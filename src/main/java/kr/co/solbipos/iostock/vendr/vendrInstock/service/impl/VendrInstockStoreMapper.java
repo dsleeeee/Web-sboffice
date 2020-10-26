@@ -70,6 +70,8 @@ public interface VendrInstockStoreMapper {
     
     int mergeVendrInstockProd(VendrInstockVO vendrInstockVO);
     
+    int mergeVendrInstockProdConfm(VendrInstockVO vendrInstockVO);
+    
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 수정 */
     int updateVendrInstockDtl(VendrInstockVO vendrInstockVO);
     
@@ -80,7 +82,9 @@ public interface VendrInstockStoreMapper {
     int deleteVendrInstockDtl(VendrInstockVO vendrInstockVO);
     
     /** 거래처 입고/반출등록 - 입고/반출상품 PROD 삭제 */
-    int deleteVendrInstockProd(VendrInstockVO vendrInstockVO);    
+    int deleteVendrInstockProd(VendrInstockVO vendrInstockVO);
+    
+    int deleteVendrInstockProdConfm(VendrInstockVO vendrInstockVO);
 
     /** 거래처 입고/반출등록 - 입고/반출정보 DTL의 집계정보 HD에 수정 */
     int updateVendrInstockDtlSumHd(VendrInstockVO vendrInstockVO);
@@ -109,6 +113,9 @@ public interface VendrInstockStoreMapper {
     /** 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보) */
     DefaultMap<String> getVendrInstockReportInfo(VendrInstockVO vendrInstockVO);   
     
-    /** TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y' */
+    /** TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y' */
     int saveVendrInstockProd(VendrInstockVO vendrInstockVO);
+    
+    /** TB_PO_STORE_VENDR_INSTOCK_PROD - 창고 조회 */
+    String getOutStorageCd(VendrInstockVO vendrInstockVO);    
 }

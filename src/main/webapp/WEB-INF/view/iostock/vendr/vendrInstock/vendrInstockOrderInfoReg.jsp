@@ -18,7 +18,7 @@
       </ul>
 
       <div class="mt20 tr">
-      <%--출고창고 --%>
+      <%--출고창고 
 	   	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
 	   	<span class="txtIn w150px sb-select fl mr5">
 	       <wj-combo-box
@@ -33,7 +33,7 @@
 	         >
 	       </wj-combo-box>
 	     </span>
-      
+      --%>
         <%-- 초기화 --%>
         <button type="button" class="btn_skyblue ml5" id="btnDefault" ng-click="setDefault()">
           <s:message code="vendrInstock.ord.default"/></button>

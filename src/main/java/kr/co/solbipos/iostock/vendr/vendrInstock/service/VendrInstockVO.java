@@ -124,6 +124,9 @@ public class VendrInstockVO extends PageVO {
     
     private String delFg;
     
+    /** 처리구분 0:확정취소 1:확정 */
+    private String confmYn;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -746,6 +749,14 @@ public class VendrInstockVO extends PageVO {
 
 	public void setDelFg(String delFg) {
 		this.delFg = delFg;
+	}
+
+	public String getConfmYn() {
+		return confmYn;
+	}
+
+	public void setConfmYn(String confmYn) {
+		this.confmYn = confmYn;
 	}	
 	
 	

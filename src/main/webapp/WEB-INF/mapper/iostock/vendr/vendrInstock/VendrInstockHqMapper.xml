@@ -157,7 +157,7 @@
         AND     thv.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
         AND     thv.VENDR_CD        =   #{vendrCd}
         AND     thn.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
-        AND     thn.NMCODE_GRP_CD(+)=   '093'
+        AND     thn.NMCODE_GRP_CD(+)=   '097'
         AND     thn.NMCODE_CD    (+)=   thp.PO_UNIT_FG
         ORDER
         BY      tphvid.PROD_CD
@@ -1003,7 +1003,7 @@
         TABLE    : TB_PO_HQ_VENDR_INSTOCK_PROD
         PARAM    : vendrInstockVO
         COMMENTS : 거래처 입고/반출정보 PROD를 수정한다.
-    -->
+    
     <update id="saveVendrInstockProd" parameterType="vendrInstockVO">
         /* USE : VendrInstockHqMapper.saveVendrInstockProd */
         UPDATE  TB_PO_HQ_VENDR_INSTOCK_PROD
@@ -1013,6 +1013,162 @@
         WHERE   HQ_OFFICE_CD  	= #{hqOfficeCd}
         AND     SLIP_NO       	= #{slipNo}
     </update>
+    -->
+    
+    <select id="getOutStorageCd" parameterType="vendrInstockVO" resultType="String">
+        /* USE : VendrInstockHqMapper.getOutStorageCd */
+        <![CDATA[
+        SELECT  DISTINCT STORAGE_CD
+        FROM    TB_PO_HQ_VENDR_INSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  	=	#{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        ]]>
+    </select>
+    
+    <delete id="deleteVendrInstockProdConfm" parameterType="vendrInstockVO">
+        /* USE : VendrInstockHqMapper.deleteVendrInstockProdConfm */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  	= 	#{hqOfficeCd}
+        AND     SLIP_NO       	= 	#{slipNo}
+		<if test='delFg != null and delFg == "Y"'>
+		AND		STORAGE_CD		!=	#{outStorageCd}
+		</if>        
+    </delete>
+            
+    <update id="mergeVendrInstockProdConfm" parameterType="vendrInstockVO">
+    /* USE : VendrInstockHqMapper.mergeVendrInstockProdConfm */
+    
+		MERGE INTO TB_PO_HQ_VENDR_INSTOCK_PROD C
+		USING
+		(
+		      	SELECT  HQ_OFFICE_CD
+				,       SLIP_NO
+				,       PROD_CD
+				,       #{outStorageCd}	AS OUT_STORAGE_CD
+				,       DECODE(SLIP_FG,1,'01','16') AS OCCR_FG
+				,       SLIP_FG
+				,       DECODE(#{confmYn}, '1','Y','N') AS CONFM_YN
+				,       COST_UPRC
+				,       PO_UNIT_FG
+				,       PO_UNIT_QTY
+				,       IN_UNIT_QTY
+				,       IN_ETC_QTY
+				,       IN_TOT_QTY
+				,       IN_AMT
+				,       IN_VAT
+				,       IN_TOT
+				FROM    TB_PO_HQ_VENDR_INSTOCK_DTL 
+				WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+				AND     SLIP_NO         =   #{slipNo}
+		) N
+		ON (
+            	 C.HQ_OFFICE_CD = N.HQ_OFFICE_CD
+             AND C.SLIP_NO		= N.SLIP_NO
+             AND C.PROD_CD  	= N.PROD_CD
+             AND C.STORAGE_CD  	= N.OUT_STORAGE_CD
+             AND C.OCCR_FG		= N.OCCR_FG	              
+		)
+		WHEN MATCHED THEN
+		UPDATE
+		SET 	C.CONFM_YN    	= N.CONFM_YN
+        ,       C.MOD_DT      	= #{modDt}
+        ,       C.MOD_ID      	= #{modId}
+		WHEN NOT MATCHED THEN
+		INSERT (
+			        HQ_OFFICE_CD,
+			        SLIP_NO,
+			        PROD_CD,
+			        STORAGE_CD,
+			        OCCR_FG,  
+			        SLIP_FG,
+			        CONFM_YN,
+			        COST_UPRC,
+			        PO_UNIT_FG,
+			        PO_UNIT_QTY,
+			        IN_UNIT_QTY,
+			        IN_ETC_QTY,
+			        IN_TOT_QTY,
+			        IN_AMT,
+			        IN_VAT,
+			        IN_TOT,
+			        REG_DT,
+			        REG_ID,
+			        MOD_DT,
+			        MOD_ID
+			    )
+		 VALUES (
+		          N.HQ_OFFICE_CD
+				, N.SLIP_NO
+				, N.PROD_CD
+				, N.OUT_STORAGE_CD
+				, N.OCCR_FG
+				, N.SLIP_FG
+				, N.CONFM_YN
+				, N.COST_UPRC
+				, N.PO_UNIT_FG
+				, N.PO_UNIT_QTY
+				, N.IN_UNIT_QTY
+				, N.IN_ETC_QTY
+				, N.IN_TOT_QTY
+				, N.IN_AMT
+				, N.IN_VAT
+				, N.IN_TOT
+		       	,		#{regDt}
+				,		#{regId}	
+				,		#{modDt}
+				,		#{modId}
+		 )    
+    </update>
+    <insert id="saveVendrInstockProd" parameterType="vendrInstockVO">
+    /* USE : VendrInstockHqMapper.saveVendrInstockProd */
+    INSERT
+    INTO	TB_PO_HQ_VENDR_INSTOCK_PROD
+    (
+        HQ_OFFICE_CD,
+        SLIP_NO,
+        PROD_CD,
+        STORAGE_CD,
+        OCCR_FG,  
+        SLIP_FG,
+        CONFM_YN,
+        COST_UPRC,
+        PO_UNIT_FG,
+        PO_UNIT_QTY,
+        IN_UNIT_QTY,
+        IN_ETC_QTY,
+        IN_TOT_QTY,
+        IN_AMT,
+        IN_VAT,
+        IN_TOT,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+    )
+    SELECT  HQ_OFFICE_CD
+	,       SLIP_NO
+	,       PROD_CD
+	,       #{outStorageCd}
+	,       DECODE(SLIP_FG,1,'01','16')
+	,       SLIP_FG
+	,       'Y'         AS CONFM_YN
+	,       COST_UPRC
+	,       PO_UNIT_FG
+	,       PO_UNIT_QTY
+	,       IN_UNIT_QTY
+	,       IN_ETC_QTY
+	,       IN_TOT_QTY
+	,       IN_AMT
+	,       IN_VAT
+	,       IN_TOT
+	,		#{regDt}
+	,		#{regId}	
+	,		#{modDt}
+	,		#{modId}
+	FROM    TB_PO_HQ_VENDR_INSTOCK_DTL 
+	WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+	AND     SLIP_NO         =   #{slipNo}
+    </insert>
   	
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 삭제 -->
     <!--

@@ -118,8 +118,23 @@
   </form>
 
   <h3 class="h3_tbl pdt5 lh30 mt10">
-    <s:message code="vendrInstock.dtl.slipDtlInfo"/>
+    <s:message code="vendrInstock.dtl.slipDtlInfo"/>    
     <div class="fr" ng-if="procLayerIfFg">
+		<%--출고창고 --%>	   	
+	   	<span class="txtIn w150px sb-select fl mr5">
+	       <wj-combo-box
+	         id="saveVendrDtlOutStorageCd"
+	         ng-model="slipInfo.outStorageCd"
+	         ng-disabled="outStorageCdDisabledFg"
+	         items-source="_getComboData('saveVendrDtlOutStorageCd')"
+	         display-member-path="name"
+	         selected-value-path="value"
+	         is-editable="false"
+	         initialized="_initComboBox(s)"
+	         selected-index-changed="selectedIndexChanged(s)"
+	         >
+	       </wj-combo-box>
+	     </span>    
       <p class="s12 bk lh30 fl"><s:message code="vendrInstock.dtl.procFg"/>: [</p>
       <p class="s12 bk lh30 fl red" ng-bind="procNm"></p>
       <p class="s12 bk lh30 fl">]</p>
@@ -128,8 +143,8 @@
       <p class="s12 bk lh30 fl mr10">]</p>
       <button type="button" id="btnDtlConfirm" class="btn_skyblue ml5" ng-click="confirm('1')" ng-if="btnDtlConfirmShowFg">
         <s:message code="vendrInstock.dtl.confirm"/></button>
-<!--       <button type="button" id="btnDtlConfirmCancel" class="btn_skyblue ml5" ng-click="confirm('0')" ng-if="btnDtlConfirmCancelShowFg"> -->
-<%--         <s:message code="vendrInstock.dtl.confirmCancel"/></button> --%>
+       <button type="button" id="btnDtlConfirmCancel" class="btn_skyblue ml5" ng-click="confirm('0')" ng-if="btnDtlConfirmCancelShowFg">
+         <s:message code="vendrInstock.dtl.confirmCancel"/></button> 
     </div>
   </h3>
   <table class="tblType01">
@@ -175,7 +190,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20201020.05" charset="utf-8"></script>
 
 <%-- 발주번호선택 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockOrderSlip.jsp">

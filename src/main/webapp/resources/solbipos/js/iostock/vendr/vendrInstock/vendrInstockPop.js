@@ -2,7 +2,7 @@
 app.controller('vendrInstockPopCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('vendrInstockPopCtrl', $scope, $http, true));
-
+  
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("vendrInstockPopCtrl", function (event, data) {
     $scope.slipNo = data.slipNo;
@@ -32,7 +32,7 @@ app.controller('vendrInstockPopCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.dtlTab = messages["vendrInstock.pop.vendrInstockDtl"];
       $scope.prodTab = messages["vendrInstock.pop.vendrInstockProd"];
     }
-    // 반출
+    //반출
     else if($scope.slipFg === -1) {
       $("#popTitle").html(messages["vendrInstock.pop.rtnTitle"]); // 현재 팝업이 같은 scope 가 아니라서 jquery 형태로 text 부여
       $scope.dtlTab = messages["vendrInstock.pop.vendrRtnDtl"];
@@ -114,4 +114,5 @@ app.controller('vendrInstockPopCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._broadcast('vendrInstockReportCtrl', params);
   };
 
+   
 }]);

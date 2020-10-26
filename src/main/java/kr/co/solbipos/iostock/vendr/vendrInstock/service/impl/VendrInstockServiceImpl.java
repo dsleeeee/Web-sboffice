@@ -217,22 +217,39 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                 result = vendrInstockHqMapper.updateVendrOrderProcFg(vendrInstockVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
-
+            
+            String getOutStorageCd = "";
+                        
             // 확정
             if(procFg.equals("1")) {
+            	vendrInstockVO.setConfmYn("1");
                 // 거래처정산 입력
                 result = vendrInstockHqMapper.insertVendrExact(vendrInstockVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 
+                result = vendrInstockHqMapper.deleteVendrInstockProdConfm(vendrInstockVO);
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
                 // TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y'
-                result = vendrInstockHqMapper.saveVendrInstockProd(vendrInstockVO);
+//                result = vendrInstockHqMapper.saveVendrInstockProd(vendrInstockVO);
+                result = vendrInstockHqMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
             // 확정취소
             else if(procFg.equals("0")) {
+            	getOutStorageCd = vendrInstockHqMapper.getOutStorageCd(vendrInstockVO);
+            	
+            	vendrInstockVO.setConfmYn				("0");
+            	vendrInstockVO.setDelFg					("Y");
+            	vendrInstockVO.setOutStorageCd			(getOutStorageCd);
+            	
                 // 거래처정산 삭제
                 result = vendrInstockHqMapper.deleteVendrExact(vendrInstockVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                
+                // TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y'
+//              result = vendrInstockHqMapper.saveVendrInstockProd(vendrInstockVO);
+              result = vendrInstockHqMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
+              if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
             }
         }
         else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -259,21 +276,41 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                 result = vendrInstockStoreMapper.updateVendrOrderProcFg(vendrInstockVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
+            
+            String getOutStorageCd = "";
+            
             // 확정
             if(procFg.equals("1")) {
+            	vendrInstockVO.setConfmYn				("1");
+            	vendrInstockVO.setDelFg					("Y");
+            	
                 // 거래처정산 입력
                 result = vendrInstockStoreMapper.insertVendrExact(vendrInstockVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 
+                result = vendrInstockStoreMapper.deleteVendrInstockProdConfm(vendrInstockVO);
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
                 // TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y'
-                result = vendrInstockStoreMapper.saveVendrInstockProd(vendrInstockVO);
+//                result = vendrInstockStoreMapper.saveVendrInstockProd(vendrInstockVO);
+                result = vendrInstockStoreMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
             // 확정취소
             else if(procFg.equals("0")) {
+            	getOutStorageCd = vendrInstockStoreMapper.getOutStorageCd(vendrInstockVO);
+            	
+            	vendrInstockVO.setConfmYn				("0");
+            	vendrInstockVO.setDelFg					("Y");
+            	vendrInstockVO.setOutStorageCd			(getOutStorageCd);
+            	
                 // 거래처정산 삭제
                 result = vendrInstockStoreMapper.deleteVendrExact(vendrInstockVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                
+                // TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y'
+//              result = vendrInstockStoreMapper.saveVendrInstockProd(vendrInstockVO);
+              result = vendrInstockStoreMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
+              if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
             }
         }
 
@@ -437,11 +474,11 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                         
                         
                         vendrInstockVO.setDelFg					("Y");
-                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
-                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                        
-                        
-                        result = vendrInstockHqMapper.mergeVendrInstockProd(vendrInstockVO);
-	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
+//                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                        
+//                        
+//                        result = vendrInstockHqMapper.mergeVendrInstockProd(vendrInstockVO);
+//	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                         //창고별 상품저장
                         //TB_PO_HQ_VENDR_INSTOCK_PROD - START
                     	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
@@ -492,11 +529,11 @@ public class VendrInstockServiceImpl implements VendrInstockService {
     		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)                        
 //                        result = vendrInstockStoreMapper.insertVendrInstockProd(vendrInstockVO);
     		            vendrInstockVO.setDelFg					("Y");
-                        result = vendrInstockStoreMapper.deleteVendrInstockProd(vendrInstockVO);
-                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                        
-                        result = vendrInstockStoreMapper.mergeVendrInstockProd(vendrInstockVO);
-	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                        result = vendrInstockStoreMapper.deleteVendrInstockProd(vendrInstockVO);
+//                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//                        
+//                        result = vendrInstockStoreMapper.mergeVendrInstockProd(vendrInstockVO);
+//	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                         
                         //창고별 상품저장
                         //TB_PO_STORE_VENDR_INSTOCK_PROD - START
@@ -551,11 +588,11 @@ public class VendrInstockServiceImpl implements VendrInstockService {
     		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)                        
 //                        result = vendrInstockHqMapper.updateVendrInstockProd(vendrInstockVO);
     		            vendrInstockVO.setDelFg					("Y");
-                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
-                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                        
-                        result = vendrInstockHqMapper.mergeVendrInstockProd(vendrInstockVO);
-	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
+//                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//                        
+//                        result = vendrInstockHqMapper.mergeVendrInstockProd(vendrInstockVO);
+//	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                         
                         //창고별 상품저장
                         //TB_PO_HQ_VENDR_INSTOCK_PROD - START
@@ -609,11 +646,11 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                         vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)                        
 //                        result = vendrInstockStoreMapper.updateVendrInstockProd(vendrInstockVO);
                         vendrInstockVO.setDelFg					("Y");
-                        result = vendrInstockStoreMapper.deleteVendrInstockProd(vendrInstockVO);
-                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                        
-                        result = vendrInstockStoreMapper.mergeVendrInstockProd(vendrInstockVO);
-	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                        result = vendrInstockStoreMapper.deleteVendrInstockProd(vendrInstockVO);
+//                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//                        
+//                        result = vendrInstockStoreMapper.mergeVendrInstockProd(vendrInstockVO);
+//	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 	            		
                         //창고별 상품저장
                         //TB_PO_STORE_VENDR_INSTOCK_PROD - START
@@ -668,8 +705,8 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 
                         vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
                         vendrInstockVO.setDelFg					("N");
-                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
-	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
+//	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                         
                     }
                     else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -747,56 +784,56 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 
     /** 거래처 발주등록 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadMPSVO excelUploaMPSdVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploaMPSdVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploaMPSdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploaMPSdVO.setStoreCd(sessionInfoVO.getStoreCd());
-        excelUploaMPSdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploaMPSdVO.setRegId(sessionInfoVO.getUserId());
-        excelUploaMPSdVO.setRegDt(currentDt);
-        excelUploaMPSdVO.setModId(sessionInfoVO.getUserId());
-        excelUploaMPSdVO.setModDt(currentDt);
+        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadMPSVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setRegDt(currentDt);
+        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setModDt(currentDt);
 
         // 수량추가인 경우
-        if(StringUtil.getOrBlank(excelUploaMPSdVO.getAddQtyFg()).equals("add")) {
+        if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                result = vendrInstockHqMapper.insertExcelUploadAddQty(excelUploaMPSdVO);
+                result = vendrInstockHqMapper.insertExcelUploadAddQty(excelUploadMPSVO);
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                result = vendrInstockStoreMapper.insertExcelUploadAddQty(excelUploaMPSdVO);
+                result = vendrInstockStoreMapper.insertExcelUploadAddQty(excelUploadMPSVO);
             }
         }
 
         // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            result = vendrInstockHqMapper.deleteVendrInstockToExcelUploadData(excelUploaMPSdVO);
+            result = vendrInstockHqMapper.deleteVendrInstockToExcelUploadData(excelUploadMPSVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            result = vendrInstockStoreMapper.deleteVendrInstockToExcelUploadData(excelUploaMPSdVO);
+            result = vendrInstockStoreMapper.deleteVendrInstockToExcelUploadData(excelUploadMPSVO);
         }
 
         // 엑셀업로드 한 수량을 입고수량으로 입력
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            result = vendrInstockHqMapper.insertVendrInstockToExcelUploadData(excelUploaMPSdVO);
+            result = vendrInstockHqMapper.insertVendrInstockToExcelUploadData(excelUploadMPSVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            result = vendrInstockStoreMapper.insertVendrInstockToExcelUploadData(excelUploaMPSdVO);
+            result = vendrInstockStoreMapper.insertVendrInstockToExcelUploadData(excelUploadMPSVO);
         }
 
         // 정상 입력된 데이터 TEMP 테이블에서 삭제
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            result = vendrInstockHqMapper.deleteExcelUploadCompleteData(excelUploaMPSdVO);
+            result = vendrInstockHqMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            result = vendrInstockStoreMapper.deleteExcelUploadCompleteData(excelUploaMPSdVO);
+            result = vendrInstockStoreMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
         }
 
         VendrInstockVO vendrInstockHdVO = new VendrInstockVO();
-        vendrInstockHdVO.setSlipNo(excelUploaMPSdVO.getSlipNo());
+        vendrInstockHdVO.setSlipNo(excelUploadMPSVO.getSlipNo());
 
         /** regId, regDt, modId, modDt, hqOfficd, storeCd, orgnFg 세팅  */
         vendrInstockHdVO = setSessionValue(vendrInstockHdVO, sessionInfoVO, currentDt);

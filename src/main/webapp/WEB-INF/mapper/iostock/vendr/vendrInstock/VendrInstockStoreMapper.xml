@@ -136,13 +136,13 @@
         <![CDATA[
         SELECT  tpsvid.PROD_CD, tmp.PROD_NM, tpsvid.PO_UNIT_FG, tpsvid.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
         ,       tpsvid.SLIP_FG, tpsvid.COST_UPRC, tmp.PO_MIN_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, ABS(tpsvid.IN_TOT_QTY) *tpsvid.SLIP_FG)) AS PREV_IN_TOT_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, ABS(tpsvid.IN_UNIT_QTY)*tpsvid.SLIP_FG)) AS IN_UNIT_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY , 0, NULL, ABS(tpsvid.IN_ETC_QTY) *tpsvid.SLIP_FG)) AS IN_ETC_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, ABS(tpsvid.IN_TOT_QTY) *tpsvid.SLIP_FG)) AS IN_TOT_QTY
-        ,       ABS(tpsvid.IN_AMT)*tpsvid.SLIP_FG AS IN_AMT
-        ,       ABS(tpsvid.IN_VAT)*tpsvid.SLIP_FG AS IN_VAT
-        ,       ABS(tpsvid.IN_TOT)*tpsvid.SLIP_FG AS IN_TOT
+        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, tpsvid.IN_TOT_QTY *tpsvid.SLIP_FG)) AS PREV_IN_TOT_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, tpsvid.IN_UNIT_QTY*tpsvid.SLIP_FG)) AS IN_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY , 0, NULL, tpsvid.IN_ETC_QTY *tpsvid.SLIP_FG)) AS IN_ETC_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, tpsvid.IN_TOT_QTY *tpsvid.SLIP_FG)) AS IN_TOT_QTY
+        ,       tpsvid.IN_AMT*tpsvid.SLIP_FG AS IN_AMT
+        ,       tpsvid.IN_VAT*tpsvid.SLIP_FG AS IN_VAT
+        ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
         ,       tmsn.NMCODE_NM AS PO_UNIT_FG_NM
@@ -157,6 +157,7 @@
         AND     tmv.STORE_CD    =   tpsvid.STORE_CD
         AND     tmv.VENDR_CD    =   #{vendrCd}
         AND     tmsn.STORE_CD      (+)=   tmp.STORE_CD
+        /* AND     tmsn.NMCODE_GRP_CD (+)=   '097'  20200309 097 -> 093 수정 */
         AND     tmsn.NMCODE_GRP_CD (+)=   '093'
         AND     tmsn.NMCODE_CD     (+)=   tmp.PO_UNIT_FG
         ORDER
@@ -981,7 +982,7 @@
         TABLE    : TB_PO_STORE_VENDR_INSTOCK_PROD
         PARAM    : vendrInstockVO
         COMMENTS : 거래처 입고/반출정보 PROD를 수정한다.
-    -->
+    
     <update id="saveVendrInstockProd" parameterType="vendrInstockVO">
         /* USE : VendrInstockStoreMapper.saveVendrInstockProd */
         UPDATE  TB_PO_STORE_VENDR_INSTOCK_PROD
@@ -990,6 +991,109 @@
         ,       MOD_ID      = #{modId}
         WHERE   STORE_CD    = #{storeCd}
         AND     SLIP_NO     = #{slipNo}
+    </update>
+    -->
+    <select id="getOutStorageCd" parameterType="vendrInstockVO" resultType="String">
+        /* USE : VendrInstockStoreMapper.getOutStorageCd */
+        <![CDATA[
+        SELECT  DISTINCT STORAGE_CD
+        FROM    TB_PO_STORE_VENDR_INSTOCK_PROD
+        WHERE   STORE_CD  		=	#{storeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        ]]>
+    </select>
+    
+    <delete id="deleteVendrInstockProdConfm" parameterType="vendrInstockVO">
+        /* USE : VendrInstockStoreMapper.deleteVendrInstockProdConfm */
+        DELETE  TB_PO_STORE_VENDR_INSTOCK_PROD
+        WHERE   STORE_CD  		= 	#{storeCd}
+        AND     SLIP_NO       	= 	#{slipNo}
+		<if test='delFg != null and delFg == "Y"'>
+		AND		STORAGE_CD		!=	#{outStorageCd}
+		</if>        
+    </delete>      
+        
+    <update id="mergeVendrInstockProdConfm" parameterType="vendrInstockVO">
+    MERGE INTO TB_PO_STORE_VENDR_INSTOCK_PROD	C
+	    USING	(
+	    			SELECT  STORE_CD
+					,       SLIP_NO
+					,       PROD_CD
+					,       #{outStorageCd}	AS OUT_STORAGE_CD
+					,       DECODE(SLIP_FG,1,'06','18') AS OCCR_FG
+					,       SLIP_FG
+					,       DECODE(#{confmYn}, '1','Y','N') AS CONFM_YN
+					,       COST_UPRC
+					,       PO_UNIT_FG
+					,       PO_UNIT_QTY
+					,       IN_UNIT_QTY
+					,       IN_ETC_QTY
+					,       IN_TOT_QTY
+					,       IN_AMT
+					,       IN_VAT
+					,       IN_TOT
+					FROM    TB_PO_STORE_VENDR_INSTOCK_DTL 
+					WHERE   STORE_CD    =   #{storeCd}
+					AND     SLIP_NO         =   #{slipNo}
+	    ) 
+	    ON           (
+	                     	 C.STORE_CD 	= N.STORE_CD
+			             AND C.SLIP_NO		= N.SLIP_NO
+			             AND C.PROD_CD  	= N.PROD_CD
+			             AND C.STORAGE_CD  	= N.OUT_STORAGE_CD
+			             AND C.OCCR_FG		= N.OCCR_FG	   
+	                            )
+	    WHEN     MATCHED THEN   
+	    UPDATE	
+	    SET		C.CONFM_YN    	= N.CONFM_YN
+        ,       C.MOD_DT      	= #{modDt}
+        ,       C.MOD_ID      	= #{modId}
+	    WHEN NOT MATCHED THEN   INSERT  (
+								            STORE_CD,
+								            SLIP_NO,
+								            PROD_CD,
+								            STORAGE_CD,
+								            OCCR_FG,  
+								            SLIP_FG,
+								            CONFM_YN,
+								            COST_UPRC,
+								            PO_UNIT_FG,
+								            PO_UNIT_QTY,
+								            IN_UNIT_QTY,
+								            IN_ETC_QTY,
+								            IN_TOT_QTY,
+								            IN_AMT,
+								            IN_VAT,
+								            IN_TOT,
+								            REG_DT,
+								            REG_ID,
+								            MOD_DT,
+								            MOD_ID
+								        )
+								        VALUES
+								        (
+								          N.STORE_CD
+										, N.SLIP_NO
+										, N.PROD_CD
+										, N.OUT_STORAGE_CD
+										, N.OCCR_FG
+										, N.SLIP_FG
+										, N.CONFM_YN
+										, N.COST_UPRC
+										, N.PO_UNIT_FG
+										, N.PO_UNIT_QTY
+										, N.IN_UNIT_QTY
+										, N.IN_ETC_QTY
+										, N.IN_TOT_QTY
+										, N.IN_AMT
+										, N.IN_VAT
+										, N.IN_TOT
+								       	,		#{regDt}
+										,		#{regId}	
+										,		#{modDt}
+										,		#{modId}
+								        )
+    
     </update>
     
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 삭제 -->

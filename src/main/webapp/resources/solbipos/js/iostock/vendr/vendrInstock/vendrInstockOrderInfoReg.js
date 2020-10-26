@@ -9,12 +9,12 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
 	var comboParams         = {};
     
 	// 출고창고
-    var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';    
-    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
-    $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-    
-    comboParams         = {};
-    comboParams.nmcodeGrpCd = "093";
+//    var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';    
+//    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+//    $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+//    
+//    comboParams         = {};
+    comboParams.nmcodeGrpCd = "097";
     url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -228,7 +228,7 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
       item.slipFg    = $scope.slipFg;
       item.storageCd = "999";			//001 -> 999      
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      item.outStorageCd	= $scope.save.dtl.outStorageCd;
+//      item.outStorageCd	= $scope.save.dtl.outStorageCd;
       
       params.push(item);
     }

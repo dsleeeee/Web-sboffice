@@ -8,11 +8,20 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     {"name": messages["vendrInstock.dtl.orderInstock"], "value": "Y"},
     {"name": messages["vendrInstock.dtl.notOrderInstock"], "value": "N"}
   ]);
-
+    
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("vendrInstockDtlCtrl", function (event, data) {
+	
+	  var comboParams         = {};
+	    
+	    // 출고창고
+	    var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';    
+	    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+	    $scope._queryCombo("combo", "saveVendrDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.	  
+	  
     $scope.slipNo = data.slipNo;
     $scope.slipFg = data.slipFg;
+    
 
     // 발주/무발주입고에 대한 내용을 발주입고 상태로 layer show
     $scope.orderLayerShowFg = true;
@@ -38,7 +47,6 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     // DB에서 조회해 온 값으로 세팅하는 경우에는 초기화하지 않기 위해 slipSearchYn 변수를 사용.
     $scope.slipSearchYn = 'N';
 
-    // 입고
     if($scope.slipFg === 1) {
       $scope.btnSaveShowFg                         = true;  // 저장
       $scope.btnDelShowFg                          = false; // 삭제
@@ -50,12 +58,9 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
 
       $("#vendrInstockDtlSelectVendrCd").val('');
       $("#vendrInstockDtlSelectVendrNm").val('선택');
-    // 반출
-    } else if($scope.slipFg === -1) {
-    // } else {
+    } else {
       $scope.btnSaveShowFg                         = true;  // 저장
       $scope.btnDelShowFg                          = false; // 삭제
-      $scope.procLayerIfFg                         = false; // 진행상태내역
       $scope.vendrInstockDtlRtnSelectVendrNmDisabled  = false; // 반출 거래처선택 모듈 input
       $scope.vendrInstockDtlRtnSelectVendrBtnDisabled = false; // 반출 선택취소
 
@@ -132,6 +137,8 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
             $scope.btnDtlConfirmShowFg       = true;
             $scope.btnDtlConfirmCancelShowFg = false;
             $scope.procNm                    = messages["vendrInstock.dtl.procFg0"];
+            $scope.outStorageCdDisabledFg	 = false;
+            
           }
           // 전표상태가 확정인 경우 버튼 컨트롤
           else {
@@ -140,6 +147,8 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
             $scope.btnDtlConfirmShowFg       = false;
             $scope.btnDtlConfirmCancelShowFg = true;
             $scope.procNm                    = messages["vendrInstock.dtl.procFg1"];
+            
+            $scope.outStorageCdDisabledFg	 = true;
           }
 
           // 진행상태 관련 레이어 show 여부
@@ -373,6 +382,7 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     	return false;
     }
     
+//    alert("saveDtlOutStorageCd :::"+$scope.slipInfo.outStorageCd)
     
     if (procFg === '1') {
       /** 확정처리 하시겠습니까? */
@@ -382,11 +392,13 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
       /** 확정취소 하시겠습니까? */
       msg = messages["vendrInstock.dtl.confirmCancelMsg"];
     }
-
+    
+    
     s_alert.popConf(msg, function () {
       var params         = {};
       params.slipNo      = $scope.slipNo;
       params.procFg      = procFg;
+      params.outStorageCd	= $scope.slipInfo.outStorageCd;
 
       // 입고이면서 발주입고인 경우만 발주번호를 파라미터에 세팅
       if ($scope.slipFg === 1) {
@@ -508,5 +520,82 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     $scope._broadcast('vendrInstockDtlRtnSelectVendrCtrl');
   };
 
+  
+  //DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+  // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+  // comboId : combo 생성할 ID
+  // gridMapId : grid 에서 사용할 Map ID
+  // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+  // params : 데이터 조회할 url에 보낼 파라미터
+  // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+  // callback : queryCombo 후 callback 할 함수
+  $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+    var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+    if (url) {
+      comboUrl = url;
+    }
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
+    // ajax 통신 설정
+    $http({
+      method : 'POST', //방식
+      url    : comboUrl, /* 통신할 URL */
+      params : params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        if (!$.isEmptyObject(response.data.data.list)) {
+          var list       = response.data.data.list;
+          var comboArray = [];
+          var comboData  = {};
+
+          if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+            comboArray = [];
+            if (option === "A") {
+              comboData.name  = messages["cmm.all"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            } else if (option === "S") {
+              comboData.name  = messages["cmm.select"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            }
+
+            for (var i = 0; i < list.length; i++) {
+              comboData       = {};
+              comboData.name  = list[i].nmcodeNm;
+              comboData.value = list[i].nmcodeCd;
+              comboArray.push(comboData);
+            }
+            $scope._setComboData(comboId, comboArray);
+          }
+
+          if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+            comboArray = [];
+            for (var i = 0; i < list.length; i++) {
+              comboData      = {};
+              comboData.id   = list[i].nmcodeCd;
+              comboData.name = list[i].nmcodeNm;
+              comboArray.push(comboData);
+            }
+            $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+          }
+        }
+      }
+    }, function errorCallback(response) {
+      $scope._popMsg(messages["cmm.error"]);
+      return false;
+    }).then(function () {
+      if (typeof callback === 'function') {
+        $timeout(function () {
+          callback();
+        }, 10);
+      }
+    });
+  };  
 
 }]);

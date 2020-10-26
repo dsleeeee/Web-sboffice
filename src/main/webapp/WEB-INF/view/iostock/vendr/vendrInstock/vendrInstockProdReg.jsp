@@ -88,7 +88,7 @@
           <label for="storeSplyChk"><s:message code="vendrInstock.reg.storeSplyUprcCheck"/></label>
         </span>
         </c:if>
-        <%--출고창고 --%>
+        <%--출고창고 
 	   	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
 	   	<span class="txtIn w150px sb-select fl mr5">
 	       <wj-combo-box
@@ -103,6 +103,7 @@
 	         >
 	       </wj-combo-box>
 	     </span>
+	     --%>
         <%-- 최종원가를 발주원가로 세팅 --%>
         <button type="button" class="btn_skyblue ml5" id="btnLastCostToCostUprc" ng-click="setLastCostToCostUprc()">
           <s:message code="vendrInstock.reg.lastCostToCostUprc"/></button>
@@ -113,7 +114,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 400px;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -159,7 +160,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20200923.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20181224.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
