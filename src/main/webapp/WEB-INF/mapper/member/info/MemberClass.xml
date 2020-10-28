@@ -56,8 +56,12 @@
               , NEW_JOIN_SAVE_POINT
               , FIRST_SALE_SAVE_POINT
               , MIN_USE_POINT
+              , MAX_USE_POINT
+              , USE_ACC_POINT_YN
               , ANVSR_POINT_SAVE_FG
               , ANVSR_SAVE_POINT
+              , DC_ACC_POINT_YN
+              , DC_LIMIT_AMT
               , USE_YN
               , REG_DT
               , REG_ID
@@ -110,6 +114,20 @@
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
             AND MEMBR_CLASS_CD = #{membrClassCd}
+    </select>
+
+    <!-- 회원등급 기본여부-->
+    <!--
+        TABLE    : TB_MB_MEMBER_CLASS
+        COMMENTS : 기본여부
+    -->
+    <select id="classDefltChk" parameterType="membrClassVO" resultType="int">
+        /* MemberClassMapper.classDefltChk */
+        SELECT count(*)
+          FROM TB_MB_MEMBER_CLASS
+          WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+            AND MEMBR_CLASS_CD = #{membrClassCd}
+            AND DEFLT_YN = 'Y'
     </select>
 
     <!-- 회원등급 등록-->
@@ -198,6 +216,27 @@
         AND MEMBR_CLASS_CD = #{membrClassCd}
     </update>
 
+    <!-- 회원등급 사용여부-->
+    <!--
+        TABLE    : TTB_MB_MEMBER_CLASS_PAY_RATE
+        COMMENTS : 사용여부
+    -->
+    <update id="updateClassPayRateInfo" parameterType="membrClassVO">
+        /* MemberClassMapper.updateClassPayRateInfo */
+       MERGE INTO
+        	TB_MB_MEMBER_CLASS_PAY_RATE tmmcpr
+        		USING TB_MB_MEMBER_CLASS tmmc ON
+        	( tmmc.MEMBR_CLASS_CD = tmmcpr.MEMBR_CLASS_CD
+        	AND tmmc.MEMBR_ORGN_CD = tmmcpr.MEMBR_ORGN_CD
+        	AND tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
+        	AND tmmc.MEMBR_CLASS_CD = #{membrClassCd}
+        	AND tmmc.POINT_SAVE_FG = #{pointSaveFg})
+        	WHEN MATCHED THEN
+        UPDATE
+        SET
+        	tmmcpr.ACC_RATE = 0
+    </update>
+
     <update id="defaultUpdateClassInfo" parameterType="membrClassVO">
         /* MemberClassMapper.defaultUpdateClassInfo */
        UPDATE TB_MB_MEMBER_CLASS
@@ -205,18 +244,41 @@
 	    WHERE  MEMBR_ORGN_CD || MEMBR_CLASS_CD != #{membrOrgnClassCd}
     </update>
 
+    <!-- 회원등급 사용여부-->
+    <!--
+        TABLE    : TB_MB_MEMBER_CLASS, TB_MB_MEMBER
+        COMMENTS : 사용여부
+    -->
+    <select id="deleteClassChk" parameterType="membrClassVO" resultType="int">
+        /* MemberClassMapper.deleteClassChk */
+        SELECT count(*)
+        FROM TB_MB_MEMBER tmm, TB_MB_MEMBER_CLASS tmmc
+        WHERE tmm.MEMBR_CLASS_CD = tmmc.MEMBR_CLASS_CD
+        AND tmm.USE_YN = 'Y'
+        AND tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmmc.MEMBR_CLASS_CD = #{membrClassCd}
+    </select>
+
 
     <!-- 회원등급 삭제 -->
     <!--
         TABLE    : TB_MB_MEMBER_CLASS
     -->
     <delete id="deleteClassInfo" parameterType="memberClassVO">
+        /* MemberClassMapper.deleteMemberInfo */
+        DELETE FROM TB_MB_MEMBER_CLASS
+        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_CLASS_CD = #{membrClassCd}
+    </delete>
+    <!-- 회원등급 포인트삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CLASS_PAY_RATE
+    -->
+    <delete id="deleteClassPayRateInfo" parameterType="memberClassVO">
       /* MemberClassMapper.deleteMemberInfo */
-      UPDATE TB_MB_MEMBER_CLASS
-         SET USE_YN = 'N',
-             MOD_ID = #{modId},
-             MOD_DT = #{modDt}
-       WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+      DELETE FROM
+        TB_MB_MEMBER_CLASS_PAY_RATE
+        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
          AND MEMBR_CLASS_CD = #{membrClassCd}
     </delete>
 

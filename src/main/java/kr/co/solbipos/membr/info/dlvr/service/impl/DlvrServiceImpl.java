@@ -43,11 +43,30 @@ public class DlvrServiceImpl implements DlvrService {
 
     @Override
     public List<DefaultMap<Object>> getDlvrList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
+//        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+//            dlvrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+//        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+//            dlvrVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+//        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            dlvrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        }
+        dlvrVO.setDlvrStoreCd(sessionInfoVO.getStoreCd());
         return dlvrMapper.getDlvrList(dlvrVO);
     }
 
     @Override
     public List<DefaultMap<Object>> getDlvrTelList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            dlvrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        }
+        dlvrVO.setDlvrStoreCd(sessionInfoVO.getStoreCd());
         return dlvrMapper.getDlvrTelList(dlvrVO);
     }
 
@@ -59,7 +78,7 @@ public class DlvrServiceImpl implements DlvrService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         }
         List<DefaultMap<String>> resultList = dlvrMapper.getMemberClassList(membrClassVO);
         // 등록된 회원등급이 없을때는 기본등급을 리스트에 넣어줌.
@@ -78,7 +97,7 @@ public class DlvrServiceImpl implements DlvrService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             dlvrVO.setRegStoreCd(sessionInfoVO.getHqOfficeCd());
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            dlvrVO.setRegStoreCd(sessionInfoVO.getStoreCd());
+            dlvrVO.setRegStoreCd(sessionInfoVO.getOrgnGrpCd());
         }
         List mZoneList = dlvrMapper.getDlvrMzoneList(dlvrVO);
         result.put("mZoneList", mZoneList);
@@ -87,7 +106,7 @@ public class DlvrServiceImpl implements DlvrService {
 
     @Override
     public int saveDlvr(DlvrVO[] dlvrVOs, SessionInfoVO sessionInfoVO) {
-        int result = 0;
+        int resultCnt = 0;
         String procResult = "";
 
         OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
@@ -99,10 +118,10 @@ public class DlvrServiceImpl implements DlvrService {
 
             if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             } else {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             }
 
             dlvrVO.setRegDt(dt);
@@ -110,16 +129,20 @@ public class DlvrServiceImpl implements DlvrService {
             dlvrVO.setModDt(dt);
             dlvrVO.setModId(sessionInfoVO.getUserId());
 
-            result = dlvrMapper.updateDlvr(dlvrVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            int result = dlvrMapper.updateDlvr(dlvrVO);
+            if(result <= 0){
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            } else {
+                resultCnt += result;
+            }
 
         }
-        return result;
+        return resultCnt;
     }
 
     @Override
     public int saveDlvrTel(DlvrVO[] dlvrVOs, SessionInfoVO sessionInfoVO) {
-        int result = 0;
+        int resultCnt = 0;
         String procResult = "";
 
         OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
@@ -131,10 +154,10 @@ public class DlvrServiceImpl implements DlvrService {
 
             if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             } else {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             }
 
             dlvrVO.setRegDt(dt);
@@ -142,11 +165,15 @@ public class DlvrServiceImpl implements DlvrService {
             dlvrVO.setModDt(dt);
             dlvrVO.setModId(sessionInfoVO.getUserId());
 
-            result = dlvrMapper.updateDlvrTel(dlvrVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            int result = dlvrMapper.updateDlvrTel(dlvrVO);
+            if(result <= 0){
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            } else {
+                resultCnt += result;
+            }
 
         }
-        return result;
+        return resultCnt;
     }
 
     @Override
@@ -163,10 +190,10 @@ public class DlvrServiceImpl implements DlvrService {
 
             if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             } else {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             }
 
             dlvrVO.setRegDt(dt);
@@ -195,10 +222,10 @@ public class DlvrServiceImpl implements DlvrService {
 
             if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             } else {
                 dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             }
 
             dlvrVO.setRegDt(dt);
@@ -220,7 +247,7 @@ public class DlvrServiceImpl implements DlvrService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             dlvrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            dlvrVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         }
 
         List<DefaultMap<String>> resultList = dlvrMapper.getDlvrLzoneList(dlvrVO);

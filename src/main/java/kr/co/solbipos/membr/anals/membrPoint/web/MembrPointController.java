@@ -65,8 +65,6 @@ public class MembrPointController {
                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//        System.out.println("test : 1111");
-
         List<DefaultMap<Object>> result = membrPointService.getMembrPointList(membrPointVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, membrPointVO);

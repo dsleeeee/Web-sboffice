@@ -71,7 +71,7 @@ public class RegistController {
     /** Constructor Injection */
     @Autowired
     public RegistController(RegistService registService, SessionService sessionService,MessageService messageService,
-        CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+                            CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.registService = registService;
         this.sessionService = sessionService;
         this.messageService = messageService;
@@ -97,7 +97,8 @@ public class RegistController {
         // 회원등급 리스트 조회
         List membrClassList = registService.getMembrClassList(sessionInfoVO);
 
-        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
+        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.ALL);
+        String membrClassListSelect = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
         // 본사일 경우 해당 본사의 기본매장(코드)을 조회 해야 함.
         // [보나비]의 경우 기본매장코드를 사용하여
@@ -110,7 +111,7 @@ public class RegistController {
 
         model.addAttribute("regstrStoreList", regstrStoreListAll);
         model.addAttribute("memberClassList", membrClassListAll);
-        model.addAttribute("memberClassSelect", membrClassListAll);
+        model.addAttribute("memberClassSelect", membrClassListSelect);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
 
         return "membr/info/view/memberInfo";
@@ -128,7 +129,7 @@ public class RegistController {
     @RequestMapping(value = "view/getMemberlist.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMemberlist(RegistVO registVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -149,7 +150,7 @@ public class RegistController {
     @RequestMapping(value = "base/getMemberInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result baseListPost(RegistVO registVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                               HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -170,7 +171,7 @@ public class RegistController {
     @RequestMapping(value = "base/registMemberInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result registMemberInfo(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
-        HttpServletRequest request, HttpServletResponse response, Model model) {
+                                   HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -182,7 +183,9 @@ public class RegistController {
         }
 
         // 생일 특문 제거
-        registVO.setBirthday(registVO.getBirthday().replaceAll("-",""));
+        if(null != registVO.getBirthday() && !"".equals(registVO.getBirthday())) {
+            registVO.setBirthday(registVO.getBirthday().replaceAll("-", ""));
+        }
 
 
         // 결혼여부 선택값이 미혼이면 결혼기념일 null
@@ -211,7 +214,7 @@ public class RegistController {
     @RequestMapping(value = "base/updateMemberInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result updateMemberInfo(@Validated(Regist.class) @RequestBody RegistVO registVO, BindingResult bindingResult,
-        HttpServletRequest request, HttpServletResponse response, Model model) {
+                                   HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -221,7 +224,9 @@ public class RegistController {
         }
 
         // 생일 특문 제거
-        registVO.setBirthday(registVO.getBirthday().replaceAll("-",""));
+        if(null != registVO.getBirthday() && !"".equals(registVO.getBirthday())) {
+            registVO.setBirthday(registVO.getBirthday().replaceAll("-", ""));
+        }
 
         // 결혼여부 선택값이 미혼이면 결혼기념일 null
         if(registVO.getWeddingYn() == WeddingYn.N) {
@@ -247,7 +252,7 @@ public class RegistController {
     @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result baseRemove(@Validated(RegistDelete.class) @RequestBody RegistVO[] registVOs, BindingResult bindingResult,
-        HttpServletRequest request, HttpServletResponse response, Model model) {
+                             HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -272,7 +277,7 @@ public class RegistController {
     @RequestMapping(value = "postpaid/getPostpaidStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPostpaidStoreList(PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                       HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
@@ -292,7 +297,7 @@ public class RegistController {
     @RequestMapping(value = "postpaid/registPostpaidStore.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result registPostpaidStore(@RequestBody PostpaidStoreVO[] postpaidStoreVOs, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
@@ -313,7 +318,7 @@ public class RegistController {
     @RequestMapping(value = "postpaid/deletePostpaidStore.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result deletePostpaidStore(@RequestBody PostpaidStoreVO[] postpaidStoreVOs, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
@@ -334,7 +339,7 @@ public class RegistController {
     @RequestMapping(value = "mapping/getMappingCompany.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMappingCompany(MemberMappingVO memberMappingVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -355,7 +360,7 @@ public class RegistController {
     @RequestMapping(value = "view/getMemberVendorMappingList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMemberVendorMappingList(RegistVO registVO, HttpServletRequest request,
-                                HttpServletResponse response, Model model) {
+                                             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -376,13 +381,35 @@ public class RegistController {
     @RequestMapping(value = "view/getCardlist.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getCardlist(RegistVO registVO, HttpServletRequest request,
-                                HttpServletResponse response, Model model) {
+                              HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> result = registService.getCardList(registVO, sessionInfoVO);
 
+        model.addAttribute("orgnCd", sessionInfoVO.getOrgnCd());
+        model.addAttribute("orgnNm", sessionInfoVO.getOrgnNm());
         return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /**
+     * 카드정보 중복체크
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/registCardInfoCount.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberCardInfoCount(RegistVO registVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.getMemberCardInfoCount(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 
     /***
@@ -396,14 +423,36 @@ public class RegistController {
     @RequestMapping(value = "base/registCardInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result registCardInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
-                                      HttpServletResponse response, Model model) {
+                                 HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
         int result = registService.registCardInfo(registVO, si);
 
-        return ReturnUtil.returnJson(Status.OK, result);
+        return ReturnUtil.returnJson(Status.OK, registVO.getMembrNo());
     }
+
+    /***
+     * 카드정보 등록
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/updateMemberCard.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateMembrCard(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.updateMembrCard(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, registVO.getMembrNo());
+    }
+
+
     /**
      * 배달정보 리스트 조회
      *
@@ -438,7 +487,7 @@ public class RegistController {
     @RequestMapping(value = "view/getDlvrMzoneList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDlvrMzoneList(RegistVO registVO, HttpServletRequest request,
-                              HttpServletResponse response, Model model) {
+                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -460,7 +509,7 @@ public class RegistController {
     @RequestMapping(value = "view/getDlvrTelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDlvrTelList(RegistVO registVO, HttpServletRequest request,
-                              HttpServletResponse response, Model model) {
+                                 HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -499,11 +548,51 @@ public class RegistController {
     @RequestMapping(value = "base/registDlvrTelInfo.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result registDlvrTelInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
-                                 HttpServletResponse response, Model model) {
+                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
         int result = registService.registDlvrTelInfo(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /***
+     * 배달전화번호정보 수정
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/updateDlvrTelInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateDlvrTelInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.updateDlvrTelInfo(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /***
+     * 배달전화번호정보 삭제
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/deleteDlvrTelInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteDlvrTelInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.deleteDlvrTelInfo(registVO, si);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

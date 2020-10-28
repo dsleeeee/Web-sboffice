@@ -106,6 +106,7 @@ public class MembrClassVO extends CmmVO {
      * [기념일적립구분한글]
      */
     private String anvsrPointSaveFgNm;
+
     /**
      * @return the membrOrgnFg
      */

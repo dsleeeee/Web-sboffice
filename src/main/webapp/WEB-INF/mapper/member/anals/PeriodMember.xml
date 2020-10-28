@@ -16,40 +16,128 @@
         TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_SALE_DTL
         COMMENTS : [매출]헤더_회원 과 [매출]상세
     -->
-    <select id="getPeriodMembrList"  parameterType="periodMembrVO" resultType="DefaultMap">
+    <select id="getPeriodMembrList" parameterType="periodMembrVO" resultType="DefaultMap">
         /* PeriodMembrMapper.getPeriodMembrList */
+
         SELECT
         tsshm.MEMBR_NO,
-        SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM,
-        tsshm.MEMBR_CARD_NO,
-        COUNT(MEMBR_NO) AS SALE_COUNT,
+        MAX(SBPENC.D(tsshm.MEMBR_NM)) AS MEMBR_NM,
+        MAX(tsshm.MEMBR_CARD_NO) AS MEMBR_CARD_NO,
+        MAX(tmmc.MEMBR_CLASS_NM) AS MEMBR_CLASS_NM,
+        MAX(tmmc.DC_RATE) AS DC_RATE,
+        COUNT(tsshm.MEMBR_NO) AS SALE_COUNT,
         SUM(tssd.SALE_AMT) AS SALE_AMT,
         SUM(tssd.DC_AMT) AS DC_AMT,
         SUM(tssd.MEMBR_SAVE_POINT) AS MEMBR_SAVE_POINT,
         SUM(tssd.MEMBR_USE_POINT) AS MEMBR_USE_POINT,
-        TO_CHAR(TO_DATE(MIN(tsshm.REG_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MIN_REG_DT,
-        TO_CHAR(TO_DATE(MAX(tsshm.REG_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MAX_REG_DT,
-        tsshm.SALE_DATE,
         tsshm.POS_NO,
-        tsshm.BILL_NO
-        FROM TB_SL_SALE_HDR_MEMBR tsshm,
+        tsshm.BILL_NO,
+        tsshm.SALE_DATE,
+        tsshm.STORE_CD,
+        tsshm.HQ_BRAND_CD,
+        tsshm.HQ_OFFICE_CD,
+        TO_CHAR(TO_DATE(MIN(tsshm.REG_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MIN_REG_DT,
+        TO_CHAR(TO_DATE(MAX(tsshm.REG_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MAX_REG_DT
+        FROM
+        TB_SL_SALE_HDR_MEMBR tsshm,
+        TB_MB_MEMBER tmm,
+        TB_MB_MEMBER_CLASS tmmc,
         TB_SL_SALE_DTL tssd
-        WHERE 1=1
-        AND tsshm.HQ_OFFICE_CD = #{membrOrgnCd}
+        WHERE
+        1 = 1
+        AND tsshm.HQ_OFFICE_CD = 'A0001'
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
-                AND tsshm.STORE_CD = #{storeCd}
-            ]]>
+                        AND tsshm.STORE_CD = #{storeCd}
+                    ]]>
         </if>
-        AND tsshm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsshm.SALE_DATE BETWEEN '20190101' AND '20200101'
         AND tsshm.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
         AND tsshm.HQ_BRAND_CD = tssd.HQ_BRAND_CD
         AND tsshm.STORE_CD = tssd.STORE_CD
         AND tsshm.SALE_DATE = tssd.SALE_DATE
         AND tsshm.POS_NO = tssd.POS_NO
         AND tsshm.BILL_NO = tssd.BILL_NO
-        GROUP BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsshm.MEMBR_CARD_NO, tsshm.SALE_DATE, tsshm.POS_NO, tsshm.BILL_NO
-        ORDER BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsshm.MEMBR_CARD_NO
+        AND tsshm.MEMBR_NO = tmm.MEMBR_NO
+        AND tmm.MEMBR_ORGN_CD = tmmc.MEMBR_ORGN_CD
+        AND tmm.MEMBR_CLASS_CD = tmmc.MEMBR_CLASS_CD
+        GROUP BY
+        tsshm.MEMBR_NO,
+        tsshm.POS_NO,
+        tsshm.BILL_NO,
+        tsshm.SALE_DATE,
+        tsshm.STORE_CD,
+        tsshm.HQ_BRAND_CD,
+        tsshm.HQ_OFFICE_CD
+        ORDER BY
+        tsshm.MEMBR_NO
+        <!--        SELECT-->
+        <!--        A.HQ_OFFICE_CD,-->
+        <!--        A.HQ_BRAND_CD,-->
+        <!--        A.STORE_CD,-->
+        <!--        A.MEMBR_NO,-->
+        <!--        A.SALE_COUNT,-->
+        <!--        A.MEMBR_NM,-->
+        <!--        A.MEMBR_CARD_NO,-->
+        <!--        B.SALE_AMT,-->
+        <!--        B.DC_AMT,-->
+        <!--        B.MEMBR_SAVE_POINT,-->
+        <!--        B.MEMBR_USE_POINT-->
+        <!--        FROM-->
+        <!--        (-->
+        <!--            SELECT-->
+        <!--                MAX(tsshm.SALE_DATE) AS SALE_DATE,-->
+        <!--                MAX(tsshm.HQ_OFFICE_CD) AS HQ_OFFICE_CD,-->
+        <!--                MAX(tsshm.HQ_BRAND_CD) AS HQ_BRAND_CD,-->
+        <!--                MAX(tsshm.STORE_CD) AS STORE_CD,-->
+        <!--                tsshm.MEMBR_NO,-->
+        <!--                COUNT(tsshm.MEMBR_NO) AS SALE_COUNT,-->
+        <!--                SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM,-->
+        <!--                MAX(tsshm.MEMBR_CARD_NO) AS MEMBR_CARD_NO-->
+        <!--            FROM-->
+        <!--                TB_SL_SALE_HDR_MEMBR tsshm-->
+        <!--            WHERE-->
+        <!--                1 = 1-->
+        <!--            AND tsshm.HQ_OFFICE_CD = #{membrOrgnCd}-->
+        <!--            AND tsshm.SALE_DATE BETWEEN #{startDate} AND #{endDate}-->
+        <!--            GROUP BY-->
+        <!--                tsshm.MEMBR_NO, tsshm.HQ_OFFICE_CD, tsshm.HQ_BRAND_CD,-->
+        <!--                tsshm.STORE_CD, tsshm.SALE_DATE, tsshm.POS_NO, tsshm.BILL_NO-->
+        <!--            ORDER BY-->
+        <!--                tsshm.MEMBR_NO-->
+        <!--        ) A,-->
+        <!--        (-->
+        <!--            SELECT-->
+        <!--                tssd.HQ_OFFICE_CD,-->
+        <!--                tssd.HQ_BRAND_CD,-->
+        <!--                tssd.STORE_CD,-->
+        <!--                SUM(tssd.SALE_AMT) AS SALE_AMT,-->
+        <!--                SUM(tssd.DC_AMT) AS DC_AMT,-->
+        <!--                SUM(tssd.MEMBR_SAVE_POINT) AS MEMBR_SAVE_POINT,-->
+        <!--                SUM(tssd.MEMBR_USE_POINT) AS MEMBR_USE_POINT-->
+        <!--            FROM-->
+        <!--                TB_SL_SALE_DTL tssd-->
+        <!--            WHERE-->
+        <!--                1 = 1-->
+        <!--            AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}-->
+        <!--            AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}-->
+        <!--            GROUP BY-->
+        <!--                tssd.HQ_OFFICE_CD, tssd.HQ_BRAND_CD, tssd.STORE_CD-->
+        <!--            ORDER BY-->
+        <!--                tssd.STORE_CD-->
+        <!--        ) B-->
+        <!--        WHERE-->
+        <!--            1 = 1-->
+        <!--        AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD-->
+        <!--        AND A.HQ_BRAND_CD = B.HQ_BRAND_CD-->
+        <!--        AND A.STORE_CD = B.STORE_CD-->
+        <!--        <if test='storeCd != null and storeCd != ""'>&ndash;&gt;-->
+        <!--        <![CDATA[&ndash;&gt;-->
+        <!--            AND A.STORE_CD = #{storeCd}&ndash;&gt;-->
+        <!--        ]]>&ndash;&gt;-->
+        <!--        </if>-->
+        <!--        ORDER BY A.MEMBR_NO-->
+
     </select>
 
 </mapper>

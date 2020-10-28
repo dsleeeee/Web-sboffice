@@ -19,9 +19,10 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.initGrid = function (s, e) {
         $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
-        $scope.$apply(function () {
-            $scope.data = new wijmo.collections.CollectionView(dlvrFirstList);
-        });
+        $scope.searchDlvr();
+        // $scope.$apply(function () {
+        //     $scope.data = new wijmo.collections.CollectionView(dlvrFirstList);
+        // });
 
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
             var ht = s.hitTest(e);
@@ -54,7 +55,7 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.dlvrLzoneCd = '자동채번';
         params.dlvrLzoneNm = '';
-        params.pageNo = $scope.flex.collectionView.items.length + 1;
+        params.pageNo = $scope.flex.collectionView.items.length;
         params.useYn = 'Y';
         params.inFg = 'W';
         // 추가 row
@@ -62,12 +63,14 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
     };
     // 삭제
     $scope.dlvrAreaDel = function () {
+
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
                 $scope.flex.collectionView.removeAt(i);
             }
         }
+
     };
 
     // Up
@@ -83,7 +86,8 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(i);
+                    $scope.flex.collectionView.items[i].pageNo = String(movedRows+1);
+                    $scope.flex.collectionView.items[i-1].pageNo = String(movedRows);
                 }
             }
         }
@@ -103,7 +107,9 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(i);
+                    $scope.flex.collectionView.items[i].pageNo = String(movedRows-1);
+                    $scope.flex.collectionView.items[i+1].pageNo = String(movedRows);
+                    console.log(movedRows)
                 }
             }
         }
@@ -115,29 +121,59 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.dlvrAreaSave = function () {
         // 파라미터 설정
         var params = new Array();
+
+        // pageNo 재설정
+        var editItems = [];
+        for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+            if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+                editItems.push($scope.flex.collectionView.items[s]);
+            }
+        }
+
+        for (var s = 0; s < editItems.length; s++) {
+            editItems[s].dispSeq = (s + 1);
+            console.log(editItems);
+            $scope.flex.collectionView.editItem(editItems[s]);
+            editItems[s].status = "U";
+            $scope.flex.collectionView.commitEdit();
+        }
+
+
+        console.log($scope.flex.collectionView);
+
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             var item = $scope.flex.collectionView.itemsAdded[i];
-            if (item.dlvrMzoneNm === "" || item.dlvrMzoneNm === null) {
+            if (item.dlvrLzoneNm === "" || item.dlvrLzoneNm === null) {
                 $scope._popMsg(messages["dlvrManage.areaNm"] + messages["cmm.require.text"]);
+                return false;
+            }
+            if (item.dlvrLzoneNm.getByteLengthForOracle() > 50) {
+                $scope._popMsg(messages["dlvrManage.areaNm"] + messages["excelUpload.overLength"] + " 50 ");
                 return false;
             }
             $scope.flex.collectionView.itemsAdded[i].status = "I";
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
+
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $.postJSONArray("/dlvr/manage/info/dlvrZone/regist.sb", params, function (result) {
-            $scope.data = new wijmo.collections.CollectionView(dlvrFirstList);
-        }, function (err) {
-            s_alert.pop(err.message);
+        $scope._save("/dlvr/manage/info/dlvrZone/regist.sb", params, function () {
+            $scope.searchDlvr();
         });
+    };
+    
+    // 저장후 조회
+    $scope.searchDlvr = function () {
+        $scope._inquiryMain("/dlvr/manage/info/dlvrZone/saveList.sb", {}, function () {
+        }, false);
     };
 }])
 ;
@@ -217,6 +253,7 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
         params.dlvrAddr = 'test'
         params.useYn = 'Y';
         params.inFg = 'W';
+        params.inNm = 'WEB';
         // 추가 row
         $scope._addRow(params);
     };
@@ -243,7 +280,8 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(i);
+                    $scope.flex.collectionView.items[i].pageNo = String(movedRows+1);
+                    $scope.flex.collectionView.items[i-1].pageNo = String(movedRows);
                 }
             }
         }
@@ -263,7 +301,8 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(i);
+                    $scope.flex.collectionView.items[i].pageNo = String(movedRows-1);
+                    $scope.flex.collectionView.items[i+1].pageNo = String(movedRows);
                 }
             }
         }
@@ -275,6 +314,23 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.dlvrDetailAreaSave = function () {
         // 파라미터 설정
         var params = new Array();
+
+        // pageNo 재설정
+        var editItems = [];
+        for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+            if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+                editItems.push($scope.flex.collectionView.items[s]);
+            }
+        }
+
+        for (var s = 0; s < editItems.length; s++) {
+            editItems[s].dispSeq = (s + 1);
+            console.log(editItems);
+            $scope.flex.collectionView.editItem(editItems[s]);
+            editItems[s].status = "U";
+            $scope.flex.collectionView.commitEdit();
+        }
+
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -294,7 +350,7 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $.postJSONArray("/dlvr/manage/info/dlvrZone/detailRegist.sb", params, function (result) {
-            $scope.data = new wijmo.collections.CollectionView(dlvrFirstList);
+            $scope.getDlvrManageDetailList();
         }, function (err) {
             s_alert.pop(err.message);
         });

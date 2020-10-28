@@ -5,7 +5,7 @@
 
 <div class="wj-dialog-body" id="deliView" name="deliView" class="subCon">
     <%-- body --%>
-    <div style="height:400px; overflow-y: auto;">
+    <div style="height:450px; overflow-y: auto;">
         <div ng-controller="memberDlvrCtrl">
             <f:form id="regDlvrForm" name="regDlvrForm">
                 <div class="searchBar flddUnfld">
@@ -107,7 +107,8 @@
                         <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn"
                                              align="center"
                                              width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalDlvrDate"/>" binding="lastDlvrDate"
+                        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalDlvrDate"/>"
+                                             binding="lastDlvrDate"
                                              align="center"
                                              width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvr.membr.time"/>" binding="totDlvrCnt"
@@ -119,53 +120,63 @@
             </div>
         </div>
         <div ng-controller="memberDlvrTelCtrl">
-<%--            <f:form id="regDlvrTelForm" name="regDlvrTelForm">--%>
-                <div class="searchBar flddUnfld">
-                    <a href="#" class="open fl"> <s:message code="regist.delivery.tel"/></a>
-                    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                        <button type="button" class="btn_blue fr" ng-click="saveTel()">
-                            <s:message code="cmm.save"/>
-                        </button>
-                    </div>
+            <%--            <f:form id="regDlvrTelForm" name="regDlvrTelForm">--%>
+            <div class="searchBar flddUnfld">
+                <a href="#" class="open fl"> <s:message code="regist.delivery.tel"/></a>
+                <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+                    <button type="button" class="btn_blue ml5 fr" ng-if="!selectedMember.dlvrTelSeq" ng-click="saveTel()">
+                        <s:message code="cmm.save"/>
+                    </button>
+                    <button type="button" class="btn_blue ml5 fr" ng-if="selectedMember.dlvrTelSeq" ng-click="saveInit()">
+                        <s:message code="cmm.init"/>
+                    </button>
+                    <button type="button" class="btn_blue ml5 fr" ng-if="selectedMember.dlvrTelSeq" ng-click="saveDel()">
+                        <s:message code="cmm.delete"/>
+                    </button>
+                    <button type="button" class="btn_blue ml5 fr" ng-if="selectedMember.dlvrTelSeq" ng-click="saveEdit()">
+                        <s:message code="cmm.edit"/>
+                    </button>
+
                 </div>
-                <%--                                <h3 class="h3_tbl"><s:message code="storeManage.basicInfo"/></h3>--%>
-                <table class="searchTbl">
-                    <colgroup>
-                        <col class="w15"/>
-                        <col class="w35"/>
-                        <col class="w15"/>
-                        <col class="w35"/>
-                    </colgroup>
-                    <tbody>
-                    <tr style="border-top: 1px solid #ccc;">
-                            <%-- 배달구역 --%>
-                        <th><s:message code="regist.tel"/><em class="imp">*</em></th>
-                        <td>
-                            <input type="text" id="dlvrTelNo" name="dlvrTelNo" ng-model="dlvrTelNo"
-                                   class="sb-input w100" maxlength="30" required>
-                        </td>
-                        <th><s:message code="regist.useYn"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="dlvrTelUseYn"
-                                        ng-model="dlvrTelUseYn"
-                                        control="useYnCombo"
-                                        items-source="_getComboData('useYn')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-<%--            </f:form>--%>
+            </div>
+            <%--                                <h3 class="h3_tbl"><s:message code="storeManage.basicInfo"/></h3>--%>
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                </colgroup>
+                <tbody>
+                <tr style="border-top: 1px solid #ccc;">
+                    <%-- 배달전화번호 --%>
+                    <th><s:message code="regist.tel"/><em class="imp">*</em></th>
+                    <td>
+                        <input type="text" id="dlvrTelNo" name="dlvrTelNo" ng-model="memberTel.dlvrTelNo"
+                               class="sb-input w100" maxlength="30" required>
+                    </td>
+                    <th><s:message code="regist.useYn"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="dlvrTelUseYn"
+                                    ng-model="memberTel.dlvrTelUseYn"
+                                    control="useYnCombo"
+                                    items-source="_getComboData('useYn')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <%--            </f:form>--%>
 
             <%-- Card Histroy --%>
-            <div class="w100 mt10 mb20">
+            <div class="w100 mt10">
                 <div class="wj-gridWrap" style="height:200px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             control="flex"
@@ -177,9 +188,9 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-<%--                        <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="dlvrTelSeq"--%>
-<%--                                             align="center"--%>
-<%--                                             is-read-only="true"></wj-flex-grid-column>--%>
+                        <%--                        <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="dlvrTelSeq"--%>
+                        <%--                                             align="center"--%>
+                        <%--                                             is-read-only="true"></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo"
                                              align="left"
                                              is-read-only="true"></wj-flex-grid-column>

@@ -67,27 +67,25 @@
     FROM
         TB_MB_MEMBER_POINT tmmp
     WHERE
-        MEMBR_ORGN_CD = 'A0001'
---         AND MEMBR_NO = '0000000002';
+        MEMBR_ORGN_CD = #{membrOrgnCd}
     </insert>
 
     <select id="getMemberPointListChk" parameterType="memberPointVO" resultType="DefaultMap">
       /* MemberPointMapper.getMemberPointListChk */
         SELECT
-	       tmm.MEMBR_CLASS_CD ,
-	       SBPENC.D (tmm.MEMBR_NM) AS MEMBR_NM,
-	       tmm.MEMBR_CARD_NO,
-	       tmmp.MEMBR_ORGN_CD ,
-	       tmmp.MEMBR_NO ,
-	       tmmp.AVABL_POINT
+        	tmm.MEMBR_CLASS_CD ,
+        	SBPENC.D (tmm.MEMBR_NM) AS MEMBR_NM,
+        	tmm.MEMBR_CARD_NO,
+        	tmm.MEMBR_ORGN_CD ,
+        	tmm.MEMBR_NO,
+        	tmmp.AVABL_POINT
         FROM
-	       TB_MB_MEMBER_POINT tmmp,
-	       TB_MB_MEMBER tmm
-        WHERE
-	       tmmp.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
-	    AND tmmp.MEMBR_NO = tmm.MEMBR_NO
-        AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
-	    AND tmmp.MEMBR_NO = #{membrNo}
+        	TB_MB_MEMBER tmm, TB_MB_MEMBER_POINT tmmp
+        WHERE 1=1
+            AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD
+            AND tmm.MEMBR_NO = tmmp.MEMBR_NO
+        	AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        	AND tmm.MEMBR_NO = #{membrNo}
   </select>
 
 
@@ -114,5 +112,40 @@
         	MEMBR_ORGN_CD = #{membrOrgnCd}
         	AND MEMBR_NO = #{membrNo}
     </update>
+
+    <!-- 회원포인트조정 저장 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_HIST
+        COMMENTS : 회원포인트조정 저장
+    -->
+    <insert id="insertMemberPointHist" parameterType="memberPointVO">
+        /* MemberPointMapper.insertMemberPointHist */
+        INSERT INTO TB_MB_MEMBER_POINT_HIST (
+	         MEMBR_ORGN_CD ,
+	         MEMBR_NO ,
+	         CHG_DATE ,
+	         CHG_SEQ ,
+	         POINT_CHG_FG ,
+	         CHG_POINT ,
+	         REMARK ,
+	         REG_DT ,
+	         REG_ID,
+	         MOD_DT , 
+	         MOD_ID
+	    ) VALUES (
+            #{membrOrgnCd},
+            #{membrNo},
+            #{chgDate},
+            SQ_TB_MEMBER_POINT_HIST.NEXTVAL,
+            '3',
+            #{avablPoint},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
 
 </mapper>

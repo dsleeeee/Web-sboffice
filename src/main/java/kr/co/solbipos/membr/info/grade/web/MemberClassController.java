@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -146,9 +147,38 @@ public class MemberClassController {
     public Result classRegist(@RequestBody MembrClassVO membrClassVO, HttpServletRequest request,
                               HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        DefaultMap<Object> result = classService.classInfoChk(membrClassVO,sessionInfoVO);
+        int result = classService.classInfoChk(membrClassVO,sessionInfoVO);
+        DefaultMap<Object> status = classService.getMember(membrClassVO, sessionInfoVO);
+        if(result == 0) {
+            status.put("data", result);
+            status.put("message", messageService.get("grade.membr.deflt.yn.fail"));
+            return returnJson(Status.OK, status);
+        } else {
+            status.put("data", result);
+            status.put("message", messageService.get("cmm.saveSucc"));
+            return returnJson(Status.OK, status);
+        }
+    }
 
-        return returnJson(Status.OK, result);
+    /**
+     * 회원정보 삭제 체크
+     *
+     * @param membrClassVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "grade/removeChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result classRemoveChk(@RequestBody  MembrClassVO[] membrClassVOs, BindingResult bindingResult,
+                                 HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> resultMap = classService.deleteClassInfoChk(membrClassVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, resultMap);
     }
 
     /**

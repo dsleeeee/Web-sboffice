@@ -12,7 +12,7 @@ import java.util.List;
 public interface MemberExcelUploadMapper {
   List<DefaultMap<Object>> getMemberExcelList(MemberExcelUploadVO memberExcelUploadVO);
 
-    int insertMember(MemberExcelUploadVO memberExcelUploadVO);
+  int insertMember(MemberExcelUploadVO memberExcelUploadVO);
 
   int insertMemberAddr(MemberExcelUploadVO memberExcelUploadVO);
 

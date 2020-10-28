@@ -16,16 +16,19 @@
         <div class="searchBar flddUnfld">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
+            <!-- 삭제-->
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnDel" ng-if="userUseYn" ng-click="classDel()">
+                <button class="btn_blue fr" id="btnDel" ng-if="userUseYn" ng-click="classDel()" >
                     <s:message code="cmm.del"/>
                 </button>
             </div>
+            <!-- 저장-->
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <button class="btn_blue fr" id="btnSearch" ng-if="userUseYn" ng-click="classSave()">
                     <s:message code="cmm.save"/>
                 </button>
             </div>
+            <!-- 신규등록-->
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <button class="btn_blue fr" id="btnSave" ng-if="userUseYn" ng-click="newAdd()">
                     <s:message code="cmm.new.add"/>
@@ -41,12 +44,12 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 회원번호 --%>
+                <%-- 등급코드/명/기본여부 --%>
                 <th><s:message code="grade.membr.class.cd.nm"/></th>
                 <td colspan="3">
-                    <input type="text" id="membrCd" class="sb-input w10 fl mr10" ng-model="detailData.membrClassCd"
-                           maxlength="3" />
-                    <input type="text" id="membrCdNm" class="sb-input w30 fl mr10" ng-model="detailData.membrClassNm"
+                    <input type="text" id="membrClassCd" class="sb-input w10 fl mr10" ng-model="detailData.membrClassCd"
+                           maxlength="3" ng-readonly="detailData.regDt !== undefined" />
+                    <input type="text" id="membrClassNm" class="sb-input w30 fl mr10" ng-model="detailData.membrClassNm"
                            maxlength="15" />
                     <div class="sb-select fl w20 mr10">
                         <wj-combo-box
@@ -71,13 +74,13 @@
                 <%-- 할인율 --%>
                 <th><s:message code="grade.membr.dc.rate"/></th>
                 <td>
-                    <input type="text" id="membrDc" class="sb-input w80" ng-model="detailData.dcRate" maxlength="3" placeholder="<s:message code="grade.membr.dc.rate"/><s:message code='cmm.regexp' arguments='3'/>"/>
+                    <input type="text" id="dcRate" class="sb-input w80" ng-model="detailData.dcRate" maxlength="3" placeholder="<s:message code="grade.membr.dc.rate"/><s:message code='cmm.regexp' arguments='3'/>"/>
                     <s:message code="grade.membr.per"/> <s:message code="grade.membr.discnt"/>
                 </td>
                 <%-- 신규가입시 부여 Point --%>
                 <th><s:message code="grade.membr.new.join.save.point"/></th>
                 <td>
-                    <input type="text" id="membrNewPoint" class="sb-input w80" ng-model="detailData.newJoinSavePoint"
+                    <input type="text" id="newJoinSavePoint" class="sb-input w80" ng-model="detailData.newJoinSavePoint"
                            maxlength="8" placeholder="<s:message code="grade.membr.new.join.save.point"/><s:message code='cmm.regexp' arguments='8'/>"/>
                     <s:message code="grade.membr.amt"/>
                 </td>
@@ -86,14 +89,14 @@
                 <%-- 최소 사용 Point --%>
                 <th><s:message code="grade.membr.min.use.point"/></th>
                 <td>
-                    <input type="text" id="membrMinPoint" class="sb-input w50" ng-model="detailData.minUsePoint"
+                    <input type="text" id="minUsePoint" class="sb-input w50" ng-model="detailData.minUsePoint"
                            maxlength="8"/>
                     <s:message code="grade.membr.min.use.point.message"/>
                 </td>
                 <%-- 첫거래 적립 Point --%>
                 <th><s:message code="grade.membr.first.sale.save.point"/></th>
                 <td>
-                    <input type="text" id="membrFirstPoint" class="sb-input w80"
+                    <input type="text" id="firstSaleSavePoint" class="sb-input w80"
                            ng-model="detailData.firstSaleSavePoint"
                            maxlength="3" placeholder="<s:message code="grade.membr.first.sale.save.point"/><s:message code='cmm.regexp' arguments='3'/>"/>
                     <s:message code="grade.membr.per"/>
@@ -103,7 +106,7 @@
                 <%-- 최대 사용 포인트 --%>
                 <th><s:message code="grade.membr.max.use.point"/></th>
                 <td>
-                    <input type="text" id="membrMaxPoint" class="sb-input w50" ng-model="detailData.maxUsePoint"
+                    <input type="text" id="maxUsePoint" class="sb-input w50" ng-model="detailData.maxUsePoint"
                            maxlength="8"/>
                     <s:message code="grade.membr.max.use.point.message"/>
                 </td>
@@ -112,7 +115,7 @@
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
-                                id="membrPointYn"
+                                id="useAccPointYn"
                                 ng-model="detailData.useAccPointYn"
                                 control="membrPointYnCombo"
                                 items-source="_getComboData('membrDcYn')"
@@ -130,7 +133,7 @@
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
-                                id="membrDcYn"
+                                id="dcAccPointYn"
                                 ng-model="detailData.dcAccPointYn"
                                 control="membrDcYnCombo"
                                 items-source="_getComboData('membrDcYn')"
@@ -144,7 +147,7 @@
                 <%-- 할인한도액 --%>
                 <th><s:message code="grade.membr.dc.max"/></th>
                 <td>
-                    <input type="text" id="membrDcMax" class="sb-input w100" ng-model="detailData.dcLimitAmt" maxlength="8"/>
+                    <input type="text" id="dcLimitAmt" class="sb-input w100" ng-model="detailData.dcLimitAmt" maxlength="8"/>
                 </td>
             </tr>
             <tr>
@@ -153,7 +156,7 @@
                 <td>
                     <div class="sb-select w50 fl mr10">
                         <wj-combo-box
-                                id="membrAnvsrYn"
+                                id="anvsrPointSaveFg"
                                 ng-model="detailData.anvsrPointSaveFg"
                                 control="membrAnvsrYnCombo"
                                 items-source="_getComboData('membrAnvsrYn')"
@@ -163,7 +166,7 @@
                                 initialized="_initComboBox(s)">
                         </wj-combo-box>
                     </div>
-                    <input type="text" id="membrAnvsr" ng-readonly="detailData.anvsrPointSaveFg === ''" class="sb-input w10 fl " ng-model="detailData.anvsrSavePoint"
+                    <input type="text" id="anvsrSavePoint" ng-readonly="detailData.anvsrPointSaveFg === ''" class="sb-input w10 fl " ng-model="detailData.anvsrSavePoint"
                            maxlength="3"/><span class="txtIn mt10"> <s:message code="grade.membr.per"/> <s:message code="grade.membr.plus"/></span>
                 </td>
                 <%-- 포인트 사용 구분 --%>
@@ -210,49 +213,49 @@
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk"
-                                                 width="*"></wj-flex-grid-column>
+                                                 width="40"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
                                                  binding="membrClassType"
-                                                 align="center"
+                                                 align="center" width="100"
                                                  is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.deflt.yn"/>" binding="defltYn"
-                                                 align="center"
+                                                 align="center" width="*"
                                                  is-read-only="true" width="*"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.dc.rate"/>" binding="dcRate"
                                                  align="center"
-                                                 is-read-only="true" visible="false" width="0"></wj-flex-grid-column>
+                                                 is-read-only="true" visible="false" width="80"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.new.join.save.point"/>"
                                                  binding="newJoinSavePoint"
                                                  align="center"
-                                                 width="*" is-read-only="true"></wj-flex-grid-column>
+                                                 width="80" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.first.sale.save.point"/>"
                                                  binding="firstSaleSavePoint"
-                                                 width="*" align="center"
+                                                 width="80" align="center"
                                                  is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.min.use.point"/>"
                                                  binding="minUsePoint"
-                                                 width="*"
+                                                 width="80"
                                                  align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.max.use.point"/>"
                                                  binding="maxUsePoint" is-read-only="true"
-                                                 width="*"></wj-flex-grid-column>
+                                                 width="80"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.point.save.fg"/>"
                                                  binding="pointSaveFgNm"
-                                                 width="*"
+                                                 width="80"
                                                  align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.dc.yn"/>" binding="dcAccPointYn"
-                                                 data-map="useYn" width="*" align="center"
+                                                 data-map="useYn" width="80" align="center"
                                                  is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.point.yn"/>"
                                                  binding="useAccPointYn"
-                                                 data-map="useAccPointYn" width="*" align="center"
+                                                 data-map="useAccPointYn" width="80" align="center"
                                                  is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.dc.max"/>" binding="dcLimitAmt"
-                                                 data-map="dcLimitAmt" width="*" align="center"
+                                                 data-map="dcLimitAmt" width="80" align="center"
                                                  is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="grade.membr.anvsr.point.save.fg"/>"
                                                  binding="anvsrPointSaveFgNm"
-                                                 data-map="anvsrPointSaveFg" width="*" align="center"
+                                                 data-map="anvsrPointSaveFg" width="80" align="center"
                                                  is-read-only="true"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
@@ -263,7 +266,7 @@
     <div class="w50 fr mt40 mb20" style="width: 45%" ng-controller="memberClassDetailCtrl">
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
-            <div class="updownSet oh mb10" ng-switch="classData.pointSaveFg">
+            <div class="oh mb10" ng-switch="classData.pointSaveFg">
                 <span class="fl bk lh30 mr10" ng-switch-default><s:message code='grade.membr.point.list.rate'/></span>
                 <span class="fl bk lh30 mr10" ng-switch-when="1"><s:message code='grade.membr.point.list.rate'/></span>
                 <span class="fl bk lh30 mr10" ng-switch-when="2"><s:message code='grade.membr.point.list.amt'/></span>
@@ -313,10 +316,10 @@
                         <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk"
                                              width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
-                                             binding="membrOrgnCd" is-read-only="true"
+                                             binding="membrOrgnCd" is-read-only="true" width="*"
                                              visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
-                                             binding="initPayCd" is-read-only="true"
+                                             binding="initPayCd" is-read-only="true" width="*"
                                              visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
                                              binding="membrClassType" is-read-only="true" width="*"></wj-flex-grid-column>

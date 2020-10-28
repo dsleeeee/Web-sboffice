@@ -8,6 +8,9 @@ import kr.co.solbipos.membr.info.regist.service.enums.AnvType;
 import kr.co.solbipos.membr.info.regist.service.enums.PeriodType;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
+
+import java.util.Arrays;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -44,13 +47,17 @@ public class RegistVO extends PageVO {
     @NotBlank(groups = {Regist.class}, message = "{regist.membr.nm}{cmm.require.text}")
     private String membrNm;
     /** 회원영문명 */
-    private String memberEngNm;
+    private String membrEngNm;
     /** 회원닉네임 */
     private String membrNicknm;
     /** 회원분류코드 */
     private String membrClassCd;
     /** 회원카드번호 */
     private String membrCardNo;
+    /** 우리매장 등록회원 */
+    private String storeMembr;
+    /** 우리매장 방문회원 */
+    private String visitStoreMembr;
     /** 등록매장코드 */
     @NotBlank(groups = {Regist.class}, message = "{regist.reg.store.cd}{cmm.require.text}")
     private String regStoreCd;
@@ -136,6 +143,9 @@ public class RegistVO extends PageVO {
     private String regDt;
 
     /** 고객카드상태구분*/
+    private String cstCardUseFg;
+
+    /** 고객카드상태구분*/
     private String cstCardStatFg;
     /** 이전고객카드번호*/
     private String oldCstCardNo;
@@ -154,9 +164,23 @@ public class RegistVO extends PageVO {
     private String lastDlvrDate;
     private Integer totDlvrCnt;
     private Integer dlvrAddrSeq;
+    private Integer dlvrTelSeq;
+
+    private String memberSaleFg;
+    private String memberPointFg;
+    private Integer chgPoint;
+    private String chgDate;
     /** 프로시져 결과 */
     private String result;
 
+    private String pointChgFg;
+    private Integer movePoint;
+
+    private String regUseStoreCd;
+    private String regUseStoreCds[];
+    private String storeNm;
+
+    private boolean newMemberYn;
     /**
      * @return the orgnFg
      */
@@ -248,18 +272,18 @@ public class RegistVO extends PageVO {
     }
 
     /**
-     * @return the memberEngNm
+     * @return the membrEngNm
      */
 
-    public String getMemberEngNm() {
-        return memberEngNm;
+    public String getMembrEngNm() {
+        return membrEngNm;
     }
 
     /**
-     * @param memberEngNm the memberEngNm to set
+     * @param membrEngNm the membrEngNm to set
      */
-    public void setMemberEngNm(String memberEngNm) {
-        this.memberEngNm = memberEngNm;
+    public void setMembrEngNm(String membrEngNm) {
+        this.membrEngNm = membrEngNm;
     }
 
     /**
@@ -305,6 +329,22 @@ public class RegistVO extends PageVO {
      */
     public void setMembrCardNo(String membrCardNo) {
         this.membrCardNo = membrCardNo;
+    }
+
+    public String getStoreMembr() {
+        return storeMembr;
+    }
+
+    public void setStoreMembr(String storeMembr) {
+        this.storeMembr = storeMembr;
+    }
+
+    public String getVisitStoreMembr() {
+        return visitStoreMembr;
+    }
+
+    public void setVisitStoreMembr(String visitStoreMembr) {
+        this.visitStoreMembr = visitStoreMembr;
     }
 
     /**
@@ -864,6 +904,14 @@ public class RegistVO extends PageVO {
         this.regDt = regDt;
     }
 
+    public String getCstCardUseFg() {
+        return cstCardUseFg;
+    }
+
+    public void setCstCardUseFg(String cstCardUseFg) {
+        this.cstCardUseFg = cstCardUseFg;
+    }
+
     /**
      * @return the cstCardStatFg
      */
@@ -987,7 +1035,115 @@ public class RegistVO extends PageVO {
     public void setDlvrAddrSeq(Integer dlvrAddrSeq) {
         this.dlvrAddrSeq = dlvrAddrSeq;
     }
+
+    public Integer getDlvrTelSeq() {
+        return dlvrTelSeq;
+    }
+
+    public void setDlvrTelSeq(Integer dlvrTelSeq) {
+        this.dlvrTelSeq = dlvrTelSeq;
+    }
+
     public String getResult() { return result; }
 
     public void setResult(String result) { this.result = result; }
+
+    public String getMemberSaleFg() {
+        return memberSaleFg;
+    }
+
+    public void setMemberSaleFg(String memberSaleFg) {
+        this.memberSaleFg = memberSaleFg;
+    }
+
+    public String getMemberPointFg() {
+        return memberPointFg;
+    }
+
+    public void setMemberPointFg(String memberPointFg) {
+        this.memberPointFg = memberPointFg;
+    }
+
+    public Integer getChgPoint() {
+        return chgPoint;
+    }
+
+    public void setChgPoint(Integer chgPoint) {
+        this.chgPoint = chgPoint;
+    }
+
+    public String getChgDate() {
+        return chgDate;
+    }
+
+    public void setChgDate(String chgDate) {
+        this.chgDate = chgDate;
+    }
+
+    public String getPointChgFg() { return pointChgFg; }
+
+    public void setPointChgFg(String pointChgFg) { this.pointChgFg = pointChgFg; }
+
+    public Integer getMovePoint() { return movePoint; }
+
+    public void setMovePoint(Integer movePoint) { this.movePoint = movePoint; }
+
+    public String getRegUseStoreCd() {
+        return regUseStoreCd;
+    }
+
+    public void setRegUseStoreCd(String regUseStoreCd) {
+        this.regUseStoreCd = regUseStoreCd;
+    }
+
+    public String[] getRegUseStoreCds() {
+        return regUseStoreCds;
+    }
+
+    public void setRegUseStoreCds(String[] regUseStoreCds) {
+        this.regUseStoreCds = regUseStoreCds;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public boolean isNewMemberYn() {
+        return newMemberYn;
+    }
+
+    public void setNewMemberYn(boolean newMemberYn) {
+        this.newMemberYn = newMemberYn;
+    }
+
+    @Override
+	public String toString() {
+		return "RegistVO [orgnFg=" + orgnFg + ", hqOfficeCd=" + hqOfficeCd + ", storeCd=" + storeCd + ", membrOrgnCd="
+				+ membrOrgnCd + ", membrNo=" + membrNo + ", membrNm=" + membrNm + ", membrEngNm=" + membrEngNm
+				+ ", membrNicknm=" + membrNicknm + ", membrClassCd=" + membrClassCd + ", membrCardNo=" + membrCardNo
+				+ ", storeMembr=" + storeMembr + ", visitStoreMembr=" + visitStoreMembr + ", regStoreCd=" + regStoreCd
+				+ ", regStoreCds=" + Arrays.toString(regStoreCds) + ", postNo=" + postNo + ", addr=" + addr
+				+ ", addrDtl=" + addrDtl + ", birthday=" + birthday + ", lunarYn=" + lunarYn + ", gendrFg=" + gendrFg
+				+ ", emailAddr=" + emailAddr + ", shortNo=" + shortNo + ", telNo=" + telNo + ", weddingYn=" + weddingYn
+				+ ", weddingday=" + weddingday + ", emailRecvYn=" + emailRecvYn + ", smsRecvYn=" + smsRecvYn
+				+ ", useYn=" + useYn + ", remark=" + remark + ", anvType=" + anvType + ", anvStartDate=" + anvStartDate
+				+ ", anvEndDate=" + anvEndDate + ", periodType=" + periodType + ", periodStartDate=" + periodStartDate
+				+ ", periodEndDate=" + periodEndDate + ", postpaidStoreCds=" + postpaidStoreCds + ", cdCompany="
+				+ cdCompany + ", cdPartner=" + cdPartner + ", startSaveSale=" + startSaveSale + ", endSaveSale="
+				+ endSaveSale + ", startAvablPoint=" + startAvablPoint + ", endAvablPoint=" + endAvablPoint
+				+ ", phoneNo=" + phoneNo + ", totSavePoint=" + totSavePoint + ", totUsePoint=" + totUsePoint
+				+ ", avablPoint=" + avablPoint + ", totAdjPoint=" + totAdjPoint + ", firstSaleDate=" + firstSaleDate
+				+ ", lastSaleDate=" + lastSaleDate + ", regDt=" + regDt + ", cstCardUseFg=" + cstCardUseFg
+				+ ", cstCardStatFg=" + cstCardStatFg + ", oldCstCardNo=" + oldCstCardNo + ", cstCardIssFg="
+				+ cstCardIssFg + ", issRemark=" + issRemark + ", issOrgnCd=" + issOrgnCd + ", issDate=" + issDate
+				+ ", dlvrLzoneCd=" + dlvrLzoneCd + ", dlvrMzoneCd=" + dlvrMzoneCd + ", lastDlvrDate=" + lastDlvrDate
+				+ ", totDlvrCnt=" + totDlvrCnt + ", dlvrAddrSeq=" + dlvrAddrSeq + ", dlvrTelSeq=" + dlvrTelSeq
+				+ ", memberSaleFg=" + memberSaleFg + ", memberPointFg=" + memberPointFg + ", chgPoint=" + chgPoint
+				+ ", chgDate=" + chgDate + ", result=" + result + ", pointChgFg=" + pointChgFg + ", movePoint="
+				+ movePoint + "]";
+	}
 }

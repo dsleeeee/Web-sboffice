@@ -87,7 +87,6 @@ public class MembrNonBilClctController {
                                          HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//        System.out.println("test : 1111");
 
         List<DefaultMap<Object>> result = membrNonBilClctService.getMembrNonBilClctDetailList(membrNonBilClctVO, sessionInfoVO);
 

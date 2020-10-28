@@ -13,6 +13,14 @@
  */
 var app = agrid.getApp();
 
+// 사용여부
+var useDataMapTotal = [
+    {"name": "전체", "value": ""},
+    {"name": "사용", "value": "Y"},
+    {"name": "미사용", "value": "N"}
+];
+
+
 /**
  *  세금계산서 요청목록 그리드 생성
  */
@@ -25,6 +33,7 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     $scope._setComboData("rMemberClass", memberClassList);
     $scope._setComboData("rMemberDlvrLzone", memberDlvrLzone);
     $scope._setComboData("rUseYn", useDataMap);
+    $scope._setComboData("rUseYnDefeult", useData);
     memberClassList.unshift({name: "전체", value: ""});
     memberDlvrLzone.unshift({name: "전체", value: ""});
 
@@ -58,22 +67,24 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     $scope.$on("dlvrCtrl", function (event, data) {
         $scope.searchDlvrList();
         event.preventDefault();
-        var scope = agrid.getScope('dlvrTelCtrl');
-        scope._broadcast('dlvrTelList');
     });
 
 //
     $scope.searchDlvrList = function () {
+        var scope = agrid.getScope('dlvrTelCtrl');
         var params = {};
-        params.membrNo = $scope.membrNo
-        params.membrNm = $scope.membrNm
-        params.memberClass = $scope.memberClassCd;
+        params.membrNo = $scope.membrNo;
+        params.membrNm = $scope.membrNm;
+        params.membrClassCd = $scope.membrClassCd;
         params.lZoneListCd = $scope.lZoneListCd;
         params.mZoneListCd = $scope.mZoneListCd;
+        params.addrDtl = $scope.addrDtl;
         params.useYn = $scope.useYn;
+        params.telNo = $scope.telNo;
+        params.dlvrTelUseYn = $scope.dlvrTelUseYn;
         $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {
         }, false);
-
+        scope._broadcast('dlvrTelList', params);
     };
 
     // http 조회 후 status 체크
@@ -185,9 +196,10 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     // 배달구역 일괄적용
     $scope.dlvrZoneSetting = function () {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            console.log();
             if ($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].addr = $scope.totDlvrLzoneCd + ' ' + $scope.totDlvrMzoneCd;
-                $scope.flex.collectionView.commitEdit();
+                $scope.flex.collectionView.items[i].addr = $scope.totDlvrLzoneCdCombo.text + ' ' + $scope.totDlvrMzoneCdCombo.text;
+                // $scope.flex.collectionView.commitEdit();
                 $scope.flex.collectionView.refresh();
             }
         }
@@ -198,7 +210,7 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].useYn = $scope.totUseYn;
-                $scope.flex.collectionView.commitEdit();
+                // $scope.flex.collectionView.commitEdit();
                 $scope.flex.collectionView.refresh();
             }
         }
@@ -210,7 +222,7 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         for (var i = 0; i < scope.flex.collectionView.items.length; i++) {
             if (scope.flex.collectionView.items[i].gChk) {
                 scope.flex.collectionView.items[i].telNo = $scope.totTelNo;
-                scope.flex.collectionView.commitEdit();
+                // scope.flex.collectionView.commitEdit();
                 scope.flex.collectionView.refresh();
             }
         }
@@ -222,7 +234,7 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         for (var i = 0; i < scope.flex.collectionView.items.length; i++) {
             if (scope.flex.collectionView.items[i].gChk) {
                 scope.flex.collectionView.items[i].useYn = $scope.totTelUseYn;
-                scope.flex.collectionView.commitEdit();
+                // scope.flex.collectionView.commitEdit();
                 scope.flex.collectionView.refresh();
             }
         }
@@ -255,6 +267,7 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
     // 배달주소지 저장
     $scope.infoSave = function () {
+        console.log($scope.flex.collectionView);
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
@@ -268,16 +281,30 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
     // 배달주소지 삭제
     $scope.infoDelete = function () {
+
+        // 해당 자료를 삭제하시겠습니까?
+        $scope._popConfirm(messages["dlvr.membr.del"], function () {
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                if (item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
+            }
+            $scope.infoDeleteSave()
+        });
+    };
+
+    $scope.infoDeleteSave = function () {
         let params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $.postJSONArray("/membr/info/dlvr/dlvr/deleteDlvr.sb", params, function (result) {
+        $.postJSONArray("/membr/info/dlvr/dlvr/deleteDlvr.sb", params, function () {
             $scope.searchDlvrList();
         });
-    };
+    }
 }]);
 
 
@@ -298,7 +325,8 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope._getComboDataQuery('076', 'weddingYn', 'A');
     $scope._getComboDataQuery('055', 'gendrFg', 'A');
     $scope._getComboDataQuery('067', 'useYn', 'A');
-
+    // $scope._getComboDataQuery('067', 'telUseYn', '');
+    $scope._setComboData("telUseYn", useDataMapTotal);
 
     // 선택 회원
     $scope.selectedMember;
@@ -317,16 +345,19 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         $scope.memberClassDataMap = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
     };
 
+    // 조회
     $scope.$on("dlvrTelList", function (event, data) {
-        $scope.searchDlvrTelList();
+        $scope.searchDlvrTelList(data);
         event.preventDefault();
     });
-    $scope.searchDlvrTelList = function () {
+    $scope.searchDlvrTelList = function (data) {
+        console.log(data);
+        $scope.telData = data;
         var params = {};
-        params.membrNo = $scope.membrNo;
-        params.membrNm = $scope.membrNm;
-        params.telNo = $scope.telNo;
-        params.useYn = $scope.dlvrTelUseYn;
+        params.membrNo = data.membrNo;
+        params.membrNm = data.membrNm;
+        params.telNo = data.telNo;
+        params.useYn = data.dlvrTelUseYn;
         $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {
         }, false);
     };
@@ -360,23 +391,33 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
+            // 전화번호를 입력하세요.
+            var msg = messages["regist.tel"] + messages["cmm.require.text"];
+            if ($scope.flex.collectionView.itemsEdited[i].telNo === "") {
+                $scope._popMsg(msg);
+                return false;
+            }
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $.postJSONArray("/membr/info/dlvr/dlvr/saveDlvrTel.sb", params, function (result) {
-            $scope.searchDlvrTelList();
+            $scope.searchDlvrTelList($scope.telData);
         });
     };
 
     $scope.infoDelete = function () {
         let params = new Array();
-        for (var i = $scope.flex.collectionView.items.length-1; i >= 0; i--) {
-            var item = $scope.flex.collectionView.items[i];
-            if (item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
+        // 해당 자료를 삭제하시겠습니까?
+        $scope._popConfirm(messages["dlvr.membr.del"], function () {
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                var item = $scope.flex.collectionView.items[i];
+                if (item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
             }
-        }
-        $scope.infoDeleteSave();
+
+            $scope.infoDeleteSave();
+        });
     }
 
     // 배달전화번호 삭제

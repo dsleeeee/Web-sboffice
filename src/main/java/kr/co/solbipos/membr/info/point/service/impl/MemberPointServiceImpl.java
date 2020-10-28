@@ -1,5 +1,21 @@
 package kr.co.solbipos.membr.info.point.service.impl;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -11,18 +27,6 @@ import kr.co.solbipos.membr.info.point.service.MemberPointService;
 import kr.co.solbipos.membr.info.point.service.MemberPointVO;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.service.impl.RegistMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("MemberPointService")
 @Transactional
@@ -55,6 +59,7 @@ public class MemberPointServiceImpl implements MemberPointService {
         List<DefaultMap<Object>> resultList = memberPointMapper.getMemberPointList(memberPointVO);
 
         int totAjdPoint = Integer.parseInt(request.getParameter("totAjdPoint"));
+        String remark = request.getParameter("remark");
 
         int result = 0;
 
@@ -64,6 +69,7 @@ public class MemberPointServiceImpl implements MemberPointService {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
             String nowDateStr = formatter.format(date);
 
+            re.put("remark", remark);
             re.put("chgSeq", 0);
             re.put("chgDate", nowDateStr);
             re.put("regDt", dt);
@@ -91,15 +97,45 @@ public class MemberPointServiceImpl implements MemberPointService {
 
     @Override
     public List<MemberPointVO> getMemberPointListChk(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        LOGGER.debug("sessionInfoVO.getOrgnFg(: {}", sessionInfoVO.getOrgnFg());
+        LOGGER.debug("sessionInfoVO.getOrgnGrpCd: {}", sessionInfoVO.getOrgnGrpCd());
+        LOGGER.debug("sessionInfoVO.getOrgnCd(): {}", sessionInfoVO.getOrgnCd());
+        LOGGER.debug("sessionInfoVO.getHqOfficeCd: {}", sessionInfoVO.getHqOfficeCd());
+
         String dt = currentDateTimeString();
         DefaultMap<Object> result = new DefaultMap<>();
         List<MemberPointVO> resultList = new ArrayList<MemberPointVO>();
         for (MemberPointVO memberPointVO : memberPointVOs) {
             memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
 //            memberPointVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            String pattern = "^[0-9]*$"; //숫자만
+            //String val = "123456789"; //대상문자열
+
+            if (memberPointVO.getTmpTotAdjPoint() != null && !memberPointVO.getTmpTotAdjPoint().equals("")) {
+                boolean regex = Pattern.matches(pattern, memberPointVO.getTmpTotAdjPoint());
+                if (!regex) {
+                    memberPointVO.setTotAdjPoint(0);
+                } else {
+                    memberPointVO.setTotAdjPoint(Integer.parseInt(memberPointVO.getTmpTotAdjPoint()));
+                }
+            } else {
+                memberPointVO.setTotAdjPoint(0);
+            }
             result = memberPointMapper.getMemberPointListChk(memberPointVO);
+
             if (result != null) {
-                memberPointVO.setMemberResult("검증성공");
+                if(resultList.size() > 0) {
+                   for (int i = 0; i < resultList.size(); i++) {
+                        if (resultList.get(i).getMembrNo().equals(memberPointVO.getMembrNo())) {
+                            memberPointVO.setMemberResult("회원번호중복");
+                            resultList.get(i).setMemberResult("회원번호중복");
+                            break;
+                        }
+                   }
+                }else{
+                    memberPointVO.setMemberResult("검증 성공");
+                }
                 memberPointVO.setMembrClassCd(result.getStr("membrClassCd"));
                 memberPointVO.setMembrCardNo(result.getStr("membrCardNo"));
                 memberPointVO.setMembrNo(result.getStr("membrNo"));
@@ -107,10 +143,14 @@ public class MemberPointServiceImpl implements MemberPointService {
                 memberPointVO.setMembrOrgnCd(result.getStr("membrOrgnCd"));
                 memberPointVO.setAvablPoint(result.getInt("avablPoint"));
             } else {
-                memberPointVO.setMemberResult("검증실패");
+                memberPointVO.setMemberResult("회원번호없음");
             }
+
             resultList.add(memberPointVO);
         }
+
+
+
         LOGGER.debug("resultList {}", resultList);
         return resultList;
     }
@@ -120,18 +160,19 @@ public class MemberPointServiceImpl implements MemberPointService {
         int result = 0;
 
         String dt = currentDateTimeString();
+
 //        String membrNo = "";
 
         LOGGER.debug("memberExcelUploadVOs: {}", memberPointVOs);
         for (MemberPointVO memberPointVO : memberPointVOs) {
             memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            memberPointVO.setRegDt(dt);
+            memberPointVO.setRegId(sessionInfoVO.getUserId());
             memberPointVO.setModDt(dt);
             memberPointVO.setModId(sessionInfoVO.getUserId());
+            memberPointVO.setChgDate(memberPointVO.getRegDt().substring(0, memberPointVO.getRegDt().length() - 6));
 
-            if (memberPointVO.getStatus() == GridDataFg.UPDATE) {
-                result = memberPointMapper.updateMemberPoint(memberPointVO);
-                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
+            result = memberPointMapper.insertMemberPointHist(memberPointVO);
         }
 
         return result;

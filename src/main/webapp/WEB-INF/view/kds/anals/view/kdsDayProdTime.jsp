@@ -22,10 +22,10 @@
     </div>
     <table class="searchTbl">
         <colgroup>
-            <col class="w5"/>
             <col class="w15"/>
-            <col class="w5"/>
+            <col class="w35"/>
             <col class="w15"/>
+            <col class="w35"/>
         </colgroup>
         <tbody>
         <tr>
@@ -35,33 +35,38 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn">
-                      <div class="sb-select">
-                        <wj-input-date
-                                value="kdsDayStartDate"
-                                ng-model="kdsDayStartDate"
-                                control="kdsDayStartDateCombo"
-                                format="yyyy/MM/dd"
-                                min="2000-01-01"
-                                max="2099-12-31"
-                                initialized="_initDateBox(s)">
-                        </wj-input-date>
-                      </div>
-                    </span>
+                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w115px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn">
-                    <div class="sb-select">
-                      <wj-input-date
-                              value="kdsDayEndDate"
-                              ng-model="kdsDayEndDate"
-                              control="kdsDayEndDateCombo"
-                              format="yyyy/MM/dd"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </div>
-                    </span>
+                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w115px"/></span>
+
+<%--                    <span class="txtIn">--%>
+<%--                      <div class="sb-select">--%>
+<%--                        <wj-input-date--%>
+<%--                                value="kdsDayStartDate"--%>
+<%--                                ng-model="kdsDayStartDate"--%>
+<%--                                control="kdsDayStartDateCombo"--%>
+<%--                                format="yyyy/MM/dd"--%>
+<%--                                min="2000-01-01"--%>
+<%--                                max="2099-12-31"--%>
+<%--                                initialized="_initDateBox(s)">--%>
+<%--                        </wj-input-date>--%>
+<%--                      </div>--%>
+<%--                    </span>--%>
+<%--                    <span class="rg">~</span>--%>
+<%--                    <span class="txtIn">--%>
+<%--                    <div class="sb-select">--%>
+<%--                      <wj-input-date--%>
+<%--                              value="kdsDayEndDate"--%>
+<%--                              ng-model="kdsDayEndDate"--%>
+<%--                              control="kdsDayEndDateCombo"--%>
+<%--                              format="yyyy/MM/dd"--%>
+<%--                              min="2000-01-01"--%>
+<%--                              max="2099-12-31"--%>
+<%--                              initialized="_initDateBox(s)">--%>
+<%--                      </wj-input-date>--%>
+<%--                    </div>--%>
+<%--                    </span>--%>
+
                 </div>
             </td>
             <%-- 시간대 --%>
@@ -69,7 +74,7 @@
                 <s:message code="kds.time"/>
             </th>
             <td>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w80px mr10">
                     <wj-combo-box
                             id="timeZone"
                             ng-model="timeZone"
@@ -95,7 +100,7 @@
                     <%--                    </wj-input-date-time>--%>
                 </div>
 
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w80px mr10">
                     <wj-combo-box
                             id="timeZoneSec"
                             ng-model="timeZoneSec"
@@ -114,7 +119,7 @@
                 <s:message code="kds.makeDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="makeDate"
                             ng-model="makeDate"
@@ -126,7 +131,7 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="makeDateSec"
                             ng-model="makeDateSec"
@@ -143,7 +148,7 @@
                 <s:message code="kds.picDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="picDate"
                             ng-model="picDate"
@@ -155,7 +160,7 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="picDateSec"
                             ng-model="picDateSec"

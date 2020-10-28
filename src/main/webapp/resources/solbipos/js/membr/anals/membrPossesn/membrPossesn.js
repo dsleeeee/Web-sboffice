@@ -121,6 +121,20 @@ app.controller('membrPossesnCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd= '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = String(yyyy) + String(mm) + dd;
 
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -135,7 +149,7 @@ app.controller('membrPossesnCtrl', ['$scope', '$http', '$timeout', function ($sc
         includeColumns: function (column) {
           return column.visible;
         }
-      }, '회원관리_회원분석_회원매출졈유_' + getToday() + '.xlsx', function () {
+      }, '회원관리_회원분석_회원매출졈유_' + today + '.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

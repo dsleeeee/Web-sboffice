@@ -65,7 +65,9 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
         }
+
         List<DefaultMap<String>> resultList = mapper.getMemberClassList(membrClassVO);
+
         // 등록된 회원등급이 없을때는 기본등급을 리스트에 넣어줌.
         if (resultList.size() == 0) {
             DefaultMap<String> tmpList = new DefaultMap<String>();
@@ -90,6 +92,8 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         if (!StringUtil.isEmpties(chgBatchVO.getRegStoreCd())) {
             chgBatchVO.setRegStoreCds(chgBatchVO.getRegStoreCd().split(","));
         }
+
+        LOGGER.info("AnvStartDate ::: {}",chgBatchVO.getAnvStartDate());
 
         return mapper.getMemberChgBatchList(chgBatchVO);
     }

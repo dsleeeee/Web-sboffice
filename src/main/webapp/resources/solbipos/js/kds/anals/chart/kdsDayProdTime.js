@@ -6,13 +6,16 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('kdsDayProdTimeCtrl', $scope, $http, $timeout, true));
-
     $scope._getComboDataQuery('400', 'kdsMakeDate', '');
     $scope._getComboDataQuery('401', 'kdsPicDate', '');
     $scope._getComboDataQuery('402', 'kdsMakeDateSec', '');
     $scope._getComboDataQuery('403', 'kdsPicDateSec', '');
     $scope.picChecked = true;
     $scope.makeChecked = true;
+
+    // 검색조건에 조회기간
+    var kdsDayStartDate = wcombo.genDateVal("#kdsDayStartDate", gvStartDate);
+    var kdsDayEndDate = wcombo.genDateVal("#kdsDayEndDate", gvEndDate);
 
     // $scope.kdsMakeDate = [
     //     {name: '최초조리일시', value: 'AVG_S_CK_TO_E_CK'},
@@ -70,7 +73,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
-
+    $scope.timeZoneSec = "23";
     $scope.initGrid = function (s, e) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -209,6 +212,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 }
             }
         }
+
     };
 
     function getData(dataList) {
@@ -293,8 +297,8 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
     var list = [];
     // 조회
     $scope.$on("kdsDayProdTimeList", function () {
-        var date1 = new Date($scope.kdsDayStartDate);
-        var date2 = new Date($scope.kdsDayEndDate);
+        var date1 = new Date(wijmo.Globalize.format(kdsDayStartDate.value, 'yyyy-MM-dd'));
+        var date2 = new Date(wijmo.Globalize.format(kdsDayEndDate.value, 'yyyy-MM-dd'));
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
         if (diffDay > 30) {
             $scope._popMsg(messages['kds.date.error']);
@@ -308,8 +312,11 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         if (!$scope.valueCheck()) return false;
 
         var params = {};
-        params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
-        params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
+        params.kdsDayStartDate = wijmo.Globalize.format(kdsDayStartDate.value, 'yyyyMMdd'); //조회기간
+        params.kdsDayEndDate = wijmo.Globalize.format(kdsDayEndDate.value, 'yyyyMMdd'); //조회기간
+
+        // params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
+        // params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
         params.makeDate = $scope.makeDate;
         params.makeDateSec = $scope.makeDateSec;
         params.picDate = $scope.picDate;
@@ -317,7 +324,11 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         params.startHh = $scope.timeZone;
         params.endHh = $scope.timeZoneSec;
         params.kdsTimeList = $scope.kdsTimeZone2;
-        params.storeCd = $("#regStoreCd").val();
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
+        if ($("#regStoreCd").val()) {
+            params.storeCd = $("#regStoreCd").val();
+        }
         params.orgnFg = $("#resurceFg").val();
 
         $scope.kdsSearch(params);
@@ -337,6 +348,10 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 }
             }
         }
+        // 가상로그인 세션정보
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
         $http({
             method: 'POST', //방식
             url: "/kds/anals/chart/dayProdTime/getKdsDayProdTime.sb", /* 통신할 URL */
@@ -349,6 +364,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 list = response.data.data.list;
                 if (list.length === undefined || list.length === 0) {
                     $scope.data = new wijmo.collections.CollectionView([]);
+                    chart1.itemsSource = [];
                     if (true && response.data.message) {
                         $scope._popMsg(response.data.message);
                     }
@@ -392,9 +408,10 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         if (!$scope.valueCheck()) return false;
 
         var params = {};
-
-        params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
-        params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
+        params.kdsDayStartDate = wijmo.Globalize.format(kdsDayStartDate.value, 'yyyyMMdd'); //조회기간
+        params.kdsDayEndDate = wijmo.Globalize.format(kdsDayEndDate.value, 'yyyyMMdd'); //조회기간
+        // params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
+        // params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
         params.makeDate = $scope.makeDate;
         params.makeDateSec = $scope.makeDateSec;
         params.picDate = $scope.picDate;
@@ -454,7 +471,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
 // 픽업시간
     $scope.picChkDt = function () {
         // getData(list);
-        chart1.series = chart1.series.forEach((e, i) => {
+        chart1.series = chart1.series.forEach(function (e, i) {
             if ($scope.picChecked !== true) {
                 if (e.binding === 'avgPic') {
                     e.visibility = 3;
@@ -470,7 +487,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
 
 // 제조시간
     $scope.makeChkDt = function () {
-        chart1.series = chart1.series.forEach((e, i) => {
+        chart1.series = chart1.series.forEach(function (e, i) {
             if ($scope.makeChecked !== true) {
                 if (e.binding === 'avgMake') {
                     e.visibility = 3;
@@ -489,8 +506,8 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 체크
     $scope.valueCheck = function () {
-        var date1 = new Date($scope.kdsDayStartDate);
-        var date2 = new Date($scope.kdsDayEndDate);
+        var date1 = new Date(wijmo.Globalize.format(kdsDayStartDate.value, 'yyyy-MM-dd'));
+        var date2 = new Date(wijmo.Globalize.format(kdsDayEndDate.value, 'yyyy-MM-dd'));
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
         if (diffDay > 30) {
             $scope._popMsg(messages['kds.date.error']);
@@ -526,11 +543,22 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             return false;
         }
 
-        var msg = messages["kds.prodCd"] + messages["cmm.require.text"];
-        if (isNull($scope.prodCd)) {
-            $scope._popMsg(msg);
-            return false;
+        if (isNull($scope.prodClassCd)) {
+            var msg = messages["kds.prodCd"] + messages["cmm.require.text"];
+            if (isNull($scope.prodCd)) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
+
+        if (isNull($scope.prodCd)) {
+            var msg = messages["kds.prodClassNm"] + messages["cmm.require.text"];
+            if (isNull($scope.prodClassCd)) {
+                $scope._popMsg(msg);
+                return false;
+            }
+        }
+
 
         if ($("#resurceFg").val() === "HQ") {
             var msg = messages["kds.store"] + messages["cmm.require.text"];

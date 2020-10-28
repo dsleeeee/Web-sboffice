@@ -14,4 +14,6 @@ public interface DlvrRegistService {
     List<DefaultMap<String>> dlvrDetailList(DlvrRegistVO dlvrRegistVO, SessionInfoVO sessionInfoVO);
 
     int saveDlvrDetailRegistList(DlvrRegistVO[] dlvrRegistVOs, SessionInfoVO sessionInfoVO);
+
+    List<DefaultMap<String>> dlvrManageList(SessionInfoVO sessionInfoVO);
 }

@@ -15,6 +15,10 @@ public class DlvrInfoVO extends PageVO {
   private String startDate;
   private String endDate;
 
+  private String hqOfficeCd;
+  private String hqBrandCd;
+  private String storeCd;
+
   public String getSaleDate() {
     return saleDate;
   }
@@ -101,5 +105,29 @@ public class DlvrInfoVO extends PageVO {
 
   public void setEndDate(String endDate) {
     this.endDate = endDate;
+  }
+
+  public String getHqOfficeCd() {
+    return hqOfficeCd;
+  }
+
+  public void setHqOfficeCd(String hqOfficeCd) {
+    this.hqOfficeCd = hqOfficeCd;
+  }
+
+  public String getHqBrandCd() {
+    return hqBrandCd;
+  }
+
+  public void setHqBrandCd(String hqBrandCd) {
+    this.hqBrandCd = hqBrandCd;
+  }
+
+  public String getStoreCd() {
+    return storeCd;
+  }
+
+  public void setStoreCd(String storeCd) {
+    this.storeCd = storeCd;
   }
 }

@@ -53,7 +53,7 @@
     <!-- 배달지 조회 및 변경 -->
     <!--
         TABLE    : TB_MB_MEMBER_DLVR_ADDR & TB_MB_MEMBER_DLVR_TEL
-        COMMENTS : 배달지 조회 및 변경@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨
+        COMMENTS : 배달지 조회 및 변경
     -->
     <select id="getDlvrList" parameterType="dlvrVO" resultType="DefaultMap">
         /*DlvrMapper.getDlvrList*/
@@ -78,6 +78,10 @@
         FROM TB_MB_MEMBER_DLVR_ADDR tmmda,
         TB_MB_MEMBER tmm
         WHERE tmmda.MEMBR_NO = tmm.MEMBR_NO
+        AND	tmmda.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
+        <if test='membrOrgnCd != null and membrOrgnCd !=""'>
+            AND tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
+        </if>
         <if test='membrNo != null and membrNo !=""'>
             AND tmmda.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
@@ -85,15 +89,23 @@
             AND SBPENC.D(tmm.MEMBR_NM ) LIKE '%'||#{membrNm}||'%'
         </if>
         <if test='membrClassCd != null and membrClassCd !=""'>
-            AND tmm.MEMBR_CLASS_CD LIKE '%'|| #{membrClassCd}||'%'
+            AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
         </if>
         <if test='dlvrLzoneCd != null and dlvrLzoneCd !=""'>
-            AND tmmda.DLVR_LZONE_CD LIKE '%'|| #{dlvrLzoneCd}||'%'
+            AND tmmda.DLVR_LZONE_CD = #{dlvrLzoneCd}
         </if>
         <if test='dlvrMzoneCd != null and dlvrMzoneCd !=""'>
-            AND tmmda.DLVR_MZONE_CD LIKE '%'|| #{dlvrMzoneCd}||'%'
+            AND tmmda.DLVR_MZONE_CD = #{dlvrMzoneCd}
         </if>
-        AND tmmda.USE_YN = 'Y'
+        <if test='dlvrStoreCd != null and dlvrStoreCd !=""'>
+            AND tmmda.DLVR_STORE_CD LIKE '%'|| #{dlvrStoreCd}||'%'
+        </if>
+        <if test='addrDtl != null and addrDtl !=""'>
+            AND SBPENC.D(tmmda.ADDR_DTL) LIKE '%'|| #{addrDtl}||'%'
+        </if>
+        <if test='useYn != null and useYn !=""'>
+            AND tmmda.USE_YN = #{useYn}
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -102,42 +114,50 @@
       DELETE FROM  TB_MB_MEMBER_DLVR_ADDR tmmda
       WHERE tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
       AND tmmda.MEMBR_NO = #{membrNo}
+      AND tmmda.DLVR_ADDR_SEQ = #{dlvrAddrSeq}
   </delete>
 
     <update id="updateDlvr" parameterType="dlvrVO">
       /*배달지주소 저장*/
-      UPDATE TB_MB_MEMBER_DLVR_ADDR
-      SET tmmda.ADDR = #{addr}
-      , tmmda.ADDR_DTL = #{addrDtl}
+      UPDATE TB_MB_MEMBER_DLVR_ADDR tmmda
+      SET tmmda.ADDR = SBPENC.E(#{addr})
+      , tmmda.ADDR_DTL = SBPENC.E(#{addrDtl})
       , tmmda.USE_YN = #{useYn}
       , tmmda.LAST_DLVR_DATE = #{lastDlvrDate}
       , tmmda.DLVR_STORE_CD = #{dlvrStoreCd}
       , tmmda.DLVR_LZONE_CD = #{dlvrLzoneCd}
       , tmmda.DLVR_MZONE_CD = #{dlvrMzoneCd}
       , tmmda.TOT_DLVR_CNT = #{totDlvrCnt}
-      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-      AND MEMBR_NO = #{membrNo}
+      WHERE tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
+      AND tmmda.MEMBR_NO = #{membrNo}
+      AND tmmda.DLVR_ADDR_SEQ = #{dlvrAddrSeq}
   </update>
 
     <select id="getDlvrTelList" parameterType="dlvrVO" resultType="DefaultMap">
         /*배달전화번호 조회*/
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmmdt.MEMBR_ORGN_CD
-        , tmmdt.MEMBR_NO
-        , SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
-        , tmmdt.DLVR_TEL_SEQ
-        , tmmdt.DLVR_STORE_CD
-        , SBPENC.D(tmmdt.TEL_NO) AS TEL_NO
-        , tmmdt.SHORT_NO
-        , tmmdt.USE_YN
-        , TO_CHAR(TO_DATE(tmmdt.REG_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS REG_DT
-        , tmmdt.REG_ID
-        , TO_CHAR(TO_DATE(tmmdt.MOD_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS MOD_DT
-        , tmmdt.MOD_ID
+        SELECT
+        tmmdt.MEMBR_ORGN_CD ,
+        tmmdt.MEMBR_NO ,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM ,
+        tmmdt.DLVR_TEL_SEQ ,
+        tmmdt.DLVR_STORE_CD ,
+        SBPENC.D(tmmdt.TEL_NO) AS TEL_NO ,
+        tmmdt.SHORT_NO ,
+        tmmdt.USE_YN ,
+        TO_CHAR(TO_DATE(tmmdt.REG_DT, 'yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') AS REG_DT ,
+        tmmdt.REG_ID ,
+        TO_CHAR(TO_DATE(tmmdt.MOD_DT, 'yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') AS MOD_DT ,
+        tmmdt.MOD_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_MB_MEMBER_DLVR_TEL tmmdt,
+        FROM
+        TB_MB_MEMBER_DLVR_TEL tmmdt,
         TB_MB_MEMBER tmm
         WHERE tmmdt.MEMBR_NO = tmm.MEMBR_NO
+        AND	tmmdt.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
+        <if test='membrOrgnCd != null and membrOrgnCd !=""'>
+            AND tmmdt.MEMBR_ORGN_CD = #{membrOrgnCd}
+        </if>
         <if test='membrNo != null and membrNo !=""'>
             AND tmmdt.MEMBR_NO = #{membrNo}
         </if>
@@ -153,26 +173,31 @@
         <if test='shortNo != null and shortNo !=""'>
             AND tmmdt.SHORT_NO LIKE '%'|| #{shortNo}||'%'
         </if>
-        AND tmmdt.USE_YN = 'Y'
+        <if test='dlvrStoreCd != null and dlvrStoreCd !=""'>
+            AND tmmdt.DLVR_STORE_CD LIKE '%'|| #{dlvrStoreCd}||'%'
+        </if>
+        <if test='useYn != null and useYn !=""'>
+            AND tmmdt.USE_YN = #{useYn}
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <delete id="deleteDlvrTel" parameterType="dlvrVO">
       /*배달전화 삭제*/
       DELETE FROM TB_MB_MEMBER_DLVR_TEL tmmdt
-      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-      AND MEMBR_NO = #{membrNo}
+      WHERE tmmdt.MEMBR_ORGN_CD = #{membrOrgnCd}
+      AND tmmdt.MEMBR_NO = #{membrNo}
+      AND tmmdt.DLVR_TEL_SEQ = #{dlvrTelSeq}
   </delete>
 
     <update id="updateDlvrTel" parameterType="dlvrVO">
       /*배달전화 저장*/
       UPDATE TB_MB_MEMBER_DLVR_TEL tmmdt
-      SET tmmdt.DLVR_STORE_CD = #{dlvrStoreCd}
-      , tmmdt.TEL_NO = SBPENC.E(#{telNo})
-      , tmmdt.SHORT_NO = #{shortNo}
+      SET tmmdt.TEL_NO = SBPENC.E(#{telNo})
       , tmmdt.USE_YN = #{useYn}
-      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-      AND MEMBR_NO = #{membrNo}
+      WHERE tmmdt.MEMBR_ORGN_CD = #{membrOrgnCd}
+      AND tmmdt.MEMBR_NO = #{membrNo}
+      AND tmmdt.DLVR_TEL_SEQ = #{dlvrTelSeq}
   </update>
 
 </mapper>

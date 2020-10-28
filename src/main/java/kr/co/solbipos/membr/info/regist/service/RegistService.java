@@ -126,4 +126,12 @@ public interface RegistService {
     DefaultMap<Object> getDlvrMzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     List getLzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    int updateMembrCard(RegistVO registVO, SessionInfoVO si);
+
+    int getMemberCardInfoCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    int updateDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
+
+    int deleteDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
 }

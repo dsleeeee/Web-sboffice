@@ -7,6 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 
 <div class="subCon" ng-controller="memberCtrl">
@@ -51,7 +52,7 @@
             <td>
                 <div class="sb-select">
             <span class="txtIn">
-              <div class="sb-select w110px" >
+              <div class="sb-select w110px">
                 <wj-input-date
                         value="periodStartDate"
                         ng-model="periodStartDate"
@@ -132,7 +133,7 @@
             <%-- 회원번호 --%>
             <th><s:message code="regist.membr.no"/></th>
             <td>
-                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10"/>
+                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
             </td>
 
             <%-- 회원등급 --%>
@@ -151,39 +152,54 @@
                     </wj-combo-box>
                 </div>
             </td>
-
-
         </tr>
-        <tr>
-            <%--            todo--%>
-            <%--            우리매장 등록회원--%>
-            <%--            우리매장 방문회원--%>
-            <%-- 등록매장 --%>
-            <th><s:message code="regist.reg.store.cd"/></th>
-            <td>
-                <%--
-                <input type="text" id="regStoreNm" class="sb-input w100" readonly="readonly"/>
-                <input type="hidden" id="regStoreCd" ng-model="regStoreCd" readonly="readonly"/>
-                --%>
-                <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                    <jsp:param name="targetId" value="regStore"/>
-                </jsp:include>
-                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-            </td>
-
-            <%-- 사용매장 --%>
-            <th><s:message code="regist.use.store.cd"/></th>
-            <td>
-                <input type="text" id="storeCd" class="sb-input w100" ng-model="storeCd" maxlength="15"/>
-            </td>
-
-        </tr>
+        <%-- 매장 선택 --%>
+        <c:if test="${orgnFg == 'HQ'}">
+            <tr>
+                <th><s:message code="regist.reg.store.cd"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="regStore"/>
+                    </jsp:include>
+                </td>
+                <th><s:message code="regist.use.store.cd"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="regUseStore"/>
+                    </jsp:include>
+                </td>
+            </tr>
+        </c:if>
+        <%-- 우리매장 --%>
+        <c:if test="${orgnFg == 'STORE'}">
+            <c:if test="${hqOfficeCd ne '00000'}">
+                <th><s:message code="regist.use.store.membr"/></th>
+                <td>
+                    <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
+                </td>
+                <th><s:message code="regist.use.visit.store.membr"/></th>
+                <td>
+                    <input type="checkbox" id="visitStoreMembr" ng-model="visitStoreMembr"/>
+                </td>
+            </c:if>
+        </c:if>
         <tr>
             <%-- 회원카드번호 --%>
             <th><s:message code="regist.membr.card.no"/></th>
             <td>
-                <input type="text" id="membrCardNo" class="sb-input w100" ng-model="membrCardNo" maxlength="15"/>
+                <input type="text" id="membrCardNo" class="sb-input w60 fl" ng-model="membrCardNo" maxlength="15"/>
+                <div class="sb-select w30 ml5 fl">
+                    <wj-combo-box
+                            id="membrCardFg"
+                            ng-model="cstCardUseFg"
+                            control="membrCardFgCombo"
+                            items-source="_getComboData('membrCardFg')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
             </td>
             <%-- E-Mail --%>
             <th>E-Mail</th>
@@ -256,10 +272,10 @@
             <td>
                 <div class="sb-select">
                     <wj-combo-box
-                            id="useYn"
+                            id="useYnAll"
                             ng-model="useYn"
-                            control="useYnCombo"
-                            items-source="_getComboData('useYnComboData')"
+                            control="useYnAllCombo"
+                            items-source="_getComboData('useYnAll')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -269,8 +285,21 @@
             </td>
         </tr>
         <tr>
-            <%-- 적립매출횟수 --%>
-            <th><s:message code="regist.save.sale"/></th>
+            <%-- 적립매출횟수/금액 --%>
+            <th>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="memberSaleList"
+                            ng-model="memberSaleFg"
+                            control="memberSaleListCombo"
+                            items-source="memberSaleList"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </th>
             <td>
                 <div class="sb-select">
                     <span class="txtIn">
@@ -289,7 +318,20 @@
                 </div>
             </td>
             <%-- 가용포인트 --%>
-            <th><s:message code="regist.avabl.point"/></th>
+            <th>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="memberSaleLmemberPointListist"
+                            ng-model="memberPointFg"
+                            control="memberPointListCombo"
+                            items-source="memberPointList"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </th>
             <td>
                 <div class="sb-select">
                     <span class="txtIn">
@@ -312,7 +354,7 @@
             <%-- 회사단축번호 --%>
             <th><s:message code="regist.membr.stortNo"/></th>
             <td>
-                <input type="text" id="stortNo" class="sb-input w100" ng-model="stortNo" maxlength="15"/>
+                <input type="text" id="shortNo" class="sb-input w100" ng-model="shortNo" maxlength="15"/>
             </td>
             <%-- 결혼여부 --%>
             <th><s:message code="regist.wedding"/></th>
@@ -336,25 +378,24 @@
             <%-- 회원명(한글) --%>
             <th><s:message code="regist.membr.nm"/></th>
             <td>
-                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15"/>
+                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
             </td>
 
             <%-- 회원명(영문) --%>
             <th><s:message code="regist.membr.nm.eng"/></th>
             <td>
-                <input type="text" id="memberEngNm" class="sb-input w100" ng-model="memberEngNm" maxlength="15"/>
+                <input type="text" id="memberEngNm" class="sb-input w100" ng-model="member.memberEngNm" maxlength="15" ng-disabled="newMemberYn === true" ng/>
             </td>
         </tr>
         <tr>
-            <%-- 전화번호 --%>
+            <%-- 연락처 --%>
             <th><s:message code="regist.tel"/></th>
-            <td>
+            <td >
                 <input type="text" id="telNo" class="sb-input w100" ng-model="telNo" maxlength="15"/>
             </td>
-            <%-- 핸드폰번호 --%>
-            <th><s:message code="regist.phone.no"/></th>
+            <th><s:message code="regist.membr.new"/></th>
             <td>
-                <input type="text" id="phoneNo" class="sb-input w100" ng-model="phoneNo" maxlength="15"/>
+                <input type="checkbox" id="newMemberYn" class="mt5" ng-model="newMemberYn"/>
             </td>
         </tr>
         </tbody>
@@ -418,12 +459,9 @@
                                      width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.brthd"/>" binding="birthday" align="center"
                                      width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" align="center"
+                                     width="100" is-read-only="true"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="phoneNo" width="100" align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="telNo" width="100"
-                                     align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85"
                                      align="center" is-read-only="true"></wj-flex-grid-column>
                 <%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd"--%>
@@ -442,6 +480,32 @@
                     <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
+                <%--                <c:if test="visitStoreMembr === true">--%>
+                <wj-flex-grid-column header="<s:message code="regist.membr.point.add"/>" binding="storeTotSavePoint"
+                                     width="75" align="center" ng-if="regStoreChk === true"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.point.use"/>" binding="storeTotUsePoint"
+                                     width="75" align="center" ng-if="regStoreChk === true"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.point.adj"/>" binding="storeTotAdjPoint"
+                                     width="75" align="center" ng-if="regStoreChk === true"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="storePointAccCnt"
+                                     width="75"
+                                     align="center" ng-if="regStoreChk === true"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.amt"/>" binding="storeTotSaleAmt"
+                                     width="75"
+                                     align="center" ng-if="regStoreChk === true"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.visit.start"/>"
+                                     binding="storeFirstSaleDate"
+                                     width="75" align="center" ng-if="regStoreChk === true"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="storeLastSaleDate"
+                                     width="75" align="center" ng-if="regStoreChk === true"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <%--                </c:if>--%>
                 <wj-flex-grid-column header="<s:message code="regist.membr.point.add"/>" binding="totSavePoint"
                                      width="75" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
@@ -454,10 +518,10 @@
                 <wj-flex-grid-column header="<s:message code="regist.membr.point.ava"/>" binding="avablPoint" width="75"
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="saveCnt" width="75"
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="pointAccCnt" width="75"
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.save.amt"/>" binding="saveAmt" width="75"
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.amt"/>" binding="totSaleAmt" width="75"
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.visit.start"/>" binding="firstSaleDate"
@@ -468,6 +532,9 @@
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.day"/>" binding="regDt" width="75"
                                      align="center"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.addr"/>" binding="addr" width="75"
+                                     align="left"
                                      is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
@@ -497,12 +564,17 @@
     <%--조회기간--%>
     var weddingDataMap = ${ccu.getCommCodeExcpAll("076")};
     <%--결혼유무--%>
+    var weddingList = ${ccu.getCommCodeSelect("076")};
+    <%--결혼유무 Select--%>
     var anvrsDataMap = ${ccu.getCommCode("032")};
     <%--카드사용구분--%>
-    var rMembrcardList = ${ccu.getCommCodeExcpAll("014")};
+    var rMembrcardList = ${ccu.getCommCodeExcpAll("301")};
     var regstrStoreList = ${regstrStoreList};
     var memberClassList = ${memberClassList};
     var memberClassSelect = ${memberClassSelect};
+
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
 
     <%--카드발급구분--%>
     <%--var rCstCardIssFgList = ${ccu.getCommCodeExcpAll("301")};--%>
@@ -511,7 +583,8 @@
 
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20200909.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.07"
+        charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
@@ -527,6 +600,12 @@
 
 <%-- 매장 등록/수정--%>
 <c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원 매핑코드 조회 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberMapping.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

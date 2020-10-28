@@ -31,7 +31,7 @@
 		<if test="picDate == 1">
 			SUM(C.AVG_E_CK_TO_E_PK) AS AVG_PIC,
 		</if>
-		COUNT(*) OVER() AS TOT_CNT
+		A.PROD_CLASS_NM
 	FROM
 		<choose>
 			<when test='orgnFg != null and orgnFg == "HQ"'>
@@ -43,7 +43,8 @@
 				B.PROD_CLASS_NM     AS LV3_NM,
 				(SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
 				(SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-				(SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+				(SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL,
+				( SELECT SF_GET_PROD_CLASSES('H', #{hqOfficeCd}, B.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
 				FROM    (
 				SELECT  HQ_OFFICE_CD,
 				P_PROD_CLASS_CD,
@@ -84,7 +85,8 @@
 				B.PROD_CLASS_NM     AS LV3_NM,
 				(SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
 				(SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-				(SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+				(SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL,
+				( SELECT SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
 				FROM    (
 				SELECT  STORE_CD,
 				P_PROD_CLASS_CD,
@@ -135,6 +137,9 @@
 		<if test='prodClassCd != null and prodClassCd != ""'>
 			AND B.PROD_CLASS_CD	= #{prodClassCd}
 		</if>
+		<if test='prodNm != null and prodNm != ""'>
+			AND B.PROD_NM LIKE '%'||#{prodNm}||'%'
+		</if>
 		AND C.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
 	GROUP BY
 		A.LV1_CD,
@@ -149,6 +154,7 @@
 		B.PROD_NM,
 		C.STORE_CD,
 		C.SALE_DATE,
+		A.PROD_CLASS_NM,
 		D.STORE_NM
     </select>
 </mapper>

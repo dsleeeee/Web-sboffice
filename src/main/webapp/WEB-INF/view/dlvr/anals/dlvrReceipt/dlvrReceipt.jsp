@@ -68,50 +68,48 @@
 
         <%-- 그리드 left --%>
         <div class="w50 fl mt40 mb20" style="width: 40%">
-            <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
-                <div class="oh sb-select dkbr">
-                    <%-- 페이지 스케일  --%>
-                    <wj-combo-box
-                            class="w100px fl"
-                            id="listScaleBox"
-                            ng-model="listScale"
-                            items-source="_getComboData('listScaleBox')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
-                    <div class="row">
-                        <wj-flex-grid
-                                autoGenerateColumns="false"
-                                control="flex"
-                                initialized="initGrid(s,e)"
-                                sticky-headers="true"
-                                selection-mode="Row"
-                                items-source="data"
-                                item-formatter="_itemFormatter">
-                            <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"
-                                                 align="center"
-                                                 is-read-only="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.area"/>" binding="dlvrAddr"
-                                                 width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.bill.cnt"/>" binding="billCount"
-                                                 width="230" is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.real.sale"/>"
-                                                 binding="realSaleAmt"
-                                                 width="230" is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column binding="hqOfficeCd" width="120" dalign="center"
-                                                 is-read-only="false" align="right"
-                                                 visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column binding="hqBrandCd" width="120"
-                                                 is-read-only="true" align="right"
-                                                 visible="false"></wj-flex-grid-column>
+            <div class="mb10 oh sb-select dkbr ">
+                <%-- 페이지 스케일  --%>
+                <wj-combo-box
+                        class="w100px fl"
+                        id="listScaleBox"
+                        ng-model="listScale"
+                        items-source="_getComboData('listScaleBox')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="initComboBox(s)">
+                </wj-combo-box>
+            </div>
+            <div class="wj-gridWrap pd20" style="height:480px; overflow-y: hidden;">
+                <div class="row">
+                    <wj-flex-grid
+                            autoGenerateColumns="false"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="data"
+                            item-formatter="_itemFormatter">
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"
+                                             align="center"
+                                             is-read-only="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.area"/>" binding="dlvrAddr"
+                                             width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.bill.cnt"/>" binding="billCount"
+                                             width="230" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.real.sale"/>"
+                                             binding="realSaleAmt" data-type="Number" format="n0" aggregate="Sum"
+                                             width="230" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column binding="hqOfficeCd" width="120" dalign="center"
+                                             is-read-only="false" align="right"
+                                             visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column binding="hqBrandCd" width="120"
+                                             is-read-only="true" align="right"
+                                             visible="false"></wj-flex-grid-column>
 
-                        </wj-flex-grid>
-                    </div>
+                    </wj-flex-grid>
                 </div>
             </div>
             <%-- 페이지 리스트 --%>
@@ -128,56 +126,54 @@
     <div ng-controller="dlvrReceiptDetailCtrl">
         <%-- 그리드 right --%>
         <div class="w50 mt40 fl mb20" style="width: 60%">
-            <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
-                <div class="oh sb-select dkbr">
-                    <%-- 페이지 스케일  --%>
-                    <wj-combo-box
-                            class="w100px fl"
-                            id="listScaleBox"
-                            ng-model="listScaleDatail"
-                            items-source="_getComboData('listScaleBox')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
-                    <div class="row">
-                        <wj-flex-grid
-                                autoGenerateColumns="false"
-                                control="flex"
-                                initialized="initGrid(s,e)"
-                                sticky-headers="true"
-                                selection-mode="Row"
-                                items-source="data"
-                                item-formatter="_itemFormatter"
-                                is-read-only="true">
-                            <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"
-                                                 align="center"
-                                                 is-read-only="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.sale.date"/>" binding="saleDate"
-                                                 width="220"
-                                                 is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.pos.no"/>" binding="posNo"
-                                                 width="230"
-                                                 is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.bill.no"/>" binding="billNo"
-                                                 width="115"
-                                                 is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.real.sale"/>"
-                                                 binding="realSaleAmt"
-                                                 width="120"
-                                                 is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.member.nm"/>" binding="membrNm"
-                                                 width="120"
-                                                 is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.dlvr.nm"/>" binding="empNm"
-                                                 width="120"
-                                                 is-read-only="true" align="right"></wj-flex-grid-column>
-                        </wj-flex-grid>
-                    </div>
+            <div class="mb10 ml10 oh sb-select dkbr ">
+                <%-- 페이지 스케일  --%>
+                <wj-combo-box
+                        class="w100px fl"
+                        id="listScaleBox"
+                        ng-model="listScale"
+                        items-source="_getComboData('listScaleBox')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="initComboBox(s)">
+                </wj-combo-box>
+            </div>
+            <div class="wj-gridWrap ml10 pd20" style="height:480px; overflow-y: hidden;">
+                <div class="row">
+                    <wj-flex-grid
+                            autoGenerateColumns="false"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="data"
+                            item-formatter="_itemFormatter"
+                            is-read-only="true">
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"
+                                             align="center"
+                                             is-read-only="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.sale.date"/>" binding="saleDate"
+                                             width="220"
+                                             is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.pos.no"/>" binding="posNo"
+                                             width="230"
+                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.bill.no"/>" binding="billNo"
+                                             width="115"
+                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.real.sale"/>"
+                                             binding="realSaleAmt" data-type="Number" format="n0"
+                                             width="120" aggregate="Sum"
+                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.member.nm"/>" binding="membrNm"
+                                             width="120"
+                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrReceipt.dlvr.nm"/>" binding="empNm"
+                                             width="120"
+                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                    </wj-flex-grid>
                 </div>
             </div>
             <%-- 페이지 리스트 --%>
@@ -197,3 +193,9 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrReceipt/dlvrReceipt.js?ver=2020062901.11"
         charset="utf-8"></script>
+
+<%-- 영수증상세 --%>
+<c:import url="/WEB-INF/view/dlvr/anals/dlvrInfo/billPopup.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

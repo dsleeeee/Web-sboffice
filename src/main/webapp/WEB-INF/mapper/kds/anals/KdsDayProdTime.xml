@@ -109,31 +109,69 @@
             </if>
         </foreach>
         FROM
-        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
-        TB_HQ_PRODUCT thp
-        WHERE
-        thp.PROD_CD = tookddt.PROD_CD
-        AND tookddt.STORE_CD = #{storeCd}
-        AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
-        AND tookddt.SALE_HH BETWEEN #{startHh} AND #{endHh}
-        <if test='prodCd != null and prodCd != ""'>
-            AND tookddt.PROD_CD = #{prodCd}
-        </if>
-        <if test='prodClassCd != null and prodClassCd != ""'>
-            AND B.PROD_CLASS_CD = #{prodClassCd}
-        </if>
-        GROUP BY
-        tookddt.STORE_CD , tookddt.SALE_DATE, tookddt.SALE_HH, tookddt.PROD_CD) A ,
-        TB_MS_STORE tms
-        WHERE
-        A.STORE_CD = tms.STORE_CD(+)
-        GROUP BY
-        A.STORE_CD,
-        A.SALE_DATE,
-        tms.STORE_NM,
-        A.PROD_CD
-        ORDER BY
-        A.SALE_DATE
+        <choose>
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+                TB_HQ_PRODUCT thp
+                WHERE
+                thp.PROD_CD = tookddt.PROD_CD
+                AND tookddt.STORE_CD = #{storeCd}
+                AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                AND tookddt.SALE_HH BETWEEN #{startHh} AND #{endHh}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tookddt.PROD_CD = #{prodCd}
+                </if>
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND thp.PROD_CLASS_CD = #{prodClassCd}
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                GROUP BY
+                tookddt.STORE_CD , tookddt.SALE_DATE, tookddt.SALE_HH, tookddt.PROD_CD) A ,
+                TB_MS_STORE tms
+                WHERE
+                A.STORE_CD = tms.STORE_CD(+)
+                GROUP BY
+                A.STORE_CD,
+                A.SALE_DATE,
+                tms.STORE_NM,
+                A.PROD_CD
+                ORDER BY
+                A.SALE_DATE
+            </when>
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+                TB_MS_PRODUCT tmp
+                WHERE
+                tmp.PROD_CD = tookddt.PROD_CD
+                AND tookddt.STORE_CD = #{storeCd}
+                AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                AND tookddt.SALE_HH BETWEEN #{startHh} AND #{endHh}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tookddt.PROD_CD = #{prodCd}
+                </if>
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                GROUP BY
+                tookddt.STORE_CD , tookddt.SALE_DATE, tookddt.SALE_HH, tookddt.PROD_CD) A ,
+                TB_MS_STORE tms
+                WHERE
+                A.STORE_CD = tms.STORE_CD(+)
+                GROUP BY
+                A.STORE_CD,
+                A.SALE_DATE,
+                tms.STORE_NM,
+                A.PROD_CD
+                ORDER BY
+                A.SALE_DATE
+            </when>
+        </choose>
+
     </select>
     <select id="getKdsDayProdTimeChart" parameterType="KdsVO" resultType="DefaultMap">
         /* KdsMapper.getKdsDayProdTimeChart */
@@ -161,39 +199,88 @@
             , NVL(avg(tookddt.AVG_E_CK_TO_E_PK),0) AS AVG_PIC
         </if>
         FROM
-        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
-        TB_HQ_PRODUCT thp
-        WHERE
-        thp.PROD_CD = tookddt.PROD_CD
-        AND tookddt.STORE_CD = #{storeCd}
-        AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
-        <if test='prodCd != null and prodCd != ""'>
-            AND tookddt.PROD_CD = #{prodCd}
-        </if>
-        <if test='prodClassCd != null and prodClassCd != ""'>
-            AND B.PROD_CLASS_CD = #{prodClassCd}
-        </if>
-        GROUP BY
-        tookddt.STORE_CD ,
-        tookddt.SALE_HH
-        <foreach collection="kdsTimeList" item="i" separator="">
-            UNION
-            SELECT tookddt.STORE_CD
-            , #{i}||'시' AS SALE_HH
-            , 0 AS SALE_QTY
-            , 0 AS AVG_MAKE
-            , 0 AS AVG_PIC
-            FROM TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
-            TB_HQ_PRODUCT thp
-            WHERE
-            thp.PROD_CD = tookddt.PROD_CD
-            AND tookddt.STORE_CD = #{storeCd}
-            AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
-        </foreach>
-        )
-        WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
-        GROUP BY STORE_CD,
-        SALE_HH
-        ORDER BY SALE_HH
+        <choose>
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+                TB_HQ_PRODUCT thp
+                WHERE
+                thp.PROD_CD = tookddt.PROD_CD
+                AND tookddt.STORE_CD = #{storeCd}
+                AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tookddt.PROD_CD = #{prodCd}
+                </if>
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND thp.PROD_CLASS_CD = #{prodClassCd}
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                GROUP BY
+                tookddt.STORE_CD ,
+                tookddt.SALE_HH
+                <foreach collection="kdsTimeList" item="i" separator="">
+                    UNION
+                    SELECT tookddt.STORE_CD
+                    , #{i}||'시' AS SALE_HH
+                    , 0 AS SALE_QTY
+                    , 0 AS AVG_MAKE
+                    , 0 AS AVG_PIC
+                    FROM TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+                    TB_HQ_PRODUCT thp
+                    WHERE
+                    thp.PROD_CD = tookddt.PROD_CD
+                    AND tookddt.STORE_CD = #{storeCd}
+                    AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                </foreach>
+                )
+                WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
+                GROUP BY STORE_CD,
+                SALE_HH
+                ORDER BY SALE_HH
+            </when>
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+                TB_MS_PRODUCT tmp
+                WHERE
+                tmp.PROD_CD = tookddt.PROD_CD
+                AND tookddt.STORE_CD = #{storeCd}
+                AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tookddt.PROD_CD = #{prodCd}
+                </if>
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                GROUP BY
+                tookddt.STORE_CD ,
+                tookddt.SALE_HH
+                <foreach collection="kdsTimeList" item="i" separator="">
+                    UNION
+                    SELECT tookddt.STORE_CD
+                    , #{i}||'시' AS SALE_HH
+                    , 0 AS SALE_QTY
+                    , 0 AS AVG_MAKE
+                    , 0 AS AVG_PIC
+                    FROM TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+                    TB_MS_PRODUCT tmp
+                    WHERE
+                    tmp.PROD_CD = tookddt.PROD_CD
+                    AND tookddt.STORE_CD = #{storeCd}
+                    AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                </foreach>
+                )
+                WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
+                GROUP BY STORE_CD,
+                SALE_HH
+                ORDER BY SALE_HH
+            </when>
+        </choose>
+
+
+
     </select>
 </mapper>

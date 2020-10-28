@@ -59,7 +59,7 @@
                         <div class="sb-select fl">
                             <wj-combo-box
                                     id="rMemberClass"
-                                    ng-model="memberClass"
+                                    ng-model="membrClassCd"
                                     control="memberClassCombo"
                                     items-source="_getComboData('rMemberClass')"
                                     display-member-path="name"
@@ -142,7 +142,7 @@
                                     id="dlvrTelUseYn"
                                     ng-model="dlvrTelUseYn"
                                     control="dlvrTelUseYnCombo"
-                                    items-source="_getComboData('useYn')"
+                                    items-source="_getComboData('telUseYn')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
@@ -187,20 +187,15 @@
                             <s:message code="cmm.apply"/>
                         </button>
                     </td>
-                    <%-- 상세주소  --%>
-                    <th><s:message code="dlvr.membr.areaDetail"/></th>
-                    <td>
-                        <input type="text" class="sb-input w100" ng-model="addrDtl" id="addrDtl"/>
-                    </td>
                     <%-- 배달지사용  --%>
                     <th><s:message code="dlvr.membr.areaUseYn"/></th>
-                    <td>
+                    <td colspan="3">
                         <div class="sb-select w60 fl">
                             <wj-combo-box
                                     id="totUseYn"
                                     ng-model="totUseYn"
                                     control="totUseYnCombo"
-                                    items-source="_getComboData('useYn')"
+                                    items-source="_getComboData('rUseYn')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
@@ -286,17 +281,14 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
                                          is-read-only="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="searchResult"
+                    <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="membrNm"
                                          width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvr.membr.addr"/>" binding="addr"
-                                         width="220"
-                                         is-read-only="true" align="center"></wj-flex-grid-column>
+                                         width="220" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvr.membr.areaDetail"/>" binding="addrDtl"
-                                         width="200"
-                                         is-read-only="true" align="right"></wj-flex-grid-column>
+                                         width="200" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvr.membr.useYn"/>" binding="useYn" width="90"
-                                         is-read-only="true" align="right"
-                                         data-map="useYnDataMap"></wj-flex-grid-column>
+                                         align="left" data-map="useYnDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvr.membr.finalDlvrDate"/>" binding="lastDlvrDate"
                                          width="120"
                                          is-read-only="true" align="right"></wj-flex-grid-column>
@@ -338,7 +330,7 @@
                                      is-read-only="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="membrNm"
                                      width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvr.membr.phoneNumber"/>" binding="telNo" width="180"
+                <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="180"
                                      is-read-only="false" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvr.membr.useYn"/>" binding="useYn" width="90"
                                      data-map="useYnDataMap"
@@ -352,11 +344,14 @@
     </div>
 
 </div>
+
 <script>
     var useDataMap = ${ccu.getCommCodeExcpAll("067")};
+    var useData = ${ccu.getCommCode("067")};
+    <%--사용, 미사용--%>
     var memberClassList = ${memberClassList};
     var memberDlvrLzone = ${memberDlvrLzone};
     <%--var memberDlvrMzone = ${memberDlvrMzone};--%>
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/dlvr.js?ver=2019052801.11"
-        charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/dlvr.js?ver=2019052801.14" charset="utf-8"></script>

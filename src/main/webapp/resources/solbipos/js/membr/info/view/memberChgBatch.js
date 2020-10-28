@@ -9,7 +9,7 @@
  * get application
  */
 var app = agrid.getApp();
-
+memberClass.unshift({name: "전체", value: ""});
 /**********************************************************************
  *  회원정보 그리드
  **********************************************************************/
@@ -17,28 +17,65 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('memberChgBatchCtrl', $scope, $http, true));
 
+    var rAnvTypeList = [{value:"",name:messages["chgBatch.membr.anv.none"]},{value:"1",name:messages["chgBatch.membr.anv.birth"]},{value:"2", name:messages["chgBatch.membr.anv.weding"]}];
+    var rShortNoYnList = [{value:"",name:"전체"},{value:"1",name:messages["chgBatch.membr.short.telNo"]}];
+
+
+    var rMonthList = [];
+    for(var i=1; i <= 12; i++) {
+        var month = new Object();
+        if(i < 10){
+            month.value= '0'+i;
+            month.name = '0'+i;
+        }else {
+            month.value = ''+i;
+            month.name =  ''+i;
+        }
+        rMonthList.push(month);
+    }
+
+    var rDayList = [];
+    for(var i=1; i <=31; i++) {
+        var day = new Object();
+        if(i < 10){
+            day.value= '0'+i;
+            day.name = '0'+i;
+        }else {
+            day.value = ''+i;
+            day.name =  ''+i;
+        }
+        rDayList.push(day);
+    }
+
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
-    $scope._setComboData("rEmailRecvYn", recvDataMapEx);
-    $scope._setComboData("rSmsRecvYn", recvDataMapEx);
-    $scope._setComboData("rGendrFg", genderDataMapEx);
-    $scope._setComboData("rWeddingYn", weddingDataMap);
-    $scope._setComboData("rUseYn", useDataMap);
-    $scope._setComboData("rMemberClass", memberClassList);
+    /*$scope._setComboData("rEmailRecvYn", recvDataMapEx);
+    $scope._setComboData("rSmsRecvYn", recvDataMapEx);*/
+    /*$scope._setComboData("rGendrFg", genderDataMapEx);*/
+    /*$scope._setComboData("rWeddingYn", weddingDataMap);*/
+    $scope._setComboData("rMemberClassList", memberClass);
     $scope._setComboData("rMemberClassSelect", memberClassSelect);
     $scope._setComboData("rMembrcardYn", rMembrcardList);
-    memberClassList.unshift({name: "전체", value: ""});
+    $scope._setComboData("anvType", rAnvTypeList);
+    $scope._setComboData("shortNoYn", rShortNoYnList);
+    $scope._setComboData("startMonth", rMonthList);
+    $scope._setComboData("startDay", rDayList);
+    $scope._setComboData("endMonth", rMonthList);
+    $scope._setComboData("endDay", rDayList);
+
     // $scope.memberClassSelect = memberClassList;
     // $scope.memberClassSelect.splice(0,1);
     // $scope._setComboData("rMemberClassSelect", $scope.memberClassSelect);
 
     $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
     $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
-    $scope._getComboDataQuery('032', 'anvType', 'A');
-    $scope._getComboDataQuery('077', 'periodType', 'A');
+    /*$scope._getComboDataQuery('032', 'anvType', 'A');*/
+    $scope._getComboDataQuery('077', 'periodType', '');
     $scope._getComboDataQuery('076', 'weddingYn', 'A');
     $scope._getComboDataQuery('055', 'gendrFg', 'A');
-    $scope._getComboDataQuery('067', 'useYn', 'A');
+    $scope._getComboDataQuery('067', 'useYnAll', 'A');
+
+
 
 
     // 선택 회원
@@ -105,7 +142,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         dataItem.birthday = messages["regist.brthd"]
         dataItem.telNo = messages["regist.tel"]
         dataItem.phoneNo = messages["regist.phone.no"]
-        dataItem.shortNo = messages["regist.membr.stortNo"]
+        dataItem.shortNo = messages["regist.membr.shortNo"]
         // dataItem.regStoreCd = messages["regist.membr.regStore"]
         // dataItem.regStoreNm = messages["regist.membr.regStore"]
         dataItem.emailRecvYn = messages["regist.email.recv"]
@@ -135,7 +172,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         dataItem1.birthday = messages["regist.brthd"]
         dataItem1.telNo = messages["regist.tel"]
         dataItem1.phoneNo = messages["regist.phone.no"]
-        dataItem1.shortNo = messages["regist.membr.stortNo"]
+        dataItem1.shortNo = messages["regist.membr.shortNo"]
         dataItem1.regStoreCd = messages["regist.membr.regStore"]
         dataItem1.regStoreNm = messages["regist.membr.regStore"]
         dataItem1.emailRecvYn = messages["regist.email.recv"]
@@ -228,18 +265,20 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
         params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
         params.anvType = $scope.anvType;
-        params.anvStartDate = dateToDaystring($scope.anvStartDate).replaceAll('-', '');
-        params.anvEndDate = dateToDaystring($scope.anvEndDate).replaceAll('-', '');
+        if($scope.anvType !== 0){
+            params.anvStartDate = $scope.startMonth +$scope.startDay;
+            params.anvEndDate = $scope.endMonth+$scope.endDay;
+        }
 
         params.startSaveSale = $scope.startSaveSale;
         params.endSaveSale = $scope.endSaveSale;
         params.startAvablPoint = $scope.startAvablPoint;
         params.endAvablPoint = $scope.endAvablPoint
-        params.stortNo = $scope.stortNo;
+        /*params.stortNo = $scope.stortNo;*/
         params.weddingYn = $scope.weddingYn;
         params.memberClass = $scope.memberClass;
         params.phoneNo = $scope.phoneNo;
-
+        params.shortNo = $scope.shortNo;
         params.listScale = $scope.listScale;
 
         params.membrNo = $("#memberNo").val();
@@ -260,6 +299,30 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         });
     };
 
+    $scope.chgSave = function (param) {
+        console.log("$scope.chgMembrClassCd:: ", $scope.chgMembrClassCd);
+        console.log("$scope.chgSmsRecvYn:: ", $scope.chgSmsRecvYn);
+        console.log("$scope.chgEmailRecvYn:: ", $scope.chgEmailRecvYn);
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if ($scope.flex.collectionView.items[i].gChk === true) {
+                if (param === "class") {
+                    $scope.flex.collectionView.items[i].membrClassCd = $scope.chgMembrClassCd;
+                }else if (param === "short") {
+                    var tel = $scope.flex.collectionView.items[i].telNo;
+                    $scope.flex.collectionView.items[i].shortNo = tel.substr(tel.length-4,4);
+                } else if (param === "sms") {
+                    $scope.flex.collectionView.items[i].smsRecvYn = $scope.chgSmsRecvYn;
+                } else if (param === "email") {
+                    $scope.flex.collectionView.items[i].emailRecvYn = $scope.chgEmailRecvYn;
+                }
+            }
+        }
+        // $scope.flex.collectionView.commitEdit();
+        $scope.flex.collectionView.refresh();
+
+    }
+    ;
+
     // 저장
     $scope.gridSave = function () {
         // 파라미터 설정
@@ -267,16 +330,14 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         var params = new Array();
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if ($scope.flex.collectionView.itemsEdited[i].gChk == true) {
-                $scope.flex.collectionView.itemsEdited[i].status = "U";
-                $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
-                params.push($scope.flex.collectionView.itemsEdited[i]);
-            }
+            $scope.flex.collectionView.itemsEdited[i].status = "U";
+            $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
+            params.push($scope.flex.collectionView.itemsEdited[i]);
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $.postJSONArray("/membr/info/chgBatch/chgBatch/getMemberChgBatchSave.sb", params, function (result) {
-                $scope.getMemberChgBatchList();
-            });
-        }
-        ;
+        };
+        $.postJSONArray("/membr/info/chgBatch/chgBatch/getMemberChgBatchSave.sb", params, function (result) {
+            $scope.getMemberChgBatchList();
+        });
     };
-}]);
+}
+]);

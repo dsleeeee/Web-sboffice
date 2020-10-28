@@ -108,6 +108,20 @@ app.controller('membrProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd= '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = String(yyyy) + String(mm) + dd;
 
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -116,18 +130,33 @@ app.controller('membrProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
     $timeout(function () {
+
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
         includeCellStyles: true,
+        formatItem: saveFormatItem,
         includeColumns: function (column) {
           return column.visible;
         }
-      }, '회원관리_회원분석_회원상품구매내역_' + getToday() + '.xlsx', function () {
+      }, '회원관리_회원분석_회원상품구매내역_' + today + '.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
       });
     }, 10);
   };
+
+  function saveFormatItem(args) {
+    let p = args.panel, row = args.row, col = args.col, xlsxCell = args.xlsxCell, cell, color;
+    if (p.cellType === wijmo.grid.CellType.Cell) {
+      if (p.columns[col].binding === 'prodCd') {
+        if (xlsxCell.value) {
+          xlsxCell.style.format = "@"
+        }
+      }
+    }
+  };
+
+
 
 }]);

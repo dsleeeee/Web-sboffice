@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -52,6 +53,19 @@ public class DlvrRegistServiceImpl implements DlvrRegistService {
         }
         List<DefaultMap<String>> dlvrManageList = mapper.getDlvrManageList(dlvrRegistVO);
         return convertToJson(dlvrManageList);
+    }
+
+    /** 배달구역 -대분류 저장후 조회 */
+    @Override
+    public List<DefaultMap<String>> dlvrManageList(SessionInfoVO sessionInfoVO) {
+        DlvrRegistVO dlvrRegistVO = new DlvrRegistVO();
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            dlvrRegistVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        } else {
+            dlvrRegistVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+//        List<DefaultMap<String>> result = mapper.getDlvrManageList(dlvrRegistVO);
+        return mapper.getDlvrManageList(dlvrRegistVO);
     }
 
     /** 배달구역 -대분류 저장*/

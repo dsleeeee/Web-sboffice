@@ -19,45 +19,60 @@
     <select id="getMembrNonBilClctList"  parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctList */
         SELECT
-        tmmpb.MEMBR_NO,
-        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
-        SUM(tmmpb.POSTPAID_AMT) AS POSTPAID_AMT,
-        SUM(tmmpb.POSTPAID_IN_AMT) AS POSTPAID_IN_AMT,
-        SUM(tmmpb.POSTPAID_BAL_AMT) AS POSTPAID_BAL_AMT,
-        SUM(tmmpbdt.POSTPAID_AMT_DT) AS POSTPAID_AMT_DT,
-        SUM(tmmpbdt.POSTPAID_IN_AMT_DT) AS POSTPAID_IN_AMT_DT
-        FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
+            tmmpb.MEMBR_NO,
+            SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+            tmmpb.POSTPAID_AMT AS POSTPAID_AMT,
+            tmmpb.POSTPAID_IN_AMT AS POSTPAID_IN_AMT,
+            tmmpb.POSTPAID_BAL_AMT AS POSTPAID_BAL_AMT,
+            tmmpbdt.POSTPAID_AMT_DT AS POSTPAID_AMT_DT,
+            tmmpbdt.POSTPAID_IN_AMT_DT AS POSTPAID_IN_AMT_DT
+        FROM (
+            SELECT
+            MEMBR_NO,
+            HQ_OFFICE_CD,
+            SUM(POSTPAID_AMT) AS POSTPAID_AMT,
+            SUM(POSTPAID_IN_AMT) AS POSTPAID_IN_AMT,
+            SUM(POSTPAID_BAL_AMT) AS POSTPAID_BAL_AMT
+            FROM TB_MB_MEMBER_PAID_BALANCE
+            WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+            <if test='storeCd != null and storeCd != ""'>
+                <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+            </if>
+            <if test='membrNo != null and membrNo != ""'>
+                <![CDATA[
+                AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
+            ]]>
+            </if>
+            GROUP BY MEMBR_NO, HQ_OFFICE_CD
+        ) tmmpb,
         TB_MB_MEMBER tmm,
         (
             SELECT
-            MEMBR_NO,
-            POSTPAID_AMT AS POSTPAID_AMT_DT,
-            POSTPAID_IN_AMT AS POSTPAID_IN_AMT_DT
+                MEMBR_NO,
+                SUM(POSTPAID_AMT) AS POSTPAID_AMT_DT,
+                SUM(POSTPAID_IN_AMT) AS POSTPAID_IN_AMT_DT
             FROM TB_MB_MEMBER_PAID_BALANCE
-            WHERE 1=1
-            AND REG_DT BETWEEN #{startDate} AND #{endDate}
+            <where>
+                AND REG_DT BETWEEN #{startDate} AND #{endDate}
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                <if test='storeCd != null and storeCd != ""'>
+                    AND STORE_CD = #{storeCd}
+                </if>
+                <if test='membrNo != null and membrNo != ""'>
+                    AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
+                </if>
+            </where>
+            GROUP BY MEMBR_NO, HQ_OFFICE_CD
         ) tmmpbdt
         WHERE 1=1
-        AND tmmpb.HQ_OFFICE_CD = #{membrOrgnCd}
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-                AND tmmpb.STORE_CD = #{storeCd}
-            ]]>
-        </if>
-        <if test='membrNm != null and membrNm != ""'>
-            <![CDATA[
-                AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
-            ]]>
-        </if>
-        <if test='membrNo != null and membrNo != ""'>
-            <![CDATA[
-                AND tmmpb.MEMBR_NO LIKE '%'||#{membrNo}||'%'
-            ]]>
-        </if>
         AND tmmpb.MEMBR_NO = tmm.MEMBR_NO
         AND tmmpb.MEMBR_NO = tmmpbdt.MEMBR_NO
         AND tmmpb.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
-        GROUP BY tmmpb.HQ_OFFICE_CD, tmmpb.STORE_CD, tmmpb.MEMBR_NO, tmm.MEMBR_NM
+        <if test='membrNm != null and membrNm != ""'>
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
+        </if>
         ORDER BY tmmpb.MEMBR_NO
     </select>
 
@@ -69,9 +84,9 @@
     <select id="getMembrNonBilClctDetailList"  parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctDetailList */
         SELECT
-        TO_CHAR(TO_DATE(tmmpb.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
-        tmmpb.POSTPAID_AMT,
-        tmmpb.POSTPAID_IN_AMT
+            TO_CHAR(TO_DATE(tmmpb.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+            tmmpb.POSTPAID_AMT,
+            tmmpb.POSTPAID_IN_AMT
         FROM TB_MB_MEMBER_PAID_BALANCE tmmpb
         WHERE 1=1
         AND tmmpb.HQ_OFFICE_CD = #{membrOrgnCd}

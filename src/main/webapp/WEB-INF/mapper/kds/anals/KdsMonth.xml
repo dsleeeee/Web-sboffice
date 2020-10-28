@@ -18,6 +18,7 @@
         C.SALE_MON,
         B.PROD_NM,
         D.STORE_NM,
+        A.PROD_CLASS_NM,
         SUM(C.SALE_QTY) AS SALE_QTY,
         SUM(C.AVG_MAKE) AS AVG_MAKE,
         SUM(C.AVG_PIC) AS AVG_PIC
@@ -32,7 +33,8 @@
                 B.PROD_CLASS_NM     AS LV3_NM,
                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-                (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+                (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL,
+                ( SELECT SF_GET_PROD_CLASSES('H', #{hqOfficeCd}, B.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
                 FROM    (
                 SELECT  HQ_OFFICE_CD,
                 P_PROD_CLASS_CD,
@@ -73,7 +75,8 @@
                 B.PROD_CLASS_NM     AS LV3_NM,
                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-                (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+                (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL,
+                ( SELECT SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
                 FROM    (
                 SELECT  STORE_CD,
                 P_PROD_CLASS_CD,
@@ -142,6 +145,9 @@
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND B.PROD_CLASS_CD	= #{prodClassCd}
         </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND B.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
         AND C.SALE_MON BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
         GROUP BY
             A.LV1_CD,
@@ -156,6 +162,7 @@
             B.PROD_NM,
             C.STORE_CD,
             C.SALE_MON,
+            A.PROD_CLASS_NM,
             D.STORE_NM
         ORDER BY
             C.SALE_MON

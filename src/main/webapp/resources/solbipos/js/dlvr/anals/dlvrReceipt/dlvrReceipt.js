@@ -18,6 +18,9 @@ app.controller('dlvrReceiptCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     $scope.initGrid = function (s, e) {
+        s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        s.bottomLeftCells.setCellData(0, 0, '합계');
+
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
@@ -69,7 +72,7 @@ app.controller('dlvrReceiptDetailCtrl', ['$scope', '$http', function ($scope, $h
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dlvrReceiptDetailCtrl', $scope, $http, true));
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("listScaleDatail", gvListScaleBoxData);
+    $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
     $scope.selectedMember;
     $scope.setSelectedMember = function (data) {
@@ -81,6 +84,32 @@ app.controller('dlvrReceiptDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.data = new wijmo.collections.CollectionView([]);
 
     $scope.initGrid = function (s, e) {
+        s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // 그리드 포맷
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "billNo") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+            }
+        });
+
+        // 그리드 선택 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+                if (col.binding === "billNo") {
+                    $scope.setSelectedMember(selectedRow);
+                    $scope._broadcast('popBillInfo', selectedRow);
+                    $scope.wjDlvrInfoLayer.show(true);
+                }
+            }
+        });
     };
     $scope.$on("dlvrReceiptDetailCtrl", function (event, data) {
         $scope.setSelectedMember(data);
@@ -101,7 +130,7 @@ app.controller('dlvrReceiptDetailCtrl', ['$scope', '$http', function ($scope, $h
         params.periodStartDate = data.periodStartDate;
         params.periodEndDate = data.periodEndDate;
         params.posNo = data.posNo;
-        // params.listScale = 2;
+        params.listScale  = $scope.listScale;
 
         $scope._inquirySub("/dlvr/manage/anals/dlvrZone/getDlvrReceiptDetailList.sb", params, function () {
         }, false);

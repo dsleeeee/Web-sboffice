@@ -18,19 +18,17 @@
     -->
     <select id="getMembrPointList"  parameterType="membrPointVO" resultType="DefaultMap">
         /* MembrPointMapper.getMembrPointList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssd.STORE_CD) AS STORE_NM,
         TO_CHAR(TO_DATE(tssd.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS REG_DT,
         tsshm.MEMBR_NO,
         SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
-        (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = tmm.REG_STORE_CD AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+        (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
         SUM(tssd.MEMBR_SAVE_POINT) AS MEMBR_SAVE_POINT,
         SUM(tssd.MEMBR_USE_POINT) AS MEMBR_USE_POINT,
         SUM(tssd.SALE_AMT) AS SALE_AMT,
         SUM(tssd.DC_AMT) AS DC_AMT,
         SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
-        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_SL_SALE_HDR_MEMBR tsshm,
         TB_SL_SALE_DTL tssd,
         TB_MB_MEMBER tmm
@@ -41,7 +39,7 @@
                 AND tsshm.STORE_CD = #{storeCd}
             ]]>
         </if>
-        AND tssd.REG_DT BETWEEN #{startDate} AND #{endDate}
+        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tssd.STORE_CD IN
             <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
@@ -67,7 +65,6 @@
         AND tsshm.BILL_NO = tssd.BILL_NO
         AND tsshm.STORE_CD = tmm.REG_STORE_CD
         AND tsshm.MEMBR_NO = tmm.MEMBR_NO
-        AND tsshm.MEMBR_NM = tmm.MEMBR_NM
         GROUP BY tssd.STORE_CD, tssd.REG_DT, tsshm.MEMBR_NO, tsshm.MEMBR_NM, tmm.REG_STORE_CD, tmm.MEMBR_CLASS_CD
         <if test='array == "1"'>
             <![CDATA[
@@ -99,7 +96,5 @@
                 ORDER BY tssd.REG_DT, tsshm.MEMBR_NO, tssd.STORE_CD
             ]]>
         </if>
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-
 </mapper>

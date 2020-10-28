@@ -31,10 +31,10 @@
             <col class="w35"/>
             <col class="w15"/>
             <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
+            <%-- <col class="w15"/>
+             <col class="w35"/>
+             <col class="w15"/>
+             <col class="w35"/>--%>
         </colgroup>
         <tbody>
         <tr>
@@ -105,7 +105,7 @@
             <th><s:message code="regist.reg.store.cd"/></th>
             <td>
                 <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
                     <jsp:param name="targetId" value="regStore"/>
                 </jsp:include>
                 <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -165,8 +165,6 @@
             <td>
                 <input type="text" id="emailAddr" class="sb-input w100" ng-model="emailAddr" maxlength="15"/>
             </td>
-
-
         </tr>
         <tr>
             <%-- SMS 수신 --%>
@@ -186,7 +184,7 @@
                 </div>
             </td>
             <%-- 핸드폰번호 --%>
-            <th><s:message code="regist.phone.no"/></th>
+            <th><s:message code="regist.tel"/></th>
             <td>
                 <input type="text" id="phoneNo" class="sb-input w100" ng-model="phoneNo" maxlength="15"/>
             </td>
@@ -213,7 +211,7 @@
             <%-- 기념일 --%>
             <th><s:message code="regist.brt.wed.day"/></th>
             <td>
-                <div class="sb-select">
+                <div class="sb-select mb5 w100">
                     <wj-combo-box
                             id="anvType"
                             ng-model="anvType"
@@ -222,8 +220,72 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)">
+                            initialized="_initComboBox(s)"
+                            >
                     </wj-combo-box>
+                </div>
+                <div ng-if="anvType !== ''" class="sb-select">
+                    <span class="rg">월</span>
+                    <span class="txtIn w15">
+                      <div class="sb-select ">
+                        <wj-combo-box
+                                id="startMonth"
+                                ng-model="startMonth"
+                                control="startMonthCombo"
+                                items-source="_getComboData('startMonth')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                      </div>
+                    </span>
+                    <span class="rg">일</span>
+                    <span class="txtIn w15">
+                      <div class="sb-select ">
+                        <wj-combo-box
+                                id="startDay"
+                                ng-model="startDay"
+                                control="startDayCombo"
+                                items-source="_getComboData('startDay')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                      </div>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="rg">월</span>
+                    <span class="txtIn w15">
+                      <div class="sb-select ">
+                        <wj-combo-box
+                                id="endMonth"
+                                ng-model="endMonth"
+                                control="endMonthCombo"
+                                items-source="_getComboData('endMonth')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                      </div>
+                    </span>
+                    <span class="rg">일</span>
+                    <span class="txtIn w15">
+                      <div class="sb-select">
+                        <wj-combo-box
+                                id="endDay"
+                                ng-model="endDay"
+                                control="endDayCombo"
+                                items-source="_getComboData('endDay')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                      </div>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -268,10 +330,10 @@
             </td>
         </tr>
         <tr>
-            <%-- 회사단축번호 --%>
+            <%-- 회원단축번호 --%>
             <th><s:message code="regist.membr.stortNo"/></th>
             <td>
-                <input type="text" id="stortNo" class="sb-input w100" ng-model="stortNo" maxlength="15"/>
+                <input type="text" id="shortNo" class="sb-input w100" ng-model="shortNo" maxlength="15"/>
             </td>
             <%-- 결혼여부 --%>
             <th><s:message code="regist.wedding"/></th>
@@ -292,14 +354,14 @@
         </tr>
         <tr>
             <%-- 회원등급 --%>
-            <th><s:message code="regist.memberClass"/><em class="imp">*</em></th>
+            <th><s:message code="regist.memberClass"/></th>
             <td>
                 <div class="sb-select">
                     <wj-combo-box
                             id="rMemberClass"
                             ng-model="membrClassCd"
                             control="memberClassCombo"
-                            items-source="_getComboData('rMemberClass')"
+                            items-source="_getComboData('rMemberClassList')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -312,10 +374,10 @@
             <td>
                 <div class="sb-select">
                     <wj-combo-box
-                            id="useYn"
+                            id="useYnAll"
                             ng-model="useYn"
-                            control="useYnCombo"
-                            items-source="_getComboData('useYn')"
+                            control="useYnAllCombo"
+                            items-source="_getComboData('useYnAll')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -339,6 +401,74 @@
                 is-editable="false"
                 initialized="initComboBox(s)">
         </wj-combo-box>
+        <%-- 회원등급 --%>
+        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.class.nm'/></span>
+        <div class="sb-select w100px fl">
+            <wj-combo-box
+                    id="rMemberClass"
+                    ng-model="chgMembrClassCd"
+                    control="memberClassCombo"
+                    items-source="_getComboData('rMemberClassList')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('class')">
+            <s:message code="cmm.save"/>
+        </button>
+        <%-- 단축번호--%>
+        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='member.excel.shortNo'/></span>
+        <div class="sb-select w100px fl">
+            <wj-combo-box
+                    id="shortNoYn"
+                    ng-model="shortNoYn"
+                    control="shortNoYnCombo"
+                    items-source="_getComboData('shortNoYn')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('short')">
+            <s:message code="cmm.save"/>
+        </button>
+        <%-- sms 수신--%>
+        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.sms.recv'/></span>
+        <div class="sb-select w100px fl">
+            <wj-combo-box
+                    id="smsRecvYn"
+                    ng-model="chgSmsRecvYn"
+                    control="smsRecvYnCombo"
+                    items-source="_getComboData('smsRecvYn')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('sms')">
+            <s:message code="cmm.save"/>
+        </button>
+        <%-- 이메일수신 --%>
+        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.email.recv'/></span>
+        <div class="sb-select w100px fl">
+            <wj-combo-box
+                    id="emailRecvYn"
+                    ng-model="chgEmailRecvYn"
+                    control="emailRecvYnCombo"
+                    items-source="_getComboData('emailRecvYn')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('email')">
+            <s:message code="cmm.save"/>
+        </button>
         <%-- 저장 --%>
         <button class="btn_skyblue ml5 fr" id="save" ng-click="gridSave()">
             <s:message code="cmm.save"/>
@@ -365,9 +495,9 @@
                 <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" align="left"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="membrClassCd" align="center"
-                                    data-map="memberClassDataMap" ></wj-flex-grid-column>
+                                     data-map="memberClassDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.class.nm"/>" binding="membrClassNm" align="center"
-                                     width="100"  visible="false" ></wj-flex-grid-column>
+                                     width="100" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.brthd"/>" binding="birthday" align="center"
                                      width="100" is-read-only="true"></wj-flex-grid-column>
 
@@ -377,7 +507,7 @@
                                      align="center" visible="false"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85"
-                                     align="center" is-read-only="true"></wj-flex-grid-column>
+                                     align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="saveCnt" width="75"
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
@@ -392,12 +522,10 @@
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn"
                                      data-map="emailRecvDataMap" width="75" align="center"
-                                     ></wj-flex-grid-column>
+                ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn"
                                      data-map="smsRecvDataMap" width="75" align="center"
-                                     ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap"
-                                     width="75" align="center" ></wj-flex-grid-column>
+                ></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -427,10 +555,13 @@
     var weddingDataMap = ${ccu.getCommCodeExcpAll("076")};
     <%--결혼유무--%>
     var anvrsDataMap = ${ccu.getCommCode("032")};
+    <%--결혼유무--%>
+    var weddingList = ${ccu.getCommCodeSelect("076")};
     <%--카드사용구분--%>
     var rMembrcardList = ${ccu.getCommCode("014")};
     <%--var membrChgBatchList = ${membrChgBatchList};--%>
-    var memberClassList = ${memberClassList};
+    var memberClass = ${memberClassList};
+
     var memberClassSelect = ${memberClassSelect};
 
     var regstrStoreList = ${regstrStoreList};
