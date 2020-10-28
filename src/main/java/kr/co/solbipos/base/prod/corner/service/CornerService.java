@@ -7,7 +7,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import java.util.List;
 
 /**
- * @Class Name : CornerController.java
+ * @Class Name : CornerService.java
  * @Description : 기초관리 - 상품관리 - 코너관리
  * @Modification Information
  * @
