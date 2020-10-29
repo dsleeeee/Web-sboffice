@@ -183,7 +183,7 @@ app.controller('vendrOrderProdCtrl', ['$scope', '$http', '$timeout', function ($
     params.vendrCd = $scope.vendrCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/iostock/vendr/vendrOrder/vendrOrderProd/list.sb", params);
+    $scope._inquirySub("/iostock/vendr/vendrOrder/vendrOrderProd/list.sb", params);
   };
 
 

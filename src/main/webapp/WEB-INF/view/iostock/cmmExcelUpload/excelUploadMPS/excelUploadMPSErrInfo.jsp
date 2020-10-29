@@ -49,4 +49,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPSErrInfo.js?ver=20200910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPSErrInfo.js?ver=20200910.02" charset="utf-8"></script>

@@ -212,7 +212,7 @@
 				,		A.IN_AMT
 				,		A.IN_VAT
 				,		A.IN_TOT
-					
+				,       A.TOT_CNT
 				/*
 				,		NVL(B.PROD_CD, A.PROD_CD)       AS  A_PROD_CD
 				,       NVL(B.STORAGE_CD, '001')        AS  A_STORAGE_CD
@@ -262,6 +262,8 @@
 				        AND     tphvid.PROD_CD    (+) =   thp.PROD_CD
 				        AND     thv.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
 				        AND     thv.VENDR_CD          =   #{vendrCd}
+				        AND     thp.PO_PROD_FG IN ('1', '2')
+				        AND     thvp.USE_YN           = 'Y'
 				        ]]>
 				        <if test='prodCd != null and prodCd != ""'>
 				            AND thp.PROD_CD = #{prodCd}

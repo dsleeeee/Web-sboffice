@@ -391,6 +391,7 @@
                 AND     tphvod.PROD_CD    (+) 	=   thp.PROD_CD
                 AND     thv.HQ_OFFICE_CD      	=   thvp.HQ_OFFICE_CD
                 AND     thv.VENDR_CD          	=   #{vendrCd}
+                AND     thvp.USE_YN             =  'Y'
                 ]]>
                 <if test='prodCd != null and prodCd != ""'>
                     AND thp.PROD_CD = #{prodCd}
@@ -469,6 +470,7 @@
                 AND     tpsvod.PROD_CD  (+) =   tmp.PROD_CD
                 AND     tmv.STORE_CD        =   tmvp.STORE_CD
                 AND     tmv.VENDR_CD        =   #{vendrCd}
+                AND     tmvp.USE_YN         =  'Y'
                 ]]>
                 <if test='prodCd != null and prodCd != ""'>
                     AND tmp.PROD_CD = #{prodCd}

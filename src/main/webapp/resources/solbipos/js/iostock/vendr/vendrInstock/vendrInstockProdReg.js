@@ -67,44 +67,44 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
     s.bottomLeftCells.setCellData(0, 0, '합계');
 
     // 헤더머지
-//    s.allowMerging  = 2;
-//    s.itemFormatter = function (panel, r, c, cell) {
-//      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-//        //align in center horizontally and vertically
-//        panel.rows[r].allowMerging    = true;
-//        panel.columns[c].allowMerging = true;
-//        wijmo.setCss(cell, {
-//          display    : 'table',
-//          tableLayout: 'fixed'
-//        });
-//        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-//        wijmo.setCss(cell.children[0], {
-//          display      : 'table-cell',
-//          verticalAlign: 'middle',
-//          textAlign    : 'center'
-//        });
-//      }
-//      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-//      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-//        // GroupRow 인 경우에는 표시하지 않는다.
-//        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-//          cell.textContent = '';
-//        } else {
-//          if (!isEmpty(panel._rows[r]._data.rnum)) {
-//            cell.textContent = (panel._rows[r]._data.rnum).toString();
-//          } else {
-//            cell.textContent = (r + 1).toString();
-//          }
-//        }
-//      }
-//      // readOnly 배경색 표시
-//      else if (panel.cellType === wijmo.grid.CellType.Cell) {
-//        var col = panel.columns[c];
-//        if (col.isReadOnly || panel.grid.isReadOnly) {
-//          wijmo.addClass(cell, 'wj-custom-readonly');
-//        }
-//      }
-//    }
+   s.allowMerging  = 2;
+   s.itemFormatter = function (panel, r, c, cell) {
+     if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+       //align in center horizontally and vertically
+       panel.rows[r].allowMerging    = true;
+       panel.columns[c].allowMerging = true;
+       wijmo.setCss(cell, {
+         display    : 'table',
+         tableLayout: 'fixed'
+       });
+       cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+       wijmo.setCss(cell.children[0], {
+         display      : 'table-cell',
+         verticalAlign: 'middle',
+         textAlign    : 'center'
+       });
+     }
+     // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+     else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+       // GroupRow 인 경우에는 표시하지 않는다.
+       if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+         cell.textContent = '';
+       } else {
+         if (!isEmpty(panel._rows[r]._data.rnum)) {
+           cell.textContent = (panel._rows[r]._data.rnum).toString();
+         } else {
+           cell.textContent = (r + 1).toString();
+         }
+       }
+     }
+     // readOnly 배경색 표시
+     else if (panel.cellType === wijmo.grid.CellType.Cell) {
+       var col = panel.columns[c];
+       if (col.isReadOnly || panel.grid.isReadOnly) {
+         wijmo.addClass(cell, 'wj-custom-readonly');
+       }
+     }
+   }
     
     
   //Grid Header 2줄 - START	----------------------------------------------------------------
@@ -138,7 +138,6 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
 
   };
 
-
   $scope.calcAmt = function (item) {
     /** 수량이 없는 경우 계산하지 않음.
         null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 */
@@ -163,7 +162,6 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
     item.inTot    = inTot; // 합계
   };
   //$scope.calcAmt		--------------------------------------------------------------------------------------------------------------------------
-  
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("vendrInstockProdRegCtrl", function (event, data) {
@@ -196,7 +194,7 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
 
   // 조회버튼 클릭으로 조회시
   $scope.fnSearch = function () {
-    $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+    //$scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
     $scope.searchVendrInstockRegList();
   };
 

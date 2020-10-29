@@ -76,6 +76,7 @@ app.controller('excelUploadMPSErrInfoCtrl', ['$scope', '$http', function ($scope
         $scope.data     = cv;
 
         $scope.uploadFg = data.uploadFg;
+        $scope.vendrCd = data.vendrCd;
         $scope.wjExcelUploadMPSErrInfoLayer.show(true);
         $scope.gridVisible();
         $scope.searchExcelUploadErrInfoList();
@@ -138,6 +139,7 @@ app.controller('excelUploadMPSErrInfoCtrl', ['$scope', '$http', function ($scope
     $scope.searchExcelUploadErrInfoList = function () {
         // 파라미터
         var params = {};
+        params.vendrCd = $scope.vendrCd;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPSErrInfo/list.sb", params);

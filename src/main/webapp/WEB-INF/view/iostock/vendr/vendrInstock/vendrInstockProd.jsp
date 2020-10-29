@@ -42,7 +42,7 @@
 
   <div class="w100 mt10 mb20">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 400px;">
+    <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -74,7 +74,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProd.js?ver=20201020.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProd.js?ver=20201020.02" charset="utf-8"></script>
 
 <%-- 상품 추가/변경 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockProdReg.jsp">

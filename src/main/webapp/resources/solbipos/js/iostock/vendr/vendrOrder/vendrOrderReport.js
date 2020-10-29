@@ -230,12 +230,17 @@ app.controller('vendrOrderReportCtrl', ['$scope', '$http', '$timeout', function 
                 // if (prodNm.length > nmLimit) {
                 //   prodNm = prodNm.substr(0, nmLimit) + '..';
                 // }
+                // 수량이 null 인 경우,
+                var vOrderTotQty = 0;
+                if(item.orderTotQty !== null && item.orderTotQty !== undefined && item.orderTotQty !== ""){
+                  vOrderTotQty = item.orderTotQty;
+                }
                 prodListHtml += '<tr class="h25">'
                   + '<td class="tc">' + (j + 1) + '</td>'
                   + '<td class="tl"><input type="text" value="' + prodNm + '" class="w100" readonly></td>'
                   + '<td class="tc">' + item.poUnitFgNm + '</td>'
                   + '<td class="tr">' + addComma(item.costUprc) + '</td>'
-                  + '<td class="tr">' + addComma(item.orderTotQty) + '</td>'
+                  + '<td class="tr">' + addComma(vOrderTotQty) + '</td>'
                   + '<td class="tr">' + addComma(item.orderTot) + '</td>'
                   + '</tr>';
                 pageTotAmt = parseInt(pageTotAmt) + parseInt(item.orderTot);
