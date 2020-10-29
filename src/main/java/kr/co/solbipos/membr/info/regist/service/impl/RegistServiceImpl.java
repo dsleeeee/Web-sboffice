@@ -87,11 +87,16 @@ public class RegistServiceImpl implements RegistService {
         MembrClassVO membrClassVO = new MembrClassVO();
 
         membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        } else {
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            /*if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            }*/
         }
 
         List<DefaultMap<String>> resultList = mapper.getMemberClassList(membrClassVO);
@@ -123,17 +128,37 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public List<DefaultMap<String>> getMemberList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
+        LOGGER.debug("sessionInfoVO.getHqOfficeCd(): {}", sessionInfoVO.getHqOfficeCd());
+
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
-        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+                registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+                if (!StringUtil.isEmpties(registVO.getRegStoreCd())) {
+                    registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
+                }
+                if (!StringUtil.isEmpties(registVO.getRegUseStoreCd())) {
+                    registVO.setRegUseStoreCds(registVO.getRegUseStoreCd().split(","));
+                }
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+                registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+                registVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+        }
+//        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+//        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-
-        if (!StringUtil.isEmpties(registVO.getRegStoreCd())) {
-            registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
         }
 
         return mapper.getMemberList(registVO);
@@ -147,27 +172,58 @@ public class RegistServiceImpl implements RegistService {
 
         String dt = currentDateTimeString();
 
-        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }
+        }
+
+//        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         registVO.setMembrNo(mapper.getNewMemberNo(registVO));
 
-        // 회원단축번호 추가_2019.08.02 추가 이다솜
-        registVO.setShortNo(registVO.getTelNo().substring(registVO.getTelNo().length() - 4, registVO.getTelNo().length()));
+        // 회원단축번호 추가_2019.08.02 추가 이다솜 -> 테스트중 에러나서 주석처리 2020.10.27 김설아(확인 김중선)
+//        registVO.setShortNo(registVO.getTelNo().substring(registVO.getTelNo().length() - 4, registVO.getTelNo().length()));
 
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
 
+        registVO.setChgDate(registVO.getRegDt().substring(0, registVO.getRegDt().length()-6));
+        LOGGER.debug("registVO.getRegDt()(): {}", registVO.getRegDt());
+        LOGGER.debug("registVO.setChgDate(): {}", registVO.getChgDate());
+        int firstSaleSavePoint = mapper.firstSaleSavePointInfo(registVO);
+
         // 회원등록
         int result = mapper.registMemberInfo(registVO);
         String membrNo = "";
 
-        if (result == 1 ) {
+        if (result == 1) {
             membrNo = registVO.getMembrNo();
 //            // 회원카드 등록
 //            if (mapper.insertMembrCard(registVO) <= 0) {
 //                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 //            }
+            if(registVO.getMovePoint() > 0){
+                registVO.setPointChgFg("2");
+                registVO.setChgPoint(registVO.getMovePoint());
+                mapper.insertMembrPointHist(registVO);
+            }else {
+                if (firstSaleSavePoint > 0) {
+                    registVO.setPointChgFg("1");
+                    registVO.setChgPoint(firstSaleSavePoint);
+                    mapper.insertMembrPointHist(registVO);
+                }
+            }
+            if ( registVO.getMembrCardNo() != null && !"".equals(registVO.getMembrCardNo())) {
+                registVO.setCstCardIssFg("0");//신규발급
+                mapper.insertMembrCard(registVO);
+            }
         }
         // 선불회원 등록 (자점회원)
         result = mapper.registMemberPrepaid(registVO);
@@ -182,24 +238,13 @@ public class RegistServiceImpl implements RegistService {
 //        System.out.println("test1111");
         LOGGER.info("회원등록 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
-        if(("A0007").equals(registVO.getMembrOrgnCd())) {
-
-            // 프로시저 결과
-            String sResult = "";
-
-            LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_PTN 호출 : " + dt);
-            sResult = mapper.registPoslinkPtn(registVO);
-            /*if(result <= 0) {
-                LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_PTN Fail : " + dt);
-                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }*/
-
-            LOGGER.info("회원등록 >>> SP_NEOE_SPOS_BILL_PTN 호출 : " + dt);
-            sResult = mapper.registSposBillPtn(registVO);
-            /*if(result <= 0) {
-                LOGGER.info("회원등록 >>> SP_NEOE_SPOS_BILL_PTN Fail : " + dt);
-                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }*/
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registPoslinkPtn(registVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registSposBillPtn(registVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         return membrNo;
@@ -227,37 +272,26 @@ public class RegistServiceImpl implements RegistService {
 
 
         // 선불회원 등록 (자점회원)
-        result = mapper.registMemberPrepaid(registVO);
-        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-
-        // 회원-거래처 매핑코드 등록 (보나비)
-        if (registVO.getCdCompany() != null && registVO.getCdPartner() != null) {
-            result = mapper.registMemberMappingCode(registVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+//        result = mapper.registMemberPrepaid(registVO);
+//        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//
+//
+//        // 회원-거래처 매핑코드 등록 (보나비)
+//        if (registVO.getCdCompany() != null && registVO.getCdPartner() != null) {
+//            result = mapper.registMemberMappingCode(registVO);
+//            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
 
 //        System.out.println("test1111");
         LOGGER.info("회원수정 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
-        if(("A0007").equals(registVO.getMembrOrgnCd())) {
-
-            // 프로시저 결과
-            String sResult = "";
-
-            LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_PTN 호출 : " + dt);
-            sResult = mapper.registPoslinkPtn(registVO);
-            /*if(result <= 0) {
-                LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_PTN Fail : " + dt);
-                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }*/
-
-            LOGGER.info("회원수정 >>> SP_NEOE_SPOS_BILL_PTN 호출 : " + dt);
-            sResult = mapper.registSposBillPtn(registVO);
-            /*if(result <= 0) {
-                LOGGER.info("회원수정 >>> SP_NEOE_SPOS_BILL_PTN Fail : " + dt);
-                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }*/
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registPoslinkPtn(registVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registSposBillPtn(registVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         return result;
@@ -274,7 +308,7 @@ public class RegistServiceImpl implements RegistService {
         int registCnt = 0;
 
         for (RegistVO registVO : registVOs) {
-            //registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             registVO.setModId(sessionInfoVO.getUserId());
             registVO.setModDt(DateUtil.currentDateTimeString());
 
@@ -382,7 +416,6 @@ public class RegistServiceImpl implements RegistService {
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
         registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -400,14 +433,45 @@ public class RegistServiceImpl implements RegistService {
      */
     @Override
     public List<DefaultMap<String>> getCardList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
-        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+
+       if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
             registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        } else {
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+           /*if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }*/
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-        }
+
         return mapper.getCardList(registVO);
+    }
+
+    /**
+     *  카드 중복 체크
+     */
+    @Override
+    public int getMemberCardInfoCount(RegistVO registVO, SessionInfoVO sessionInfoVO){
+
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        } else {
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            /*if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }*/
+        }
+
+        System.out.println("getMembrOrgnCd ::::::"+registVO.getMembrOrgnCd());
+
+        int result = mapper.getMemberCardInfoCount(registVO);
+        return result;
     }
 
     /**
@@ -418,13 +482,19 @@ public class RegistServiceImpl implements RegistService {
 
         String dt = currentDateTimeString();
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
             registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        } else {
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+           /* if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }*/
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-        }
-
+        //신규등록일 때 이전 카드번호 '0'으로 set
+        registVO.setOldCstCardNo("0");
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
@@ -432,7 +502,55 @@ public class RegistServiceImpl implements RegistService {
 
         // 회원카드 등록
         int result = mapper.insertMembrCard(registVO);
+        int membrResult = mapper.updateMembr(registVO);
         if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        if (membrResult <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
+    /**
+     * 카드정보수정
+     */
+    @Override
+    public int updateMembrCard(RegistVO registVO, SessionInfoVO si) {
+        String dt = currentDateTimeString();
+
+        if ("00000".equals(si.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(si.getOrgnFg());
+            registVO.setMembrOrgnCd(si.getHqOfficeCd());
+        } else {
+            registVO.setMembrOrgnCd(si.getHqOfficeCd());
+           /* if (si.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(si.getHqOfficeCd());
+            } else if (si.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(si.getStoreCd());
+            }*/
+        }
+
+        registVO.setRegDt(dt);
+        registVO.setRegId(si.getUserId());
+        registVO.setModDt(dt);
+        registVO.setModId(si.getUserId());
+
+        //기존 카드 사용여부 '중지(1)'로 변경
+        registVO.setCstCardUseFg("1");
+
+        // 회원카드 수정
+        int result = mapper.insertMembrCard(registVO);
+        int membrResult = mapper.updateMembr(registVO);
+        registVO.setMembrCardNo(registVO.getOldCstCardNo());
+        int cardResult = mapper.updateMembrCard(registVO);
+        if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        if (cardResult <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        if (membrResult <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         return result;
@@ -441,13 +559,16 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public DefaultMap<Object> getDlvrList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-        }
-
         LOGGER.debug("regStoreCd: {}", registVO.getRegStoreCd());
         LOGGER.debug("sessionInfoStoreCd: {}", sessionInfoVO.getStoreCd());
 
@@ -457,6 +578,7 @@ public class RegistServiceImpl implements RegistService {
         result.put("lZoneList", lZoneList);
         return result;
     }
+
     @Override
     public DefaultMap<Object> getDlvrMzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
@@ -468,10 +590,15 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public List getLzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            registVO.setStoreCd(sessionInfoVO.getHqOfficeCd());
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                registVO.setStoreCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                registVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
         }
 
         List<DefaultMap<String>> resultList = mapper.getDlvrList(registVO);
@@ -486,14 +613,20 @@ public class RegistServiceImpl implements RegistService {
         return resultList;
     }
 
+
+
     // 배달전화 리스트
     @Override
     public List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }
         }
         return mapper.getDlvrTelList(registVO);
     }
@@ -504,12 +637,15 @@ public class RegistServiceImpl implements RegistService {
     public int registDlvrInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         String dt = currentDateTimeString();
 
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }
         }
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
@@ -524,16 +660,22 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
-    // 배달정보등록
+    // 배달 전화번호 정보
     @Override
     public int registDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         String dt = currentDateTimeString();
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            registVO.setRegStoreCd(sessionInfoVO.getOrgnCd());
+
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }
         }
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
@@ -542,6 +684,65 @@ public class RegistServiceImpl implements RegistService {
 
         // 회원카드 등록
         int result = mapper.insertMembrDlvrTel(registVO);
+        if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
+    // 배달 전화번호 수정
+    @Override
+    public int updateDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            registVO.setRegStoreCd(sessionInfoVO.getOrgnCd());
+
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }
+        }
+        registVO.setRegDt(dt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(dt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        // 회원카드 등록
+        int result = mapper.updateMembrDlvrTel(registVO);
+        if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
+    @Override
+    public int deleteDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            registVO.setRegStoreCd(sessionInfoVO.getOrgnCd());
+
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+            }
+        }
+        registVO.setRegDt(dt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(dt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        // 회원카드 등록
+        int result = mapper.deleteMembrDlvrTel(registVO);
         if (result <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }

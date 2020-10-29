@@ -1,10 +1,16 @@
 package kr.co.solbipos.membr.anals.incln.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class InclnVO extends PageVO {
   private String gendrFg;
   private String birthday;
+  private String membrOrgnCd;
+  private String storeCd;
+  private String orgnFg;
   private String age;
   private String lv3Cd;
   private String lv3Nm;
@@ -49,6 +55,30 @@ public class InclnVO extends PageVO {
 
   public void setBirthday(String birthday) {
     this.birthday = birthday;
+  }
+
+  public String getMembrOrgnCd() {
+    return membrOrgnCd;
+  }
+
+  public void setMembrOrgnCd(String membrOrgnCd) {
+    this.membrOrgnCd = membrOrgnCd;
+  }
+
+  public String getStoreCd() {
+    return storeCd;
+  }
+
+  public void setStoreCd(String storeCd) {
+    this.storeCd = storeCd;
+  }
+
+  public String getOrgnFg() {
+    return orgnFg;
+  }
+
+  public void setOrgnFg(String orgnFg) {
+    this.orgnFg = orgnFg;
   }
 
   public String getAge() {

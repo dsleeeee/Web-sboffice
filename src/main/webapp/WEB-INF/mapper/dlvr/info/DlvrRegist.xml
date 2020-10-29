@@ -5,20 +5,20 @@
     <select id="getDlvrManageList" parameterType="dlvrRegistVO" resultType="DefaultMap">
         /* DlvrRegistMapper.getDlvrManageList */
         SELECT STORE_CD
-               , DLVR_LZONE_CD
-               , DLVR_LZONE_NM
-               , PAGE_NO
-               , EMP_NO
-               , IN_FG
-               , USE_YN
-               , REG_DT
-               , REG_ID
-               , MOD_DT
-               , MOD_ID
-          FROM TB_MS_DELIVERY_LZONE
-         WHERE USE_YN = 'Y'
-         AND STORE_CD = #{storeCd}
-         ORDER BY PAGE_NO
+	       , DLVR_LZONE_CD
+	       , DLVR_LZONE_NM
+	       , TO_NUMBER(PAGE_NO) AS PAGE_NO
+	       , EMP_NO
+	       , DECODE(IN_FG, 'W', 'WEB', 'POS') AS IN_NM
+	       , IN_FG
+	       , USE_YN
+	       , REG_DT
+	       , REG_ID
+	       , MOD_DT
+	       , MOD_ID
+	    FROM TB_MS_DELIVERY_LZONE
+	    WHERE STORE_CD = #{storeCd}
+	    ORDER BY PAGE_NO
     </select>
 
     <select id="getNewDlvrLzoneCd" parameterType="dlvrRegistVO" resultType="String">
@@ -28,7 +28,7 @@
          WHERE STORE_CD = #{storeCd}
     </select>
 
-    <insert id="insertDlvrRegistInfo" parameterType="dlvrRegistVO" >
+    <insert id="insertDlvrRegistInfo" parameterType="dlvrRegistVO">
         /* DlvrRegistMapper.insertDlvrRegistInfo */
         INSERT INTO TB_MS_DELIVERY_LZONE (
             STORE_CD
@@ -76,8 +76,7 @@
 
     <delete id="deleteDlvrRegistInfo" parameterType="dlvrRegistVO">
       /* DlvrRegistMapper.deleteDlvrRegistInfo */
-      UPDATE TB_MS_DELIVERY_LZONE
-         SET USE_YN = #{useYn}
+      DELETE FROM TB_MS_DELIVERY_LZONE
        WHERE STORE_CD = #{storeCd}
          AND DLVR_LZONE_CD = #{dlvrLzoneCd}
     </delete>
@@ -89,9 +88,10 @@
         , DLVR_MZONE_CD
         , DLVR_MZONE_NM
         , DLVR_LZONE_CD
-        , PAGE_NO
+        , TO_NUMBER(PAGE_NO) AS PAGE_NO
         , EMP_NO
         , SBPENC.D(DLVR_ADDR) AS DLVR_ADDR
+        , DECODE(IN_FG, 'W', 'WEB', 'POS') AS IN_NM
         , IN_FG
         , USE_YN
         , REG_DT
@@ -99,8 +99,7 @@
         , MOD_DT
         , MOD_ID
          FROM TB_MS_DELIVERY_MZONE
-         WHERE USE_YN = 'Y'
-         AND STORE_CD = #{storeCd}
+         WHERE STORE_CD = #{storeCd}
          AND DLVR_LZONE_CD = #{dlvrLzoneCd}
          ORDER BY PAGE_NO
     </select>
@@ -113,8 +112,7 @@
     </select>
 
 
-
-    <insert id="insertDlvrDetailRegistInfo" parameterType="dlvrRegistVO" >
+    <insert id="insertDlvrDetailRegistInfo" parameterType="dlvrRegistVO">
         /* DlvrRegistMapper.insertDlvrDetailRegistInfo */
         INSERT INTO TB_MS_DELIVERY_MZONE (
             STORE_CD
@@ -123,7 +121,7 @@
             , DLVR_LZONE_CD
             , PAGE_NO
             , EMP_NO
-            , SBPENC.D(DLVR_ADDR) AS DLVR_ADDR
+            , DLVR_ADDR
             , IN_FG
             , USE_YN
             , REG_DT
@@ -165,8 +163,7 @@
 
     <delete id="deleteDlvrDetailRegistInfo" parameterType="dlvrRegistVO">
       /* DlvrRegistMapper.deleteDlvrDetailRegistInfo */
-      UPDATE TB_MS_DELIVERY_MZONE
-         SET USE_YN = #{useYn}
+      DELETE FROM TB_MS_DELIVERY_MZONE
        WHERE STORE_CD = #{storeCd}
          AND DLVR_MZONE_CD = #{dlvrMzoneCd}
     </delete>

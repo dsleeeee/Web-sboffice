@@ -22,10 +22,10 @@
     </div>
     <table class="searchTbl">
         <colgroup>
-            <col class="w5"/>
             <col class="w15"/>
-            <col class="w5"/>
+            <col class="w35"/>
             <col class="w15"/>
+            <col class="w35"/>
         </colgroup>
         <tbody>
         <tr>
@@ -35,7 +35,10 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn">
+                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w115px"/></span>
+                    <span class="rg">~</span>
+                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w115px"/></span>
+                    <%--<span class="txtIn">
                       <div class="sb-select">
                         <wj-input-date
                                 value="kdsDayStartDate"
@@ -61,7 +64,7 @@
                               initialized="_initDateBox(s)">
                       </wj-input-date>
                     </div>
-                    </span>
+                    </span>--%>
                 </div>
             </td>
             <c:if test="${orgnFg == 'HQ'}">
@@ -82,7 +85,7 @@
                 <s:message code="kds.makeDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="makeDate"
                             ng-model="makeDate"
@@ -94,7 +97,7 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="makeDateSec"
                             ng-model="makeDateSec"
@@ -111,7 +114,7 @@
                 <s:message code="kds.picDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="picDate"
                             ng-model="picDate"
@@ -123,7 +126,7 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="picDateSec"
                             ng-model="picDateSec"
@@ -217,6 +220,7 @@
     <div class="w100 mt20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
+                    id="kdsDayProdGrid"
                     autoGenerateColumns="false"
                     control="flex"
                     initialized="initGrid(s,e)"
@@ -237,16 +241,18 @@
                                      width="*"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.lClassCd"/>" binding="lv1Cd" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.lClassNm"/>" binding="lv1Nm" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.mClassCd"/>" binding="lv2Cd" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.mClassNm"/>" binding="lv2Nm" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sClassCd"/>" binding="lv3Cd" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sClassNm"/>" binding="lv3Nm" width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.prodClassNm"/>" binding="prodClassNm" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.prodCd"/>" binding="prodCd" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>

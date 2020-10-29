@@ -37,15 +37,94 @@ public class MemberExcelUploadVO extends PageVO {
   private String cstCardUseFg;
   private Integer cstCardIssCnt;
   private String orgCstCardNo;
+  private String memberTelNo;
+  private String memberShortNo;
+  private String memberEmail;
+  private String memberPostNo;
+  private String memberAddr;
+  private String memberAddrDtl;
+  private String avablPoint;
+  private String totAdjPoint;
 
-//  private String dlvrAddrSeq;
-//  private String dlvrStoreCd;
-//  private String dlvrLzoneCd;
-//  private String dlvrMzoneCd;
-//  private String lastSlvrSate;
-//  private String totSlvrCnt;
+  public String getAvablPoint() {
+	return avablPoint;
+}
 
-  public String getMembrOrgnCd() {
+public void setAvablPoint(String avablPoint) {
+	this.avablPoint = avablPoint;
+}
+
+public String getTotAdjPoint() {
+	return totAdjPoint;
+}
+
+public void setTotAdjPoint(String totAdjPoint) {
+	this.totAdjPoint = totAdjPoint;
+}
+
+public String getMemberTelNo() {
+	return memberTelNo;
+}
+
+@Override
+public String toString() {
+	return "MemberExcelUploadVO [membrOrgnCd=" + membrOrgnCd + ", membrNo=" + membrNo + ", membrNm=" + membrNm
+			+ ", membrNicknm=" + membrNicknm + ", membrClassCd=" + membrClassCd + ", membrCardNo=" + membrCardNo
+			+ ", regStoreCd=" + regStoreCd + ", postNo=" + postNo + ", addr=" + addr + ", addrDtl=" + addrDtl
+			+ ", birthday=" + birthday + ", lunarYn=" + lunarYn + ", gendrFg=" + gendrFg + ", emailAddr=" + emailAddr
+			+ ", shortNo=" + shortNo + ", telNo=" + telNo + ", weddingYn=" + weddingYn + ", weddingday=" + weddingday
+			+ ", emailRecvYn=" + emailRecvYn + ", smsRecvYn=" + smsRecvYn + ", useYn=" + useYn + ", remark=" + remark
+			+ ", memberEngNm=" + memberEngNm + ", cstCardUseFg=" + cstCardUseFg + ", cstCardIssCnt=" + cstCardIssCnt
+			+ ", orgCstCardNo=" + orgCstCardNo + ", memberTelNo=" + memberTelNo + ", memberShortNo=" + memberShortNo
+			+ ", memberEmail=" + memberEmail + ", memberPostNo=" + memberPostNo + ", memberAddr=" + memberAddr
+			+ ", memberAddrDtl=" + memberAddrDtl + ", avablPoint=" + avablPoint + ", totAdjPoint=" + totAdjPoint + "]";
+}
+
+public String getMemberEmail() {
+	return memberEmail;
+}
+
+public void setMemberEmail(String memberEmail) {
+	this.memberEmail = memberEmail;
+}
+
+public void setMemberTelNo(String memberTelNo) {
+	this.memberTelNo = memberTelNo;
+}
+
+public String getMemberShortNo() {
+	return memberShortNo;
+}
+
+public void setMemberShortNo(String memberShortNo) {
+	this.memberShortNo = memberShortNo;
+}
+
+public String getMemberPostNo() {
+	return memberPostNo;
+}
+
+public void setMemberPostNo(String memberPostNo) {
+	this.memberPostNo = memberPostNo;
+}
+
+public String getMemberAddr() {
+	return memberAddr;
+}
+
+public void setMemberAddr(String memberAddr) {
+	this.memberAddr = memberAddr;
+}
+
+public String getMemberAddrDtl() {
+	return memberAddrDtl;
+}
+
+public void setMemberAddrDtl(String memberAddrDtl) {
+	this.memberAddrDtl = memberAddrDtl;
+}
+
+public String getMembrOrgnCd() {
     return membrOrgnCd;
   }
 

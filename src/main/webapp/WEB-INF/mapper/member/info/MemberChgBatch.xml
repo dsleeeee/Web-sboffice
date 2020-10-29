@@ -105,6 +105,12 @@
         <if test='smsRecvYn != null and smsRecvYn.toString() != ""'>
             AND tmm.SMS_RECV_YN = #{smsRecvYn}
         </if>
+        <if test='(startSaveSale != null and startSaveSale != "") and (endSaveSale != null and endSaveSale != "")'>
+            AND tmmp.POINT_ACC_CNT BETWEEN #{startSaveSale} AND #{endSaveSale}
+        </if>
+        <if test='(startAvablPoint != null and startAvablPoint != "") and (endAvablPoint != null and endAvablPoint != "")'>
+            AND tmmp.AVABL_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
+        </if>
         <if test='periodType != null and periodType.toString() != ""'>
             <if test='periodType.getCode() == "reg"'>
                 AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
@@ -114,14 +120,17 @@
         </if>
         <if test='anvType != null and anvType.toString() != ""'>
             <if test='anvType.getCode() == "1"'>
-                AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+                AND substr(tmm.BIRTHDAY, 5,4) BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
             <if test='anvType.getCode() == "2"'>
-                AND tmm.WEDDINGDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+                AND substr(tmm.WEDDINGDAY, 5,4) BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
         </if>
         <if test='useYn != null and useYn != ""'>
             AND tmm.USE_YN = #{useYn}
+        </if>
+        <if test='shortNo != null and shortNo != ""'>
+            AND tmm.SHORT_NO = #{shortNo}
         </if>
         ORDER BY tmm.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>

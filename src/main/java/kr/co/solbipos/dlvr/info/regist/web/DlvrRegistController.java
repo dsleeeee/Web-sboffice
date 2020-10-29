@@ -61,10 +61,28 @@ public class DlvrRegistController {
     public String selectList(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String dlvrFirstList = dlvrRegistService.getDlvrManageList(sessionInfoVO);
+//        String dlvrFirstList = dlvrRegistService.getDlvrManageList(sessionInfoVO);
 
-        model.addAttribute("dlvrFirstList",  dlvrFirstList);
+//        model.addAttribute("dlvrFirstList",  dlvrFirstList);
         return "dlvr/info/view/dlvrManage";
+    }
+    /**
+     * 배달지등록 저장후 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @ResponseBody
+    @RequestMapping(value = "dlvrZone/saveList.sb", method = RequestMethod.POST)
+    public Result dlvrList(DlvrRegistVO dlvrRegistVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = dlvrRegistService.dlvrManageList(sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
     }
     /**
      * 배달지등록

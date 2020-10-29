@@ -24,6 +24,9 @@ public class MemberPointVO extends PageVO {
   private String membrClassCd;
   private String membrCardNo;
   private String membrNm;
+  private String remark;
+  private String tmpTotAdjPoint;
+
 
   public String getMembrOrgnCd() {
     return membrOrgnCd;
@@ -135,5 +138,21 @@ public class MemberPointVO extends PageVO {
 
   public void setMembrNm(String membrNm) {
     this.membrNm = membrNm;
+  }
+
+  public String getRemark() {
+    return remark;
+  }
+
+  public void setRemark(String remark) {
+    this.remark = remark;
+  }
+
+  public String getTmpTotAdjPoint() {
+    return tmpTotAdjPoint;
+  }
+
+  public void setTmpTotAdjPoint(String tmpTotAdjPoint) {
+    this.tmpTotAdjPoint = tmpTotAdjPoint;
   }
 }

@@ -1,13 +1,3 @@
-/****************************************************************
- *
- * 파일명 : memberClass.js
- * 설  명 : 회원정보관리 > 회원등급설정 JavaScript
- *
- *    수정일      수정자      Version        Function 명
- * ------------  ---------   -------------  --------------------
- * 2020.06.09     이재영      1.0
- *
- * **************************************************************/
 app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -78,6 +68,7 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.dlvrStoreCd = params.regStoreCd;
                 if (list.length === undefined || list.length === 0) {
                     $scope.data = new wijmo.collections.CollectionView([]);
+                    $scope._popMsg(messages['regist.delivery.data.none']);
                     return false;
                 }
                 var data = new wijmo.collections.CollectionView(list);
@@ -176,8 +167,26 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
      * *******************************************************/
     $scope.valueCheck = function () {
 
+        // 배달구역(대) 입력하세요.
+        var msg = messages["dlvr.membr.area"] + messages["cmm.require.text"];
+        if (isNull($scope.lZoneListCd)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        // 배달구역(중) 입력하세요.
+        var msg = messages["dlvr.membr.area"] + messages["cmm.require.text"];
+        if (isNull($scope.mZoneListCd)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        // 상세주소 입력하세요.
+        var msg = messages["dlvr.membr.areaDetail"] + messages["cmm.require.text"];
+        if (isNull($scope.dlvrAddr)) {
+            $scope._popMsg(msg);
+            return false;
+        }
         // 주소 최대길이 체크
-        if (nvl($scope.dlvrAddr, '') !== '' && nvl($scope.dlvrAddr + '', '').getByteLengthForOracle() > 60) {
+        if (nvl($scope.dlvrAddr, '') !== '' && nvl($scope.addrDtl + '', '').getByteLengthForOracle() > 60) {
             msg = messages["regist.delivery.addr.dtl"] + messages["excelUpload.overLength"] + " 60 " + messages["excelUpload.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
@@ -227,15 +236,135 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
         });
     };
     $scope.$on("getMemberDlvrTel", function (event, params, mode) {
-        $scope.memberParmas = params
-        $scope._inquiryMain("/membr/info/view/view/getDlvrTelList.sb", params, function () {
+        $scope.memberParmas = params;
+        let url = "/membr/info/view/view/getDlvrTelList.sb";
+        $scope.$broadcast('loadingPopupActive');
+        // 페이징 처리
+        if ($scope._getPagingInfo('curr') > 0) {
+            params['curr'] = $scope._getPagingInfo('curr');
+        } else {
+            params['curr'] = 1;
+        }
+        // 가상로그인 대응한 session id 설정
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+        // ajax 통신 설정
+        $http({
+            method: 'POST', //방식
+            url: url, /* 통신할 URL */
+            params: params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            $scope.pageData = response.data.data.page;
+            // 로딩바 hide
+            $scope.$broadcast('loadingPopupInactive');
+            if (_httpStatusCheck(response, true)) {
+                // this callback will be called asynchronously
+                // when the response is available
+                var list = response.data.data.list;
+                if (list.length === undefined || list.length === 0) {
+                    $scope.data = new wijmo.collections.CollectionView([]);
+                    if (response.data.message) {
+
+                        // 페이징 처리
+                        $scope._setPagingInfo('ctrlName', $scope.name);
+                        $scope._setPagingInfo('pageScale', 10);
+                        $scope._setPagingInfo('curr', 1);
+                        $scope._setPagingInfo('totCnt', 1);
+                        $scope._setPagingInfo('totalPage', 1);
+
+                        $scope._broadcast('drawPager');
+                        $scope._popMsg(messages["regist.delivery.tel.data.none"]);
+                    }
+                    return false;
+                }
+                var data = new wijmo.collections.CollectionView(list);
+                data.trackChanges = true;
+                $scope.data = data;
+
+                // 페이징 처리
+                if (response.data.data.page && response.data.data.page.curr) {
+                    var pagingInfo = response.data.data.page;
+                    $scope._setPagingInfo('ctrlName', $scope.name);
+                    $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+                    $scope._setPagingInfo('curr', pagingInfo.curr);
+                    $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+                    $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+                    $scope._broadcast('drawPager');
+                }
+            }
+        }, function errorCallback(response) {
+            // 로딩바 hide
+            $scope.$broadcast('loadingPopupInactive');
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.error']);
+            }
+            return false;
+        }).then(function () {
+            // 'complete' code here
+            if (typeof callback === 'function') {
+                setTimeout(function () {
+                    callback();
+                }, 10);
+            }
         });
+        // $scope._inquiryMain("/membr/info/view/view/getDlvrTelList.sb", params, function () {
+        //     $scope.$apply(function() {
+        //         if($scope.data.items.length === 0) {
+        //
+        //         }
+        //        console.log()
+        //     });
+        // });
+        // http 조회 후 status 체크
+        $scope._httpStatusCheck = function (res, isMsg) {
+            return _httpStatusCheck(res, isMsg);
+        };
+
+        // private
+        function _httpStatusCheck(res, isMsg) {
+            if (res.data.status === 'OK') {
+                return true;
+            } else if (res.data.status === 'FAIL') {
+                if (isMsg) {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                }
+                return false;
+            } else if (res.data.status === 'SESSION_EXFIRE') {
+                if (isMsg) {
+                    $scope._popMsg(res.data.message, function () {
+                        location.href = res.data.url;
+                    });
+                }
+                return false;
+            } else if (res.data.status === 'SERVER_ERROR') {
+                if (isMsg) {
+                    $scope._popMsg(res.data.message);
+                }
+                return false;
+            } else {
+                if (isMsg) {
+                    var msg = res.data.status + ' : ' + res.data.message;
+                    $scope._popMsg(msg);
+                }
+                return false;
+            }
+        }
     });
+
+
     $scope.$on("dlvrTelDetail", function (event, params, mode) {
-        $scope._broadcast('getMemberDlvrTel', params);
-        $scope.setSelectedMember(params);
-        $scope.dlvrTelNo = params.telNo;
-        $scope.dlvrTelUseYn = params.useYn;
+        // $scope._broadcast('getMemberDlvrTel', params);
+        var memberInfoScope = agrid.getScope('memberCtrl');
+        $scope.memberTel.dlvrTelNo = params.telNo;
+        $scope.memberTel.dlvrTelUseYn = params.useYn;
+        memberInfoScope.getMemberList();
+
         event.preventDefault();
     });
 
@@ -252,8 +381,15 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
         //     return false;
         // }
 
+        // 연락처 입력하세요.
+        var msg = messages["regist.tel"] + messages["cmm.require.text"];
+        if (isNull($scope.memberTel.dlvrTelNo)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+
         // 전화번호 최대길이 체크
-        if (nvl($scope.dlvrTelNo, '') !== '' && nvl($scope.dlvrTelNo + '', '').getByteLengthForOracle() > 14) {
+        if (nvl($scope.memberTel.dlvrTelNo, '') !== '' && nvl($scope.memberTel.dlvrTelNo + '', '').getByteLengthForOracle() > 14) {
             msg = messages["regist.delivery.tel"] + messages["excelUpload.overLength"] + " 14 " + messages["excelUpload.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
@@ -263,35 +399,64 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
     };
     // 저장
     $scope.saveTel = function () {
+        if ($scope.memberParmas.regStoreCd) {
+            $scope.memberParmas.dlvrStoreCd = $scope.memberParmas.regStoreCd;
+        }
         if (!$scope.valueCheck()) return false;
         // 파라미터 설정
         var memberInfoScope = agrid.getScope('memberCtrl');
         var params = {};
+
         params.membrOrgnCd = $scope.memberParmas.membrOrgnCd;
         params.membrNo = $scope.memberParmas.membrNo;
         params.regStoreCd = $scope.memberParmas.dlvrStoreCd;
-        params.telNo = $scope.dlvrTelNo;
+        params.telNo = $scope.memberTel.dlvrTelNo;
         params.shortNo = $scope.memberParmas.shortNo;
-        params.useYn = $scope.dlvrTelUseYn;
+        params.useYn = $scope.memberTel.dlvrTelUseYn;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        // if ($scope.saveMode === "REG") {
-            $scope._postJSONSave.withPopUp("/membr/info/view/base/registDlvrTelInfo.sb", params, function (response) {
-                $scope._popMsg(messages["cmm.saveSucc"]);
-                $scope.memberRegistLayer.hide();
-                memberInfoScope.getMemberList();
-            });
-        // }
-        // 수정
-        // else if ($scope.saveMode === "MOD") {
-        //     $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberDlvr.sb", params, function (result) {
-        //         $scope._popMsg(messages["cmm.saveSucc"]);
-        //         $scope.$emit("responseGet", result.data.data, $scope.saveMode);
-        //         $scope.memberRegistLayer.hide();
-        //         // $scope.memberInfoDetailLayer.hide();
-        //         memberInfoScope.getMemberList();
-        //     });
-        // }
+        $scope._postJSONSave.withPopUp("/membr/info/view/base/registDlvrTelInfo.sb", params, function (response) {
+            $scope._popMsg(messages["cmm.saveSucc"]);
+            $scope.memberRegistLayer.hide();
+            memberInfoScope.getMemberList();
+        });
+    };
+    //수정
+    $scope.saveEdit = function () {
+        var params = $scope.getSelectedMember();
+        params.telNo = $scope.memberTel.dlvrTelNo;
+        params.useYn = $scope.memberTel.dlvrTelUseYn;
+        $scope._postJSONSave.withPopUp("/membr/info/view/base/updateDlvrTelInfo.sb", params, function (result) {
+            $scope._popMsg(messages["cmm.saveSucc"]);
+            // $scope.$emit("responseGet", result.data.data, $scope.saveMode);
+            // $scope.memberRegistLayer.hide();
+            // $scope.memberInfoDetailLayer.hide();
+            // memberInfoScope.getMemberList();
+            $scope.saveInit();
+            $scope._broadcast('getMemberDlvrTel', params);
+        });
+    };
+
+    // 초기화
+    $scope.saveInit = function () {
+        $scope.setSelectedMember({});
+        $scope.memberTel = {}
+    };
+
+    // 삭제
+    $scope.saveDel = function () {
+        var params = $scope.getSelectedMember();
+        params.telNo = $scope.memberTel.dlvrTelNo;
+        params.useYn = $scope.memberTel.dlvrTelUseYn;
+        $scope._postJSONSave.withPopUp("/membr/info/view/base/deleteDlvrTelInfo.sb", params, function (result) {
+            $scope._popMsg(messages["cmm.saveSucc"]);
+            // $scope.$emit("responseGet", result.data.data, $scope.saveMode);
+            // $scope.memberRegistLayer.hide();
+            // $scope.memberInfoDetailLayer.hide();
+            // memberInfoScope.getMemberList();
+            $scope.saveInit();
+            $scope._broadcast('getMemberDlvrTel', params);
+        });
     };
     // $scope.valueCheck = function () {
 }]);

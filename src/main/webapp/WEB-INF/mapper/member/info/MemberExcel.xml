@@ -10,7 +10,8 @@
     -->
     <select id="getMemberExcelList" parameterType="memberExcelUploadVO" resultType="DefaultMap">
         /* 회원엑셀 조회 */
-      SELECT tmm.MEMBR_NM, tmm.MEMBER_ENG_NM, tmm.MEMBR_CLASS_CD, tmm.REG_STORE_CD, tmm.GENDR_FG, tmm.MEMBR_CARD_NO, tmm.BIRTHDAY, tmm.WEDDING_YN, tmm.WEDDINGDAY, tmm.MEMBR_NO
+      SELECT
+      	SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM, tmm.MEMBER_ENG_NM, tmm.MEMBR_CLASS_CD, tmm.REG_STORE_CD, tmm.GENDR_FG, tmm.MEMBR_CARD_NO, tmm.BIRTHDAY, tmm.WEDDING_YN, tmm.WEDDINGDAY, tmm.MEMBR_NO
       FROM TB_MB_MEMBER tmm
   </select>
 
@@ -49,7 +50,8 @@
             tmm.REG_DT,
             tmm.REG_ID,
             tmm.MOD_DT,
-            tmm.MOD_ID
+            tmm.MOD_ID,
+            tmm.MEMBER_ENG_NM
         ) VALUES (
             #{membrOrgnCd},
             #{membrNo},
@@ -76,7 +78,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{memberEngNm}
         )
     </insert>
     <!--

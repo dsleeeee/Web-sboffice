@@ -107,12 +107,16 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsMonth(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        LOGGER.debug("kdsVO.orgnFg {}", kdsVO.getOrgnFg());
+        LOGGER.debug("sessionInfoVO.orgnFg {}", sessionInfoVO.getOrgnFg());
+        LOGGER.debug("sessionInfoVO.getOrgnGrpCd {}", sessionInfoVO.getOrgnGrpCd());
+        LOGGER.debug("sessionInfoVO.getOrgnCd {}", sessionInfoVO.getOrgnCd());
+        LOGGER.debug("sessionInfoVO.getHqOfficeCd {}", sessionInfoVO.getHqOfficeCd());
+        LOGGER.debug("sessionInfoVO.getStoreCd {}", sessionInfoVO.getStoreCd());
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
         return mapper.getKdsMonth(kdsVO);
@@ -126,11 +130,10 @@ public class KdsServiceImpl implements KdsService {
         kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         LOGGER.debug("prodCd: {}", kdsVO.getProdCd());
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
-//        if (kdsVO.getProdCd().equals(null)){
-        if (kdsVO.getProdCd() == null || kdsVO.getProdCd().equals("")) {
-            result = mapper.getKdsStore(kdsVO);
-        } else {
+        if ((kdsVO.getProdCd() != null && !kdsVO.getProdCd().equals("")) || (kdsVO.getProdNm() != null && !kdsVO.getProdNm().equals("")) || (kdsVO.getProdClassCd() != null && !kdsVO.getProdClassCd().equals(""))) {
             result = mapper.getKdsStoreProd(kdsVO);
+        } else {
+            result = mapper.getKdsStore(kdsVO);
         }
         return result;
     }
@@ -140,8 +143,23 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayProdTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+        LOGGER.debug("sessionInfoVO.orgnFg {}", sessionInfoVO.getOrgnFg());
+        LOGGER.debug("sessionInfoVO.getOrgnGrpCd {}", sessionInfoVO.getOrgnGrpCd());
+        LOGGER.debug("sessionInfoVO.getOrgnCd {}", sessionInfoVO.getOrgnCd());
+        LOGGER.debug("sessionInfoVO.getHqOfficeCd {}", sessionInfoVO.getHqOfficeCd());
+        LOGGER.debug("sessionInfoVO.getStoreCd {}", sessionInfoVO.getStoreCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//                kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+//                kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
         }
         return mapper.getKdsDayProdTime(kdsVO);
     }

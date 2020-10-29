@@ -36,4 +36,12 @@ public interface MemberClassMapper {
     int defaultUpdateClassInfo(MembrClassVO membrClassVO);
 
     int deleteClassInitPointInfo(MembrClassPointVO membrClassPointVO);
+
+    int classDefltChk(MembrClassVO membrClassVO);
+
+    int deleteClassChk(MembrClassVO membrClassVO);
+
+    int updateClassPayRateInfo(MembrClassVO membrClassVO);
+
+    int deleteClassPayRateInfo(MembrClassVO membrClassVO);
 }

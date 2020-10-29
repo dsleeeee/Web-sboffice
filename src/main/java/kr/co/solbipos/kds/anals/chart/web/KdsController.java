@@ -268,6 +268,7 @@ public class KdsController {
     @RequestMapping(value = "dayProdTime/list.sb", method = RequestMethod.GET)
     public String kdsDayProdTimeList(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        LOGGER.debug("sessionInfoVO ::::::: {}/{}", sessionInfoVO.getOrgnFg(),sessionInfoVO.getOrgnCd() );
         // 등록 매장 조회
         List regstrStoreList = registService.getRegistStore(sessionInfoVO);
         // 등록 매장 전체 포함
@@ -299,6 +300,8 @@ public class KdsController {
                             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        LOGGER.debug("sessionInfoVO ::::::: {}/{}", sessionInfoVO.getOrgnFg(),sessionInfoVO.getOrgnCd() );
 
         List<DefaultMap<String>> result = kdsService.getKdsDayProdTime(kdsVO, sessionInfoVO);
 

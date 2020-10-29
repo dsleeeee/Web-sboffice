@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
     public interface MemberClassService {
@@ -12,9 +13,11 @@ import java.util.List;
 
         String getMemberClassList(SessionInfoVO sessionInfoVO);
 
-        DefaultMap<Object> classInfoChk(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO);
+        int classInfoChk(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO);
 
         int deleteClassInfo(MembrClassVO[] membrClassVOs, SessionInfoVO sessionInfoVO);
+
+        DefaultMap<Object> deleteClassInfoChk(MembrClassVO[] membrClassVOs, SessionInfoVO sessionInfoVO);
 
         int saveClassPointList(MembrClassPointVO[] membrClassPointVOs, SessionInfoVO sessionInfoVO);
 

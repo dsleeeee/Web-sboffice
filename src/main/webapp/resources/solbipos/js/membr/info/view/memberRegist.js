@@ -53,6 +53,7 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
         } else {
             $scope._popMsg(messages["cmm.base.info.save"]);
         }
+        //$scope.$broadcast("memberRegistCtrl");
     };
 
     // 배달 탭 보이기
@@ -62,7 +63,7 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
         } else if ($scope.saveMode === 'REG' && $scope.insertMembrNo !== undefined) {
             $("#basicView").hide();
             $("#cardView").hide();
-            $("#deliView").show()
+            $("#deliView").show();
 
             $("#basicTab").removeClass("on");
             $("#cardTab").removeClass("on");
@@ -72,7 +73,7 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
         } else if ($scope.saveMode === 'MOD') {
             $("#basicView").hide();
             $("#cardView").hide();
-            $("#deliView").show()
+            $("#deliView").show();
 
             $("#basicTab").removeClass("on");
             $("#cardTab").removeClass("on");

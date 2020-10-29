@@ -37,33 +37,9 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn">
-                      <div class="sb-select">
-                        <wj-input-date
-                                value="kdsDayStartDate"
-                                ng-model="kdsDayStartDate"
-                                control="kdsDayStartDateCombo"
-                                format="yyyy-MM-dd"
-                                min="2000-01-01"
-                                max="2099-12-31"
-                                initialized="_initDateBox(s)">
-                        </wj-input-date>
-                      </div>
-                    </span>
+                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w115px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn">
-                    <div class="sb-select">
-                      <wj-input-date
-                              value="kdsDayEndDate"
-                              ng-model="kdsDayEndDate"
-                              control="kdsDayEndDateCombo"
-                              format="yyyy-MM-dd"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </div>
-                    </span>
+                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w115px"/></span>
                 </div>
             </td>
             <c:if test="${orgnFg == 'HQ'}">
@@ -88,7 +64,7 @@
                 <s:message code="kds.makeDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="makeDate"
                             ng-model="makeDate"
@@ -100,7 +76,7 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <div class="sb-select fl w20 mr10">
+                <div class="sb-select fl w115px mr10">
                     <wj-combo-box
                             id="makeDateSec"
                             ng-model="makeDateSec"

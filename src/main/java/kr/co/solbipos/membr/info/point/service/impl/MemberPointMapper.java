@@ -37,4 +37,6 @@ public interface MemberPointMapper {
   DefaultMap<Object> getMemberPointListChk(MemberPointVO memberPointVO);
 
     int updateMemberPoint(MemberPointVO memberPointVO);
+
+  int insertMemberPointHist(MemberPointVO memberPointVO);
 }

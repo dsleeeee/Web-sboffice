@@ -35,8 +35,9 @@ public class KdsVO extends PageVO {
     private String picDate;
     private String picDateSec;
     private String prodClassCd;
+    private String prodNm;
 
-//    private List<Map<String, Object>> kdsTimeList;
+    //    private List<Map<String, Object>> kdsTimeList;
     private List<String> kdsTimeList;
 
     public String getOrgnFg() {
@@ -290,5 +291,13 @@ public class KdsVO extends PageVO {
 
     public void setKdsTimeList(List<String> kdsTimeList) {
         this.kdsTimeList = kdsTimeList;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 }

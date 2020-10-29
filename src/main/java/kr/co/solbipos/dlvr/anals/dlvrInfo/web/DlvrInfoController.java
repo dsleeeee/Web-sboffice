@@ -52,20 +52,43 @@ public class DlvrInfoController {
   }
 
 
-  //  /**
-//   * 배달지 조회 및 변경
-//   *
-//   * @param request
-//   * @param response
-//   * @param model
-//   * @return
-//   */
+    /**
+   * 배달내역 조회
+   *
+   * @return
+   */
   @RequestMapping(value = "/dlvr/getDlvrInfoList.sb", method = RequestMethod.POST)
   @ResponseBody
   public Result getDlvrInfoList(DlvrInfoVO dlvrInfoVO, HttpServletRequest request) {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
     List<DefaultMap<Object>> result = dlvrInfoService.getDlvrInfoList(dlvrInfoVO, sessionInfoVO);
     return ReturnUtil.returnListJson(Status.OK, result, dlvrInfoVO);
+  }
+
+  /**
+   * 영수증 상세조회
+   *
+   * @return
+   */
+  @RequestMapping(value = "/dlvr/getBillInfo.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getBillInfo(DlvrInfoVO dlvrInfoVO, HttpServletRequest request) {
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+    DefaultMap<String> result = dlvrInfoService.getBillInfo(dlvrInfoVO, sessionInfoVO);
+    return ReturnUtil.returnJson(Status.OK, result);
+  }
+
+  /**
+   * 영수증 상세조회
+   *
+   * @return
+   */
+  @RequestMapping(value = "/dlvr/getBillInfoList.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getBillInfoList(DlvrInfoVO dlvrInfoVO, HttpServletRequest request) {
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+    List<DefaultMap<Object>> result = dlvrInfoService.getBillInfoList(dlvrInfoVO, sessionInfoVO);
+    return ReturnUtil.returnListJson(Status.OK, result);
   }
 
 }

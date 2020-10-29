@@ -134,7 +134,7 @@ public class DlvrController {
    */
   @RequestMapping(value = "/dlvr/saveDlvr.sb", method = RequestMethod.POST)
   @ResponseBody
-  public Result saveDlvr(DlvrVO[] dlvrVOs, HttpServletRequest request) {
+  public Result saveDlvr(@RequestBody DlvrVO[] dlvrVOs, HttpServletRequest request) {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
     int result = dlvrService.saveDlvr(dlvrVOs, sessionInfoVO);
     return returnJson(Status.OK, result);

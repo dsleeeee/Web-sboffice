@@ -15,34 +15,32 @@
         <a href="#" class="open fl">${menuNm}</a>
     </div>
     <%-- 그리드 left --%>
-    <div class="w50 fl mt40 mb20" style="width: 55%" ng-controller="dlvrManageCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
-            <h2 class="h2_tit oh lh30">
-                <s:message code="dlvrManage.area"/> - <s:message code="dlvrManage.first"/>
+    <div class="w50 fl " style="width: 55%" ng-controller="dlvrManageCtrl">
+        <div class="mt20 oh sb-select dkbr">
 
-                <button class="btn_skyblue mr5 mt5 fr" ng-click="dlvrAreaDn()">
-                    <s:message code="dlvrManage.dn"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaUp()">
-                    <s:message code="dlvrManage.up"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaDel()">
-                    <s:message code="cmm.delete"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaSave()">
-                    <s:message code="cmm.save"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaAdd()">
-                    <s:message code="dlvrManage.new"/>
-                </button>
-            </h2>
+            <button class="btn_skyblue mr5 mt5 fr" ng-click="dlvrAreaDn()">
+                <s:message code="dlvrManage.dn"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaUp()">
+                <s:message code="dlvrManage.up"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaDel()">
+                <s:message code="cmm.delete"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaSave()">
+                <s:message code="cmm.save"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrAreaAdd()">
+                <s:message code="dlvrManage.new"/>
+            </button>
+        </div>
+        <div class="wj-TblWrapBr ml10 pd20 mt10" style="height: 600px;">
             <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
                 <div class="row">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
                             initialized="initGrid(s,e)"
-                            cell-edit-ended="cellEditEnded(s,e)"
 <%--                            sticky-headers="true"--%>
                             selection-mode="Row"
                             items-source="data"
@@ -65,6 +63,9 @@
                                              is-read-only="false" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrManage.input"/>" binding="inFg"
                                              width="120"
+                                             is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.input"/>" binding="inNm"
+                                             width="120"
                                              is-read-only="true" align="right"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -74,27 +75,27 @@
     </div>
 
     <%-- 그리드 right --%>
-    <div class="w50 fl mt40 mb20" style="width: 45%" ng-controller="dlvrManageDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
-            <h2 class="h2_tit oh lh30">
-                <s:message code="dlvrManage.area"/> - <s:message code="dlvrManage.secend"/>
 
-                <button class="btn_skyblue mr5 mt5 fr" ng-click="dlvrDetailAreaDn()">
-                    <s:message code="dlvrManage.dn"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaUp()">
-                    <s:message code="dlvrManage.up"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaDel()">
-                    <s:message code="cmm.delete"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaSave()">
-                    <s:message code="cmm.save"/>
-                </button>
-                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaAdd()">
-                    <s:message code="dlvrManage.new"/>
-                </button>
-            </h2>
+    <div class="w50 fl " style="width: 45%" ng-controller="dlvrManageDetailCtrl">
+        <div class="mt20 oh sb-select dkbr">
+
+            <button class="btn_skyblue mr5 mt5 fr" ng-click="dlvrDetailAreaDn()">
+                <s:message code="dlvrManage.dn"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaUp()">
+                <s:message code="dlvrManage.up"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaDel()">
+                <s:message code="cmm.delete"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaSave()">
+                <s:message code="cmm.save"/>
+            </button>
+            <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaAdd()">
+                <s:message code="dlvrManage.new"/>
+            </button>
+        </div>
+        <div class="wj-TblWrapBr ml10 pd20 mt10" style="height: 600px;">
             <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
                 <div class="row">
                     <wj-flex-grid
@@ -126,8 +127,11 @@
                         <wj-flex-grid-column header="<s:message code="dlvrManage.useYn"/>" binding="useYn"
                                              width="115" data-map="useYnDataMap"
                                              is-read-only="false" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrManage.input"/>" binding="inFg"
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.input"/>" binding="inNm"
                                              width="120"
+                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.input"/>" binding="inFg"
+                                             width="120" visible="false"
                                              is-read-only="true" align="right"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -137,7 +141,7 @@
 </div>
 <script>
     var useYn = ${ccu.getCommCodeExcpAll("067")};
-    var dlvrFirstList = ${dlvrFirstList};
+    <%--var dlvrFirstList = ${dlvrFirstList};--%>
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/dlvr/info/view/dlvr.js?ver=2020062901.11"

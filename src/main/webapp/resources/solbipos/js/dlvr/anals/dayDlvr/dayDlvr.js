@@ -80,7 +80,7 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     dataItem.saleDate = messages["dayDlvr.saleDate"];
     dataItem.dlvrBillCnt = messages["dayDlvr.dlvrSale"];
     dataItem.dlvrAmt = messages["dayDlvr.dlvrSale"];
-    dataItem.nonCntBill = messages["dayDlvr.nonDlvrSale"];
+    dataItem.nonDlvrBillCnt = messages["dayDlvr.nonDlvrSale"];
     dataItem.nonDlvrAmt = messages["dayDlvr.nonDlvrSale"];
 
     s.columnHeaders.rows[0].dataItem = dataItem;
@@ -142,6 +142,20 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
   // 엑셀 다운로드
   $scope.leftExcelDownload = function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd= '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = String(yyyy) + String(mm) + dd;
 
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -156,7 +170,7 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         includeColumns: function (column) {
           return column.visible;
         }
-      }, '일자별_배달내역_' + getToday() + '.xlsx', function () {
+      }, '일자별_배달내역_' + today + '.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -200,6 +214,7 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     dataItem.lv2Nm = messages["dayDlvr.prodLV2"];
     dataItem.prodCd = messages["dayDlvr.prodDd"];
     dataItem.prodNm = messages["dayDlvr.prodNm"];
+    dataItem.prodClassNm = messages["dayDlvr.prodClassNm"];
     dataItem.dlvrSaleQty = messages["dayDlvr.dlvrSale"];
     dataItem.dlvrAmt = messages["dayDlvr.dlvrSale"];
     dataItem.nonDlvrSaleQty = messages["dayDlvr.nonDlvrSale"];

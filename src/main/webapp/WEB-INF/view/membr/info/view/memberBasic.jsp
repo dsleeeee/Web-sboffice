@@ -3,14 +3,17 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
+<c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div class="wj-dialog-body" id="basicView" name="basicView" class="subCon" ng-controller="memberBasicCtrl">
     <%-- body --%>
     <div style="height:400px; overflow-y: auto;">
-        <f:form id="regForm" name="regForm">
+        <f:form id="regForm" name="regForm" ng-submit="submit()">
             <%--                    <h3 class="h3_tbl"><s:message code="storeManage.basicInfo"/></h3>--%>
             <table class="searchTbl">
                 <colgroup>
@@ -42,26 +45,26 @@
                                class="sb-input w100" maxlength="30" required>
                     </td>
                         <%-- 회원명영문 --%>
-                    <th><s:message code="regist.membr.nm.eng"/><%--<em class="imp">*</em>--%></th>
+                    <th><s:message code="regist.membr.nm.eng"/></th>
                     <td>
-                        <input type="text" id="rMemberEngNm" name="memberEngNm" ng-model="member.memberEngNm"
+                        <input type="text" id="rMemberEngNm" name="membrEngNm" ng-model="member.membrEngNm"
                                class="sb-input w100" maxlength="30" required>
                     </td>
                 </tr>
                 <tr>
                         <%-- 회원카드번호 --%>
-                    <th><s:message code="regist.membr.card.no"/><%--<em class="imp">*</em>--%></th>
+                    <th><s:message code="regist.membr.card.no"/></th>
                     <td>
                         <input type="text" id="basicMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo"
-                               class="sb-input w100" maxlength="30" required>
+                               class="sb-input w100" maxlength="30" required  ng-disabled="member.membrNo !== '자동채번'">
                     </td>
-                        <%-- 회원카드구분 --%>
+                        <%-- 카드사용구분 --%>
                     <th><s:message code="regist.membr.card.yn"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
                                     id="rMembrcardYn"
-                                    ng-model="member.cardYn"
+                                    ng-model="member.cstCardUseFg"
                                     control="rMembrcardYn"
                                     items-source="_getComboData('rMembrcardYn')"
                                     display-member-path="name"
@@ -74,27 +77,38 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 회원단축번호 --%>
+                        <%-- 회사단축번호 --%>
                     <th><s:message code="regist.membr.stortNo"/></th>
                     <td>
-                        <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.stortNo"
+                        <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.shortNo"
                                maxlength="15"/>
                     </td>
                         <%-- 등록매장 --%>
                     <th><s:message code="regist.reg.store.cd"/><em class="imp">*</em></th>
                     <td>
-                        <div class="sb-select">
-                            <wj-combo-box
-                                    id="basicRegStoreCd"
-                                    ng-model="member.regStoreCd"
-                                    control="basicRegStoreCdCombo"
-                                    items-source="_getComboData('basicRegStoreCd')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    initialized="_initComboBox(s)">
-                            </wj-combo-box>
-                        </div>
+                        <c:if test="${hqOfficeCd eq '00000'}">
+                            <input type="text" id="basicRegStoreNm" readonly class="sb-input w100" ng-model="member.storeNm"
+                                   maxlength="15" value="${orgnNm}"/>
+                            <input type="hidden" id="basicRegStoreCd"  class="sb-input w100" ng-model="member.regStoreCd"
+                                   maxlength="15" value="${orgnCd}"/>
+                            <input type="hidden" id="basicRegStoreChk"  class="sb-input w100" ng-model="member.chk"
+                                   maxlength="15" value="${hqOfficeCd}"/>
+                        </c:if>
+                        <c:if test="${hqOfficeCd ne '00000'}">
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="basicRegStoreCd"
+                                        ng-model="member.regStoreCd"
+                                        control="basicRegStoreCdCombo"
+                                        items-source="_getComboData('basicRegStoreCd')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)">
+                                </wj-combo-box>
+                            </div>
+                        </c:if>
+
 <%--                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">--%>
 <%--                            <jsp:param name="targetId" value="regStoreSelect"/>--%>
 <%--                        </jsp:include>--%>
@@ -103,17 +117,17 @@
 
 
                 <tr>
-                        <%-- 전화번호 --%>
-                    <th><s:message code="regist.tel"/></th>
+                        <%-- 연락처 --%>
+                    <th><s:message code="regist.tel"/><em class="imp">*</em></th>
                     <td>
                         <input type="text" id="telNo" name="telNo" ng-model="member.telNo"
-                               class="sb-input w100" maxlength="11" disable="true" readonly
+                               class="sb-input w100" maxlength="11"
                                placeholder="<s:message code='storeManage.bizNo.comment' />" required/>
                     </td>
                         <%-- 핸드폰번호 --%>
-                    <th><s:message code="regist.phone.no"/><%--<em class="imp">*</em>--%></th>
-                    <td>
-                        <input type="text" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo"
+                    <th style="display:none;"><s:message code="regist.phone.no"/><em class="imp">*</em></th>
+                    <td style="display:none;">
+                        <input type="hidden" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo"
                                maxlength="15"/>
                     </td>
 
@@ -137,15 +151,15 @@
                         </div>
                     </td>
                         <%-- 결혼기념일 --%>
-                    <th><s:message code="regist.weddingDay"/></th>
-                    <td>
+                    <th ng-if="member.weddingYn === 'Y'"><s:message code="regist.weddingDay"/></th>
+                    <td ng-if="member.weddingYn === 'Y'">
                         <div class="sb-select">
                             <wj-input-date
                                     value="rWeddingDay"
                                     ng-model="member.weddingday"
                                     control="weddingDayCombo"
                                     format="yyyy/MM/dd"
-                                    min="2000-01-01"
+                                    min="1930-01-01"
                                     max="2099-12-31"
                                     initialized="_initDateBox(s)">
                             </wj-input-date>
@@ -157,15 +171,18 @@
                     <th><s:message code="regist.lunarYn"/></th>
                     <td>
                         <div class="sb-input">
-                            <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="N" checked="checked">
-                            <label><s:message code="regist.solar"/></label>
-                            <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="Y">
-                            <label class="mr5"><s:message code="regist.lunar"/></label>
+                            <s:message code="vendrInstock.procFg0"/> <input type="checkbox" name="birthChk" ng-model="member.birthChk" id="birthChk" >
+                            {{}}
+                            <input ng-if="member.birthChk === true" type="radio" name="lunarYn" ng-model="member.lunarYn" value="N"
+                                   checked="checked">
+                            <label ng-if="member.birthChk === true"><s:message code="regist.solar"/></label>
+                            <input ng-if="member.birthChk === true" type="radio" name="lunarYn" ng-model="member.lunarYn" value="Y">
+                            <label ng-if="member.birthChk === true" class="mr5"><s:message code="regist.lunar"/></label>
                         </div>
                     </td>
                         <%-- 생일 --%>
-                    <th><s:message code="regist.brthd"/></th>
-                    <td>
+                    <th ng-if="member.birthChk === true"><s:message code="regist.brthd"/></th>
+                    <td ng-if="member.birthChk === true">
                         <div class="sb-select">
                             <wj-input-date
                                     value="rBirthday"
@@ -180,7 +197,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <%-- 회원등급 --%>
+                        <%-- 회원등급 --%>
                     <th><s:message code="regist.memberClass"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -196,7 +213,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <%-- 사용여부 --%>
+                        <%-- 사용여부 --%>
                     <th><s:message code="regist.useYn"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -213,17 +230,17 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                        <%-- 거래처 매핑코드 --%>
-                    <th><s:message code="regist.membr.mappingCd" /></th>
-                    <td>
-                        <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
-                        <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />
-                        <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />
-                    </td>
-                    <th></th>
-                    <td></td>
-                </tr>
+                    <%--            <tr>--%>
+                    <%--              &lt;%&ndash; 거래처 매핑코드 &ndash;%&gt;--%>
+                    <%--              <th><s:message code="regist.membr.mappingCd" /></th>--%>
+                    <%--              <td>--%>
+                    <%--                <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>--%>
+                    <%--                <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />--%>
+                    <%--                <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />--%>
+                    <%--              </td>--%>
+                    <%--              <th></th>--%>
+                    <%--              <td></td>--%>
+                    <%--            </tr>--%>
                 <tr>
                         <%-- E-mail --%>
                     <th><s:message code="regist.email"/></th>
@@ -259,7 +276,7 @@
                         </a>
                         <br>
                         <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100"
-                               maxlength="60"/>
+                               maxlength="60" style="margin:2px 0px;"/>
                         <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl"
                                class="sb-input w100" maxlength="60"/>
                     </td>
@@ -273,7 +290,7 @@
                                     id="rEmailRecvYn"
                                     ng-model="member.emailRecvYn"
                                     control="emailRecvYnCombo"
-                                    items-source="_getComboData('rEmailRecvYn')"
+                                    items-source="_getComboData('recvYn')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
@@ -289,13 +306,21 @@
                                     id="rSmsRecvYn"
                                     ng-model="member.smsRecvYn"
                                     control="smsRecvYnCombo"
-                                    items-source="_getComboData('rSmsRecvYn')"
+                                    items-source="_getComboData('recvYn')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
                                     initialized="_initComboBox(s)">
                             </wj-combo-box>
                         </div>
+                    </td>
+                </tr>
+                <tr ng-if="member.membrNm === ''">
+                    <%-- 이전포인트 --%>
+                    <th><s:message code="regist.membr.move.point"/></th>
+                    <td colspan="3">
+                        <input type="text" id="movePoint" name="movePoint" ng-model="member.movePoint"
+                               class="sb-input w30"/><s:message code="regist.membr.move.point.txt"/>
                     </td>
                 </tr>
                 <tr>
@@ -328,14 +353,8 @@
     </div>
 </div>
 <script>
-    var orgnFg = "${orgnFg}";
-    var orgnCd = "${orgnCd}";
-    var hqOfficeCd = "${hqOfficeCd}";
+    var memberClassList = ${memberClassList};
+    var orgnNm = "${orgnNm}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200903.01 charset='utf-8'"></script>
-
-<%-- 회원 매핑코드 조회 --%>
-<c:import url="/WEB-INF/view/membr/info/view/memberMapping.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<script type="text/javascript"
+        src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20191223.17 charset='utf-8'"></script>

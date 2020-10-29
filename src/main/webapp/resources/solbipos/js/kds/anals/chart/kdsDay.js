@@ -20,6 +20,10 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope.picChecked = true;
     $scope.makeChecked = true;
 
+    // 검색조건에 조회기간
+    var kdsDayStartDate = wcombo.genDateVal("#kdsDayStartDate", gvStartDate);
+    var kdsDayEndDate = wcombo.genDateVal("#kdsDayEndDate", gvEndDate);
+
     $scope.selectedMember;
     $scope.setSelectedMember = function (data) {
         $scope.selectedMember = data;
@@ -37,8 +41,6 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 }
             }
         });
-        console.log($scope.kdsDayStartDate);
-        console.log($scope.kdsDayEndDate);
     };
 
     function getData(dataList) {
@@ -46,7 +48,7 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         return view;
     }
 
-    var chart1 = ''
+    var chart1 = '';
 
     function chartList(list) {
         // create the Pareto chart
@@ -130,8 +132,10 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             return false;
         }
         var params = {};
-        params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
-        params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
+        params.kdsDayStartDate = wijmo.Globalize.format(kdsDayStartDate.value, 'yyyyMMdd'); //조회기간
+        params.kdsDayEndDate = wijmo.Globalize.format(kdsDayEndDate.value, 'yyyyMMdd'); //조회기간
+        //params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
+        //params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
         params.makeDate = $scope.makeDate;
         params.makeDateSec = $scope.makeDateSec;
         params.picDate = $scope.picDate;
@@ -167,6 +171,7 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 list = response.data.data.list;
                 if (list.length === undefined || list.length === 0) {
                     $scope.data = new wijmo.collections.CollectionView([]);
+                    chart1.itemsSource = [];
                     if (true && response.data.message) {
                         $scope._popMsg(response.data.message);
                     }
@@ -216,7 +221,7 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 // 픽업시간
     $scope.picChkDt = function () {
         // getData(list);
-        chart1.series = chart1.series.forEach((e, i) => {
+        chart1.series = chart1.series.forEach(function(e, i) {
             if ($scope.picChecked !== true) {
                 if (e.binding === 'avgPic') {
                     e.visibility = 3;
@@ -232,7 +237,7 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 // 제조시간
     $scope.makeChkDt = function () {
-        chart1.series = chart1.series.forEach((e, i) => {
+        chart1.series = chart1.series.forEach(function(e, i) {
             if ($scope.makeChecked !== true) {
                 if (e.binding === 'avgMake') {
                     e.visibility = 3;
@@ -248,8 +253,8 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 // 체크
     $scope.valueCheck = function () {
         var msg = messages['kds.date.error'];
-        var date1 = new Date($scope.kdsDayStartDate);
-        var date2 = new Date($scope.kdsDayEndDate);
+        var date1 = new Date(wijmo.Globalize.format(kdsDayStartDate.value, 'yyyy-MM-dd'));
+        var date2 = new Date(wijmo.Globalize.format(kdsDayEndDate.value, 'yyyy-MM-dd'));
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
         if (diffDay > 30) {
             $scope._popMsg(msg);

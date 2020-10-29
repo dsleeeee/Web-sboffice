@@ -11,4 +11,8 @@ import java.util.List;
 @Repository
 public interface DlvrInfoMapper {
   public List<DefaultMap<Object>> getDlvrInfoList(DlvrInfoVO dlvrInfoVO);
+
+  DefaultMap<String> getBillInfo(DlvrInfoVO dlvrInfoVO);
+
+  List<DefaultMap<Object>> getBillInfoList(DlvrInfoVO dlvrInfoVO);
 }

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("classService")
@@ -73,14 +74,20 @@ public class MemberClassServiceImpl implements MemberClassService {
     public String getMemberClassList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
         List<DefaultMap<String>> classList;
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             classList = mapper.getMemberClassList(membrClassVO);
         } else {
-            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-            classList = mapper.getMemberClassList(membrClassVO);
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                classList = mapper.getMemberClassList(membrClassVO);
+            } else {
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+                classList = mapper.getMemberClassList(membrClassVO);
+            }
         }
 
         return convertToJson(classList);
@@ -90,56 +97,93 @@ public class MemberClassServiceImpl implements MemberClassService {
     public List<DefaultMap<String>> getMemberClassGridList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
         List<DefaultMap<String>> classList;
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+        LOGGER.info("sessionInfoVO.getHqOfficeCd() ::::{}",sessionInfoVO.getHqOfficeCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             classList = mapper.getMemberClassList(membrClassVO);
         } else {
-            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-            classList = mapper.getMemberClassList(membrClassVO);
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                classList = mapper.getMemberClassList(membrClassVO);
+            } else {
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+                classList = mapper.getMemberClassList(membrClassVO);
+            }
         }
         return classList;
     }
 
 
     /**
-     * 회원등급 check
-     *
+     * 회원 등급 체크 및 저장 프로세스
+     * @param membrClassVO
+     * @param sessionInfoVO
      * @return
      */
     @Override
-    public DefaultMap<Object> classInfoChk(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
+    public int classInfoChk(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
         String dt = currentDateTimeString();
         String defltYn = membrClassVO.getDefltYn();
 
-        membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        } else {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            } else {
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            }
+        }
+
+        //membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
 
         int classChk = mapper.classInfoChk(membrClassVO);
+        int defltChk = mapper.classDefltChk(membrClassVO);
         int classResult;
+        int classPayRateResult;
 
         membrClassVO.setRegDt(dt);
         membrClassVO.setRegId(sessionInfoVO.getUserId());
         membrClassVO.setModDt(dt);
         membrClassVO.setModId(sessionInfoVO.getUserId());
         membrClassVO.setMembrOrgnClassCd(membrClassVO.getMembrOrgnCd() + membrClassVO.getMembrClassCd());
+        LOGGER.debug("defltChk: {}", defltChk);
 
         if (classChk > 0) {
-            classResult = mapper.updateClassInfo(membrClassVO);
-            if (classResult > 0 && "Y".equals(defltYn)) {
-                membrClassVO.setDefltYn("N");
-                classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+            if (defltChk > 0 && "N".equals(defltYn)) {
+                classResult = 0;
+//                result.put("msg", messageService.get("login.pw.find.h2.1") +  messageService.get("login.pw.find.h2.2"));
+//                throw new JsonException(Status.FAIL, messageService.get("grade.membr.deflt.yn.fail"));
+            } else {
+                classResult = mapper.updateClassInfo(membrClassVO);
+                classPayRateResult = mapper.updateClassPayRateInfo(membrClassVO);
+                if (classResult > 0 && "Y".equals(defltYn)) {
+                    membrClassVO.setDefltYn("N");
+                    classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+                }
             }
         } else {
-            classResult = mapper.insertClassInfo(membrClassVO);
-            if (classResult > 0 && "Y".equals(defltYn)) {
-                membrClassVO.setDefltYn("N");
-                classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+            if (defltChk > 0 && "N".equals(defltYn)) {
+                classResult = 0;
+            } else {
+                classResult = mapper.insertClassInfo(membrClassVO);
+                classPayRateResult = mapper.updateClassPayRateInfo(membrClassVO);
+                if (classResult > 0 && "Y".equals(defltYn)) {
+                    membrClassVO.setDefltYn("N");
+                    classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+                }
             }
         }
-        result.put("classResult", classResult);
-        return result;
+
+        return classResult;
     }
 
     /**
@@ -149,22 +193,37 @@ public class MemberClassServiceImpl implements MemberClassService {
      */
     @Override
     public int deleteClassInfo(MembrClassVO[] membrClassVOs, SessionInfoVO sessionInfoVO) {
-        String currentDate = currentDateTimeString();
         int classCnt = 0;
         for (MembrClassVO membrClassVO : membrClassVOs) {
-//            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             membrClassVO.setModId(sessionInfoVO.getUserId());
             membrClassVO.setModDt(DateUtil.currentDateTimeString());
-            System.out.println();
 
             int result = mapper.deleteClassInfo(membrClassVO);
             if (result <= 0) {
-                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                throw new JsonException(Status.FAIL, messageService.get("cmm.dltFail"));
             } else {
+                int deletePayRateChk = mapper.deleteClassPayRateInfo(membrClassVO);
                 classCnt += result;
             }
         }
         return classCnt;
+    }
+
+    @Override
+    public DefaultMap<Object> deleteClassInfoChk(MembrClassVO[] membrClassVOs, SessionInfoVO sessionInfoVO) {
+        int deleteChk = 0;
+        DefaultMap<Object> result = new DefaultMap<>();
+        for (MembrClassVO membrClassVO : membrClassVOs) {
+            deleteChk = mapper.deleteClassChk(membrClassVO);
+            if(deleteChk > 0){
+                result.put("membrClassNm",membrClassVO.getMembrClassNm());
+                result.put("membrClassCd",membrClassVO.getMembrClassCd());
+                result.put("deleteChk",deleteChk);
+                break;
+                //throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+        }
+        return result;
     }
 
     /**
@@ -184,19 +243,24 @@ public class MemberClassServiceImpl implements MemberClassService {
 
         for (MembrClassPointVO membrClassPointVO : membrClassPointVOs) {
 
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
                 membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
                 membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             } else {
-                membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-                membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                } else {
+                    membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                }
             }
             membrClassPointVO.setRegDt(dt);
             membrClassPointVO.setRegId(sessionInfoVO.getUserId());
             membrClassPointVO.setModDt(dt);
             membrClassPointVO.setModId(sessionInfoVO.getUserId());
 
-            if(membrClassPointVO.getInitPayCd() != null) {
+            if (membrClassPointVO.getInitPayCd() != null) {
                 membrClassPointVO.setStatus(GridDataFg.INSERT);
                 result = mapper.deleteClassInitPointInfo(membrClassPointVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -260,12 +324,17 @@ public class MemberClassServiceImpl implements MemberClassService {
 
         for (MembrClassPointVO membrClassPointVO : membrClassPointVOs) {
 
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
                 membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
                 membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             } else {
-                membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-                membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                } else {
+                    membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                }
             }
 
             membrClassPointVO.setRegDt(dt);

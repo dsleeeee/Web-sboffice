@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
 
 
 <div class="wj-dialog-body" id="cardView" name="cardView" class="subCon" ng-controller="memberCardCtrl">
@@ -26,9 +27,9 @@
                         <div class="sb-select">
                             <wj-combo-box
                                     id="cstCardIssFg"
-                                    ng-model="cstCardIssFg"
-                                    control="rMembrcardYnCombo"
-                                    items-source="_getComboData('rMembrcardYn')"
+                                    ng-model="member.cstCardIssFg"
+                                    control="rMembrcardIssFgCombo"
+                                    items-source="_getComboData('cstCardIssFg')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
@@ -39,8 +40,23 @@
                         <%-- 발급소속 --%>
                     <th><s:message code="regist.card.org"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="rMembrCardOrgn" class="sb-input w100" ng-model="member.membrCardOrgn"
-                               readonly="readonly" value="${orgnCd} / ${orgnFg}"/>
+                        <c:if test="${orgnFg eq 'HQ'}">
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="basicRegStoreCd"
+                                        ng-model="member.issOrgnCd"
+                                        control="basicRegStoreCdCombo"
+                                        items-source="_getComboData('basicRegStoreCd')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)">
+                                </wj-combo-box>
+                            </div>
+                        </c:if>
+                        <c:if test="${orgnFg ne 'HQ'}">
+                            <input type="text" id="rMembrCardOrgn" class="sb-input w100" ng-model="member.issOrgnCd" readonly required />
+                        </c:if>
                     </td>
                 </tr>
                 <tr>
@@ -54,7 +70,7 @@
                     <th><s:message code="regist.card.old.no"/></th>
                     <td>
                         <input type="text" id="rOldCstCardNo" name="oldCstCardNo" ng-model="member.oldCstCardNo"
-                               class="sb-input w100" maxlength="30"/>
+                               readonly class="sb-input w100" maxlength="30"/>
                     </td>
                 </tr>
                 <tr>
@@ -103,15 +119,15 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk"
-                                         width="40"></wj-flex-grid-column>
+                    <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk"
+                                         width="40"></wj-flex-grid-column>--%>
                     <wj-flex-grid-column header="<s:message code="regist.card.new.no"/>" binding="membrCardNo" align="center"
                                          is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="regist.card.old.no"/>" binding="oldCstCardNo" align="left"
                                          is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.iss.fg"/>" binding="cstCardStatFg" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.iss.fg"/>" binding="statFgNm" align="center"
                                          width="100" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.fg"/>" binding="cstCardIssFg" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.fg"/>" binding="issFgNm" align="center"
                                          width="100" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="regist.card.org"/>" binding="membrOrgnCd" align="center"
                                          width="100" is-read-only="true"></wj-flex-grid-column>
@@ -133,6 +149,10 @@
 <script>
     <%--var cstCardIssFg = ${ccu.getCommCode("300")};--%>
     <%--var cstCardStatFg = ${ccu.getCommCode("301")};--%>
+    var sessionInfo = {
+        orgnCd: "${sessionScope.sessionInfo.orgnCd}",
+        orgnNm: "${sessionScope.sessionInfo.orgnNm}"
+    };
 </script>
 <script type="text/javascript"
-        src="/resource/solbipos/js/membr/info/view/memberCard.js?ver=20191223.18 charset='utf-8'"></script>
+        src="/resource/solbipos/js/membr/info/view/memberCard.js?ver=20191223.17 charset='utf-8'"></script>

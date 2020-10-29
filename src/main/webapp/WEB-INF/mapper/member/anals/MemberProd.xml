@@ -38,7 +38,9 @@
             ]]>
         </if>
         AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND SBPENC.D ( tsshm.MEMBR_NM ) LIKE '%'|| #{membrNm} ||'%'
+        <if test="membrNm != null and membrNm != ''">
+            AND SBPENC.D ( tsshm.MEMBR_NM ) LIKE '%'|| #{membrNm} ||'%'
+        </if>
         AND tssd.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
         AND tssd.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
         AND tssd.STORE_CD = tsshm.STORE_CD

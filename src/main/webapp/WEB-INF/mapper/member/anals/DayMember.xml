@@ -31,7 +31,8 @@
         SUM(tssh.PAYOTHER) AS PAY_OTHER,
         SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
         tsshm.POS_NO,
-        tsshm.BILL_NO
+        tsshm.BILL_NO,
+        TO_CHAR(TO_DATE(MAX(tsshm.REG_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS VISIT_DT
         FROM
         TB_SL_SALE_HDR_MEMBR tsshm,
         (
@@ -128,7 +129,7 @@
         AND tsshm.POS_NO = tssh.POS_NO
         AND tsshm.BILL_NO = tssh.BILL_NO
         GROUP BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsshm.MEMBR_CARD_NO, tsshm.SALE_FG, tsshm.SALE_DATE, tsshm.POS_NO, tsshm.BILL_NO
-        ORDER BY tsshm.SALE_DATE, tsshm.MEMBR_NM, tsshm.SALE_FG
+        ORDER BY tsshm.SALE_DATE, tsshm.MEMBR_NM, tsshm.BILL_NO + tsshm.SALE_FG, tsshm.SALE_FG
     </select>
 
 

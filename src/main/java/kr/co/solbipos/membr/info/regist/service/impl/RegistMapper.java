@@ -146,10 +146,10 @@ public interface RegistMapper {
     List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO);
 
     /** 회원정보 등록,수정시 본사코드 A0007만 */
-    String registPoslinkPtn(RegistVO registVO);
+    int registPoslinkPtn(RegistVO registVO);
 
     /** 회원정보 등록,수정시 본사코드 A0007만 */
-    String registSposBillPtn(RegistVO registVO);
+    int registSposBillPtn(RegistVO registVO);
 
     DefaultMap<String> getMemberSelect(RegistVO registVO);
 
@@ -166,4 +166,18 @@ public interface RegistMapper {
     List getMembrLzoneList(RegistVO registVO);
 
     List getDlvrMzoneList(RegistVO registVO);
+
+    int updateMemberCard(RegistVO registVO);
+
+    int updateMembr(RegistVO registVO);
+
+    int getMemberCardInfoCount(RegistVO registVO);
+
+    int firstSaleSavePointInfo(RegistVO registVO);
+
+    void insertMembrPointHist(RegistVO registVO);
+
+    int updateMembrDlvrTel(RegistVO registVO);
+
+    int deleteMembrDlvrTel(RegistVO registVO);
 }

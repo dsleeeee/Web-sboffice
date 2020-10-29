@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 

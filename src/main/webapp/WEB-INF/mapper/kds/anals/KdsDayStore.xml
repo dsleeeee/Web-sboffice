@@ -80,11 +80,11 @@
     <select id="getKdsStoreProd" parameterType="KdsVO" resultType="DefaultMap">
         /* KdsMapper.getKdsStoreProd */
         SELECT
-            A.STORE_CD
-            , NVL(A.SALE_DATE, B.SALE_DATE) AS SALE_DATE
-            , A.PROD_CD
-            , A.PROD_NM
-            , NVL(SUM(A.SALE_QTY),0) AS SALE_QTY
+        A.STORE_CD
+        , NVL(A.SALE_DATE, B.SALE_DATE) AS SALE_DATE
+        , A.PROD_CD
+        , A.PROD_NM
+        , NVL(SUM(A.SALE_QTY),0) AS SALE_QTY
         <if test='makeDate == 0'>
             , NVL(SUM(A.AVG_S_CK_TO_E_CK),0) AS AVG_MAKE
         </if>
@@ -97,11 +97,11 @@
         <if test="picDate == 1">
             , NVL(SUM(A.AVG_E_CK_TO_E_PK),0) AS AVG_PIC
         </if>
-            , B.STORE_CD AS CON_STORE_CD
-            , B.SALE_DATE AS CON_SALE_DATE
-            , B.PROD_CD AS CON_PROD_CD
-            , B.PROD_NM AS CON_PROD_NM
-            , NVL(SUM(B.SALE_QTY),0) AS CON_SALE_QTY
+        , B.STORE_CD AS CON_STORE_CD
+        , B.SALE_DATE AS CON_SALE_DATE
+        , B.PROD_CD AS CON_PROD_CD
+        , B.PROD_NM AS CON_PROD_NM
+        , NVL(SUM(B.SALE_QTY),0) AS CON_SALE_QTY
         <if test='makeDate == 0'>
             , NVL(SUM(B.AVG_S_CK_TO_E_CK),0) AS CON_AVG_MAKE
         </if>
@@ -115,40 +115,52 @@
             , NVL(SUM(B.AVG_E_CK_TO_E_PK),0) AS CON_AVG_PIC
         </if>
         FROM
-            (
-            SELECT
-                toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK , toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK , toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
-            FROM
-                TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
-            WHERE
-                toodkd.PROD_CD = thp.PROD_CD(+)
-            AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND toodkd.STORE_CD = #{storeCd}
-            AND toodkd.PROD_CD = #{prodCd}
-            ) A
+        (
+        SELECT
+        toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK ,
+        toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK ,
+        toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
+        FROM
+        TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
+        WHERE
+        toodkd.PROD_CD = thp.PROD_CD(+)
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND toodkd.STORE_CD = #{storeCd}
+        AND toodkd.PROD_CD = #{prodCd}
+        ) A
         FULL OUTER JOIN
-            (
-            SELECT
-                toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK , toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK , toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
-            FROM
-            TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
-            WHERE
-                toodkd.PROD_CD = thp.PROD_CD(+)
-            AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND toodkd.STORE_CD = #{conStoreCd}
+        (
+        SELECT
+        toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK ,
+        toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK ,
+        toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
+        FROM
+        TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
+        WHERE
+        toodkd.PROD_CD = thp.PROD_CD(+)
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND toodkd.STORE_CD = #{conStoreCd}
+        <if test='prodCd != null and prodCd != ""'>
             AND toodkd.PROD_CD = #{prodCd}
-            ) B
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD = #{prodClassCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        ) B
         ON A.SALE_DATE = B.SALE_DATE
         GROUP BY
-            A.STORE_CD,
-            A.SALE_DATE,
-            A.PROD_CD,
-            A.PROD_NM,
-            B.STORE_CD,
-            B.SALE_DATE,
-            B.PROD_CD,
-            B.PROD_NM
+        A.STORE_CD,
+        A.SALE_DATE,
+        A.PROD_CD,
+        A.PROD_NM,
+        B.STORE_CD,
+        B.SALE_DATE,
+        B.PROD_CD,
+        B.PROD_NM
         ORDER BY
-            A.SALE_DATE, B.SALE_DATE
+        A.SALE_DATE, B.SALE_DATE
     </select>
 </mapper>
