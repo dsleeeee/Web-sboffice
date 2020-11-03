@@ -45,15 +45,6 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
         event.preventDefault();
     });
 
-
-    $scope.changeWeddingCombo = function (s, e) {
-        if (s.selectedValue === 'Y') {
-            $scope.weddingDayCombo.isReadOnly = false;
-        } else {
-            $scope.weddingDayCombo.isReadOnly = true;
-        }
-    };
-
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 

@@ -88,11 +88,9 @@
                     <td>
                         <c:if test="${hqOfficeCd eq '00000'}">
                             <input type="text" id="basicRegStoreNm" readonly class="sb-input w100" ng-model="member.storeNm"
-                                   maxlength="15" value="${orgnNm}"/>
+                                   maxlength="15"/>
                             <input type="hidden" id="basicRegStoreCd"  class="sb-input w100" ng-model="member.regStoreCd"
-                                   maxlength="15" value="${orgnCd}"/>
-                            <input type="hidden" id="basicRegStoreChk"  class="sb-input w100" ng-model="member.chk"
-                                   maxlength="15" value="${hqOfficeCd}"/>
+                                   maxlength="15"/>
                         </c:if>
                         <c:if test="${hqOfficeCd ne '00000'}">
                             <div class="sb-select">
@@ -114,10 +112,8 @@
 <%--                        </jsp:include>--%>
                     </td>
                 </tr>
-
-
                 <tr>
-                        <%-- 연락처 --%>
+                    <%-- 연락처 --%>
                     <th><s:message code="regist.tel"/><em class="imp">*</em></th>
                     <td>
                         <input type="text" id="telNo" name="telNo" ng-model="member.telNo"
@@ -130,10 +126,7 @@
                         <input type="hidden" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo"
                                maxlength="15"/>
                     </td>
-
-                </tr>
-                <tr>
-                        <%-- 결혼여부 --%>
+                    <%-- 결혼여부 --%>
                     <th><s:message code="regist.wedding"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -150,9 +143,11 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 결혼기념일 --%>
-                    <th ng-if="member.weddingYn === 'Y'"><s:message code="regist.weddingDay"/></th>
-                    <td ng-if="member.weddingYn === 'Y'">
+                </tr>
+                <tr id="trWeddingDay">
+                    <%-- 결혼기념일 --%>
+                    <th><s:message code="regist.weddingDay"/></th>
+                    <td>
                         <div class="sb-select">
                             <wj-input-date
                                     value="rWeddingDay"
@@ -165,24 +160,28 @@
                             </wj-input-date>
                         </div>
                     </td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
-                        <%-- 음력/양력 구분 --%>
+                    <%-- 음력/양력 구분 --%>
                     <th><s:message code="regist.lunarYn"/></th>
                     <td>
                         <div class="sb-input">
-                            <s:message code="vendrInstock.procFg0"/> <input type="checkbox" name="birthChk" ng-model="member.birthChk" id="birthChk" >
-                            {{}}
-                            <input ng-if="member.birthChk === true" type="radio" name="lunarYn" ng-model="member.lunarYn" value="N"
-                                   checked="checked">
-                            <label ng-if="member.birthChk === true"><s:message code="regist.solar"/></label>
-                            <input ng-if="member.birthChk === true" type="radio" name="lunarYn" ng-model="member.lunarYn" value="Y">
-                            <label ng-if="member.birthChk === true" class="mr5"><s:message code="regist.lunar"/></label>
+                            <div style="float: left; padding-right: 10px;">
+                            <s:message code="vendrInstock.procFg0"/><input type="checkbox" name="birthChk" id="birthChk" ng-click="showBirthday()">
+                            </div>
+                            <div id="divBirthday1" style="display: none;">
+                            <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="N">
+                            <label><s:message code="regist.solar"/></label>
+                            <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="Y">
+                            <label class="mr5"><s:message code="regist.lunar"/></label>
+                            </div>
                         </div>
                     </td>
-                        <%-- 생일 --%>
-                    <th ng-if="member.birthChk === true"><s:message code="regist.brthd"/></th>
-                    <td ng-if="member.birthChk === true">
+                    <%-- 생일 --%>
+                    <th id="thBirthday2" style="display: none;"><s:message code="regist.brthd"/></th>
+                    <td id="thBirthday3" style="display: none;">
                         <div class="sb-select">
                             <wj-input-date
                                     value="rBirthday"
@@ -230,17 +229,17 @@
                         </div>
                     </td>
                 </tr>
-                    <%--            <tr>--%>
-                    <%--              &lt;%&ndash; 거래처 매핑코드 &ndash;%&gt;--%>
-                    <%--              <th><s:message code="regist.membr.mappingCd" /></th>--%>
-                    <%--              <td>--%>
-                    <%--                <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>--%>
-                    <%--                <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />--%>
-                    <%--                <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />--%>
-                    <%--              </td>--%>
-                    <%--              <th></th>--%>
-                    <%--              <td></td>--%>
-                    <%--            </tr>--%>
+                <tr>
+                        <%-- 거래처 매핑코드 --%>
+                    <th><s:message code="regist.membr.mappingCd" /></th>
+                    <td>
+                        <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
+                        <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />
+                        <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
                 <tr>
                         <%-- E-mail --%>
                     <th><s:message code="regist.email"/></th>
@@ -270,7 +269,7 @@
                     <th><s:message code="regist.addr"/></th>
                     <td colspan="3">
                         <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo"
-                               class="sb-input w30" maxlength="5"/>
+                               class="sb-input w30" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
                             <s:message code="regist.srchAddr"/>
                         </a>
@@ -355,6 +354,8 @@
 <script>
     var memberClassList = ${memberClassList};
     var orgnNm = "${orgnNm}";
+    var orgnFg = "${orgnFg}";
+    var orgnCd = "${orgnCd}";
+    var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript"
-        src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20191223.17 charset='utf-8'"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20191223.27" charset='utf-8'"></script>
