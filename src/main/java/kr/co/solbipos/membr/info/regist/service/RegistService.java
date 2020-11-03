@@ -48,6 +48,15 @@ public interface RegistService {
     List<DefaultMap<String>> getMemberList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     /**
+     * 회원정보 리스트 조회(Excel 용)
+     *
+     * @param registVO
+     * @param sessionInfoVO
+     * @return
+     */
+    List<DefaultMap<String>> getMemberListExcel(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /**
      * 회원정보 조회
      *
      * @param registVO

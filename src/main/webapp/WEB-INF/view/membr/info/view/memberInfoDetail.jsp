@@ -11,7 +11,7 @@
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="regist.membr.info" />
       <span id="memberInfoDetailTitle" class="ml20"></span>
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
     </div>
 
     <%-- body --%>

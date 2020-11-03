@@ -1,13 +1,29 @@
+/****************************************************************
+ *
+ * 파일명 : memberRegist.js
+ * 설  명 : 회원정보관리 > 회원정보등록 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2018.10.23     김지은      1.0
+ *
+ * **************************************************************/
+
 app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('memberBasicCtrl', $scope, $http, false));
 
+    // 기본 회원등급
+    if (memberClassList.length == 0) {
+        memberClassList = [{value: "", name: "전체"}, {value: "001", name: "기본등급"}];
+    }
+
     // 조회조건 콤보박스 데이터
-    $scope._getComboDataQuery('055', 'rGendrFg', 'S');//성별
-    $scope._getComboDataQuery('076', 'rWeddingYn', 'S');//결혼여부
-    $scope._getComboDataQuery('067', 'rUseYn', 'S'); //사용여부
-    $scope._getComboDataQuery('072', 'recvYn', 'S'); //sms수신
+    $scope._getComboDataQuery('055', 'rGendrFg', '');//성별
+    $scope._getComboDataQuery('076', 'rWeddingYn', '');//결혼여부
+    $scope._getComboDataQuery('067', 'rUseYn', ''); //사용여부
+    $scope._getComboDataQuery('072', 'recvYn', ''); //sms수신
     $scope._getComboDataQuery('299', 'rMembrcardYn', ''); //카드발급구분
 
     /*$scope._setComboData("rGendrFg", genderDataMapEx);*/
@@ -28,7 +44,6 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 저장/수정인지 파악하기 위해
     $scope.saveMode = "REG";
-
 
     /*********************************************************
      * 팝업 오픈
@@ -56,35 +71,54 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
      * *******************************************************/
     $scope.resetForm = function () {
 
-        $("#regForm")[0].reset();
+        //$("#regForm")[0].reset();
         // $("#memberInfoTitle").text("");
-        $scope.$apply(function () {
+        //$scope.$apply(function () {
             $scope.member.membrNo = '자동채번';
             $scope.member.beforeBizNo = '';
-            if ($("#basicRegStoreChk").val() !== '00000') {
+
+            // 등록매장 기본셋팅
+            if(orgnFg == "STORE"){
+                $scope.member.regStoreCd = orgnCd;
+                if(hqOfficeCd == "00000"){
+                    $scope.member.storeNm = orgnNm;
+                }else{
+                    $scope.basicRegStoreCdCombo.isReadOnly = true;
+                }
+            }else{
                 $scope.basicRegStoreCdCombo.selectedIndex = 0;
+                $scope.basicRegStoreCdCombo.isReadOnly = false;
             }
+
             $scope.member.membrNm = '';
             $scope.member.membrNicknm = '';
+            $scope.member.membrEngNm = '';
             $scope.rMembrcardYn.selectedIndex = 1;
             $scope.member.membrCardNo = '';
             $scope.member.telNo = '';
             $scope.member.shortNo = '';
             $scope.genderCombo.selectedIndex = 0;
+
+            // 결혼여부 기본셋팅
             $scope.weddingYnCombo.selectedIndex = 0;
-            if($('rWeddingYn').val() === 'Y') {
-                $scope.weddingDayCombo.selectedValue = new Date();
-                $scope.weddingDayCombo.refresh();
-                $scope.weddingDayCombo.isReadOnly = true;
-            }
-            $scope.member.lunarYn = 0;
-            if($("input:checkbox[id='birthChk']").is(":checked")){
-                $scope.birthdayCombo.selectedValue = new Date();
-                $scope.birthdayCombo.refresh();
-                $scope.member.birthday = new Date();
-            }
+            $("#trWeddingDay").css("display", "none");
+            $scope.weddingDayCombo.selectedValue = new Date();
+            $scope.weddingDayCombo.refresh();
+            $scope.member.weddingDayCombo = new Date();
+
+            // 생일구분 기본셋팅
+            $("input:checkbox[id='birthChk']").prop("checked", false);
+            $("input:radio[name='lunarYn']:radio[value='N']").prop('checked', true);
+            $("input:radio[name='lunarYn']:radio[value='Y']").prop('checked', false);
+            $("#divBirthday1").css("display", "none");
+            $("#thBirthday2").css("display", "none");
+            $("#thBirthday3").css("display", "none");
+            $scope.birthdayCombo.selectedValue = new Date();
+            $scope.birthdayCombo.refresh();
+            $scope.member.birthday = new Date();
+
             $scope.rMemberClassSelectCombo.selectedIndex = 0;
-            $scope.useYnCombo.selectedIndex = 2;
+            $scope.useYnCombo.selectedIndex = 1;
             $scope.member.lnPartner = '';
             $scope.member.cdCompany = '';
             $scope.member.cdPartner = '';
@@ -92,14 +126,14 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.member.postNo = '';
             $scope.member.addr = '';
             $scope.member.addrDtl = '';
-            $scope.emailRecvYnCombo.selectedIndex = 2;
-            $scope.smsRecvYnCombo.selectedIndex = 2;
+            $scope.emailRecvYnCombo.selectedIndex = 1;
+            $scope.smsRecvYnCombo.selectedIndex = 1;
             $scope.member.remark = '';
             $scope.member.phoneNo = '01000000000';
             // 이전포인트 초기값 세팅
             $scope.member.movePoint = 0;
 
-        });
+        //});
     };
 
     /*********************************************************
@@ -107,6 +141,9 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
      * *******************************************************/
     $scope.getMemberInfo = function () {
 
+        // 기존셋팅 한번 초기화
+        $scope.resetForm();
+        
         var params = $scope.getSelectedMember();
 
         $scope._postJSONQuery.withOutPopUp('/membr/info/view/base/getMemberInfo.sb', params, function (response) {
@@ -122,16 +159,30 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $("#memberInfoTitle").text("[" + memberDetailInfo.membrNo + "] " + memberDetailInfo.membrNm);
 
-            if(memberDetailInfo.birthday != '' && memberDetailInfo.birthday != null) {
-                $("input:checkbox[id='birthChk']").prop("checked", true);
-                memberDetailInfo.birthChk = true;
-                memberDetailInfo.birthday = stringToDate(memberDetailInfo.birthday);
-                $("nput:radio[name=lunarYn]").prop("checked", true);
-                $("input:radio[name='lunarYn']:radio[value='"+memberDetailInfo.lunarYn+"']").prop('checked', true);
+            // 결혼기념일을 입력한 경우
+            if(memberDetailInfo.weddingYn === 'Y') {
+                $("#trWeddingDay").css("display", "");
+                memberDetailInfo.weddingday = stringToDate(memberDetailInfo.weddingday);
+            }else{
+                memberDetailInfo.weddingday = new Date();
             }
 
-            memberDetailInfo.weddingday = stringToDate(memberDetailInfo.weddingday);
+            // 생일을 입력한 경우
+            if(memberDetailInfo.birthday != '' && memberDetailInfo.birthday != null) {
+                $("#divBirthday1").css("display", "");
+                $("#thBirthday2").css("display", "");
+                $("#thBirthday3").css("display", "");
 
+                $("input:checkbox[id='birthChk']").prop("checked", true);
+                
+                // 날짜 형태 변환
+                memberDetailInfo.birthday =  stringToDate(memberDetailInfo.birthday);
+            }else{
+                memberDetailInfo.lunarYn = 'N';
+                memberDetailInfo.birthday =  new Date();
+            }
+
+            // 데이터 바인딩
             $scope.member = memberDetailInfo;
             $scope.member.temp = orgnNm;
 
@@ -150,10 +201,8 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
-        // 신규등록일 경우
-        //if( $.isEmptyObject($scope.selectedMember) ){
         // 등록매장을 선택해주세요.
-        if ($("#basicRegStoreChk").val() !== '00000') {
+        if (hqOfficeCd !== '00000') {
             var msg = messages["regist.reg.store.cd"] + messages["cmm.require.select"];
             if (isNull($scope.basicRegStoreCdCombo.selectedValue)) {
                 $scope._popMsg(msg);
@@ -339,31 +388,32 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var params = $scope.member;
 
-        if($scope.member.telNo === ''){
+        /*if($scope.member.telNo === ''){
             $scope.member.telNo = '01000000000';
+        }*/
+        
+        // 기혼인 경우만 결혼날짜 입력
+        if($scope.weddingYnCombo.selectedIndex === 1) {
+            params.weddingday = dateToDaystring($scope.member.weddingday);
+        }else{
+            params.weddingday = '';
         }
-        // console.log(params)
-
-        params.cdCompany = "15";
-        params.cdPartner = "00001000502";
-        params.weddingday = dateToDaystring($scope.member.weddingday);
+        
+        // 생일을 입력한 경우만 생일 입력
         if($("input:checkbox[id='birthChk']").is(":checked")) {
             params.birthday = dateToDaystring($scope.member.birthday);
             params.lunarYn = $(":input:radio[name=lunarYn]:checked").val();
         }else{
             params.birthday = '';
         }
-        /*params.telNo = $scope.member.telNo;
-        params.phoneNo = $scope.member.phoneNo;*/
+        // 단축번호
         if (params.shortNo === "") {
             params.shortNo = params.telNo.substr(params.telNo.length - 4, 4)
         }
-        // console.log(params.shortNo);
-        console.log(params.telNo, "/////", params.telNo.length - 5);
-        console.log(params.shortNo);
-        if ($("#basicRegStoreChk").val() == '00000') {
+        // 단독매장의 경우
+        /*if (hqOfficeCd === '00000') {
             params.regStoreCd = $("#basicRegStoreCd").val();
-        }
+        }*/
 
         // console.log(params);
 
@@ -371,7 +421,6 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 회원 신규 등록시
         if ($.isEmptyObject($scope.selectedMember)) {
-
             if ($scope.saveMode === "REG") {
                 $scope._postJSONSave.withPopUp("/membr/info/view/base/registMemberInfo.sb", params, function (result) {
                     var scope = agrid.getScope('memberCtrl');
@@ -379,37 +428,26 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                     // console.log(result.data.data)
                     $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                     $scope.memberRegistLayer.hide();
-                    $scope.$broadcast("memberCtrl");
-                    // memberInfoScope.getMemberList();
+                    scope.getMemberList();
                 });
             }
         } else {
-            console.log($scope.selectedMember);
-            if ($scope.saveMode === "REG") {
-                $scope._postJSONSave.withPopUp("/membr/info/view/base/registMemberInfo.sb", params, function (result) {
-                    var scope = agrid.getScope('memberCtrl');
-                    $scope._popMsg(messages["cmm.saveSucc"]);
-                    // console.log(result.data.data)
-                    $scope.$emit("responseGet", result.data.data, $scope.saveMode);
-                    $scope.memberRegistLayer.hide();
-                    $scope.$broadcast("memberCtrl");
-                    // memberInfoScope.getMemberList();
-                });
-            }
             // 수정
-            else if ($scope.saveMode === "MOD") {
+            if ($scope.saveMode === "MOD") {
                 $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function (result) {
                     var scope = agrid.getScope('memberCtrl');
                     $scope._popMsg(messages["cmm.saveSucc"]);
                     $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                     $scope.memberRegistLayer.hide();
-                    $scope.$broadcast("memberCtrl");
+                    scope.getMemberList();
                     $scope.$broadcast("memberChgBatchCtrl");
                     // $scope.memberInfoDetailLayer.hide();
-                    // memberInfoScope.getMemberList();
                 });
             }
         }
+
+        // 데이터 초기화 (수정, 저장 후 다시 팝업 호출 시, 예전 정보가 남아있는 경우가 있어서)
+        $scope.member = {};
     };
 
     // 닫기
@@ -423,24 +461,82 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
     }, true);
 
+    // 생일 구분 입력 CheckBox 클릭에 따른 VIEW 변화
+    $scope.changeWeddingCombo = function (s, e) {
+
+        if($scope.saveMode === "REG") {
+            // 날짜 다시 오늘날짜로 새로 셋팅
+            $scope.weddingDayCombo.selectedValue = new Date();
+            $scope.weddingDayCombo.refresh();
+            $scope.member.weddingday = new Date();
+        }
+
+        if (s.selectedValue === 'N') {
+            $("#trWeddingDay").css("display", "none");
+            $scope.weddingDayCombo.isReadOnly = true;
+        } else {
+            $("#trWeddingDay").css("display", "");
+            $scope.weddingDayCombo.isReadOnly = false;
+        }
+    };
+
+    // 생일 구분 입력 CheckBox 클릭에 따른 VIEW 변화
+    $scope.showBirthday = function () {
+
+        if($scope.saveMode === "REG"){
+
+            // 날짜 다시 오늘날짜로 새로 셋팅
+            $scope.birthdayCombo.selectedValue = new Date();
+            $scope.birthdayCombo.refresh();
+            $scope.member.birthday = new Date();
+
+            if($("input:checkbox[id='birthChk']").is(":checked")){
+                $("#divBirthday1").css("display", "");
+                $("#thBirthday2").css("display", "");
+                $("#thBirthday3").css("display", "");
+                $("input:radio[name='lunarYn']:radio[value='N']").prop('checked', true);
+
+            }else{
+                $("#divBirthday1").css("display", "none");
+                $("#thBirthday2").css("display", "none");
+                $("#thBirthday3").css("display", "none");
+                $("input:radio[name='lunarYn']:radio[value='N']").prop('checked', false);
+                $("input:radio[name='lunarYn']:radio[value='Y']").prop('checked', false);
+            }
+
+        }else{
+
+            if($("input:checkbox[id='birthChk']").is(":checked")){
+                $("#divBirthday1").css("display", "");
+                $("#thBirthday2").css("display", "");
+                $("#thBirthday3").css("display", "");
+            }else{
+                $("#divBirthday1").css("display", "none");
+                $("#thBirthday2").css("display", "none");
+                $("#thBirthday3").css("display", "none");
+            }
+        }
+
+    }
+
 
     /*********************************************************
      * 회원 거래처 매핑코드 조회(보나비)
      * *******************************************************/
-    // $scope.searchMemberMappingCd = function(){
-    //     $scope.memberMappingLayer.show(true, function(s) {
-    //
-    //         var memberMappingScope = agrid.getScope('memberMappingCtrl');
-    //         // console.log('getCompany', memberMappingScope.getCompany());
-    //         $scope.$apply(function(){
-    //             if( !$.isEmptyObject(memberMappingScope.getCompany())) {
-    //                 $scope.member.lnPartner = memberMappingScope.getCompany().lnPartner;
-    //                 $scope.member.cdCompany = memberMappingScope.getCompany().cdCompany;
-    //                 $scope.member.cdPartner = memberMappingScope.getCompany().cdPartner;
-    //             }
-    //         });
-    //     });
-    // };
+    $scope.searchMemberMappingCd = function(){
+        $scope.memberMappingLayer.show(true, function(s) {
+
+            var memberMappingScope = agrid.getScope('memberMappingCtrl');
+            // console.log('getCompany', memberMappingScope.getCompany());
+            $scope.$apply(function(){
+                if( !$.isEmptyObject(memberMappingScope.getCompany())) {
+                    $scope.member.lnPartner = memberMappingScope.getCompany().lnPartner;
+                    $scope.member.cdCompany = memberMappingScope.getCompany().cdCompany;
+                    $scope.member.cdPartner = memberMappingScope.getCompany().cdPartner;
+                }
+            });
+        });
+    };
 
     /*********************************************************
      * 주소검색 TODO
