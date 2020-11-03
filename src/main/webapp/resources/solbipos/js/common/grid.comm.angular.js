@@ -639,6 +639,29 @@ function RootController(ctrlName, $scope, $http, isPicker) {
             params.type = "";
         }
 
+        // 콤보박스 조회 공통로직(권한에 따라 각각의 본사/매장별 공통코드 조회 시 사용)
+        $scope._getComboDataQueryByAuth = function(code, comboNm) {
+
+            var params = {};
+            params.nmcodeGrpCd = code;
+
+            $scope._postJSONQuery.withOutPopUp("/iostock/cmm/iostockCmm/getOrgnCombo.sb", params, function(response) {
+
+                var list = response.data.data.list;
+                var comboArray = [];
+                var comboData = {};
+
+                for (var i = 0; i < list.length; i++) {
+                    comboData = {};
+                    comboData.name = list[i].nmcodeNm;
+                    comboData.value = list[i].nmcodeCd;
+                    comboArray.push(comboData);
+                }
+                $scope._setComboData(comboNm, comboArray);
+
+            });
+        };
+
         $scope._postJSONQuery.withOutPopUp("/common/getCustomCombo.sb", params,
             function (response) {
                 $scope._setComboData(comboNm, JSON.parse(JSON.stringify(response.data.data)));
