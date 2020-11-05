@@ -54,6 +54,14 @@ public interface RegistMapper {
     List<DefaultMap<String>> getMemberList(RegistVO registVO);
 
     /**
+     * 회원정보 리스트 조회
+     *
+     * @param registVO
+     * @return
+     */
+    List<DefaultMap<String>> getMemberListExcel(RegistVO registVO);
+
+    /**
      * 회원정보 조회
      *
      * @param registVO
@@ -146,10 +154,10 @@ public interface RegistMapper {
     List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO);
 
     /** 회원정보 등록,수정시 본사코드 A0007만 */
-    int registPoslinkPtn(RegistVO registVO);
+    String registPoslinkPtn(RegistVO registVO);
 
     /** 회원정보 등록,수정시 본사코드 A0007만 */
-    int registSposBillPtn(RegistVO registVO);
+    String registSposBillPtn(RegistVO registVO);
 
     DefaultMap<String> getMemberSelect(RegistVO registVO);
 

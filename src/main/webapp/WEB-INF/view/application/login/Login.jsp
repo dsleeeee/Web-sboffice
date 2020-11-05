@@ -3,13 +3,20 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<%
+String mobile_url = "";
+System.out.println(request.getRequestURL());
+if     (request.getRequestURL().indexOf("://192") > 0 || request.getRequestURL().indexOf("://localhost") > 0 )  { mobile_url = "http://192.168.0.85:22001/mobile/login/login_form.jsp"; }
+else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )                                           { mobile_url = "http://mob.solbipos.com/mobile/login/login_form.jsp"; }
+%>
+
 <div class="loginArea">
   <h2>Welcome Login</h2>
 
   <f:form class="loginF" modelAttribute="sessionInfo" method="post" action="/auth/login.sb">
 
     <%--     <s:eval expression="@env['login.check.id.save']" var="idField"/> --%>
-    
+
     <c:if test="${userId == '' || userId ne null}">
       <c:set var="cid" value="${userId}" />
     </c:if>
@@ -34,8 +41,8 @@
 
     <div class="idsave">
       <span> <input type="checkbox" id="chk" name="chk"
-        ${empty cid ? '' : 'checked="checked"' } /> 
-        <label for="chk"> 
+        ${empty cid ? '' : 'checked="checked"' } />
+        <label for="chk">
           <s:message code="login.rememberId" />
         </label>
       </span>
@@ -53,6 +60,9 @@
         <s:message code="login.find.pw" />
       </a>
     </span>
+    <a href="<%=mobile_url%>" class="btn_mobile_login">
+    <s:message code="mobile.login.submit" />
+    </a>
     <a href="http://www.solbipos.com" target="_blank" class="distributor">
       <s:message code="login.add.dist" />
     </a>

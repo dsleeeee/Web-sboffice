@@ -87,17 +87,7 @@ public class RegistServiceImpl implements RegistService {
         MembrClassVO membrClassVO = new MembrClassVO();
 
         membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-        } else {
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            /*if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            }*/
-        }
+        membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         List<DefaultMap<String>> resultList = mapper.getMemberClassList(membrClassVO);
 
@@ -130,38 +120,50 @@ public class RegistServiceImpl implements RegistService {
 
         LOGGER.debug("sessionInfoVO.getHqOfficeCd(): {}", sessionInfoVO.getHqOfficeCd());
 
-        // 회원정보 조회시 해당 본사나 매장의 회원만 조회
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
-                if (!StringUtil.isEmpties(registVO.getRegStoreCd())) {
-                    registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
-                }
-                if (!StringUtil.isEmpties(registVO.getRegUseStoreCd())) {
-                    registVO.setRegUseStoreCds(registVO.getRegUseStoreCd().split(","));
-                }
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-                registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            if (!StringUtil.isEmpties(registVO.getRegStoreCd())) {
+                registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
+            }
+            if (!StringUtil.isEmpties(registVO.getRegUseStoreCd())) {
+                registVO.setRegUseStoreCds(registVO.getRegUseStoreCd().split(","));
             }
         }
-//        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-//        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-//        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
         return mapper.getMemberList(registVO);
+    }
+
+    /**
+     * 회원 목록 조회(Excel 용)
+     */
+    @Override
+    public List<DefaultMap<String>> getMemberListExcel(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            if (!StringUtil.isEmpties(registVO.getRegStoreCd())) {
+                registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
+            }
+            if (!StringUtil.isEmpties(registVO.getRegUseStoreCd())) {
+                registVO.setRegUseStoreCds(registVO.getRegUseStoreCd().split(","));
+            }
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mapper.getMemberListExcel(registVO);
     }
 
     /**
@@ -172,21 +174,11 @@ public class RegistServiceImpl implements RegistService {
 
         String dt = currentDateTimeString();
 
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            }
-        }
-
-//        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         registVO.setMembrNo(mapper.getNewMemberNo(registVO));
 
         // 회원단축번호 추가_2019.08.02 추가 이다솜 -> 테스트중 에러나서 주석처리 2020.10.27 김설아(확인 김중선)
+        // .js 단에서 처리하고 있음 2020.11.02 이다솜
 //        registVO.setShortNo(registVO.getTelNo().substring(registVO.getTelNo().length() - 4, registVO.getTelNo().length()));
 
         registVO.setRegDt(dt);
@@ -230,21 +222,34 @@ public class RegistServiceImpl implements RegistService {
         if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 회원-거래처 매핑코드 등록 (보나비)
-        if (registVO.getCdCompany() != null && registVO.getCdPartner() != null) {
-            result = mapper.registMemberMappingCode(registVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if (registVO.getCdCompany() != null && registVO.getCdCompany() != ""){
+                if(registVO.getCdPartner() != null && registVO.getCdPartner() != "") {
+                    result = mapper.registMemberMappingCode(registVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
         }
 
 //        System.out.println("test1111");
         LOGGER.info("회원등록 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
-        if (registVO.getMembrOrgnCd() == "A0007") {
-            result = mapper.registPoslinkPtn(registVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-        if (registVO.getMembrOrgnCd() == "A0007") {
-            result = mapper.registSposBillPtn(registVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(("A0007").equals(registVO.getMembrOrgnCd())) {
+
+            // 프로시저 결과
+            String sResult = "";
+
+            LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_PTN 호출 : " + dt);
+            sResult = mapper.registPoslinkPtn(registVO);
+            /*if(result <= 0) {
+                LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_PTN Fail : " + dt);
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }*/
+
+            LOGGER.info("회원등록 >>> SP_NEOE_SPOS_BILL_PTN 호출 : " + dt);
+            sResult = mapper.registSposBillPtn(registVO);
+            /*if(result <= 0) {
+                LOGGER.info("회원등록 >>> SP_NEOE_SPOS_BILL_PTN Fail : " + dt);
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }*/
         }
 
         return membrNo;
@@ -272,26 +277,37 @@ public class RegistServiceImpl implements RegistService {
 
 
         // 선불회원 등록 (자점회원)
-//        result = mapper.registMemberPrepaid(registVO);
-//        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-//
-//
-//        // 회원-거래처 매핑코드 등록 (보나비)
-//        if (registVO.getCdCompany() != null && registVO.getCdPartner() != null) {
-//            result = mapper.registMemberMappingCode(registVO);
-//            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-//        }
+        result = mapper.registMemberPrepaid(registVO);
+        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-//        System.out.println("test1111");
+        // 회원-거래처 매핑코드 등록 (보나비)
+        if (registVO.getCdCompany() != null && registVO.getCdCompany() != ""){
+            if(registVO.getCdPartner() != null && registVO.getCdPartner() != "") {
+                result = mapper.registMemberMappingCode(registVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+        }
+
         LOGGER.info("회원수정 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
-        if (registVO.getMembrOrgnCd() == "A0007") {
-            result = mapper.registPoslinkPtn(registVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-        if (registVO.getMembrOrgnCd() == "A0007") {
-            result = mapper.registSposBillPtn(registVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(("A0007").equals(registVO.getMembrOrgnCd())) {
+
+                // 프로시저 결과
+                String sResult = "";
+
+                LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_PTN 호출 : " + dt);
+                sResult = mapper.registPoslinkPtn(registVO);
+            /*if(result <= 0) {
+                LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_PTN Fail : " + dt);
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }*/
+
+                LOGGER.info("회원수정 >>> SP_NEOE_SPOS_BILL_PTN 호출 : " + dt);
+                sResult = mapper.registSposBillPtn(registVO);
+            /*if(result <= 0) {
+                LOGGER.info("회원수정 >>> SP_NEOE_SPOS_BILL_PTN Fail : " + dt);
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }*/
         }
 
         return result;
@@ -308,7 +324,7 @@ public class RegistServiceImpl implements RegistService {
         int registCnt = 0;
 
         for (RegistVO registVO : registVOs) {
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             registVO.setModId(sessionInfoVO.getUserId());
             registVO.setModDt(DateUtil.currentDateTimeString());
 
@@ -416,6 +432,7 @@ public class RegistServiceImpl implements RegistService {
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
         registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());

@@ -139,6 +139,27 @@ public class RegistController {
     }
 
     /**
+     * 회원정보 리스트 조회(Excel 용)
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "view/getMemberListExcel.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberListExcel(RegistVO registVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = registService.getMemberListExcel(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /**
      * 회원정보 조회
      *
      * @param registVO

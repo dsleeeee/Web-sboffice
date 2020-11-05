@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<wj-popup id="postpaidStoreRegistLayer" control="postpaidStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:850px; height:620px;">
+<wj-popup id="postpaidStoreRegistLayer" control="postpaidStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:850px; height:520px;">
   <div class="wj-dialog wj-dialog-columns title"  >
 
     <%-- header --%>
