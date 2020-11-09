@@ -81,9 +81,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="foodAllergy.level1Nm"/>" binding="level1Nm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="foodAllergy.level2Nm"/>" binding="level2Nm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="foodAllergy.level3Nm"/>" binding="level3Nm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="foodAllergy.pathNm"/>" binding="pathNm" width="250" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="foodAllergy.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="foodAllergy.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="foodAllergy.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
