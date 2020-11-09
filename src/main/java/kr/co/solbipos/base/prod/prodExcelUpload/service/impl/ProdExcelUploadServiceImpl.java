@@ -25,7 +25,6 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
@@ -46,9 +45,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("prodExcelUploadService")
 @Transactional
 public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
-    private final ProdExcelUploadMapper prodExcelUploadMapper;
-    private final SimpleProdMapper simpleProdMapper;
-    private final ProdMapper prodMapper;
+    private final ProdExcelUploadMapper prodExcelUploadMapper; // 상품엑셀업로드
+    private final SimpleProdMapper simpleProdMapper; // 간편상품등록
+    private final ProdMapper prodMapper; // 상품등록
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
@@ -62,6 +61,21 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
         this.prodMapper = prodMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+    }
+
+    /** 상품분류 콤보 조회 */
+    @Override
+    public List<DefaultMap<String>> prodClassComboList(SessionInfoVO sessionInfoVO) {
+
+        ProdExcelUploadVO prodExcelUploadVO = new ProdExcelUploadVO();
+
+        prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodExcelUploadMapper.prodClassComboList(prodExcelUploadVO);
     }
 
     /** 검증결과 전체 삭제 */
@@ -87,7 +101,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
     /** 검증결과 조회 */
     @Override
-    public List<DefaultMap<Object>> getProdExcelUploadList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getProdExcelUploadCheckList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO) {
 
         prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
@@ -97,12 +111,12 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
         prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
 
-        return prodExcelUploadMapper.getProdExcelUploadList(prodExcelUploadVO);
+        return prodExcelUploadMapper.getProdExcelUploadCheckList(prodExcelUploadVO);
     }
 
     /** 업로드시 임시테이블 저장 */
     @Override
-    public int getProdExcelUploadAddSave(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO) {
+    public int getProdExcelUploadCheckSave(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         int i = 1;
@@ -126,8 +140,63 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             prodExcelUploadVO.setResult("검증전");
 
+            // <-- 업로할때는 전부 명칭으로 들어간다 -->
+            // 상품유형
+            if (prodExcelUploadVO.getProdTypeFg() != null && !"".equals(prodExcelUploadVO.getProdTypeFg())) {
+                // 상품유형 조회
+                String prodTypeFg = prodExcelUploadMapper.getProdTypeFgCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setProdTypeFg(prodTypeFg);
+            }
+
+            // 판매상품여부
+            if (prodExcelUploadVO.getSaleProdYn() != null && !"".equals(prodExcelUploadVO.getSaleProdYn())) {
+                // 판매상품여부 조회
+                String saleProdYn = prodExcelUploadMapper.getSaleProdYnCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setSaleProdYn(saleProdYn);
+            }
+
+            // 발주상품구분
+            if (prodExcelUploadVO.getPoProdFg() != null && !"".equals(prodExcelUploadVO.getPoProdFg())) {
+                String poProdFg = prodExcelUploadMapper.getPoProdFgCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setPoProdFg(poProdFg);
+            }
+
+            // 과세여부
+            if (prodExcelUploadVO.getVatFg() != null && !"".equals(prodExcelUploadVO.getVatFg())) {
+                // 과세여부 조회
+                String vatFg = prodExcelUploadMapper.getVatFgCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setVatFg(vatFg);
+            }
+
+            // 재고관리여부
+            if (prodExcelUploadVO.getStockProdYn() != null && !"".equals(prodExcelUploadVO.getStockProdYn())) {
+                // 재고관리여부 조회
+                String stockProdYn = prodExcelUploadMapper.getStockProdYnCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setStockProdYn(stockProdYn);
+            }
+
+            // 거래처
+            if (prodExcelUploadVO.getVendrCd() != null && !"".equals(prodExcelUploadVO.getVendrCd())) {
+                String vendrCd = prodExcelUploadMapper.getVendrCdCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setVendrCd(vendrCd);
+            }
+
+            // 상품분류
+            if (prodExcelUploadVO.getProdClassCd() != null && !"".equals(prodExcelUploadVO.getProdClassCd())) {
+                String prodClassCd = prodExcelUploadMapper.getProdClassCdCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setProdClassCd(prodClassCd);
+            }
+            // <-- //업로할때는 전부 명칭으로 들어간다 -->
+
+            // 상품코드
+            if (prodExcelUploadVO.getProdCd() != null && !"".equals(prodExcelUploadVO.getProdCd())) {
+                if(prodExcelUploadVO.getProdCd().contains("'")) {
+                    prodExcelUploadVO.setProdCd(prodExcelUploadVO.getProdCd().replaceAll("'",""));
+                }
+            }
+
             // 검증결과 저장
-            procCnt = prodExcelUploadMapper.getProdExcelUploadAddSave(prodExcelUploadVO);
+            procCnt = prodExcelUploadMapper.getProdExcelUploadCheckSave(prodExcelUploadVO);
             i++;
         }
 
@@ -136,7 +205,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
     /** 검증결과 저장 */
     @Override
-    public int getProdExcelUploadCheckSave(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO) {
+    public int getProdExcelUploadCheckSaveAdd(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         int i = 1;
@@ -163,6 +232,10 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 if (prodExcelUploadVO.getStartStockQty() < 0) {
                     prodExcelUploadVO.setResult("초기재고는 0이상 입력해주세요.");
                 }
+                if (prodExcelUploadVO.getStartStockQty() > 99999999) {
+                    prodExcelUploadVO.setStartStockQty(0);
+                    prodExcelUploadVO.setResult("초기재고 길이가 너무 깁니다.");
+                }
             } else {
                 prodExcelUploadVO.setResult("초기재고를 입력해주세요.");
             }
@@ -171,6 +244,10 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             if (prodExcelUploadVO.getSafeStockQty() != null && !"".equals(prodExcelUploadVO.getSafeStockQty())) {
                 if (prodExcelUploadVO.getSafeStockQty() < 0) {
                     prodExcelUploadVO.setResult("안전재고는 0이상 입력해주세요.");
+                }
+                if (prodExcelUploadVO.getSafeStockQty() > 999999999) {
+                    prodExcelUploadVO.setSafeStockQty(0);
+                    prodExcelUploadVO.setResult("안전재고 길이가 너무 깁니다.");
                 }
             } else {
                 prodExcelUploadVO.setResult("안전재고를 입력해주세요.");
@@ -187,13 +264,8 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 재고관리여부
             if (prodExcelUploadVO.getStockProdYn() != null && !"".equals(prodExcelUploadVO.getStockProdYn())) {
-                // 재고관리여부 조회
-                int stockProdYn = prodExcelUploadMapper.getStockProdYn(prodExcelUploadVO);
-                if (stockProdYn < 1) {
-                    prodExcelUploadVO.setResult("재고관리여부 값을 확인해주세요.");
-                }
             } else {
-                prodExcelUploadVO.setResult("재고관리여부를 입력해주세요.");
+                prodExcelUploadVO.setResult("재고관리여부를 선택해주세요.");
             }
 
             // SimpleProdVO
@@ -219,19 +291,18 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 과세여부
             if (prodExcelUploadVO.getVatFg() != null && !"".equals(prodExcelUploadVO.getVatFg())) {
-                // 과세여부 조회
-                int vatFg = prodExcelUploadMapper.getVatFg(prodExcelUploadVO);
-                if (vatFg < 1) {
-                    prodExcelUploadVO.setResult("과세여부 값을 확인해주세요.");
-                }
             } else {
-                prodExcelUploadVO.setResult("과세여부를 입력해주세요.");
+                prodExcelUploadVO.setResult("과세여부를 선택해주세요.");
             }
 
             // 최소발주수량
             if (prodExcelUploadVO.getPoMinQty() != null && !"".equals(prodExcelUploadVO.getPoMinQty())) {
                 if (prodExcelUploadVO.getPoMinQty() < 1) {
                     prodExcelUploadVO.setResult("최소발주수량은 1이상 입력해주세요.");
+                }
+                if (prodExcelUploadVO.getPoMinQty() > 999999999) {
+                    prodExcelUploadVO.setPoMinQty(0);
+                    prodExcelUploadVO.setResult("최소발주수량 길이가 너무 깁니다.");
                 }
             } else {
                 prodExcelUploadVO.setResult("최소발주수량을 입력해주세요.");
@@ -248,13 +319,8 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 발주상품구분
             if (prodExcelUploadVO.getPoProdFg() != null && !"".equals(prodExcelUploadVO.getPoProdFg())) {
-                // 발주상품구분 조회
-                int poProdFg = prodExcelUploadMapper.getPoProdFg(prodExcelUploadVO);
-                if (poProdFg < 1) {
-                    prodExcelUploadVO.setResult("발주상품구분 값을 확인해주세요.");
-                }
             } else {
-                prodExcelUploadVO.setResult("발주상품구분를 입력해주세요.");
+                prodExcelUploadVO.setResult("발주상품구분를 선택해주세요.");
             }
 
             // 공급단가 길이체크
@@ -277,48 +343,18 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 판매상품여부
             if (prodExcelUploadVO.getSaleProdYn() != null && !"".equals(prodExcelUploadVO.getSaleProdYn())) {
-                // 판매상품여부 조회
-                int saleProdYn = prodExcelUploadMapper.getSaleProdYn(prodExcelUploadVO);
-                if (saleProdYn < 1) {
-                    prodExcelUploadVO.setResult("판매상품여부 값을 확인해주세요.");
-                }
             } else {
-                prodExcelUploadVO.setResult("판매상품여부를 입력해주세요.");
+                prodExcelUploadVO.setResult("판매상품여부를 선택해주세요.");
             }
 
             // 상품유형
             if (prodExcelUploadVO.getProdTypeFg() != null && !"".equals(prodExcelUploadVO.getProdTypeFg())) {
-                // 상품유형 조회
-                int prodTypeFg = prodExcelUploadMapper.getProdTypeFg(prodExcelUploadVO);
-                if (prodTypeFg < 1) {
-                    prodExcelUploadVO.setResult("상품유형 값을 확인해주세요.");
-                }
             } else {
-                prodExcelUploadVO.setResult("상품유형를 입력해주세요.");
+                prodExcelUploadVO.setResult("상품유형를 선택해주세요.");
             }
 
             // 상품분류
             if (prodExcelUploadVO.getProdClassCd() != null && !"".equals(prodExcelUploadVO.getProdClassCd())) {
-//                int checkLevel = 0;
-//                String checkProdClassNm = "";
-//                String checkProdClassCd = "";
-//                String fullProdClassCd = "/";
-//
-//                String arrProdClassCd[] = prodExcelUploadVO.getProdClassCd().split("▶");
-//                for(int j=1; j < arrProdClassCd.length+1; j++) {
-//                    checkLevel = j;
-//                    checkProdClassNm = arrProdClassCd[j];
-//
-//                    // 상품분류코드 조회
-//                    checkProdClassCd = prodExcelUploadMapper.getCheckProdClassCd(prodExcelUploadVO);
-//                    fullProdClassCd = checkProdClassCd + "/";
-//                }
-//
-//                // 상품분류 조회
-//                int prodClassCd = prodExcelUploadMapper.getProdClassCd(prodExcelUploadVO);
-//                if (prodClassCd < 1) {
-//                    prodExcelUploadVO.setResult("상품분류 값을 확인해주세요.");
-//                }
             } else {
                 prodExcelUploadVO.setResult("상품분류를 입력해주세요.");
             }
@@ -348,15 +384,14 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 자동채번인 경우 상품코드 조회
             if(prodExcelUploadVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
-                // 자동채번 Start
-                String prodCd = prodMapper.getProdCd(prodVO);
-
                 // 순차적으로
                 if(prodExcelUploadVO.getSeq() == 1) {
+                    // 자동채번 Start
+                    String prodCd = prodMapper.getProdCd(prodVO);
                     prodExcelUploadVO.setProdCd(prodCd);
                 } else {
                     // 상품코드 자동채번
-                    prodCd = simpleProdMapper.getProdCd(simpleProdVO);
+                    String prodCd = prodExcelUploadMapper.getProdCd(prodExcelUploadVO);
                     prodExcelUploadVO.setProdCd(prodCd);
                 }
             // 수동채번인 경우 중복체크
@@ -384,8 +419,35 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             }
 
             // 검증결과 저장
-            procCnt = prodExcelUploadMapper.getProdExcelUploadAddSave(prodExcelUploadVO);
+            procCnt = prodExcelUploadMapper.getProdExcelUploadCheckSave(prodExcelUploadVO);
             i++;
+        }
+
+        return procCnt;
+    }
+
+    /** 검증결과 삭제 */
+    @Override
+    public int getProdExcelUploadCheckDelete(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        int i = 1;
+        String currentDt = currentDateTimeString();
+
+        for(ProdExcelUploadVO prodExcelUploadVO : prodExcelUploadVOs) {
+
+            if (prodExcelUploadVO.getStatus() == GridDataFg.DELETE) {
+
+                prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                prodExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                    prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+                }
+                prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+
+                // 검증결과 삭제
+                procCnt = prodExcelUploadMapper.getProdExcelUploadCheckDelete(prodExcelUploadVO);
+            }
         }
 
         return procCnt;

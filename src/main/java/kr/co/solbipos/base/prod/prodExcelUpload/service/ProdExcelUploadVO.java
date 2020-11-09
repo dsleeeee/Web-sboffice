@@ -46,9 +46,6 @@ public class ProdExcelUploadVO extends PageVO {
     /** 상품분류코드 */
     private String prodClassCd;
 
-    /** 상품분류명 */
-    private String prodClassNm;
-
     /** 바코드 */
     private String barCd;
 
@@ -130,11 +127,11 @@ public class ProdExcelUploadVO extends PageVO {
     /** 거래처코드 */
     private String vendrCd;
 
-    /** 거래처명 */
-    private String vendrNm;
-
     /** 초기재고 */
     private Integer startStockQty;
+
+    /** 구분 */
+    private String gubun;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -159,10 +156,6 @@ public class ProdExcelUploadVO extends PageVO {
     public String getProdClassCd() { return prodClassCd; }
 
     public void setProdClassCd(String prodClassCd) { this.prodClassCd = prodClassCd; }
-
-    public String getProdClassNm() { return prodClassNm; }
-
-    public void setProdClassNm(String prodClassNm) { this.prodClassNm = prodClassNm; }
 
     public String getBarCd() { return barCd; }
 
@@ -202,9 +195,7 @@ public class ProdExcelUploadVO extends PageVO {
         this.prodTypeFg = prodTypeFg;
     }
 
-    public String getPoProdFg() {
-        return poProdFg;
-    }
+    public String getPoProdFg() { return poProdFg; }
 
     public void setPoProdFg(String poProdFg) {
         this.poProdFg = poProdFg;
@@ -304,11 +295,11 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setVendrCd(String vendrCd) { this.vendrCd = vendrCd; }
 
-    public String getVendrNm() { return vendrNm; }
-
-    public void setVendrNm(String vendrNm) { this.vendrNm = vendrNm; }
-
     public Integer getStartStockQty() { return startStockQty; }
 
     public void setStartStockQty(Integer startStockQty) { this.startStockQty = startStockQty; }
+
+    public String getGubun() { return gubun; }
+
+    public void setGubun(String gubun) { this.gubun = gubun; }
 }

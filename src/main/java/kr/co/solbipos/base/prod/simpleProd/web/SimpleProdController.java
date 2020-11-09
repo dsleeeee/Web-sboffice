@@ -1,10 +1,12 @@
 package kr.co.solbipos.base.prod.simpleProd.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -23,9 +25,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 @Controller
 @RequestMapping("/base/prod/simpleProd")
@@ -34,15 +39,17 @@ public class SimpleProdController {
     private final SessionService sessionService;
     private final SimpleProdService simpleProdService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SimpleProdController(SessionService sessionService, SimpleProdService simpleProdService, CmmEnvUtil cmmEnvUtil) {
+    public SimpleProdController(SessionService sessionService, SimpleProdService simpleProdService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.simpleProdService = simpleProdService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -70,6 +77,24 @@ public class SimpleProdController {
 
         model.addAttribute("prodEnvstVal", prodEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
+
+
+        // 거래처 콤보 조회
+        List vendrComboList = simpleProdService.vendrComboList(sessionInfoVO);
+        String vendrComboListAll = "";
+        if (vendrComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+                HashMap<String, String> m = new HashMap<>();
+                m.put("name", "선택");
+                m.put("value", "");
+                list.add(m);
+            vendrComboListAll = convertToJson(list);
+        } else {
+            // 거래처 선택 포함
+            vendrComboListAll = cmmCodeUtil.assmblObj(vendrComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("vendrComboList", vendrComboListAll);
+//        System.out.println("vendrComboList : "+vendrComboListAll);
 
         return "base/prod/simpleProd/simpleProd";
     }

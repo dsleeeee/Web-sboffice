@@ -37,13 +37,14 @@
 
         <div class="mt10 oh sb-select dkbr">
             <p class="tl s14 mt5 lh15">1. '양식다운로드' 버튼을 클릭하여 양식을 다운받아주세요.</p>
-            <p class="tl s14 mt5 lh15">2. 다운받은 양식을 입력해주세요. ('양식 샘플 미리보기'를 꼭 참고해주세요.)</p>
-            <%--<p class="tl s14 mt5 lh15">  - 상품분류는 [ '대분류' / '대분류▶중분류' / '대분류▶중분류▶소분류' ] 와 같이 '▶'을 사용하여 단계별로 입력해주세요.</p>--%>
-            <p class="tl s14 mt5 lh15">- 상품분류는 ( [1단계] : 대분류 / [2단계] : 대분류▶중분류 / [3단계] : 대분류▶중분류▶소분류 ) 와 같이 '▶'을 사용하여 단계별로 입력해주세요.</p>
-            <p class="tl s14 mt5 lh15">- 상품유형, 판매상품여부, 발주상품유형, 과세여부, 재고관리여부는 '양식 샘플 미리보기'에 ▼ 클릭하여 참고해주세요.</p>
-            <p class="tl s14 mt5 lh15">3. '엑셀업로드' 버튼을 클릭해주세요.</p>
-            <%--<p class="tl s14 mt5 lh15">4. 업로드된 '상품내역'에 검증결과에 따라 수정하여 '저장'을 클릭해주세요. (검증결과가 '검증성공'인 상품만 저장됩니다.)</p>--%>
-            <p class="tl s14 mt5 lh15">4. '상품내역'이 업로드되면 '저장'을 클릭하여 검증 및 저장을 해주세요. (검증결과가 '검증성공'인 상품만 저장됩니다.)</p>
+            <p class="tl s14 mt5 lh15">2. 다운받은 양식을 입력해주세요.</p>
+            <p class="tl s14 mt5 lh15">- '양식 샘플 미리보기'를 꼭 참고해주세요.</p>
+            <p class="tl s14 mt5 lh15">- 상품분류는 '▶'을 사용하여 단계별로 입력해주세요. (예시) [1단계] : 대분류 / [2단계] : 대분류▶중분류 / [3단계] : 대분류▶중분류▶소분류</p>
+            <p class="tl s14 mt5 lh15">- 상품유형, 판매상품여부, 거래처, 발주상품유형, 과세여부, 재고관리여부는 '양식 샘플 미리보기'에 ▼ 클릭하여 입력해주세요.</p>
+            <p class="tl s14 mt5 lh15">3. '엑셀업로드' 버튼을 클릭하여 업로드 해주세요.</p>
+            <p class="tl s14 mt5 lh15">4. '상품내역'이 업로드되면 '저장'을 클릭하여 검증 및 저장을 해주세요.</p>
+            <p class="tl s14 mt5 lh15">- 검증결과가 '검증성공'인 상품만 저장됩니다.</p>
+            <p class="tl s14 mt5 lh15">- 상품은 5000개 이하로 업로드해주세요.</p>
             <%-- 엑셀업로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelUpload()">
                 <s:message code="prodExcelUpload.excelUpload" />
@@ -70,14 +71,14 @@
 
                     <!-- define columns -->
                     <c:if test="${prodNoEnvFg == 'MANUAL'}">
-                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodCd"/>" binding="prodCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodCd"/>" binding="prodCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodNm"/>" binding="prodNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodClassCd"/>" binding="prodClassCd" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodClassCd"/>" binding="prodClassCd" data-map="prodClassCdDataMap" width="150" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleUprc"/>" binding="saleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprc"/>" binding="splyUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poUnitFg"/>" binding="poUnitFg" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -87,7 +88,7 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.stockProdYn"/>" binding="stockProdYn" data-map="stockProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.safeStockQty"/>" binding="safeStockQty" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.startStockQty"/>" binding="startStockQty" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.startStockQty"/>" binding="startStockQty" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 </wj-flex-grid>
@@ -98,6 +99,14 @@
     <%-- 그리드 --%>
     <div ng-controller="prodExcelUploadProdCtrl">
         <div class="mt10 oh sb-select dkbr">
+            <%-- 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="prodExcelDownload()">
+                <s:message code="cmm.excel.down" />
+            </button>
+            <%-- 삭제 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="delete()">
+                <s:message code="cmm.del" />
+            </button>
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="btnProdExcelUploadSave" ng-click="save()">
                 <s:message code="cmm.save" />
@@ -122,19 +131,21 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    frozen-columns="2">
 
                     <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
                     <c:if test="${prodNoEnvFg == 'MANUAL'}">
-                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodCd"/>" binding="prodCd" width="80" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodCd"/>" binding="prodCd" width="70" align="center"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodNm"/>" binding="prodNm" width="80" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodClassCd"/>" binding="prodClassCd" width="125" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodClassCd"/>" binding="prodClassCd" data-map="prodClassCdDataMap" width="150" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleUprc"/>" binding="saleUprc" width="70" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" width="70" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprc"/>" binding="splyUprc" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poUnitFg"/>" binding="poUnitFg" width="70" align="center"></wj-flex-grid-column>
@@ -144,18 +155,17 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.stockProdYn"/>" binding="stockProdYn" data-map="stockProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" width="70" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.safeStockQty"/>" binding="safeStockQty" width="85" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.startStockQty"/>" binding="startStockQty" width="70" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.startStockQty"/>" binding="startStockQty" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60"  align="center"></wj-flex-grid-column>
 
                     <%--상품 저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.chkProdNm"/>" binding="chkProdNm" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodClassCd"/>" binding="prodClassCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.pointSaveYn"/>" binding="pointSaveYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodTipYn"/>" binding="prodTipYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.sideProdYn"/>" binding="sideProdYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.setProdFg"/>" binding="setProdFg" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.lastCostUprc"/>" binding="lastCostUprc" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprcUseYn"/>" binding="lastCostUprc" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprcUseYn"/>" binding="splyUprcUseYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poUnitQty"/>" binding="poUnitQty" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.useYn"/>" binding="useYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
@@ -167,8 +177,13 @@
 </div>
 
 <script>
+    // String 형식
     var prodEnvstVal = "${prodEnvstVal}";
     var prodNoEnvFg = "${prodNoEnvFg}";
+
+    // List 형식("" 안붙임)
+    var vendrComboList = ${vendrComboList};
+    var prodClassComboList = ${prodClassComboList};
 
     <%-- 상품유형 구분 --%>
     var prodTypeFgData = ${ccu.getCommCodeExcpAll("008")};
@@ -182,7 +197,7 @@
     var stockProdYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20201019.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20201105.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

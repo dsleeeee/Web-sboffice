@@ -56,6 +56,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFgData, 'value', 'name'); // 상품유형구분
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
+        $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -98,6 +99,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         params.prodNm = "";
         params.saleUprc = "";
+        params.vendrCd = "";
         params.prodTypeFg = "1";
         params.poProdFg = "1";
         params.splyUprc = "0";
@@ -155,6 +157,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             $scope.flex.collectionView.items[i].prodNm = "";
             $scope.flex.collectionView.items[i].saleUprc = "";
+            $scope.flex.collectionView.items[i].vendrCd = "";
             $scope.flex.collectionView.items[i].prodTypeFg = "1";
             $scope.flex.collectionView.items[i].poProdFg = "1";
             $scope.flex.collectionView.items[i].splyUprc = "0";
@@ -234,12 +237,6 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
                     result = messages["simpleProd.splyUprcInChk"]; // 공급단가 숫자만 입력해주세요.
                 }
             }
-
-            // 발주상품구분
-            if($scope.flex.collectionView.items[i].poProdFg === "" || $scope.flex.collectionView.items[i].poProdFg === null) { result = messages["simpleProd.poProdFgBlank"]; } // 발주상품구분을 선택하세요.
-
-            // 상품유형
-            if($scope.flex.collectionView.items[i].prodTypeFg === "" || $scope.flex.collectionView.items[i].prodTypeFg === null) { result = messages["simpleProd.prodTypeFgBlank"]; } // 상품유형을 입력하세요.
 
             // 판매단가
             if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
@@ -331,6 +328,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            $scope.flex.collectionView.items[i].gubun = "simpleProd";
             params.push($scope.flex.collectionView.items[i]);
         }
 

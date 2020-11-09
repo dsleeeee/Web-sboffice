@@ -22,6 +22,9 @@ import java.util.List;
  */
 public interface SimpleProdService {
 
+    /** 거래처 콤보 조회 */
+    List<DefaultMap<String>> vendrComboList(SessionInfoVO sessionInfoVO);
+
     /** 검증결과 전체 삭제 */
     int getSimpleProdCheckDeleteAll(SimpleProdVO simpleProdVO, SessionInfoVO sessionInfoVO);
 

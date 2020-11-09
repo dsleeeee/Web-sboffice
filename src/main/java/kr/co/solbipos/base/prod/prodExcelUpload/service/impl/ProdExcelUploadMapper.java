@@ -27,33 +27,42 @@ import java.util.List;
 @Repository
 public interface ProdExcelUploadMapper {
 
+    /** 상품분류 콤보 조회 */
+    List<DefaultMap<String>> prodClassComboList(ProdExcelUploadVO prodExcelUploadVO);
+
     /** 검증결과 전체 삭제 */
     int getProdExcelUploadCheckDeleteAll(ProdExcelUploadVO prodExcelUploadVO);
 
+    /** 검증결과 전체 삭제 */
+    int getProdExcelUploadCheckDelete(ProdExcelUploadVO prodExcelUploadVO);
+
     /** 검증결과 조회 */
-    List<DefaultMap<Object>> getProdExcelUploadList(ProdExcelUploadVO prodExcelUploadVO);
+    List<DefaultMap<Object>> getProdExcelUploadCheckList(ProdExcelUploadVO prodExcelUploadVO);
 
     /** 업로드시 임시테이블 저장 */
-    int getProdExcelUploadAddSave(ProdExcelUploadVO prodExcelUploadVO);
+    int getProdExcelUploadCheckSave(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 상품분류코드 조회 */
-//    String getCheckProdClassCd(ProdExcelUploadVO prodExcelUploadVO);
+    /** 상품유형 검증 조회 */
+    String getProdTypeFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 상품분류 조회 */
-//    int getProdClassCd(ProdExcelUploadVO prodExcelUploadVO);
+    /** 판매상품여부 검증 조회 */
+    String getSaleProdYnCheck(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 상품유형 조회 */
-    int getProdTypeFg(ProdExcelUploadVO prodExcelUploadVO);
+    /** 발주상품구분 검증 조회 */
+    String getPoProdFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 판매상품여부 조회 */
-    int getSaleProdYn(ProdExcelUploadVO prodExcelUploadVO);
+    /** 과세여부 검증 조회 */
+    String getVatFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 발주상품구분 조회 */
-    int getPoProdFg(ProdExcelUploadVO prodExcelUploadVO);
+    /** 재고관리여부 검증 조회 */
+    String getStockProdYnCheck(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 과세여부 조회 */
-    int getVatFg(ProdExcelUploadVO prodExcelUploadVO);
+    /** 거래처 검증 조회 */
+    String getVendrCdCheck(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 재고관리여부 조회 */
-    int getStockProdYn(ProdExcelUploadVO prodExcelUploadVO);
+    /** 상품분류 검증 조회 */
+    String getProdClassCdCheck(ProdExcelUploadVO prodExcelUploadVO);
+
+    /** 상품코드 자동채번 */
+    String getProdCd(ProdExcelUploadVO prodExcelUploadVO);
 }

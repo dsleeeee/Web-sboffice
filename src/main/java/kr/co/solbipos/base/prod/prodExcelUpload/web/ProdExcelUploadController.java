@@ -1,15 +1,18 @@
 package kr.co.solbipos.base.prod.prodExcelUpload.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadService;
 import kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO;
+import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
@@ -23,9 +26,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 @Controller
 @RequestMapping("/base/prod/prodExcelUpload")
@@ -33,16 +39,20 @@ public class ProdExcelUploadController {
 
     private final SessionService sessionService;
     private final ProdExcelUploadService prodExcelUploadService;
+    private final SimpleProdService simpleProdService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public ProdExcelUploadController(SessionService sessionService, ProdExcelUploadService prodExcelUploadService, CmmEnvUtil cmmEnvUtil) {
+    public ProdExcelUploadController(SessionService sessionService, ProdExcelUploadService prodExcelUploadService, SimpleProdService simpleProdService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.prodExcelUploadService = prodExcelUploadService;
+        this.simpleProdService = simpleProdService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -70,6 +80,42 @@ public class ProdExcelUploadController {
 
         model.addAttribute("prodEnvstVal", prodEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
+
+
+        // 거래처 콤보 조회
+        List vendrComboList = simpleProdService.vendrComboList(sessionInfoVO);
+        String vendrComboListAll = "";
+        if (vendrComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+                HashMap<String, String> m = new HashMap<>();
+                m.put("name", "선택");
+                m.put("value", "");
+                list.add(m);
+            vendrComboListAll = convertToJson(list);
+        } else {
+            // 거래처 선택 포함
+            vendrComboListAll = cmmCodeUtil.assmblObj(vendrComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("vendrComboList", vendrComboListAll);
+//        System.out.println("vendrComboList : "+vendrComboListAll);
+
+
+        // 상품분류 콤보 조회
+        List prodClassComboList = prodExcelUploadService.prodClassComboList(sessionInfoVO);
+        String prodClassComboListAll = "";
+        if (prodClassComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+                HashMap<String, String> m = new HashMap<>();
+                m.put("name", "선택");
+                m.put("value", "");
+                list.add(m);
+            prodClassComboListAll = convertToJson(list);
+        } else {
+            // 상품분류 전체 포함
+            prodClassComboListAll = cmmCodeUtil.assmblObj(prodClassComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("prodClassComboList", prodClassComboListAll);
+//        System.out.println("prodClassComboList : "+prodClassComboListAll);
 
         return "base/prod/prodExcelUpload/prodExcelUpload";
     }
@@ -108,14 +154,14 @@ public class ProdExcelUploadController {
      * @author  김설아
      * @since   2020. 09. 09.
      */
-    @RequestMapping(value = "/prodExcelUpload/getProdExcelUploadList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/prodExcelUpload/getProdExcelUploadCheckList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdExcelUploadList(ProdExcelUploadVO prodExcelUploadVO, HttpServletRequest request,
+    public Result getProdExcelUploadCheckList(ProdExcelUploadVO prodExcelUploadVO, HttpServletRequest request,
                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = prodExcelUploadService.getProdExcelUploadList(prodExcelUploadVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = prodExcelUploadService.getProdExcelUploadCheckList(prodExcelUploadVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, prodExcelUploadVO);
     }
@@ -131,14 +177,14 @@ public class ProdExcelUploadController {
      * @author  김설아
      * @since   2020. 10. 14.
      */
-    @RequestMapping(value = "/prodExcelUpload/getProdExcelUploadAddSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/prodExcelUpload/getProdExcelUploadCheckSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdExcelUploadAddSave(@RequestBody ProdExcelUploadVO[] prodExcelUploadVOs, HttpServletRequest request,
+    public Result getProdExcelUploadCheckSave(@RequestBody ProdExcelUploadVO[] prodExcelUploadVOs, HttpServletRequest request,
                                          HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = prodExcelUploadService.getProdExcelUploadAddSave(prodExcelUploadVOs, sessionInfoVO);
+        int result = prodExcelUploadService.getProdExcelUploadCheckSave(prodExcelUploadVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
@@ -154,14 +200,37 @@ public class ProdExcelUploadController {
      * @author  김설아
      * @since   2020. 10. 14.
      */
-    @RequestMapping(value = "/prodExcelUpload/getProdExcelUploadCheckSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/prodExcelUpload/getProdExcelUploadCheckSaveAdd.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdExcelUploadCheckSave(@RequestBody ProdExcelUploadVO[] prodExcelUploadVOs, HttpServletRequest request,
+    public Result getProdExcelUploadCheckSaveAdd(@RequestBody ProdExcelUploadVO[] prodExcelUploadVOs, HttpServletRequest request,
                                             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = prodExcelUploadService.getProdExcelUploadCheckSave(prodExcelUploadVOs, sessionInfoVO);
+        int result = prodExcelUploadService.getProdExcelUploadCheckSaveAdd(prodExcelUploadVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 검증결과 삭제
+     *
+     * @param prodExcelUploadVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 10. 14.
+     */
+    @RequestMapping(value = "/prodExcelUpload/getProdExcelUploadCheckDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdExcelUploadCheckDelete(@RequestBody ProdExcelUploadVO[] prodExcelUploadVOs, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodExcelUploadService.getProdExcelUploadCheckDelete(prodExcelUploadVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

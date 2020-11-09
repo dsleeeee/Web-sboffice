@@ -11,6 +11,40 @@
 -->
 <mapper namespace="kr.co.solbipos.base.prod.prodExcelUpload.service.impl.ProdExcelUploadMapper">
 
+    <!-- 상품분류 콤보 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+        COMMENTS : [본사]상품_분류, [매장]상품_분류
+    -->
+    <select id="prodClassComboList" parameterType="ProdExcelUploadVO" resultType="DefaultMap">
+        /* ProdExcelUploadMapper.prodClassComboList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thpc.PROD_CLASS_CD AS VALUE
+                , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_NM,'▶') , 2 ) AS NAME
+                , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
+                FROM TB_HQ_PRODUCT_CLASS thpc
+                WHERE 1=1
+                AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                START WITH thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmpc.PROD_CLASS_CD AS VALUE
+                , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_NM,'▶') , 2 ) AS NAME
+                , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
+                FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
+                WHERE 1=1
+                START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
+                CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
     <!-- 검증결과 전체 삭제 -->
     <!--
         TABLE    : TB_TMP_EXCEL_PRODUCT
@@ -30,13 +64,33 @@
         </if>
     </delete>
 
+    <!-- 검증결과 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_PRODUCT
+        COMMENTS : [임시]상품엑셀업로드
+    -->
+    <delete id="getProdExcelUploadCheckDelete" parameterType="ProdExcelUploadVO">
+        /* ProdExcelUploadMapper.getProdExcelUploadCheckDelete */
+        DELETE
+        TB_TMP_EXCEL_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND PROD_CD = #{prodCd}
+    </delete>
+
     <!-- 검증결과 조회 -->
     <!--
         TABLE    : TB_TMP_EXCEL_PRODUCT
         COMMENTS : [임시]상품엑셀업로드
     -->
-    <select id="getProdExcelUploadList"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
-        /* ProdExcelUploadMapper.getProdExcelUploadList */
+    <select id="getProdExcelUploadCheckList"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
+        /* ProdExcelUploadMapper.getProdExcelUploadCheckList */
         SELECT
         SESSION_ID,
         SEQ,
@@ -99,8 +153,8 @@
         TABLE    : TB_TMP_EXCEL_PRODUCT
         COMMENTS : [임시]상품엑셀업로드
     -->
-    <insert id="getProdExcelUploadAddSave" parameterType="ProdExcelUploadVO">
-        /* ProdExcelUploadMapper.getProdExcelUploadAddSave */
+    <insert id="getProdExcelUploadCheckSave" parameterType="ProdExcelUploadVO">
+        /* ProdExcelUploadMapper.getProdExcelUploadCheckSave */
         INSERT INTO TB_TMP_EXCEL_PRODUCT
         (
             SESSION_ID,
@@ -197,131 +251,171 @@
         )
     </insert>
 
-    <!-- 상품분류코드 조회 -->
+    <!-- 상품유형 검증 조회 -->
     <!--
-      TABLE    : TB_CM_NMCODE
+        TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <!--<select id="getCheckProdClassCd"  parameterType="ProdExcelUploadVO" resultType="String">-->
-        <!--/* ProdExcelUploadMapper.getCheckProdClassCd */-->
-        <!--<choose>-->
-            <!--&lt;!&ndash; 본사 &ndash;&gt;-->
-            <!--<when test='orgnFg != null and orgnFg == "H"'>-->
-
-            <!--</when>-->
-            <!--&lt;!&ndash; 매장 &ndash;&gt;-->
-            <!--<when test='orgnFg != null and orgnFg == "S"'>-->
-
-            <!--</when>-->
-        <!--</choose>-->
-    <!--</select>-->
-
-    <!-- 상품분류 조회 -->
-    <!--
-      TABLE    : TB_CM_NMCODE
-        COMMENTS : [공통]명칭코드
-    -->
-    <!--<select id="getProdClassCd"  parameterType="ProdExcelUploadVO" resultType="Integer">-->
-        <!--/* ProdExcelUploadMapper.getProdClassCd */-->
-        <!--<choose>-->
-            <!--&lt;!&ndash; 본사 &ndash;&gt;-->
-            <!--<when test='orgnFg != null and orgnFg == "H"'>-->
-                <!--SELECT A.PROD_CLASS_CD-->
-                <!--,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/') PATH-->
-                <!--FROM-->
-                <!--(-->
-                    <!--SELECT P_PROD_CLASS_CD-->
-                    <!--,       PROD_CLASS_CD-->
-                    <!--,       PROD_CLASS_NM-->
-                    <!--FROM   TB_HQ_PRODUCT_CLASS-->
-                    <!--WHERE  1=1-->
-                    <!--AND    HQ_OFFICE_CD = #{membrOrgnCd}-->
-                <!--)  A-->
-                <!--WHERE CONNECT_BY_ISLEAF = 1-->
-                <!--CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD-->
-            <!--</when>-->
-            <!--&lt;!&ndash; 매장 &ndash;&gt;-->
-            <!--<when test='orgnFg != null and orgnFg == "S"'>-->
-                <!--SELECT A.PROD_CLASS_CD-->
-                <!--,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH-->
-                <!--FROM-->
-                <!--(-->
-                    <!--SELECT P_PROD_CLASS_CD-->
-                    <!--,       PROD_CLASS_CD-->
-                    <!--,       PROD_CLASS_NM-->
-                    <!--FROM   TB_MS_PRODUCT_CLASS-->
-                    <!--WHERE  1=1-->
-                    <!--AND    STORE_CD = #{storeCd}-->
-                <!--)  A-->
-                <!--WHERE CONNECT_BY_ISLEAF = 1-->
-                <!--CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD-->
-            <!--</when>-->
-        <!--</choose>-->
-    <!--</select>-->
-
-    <!-- 상품유형 조회 -->
-    <!--
-      TABLE    : TB_CM_NMCODE
-        COMMENTS : [공통]명칭코드
-    -->
-    <select id="getProdTypeFg"  parameterType="ProdExcelUploadVO" resultType="Integer">
-        /* ProdExcelUploadMapper.getProdTypeFg */
-        SELECT COUNT(*)
+    <select id="getProdTypeFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getProdTypeFgCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
         WHERE NMCODE_GRP_CD = '008'
         AND NMCODE_NM = #{prodTypeFg}
+        GROUP BY NMCODE_CD
     </select>
 
-    <!-- 판매상품여부 조회 -->
+    <!-- 판매상품여부 검증 조회 -->
     <!--
-      TABLE    : TB_CM_NMCODE
+        TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getSaleProdYn"  parameterType="ProdExcelUploadVO" resultType="Integer">
-        /* ProdExcelUploadMapper.getSaleProdYn */
-        SELECT COUNT(*)
+    <select id="getSaleProdYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getSaleProdYnCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
         WHERE NMCODE_GRP_CD = '067'
         AND NMCODE_NM = #{saleProdYn}
+        GROUP BY NMCODE_CD
     </select>
 
-    <!-- 발주상품구분 조회 -->
+    <!-- 발주상품구분 검증 조회 -->
     <!--
-      TABLE    : TB_CM_NMCODE
+        TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getPoProdFg"  parameterType="ProdExcelUploadVO" resultType="Integer">
-        /* ProdExcelUploadMapper.getPoProdFg */
-        SELECT COUNT(*)
+    <select id="getPoProdFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getPoProdFgCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
         WHERE NMCODE_GRP_CD = '092'
         AND NMCODE_NM = #{poProdFg}
+        GROUP BY NMCODE_CD
     </select>
 
-    <!-- 과세여부 조회 -->
+    <!-- 과세여부 검증 조회 -->
     <!--
-      TABLE    : TB_CM_NMCODE
+        TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getVatFg"  parameterType="ProdExcelUploadVO" resultType="Integer">
-        /* ProdExcelUploadMapper.getVatFg */
-        SELECT COUNT(*)
+    <select id="getVatFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getVatFgCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
         WHERE NMCODE_GRP_CD = '039'
         AND NMCODE_NM = #{vatFg}
+        GROUP BY NMCODE_CD
     </select>
 
-    <!-- 재고관리여부 조회 -->
+    <!-- 재고관리여부 검증 조회 -->
     <!--
-      TABLE    : TB_CM_NMCODE
+        TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getStockProdYn"  parameterType="ProdExcelUploadVO" resultType="Integer">
-        /* ProdExcelUploadMapper.getStockProdYn */
-        SELECT COUNT(*)
+    <select id="getStockProdYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getStockProdYnCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
         WHERE NMCODE_GRP_CD = '067'
         AND NMCODE_NM = #{stockProdYn}
+        GROUP BY NMCODE_CD
+    </select>
+
+    <!-- 거래처 검증 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR, TB_MS_VENDOR
+        COMMENTS : [본사]상품_거래처, [매장]상품_거래처
+    -->
+    <select id="getVendrCdCheck" parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getVendrCdCheck */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT (CASE WHEN COUNT(VENDR_CD) = '0' THEN '' ELSE VENDR_CD END) AS VENDR_CD
+                FROM TB_HQ_VENDOR
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND VENDR_NM = #{vendrCd}
+                GROUP BY VENDR_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT (CASE WHEN COUNT(VENDR_CD) = '0' THEN '' ELSE VENDR_CD END) AS VENDR_CD
+                FROM TB_MS_VENDOR
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND VENDR_NM = #{vendrCd}
+                GROUP BY VENDR_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품분류 검증 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+        COMMENTS : [본사]상품_분류, [매장]상품_분류
+    -->
+    <select id="getProdClassCdCheck" parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getProdClassCdCheck */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT (CASE WHEN COUNT(PROD_CLASS_CD) = '0' THEN '' ELSE PROD_CLASS_CD END) AS PROD_CLASS_CD
+                FROM
+                (
+                    SELECT
+                    thpc.PROD_CLASS_CD AS PROD_CLASS_CD
+                    , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_NM,'▶') , 2 ) AS PATH_NM
+                    , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
+                    FROM TB_HQ_PRODUCT_CLASS thpc
+                    WHERE 1=1
+                    AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                    START WITH thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                    CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                )
+                WHERE 1=1
+                AND PATH_NM = #{prodClassCd}
+                GROUP BY PROD_CLASS_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT (CASE WHEN COUNT(PROD_CLASS_CD) = '0' THEN '' ELSE PROD_CLASS_CD END) AS PROD_CLASS_CD
+                FROM
+                (
+                    SELECT
+                    tmpc.PROD_CLASS_CD AS PROD_CLASS_CD
+                    , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_NM,'▶') , 2 ) AS PATH_NM
+                    , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
+                    FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
+                    WHERE 1=1
+                    START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
+                    CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+                )
+                WHERE 1=1
+                AND PATH_NM = #{prodClassCd}
+                GROUP BY PROD_CLASS_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품코드 자동채번 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_PRODUCT
+        COMMENTS : [임시]상품엑셀업로드
+    -->
+    <select id="getProdCd"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getProdCd */
+        SELECT
+        NVL(MAX(PROD_CD),0) + 1 AS PROD_CD
+        FROM TB_TMP_EXCEL_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
     </select>
 
 </mapper>

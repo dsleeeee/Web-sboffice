@@ -15,6 +15,10 @@ import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
+import kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO;
+import kr.co.solbipos.base.prod.prodExcelUpload.service.impl.ProdExcelUploadMapper;
+import kr.co.solbipos.stock.adj.adj.service.AdjVO;
+import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,8 +48,10 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("simpleProdService")
 @Transactional
 public class SimpleProdServiceImpl implements SimpleProdService {
-    private final SimpleProdMapper simpleProdMapper;
-    private final ProdMapper prodMapper;
+    private final SimpleProdMapper simpleProdMapper; // 간편상품등록
+    private final ProdMapper prodMapper; // 상품등록
+    private final ProdExcelUploadMapper prodExcelUploadMapper; // 상품엑셀업로드
+    private final AdjMapper adjMapper; // 조정관리
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
@@ -53,11 +59,28 @@ public class SimpleProdServiceImpl implements SimpleProdService {
      * Constructor Injection
      */
     @Autowired
-    public SimpleProdServiceImpl(SimpleProdMapper simpleProdMapper, ProdMapper prodMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public SimpleProdServiceImpl(SimpleProdMapper simpleProdMapper, ProdMapper prodMapper, ProdExcelUploadMapper prodExcelUploadMapper, AdjMapper adjMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.simpleProdMapper = simpleProdMapper;
         this.prodMapper = prodMapper;
+        this.prodExcelUploadMapper = prodExcelUploadMapper;
+        this.adjMapper = adjMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+    }
+
+    /** 거래처 콤보 조회 */
+    @Override
+    public List<DefaultMap<String>> vendrComboList(SessionInfoVO sessionInfoVO) {
+
+        SimpleProdVO simpleProdVO = new SimpleProdVO();
+
+        simpleProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        simpleProdVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            simpleProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return simpleProdMapper.vendrComboList(simpleProdVO);
     }
 
     /** 검증결과 전체 삭제 */
@@ -144,6 +167,18 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 }
             }
 
+            // 발주상품구분
+            if (simpleProdVO.getPoProdFg() != null && !"".equals(simpleProdVO.getPoProdFg())) {
+            } else {
+                simpleProdVO.setResult("발주상품구분를 선택해주세요.");
+            }
+
+            // 상품유형
+            if (simpleProdVO.getProdTypeFg() != null && !"".equals(simpleProdVO.getProdTypeFg())) {
+            } else {
+                simpleProdVO.setResult("상품유형를 선택해주세요.");
+            }
+
             // 판매단가 길이체크
             // 값이 있을때만
             if (simpleProdVO.getSaleUprc() != null && !"".equals(simpleProdVO.getSaleUprc())) {
@@ -190,6 +225,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             if(simpleProdVO.getStoreCd() == null) { simpleProdVO.setStoreCd(""); }
             if(simpleProdVO.getProdCd() == null) { simpleProdVO.setProdCd(""); }
             if(simpleProdVO.getProdNm() == null) { simpleProdVO.setProdNm(""); }
+            if(simpleProdVO.getVendrCd() == null) { simpleProdVO.setVendrCd(""); }
             if(simpleProdVO.getSaleUprc() == null) { simpleProdVO.setSaleUprc(""); }
             if(simpleProdVO.getSplyUprc() == null) { simpleProdVO.setSplyUprc(0.0); }
             if(simpleProdVO.getCostUprc() == null) { simpleProdVO.setCostUprc(0.0); }
@@ -229,6 +265,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
 //        System.out.println("test1111");
         int procCnt = 0;
         String currentDt = currentDateTimeString();
+        String currentDate = currentDateString();
 
         for(SimpleProdVO simpleProdVO : simpleProdVOs) {
 
@@ -291,6 +328,8 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setEndDate("99991231");
                 prodVO.setSaleUprc(simpleProdVO.getSaleUprc());
 
+                prodVO.setCornrCd("00");
+
                 // 매장에서 매장상품 등록시에 가격관리 구분 등록
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
                 else                                        prodVO.setPrcCtrlFg("S"); //매장
@@ -335,9 +374,100 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
                 }
 
+                // 거래처
+                if (simpleProdVO.getVendrCd() != null && !"".equals(simpleProdVO.getVendrCd())) {
+                    // 거래처 저장
+                    simpleProdMapper.getVendorProdSaveInsert(simpleProdVO);
+                }
+
+                // 초기재고 저장
+                // 상품엑셀업로드
+                if (("prodExcelUpload").equals(simpleProdVO.getGubun())) {
+                    if (simpleProdVO.getStartStockQty() != null && !"".equals(simpleProdVO.getStartStockQty())) {
+                        if (simpleProdVO.getStartStockQty() > 0) {
+                            AdjVO adjVO = new AdjVO();
+
+                            adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                            adjVO.setStoreCd(sessionInfoVO.getStoreCd());
+                            adjVO.setAdjDate(currentDate);
+
+                            String seqNo = "";
+                            // 신규 seq 조회
+                            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                                seqNo = adjMapper.getHqNewSeqNo(adjVO);
+                            }
+                            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                                seqNo = adjMapper.getStNewSeqNo(adjVO);
+                            }
+                            adjVO.setSeqNo(adjVO.getSeqNo());
+                            adjVO.setSeqNo(Integer.parseInt(seqNo));
+
+                            adjVO.setRegId(sessionInfoVO.getUserId());
+                            adjVO.setRegDt(currentDt);
+                            adjVO.setModId(sessionInfoVO.getUserId());
+                            adjVO.setModDt(currentDt);
+
+                            adjVO.setHqBrandCd("00");
+                            adjVO.setProdCd(simpleProdVO.getProdCd());
+                            adjVO.setCostUprc(Integer.parseInt(String.valueOf(Math.round(simpleProdVO.getCostUprc()))));
+                            adjVO.setPoUnitQty(simpleProdVO.getPoUnitQty()); //주문단위-입수량
+                            adjVO.setCurrQty(0); //현재고수량
+                            adjVO.setAdjQty(simpleProdVO.getStartStockQty()); //조정수량
+                            adjVO.setAdjAmt(0); //조정금액
+
+                            // DTL 등록
+                            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                                result = adjMapper.insertHqAdjDtl(adjVO);
+                            }
+                            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                                result = adjMapper.insertStAdjDtl(adjVO);
+                            }
+                            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                            adjVO.setAdjTitle("상품등록 후 초기재고 생성");
+                            adjVO.setProcFg("1"); // 0:등록, 1:확정
+                            adjVO.setAdjStorageCd("001");
+                            adjVO.setStorageCd("999");
+
+                            // HD 등록
+                            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                                result = adjMapper.insertHqAdjHd(adjVO);
+                            }
+                            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                                result = adjMapper.insertStAdjHd(adjVO);
+                            }
+                            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                            // 확정시 확정일자,확정자 등록하려고(ProcFg 1일때만)
+                           if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                                // HD 수정
+                                result = adjMapper.updateHqAdjHd(adjVO);
+                            }
+                            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                                // HD 수정
+                                result = adjMapper.updateStAdjHd(adjVO);
+                            }
+                            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                    }
+                }
 
                 // 저장완료된 검증결과만 삭제
-                procCnt = simpleProdMapper.getSimpleProdCheckDelete(simpleProdVO);
+                // 간편상품등록
+                if(("simpleProd").equals(simpleProdVO.getGubun())) {
+                    procCnt = simpleProdMapper.getSimpleProdCheckDelete(simpleProdVO);
+
+                // 상품엑셀업로드
+                } else if (("prodExcelUpload").equals(simpleProdVO.getGubun())) {
+                    ProdExcelUploadVO prodExcelUploadVO = new ProdExcelUploadVO();
+
+                    prodExcelUploadVO.setSessionId(simpleProdVO.getSessionId());
+                    prodExcelUploadVO.setMembrOrgnCd(simpleProdVO.getMembrOrgnCd());
+                    prodExcelUploadVO.setStoreCd(simpleProdVO.getStoreCd());
+                    prodExcelUploadVO.setProdCd(simpleProdVO.getProdCd());
+
+                    procCnt = prodExcelUploadMapper.getProdExcelUploadCheckDelete(prodExcelUploadVO);
+                }
             }
         }
 

@@ -11,6 +11,37 @@
 -->
 <mapper namespace="kr.co.solbipos.base.prod.simpleProd.service.impl.SimpleProdMapper">
 
+    <!-- 거래처 콤보 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR, TB_MS_VENDOR
+        COMMENTS : [본사]상품_거래처, [매장]상품_거래처
+    -->
+    <select id="vendrComboList" parameterType="SimpleProdVO" resultType="DefaultMap">
+        /* SimpleProdMapper.vendrComboList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                VENDR_CD AS VALUE,
+                VENDR_NM AS NAME
+                FROM TB_HQ_VENDOR
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                VENDR_CD AS VALUE,
+                VENDR_NM AS NAME
+                FROM TB_MS_VENDOR
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
+
     <!-- 검증결과 전체 삭제 -->
     <!--
         TABLE    : TB_TMP_PRODUCT
@@ -28,6 +59,26 @@
                 AND STORE_CD = #{storeCd}
             ]]>
         </if>
+    </delete>
+
+    <!-- 검증결과 삭제 -->
+    <!--
+        TABLE    : TB_TMP_PRODUCT
+        COMMENTS : [임시]간편상품등록
+    -->
+    <delete id="getSimpleProdCheckDelete" parameterType="SimpleProdVO">
+        /* SimpleProdMapper.getSimpleProdCheckDelete */
+        DELETE
+        TB_TMP_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND PROD_CD = #{prodCd}
     </delete>
 
     <!-- 상품코드 자동채번 -->
@@ -157,7 +208,7 @@
     -->
     <insert id="getSimpleProdCheckSave" parameterType="SimpleProdVO">
         /* SimpleProdMapper.getSimpleProdCheckSave */
-         INSERT INTO TB_TMP_PRODUCT
+        INSERT INTO TB_TMP_PRODUCT
         (
             SESSION_ID,
             SEQ,
@@ -201,7 +252,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            VENDR_CD
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -245,7 +297,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{vendrCd}
         )
     </insert>
 
@@ -299,7 +352,8 @@
         REG_DT,
         REG_ID,
         MOD_DT,
-        MOD_ID
+        MOD_ID,
+        VENDR_CD
         FROM TB_TMP_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
@@ -311,24 +365,67 @@
         </if>
     </select>
 
-    <!-- 검증결과 삭제 -->
+    <!-- 거래처 저장 -->
     <!--
-        TABLE    : TB_TMP_PRODUCT
-        COMMENTS : [임시]간편상품등록
+        TABLE    : TB_HQ_VENDOR_PROD, TB_MS_VENDOR_PROD
+        COMMENTS : [본사]상품_거래처별_취급상품, [매장]상품_거래처별_취급상품
     -->
-    <delete id="getSimpleProdCheckDelete" parameterType="SimpleProdVO">
-        /* SimpleProdMapper.getSimpleProdCheckDelete */
-        DELETE
-        TB_TMP_PRODUCT
-        WHERE 1=1
-        AND SESSION_ID = #{sessionId}
-        AND HQ_OFFICE_CD = #{membrOrgnCd}
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-                AND STORE_CD = #{storeCd}
-            ]]>
-        </if>
-        AND PROD_CD = #{prodCd}
-    </delete>
+    <insert id="getVendorProdSaveInsert" parameterType="SimpleProdVO">
+        /* SimpleProdMapper.getVendorProdSaveInsert */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_VENDOR_PROD
+                (
+                    HQ_OFFICE_CD,
+                    HQ_BRAND_CD,
+                    VENDR_CD,
+                    PROD_CD,
+                    SPLY_UPRC,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{membrOrgnCd},
+                    '0000000', --HQ_BRAND_CD
+                    #{vendrCd},
+                    #{prodCd},
+                    #{splyUprc},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_VENDOR_PROD
+                (
+                    STORE_CD,
+                    VENDR_CD,
+                    PROD_CD,
+                    SPLY_UPRC,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{vendrCd},
+                    #{prodCd},
+                    #{splyUprc},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
 
 </mapper>

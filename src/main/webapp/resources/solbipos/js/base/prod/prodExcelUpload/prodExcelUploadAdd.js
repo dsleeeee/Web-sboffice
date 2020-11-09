@@ -60,8 +60,8 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
     // 엑셀 업로드
     $scope.excelUpload = function () {
         // 선택한 파일이 있으면
-        if ($('#excelUpFile')[0].files[0]) {
-            var file          = $('#excelUpFile')[0].files[0];
+        if ($('#prodExcelUpFile')[0].files[0]) {
+            var file          = $('#prodExcelUpFile')[0].files[0];
             var fileName      = file.name;
             var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
@@ -71,7 +71,7 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
 
                 $timeout(function () {
                     var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
+                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#prodExcelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
                             $timeout(function () {
                                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
@@ -81,7 +81,7 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
                     );
                 }, 10);
             } else {
-                $("#excelUpFile").val('');
+                $("#prodExcelUpFile").val('');
                 $scope._popMsg(messages['prodExcelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
@@ -116,7 +116,7 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             jsonData.push(item);
         }
 
-        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        // $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         $timeout(function () {
             $scope.save(jsonData);
         }, 10);
@@ -124,8 +124,46 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
 
     // DB에 저장
     $scope.save = function (jsonData) {
+        for (var i = 0; i < jsonData.length; i++) {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            // 공급단가
+            if (numChkexp.test(jsonData[i].splyUprc)) {
+                jsonData[i].splyUprc = "";
+            }
+            // 원가단가
+            if (numChkexp.test(jsonData[i].costUprc)) {
+                jsonData[i].costUprc = "";
+            }
+            // 최종원가단가
+            if (numChkexp.test(jsonData[i].lastCostUprc)) {
+                jsonData[i].lastCostUprc = "";
+            }
+            // 발주단위수량
+            if (numChkexp.test(jsonData[i].poUnitQty)) {
+                jsonData[i].poUnitQty = "";
+            }
+            // 발주단위
+            if (numChkexp.test(jsonData[i].poUnitFg)) {
+                jsonData[i].poUnitFg = "";
+            }
+            // 발주최소수량
+            if (numChkexp.test(jsonData[i].poMinQty)) {
+                jsonData[i].poMinQty = "";
+            }
+            // 안전재고수량
+            if (numChkexp.test(jsonData[i].safeStockQty)) {
+                jsonData[i].safeStockQty = "";
+            }
+            // 초기재고
+            if (numChkexp.test(jsonData[i].startStockQty)) {
+                jsonData[i].startStockQty = "";
+            }
+        }
+
         // 업로드시 임시테이블 저장
-        $scope._postJSONSave.withPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadAddSave.sb", jsonData, function () {
+        $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckSave.sb", jsonData, function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             // 저장기능 수행후 재조회
             $scope._broadcast('prodExcelUploadProdCtrl');
         });
