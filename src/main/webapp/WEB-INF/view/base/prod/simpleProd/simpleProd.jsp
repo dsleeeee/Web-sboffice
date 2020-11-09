@@ -7,8 +7,8 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
-<c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />
+<%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
+<%--<c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />--%>
 
 <div class="contents" id ="divSimpleProdAuth" style="display: none">
     <div class="elseCon">
@@ -90,6 +90,7 @@
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="simpleProd.prodNm"/>" binding="prodNm" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.saleUprc"/>" binding="saleUprc" width="80" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.splyUprc"/>" binding="splyUprc" width="80" align="center"></wj-flex-grid-column>
@@ -107,7 +108,7 @@
                     <wj-flex-grid-column header="<s:message code="simpleProd.sideProdYn"/>" binding="sideProdYn" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.setProdFg"/>" binding="setProdFg" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.lastCostUprc"/>" binding="lastCostUprc" width="100" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="simpleProd.splyUprcUseYn"/>" binding="lastCostUprc" width="100" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.splyUprcUseYn"/>" binding="splyUprcUseYn" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poUnitFg"/>" binding="poUnitFg" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poUnitQty"/>" binding="poUnitQty" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poMinQty"/>" binding="poMinQty" width="100" align="center" visible="false"></wj-flex-grid-column>
@@ -122,8 +123,12 @@
 </div>
 
 <script>
+    // String 형식
     var prodEnvstVal = "${prodEnvstVal}";
     var prodNoEnvFg = "${prodNoEnvFg}";
+
+    // List 형식("" 안붙임)
+    var vendrComboList = ${vendrComboList};
 
     <%-- 상품유형 구분 --%>
     var prodTypeFgData = ${ccu.getCommCodeExcpAll("008")};
@@ -133,7 +138,7 @@
     var vatFgData = ${ccu.getCommCodeExcpAll("039")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20200907.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20201105.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

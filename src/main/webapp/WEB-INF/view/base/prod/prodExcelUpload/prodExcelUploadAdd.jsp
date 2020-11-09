@@ -11,8 +11,8 @@
 
 <div class="subCon" style="display: none" ng-controller="prodExcelUploadAddCtrl">
 
-    <input type="file" class="form-control" id="excelUpFile"
-        ng-model="excelUpFile"
+    <input type="file" class="form-control" id="prodExcelUpFile"
+        ng-model="prodExcelUpFile"
         onchange="angular.element(this).scope().excelFileChanged()"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 

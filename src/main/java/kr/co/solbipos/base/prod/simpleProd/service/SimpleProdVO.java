@@ -121,6 +121,15 @@ public class SimpleProdVO extends PageVO {
     /** 사용여부 */
     private String useYn;
 
+    /** 거래처코드 */
+    private String vendrCd;
+
+    /** 초기재고 */
+    private Integer startStockQty;
+
+    /** 구분 */
+    private String gubun;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -276,4 +285,16 @@ public class SimpleProdVO extends PageVO {
     public String getUseYn() { return useYn; }
 
     public void setUseYn(String useYn) { this.useYn = useYn; }
+
+    public String getVendrCd() { return vendrCd; }
+
+    public void setVendrCd(String vendrCd) { this.vendrCd = vendrCd; }
+
+    public Integer getStartStockQty() { return startStockQty; }
+
+    public void setStartStockQty(Integer startStockQty) { this.startStockQty = startStockQty; }
+
+    public String getGubun() { return gubun; }
+
+    public void setGubun(String gubun) { this.gubun = gubun; }
 }

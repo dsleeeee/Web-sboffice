@@ -2,7 +2,6 @@ package kr.co.solbipos.base.prod.prodExcelUpload.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-
 import java.util.List;
 
 /**
@@ -22,15 +21,21 @@ import java.util.List;
  */
 public interface ProdExcelUploadService {
 
+    /** 상품분류 콤보 조회 */
+    List<DefaultMap<String>> prodClassComboList(SessionInfoVO sessionInfoVO);
+
     /** 검증결과 전체 삭제 */
     int getProdExcelUploadCheckDeleteAll(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO);
 
     /** 검증결과 조회 */
-    List<DefaultMap<Object>> getProdExcelUploadList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getProdExcelUploadCheckList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO);
 
     /** 업로드시 임시테이블 저장 */
-    int getProdExcelUploadAddSave(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO);
+    int getProdExcelUploadCheckSave(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO);
 
     /** 검증결과 저장 */
-    int getProdExcelUploadCheckSave(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO);
+    int getProdExcelUploadCheckSaveAdd(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO);
+
+    /** 검증결과 삭제 */
+    int getProdExcelUploadCheckDelete(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO);
 }

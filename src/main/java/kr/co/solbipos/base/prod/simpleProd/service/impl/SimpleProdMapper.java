@@ -27,8 +27,14 @@ import java.util.List;
 @Repository
 public interface SimpleProdMapper {
 
+    /** 거래처 콤보 조회 */
+    List<DefaultMap<String>> vendrComboList(SimpleProdVO simpleProdVO);
+
     /** 검증결과 전체 삭제 */
     int getSimpleProdCheckDeleteAll(SimpleProdVO simpleProdVO);
+
+    /** 검증결과 삭제 */
+    int getSimpleProdCheckDelete(SimpleProdVO simpleProdVO);
 
     /** 상품코드 자동채번 */
     String getProdCd(SimpleProdVO simpleProdVO);
@@ -45,6 +51,6 @@ public interface SimpleProdMapper {
     /** 검증결과 조회 */
     List<DefaultMap<Object>> getSimpleProdList(SimpleProdVO simpleProdVO);
 
-    /** 검증결과 삭제 */
-    int getSimpleProdCheckDelete(SimpleProdVO simpleProdVO);
+    /** 거래처 저장 */
+    int getVendorProdSaveInsert(SimpleProdVO simpleProdVO);
 }

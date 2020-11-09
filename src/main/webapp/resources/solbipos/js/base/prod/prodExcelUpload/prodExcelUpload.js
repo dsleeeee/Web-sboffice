@@ -55,6 +55,8 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
+        $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
+        $scope.prodClassCdDataMap = new wijmo.grid.DataMap(prodClassComboList, 'value', 'name'); // 상품분류
 
         // 전체삭제
         $scope.delAll();
@@ -77,11 +79,11 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
             params.prodCd = "00001";
         }
         params.prodNm = "아메리카노";
-        params.prodClassCd = "음료▶커피▶카페인";
+        params.prodClassCd = prodClassComboList[0].name;
         params.prodTypeFg = "1";
         params.saleProdYn = "Y";
         params.saleUprc = "1000";
-        params.vendrCd = "솔비포스";
+        params.vendrCd = vendrComboList[0].name;
         params.splyUprc = "1000";
         params.poProdFg = "1";
         params.poUnitFg = "1";
@@ -123,7 +125,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
                         return column.visible;
                     }
                 },
-                '상품엑셀업로드_'+getToday()+'.xlsx',
+                '상품엑셀업로드_'+getCurDate()+'.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -137,7 +139,8 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
     // <-- 엑셀업로드 -->
     $scope.excelUpload = function(){
         // 상품엑셀업로드 팝업
-        $("#excelUpFile").trigger('click');
+        $("#prodExcelUpFile").val('');
+        $("#prodExcelUpFile").trigger('click');
     };
     // <-- //엑셀업로드 -->
 
@@ -146,7 +149,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
 /**
  *  상품목록 조회 그리드 생성
  */
-app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodExcelUploadProdCtrl', $scope, $http, true));
@@ -161,6 +164,8 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', function ($scope, 
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
+        $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
+        $scope.prodClassCdDataMap = new wijmo.grid.DataMap(prodClassComboList, 'value', 'name'); // 상품분류
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -191,7 +196,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', function ($scope, 
     $scope.searchProdExcelUploadProd = function() {
         var params = {};
 
-        $scope._inquiryMain("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadList.sb", params, function() {}, false);
+        $scope._inquiryMain("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -206,6 +211,8 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', function ($scope, 
             return false;
         }
 
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -218,9 +225,15 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', function ($scope, 
             // 상품명 중복체크
             $scope.flex.collectionView.items[i].chkProdNm = $scope.isChecked;
 
-
             // <-- 검증 -->
             var result = "";
+
+            // 비고
+            if($scope.flex.collectionView.items[i].remark === "" || $scope.flex.collectionView.items[i].remark === null) {
+            } else {
+                // 최대길이 체크
+                if(nvl($scope.flex.collectionView.items[i].remark, '').getByteLengthForOracle() > 500) { result = messages["prodExcelUpload.remarkLengthChk"]; } // 비고 길이가 너무 깁니다.
+            }
 
             // 바코드
             if($scope.flex.collectionView.items[i].barCd === "" || $scope.flex.collectionView.items[i].barCd === null) {
@@ -246,6 +259,33 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', function ($scope, 
                     $scope.flex.collectionView.items[i].costUprc = "";
                     result = messages["prodExcelUpload.costUprcInChk"]; // 원가단가 숫자만 입력해주세요.
                 }
+            }
+
+            // 최소발주수량
+            if($scope.flex.collectionView.items[i].poMinQty === "" || $scope.flex.collectionView.items[i].poMinQty === null) {
+                result = messages["prodExcelUpload.poMinQtyBlank"]; // 최소발주수량를 입력하세요.
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test($scope.flex.collectionView.items[i].poMinQty)) {
+                    $scope.flex.collectionView.items[i].poMinQty = "";
+                    result = messages["prodExcelUpload.poMinQtyInChk"]; // 최소발주수량는 숫자만 입력해주세요.
+                }
+            }
+
+            // 발주단위
+            if($scope.flex.collectionView.items[i].poUnitFg === "" || $scope.flex.collectionView.items[i].poUnitFg === null) {
+                result = messages["prodExcelUpload.poUnitFgBlank"]; // 발주단위를 입력하세요.
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test($scope.flex.collectionView.items[i].poUnitFg)) {
+                    $scope.flex.collectionView.items[i].poUnitFg = "";
+                    result = messages["prodExcelUpload.poUnitFgInChk"]; // 발주단위는 숫자만 입력해주세요.
+                }
+
+                // 최대길이 체크
+                if(nvl($scope.flex.collectionView.items[i].poUnitFg, '').getByteLengthForOracle() > 2) { result = messages["prodExcelUpload.poUnitFgLengthChk"]; } // 발주단위 길이가 너무 깁니다.
             }
 
             // 공급단가
@@ -318,18 +358,100 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', function ($scope, 
             params.push($scope.flex.collectionView.items[i]);
         }
 
-        alert('개발중임');
         // 검증결과 저장
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        // $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckSave.sb", params, function(){
-        //     // 검증결과 조회
-        //     $scope.searchProdExcelUploadProd();
-        //     $scope._popConfirm(messages["prodExcelUpload.saveConfirm"], function() {
-        //         // 상품등록 저장
-        //         // $scope.SimpleProdSave();
-        //     });
-        // });
+        $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckSaveAdd.sb", params, function(){
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 
+            // 검증결과 조회
+            $scope.searchProdExcelUploadProd();
+
+            $scope._popConfirm(messages["prodExcelUpload.saveConfirm"], function() {
+                // 상품등록 저장
+                $scope.ProdExcelUploadSave();
+            });
+        });
    };
+
+    // 상품등록 저장
+    $scope.ProdExcelUploadSave = function() {
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            $scope.flex.collectionView.items[i].gubun = "prodExcelUpload";
+            params.push($scope.flex.collectionView.items[i]);
+        }
+
+        $scope._save("/base/prod/simpleProd/simpleProd/getSimpleProdSave.sb", params, function(){
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            // 검증결과 조회
+            $scope.searchProdExcelUploadProd();
+        });
+    };
+
+    // <-- 엑셀다운로드 -->
+    $scope.prodExcelDownload = function(){
+       var column_binding;
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function()	{
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
+                {
+                    includeColumnHeaders: 	true,
+                    includeCellStyles	: 	false,
+                    includeColumns      :	function (column) {
+                        // return column.visible;
+                        return column.binding != 'gChk';
+                    }
+                },
+                '상품엑셀업로드_'+getCurDate()+'.xlsx',
+                function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                }
+            );
+        }, 10);
+    };
+    // <-- //양식다운로드 -->
+
+    // <-- 그리드 행 삭제 -->
+    $scope.delete = function(){
+        $scope._popConfirm(messages["prodExcelUpload.delConfirm"], function() {
+            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                var item = $scope.flex.collectionView.items[i];
+
+                if(item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
+            }
+
+            // 삭제
+            $scope.deleteSave();
+        });
+    };
+
+    $scope.deleteSave = function() {
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+            $scope.flex.collectionView.itemsRemoved[i].status = "D";
+            params.push($scope.flex.collectionView.itemsRemoved[i]);
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckDelete.sb", params, function(){
+            $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+        });
+    };
+    // <-- //그리드 행 삭제 -->
 
 }]);

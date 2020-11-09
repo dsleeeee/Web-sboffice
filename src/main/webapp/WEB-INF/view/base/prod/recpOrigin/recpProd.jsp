@@ -80,9 +80,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="recpProd.level1Nm"/>" binding="level1Nm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="recpProd.level2Nm"/>" binding="level2Nm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="recpProd.level3Nm"/>" binding="level3Nm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="recpProd.pathNm"/>" binding="pathNm" width="350" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpProd.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpProd.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
