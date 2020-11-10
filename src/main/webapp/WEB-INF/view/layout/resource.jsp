@@ -13,7 +13,7 @@
 <%-- third-party plug-in --%>
 <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="/resource/vendor/bootstrap/bootstrap.min.js?ver=337"></script>
-<script type="text/javascript" src="/resource/vendor/angularjs/angular.min.js?ver=175"></script>
+<script type="text/javascript" src="/resource/vendor/angularjs/angular.min.js?ver=176"></script>
 <script type="text/javascript" src="/resource/vendor/angularjs/ui-bootstrap-tpls-2.5.0.min.js"></script>
 <script type="text/javascript" src="/resource/vendor/angularjs/angular-sanitize.min.js?ver=175"></script>
 <script type="text/javascript" src="/resource/vendor/angularjs/angular-route.min.js?ver=175"></script>
