@@ -242,8 +242,8 @@
                     SELECT
                     thpc.HQ_OFFICE_CD
                     , thpc.PROD_CLASS_CD
-                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_CD,'/ ') PATH
-                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_NM,'/ ') PATH_NM
+                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_CD,'▶') PATH
+                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_NM,'▶') PATH_NM
                     FROM TB_HQ_PRODUCT_CLASS thpc
                     WHERE 1=1
                     AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
@@ -279,8 +279,8 @@
                     SELECT
                     tmpc.STORE_CD
                     , tmpc.PROD_CLASS_CD
-                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_CD,'/ ') PATH
-                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_NM,'/ ') PATH_NM
+                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_CD,'▶') PATH
+                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_NM,'▶') PATH_NM
                     FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
                     WHERE 1=1
                     START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
@@ -327,8 +327,8 @@
                 (
                     SELECT
                     thpc.PROD_CLASS_CD
-                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_CD,'/ ') PATH
-                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_NM,'/ ') PATH_NM
+                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_CD,'▶') PATH
+                    , SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_NM,'▶') PATH_NM
                     FROM TB_HQ_PRODUCT_CLASS thpc
                     WHERE 1=1
                     AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
@@ -379,8 +379,8 @@
                 (
                     SELECT
                     tmpc.PROD_CLASS_CD
-                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_CD,'/ ') PATH
-                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_NM,'/ ') PATH_NM
+                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_CD,'▶') PATH
+                    , SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_NM,'▶') PATH_NM
                     FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
                     WHERE 1=1
                     START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
