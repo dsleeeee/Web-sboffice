@@ -2,9 +2,11 @@ package kr.co.solbipos.membr.info.excelUpload.service.impl;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,20 +57,26 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
         String dt = currentDateTimeString();
 
         for (MemberExcelUploadVO memberExcelUploadVO : memberExcelUploadVOs) {
-
-            memberExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+                registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+                registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                memberExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            } else { // 본사/매장
+                registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+                memberExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            }
             memberExcelUploadVO.setMembrNo(registMapper.getNewMemberNo(registVO));
-
+            
             // NOT NULL 컬럼
             memberExcelUploadVO.setLunarYn("N");
             
             // match invalid variable
-            String strTelNo = memberExcelUploadVO.getMemberTelNo();
-            memberExcelUploadVO.setTelNo(StringUtils.isEmpty(strTelNo) ? "01000000000" : memberExcelUploadVO.getMemberTelNo());
+            String strTelNo = (memberExcelUploadVO.getMemberTelNo() == null || "".equals(memberExcelUploadVO.getMemberTelNo())) ? "01000000000" : memberExcelUploadVO.getMemberTelNo();
+            memberExcelUploadVO.setTelNo(strTelNo);
 
-            String strShortNo = memberExcelUploadVO.getMemberShortNo();
-            if (StringUtils.isEmpty(strShortNo)) { // 단축번호
+            String strShortNo = (memberExcelUploadVO.getMemberShortNo() == null || "".equals(memberExcelUploadVO.getMemberShortNo())) ? "0000" : memberExcelUploadVO.getMemberShortNo();
+            if ("0000".equals(strShortNo)) { // 단축번호
                 memberExcelUploadVO.setShortNo( (strTelNo.length() > 4) ? StringUtils.right(strTelNo, 4) : "0000");
             } else {
                 memberExcelUploadVO.setShortNo(strShortNo);
@@ -92,7 +100,6 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                 result = mapper.insertMember(memberExcelUploadVO);
 
                 if (result == 1) {
-
                     registVO.setMembrCardNo(memberExcelUploadVO.getMembrCardNo());
                     registVO.setMembrNo(memberExcelUploadVO.getMembrNo());
                     registVO.setIssOrgnCd(memberExcelUploadVO.getRegStoreCd());
@@ -108,13 +115,40 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                         result = registMapper.insertMembrCard(registVO); // 회원카드등록
                     }
 
-                    // 가용포인트에 값이 있을때 포인트히스토리에 등록
-                    if (!StringUtils.isEmpty(memberExcelUploadVO.getAvablPoint())) {
-                        registVO.setChgDate(DateUtil.currentDateString()); //DEFAULT_YMD_FORMAT = "yyyyMMdd";
-                        registVO.setRegStoreCd(memberExcelUploadVO.getRegStoreCd());
+                    // 포인트 처리
+                    registVO.setRegStoreCd(memberExcelUploadVO.getRegStoreCd());
+                    registVO.setMembrClassCd(memberExcelUploadVO.getMembrClassCd());
+                    registVO.setChgDate(DateUtil.currentDateString()); //DEFAULT_YMD_FORMAT = "yyyyMMdd";
+                    // 1. 회원등급에 따른 신규가입포인트 처리
+                    int newJoinSavePoint = registMapper.newJoinSavePointInfo(registVO);
+                    if ( newJoinSavePoint > 0 ) {
+                        // 신규가입 적립 Point
+                        registVO.setPointChgFg("1");
+                        registVO.setRemark("신규가입");
+                        registVO.setChgPoint(newJoinSavePoint);
+                        registVO.setRegDt(currentDateTimeString());
+                        registMapper.insertMembrPointHist(registVO); // 회원포인트 등록
+                    }
+                    // 2. 가용포인트 = (누적포인트 - 가용포인트)를 사용 처리한 값
+                    int totAdjPoint = StringUtils.isEmpty(memberExcelUploadVO.getTotAdjPoint()) ? 0 : Integer.parseInt( memberExcelUploadVO.getTotAdjPoint() );
+                    int usedPoint = StringUtils.isEmpty(memberExcelUploadVO.getAvablPoint()) ? 0 : totAdjPoint - Integer.parseInt( memberExcelUploadVO.getAvablPoint() );
+                    if (usedPoint != 0) {
+                        registVO.setPointChgFg("6");
+                        registVO.setRemark("사용포인트");
+                        registVO.setChgPoint(usedPoint); // 사용포인트
+                        String nowDt = DateFormatUtils.format(new Date(System.currentTimeMillis() + 1000L), "yyyyMMddHHmmss");
+                        registVO.setRegDt(nowDt);
+                        registVO.setModDt(nowDt);
+                        registMapper.insertMembrPointHist(registVO); // 회원포인트 등록
+                    }
+                    // 3. 누적포인트 처리
+                    if (totAdjPoint != 0) {
                         registVO.setPointChgFg("3");
-                        registVO.setChgPoint(Integer.parseInt(memberExcelUploadVO.getAvablPoint())); // 가용포인트
-                        registVO.setTotAdjPoint(memberExcelUploadVO.getTotAdjPoint()); // 누적포인트
+                        registVO.setRemark("누적포인트");
+                        registVO.setChgPoint(totAdjPoint); // 누적포인트
+                        String nowDt = DateFormatUtils.format(new Date(System.currentTimeMillis() + 2000L), "yyyyMMddHHmmss");
+                        registVO.setRegDt(nowDt);
+                        registVO.setModDt(nowDt);
                         registMapper.insertMembrPointHist(registVO); // 회원포인트 등록
                     }
                 }

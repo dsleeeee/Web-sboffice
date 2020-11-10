@@ -74,8 +74,8 @@ public class MemberExcelUploadController {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
     // 등록 매장 조회
     List regstrStoreList = registService.getRegistStore(sessionInfoVO);
-    // 등록 매장 전체 포함
-    String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.SELECT);
+    // 등록 매장
+    String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.N);
 
     // 회원등급 리스트 조회
     List membrClassList = registService.getMembrClassList(sessionInfoVO);

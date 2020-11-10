@@ -181,7 +181,7 @@ public interface RegistMapper {
 
     int getMemberCardInfoCount(RegistVO registVO);
 
-    int firstSaleSavePointInfo(RegistVO registVO);
+    int newJoinSavePointInfo(RegistVO registVO);
 
     void insertMembrPointHist(RegistVO registVO);
 

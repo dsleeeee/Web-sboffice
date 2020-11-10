@@ -502,9 +502,9 @@
         TABLE    : TB_MB_MEMBER_CLASS
         COMMENTS : 신규가입 적립 POINT 조회
     -->
-    <select id="firstSaleSavePointInfo" parameterType="registVO" resultType="int">
-        /* RegistMapper.firstSaleSavePointInfo */
-        SELECT FIRST_SALE_SAVE_POINT
+    <select id="newJoinSavePointInfo" parameterType="registVO" resultType="int">
+        /* RegistMapper.newJoinSavePointInfo */
+        SELECT NEW_JOIN_SAVE_POINT
           FROM TB_MB_MEMBER_CLASS
          WHERE MEMBR_CLASS_CD = #{membrClassCd}
          AND MEMBR_ORGN_CD = #{membrOrgnCd}
@@ -525,6 +525,7 @@
             tmmph.STORE_CD,
             tmmph.POINT_CHG_FG,
             tmmph.CHG_POINT,
+            tmmph.REMARK,
             tmmph.REG_DT,
             tmmph.REG_ID,
             tmmph.MOD_DT,
@@ -537,6 +538,7 @@
             #{regStoreCd},
             #{pointChgFg},
             #{chgPoint},
+            #{remark},
             #{regDt},
             #{regId},
             #{modDt},

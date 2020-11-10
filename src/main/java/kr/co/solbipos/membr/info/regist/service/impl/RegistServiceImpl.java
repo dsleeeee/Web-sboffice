@@ -189,7 +189,7 @@ public class RegistServiceImpl implements RegistService {
         registVO.setChgDate(registVO.getRegDt().substring(0, registVO.getRegDt().length()-6));
         LOGGER.debug("registVO.getRegDt()(): {}", registVO.getRegDt());
         LOGGER.debug("registVO.setChgDate(): {}", registVO.getChgDate());
-        int firstSaleSavePoint = mapper.firstSaleSavePointInfo(registVO);
+        int newJoinSavePoint = mapper.newJoinSavePointInfo(registVO);
 
         // 회원등록
         int result = mapper.registMemberInfo(registVO);
@@ -206,9 +206,9 @@ public class RegistServiceImpl implements RegistService {
                 registVO.setChgPoint(registVO.getMovePoint());
                 mapper.insertMembrPointHist(registVO);
             }else {
-                if (firstSaleSavePoint > 0) {
+                if (newJoinSavePoint > 0) {
                     registVO.setPointChgFg("1");
-                    registVO.setChgPoint(firstSaleSavePoint);
+                    registVO.setChgPoint(newJoinSavePoint);
                     mapper.insertMembrPointHist(registVO);
                 }
             }

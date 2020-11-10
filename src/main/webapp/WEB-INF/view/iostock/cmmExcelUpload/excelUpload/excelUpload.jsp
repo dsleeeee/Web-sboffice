@@ -343,20 +343,24 @@
                 $scope.birthday = true; // 생년월일
                 $scope.weddingYn = true; // 결혼여부
                 $scope.weddingday = true; // 결혼기념일
-                $scope.telNo = true; // 전화번호
-                $scope.phonneNo = false; // 핸드폰번호
-                $scope.shortNo = true; // 단축번호
-                $scope.email = true; // E-MAIL
-                $scope.postNo = true; // 우편번호
-                $scope.addr = true; // 주소
-                $scope.addrDtl = true; // 상세주소
+                $scope.memberTelNo = true; // 전화번호
+                // $scope.phonneNo = false; // 핸드폰번호
+                $scope.memberShortNo = true; // 단축번호
+                $scope.memberEmail = true; // E-MAIL
+                $scope.memberPostNo = true; // 우편번호
+                $scope.memberAddr = true; // 주소
+                $scope.memberAddrDtl = true; // 상세주소
                 $scope.emailRecvYn = true; // 이메일수신
                 $scope.smsRecvYn = true; // SMS수신
                 $scope.avablPoint = true; // 가용포인트
                 $scope.totSavePoint = true; // 누적포인트
-
-                params.membrClassCd = memberClassList[0].name;
-                params.membrStore = regstrStoreList[1].name;
+                //양식 샘플 초기값
+                // params.membrClassCd = '기본';
+                // params.membrStore = '매장명';
+                var membrClassCd = memberClassList[0].name;
+                var membrStore = regstrStoreList[0].name;
+                params.membrClassCd = membrClassCd;
+                params.membrStore = membrStore;
                 params.gendrFg = '남자';
                 params.weddingYn = '미혼';
                 params.emailRecvYn = '미수신';
@@ -1491,6 +1495,16 @@
             }
         });
         return checked;
+    }
+    
+    function selectValueFromIndex(wijmoGridDataMapList, index) {
+        var value = '';
+        for (var i=0; wijmoGridDataMapList; i++) {
+            if (i === index) {
+                value = wijmoGridDataMapList[i].name;
+                return value;
+            }
+        }
     }
 </script>
 

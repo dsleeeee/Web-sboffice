@@ -7,6 +7,9 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
+
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
 </c:import>
 
@@ -121,7 +124,7 @@
     </div>
     <%-- 그리드 top --%>
     <div class="mt20 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
+<%--         페이지 스케일 
         <wj-combo-box
                 class="w100px fl"
                 id="listScaleBox"
@@ -131,7 +134,7 @@
                 selected-value-path="value"
                 is-editable="false"
                 initialized="initComboBox(s)">
-        </wj-combo-box>
+        </wj-combo-box> --%>
         <%-- 저장 --%>
         <button id="btnSave" class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.save"/></button>
         <%-- 삭제 --%>
@@ -211,6 +214,9 @@
     var rMembrcardList = ${ccu.getCommCodeExcpAll("014")}; <%-- 카드사용구분 --%>
     var regstrStoreList = ${regstrStoreList}; <%-- 매장목록 --%>
     var memberClassList = ${memberClassList}; <%-- 회원등급목록 --%>
+    var hqOfficeCd = "${hqOfficeCd}"; <%-- 본사코드 --%>
+    var storeCd = "${storeCd}"; <%-- 매장코드 --%>
+    var orgnFg = "${orgnFg}"; <%-- 본사매장구분 --%>
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.11" charset="utf-8"></script>

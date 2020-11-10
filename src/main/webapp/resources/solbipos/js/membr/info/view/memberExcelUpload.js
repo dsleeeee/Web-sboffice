@@ -26,7 +26,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         {value: '2', name: '성공내역'},
         {value: '3', name: '오류내역'}
     ]
-    $scope.statu = $scope.statusList[0];
+    $scope.status = $scope.statusList[0];
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
     $scope._getComboDataQuery('072', 'emailRecvYn', '');
@@ -53,6 +53,17 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         $scope.memberClassList = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
         $scope.genderDataMap = new wijmo.grid.DataMap(genderDataMap, 'value', 'name');
         $scope.weddingDataMap = new wijmo.grid.DataMap(weddingDataMap, 'value', 'name');
+        $scope.isEdited = false;
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+              var col = s.columns[e.col];
+              var dataItem = s.rows[e.row].dataItem;
+              if (col.binding !== "gChk") {
+                  $scope.isEdited = true;
+                  dataItem.result = "양식검증 필요";
+              }
+            }
+        });
     };
 
     $scope.initGrid1 = function (s, e) {
@@ -70,16 +81,35 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
             flex1.itemsSource = new wijmo.collections.CollectionView();
         }
         var newRow = flex1.collectionView.addNew();
+
         // 파라미터 설정
         var params = {};
+        // 단독매장
+        if (hqOfficeCd === "00000") {
+            for (var j in regstrStoreList) {
+                if (regstrStoreList[j].value === storeCd) {
+                    regstrStoreList = [{name: regstrStoreList[j].name, value: regstrStoreList[j].value}]
+                    break;
+                }
+            }
+        } else {
+            // 매장
+            if (orgnFg !== "HQ") {
+                for (var j in regstrStoreList) {
+                    if (regstrStoreList[j].value === storeCd) {
+                        regstrStoreList = [{name: regstrStoreList[j].name, value: regstrStoreList[j].value}]
+                        break;
+                    }
+                }
+            }
+        }
         params.comboClass = memberClassList[0].name; // 회원등급분류 첫번째 값
-        params.comboStore = regstrStoreList[1].name; // 등록매장 첫번째 값
+        params.comboStore = regstrStoreList[0].name; // 등록매장 첫번째 값
         params.comboGendr = 'M'; // 남
         params.comboWedding = 'N'; // 미혼
         params.comboCardUse = rMembrcardList[0].name; // 카드사용구분 첫번째 값
         params.comboEmail = 'N'; // 미수신
         params.comboSms = 'N'; // 미수신
-
         // $scope._addRow(params);
 
         newRow.status = 'I';
@@ -91,7 +121,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         $scope.flex1.collectionView.commitNew();
 
         document.getElementById('btnSearch').addEventListener('click', function (e) {
-            if ($scope.flex.rows.length <= 0) {
+            if ($scope.flex.collectionView === undefined) {
                 $scope._popMsg(messages["cmm.empty.data"]); // 조회 데이터가 없습니다.
                 return false;
             }
@@ -104,6 +134,13 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
                     return item
                 }
             };
+            if ($scope.flex.collectionView.items.length === 0) {
+                $scope._popMsg(messages["cmm.empty.data"]); // 조회 데이터가 없습니다.
+            }
+            if ($scope.flex.collectionView._src.length === 0) {
+                $scope._popMsg(messages["cmm.empty.data"]); // 조회 데이터가 없습니다.
+                return false;
+            }
         });
     };
 
@@ -167,7 +204,9 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         }
         var jsonData = $scope.flex.collectionView.items;
         scope.valChk(jsonData);
+        $scope.flex.collectionView.commitEdit();
         $scope.flex.collectionView.refresh();
+        $scope.isEdited = false;
     };
 
     // 체크박스 체크된 항목 삭제
@@ -197,46 +236,56 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
 
     // 저장
     $scope.save = function () {
+        $scope.flex.collectionView.commitEdit();
         if ($scope.flex.rows.length <= 0) {
             var msg = messages["outstockReqDate.not.save"]; // 저장할 내용이 없습니다.
             $scope._popMsg(msg);
             return false;
         }
-        if ($scope.flex.collectionView.itemsEdited.length > 0) {
-            $scope._popMsg(messages["cmm.excel.edit.chk"]);
+        if ($scope.isEdited) {
+            $scope._popMsg(messages["cmm.excel.edit.chk"]); // 수정한 내역이 있습니다.<br>양식 검증 처리후 저장하십시오.
             return false;
         }
         var params = new Array();
-
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             var item = $scope.flex.collectionView.items[i];
             item.membrClassCd = selectValueFromName(memberClassList, item.membrClassCd);
+            getStoreLoop:
             for (var j in regstrStoreList) {
                 if (regstrStoreList[j].name === item.membrStore) {
                     item.membrStore = regstrStoreList[j].value;
                     item.regStoreCd = regstrStoreList[j].value;
-                    break;
+                    break getStoreLoop;
+                }
+                if (regstrStoreList[j].value === item.membrStore) {
+                    item.membrStore = regstrStoreList[j].value;
+                    item.regStoreCd = regstrStoreList[j].value;
+                    break getStoreLoop;
                 }
             }
             item.gendrFg = selectValueFromName(genderDataMap, item.gendrFg);
             item.weddingYn = selectValueFromName(weddingDataMap, item.weddingYn);
             item.emailRecvYn = nvl(selectValueFromName(recvDataMap, item.emailRecvYn), 'N');
             item.smsRecvYn = nvl(selectValueFromName(recvDataMap, item.smsRecvYn), 'N');
+            item.totAdjPoint = nvl(item.totSavePoint, 0);
 
             $scope.flex.collectionView.items[i].status = "I";
-
-            console.log(item);
 
             if (item.result === "검증성공") {
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
+        if (params.length < 1) {
+            var msg = messages["outstockReqDate.not.save"]; // 저장할 내용이 없습니다.
+            $scope._popMsg(msg);
+            return false;
+        }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope.$broadcast('loadingPopupActive', messages['cmm.saving']);
         $.postJSONArray("/membr/info/upload/excel/memberExcelSave.sb", params, function (result) {
             if (result.status === "OK") {
                 $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
-                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                for ( var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
                     var item = $scope.flex.collectionView.items[i];
                     if (item.result === "검증성공") {
                         $scope.flex.collectionView.removeAt(i);
