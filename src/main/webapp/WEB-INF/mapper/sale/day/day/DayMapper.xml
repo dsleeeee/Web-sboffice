@@ -547,83 +547,83 @@
     -->
     <select id="getDayProdClassMaxLevel" parameterType="dayVO" resultType="Integer">
         <choose>
-         <!--   <when test='orgnFg != null and orgnFg == "H"'>
+            <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT MAX(LEVEL)
                 FROM TB_HQ_PRODUCT_CLASS thpc
                 WHERE 1=1
                 AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                START WITH thpc.P_PROD_CLASS_CD = #{pProdClassCd}
-                CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                START WITH thpc.P_PROD_CLASS_CD = #{pProdClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT MAX(LEVEL)
                 FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
                 WHERE 1=1
-                START WITH tmpc.P_PROD_CLASS_CD = #{pProdClassCd}
-                CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
-            </when>-->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  MAX(A.STEP)
-                FROM    (
-                            SELECT CONNECT_BY_ROOT PARENT AS ROOT
-                            ,       LEVEL AS STEP
-                            ,       SUBSTR(SYS_CONNECT_BY_PATH(A.PARENT || '@' || A.STAGE || '@','|') ||A.CHILD  , 2) PATH --, A.PARENT, A.STAGE
-                            FROM    (
-                                        SELECT P_PROD_CLASS_CD PARENT
-                                        ,       PROD_CLASS_CD CHILD
-                                        ,       PROD_CLASS_NM STAGE
-                                        FROM   TB_HQ_PRODUCT_CLASS
-                                        WHERE  1=1
-                                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
-                                    )  A
-                        WHERE CONNECT_BY_ISLEAF = 1
-                        START WITH (A.STAGE, A.PARENT)  IN  (
-                                                                SELECT DISTINCT A.STAGE, A.PARENT
-                                                                FROM    (
-                                                                            SELECT P_PROD_CLASS_CD PARENT
-                                                                            ,       PROD_CLASS_CD CHILD
-                                                                            ,       PROD_CLASS_NM STAGE
-                                                                            FROM   TB_HQ_PRODUCT_CLASS
-                                                                            WHERE  1=1
-                                                                            AND    HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                        )  A
-                                                                WHERE CONNECT_BY_ISLEAF = 1
-                                                                CONNECT BY NOCYCLE PRIOR PARENT = CHILD
-                                                            )
-                        CONNECT BY PRIOR CHILD = PARENT
-                ) A
+                START WITH tmpc.P_PROD_CLASS_CD = #{pProdClassCd} AND STORE_CD = #{storeCd}
+                CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND STORE_CD = #{storeCd}
             </when>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  MAX(A.STEP)
-                FROM    (
-                            SELECT CONNECT_BY_ROOT PARENT AS ROOT
-                            ,       LEVEL AS STEP
-                            ,       SUBSTR(SYS_CONNECT_BY_PATH(A.PARENT || '@' || A.STAGE || '@','|') ||A.CHILD  , 2) PATH --, A.PARENT, A.STAGE
-                            FROM    (
-                                        SELECT P_PROD_CLASS_CD PARENT
-                                        ,       PROD_CLASS_CD CHILD
-                                        ,       PROD_CLASS_NM STAGE
-                                        FROM   TB_MS_PRODUCT_CLASS
-                                        WHERE  1=1
-                                        AND    STORE_CD = #{storeCd}
-                                    )  A
-                        WHERE CONNECT_BY_ISLEAF = 1
-                        START WITH (A.STAGE, A.PARENT)  IN  (
-                                                                SELECT DISTINCT A.STAGE, A.PARENT
-                                                                FROM    (
-                                                                            SELECT P_PROD_CLASS_CD PARENT
-                                                                            ,       PROD_CLASS_CD CHILD
-                                                                            ,       PROD_CLASS_NM STAGE
-                                                                            FROM   TB_MS_PRODUCT_CLASS
-                                                                            WHERE  1=1
-                                                                            AND    STORE_CD = #{storeCd}
-                                                                        )  A
-                                                                WHERE CONNECT_BY_ISLEAF = 1
-                                                                CONNECT BY NOCYCLE PRIOR PARENT = CHILD
-                                                            )
-                        CONNECT BY PRIOR CHILD = PARENT
-                ) A
-            </when>
+            <!--<when test='orgnFg != null and orgnFg == "H"'>-->
+                <!--SELECT  MAX(A.STEP)-->
+                <!--FROM    (-->
+                            <!--SELECT CONNECT_BY_ROOT PARENT AS ROOT-->
+                            <!--,       LEVEL AS STEP-->
+                            <!--,       SUBSTR(SYS_CONNECT_BY_PATH(A.PARENT || '@' || A.STAGE || '@','|') ||A.CHILD  , 2) PATH &#45;&#45;, A.PARENT, A.STAGE-->
+                            <!--FROM    (-->
+                                        <!--SELECT P_PROD_CLASS_CD PARENT-->
+                                        <!--,       PROD_CLASS_CD CHILD-->
+                                        <!--,       PROD_CLASS_NM STAGE-->
+                                        <!--FROM   TB_HQ_PRODUCT_CLASS-->
+                                        <!--WHERE  1=1-->
+                                        <!--AND    HQ_OFFICE_CD = #{hqOfficeCd}-->
+                                    <!--)  A-->
+                        <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                        <!--START WITH (A.STAGE, A.PARENT)  IN  (-->
+                                                                <!--SELECT DISTINCT A.STAGE, A.PARENT-->
+                                                                <!--FROM    (-->
+                                                                            <!--SELECT P_PROD_CLASS_CD PARENT-->
+                                                                            <!--,       PROD_CLASS_CD CHILD-->
+                                                                            <!--,       PROD_CLASS_NM STAGE-->
+                                                                            <!--FROM   TB_HQ_PRODUCT_CLASS-->
+                                                                            <!--WHERE  1=1-->
+                                                                            <!--AND    HQ_OFFICE_CD = #{hqOfficeCd}-->
+                                                                        <!--)  A-->
+                                                                <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                                                                <!--CONNECT BY NOCYCLE PRIOR PARENT = CHILD-->
+                                                            <!--)-->
+                        <!--CONNECT BY PRIOR CHILD = PARENT-->
+                <!--) A-->
+            <!--</when>-->
+            <!--<when test='orgnFg != null and orgnFg == "S"'>-->
+                <!--SELECT  MAX(A.STEP)-->
+                <!--FROM    (-->
+                            <!--SELECT CONNECT_BY_ROOT PARENT AS ROOT-->
+                            <!--,       LEVEL AS STEP-->
+                            <!--,       SUBSTR(SYS_CONNECT_BY_PATH(A.PARENT || '@' || A.STAGE || '@','|') ||A.CHILD  , 2) PATH &#45;&#45;, A.PARENT, A.STAGE-->
+                            <!--FROM    (-->
+                                        <!--SELECT P_PROD_CLASS_CD PARENT-->
+                                        <!--,       PROD_CLASS_CD CHILD-->
+                                        <!--,       PROD_CLASS_NM STAGE-->
+                                        <!--FROM   TB_MS_PRODUCT_CLASS-->
+                                        <!--WHERE  1=1-->
+                                        <!--AND    STORE_CD = #{storeCd}-->
+                                    <!--)  A-->
+                        <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                        <!--START WITH (A.STAGE, A.PARENT)  IN  (-->
+                                                                <!--SELECT DISTINCT A.STAGE, A.PARENT-->
+                                                                <!--FROM    (-->
+                                                                            <!--SELECT P_PROD_CLASS_CD PARENT-->
+                                                                            <!--,       PROD_CLASS_CD CHILD-->
+                                                                            <!--,       PROD_CLASS_NM STAGE-->
+                                                                            <!--FROM   TB_MS_PRODUCT_CLASS-->
+                                                                            <!--WHERE  1=1-->
+                                                                            <!--AND    STORE_CD = #{storeCd}-->
+                                                                        <!--)  A-->
+                                                                <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                                                                <!--CONNECT BY NOCYCLE PRIOR PARENT = CHILD-->
+                                                            <!--)-->
+                        <!--CONNECT BY PRIOR CHILD = PARENT-->
+                <!--) A-->
+            <!--</when>-->
         </choose>
     </select>
 
