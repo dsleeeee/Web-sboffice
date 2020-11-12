@@ -635,7 +635,7 @@
     -->
     <select id="getDayProdClassLevel" parameterType="dayVO" resultType="DefaultMap">
         <choose>
-           <!-- <when test='orgnFg != null and orgnFg == "H"'>
+            <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT ROWNUM,
                         LEVEL,
                         thpc.PROD_CLASS_NM,
@@ -646,8 +646,8 @@
                  WHERE 1=1
                    AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                    AND LEVEL = #{level}
-            START WITH thpc.P_PROD_CLASS_CD = #{pProdClassCd}
-           CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+            START WITH thpc.P_PROD_CLASS_CD = #{pProdClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+           CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
              ORDER BY thpc.PROD_CLASS_CD
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -660,48 +660,48 @@
                   FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
                  WHERE 1=1
                    AND LEVEL = #{level}
-            START WITH tmpc.P_PROD_CLASS_CD = #{pProdClassCd}
-           CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+            START WITH tmpc.P_PROD_CLASS_CD = #{pProdClassCd} AND STORE_CD = #{storeCd}
+           CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND STORE_CD = #{storeCd}
              ORDER BY tmpc.PROD_CLASS_CD
-            </when>-->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT ROWNUM
-                ,       LEVEL
-                ,       A.P_PROD_CLASS_CD
-                ,       A.PROD_CLASS_CD
-                ,       A.PROD_CLASS_NM
-                ,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH
-                FROM    (
-                            SELECT P_PROD_CLASS_CD
-                            ,       PROD_CLASS_CD
-                            ,       PROD_CLASS_NM
-                            FROM   TB_HQ_PRODUCT_CLASS
-                            WHERE  1=1
-                            AND    HQ_OFFICE_CD = #{hqOfficeCd}
-                        )  A
-                WHERE CONNECT_BY_ISLEAF = 1
-                AND LEVEL = #{level}
-                CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
             </when>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT ROWNUM
-                ,       LEVEL
-                ,       A.P_PROD_CLASS_CD
-                ,       A.PROD_CLASS_CD
-                ,       A.PROD_CLASS_NM
-                ,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH
-                FROM    (
-                            SELECT P_PROD_CLASS_CD
-                            ,       PROD_CLASS_CD
-                            ,       PROD_CLASS_NM
-                            FROM   TB_MS_PRODUCT_CLASS
-                            WHERE  1=1
-                            AND    STORE_CD = #{storeCd}
-                        )  A
-                WHERE CONNECT_BY_ISLEAF = 1
-                AND LEVEL = #{level}
-                CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
-            </when>
+            <!--<when test='orgnFg != null and orgnFg == "H"'>-->
+                <!--SELECT ROWNUM-->
+                <!--,       LEVEL-->
+                <!--,       A.P_PROD_CLASS_CD-->
+                <!--,       A.PROD_CLASS_CD-->
+                <!--,       A.PROD_CLASS_NM-->
+                <!--,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH-->
+                <!--FROM    (-->
+                            <!--SELECT P_PROD_CLASS_CD-->
+                            <!--,       PROD_CLASS_CD-->
+                            <!--,       PROD_CLASS_NM-->
+                            <!--FROM   TB_HQ_PRODUCT_CLASS-->
+                            <!--WHERE  1=1-->
+                            <!--AND    HQ_OFFICE_CD = #{hqOfficeCd}-->
+                        <!--)  A-->
+                <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                <!--AND LEVEL = #{level}-->
+                <!--CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD-->
+            <!--</when>-->
+            <!--<when test='orgnFg != null and orgnFg == "S"'>-->
+                <!--SELECT ROWNUM-->
+                <!--,       LEVEL-->
+                <!--,       A.P_PROD_CLASS_CD-->
+                <!--,       A.PROD_CLASS_CD-->
+                <!--,       A.PROD_CLASS_NM-->
+                <!--,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH-->
+                <!--FROM    (-->
+                            <!--SELECT P_PROD_CLASS_CD-->
+                            <!--,       PROD_CLASS_CD-->
+                            <!--,       PROD_CLASS_NM-->
+                            <!--FROM   TB_MS_PRODUCT_CLASS-->
+                            <!--WHERE  1=1-->
+                            <!--AND    STORE_CD = #{storeCd}-->
+                        <!--)  A-->
+                <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                <!--AND LEVEL = #{level}-->
+                <!--CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD-->
+            <!--</when>-->
         </choose>
     </select>
 
