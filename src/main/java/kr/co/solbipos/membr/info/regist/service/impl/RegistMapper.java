@@ -181,6 +181,9 @@ public interface RegistMapper {
 
     int getMemberCardInfoCount(RegistVO registVO);
 
+    /** 카드 중복 체크( 카드번호 사용중인 회원번호 / X (해당 카드번호 미사용) ) */
+    String getMemberCardInfoCountDetail(RegistVO registVO);
+
     int newJoinSavePointInfo(RegistVO registVO);
 
     void insertMembrPointHist(RegistVO registVO);

@@ -131,11 +131,14 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
-        // 발급소속을 선택해주세요.
-        var msg = messages["regist.card.org"] + messages["cmm.require.select"];
-        if (isNull($scope.basicRegStoreCdCombo.selectedValue)) {
-            $scope._popMsg(msg);
-            return false;
+        // 본사일때만
+        if(orgnFg == "HQ") {
+            // 발급소속을 선택해주세요.
+            var msg = messages["regist.card.org"] + messages["cmm.require.select"];
+            if (isNull($scope.basicRegStoreCdCombo.selectedValue)) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
 
         // 신규카드번호를 입력하세요.
@@ -154,13 +157,13 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 카드번호
-        var msg = messages["regist.card.new.no"] + messages["regist.card.add.new"];
-        $scope.data.items.forEach( function (e) {
-            if (e.oldCstCardNo == $scope.member.membrCardNo) {
-                $scope._popMsg(msg);
-                return false;
-            }
-        });
+        // var msg = messages["regist.card.new.no"] + messages["regist.card.add.new"];
+        // $scope.data.items.forEach( function (e) {
+        //     if (e.oldCstCardNo == $scope.member.membrCardNo) {
+        //         $scope._popMsg(msg);
+        //         return false;
+        //     }
+        // });
 
         // 카드번호 최대길이 체크
         if (nvl($scope.member.membrCardNo, '') !== '' && nvl($scope.member.membrCardNo + '', '').getByteLengthForOracle() > 16) {
@@ -182,7 +185,6 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._popMsg(msg);
             return false;
         }
-
 
         // 전화번호는 숫자만 입력할 수 있습니다.
         // var msg = messages["regist.tel"] + messages["cmm.require.number"];
@@ -210,6 +212,7 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.save = function () {
 
         if (!$scope.valueCheck()) return false;
+
         var params = $scope.member;
         params.membrNo = $scope.params.membrNo;
         var leng = $scope.member.issDate.length;
@@ -220,10 +223,12 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         var memberInfoScope = agrid.getScope('memberCtrl');
 
-        var msg = messages["regist.card.add.overlap"];
-        $scope._postJSONQuery.withPopUp("/membr/info/view/base/registCardInfoCount.sb", params, function (result) {
-            if(result.data.data > 0){
-                $scope._popMsg(msg);
+        // var msg = messages["regist.card.add.overlap"];
+        // $scope._postJSONQuery.withPopUp("/membr/info/view/base/registCardInfoCount.sb", params, function (result) {
+        // if(result.data.data > 0){
+        $scope._postJSONQuery.withPopUp("/membr/info/view/base/getMemberCardInfoCountDetail.sb", params, function (result) {
+            if(result.data.data !== "X"){
+                $scope._popMsg("회원번호[" + result.data.data + "]가 카드번호 [" + $scope.member.membrCardNo + "] 사용중입니다.");
                 return false;
             }else{
                 if ($scope.saveMode === "REG") {

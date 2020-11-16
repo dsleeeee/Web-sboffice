@@ -14,6 +14,13 @@
  */
 var app = agrid.getApp();
 
+// 검색기간 콤보박스
+var periodData = [
+    {"name":"기간 미사용","value":"all"},
+    {"name":"가입일","value":"reg"},
+    {"name":"최종방문일","value":"last"}
+];
+
 /**********************************************************************
  *  회원정보 그리드
  **********************************************************************/
@@ -25,6 +32,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
     $scope._setComboData("rMemberClass", memberClassList);
     $scope._setComboData("rMemberClassSelect", memberClassSelect);
+    $scope._setComboData("periodType", periodData); // 검색기간 콤보박스
 
     $scope.memberSaleList = [
         {value: "0", name: messages["regist.save.sale"]},
@@ -41,7 +49,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
     $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
     $scope._getComboDataQuery('032', 'anvType', 'A');
-    $scope._getComboDataQuery('077', 'periodType', '');
+    // $scope._getComboDataQuery('077', 'periodType', ''); // 검색기간 콤보박스
     $scope._getComboDataQuery('076', 'weddingYn', 'A');
     $scope._getComboDataQuery('055', 'gendrFg', 'A');
     $scope._getComboDataQuery('067', 'useYnAll', 'A');

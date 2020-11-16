@@ -57,10 +57,12 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         if ($.isEmptyObject(data)) {
             $scope.resetForm();
             $scope.saveMode = "REG";
+            $("#trMovePoint").css("display", "")
         } else {
             console.log($scope.member.temp);
             $scope.getMemberInfo();
             $scope.saveMode = "MOD";
+            $("#trMovePoint").css("display", "none")
         }
 
         event.preventDefault();
@@ -95,7 +97,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.member.membrEngNm = '';
             $scope.rMembrcardYn.selectedIndex = 1;
             $scope.member.membrCardNo = '';
-            $scope.member.telNo = '';
+            $scope.member.telNo = '01000000000';
             $scope.member.shortNo = '';
             $scope.genderCombo.selectedIndex = 0;
 
@@ -224,14 +226,14 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
-        // 전화번호를 입력하세요.
+        // 연락처(전화번호) 를 입력하세요.
         var msg = messages["regist.tel"] + messages["cmm.require.text"];
         if (isNull($scope.member.telNo)) {
             $scope._popMsg(msg);
             return false;
         }
 
-        // 전화번호 정규식
+        // 연락처(전화번호) 정규식
         var msg = messages["regist.tel"] + messages["cmm.require.number"];
         var numChkregexp = /[^0-9]/g;
         if (numChkregexp.test($scope.member.telNo)) {
@@ -364,8 +366,6 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 return false;
             }
         }
-
-
         //
         // if($scope.saveMode === "REG"){
         //   // 회원 거래처 매핑코드를 선택해주세요.
@@ -408,13 +408,16 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 단축번호
         if (params.shortNo === "") {
-            params.shortNo = params.telNo.substr(params.telNo.length - 4, 4)
+            if(params.telNo.length < 4) {
+                params.shortNo = params.telNo;
+            } else {
+                params.shortNo = params.telNo.substr(params.telNo.length - 4, 4);
+            }
         }
         // 단독매장의 경우
         /*if (hqOfficeCd === '00000') {
             params.regStoreCd = $("#basicRegStoreCd").val();
         }*/
-
         // console.log(params);
 
         var memberInfoScope = agrid.getScope('memberCtrl');

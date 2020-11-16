@@ -16,7 +16,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.extend(this, new RootController('memberClassCtrl', $scope, $http, false));
 
     // 기본 회원등급
-    membrClass = [{value: "001", name: "기본"}, {value: "002", name: "일반"}];
+    membrClass = [{value: "002", name: "일반"}, {value: "001", name: "기본"}];
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -103,7 +103,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.detailData = {};
         $scope.detailData.anvsrPointSaveFg = "";
         $scope.detailData.dcAccPointYn = "";
-        $scope.detailData.membrClass = "001";
+        $scope.detailData.membrClass = "002";
         $scope.detailData.pointSaveFg = "1";
         $scope.detailData.useAccPointYn = "";
         console.log($scope.detailData);
@@ -121,12 +121,20 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         $scope.detailData.anvsrPointSaveFg = String(nvl($scope.detailData.anvsrPointSaveFg, '0'));
         var params = $scope.detailData;
-        $scope._save("/membr/info/grade/grade/classRegist.sb", params, function (response) {
-            $scope.getMember();
-            var scope = agrid.getScope('memberClassDetailCtrl');
-            scope._broadcast('memberClassDetailCtrl', params);
+
+        // 저장
+        $scope._postJSONSave.withOutPopUp("/membr/info/grade/grade/classRegist.sb", params, function (response) {
+            if(response.data.data.data === 0) {
+                $scope._popMsg(response.data.data.message); // 기본등급은 1개 존재해야합니다.
+            } else {
+                $scope._popMsg(response.data.data.message); // 저장되었습니다.
+                $scope.getMember();
+                var scope = agrid.getScope('memberClassDetailCtrl');
+                scope._broadcast('memberClassDetailCtrl', params);
+            }
         });
     };
+
     // 등급 삭제
     $scope.classDel = function () {
         var params = new Array();
@@ -140,27 +148,28 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
 
-        if(params.length > 0){
-            $.postJSONArray("/membr/info/grade/grade/removeChk.sb", params, function (result) {
-                if (result.data.deleteChk > 0) {
-                    console.log(result.data.membrClassNm);
-                    $scope._popMsg("[" + result.data.membrClassCd + "]" + result.data.membrClassNm + messages["grade.membr.chk.yn"]);
-                    return false;
-                } else {
-                    // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
-                    $scope._save("/membr/info/grade/grade/remove.sb", params, function () {
-                        $scope.getMember();
-                        $scope.newAdd();
-                        var scope = agrid.getScope('memberClassDetailCtrl');
-                        scope._broadcast('memberClassDetailCtrl', '');
-                    });
-                }
-            });
-        }else{
-            $scope._popMsg(messages["cmm.not.select"]);
-            return false;
-        }
-
+        $scope._popConfirm(messages["grade.membr.delConfirm"], function() {
+            if(params.length > 0){
+                $.postJSONArray("/membr/info/grade/grade/removeChk.sb", params, function (result) {
+                    if (result.data.deleteChk > 0) {
+                        console.log(result.data.membrClassNm);
+                        $scope._popMsg("[" + result.data.membrClassCd + "]" + result.data.membrClassNm + messages["grade.membr.chk.yn"]);
+                        return false;
+                    } else {
+                        // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
+                        $scope._save("/membr/info/grade/grade/remove.sb", params, function () {
+                            $scope.getMember();
+                            $scope.newAdd();
+                            var scope = agrid.getScope('memberClassDetailCtrl');
+                            scope._broadcast('memberClassDetailCtrl', '');
+                        });
+                    }
+                });
+            }else{
+                $scope._popMsg(messages["cmm.not.select"]);
+                return false;
+            }
+        });
     };
     $scope.getMember = function () {
         var params = {}
@@ -519,22 +528,25 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
 
     // 삭제
     $scope.pointDel = function () {
-        var params = new Array();
-        for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
-            var item = $scope.flex.collectionView.items[i];
-            if (item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
+        $scope._popConfirm(messages["grade.membr.delConfirm"], function() {
+            var params = new Array();
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                var item = $scope.flex.collectionView.items[i];
+                if (item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
             }
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
-        }
+            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+                $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $.postJSONArray("/membr/info/grade/grade/getMemberClassPointDel.sb", params, function (result) {
-            $scope.getClassList()
-            // $scope.data = new wijmo.collections.CollectionView([]);
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            // $.postJSONArray("/membr/info/grade/grade/getMemberClassPointDel.sb", params, function (result) {
+            $scope._save("/membr/info/grade/grade/getMemberClassPointDel.sb", params, function () {
+                $scope.getClassList()
+                // $scope.data = new wijmo.collections.CollectionView([]);
+            });
         });
     };
 

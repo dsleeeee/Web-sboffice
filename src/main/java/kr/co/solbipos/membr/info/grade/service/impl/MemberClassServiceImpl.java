@@ -145,8 +145,12 @@ public class MemberClassServiceImpl implements MemberClassService {
 
         //membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
 
+        // 회원등급 중복여부
         int classChk = mapper.classInfoChk(membrClassVO);
-        int defltChk = mapper.classDefltChk(membrClassVO);
+        // 회원등급 기본여부
+        String defltChk = mapper.classDefltChk(membrClassVO);
+        // 회원등급 기본여부(기존에 저장된 기본이 있는지)
+        int defltChkList = mapper.classDefltChkList(membrClassVO);
         int classResult;
         int classPayRateResult;
 
@@ -157,11 +161,14 @@ public class MemberClassServiceImpl implements MemberClassService {
         membrClassVO.setMembrOrgnClassCd(membrClassVO.getMembrOrgnCd() + membrClassVO.getMembrClassCd());
         LOGGER.debug("defltChk: {}", defltChk);
 
+        // 2020.11.11 김설아 주석작업
+        //  DEFLT_YN에 Y는 무조건 한개
+        // 회원등급 코드가 중복이 되면(업데이트)
         if (classChk > 0) {
-            if (defltChk > 0 && "N".equals(defltYn)) {
+            // 기존에 Y으로 저장되어있어 && N으로 저장할거야
+            if ("Y".equals(defltChk) && "N".equals(defltYn)) {
                 classResult = 0;
-//                result.put("msg", messageService.get("login.pw.find.h2.1") +  messageService.get("login.pw.find.h2.2"));
-//                throw new JsonException(Status.FAIL, messageService.get("grade.membr.deflt.yn.fail"));
+            // 기존에 N으로 저장되어있어 && N으로 저장할거야 // 기존에 Y으로 저장되어있어 && Y으로 저장할거야 // 기존에 N으로 저장되어있어 && Y으로 저장할거야
             } else {
                 classResult = mapper.updateClassInfo(membrClassVO);
                 classPayRateResult = mapper.updateClassPayRateInfo(membrClassVO);
@@ -170,9 +177,20 @@ public class MemberClassServiceImpl implements MemberClassService {
                     classResult = mapper.defaultUpdateClassInfo(membrClassVO);
                 }
             }
+        // 회원등급 코드가 중복이 안되면(신규)
         } else {
-            if (defltChk > 0 && "N".equals(defltYn)) {
-                classResult = 0;
+            if ("N".equals(defltYn)) {
+                // 저장된 Y가 없다
+                if(defltChkList < 1) {
+                    classResult = 0;
+                } else {
+                    classResult = mapper.insertClassInfo(membrClassVO);
+                    classPayRateResult = mapper.updateClassPayRateInfo(membrClassVO);
+                    if (classResult > 0 && "Y".equals(defltYn)) {
+                        membrClassVO.setDefltYn("N");
+                        classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+                    }
+                }
             } else {
                 classResult = mapper.insertClassInfo(membrClassVO);
                 classPayRateResult = mapper.updateClassPayRateInfo(membrClassVO);
@@ -212,6 +230,7 @@ public class MemberClassServiceImpl implements MemberClassService {
     @Override
     public DefaultMap<Object> deleteClassInfoChk(MembrClassVO[] membrClassVOs, SessionInfoVO sessionInfoVO) {
         int deleteChk = 0;
+
         DefaultMap<Object> result = new DefaultMap<>();
         for (MembrClassVO membrClassVO : membrClassVOs) {
             deleteChk = mapper.deleteClassChk(membrClassVO);

@@ -433,6 +433,26 @@ public class RegistController {
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
+    /**
+     * 카드 중복 체크( 카드번호 사용중인 회원번호 / X (해당 카드번호 미사용) )
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/getMemberCardInfoCountDetail.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberCardInfoCountDetail(RegistVO registVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        String result = registService.getMemberCardInfoCountDetail(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
     /***
      * 카드정보 등록
      * @param registVO

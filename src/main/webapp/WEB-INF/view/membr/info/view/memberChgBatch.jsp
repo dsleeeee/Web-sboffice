@@ -13,7 +13,6 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
-
 <div class="subCon" ng-controller="memberChgBatchCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
@@ -31,10 +30,6 @@
             <col class="w35"/>
             <col class="w15"/>
             <col class="w35"/>
-            <%-- <col class="w15"/>
-             <col class="w35"/>
-             <col class="w15"/>
-             <col class="w35"/>--%>
         </colgroup>
         <tbody>
         <tr>
@@ -55,33 +50,32 @@
             </th>
             <td colspan="3">
                 <div class="sb-select">
-            <span class="txtIn">
-              <div class="sb-select">
-                <wj-input-date
-                        value="periodStartDate"
-                        ng-model="periodStartDate"
-                        control="periodStartDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+            		<span class="txtIn w110px">
+                      <div class="sb-select">
+                        <wj-input-date
+                                value="periodStartDate"
+                                ng-model="periodStartDate"
+                                control="periodStartDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
+                    </span>
                     <span class="rg">~</span>
-                    <span class="txtIn">
-              <div class="sb-select">
-                <wj-input-date
-                        value="periodEndDate"
-                        ng-model="periodEndDate"
-                        control="periodEndDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+                    <span class="txtIn w110px">
+                      <div class="sb-select">
+                        <wj-input-date
+                                value="periodEndDate"
+                                ng-model="periodEndDate"
+                                control="periodEndDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
                     </span>
                 </div>
             </td>
@@ -92,13 +86,11 @@
             <td>
                 <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10"/>
             </td>
-
             <%-- 회원명 --%>
             <th><s:message code="regist.membr.nm"/></th>
             <td>
                 <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15"/>
             </td>
-
         </tr>
         <tr>
             <%-- 등록매장 --%>
@@ -110,13 +102,11 @@
                 </jsp:include>
                 <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
             </td>
-
             <%-- 사용매장 --%>
             <th><s:message code="regist.use.store.cd"/></th>
             <td>
                 <input type="text" id="storeCd" class="sb-input w100" ng-model="storeCd" maxlength="15"/>
             </td>
-
         </tr>
         <tr>
             <%-- 회원카드번호 --%>
@@ -139,9 +129,8 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <%--                <input type="text" id="rMembrcardYn" name="cardYn" ng-model="member.cardYn" class="sb-input w100" maxlength="30" />--%>
+<%--                <input type="text" id="rMembrcardYn" name="cardYn" ng-model="member.cardYn" class="sb-input w100" maxlength="30" />--%>
             </td>
-
         </tr>
         <tr>
             <%-- 이메일 수신 --%>
@@ -188,8 +177,6 @@
             <td>
                 <input type="text" id="phoneNo" class="sb-input w100" ng-model="phoneNo" maxlength="15"/>
             </td>
-
-
         </tr>
         <tr>
             <%-- 성별 --%>
@@ -220,8 +207,7 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)"
-                            >
+                            initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
                 <div ng-if="anvType !== ''" class="sb-select">
@@ -294,18 +280,12 @@
             <th><s:message code="regist.save.sale"/></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn">
-                      <div class="sb-select">
-                        <input type="text" id="startSaveSale" class="sb-input w100" ng-model="startSaveSale"
-                               maxlength="15"/>
-                      </div>
+                    <span class="txtIn w110px">
+                        <input type="text" id="startSaveSale" class="sb-input w100" ng-model="startSaveSale" maxlength="15"/>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn">
-                      <div class="sb-select">
-                        <input type="text" id="endSaveSale" class="sb-input w100" ng-model="endSaveSale"
-                               maxlength="15"/>
-                      </div>
+                    <span class="txtIn w110px">
+                        <input type="text" id="endSaveSale" class="sb-input w100" ng-model="endSaveSale" maxlength="15"/>
                     </span>
                 </div>
             </td>
@@ -313,18 +293,12 @@
             <th><s:message code="regist.avabl.point"/></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn">
-                      <div class="sb-select">
-                        <input type="text" id="startAvablPoint" class="sb-input w100" ng-model="startAvablPoint"
-                               maxlength="15"/>
-                      </div>
+                    <span class="txtIn w110px">
+                        <input type="text" id="startAvablPoint" class="sb-input w100" ng-model="startAvablPoint" maxlength="15"/>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn">
-                      <div class="sb-select">
-                        <input type="text" id="endAvablPoint" class="sb-input w100" ng-model="endAvablPoint"
-                               maxlength="15"/>
-                      </div>
+                    <span class="txtIn w110px">
+                        <input type="text" id="endAvablPoint" class="sb-input w100" ng-model="endAvablPoint" maxlength="15"/>
                     </span>
                 </div>
             </td>
@@ -477,7 +451,7 @@
 
     <%-- 회원목록 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height:310px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     control="flex"
                     autoGenerateColumns="false"
@@ -488,44 +462,21 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk"
-                                     width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.no"/>" binding="membrNo" align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" align="left"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="membrClassCd" align="center"
-                                     data-map="memberClassDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.class.nm"/>" binding="membrClassNm" align="center"
-                                     width="100" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.brthd"/>" binding="birthday" align="center"
-                                     width="100" is-read-only="true"></wj-flex-grid-column>
-
-                <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="100" align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="phoneNo" width="100"
-                                     align="center" visible="false"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85"
-                                     align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="saveCnt" width="75"
-                                     align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.save.amt"/>" binding="saveAmt" width="75"
-                                     align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.visit.start"/>" binding="firstSaleDate"
-                                     width="75" align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="lastSaleDate"
-                                     width="75" align="center"
-                                     is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn"
-                                     data-map="emailRecvDataMap" width="75" align="center"
-                ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn"
-                                     data-map="smsRecvDataMap" width="75" align="center"
-                ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.no"/>" binding="membrNo" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="membrClassCd" align="center" data-map="memberClassDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.class.nm"/>" binding="membrClassNm" align="center" width="100" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.brthd"/>" binding="birthday" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="phoneNo" width="100" align="center" visible="false" s-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="saveCnt" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.amt"/>" binding="saveAmt" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.visit.start"/>" binding="firstSaleDate" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="lastSaleDate" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" ></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -537,8 +488,8 @@
         </ul>
     </div>
     <%--//페이지 리스트--%>
-
 </div>
+
 <script>
     var recvDataMap = ${ccu.getCommCode("072")};
     <%--수신, 미수신--%>
@@ -561,15 +512,11 @@
     var rMembrcardList = ${ccu.getCommCode("014")};
     <%--var membrChgBatchList = ${membrChgBatchList};--%>
     var memberClass = ${memberClassList};
-
     var memberClassSelect = ${memberClassSelect};
-
     var regstrStoreList = ${regstrStoreList};
-
-
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20191223.07"
-        charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20191223.07" charset="utf-8"></script>
 
 <%-- 매장 등록/수정--%>
 <c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">

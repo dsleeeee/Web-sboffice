@@ -9,7 +9,6 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-
 <div class="subCon" ng-controller="memberCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
@@ -51,33 +50,32 @@
             </th>
             <td>
                 <div class="sb-select">
-            <span class="txtIn">
-              <div class="sb-select w110px">
-                <wj-input-date
-                        value="periodStartDate"
-                        ng-model="periodStartDate"
-                        control="periodStartDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+                    <span class="txtIn">
+                      <div class="sb-select w110px">
+                        <wj-input-date
+                                value="periodStartDate"
+                                ng-model="periodStartDate"
+                                control="periodStartDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
+                    </span>
                     <span class="rg">~</span>
                     <span class="txtIn">
-              <div class="sb-select w110px">
-                <wj-input-date
-                        value="periodEndDate"
-                        ng-model="periodEndDate"
-                        control="periodEndDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+                      <div class="sb-select w110px">
+                        <wj-input-date
+                                value="periodEndDate"
+                                ng-model="periodEndDate"
+                                control="periodEndDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
                     </span>
                 </div>
             </td>
@@ -98,33 +96,32 @@
             </th>
             <td>
                 <div class="sb-select">
-            <span class="txtIn">
-              <div class="sb-select w110px">
-                <wj-input-date
-                        value="anvStartDate"
-                        ng-model="anvStartDate"
-                        control="anvStartDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+                    <span class="txtIn">
+                      <div class="sb-select w110px">
+                        <wj-input-date
+                                value="anvStartDate"
+                                ng-model="anvStartDate"
+                                control="anvStartDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
+                    </span>
                     <span class="rg">~</span>
                     <span class="txtIn">
-              <div class="sb-select w110px">
-                <wj-input-date
-                        value="anvEndDate"
-                        ng-model="anvEndDate"
-                        control="anvEndDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+                        <div class="sb-select w110px">
+                            <wj-input-date
+                                value="anvEndDate"
+                                ng-model="anvEndDate"
+                                control="anvEndDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                            </wj-input-date>
+                        </div>
                     </span>
                 </div>
             </td>
@@ -201,7 +198,6 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <%-- E-Mail --%>
             <th>E-Mail</th>
             <td>
                 <input type="text" id="emailAddr" class="sb-input w100" ng-model="emailAddr" maxlength="15"/>
@@ -350,7 +346,6 @@
             </td>
         </tr>
         <tr>
-
             <%-- 회원명(한글) --%>
             <th><s:message code="regist.membr.nm"/></th>
             <td>
@@ -389,7 +384,6 @@
                 is-editable="false"
                 initialized="initComboBox(s)">
         </wj-combo-box>
-
         <%-- 신규 회원 등록
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/>
         </button>--%>
@@ -630,6 +624,7 @@
     </div>
 
 </div>
+
 <script>
     var recvDataMap = ${ccu.getCommCode("072")};
     <%--수신, 미수신--%>
@@ -661,11 +656,9 @@
     <%--var rCstCardIssFgList = ${ccu.getCommCodeExcpAll("301")};--%>
     <%--카드상태구분--%>
     <%--var rCstCardStatFgList = ${ccu.getCommCodeExcpAll("300")};--%>
-
-
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.13"
-        charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20201112.01" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
@@ -696,5 +689,3 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-
-

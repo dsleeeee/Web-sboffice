@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.membr.info.chgBatch.service.impl.ChgBatchMapper">
+
+    <!-- -->
+    <!--
+        TABLE    :
+    -->
     <select id="getMemberClassList" parameterType="membrClassVO" resultType="DefaultMap">
         /* ChgBatchMapper.getMemberClassList */
         SELECT MEMBR_CLASS_CD AS VALUE,
@@ -67,8 +72,10 @@
         AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmm.REG_STORE_CD
-        AND tmm.MEMBR_CARD_NO = tmmcd.MEMBR_CARD_NO(+)
-        AND tmm.MEMBR_NO = tmmp.MEMBR_NO(+)
+        AND tmmcd.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmcd.MEMBR_CARD_NO (+)= tmm.MEMBR_CARD_NO
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         <if test='storeCd != null and storeCd != ""'>
             AND tmm.REG_STORE_CD = #{storeCd}
         </if>
@@ -112,6 +119,7 @@
             AND tmmp.AVABL_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
         </if>
         <if test='periodType != null and periodType.toString() != ""'>
+            <!-- 가입일 -->
             <if test='periodType.getCode() == "reg"'>
                 AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
             </if>

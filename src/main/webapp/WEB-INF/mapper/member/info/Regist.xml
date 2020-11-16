@@ -40,7 +40,6 @@
          ORDER BY DEFLT_YN DESC
     </select>
 
-
     <!-- 회원정보 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER
@@ -103,25 +102,14 @@
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             TB_MB_MEMBER_POINT_STORE tmmps,
         </if>
-        TB_MB_MEMBER_CARD tmmcd,
         TB_MB_MEMBER_POINT tmmp
         WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        <choose>
-            <when test='hqOfficeCd.equals("00000")'>
-                AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
-                AND tmmc.MEMBR_ORGN_CD (+)= #{storeCd}
-            </when>
-            <otherwise>
-                AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
-                AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
-            </otherwise>
-        </choose>
+        AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+        AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmm.REG_STORE_CD
         AND tmm.MEMBR_NO = tmmp.MEMBR_NO(+)
         AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD(+)
-        AND tmm.MEMBR_CARD_NO = tmmcd.MEMBR_CARD_NO(+)
-        AND tmm.MEMBR_ORGN_CD = tmmcd.MEMBR_ORGN_CD(+)
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             AND tmm.REG_STORE_CD = tmmps.MEMBR_ORGN_CD (+)
             AND tmm.REG_STORE_CD = tmmps.CHG_MEMBR_ORGN_CD (+)
@@ -181,9 +169,11 @@
             AND tmm.SMS_RECV_YN = #{smsRecvYn}
         </if>
         <if test='periodType != null and periodType.toString() != ""'>
+            <!-- 최종방문일 -->
             <if test='periodType.getCode() == "last"'>
                 AND tmmp.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
             </if>
+            <!-- 가입일 -->
             <if test='periodType.getCode() == "reg"'>
                 AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
             </if>
@@ -207,7 +197,6 @@
                 AND tmmp.TOT_SALE_AMT BETWEEN #{startSaveSale} AND #{endSaveSale}
             </if>
         </if>
-
         <if test='startAvablPoint != null and startAvablPoint != "" and endAvablPoint != null and endAvablPoint != ""'>
             <if test='memberPointFg == "0"'>
                 AND tmmp.TOT_SAVE_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
@@ -295,25 +284,14 @@
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             TB_MB_MEMBER_POINT_STORE tmmps,
         </if>
-        TB_MB_MEMBER_CARD tmmcd,
         TB_MB_MEMBER_POINT tmmp
         WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        <choose>
-            <when test='hqOfficeCd.equals("00000")'>
-                AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
-                AND tmmc.MEMBR_ORGN_CD (+)= #{storeCd}
-            </when>
-            <otherwise>
-                AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
-                AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
-            </otherwise>
-        </choose>
+        AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+        AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmm.REG_STORE_CD
         AND tmm.MEMBR_NO = tmmp.MEMBR_NO(+)
         AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD(+)
-        AND tmm.MEMBR_CARD_NO = tmmcd.MEMBR_CARD_NO(+)
-        AND tmm.MEMBR_ORGN_CD = tmmcd.MEMBR_ORGN_CD(+)
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             AND tmm.REG_STORE_CD = tmmps.MEMBR_ORGN_CD (+)
             AND tmm.REG_STORE_CD = tmmps.CHG_MEMBR_ORGN_CD (+)
@@ -373,9 +351,11 @@
             AND tmm.SMS_RECV_YN = #{smsRecvYn}
         </if>
         <if test='periodType != null and periodType.toString() != ""'>
+            <!-- 최종방문일 -->
             <if test='periodType.getCode() == "last"'>
                 AND tmmp.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
             </if>
+            <!-- 가입일 -->
             <if test='periodType.getCode() == "reg"'>
                 AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
             </if>
@@ -399,7 +379,6 @@
                 AND tmmp.TOT_SALE_AMT BETWEEN #{startSaveSale} AND #{endSaveSale}
             </if>
         </if>
-
         <if test='startAvablPoint != null and startAvablPoint != "" and endAvablPoint != null and endAvablPoint != ""'>
             <if test='memberPointFg == "0"'>
                 AND tmmp.TOT_SAVE_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
@@ -742,6 +721,22 @@
         WHERE membr_orgn_cd =  #{membrOrgnCd}
         AND	membr_card_no = #{membrCardNo}
     </select>
+
+    <!-- 카드정보 중복체크( 카드번호 사용중인 회원번호 / X (해당 카드번호 미사용) ) -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CARD
+        COMMENTS : 카드정보 중복 체크
+    -->
+    <select id="getMemberCardInfoCountDetail" parameterType="registVO" resultType="String">
+        /* RegistMapper.getMemberCardInfoCountDetail */
+        SELECT NVL(max(MEMBR_NO), 'X') AS MEMBR_NO
+        FROM TB_MB_MEMBER_CARD tmmc
+        WHERE membr_orgn_cd =  #{membrOrgnCd}
+        AND	membr_card_no = #{membrCardNo}
+        AND CST_CARD_STAT_FG = '0'
+    </select>
+
+
     <!-- 회원정보 수정 Sec-->
     <!--
         TABLE    : TB_MB_MEMBER
@@ -1083,12 +1078,9 @@
         ,iss_remark
         ,iss_orgn_cd
         ,iss_date
-        ,(SELECT nmcode_nm FROM tb_cm_nmcode WHERE nmcode_grp_cd = '300' AND nmcode_cd = tmmc.cst_card_stat_fg) AS
-        stat_fg_nm
-        ,(SELECT nmcode_nm FROM tb_cm_nmcode WHERE nmcode_grp_cd = '301' AND nmcode_cd = tmmc.cst_card_iss_fg ) AS
-        iss_fg_nm
-        FROM
-        TB_MB_MEMBER_CARD tmmc
+        ,(SELECT nmcode_nm FROM tb_cm_nmcode WHERE nmcode_grp_cd = '300' AND nmcode_cd = tmmc.cst_card_stat_fg) AS stat_fg_nm
+        ,(SELECT nmcode_nm FROM tb_cm_nmcode WHERE nmcode_grp_cd = '301' AND nmcode_cd = tmmc.cst_card_iss_fg ) AS iss_fg_nm
+        FROM TB_MB_MEMBER_CARD tmmc
         <where>
             <if test='membrNo != null and membrNo != ""'>
                 AND MEMBR_NO = #{membrNo}
@@ -1098,7 +1090,6 @@
             </if>
         </where>
         ORDER BY REG_DT DESC
-
     </select>
 
     <!-- 회원카드정보 추가 -->
@@ -1111,35 +1102,38 @@
             select MEMBR_NO FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}
         </selectKey>
         /* RegistMapper.insertMembrCard */
-        INSERT INTO TB_MB_MEMBER_CARD tmmc (
-        tmmc.MEMBR_CARD_NO,
-        tmmc.MEMBR_ORGN_CD,
-        tmmc.MEMBR_NO,
-        tmmc.CST_CARD_STAT_FG,
-        tmmc.OLD_CST_CARD_NO,
-        tmmc.CST_CARD_ISS_FG,
-        tmmc.ISS_REMARK,
-        tmmc.ISS_ORGN_CD,
-        tmmc.ISS_DATE,
-        tmmc.REG_ID,
-        tmmc.REG_DT,
-        tmmc.MOD_ID,
-        tmmc.MOD_DT)
-        VALUES (
-        #{membrCardNo},
-        #{membrOrgnCd},
-        #{membrNo},
-        '0',
-        #{oldCstCardNo},
-        #{cstCardIssFg},
-        #{issRemark},
-        #{issOrgnCd},
-        #{issDate},
-        #{regId},
-        #{regDt},
-        #{modId},
-        #{modDt})
-
+        INSERT INTO TB_MB_MEMBER_CARD tmmc
+        (
+            tmmc.MEMBR_CARD_NO,
+            tmmc.MEMBR_ORGN_CD,
+            tmmc.MEMBR_NO,
+            tmmc.CST_CARD_STAT_FG,
+            tmmc.OLD_CST_CARD_NO,
+            tmmc.CST_CARD_ISS_FG,
+            tmmc.ISS_REMARK,
+            tmmc.ISS_ORGN_CD,
+            tmmc.ISS_DATE,
+            tmmc.REG_ID,
+            tmmc.REG_DT,
+            tmmc.MOD_ID,
+            tmmc.MOD_DT,
+            tmmc.MEMBR_CARD_SEQ
+        ) VALUES (
+            #{membrCardNo},
+            #{membrOrgnCd},
+            #{membrNo},
+            '0',
+            #{oldCstCardNo},
+            #{cstCardIssFg},
+            #{issRemark},
+            #{issOrgnCd},
+            #{issDate},
+            #{regId},
+            #{regDt},
+            #{modId},
+            #{modDt},
+            (SELECT NVL(MAX(MEMBR_CARD_SEQ),-1)+1 FROM TB_MB_MEMBER_CARD WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_CARD_NO = #{membrCardNo})
+        )
     </insert>
 
     <!-- 배달정보 조회 -->

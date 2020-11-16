@@ -79,7 +79,7 @@
         COMMENTS : 상세(포인트)
     -->
     <select id="getMemberClassPoint" parameterType="membrClassVO" resultType="DefaultMap">
-        /* MemberClassMapper.getMemberClassDetail */
+        /* MemberClassMapper.getMemberClassPoint */
         SELECT
             	tmmcpr.MEMBR_ORGN_CD ,
             	tmmcpr.MEMBR_CLASS_CD ,
@@ -121,12 +121,24 @@
         TABLE    : TB_MB_MEMBER_CLASS
         COMMENTS : 기본여부
     -->
-    <select id="classDefltChk" parameterType="membrClassVO" resultType="int">
+    <select id="classDefltChk" parameterType="membrClassVO" resultType="String">
         /* MemberClassMapper.classDefltChk */
-        SELECT count(*)
+        SELECT DEFLT_YN
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
             AND MEMBR_CLASS_CD = #{membrClassCd}
+    </select>
+
+    <!-- 회원등급 기본여부(기존에 저장된 기본이 있는지) -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CLASS
+        COMMENTS : 기본여부
+    -->
+    <select id="classDefltChkList" parameterType="membrClassVO" resultType="int">
+        /* MemberClassMapper.classDefltChk */
+        SELECT Count(*)
+          FROM TB_MB_MEMBER_CLASS
+          WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
             AND DEFLT_YN = 'Y'
     </select>
 
@@ -251,14 +263,15 @@
     -->
     <select id="deleteClassChk" parameterType="membrClassVO" resultType="int">
         /* MemberClassMapper.deleteClassChk */
-        SELECT count(*)
-        FROM TB_MB_MEMBER tmm, TB_MB_MEMBER_CLASS tmmc
-        WHERE tmm.MEMBR_CLASS_CD = tmmc.MEMBR_CLASS_CD
-        AND tmm.USE_YN = 'Y'
+        SELECT COUNT(*)
+        FROM TB_MB_MEMBER tmm
+            , TB_MB_MEMBER_CLASS tmmc
+        WHERE 1=1
+        AND tmm.MEMBR_CLASS_CD = tmmc.MEMBR_CLASS_CD
+        AND tmm.MEMBR_ORGN_CD = tmmc.MEMBR_ORGN_CD
         AND tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tmmc.MEMBR_CLASS_CD = #{membrClassCd}
     </select>
-
 
     <!-- 회원등급 삭제 -->
     <!--

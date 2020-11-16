@@ -57,15 +57,11 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
         String dt = currentDateTimeString();
 
         for (MemberExcelUploadVO memberExcelUploadVO : memberExcelUploadVOs) {
-            if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-                registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-                registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-                memberExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-            } else { // 본사/매장
-                registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-                memberExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            }
+
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+            memberExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
             memberExcelUploadVO.setMembrNo(registMapper.getNewMemberNo(registVO));
             
             // NOT NULL 컬럼

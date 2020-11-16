@@ -146,9 +146,12 @@ public class MemberClassController {
     @RequestMapping(value = "grade/classRegist.sb", method = RequestMethod.POST)
     public Result classRegist(@RequestBody MembrClassVO membrClassVO, HttpServletRequest request,
                               HttpServletResponse response, Model model) {
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
         int result = classService.classInfoChk(membrClassVO,sessionInfoVO);
         DefaultMap<Object> status = classService.getMember(membrClassVO, sessionInfoVO);
+
         if(result == 0) {
             status.put("data", result);
             status.put("message", messageService.get("grade.membr.deflt.yn.fail"));
@@ -244,7 +247,4 @@ public class MemberClassController {
 
         return returnJson(Status.OK, result);
     }
-
-
-
 }

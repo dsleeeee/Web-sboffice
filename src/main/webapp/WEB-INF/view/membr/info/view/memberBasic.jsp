@@ -24,41 +24,36 @@
                 </colgroup>
                 <tbody>
                 <tr style="border-top: 1px solid #ccc;">
-                        <%-- 회원번호 --%>
+                    <%-- 회원번호 --%>
                     <th><s:message code="regist.membr.no"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="rMembrNo" class="sb-input w100" ng-model="member.membrNo"
-                               readonly="readonly"/>
+                        <input type="text" id="rMembrNo" class="sb-input w100" ng-model="member.membrNo" readonly="readonly"/>
                     </td>
-                        <%-- 회원닉네임 --%>
+                    <%-- 회원닉네임 --%>
                     <th><s:message code="regist.membr.nicknm"/></th>
                     <td>
-                        <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm"
-                               class="sb-input w100" maxlength="30"/>
+                        <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm" class="sb-input w100" maxlength="30"/>
                     </td>
                 </tr>
                 <tr>
-                        <%-- 회원명 --%>
+                    <%-- 회원명 --%>
                     <th><s:message code="regist.membr.nm"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm"
-                               class="sb-input w100" maxlength="30" required>
+                        <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm" class="sb-input w100" maxlength="30" required>
                     </td>
-                        <%-- 회원명영문 --%>
+                    <%-- 회원명영문 --%>
                     <th><s:message code="regist.membr.nm.eng"/></th>
                     <td>
-                        <input type="text" id="rMemberEngNm" name="membrEngNm" ng-model="member.membrEngNm"
-                               class="sb-input w100" maxlength="30" required>
+                        <input type="text" id="rMemberEngNm" name="membrEngNm" ng-model="member.membrEngNm" class="sb-input w100" maxlength="30" required>
                     </td>
                 </tr>
                 <tr>
-                        <%-- 회원카드번호 --%>
+                    <%-- 회원카드번호 --%>
                     <th><s:message code="regist.membr.card.no"/></th>
                     <td>
-                        <input type="text" id="basicMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo"
-                               class="sb-input w100" maxlength="30" required  ng-disabled="member.membrNo !== '자동채번'">
+                        <input type="text" id="basicMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo" class="sb-input w100" maxlength="30" required  ng-disabled="member.membrNo !== '자동채번'">
                     </td>
-                        <%-- 카드사용구분 --%>
+                    <%-- 카드사용구분 --%>
                     <th><s:message code="regist.membr.card.yn"/></th>
                     <td>
                         <div class="sb-select">
@@ -77,20 +72,17 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 회사단축번호 --%>
+                    <%-- 회사단축번호 --%>
                     <th><s:message code="regist.membr.stortNo"/></th>
                     <td>
-                        <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.shortNo"
-                               maxlength="15"/>
+                        <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.shortNo" maxlength="15"/>
                     </td>
-                        <%-- 등록매장 --%>
+                    <%-- 등록매장 --%>
                     <th><s:message code="regist.reg.store.cd"/><em class="imp">*</em></th>
                     <td>
                         <c:if test="${hqOfficeCd eq '00000'}">
-                            <input type="text" id="basicRegStoreNm" readonly class="sb-input w100" ng-model="member.storeNm"
-                                   maxlength="15"/>
-                            <input type="hidden" id="basicRegStoreCd"  class="sb-input w100" ng-model="member.regStoreCd"
-                                   maxlength="15"/>
+                            <input type="text" id="basicRegStoreNm" readonly class="sb-input w100" ng-model="member.storeNm" maxlength="15"/>
+                            <input type="hidden" id="basicRegStoreCd"  class="sb-input w100" ng-model="member.regStoreCd" maxlength="15"/>
                         </c:if>
                         <c:if test="${hqOfficeCd ne '00000'}">
                             <div class="sb-select">
@@ -106,7 +98,6 @@
                                 </wj-combo-box>
                             </div>
                         </c:if>
-
 <%--                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">--%>
 <%--                            <jsp:param name="targetId" value="regStoreSelect"/>--%>
 <%--                        </jsp:include>--%>
@@ -116,15 +107,12 @@
                     <%-- 연락처 --%>
                     <th><s:message code="regist.tel"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="telNo" name="telNo" ng-model="member.telNo"
-                               class="sb-input w100" maxlength="11"
-                               placeholder="<s:message code='storeManage.bizNo.comment' />" required/>
+                        <input type="text" id="telNo" name="telNo" ng-model="member.telNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" required/>
                     </td>
-                        <%-- 핸드폰번호 --%>
+                    <%-- 핸드폰번호 --%>
                     <th style="display:none;"><s:message code="regist.phone.no"/><em class="imp">*</em></th>
                     <td style="display:none;">
-                        <input type="hidden" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo"
-                               maxlength="15"/>
+                        <input type="hidden" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo" maxlength="15"/>
                     </td>
                     <%-- 결혼여부 --%>
                     <th><s:message code="regist.wedding"/><em class="imp">*</em></th>
@@ -196,7 +184,7 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 회원등급 --%>
+                    <%-- 회원등급 --%>
                     <th><s:message code="regist.memberClass"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -212,7 +200,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 사용여부 --%>
+                    <%-- 사용여부 --%>
                     <th><s:message code="regist.useYn"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -230,7 +218,7 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 거래처 매핑코드 --%>
+                    <%-- 거래처 매핑코드 --%>
                     <th><s:message code="regist.membr.mappingCd" /></th>
                     <td>
                         <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
@@ -241,13 +229,12 @@
                     <td></td>
                 </tr>
                 <tr>
-                        <%-- E-mail --%>
+                    <%-- E-mail --%>
                     <th><s:message code="regist.email"/></th>
                     <td>
-                        <input type="text" id="rEmailAddr" name="emailAddr" ng-model="member.emailAddr"
-                               class="sb-input w100" maxlength="50"/>
+                        <input type="text" id="rEmailAddr" name="emailAddr" ng-model="member.emailAddr" class="sb-input w100" maxlength="50"/>
                     </td>
-                        <%-- 성별 --%>
+                    <%-- 성별 --%>
                     <th><s:message code="regist.gender"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -265,23 +252,20 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 주소 //TODO 주소검색 추가 필요 --%>
+                    <%-- 주소 //TODO 주소검색 추가 필요 --%>
                     <th><s:message code="regist.addr"/></th>
                     <td colspan="3">
-                        <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo"
-                               class="sb-input w30" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                        <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo" class="sb-input w30" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
                             <s:message code="regist.srchAddr"/>
                         </a>
                         <br>
-                        <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100"
-                               maxlength="60" style="margin:2px 0px;"/>
-                        <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl"
-                               class="sb-input w100" maxlength="60"/>
+                        <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100" maxlength="60" style="margin:2px 0px;"/>
+                        <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl" class="sb-input w100" maxlength="60"/>
                     </td>
                 </tr>
                 <tr>
-                        <%-- 이메일수신 --%>
+                    <%-- 이메일수신 --%>
                     <th><s:message code="regist.email.recv"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -297,7 +281,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- SMS 수신 --%>
+                    <%-- SMS 수신 --%>
                     <th><s:message code="regist.sms.recv"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -314,15 +298,15 @@
                         </div>
                     </td>
                 </tr>
-                <tr ng-if="member.membrNm === ''">
+                <%--<tr ng-if="member.membrNm === ''">--%>
+                <tr id="trMovePoint">
                     <%-- 이전포인트 --%>
                     <th><s:message code="regist.membr.move.point"/></th>
                     <td colspan="3">
-                        <input type="text" id="movePoint" name="movePoint" ng-model="member.movePoint"
-                               class="sb-input w30"/><s:message code="regist.membr.move.point.txt"/>
+                        <input type="text" id="movePoint" name="movePoint" ng-model="member.movePoint" class="sb-input w30"/><s:message code="regist.membr.move.point.txt"/>
                     </td>
                 </tr>
-                <tr>
+                <%--<tr>--%>
                         <%-- 회원유치사원 --%>
 <%--                    <th><s:message code="regist.membr.attract"/></th>--%>
 <%--                    <td colspan="3">--%>
@@ -330,27 +314,25 @@
 <%--                            <jsp:param name="targetId" value="regStore"/>--%>
 <%--                        </jsp:include>--%>
 <%--                    </td>--%>
-                </tr>
+                <%--</tr>--%>
                 <tr>
-                        <%-- 비고 --%>
+                    <%-- 비고 --%>
                     <th><s:message code="regist.remark"/></th>
                     <td colspan="3">
-                        <input type="text" id="rRemark" name="remark" ng-model="member.remark"
-                               class="sb-input w100" maxlength="100"/>
+                        <input type="text" id="rRemark" name="remark" ng-model="member.remark" class="sb-input w100" maxlength="100"/>
                     </td>
                 </tr>
                 </tbody>
             </table>
-
         </f:form>
     </div>
     <div class="btnSet">
         <%-- 저장 --%>
-        <span><a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message
-                code="cmm.save"/></a></span>
-            <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
+        <span><a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message code="cmm.save"/></a></span>
+        <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
     </div>
 </div>
+
 <script>
     var memberClassList = ${memberClassList};
     var orgnNm = "${orgnNm}";
@@ -358,4 +340,5 @@
     var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20191223.27" charset='utf-8'"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20201112.01" charset="utf-8"></script>

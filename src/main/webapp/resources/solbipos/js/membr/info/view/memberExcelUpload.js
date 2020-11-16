@@ -25,7 +25,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         {value: '1', name: '전체'},
         {value: '2', name: '성공내역'},
         {value: '3', name: '오류내역'}
-    ]
+    ];
     $scope.status = $scope.statusList[0];
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -53,6 +53,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         $scope.memberClassList = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
         $scope.genderDataMap = new wijmo.grid.DataMap(genderDataMap, 'value', 'name');
         $scope.weddingDataMap = new wijmo.grid.DataMap(weddingDataMap, 'value', 'name');
+
         $scope.isEdited = false;
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -62,6 +63,24 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
                   $scope.isEdited = true;
                   dataItem.result = "양식검증 필요";
               }
+            }
+        });
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 검증결과
+                if (col.binding === "result") {
+                    var item = s.rows[e.row].dataItem;
+
+                    // 값이 있으면 링크 효과
+                    if (item[("result")] !== '검증성공') {
+                        wijmo.addClass(e.cell, 'wij_gridText-red');
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    }
+                }
             }
         });
     };

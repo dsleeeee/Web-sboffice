@@ -37,7 +37,9 @@ public interface MemberClassMapper {
 
     int deleteClassInitPointInfo(MembrClassPointVO membrClassPointVO);
 
-    int classDefltChk(MembrClassVO membrClassVO);
+    String classDefltChk(MembrClassVO membrClassVO);
+
+    int classDefltChkList(MembrClassVO membrClassVO);
 
     int deleteClassChk(MembrClassVO membrClassVO);
 

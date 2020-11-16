@@ -7,22 +7,17 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
-<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp"></c:import>
-<%--<div ng-controller="memberExcelUploadCtrl"></div>--%>
+
 <div class="subCon" ng-controller="memberPointCtrl">
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
-        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <%--      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberPointCtrl', 1)">--%>
-            <%--            <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberPointCtrl', 1)">--%>
-            <%--                <s:message code="cmm.search"/>--%>
-            <%--            </button>--%>
-        </div>
     </div>
     <%-- 상단 타이틀 --%>
+
     <div class="w100 mt10 mb10">
         <h2 class="h2_tit oh lh30">
+            <%-- 전체회원 포인트 세팅 --%>
             <s:message code="membrPoint.totAjdPoint.title"/>
         </h2>
         <table class="searchTbl">
@@ -42,11 +37,10 @@
                 <%-- 비고  --%>
                 <th><s:message code="memberPoint.remark"/></th>
                 <td>
-                    <input type="text" class="sb-input fl w70" ng-model="changeAll.adjustPartRemark"
-                           id="adjustPartRemark"/>
+                    <input type="text" class="sb-input fl w70" ng-model="changeAll.adjustPartRemark" id="adjustPartRemark"/>
+                    <%--저장--%>
                     <%--          <input type="button" class="sb-input w5" value="저장" onclick="adjustAll()"/>--%>
-                    <button class="btn_skyblue sb-input ml5 fl w25" ng-click="adjustAll()"><s:message
-                            code="cmm.save"/></button>
+                    <button class="btn_skyblue sb-input ml5 fl w25" ng-click="adjustAll()"><s:message code="cmm.save"/></button>
                 </td>
             </tr>
             </tbody>
@@ -74,40 +68,35 @@
             <tr class="brt">
                 <%-- 양식다운로드 --%>
                 <td>
-                    <button class="btn_skyblue sb-input w100" style="margin-left: 5px"
-                            ng-click="excelTextUpload('excelFormDown')">
-                        <s:message code="member.excel.download"/></button>
+                    <button class="btn_skyblue sb-input w100" style="margin-left: 5px" ng-click="excelTextUpload('excelFormDown')"><s:message code="member.excel.download"/></button>
                 </td>
                 <%-- 양식업로드  --%>
                 <td>
-                    <button class="btn_skyblue sb-input w100" style="margin-left: 5px"
-                            ng-click="excelTextUpload('memberPoint')">
-                        <s:message code="member.excel.upload"/>
-                    </button>
+                    <button class="btn_skyblue sb-input w100" style="margin-left: 5px"  ng-click="excelTextUpload('memberPoint')"><s:message code="member.excel.upload"/></button>
                 </td>
                 <%-- 편집화면다운로드  --%>
                 <td>
-                    <button class="btn_skyblue sb-input w100" style="margin-left: 5px" ng-click="excelDownload()">
-                        <s:message
-                                code="member.excel.pageDownload"/></button>
+                    <button class="btn_skyblue sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message code="member.excel.pageDownload"/></button>
                 </td>
                 <td></td>
                 <td></td>
+                <%--양식검증--%>
                 <td>
-                    <button class="btn_skyblue sb-input w100" ng-click="formChk()"><s:message
-                            code="member.excel.check"/></button>
+                    <button class="btn_skyblue sb-input w100" ng-click="formChk()"><s:message code="member.excel.check"/></button>
                 </td>
+                <%--비고--%>
                 <th><s:message code="memberPoint.remark"/></th>
                 <td>
                     <input type="text" class="sb-input w100" id="" ng-model="remark"/>
                 </td>
+                <%--저장--%>
                 <td>
                     <button class="btn_skyblue sb-input w100" ng-click="save()"><s:message code="cmm.save"/></button>
                 </td>
-                <%--                <td></td>--%>
             </tr>
             </tbody>
         </table>
+
         <ul class="txtSty2 mt10 pdb20 bb">
             <li class="red">
                 <p>
@@ -124,20 +113,6 @@
     </div>
 
     <div class="oh mb10">
-<%--        <div class="sb-select dkbr fl ">--%>
-            <%-- 페이지 스케일  --%>
-<%--            <wj-combo-box--%>
-<%--                    class="w100px fl"--%>
-<%--                    id="listScaleBox"--%>
-<%--                    ng-model="listScale"--%>
-<%--                    items-source="_getComboData('listScaleBox')"--%>
-<%--                    display-member-path="name"--%>
-<%--                    selected-value-path="value"--%>
-<%--                    is-editable="false"--%>
-<%--                    initialized="initComboBox(s)"--%>
-<%--                    frozen-columns="2">--%>
-<%--            </wj-combo-box>--%>
-<%--        </div>--%>
         <div class="sb-select dkbr ml5 fl">
             <wj-combo-box
                     class="w100px fl"
@@ -151,20 +126,19 @@
                     initialized="_initComboBox(s)">
             </wj-combo-box>
         </div>
+        <%--조회--%>
         <button class="btn_skyblue sb-input ml5 fl" id="btnSearch" ng-click="_pageView('memberPointCtrl', 1)">
             <s:message code="cmm.search"/>
         </button>
-        <button class="btn_skyblue sb-input ml5 fl" ng-click="deleteUpload()"><s:message
-                code="cmm.delete"/></button>
-<%--        <button class="btn_skyblue sb-input ml5 fl"  id="totGrid" ng-click="totGrid()"><s:message--%>
-<%--                code="cmm.delete"/></button>--%>
+        <%--삭제--%>
+        <button class="btn_skyblue sb-input ml5 fl" ng-click="deleteUpload()"><s:message code="cmm.delete"/></button>
+<%--        <button class="btn_skyblue sb-input ml5 fl" id="totGrid" ng-click="totGrid()"><s:message code="cmm.delete"/></button>--%>
     </div>
+    <%-- 콤보 리스트 --%>
+    <s:message code="memberPoint.title.delete"/>
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
-            <span><s:message code="memberPoint.title.delete"/></span>
-            <%--            <button class="btn_skyblue sb-input w5" style="margin: 5px 15px" ng-click="deleteUpload()"><s:message--%>
-            <%--                    code="cmm.delete"/></button>--%>
+        <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     id="memberPointGrid"
                     autoGenerateColumns="false"
@@ -176,30 +150,15 @@
                     item-formatter="_itemFormatter"
                     frozen-columns="2">
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
-                                     is-read-only="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberPoint.tit.searchResult"/>" binding="memberResult"
-                                     width="240" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="member.excel.membrClassCd"/>" binding="membrClassCd"
-                                     width="115" data-map="memberClassList"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberPoint.memberNo"/>" binding="membrNo" width="115"
-                                     is-read-only="false" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberPoint.memberNm"/>" binding="membrNm" width="115"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberPoint.memberCardNo"/>" binding="membrCardNo"
-                                     width="115"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberPoint.avablPoint"/>" binding="avablPoint"
-                                     width="115"
-                                     is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberPoint.chanPoint"/>" binding="totAdjPoint"
-                                     width="115"
-                                     is-read-only="false" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberPoint.totAdjPointAfter"/>"
-                                     binding="totAdjPointAfter"
-                                     width="115"
-                                     is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberPoint.tit.searchResult"/>" binding="memberResult" width="250" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.membrClassCd"/>" binding="membrClassCd" width="110" data-map="memberClassList" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberPoint.memberNo"/>" binding="membrNo" width="110" is-read-only="false" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberPoint.memberNm"/>" binding="membrNm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberPoint.memberCardNo"/>" binding="membrCardNo" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberPoint.avablPoint"/>" binding="avablPoint" width="110" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberPoint.chanPoint"/>" binding="totAdjPoint" width="110" is-read-only="false" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberPoint.totAdjPointAfter"/>" binding="totAdjPointAfter" width="110" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -216,8 +175,8 @@
 <%--        </div>--%>
         <%--//페이지 리스트--%>
 </div>
-<script>
 
+<script>
     var recvDataMap = ${ccu.getCommCodeSelect("072")};
     <%--수신, 미수신--%>
     var recvDataMapEx = ${ccu.getCommCodeExcpAll("072")};
@@ -234,10 +193,11 @@
     <%--결혼유무--%>
     var anvrsDataMap = ${ccu.getCommCode("032")};
     var memberClassList = ${memberClassList};
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.11"
-        charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.11"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.11" charset="utf-8"></script>
+
+<%-- 수불 엑셀업로드 공통 팝업 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
+</c:import>
