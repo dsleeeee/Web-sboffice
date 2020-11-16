@@ -62,9 +62,29 @@ app.controller('agencyAuthListCtrl', ['$scope', '$http', function ($scope, $http
         params.orgnCd = orgnCd;
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
+        params.manageVanCd = $("#ssl_srchManageVanCdAuth").val();
 
         $scope._inquiryMain("/pos/license/oper/oper/getAgencyAuthList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+    /*********************************************************
+     * 관리밴사 조회
+     * *******************************************************/
+    $scope.searchManageVanAuth = function(){
+        var popup = $scope.vanLayer;
+
+        // 팝업 닫을때
+        popup.show(true, function (s) {
+            var vanScope = agrid.getScope('searchVanCtrl');
+            vanScope.$apply(function () {
+                vanScope._gridDataInit();
+                if (!$.isEmptyObject(vanScope.getVan())) {
+                    $("#ssl_srchManageVanCdAuth").val(vanScope.getVan().vanCd);
+                    $("#manageVanNmAuth").val(vanScope.getVan().vanNm);
+                }
+            });
+        });
+    };
 
 }]);

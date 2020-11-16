@@ -29,7 +29,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <%-- 조회일자 --%>
+                <%-- 시스템등록 일자 --%>
                 <th>
                     <s:message code="oper.date" />
                 </th>
@@ -65,17 +65,30 @@
                     </div>
                 </td>
             </tr>
-            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
-                <%-- 관리업체 --%>
+            <%--<tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >--%>
+            <tr>
+                <%-- 관리밴사 --%>
                 <th>
-                    <s:message code="oper.agency" />
+                    <s:message code="oper.manageVan" />
                 </th>
                 <td>
-                    <input type="text" id="agencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency()">
-                    <input type="hidden" id="ssl_srchAgencyCd" ng-hide="true">
+                    <input type="text" id="manageVanNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchManageVan()">
+                    <input type="hidden" id="ssl_srchManageVanCd" ng-hide="true">
                 </td>
-                <th></th>
-                <td></td>
+                <c:if test="${orgnFg == 'MASTER'}">
+                    <%-- 관리업체 --%>
+                    <th>
+                        <s:message code="oper.agency" />
+                    </th>
+                    <td>
+                        <input type="text" id="agencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency()">
+                        <input type="hidden" id="ssl_srchAgencyCd" ng-hide="true">
+                    </td>
+                </c:if>
+                <c:if test="${orgnFg == 'AGENCY'}">
+                    <th></th>
+                    <td></td>
+                </c:if>
             </tr>
             <tr>
                 <%-- 본사코드 --%>
@@ -183,8 +196,12 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=2019052801.20" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=20201116.02" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">
+</c:import>
+
+<%-- 관리밴사 조회 --%>
+<c:import url="/WEB-INF/view/application/layer/searchVan.jsp">
 </c:import>

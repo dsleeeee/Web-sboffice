@@ -125,6 +125,11 @@
                  AND tssh.MAX_SALE_DATE IS NOT NULL
             ]]>
         </if>
+        <if test='manageVanCd != null and manageVanCd != ""'>
+            <![CDATA[
+                 AND tms.VAN_CD = #{manageVanCd}
+            ]]>
+        </if>
         AND tho.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
         AND tmp.STORE_CD (+)= tms.STORE_CD
         AND tci.STORE_CD (+)= tms.STORE_CD
@@ -136,7 +141,6 @@
         ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-
 
     <!-- 대리점인증현황탭 - 대리점인증현황조회-->
     <!--
@@ -169,13 +173,21 @@
         FROM TB_CM_AGENCY tca,
         (
             SELECT
-            AGENCY_CD,
-            COUNT(STORE_CD) AS INST_CNT
-            FROM TB_CM_INSTLL
+            tci.AGENCY_CD,
+            COUNT(tci.STORE_CD) AS INST_CNT
+            FROM TB_CM_INSTLL tci,
+            TB_MS_STORE tms
             WHERE 1=1
-            AND SEQ_NO = '1'
-            AND INST_FG = '1'
-            GROUP BY AGENCY_CD
+            AND tci.SEQ_NO = '1'
+            AND tci.INST_FG = '1'
+            AND tms.STORE_CD (+)= tci.STORE_CD
+            AND tms.AGENCY_CD (+)= tci.AGENCY_CD
+            <if test='manageVanCd != null and manageVanCd != ""'>
+                <![CDATA[
+                     AND tms.VAN_CD = #{manageVanCd}
+                ]]>
+            </if>
+            GROUP BY tci.AGENCY_CD
         ) tci
         WHERE 1=1
         AND tca.AGENCY_CD != '00000'

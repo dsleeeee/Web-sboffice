@@ -50,13 +50,14 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', function ($scope, $http)
         params.pAgencyCd = pAgencyCd;
         params.agencyCd = orgnCd;
         params.listScale = $scope.listScaleSale;
+        params.manageVanCd = $("#ssl_srchManageVanCd").val();
 
         $scope._inquiryMain("/pos/license/oper/oper/getSaleStoreList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
     /*********************************************************
-     * 관리업체 조회
+     * 대리점 조회
      * *******************************************************/
     $scope.searchAgency = function(){
         if(orgnFg === "MASTER") {
@@ -74,6 +75,25 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', function ($scope, $http)
                 });
             });
         }
+    };
+
+    /*********************************************************
+     * 관리밴사 조회
+     * *******************************************************/
+    $scope.searchManageVan = function(){
+        var popup = $scope.vanLayer;
+
+        // 팝업 닫을때
+        popup.show(true, function (s) {
+            var vanScope = agrid.getScope('searchVanCtrl');
+            vanScope.$apply(function () {
+                vanScope._gridDataInit();
+                if (!$.isEmptyObject(vanScope.getVan())) {
+                    $("#ssl_srchManageVanCd").val(vanScope.getVan().vanCd);
+                    $("#manageVanNm").val(vanScope.getVan().vanNm);
+                }
+            });
+        });
     };
 
 }]);
