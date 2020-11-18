@@ -15,6 +15,7 @@ import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.store.hq.brand.enums.TargtFg;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.*;
+import kr.co.solbipos.store.manage.storemanage.service.MemberClassVO;
 import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -208,6 +209,17 @@ public class HqManageServiceImpl implements HqManageService{
 //        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
 //        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
 //        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
+
+        // 회원등급 생성
+        MemberClassVO memberClassVO = new MemberClassVO();
+        memberClassVO.setMembrOrgnCd(hqOfficeCd);
+        memberClassVO.setRegDt(dt);
+        memberClassVO.setRegId(sessionInfoVO.getUserId());
+        memberClassVO.setModDt(dt);
+        memberClassVO.setModId(sessionInfoVO.getUserId());
+
+        result += mapper.insertMemberClass(memberClassVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 포스 템플릿 등록
         result += mapper.hqPrintTempReg(hqManage);

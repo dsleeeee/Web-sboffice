@@ -278,7 +278,10 @@ public class StoreManageServiceImpl implements StoreManageService{
             memberClassVO.setModDt(dt);
             memberClassVO.setModId(sessionInfoVO.getUserId());
 
-            procCnt += mapper.insertMemberClass(memberClassVO);
+            // 단독매장 회원등급 생성
+            if(storeManageVO.getHqOfficeCd().equals("00000")) {
+                procCnt += mapper.insertMemberClass(memberClassVO);
+            }
 
             // 기본 테이블 그룹 생성
             TableGroupVO tableGroupVO = new TableGroupVO();

@@ -2,6 +2,7 @@ package kr.co.solbipos.store.hq.hqmanage.service.impl;
 
 import java.util.List;
 
+import kr.co.solbipos.store.manage.storemanage.service.MemberClassVO;
 import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
@@ -69,6 +70,9 @@ public interface HqManageMapper {
 
 //    /** 공통코드 복사 */
 //    int copyCmmCode(HqNmcodeVO nmcodeVO);
+
+    /** 회원 기본등급 등록 */
+    int insertMemberClass(MemberClassVO memberClassVO);
 
     /** 포스 출력물 템플릿 등록 (본사) */
     int hqPrintTempReg(HqManageVO hqManage);
