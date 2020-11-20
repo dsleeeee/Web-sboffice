@@ -104,6 +104,6 @@ app.controller('memberInfoDtlCtrl', ['$scope', '$http', function ($scope, $http)
         $scope.wjMemberInfoDtlLayer.hide();
 
         // 저장기능 수행후 재조회
-        $scope._broadcast('memberChgBatchCtrl', null);
+        // $scope._broadcast('memberChgBatchCtrl', null);
     };
 }]);
