@@ -20,6 +20,8 @@ public interface DlvrRegistMapper {
 
     int deleteDlvrRegistInfo(DlvrRegistVO dlvrRegistVO);
 
+    int deleteDlvrDetailInfo(DlvrRegistVO dlvrRegistVO);
+
     String getEmpNoSelect(DlvrRegistVO dlvrRegistVO);
 
     List<DefaultMap<String>> dlvrDetailList(DlvrRegistVO dlvrRegistVO);

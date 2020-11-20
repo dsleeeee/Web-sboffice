@@ -81,6 +81,13 @@
          AND DLVR_LZONE_CD = #{dlvrLzoneCd}
     </delete>
 
+    <delete id="deleteDlvrDetailInfo" parameterType="dlvrRegistVO">
+      /* DlvrRegistMapper.deleteDlvrDetailInfo */
+      DELETE FROM TB_MS_DELIVERY_MZONE
+       WHERE STORE_CD = #{storeCd}
+         AND DLVR_LZONE_CD = #{dlvrLzoneCd}
+    </delete>
+
     <select id="dlvrDetailList" parameterType="dlvrRegistVO" resultType="DefaultMap">
         /* DlvrRegistMapper.dlvrDetailList */
         SELECT
@@ -106,7 +113,7 @@
 
     <select id="getNewDlvrMzoneCd" parameterType="dlvrRegistVO" resultType="String">
         /* DlvrRegistMapper.getNewDlvrMzoneCd */
-        SELECT LPAD( NVL(MAX(DLVR_MZONE_CD), 0) + 1, 3, '0') AS DLVR_MZONE_CD
+        SELECT LPAD( NVL(MAX(DLVR_MZONE_CD), 0) + 1, 5, '0') AS DLVR_MZONE_CD
           FROM TB_MS_DELIVERY_MZONE
          WHERE STORE_CD = #{storeCd}
     </select>

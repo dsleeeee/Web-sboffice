@@ -41,24 +41,25 @@
         tsshd.POS_NO,
         tsshd.STORE_CD,
         MAX(SBPENC.D(tsshm.MEMBR_NM)) AS MEMBR_NM,
-        tce.EMP_NM,
+        tme.EMP_NM,
         SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         TB_SL_SALE_HDR_DLVR tsshd,
         TB_SL_SALE_HDR tssh,
-        TB_CM_EMPLOYEE tce,
+        TB_MS_EMPLOYEE tme,
         TB_SL_SALE_HDR_MEMBR tsshm
         WHERE 1=1
-        AND tsshd.POS_NO = tsshm.POS_NO
-        AND tsshd.BILL_NO = tsshm.BILL_NO
-        AND tsshd.STORE_CD = tsshm.STORE_CD
-        AND tsshd.SALE_DATE = tsshm.SALE_DATE
+        AND tsshm.POS_NO (+)= tsshd.POS_NO
+        AND tsshm.BILL_NO (+)= tsshd.BILL_NO
+        AND tsshm.STORE_CD (+)= tsshd.STORE_CD
+        AND tsshm.SALE_DATE (+)= tsshd.SALE_DATE
         AND tsshd.POS_NO = tssh.POS_NO
         AND tsshd.BILL_NO = tssh.BILL_NO
         AND tsshd.STORE_CD = tssh.STORE_CD
         AND tsshd.SALE_DATE = tssh.SALE_DATE
-        AND tsshd.DLVR_EMP_NO = tce.EMP_NO
+        AND tme.STORE_CD (+)= tsshd.STORE_CD
+        AND tme.EMP_NO (+)= tsshd.DLVR_EMP_NO
         AND tsshd.STORE_CD = #{storeCd}
         AND tsshd.POS_NO = #{posNo}
         AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
@@ -69,7 +70,7 @@
         tsshd.BILL_NO,
         tsshd.DLVR_ADDR,
         tsshd.STORE_CD,
-        tce.EMP_NM
+        tme.EMP_NM
         ORDER BY
         tsshd.SALE_DATE
         <include refid="CmmSQL.PagingTemplateBottom"/>

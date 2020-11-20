@@ -46,12 +46,16 @@
             <td>
                 <input type="text" id="dlvrNm" class="sb-input w100" ng-model="dlvrNm" maxlength="15"/>
             </td>
-<%--            <th>--%>
-<%--                <s:message code="dlvrInfo.collect.name"/>--%>
-<%--            </th>--%>
-<%--            <td>--%>
-<%--                <input type="text" id="collectNm" class="sb-input w100" ng-model="collectNm" maxlength="15"/>--%>
-<%--            </td>--%>
+        </tr>
+        <tr>
+            <th>
+                <s:message code="dlvrInfo.collect.name"/>
+            </th>
+            <td>
+                <input type="text" id="collectNm" class="sb-input w100" ng-model="collectNm" maxlength="15"/>
+            </td>
+            <th></th>
+            <td></td>
         </tr>
         </tbody>
     </table>
@@ -74,7 +78,7 @@
 
         <%-- 엑셀 --%>
         <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
-            <s:message code="cmm.excel"/>
+            <s:message code="cmm.excel.down"/>
         </button>
     </div>
     <div class="w100 mt10 mb20">
@@ -89,26 +93,28 @@
                     item-formatter="_itemFormatter"
                     is-read-only="true">
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.date"/>" binding="saleDate" width="110"
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.date"/>" binding="saleDate" width="80"
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.posNo"/>" binding="posNo" width="100"
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.posNo"/>" binding="posNo" width="80"
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.billNo"/>" binding="billNo" width="100"
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.billNo"/>" binding="billNo" width="80"
                                      align="center" is-read-only="false" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.realSaleAmt"/>" binding="realSaleAmt" width="200"
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.realSaleAmt"/>" binding="realSaleAmt" width="100"
                                      is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.dlvrAddr"/>" binding="dlvrAddr" width="150"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.dlvrTelNo"/>" binding="dlvrTelNo" width="200"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.membrNm"/>" binding="membrNm" width="200"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.dlvrAddr"/>" binding="dlvrAddr" width="300"
+                                     is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.dlvrTelNo"/>" binding="dlvrTelNo" width="100"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.membrNm"/>" binding="membrNm" width="150"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvrInfo.billDt"/>" binding="billDt" width="150"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dlvrInfo.empNm"/>" binding="empNm" width="200"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.empNm"/>" binding="empNm" width="120"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dlvrInfo.collect.name"/>" binding="dlvrPayEmpNm" width="120"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -121,7 +127,7 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrInfo/dlvrInfo.js?ver=2019052801.11"
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrInfo/dlvrInfo.js?ver=2019052801.13"
         charset="utf-8"></script>
 
 <%-- 영수증상세 --%>

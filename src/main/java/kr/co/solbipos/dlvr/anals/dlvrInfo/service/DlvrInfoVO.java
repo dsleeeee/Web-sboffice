@@ -18,6 +18,7 @@ public class DlvrInfoVO extends PageVO {
   private String hqOfficeCd;
   private String hqBrandCd;
   private String storeCd;
+  private String dlvrPayEmpNm;
 
   public String getSaleDate() {
     return saleDate;
@@ -129,5 +130,13 @@ public class DlvrInfoVO extends PageVO {
 
   public void setStoreCd(String storeCd) {
     this.storeCd = storeCd;
+  }
+
+  public String getDlvrPayEmpNm() {
+    return dlvrPayEmpNm;
+  }
+
+  public void setDlvrPayEmpNm(String dlvrPayEmpNm) {
+    this.dlvrPayEmpNm = dlvrPayEmpNm;
   }
 }
