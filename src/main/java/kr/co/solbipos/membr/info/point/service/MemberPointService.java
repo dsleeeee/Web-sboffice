@@ -28,11 +28,11 @@ public interface MemberPointService {
   /**
    * 회춴포이트 리스트
    */
-  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO);
+//  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO);
 
   int getMemberPointSave(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO, HttpServletRequest request);
 
-  int adjustAll(List<DefaultMap<Object>> result, MemberPointVO[] memberPointVOs, SessionInfoVO sessionInfoVO);
+//  int adjustAll(List<DefaultMap<Object>> result, MemberPointVO[] memberPointVOs, SessionInfoVO sessionInfoVO);
 
   List<MemberPointVO> getMemberPointListChk(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO);
 

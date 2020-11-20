@@ -6,6 +6,7 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2020.06.15    Daniel      1.0
+ * 2020.11.17    김설아      1.0
  *
  * **************************************************************/
 /**
@@ -20,32 +21,37 @@ var useDataMapTotal = [
     {"name": "미사용", "value": "N"}
 ];
 
-
 /**
- *  세금계산서 요청목록 그리드 생성
+ *  배달주소지 그리드 생성
  */
 app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dlvrCtrl', $scope, $http, $timeout, true));
+
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
     // 회원등급
     $scope._setComboData("rMemberClass", memberClassList);
-    $scope._setComboData("rMemberDlvrLzone", memberDlvrLzone);
-    $scope._setComboData("rUseYn", useDataMap);
-    $scope._setComboData("rUseYnDefeult", useData);
     memberClassList.unshift({name: "전체", value: ""});
+    // 배달구역
+    $scope._setComboData("rMemberDlvrLzone", memberDlvrLzone);
     memberDlvrLzone.unshift({name: "전체", value: ""});
-
-    $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
-    $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
-    $scope._getComboDataQuery('032', 'anvType', 'A');
-    $scope._getComboDataQuery('077', 'periodType', 'A');
-    $scope._getComboDataQuery('076', 'weddingYn', 'A');
-    $scope._getComboDataQuery('055', 'gendrFg', 'A');
+    // 배달지사용
     $scope._getComboDataQuery('067', 'useYn', 'A');
+    // 배달지사용 적용
+    $scope._setComboData("rUseYn", useDataMap);
+    // $scope._setComboData("rUseYnDefeult", useData);
+    // $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
+    // $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
+    // $scope._getComboDataQuery('032', 'anvType', 'A');
+    // $scope._getComboDataQuery('077', 'periodType', 'A');
+    // $scope._getComboDataQuery('076', 'weddingYn', 'A');
+    // $scope._getComboDataQuery('055', 'gendrFg', 'A');
 
+    // 배달구역
     $scope.dlvrMzone = [];
+
     // 선택 회원
     $scope.selectedMember;
     $scope.setSelectedMember = function (member) {
@@ -55,7 +61,6 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         return $scope.selectedMember;
     };
 
-
     // // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
@@ -63,13 +68,11 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         $scope.memberClassDataMap = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
     };
 
-
     $scope.$on("dlvrCtrl", function (event, data) {
         $scope.searchDlvrList();
         event.preventDefault();
     });
 
-//
     $scope.searchDlvrList = function () {
         var scope = agrid.getScope('dlvrTelCtrl');
         var params = {};
@@ -82,8 +85,8 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         params.useYn = $scope.useYn;
         params.telNo = $scope.telNo;
         params.dlvrTelUseYn = $scope.dlvrTelUseYn;
-        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {
-        }, false);
+        params.listScale = $scope.listScale;
+        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {}, false);
         scope._broadcast('dlvrTelList', params);
     };
 
@@ -121,7 +124,6 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
             return false;
         }
     }
-
 
     $scope.$watch('dlvrLzoneCd', function () {
         var params = {};
@@ -240,10 +242,8 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         }
     };
 
-
     // 엑셀 다운로드
     $scope.excelDownload = function () {
-
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -275,7 +275,18 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $.postJSONArray("/membr/info/dlvr/dlvr/saveDlvr.sb", params, function (result) {
-            $scope.searchDlvrList();
+            if (result.status === "OK") {
+                $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
+                $scope.searchDlvrList();
+                $scope.$broadcast('loadingPopupInactive');
+            } else {
+                $scope.$broadcast('loadingPopupInactive');
+                $scope._popMsg(result.status);
+                return false;
+            }
+        }, function (err) {
+            $scope.$broadcast('loadingPopupInactive');
+            $scope._popMsg(err.message);
         });
     };
 
@@ -295,38 +306,56 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     };
 
     $scope.infoDeleteSave = function () {
-        let params = new Array();
+        var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $.postJSONArray("/membr/info/dlvr/dlvr/deleteDlvr.sb", params, function () {
-            $scope.searchDlvrList();
+        $.postJSONArray("/membr/info/dlvr/dlvr/deleteDlvr.sb", params, function (result) {
+            if (result.status === "OK") {
+                $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
+                $scope.searchDlvrList();
+                $scope.$broadcast('loadingPopupInactive');
+            } else {
+                $scope.$broadcast('loadingPopupInactive');
+                $scope._popMsg(result.status);
+                return false;
+            }
+        }, function (err) {
+            $scope.$broadcast('loadingPopupInactive');
+            $scope._popMsg(err.message);
         });
-    }
+    };
 }]);
 
 
+/**
+ *  배달전화번호 그리드 생성
+ */
 app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dlvrTelCtrl', $scope, $http, $timeout, true));
+
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
     // 회원등급
     $scope._setComboData("rMemberClass", memberClassList);
-    $scope._setComboData("rUseYn", useDataMap);
     memberClassList.unshift({name: "전체", value: ""});
-
-    $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
-    $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
-    $scope._getComboDataQuery('032', 'anvType', 'A');
-    $scope._getComboDataQuery('077', 'periodType', 'A');
-    $scope._getComboDataQuery('076', 'weddingYn', 'A');
-    $scope._getComboDataQuery('055', 'gendrFg', 'A');
-    $scope._getComboDataQuery('067', 'useYn', 'A');
-    // $scope._getComboDataQuery('067', 'telUseYn', '');
+    // 전화사용
     $scope._setComboData("telUseYn", useDataMapTotal);
+    // 전화사용 적용
+    $scope._setComboData("totTelUseYn", useDataMap);
+    // $scope._setComboData("rUseYn", useDataMap);
+    // $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
+    // $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
+    // $scope._getComboDataQuery('032', 'anvType', 'A');
+    // $scope._getComboDataQuery('077', 'periodType', 'A');
+    // $scope._getComboDataQuery('076', 'weddingYn', 'A');
+    // $scope._getComboDataQuery('055', 'gendrFg', 'A');
+    // $scope._getComboDataQuery('067', 'useYn', 'A');
 
     // 선택 회원
     $scope.selectedMember;
@@ -336,7 +365,6 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
-
 
     // // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -358,13 +386,12 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.membrNm = data.membrNm;
         params.telNo = data.telNo;
         params.useYn = data.dlvrTelUseYn;
-        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {
-        }, false);
+        params.listScale = data.listScale;
+        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {}, false);
     };
 
     // 엑셀 다운로드
     $scope.telExcelDownload = function () {
-
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -401,12 +428,23 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $.postJSONArray("/membr/info/dlvr/dlvr/saveDlvrTel.sb", params, function (result) {
-            $scope.searchDlvrTelList($scope.telData);
+            if (result.status === "OK") {
+                $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
+                $scope.searchDlvrTelList($scope.telData);
+                $scope.$broadcast('loadingPopupInactive');
+            } else {
+                $scope.$broadcast('loadingPopupInactive');
+                $scope._popMsg(result.status);
+                return false;
+            }
+        }, function (err) {
+            $scope.$broadcast('loadingPopupInactive');
+            $scope._popMsg(err.message);
         });
     };
 
     $scope.infoDelete = function () {
-        let params = new Array();
+        var params = new Array();
         // 해당 자료를 삭제하시겠습니까?
         $scope._popConfirm(messages["dlvr.membr.del"], function () {
             for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
@@ -418,17 +456,28 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
             $scope.infoDeleteSave();
         });
-    }
+    };
 
     // 배달전화번호 삭제
     $scope.infoDeleteSave = function () {
-        let params = new Array();
+        var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
         $.postJSONArray("/membr/info/dlvr/dlvr/deleteDlvrTel.sb", params, function (result) {
-            $scope.searchDlvrTelList();
+            if (result.status === "OK") {
+                $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
+                $scope.searchDlvrTelList($scope.telData);
+                $scope.$broadcast('loadingPopupInactive');
+            } else {
+                $scope.$broadcast('loadingPopupInactive');
+                $scope._popMsg(result.status);
+                return false;
+            }
+        }, function (err) {
+            $scope.$broadcast('loadingPopupInactive');
+            $scope._popMsg(err.message);
         });
-    }
+    };
 }]);

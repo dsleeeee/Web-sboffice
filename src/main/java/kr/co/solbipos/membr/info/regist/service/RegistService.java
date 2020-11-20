@@ -146,4 +146,10 @@ public interface RegistService {
     int updateDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
 
     int deleteDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
+
+    /** 배달주소지 수정 */
+    int updateDlvrAddrInfo(RegistVO registVO, SessionInfoVO si);
+
+    /** 배달주소지 삭제 */
+    int deleteDlvrAddrInfo(RegistVO registVO, SessionInfoVO si);
 }

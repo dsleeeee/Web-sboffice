@@ -124,8 +124,6 @@ public class DlvrServiceImpl implements DlvrService {
                 dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             }
 
-            dlvrVO.setRegDt(dt);
-            dlvrVO.setRegId(sessionInfoVO.getUserId());
             dlvrVO.setModDt(dt);
             dlvrVO.setModId(sessionInfoVO.getUserId());
 
@@ -203,7 +201,6 @@ public class DlvrServiceImpl implements DlvrService {
 
             result = dlvrMapper.deleteDlvr(dlvrVO);
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
         }
         return result;
     }

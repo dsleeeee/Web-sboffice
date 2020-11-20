@@ -1496,7 +1496,7 @@
         });
         return checked;
     }
-    
+
     function selectValueFromIndex(wijmoGridDataMapList, index) {
         var value = '';
         for (var i=0; wijmoGridDataMapList; i++) {

@@ -15,11 +15,6 @@
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
-        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberExcelUploadCtrl', 1)">
-                <s:message code="cmm.search"/>
-            </button>
-        </div>
     </div>
     <%-- 상단 타이틀 --%>
     <table class="searchTbl">
@@ -40,29 +35,11 @@
                 <%-- 양식업로드  --%>
                 <a href="#" class="btn_grayS" ng-click="excelTextUpload('memberExcel')"><s:message code="member.excel.upload"/></a>
             </td>
-            <%-- 회원내역 --%>
-            <th><s:message code="member.excel.memberInfo"/></th>
-            <%-- 성공내역, 실페내역  --%>
-            <td>
-                <div class="sb-select w40 fl">
-                    <wj-combo-box
-                            id="status"
-                            ng-model="status"
-                            control="statusCombo"
-                            items-source="statusList"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <%-- 편집화면다운로드  --%>
-                <a href="#" class="btn_grayS ml5" ng-click="excelDownload()"><s:message code="member.excel.pageDownload"/></a>
-            </td>
+            <td></td>
+            <td></td>
         </tr>
         </tbody>
     </table>
-
     <ul class="txtSty2 mt10 pdb20">
         <li class="red">
             <s:message code="member.excel.uploadDescription.titInfo"/><br>
@@ -76,20 +53,19 @@
             </p>
         </li>
     </ul>
-
     <%-- 콤보 리스트 --%>
     <s:message code="member.excel.combo.list"/>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap wj-control wj-content wj-flexgrid">
             <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex1"
-                    initialized="initGrid1(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data1"
-                    item-formatter="_itemFormatter"
-                    is-read-only="false">
+                autoGenerateColumns="false"
+                control="flex1"
+                initialized="initGrid1(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data1"
+                item-formatter="_itemFormatter"
+                is-read-only="false">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="dayMembrDetail.membrClassCd"/>" binding="comboClass" data-map="memberClassList"
                                      width="145" is-read-only="false" align="center"></wj-flex-grid-column><%-- 콤보리스트 회원등급분류 --%>
@@ -110,40 +86,46 @@
     </div>
 
     <%-- 회원내역 그리드 --%>
-    <%-- 그리드 top --%>
-    <div class="mt10 oh sb-select dkbr">
-<%--         페이지 스케일 
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
-        </wj-combo-box> --%>
-        <%-- 저장 --%>
-        <button id="btnSave" class="btn_skyblue ml5 fr" ng-click="save()"><s:message code="cmm.save"/></button>
+    <div class="oh mb10">
+        <div class="sb-select dkbr ml5 fl">
+            <wj-combo-box
+                    class="w100px fl"
+                    id="status"
+                    ng-model="status"
+                    control="statusCombo"
+                    items-source="statusList"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <%--조회--%>
+        <button class="btn_skyblue sb-input ml5 fl" id="btnSearch" ng-click="_pageView('memberExcelUploadCtrl', 1)"><s:message code="cmm.search"/></button>
+
+        <%-- 편집화면 엑셀 다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="member.excel.pageDownload"/></button>
         <%-- 삭제 --%>
         <button id="btnDelete" class="btn_skyblue ml5 fr" ng-click="deleteUpload()"><s:message code="cmm.delete"/></button>
+        <%-- 저장 --%>
+        <button id="btnSave" class="btn_skyblue ml5 fr" ng-click="save()"><s:message code="cmm.save"/></button>
         <%-- 양식검증 --%>
         <button class="btn_skyblue ml5 fr" ng-click="formChk()"><s:message code="member.excel.check"/></button>
     </div>
     <%-- 회원내역 --%>
     <s:message code="member.excel.memberInfo"/>
-    <%-- 그리드 bottom --%>
+    <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter"
-                    frozen-columns="2">
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter"
+                frozen-columns="2">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" 
                                      width="40" is-read-only="false" align="center"></wj-flex-grid-column>

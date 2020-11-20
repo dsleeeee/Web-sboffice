@@ -88,7 +88,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     };
    $scope.$on("memberClassCtrl", function (event, data) {
         // $scope.setSelectedMember(data);
-        console.log(data)
+        console.log(data);
         // $scope.detailData.membrClassNm = '';
         $scope.detailData = data;
         if ($scope.detailData.defltYn === 'Y') {

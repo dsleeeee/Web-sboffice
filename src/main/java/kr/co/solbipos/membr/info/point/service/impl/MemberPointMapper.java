@@ -30,9 +30,10 @@ public interface MemberPointMapper {
    */
   
 
-  int adjustAll(DefaultMap<Object> memberPointVO);
+//  int adjustAll(DefaultMap<Object> memberPointVO);
+  int adjustAll(MemberPointVO memberPointVO);
 
-  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO);
+//  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO);
 
   DefaultMap<Object> getMemberPointListChk(MemberPointVO memberPointVO);
 

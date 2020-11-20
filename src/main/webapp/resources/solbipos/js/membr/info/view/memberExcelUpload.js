@@ -70,11 +70,9 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-
                 // 검증결과
                 if (col.binding === "result") {
                     var item = s.rows[e.row].dataItem;
-
                     // 값이 있으면 링크 효과
                     if (item[("result")] !== '검증성공') {
                         wijmo.addClass(e.cell, 'wij_gridText-red');

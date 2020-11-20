@@ -564,16 +564,10 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public DefaultMap<Object> getDlvrList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            }
-        }
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
         LOGGER.debug("regStoreCd: {}", registVO.getRegStoreCd());
         LOGGER.debug("sessionInfoStoreCd: {}", sessionInfoVO.getStoreCd());
 
@@ -618,40 +612,24 @@ public class RegistServiceImpl implements RegistService {
         return resultList;
     }
 
-
-
     // 배달전화 리스트
     @Override
     public List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            }
-        }
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
         return mapper.getDlvrTelList(registVO);
     }
-
 
     // 배달정보등록
     @Override
     public int registDlvrInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         String dt = currentDateTimeString();
 
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            }
-        }
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
@@ -670,18 +648,9 @@ public class RegistServiceImpl implements RegistService {
     public int registDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         String dt = currentDateTimeString();
 
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-            registVO.setRegStoreCd(sessionInfoVO.getOrgnCd());
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            }
-        }
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
@@ -700,24 +669,12 @@ public class RegistServiceImpl implements RegistService {
     public int updateDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         String dt = currentDateTimeString();
 
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-            registVO.setRegStoreCd(sessionInfoVO.getOrgnCd());
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            }
-        }
-        registVO.setRegDt(dt);
-        registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
 
-        // 회원카드 등록
         int result = mapper.updateMembrDlvrTel(registVO);
         if (result <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -727,26 +684,9 @@ public class RegistServiceImpl implements RegistService {
 
     @Override
     public int deleteDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
-        String dt = currentDateTimeString();
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
-        if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-            registVO.setRegStoreCd(sessionInfoVO.getOrgnCd());
-
-        } else {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
-            }
-        }
-        registVO.setRegDt(dt);
-        registVO.setRegId(sessionInfoVO.getUserId());
-        registVO.setModDt(dt);
-        registVO.setModId(sessionInfoVO.getUserId());
-
-        // 회원카드 등록
         int result = mapper.deleteMembrDlvrTel(registVO);
         if (result <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -754,5 +694,35 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
-}
+    /** 배달주소지 수정 */
+    @Override
+    public int updateDlvrAddrInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
 
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        registVO.setModDt(dt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        int result = mapper.updateDlvrAddrInfo(registVO);
+        if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
+    /** 배달주소지 삭제 */
+    @Override
+    public int deleteDlvrAddrInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        int result = mapper.deleteDlvrAddrInfo(registVO);
+        if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
+}

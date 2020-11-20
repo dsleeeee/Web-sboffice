@@ -8,15 +8,15 @@
         TABLE    : TB_MB_MEMBER_POINT
         COMMENTS : 회원 포인트 조회
     -->
-    <select id="getMemberPointList" parameterType="memberPointVO" resultType="DefaultMap">
-      /* MemberPointMapper.getMemberClassList */
-      SELECT
-          MEMBR_ORGN_CD
-          ,MEMBR_NO
-          ,AVABL_POINT
-      FROM
-          TB_MB_MEMBER_POINT
-  </select>
+    <!--<select id="getMemberPointList" parameterType="memberPointVO" resultType="DefaultMap">-->
+      <!--/* MemberPointMapper.getMemberClassList */-->
+      <!--SELECT-->
+          <!--MEMBR_ORGN_CD-->
+          <!--,MEMBR_NO-->
+          <!--,AVABL_POINT-->
+      <!--FROM-->
+          <!--TB_MB_MEMBER_POINT-->
+  <!--</select>-->
 
     <!--  <insert id="adjustAllBackUp" parameterType="DefaultMap">-->
     <!--    INSERT INTO-->
@@ -49,27 +49,80 @@
     <!--    )-->
     <!--  </insert>-->
 
-    <insert id="adjustAll" parameterType="DefaultMap">
-    INSERT INTO
-	    TB_MB_MEMBER_POINT_HIST ( MEMBR_ORGN_CD , MEMBR_NO , CHG_DATE , CHG_SEQ , POINT_CHG_FG , CHG_POINT , REMARK , REG_DT , REG_ID, MOD_DT , MOD_ID )
-    SELECT
-        tmmp.MEMBR_ORGN_CD,
-        tmmp.MEMBR_NO,
-        #{chgDate},
-        SQ_TB_MEMBER_POINT_HIST.NEXTVAL,
-        '3',
-        #{totAjdPoint} - tmmp.AVABL_POINT,
-        #{remark},
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId}
-    FROM
-        TB_MB_MEMBER_POINT tmmp
-    WHERE
-        MEMBR_ORGN_CD = #{membrOrgnCd}
+    <!-- 전체포인트 셋팅 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <!--<insert id="adjustAll" parameterType="DefaultMap">-->
+      <!--/* MemberPointMapper.adjustAll */-->
+    <!--INSERT INTO-->
+	    <!--TB_MB_MEMBER_POINT_HIST ( MEMBR_ORGN_CD , MEMBR_NO , CHG_DATE , CHG_SEQ , POINT_CHG_FG , CHG_POINT , REMARK , REG_DT , REG_ID, MOD_DT , MOD_ID )-->
+    <!--SELECT-->
+        <!--tmmp.MEMBR_ORGN_CD,-->
+        <!--tmmp.MEMBR_NO,-->
+        <!--#{chgDate},-->
+        <!--SQ_TB_MEMBER_POINT_HIST.NEXTVAL,-->
+        <!--'3',-->
+        <!--#{totAjdPoint} - tmmp.AVABL_POINT,-->
+        <!--#{remark},-->
+        <!--#{regDt},-->
+        <!--#{regId},-->
+        <!--#{modDt},-->
+        <!--#{modId}-->
+    <!--FROM-->
+        <!--TB_MB_MEMBER_POINT tmmp-->
+    <!--WHERE-->
+        <!--MEMBR_ORGN_CD = #{membrOrgnCd}-->
+    <!--</insert>-->
+
+    <!-- 전체포인트 셋팅 -->
+    <!--
+        TABLE    :
+        COMMENTS : tb_mb_member 수만큼 TB_MB_MEMBER_POINT_HIST 생성되어야함
+    -->
+    <insert id="adjustAll" parameterType="memberPointVO">
+        /* MemberPointMapper.adjustAll */
+        INSERT INTO
+                TB_MB_MEMBER_POINT_HIST ( MEMBR_ORGN_CD , MEMBR_NO , CHG_DATE , CHG_SEQ , POINT_CHG_FG , CHG_POINT , REMARK , REG_DT , REG_ID, MOD_DT , MOD_ID )
+        select
+                a.MEMBR_ORGN_CD,
+                a.MEMBR_NO,
+                #{chgDate},
+                SQ_TB_MEMBER_POINT_HIST.NEXTVAL,
+                '3',
+                #{totAdjPoint} - nvl(b.AVABL_POINT, 0),
+                #{remark},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+        from TB_MB_MEMBER a
+        , 	  TB_MB_MEMBER_POINT b
+        where 	1=1
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                and a.MEMBR_ORGN_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "STORE" and hqOfficeCd != "00000"'>
+                and a.MEMBR_ORGN_CD = #{hqOfficeCd}
+            </when>
+            <!--  단독매장 -->
+            <when test='orgnFg != null and orgnFg == "STORE" and hqOfficeCd == "00000"'>
+                and a.MEMBR_ORGN_CD = #{storeCd}
+            </when>
+        </choose>
+        and 	b.MEMBR_ORGN_CD (+)= a.MEMBR_ORGN_CD
+        and 	b.MEMBR_NO (+)= a.MEMBR_NO
     </insert>
 
+    <!--  -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
     <select id="getMemberPointListChk" parameterType="memberPointVO" resultType="DefaultMap">
       /* MemberPointMapper.getMemberPointListChk */
         SELECT
@@ -78,12 +131,12 @@
         	tmm.MEMBR_CARD_NO,
         	tmm.MEMBR_ORGN_CD ,
         	tmm.MEMBR_NO,
-        	tmmp.AVABL_POINT
+        	NVL(tmmp.AVABL_POINT, 0) AS AVABL_POINT
         FROM
         	TB_MB_MEMBER tmm, TB_MB_MEMBER_POINT tmmp
         WHERE 1=1
-            AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD
-            AND tmm.MEMBR_NO = tmmp.MEMBR_NO
+            AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+            AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
         	AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         	AND tmm.MEMBR_NO = #{membrNo}
   </select>
@@ -146,6 +199,5 @@
             #{modId}
         )
     </insert>
-
 
 </mapper>

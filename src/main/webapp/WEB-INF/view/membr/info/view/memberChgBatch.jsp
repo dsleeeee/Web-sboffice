@@ -1,8 +1,3 @@
-<%--
-  Date: 2020-06-25
-  Time: 오후 4:07
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
@@ -141,7 +136,7 @@
                             id="emailRecvYn"
                             ng-model="emailRecvYn"
                             control="emailRecvYnCombo"
-                            items-source="_getComboData('emailRecvYn')"
+                            items-source="_getComboData('rEmailRecvYn')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -164,7 +159,7 @@
                             id="smsRecvYn"
                             ng-model="smsRecvYn"
                             control="smsRecvYnCombo"
-                            items-source="_getComboData('smsRecvYn')"
+                            items-source="_getComboData('rSmsRecvYn')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -211,7 +206,7 @@
                     </wj-combo-box>
                 </div>
                 <div ng-if="anvType !== ''" class="sb-select">
-                    <span class="rg">월</span>
+
                     <span class="txtIn w15">
                       <div class="sb-select ">
                         <wj-combo-box
@@ -226,7 +221,7 @@
                         </wj-combo-box>
                       </div>
                     </span>
-                    <span class="rg">일</span>
+                    <span class="rg">월</span>
                     <span class="txtIn w15">
                       <div class="sb-select ">
                         <wj-combo-box
@@ -241,8 +236,8 @@
                         </wj-combo-box>
                       </div>
                     </span>
+                    <span class="rg">일</span>
                     <span class="rg">~</span>
-                    <span class="rg">월</span>
                     <span class="txtIn w15">
                       <div class="sb-select ">
                         <wj-combo-box
@@ -257,7 +252,7 @@
                         </wj-combo-box>
                       </div>
                     </span>
-                    <span class="rg">일</span>
+                    <span class="rg">월</span>
                     <span class="txtIn w15">
                       <div class="sb-select">
                         <wj-combo-box
@@ -272,6 +267,7 @@
                         </wj-combo-box>
                       </div>
                     </span>
+                    <span class="rg">일</span>
                 </div>
             </td>
         </tr>
@@ -390,7 +386,7 @@
             </wj-combo-box>
         </div>
         <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('class')">
-            <s:message code="cmm.save"/>
+            <s:message code="cmm.apply"/>
         </button>
         <%-- 단축번호--%>
         <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='member.excel.shortNo'/></span>
@@ -407,7 +403,7 @@
             </wj-combo-box>
         </div>
         <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('short')">
-            <s:message code="cmm.save"/>
+            <s:message code="cmm.apply"/>
         </button>
         <%-- sms 수신--%>
         <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.sms.recv'/></span>
@@ -424,7 +420,7 @@
             </wj-combo-box>
         </div>
         <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('sms')">
-            <s:message code="cmm.save"/>
+            <s:message code="cmm.apply"/>
         </button>
         <%-- 이메일수신 --%>
         <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.email.recv'/></span>
@@ -441,7 +437,7 @@
             </wj-combo-box>
         </div>
         <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('email')">
-            <s:message code="cmm.save"/>
+            <s:message code="cmm.apply"/>
         </button>
         <%-- 저장 --%>
         <button class="btn_skyblue ml5 fr" id="save" ng-click="gridSave()">
@@ -516,10 +512,10 @@
     var regstrStoreList = ${regstrStoreList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20191223.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20201117.03" charset="utf-8"></script>
 
-<%-- 매장 등록/수정--%>
-<c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">
+<%-- 회원정보 상세 팝업 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberInfoDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

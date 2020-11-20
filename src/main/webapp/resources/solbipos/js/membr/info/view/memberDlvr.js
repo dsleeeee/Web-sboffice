@@ -1,3 +1,22 @@
+/****************************************************************
+ *
+ * 파일명 : memberDlvr.js (memberDeli.jsp)
+ * 설  명 : 배달지관리 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2020.00.00     ㄱㄱㄱ      1.0           두어시스템
+ * 2020.11.16     김설아      2.0           소스정리 및 오류수정 / 배달주소지 수정,삭제,저장 기능추가
+ *
+ * **************************************************************/
+/**
+ * get application
+ */
+var app = agrid.getApp();
+
+/**
+ *  배달주소지 그리드 생성
+ */
 app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -9,18 +28,42 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.dlvrMzone = [];
     $scope.userUseYn = false;
     $scope.dlvrStoreCd = '';
+
     // 선택 회원
-    $scope.selectedMember;
-    $scope.setSelectedMember = function (member) {
-        $scope.selectedMember = member;
+    $scope.selectedAddr;
+    $scope.setSelectedAddr = function (member) {
+        $scope.selectedAddr = member;
     };
-    $scope.getSelectedMember = function () {
-        return $scope.selectedMember;
+    $scope.getSelectedAddr = function () {
+        return $scope.selectedAddr;
     };
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        // $scope.getMember();
+        // ReadOnly 효과설정
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "addr") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+            }
+        });
+
+        // 회원선택
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+                // 주소 클릭시 상세정보 팝업
+                if (col.binding === "addr") {
+                    var selectedData = s.rows[ht.row].dataItem;
+                    $scope.setSelectedAddr(selectedData);
+                    $scope._broadcast('dlvrAddrDetail', selectedData);
+                    event.preventDefault();
+                }
+            }
+        });
     };
 
     // 저장
@@ -40,8 +83,11 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope._postJSONSave.withPopUp("/membr/info/view/base/registDlvrInfo.sb", params, function (response) {
             $scope._popMsg(messages["cmm.saveSucc"]);
-            $scope.memberRegistLayer.hide();
+            // $scope.memberRegistLayer.hide();
             memberInfoScope.getMemberList();
+            // 초기화
+            $scope.saveInitAddr();
+            $scope._broadcast('getMemberDlvr', params);
         });
     };
 
@@ -162,6 +208,17 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     });
 
+    $scope.$on("dlvrAddrDetail", function (event, params, mode) {
+        var memberInfoScope = agrid.getScope('memberCtrl');
+        $scope.lZoneListCd = params.dlvrLzoneCd;
+        $scope.mZoneListCd = params.dlvrMzoneCd;
+        $scope.dlvrAddr = params.addrDtl;
+        $scope.dlvrUseYn = params.useYn;
+        memberInfoScope.getMemberList();
+
+        event.preventDefault();
+    });
+
     /*********************************************************
      * 값 체크
      * *******************************************************/
@@ -193,12 +250,53 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         return true;
     };
+
+    //수정
+    $scope.saveEditAddr = function () {
+        var params = $scope.getSelectedAddr();
+        params.membrOrgnCd = $scope.memberParmas.membrOrgnCd;
+        params.membrNo = $scope.memberParmas.membrNo;
+        params.regStoreCd = $scope.memberParmas.regStoreCd;
+        params.dlvrLzoneCd = $scope.lZoneListCd;
+        params.dlvrMzoneCd = $scope.mZoneListCd;
+        params.addrDtl = $scope.dlvrAddr;
+        params.useYn = $scope.dlvrUseYn;
+        $scope._postJSONSave.withPopUp("/membr/info/view/base/updateDlvrAddrInfo.sb", params, function () {
+            // 초기화
+            $scope.saveInitAddr();
+            $scope._broadcast('getMemberDlvr', params);
+        });
+    };
+
+    // 삭제
+    $scope.saveDelAddr = function () {
+        var params = $scope.getSelectedAddr();
+        $scope._postJSONSave.withPopUp("/membr/info/view/base/deleteDlvrAddrInfo.sb", params, function () {
+            // 초기화
+            $scope.saveInitAddr();
+            $scope._broadcast('getMemberDlvr', params);
+        });
+    };
+
+    // 초기화
+    $scope.saveInitAddr = function () {
+        $scope.setSelectedAddr ({});
+        $scope.dlvrAddr = "";
+        $scope.dlvrUseYn = "";
+    };
 }]);
 
 
+
+
+/**
+ *  배달전화번호 그리드 생성
+ */
 app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('memberDlvrTelCtrl', $scope, $http, true));
+
     // 선택 기능 구분
     $scope.selectedMember;
     $scope.setSelectedMember = function (data) {
@@ -207,10 +305,11 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
+
     $scope.userUseYn = false;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        // $scope.getMember();
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -220,12 +319,13 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
                 }
             }
         });
+
         // 회원선택
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
             var ht = s.hitTest(e);
             if (ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
-                // 회원번호, 회원명 클릭시 상세정보 팝업
+                // 연락처 클릭시 상세정보 팝업
                 if (col.binding === "telNo") {
                     var selectedData = s.rows[ht.row].dataItem;
                     $scope.setSelectedMember(selectedData);
@@ -235,9 +335,10 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
             }
         });
     };
+
     $scope.$on("getMemberDlvrTel", function (event, params, mode) {
         $scope.memberParmas = params;
-        let url = "/membr/info/view/view/getDlvrTelList.sb";
+        var url = "/membr/info/view/view/getDlvrTelList.sb";
         $scope.$broadcast('loadingPopupActive');
         // 페이징 처리
         if ($scope._getPagingInfo('curr') > 0) {
@@ -313,14 +414,7 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
                 }, 10);
             }
         });
-        // $scope._inquiryMain("/membr/info/view/view/getDlvrTelList.sb", params, function () {
-        //     $scope.$apply(function() {
-        //         if($scope.data.items.length === 0) {
-        //
-        //         }
-        //        console.log()
-        //     });
-        // });
+
         // http 조회 후 status 체크
         $scope._httpStatusCheck = function (res, isMsg) {
             return _httpStatusCheck(res, isMsg);
@@ -357,9 +451,7 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
         }
     });
 
-
     $scope.$on("dlvrTelDetail", function (event, params, mode) {
-        // $scope._broadcast('getMemberDlvrTel', params);
         var memberInfoScope = agrid.getScope('memberCtrl');
         $scope.memberTel.dlvrTelNo = params.telNo;
         $scope.memberTel.dlvrTelUseYn = params.useYn;
@@ -372,7 +464,6 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
      * 값 체크
      * *******************************************************/
     $scope.valueCheck = function () {
-
         // 전화번호는 숫자만 입력할 수 있습니다.
         // var msg = messages["regist.delivery.tel"]+messages["cmm.require.number"];
         // var numChkregexp = /[^0-9]/g;
@@ -397,6 +488,7 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
 
         return true;
     };
+
     // 저장
     $scope.saveTel = function () {
         if ($scope.memberParmas.regStoreCd) {
@@ -417,10 +509,14 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/membr/info/view/base/registDlvrTelInfo.sb", params, function (response) {
             $scope._popMsg(messages["cmm.saveSucc"]);
-            $scope.memberRegistLayer.hide();
+            // $scope.memberRegistLayer.hide();
             memberInfoScope.getMemberList();
+            // 초기화
+            $scope.saveInit();
+            $scope._broadcast('getMemberDlvrTel', params);
         });
     };
+
     //수정
     $scope.saveEdit = function () {
         var params = $scope.getSelectedMember();
@@ -432,6 +528,7 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
             // $scope.memberRegistLayer.hide();
             // $scope.memberInfoDetailLayer.hide();
             // memberInfoScope.getMemberList();
+            // 초기화
             $scope.saveInit();
             $scope._broadcast('getMemberDlvrTel', params);
         });
@@ -454,9 +551,10 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
             // $scope.memberRegistLayer.hide();
             // $scope.memberInfoDetailLayer.hide();
             // memberInfoScope.getMemberList();
+            // 초기화
             $scope.saveInit();
             $scope._broadcast('getMemberDlvrTel', params);
         });
     };
-    // $scope.valueCheck = function () {
+
 }]);

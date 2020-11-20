@@ -637,4 +637,50 @@ public class RegistController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+
+    /**
+     * 배달주소지 수정
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 11. 17.
+     */
+    @RequestMapping(value = "base/updateDlvrAddrInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateDlvrAddrInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.updateDlvrAddrInfo(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 배달주소지 삭제
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 11. 17.
+     */
+    @RequestMapping(value = "base/deleteDlvrAddrInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteDlvrAddrInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.deleteDlvrAddrInfo(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }
