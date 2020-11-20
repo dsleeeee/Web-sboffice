@@ -85,6 +85,7 @@ public class MemberPointController {
   @RequestMapping(value = "/point/adjustAll.sb", method = RequestMethod.POST)
   @ResponseBody
   public Result memberPointList(MemberPointVO memberPointVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
     int result = memberPointService.getMemberPointSave(memberPointVO, sessionInfoVO, request);

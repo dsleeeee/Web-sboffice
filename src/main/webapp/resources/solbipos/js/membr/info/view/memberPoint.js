@@ -17,16 +17,17 @@ var app = agrid.getApp();
  *  세금계산서 요청목록 그리드 생성
  */
 app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('memberPointCtrl', $scope, $http, '$timeout', true));
+
     // 성공내역, 오류내역
     $scope.statusList = [
         {value: '1', name: '전체'},
         {value: '2', name: '성공내역'},
         {value: '3', name: '오류내역'}
     ];
-    $scope.status = $scope.statusList[0]
-
-    // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('memberPointCtrl', $scope, $http, '$timeout', true));
+    $scope.status = $scope.statusList[0];
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -54,20 +55,20 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
         // 그리드 DataMap 설정
         // $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
         $scope.memberClassList = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
-
         $scope.data = new wijmo.collections.CollectionView([]);
         document.getElementById('btnSearch').addEventListener('click', function (e) {
             $scope.flex.collectionView.filter = function (item) {
                 if ($scope.status === "2") {
-                    return item.memberResult === "검증 성공"
+                    return item.memberResult === "검증성공"
                 } else if ($scope.status === "3") {
-                    return item.memberResult !== "검증 성공"
+                    return item.memberResult !== "검증성공"
                 } else {
                     return item
                 }
@@ -81,8 +82,22 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
             // $scope.paging.next = $scope.flex.collectionView
             // $scope.paging.start = $scope.flex.collectionView.pageIndex;
             // $scope.paging.end = $scope.flex.collectionView
+        });
 
-
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                // 검증결과
+                if (col.binding === "memberResult") {
+                    var item = s.rows[e.row].dataItem;
+                    // 값이 있으면 링크 효과
+                    if (item[("memberResult")] !== '검증성공') {
+                        wijmo.addClass(e.cell, 'wij_gridText-red');
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    }
+                }
+            }
         });
     };
 
@@ -220,7 +235,7 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
                 $scope._popMsg(messages["cmm.excel.edit.chk"]);
                 return false;
             } else {
-                if (item.memberResult === "검증 성공") {
+                if (item.memberResult === "검증성공") {
                     params.push({
                         membrClassCd: item.membrClassCd,
                         membrNo: item.membrNo,
@@ -243,7 +258,7 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
                 $scope._popMsg(messages["cmm.saveSucc"]);
                 for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                     var item = $scope.flex.collectionView.items[i];
-                    if (item.memberResult === "검증 성공") {
+                    if (item.memberResult === "검증성공") {
                         $scope.flex.collectionView.removeAt(i);
                     }
                 }
@@ -260,9 +275,13 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
         var msg = messages["memberPoint.excel.del"];
         $scope._popConfirm(msg, function () {
             $scope.$broadcast('loadingPopupActive', messages['cmm.saving']);
-            let param = $scope.changeAll;
-            param.totAjdPoint = param.totAjdPoint * 1
+            var param = $scope.changeAll;
+            param.totAjdPoint = param.totAjdPoint * 1;
             param.remark = $scope.changeAll.adjustPartRemark;
+            param.orgnFg = orgnFg;
+            param.hqOfficeCd = hqOfficeCd;
+            param.storeCd = storeCd;
+
             $http({
                 method: 'POST', //방식
                 url: "/membr/info/point/point/adjustAll.sb", /* 통신할 URL */
@@ -294,5 +313,4 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
         });
     };
 
-}])
-;
+}]);

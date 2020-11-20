@@ -58,32 +58,38 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
 
     // 배달 탭 보이기
     $scope.deliShow = function () {
-        if ($scope.saveMode === 'REG' && $scope.insertMembrNo === undefined) {
-            $scope._popMsg(messages["cmm.base.info.save"]);
-        } else if ($scope.saveMode === 'REG' && $scope.insertMembrNo !== undefined) {
-            $("#basicView").hide();
-            $("#cardView").hide();
-            $("#deliView").show();
+        // 매장만 접근가능
+        if(orgnFg === "STORE") {
+            if ($scope.saveMode === 'REG' && $scope.insertMembrNo === undefined) {
+                $scope._popMsg(messages["cmm.base.info.save"]);
+            } else if ($scope.saveMode === 'REG' && $scope.insertMembrNo !== undefined) {
+                $("#basicView").hide();
+                $("#cardView").hide();
+                $("#deliView").show();
 
-            $("#basicTab").removeClass("on");
-            $("#cardTab").removeClass("on");
-            $("#deliTab").addClass("on");
-            $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
-            $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
-        } else if ($scope.saveMode === 'MOD') {
-            $("#basicView").hide();
-            $("#cardView").hide();
-            $("#deliView").show();
+                $("#basicTab").removeClass("on");
+                $("#cardTab").removeClass("on");
+                $("#deliTab").addClass("on");
+                $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
+                $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
+            } else if ($scope.saveMode === 'MOD') {
+                $("#basicView").hide();
+                $("#cardView").hide();
+                $("#deliView").show();
 
-            $("#basicTab").removeClass("on");
-            $("#cardTab").removeClass("on");
-            $("#deliTab").addClass("on");
-            $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
-            $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
+                $("#basicTab").removeClass("on");
+                $("#cardTab").removeClass("on");
+                $("#deliTab").addClass("on");
+                $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
+                $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
+            } else {
+                $scope._popMsg(messages["cmm.base.info.save"]);
+            }
         } else {
-            $scope._popMsg(messages["cmm.base.info.save"]);
+            $scope._popMsg(messages["regist.membr.deliveryStore"]);
         }
     };
+
     $scope.$on("responseGet", function (event, params, mode) {
         $scope.insertMembrNo = params;
         $scope.saveMode = mode;

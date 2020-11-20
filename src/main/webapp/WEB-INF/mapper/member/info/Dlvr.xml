@@ -106,10 +106,17 @@
         <if test='useYn != null and useYn !=""'>
             AND tmmda.USE_YN = #{useYn}
         </if>
+        ORDER BY tmmda.MEMBR_ORGN_CD, tmmda.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 배달주소지 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
     <delete id="deleteDlvr" parameterType="dlvrVO">
+      /*DlvrMapper.deleteDlvr*/
       /*배달주소지 삭제*/
       DELETE FROM  TB_MB_MEMBER_DLVR_ADDR tmmda
       WHERE tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
@@ -117,23 +124,32 @@
       AND tmmda.DLVR_ADDR_SEQ = #{dlvrAddrSeq}
   </delete>
 
+    <!-- 배달지주소 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
     <update id="updateDlvr" parameterType="dlvrVO">
+      /*DlvrMapper.updateDlvr*/
       /*배달지주소 저장*/
       UPDATE TB_MB_MEMBER_DLVR_ADDR tmmda
-      SET tmmda.ADDR = SBPENC.E(#{addr})
-      , tmmda.ADDR_DTL = SBPENC.E(#{addrDtl})
+      SET
+      tmmda.ADDR_DTL = SBPENC.E(#{addrDtl})
       , tmmda.USE_YN = #{useYn}
-      , tmmda.LAST_DLVR_DATE = #{lastDlvrDate}
-      , tmmda.DLVR_STORE_CD = #{dlvrStoreCd}
-      , tmmda.DLVR_LZONE_CD = #{dlvrLzoneCd}
-      , tmmda.DLVR_MZONE_CD = #{dlvrMzoneCd}
-      , tmmda.TOT_DLVR_CNT = #{totDlvrCnt}
+        , tmmda.MOD_ID = #{modId}
+        , tmmda.MOD_DT = #{modDt}
       WHERE tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
       AND tmmda.MEMBR_NO = #{membrNo}
       AND tmmda.DLVR_ADDR_SEQ = #{dlvrAddrSeq}
   </update>
 
+    <!-- 배달전화번호 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
     <select id="getDlvrTelList" parameterType="dlvrVO" resultType="DefaultMap">
+        /*DlvrMapper.getDlvrTelList*/
         /*배달전화번호 조회*/
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -150,11 +166,11 @@
         TO_CHAR(TO_DATE(tmmdt.MOD_DT, 'yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') AS MOD_DT ,
         tmmdt.MOD_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM
-        TB_MB_MEMBER_DLVR_TEL tmmdt,
+        FROM TB_MB_MEMBER_DLVR_TEL tmmdt,
         TB_MB_MEMBER tmm
-        WHERE tmmdt.MEMBR_NO = tmm.MEMBR_NO
-        AND	tmmdt.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
+        WHERE 1=1
+        AND tmm.MEMBR_ORGN_CD (+)= tmmdt.MEMBR_ORGN_CD
+        AND tmm.MEMBR_NO (+)= tmmdt.MEMBR_NO
         <if test='membrOrgnCd != null and membrOrgnCd !=""'>
             AND tmmdt.MEMBR_ORGN_CD = #{membrOrgnCd}
         </if>
@@ -179,10 +195,17 @@
         <if test='useYn != null and useYn !=""'>
             AND tmmdt.USE_YN = #{useYn}
         </if>
+        ORDER BY tmmdt.MEMBR_ORGN_CD, tmmdt.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 배달전화 삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_TEL
+        COMMENTS :
+    -->
     <delete id="deleteDlvrTel" parameterType="dlvrVO">
+      /*DlvrMapper.deleteDlvrTel*/
       /*배달전화 삭제*/
       DELETE FROM TB_MB_MEMBER_DLVR_TEL tmmdt
       WHERE tmmdt.MEMBR_ORGN_CD = #{membrOrgnCd}
@@ -190,11 +213,19 @@
       AND tmmdt.DLVR_TEL_SEQ = #{dlvrTelSeq}
   </delete>
 
+    <!-- 배달전화 저장 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_TEL
+        COMMENTS :
+    -->
     <update id="updateDlvrTel" parameterType="dlvrVO">
+       /*DlvrMapper.updateDlvrTel*/
       /*배달전화 저장*/
       UPDATE TB_MB_MEMBER_DLVR_TEL tmmdt
       SET tmmdt.TEL_NO = SBPENC.E(#{telNo})
       , tmmdt.USE_YN = #{useYn}
+      , tmmdt.MOD_ID = #{modId}
+      , tmmdt.MOD_DT = #{modDt}
       WHERE tmmdt.MEMBR_ORGN_CD = #{membrOrgnCd}
       AND tmmdt.MEMBR_NO = #{membrNo}
       AND tmmdt.DLVR_TEL_SEQ = #{dlvrTelSeq}

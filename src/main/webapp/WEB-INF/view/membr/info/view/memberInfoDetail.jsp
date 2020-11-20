@@ -16,7 +16,6 @@
 
     <%-- body --%>
     <div class="wj-dialog-body">
-
       <div style="height:500px; overflow-y: auto;">
         <f:form id="viewForm" name="viewForm" >
           <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>

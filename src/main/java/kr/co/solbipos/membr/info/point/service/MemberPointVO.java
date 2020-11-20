@@ -3,6 +3,24 @@ package kr.co.solbipos.membr.info.point.service;
 import kr.co.solbipos.application.common.service.PageVO;
 
 public class MemberPointVO extends PageVO {
+
+  /**
+   * 소속구분
+   * M : 시스템
+   * A : 대리점
+   * H : 본사
+   * S : 매장, 가맹점
+   */
+  private String orgnFg;
+
+  private String orgnCd;
+
+  /** 본사코드 */
+  private String hqOfficeCd;
+
+  /** 매장코드 */
+  private String storeCd;
+
   private String membrOrgnCd;
   private String membrNo;
   //  private Integer totSaleCnt;
@@ -27,6 +45,21 @@ public class MemberPointVO extends PageVO {
   private String remark;
   private String tmpTotAdjPoint;
 
+  public String getOrgnFg() { return orgnFg; }
+
+  public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+
+  public String getOrgnCd() { return orgnCd; }
+
+  public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
+
+  public String getHqOfficeCd() { return hqOfficeCd; }
+
+  public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
+
+  public String getStoreCd() { return storeCd; }
+
+  public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
 
   public String getMembrOrgnCd() {
     return membrOrgnCd;

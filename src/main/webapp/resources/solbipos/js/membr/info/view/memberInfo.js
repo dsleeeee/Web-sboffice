@@ -55,8 +55,6 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope._getComboDataQuery('067', 'useYnAll', 'A');
     $scope._getComboDataQuery('072', 'recvYn', 'S');
     $scope._getComboDataQuery('299', 'membrCardFg', 'A');
-
-
     /*$scope._setComboData("periodType", periodDataMap);*/
 
     // 선택 회원
@@ -67,6 +65,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
+
     if (orgnFg === "STORE") {
         if(hqOfficeCd !== "00000") {
             $scope.storeMembr = true;
@@ -74,6 +73,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     } else {
         $scope.storeMembr = false;
     }
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.useYnDataMap = new wijmo.grid.DataMap(useDataMap, 'value', 'name');
@@ -178,7 +178,6 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         dataItem.storeFirstSaleDate = messages["regist.membr.use.store.total"];
         dataItem.storeLastSaleDate = messages["regist.membr.use.store.total"];
 
-
         dataItem.regDt = messages["regist.membr.total"];
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -273,7 +272,6 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             }
         }
         // <-- //그리드 헤더3줄 -->
-
     };
 
     // 조회 버튼 클릭
@@ -288,7 +286,6 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     // 회원 목록 조회
     $scope.getMemberList = function () {
         var params = {};
-
         params.periodType = $scope.periodType;
         params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
         params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
@@ -347,8 +344,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             }
         }
 
-        $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function () {
-        });
+        $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function () {});
     };
 
     // 매장선택 모듈 팝업 사용시 정의
@@ -360,7 +356,6 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope.regUseStoreShow = function () {
         $scope._broadcast('regUseStoreCtrl');
     };
-
 
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
@@ -396,7 +391,6 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     // 회원 삭제
     $scope.deleteMember = function () {
-
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if ($scope.flex.collectionView.items[i].gChk) {
@@ -410,35 +404,11 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         $scope._save("/membr/info/view/base/remove.sb", params, function () {
             $scope.getMemberList()
         });
-
     };
 
-    // 엑셀 다운로드
-    /*$scope.excelDownloadInfo = function () {
-        if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-            return false;
-        }
-
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-        $timeout(function () {
-            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-                includeColumnHeaders: true,
-                includeCellStyles: true,
-                includeColumns: function (column) {
-                    return column.visible;
-                }
-            }, '회원정보_' + getToday() + '.xlsx', function () {
-                $timeout(function () {
-                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-                }, 10);
-            });
-        }, 10);
-    };*/
     // <-- 엑셀다운로드 호출 -->
     $scope.excelDownload = function(){
         var params       = {};
-
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
             return false;
@@ -454,17 +424,16 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             $scope.member.memberEngNm = "";
             $scope.memberNo = "";
         }
-
     });
 
     // 회원 거래처 매핑
     $scope.memberVendorMapping = function () {
         var params = {};
-
         $scope._broadcast('memberVendorMappingCtrl', params);
     };
 
 }]);
+
 
 /**
  *  엑셀다운로드 그리드 생성
@@ -477,54 +446,6 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.useYnDataMap = new wijmo.grid.DataMap(useDataMap, 'value', 'name');
-
-        // ReadOnly 효과설정
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-                // 회원번호, 회원명 클릭시 상세정보 팝업
-                if (col.binding === "membrNo" || col.binding === "membrNm") {
-                    wijmo.addClass(e.cell, 'wijLink');
-                }
-                // 후불적용매장등록 클릭시 매장선택 팝업
-                if (col.binding === "postpaidStore") {
-                    wijmo.addClass(e.cell, 'wijLink');
-                }
-                // 생일, 최초방문일, 최종방문일, 가입일 날짜 형식 맞추기
-                if (col.binding === "birthday" || col.binding === "firstSaleDate" || col.binding === "lastSaleDate") {
-                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
-                }
-                if(col.binding == "regDt"){
-                    e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
-                }
-            }
-        });
-
-        // 회원선택
-        s.addEventListener(s.hostElement, 'mousedown', function (e) {
-            var ht = s.hitTest(e);
-            if (ht.cellType === wijmo.grid.CellType.Cell) {
-                var col = ht.panel.columns[ht.col];
-                // 회원번호, 회원명 클릭시 상세정보 팝업
-                if (col.binding === "membrNo" || col.binding === "membrNm") {
-                    var selectedData = s.rows[ht.row].dataItem;
-                    $scope.setSelectedMember(selectedData);
-                    $scope._broadcast('responseGet', selectedData);
-                    $scope.memberRegistLayer.show(true);
-                    // $scope.memberInfoDetailLayer.show(true);
-                    event.preventDefault();
-                }
-
-                // 후불적용매장등록 클릭시 매장선택 팝업
-                if (col.binding === "postpaidStore") {
-                    var selectedData = s.rows[ht.row].dataItem;
-                    // 해당 매장의 등록매장이 본사의 디폴트 매장과 동일할 경우에만 후불적용 매장을 등록할 수 있다.
-                    $scope.setSelectedMember(selectedData);
-                    $scope.postpaidStoreRegistLayer.show(true);
-                    event.preventDefault();
-                }
-            }
-        });
 
         // <-- 그리드 헤더3줄 -->
         // 헤더머지
@@ -577,7 +498,6 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem.visit = messages["regist.membr.use.store.total"];
         dataItem.storeFirstSaleDate = messages["regist.membr.use.store.total"];
         dataItem.storeLastSaleDate = messages["regist.membr.use.store.total"];
-
 
         dataItem.regDt = messages["regist.membr.total"];
         s.columnHeaders.rows[0].dataItem = dataItem;
@@ -673,7 +593,6 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
             }
         }
         // <-- //그리드 헤더3줄 -->
-
     };
 
     // <-- 검색 호출 -->
@@ -684,7 +603,6 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     $scope.getMemberListExcel = function(){
         var params = {};
-
         params.periodType = $scope.periodType;
         params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
         params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
@@ -727,7 +645,6 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.useYn = 'Y';
 
         $scope._inquiryMain("/membr/info/view/view/getMemberListExcel.sb", params, function() {
-
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
                 return false;

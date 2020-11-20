@@ -83,8 +83,9 @@ public class ChgBatchServiceImpl implements ChgBatchService {
 
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
         chgBatchVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-        chgBatchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        chgBatchVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
+        chgBatchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             chgBatchVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

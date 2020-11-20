@@ -7,14 +7,17 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon" ng-controller="memberPointCtrl">
+
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
     </div>
-    <%-- 상단 타이틀 --%>
 
+    <%-- 상단 타이틀 --%>
     <div class="w100 mt10 mb10">
         <h2 class="h2_tit oh lh30">
             <%-- 전체회원 포인트 세팅 --%>
@@ -39,7 +42,6 @@
                 <td>
                     <input type="text" class="sb-input fl w70" ng-model="changeAll.adjustPartRemark" id="adjustPartRemark"/>
                     <%--저장--%>
-                    <%--          <input type="button" class="sb-input w5" value="저장" onclick="adjustAll()"/>--%>
                     <button class="btn_skyblue sb-input ml5 fl w25" ng-click="adjustAll()"><s:message code="cmm.save"/></button>
                 </td>
             </tr>
@@ -74,29 +76,16 @@
                 <td>
                     <button class="btn_skyblue sb-input w100" style="margin-left: 5px"  ng-click="excelTextUpload('memberPoint')"><s:message code="member.excel.upload"/></button>
                 </td>
-                <%-- 편집화면다운로드  --%>
-                <td>
-                    <button class="btn_skyblue sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message code="member.excel.pageDownload"/></button>
-                </td>
                 <td></td>
                 <td></td>
-                <%--양식검증--%>
-                <td>
-                    <button class="btn_skyblue sb-input w100" ng-click="formChk()"><s:message code="member.excel.check"/></button>
-                </td>
-                <%--비고--%>
-                <th><s:message code="memberPoint.remark"/></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="" ng-model="remark"/>
-                </td>
-                <%--저장--%>
-                <td>
-                    <button class="btn_skyblue sb-input w100" ng-click="save()"><s:message code="cmm.save"/></button>
-                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             </tbody>
         </table>
-
         <ul class="txtSty2 mt10 pdb20 bb">
             <li class="red">
                 <p>
@@ -127,14 +116,23 @@
             </wj-combo-box>
         </div>
         <%--조회--%>
-        <button class="btn_skyblue sb-input ml5 fl" id="btnSearch" ng-click="_pageView('memberPointCtrl', 1)">
-            <s:message code="cmm.search"/>
-        </button>
+        <button class="btn_skyblue sb-input ml5 fl" id="btnSearch" ng-click="_pageView('memberPointCtrl', 1)"><s:message code="cmm.search"/></button>
+
+        <%-- 편집화면 엑셀 다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="member.excel.pageDownload"/></button>
         <%--삭제--%>
-        <button class="btn_skyblue sb-input ml5 fl" ng-click="deleteUpload()"><s:message code="cmm.delete"/></button>
-<%--        <button class="btn_skyblue sb-input ml5 fl" id="totGrid" ng-click="totGrid()"><s:message code="cmm.delete"/></button>--%>
+        <button class="btn_skyblue ml5 fr" ng-click="deleteUpload()"><s:message code="cmm.delete"/></button>
+        <%--저장--%>
+        <button class="btn_skyblue ml5 fr" ng-click="save()"><s:message code="cmm.save"/></button>
+        <%--비고--%>
+        <div class="s14 bk lh25 ml5 fr">
+            <s:message code="memberPoint.remark"/>
+            <input type="text" class="sb-input w100px ml5 fr" id="" ng-model="remark"/>
+        </div>
+        <%-- 양식검증 --%>
+        <button class="btn_skyblue ml5 fr mr10" ng-click="formChk()"><s:message code="member.excel.check"/></button>
     </div>
-    <%-- 콤보 리스트 --%>
+    <%-- 회원 포인트 조정 내역 --%>
     <s:message code="memberPoint.title.delete"/>
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
@@ -162,21 +160,25 @@
             </wj-flex-grid>
         </div>
     </div>
-        <%-- 페이지 리스트 --%>
-<%--        <div class="pageNum mt20">--%>
-<%--            <ul class="memberPointCtrlPager" data-size="10">--%>
-<%--                <li class="btn_previous first"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridFirst('memberPointCtrl', 0);"></a></li>--%>
-<%--                <li class="btn_previous"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridPrev($event, 'memberPointCtrl', '{prev}');"></a></li>--%>
+    <%-- 페이지 리스트 --%>
+    <%--        <div class="pageNum mt20">--%>
+    <%--            <ul class="memberPointCtrlPager" data-size="10">--%>
+    <%--                <li class="btn_previous first"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridFirst('memberPointCtrl', 0);"></a></li>--%>
+    <%--                <li class="btn_previous"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridPrev($event, 'memberPointCtrl', '{prev}');"></a></li>--%>
 
-<%--                <li ng-repeat="num in paging.pageSize ">{{num}}</li>--%>
-<%--                <li class="btn_next"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridNext($event, 'memberPointCtrl', '{next}');"></a></li>--%>
-<%--                <li class="btn_next last"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridLast('memberPointCtrl', '{totalPage}');"></a></li>--%>
-<%--            </ul>--%>
-<%--        </div>--%>
-        <%--//페이지 리스트--%>
+    <%--                <li ng-repeat="num in paging.pageSize ">{{num}}</li>--%>
+    <%--                <li class="btn_next"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridNext($event, 'memberPointCtrl', '{next}');"></a></li>--%>
+    <%--                <li class="btn_next last"><a href="javascript:void(0);" onclick="return false;" ng-click="_pagingGridLast('memberPointCtrl', '{totalPage}');"></a></li>--%>
+    <%--            </ul>--%>
+    <%--        </div>--%>
+    <%--//페이지 리스트--%>
 </div>
 
 <script>
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
+    var storeCd = "${storeCd}";
+
     var recvDataMap = ${ccu.getCommCodeSelect("072")};
     <%--수신, 미수신--%>
     var recvDataMapEx = ${ccu.getCommCodeExcpAll("072")};
@@ -195,8 +197,8 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.11" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=20201118.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=20201118.01" charset="utf-8"></script>
 
 <%-- 수불 엑셀업로드 공통 팝업 --%>
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">

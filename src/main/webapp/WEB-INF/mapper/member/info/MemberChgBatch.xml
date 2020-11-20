@@ -22,7 +22,7 @@
         TABLE    :
     -->
     <select id="getMemberChgBatchList" parameterType="ChgBatchVO" resultType="DefaultMap">
-        /* ChgBatchMapper.getMembrChgBatchList */
+        /* ChgBatchMapper.getMemberChgBatchList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmm.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
@@ -60,9 +60,8 @@
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_CLASS tmmc,
         TB_MS_STORE tms,
-        TB_MB_MEMBER_CARD tmmcd,
         TB_MB_MEMBER_POINT tmmp
-        WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
+        WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
             AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
         </if>
@@ -72,8 +71,6 @@
         AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmm.REG_STORE_CD
-        AND tmmcd.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
-        AND tmmcd.MEMBR_CARD_NO (+)= tmm.MEMBR_CARD_NO
         AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
         AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         <if test='storeCd != null and storeCd != ""'>
@@ -123,7 +120,9 @@
             <if test='periodType.getCode() == "reg"'>
                 AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
             </if>
+            <!-- 최종방문일 -->
             <if test='periodType.getCode() == "last"'>
+                AND tmmp.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
             </if>
         </if>
         <if test='anvType != null and anvType.toString() != ""'>

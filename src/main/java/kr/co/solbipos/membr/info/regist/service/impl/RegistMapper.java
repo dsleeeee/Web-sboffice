@@ -191,4 +191,11 @@ public interface RegistMapper {
     int updateMembrDlvrTel(RegistVO registVO);
 
     int deleteMembrDlvrTel(RegistVO registVO);
+
+    /** 배달주소지 수정 */
+    int updateDlvrAddrInfo(RegistVO registVO);
+
+    /** 배달주소지 삭제 */
+    int deleteDlvrAddrInfo(RegistVO registVO);
+
 }

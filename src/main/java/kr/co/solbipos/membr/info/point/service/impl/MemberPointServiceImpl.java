@@ -44,56 +44,57 @@ public class MemberPointServiceImpl implements MemberPointService {
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
-
-    @Override
-    public List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO) {
-//    if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-//      membrPointVO.setStoreCd(sessionInfoVO.getStoreCd());
+//    @Override
+//    public List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO) {
+////    if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+////      membrPointVO.setStoreCd(sessionInfoVO.getStoreCd());
+////    }
+//        return memberPointMapper.getMemberPointList(memberPointVO);
 //    }
-        return memberPointMapper.getMemberPointList(memberPointVO);
-    }
 
     @Override
     public int getMemberPointSave(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO, HttpServletRequest request) {
 
-        List<DefaultMap<Object>> resultList = memberPointMapper.getMemberPointList(memberPointVO);
+//        List<DefaultMap<Object>> resultList = memberPointMapper.getMemberPointList(memberPointVO);
 
-        int totAjdPoint = Integer.parseInt(request.getParameter("totAjdPoint"));
+        int totAdjPoint = Integer.parseInt(request.getParameter("totAjdPoint"));
         String remark = request.getParameter("remark");
 
         int result = 0;
+        String currentDt = currentDateTimeString();
 
-        String dt = currentDateTimeString();
-        for (DefaultMap<Object> re : resultList) {
-            Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-            String nowDateStr = formatter.format(date);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        String nowDateStr = formatter.format(date);
 
-            re.put("remark", remark);
-            re.put("chgSeq", 0);
-            re.put("chgDate", nowDateStr);
-            re.put("regDt", dt);
-            re.put("regId", sessionInfoVO.getUserId());
-            re.put("modDt", dt);
-            re.put("modId", sessionInfoVO.getUserId());
-            re.put("totAjdPoint", totAjdPoint);
+        memberPointVO.setOrgnFg(memberPointVO.getOrgnFg());
+        memberPointVO.setHqOfficeCd(memberPointVO.getHqOfficeCd());
+        memberPointVO.setStoreCd(memberPointVO.getStoreCd());
+        memberPointVO.setModDt(currentDt);
+        memberPointVO.setModId(sessionInfoVO.getUserId());
+        memberPointVO.setRegDt(currentDt);
+        memberPointVO.setRegId(sessionInfoVO.getUserId());
 
-            //insert
-            result += memberPointMapper.adjustAll(re);
-        }
+        memberPointVO.setTotAdjPoint(totAdjPoint);
+        memberPointVO.setChgDate(nowDateStr);
+        memberPointVO.setRemark(remark);
+
+        //insert
+        result += memberPointMapper.adjustAll(memberPointVO);
+
         return result;
     }
 
-    @Override
-    public int adjustAll(List<DefaultMap<Object>> result, MemberPointVO[] memberPointVOs, SessionInfoVO sessionInfoVO) {
-        int res = 0;
-        for (MemberPointVO member : memberPointVOs) {
-            for (Object re : result) {
-            }
-//      result += memberPointMapper.adjustAll(member);
-        }
-        return res;
-    }
+//    @Override
+//    public int adjustAll(List<DefaultMap<Object>> result, MemberPointVO[] memberPointVOs, SessionInfoVO sessionInfoVO) {
+//        int res = 0;
+//        for (MemberPointVO member : memberPointVOs) {
+//            for (Object re : result) {
+//            }
+////      result += memberPointMapper.adjustAll(member);
+//        }
+//        return res;
+//    }
 
     @Override
     public List<MemberPointVO> getMemberPointListChk(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO) {
@@ -103,12 +104,12 @@ public class MemberPointServiceImpl implements MemberPointService {
         LOGGER.debug("sessionInfoVO.getOrgnCd(): {}", sessionInfoVO.getOrgnCd());
         LOGGER.debug("sessionInfoVO.getHqOfficeCd: {}", sessionInfoVO.getHqOfficeCd());
 
-        String dt = currentDateTimeString();
         DefaultMap<Object> result = new DefaultMap<>();
         List<MemberPointVO> resultList = new ArrayList<MemberPointVO>();
+
         for (MemberPointVO memberPointVO : memberPointVOs) {
-            memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-//            memberPointVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+
+            memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             String pattern = "^[0-9]*$"; //숫자만
             //String val = "123456789"; //대상문자열
 
@@ -131,10 +132,12 @@ public class MemberPointServiceImpl implements MemberPointService {
                             memberPointVO.setMemberResult("회원번호중복");
                             resultList.get(i).setMemberResult("회원번호중복");
                             break;
+                        } else {
+                            memberPointVO.setMemberResult("검증성공");
                         }
                    }
                 }else{
-                    memberPointVO.setMemberResult("검증 성공");
+                    memberPointVO.setMemberResult("검증성공");
                 }
                 memberPointVO.setMembrClassCd(result.getStr("membrClassCd"));
                 memberPointVO.setMembrCardNo(result.getStr("membrCardNo"));
@@ -149,8 +152,6 @@ public class MemberPointServiceImpl implements MemberPointService {
             resultList.add(memberPointVO);
         }
 
-
-
         LOGGER.debug("resultList {}", resultList);
         return resultList;
     }
@@ -158,14 +159,13 @@ public class MemberPointServiceImpl implements MemberPointService {
     @Override
     public int memberPointSave(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
-
         String dt = currentDateTimeString();
-
 //        String membrNo = "";
-
         LOGGER.debug("memberExcelUploadVOs: {}", memberPointVOs);
+
         for (MemberPointVO memberPointVO : memberPointVOs) {
-            memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+
+            memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             memberPointVO.setRegDt(dt);
             memberPointVO.setRegId(sessionInfoVO.getUserId());
             memberPointVO.setModDt(dt);

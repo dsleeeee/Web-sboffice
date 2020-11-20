@@ -216,8 +216,6 @@
         , ANVSR_POINT_SAVE_FG = #{anvsrPointSaveFg}
         , ANVSR_SAVE_POINT = #{anvsrSavePoint}
         , USE_YN = #{useYn}
-        , REG_DT = #{regDt}
-        , REG_ID = #{regId}
         , MOD_DT = #{modDt}
         , MOD_ID = #{modId}
         , DC_ACC_POINT_YN = #{dcAccPointYn}
@@ -349,8 +347,6 @@
           SET PAY_CD = #{payCd}
               , ACC_RATE = #{accRate}
               , REMARK = #{remark}
-	          , REG_DT = #{regDt}
-	          , REG_ID = #{regId}
 	          , MOD_DT = #{modDt}
 	          , MOD_ID = #{modId}
 	    WHERE MEMBR_ORGN_CD = #{membrOrgnCd}

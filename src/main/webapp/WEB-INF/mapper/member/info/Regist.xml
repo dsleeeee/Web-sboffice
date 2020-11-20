@@ -169,13 +169,13 @@
             AND tmm.SMS_RECV_YN = #{smsRecvYn}
         </if>
         <if test='periodType != null and periodType.toString() != ""'>
-            <!-- 최종방문일 -->
-            <if test='periodType.getCode() == "last"'>
-                AND tmmp.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
-            </if>
             <!-- 가입일 -->
             <if test='periodType.getCode() == "reg"'>
                 AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
+            </if>
+            <!-- 최종방문일 -->
+            <if test='periodType.getCode() == "last"'>
+                AND tmmp.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
             </if>
         </if>
         <if test='anvType != null and anvType.toString() != ""'>
@@ -1142,7 +1142,7 @@
         COMMENTS : 배달정보 조회
     -->
     <select id="getDlvrList" parameterType="registVO" resultType="DefaultMap">
- /* RegistMapper.getDlvrList */
+      /* RegistMapper.getDlvrList */
        SELECT
        tmmda.MEMBR_ORGN_CD
        , tmmda.MEMBR_NO
@@ -1199,7 +1199,7 @@
             , SBPENC.E((SELECT A.DLVR_LZONE_NM|| ' ' ||B.DLVR_MZONE_NM FROM TB_MS_DELIVERY_LZONE A,  TB_MS_DELIVERY_MZONE B WHERE A.DLVR_LZONE_CD = B.DLVR_LZONE_CD AND A.STORE_CD = B.STORE_CD AND A.STORE_CD = #{regStoreCd} AND B.DLVR_LZONE_CD = #{dlvrLzoneCd} AND B.DLVR_MZONE_CD = #{dlvrMzoneCd}))
             , SBPENC.E(#{addrDtl})
             , #{lastDlvrDate}
-            , #{totDlvrCnt}
+            , 0
             , #{useYn}
             , #{regDt}
             , #{regId}
@@ -1238,7 +1238,7 @@
         COMMENTS : 배달전화정보
     -->
     <select id="getDlvrTelList" parameterType="registVO" resultType="DefaultMap">
- /* RegistMapper.getDlvrTelList */
+        /* RegistMapper.getDlvrTelList */
        SELECT
             tmmdt.MEMBR_ORGN_CD
             , tmmdt.MEMBR_NO
@@ -1303,6 +1303,8 @@
              TEL_NO = SBPENC.E(#{telNo})
             , SHORT_NO = #{shortNo}
             , USE_YN = #{useYn}
+            , MOD_ID = #{modId}
+            , MOD_DT = #{modDt}
          WHERE tmmda.MEMBR_NO = #{membrNo}
            AND tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
            AND tmmda.DLVR_TEL_SEQ = #{dlvrTelSeq}
@@ -1347,5 +1349,39 @@
         AND tmdm.STORE_CD = #{regStoreCd}
         ORDER BY DLVR_MZONE_CD ASC
     </select>
+
+    <!-- 배달주소지 수정 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_ADDR
+        COMMENTS : [회원]회원_배달_주소
+    -->
+    <update id="updateDlvrAddrInfo" parameterType="registVO">
+        /* RegistMapper.updateDlvrAddrInfo */
+        UPDATE TB_MB_MEMBER_DLVR_ADDR
+        SET
+        DLVR_LZONE_CD = #{dlvrLzoneCd}
+        , DLVR_MZONE_CD = #{dlvrMzoneCd}
+        , ADDR = SBPENC.E((SELECT A.DLVR_LZONE_NM|| ' ' ||B.DLVR_MZONE_NM FROM TB_MS_DELIVERY_LZONE A,  TB_MS_DELIVERY_MZONE B WHERE A.DLVR_LZONE_CD = B.DLVR_LZONE_CD AND A.STORE_CD = B.STORE_CD AND A.STORE_CD = #{regStoreCd} AND B.DLVR_LZONE_CD = #{dlvrLzoneCd} AND B.DLVR_MZONE_CD = #{dlvrMzoneCd}))
+        , ADDR_DTL = SBPENC.E(#{addrDtl})
+        , USE_YN = #{useYn}
+        , MOD_ID = #{modId}
+        , MOD_DT = #{modDt}
+        WHERE MEMBR_NO = #{membrNo}
+        AND MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND DLVR_ADDR_SEQ = #{dlvrAddrSeq}
+    </update>
+
+    <!-- 배달주소지 삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_ADDR
+        COMMENTS : [회원]회원_배달_주소
+    -->
+    <delete id="deleteDlvrAddrInfo" parameterType="registVO">
+        /* RegistMapper.deleteDlvrAddrInfo */
+        DELETE FROM TB_MB_MEMBER_DLVR_ADDR
+        WHERE MEMBR_NO = #{membrNo}
+        AND MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND DLVR_ADDR_SEQ = #{dlvrAddrSeq}
+    </delete>
 
 </mapper>

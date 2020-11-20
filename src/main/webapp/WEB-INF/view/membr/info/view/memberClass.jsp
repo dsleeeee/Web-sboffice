@@ -60,7 +60,8 @@
                 <%-- 할인율 --%>
                 <th><s:message code="grade.membr.dc.rate"/><em class="imp">*</em></th>
                 <td>
-                    <input type="text" id="dcRate" class="sb-input w80" ng-model="detailData.dcRate" maxlength="3" placeholder="<s:message code="grade.membr.dc.rate"/><s:message code='cmm.regexp' arguments='3'/>"/>
+                    <input type="text" id="dcRate" class="sb-input w80" ng-model="detailData.dcRate"
+                           maxlength="3" placeholder="<s:message code="grade.membr.dc.rate"/><s:message code='cmm.regexp' arguments='3'/>"/>
                     <s:message code="grade.membr.per"/> <s:message code="grade.membr.discnt"/>
                 </td>
                 <%-- 신규가입시 부여 Point --%>
@@ -197,54 +198,19 @@
                                 sorted-column="toggleFreeze(false)">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk"
-                                                 width="40"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
-                                                 binding="membrClassType"
-                                                 align="left" width="100"
-                                                 is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.deflt.yn"/>" binding="defltYn"
-                                                 align="center" width="63"
-                                                 is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.dc.rate"/>"
-                                                 binding="dcRate" align="center"
-                                                 is-read-only="true" visible="false"
-                                                 width="80"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.new.join.save.point"/>"
-                                                 binding="newJoinSavePoint"
-                                                 align="right"
-                                                 width="120" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.first.sale.save.point"/>"
-                                                 binding="firstSaleSavePoint"
-                                                 width="108" align="right"
-                                                 is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.min.use.point"/>"
-                                                 binding="minUsePoint"
-                                                 width="93"
-                                                 align="right" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.max.use.point"/>"
-                                                 binding="maxUsePoint" is-read-only="true"
-                                                 width="93"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.point.save.fg"/>"
-                                                 binding="pointSaveFgNm"
-                                                 width="97"
-                                                 align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.dc.yn"/>"
-                                                 binding="dcAccPointYn" data-map="useYn"
-                                                 width="97" align="center"
-                                                 is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.point.yn"/>"
-                                                 binding="useAccPointYn" data-map="useAccPointYn"
-                                                 width="135" align="center"
-                                                 is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.dc.max"/>"
-                                                 binding="dcLimitAmt" data-map="dcLimitAmt"
-                                                 width="73" align="right"
-                                                 is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="grade.membr.anvsr.point.save.fg"/>"
-                                                 binding="anvsrPointSaveFgNm" data-map="anvsrPointSaveFg"
-                                                 width="133" align="center"
-                                                 is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>" binding="membrClassType" align="left" width="100" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.deflt.yn"/>" binding="defltYn" align="center" width="63" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.dc.rate"/>" binding="dcRate" align="center" is-read-only="true" visible="false" width="80"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.new.join.save.point"/>" binding="newJoinSavePoint" align="right" width="120" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.first.sale.save.point"/>" binding="firstSaleSavePoint" width="108" align="right" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.min.use.point"/>" binding="minUsePoint" width="93" align="right" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.max.use.point"/>" binding="maxUsePoint" is-read-only="true" width="93"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.point.save.fg"/>" binding="pointSaveFgNm" width="97" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.dc.yn"/>" binding="dcAccPointYn" data-map="useYn" width="97" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.point.yn"/>" binding="useAccPointYn" data-map="useAccPointYn" width="135" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.dc.max"/>" binding="dcLimitAmt" data-map="dcLimitAmt" width="73" align="right" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="grade.membr.anvsr.point.save.fg"/>" binding="anvsrPointSaveFgNm" data-map="anvsrPointSaveFg" width="133" align="center" is-read-only="true"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
@@ -267,6 +233,7 @@
                 <button class="btn_skyblue" id="membrPointDel" ng-if="userUseYn" ng-click="pointDel()"><s:message code="cmm.del"/></button>
 
                 <span class="fl bk lh30 mr10" ng-if="userUseYn === false && classData.pointSaveFg === '2'">원당 1포인트</span>
+
                 <input type="text" class="sb-input fl w15"
                        ng-attr-placeholder="{{classData.pointSaveFg === '2' ? '원당1Point' : '%적립'}}"
                        ng-style="userUseYn ? { 'font-size': '0.8rem'} : {'display': 'none' }"
@@ -291,32 +258,18 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter"
+                            item-formatter="_itemFormatter">
                     <%--                            frozen-columns="2"--%>
                     <%--                            sorted-column="toggleFreeze(false)"--%>
-                    >
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk"
-                                             width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
-                                             binding="membrOrgnCd" is-read-only="true" width="*"
-                                             visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
-                                             binding="initPayCd" is-read-only="true" width="*"
-                                             visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
-                                             binding="membrClassType" is-read-only="true" width="*"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.pay.code"/>"
-                                             binding="payCd" data-map="payCdDataMap" width="*"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>"
-                                             ng-switch-default  max-length="3"
-                                             binding="accRate" width="*"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>"
-                                             ng-switch-when="1" max-length="3"
-                                             binding="accRate" width="*"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.point.list.amt"/>"
-                                             ng-switch-when="2"
-                                             binding="accRate" width="*" max-length="5"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>" binding="membrOrgnCd" is-read-only="true" width="*" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>" binding="initPayCd" is-read-only="true" width="*" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>" binding="membrClassType" is-read-only="true" width="*"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.pay.code"/>" binding="payCd" data-map="payCdDataMap" width="*"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>" ng-switch-default  max-length="3" binding="accRate" width="*"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>" ng-switch-when="1" max-length="3" binding="accRate" width="*"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.point.list.amt"/>" ng-switch-when="2" binding="accRate" width="*" max-length="5"></wj-flex-grid-column>
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
