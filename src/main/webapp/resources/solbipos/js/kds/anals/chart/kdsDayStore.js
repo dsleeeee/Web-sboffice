@@ -53,6 +53,9 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
                 if (col.binding === "dlvrAddr") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+                if (col.binding === "saleDate") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
+                }
             }
         });
         // <-- 그리드 헤더2줄 -->
@@ -122,7 +125,7 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         // dataList.forEach((e, i)=> {
         //     console.log(e);
         // })
-        let view = new wijmo.collections.CollectionView(dataList);
+        view = new wijmo.collections.CollectionView(dataList);
         return view;
     }
 
@@ -134,6 +137,9 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         chart1 = new wijmo.chart.FlexChart('#chart1', {
             itemsSource: getData(list),
             bindingX: "saleDate",
+            axisY: {
+                min: 0
+            },
             legend: {
                 position: wijmo.chart.Position.None
             },
@@ -160,7 +166,7 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         chart2 = new wijmo.chart.FlexChart('#chart2', {
             itemsSource: getData(list),
-            bindingX: "saleDateSec",
+            bindingX: "saleDate",
             legend: {
                 // position: wijmo.chart.Position.Top
                 position: wijmo.chart.Position.None
@@ -218,6 +224,10 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.kdsSearch = function (params) {
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
+
+        // 차트영역 보이도록
+        $("#divChart").css("visibility", "");
+
         // 마스터그리드 여부
         if (true) {
             var el = angular.element('input');
@@ -268,6 +278,10 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
                     if (true && response.data.message) {
                         $scope._popMsg(response.data.message);
                     }
+
+                    // 데이터가 없는경우 차트영역 숨기기
+                    $("#divChart").css("visibility", "hidden");
+
                     return false;
                 }
                 var data = new wijmo.collections.CollectionView(list);
@@ -455,12 +469,12 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
             return false;
         }
 
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
+        var msg = "조회" + messages["kds.store"] + messages["cmm.require.text"];
         if (isNull($("#regStoreCd").val())) {
             $scope._popMsg(msg);
             return false;
         }
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
+        var msg = "대비" + messages["kds.store"] + messages["cmm.require.text"];
         if (isNull($("#conRegStoreCd").val())) {
             $scope._popMsg(msg);
             return false;
@@ -470,6 +484,22 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd= '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        today = String(yyyy) + String(mm) + dd;
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -482,7 +512,7 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, 'KDS_주문단위_시간대별_' + getToday() + '.xlsx', function () {
+            }, 'KDS_매장대비_' + today + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

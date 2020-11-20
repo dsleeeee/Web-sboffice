@@ -35,125 +35,11 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w115px"/></span>
+                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w150px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w115px"/></span>
-                    <%--<span class="txtIn">
-                        <div class="sb-select">
-                            <wj-input-date
-                                    value="kdsDayStartDate"
-                                    ng-model="kdsDayStartDate"
-                                    control="kdsDayStartDateCombo"
-                                    format="yyyy-MM"
-                                    selection-mode="Month"
-                                    min="2000-01-01"
-                                    max="2099-12-31"
-                                    initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </div>
-                    </span>
-                    <span class="rg">~</span>
-                    <span class="txtIn">
-                    <div class="sb-select">
-                      <wj-input-date
-                              value="kdsDayEndDate"
-                              ng-model="kdsDayEndDate"
-                              control="kdsDayEndDateCombo"
-                              format="yyyy-MM"
-                              selection-mode="Month"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </div>
-                    </span>--%>
+                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w150px"/></span>
                 </div>
             </td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th>
-                <s:message code="kds.makeDate.setting"/>
-            </th>
-            <td>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="makeDate"
-                            ng-model="makeDate"
-                            control="makeDateCombo"
-                            items-source="_getComboData('kdsMakeDate')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="makeDateSec"
-                            ng-model="makeDateSec"
-                            control="makeDateSecCombo"
-                            items-source="_getComboData('kdsMakeDateSec')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </td>
-            <th>
-                <s:message code="kds.picDate.setting"/>
-            </th>
-            <td>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="picDate"
-                            ng-model="picDate"
-                            control="picDateCombo"
-                            items-source="_getComboData('kdsPicDate')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="picDateSec"
-                            ng-model="picDateSec"
-                            control="picDateSecCombo"
-                            items-source="_getComboData('kdsPicDateSec')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th><s:message code="kds.prodCd"/></th>
-            <td>
-                <input type="text" id="prodCd" class="sb-input w50" ng-model="prodCd"
-                       maxlength="15"/>
-            </td>
-            <th><s:message code="kds.prodNm"/></th>
-            <td>
-                <input type="text" id="prodNm" class="sb-input w50" ng-model="prodNm"
-                       maxlength="15"/>
-            </td>
-        </tr>
-        <tr>
-            <%-- 매장 --%>
-            <c:if test="${orgnFg == 'HQ'}">
-                <th><s:message code="kds.store"/></th>
-                <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                        <jsp:param name="targetId" value="regStore"/>
-                    </jsp:include>
-                </td>
-            </c:if>
             <%-- 분류조회 --%>
             <th><s:message code="kds.prodClass"/></th>
             <td>
@@ -164,53 +50,140 @@
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;"
                         ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
-            <c:if test="${orgnFg != 'HQ'}">
-                <td></td>
-                <td></td>
-            </c:if>
         </tr>
+        <tr>
+            <th>
+                <s:message code="kds.makeDate.setting"/>
+            </th>
+            <td>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="makeDate"
+                                ng-model="makeDate"
+                                control="makeDateCombo"
+                                items-source="_getComboData('kdsMakeDate')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="makeDateSec"
+                                ng-model="makeDateSec"
+                                control="makeDateSecCombo"
+                                items-source="_getComboData('kdsMakeDateSec')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                </div>
+            </td>
+            <th>
+                <s:message code="kds.picDate.setting"/>
+            </th>
+            <td>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="picDate"
+                                ng-model="picDate"
+                                control="picDateCombo"
+                                items-source="_getComboData('kdsPicDate')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="picDateSec"
+                                ng-model="picDateSec"
+                                control="picDateSecCombo"
+                                items-source="_getComboData('kdsPicDateSec')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th><s:message code="kds.prodCd"/></th>
+            <td>
+                <input type="text" id="prodCd" class="sb-input w100" ng-model="prodCd"
+                       maxlength="15"/>
+            </td>
+            <th><s:message code="kds.prodNm"/></th>
+            <td>
+                <input type="text" id="prodNm" class="sb-input w100" ng-model="prodNm"
+                       maxlength="15"/>
+            </td>
+        </tr>
+        <c:if test="${orgnFg == 'HQ'}">
+        <tr>
+            <%-- 매장 --%>
+
+                <th><s:message code="kds.store"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                        <jsp:param name="targetId" value="regStore"/>
+                    </jsp:include>
+                </td>
+                <td></td>
+                <td></td>
+        </tr>
+        </c:if>
         </tbody>
     </table>
 
-
-    <div class="mt20 oh sb-select dkbr">
-        <%-- 차트 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
-            <s:message code="kds.chart"/>
-        </button>
-        <div class="sb-select mt10 fr">
-            <span class="chk ml10">
-                <%-- 제조시간 --%>
-                <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
-                <label for="makeChecked"><s:message code='kds.makeDate'/></label>
-            </span>
-            <span class="chk ml10">
-                <%-- 픽업시간 --%>
-                <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
-                <label for="picChecked"><s:message code='kds.picDate'/></label>
-            </span>
-        </div>
-        <%-- 건수 --%>
-        <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
-        <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
-        <%--			<label for="chkDt">--%>
-        <%--				<s:message code="kds.cnt"/>--%>
-        <%--			</label>--%>
-        <%--		</span>--%>
-    </div>
-    <div class="w100 mt40 mb20 ">
-        <%--위즈모 차트--%>
-        <h2>
-            <div class="circle">
-                <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
-                    <s:message code="kds.makeDate"/>
+    <div class="w100 mt40 mb20" style="border: 1px solid #e2e2e2; height:370px;">
+        <div id="divChart" style="visibility: hidden;">
+            <div class="sb-select mt10 fl">
+                <%-- 차트 --%>
+                <%--<button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
+                    <s:message code="kds.chart"/>
+                </button>--%>
+                <span class="chk ml10">
+                    <%-- 제조시간 --%>
+                    <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
+                    <label for="makeChecked"><s:message code='kds.makeDate'/></label>
                 </span>
-                <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
-                    <s:message code="kds.picDate"/>
+                <span class="chk ml10">
+                    <%-- 픽업시간 --%>
+                    <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
+                    <label for="picChecked"><s:message code='kds.picDate'/></label>
                 </span>
+                <%-- 건수 --%>
+                <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
+                <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
+                <%--			<label for="chkDt">--%>
+                <%--				<s:message code="kds.cnt"/>--%>
+                <%--			</label>--%>
+                <%--		</span>--%>
             </div>
-        </h2>
-        <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
+            <%--위즈모 차트--%>
+            <h3>
+                <div class="circle" style="padding: 10px;">
+                    <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
+                        <s:message code="kds.makeDate"/>
+                    </span>
+                    <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
+                        <s:message code="kds.picDate"/>
+                    </span>
+                </div>
+            </h3>
+            <div class="wizWrap" id="chart1" style="width:100%; height:370px; font-size: 10pt;" ></div>
+        </div>
     </div>
 
     <div class="mt20 oh sb-select dkbr">
@@ -219,6 +192,7 @@
             <s:message code="cmm.excel.down"/>
         </button>
     </div>
+
     <%-- 그리드 --%>
     <div class="w100 mt20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -234,13 +208,13 @@
 
                 <!-- define columns -->
                 <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="*"
+                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="100"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="storeNm" width="*"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="kds.saleMonth"/>" binding="saleMon"
-                                     width="*"
+                                     width="100"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.lClassCd"/>" binding="lv1Cd" width="*"
                                      is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
@@ -254,18 +228,18 @@
                                      is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sClassNm"/>" binding="lv3Nm" width="*"
                                      is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.prodClassNm"/>" binding="prodClassNm" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.prodCd"/>" binding="prodCd" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.prodNm"/>" binding="prodNm" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.amt"/>" binding="saleQty" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="avgMake" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="avgPic" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.prodClassNm"/>" binding="prodClassNm" width="250"
+                                     is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.prodCd"/>" binding="prodCd" width="150"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.prodNm"/>" binding="prodNm" width="200"
+                                     is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.amt"/>" binding="saleQty" width="80"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="avgMake" width="100"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="avgPic" width="100"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -273,17 +247,40 @@
 </div>
 <script>
     var kdsMakeDate = ${ccu.getCommCode("400")};
-
     var kdsPicDate = ${ccu.getCommCodeExcpAll("401")};
-
     var kdsMakeDateSec = ${ccu.getCommCode("402")};
-
     var kdsPicDateSec = ${ccu.getCommCodeExcpAll("403")};
     var regstrStoreList = ${regstrStoreList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsMonth.js?ver=2020070801.08"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsMonth.js?ver=2020070801.12"
         charset="utf-8"></script>
+
+<style>
+    .circle span.orange:before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background: #ff9d39;
+        border: 1px solid #ff9d39;
+        position: absolute;
+        left: 0px;
+        top: 4px;
+    }
+
+    .circle span.green:before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background: #00ba8b;
+        border: 1px solid #00ba8b;
+        position: absolute;
+        left: 0px;
+        top: 4px;
+    }
+</style>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

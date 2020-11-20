@@ -58,7 +58,7 @@
         <div class="oh sb-select dkbr">
             <%-- 엑셀G 버튼 --%>
             <button class="btn_skyblue ml5 fr" id="save" ng-click="leftExcelDownload()">
-                <s:message code="dayDlvr.leftExcelDownload"/>
+                <s:message code="cmm.excel.down"/>
             </button>
         </div>
         <div class="wj-TblWrapBr mt10 ml10 pd20" style="height: 600px;">
@@ -74,19 +74,19 @@
                             item-formatter="_itemFormatter">
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="dayDlvr.saleDate"/>" binding="saleDate"
-                                             width="110"
+                                             width="80"
                                              align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="dlvrBillCnt"
                                              width="80"
                                              is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="dlvrAmt"
-                                             width="150" is-read-only="true" align="right"
+                                             width="100" is-read-only="true" align="right"
                                              aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="nonDlvrBillCnt"
                                              width="80"
                                              is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="nonDlvrAmt"
-                                             width="150" is-read-only="true" align="right"
+                                             width="100" is-read-only="true" align="right"
                                              aggregate="Sum"></wj-flex-grid-column>
 
                         <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="hqOfficeCd"
@@ -122,7 +122,7 @@
     <div class="w50 fl mb20" style="width: 60%">
         <div class="oh sb-select dkbr">
             <button class="btn_skyblue ml5 fr" id="save" ng-click="rightExcelDownload()">
-                <s:message code="dayDlvr.rightExcelDownload"/>
+                <s:message code="cmm.excel.down"/>
             </button>
         </div>
         <div class="wj-TblWrapBr mt10 ml10 pd20" style="height: 600px;">
@@ -146,26 +146,26 @@
                         <%--                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.prodClassNm"/>" binding="prodClassNm"
                                              width="150"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                                             is-read-only="true" align="left"></wj-flex-grid-column>
                         <%--            <wj-flex-grid-column header="<s:message code="dayDlvr.prodLV2"/>" binding="lv2Cd" width="100"--%>
                         <%--                                 is-read-only="true" align="center" aggregate="Sum"  visible="false"></wj-flex-grid-column>--%>
                         <%--            <wj-flex-grid-column header="<s:message code="dayDlvr.prodLV2"/>" binding="lv2Nm" width="150"--%>
                         <%--                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>--%>
-                        <wj-flex-grid-column header="<s:message code="dayDlvr.prodDd"/>" binding="prodCd" width="100"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayDlvr.prodCd"/>" binding="prodCd" width="100"
+                                             is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.prodNm"/>" binding="prodNm" width="150"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                                             is-read-only="true" align="left"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="dlvrSaleQty"
-                                             width="150"
+                                             width="80"
                                              is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="dlvrAmt"
-                                             width="150" is-read-only="true" align="right"
+                                             width="100" is-read-only="true" align="right"
                                              aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="nonDlvrSaleQty"
-                                             width="100"
+                                             width="80"
                                              is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="nonDlvrAmt"
-                                             width="150" is-read-only="true" align="right"
+                                             width="100" is-read-only="true" align="right"
                                              aggregate="Sum"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -181,5 +181,5 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dayDlvr/dayDlvr.js?ver=2019052801.11"
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dayDlvr/dayDlvr.js?ver=2019052801.14"
         charset="utf-8"></script>

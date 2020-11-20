@@ -63,6 +63,12 @@ app.controller('dlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 if (col.binding === "billNo") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+                if(col.binding === "saleDate"){
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
+                }
+                if(col.binding === "billDt"){
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+                }
             }
         });
 
@@ -103,8 +109,8 @@ app.controller('dlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
         var params = {};
         // params.membrNm = $scope.membrNm;
-        params.membrNm = $scope.dlvrNm;
-        params.collectNm = $scope.collectNm;
+        params.empNm = $scope.dlvrNm;
+        params.dlvrPayEmpNm = $scope.collectNm;
         params.listScale = $scope.listScale;
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간

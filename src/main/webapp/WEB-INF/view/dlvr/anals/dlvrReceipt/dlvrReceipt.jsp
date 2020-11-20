@@ -92,16 +92,13 @@
                             items-source="data"
                             item-formatter="_itemFormatter">
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"
-                                             align="center"
-                                             is-read-only="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.area"/>" binding="dlvrAddr"
-                                             width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                                             width="240" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.bill.cnt"/>" binding="billCount"
-                                             width="230" is-read-only="true" align="right"></wj-flex-grid-column>
+                                             width="80" is-read-only="true" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.real.sale"/>"
                                              binding="realSaleAmt" data-type="Number" format="n0" aggregate="Sum"
-                                             width="230" is-read-only="true" align="right"></wj-flex-grid-column>
+                                             width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column binding="hqOfficeCd" width="120" dalign="center"
                                              is-read-only="false" align="right"
                                              visible="false"></wj-flex-grid-column>
@@ -151,28 +148,25 @@
                             item-formatter="_itemFormatter"
                             is-read-only="true">
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"
-                                             align="center"
-                                             is-read-only="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.sale.date"/>" binding="saleDate"
-                                             width="220"
+                                             width="100"
                                              is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.pos.no"/>" binding="posNo"
-                                             width="230"
-                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                                             width="80"
+                                             is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.bill.no"/>" binding="billNo"
-                                             width="115"
-                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                                             width="80"
+                                             is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.real.sale"/>"
                                              binding="realSaleAmt" data-type="Number" format="n0"
-                                             width="120" aggregate="Sum"
+                                             width="100" aggregate="Sum"
                                              is-read-only="true" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.member.nm"/>" binding="membrNm"
-                                             width="120"
-                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                                             width="130"
+                                             is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrReceipt.dlvr.nm"/>" binding="empNm"
-                                             width="120"
-                                             is-read-only="true" align="right"></wj-flex-grid-column>
+                                             width="130"
+                                             is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -191,7 +185,7 @@
     <%--var dlvrFirstList = ${dlvrFirstList};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrReceipt/dlvrReceipt.js?ver=2020062901.11"
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrReceipt/dlvrReceipt.js?ver=2020062901.12"
         charset="utf-8"></script>
 
 <%-- 영수증상세 --%>

@@ -31,6 +31,10 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
                 if (col.binding === "dlvrLzoneCd") {
                     var selectedData = s.rows[ht.row].dataItem
                     $scope.setSelectedMember(selectedData);
+
+                    // 선택한 대분류 보여주기
+                    $("#lblLzone").text(selectedData.dlvrLzoneNm + " [" + selectedData.dlvrLzoneCd + "] ");
+
                     var detailScope = agrid.getScope('dlvrManageDetailCtrl');
                     detailScope._broadcast('dlvrManageDetailList', $scope.getSelectedMember());
                     event.preventDefault();
@@ -64,13 +68,38 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
     // 삭제
     $scope.dlvrAreaDel = function () {
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            var item = $scope.flex.collectionView.items[i];
-            if (item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
+        // 삭제할 분류가 있는지 파악
+        if($scope.chkVal()){
+            // 대분류 삭제 시 해당 대분류에 속한 중분류도 삭제됩니다.
+            $scope._popConfirm(messages["dlvrManage.deleteLzone.msg"], function() {
+                for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                    var item = $scope.flex.collectionView.items[i];
+                    if(item.gChk){
+                        $scope.flex.collectionView.removeAt(i);
+                    }
+                }
+                // 분류 Data 삭제
+                $scope.dlvrAreaSave();
+            });
+        }else{ // 리스트에서 row만 제거
+            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                var item = $scope.flex.collectionView.items[i];
+                if(item.gChk){
+                    $scope.flex.collectionView.removeAt(i);
+                }
             }
         }
+    };
 
+    // 삭제할 분류가 있는지 파악
+    $scope.chkVal = function () {
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+            var item = $scope.flex.collectionView.items[i];
+            if(item.gChk && item.dlvrLzoneCd !== "자동채번"){ // 코드값이 있어야 삭제가능
+                return true;
+            }
+        }
+        return false;
     };
 
     // Up
@@ -119,8 +148,16 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
      * 저장
      * *******************************************************/
     $scope.dlvrAreaSave = function () {
+
+        $scope.flex.collectionView.commitEdit();
+
         // 파라미터 설정
         var params = new Array();
+
+        for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+            $scope.flex.collectionView.itemsRemoved[d].status = "D";
+            params.push($scope.flex.collectionView.itemsRemoved[d]);
+        }
 
         // pageNo 재설정
         var editItems = [];
@@ -131,20 +168,17 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         for (var s = 0; s < editItems.length; s++) {
-            editItems[s].dispSeq = (s + 1);
-            console.log(editItems);
+            editItems[s].pageNo = (s + 1);
             $scope.flex.collectionView.editItem(editItems[s]);
             editItems[s].status = "U";
             $scope.flex.collectionView.commitEdit();
         }
 
-
-        console.log($scope.flex.collectionView);
-
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
+
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             var item = $scope.flex.collectionView.itemsAdded[i];
             if (item.dlvrLzoneNm === "" || item.dlvrLzoneNm === null) {
@@ -159,24 +193,29 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
-        }
-
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/dlvr/manage/info/dlvrZone/regist.sb", params, function () {
+
+            // 대분류 조회
             $scope.searchDlvr();
+
+            // 중분류 초기화
+            $("#lblLzone").text("");
+
+            // 리스트 초기화
+            var detailScope = agrid.getScope('dlvrManageDetailCtrl');
+            detailScope._gridDataInit();
+            event.preventDefault();
+
         });
     };
     
     // 저장후 조회
     $scope.searchDlvr = function () {
-        $scope._inquiryMain("/dlvr/manage/info/dlvrZone/saveList.sb", {}, function () {
+        $scope._inquirySub("/dlvr/manage/info/dlvrZone/saveList.sb", {}, function () {
         }, false);
     };
-}])
-;
+}]);
 
 app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
@@ -257,14 +296,42 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
         // 추가 row
         $scope._addRow(params);
     };
+
     // 삭제
     $scope.dlvrDetailAreaDel = function () {
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            var item = $scope.flex.collectionView.items[i];
-            if (item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
+
+        // 삭제할 분류가 있는지 파악
+        if($scope.chkVal()){
+            // 대분류 삭제 시 해당 대분류에 속한 중분류도 삭제됩니다.
+            $scope._popConfirm(messages["dlvrManage.deleteMzone.msg"], function() {
+                for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if (item.gChk) {
+                        $scope.flex.collectionView.removeAt(i);
+                    }
+                }
+                // 분류 Data 삭제
+                $scope.dlvrDetailAreaSave();
+            });
+        }else{ // 리스트에서 row만 제거
+            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                var item = $scope.flex.collectionView.items[i];
+                if(item.gChk){
+                    $scope.flex.collectionView.removeAt(i);
+                }
             }
         }
+    };
+
+    // 삭제할 분류가 있는지 파악
+    $scope.chkVal = function () {
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+            var item = $scope.flex.collectionView.items[i];
+            if(item.gChk && item.dlvrMzoneCd !== "자동채번"){ // 코드값이 있어야 삭제가능
+                return true;
+            }
+        }
+        return false;
     };
 
     // Up
@@ -312,8 +379,16 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
      * 저장
      * *******************************************************/
     $scope.dlvrDetailAreaSave = function () {
+
+        $scope.flex.collectionView.commitEdit();
+
         // 파라미터 설정
         var params = new Array();
+
+        for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+            $scope.flex.collectionView.itemsRemoved[d].status = "D";
+            params.push($scope.flex.collectionView.itemsRemoved[d]);
+        }
 
         // pageNo 재설정
         var editItems = [];
@@ -324,8 +399,7 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
         }
 
         for (var s = 0; s < editItems.length; s++) {
-            editItems[s].dispSeq = (s + 1);
-            console.log(editItems);
+            editItems[s].pageNo = (s + 1);
             $scope.flex.collectionView.editItem(editItems[s]);
             editItems[s].status = "U";
             $scope.flex.collectionView.commitEdit();
@@ -335,19 +409,22 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
+
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             var item = $scope.flex.collectionView.itemsAdded[i];
-            if (item.dlvrLzoneNm === "" || item.dlvrLzoneNm === null) {
+            if (item.dlvrMzoneNm === "" || item.dlvrMzoneNm === null) {
                 $scope._popMsg(messages["dlvrManage.areaNm"] + messages["cmm.require.text"]);
                 return false;
             }
+            if (item.dlvrMzoneNm.getByteLengthForOracle() > 50) {
+                $scope._popMsg(messages["dlvrManage.areaNm"] + messages["excelUpload.overLength"] + " 50 ");
+                return false;
+            }
+
             $scope.flex.collectionView.itemsAdded[i].status = "I";
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
-        }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $.postJSONArray("/dlvr/manage/info/dlvrZone/detailRegist.sb", params, function (result) {
             $scope.getDlvrManageDetailList();

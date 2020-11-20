@@ -81,6 +81,9 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 if (col.binding === "dlvrAddr") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+                if (col.binding === "saleDate") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
+                }
             }
         });
         // <-- 그리드 헤더2줄 -->
@@ -219,7 +222,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         // dataList.forEach((e, i)=> {
         //     console.log(e);
         // })
-        let view = new wijmo.collections.CollectionView(dataList);
+        view = new wijmo.collections.CollectionView(dataList);
         return view;
     }
 
@@ -230,6 +233,9 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         chart1 = new wijmo.chart.FlexChart('#chart1', {
             itemsSource: getData(list),
             bindingX: "saleHh",
+            axisY: {
+                min: 0
+            },
             legend: {
                 position: wijmo.chart.Position.None
             },
@@ -335,8 +341,13 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
     });
 
     $scope.kdsSearch = function (params) {
+
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
+
+        // 차트영역 보이도록
+        $("#divChart").css("visibility", "");
+
         // 마스터그리드 여부
         if (true) {
             var el = angular.element('input');
@@ -368,11 +379,51 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                     if (true && response.data.message) {
                         $scope._popMsg(response.data.message);
                     }
+
+                    // 데이터가 없는경우 차트영역 숨기기
+                    $("#divChart").css("visibility", "hidden");
+
                     return false;
                 }
                 var data = new wijmo.collections.CollectionView(list);
                 data.trackChanges = true;
                 $scope.data = data;
+
+                // 시간대 조회조건에 따라 리스트에서 보여지는 시간대 조정
+                var grid = wijmo.Control.getControl("#wjGridList");
+                var columns = grid.columns;
+                var start = 0;
+                var end = 0;
+
+                start =  3 * parseInt($scope.timeZone);
+                end = 3 * parseInt($scope.timeZoneSec);
+
+                if(orgnFg === 'HQ') {
+                    start = start + 3;
+                    end = end + 5;
+
+                    for(var i = 3; i <= 74; i++){
+                        if(i >= start && i <= end){
+                            columns[i].visible = true;
+                        }else{
+                            columns[i].visible = false;
+                        }
+                    }
+
+                }else{
+                    start = start + 1;
+                    end = end + 3;
+
+                    for(var i = 1; i <= 72; i++){
+                        if(i >= start && i <= end){
+                            columns[i].visible = true;
+                        }else{
+                            columns[i].visible = false;
+                        }
+                    }
+                }
+                
+                // 차트 조회
                 $scope.chartKds();
             }
         }, function errorCallback(response) {
@@ -421,6 +472,11 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         params.kdsTimeList = $scope.kdsTimeZone2;
         params.storeCd = $("#regStoreCd").val();
         params.orgnFg = $("#resurceFg").val();
+
+        // 가상로그인 세션정보
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
 
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
@@ -543,7 +599,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             return false;
         }
 
-        if (isNull($scope.prodClassCd)) {
+        /*if (isNull($scope.prodClassCd)) {
             var msg = messages["kds.prodCd"] + messages["cmm.require.text"];
             if (isNull($scope.prodCd)) {
                 $scope._popMsg(msg);
@@ -557,8 +613,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 $scope._popMsg(msg);
                 return false;
             }
-        }
-
+        }*/
 
         if ($("#resurceFg").val() === "HQ") {
             var msg = messages["kds.store"] + messages["cmm.require.text"];
@@ -599,6 +654,22 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd= '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        today = String(yyyy) + String(mm) + dd;
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -611,27 +682,13 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, 'KDS_주문단위_시간대별_' + getToday() + '.xlsx', function () {
+            }, 'KDS_일_상품_시간대별_' + today + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
             });
         }, 10);
     };
-
-    $scope.$watch('prodCd', function () {
-        if ($scope.prodCd !== "") {
-            $scope.prodClassCdNm = "";
-            $scope.prodClassCd = "";
-        }
-    });
-
-    $scope.$watch('prodClassCd', function () {
-        if ($scope.prodClassCd !== "") {
-            $scope.prodCd = "";
-            $scope.prodNm = "";
-        }
-    });
 
 }])
 ;

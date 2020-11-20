@@ -145,6 +145,7 @@
                 TB_MS_PRODUCT tmp
                 WHERE
                 tmp.PROD_CD = tookddt.PROD_CD
+                AND tmp.STORE_CD = tookddt.STORE_CD
                 AND tookddt.STORE_CD = #{storeCd}
                 AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
                 AND tookddt.SALE_HH BETWEEN #{startHh} AND #{endHh}
@@ -234,7 +235,7 @@
                     AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
                 </foreach>
                 )
-                WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
+                WHERE REPLACE(SALE_HH, '시', '') BETWEEN #{startHh} AND #{endHh}
                 GROUP BY STORE_CD,
                 SALE_HH
                 ORDER BY SALE_HH
@@ -269,11 +270,12 @@
                     TB_MS_PRODUCT tmp
                     WHERE
                     tmp.PROD_CD = tookddt.PROD_CD
+                    AND tmp.STORE_CD = tookddt.STORE_CD
                     AND tookddt.STORE_CD = #{storeCd}
                     AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
                 </foreach>
                 )
-                WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
+                WHERE REPLACE(SALE_HH, '시', '') BETWEEN #{startHh} AND #{endHh}
                 GROUP BY STORE_CD,
                 SALE_HH
                 ORDER BY SALE_HH
