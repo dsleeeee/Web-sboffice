@@ -35,38 +35,9 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w115px"/></span>
+                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w150px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w115px"/></span>
-
-<%--                    <span class="txtIn">--%>
-<%--                      <div class="sb-select">--%>
-<%--                        <wj-input-date--%>
-<%--                                value="kdsDayStartDate"--%>
-<%--                                ng-model="kdsDayStartDate"--%>
-<%--                                control="kdsDayStartDateCombo"--%>
-<%--                                format="yyyy/MM/dd"--%>
-<%--                                min="2000-01-01"--%>
-<%--                                max="2099-12-31"--%>
-<%--                                initialized="_initDateBox(s)">--%>
-<%--                        </wj-input-date>--%>
-<%--                      </div>--%>
-<%--                    </span>--%>
-<%--                    <span class="rg">~</span>--%>
-<%--                    <span class="txtIn">--%>
-<%--                    <div class="sb-select">--%>
-<%--                      <wj-input-date--%>
-<%--                              value="kdsDayEndDate"--%>
-<%--                              ng-model="kdsDayEndDate"--%>
-<%--                              control="kdsDayEndDateCombo"--%>
-<%--                              format="yyyy/MM/dd"--%>
-<%--                              min="2000-01-01"--%>
-<%--                              max="2099-12-31"--%>
-<%--                              initialized="_initDateBox(s)">--%>
-<%--                      </wj-input-date>--%>
-<%--                    </div>--%>
-<%--                    </span>--%>
-
+                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w150px"/></span>
                 </div>
             </td>
             <%-- 시간대 --%>
@@ -74,43 +45,32 @@
                 <s:message code="kds.time"/>
             </th>
             <td>
-                <div class="sb-select fl w80px mr10">
-                    <wj-combo-box
-                            id="timeZone"
-                            ng-model="timeZone"
-                            control="timeZoneCombo"
-                            items-source="kdsTimeZone"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                    <%--                    <wj-input-date-time--%>
-                    <%--                            id="timeZone"--%>
-                    <%--                            ng-model="timeZone"--%>
-                    <%--                            control="timeZoneCombo"--%>
-                    <%--                            items-source="kdsTimeZone"--%>
-                    <%--                            is-editable="false"--%>
-                    <%--                            showDropDownButton=false--%>
-                    <%--                            format="HH 시"--%>
-                    <%--                            timeStep="30"--%>
-                    <%--                            min="2000-01-01"--%>
-                    <%--                            max="2099-12-31"--%>
-                    <%--                            initialized="_initComboBox(s)">--%>
-                    <%--                    </wj-input-date-time>--%>
-                </div>
-
-                <div class="sb-select fl w80px mr10">
-                    <wj-combo-box
-                            id="timeZoneSec"
-                            ng-model="timeZoneSec"
-                            control="timeZoneSecCombo"
-                            items-source="kdsTimeZone"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="timeZone"
+                                ng-model="timeZone"
+                                control="timeZoneCombo"
+                                items-source="kdsTimeZone"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="timeZoneSec"
+                                ng-model="timeZoneSec"
+                                control="timeZoneSecCombo"
+                                items-source="kdsTimeZone"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -119,70 +79,76 @@
                 <s:message code="kds.makeDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="makeDate"
-                            ng-model="makeDate"
-                            control="makeDateCombo"
-                            items-source="_getComboData('kdsMakeDate')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="makeDateSec"
-                            ng-model="makeDateSec"
-                            control="makeDateSecCombo"
-                            items-source="_getComboData('kdsMakeDateSec')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="makeDate"
+                                ng-model="makeDate"
+                                control="makeDateCombo"
+                                items-source="_getComboData('kdsMakeDate')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="makeDateSec"
+                                ng-model="makeDateSec"
+                                control="makeDateSecCombo"
+                                items-source="_getComboData('kdsMakeDateSec')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
                 </div>
             </td>
             <th>
                 <s:message code="kds.picDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="picDate"
-                            ng-model="picDate"
-                            control="picDateCombo"
-                            items-source="_getComboData('kdsPicDate')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="picDateSec"
-                            ng-model="picDateSec"
-                            control="picDateSecCombo"
-                            items-source="_getComboData('kdsPicDateSec')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="picDate"
+                                ng-model="picDate"
+                                control="picDateCombo"
+                                items-source="_getComboData('kdsPicDate')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="picDateSec"
+                                ng-model="picDateSec"
+                                control="picDateSecCombo"
+                                items-source="_getComboData('kdsPicDateSec')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
                 </div>
             </td>
         </tr>
         <tr>
             <th><s:message code="kds.prodCd"/></th>
             <td>
-                <input type="text" id="prodCd" class="sb-input w50" ng-model="prodCd"
+                <input type="text" id="prodCd" class="sb-input w100" ng-model="prodCd"
                        maxlength="15"/>
             </td>
             <th><s:message code="kds.prodNm"/></th>
             <td>
-                <input type="text" id="prodNm" class="sb-input w50" ng-model="prodNm"
+                <input type="text" id="prodNm" class="sb-input w100" ng-model="prodNm"
                        maxlength="15"/>
             </td>
         </tr>
@@ -214,51 +180,42 @@
     </table>
 
 
-    <div class="mt20 oh sb-select dkbr">
-        <%-- 차트 --%>
-<%--        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">--%>
-<%--            <s:message code="kds.chart"/>--%>
-<%--        </button>--%>
-<%--        <div class="sb-select mt10 fr">--%>
-            <span class="chk ml10">
-                <%-- 제조시간 --%>
-                <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
-                <label for="makeChecked"><s:message code='kds.makeDate'/></label>
-            </span>
-            <span class="chk ml10">
-                <%-- 픽업시간 --%>
-                <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
-                <label for="picChecked"><s:message code='kds.picDate'/></label>
-            </span>
-        </div>
-        <%-- 건수 --%>
-        <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
-        <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
-        <%--			<label for="chkDt">--%>
-        <%--				<s:message code="kds.qty"/>--%>
-        <%--			</label>--%>
-        <%--		</span>--%>
-    </div>
-    <div class="w100 mt40 mb20 ">
-        <%--위즈모 차트--%>
-        <h2>
-            <div class="circle">
-                <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
-                    <s:message code="kds.makeDate"/>
+    <div class="w100 mt40 mb20" style="border: 1px solid #e2e2e2; height:370px;">
+        <div id="divChart" style="visibility: hidden;">
+            <div class="sb-select mt10 fl">
+                <span class="chk ml10">
+                    <%-- 제조시간 --%>
+                    <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
+                    <label for="makeChecked"><s:message code='kds.makeDate'/></label>
                 </span>
-                <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
-                    <s:message code="kds.picDate"/>
+                <span class="chk ml10">
+                    <%-- 픽업시간 --%>
+                    <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
+                    <label for="picChecked"><s:message code='kds.picDate'/></label>
                 </span>
             </div>
-        </h2>
-        <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
+            <%--위즈모 차트--%>
+            <h3>
+                <div class="circle" style="padding: 10px;">
+                    <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
+                        <s:message code="kds.makeDate"/>
+                    </span>
+                    <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
+                        <s:message code="kds.picDate"/>
+                    </span>
+                </div>
+            </h3>
+            <div class="wizWrap" id="chart1" style="width:100%; height:370px; font-size: 10pt;" ></div>
+        </div>
     </div>
+
     <div class="mt20 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="excelDownloadInfo()">
             <s:message code="cmm.excel.down"/>
         </button>
     </div>
+
     <%-- 그리드 --%>
     <div class="w100 mt20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -271,17 +228,18 @@
                     items-source="data"
                     item-formatter="_itemFormatter"
                     is-read-only="true"
+                    id="wjGridList"
             >
                 <%-- ng-repeat="item in kdsTimeZone"--%>
                 <!-- define columns -->
                 <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="100"
+                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="80"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="storeNm" width="100"
+                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="storeNm" width="120"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="saleDate"
-                                     width="100"
+                                     width="80"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
                 <%--                <wj-flex-grid-column header="<s:message code="kds.sale.amt"/> {{item.name}}"--%>
                 <%--                                     binding="cntHh{{item.value}}"--%>
@@ -294,234 +252,234 @@
                 <%--                                     width="75" is-read-only="true" align="center"></wj-flex-grid-column>--%>
 
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh00" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh00" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh00" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh00" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh00" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh00" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh01" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh01" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh01" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh01" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh01" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh01" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh02" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh02" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh02" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh02" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh02" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh02" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh03" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh03" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh03" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh03" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh03" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh03" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh04" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh04" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh04" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh04" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh04" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh04" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh05" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh05" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh05" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh05" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh05" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh05" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh06" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh06" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh06" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh06" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh06" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh06" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh07" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh07" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh07" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh07" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh07" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh07" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh08" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh08" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh08" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh08" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh08" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh08" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh09" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh09" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh09" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh09" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh09" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh09" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh10" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh10" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh10" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh10" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh10" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh10" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh11" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh11" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh11" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh11" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh11" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh11" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh12" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh12" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh12" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh12" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh12" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh12" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh13" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh13" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh13" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh13" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh13" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh13" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh14" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh14" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh14" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh14" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh14" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh14" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh15" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh15" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh15" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh15" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh15" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh15" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh16" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh16" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh16" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh16" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh16" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh16" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh17" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh17" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh17" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh17" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh17" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh17" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh18" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh18" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh18" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh18" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh18" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh18" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh19" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh19" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh19" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh19" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh19" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh19" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh20" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh20" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh20" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh20" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh20" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh20" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh21" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh21" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh21" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh21" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh21" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh21" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh22" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh22" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh22" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh22" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh22" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh22" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.sale.amt"/>"
-                                     binding="qtyHh23" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="qtyHh23" width="70" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh23" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="makeHh23" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
-                                     binding="picHh23" width="75" is-read-only="true"
-                                     align="center"></wj-flex-grid-column>
+                                     binding="picHh23" width="80" is-read-only="true"
+                                     align="center" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
+
 </div>
 <script>
     var kdsMakeDate = ${ccu.getCommCode("400")};
-
     var kdsPicDate = ${ccu.getCommCodeExcpAll("401")};
-
     var kdsMakeDateSec = ${ccu.getCommCode("402")};
-
     var kdsPicDateSec = ${ccu.getCommCodeExcpAll("403")};
     var regstrStoreList = ${regstrStoreList};
+
+    var orgnFg = "${orgnFg}";
 
     <%--var kdsTimeZone = ${kdsTimeZone};--%>
 </script>
@@ -551,7 +509,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProdTime.js?ver=2020070801.08"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProdTime.js?ver=2020070801.17"
         charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>

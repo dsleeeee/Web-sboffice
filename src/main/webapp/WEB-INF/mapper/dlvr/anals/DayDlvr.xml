@@ -177,11 +177,7 @@
         SELECT
         A.PROD_CD,
         B.PROD_NM,
-        (
-        SELECT
-        SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD)
-        FROM
-        DUAL ) AS PROD_CLASS_NM,
+        FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, B.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
         NVL(DLVR_SALE_QTY, 0) AS DLVR_SALE_QTY,
         NVL(DLVR_AMT, 0) AS DLVR_AMT,
         NVL(NON_DLVR_SALE_QTY, 0) AS NON_DLVR_SALE_QTY,

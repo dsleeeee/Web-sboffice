@@ -94,6 +94,9 @@ app.controller('dlvrReceiptDetailCtrl', ['$scope', '$http', function ($scope, $h
                 if (col.binding === "billNo") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+                if(col.binding === "saleDate"){
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
+                }
             }
         });
 

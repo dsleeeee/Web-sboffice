@@ -97,8 +97,12 @@ public class DlvrRegistServiceImpl implements DlvrRegistService {
                 result = mapper.updateDlvrRegistInfo(dlvrRegistVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             } else {
+                // 대분류 삭제
                 result = mapper.deleteDlvrRegistInfo(dlvrRegistVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 중분류 삭제
+                result = mapper.deleteDlvrDetailInfo(dlvrRegistVO);
             }
         }
         return result;

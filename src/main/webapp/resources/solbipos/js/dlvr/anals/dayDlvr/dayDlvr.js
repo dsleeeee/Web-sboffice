@@ -36,6 +36,7 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         if (col.binding === "saleDate") {
+          e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -51,7 +52,7 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
           selectedData.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
           selectedData.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
           $scope.setSelectedMember(selectedData);
-          let params = {}
+          params = {}
           params.searchDate = $scope.getSelectedMember().nonDlvrSaleDate;
           params.hqOfficeCd = $scope.getSelectedMember().hqOfficeCd;
           params.hqBrandCd = $scope.getSelectedMember().hqBrandCd;
@@ -125,6 +126,12 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   }
   // <-- 검색 호출 -->
   $scope.$on("dayDlvrCtrl", function (event, data) {
+
+    // 리스트 초기화
+    var scope = agrid.getScope('dayDlvrDtlCtrl');
+    scope._gridDataInit();
+    event.preventDefault();
+
     $scope.searchDaySaleList();
     event.preventDefault();
   });
@@ -212,7 +219,7 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     dataItem.lv1Nm = messages["dayDlvr.prodClassNm"];
     // dataItem.lv2Cd = messages["dayDlvr.prodLV2"];
     dataItem.lv2Nm = messages["dayDlvr.prodLV2"];
-    dataItem.prodCd = messages["dayDlvr.prodDd"];
+    dataItem.prodCd = messages["dayDlvr.prodCd"];
     dataItem.prodNm = messages["dayDlvr.prodNm"];
     dataItem.prodClassNm = messages["dayDlvr.prodClassNm"];
     dataItem.dlvrSaleQty = messages["dayDlvr.dlvrSale"];
@@ -284,6 +291,21 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 // 엑셀 다운로드
   $scope.rightExcelDownload = function () {
 
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd= '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = String(yyyy) + String(mm) + dd;
+
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
@@ -297,7 +319,7 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
         includeColumns: function (column) {
           return column.visible;
         }
-      }, '일자별_배달내역_상세_' + getToday() + '.xlsx', function () {
+      }, '일자별_배달내역_상세_' + today + '.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

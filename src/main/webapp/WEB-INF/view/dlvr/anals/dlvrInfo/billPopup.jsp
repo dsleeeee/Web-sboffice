@@ -251,13 +251,13 @@
                         <%-- 남 --%>
                         <th><s:message code="dlvrInfo.pop.visit.male"/></th>
                         <td>
-                            <input type="text" id="male" name="male" ng-model="searchModel.male"
+                            <input type="text" id="male" name="male" ng-model="searchModel.male" readonly
                                    class="sb-input w100"/>
                         </td>
                         <%-- 여 --%>
                         <th><s:message code="dlvrInfo.pop.visit.female"/></th>
                         <td>
-                            <input type="text" id="female" name="female" ng-model="searchModel.female"
+                            <input type="text" id="female" name="female" ng-model="searchModel.female" readonly
                                    class="sb-input w100"/>
                         </td>
                     </tr>
@@ -284,19 +284,19 @@
                         <%-- 회원번호 --%>
                         <th><s:message code="dlvrInfo.pop.member.no"/></th>
                         <td>
-                            <input type="text" id="membrNo" name="membrNo" ng-model="searchModel.membrNo"
+                            <input type="text" id="membrNo" name="membrNo" ng-model="searchModel.membrNo" readonly
                                    class="sb-input w100"/>
                         </td>
                         <%-- 회원명 --%>
                         <th><s:message code="dlvrInfo.pop.member.name"/></th>
                         <td>
-                            <input type="text" id="membrNm" name="membrNm" ng-model="searchModel.membrNm"
+                            <input type="text" id="membrNm" name="membrNm" ng-model="searchModel.membrNm" readonly
                                    class="sb-input w100"/>
                         </td>
                         <%-- 발생포인트 --%>
                         <th><s:message code="dlvrInfo.pop.member.point"/></th>
                         <td>
-                            <input type="text" id="saleSavePoint" name="saleSavePoint" ng-model="searchModel.saleSavePoint"
+                            <input type="text" id="saleSavePoint" name="saleSavePoint" ng-model="searchModel.saleSavePoint" readonly
                                    class="sb-input w100"/>
                         </td>
                     </tr>
@@ -311,12 +311,12 @@
                 <s:message code="dlvrInfo.pop.prod"/>
                 <%-- 엑셀 --%>
                 <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
-                    <s:message code="cmm.excel"/>
+                    <s:message code="cmm.excel.down"/>
                 </button>
             </div>
             <div class="w100 mt10 mb20">
                 <%--위즈모 테이블--%>
-                <div class="wj-gridWrap" style="height: 500px;">
+                <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             selection-mode="Row"
@@ -334,25 +334,25 @@
                                              align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.prod.prodNm"/>" binding="prodNm"
                                              width="300"
-                                             align="center" is-read-only="true"></wj-flex-grid-column>
+                                             align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.prod.prodCnt"/>" binding="saleQty"
-                                             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                                             width="90" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.prod.uprc"/>" binding="saleUprc"
-                                             width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                                             width="90" align="right" is-read-only="true"  aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.tot.amt"/>" binding="saleAmt"
-                                             width="100" align="right" data-type="Number" format="n0"
+                                             width="90" align="right" data-type="Number" format="n0"
                                              is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.tot.discount"/>" binding="dcAmt"
-                                             width="100" align="right" data-type="Number" format="n0"
+                                             width="90" align="right" data-type="Number" format="n0"
                                              is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.tot.realAmt"/>" binding="realSaleAmt"
-                                             width="100" align="right" data-type="Number" format="n0"
+                                             width="90" align="right" data-type="Number" format="n0"
                                              is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.tot.supply"/>" binding="supplyAmt"
-                                             width="100" align="right" data-type="Number" format="n0"
+                                             width="90" align="right" data-type="Number" format="n0"
                                              is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrInfo.pop.tot.tex"/>" binding="vatAmt"
-                                             width="100" align="right" data-type="Number" format="n0"
+                                             width="90" align="right" data-type="Number" format="n0"
                                              is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
 

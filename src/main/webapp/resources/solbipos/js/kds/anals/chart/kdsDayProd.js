@@ -39,6 +39,9 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (col.binding === "dlvrAddr") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+                if (col.binding === "saleDate") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
+                }
             }
         });
     };
@@ -47,7 +50,7 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         // dataList.forEach((e, i)=> {
         //     console.log(e);
         // })
-        let view = new wijmo.collections.CollectionView(dataList);
+        view = new wijmo.collections.CollectionView(dataList);
         return view;
     }
 
@@ -58,6 +61,9 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         chart1 = new wijmo.chart.FlexChart('#chart1', {
             itemsSource: getData(list),
             bindingX: 'saleDate',
+            axisY: {
+                min: 0
+            },
             legend: {
                 position: wijmo.chart.Position.None
             },
@@ -147,6 +153,10 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.kdsSearch = function (params) {
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
+
+        // 차트영역 보이도록
+        $("#divChart").css("visibility", "");
+
         // 마스터그리드 여부
         if (true) {
             var el = angular.element('input');
@@ -158,10 +168,12 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }
             }
         }
+
         // 가상로그인 세션정보
         if (document.getElementsByName('sessionId')[0]) {
             params['sid'] = document.getElementsByName('sessionId')[0].value;
         }
+
         $http({
             method: 'POST', //방식
             url: "/kds/anals/chart/dayProd/getKdsDayProd.sb", /* 통신할 URL */
@@ -178,6 +190,10 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if (true && response.data.message) {
                         $scope._popMsg(response.data.message);
                     }
+
+                    // 데이터가 없는경우 차트영역 숨기기
+                    $("#divChart").css("visibility", "hidden");
+
                     return false;
                 }
                 var data = new wijmo.collections.CollectionView(list);
@@ -299,6 +315,22 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd= '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        today = String(yyyy) + String(mm) + dd;
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -311,7 +343,7 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, 'KDS_일별_상품별_' + getToday() + '.xlsx', function () {
+            }, 'KDS_일별_상품별_' + today + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

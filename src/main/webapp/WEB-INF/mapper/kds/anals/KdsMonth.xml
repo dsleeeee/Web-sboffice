@@ -5,107 +5,28 @@
     <select id="getKdsMonth" parameterType="KdsVO" resultType="DefaultMap">
         /* KdsMapper.getKdsMonth */
         SELECT
-        A.LV1_CD,
-        A.LV2_CD,
-        A.LV2_NM,
-        A.LV3_CD,
-        A.LV3_NM,
-        A.LV1_NM,
-        A.LV2_NM_FULL,
-        A.LV3_NM_FULL,
         C.STORE_CD,
         C.PROD_CD,
         C.SALE_MON,
         B.PROD_NM,
         D.STORE_NM,
-        A.PROD_CLASS_NM,
+        <choose>
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, B.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
+            </when>
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, B.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
+            </when>
+        </choose>
         SUM(C.SALE_QTY) AS SALE_QTY,
         SUM(C.AVG_MAKE) AS AVG_MAKE,
         SUM(C.AVG_PIC) AS AVG_PIC
         FROM
         <choose>
             <when test='orgnFg != null and orgnFg == "HQ"'>
-                (
-                SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
-                A.PROD_CLASS_CD     AS LV2_CD,
-                A.PROD_CLASS_NM     AS LV2_NM,
-                B.PROD_CLASS_CD     AS LV3_CD,
-                B.PROD_CLASS_NM     AS LV3_NM,
-                (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
-                (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-                (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL,
-                ( SELECT SF_GET_PROD_CLASSES('H', #{hqOfficeCd}, B.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
-                FROM    (
-                SELECT  HQ_OFFICE_CD,
-                P_PROD_CLASS_CD,
-                PROD_CLASS_CD,
-                PROD_CLASS_NM
-                FROM    TB_HQ_PRODUCT_CLASS
-                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     P_PROD_CLASS_CD IN (
-                SELECT  PROD_CLASS_CD
-                FROM    TB_HQ_PRODUCT_CLASS
-                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     P_PROD_CLASS_CD = '00000'
-                )
-                )                      A,
-                TB_HQ_PRODUCT_CLASS    B
-                WHERE   B.P_PROD_CLASS_CD IN    (
-                SELECT  PROD_CLASS_CD
-                FROM    TB_HQ_PRODUCT_CLASS
-                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     P_PROD_CLASS_CD IN (
-                SELECT  PROD_CLASS_CD
-                FROM    TB_HQ_PRODUCT_CLASS
-                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     P_PROD_CLASS_CD = '00000'
-                )
-                )
-                AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
-                AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-                )                   A,
                 TB_HQ_PRODUCT       B,
             </when>
             <when test='orgnFg != null and orgnFg == "STORE"'>
-                (
-                SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
-                A.PROD_CLASS_CD     AS LV2_CD,
-                A.PROD_CLASS_NM     AS LV2_NM,
-                B.PROD_CLASS_CD     AS LV3_CD,
-                B.PROD_CLASS_NM     AS LV3_NM,
-                (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
-                (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-                (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL,
-                ( SELECT SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
-                FROM    (
-                SELECT  STORE_CD,
-                P_PROD_CLASS_CD,
-                PROD_CLASS_CD,
-                PROD_CLASS_NM
-                FROM    TB_MS_PRODUCT_CLASS
-                WHERE   STORE_CD        = #{storeCd}
-                AND     P_PROD_CLASS_CD IN (
-                SELECT  PROD_CLASS_CD
-                FROM    TB_MS_PRODUCT_CLASS
-                WHERE   STORE_CD        = #{storeCd}
-                AND     P_PROD_CLASS_CD = '00000'
-                )
-                )                      A,
-                TB_MS_PRODUCT_CLASS    B
-                WHERE   B.P_PROD_CLASS_CD IN    (
-                SELECT  PROD_CLASS_CD
-                FROM    TB_MS_PRODUCT_CLASS
-                WHERE   STORE_CD        = #{storeCd}
-                AND     P_PROD_CLASS_CD IN (
-                SELECT  PROD_CLASS_CD
-                FROM    TB_MS_PRODUCT_CLASS
-                WHERE   STORE_CD        = #{storeCd}
-                AND     P_PROD_CLASS_CD = '00000'
-                )
-                )
-                AND     A.STORE_CD      = B.STORE_CD
-                AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-                )                   A,
                 TB_MS_PRODUCT       B,
             </when>
         </choose>
@@ -131,7 +52,6 @@
         TB_MS_STORE D
         WHERE
             B.PROD_CD = C.PROD_CD
-        AND B.PROD_CLASS_CD = A.LV3_CD
         AND C.STORE_CD = D.STORE_CD(+)
         <if test = 'hqOfficeCd != null and hqOfficeCd != ""'>
             AND B.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -150,19 +70,11 @@
         </if>
         AND C.SALE_MON BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
         GROUP BY
-            A.LV1_CD,
-            A.LV2_CD,
-            A.LV2_NM,
-            A.LV3_CD,
-            A.LV3_NM,
-            A.LV1_NM,
-            A.LV2_NM_FULL,
-            A.LV3_NM_FULL,
             C.PROD_CD,
             B.PROD_NM,
             C.STORE_CD,
             C.SALE_MON,
-            A.PROD_CLASS_NM,
+            B.PROD_CLASS_CD,
             D.STORE_NM
         ORDER BY
             C.SALE_MON

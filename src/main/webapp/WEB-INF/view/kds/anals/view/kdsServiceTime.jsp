@@ -35,36 +35,9 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w115px"/></span>
+                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w150px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w115px"/></span>
-                    <%--<span class="txtIn">
-                      <div class="sb-select">
-                        <wj-input-date
-                                value="kdsDayStartDate"
-                                ng-model="kdsDayStartDate"
-                                control="kdsDayStartDateCombo"
-                                format="yyyy-MM-dd"
-                                min="2000-01-01"
-                                max="2099-12-31"
-                                initialized="_initDateBox(s)">
-                        </wj-input-date>
-                      </div>
-                    </span>
-                    <span class="rg">~</span>
-                    <span class="txtIn">
-                    <div class="sb-select">
-                      <wj-input-date
-                              value="kdsDayEndDate"
-                              ng-model="kdsDayEndDate"
-                              control="kdsDayEndDateCombo"
-                              format="yyyy-MM-dd"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </div>
-                    </span>--%>
+                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w150px"/></span>
                 </div>
             </td>
             <input type="hidden" id="resurceFg" class="sb-input w50" ng-model="resurceFg" value="${orgnFg}"/>
@@ -86,68 +59,74 @@
                 <s:message code="kds.makeDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="makeDate"
-                            ng-model="makeDate"
-                            control="makeDateCombo"
-                            items-source="_getComboData('kdsMakeDate')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="makeDateSec"
-                            ng-model="makeDateSec"
-                            control="makeDateSecCombo"
-                            items-source="_getComboData('kdsMakeDateSec')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="makeDate"
+                                ng-model="makeDate"
+                                control="makeDateCombo"
+                                items-source="_getComboData('kdsMakeDate')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="makeDateSec"
+                                ng-model="makeDateSec"
+                                control="makeDateSecCombo"
+                                items-source="_getComboData('kdsMakeDateSec')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
                 </div>
             </td>
             <th>
                 <s:message code="kds.picDate.setting"/>
             </th>
             <td>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="picDate"
-                            ng-model="picDate"
-                            control="picDateCombo"
-                            items-source="_getComboData('kdsPicDate')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <div class="sb-select fl w115px mr10">
-                    <wj-combo-box
-                            id="picDateSec"
-                            ng-model="picDateSec"
-                            control="picDateSecCombo"
-                            items-source="_getComboData('kdsPicDateSec')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="picDate"
+                                ng-model="picDate"
+                                control="picDateCombo"
+                                items-source="_getComboData('kdsPicDate')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                                id="picDateSec"
+                                ng-model="picDateSec"
+                                control="picDateSecCombo"
+                                items-source="_getComboData('kdsPicDateSec')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
-    <div class="mt20 oh sb-select dkbr">
+    <%--<div class="mt20 oh sb-select dkbr">--%>
         <%-- 차트 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
-            <s:message code="kds.chart"/>
-        </button>
+        <%--<button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">--%>
+            <%--<s:message code="kds.chart"/>--%>
+        <%--</button>--%>
         <%--        <div class="sb-select mt10 fr">--%>
         <%--            <span class="chk ml10">--%>
         <%--                &lt;%&ndash; 제조시간 &ndash;%&gt;--%>
@@ -167,35 +146,42 @@
         <%--				<s:message code="kds.cnt"/>--%>
         <%--			</label>--%>
         <%--		</span>--%>
-    </div>
-    <div class="w100 mt40 mb30">
-        <%--위즈모 차트--%>
-        <h2>
-            <div class="circle">
-                <s:message code="kds.makeDate.standard"/>
-            </div>
-        </h2>
-        <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
-        <div id="theChartSelector1" class="chart-selector" style="width:100%; height:50px;"></div>
-    </div>
-    <div class="w100 mt40 mb20">
-        <%--위즈모 차트--%>
-        <h2>
-            <div class="circle">
-                <s:message code="kds.picDate.standard"/>
-            </div>
-        </h2>
-        <div class="wizWrap" id="chart2" style="width:100%; height:370px;"></div>
-        <div id="theChartSelector2" class="chart-selector" style="width:100%; height:50px;"></div>
+    <%--</div>--%>
 
+    <div class="w100 mt40 mb20" id="divChartEmpty" style="border: 1px solid #e2e2e2; height:370px;"></div>
+    <div id="divChart" style="display: none;">
+        <div class="w100 mt40 mb30">
+            <%--위즈모 차트--%>
+            <div class="sb-select fl" style="padding:15px;">
+                <h4>
+                    <div class="circle">
+                         - <s:message code="kds.makeDate.standard"/> -
+                    </div>
+                </h4>
+            </div>
+            <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
+            <div id="theChartSelector1" class="chart-selector" style="width:100%; height:50px;"></div>
+        </div>
+        <div class="w100 mt40 mb20">
+            <%--위즈모 차트--%>
+            <div class="sb-select fl" style="padding:15px;">
+                <h4>
+                    <div class="circle">
+                        - <s:message code="kds.picDate.standard"/> -
+                    </div>
+                </h4>
+            </div>
+            <div class="wizWrap" id="chart2" style="width:100%; height:370px;"></div>
+            <div id="theChartSelector2" class="chart-selector" style="width:100%; height:50px;"></div>
+        </div>
     </div>
-
     <div class="mt20 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()">
             <s:message code="cmm.excel.down"/>
         </button>
     </div>
+
     <%-- 그리드 --%>
     <div class="w100 mt20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -211,63 +197,60 @@
 
                 <!-- define columns -->
                 <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="*"
+                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="80"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="storeNm" width="*"
+                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="storeNm" width="150"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="saleDate"
-                                     width="*"
+                                     width="80"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.total.count"/>" binding="totalCount" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.total.count"/>" binding="totalCount" width="70"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.one.minute"/>" binding="opt1Cook1"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.three.minute"/>" binding="opt1Cook3"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.five.minute"/>" binding="opt1Cook5"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.seven.minute"/>" binding="opt1Cook7"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.ten.minute"/>" binding="opt1Cook10"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.ten.minute.over"/>"
-                                     binding="opt1CookOver10" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     binding="opt1CookOver10" width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.one.minute"/>" binding="opt2Pickup1"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.three.minute"/>" binding="opt2Pickup3"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.five.minute"/>" binding="opt2Pickup5"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.seven.minute"/>" binding="opt2Pickup7"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.ten.minute"/>" binding="opt2Pickup10"
-                                     width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.time.section.ten.minute.over"/>"
-                                     binding="opt2PickupOver10" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     binding="opt2PickupOver10" width="65"
+                                     is-read-only="true" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
 </div>
 <script>
     var kdsMakeDate = ${ccu.getCommCode("400")};
-
     var kdsPicDate = ${ccu.getCommCodeExcpAll("401")};
-
     var kdsMakeDateSec = ${ccu.getCommCode("402")};
-
     var kdsPicDateSec = ${ccu.getCommCodeExcpAll("403")};
     var regstrStoreList = ${regstrStoreList};
 
@@ -298,7 +281,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsServiceTime.js?ver=2020070801.08"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsServiceTime.js?ver=2020070801.10"
         charset="utf-8"></script>
 
 

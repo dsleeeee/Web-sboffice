@@ -38,6 +38,9 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 if (col.binding === "dlvrAddr") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+                if (col.binding === "saleDate") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
+                }
             }
         });
 
@@ -128,7 +131,7 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
         // dataList.forEach((e, i)=> {
         //     console.log(e);
         // })
-        let view = new wijmo.collections.CollectionView(dataList);
+        view = new wijmo.collections.CollectionView(dataList);
         return view;
     }
 
@@ -148,6 +151,9 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
             chartType: parseInt(0),
             stacking: parseInt(1),
             tooltip: {content: "{seriesName} {value}건"},
+            axisY: {
+                min: 0
+            },
             legend: {
                 position: wijmo.chart.Position.Left
             },
@@ -425,8 +431,14 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
     });
 
     $scope.kdsSearch = function (params) {
+
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
+
+        // 차트영역 보이도록
+        $("#divChartEmpty").css("display", "none");
+        $("#divChart").css("display", "");
+
         // 마스터그리드 여부
         if (true) {
             var el = angular.element('input');
@@ -438,6 +450,12 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 }
             }
         }
+
+        //가상로그인 session 설정
+        if(document.getElementsByName('sessionId')[0]){
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
         $http({
             method: 'POST', //방식
             url: "/kds/anals/chart/service/getKdsServiceTime.sb", /* 통신할 URL */
@@ -457,6 +475,11 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
                     if (true && response.data.message) {
                         $scope._popMsg(response.data.message);
                     }
+
+                    // 데이터가 없는경우 차트영역 숨기기
+                    $("#divChartEmpty").css("display", "");
+                    $("#divChart").css("display", "none");
+
                     return false;
                 }
                 var data = new wijmo.collections.CollectionView(list);
@@ -588,6 +611,22 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
 
 // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd= '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        today = String(yyyy) + String(mm) + dd;
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -600,7 +639,7 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, 'KDS_Service_Time_' + getToday() + '.xlsx', function () {
+            }, 'KDS_일별_ServiceTime구간별_' + today + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

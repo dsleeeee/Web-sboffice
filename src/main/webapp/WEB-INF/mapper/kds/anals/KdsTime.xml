@@ -125,6 +125,7 @@
         tms.STORE_NM
     </select>
     <select id="getKdsDayTimeChart" parameterType="KdsVO" resultType="DefaultMap">
+        /* KdsMapper.getKdsDayTimeChart */
         SELECT STORE_CD,
         SALE_HH,
         SUM(ORDER_CNT) AS ORDER_CNT,
@@ -168,7 +169,7 @@
             AND tookdt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
         </foreach>
         )
-        WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
+        WHERE REPLACE(SALE_HH, '시', '') BETWEEN #{startHh} AND #{endHh}
         GROUP BY STORE_CD,
         SALE_HH
         ORDER BY SALE_HH
