@@ -62,6 +62,9 @@ public interface HqManageMapper {
     /** 본사 공통코드 등록 */
     int cmmCodeReg(HqNmcodeVO nmcodeVO);
 
+    /** 매장 기본 창고 등록 */
+    int insertStorage(HqManageVO hqManage);
+
     /** 공통코드 내려받기 */
     String copyCmmNameCode(HqNmcodeVO hqNmcodeVO);
 

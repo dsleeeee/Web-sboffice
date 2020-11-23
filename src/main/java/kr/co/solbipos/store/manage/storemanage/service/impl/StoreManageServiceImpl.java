@@ -270,6 +270,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             procCnt += mapper.insertStoreCorner(storeCornerVO);
 
+            // 기본 창고 등록 (매장 기본창고(000 매대 001 기본창고)
+            procCnt += mapper.insertStorage(storeManageVO);
+
             // 회원등급 생성
             MemberClassVO memberClassVO = new MemberClassVO();
             memberClassVO.setMembrOrgnCd(storeCd);
