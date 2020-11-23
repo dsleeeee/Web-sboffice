@@ -113,7 +113,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
                 var col = s.columns[e.col];
 
                 // 회원번호, 회원명
-                if (col.binding === "membrNo" || col.binding === "membrNm") {
+                if (col.binding === "membrNo") {
                     // var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
@@ -127,7 +127,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
                 var col = ht.panel.columns[ht.col];
 
                 // 회원번호, 회원명 클릭시 상세정보 팝업
-                if (col.binding === "membrNo" || col.binding === "membrNm") {
+                if (col.binding === "membrNo") {
                     var selectedData = s.rows[ht.row].dataItem;
                     $scope.setSelectedMember(selectedData);
                     $scope.wjMemberInfoDtlLayer.show(true);

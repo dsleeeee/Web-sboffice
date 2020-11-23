@@ -39,7 +39,7 @@
         SBPENC.D(tmm.TEL_NO) AS TEL_NO,
         tmm.EMAIL_ADDR,
         tmm.EMAIL_RECV_YN,
-        TO_CHAR(TO_DATE(tmm.BIRTHDAY), 'YYYY-MM-DD') AS BIRTHDAY,
+        tmm.BIRTHDAY,
         tmm.GENDR_FG,
         tmm.SMS_RECV_YN,
         tmm.WEDDING_YN,
@@ -55,7 +55,7 @@
         tmmp.TOT_ADJ_POINT,
         tmmp.FIRST_SALE_DATE,
         tmmp.LAST_SALE_DATE,
-        TO_CHAR(TO_DATE(tmm.REG_DT, 'YYYY-MM-DD HH24MISS'), 'YYYY-MM-DD') AS REG_DT
+        tmm.REG_DT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_CLASS tmmc,
