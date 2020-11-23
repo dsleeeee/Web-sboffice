@@ -121,6 +121,7 @@ public class ChgBatchController {
     @RequestMapping(value = "chgBatch/getMemberChgBatchSave.sb", method = RequestMethod.POST)
     public Result memberClassSave(@RequestBody ChgBatchVO[] chgBatchVOs, HttpServletRequest request,
                                   HttpServletResponse response, Model model) {
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         int result = chgBatchService.saveChgBatchList(chgBatchVOs, sessionInfoVO);
 

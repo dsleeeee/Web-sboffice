@@ -330,10 +330,11 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
-            $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
+            // $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
             params.push($scope.flex.collectionView.itemsEdited[i]);
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         }
+
         $.postJSONArray("/membr/info/chgBatch/chgBatch/getMemberChgBatchSave.sb", params, function (result) {
             if (result.status === "OK") {
                 $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.

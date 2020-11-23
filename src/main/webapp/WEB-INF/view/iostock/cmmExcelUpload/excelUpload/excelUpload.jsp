@@ -230,6 +230,13 @@
 
             $scope.addRow();
 
+            var excelFileName = "excelForm";
+            if ($scope.uploadFg === "memberExcel") {
+                excelFileName = "회원엑셀업로드";
+            } else if ($scope.uploadFg === "memberPoint") {
+                excelFileName = "회원포인트조정";
+            }
+
             $timeout(function () {
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
                     includeColumnHeaders: true,
@@ -238,7 +245,7 @@
                     includeColumns: function (column) {
                         return column.visible;
                     }
-                }, 'excelForm.xlsx');
+                }, excelFileName +'.xlsx');
             }, 10);
         };
 

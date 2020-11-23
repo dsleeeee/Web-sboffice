@@ -240,14 +240,19 @@ public class DlvrServiceImpl implements DlvrService {
 
     @Override
     public List<DefaultMap<String>> getDlvrLzoneList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
-        dlvrVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            dlvrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            dlvrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            dlvrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
         List<DefaultMap<String>> resultList = dlvrMapper.getDlvrLzoneList(dlvrVO);
+        if (resultList.size() == 0) {
+            DefaultMap<String> tmpList = new DefaultMap<String>();
+            tmpList.put("value", "");
+            tmpList.put("name", "");
+            resultList.add(tmpList);
+        }
+
         return resultList;
     }
 

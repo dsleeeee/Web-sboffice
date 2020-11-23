@@ -274,6 +274,7 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._postJSONSave.withPopUp("/membr/info/view/base/deleteDlvrAddrInfo.sb", params, function () {
             // 초기화
             $scope.saveInitAddr();
+            params.regStoreCd = $scope.memberParmas.regStoreCd; // 배달구역 조회시 필요
             $scope._broadcast('getMemberDlvr', params);
         });
     };

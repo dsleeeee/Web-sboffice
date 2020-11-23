@@ -23,6 +23,7 @@ public class DlvrVO extends PageVO {
     private String telNo;
     private String shortNo;
     private String regStoreCd;
+    private String storeCd;
 
     public OrgnFg getOrgnFg() {
         return orgnFg;
@@ -166,5 +167,13 @@ public class DlvrVO extends PageVO {
 
     public void setRegStoreCd(String regStoreCd) {
         this.regStoreCd = regStoreCd;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
     }
 }
