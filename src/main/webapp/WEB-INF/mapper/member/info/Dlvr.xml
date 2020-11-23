@@ -21,15 +21,17 @@
     <!-- 배달구역 리스트 조회-->
     <!--
         TABLE    : TB_MS_DELIVERY_LZONE
+        COMMENTS :
     -->
     <select id="getDlvrLzoneList" parameterType="dlvrVO" resultType="DefaultMap">
         /* DlvrMapper.getDlvrLzoneList */
-        SELECT tmdl.DLVR_LZONE_CD AS VALUE,
+        SELECT
+        tmdl.DLVR_LZONE_CD AS VALUE,
         tmdl.DLVR_LZONE_NM AS NAME
         FROM TB_MS_DELIVERY_LZONE tmdl
         WHERE 1 = 1
-        <if test='regStoreCd != null and regStoreCd !=""'>
-            AND tmdl.STORE_CD = #{regStoreCd}
+        <if test='storeCd != null and storeCd !=""'>
+            AND tmdl.STORE_CD = #{storeCd}
         </if>
         ORDER BY DLVR_LZONE_CD ASC
     </select>

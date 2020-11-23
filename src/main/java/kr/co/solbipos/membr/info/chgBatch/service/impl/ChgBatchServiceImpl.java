@@ -102,18 +102,7 @@ public class ChgBatchServiceImpl implements ChgBatchService {
     @Override
     public int saveChgBatchList(ChgBatchVO[] chgBatchVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
-        String procResult = "";
-
-        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
-        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
-        String storeCd = sessionInfoVO.getStoreCd();
         String dt = currentDateTimeString();
-
-
-        /*
-         * 상품권은 프랜차이즈의 경우 무조건 본사에서 등록
-         *          단독매장의 경우 무조건 매장에서 등록
-         */
 
         for (ChgBatchVO chgBatchVO : chgBatchVOs) {
 
@@ -121,7 +110,7 @@ public class ChgBatchServiceImpl implements ChgBatchService {
             chgBatchVO.setRegId(sessionInfoVO.getUserId());
             chgBatchVO.setModDt(dt);
             chgBatchVO.setModId(sessionInfoVO.getUserId());
-            chgBatchVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            chgBatchVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
             if (chgBatchVO.getStatus() == GridDataFg.UPDATE) {
                 result = mapper.updateChgBatchInfo(chgBatchVO);
@@ -130,6 +119,5 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         }
         return result;
     }
-
 
 }

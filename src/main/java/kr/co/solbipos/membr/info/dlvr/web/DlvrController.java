@@ -63,7 +63,9 @@ public class DlvrController {
    */
   @RequestMapping(value = "/dlvr/list.sb", method = RequestMethod.GET)
   public String registList(DlvrVO dlvrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
     // 회원등급 리스트 조회
     List membrClassList = dlvrService.getMembrClassList(sessionInfoVO);
     String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);

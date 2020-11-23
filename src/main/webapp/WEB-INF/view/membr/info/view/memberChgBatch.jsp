@@ -405,23 +405,6 @@
         <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('short')">
             <s:message code="cmm.apply"/>
         </button>
-        <%-- sms 수신--%>
-        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.sms.recv'/></span>
-        <div class="sb-select w100px fl">
-            <wj-combo-box
-                    id="smsRecvYn"
-                    ng-model="chgSmsRecvYn"
-                    control="smsRecvYnCombo"
-                    items-source="_getComboData('smsRecvYn')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-        </div>
-        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('sms')">
-            <s:message code="cmm.apply"/>
-        </button>
         <%-- 이메일수신 --%>
         <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.email.recv'/></span>
         <div class="sb-select w100px fl">
@@ -437,6 +420,23 @@
             </wj-combo-box>
         </div>
         <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('email')">
+            <s:message code="cmm.apply"/>
+        </button>
+        <%-- sms 수신--%>
+        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.sms.recv'/></span>
+        <div class="sb-select w100px fl">
+            <wj-combo-box
+                    id="smsRecvYn"
+                    ng-model="chgSmsRecvYn"
+                    control="smsRecvYnCombo"
+                    items-source="_getComboData('smsRecvYn')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('sms')">
             <s:message code="cmm.apply"/>
         </button>
         <%-- 저장 --%>
