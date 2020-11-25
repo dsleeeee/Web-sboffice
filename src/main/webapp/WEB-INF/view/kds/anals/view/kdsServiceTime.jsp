@@ -148,8 +148,7 @@
         <%--		</span>--%>
     <%--</div>--%>
 
-    <div class="w100 mt40 mb20" id="divChartEmpty" style="border: 1px solid #e2e2e2; height:370px;"></div>
-    <div id="divChart" style="display: none;">
+    <div id="divChart" class="w100 mt40 mb20" style="display: none;">
         <div class="w100 mt40 mb30">
             <%--위즈모 차트--%>
             <div class="sb-select fl" style="padding:15px;">
@@ -175,6 +174,7 @@
             <div id="theChartSelector2" class="chart-selector" style="width:100%; height:50px;"></div>
         </div>
     </div>
+
     <div class="mt20 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()">
@@ -281,7 +281,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsServiceTime.js?ver=2020070801.10"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsServiceTime.js?ver=2020070801.11"
         charset="utf-8"></script>
 
 

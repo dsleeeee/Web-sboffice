@@ -148,50 +148,48 @@
         </tbody>
     </table>
 
-    <div class="w100 mt40 mb20" style="border: 1px solid #e2e2e2; height:370px;">
-        <div id="divChart" style="visibility: hidden;">
-            <div class="w50 fl">
-                <%--위즈모 차트--%>
-                <div class="sb-select fl" style="padding:10px;">
-                    <h4>
-                        <div class="circle">
-                            - <s:message code="kds.makeDate.standard"/> -
-                        </div>
-                    </h4>
-                </div>
-                <h3>
-                   <div class="circle" style="padding: 10px;">
+    <div id="divChart" class="w100 mt40 mb20" style="display: none;">
+        <div class="w50 fl">
+            <%--위즈모 차트--%>
+            <div class="sb-select fl" style="padding:10px;">
+                <h4>
+                    <div class="circle">
+                        - <s:message code="kds.makeDate.standard"/> -
+                    </div>
+                </h4>
+            </div>
+            <h3>
+                <div class="circle" style="padding: 10px;">
                         <span class="orange" style="color:#ff9d39 !important;">
                             <s:message code="kds.search.store"/>
                         </span>
-                        <span class="green"style="color: #00ba8b !important;">
+                    <span class="green"style="color: #00ba8b !important;">
                              <s:message code="kds.con.store"/>
                         </span>
-                   </div>
-                </h3>
-                <div class="wizWrap" id="chart1" style="width:100%; height:370px; font-size: 10pt;"></div>
-            </div>
-            <div class="w50 fr">
-                <%--위즈모 차트--%>
-                <div class="sb-select fl" style="padding:10px;">
-                    <h4>
-                        <div class="circle">
-                            - <s:message code="kds.picDate.standard"/> -
-                        </div>
-                    </h4>
                 </div>
-                <h3>
-                    <div class="circle" style="padding: 10px;">
+            </h3>
+            <div class="wizWrap" id="chart1" style="width:100%; height:370px; font-size: 10pt;"></div>
+        </div>
+        <div class="w50 fr">
+            <%--위즈모 차트--%>
+            <div class="sb-select fl" style="padding:10px;">
+                <h4>
+                    <div class="circle">
+                        - <s:message code="kds.picDate.standard"/> -
+                    </div>
+                </h4>
+            </div>
+            <h3>
+                <div class="circle" style="padding: 10px;">
                     <span class="orange" style="color:#ff9d39 !important;">
                         <s:message code="kds.search.store"/>
                     </span>
-                        <span class="green"style="color: #00ba8b !important;">
+                    <span class="green"style="color: #00ba8b !important;">
                          <s:message code="kds.con.store"/>
                     </span>
-                    </div>
-                </h3>
-                <div class="wizWrap" id="chart2" style="width:100%; height:370px; font-size: 10pt;"></div>
-            </div>
+                </div>
+            </h3>
+            <div class="wizWrap" id="chart2" style="width:100%; height:370px; font-size: 10pt;"></div>
         </div>
     </div>
 
@@ -215,72 +213,43 @@
                     item-formatter="_itemFormatter"
                     is-read-only="true">
 
-                <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="saleDate"
-                                     width="100"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <!-- define columns START-->
+                <%-- 영업일자(조회매장/대비매장 공통) --%>
+                <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodCd"/>" binding="prodCd"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodNm"/>" binding="prodNm"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.amt"/>" binding="saleQty"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.totalOrderCnt"/>"
-                                     binding="orderCnt" width="100"
-                                     is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <%-- 조회매장 START --%>
+                <%-- HDR --%>
+                <%--<wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodCd"/>" binding="prodCd" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodNm"/>" binding="prodNm" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.amt"/>" binding="saleQty" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>--%>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.totalOrderCnt"/>" binding="orderCnt" width="100" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <%-- DTL --%>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodCd"/>" binding="prodCd" width="*" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodNm"/>" binding="prodNm" width="*" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.amt"/>" binding="saleQty" width="*" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <%--<wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.totalOrderCnt"/>" binding="orderCnt" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>--%>
+                <%-- 평균제조시간/평균픽업시간 --%>
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="avgMake" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="avgPic" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <%-- 조회매장 END --%>
 
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodCd"/>" binding="prodCd"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodNm"/>" binding="prodNm"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.amt"/>" binding="saleQty"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.totalOrderCnt"/>"
-                                     binding="orderCnt" width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <%-- 대비매장 START --%>
+                <%-- HDR --%>
+                <%--<wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodCd"/>" binding="conProdCd" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodNm"/>" binding="conProdNm" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.amt"/>" binding="conSaleQty" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>--%>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.totalOrderCnt"/>" binding="conOrderCnt" width="100" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <%-- DTL --%>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodCd"/>" binding="conProdCd" width="*" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodNm"/>" binding="conProdNm" width="*" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.amt"/>" binding="conSaleQty" width="*" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                <%--<wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.totalOrderCnt"/>" binding="conOrderCnt" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>--%>
+                <%-- 평균제조시간/평균픽업시간 --%>
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="conAvgMake" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="conAvgPic" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <%-- 대비매장 END --%>
+                <!-- define columns END-->
 
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="avgMake" width="100"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="avgPic" width="100"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodCd"/>" binding="conProdCd"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodNm"/>" binding="conProdNm"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.amt"/>" binding="conSaleQty"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.totalOrderCnt"/>"
-                                     binding="conOrderCnt" width="100"
-                                     is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
-
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodCd"/>" binding="conProdCd"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodNm"/>" binding="conProdNm"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.amt"/>" binding="conSaleQty"
-                                     width="*"
-                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
-                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.totalOrderCnt"/>"
-                                     binding="conOrderCnt" width="*"
-                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="conAvgMake" width="100"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="conAvgPic" width="100"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -319,8 +288,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayStore.js?ver=2020070801.11"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayStore.js?ver=2020070801.14" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

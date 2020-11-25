@@ -436,7 +436,6 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
         $scope.$broadcast('loadingPopupActive');
 
         // 차트영역 보이도록
-        $("#divChartEmpty").css("display", "none");
         $("#divChart").css("display", "");
 
         // 마스터그리드 여부
@@ -477,7 +476,6 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
                     }
 
                     // 데이터가 없는경우 차트영역 숨기기
-                    $("#divChartEmpty").css("display", "");
                     $("#divChart").css("display", "none");
 
                     return false;

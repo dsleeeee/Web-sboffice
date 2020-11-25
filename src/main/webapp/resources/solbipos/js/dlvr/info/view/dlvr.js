@@ -170,7 +170,6 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
         for (var s = 0; s < editItems.length; s++) {
             editItems[s].pageNo = (s + 1);
             $scope.flex.collectionView.editItem(editItems[s]);
-            editItems[s].status = "U";
             $scope.flex.collectionView.commitEdit();
         }
 
@@ -401,7 +400,6 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
         for (var s = 0; s < editItems.length; s++) {
             editItems[s].pageNo = (s + 1);
             $scope.flex.collectionView.editItem(editItems[s]);
-            editItems[s].status = "U";
             $scope.flex.collectionView.commitEdit();
         }
 
