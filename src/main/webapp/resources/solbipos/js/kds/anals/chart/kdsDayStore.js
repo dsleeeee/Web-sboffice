@@ -226,7 +226,7 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         $scope.$broadcast('loadingPopupActive');
 
         // 차트영역 보이도록
-        $("#divChart").css("visibility", "");
+        $("#divChart").css("display", "");
 
         // 마스터그리드 여부
         if (true) {
@@ -252,7 +252,16 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
             if (response.data.status === "OK") {
-                $scope.prodChk = $scope.prodCd;
+
+                // 상품코드, 상품명, 상품분류가 있는 경우 리스트에서 보여지는 컬럼이 다름
+                // 세 요소 중 하나라도 있으면 prodChk에 임의의 값을 넣고, 리스트에서 값이 있는지 여부를 판단하여 컬럼을 보여준다.
+                $scope.prodChk = "";
+                if(($scope.prodCd !== '' && !isEmptyObject($scope.prodCd)) ||
+                    ($scope.prodNm !== '' && !isEmptyObject($scope.prodNm)) ||
+                    ($scope.prodClassCd !== '' && !isEmptyObject($scope.prodClassCd))){
+                    $scope.prodChk = "Search Detail";
+                }
+
                 $scope.storeNmChk = $("#regStoreNm").val();
                 $scope.conStoreNmChk = $("#conRegStoreNm").val();
                 $scope.dataItem.saleDate = messages["kds.saleDate"];
@@ -280,7 +289,7 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
                     }
 
                     // 데이터가 없는경우 차트영역 숨기기
-                    $("#divChart").css("visibility", "hidden");
+                    $("#divChart").css("display", "none");
 
                     return false;
                 }

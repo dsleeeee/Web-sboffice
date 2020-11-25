@@ -22,7 +22,7 @@ public interface KdsMapper {
 
     List<DefaultMap<String>> getKdsStore(KdsVO kdsVO);
 
-    List<DefaultMap<String>> getKdsStoreProd(KdsVO kdsVO);
+    // List<DefaultMap<String>> getKdsStoreProd(KdsVO kdsVO);
 
     List<DefaultMap<String>> getKdsDayProdTime(KdsVO kdsVO);
 

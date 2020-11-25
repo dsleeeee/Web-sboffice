@@ -155,7 +155,7 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.$broadcast('loadingPopupActive');
 
         // 차트영역 보이도록
-        $("#divChart").css("visibility", "");
+        $("#divChart").css("display", "");
 
         // 마스터그리드 여부
         if (true) {
@@ -192,7 +192,7 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
                     }
 
                     // 데이터가 없는경우 차트영역 숨기기
-                    $("#divChart").css("visibility", "hidden");
+                    $("#divChart").css("display", "none");
 
                     return false;
                 }

@@ -120,14 +120,14 @@ public class KdsServiceImpl implements KdsService {
     @Override
     public List<DefaultMap<String>> getKdsStore(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        LOGGER.debug("prodCd: {}", kdsVO.getProdCd());
-        List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+        /*List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
         if ((kdsVO.getProdCd() != null && !kdsVO.getProdCd().equals("")) || (kdsVO.getProdNm() != null && !kdsVO.getProdNm().equals("")) || (kdsVO.getProdClassCd() != null && !kdsVO.getProdClassCd().equals(""))) {
             result = mapper.getKdsStoreProd(kdsVO);
         } else {
             result = mapper.getKdsStore(kdsVO);
         }
-        return result;
+        return result;*/
+        return mapper.getKdsStore(kdsVO);
     }
 
     /**

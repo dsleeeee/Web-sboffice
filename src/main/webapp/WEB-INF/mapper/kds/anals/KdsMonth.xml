@@ -63,7 +63,30 @@
            AND C.PROD_CD = #{prodCd}
         </if>
         <if test='prodClassCd != null and prodClassCd != ""'>
-            AND B.PROD_CLASS_CD	= #{prodClassCd}
+            <choose>
+                <when test='orgnFg != null and orgnFg == "HQ"'>
+                    AND B.PROD_CLASS_CD IN (
+                                                SELECT PROD_CLASS_CD
+                                                  FROM TB_HQ_PRODUCT_CLASS
+                                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </when>
+                <when test='orgnFg != null and orgnFg == "STORE"'>
+                    AND B.PROD_CLASS_CD IN (
+                                                SELECT PROD_CLASS_CD
+                                                  FROM TB_MS_PRODUCT_CLASS
+                                                 WHERE STORE_CD = #{storeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                   AND STORE_CD = #{storeCd}
+                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                   AND STORE_CD = #{storeCd}
+                    )
+                </when>
+            </choose>
         </if>
         <if test='prodNm != null and prodNm != ""'>
             AND B.PROD_NM LIKE '%'||#{prodNm}||'%'

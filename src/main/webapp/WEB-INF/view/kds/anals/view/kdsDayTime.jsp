@@ -168,44 +168,42 @@
         </tbody>
     </table>
 
-    <div class="w100 mt40 mb20" style="border: 1px solid #e2e2e2; height:370px;">
-        <div id="divChart" style="visibility: hidden;">
-            <div class="sb-select mt10 fl">
-                <%-- 차트 --%>
-                <%--        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">--%>
-                <%--            <s:message code="kds.chart"/>--%>
-                <%--        </button>--%>
-                <span class="chk ml10">
+    <div id="divChart" class="w100 mt40 mb20" style="display: none;">
+        <div class="sb-select mt10 fl">
+            <%-- 차트 --%>
+            <%--        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">--%>
+            <%--            <s:message code="kds.chart"/>--%>
+            <%--        </button>--%>
+            <span class="chk ml10">
                     <%-- 제조시간 --%>
                     <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
                     <label for="makeChecked"><s:message code='kds.makeDate'/></label>
                 </span>
-                    <span class="chk ml10">
+            <span class="chk ml10">
                     <%-- 픽업시간 --%>
                     <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
                     <label for="picChecked"><s:message code='kds.picDate'/></label>
                 </span>
-                    <%-- 건수 --%>
-                    <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
-                    <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
-                    <%--			<label for="chkDt">--%>
-                    <%--				<s:message code="kds.cnt"/>--%>
-                    <%--			</label>--%>
-                    <%--		</span>--%>
+            <%-- 건수 --%>
+            <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
+            <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
+            <%--			<label for="chkDt">--%>
+            <%--				<s:message code="kds.cnt"/>--%>
+            <%--			</label>--%>
+            <%--		</span>--%>
 
-            </div>
-            <h3>
-                <div class="circle" style="padding: 10px;">
+        </div>
+        <h3>
+            <div class="circle" style="padding: 10px;">
                     <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
                         <s:message code="kds.makeDate"/>
                     </span>
-                    <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
+                <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
                         <s:message code="kds.picDate"/>
                     </span>
-                </div>
-            </h3>
-            <div class="wizWrap" id="chart1" style="width:100%; height:370px; font-size: 10pt;" ></div>
-        </div>
+            </div>
+        </h3>
+        <div class="wizWrap" id="chart1" style="width:100%; height:370px; font-size: 10pt;" ></div>
     </div>
 
     <div class="mt20 oh sb-select dkbr">
@@ -508,5 +506,5 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayTime.js?ver=2020070801.17"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayTime.js?ver=2020070801.18"
         charset="utf-8"></script>

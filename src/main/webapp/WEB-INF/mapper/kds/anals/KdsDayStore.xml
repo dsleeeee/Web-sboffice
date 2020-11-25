@@ -2,14 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.kds.anals.chart.service.impl.KdsMapper">
+
     <select id="getKdsStore" parameterType="KdsVO" resultType="DefaultMap">
         /* KdsMapper.getKdsStore */
-        SELECT
-        A.STORE_CD
-        , A.STORE_NM
-        , NVL(A.SALE_DATE, B.SALE_DATE) AS SALE_DATE
-        , NVL(SUBSTR(A.SALE_DATE, 5, 4), (SUBSTR(B.SALE_DATE, 3, 4))) AS SALE_DATE_SEC
-        , NVL(SUM(A.ORDER_CNT),0) AS ORDER_CNT
+        SELECT A.STORE_CD AS STORE_CD
+        ,       A.STORE_NM AS STORE_NM
+        ,       A.SALE_DATE AS SALE_DATE
+        <choose>
+            <when test='(prodCd != null and prodCd != "") or (prodNm != null and prodNm != "") or (prodClassCd != null and prodClassCd != "")'>
+              , A.PROD_CD AS PROD_CD
+              , A.PROD_NM AS PROD_NM
+              , NVL(SUM(A.SALE_QTY),0) AS SALE_QTY
+            </when>
+            <otherwise>
+              , NVL(SUM(A.ORDER_CNT),0) AS ORDER_CNT
+            </otherwise>
+        </choose>
         <if test='makeDate == 0'>
             , NVL(SUM(A.AVG_S_CK_TO_E_CK),0) AS AVG_MAKE
         </if>
@@ -22,145 +30,309 @@
         <if test="picDate == 1">
             , NVL(SUM(A.AVG_E_CK_TO_E_PK),0) AS AVG_PIC
         </if>
-        , B.STORE_CD AS CON_STORE_CD
-        , B.STORE_NM AS CON_STORE_NM
-        , B.SALE_DATE AS CON_SALE_DATE
-        , NVL(SUM(B.ORDER_CNT),0) AS CON_ORDER_CNT
-        <if test='makeDate == 0'>
-            , NVL(SUM(B.AVG_S_CK_TO_E_CK),0) AS CON_AVG_MAKE
-        </if>
-        <if test="makeDate == 1">
-            , NVL(SUM(B.AVG_L_OD_TO_E_CK),0) AS CON_AVG_MAKE
-        </if>
-        <if test='picDate == 0'>
-            , NVL(SUM(B.AVG_S_OD_TO_E_PK),0) AS CON_AVG_PIC
-        </if>
-        <if test="picDate == 1">
-            , NVL(SUM(B.AVG_E_CK_TO_E_PK),0) AS CON_AVG_PIC
-        </if>
-        FROM
-        (
-        SELECT
-        toohkd.STORE_CD , tms.STORE_NM , toohkd.SALE_DATE , toohkd.ORDER_CNT , toohkd.S_CK_TO_E_CK ,
-        toohkd.AVG_S_CK_TO_E_CK , toohkd.L_OD_TO_E_CK , toohkd.AVG_L_OD_TO_E_CK , toohkd.S_OD_TO_E_PK ,
-        toohkd.AVG_S_OD_TO_E_PK , toohkd.E_CK_TO_E_PK , toohkd.AVG_E_CK_TO_E_PK
-        FROM
-        TB_OD_ORDER_HDR_KDS_DAILY toohkd , TB_MS_STORE tms
-        WHERE
-        toohkd.STORE_CD = tms.STORE_CD(+)
-        AND toohkd.STORE_CD = #{storeCd}
-        AND toohkd.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
-        ) A
-        FULL OUTER JOIN
-        (
-        SELECT
-        toohkd.STORE_CD , tms.STORE_NM , toohkd.SALE_DATE , toohkd.ORDER_CNT , toohkd.S_CK_TO_E_CK ,
-        toohkd.AVG_S_CK_TO_E_CK , toohkd.L_OD_TO_E_CK , toohkd.AVG_L_OD_TO_E_CK , toohkd.S_OD_TO_E_PK ,
-        toohkd.AVG_S_OD_TO_E_PK , toohkd.E_CK_TO_E_PK , toohkd.AVG_E_CK_TO_E_PK
-        FROM
-        TB_OD_ORDER_HDR_KDS_DAILY toohkd , TB_MS_STORE tms
-        WHERE
-        toohkd.STORE_CD = tms.STORE_CD(+)
-        AND toohkd.STORE_CD = #{conStoreCd}
-        AND toohkd.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
-        ) B
-        ON (A.SALE_DATE = B.SALE_DATE)
-        GROUP BY
-        A.STORE_CD,
-        A.STORE_NM,
-        A.SALE_DATE,
-        B.STORE_CD,
-        B.STORE_NM,
-        B.SALE_DATE
-        ORDER BY
-        A.SALE_DATE,
-        B.SALE_DATE
-    </select>
+        ,     B.STORE_CD AS CON_STORE_CD
+        ,     B.STORE_NM AS CON_STORE_NM
+        ,     B.SALE_DATE AS CON_SALE_DATE
+    <choose>
+        <when test='(prodCd != null and prodCd != "") or (prodNm != null and prodNm != "") or (prodClassCd != null and prodClassCd != "")'>
+            , B.PROD_CD AS CON_PROD_CD
+            , B.PROD_NM AS CON_PROD_NM
+            , NVL(SUM(B.SALE_QTY),0) AS CON_SALE_QTY
+        </when>
+        <otherwise>
+            , NVL(SUM(B.ORDER_CNT),0) AS CON_ORDER_CNT
+        </otherwise>
+    </choose>
+    <if test='makeDate == 0'>
+        , NVL(SUM(B.AVG_S_CK_TO_E_CK),0) AS CON_AVG_MAKE
+    </if>
+    <if test="makeDate == 1">
+        , NVL(SUM(B.AVG_L_OD_TO_E_CK),0) AS CON_AVG_MAKE
+    </if>
+    <if test='picDate == 0'>
+        , NVL(SUM(B.AVG_S_OD_TO_E_PK),0) AS CON_AVG_PIC
+    </if>
+    <if test="picDate == 1">
+        , NVL(SUM(B.AVG_E_CK_TO_E_PK),0) AS CON_AVG_PIC
+    </if>
+    FROM (
+                <choose>
+                    <when test='(prodCd != null and prodCd != "") or (prodNm != null and prodNm != "") or (prodClassCd != null and prodClassCd != "")'>
+                        SELECT A.*
+                                , tms.STORE_NM
+                                , thp.PROD_NM
+                                , 0 AS ORDER_CNT
+                          FROM TB_OD_ORDER_DTL_KDS_DAILY A
+                                , TB_MS_STORE tms
+                                , TB_HQ_PRODUCT thp
+                         WHERE 1=1
+                           AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                           AND A.PROD_CD (+)= thp.PROD_CD
+                    </when>
+                    <otherwise>
+                        SELECT  A.*
+                               , tms.STORE_NM
+                          FROM TB_OD_ORDER_HDR_KDS_DAILY A
+                                , TB_MS_STORE tms
+                         WHERE 1=1
+                    </otherwise>
+                </choose>
+                           AND A.STORE_CD = #{storeCd}
+                           AND A.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                           AND A.STORE_CD (+)= tms.STORE_CD
+                       <if test='prodClassCd != null and prodClassCd != ""'>
+                           AND thp.PROD_CLASS_CD IN (
+                                                        SELECT PROD_CLASS_CD
+                                                          FROM TB_HQ_PRODUCT_CLASS
+                                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                           )
+                       </if>
+                       <if test='prodCd != null and prodCd != ""'>
+                           AND A.PROD_CD = #{prodCd}
+                       </if>
+                       <if test='prodNm != null and prodNm != ""'>
+                           AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                       </if>
+          ) A
+          FULL OUTER JOIN
+          (
+                <choose>
+                    <when test='(prodCd != null and prodCd != "") or (prodNm != null and prodNm != "") or (prodClassCd != null and prodClassCd != "")'>
+                        SELECT B.*
+                                , tms.STORE_NM
+                                , thp.PROD_NM
+                                , 0 AS ORDER_CNT
+                          FROM TB_OD_ORDER_DTL_KDS_DAILY B
+                                , TB_MS_STORE tms
+                                , TB_HQ_PRODUCT thp
+                         WHERE 1=1
+                           AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                           AND B.PROD_CD (+)= thp.PROD_CD
+                    </when>
+                    <otherwise>
+                        SELECT B.*
+                                , tms.STORE_NM
+                          FROM TB_OD_ORDER_HDR_KDS_DAILY B
+                                , TB_MS_STORE tms
+                         WHERE 1=1
+                    </otherwise>
+                </choose>
+                           AND B.STORE_CD = #{conStoreCd}
+                           AND B.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+                           AND B.STORE_CD (+)= tms.STORE_CD
+                       <if test='prodClassCd != null and prodClassCd != ""'>
+                           AND thp.PROD_CLASS_CD IN (
+                                                        SELECT PROD_CLASS_CD
+                                                          FROM TB_HQ_PRODUCT_CLASS
+                                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                           )
+                       </if>
+                       <if test='prodCd != null and prodCd != ""'>
+                           AND B.PROD_CD = #{prodCd}
+                       </if>
+                       <if test='prodNm != null and prodNm != ""'>
+                           AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                       </if>
+          ) B
+      ON (A.SALE_DATE = B.SALE_DATE)
+    GROUP
+       BY A.STORE_CD
+          , A.STORE_NM
+          , A.SALE_DATE
+          , B.STORE_CD
+          , B.STORE_NM
+          , B.SALE_DATE
+        <choose>
+            <when test='(prodCd != null and prodCd != "") or (prodNm != null and prodNm != "") or (prodClassCd != null and prodClassCd != "")'>
+                , A.PROD_CD
+                , A.PROD_NM
+                , B.PROD_CD
+                , B.PROD_NM
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    ORDER
+       BY A.SALE_DATE
+          , B.SALE_DATE
 
-    <select id="getKdsStoreProd" parameterType="KdsVO" resultType="DefaultMap">
-        /* KdsMapper.getKdsStoreProd */
-        SELECT
-        A.STORE_CD
-        , NVL(A.SALE_DATE, B.SALE_DATE) AS SALE_DATE
-        , A.PROD_CD
-        , A.PROD_NM
-        , NVL(SUM(A.SALE_QTY),0) AS SALE_QTY
-        <if test='makeDate == 0'>
-            , NVL(SUM(A.AVG_S_CK_TO_E_CK),0) AS AVG_MAKE
-        </if>
-        <if test="makeDate == 1">
-            , NVL(SUM(A.AVG_L_OD_TO_E_CK),0) AS AVG_MAKE
-        </if>
-        <if test='picDate == 0'>
-            , NVL(SUM(A.AVG_S_OD_TO_E_PK),0) AS AVG_PIC
-        </if>
-        <if test="picDate == 1">
-            , NVL(SUM(A.AVG_E_CK_TO_E_PK),0) AS AVG_PIC
-        </if>
-        , B.STORE_CD AS CON_STORE_CD
-        , B.SALE_DATE AS CON_SALE_DATE
-        , B.PROD_CD AS CON_PROD_CD
-        , B.PROD_NM AS CON_PROD_NM
-        , NVL(SUM(B.SALE_QTY),0) AS CON_SALE_QTY
-        <if test='makeDate == 0'>
-            , NVL(SUM(B.AVG_S_CK_TO_E_CK),0) AS CON_AVG_MAKE
-        </if>
-        <if test="makeDate == 1">
-            , NVL(SUM(B.AVG_L_OD_TO_E_CK),0) AS CON_AVG_MAKE
-        </if>
-        <if test='picDate == 0'>
-            , NVL(SUM(B.AVG_S_OD_TO_E_PK),0) AS CON_AVG_PIC
-        </if>
-        <if test="picDate == 1">
-            , NVL(SUM(B.AVG_E_CK_TO_E_PK),0) AS CON_AVG_PIC
-        </if>
-        FROM
-        (
-        SELECT
-        toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK ,
-        toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK ,
-        toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
-        FROM
-        TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
-        WHERE
-        toodkd.PROD_CD = thp.PROD_CD(+)
-        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND toodkd.STORE_CD = #{storeCd}
+</select>
+
+<!--<select id="getKdsStore" parameterType="KdsVO" resultType="DefaultMap">
+    /* KdsMapper.getKdsStore */
+    SELECT
+    A.STORE_CD
+    , A.STORE_NM
+    , NVL(A.SALE_DATE, B.SALE_DATE) AS SALE_DATE
+    , NVL(SUBSTR(A.SALE_DATE, 5, 4), (SUBSTR(B.SALE_DATE, 3, 4))) AS SALE_DATE_SEC
+    , NVL(SUM(A.ORDER_CNT),0) AS ORDER_CNT
+    <if test='makeDate == 0'>
+        , NVL(SUM(A.AVG_S_CK_TO_E_CK),0) AS AVG_MAKE
+    </if>
+    <if test="makeDate == 1">
+        , NVL(SUM(A.AVG_L_OD_TO_E_CK),0) AS AVG_MAKE
+    </if>
+    <if test='picDate == 0'>
+        , NVL(SUM(A.AVG_S_OD_TO_E_PK),0) AS AVG_PIC
+    </if>
+    <if test="picDate == 1">
+        , NVL(SUM(A.AVG_E_CK_TO_E_PK),0) AS AVG_PIC
+    </if>
+    , B.STORE_CD AS CON_STORE_CD
+    , B.STORE_NM AS CON_STORE_NM
+    , B.SALE_DATE AS CON_SALE_DATE
+    , NVL(SUM(B.ORDER_CNT),0) AS CON_ORDER_CNT
+    <if test='makeDate == 0'>
+        , NVL(SUM(B.AVG_S_CK_TO_E_CK),0) AS CON_AVG_MAKE
+    </if>
+    <if test="makeDate == 1">
+        , NVL(SUM(B.AVG_L_OD_TO_E_CK),0) AS CON_AVG_MAKE
+    </if>
+    <if test='picDate == 0'>
+        , NVL(SUM(B.AVG_S_OD_TO_E_PK),0) AS CON_AVG_PIC
+    </if>
+    <if test="picDate == 1">
+        , NVL(SUM(B.AVG_E_CK_TO_E_PK),0) AS CON_AVG_PIC
+    </if>
+    FROM
+    (
+    SELECT
+    toohkd.STORE_CD , tms.STORE_NM , toohkd.SALE_DATE , toohkd.ORDER_CNT , toohkd.S_CK_TO_E_CK ,
+    toohkd.AVG_S_CK_TO_E_CK , toohkd.L_OD_TO_E_CK , toohkd.AVG_L_OD_TO_E_CK , toohkd.S_OD_TO_E_PK ,
+    toohkd.AVG_S_OD_TO_E_PK , toohkd.E_CK_TO_E_PK , toohkd.AVG_E_CK_TO_E_PK
+    FROM
+    TB_OD_ORDER_HDR_KDS_DAILY toohkd , TB_MS_STORE tms
+    WHERE
+    toohkd.STORE_CD = tms.STORE_CD(+)
+    AND toohkd.STORE_CD = #{storeCd}
+    AND toohkd.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+    ) A
+    FULL OUTER JOIN
+    (
+    SELECT
+    toohkd.STORE_CD , tms.STORE_NM , toohkd.SALE_DATE , toohkd.ORDER_CNT , toohkd.S_CK_TO_E_CK ,
+    toohkd.AVG_S_CK_TO_E_CK , toohkd.L_OD_TO_E_CK , toohkd.AVG_L_OD_TO_E_CK , toohkd.S_OD_TO_E_PK ,
+    toohkd.AVG_S_OD_TO_E_PK , toohkd.E_CK_TO_E_PK , toohkd.AVG_E_CK_TO_E_PK
+    FROM
+    TB_OD_ORDER_HDR_KDS_DAILY toohkd , TB_MS_STORE tms
+    WHERE
+    toohkd.STORE_CD = tms.STORE_CD(+)
+    AND toohkd.STORE_CD = #{conStoreCd}
+    AND toohkd.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+    ) B
+    ON (A.SALE_DATE = B.SALE_DATE)
+    GROUP BY
+    A.STORE_CD,
+    A.STORE_NM,
+    A.SALE_DATE,
+    B.STORE_CD,
+    B.STORE_NM,
+    B.SALE_DATE
+    ORDER BY
+    A.SALE_DATE,
+    B.SALE_DATE
+</select>
+
+<select id="getKdsStoreProd" parameterType="KdsVO" resultType="DefaultMap">
+    /* KdsMapper.getKdsStoreProd */
+    SELECT
+    A.STORE_CD
+    , NVL(A.SALE_DATE, B.SALE_DATE) AS SALE_DATE
+    , A.PROD_CD
+    , A.PROD_NM
+    , NVL(SUM(A.SALE_QTY),0) AS SALE_QTY
+    <if test='makeDate == 0'>
+        , NVL(SUM(A.AVG_S_CK_TO_E_CK),0) AS AVG_MAKE
+    </if>
+    <if test="makeDate == 1">
+        , NVL(SUM(A.AVG_L_OD_TO_E_CK),0) AS AVG_MAKE
+    </if>
+    <if test='picDate == 0'>
+        , NVL(SUM(A.AVG_S_OD_TO_E_PK),0) AS AVG_PIC
+    </if>
+    <if test="picDate == 1">
+        , NVL(SUM(A.AVG_E_CK_TO_E_PK),0) AS AVG_PIC
+    </if>
+    , B.STORE_CD AS CON_STORE_CD
+    , B.SALE_DATE AS CON_SALE_DATE
+    , B.PROD_CD AS CON_PROD_CD
+    , B.PROD_NM AS CON_PROD_NM
+    , NVL(SUM(B.SALE_QTY),0) AS CON_SALE_QTY
+    <if test='makeDate == 0'>
+        , NVL(SUM(B.AVG_S_CK_TO_E_CK),0) AS CON_AVG_MAKE
+    </if>
+    <if test="makeDate == 1">
+        , NVL(SUM(B.AVG_L_OD_TO_E_CK),0) AS CON_AVG_MAKE
+    </if>
+    <if test='picDate == 0'>
+        , NVL(SUM(B.AVG_S_OD_TO_E_PK),0) AS CON_AVG_PIC
+    </if>
+    <if test="picDate == 1">
+        , NVL(SUM(B.AVG_E_CK_TO_E_PK),0) AS CON_AVG_PIC
+    </if>
+    FROM
+    (
+    SELECT
+    toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK ,
+    toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK ,
+    toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
+    FROM
+    TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
+    WHERE
+    toodkd.PROD_CD = thp.PROD_CD(+)
+    AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+    AND toodkd.STORE_CD = #{storeCd}
+    ) A
+    FULL OUTER JOIN
+    (
+    SELECT
+    toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK ,
+    toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK ,
+    toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
+    FROM
+    TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
+    WHERE
+    toodkd.PROD_CD = thp.PROD_CD(+)
+    AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+    AND toodkd.STORE_CD = #{conStoreCd}
+    <if test='prodCd != null and prodCd != ""'>
         AND toodkd.PROD_CD = #{prodCd}
-        ) A
-        FULL OUTER JOIN
-        (
-        SELECT
-        toodkd.STORE_CD, toodkd.SALE_DATE, toodkd.PROD_CD, thp.PROD_NM, toodkd.SALE_QTY, toodkd.S_CK_TO_E_CK ,
-        toodkd.AVG_S_CK_TO_E_CK , toodkd.L_OD_TO_E_CK , toodkd.AVG_L_OD_TO_E_CK , toodkd.S_OD_TO_E_PK ,
-        toodkd.AVG_S_OD_TO_E_PK , toodkd.E_CK_TO_E_PK , toodkd.AVG_E_CK_TO_E_PK
-        FROM
-        TB_OD_ORDER_DTL_KDS_DAILY toodkd, TB_HQ_PRODUCT thp
-        WHERE
-        toodkd.PROD_CD = thp.PROD_CD(+)
-        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND toodkd.STORE_CD = #{conStoreCd}
-        <if test='prodCd != null and prodCd != ""'>
-            AND toodkd.PROD_CD = #{prodCd}
-        </if>
-        <if test='prodClassCd != null and prodClassCd != ""'>
-            AND thp.PROD_CLASS_CD = #{prodClassCd}
-        </if>
-        <if test='prodNm != null and prodNm != ""'>
-            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
-        </if>
-        ) B
-        ON A.SALE_DATE = B.SALE_DATE
-        GROUP BY
-        A.STORE_CD,
-        A.SALE_DATE,
-        A.PROD_CD,
-        A.PROD_NM,
-        B.STORE_CD,
-        B.SALE_DATE,
-        B.PROD_CD,
-        B.PROD_NM
-        ORDER BY
-        A.SALE_DATE, B.SALE_DATE
-    </select>
+    </if>
+    <if test='prodClassCd != null and prodClassCd != ""'>
+        AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                          FROM TB_HQ_PRODUCT_CLASS
+                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd}
+                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+        )
+    </if>
+    <if test='prodNm != null and prodNm != ""'>
+        AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+    </if>
+    ) B
+    ON A.SALE_DATE = B.SALE_DATE
+    GROUP BY
+    A.STORE_CD,
+    A.SALE_DATE,
+    A.PROD_CD,
+    A.PROD_NM,
+    B.STORE_CD,
+    B.SALE_DATE,
+    B.PROD_CD,
+    B.PROD_NM
+    ORDER BY
+    A.SALE_DATE, B.SALE_DATE
+</select>-->
+
 </mapper>
