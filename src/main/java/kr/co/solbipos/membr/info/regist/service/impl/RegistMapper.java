@@ -187,7 +187,7 @@ public interface RegistMapper {
     /** 신규가입 적립 POINT */
     int newJoinSavePointInfo(RegistVO registVO);
 
-    /** 회원등급에 따른 신규가입 적립포인트T */
+    /** 회원등급에 따른 신규가입 적립포인트 */
     void insertMembrPointHist(RegistVO registVO);
 
     int updateMembrDlvrTel(RegistVO registVO);
