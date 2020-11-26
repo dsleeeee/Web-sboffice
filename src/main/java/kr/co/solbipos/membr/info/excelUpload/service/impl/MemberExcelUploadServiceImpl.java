@@ -116,15 +116,15 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                     registVO.setMembrClassCd(memberExcelUploadVO.getMembrClassCd());
                     registVO.setChgDate(DateUtil.currentDateString()); //DEFAULT_YMD_FORMAT = "yyyyMMdd";
                     // 1. 회원등급에 따른 신규가입포인트 처리
-                    int newJoinSavePoint = registMapper.newJoinSavePointInfo(registVO);
-                    if ( newJoinSavePoint > 0 ) {
-                        // 신규가입 적립 Point
-                        registVO.setPointChgFg("1");
-                        registVO.setRemark("신규가입");
-                        registVO.setChgPoint(newJoinSavePoint);
-                        registVO.setRegDt(currentDateTimeString());
-                        registMapper.insertMembrPointHist(registVO); // 회원포인트 등록
-                    }
+//                    int newJoinSavePoint = registMapper.newJoinSavePointInfo(registVO);
+//                    if ( newJoinSavePoint > 0 ) {
+//                        // 신규가입 적립 Point
+//                        registVO.setPointChgFg("1");
+//                        registVO.setRemark("신규가입");
+//                        registVO.setChgPoint(newJoinSavePoint);
+//                        registVO.setRegDt(currentDateTimeString());
+//                        registMapper.insertMembrPointHist(registVO); // 회원포인트 등록
+//                    }
                     // 2. 가용포인트 = (누적포인트 - 가용포인트)를 사용 처리한 값
                     int totAdjPoint = StringUtils.isEmpty(memberExcelUploadVO.getTotAdjPoint()) ? 0 : Integer.parseInt( memberExcelUploadVO.getTotAdjPoint() );
                     int usedPoint = StringUtils.isEmpty(memberExcelUploadVO.getAvablPoint()) ? 0 : totAdjPoint - Integer.parseInt( memberExcelUploadVO.getAvablPoint() );

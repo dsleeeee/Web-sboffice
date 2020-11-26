@@ -189,6 +189,8 @@ public class RegistServiceImpl implements RegistService {
         registVO.setChgDate(registVO.getRegDt().substring(0, registVO.getRegDt().length()-6));
         LOGGER.debug("registVO.getRegDt()(): {}", registVO.getRegDt());
         LOGGER.debug("registVO.setChgDate(): {}", registVO.getChgDate());
+
+        // 신규가입 적립 POINT
         int newJoinSavePoint = mapper.newJoinSavePointInfo(registVO);
 
         // 회원등록
@@ -203,12 +205,12 @@ public class RegistServiceImpl implements RegistService {
 //            }
 
             // 회원등급에 따른 신규가입 적립포인트
-            if (newJoinSavePoint > 0) {
-                registVO.setPointChgFg("1");
-                registVO.setChgPoint(newJoinSavePoint);
-                registVO.setRemark("신규가입");
-                mapper.insertMembrPointHist(registVO);
-            }
+//            if (newJoinSavePoint > 0) {
+//                registVO.setPointChgFg("1");
+//                registVO.setChgPoint(newJoinSavePoint);
+//                registVO.setRemark("신규가입");
+//                mapper.insertMembrPointHist(registVO);
+//            }
 
             // 이전포인트
             if(registVO.getMovePoint() > 0){

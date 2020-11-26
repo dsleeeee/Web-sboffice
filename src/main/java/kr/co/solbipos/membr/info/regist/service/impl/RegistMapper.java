@@ -184,8 +184,10 @@ public interface RegistMapper {
     /** 카드 중복 체크( 카드번호 사용중인 회원번호 / X (해당 카드번호 미사용) ) */
     String getMemberCardInfoCountDetail(RegistVO registVO);
 
+    /** 신규가입 적립 POINT */
     int newJoinSavePointInfo(RegistVO registVO);
 
+    /** 회원등급에 따른 신규가입 적립포인트T */
     void insertMembrPointHist(RegistVO registVO);
 
     int updateMembrDlvrTel(RegistVO registVO);
