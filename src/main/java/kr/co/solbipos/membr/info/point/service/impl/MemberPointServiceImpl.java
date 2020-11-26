@@ -109,6 +109,13 @@ public class MemberPointServiceImpl implements MemberPointService {
 
         for (MemberPointVO memberPointVO : memberPointVOs) {
 
+            // 상품코드
+            if (memberPointVO.getMembrNo() != null && !"".equals(memberPointVO.getMembrNo())) {
+                if(memberPointVO.getMembrNo().contains("'")) {
+                    memberPointVO.setMembrNo(memberPointVO.getMembrNo().replaceAll("'",""));
+                }
+            }
+
             memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             String pattern = "^[0-9]*$"; //숫자만
             //String val = "123456789"; //대상문자열
