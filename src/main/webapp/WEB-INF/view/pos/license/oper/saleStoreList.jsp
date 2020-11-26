@@ -56,7 +56,7 @@
                                 initialized="_initDateBox(s)">
                             </wj-input-date>
                         </span>
-                        <span class="chk ml10">
+                        <span class="chk ml10" style="display:none">
                           <input type="checkbox" id="chkDt" ng-model="isChecked" />
                           <label for="chkDt">
                             <s:message code="oper.noSaleStore" />
@@ -161,15 +161,15 @@
                     <wj-flex-grid-column header="<s:message code="oper.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.agency"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posCnt"/>" binding="posCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.saleFg"/>" binding="saleFg" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.saleFgN"/>" binding="saleFgN" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.saleFgY"/>" binding="saleFgY" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.cardCnt"/>" binding="cardCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.cashCnt"/>" binding="cashCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.cashRecCnt"/>" binding="cashRecCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.saleFg"/>" binding="saleFg" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.saleFgN"/>" binding="saleFgN" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.saleFgY"/>" binding="saleFgY" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.cardCnt"/>" binding="cardCnt" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.cashCnt"/>" binding="cashCnt" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.cashRecCnt"/>" binding="cashRecCnt" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.maxInstInsDt"/>" binding="maxInstInsDt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>" binding="sysOpenDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.maxSaleDate"/>" binding="maxSaleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.maxSaleDate"/>" binding="maxSaleDate" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 </wj-flex-grid>

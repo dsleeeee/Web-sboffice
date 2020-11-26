@@ -27,15 +27,8 @@
         tms.AGENCY_CD,
         (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY_NM,
         NVL(tmp.POS_CNT,0) AS POS_CNT,
-        NVL(tssh.SALE_FG,0) AS SALE_FG,
-        NVL(tssh.SALE_FG_N,0) AS SALE_FG_N,
-        NVL(tssh.SALE_FG_Y,0) AS SALE_FG_Y,
-        NVL(tsspc.CARD_CNT,0) AS CARD_CNT,
-        NVL(tssph.CASH_CNT,0) AS CASH_CNT,
-        NVL(tssph.CASH_REC_CNT,0) AS CASH_REC_CNT,
         CASE WHEN tci.MAX_INST_INS_DT !='' THEN TO_CHAR(TO_DATE(tci.MAX_INST_INS_DT, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MAX_INST_INS_DT,
         TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE,
-        TO_CHAR(TO_DATE(tssh.MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
         tms.SYS_STAT_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_STORE tms,
@@ -54,34 +47,7 @@
             MAX(INST_INS_DT) AS MAX_INST_INS_DT
             FROM TB_CM_INSTLL
             GROUP BY STORE_CD
-        ) tci,
-        (
-            SELECT
-            STORE_CD,
-            SUM(CASE WHEN SALE_YN in ('Y','N') THEN 1 ELSE 0 END) AS SALE_FG,
-            SUM(CASE WHEN SALE_YN = 'Y' THEN 1 ELSE 0 END) AS SALE_FG_Y,
-            SUM(CASE WHEN SALE_YN = 'N' THEN 1 ELSE 0 END) AS SALE_FG_N,
-            MAX(SALE_DATE) AS MAX_SALE_DATE
-            FROM TB_SL_SALE_HDR
-            GROUP BY STORE_CD
-        ) tssh,
-        (
-            SELECT
-            HQ_OFFICE_CD,
-            STORE_CD,
-            COUNT(STORE_CD) AS CARD_CNT
-            FROM TB_SL_SALE_PAY_CARD
-            GROUP BY HQ_OFFICE_CD, STORE_CD
-        ) tsspc,
-        (
-            SELECT
-            HQ_OFFICE_CD,
-            STORE_CD,
-            COUNT(STORE_CD) AS CASH_CNT,
-            SUM(CASE WHEN APPR_DT IS NOT NULL THEN 1 ELSE 0 END) AS CASH_REC_CNT
-            FROM TB_SL_SALE_PAY_CASH
-            GROUP BY HQ_OFFICE_CD, STORE_CD
-        ) tssph
+        ) tci
         WHERE 1=1
         AND tms.REG_DT BETWEEN #{startDate} AND #{endDate}
         <choose>
@@ -120,11 +86,6 @@
                  AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
             ]]>
         </if>
-        <if test='chkDt != true'>
-            <![CDATA[
-                 AND tssh.MAX_SALE_DATE IS NOT NULL
-            ]]>
-        </if>
         <if test='manageVanCd != null and manageVanCd != ""'>
             <![CDATA[
                  AND tms.VAN_CD = #{manageVanCd}
@@ -133,11 +94,6 @@
         AND tho.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
         AND tmp.STORE_CD (+)= tms.STORE_CD
         AND tci.STORE_CD (+)= tms.STORE_CD
-        AND tssh.STORE_CD (+)= tms.STORE_CD
-        AND tsspc.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
-        AND tsspc.STORE_CD (+)= tms.STORE_CD
-        AND tssph.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
-        AND tssph.STORE_CD (+)= tms.STORE_CD
         ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
