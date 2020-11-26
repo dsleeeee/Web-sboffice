@@ -96,6 +96,9 @@ public interface StoreManageMapper {
     /** 매장 기본 코너 등록 */
     int insertStoreCorner(StoreCornerVO storeCornerVO);
 
+    /** 매장 기본 창고 등록 */
+    int insertStorage(StoreManageVO storeManageVO);
+
     /** 회원 기본등급 등록 */
     int insertMemberClass(MemberClassVO memberClassVO);
 

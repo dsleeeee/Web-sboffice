@@ -143,4 +143,4 @@
     <%--var dlvrFirstList = ${dlvrFirstList};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/view/dlvr.js?ver=2020062901.31" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/view/dlvr.js?ver=2020062901.32" charset="utf-8"></script>

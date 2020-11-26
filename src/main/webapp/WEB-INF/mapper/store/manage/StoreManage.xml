@@ -775,6 +775,65 @@
            AND CORNR_CD = '01'
     </insert>
 
+    <!-- 기본 창고 등록 -->
+    <!--
+        TABLE    : TB_MS_STORAGE
+        PARAM    : storeManageVO
+        COMMENTS : 매장 기본창고를 등록한다. (000 매대 001 기본창고)
+    -->
+    <insert id="insertStorage" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStorage */
+        MERGE INTO TB_MS_STORAGE A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       '001'           AS STORAGE_CD
+                    ,       '기본창고'      AS STORAGE_NM
+                    ,       'Y'             AS USE_YN
+                    ,       #{hqOfficeCd}   AS HQ_OFFICE_CD
+                    FROM    DUAL B
+                    UNION ALL
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       '000'           AS STORAGE_CD
+                    ,       '매대'      AS STORAGE_NM
+                    ,       'Y'             AS USE_YN
+                    ,       #{hqOfficeCd}   AS HQ_OFFICE_CD
+                    FROM    DUAL B
+                ) B
+        ON      (           A.STORE_CD      =   B.STORE_CD
+                AND         A.STORAGE_CD    =   B.STORAGE_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.STORAGE_NM    =   B.STORAGE_NM
+        ,       A.USE_YN        =   B.USE_YN
+        ,       A.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.STORAGE_CD
+        ,       A.STORAGE_NM
+        ,       A.USE_YN
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.HQ_OFFICE_CD
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.STORAGE_CD
+        ,       B.STORAGE_NM
+        ,       B.USE_YN
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        ,       B.HQ_OFFICE_CD
+        )
+    </insert>
+
 
     <!-- 회원 기본등급 등록 -->
     <!--

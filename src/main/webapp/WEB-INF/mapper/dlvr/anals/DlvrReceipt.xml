@@ -19,6 +19,7 @@
         AND tsshd.STORE_CD = tssh.STORE_CD
         AND tsshd.POS_NO = tssh.POS_NO
         AND tsshd.SALE_DATE = tssh.SALE_DATE
+        AND tsshd.BILL_NO = tssh.BILL_NO
         AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
         AND tssh.DLVR_YN = 'Y'
         <if test = 'storeCd != null and storeCd != ""'>
@@ -31,6 +32,7 @@
         tsshd.POS_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+
     <select id="getDlvrReceiptDetailList" parameterType="dlvrReceiptVO" resultType="DefaultMap">
         /* DlvrReceiptMapper.getDlvrReceiptDetailList */
         /* AND tssd.DLVR_PACK_FG = '2' */

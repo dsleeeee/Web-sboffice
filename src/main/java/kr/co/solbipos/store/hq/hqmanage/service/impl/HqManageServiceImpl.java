@@ -221,6 +221,10 @@ public class HqManageServiceImpl implements HqManageService{
         result += mapper.insertMemberClass(memberClassVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        // 기본 창고 등록 (본사 001 기본창고)
+        result += mapper.insertStorage(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
         // 포스 템플릿 등록
         result += mapper.hqPrintTempReg(hqManage);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

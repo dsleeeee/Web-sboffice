@@ -364,5 +364,5 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrInfo/billPopup.js?ver=2019052801.11"
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrInfo/billPopup.js?ver=2019052801.12"
         charset="utf-8"></script>
