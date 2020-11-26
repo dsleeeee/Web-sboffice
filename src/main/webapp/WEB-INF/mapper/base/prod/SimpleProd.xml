@@ -89,7 +89,7 @@
     <select id="getProdCd"  parameterType="SimpleProdVO" resultType="String">
         /* SimpleProdMapper.getProdCd */
         SELECT
-        NVL(MAX(PROD_CD),0) + 1 AS PROD_CD
+        LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
         FROM TB_TMP_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
