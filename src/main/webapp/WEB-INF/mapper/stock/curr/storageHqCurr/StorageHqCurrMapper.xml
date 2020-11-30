@@ -7,31 +7,31 @@
     <select id="getStorageHqCurrList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : HqCurrMapper.getStorageHqCurrList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT A.PROD_CD             ,   A.PROD_NM             
+		SELECT A.PROD_CD             ,   A.PROD_NM
 		,	A.FIRST_VENDR_IN_DATE ,   A.LAST_VENDR_IN_DATE
-		,	A.FIRST_HQ_OUT_DATE   ,   A.LAST_HQ_OUT_DATE  
+		,	A.FIRST_HQ_OUT_DATE   ,   A.LAST_HQ_OUT_DATE
 		,	A.FIRST_SALE_DATE     ,   A.LAST_SALE_DATE
-		,   A.COST_UPRC                                                                             
-		,	A.VENDR_NM                                                                              
-		,	A.BARCD_CD                                                                             
-		,	A.PO_UNIT_QTY                                                                           
-		,	A.CURR_AMT                       
+		,   A.COST_UPRC
+		,	A.VENDR_NM
+		,	A.BARCD_CD
+		,	A.PO_UNIT_QTY
+		,	A.CURR_AMT
 		,	A.PO_UNIT_FG
 		,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
-		,	A.SAFE_STOCK_QTY                                                      
-		,	A.CURR_QTY              
-		,	A.ACC_VENDR_IN_QTY      
-		,	A.ACC_VENDR_OUT_QTY     
-		,	A.ACC_HQ_OUT_QTY        
-		,	A.ACC_HQ_IN_QTY         
-		,	A.ACC_STORE_MOVE_IN_QTY 
+		,	A.SAFE_STOCK_QTY
+		,	A.CURR_QTY
+		,	A.ACC_VENDR_IN_QTY
+		,	A.ACC_VENDR_OUT_QTY
+		,	A.ACC_HQ_OUT_QTY
+		,	A.ACC_HQ_IN_QTY
+		,	A.ACC_STORE_MOVE_IN_QTY
 		,	A.ACC_STORE_MOVE_OUT_QTY
-		,	A.ACC_DISUSE_QTY        
-		,	A.ACC_ADJ_QTY           
-		,	A.ACC_SET_IN_QTY        
+		,	A.ACC_DISUSE_QTY
+		,	A.ACC_ADJ_QTY
+		,	A.ACC_SET_IN_QTY
 		,	A.ACC_SALE_VENDR_OUT_QTY
-		,	A.ACC_SALE_VENDR_IN_QTY 
-		,	A.PROD_CLASS_CD                                                                           
+		,	A.ACC_SALE_VENDR_IN_QTY
+		,	A.PROD_CLASS_CD
 		,   C.LV1_CD
 		,   C.LV1_NM
 		,   C.LV2_CD
@@ -86,7 +86,7 @@
                 ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  )) AS ACC_SALE_VENDR_IN_QTY
 		        </if>
 		        ,       thp.PROD_CLASS_CD
-		        FROM    tb_st_hq_stock_cur tshsc		        
+		        FROM    tb_st_hq_stock_cur tshsc
 		        ,       TB_HQ_PRODUCT thp
 		        ,       TB_HQ_PRODUCT_BARCD thpb
 		        ,       (   SELECT   thvp.PROD_CD
@@ -104,7 +104,7 @@
 		        WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
 		        AND     tshsc.STORAGE_CD      =   '999'
 		        AND     thp.HQ_OFFICE_CD      =   tshsc.HQ_OFFICE_CD
-		 
+
 		        AND     thp.PROD_CD           =   tshsc.PROD_CD
 		        AND     thp.STOCK_PROD_YN     =   'Y'
 		        AND     thp.USE_YN            =   'Y'
@@ -112,7 +112,7 @@
 		        AND     thpb.PROD_CD      (+) =   tshsc.PROD_CD
 		        AND     thv.PROD_CD       (+) =   tshsc.PROD_CD
 		        <if test='safeStockFg == "0"'>
-		          AND     tshsc.CURR_QTY <![CDATA[<]]> thp.SAFE_STOCK_QTY  
+		          AND     tshsc.CURR_QTY <![CDATA[<]]> thp.SAFE_STOCK_QTY
 		        </if>
 		        ORDER BY tshsc.PROD_CD
 		      )   A
@@ -122,8 +122,8 @@
 		            SELECT  B.HQ_OFFICE_CD
 		            ,      B.PROD_CD
 		            ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
-		            /* 동적 START */  
-		            ${sQuery2}          
+		            /* 동적 START */
+		            ${sQuery2}
 		            /* 동적 END */
 		            FROM   (
 		                  SELECT   B.HQ_OFFICE_CD
@@ -147,7 +147,7 @@
 		      LEFT
 		      OUTER
 		      JOIN	(
-		        <![CDATA[	    			 
+		        <![CDATA[
 				SELECT  A.HQ_OFFICE_CD
 				,       A.PROD_CLASS_CD
 				,		NULL	LV1_CD
@@ -163,18 +163,20 @@
 				,       DECODE	(A.LV ,1  ,NULL
 				                    ,2  ,NULL
 				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-				             	)  AS  LV3_NM                    
+				             	)  AS  LV3_NM
 				FROM    (
 				        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 				        FROM    (
 				                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-				                    FROM    TB_HQ_PRODUCT_CLASS				
+				                    FROM    TB_HQ_PRODUCT_CLASS
 				                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                )
 				        START WITH  P_PROD_CLASS_CD ='00000'
-				        CONNECT BY 
+                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+				        CONNECT BY
 				        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-				        )   A		
+                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+				        )   A
 	    		]]>
 		      )	C
 			ON	A.PROD_CLASS_CD = C.PROD_CLASS_CD
@@ -216,30 +218,30 @@
     <select id="getStorageStorageCurrList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : HqCurrMapper.getStorageStorageCurrList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT A.PROD_CD             ,   A.PROD_NM             
+        SELECT A.PROD_CD             ,   A.PROD_NM
         ,   A.FIRST_IN_DATE       ,   A.LAST_IN_DATE
         ,   A.FIRST_SALE_DATE     ,   A.LAST_SALE_DATE
-        ,   A.COST_UPRC                                                                             
-        ,   A.VENDR_NM                                                                              
-        ,   A.BARCD_CD                                                                             
-        ,   A.PO_UNIT_QTY                                                                           
-        ,   A.CURR_AMT                       
-        ,   A.PO_UNIT_FG   
+        ,   A.COST_UPRC
+        ,   A.VENDR_NM
+        ,   A.BARCD_CD
+        ,   A.PO_UNIT_QTY
+        ,   A.CURR_AMT
+        ,   A.PO_UNIT_FG
         ,	(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
-        ,   A.SAFE_STOCK_QTY                                                      
-        ,   A.CURR_QTY              
-        /*,   A.ACC_VENDR_IN_QTY      
-        ,   A.ACC_VENDR_OUT_QTY */     
-        ,   A.ACC_STORE_OUT_QTY        
-        ,   A.ACC_STORE_IN_QTY         
-        ,   A.ACC_MOVE_IN_QTY 
+        ,   A.SAFE_STOCK_QTY
+        ,   A.CURR_QTY
+        /*,   A.ACC_VENDR_IN_QTY
+        ,   A.ACC_VENDR_OUT_QTY */
+        ,   A.ACC_STORE_OUT_QTY
+        ,   A.ACC_STORE_IN_QTY
+        ,   A.ACC_MOVE_IN_QTY
         ,   A.ACC_MOVE_OUT_QTY
-        ,   A.ACC_DISUSE_QTY        
-        ,   A.ACC_ADJ_QTY           
-        /*,   A.ACC_SET_IN_QTY        
+        ,   A.ACC_DISUSE_QTY
+        ,   A.ACC_ADJ_QTY
+        /*,   A.ACC_SET_IN_QTY
         ,   A.ACC_SALE_VENDR_OUT_QTY
         ,   A.ACC_SALE_VENDR_IN_QTY  */
-        ,   A.PROD_CLASS_CD        
+        ,   A.PROD_CLASS_CD
         ,   C.LV1_CD
         ,   C.LV1_NM
         ,   C.LV2_CD
@@ -252,7 +254,7 @@
         </if>
         <if test='unitFg == "1"'>
         ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000      --매대
-        </if>        
+        </if>
         /*   동적 START */
         ${sQuery1}
         /*   동적 END */
@@ -300,7 +302,7 @@
                 </if>
                 ,       tmp.PROD_CLASS_CD
                 FROM    tb_st_store_stock_cur tsssc
-                
+
                 ,       TB_MS_PRODUCT tmp
                 ,       TB_MS_PRODUCT_BARCD tmpb
                 ,       (   SELECT   tmvp.PROD_CD
@@ -318,7 +320,7 @@
                 WHERE   tsssc.STORE_CD    =   #{storeCd}
                 AND     tsssc.STORAGE_CD      =   '999'
                 AND     tmp.STORE_CD      =   tsssc.STORE_CD
-         
+
                 AND     tmp.PROD_CD           =   tsssc.PROD_CD
                 AND     tmp.STOCK_PROD_YN     =   'Y'
                 AND     tmp.USE_YN            =   'Y'
@@ -326,7 +328,7 @@
                 AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
                 AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
                 <if test='safeStockFg == "0"'>
-                  AND     tsssc.CURR_QTY <![CDATA[<]]> tmp.SAFE_STOCK_QTY  
+                  AND     tsssc.CURR_QTY <![CDATA[<]]> tmp.SAFE_STOCK_QTY
                 </if>
                 ORDER BY tsssc.PROD_CD
               )   A
@@ -336,8 +338,8 @@
                     SELECT  B.STORE_CD
                     ,      B.PROD_CD
                     ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
-                    /* 동적 START */  
-                    ${sQuery2}          
+                    /* 동적 START */
+                    ${sQuery2}
                     /* 동적 END */
                     FROM   (
                           SELECT   B.STORE_CD
@@ -375,21 +377,23 @@
 						              )  AS  LV2_NM
 						,       DECODE(A.LV ,1  ,NULL
 						                    ,2  ,NULL
-						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 						FROM    (
 						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-						                    FROM    TB_MS_PRODUCT_CLASS						
-						                    WHERE   STORE_CD    =  #{storeCd} 
+						                    FROM    TB_MS_PRODUCT_CLASS
+						                    WHERE   STORE_CD    =  #{storeCd}
 						                )
 						        START WITH  P_PROD_CLASS_CD ='00000'
-						        CONNECT BY 
+                                AND         STORE_CD    =  #{storeCd}
+						        CONNECT BY
 						        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                                AND         STORE_CD    =  #{storeCd}
 						        )   A
         			]]>
               )	C
-			ON A.PROD_CLASS_CD = C.PROD_CLASS_CD                       
+			ON A.PROD_CLASS_CD = C.PROD_CLASS_CD
         WHERE 1=1
         <if test='prodCd != null and prodCd != ""'>
             AND A.PROD_CD = #{prodCd}
@@ -424,7 +428,7 @@
         ORDER BY A.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getStorageHqList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : StorageHqCurrMapper.getStorageHqList - 본사 창고정보 조회 */
         SELECT   B.HQ_OFFICE_CD
@@ -442,7 +446,7 @@
 		 ,      B.STORAGE_CD
 		 ,      THS.STORAGE_NM
     </select>
-    
+
     <select id="getStorageStorageList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : StorageHqCurrMapper.getStorageStorageList - 매장 창고정보 조회 */
         SELECT   B.STORE_CD
@@ -451,7 +455,7 @@
         FROM   TB_ST_STORE_STOCK_CUR B
           ,    TB_MS_STORAGE TMS
         WHERE   B.STORE_CD   =   #{storeCd}
-        
+
         AND      B.STORAGE_CD   >=   '000'
         AND      B.STORAGE_CD   <![CDATA[<]]>   '999'
         AND      B.STORAGE_CD = TMS.STORAGE_CD
@@ -461,34 +465,34 @@
          ,      B.STORAGE_CD
          ,      TMS.STORAGE_NM
     </select>
-    
+
     <select id="getStorageHqCurrExcelList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : HqCurrMapper.getStorageHqCurrExcelList */
-        SELECT A.PROD_CD             ,   A.PROD_NM             
+        SELECT A.PROD_CD             ,   A.PROD_NM
         ,   A.FIRST_VENDR_IN_DATE ,   A.LAST_VENDR_IN_DATE
-        ,   A.FIRST_HQ_OUT_DATE   ,   A.LAST_HQ_OUT_DATE  
+        ,   A.FIRST_HQ_OUT_DATE   ,   A.LAST_HQ_OUT_DATE
         ,   A.FIRST_SALE_DATE     ,   A.LAST_SALE_DATE
-        ,   A.COST_UPRC                                                                             
-        ,   A.VENDR_NM                                                                              
-        ,   A.BARCD_CD                                                                             
-        ,   A.PO_UNIT_QTY                                                                           
-        ,   A.CURR_AMT                       
-        ,   A.PO_UNIT_FG  
+        ,   A.COST_UPRC
+        ,   A.VENDR_NM
+        ,   A.BARCD_CD
+        ,   A.PO_UNIT_QTY
+        ,   A.CURR_AMT
+        ,   A.PO_UNIT_FG
         ,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
-        ,   A.SAFE_STOCK_QTY                                                      
-        ,   A.CURR_QTY              
-        ,   A.ACC_VENDR_IN_QTY      
-        ,   A.ACC_VENDR_OUT_QTY     
-        ,   A.ACC_HQ_OUT_QTY        
-        ,   A.ACC_HQ_IN_QTY         
-        ,   A.ACC_STORE_MOVE_IN_QTY 
+        ,   A.SAFE_STOCK_QTY
+        ,   A.CURR_QTY
+        ,   A.ACC_VENDR_IN_QTY
+        ,   A.ACC_VENDR_OUT_QTY
+        ,   A.ACC_HQ_OUT_QTY
+        ,   A.ACC_HQ_IN_QTY
+        ,   A.ACC_STORE_MOVE_IN_QTY
         ,   A.ACC_STORE_MOVE_OUT_QTY
-        ,   A.ACC_DISUSE_QTY        
-        ,   A.ACC_ADJ_QTY           
-        ,   A.ACC_SET_IN_QTY        
+        ,   A.ACC_DISUSE_QTY
+        ,   A.ACC_ADJ_QTY
+        ,   A.ACC_SET_IN_QTY
         ,   A.ACC_SALE_VENDR_OUT_QTY
-        ,   A.ACC_SALE_VENDR_IN_QTY 
-        ,   A.PROD_CLASS_CD                                                                           
+        ,   A.ACC_SALE_VENDR_IN_QTY
+        ,   A.PROD_CLASS_CD
         ,   C.LV1_CD
         ,   C.LV1_NM
         ,   C.LV2_CD
@@ -543,7 +547,7 @@
                 </if>
                 ,       thp.PROD_CLASS_CD
                 FROM    tb_st_hq_stock_cur tshsc
-                
+
                 ,       TB_HQ_PRODUCT thp
                 ,       TB_HQ_PRODUCT_BARCD thpb
                 ,       (   SELECT   thvp.PROD_CD
@@ -561,7 +565,7 @@
                 WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
                 AND     tshsc.STORAGE_CD      =   '999'
                 AND     thp.HQ_OFFICE_CD      =   tshsc.HQ_OFFICE_CD
-         
+
                 AND     thp.PROD_CD           =   tshsc.PROD_CD
                 AND     thp.STOCK_PROD_YN     =   'Y'
                 AND     thp.USE_YN            =   'Y'
@@ -569,7 +573,7 @@
                 AND     thpb.PROD_CD      (+) =   tshsc.PROD_CD
                 AND     thv.PROD_CD       (+) =   tshsc.PROD_CD
                 <if test='safeStockFg == "0"'>
-                  AND     tshsc.CURR_QTY <![CDATA[<]]> thp.SAFE_STOCK_QTY  
+                  AND     tshsc.CURR_QTY <![CDATA[<]]> thp.SAFE_STOCK_QTY
                 </if>
                 ORDER BY tshsc.PROD_CD
               )   A
@@ -579,8 +583,8 @@
                     SELECT  B.HQ_OFFICE_CD
                     ,      B.PROD_CD
                     ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
-                    /* 동적 START */  
-                    ${sQuery2}          
+                    /* 동적 START */
+                    ${sQuery2}
                     /* 동적 END */
                     FROM   (
                           SELECT   B.HQ_OFFICE_CD
@@ -604,7 +608,7 @@
               LEFT
 		      OUTER
 		      JOIN	(
-		        <![CDATA[	    			 
+		        <![CDATA[
 				SELECT  A.HQ_OFFICE_CD
 				,       A.PROD_CLASS_CD
 				,		NULL	LV1_CD
@@ -620,18 +624,20 @@
 				,       DECODE	(A.LV ,1  ,NULL
 				                    ,2  ,NULL
 				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-				             	)  AS  LV3_NM                    
+				             	)  AS  LV3_NM
 				FROM    (
 				        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 				        FROM    (
 				                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-				                    FROM    TB_HQ_PRODUCT_CLASS				
+				                    FROM    TB_HQ_PRODUCT_CLASS
 				                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                )
 				        START WITH  P_PROD_CLASS_CD ='00000'
-				        CONNECT BY 
+                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+				        CONNECT BY
 				        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-				        )   A		
+                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+				        )   A
 	    		]]>
 		      )	C
 			ON	A.PROD_CLASS_CD = C.PROD_CLASS_CD
@@ -671,30 +677,30 @@
 
     <select id="getStorageStorageCurrExcelList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : HqCurrMapper.getStorageStorageCurrExcelList */
-        SELECT A.PROD_CD             ,   A.PROD_NM             
+        SELECT A.PROD_CD             ,   A.PROD_NM
         ,   A.FIRST_IN_DATE       ,   A.LAST_IN_DATE
         ,   A.FIRST_SALE_DATE     ,   A.LAST_SALE_DATE
-        ,   A.COST_UPRC                                                                             
-        ,   A.VENDR_NM                                                                              
-        ,   A.BARCD_CD                                                                             
-        ,   A.PO_UNIT_QTY                                                                           
-        ,   A.CURR_AMT                       
+        ,   A.COST_UPRC
+        ,   A.VENDR_NM
+        ,   A.BARCD_CD
+        ,   A.PO_UNIT_QTY
+        ,   A.CURR_AMT
         ,   A.PO_UNIT_FG
         ,	(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
-        ,   A.SAFE_STOCK_QTY                                                      
-        ,   A.CURR_QTY              
-        /*,   A.ACC_VENDR_IN_QTY      
-        ,   A.ACC_VENDR_OUT_QTY */     
-        ,   A.ACC_STORE_OUT_QTY        
-        ,   A.ACC_STORE_IN_QTY         
-        ,   A.ACC_MOVE_IN_QTY 
+        ,   A.SAFE_STOCK_QTY
+        ,   A.CURR_QTY
+        /*,   A.ACC_VENDR_IN_QTY
+        ,   A.ACC_VENDR_OUT_QTY */
+        ,   A.ACC_STORE_OUT_QTY
+        ,   A.ACC_STORE_IN_QTY
+        ,   A.ACC_MOVE_IN_QTY
         ,   A.ACC_MOVE_OUT_QTY
-        ,   A.ACC_DISUSE_QTY        
-        ,   A.ACC_ADJ_QTY           
-        /*,   A.ACC_SET_IN_QTY        
+        ,   A.ACC_DISUSE_QTY
+        ,   A.ACC_ADJ_QTY
+        /*,   A.ACC_SET_IN_QTY
         ,   A.ACC_SALE_VENDR_OUT_QTY
         ,   A.ACC_SALE_VENDR_IN_QTY  */
-        ,   A.PROD_CLASS_CD        
+        ,   A.PROD_CLASS_CD
         ,   C.LV1_CD
         ,   C.LV1_NM
         ,   C.LV2_CD
@@ -707,7 +713,7 @@
         </if>
         <if test='unitFg == "1"'>
         ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000      --매대
-        </if>        
+        </if>
         /*   동적 START */
         ${sQuery1}
         /*   동적 END */
@@ -754,7 +760,7 @@
                 </if>
                 ,       tmp.PROD_CLASS_CD
                 FROM    tb_st_store_stock_cur tsssc
-                
+
                 ,       TB_MS_PRODUCT tmp
                 ,       TB_MS_PRODUCT_BARCD tmpb
                 ,       (   SELECT   tmvp.PROD_CD
@@ -772,7 +778,7 @@
                 WHERE   tsssc.STORE_CD    =   #{storeCd}
                 AND     tsssc.STORAGE_CD      =   '999'
                 AND     tmp.STORE_CD      =   tsssc.STORE_CD
-         
+
                 AND     tmp.PROD_CD           =   tsssc.PROD_CD
                 AND     tmp.STOCK_PROD_YN     =   'Y'
                 AND     tmp.USE_YN            =   'Y'
@@ -780,7 +786,7 @@
                 AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
                 AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
                 <if test='safeStockFg == "0"'>
-                  AND     tsssc.CURR_QTY <![CDATA[<]]> tmp.SAFE_STOCK_QTY  
+                  AND     tsssc.CURR_QTY <![CDATA[<]]> tmp.SAFE_STOCK_QTY
                 </if>
                 ORDER BY tsssc.PROD_CD
               )   A
@@ -790,8 +796,8 @@
                     SELECT  B.STORE_CD
                     ,      B.PROD_CD
                     ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
-                    /* 동적 START */  
-                    ${sQuery2}          
+                    /* 동적 START */
+                    ${sQuery2}
                     /* 동적 END */
                     FROM   (
                           SELECT   B.STORE_CD
@@ -829,17 +835,19 @@
 						              )  AS  LV2_NM
 						,       DECODE(A.LV ,1  ,NULL
 						                    ,2  ,NULL
-						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 						FROM    (
 						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-						                    FROM    TB_MS_PRODUCT_CLASS						
-						                    WHERE   STORE_CD    =  #{storeCd} 
+						                    FROM    TB_MS_PRODUCT_CLASS
+						                    WHERE   STORE_CD    =  #{storeCd}
 						                )
 						        START WITH  P_PROD_CLASS_CD ='00000'
-						        CONNECT BY 
+                                AND         STORE_CD    =  #{storeCd}
+						        CONNECT BY
 						        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                                AND         STORE_CD    =  #{storeCd}
 						        )   A
         			]]>
               )	C

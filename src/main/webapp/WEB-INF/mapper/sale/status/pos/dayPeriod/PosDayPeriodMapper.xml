@@ -90,9 +90,9 @@
 		                                    FROM    TB_HQ_PRODUCT_CLASS
 		                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 		                                )
-		                        START WITH  P_PROD_CLASS_CD ='00000'
+		                        START WITH  P_PROD_CLASS_CD ='00000' AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 		                        CONNECT BY
-		                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+		                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 		                        )   A
 
 		                ]]>
@@ -129,9 +129,9 @@
 	                                            FROM    TB_MS_PRODUCT_CLASS
 	                                            WHERE   STORE_CD    =  #{storeCd}
 	                                        )
-	                                START WITH  P_PROD_CLASS_CD ='00000'
+	                                START WITH  P_PROD_CLASS_CD ='00000'  AND         STORE_CD    =  #{storeCd}
 	                                CONNECT BY
-	                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+	                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         STORE_CD    =  #{storeCd}
 	                                )   A
 	                    ]]>
                      )                   A,
@@ -255,9 +255,9 @@
 		                                    FROM    TB_HQ_PRODUCT_CLASS
 		                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 		                                )
-		                        START WITH  P_PROD_CLASS_CD ='00000'
+		                        START WITH  P_PROD_CLASS_CD ='00000' AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 		                        CONNECT BY
-		                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+		                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD  AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 		                        )   A
 
 		                ]]>
@@ -294,9 +294,9 @@
 	                                            FROM    TB_MS_PRODUCT_CLASS
 	                                            WHERE   STORE_CD    =  #{storeCd}
 	                                        )
-	                                START WITH  P_PROD_CLASS_CD ='00000'
+	                                START WITH  P_PROD_CLASS_CD ='00000'  AND         STORE_CD    =  #{storeCd}
 	                                CONNECT BY
-	                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+	                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD  AND         STORE_CD    =  #{storeCd}
 	                                )   A
 	                    ]]>
                      )                   A,

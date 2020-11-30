@@ -14,11 +14,11 @@
         /* USE : SaleComPopupMapper.getTablePopList */
 		SELECT TSSH.STORE_CD
 			, TMS.STORE_NM
-            , TSSH.SALE_DATE 
+            , TSSH.SALE_DATE
 		    , TSSH.POS_NO
 			, TSSH.BILL_NO
 <!-- 		    , TO_CHAR(TO_DATE(TSSH.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT -->
-		    , TSSH.BILL_DT		    
+		    , TSSH.BILL_DT
 <!-- 		    , DECODE(TSSH.SALE_FG, '1', '판매', '-1', '반품') AS SALE_FG -->
 		    , TSSH.SALE_FG
 		    , SUM(TSSH.TOT_SALE_AMT) AS TOT_SALE_AMT
@@ -35,12 +35,12 @@
 		    , SUM(A.GUEST_CNT_3) AS GUEST_CNT_3
 		    , SUM(A.GUEST_CNT_4) AS GUEST_CNT_4
 		    , (SUM(TSSH.REAL_SALE_AMT) / SUM(A.GUEST_CNT_1 + A.GUEST_CNT_2 + A.GUEST_CNT_3 + A.GUEST_CNT_4)) GUEST_AMT
-		FROM 
+		FROM
 <!-- 		TB_SL_SALE_HDR TSSH -->
 			  (
 			  	SELECT	TSSH.HQ_OFFICE_CD
 			  	,		TSSH.STORE_CD
-		        , 		TSSH.SALE_DATE 
+		        , 		TSSH.SALE_DATE
 				, 		TSSH.POS_NO
 				, 		TSSH.BILL_NO
 				,		TSSH.TBL_CD
@@ -55,7 +55,7 @@
 			  	WHERE	TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 			  	<if test='storeCd != null and storeCd != ""'>
 					AND TSSH.STORE_CD = #{storeCd}
-				</if>	
+				</if>
 				<if test='startDate != null and startDate != ""'>
 					AND TSSH.SALE_DATE 	>= #{startDate}
 				</if>
@@ -71,8 +71,8 @@
 				<if test='saleYm != null and saleYm != ""'>
 		<!-- 			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE),'YYYYMM') =   #{saleYm} -->
 					AND TSSH.SALE_DATE LIKE  #{saleYm}||'%'
-				</if>				
-			  ) TSSH			  
+				</if>
+			  ) TSSH
           	, (SELECT TSSHP.STORE_CD
                 ,TSSHP.BILL_NO
                 ,TSSHP.POS_NO
@@ -105,7 +105,7 @@
             <foreach collection="arrStoreTbl" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
-        </if>              
+        </if>
               AND	TSSHP.STORE_CD 		= TSSHG.STORE_CD
               AND 	TSSHP.BILL_NO 		= TSSHG.BILL_NO
               AND 	TSSHP.POS_NO		= TSSHG.POS_NO
@@ -115,7 +115,7 @@
 		WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
 			AND TSSH.STORE_CD = #{storeCd}
-		</if>		
+		</if>
 		AND TSSH.STORE_CD = A.STORE_CD(+)
       	AND TSSH.BILL_NO 	= A.BILL_NO(+)
 		AND TSSH.POS_NO 	= A.POS_NO(+)
@@ -123,13 +123,13 @@
 <!-- 		AND TSSH.REAL_SALE_AMT  = A.PAY_AMT(+) -->
 		AND	TSSH.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
 		AND TSSH.STORE_CD	=	TMS.STORE_CD
-				
+
 		<if test='arrStoreTbl != null and arrStoreTbl.length >= 0'>
             AND TSSH.TBL_CD IN
             <foreach collection="arrStoreTbl" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
-        </if>        
+        </if>
 <!-- 		<if test='arrStoreTbl != null and arrStoreTbl.length >= 0'> -->
 <!--             AND TSSH.STORE_CD||'||'||A.TBL_CD IN -->
 <!--             <foreach collection="arrStoreTbl" item="item" open="(" close=")" separator=","> -->
@@ -174,10 +174,10 @@
                B.PROD_CD,
                A.PROD_NM,
                SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY,
-               SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT             
+               SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
       <choose>
          <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
-             FROM    (           
+             FROM    (
              			SELECT  A.LV1_CD,
                                 A.LV2_CD,
                                 A.LV2_NM,
@@ -187,7 +187,7 @@
                                 B.PROD_CD,
                                 B.PROD_NM
                          FROM(
-		                         <![CDATA[	    			 
+		                         <![CDATA[
 										SELECT  A.HQ_OFFICE_CD
 										,       A.PROD_CLASS_CD
 										,		NULL	LV1_CD
@@ -203,18 +203,18 @@
 										,       DECODE	(A.LV ,1  ,NULL
 										                    ,2  ,NULL
 										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-										             	)  AS  LV3_NM                    
+										             	)  AS  LV3_NM
 										FROM    (
 										        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 										        FROM    (
 										                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-										                    FROM    TB_HQ_PRODUCT_CLASS				
+										                    FROM    TB_HQ_PRODUCT_CLASS
 										                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 										                )
-										        START WITH  P_PROD_CLASS_CD ='00000'
-										        CONNECT BY 
-										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-										        )   A					
+										        START WITH  P_PROD_CLASS_CD ='00000' AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+										        CONNECT BY
+										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+										        )   A
 							    ]]>
 		                     )                   A,
 		                     TB_HQ_PRODUCT       B
@@ -230,7 +230,7 @@
                             ,       STORE_CD||'||'||CORNR_CD    AS STORE_CORNR_CD
                             <if test='yoil != null and yoil != ""'>
                             ,       TO_CHAR(TO_DATE(B.SALE_DATE, 'YYYYMMDD'),'DY')  AS  SALE_DATE_DY
-                            </if>                            
+                            </if>
                             ,       TOT_SALE_QTY
                             ,       REAL_SALE_AMT
                             FROM    TB_SL_DAILY_CORNR_PROD    B
@@ -240,8 +240,8 @@
 							</if>
 							<if test='endDate != null and endDate != ""'>
 								AND B.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
-							</if>							
-                        ) B					  	
+							</if>
+                        ) B
 <!--                    		TB_SL_DAILY_CORNR_PROD    B -->
              WHERE   B.PROD_CD       = A.PROD_CD(+)
              AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -313,17 +313,17 @@
 									              )  AS  LV2_NM
 									,       DECODE(A.LV ,1  ,NULL
 									                    ,2  ,NULL
-									                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+									                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 									FROM    (
 									        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 									        FROM    (
 									                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-									                    FROM    TB_MS_PRODUCT_CLASS						
-									                    WHERE   STORE_CD    =  #{storeCd} 
+									                    FROM    TB_MS_PRODUCT_CLASS
+									                    WHERE   STORE_CD    =  #{storeCd}
 									                )
-									        START WITH  P_PROD_CLASS_CD ='00000'
-									        CONNECT BY 
-									        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+									        START WITH  P_PROD_CLASS_CD ='00000' AND STORE_CD    =  #{storeCd}
+									        CONNECT BY
+									        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND STORE_CD    =  #{storeCd}
 									        )   A
 			        			]]>
 		                     )                   A,
@@ -340,7 +340,7 @@
                             ,       STORE_CD||'||'||CORNR_CD    AS STORE_CORNR_CD
                             <if test='yoil != null and yoil != ""'>
                             ,       TO_CHAR(TO_DATE(B.SALE_DATE, 'YYYYMMDD'),'DY')  AS  SALE_DATE_DY
-                            </if>                            
+                            </if>
                             ,       TOT_SALE_QTY
                             ,       REAL_SALE_AMT
                             FROM    TB_SL_DAILY_CORNR_PROD    B
@@ -350,8 +350,8 @@
 							</if>
 							<if test='endDate != null and endDate != ""'>
 								AND B.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
-							</if>							
-                        ) B	
+							</if>
+                        ) B
 <!-- 		                 TB_SL_DAILY_CORNR_PROD    B -->
              WHERE   B.PROD_CD       = A.PROD_CD(+)
              AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -409,7 +409,7 @@
                    A.PROD_NM
        ORDER BY B.PROD_CD
     </select>
-	
+
 	<!-- 매출공통팝업 - 상품매출내역 팝업 -->
     <!--
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_POS_PROD
@@ -437,7 +437,7 @@
                                 B.PROD_CD,
                                 B.PROD_NM
                          FROM(
-		                         <![CDATA[	    			 
+		                         <![CDATA[
 										SELECT  A.HQ_OFFICE_CD
 										,       A.PROD_CLASS_CD
 										,		NULL	LV1_CD
@@ -453,18 +453,18 @@
 										,       DECODE	(A.LV ,1  ,NULL
 										                    ,2  ,NULL
 										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-										             	)  AS  LV3_NM                    
+										             	)  AS  LV3_NM
 										FROM    (
 										        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 										        FROM    (
 										                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-										                    FROM    TB_HQ_PRODUCT_CLASS				
+										                    FROM    TB_HQ_PRODUCT_CLASS
 										                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 										                )
-										        START WITH  P_PROD_CLASS_CD ='00000'
-										        CONNECT BY 
-										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-										        )   A					
+										        START WITH  P_PROD_CLASS_CD ='00000' AND HQ_OFFICE_CD = #{hqOfficeCd}
+										        CONNECT BY
+										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+										        )   A
 							    ]]>
 		                     )                   A,
 		                     TB_HQ_PRODUCT       B
@@ -530,17 +530,17 @@
 										              )  AS  LV2_NM
 										,       DECODE(A.LV ,1  ,NULL
 										                    ,2  ,NULL
-										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 										FROM    (
 										        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 										        FROM    (
 										                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-										                    FROM    TB_MS_PRODUCT_CLASS						
-										                    WHERE   STORE_CD    =  #{storeCd} 
+										                    FROM    TB_MS_PRODUCT_CLASS
+										                    WHERE   STORE_CD    =  #{storeCd}
 										                )
-										        START WITH  P_PROD_CLASS_CD ='00000'
-										        CONNECT BY 
-										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+										        START WITH  P_PROD_CLASS_CD ='00000'  AND         STORE_CD    =  #{storeCd}
+										        CONNECT BY
+										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD  AND         STORE_CD    =  #{storeCd}
 										        )   A
 				        			]]>
 		                     )                   A,
@@ -593,7 +593,7 @@
                    A.PROD_NM
        ORDER BY C.PROD_CD
     </select>
-    
+
 	<!-- 매출공통팝업 - 상품매출내역 팝업 -->
     <!--
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_POS_PROD
@@ -621,7 +621,7 @@
                                 B.PROD_CD,
                                 B.PROD_NM
                          FROM(
-		                         <![CDATA[	    			 
+		                         <![CDATA[
 										SELECT  A.HQ_OFFICE_CD
 										,       A.PROD_CLASS_CD
 										,		NULL	LV1_CD
@@ -637,18 +637,18 @@
 										,       DECODE	(A.LV ,1  ,NULL
 										                    ,2  ,NULL
 										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-										             	)  AS  LV3_NM                    
+										             	)  AS  LV3_NM
 										FROM    (
 										        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 										        FROM    (
 										                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-										                    FROM    TB_HQ_PRODUCT_CLASS				
+										                    FROM    TB_HQ_PRODUCT_CLASS
 										                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 										                )
-										        START WITH  P_PROD_CLASS_CD ='00000'
-										        CONNECT BY 
-										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-										        )   A					
+										        START WITH  P_PROD_CLASS_CD ='00000' AND HQ_OFFICE_CD = #{hqOfficeCd}
+										        CONNECT BY
+										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+										        )   A
 							    ]]>
 		                     )                   A,
 		                     TB_HQ_PRODUCT       B
@@ -666,7 +666,7 @@
 			</if>
 			<if test='saleMonth != null and saleMonth != ""'>
 				AND C.SALE_YM = REPLACE(#{saleMonth}, '-', '')
-			</if>			
+			</if>
 			<if test='prodCd != null and prodCd != ""'>
 				AND C.PROD_CD = #{prodCd}
 			</if>
@@ -699,17 +699,17 @@
 										              )  AS  LV2_NM
 										,       DECODE(A.LV ,1  ,NULL
 										                    ,2  ,NULL
-										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 										FROM    (
 										        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 										        FROM    (
 										                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-										                    FROM    TB_MS_PRODUCT_CLASS						
-										                    WHERE   STORE_CD    =  #{storeCd} 
+										                    FROM    TB_MS_PRODUCT_CLASS
+										                    WHERE   STORE_CD    =  #{storeCd}
 										                )
-										        START WITH  P_PROD_CLASS_CD ='00000'
-										        CONNECT BY 
-										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+										        START WITH  P_PROD_CLASS_CD ='00000' AND         STORE_CD    =  #{storeCd}
+										        CONNECT BY
+										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD   AND         STORE_CD    =  #{storeCd}
 										        )   A
 				        			]]>
 		                     )                   A,
@@ -728,7 +728,7 @@
 			</if>
 			<if test='saleMonth != null and saleMonth != ""'>
 				AND C.SALE_YM = REPLACE(#{saleMonth}, '-', '')
-			</if>			
+			</if>
 			<if test='prodCd != null and prodCd != ""'>
 				AND C.PROD_CD = #{prodCd}
 			</if>
@@ -746,8 +746,8 @@
                    C.PROD_CD,
                    A.PROD_NM
        ORDER BY C.PROD_CD
-    </select>    
-	
+    </select>
+
     <!-- 매출공통팝업 - 상품매출내역 팝업 -->
     <!--
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_POS_PROD
@@ -781,10 +781,10 @@
 		</if>
 		<if test='posNo != null and posNo != ""'>
 			AND A.POS_NO = #{posNo}
-		</if>   
+		</if>
 		GROUP BY A.SALE_DATE, B.STORE_NM
     </select>
-	
+
 	<!-- 매출공통팝업 - 상품매출내역 팝업(판매자별) -->
     <!--
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_CORNR_PROD
@@ -812,7 +812,7 @@
                                 B.PROD_CD,
                                 B.PROD_NM
                          FROM(
-		                         <![CDATA[	    			 
+		                         <![CDATA[
 										SELECT  A.HQ_OFFICE_CD
 										,       A.PROD_CLASS_CD
 										,		NULL	LV1_CD
@@ -828,18 +828,18 @@
 										,       DECODE	(A.LV ,1  ,NULL
 										                    ,2  ,NULL
 										                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-										             	)  AS  LV3_NM                    
+										             	)  AS  LV3_NM
 										FROM    (
 										        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 										        FROM    (
 										                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-										                    FROM    TB_HQ_PRODUCT_CLASS				
+										                    FROM    TB_HQ_PRODUCT_CLASS
 										                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 										                )
-										        START WITH  P_PROD_CLASS_CD ='00000'
-										        CONNECT BY 
-										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-										        )   A					
+										        START WITH  P_PROD_CLASS_CD ='00000' AND HQ_OFFICE_CD = #{hqOfficeCd}
+										        CONNECT BY
+										        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+										        )   A
 							    ]]>
 		                     )                   A,
 		                     TB_HQ_PRODUCT       B
@@ -944,17 +944,17 @@
 									              )  AS  LV2_NM
 									,       DECODE(A.LV ,1  ,NULL
 									                    ,2  ,NULL
-									                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+									                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 									FROM    (
 									        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 									        FROM    (
 									                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-									                    FROM    TB_MS_PRODUCT_CLASS						
-									                    WHERE   STORE_CD    =  #{storeCd} 
+									                    FROM    TB_MS_PRODUCT_CLASS
+									                    WHERE   STORE_CD    =  #{storeCd}
 									                )
-									        START WITH  P_PROD_CLASS_CD ='00000'
-									        CONNECT BY 
-									        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+									        START WITH  P_PROD_CLASS_CD ='00000' AND STORE_CD    =  #{storeCd}
+									        CONNECT BY
+									        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND STORE_CD    =  #{storeCd}
 									        )   A
 			        			]]>
 		                     )                   A,
@@ -1495,7 +1495,7 @@
 			AND TNNPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
 		</if>
     </select>
-    
+
     <!-- 매출공통팝업 - 상품선택(대분류) 팝업 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_CLASS
@@ -1508,7 +1508,7 @@
 			SELECT DISTINCT PROD_CLASS_CD
 					, PROD_CLASS_NM
 	  		FROM TB_HQ_PRODUCT_CLASS
-			WHERE P_PROD_CLASS_CD = '00000' 
+			WHERE P_PROD_CLASS_CD = '00000'
 	   		AND HQ_OFFICE_CD = #{hqOfficeCd}
 	 		ORDER BY PROD_CLASS_CD
  		</if>
@@ -1516,12 +1516,12 @@
 			SELECT DISTINCT PROD_CLASS_CD
 					, PROD_CLASS_NM
 	  		FROM TB_MS_PRODUCT_CLASS
-			WHERE P_PROD_CLASS_CD = '00000' 
+			WHERE P_PROD_CLASS_CD = '00000'
 	   		AND STORE_CD = #{storeCd}
 	 		ORDER BY PROD_CLASS_CD
  		</if>
     </select>
-    
+
     <!-- 매출공통팝업 - 상품선택(상품) 팝업 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS
@@ -1538,7 +1538,7 @@
       <choose>
          <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
              FROM    (
-                         <![CDATA[	    			 
+                         <![CDATA[
 								SELECT  A.HQ_OFFICE_CD
 								,       A.PROD_CLASS_CD
 								,       DECODE	(A.LV ,1  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,LENGTH(A.ACD))
@@ -1562,29 +1562,29 @@
 								,       DECODE	(A.LV ,1  ,NULL
 								                    ,2  ,NULL
 								                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-								             	)  AS  LV3_NM                    
+								             	)  AS  LV3_NM
 								FROM    (
 								        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 								        FROM    (
 								                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-								                    FROM    TB_HQ_PRODUCT_CLASS				
+								                    FROM    TB_HQ_PRODUCT_CLASS
 								                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 								                )
-								        START WITH  P_PROD_CLASS_CD ='00000'
-								        CONNECT BY 
-								        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-								        )   A					
+								        START WITH  P_PROD_CLASS_CD ='00000'  AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+								        CONNECT BY
+								        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD  AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+								        )   A
 					    ]]>
                      )                   A,
                      TB_HQ_PRODUCT       B
              WHERE   B.HQ_OFFICE_CD   	= #{hqOfficeCd}
              AND     B.PROD_CLASS_CD 	= A.PROD_CLASS_CD(+)
-             AND	 A.LV1_CD			= #{prodClassCd}	
+             AND	 A.LV1_CD			= #{prodClassCd}
             <if test='srchPopProdCd != null and srchPopProdCd != ""'>
 	   			AND B.PROD_CD = #{srchPopProdCd}
 	   		</if>
 	   		<if test='srchPopProdNm != null and srchPopProdNm != ""'>
-	   			AND B.PROD_NM LIKE '%'||#{srchPopProdNm}||'%' 
+	   			AND B.PROD_NM LIKE '%'||#{srchPopProdNm}||'%'
 	   		</if>
          </when>
          <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
@@ -1611,17 +1611,17 @@
 							              )  AS  LV2_NM
 							,       DECODE(A.LV ,1  ,NULL
 							                    ,2  ,NULL
-							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 							FROM    (
 							        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 							        FROM    (
 							                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-							                    FROM    TB_MS_PRODUCT_CLASS						
-							                    WHERE   STORE_CD    =  #{storeCd} 
+							                    FROM    TB_MS_PRODUCT_CLASS
+							                    WHERE   STORE_CD    =  #{storeCd}
 							                )
-							        START WITH  P_PROD_CLASS_CD ='00000'
-							        CONNECT BY 
-							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+							        START WITH  P_PROD_CLASS_CD ='00000'  AND         STORE_CD    =  #{storeCd}
+							        CONNECT BY
+							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         STORE_CD    =  #{storeCd}
 							        )   A
 	        			]]>
                      )                   A,
@@ -1633,13 +1633,13 @@
 	   			AND B.PROD_CD = #{srchPopProdCd}
 	   		</if>
 	   		<if test='srchPopProdNm != null and srchPopProdNm != ""'>
-	   			AND B.PROD_NM LIKE '%'||#{srchPopProdNm}||'%' 
+	   			AND B.PROD_NM LIKE '%'||#{srchPopProdNm}||'%'
 	   		</if>
          </when>
       </choose>
-       ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD  
+       ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD
     </select>
-    
+
     <!-- 상품 목록 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
@@ -1664,8 +1664,8 @@
                                              SELECT  thpc.PROD_CLASS_CD
                                                FROM    TB_HQ_PRODUCT_CLASS thpc
                                               WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                                              START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                            CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                              START WITH    thpc.P_PROD_CLASS_CD = #{prodClassCd} AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY      thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD  AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                  )
             </if>
             <if test='prodCd != null and prodCd != "" '>
@@ -1690,8 +1690,8 @@
                                              SELECT  tmpc.PROD_CLASS_CD
                                                FROM    TB_MS_PRODUCT_CLASS tmpc
                                               WHERE   tmpc.STORE_CD = #{storeCd}
-                                              START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                            CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                              START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND   tmpc.STORE_CD = #{storeCd}
+                                            CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD  AND   tmpc.STORE_CD = #{storeCd}
                   )
               </if>
               <if test='prodCd != null and prodCd != ""'>
@@ -1703,7 +1703,7 @@
           </when>
         </choose>
     </select>
-	
+
     <!-- 상품별 결제수단별 상세 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL_PAY
@@ -1712,7 +1712,7 @@
     -->
     <select id="getPayFgList" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.getPayFgList */
-        
+
 		SELECT SUBSTR(TSSDP.SALE_DATE, 1, 4)||'-'||SUBSTR(TSSDP.SALE_DATE, 5, 2)||'-'||SUBSTR(TSSDP.SALE_DATE, 7, 2) AS SALE_DATE
 		    , TSSH.STORE_CD
 		    , TMS.STORE_NM
@@ -1757,7 +1757,7 @@
         	</if>
          ORDER BY TSSDP.SALE_DATE DESC, TSSDP.POS_NO, TSSDP.BILL_NO
     </select>
-    
+
     <!-- 결제수단 컬럼 리스트 조회 -->
     <!--
         TABLE    : TB_CM_NMCODE
@@ -1774,7 +1774,7 @@
         BY      TCN.NMCODE_CD
         ]]>
     </select>
-    
+
     <!-- 영수증 팝업(매장정보,매출종합내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_MS_STORE
@@ -1783,7 +1783,7 @@
     -->
     <select id="selectBillSalePop1" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.selectBillSalePop1 */
-        
+
         SELECT A.STORE_CD
 		    , B.STORE_NM
 		    , TO_CHAR(TO_DATE(A.SALE_DATE), 'YYYY.MM.DD')SALE_DATE
@@ -1798,14 +1798,14 @@
 		    , A.VAT_AMT
 		    , A.TOT_TIP_AMT
 		FROM TB_SL_SALE_HDR A,
-		      TB_MS_STORE B    
+		      TB_MS_STORE B
 		WHERE A.STORE_CD  = B.STORE_CD
 		  AND A.STORE_CD  = #{storeCd}
 		  AND A.SALE_DATE = REPLACE(#{saleDate}, '-', '')
 		  AND A.POS_NO 	  = #{posNo}
 		  AND A.BILL_NO   = #{billNo}
     </select>
-    
+
     <!-- 영수증 팝업(결제내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
@@ -1813,7 +1813,7 @@
         COMMENTS : 영수증 - 결제내역 조회한다.
     -->
     <select id="selectBillSalePop3" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillSalePop3 */        		  
+        /* USE : SaleComPopupMapper.selectBillSalePop3 */
 		SELECT PAY_CD
 		    ${sQuery1}
 		FROM TB_SL_SALE_HDR_PAY A
@@ -1824,7 +1824,7 @@
 		  AND A.BILL_NO   = #{billNo}
 		GROUP BY PAY_CD
     </select>
-    
+
     <!-- 영수증 팝업(회원정보) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR_MEMBR
@@ -1832,7 +1832,7 @@
         COMMENTS : 영수증 - 결제내역 조회한다.
     -->
     <select id="selectBillSalePop4" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillSalePop4 */        		  
+        /* USE : SaleComPopupMapper.selectBillSalePop4 */
 		SELECT A.MEMBR_NO
 		    , A.MEMBR_NM
 		    , A.MEMBR_CARD_NO
@@ -1844,7 +1844,7 @@
 		  AND A.POS_NO 	  = #{posNo}
 		  AND A.BILL_NO   = #{billNo}
     </select>
-    
+
     <!-- 영수증 팝업(신용카드결제내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_PAY_CARD
@@ -1852,8 +1852,8 @@
         COMMENTS : 영수증 - 신용카드결제내역 조회한다.
     -->
     <select id="selectBillSalePopCard" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillSalePopCard */        		  		  
-		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM                                             
+        /* USE : SaleComPopupMapper.selectBillSalePopCard */
+		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
 		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 		    , TSSPC.CARD_NO
 		    , TSSPC.INST_CNT
@@ -1871,7 +1871,7 @@
 		  AND TSSPC.POS_NO 	 = #{posNo}
 		  AND TSSPC.BILL_NO   = #{billNo}
     </select>
-    
+
     <!-- 영수증 팝업(현금결제내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
@@ -1879,8 +1879,8 @@
         COMMENTS : 영수증 - 현금결제내역 조회한다.
     -->
     <select id="selectBillSalePopCash" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillSalePopCash */        		  		  
-		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM                                            
+        /* USE : SaleComPopupMapper.selectBillSalePopCash */
+		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
 		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 		    , TSSPC.CASH_BILL_CARD_NO
 		    , TSSPC.APPR_NO
@@ -1895,7 +1895,7 @@
 		  AND TSSPC.POS_NO 	 = #{posNo}
 		  AND TSSPC.BILL_NO   = #{billNo}
     </select>
-    
+
     <!-- 영수증 팝업(상품내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
@@ -1903,7 +1903,7 @@
         COMMENTS : 영수증 - 상품내역 조회한다.
     -->
     <select id="selectBillSalePop6" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillSalePop4 */        		  		  
+        /* USE : SaleComPopupMapper.selectBillSalePop4 */
 		SELECT TSSD.PROD_CD
     		, TSSD.SALE_QTY
 		    , TSSD.SALE_UPRC
@@ -1919,7 +1919,7 @@
 		  AND TSSD.POS_NO 	 = #{posNo}
 		  AND TSSD.BILL_NO   = #{billNo}
     </select>
-    
+
     <!-- 영수증 팝업(신용카드결제취소내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_PAY_CARD
@@ -1927,8 +1927,8 @@
         COMMENTS : 영수증 - 신용카드결제취소내역 조회한다.
     -->
     <select id="selectBillRtnPopCard" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillRtnPopCard */        		  		  
-		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM                                             
+        /* USE : SaleComPopupMapper.selectBillRtnPopCard */
+		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
 		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스취소', 2, '단말기취소') AS APPR_PROC_FG
 		    , TSSPC.CARD_NO
 		    , TSSPC.INST_CNT
@@ -1946,7 +1946,7 @@
 		  AND TSSPC.POS_NO 	 = #{posNo}
 		  AND TSSPC.BILL_NO   = #{billNo}
     </select>
-    
+
     <!-- 영수증 팝업(현금결제취소내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
@@ -1954,8 +1954,8 @@
         COMMENTS : 영수증 - 현금결제취소내역 조회한다.
     -->
     <select id="selectBillRtnPopCash" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillRtnPopCash */        		  		  
-		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM                                            
+        /* USE : SaleComPopupMapper.selectBillRtnPopCash */
+		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
 		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스취소', 2, '단말기취소') AS APPR_PROC_FG
 		    , TSSPC.CASH_BILL_CARD_NO
 		    , TSSPC.APPR_NO
@@ -1970,7 +1970,7 @@
 		  AND TSSPC.POS_NO 	 = #{posNo}
 		  AND TSSPC.BILL_NO   = #{billNo}
     </select>
-    
+
     <!-- 영수증 팝업(원거래매출정보) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_MS_STORE
@@ -1979,19 +1979,19 @@
     -->
     <select id="selectBillSalePop7" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.selectBillSalePop7 */
-        
+
         SELECT TO_CHAR(TO_DATE(A.SALE_DATE), 'YYYY.MM.DD')SALE_DATE
 		    , A.POS_NO
-		    , A.BILL_NO		    
+		    , A.BILL_NO
 		FROM TB_SL_SALE_HDR A,
-		      TB_MS_STORE B    
+		      TB_MS_STORE B
 		WHERE A.STORE_CD  = B.STORE_CD
-		  AND A.STORE_CD  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),0,7)     
+		  AND A.STORE_CD  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),0,7)
 		  AND A.SALE_DATE = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),8,8)
 		  AND A.POS_NO 	  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),16,2)
 		  AND A.BILL_NO   = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),18)
     </select>
-    
+
     <!-- 영수증 팝업(원 신용카드결제내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_PAY_CARD
@@ -1999,8 +1999,8 @@
         COMMENTS : 영수증 - 원 신용카드결제내역 조회한다.
     -->
     <select id="selectBillRealRtnPopCard" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillRealRtnPopCard */        		  		  
-		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM                                             
+        /* USE : SaleComPopupMapper.selectBillRealRtnPopCard */
+		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
 		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 		    , TSSPC.CARD_NO
 		    , TSSPC.INST_CNT
@@ -2013,12 +2013,12 @@
 		    , TSSPC.ACQUIRE_NM
 		FROM TB_SL_SALE_PAY_CARD  TSSPC
 		WHERE 1 = 1
-		  AND TSSPC.STORE_CD  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),0,7)     
+		  AND TSSPC.STORE_CD  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),0,7)
 		  AND TSSPC.SALE_DATE = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),8,8)
 		  AND TSSPC.POS_NO 	  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),16,2)
 		  AND TSSPC.BILL_NO   = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),18)
     </select>
-    
+
     <!-- 영수증 팝업(원 현금결제내역) 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
@@ -2026,8 +2026,8 @@
         COMMENTS : 영수증 - 원 현금결제내역 조회한다.
     -->
     <select id="selectBillRealRtnPopCash" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.selectBillRealRtnPopCash */        		  		  
-		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM                                            
+        /* USE : SaleComPopupMapper.selectBillRealRtnPopCash */
+		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
 		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 		    , TSSPC.CASH_BILL_CARD_NO
 		    , TSSPC.APPR_NO
@@ -2037,7 +2037,7 @@
 <!-- 		    , (SELECT VAN_CARDCO_NM FROM TB_CM_VAN_CARD WHERE VAN_CD = TSSPC.VAN_CD AND CARDCO_CD = TSSPC.CASH_BILL_CARD_NO) AS VAN_CARDCO_NM -->
   		FROM TB_SL_SALE_PAY_CASH TSSPC
 		WHERE 1 = 1
-		  AND TSSPC.STORE_CD  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),0,7)     
+		  AND TSSPC.STORE_CD  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),0,7)
 		  AND TSSPC.SALE_DATE = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),8,8)
 		  AND TSSPC.POS_NO 	  = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),16,2)
 		  AND TSSPC.BILL_NO   = SUBSTR((SELECT ORG_BILL_NO FROM TB_SL_SALE_HDR WHERE STORE_CD = #{storeCd} AND SALE_DATE = REPLACE(#{saleDate}, '-', '') AND POS_NO = #{posNo} AND BILL_NO = #{billNo}),18)

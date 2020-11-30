@@ -41,10 +41,8 @@
                                SELECT              PROD_CLASS_CD
                                FROM                TB_HQ_PRODUCT_CLASS
                                WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
-                               START WITH          PROD_CLASS_CD   = #{prodClassCd}
-                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
-                               CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
-                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                               START WITH          PROD_CLASS_CD   = #{prodClassCd}  AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                               CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
                            )
            </if>
            <if test='prodCd != null and prodCd !=""'>
@@ -107,10 +105,8 @@
                                SELECT              PROD_CLASS_CD
                                FROM                TB_HQ_PRODUCT_CLASS
                                WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
-                               START WITH          PROD_CLASS_CD   = #{prodClassCd}
-                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
-                               CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
-                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                               START WITH          PROD_CLASS_CD   = #{prodClassCd} AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                               CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
                            )
            </if>
            <if test='prodCd != null and prodCd !=""'>

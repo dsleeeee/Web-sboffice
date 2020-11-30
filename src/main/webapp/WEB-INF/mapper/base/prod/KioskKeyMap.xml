@@ -311,10 +311,8 @@
                                                 SELECT PROD_CLASS_CD
                                                   FROM TB_MS_PRODUCT_CLASS
                                                   WHERE STORE_CD = #{storeCd}
-                                             START WITH PROD_CLASS_CD = #{prodClassCd}
-                                                    AND STORE_CD = #{storeCd}
-                                     CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
-                                                    AND STORE_CD = #{storeCd}
+                                             START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                     CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND STORE_CD = #{storeCd}
                     ) --상품분류
                 </if>
                 <if test="barCd != null and barCd != ''">

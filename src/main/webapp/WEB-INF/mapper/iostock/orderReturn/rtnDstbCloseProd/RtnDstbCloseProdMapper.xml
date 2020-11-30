@@ -246,7 +246,7 @@
         ,       TB_HQ_PRODUCT_BARCD thpb
         WHERE   thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND     thpb.HQ_OFFICE_CD(+)=   thp.HQ_OFFICE_CD
-        AND     thpb.PROD_CD     (+)=   thp.PROD_CD        
+        AND     thpb.PROD_CD     (+)=   thp.PROD_CD
         AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1)
         ]]>
         <if test='prodCd != null and prodCd != ""'>
@@ -265,8 +265,8 @@
                                         SELECT  thpc.PROD_CLASS_CD
                                         FROM    TB_HQ_PRODUCT_CLASS thpc
                                         WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD  AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                       )
         </if>
         <![CDATA[
@@ -304,7 +304,7 @@
         ,       DECODE(NVL(suborder.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG
         ,       DECODE(NVL(suborder1.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG1
         ,       DECODE(NVL(suborder2.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG2
-        ,       DECODE(NVL(suborder3.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG3        
+        ,       DECODE(NVL(suborder3.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG3
         ,       'N' AS CONFIRM_YN
         FROM    TB_MS_STORE tms
         ,       TB_MS_PRODUCT tmp
@@ -374,8 +374,8 @@
 					WHERE   tphsod.HQ_OFFICE_CD = #{hqOfficeCd}
 					AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
 					GROUP
-					BY      tphsod.STORE_CD 
-        		) suborder3                
+					BY      tphsod.STORE_CD
+        		) suborder3
         ,       TB_HQ_ENVST the
         WHERE   tms.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tmp.STORE_CD            =   tms.STORE_CD
@@ -383,16 +383,16 @@
         AND     tphsd.STORE_CD      (+) =   tmp.STORE_CD
         AND     tphsd.PROD_CD       (+) =   tmp.PROD_CD
         AND     tshsc.PROD_CD       (+) =   tmp.PROD_CD
-        AND     tsssc.STORAGE_CD      =   '999'        
+        AND     tsssc.STORAGE_CD      =   '999'
         AND     tsssc.STORE_CD      (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD       (+) =   tmp.PROD_CD
         AND     suborder.STORE_CD   (+) =   tms.STORE_CD
         AND     suborder1.STORE_CD   (+) =   tms.STORE_CD
         AND     suborder2.STORE_CD   (+) =   tms.STORE_CD
-        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD         
+        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD
         AND     the.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     the.ENVST_CD            =   '0011'
-	
+
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tms.STORE_CD IN
@@ -457,14 +457,14 @@
         #{hqBrandCd},
         #{prodCd},
         #{poUnitFg},
-        #{poUnitQty},      
+        #{poUnitQty},
         #{mgrSplyUprc},
         #{mgrUnitQty},
         #{mgrEtcQty},
         #{mgrTotQty},
         #{mgrAmt},
         #{mgrVat},
-        #{mgrTot},       
+        #{mgrTot},
         #{procFg},
         #{remark},
         #{regDt},
@@ -473,7 +473,7 @@
         #{modId}
         )
     </insert>
-    
+
     <!-- 반품등록 반품상품 PROD 저장 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_ORDER_PROD
@@ -506,25 +506,25 @@
          	 TPHSOP.SLIP_FG,
          	 TPHSOP.REQ_DATE,
          	 TPHSOP.STORE_CD,
-             TPHSOP.PO_UNIT_FG , 
-             TPHSOP.PO_UNIT_QTY, 	
-             TPHSOP.ORDER_SPLY_UPRC, 
-             TPHSOP.ORDER_UNIT_QTY,	
-             TPHSOP.ORDER_ETC_QTY,	
-             TPHSOP.ORDER_TOT_QTY,	
-             TPHSOP.ORDER_AMT,		
-             TPHSOP.ORDER_VAT,		
-             TPHSOP.ORDER_TOT,		
+             TPHSOP.PO_UNIT_FG ,
+             TPHSOP.PO_UNIT_QTY,
+             TPHSOP.ORDER_SPLY_UPRC,
+             TPHSOP.ORDER_UNIT_QTY,
+             TPHSOP.ORDER_ETC_QTY,
+             TPHSOP.ORDER_TOT_QTY,
+             TPHSOP.ORDER_AMT,
+             TPHSOP.ORDER_VAT,
+             TPHSOP.ORDER_TOT,
              TPHSOP.REG_DT,
              TPHSOP.REG_ID,
              TPHSOP.MOD_DT,
              TPHSOP.MOD_ID
          )
          VALUES
-         (	 
+         (
          	 #{outStorageCd},
          	 #{prodCd},
-         	 #{slipFg},          	 
+         	 #{slipFg},
          	 #{reqDate},
          	 #{storeCd},
              #{poUnitFg},
@@ -542,17 +542,17 @@
              #{modId}
          )
     </insert>
-    
+
     <update id="updateRtnStoreOrderProd" parameterType="rtnDstbCloseProdVO">
-	    UPDATE  TB_PO_HQ_STORE_ORDER_PROD 
-        SET     (  	
-              		 PO_UNIT_QTY 
-              		,ORDER_UNIT_QTY	
-              		,ORDER_ETC_QTY	
-              		,ORDER_TOT_QTY	
-              		,ORDER_AMT		
-              		,ORDER_VAT		
-              		,ORDER_TOT			
+	    UPDATE  TB_PO_HQ_STORE_ORDER_PROD
+        SET     (
+              		 PO_UNIT_QTY
+              		,ORDER_UNIT_QTY
+              		,ORDER_ETC_QTY
+              		,ORDER_TOT_QTY
+              		,ORDER_AMT
+              		,ORDER_VAT
+              		,ORDER_TOT
 				 )
             =   ( SELECT  (PO_UNIT_QTY)+#{poUnitQty}
             			, (ORDER_UNIT_QTY)+#{orderUnitQty}
@@ -562,18 +562,18 @@
             			, (ORDER_VAT)+#{orderVat}
             			, (ORDER_TOT)+#{orderTot}
             	  FROM TB_PO_HQ_STORE_ORDER_PROD
-				  WHERE REQ_DATE = #{reqDate} 
-				  AND STORE_CD = #{storeCd} 
-				  AND SLIP_FG = #{slipFg} 
-				  AND PROD_CD = #{prodCd} 
+				  WHERE REQ_DATE = #{reqDate}
+				  AND STORE_CD = #{storeCd}
+				  AND SLIP_FG = #{slipFg}
+				  AND PROD_CD = #{prodCd}
 				  AND STORAGE_CD = #{storageCd}
                 )
         ,       MOD_DT  = #{modDt}
         ,       MOD_ID  = #{modId}
-		WHERE REQ_DATE = #{reqDate} 
-		AND STORE_CD = #{storeCd} 
-		AND SLIP_FG = #{slipFg} 
-		AND PROD_CD = #{prodCd} 
+		WHERE REQ_DATE = #{reqDate}
+		AND STORE_CD = #{storeCd}
+		AND SLIP_FG = #{slipFg}
+		AND PROD_CD = #{prodCd}
 		AND STORAGE_CD = #{outStorageCd}
 	</update>
 </mapper>

@@ -151,8 +151,8 @@
 					WHERE   tphsod.HQ_OFFICE_CD = #{hqOfficeCd}
 					AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
 					GROUP
-					BY      tphsod.STORE_CD 
-        		) suborder3                 
+					BY      tphsod.STORE_CD
+        		) suborder3
         ,       TB_HQ_ENVST the
         WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
         AND     tphsd.REQ_DATE       =   #{reqDate}
@@ -169,7 +169,7 @@
         AND     suborder.STORE_CD(+) =   tphsd.STORE_CD
         AND     suborder1.STORE_CD   (+) =   tms.STORE_CD
         AND     suborder2.STORE_CD   (+) =   tms.STORE_CD
-        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD          
+        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD
         AND     the.HQ_OFFICE_CD     =   #{hqOfficeCd}
         AND     the.ENVST_CD         =   '0011'
         ORDER BY tphsd.PROD_CD
@@ -292,8 +292,8 @@
                                         SELECT  thpc.PROD_CLASS_CD
                                         FROM    TB_HQ_PRODUCT_CLASS thpc
                                         WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}   AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD   AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                       )
         </if>
         <![CDATA[
@@ -332,7 +332,7 @@
         ,       DECODE(NVL(suborder1.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG1
         ,       DECODE(NVL(suborder2.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG2
         ,       DECODE(NVL(suborder3.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG3
-        
+
         ,       'N' AS CONFIRM_YN
         FROM    TB_MS_STORE tms
         ,       TB_MS_PRODUCT tmp
@@ -402,8 +402,8 @@
 					WHERE   tphsod.HQ_OFFICE_CD = #{hqOfficeCd}
 					AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
 					GROUP
-					BY      tphsod.STORE_CD 
-        		) suborder3         
+					BY      tphsod.STORE_CD
+        		) suborder3
         ,       TB_HQ_ENVST the
         WHERE   tms.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tmp.STORE_CD            =   tms.STORE_CD
@@ -417,7 +417,7 @@
         AND     suborder.STORE_CD   (+) =   tms.STORE_CD
         AND     suborder1.STORE_CD   (+) =   tms.STORE_CD
         AND     suborder2.STORE_CD   (+) =   tms.STORE_CD
-        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD                        
+        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD
         AND     the.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     the.ENVST_CD            =   '0011'
         ]]>
@@ -428,8 +428,8 @@
             </foreach>
         </if>
     </select>
-    
-    
+
+
     <!-- 분배마감 매장 마감여부 확인 -->
     <!--
         TABLE    : TB_MS_PRODUCT

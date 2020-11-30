@@ -74,8 +74,8 @@
                                                 FROM TB_HQ_PRODUCT_CLASS
                                                 WHERE 1=1
                                                 AND HQ_OFFICE_CD = #{membrOrgnCd}
-                                                START WITH PROD_CLASS_CD = #{prodClassCd}
-                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{membrOrgnCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{membrOrgnCd}
                                                 )
                 </if>
                 ORDER BY thp.PROD_CD
@@ -133,8 +133,8 @@
                                                 FROM TB_MS_PRODUCT_CLASS
                                                 WHERE 1=1
                                                 AND STORE_CD = #{storeCd}
-                                                START WITH PROD_CLASS_CD = #{prodClassCd}
-                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
                                                 )
                 </if>
                 ORDER BY tmp.PROD_CD
@@ -323,8 +323,8 @@
                                                 FROM TB_HQ_PRODUCT_CLASS
                                                 WHERE 1=1
                                                 AND HQ_OFFICE_CD = #{membrOrgnCd}
-                                                START WITH PROD_CLASS_CD = #{prodClassCd}
-                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{membrOrgnCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{membrOrgnCd}
                                                 )
                 </if>
                 AND NOT EXISTS
@@ -369,8 +369,8 @@
                                                 FROM TB_MS_PRODUCT_CLASS
                                                 WHERE 1=1
                                                 AND STORE_CD = #{storeCd}
-                                                START WITH PROD_CLASS_CD = #{prodClassCd}
-                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
                                                 )
                 </if>
                 AND NOT EXISTS

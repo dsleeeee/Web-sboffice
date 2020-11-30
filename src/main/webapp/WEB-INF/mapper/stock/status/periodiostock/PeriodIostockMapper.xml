@@ -6,7 +6,7 @@
 
 	<!-- 기간수불현황 - 리스트 조회 -->
     <!--
-        TABLE    : 
+        TABLE    :
         PARAM    : periodIostockVO
         COMMENTS : 기간수불현황 - 리스트를 조회한다.
     -->
@@ -35,7 +35,7 @@
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '21', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '22', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '19', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_19 /* 거래처출고 수량*/
-			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/  
+			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
 			    </if>
 			    <if test='unitFg == "1"'>
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
@@ -62,9 +62,9 @@
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '19', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_19 /* 거래처출고 금액*/
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
 		<include refid="CmmSQL.PagingTemplateCount"/>
-  		FROM 
+  		FROM
   			(
-  				<![CDATA[	    			 
+  				<![CDATA[
 							SELECT  A.HQ_OFFICE_CD
 							,       A.PROD_CLASS_CD
 							,		NULL	LV1_CD
@@ -80,18 +80,20 @@
 							,       DECODE	(A.LV ,1  ,NULL
 							                    ,2  ,NULL
 							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-							             	)  AS  LV3_NM                    
+							             	)  AS  LV3_NM
 							FROM    (
 							        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 							        FROM    (
 							                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-							                    FROM    TB_HQ_PRODUCT_CLASS				
+							                    FROM    TB_HQ_PRODUCT_CLASS
 							                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 							                )
 							        START WITH  P_PROD_CLASS_CD ='00000'
-							        CONNECT BY 
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+							        CONNECT BY
 							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-							        )   A					
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+							        )   A
 				   			]]>
 			              )  A
 	        , TB_PO_HQ_STOCK TPHS
@@ -147,7 +149,7 @@
 		    , A.LV2_CD
 		    , A.LV2_NM
 		    , A.LV3_CD
-		    , A.LV3_NM 
+		    , A.LV3_NM
  			, TPHS.PROD_CD
      		, THP.PROD_NM
      		, THP.PO_UNIT_QTY
@@ -157,7 +159,7 @@
 			TPHS.PROD_CD
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getPeriodIostockStoreList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : PeriodIostockMapper.getPeriodIostockStoreList */
     	<include refid="CmmSQL.PagingTemplateHeader"/>
@@ -223,20 +225,22 @@
 						              )  AS  LV2_NM
 						,       DECODE(A.LV ,1  ,NULL
 						                    ,2  ,NULL
-						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 						FROM    (
 						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-						                    FROM    TB_MS_PRODUCT_CLASS						
-						                    WHERE   STORE_CD    =  #{storeCd} 
+						                    FROM    TB_MS_PRODUCT_CLASS
+						                    WHERE   STORE_CD    =  #{storeCd}
 						                )
 						        START WITH  P_PROD_CLASS_CD ='00000'
-						        CONNECT BY 
+                                AND         STORE_CD    =  #{storeCd}
+						        CONNECT BY
 						        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                                AND         STORE_CD    =  #{storeCd}
 						        )   A
-        			]]>	
-			)                A 
+        			]]>
+			)                A
   			, TB_PO_STORE_STOCK TPSS
      		, TB_MS_PRODUCT TMP
      		, TB_MS_PRODUCT_BARCD TMPB
@@ -290,10 +294,10 @@
      			 , TMP.PO_UNIT_QTY
      			 , TMP.PO_UNIT_FG
      			 , TMPB.BARCD_CD
-		ORDER BY TPSS.PROD_CD     			 
+		ORDER BY TPSS.PROD_CD
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getPeriodiostockProdDtlList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : PeriodIostockMapper.getPeriodiostockProdDtlList */
     	<include refid="CmmSQL.PagingTemplateHeader"/>
@@ -330,7 +334,7 @@
  		ORDER BY IO_PROC_DATE DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getPeriodiostockProdStoreDtlList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : PeriodIostockMapper.getPeriodiostockProdStoreDtlList */
     	<include refid="CmmSQL.PagingTemplateHeader"/>
@@ -365,7 +369,7 @@
  		ORDER BY TPSS.IO_PROC_DATE DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getPeriodIostockExcelList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : PeriodIostockMapper.getPeriodIostockExcelList */
         SELECT 	A.LV1_CD
@@ -390,7 +394,7 @@
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '21', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '22', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '19', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_19 /* 거래처출고 수량*/
-			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/  
+			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
 			    </if>
 			    <if test='unitFg == "1"'>
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
@@ -416,9 +420,9 @@
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '22', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '19', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_19 /* 거래처출고 금액*/
 			    , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
-  		FROM 
+  		FROM
   			(
-  				<![CDATA[	    			 
+  				<![CDATA[
 							SELECT  A.HQ_OFFICE_CD
 							,       A.PROD_CLASS_CD
 							,		NULL	LV1_CD
@@ -434,18 +438,20 @@
 							,       DECODE	(A.LV ,1  ,NULL
 							                    ,2  ,NULL
 							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-							             	)  AS  LV3_NM                    
+							             	)  AS  LV3_NM
 							FROM    (
 							        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 							        FROM    (
 							                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-							                    FROM    TB_HQ_PRODUCT_CLASS				
+							                    FROM    TB_HQ_PRODUCT_CLASS
 							                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 							                )
 							        START WITH  P_PROD_CLASS_CD ='00000'
-							        CONNECT BY 
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+							        CONNECT BY
 							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-							        )   A					
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+							        )   A
 				   			]]>
 			              )  A
 	        , TB_PO_HQ_STOCK TPHS
@@ -501,16 +507,16 @@
 		    , A.LV2_CD
 		    , A.LV2_NM
 		    , A.LV3_CD
-		    , A.LV3_NM 
+		    , A.LV3_NM
  			, TPHS.PROD_CD
      		, THP.PROD_NM
      		, THP.PO_UNIT_QTY
 		    , THP.PO_UNIT_FG
 		    , THPB.BARCD_CD
 		ORDER BY
-			TPHS.PROD_CD		    
+			TPHS.PROD_CD
     </select>
-    
+
     <select id="getPeriodIostockStoreExcelList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : PeriodIostockMapper.getPeriodIostockStoreExcelList */
 		SELECT A.LV1_CD
@@ -574,20 +580,22 @@
 						              )  AS  LV2_NM
 						,       DECODE(A.LV ,1  ,NULL
 						                    ,2  ,NULL
-						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 						FROM    (
 						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-						                    FROM    TB_MS_PRODUCT_CLASS						
-						                    WHERE   STORE_CD    =  #{storeCd} 
+						                    FROM    TB_MS_PRODUCT_CLASS
+						                    WHERE   STORE_CD    =  #{storeCd}
 						                )
 						        START WITH  P_PROD_CLASS_CD ='00000'
-						        CONNECT BY 
+                                AND         STORE_CD    =  #{storeCd}
+						        CONNECT BY
 						        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                                AND         STORE_CD    =  #{storeCd}
 						        )   A
-        			]]>	
-			)                A 
+        			]]>
+			)                A
   			, TB_PO_STORE_STOCK TPSS
      		, TB_MS_PRODUCT TMP
      		, TB_MS_PRODUCT_BARCD TMPB
@@ -641,6 +649,6 @@
      			 , TMP.PO_UNIT_QTY
      			 , TMP.PO_UNIT_FG
      			 , TMPB.BARCD_CD
-		ORDER BY TPSS.PROD_CD     			 
+		ORDER BY TPSS.PROD_CD
     </select>
 </mapper>

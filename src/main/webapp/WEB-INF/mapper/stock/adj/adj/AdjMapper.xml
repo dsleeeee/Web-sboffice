@@ -17,7 +17,7 @@
         ,       tsha.ADJ_TITLE, tsha.PROC_FG, tsha.DTL_CNT
         ,       tsha.CONFM_DATE
         ,       SUBSTR(tsha.REG_DT,0,8) AS REG_DATE
-        ,		tsha.ADJ_STORAGE_CD        
+        ,		tsha.ADJ_STORAGE_CD
         FROM    TB_ST_HQ_ADJUST tsha
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -44,7 +44,7 @@
         ,       tssa.ADJ_TITLE, tssa.PROC_FG, tssa.DTL_CNT
         ,       tssa.CONFM_DATE
         ,       SUBSTR(tssa.REG_DT,0,8) AS REG_DATE
-        ,		tssa.ADJ_STORAGE_CD          
+        ,		tssa.ADJ_STORAGE_CD
         FROM    TB_ST_STORE_ADJUST tssa
         WHERE   STORE_CD  = #{storeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -74,7 +74,7 @@
         AND     tsha.ADJ_DATE      = #{adjDate}
         AND     tsha.SEQ_NO        = #{seqNo}
 		AND     tsha.HQ_OFFICE_CD      = ths.HQ_OFFICE_CD
-		AND     tsha.ADJ_STORAGE_CD    = ths.STORAGE_CD         
+		AND     tsha.ADJ_STORAGE_CD    = ths.STORAGE_CD
         ]]>
     </select>
 
@@ -90,12 +90,12 @@
         <![CDATA[
         SELECT  tssa.PROC_FG, tssa.ADJ_TITLE, tssa.ADJ_STORAGE_CD, tms.STORAGE_NM
         FROM    TB_ST_STORE_ADJUST tssa
-        ,       TB_MS_STORAGE               tms        
+        ,       TB_MS_STORAGE               tms
         WHERE   tssa.STORE_CD      = #{storeCd}
         AND     tssa.ADJ_DATE      = #{adjDate}
         AND     tssa.SEQ_NO        = #{seqNo}
         AND		tssa.STORE_CD		= tms.STORE_CD
-        AND		tssa.ADJ_STORAGE_CD = tms.STORAGE_CD        
+        AND		tssa.ADJ_STORAGE_CD = tms.STORAGE_CD
         ]]>
     </select>
 
@@ -166,8 +166,8 @@
                                         SELECT  thpc.PROD_CLASS_CD
                                         FROM    TB_HQ_PRODUCT_CLASS thpc
                                         WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                       )
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
@@ -262,8 +262,8 @@
                                         SELECT  tmpc.PROD_CLASS_CD
                                         FROM    TB_MS_PRODUCT_CLASS tmpc
                                         WHERE   tmpc.STORE_CD = #{storeCd}
-                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
                                       )
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
@@ -351,7 +351,7 @@
         ,       tshad.ADJ_AMT
         ,       tshad.REMARK
         ,       'U' AS ADJ_PROD_STATUS
-        ,		tsha.ADJ_STORAGE_CD        
+        ,		tsha.ADJ_STORAGE_CD
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -385,7 +385,7 @@
         AND     tshad.SEQ_NO            =   #{seqNo}
         AND		tshad.HQ_OFFICE_CD     =   tsha.HQ_OFFICE_CD
         AND     tshad.ADJ_DATE       	=   tsha.ADJ_DATE
-        AND     tshad.SEQ_NO           =   tsha.SEQ_NO         
+        AND     tshad.SEQ_NO           =   tsha.SEQ_NO
         AND     tshad.HQ_OFFICE_CD      =   thp.HQ_OFFICE_CD
         AND     tshad.PROD_CD           =   thp.PROD_CD
         AND     tshsm.PROD_CD       (+) =   tshad.PROD_CD
@@ -422,7 +422,7 @@
         ,       tssad.ADJ_AMT
         ,       tssad.REMARK
         ,       'U' AS ADJ_PROD_STATUS
-        ,		tssa.ADJ_STORAGE_CD        
+        ,		tssa.ADJ_STORAGE_CD
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -456,7 +456,7 @@
         AND     tssad.SEQ_NO            =   #{seqNo}
         AND		tssad.STORE_CD     		=   tssa.STORE_CD
         AND     tssad.ADJ_DATE       	=   tssa.ADJ_DATE
-        AND     tssad.SEQ_NO           	=   tssa.SEQ_NO           
+        AND     tssad.SEQ_NO           	=   tssa.SEQ_NO
         AND     tssad.STORE_CD          =   tmp.STORE_CD
         AND     tssad.PROD_CD           =   tmp.PROD_CD
         AND     tsssm.PROD_CD       (+) =   tssad.PROD_CD
@@ -821,7 +821,7 @@
                     AND     tshad.SEQ_NO        =   #{seqNo}
                 )
         ,       ADJ_TITLE   = #{adjTitle}
-        ,       ADJ_STORAGE_CD = #{adjStorageCd}        
+        ,       ADJ_STORAGE_CD = #{adjStorageCd}
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
@@ -851,7 +851,7 @@
                     AND     tssad.SEQ_NO        =   #{seqNo}
                 )
         ,       ADJ_TITLE   = #{adjTitle}
-        ,       ADJ_STORAGE_CD = #{adjStorageCd}        
+        ,       ADJ_STORAGE_CD = #{adjStorageCd}
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
