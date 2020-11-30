@@ -151,11 +151,9 @@
                 WHERE
                     thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                 START WITH
-                    thpc.P_PROD_CLASS_CD = '00000'
-                    AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                 CONNECT BY
-                    thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
-                    AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD  AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -168,11 +166,9 @@
                 WHERE
                     tmpc.STORE_CD = #{storeCd}
                 START WITH
-                    tmpc.P_PROD_CLASS_CD = '00000'
-                    AND tmpc.STORE_CD = #{storeCd}
+                    tmpc.P_PROD_CLASS_CD = '00000'   AND tmpc.STORE_CD = #{storeCd}
                 CONNECT BY
-                    tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
-                    AND tmpc.STORE_CD = #{storeCd}
+                    tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD   AND tmpc.STORE_CD = #{storeCd}
             </when>
         </choose>
     </select>
@@ -228,8 +224,8 @@
                                              SELECT  thpc.PROD_CLASS_CD
                                                FROM    TB_HQ_PRODUCT_CLASS thpc
                                               WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                                              START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                            CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                              START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                  )
             </if>
             <if test='prodCd != null and prodCd != "" '>
@@ -254,8 +250,8 @@
                                              SELECT  tmpc.PROD_CLASS_CD
                                                FROM    TB_MS_PRODUCT_CLASS tmpc
                                               WHERE   tmpc.STORE_CD = #{storeCd}
-                                              START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                            CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                              START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+                                            CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
                   )
               </if>
               <if test='prodCd != null and prodCd != ""'>

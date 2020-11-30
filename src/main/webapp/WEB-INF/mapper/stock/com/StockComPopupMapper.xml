@@ -754,8 +754,10 @@
 							                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 							                )
 							        START WITH  P_PROD_CLASS_CD ='00000'
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 							        CONNECT BY
 							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 							        )   A
 				   			]]>
                 )   A
@@ -788,8 +790,10 @@
 						                    WHERE   STORE_CD    =  #{storeCd}
 						                )
 						        START WITH  P_PROD_CLASS_CD ='00000'
+                                AND         STORE_CD    =  #{storeCd}
 						        CONNECT BY
 						        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                                AND         STORE_CD    =  #{storeCd}
 						        )   A
         			]]>
                 )   A
@@ -1971,8 +1975,10 @@
 							                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 							                )
 							        START WITH  P_PROD_CLASS_CD ='00000'
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 							        CONNECT BY
 							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 							        )   A
 				   			]]>
            )

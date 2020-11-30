@@ -193,7 +193,7 @@
         /* USE : VendrInstockHqMapper.getVendrInstockProdRegList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-		
+
 				SELECT  A.PROD_CD
 				,		A.PROD_NM
 				,		A.VAT_FG01
@@ -208,7 +208,7 @@
 				,		A.PREV_IN_TOT_QTY
 				,		A.PREV_IN_AMT
 				,		A.PREV_IN_VAT
-				,		A.PREV_IN_TOT				
+				,		A.PREV_IN_TOT
 				,		A.IN_AMT
 				,		A.IN_VAT
 				,		A.IN_TOT
@@ -224,7 +224,7 @@
 				,       NVL(B.IN_VAT,0)        AS  A_IN_VAT
 				,       NVL(B.IN_TOT,0)        AS  A_IN_TOT
 				*/
-				FROM	(                
+				FROM	(
 				        SELECT  thvp.HQ_OFFICE_CD
 						,		NVL(tphvid.SLIP_NO,#{slipNo})	AS SLIP_NO
 						,		thvp.PROD_CD
@@ -241,7 +241,7 @@
 				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT_QTY,  0, NULL, tphvid.IN_TOT_QTY*tphvid.SLIP_FG )) AS PREV_IN_TOT_QTY
 				        ,       TO_NUMBER(DECODE(tphvid.IN_AMT, 0, NULL, tphvid.IN_AMT*tphvid.SLIP_FG)) AS PREV_IN_AMT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_VAT,  0, NULL, tphvid.IN_VAT*tphvid.SLIP_FG )) AS PREV_IN_VAT
-				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG )) AS PREV_IN_TOT				        
+				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG )) AS PREV_IN_TOT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_AMT    ,  0, NULL, tphvid.IN_AMT*tphvid.SLIP_FG     )) AS IN_AMT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_VAT    ,  0, NULL, tphvid.IN_VAT*tphvid.SLIP_FG     )) AS IN_VAT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT    ,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG     )) AS IN_TOT
@@ -285,13 +285,13 @@
 				                                        SELECT  thpc.PROD_CLASS_CD
 				                                        FROM    TB_HQ_PRODUCT_CLASS thpc
 				                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-				                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-				                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+				                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+				                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
 				                                      )
 				        </if>
-				        )	A				        
+				        )	A
 			ORDER
-			BY      A.PROD_CD        
+			BY      A.PROD_CD
 
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -325,8 +325,8 @@
         /* USE : VendrInstockHqMapper.getVendrInstockOrderInfoRegList */
         <!--
         <![CDATA[
-        
-        
+
+
         SELECT  tphvod.PROD_CD, thp.PROD_NM, tphvod.PO_UNIT_FG, tphvod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
         ,       tphvod.SLIP_FG, thp.PO_MIN_QTY
         ,       thp.LAST_COST_UPRC
@@ -417,11 +417,11 @@
 				        AND     thp.HQ_OFFICE_CD      =   tphvod.HQ_OFFICE_CD
 				        AND     thp.PROD_CD           =   tphvod.PROD_CD
 				        AND     thv.HQ_OFFICE_CD      =   tphvod.HQ_OFFICE_CD
-				        AND     thv.VENDR_CD          =   #{vendrCd}	
-				        ) A					
+				        AND     thv.VENDR_CD          =   #{vendrCd}
+				        ) A
 		ORDER
-		BY      A.PROD_CD    
-   
+		BY      A.PROD_CD
+
     </select>
 
 
@@ -849,7 +849,7 @@
             SLIP_NO,
             PROD_CD,
             STORAGE_CD,
-            OCCR_FG,  
+            OCCR_FG,
             SLIP_FG,
             COST_UPRC,
             PO_UNIT_FG,
@@ -888,7 +888,7 @@
             #{modId}
         )
     </insert>
-    
+
 	<update id="mergeVendrInstockProd" parameterType="vendrInstockVO">
 	    MERGE INTO TB_PO_HQ_VENDR_INSTOCK_PROD	A
 	    USING DUAL ON           (
@@ -912,7 +912,7 @@
 								            SLIP_NO,
 								            PROD_CD,
 								            STORAGE_CD,
-								            OCCR_FG,  
+								            OCCR_FG,
 								            SLIP_FG,
 								            COST_UPRC,
 								            PO_UNIT_FG,
@@ -950,9 +950,9 @@
 								            #{modDt},
 								            #{modId}
 								        )
-	</update>    
-    
-	
+	</update>
+
+
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
@@ -975,7 +975,7 @@
         AND     SLIP_NO       = #{slipNo}
         AND     PROD_CD       = #{prodCd}
     </update>
-  	
+
   	<!-- 거래처 입고/반출등록 - 입고/반출정보 PROD 수정 -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_INSTOCK_PROD
@@ -999,13 +999,13 @@
         AND     SLIP_NO       	= #{slipNo}
         AND     PROD_CD       	= #{prodCd}
     </update>
-  	
+
   	<!-- 거래처 입고/반출등록 - 입고/반출정보 PROD 수정 -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_INSTOCK_PROD
         PARAM    : vendrInstockVO
         COMMENTS : 거래처 입고/반출정보 PROD를 수정한다.
-    
+
     <update id="saveVendrInstockProd" parameterType="vendrInstockVO">
         /* USE : VendrInstockHqMapper.saveVendrInstockProd */
         UPDATE  TB_PO_HQ_VENDR_INSTOCK_PROD
@@ -1016,7 +1016,7 @@
         AND     SLIP_NO       	= #{slipNo}
     </update>
     -->
-    
+
     <select id="getOutStorageCd" parameterType="vendrInstockVO" resultType="String">
         /* USE : VendrInstockHqMapper.getOutStorageCd */
         <![CDATA[
@@ -1026,7 +1026,7 @@
         AND     SLIP_NO         =   #{slipNo}
         ]]>
     </select>
-    
+
     <delete id="deleteVendrInstockProdConfm" parameterType="vendrInstockVO">
         /* USE : VendrInstockHqMapper.deleteVendrInstockProdConfm */
         DELETE  TB_PO_HQ_VENDR_INSTOCK_PROD
@@ -1034,12 +1034,12 @@
         AND     SLIP_NO       	= 	#{slipNo}
 		<if test='delFg != null and delFg == "Y"'>
 		AND		STORAGE_CD		!=	#{outStorageCd}
-		</if>        
+		</if>
     </delete>
-            
+
     <update id="mergeVendrInstockProdConfm" parameterType="vendrInstockVO">
     /* USE : VendrInstockHqMapper.mergeVendrInstockProdConfm */
-    
+
 		MERGE INTO TB_PO_HQ_VENDR_INSTOCK_PROD C
 		USING
 		(
@@ -1059,7 +1059,7 @@
 				,       IN_AMT
 				,       IN_VAT
 				,       IN_TOT
-				FROM    TB_PO_HQ_VENDR_INSTOCK_DTL 
+				FROM    TB_PO_HQ_VENDR_INSTOCK_DTL
 				WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 				AND     SLIP_NO         =   #{slipNo}
 		) N
@@ -1068,7 +1068,7 @@
              AND C.SLIP_NO		= N.SLIP_NO
              AND C.PROD_CD  	= N.PROD_CD
              AND C.STORAGE_CD  	= N.OUT_STORAGE_CD
-             AND C.OCCR_FG		= N.OCCR_FG	              
+             AND C.OCCR_FG		= N.OCCR_FG
 		)
 		WHEN MATCHED THEN
 		UPDATE
@@ -1081,7 +1081,7 @@
 			        SLIP_NO,
 			        PROD_CD,
 			        STORAGE_CD,
-			        OCCR_FG,  
+			        OCCR_FG,
 			        SLIP_FG,
 			        CONFM_YN,
 			        COST_UPRC,
@@ -1116,10 +1116,10 @@
 				, N.IN_VAT
 				, N.IN_TOT
 		       	,		#{regDt}
-				,		#{regId}	
+				,		#{regId}
 				,		#{modDt}
 				,		#{modId}
-		 )    
+		 )
     </update>
     <insert id="saveVendrInstockProd" parameterType="vendrInstockVO">
     /* USE : VendrInstockHqMapper.saveVendrInstockProd */
@@ -1130,7 +1130,7 @@
         SLIP_NO,
         PROD_CD,
         STORAGE_CD,
-        OCCR_FG,  
+        OCCR_FG,
         SLIP_FG,
         CONFM_YN,
         COST_UPRC,
@@ -1164,14 +1164,14 @@
 	,       IN_VAT
 	,       IN_TOT
 	,		#{regDt}
-	,		#{regId}	
+	,		#{regId}
 	,		#{modDt}
 	,		#{modId}
-	FROM    TB_PO_HQ_VENDR_INSTOCK_DTL 
+	FROM    TB_PO_HQ_VENDR_INSTOCK_DTL
 	WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 	AND     SLIP_NO         =   #{slipNo}
     </insert>
-  	
+
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 삭제 -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
@@ -1185,20 +1185,20 @@
         AND     SLIP_NO       = #{slipNo}
         AND     PROD_CD       = #{prodCd}
     </delete>
-    
+
     <delete id="deleteVendrInstockProd" parameterType="vendrInstockVO">
         /* USE : VendrInstockHqMapper.deleteVendrInstockProd */
         DELETE  TB_PO_HQ_VENDR_INSTOCK_PROD
         WHERE   HQ_OFFICE_CD  	= 	#{hqOfficeCd}
         AND     SLIP_NO       	= 	#{slipNo}
-        AND     PROD_CD       	= 	#{prodCd}        
+        AND     PROD_CD       	= 	#{prodCd}
         AND		OCCR_FG			=	#{occrFg}
 		<if test='delFg != null and delFg == "Y"'>
 		AND		STORAGE_CD		!=	#{outStorageCd}
-		</if>        
+		</if>
     </delete>
-        
-   
+
+
     <!-- 거래처 입고/반출등록 - 입고/반출 상품 공급가 수정(본사) -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL

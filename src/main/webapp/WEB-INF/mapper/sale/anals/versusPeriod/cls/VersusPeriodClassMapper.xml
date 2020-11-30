@@ -79,9 +79,9 @@
 				                                    FROM    TB_HQ_PRODUCT_CLASS
 				                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                                )
-				                        START WITH  P_PROD_CLASS_CD ='00000'
+				                        START WITH  P_PROD_CLASS_CD ='00000' AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                        CONNECT BY
-				                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+				                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                        )   A
 
 				                ]]>
@@ -119,14 +119,14 @@
 		                                            FROM    TB_MS_PRODUCT_CLASS
 		                                            WHERE   STORE_CD    =  #{storeCd}
 		                                        )
-		                                START WITH  P_PROD_CLASS_CD ='00000'
+		                                START WITH  P_PROD_CLASS_CD ='00000' AND         STORE_CD    =  #{storeCd}
 		                                CONNECT BY
-		                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+		                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         STORE_CD    =  #{storeCd}
 		                                )   A
 		                    ]]>
 							  ) A
-							  
-							  
+
+
 				</when>
     			</choose>
 		       		  		, (
@@ -168,7 +168,7 @@
 									GROUP BY C.STORE_CD
 									  	   , C.PROD_CD
 									  ) C
-							  WHERE B.STORE_CD = C.STORE_CD(+) 
+							  WHERE B.STORE_CD = C.STORE_CD(+)
 							  AND	B.PROD_CD = C.PROD_CD(+)
 							  GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 							  ) B
@@ -224,9 +224,9 @@
 				                                    FROM    TB_HQ_PRODUCT_CLASS
 				                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                                )
-				                        START WITH  P_PROD_CLASS_CD ='00000'
+				                        START WITH  P_PROD_CLASS_CD ='00000' AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                        CONNECT BY
-				                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+				                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
 				                        )   A
 
 				                ]]>
@@ -264,9 +264,9 @@
 		                                            FROM    TB_MS_PRODUCT_CLASS
 		                                            WHERE   STORE_CD    =  #{storeCd}
 		                                        )
-		                                START WITH  P_PROD_CLASS_CD ='00000'
+		                                START WITH  P_PROD_CLASS_CD ='00000'  AND         STORE_CD    =  #{storeCd}
 		                                CONNECT BY
-		                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+		                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD AND         STORE_CD    =  #{storeCd}
 		                                )   A
 		                    ]]>
 							  ) A
@@ -451,7 +451,7 @@
 											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
-											 WHERE  C.HQ_OFFICE_CD = #{hqOfficeCd}											
+											 WHERE  C.HQ_OFFICE_CD = #{hqOfficeCd}
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
 									   	   	  	   AND C.STORE_CD IN
 										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

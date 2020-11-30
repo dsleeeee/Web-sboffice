@@ -185,7 +185,7 @@
             </when>
         </choose>
     </select>
-    
+
 
     <!-- 거래처 발주등록 - 신규전표번호 조회 -->
     <!--
@@ -199,7 +199,7 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                <![CDATA[                    
+                <![CDATA[
     			SELECT  DECODE(tphvo.PROC_FG,'0','N','Y')	AS	CHK_PROC_FG
                 FROM    TB_PO_HQ_VENDR_ORDER tphvo
                 WHERE   tphvo.HQ_OFFICE_CD  =   #{hqOfficeCd}
@@ -413,8 +413,8 @@
                                                 SELECT  thpc.PROD_CLASS_CD
                                                 FROM    TB_HQ_PRODUCT_CLASS thpc
                                                 WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                                                START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                                CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                                START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND         thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                               )
                 </if>
                 <if test='safeStockFg == "Y"'>
@@ -492,8 +492,8 @@
                                                 SELECT  tmpc.PROD_CLASS_CD
                                                 FROM    TB_MS_PRODUCT_CLASS tmpc
                                                 WHERE   tmpc.STORE_CD = #{storeCd}
-                                                START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                                CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                                START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}  AND     tmpc.STORE_CD = #{storeCd}
+                                                CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD  AND     tmpc.STORE_CD = #{storeCd}
                                               )
                 </if>
                 <if test='safeStockFg == "Y"'>

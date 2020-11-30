@@ -375,8 +375,8 @@
                                         SELECT  tmpc.PROD_CLASS_CD
                                         FROM    TB_MS_PRODUCT_CLASS tmpc
                                         WHERE   tmpc.STORE_CD = #{storeCd}
-                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND   tmpc.STORE_CD = #{storeCd}
+                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND   tmpc.STORE_CD = #{storeCd}
                                       )
                           -->
 			AND	tmp.PROD_CLASS_CD in (SELECT
@@ -386,11 +386,9 @@
 									  WHERE
 									      tmpc.STORE_CD = #{storeCd}
 									  START WITH
-									      tmpc.PROD_CLASS_CD = #{prodClassCd}
-									      AND tmpc.STORE_CD = #{storeCd}
+									      tmpc.PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
 									  CONNECT BY
-									      PRIOR tmpc.PROD_CLASS_CD = tmpc.P_PROD_CLASS_CD
-									      AND tmpc.STORE_CD = #{storeCd}
+									      PRIOR tmpc.PROD_CLASS_CD = tmpc.P_PROD_CLASS_CD  AND tmpc.STORE_CD = #{storeCd}
 			)
 			                                      
         </if>

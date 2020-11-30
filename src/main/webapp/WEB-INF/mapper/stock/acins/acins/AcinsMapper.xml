@@ -44,7 +44,7 @@
         ,       tssai.ACINS_TITLE, tssai.PROC_FG, tssai.DTL_CNT
         ,       tssai.ADJ_CNT, tssai.CONFM_DATE
         ,       SUBSTR(tssai.REG_DT,0,8) AS REG_DATE
-        ,		tssai.ADJ_STORAGE_CD        
+        ,		tssai.ADJ_STORAGE_CD
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
         WHERE   tssai.STORE_CD    = #{storeCd}
         AND     tssai.ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -69,12 +69,12 @@
         <![CDATA[
         SELECT  tshai.PROC_FG, tshai.ACINS_TITLE, tshai.ADJ_STORAGE_CD, ths.STORAGE_NM
         FROM    TB_ST_HQ_ACTUAL_INSPECTION tshai
-		,       TB_HQ_STORAGE               ths        
+		,       TB_HQ_STORAGE               ths
         WHERE   tshai.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tshai.ACINS_DATE    = #{acinsDate}
         AND     tshai.SEQ_NO        = #{seqNo}
 		AND     tshai.HQ_OFFICE_CD      = ths.HQ_OFFICE_CD
-		AND     tshai.ADJ_STORAGE_CD    = ths.STORAGE_CD        
+		AND     tshai.ADJ_STORAGE_CD    = ths.STORAGE_CD
         ]]>
     </select>
 
@@ -90,12 +90,12 @@
         <![CDATA[
         SELECT  tssai.PROC_FG, tssai.ACINS_TITLE, tssai.ADJ_STORAGE_CD, tms.STORAGE_NM
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
-        ,       TB_MS_STORAGE               tms        
+        ,       TB_MS_STORAGE               tms
         WHERE   tssai.STORE_CD      = #{storeCd}
         AND     tssai.ACINS_DATE    = #{acinsDate}
         AND     tssai.SEQ_NO        = #{seqNo}
         AND		tssai.STORE_CD		= tms.STORE_CD
-        AND		tssai.ADJ_STORAGE_CD = tms.STORAGE_CD 
+        AND		tssai.ADJ_STORAGE_CD = tms.STORAGE_CD
         ]]>
     </select>
 
@@ -135,7 +135,7 @@
                     ,       TB_ST_HQ_STOCK_MONTHLY tshsm
                     WHERE   tshsc.HQ_OFFICE_CD    	=   #{hqOfficeCd}
                      AND		tshsc.STORAGE_CD	=	#{storageCd}
-                    AND		tshsc.STORAGE_CD IN (SELECT X.STORAGE_CD FROM TB_HQ_STORAGE X WHERE X.HQ_OFFICE_CD  =   #{hqOfficeCd} AND X.AREA_FG    =   #{areaFg})	
+                    AND		tshsc.STORAGE_CD IN (SELECT X.STORAGE_CD FROM TB_HQ_STORAGE X WHERE X.HQ_OFFICE_CD  =   #{hqOfficeCd} AND X.AREA_FG    =   #{areaFg})
                     AND     tshsm.IOSTOCK_YM  (+) 	=   SUBSTR(#{acinsDate}, 0, 6)
                     AND     tshsm.HQ_OFFICE_CD(+) 	=   tshsc.HQ_OFFICE_CD
                     AND     tshsm.PROD_CD     (+) 	=   tshsc.PROD_CD
@@ -169,7 +169,9 @@
                                         FROM    TB_HQ_PRODUCT_CLASS thpc
                                         WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                         START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        AND     thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                         CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                        AND     thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                       )
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
@@ -267,7 +269,9 @@
                                         FROM    TB_MS_PRODUCT_CLASS tmpc
                                         WHERE   tmpc.STORE_CD = #{storeCd}
                                         START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        AND     tmpc.STORE_CD = #{storeCd}
                                         CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                        AND     tmpc.STORE_CD = #{storeCd}
                                       )
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
@@ -391,7 +395,7 @@
         AND     tshaid.SEQ_NO           =   #{seqNo}
         AND		tshaid.HQ_OFFICE_CD     =   tshai.HQ_OFFICE_CD
         AND     tshaid.ACINS_DATE       =   tshai.ACINS_DATE
-        AND     tshaid.SEQ_NO           =   tshai.SEQ_NO        
+        AND     tshaid.SEQ_NO           =   tshai.SEQ_NO
         AND     tshaid.HQ_OFFICE_CD     =   thp.HQ_OFFICE_CD
         AND     tshaid.PROD_CD          =   thp.PROD_CD
         AND     tshsm.PROD_CD       (+) =   tshaid.PROD_CD
@@ -464,7 +468,7 @@
         AND     tssaid.SEQ_NO           =   #{seqNo}
         AND		tssaid.STORE_CD     	=   tssai.STORE_CD
         AND     tssaid.ACINS_DATE       =   tssai.ACINS_DATE
-        AND     tssaid.SEQ_NO           =   tssai.SEQ_NO           
+        AND     tssaid.SEQ_NO           =   tssai.SEQ_NO
         AND     tssaid.STORE_CD         =   tmp.STORE_CD
         AND     tssaid.PROD_CD          =   tmp.PROD_CD
         AND     tsssm.PROD_CD       (+) =   tssaid.PROD_CD
@@ -877,7 +881,7 @@
                     AND     tshaid.SEQ_NO       =   #{seqNo}
                 )
         ,       ACINS_TITLE = #{acinsTitle}
-        ,       ADJ_STORAGE_CD = #{adjStorageCd}        
+        ,       ADJ_STORAGE_CD = #{adjStorageCd}
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})

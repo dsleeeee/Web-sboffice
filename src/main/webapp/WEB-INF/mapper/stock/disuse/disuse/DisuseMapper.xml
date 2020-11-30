@@ -17,7 +17,7 @@
         ,       tshd.DISUSE_TITLE, tshd.PROC_FG, tshd.DTL_CNT
         ,       tshd.CONFM_DATE
         ,       SUBSTR(tshd.REG_DT,0,8) AS REG_DATE
-        ,		tshd.DISUSE_STORAGE_CD        
+        ,		tshd.DISUSE_STORAGE_CD
         FROM    TB_ST_HQ_DISUSE tshd
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -44,7 +44,7 @@
         ,       tssd.DISUSE_TITLE, tssd.PROC_FG, tssd.DTL_CNT
         ,       tssd.CONFM_DATE
         ,       SUBSTR(tssd.REG_DT,0,8) AS REG_DATE
-        ,		tssd.DISUSE_STORAGE_CD        
+        ,		tssd.DISUSE_STORAGE_CD
         FROM    TB_ST_STORE_DISUSE tssd
         WHERE   tssd.STORE_CD     = #{storeCd}
         AND     tssd.DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -69,12 +69,12 @@
         <![CDATA[
         SELECT  tshd.PROC_FG, tshd.DISUSE_TITLE, tshd.DISUSE_STORAGE_CD, ths.STORAGE_NM
         FROM    TB_ST_HQ_DISUSE tshd
-        ,       TB_HQ_STORAGE               ths        
+        ,       TB_HQ_STORAGE               ths
         WHERE   tshd.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tshd.DISUSE_DATE   = #{disuseDate}
         AND     tshd.SEQ_NO        = #{seqNo}
 		AND     tshd.HQ_OFFICE_CD      = ths.HQ_OFFICE_CD
-		AND     tshd.DISUSE_STORAGE_CD    = ths.STORAGE_CD         
+		AND     tshd.DISUSE_STORAGE_CD    = ths.STORAGE_CD
         ]]>
     </select>
 
@@ -90,12 +90,12 @@
         <![CDATA[
         SELECT  tssd.PROC_FG, tssd.DISUSE_TITLE, tssd.DISUSE_STORAGE_CD, tms.STORAGE_NM
         FROM    TB_ST_STORE_DISUSE tssd
-        ,       TB_MS_STORAGE               tms        
+        ,       TB_MS_STORAGE               tms
         WHERE   tssd.STORE_CD      = #{storeCd}
         AND     tssd.DISUSE_DATE   = #{disuseDate}
         AND     tssd.SEQ_NO        = #{seqNo}
         AND		tssd.STORE_CD		= tms.STORE_CD
-        AND		tssd.DISUSE_STORAGE_CD = tms.STORAGE_CD         
+        AND		tssd.DISUSE_STORAGE_CD = tms.STORAGE_CD
         ]]>
     </select>
 
@@ -167,7 +167,9 @@
                                         FROM    TB_HQ_PRODUCT_CLASS thpc
                                         WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                         START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        AND     thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                         CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                        AND     thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                                       )
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
@@ -263,7 +265,9 @@
                                         FROM    TB_MS_PRODUCT_CLASS tmpc
                                         WHERE   tmpc.STORE_CD = #{storeCd}
                                         START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        AND     tmpc.STORE_CD = #{storeCd}
                                         CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                        AND     tmpc.STORE_CD = #{storeCd}
                                       )
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
@@ -351,7 +355,7 @@
         ,       tshdd.DISUSE_AMT
         ,       tshdd.REMARK
         ,       'U' AS DISUSE_PROD_STATUS
-        ,		tshd.DISUSE_STORAGE_CD        
+        ,		tshd.DISUSE_STORAGE_CD
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -385,7 +389,7 @@
         AND     tshdd.SEQ_NO            =   #{seqNo}
         AND		tshdd.HQ_OFFICE_CD     		=   tshd.HQ_OFFICE_CD
         AND     tshdd.DISUSE_DATE       =   tshd.DISUSE_DATE
-        AND     tshdd.SEQ_NO           	=   tshd.SEQ_NO         
+        AND     tshdd.SEQ_NO           	=   tshd.SEQ_NO
         AND     tshdd.HQ_OFFICE_CD      =   thp.HQ_OFFICE_CD
         AND     tshdd.PROD_CD           =   thp.PROD_CD
         AND     tshsm.PROD_CD       (+) =   tshdd.PROD_CD
@@ -422,7 +426,7 @@
         ,       tssdd.DISUSE_AMT
         ,       tssdd.REMARK
         ,       'U' AS DISUSE_PROD_STATUS
-        ,		tssd.DISUSE_STORAGE_CD         
+        ,		tssd.DISUSE_STORAGE_CD
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -456,7 +460,7 @@
         AND     tssdd.SEQ_NO            =   #{seqNo}
         AND		tssdd.STORE_CD     	=   tssd.STORE_CD
         AND     tssdd.DISUSE_DATE       =   tssd.DISUSE_DATE
-        AND     tssdd.SEQ_NO           =   tssd.SEQ_NO         
+        AND     tssdd.SEQ_NO           =   tssd.SEQ_NO
         AND     tssdd.STORE_CD          =   tmp.STORE_CD
         AND     tssdd.PROD_CD           =   tmp.PROD_CD
         AND     tsssm.PROD_CD       (+) =   tssdd.PROD_CD
@@ -821,7 +825,7 @@
                     AND     tshdd.SEQ_NO        =   #{seqNo}
                 )
         ,       DISUSE_TITLE = #{disuseTitle}
-        ,       DISUSE_STORAGE_CD = #{disuseStorageCd}        
+        ,       DISUSE_STORAGE_CD = #{disuseStorageCd}
         ,       PROC_FG      = #{procFg}
         ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})
@@ -851,7 +855,7 @@
                     AND     tssdd.SEQ_NO        =   #{seqNo}
                 )
         ,       DISUSE_TITLE = #{disuseTitle}
-        ,       DISUSE_STORAGE_CD = #{disuseStorageCd}        
+        ,       DISUSE_STORAGE_CD = #{disuseStorageCd}
         ,       PROC_FG      = #{procFg}
         ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})

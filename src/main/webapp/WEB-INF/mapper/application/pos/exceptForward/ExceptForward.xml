@@ -42,8 +42,8 @@
                ) tmp
          WHERE tmpc.STORE_CD = #{storeCd}
            AND tmp.STORE_CD = tmpc.STORE_CD
-         START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
-       CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD
+         START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD AND tmp.STORE_CD = tmpc.STORE_CD
+       CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD AND tmp.STORE_CD = tmpc.STORE_CD
            AND tmpc.STORE_CD = #{storeCd}
            AND tmpc.P_PROD_CLASS_CD IS NOT NULL
          GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
@@ -126,8 +126,8 @@
                                        SELECT tmpc.PROD_CLASS_CD
                                          FROM TB_MS_PRODUCT_CLASS tmpc
                                         WHERE tmpc.STORE_CD = #{storeCd}
-                                        START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                      CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                                        START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+                                      CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
                                       )
         </if>
         <if test="prodCd != null and prodCd != ''">

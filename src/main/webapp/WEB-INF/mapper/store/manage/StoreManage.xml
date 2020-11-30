@@ -2616,6 +2616,7 @@
         WHERE tmpc.store_cd = #{storeCd}
         AND tmp.STORE_CD = tmpc.STORE_CD
         START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+        AND tmpc.STORE_CD = #{storeCd}
         CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD
         AND tmpc.STORE_CD = #{storeCd}
         AND tmpc.P_PROD_CLASS_CD IS NOT NULL
