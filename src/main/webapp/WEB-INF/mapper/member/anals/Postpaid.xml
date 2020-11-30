@@ -32,11 +32,10 @@
                TB_MB_MEMBER tmm,
                TB_MS_STORE tms
          WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-           AND tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
            AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
            AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
            AND tms.STORE_CD = tmmpb.STORE_CD
-      <if test='storeCds != null and storeCds != ""'>
+        <if test='storeCds != null and storeCds != ""'>
            AND tmmpb.STORE_CD IN
           <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
              #{item}
@@ -69,38 +68,40 @@
     <select id="getDepositMemberList" parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* PostpaidMapper.getDepositMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmmcs.MEMBR_ORGN_CD,
-               tmmcs.MEMBR_NO,
-                SBPENC.D(tmmcs.MEMBR_NM) AS MEMBR_NM,
-               tmmcs.STORE_CD,
-               tmmcs.STORE_NM
-          <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM (
-          SELECT tmmcs.MEMBR_ORGN_CD,
-                 tmmcs.MEMBR_NO AS MEMBR_NO,
-                 (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = tmmcs.MEMBR_ORGN_CD AND MEMBR_NO = tmmcs.MEMBR_NO) AS MEMBR_NM,
-                 tmmcs.STORE_CD,
-                 (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmmcs.MEMBR_ORGN_CD AND STORE_CD = tmmcs.STORE_CD) AS STORE_NM
+        SELECT
+        tmmcs.MEMBR_ORGN_CD,
+        tmmcs.MEMBR_NO,
+        SBPENC.D(tmmcs.MEMBR_NM) AS MEMBR_NM,
+        tmmcs.STORE_CD,
+        tmmcs.STORE_NM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT
+            tmmcs.MEMBR_ORGN_CD,
+            tmmcs.MEMBR_NO AS MEMBR_NO,
+            (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = tmmcs.MEMBR_ORGN_CD AND MEMBR_NO = tmmcs.MEMBR_NO) AS MEMBR_NM,
+            tmmcs.STORE_CD,
+            (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmmcs.MEMBR_ORGN_CD AND STORE_CD = tmmcs.STORE_CD) AS STORE_NM
             FROM TB_MB_MEMBER_POSTPAID_STORE tmmcs
-           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-               ) tmmcs
-        <where>
-          <if test='storeCd != null and storeCd != ""'>
-            AND tmmcs.STORE_CD LIKE '%'|| #{storeCd} ||'%'
-          </if>
-          <if test='storeNm != null and storeNm != ""'>
+            WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+            <if test='storeCd != null and storeCd != ""'>
+              AND tmmcs.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+            </if>
+            <if test='membrNo != null and membrNo != ""'>
+              AND tmmcs.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+            </if>
+            <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
+                AND tmmcs.STORE_CD != #{defaultStoreCd}
+            </if>
+        ) tmmcs
+        WHERE 1=1
+        <if test='storeNm != null and storeNm != ""'>
             AND tmmcs.STORE_NM LIKE '%'|| #{storeNm} ||'%'
-          </if>
-          <if test='membrNo != null and membrNo != ""'>
-            AND tmmcs.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
-          </if>
-          <if test='membrNm != null and membrNm != ""'>
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
             AND SBPENC.D(tmmcs.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
-          </if>
-          <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
-            AND tmmcs.STORE_CD != #{defaultStoreCd}
-          </if>
-        </where>
+        </if>
         ORDER BY tmmcs.STORE_CD, tmmcs.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

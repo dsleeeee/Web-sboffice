@@ -31,8 +31,7 @@
         FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
              TB_MB_MEMBER tmm,
              TB_MS_STORE tms
-       WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
-         AND tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
+       WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
          AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
          AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
          AND tms.STORE_CD = tmmpb.STORE_CD
@@ -73,32 +72,37 @@
              tms.STORE_NM,
              tmm.MEMBR_NO,
             SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
-        FROM TB_MB_MEMBER tmm,
+      FROM TB_MB_MEMBER tmm,
              TB_MS_STORE tms
-       WHERE tms.STORE_CD = tmm.REG_STORE_CD
-         AND MEMBR_ORGN_CD = #{hqOfficeCd}
-      <if test='defaultStoreCd != null and defaultStoreCd != ""'>
-         AND tmm.REG_STORE_CD != #{defaultStoreCd}
-      </if>
-      <if test='prepaidStoreCd != null and prepaidStoreCd != ""'>
-        AND tmm.REG_STORE_CD = #{prepaidStoreCd}
-      </if>
-      <if test='prepaidStoreNm != null and prepaidStoreNm != ""'>
-        <![CDATA[
-        AND tms.STORE_NM LIKE '%'|| #{prepaidStoreNm} ||'%'
-        ]]>
-      </if>
-      <if test='membrNo != null and membrNo != ""'>
-        <![CDATA[
-        AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
-        ]]>
-      </if>
-
-      <if test='membrNm != null and membrNm != ""'>
-        <![CDATA[
-        AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
-        ]]>
-      </if>
+      WHERE tms.STORE_CD = tmm.REG_STORE_CD
+          AND MEMBR_ORGN_CD = #{membrOrgnCd}
+          <if test='storeCd != null and storeCd != ""'>
+              <![CDATA[
+                  AND tmm.REG_STORE_CD = #{storeCd}
+              ]]>
+          </if>
+          <if test='defaultStoreCd != null and defaultStoreCd != ""'>
+             AND tmm.REG_STORE_CD != #{defaultStoreCd}
+          </if>
+          <if test='prepaidStoreCd != null and prepaidStoreCd != ""'>
+            AND tmm.REG_STORE_CD = #{prepaidStoreCd}
+          </if>
+          <if test='prepaidStoreNm != null and prepaidStoreNm != ""'>
+            <![CDATA[
+            AND tms.STORE_NM LIKE '%'|| #{prepaidStoreNm} ||'%'
+            ]]>
+          </if>
+          <if test='membrNo != null and membrNo != ""'>
+            <![CDATA[
+            AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+            ]]>
+          </if>
+          <if test='membrNm != null and membrNm != ""'>
+            <![CDATA[
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
+            ]]>
+          </if>
+      ORDER BY tmm.REG_STORE_CD, tmm.MEMBR_NO
   </select>
 
   <!-- 충전입금 -->

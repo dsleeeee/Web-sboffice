@@ -17,6 +17,7 @@ var app = agrid.getApp();
  *  후불회원 그리드 생성
  */
 app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('depositCtrl', $scope, $http, true));
 
@@ -64,7 +65,6 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
   // 외상입금 대상 회원 목록 조회
   $scope.getMemberList = function(){
     var params = {};
-
     params.storeCd = $("#searchDepositStoreCd").val();
     params.storeNm = $("#searchDepositStoreNm").val();
     params.membrNo = $("#searchDepositMemberNo").val();
@@ -75,6 +75,7 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
+
     // 비밀번호 변경 팝업 핸들러 추가
     $scope.depositRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {

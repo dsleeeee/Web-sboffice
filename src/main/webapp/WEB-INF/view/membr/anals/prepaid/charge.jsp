@@ -1,6 +1,8 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <!-- 선불 충전 -->
 <wj-popup control="chargeLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
@@ -10,9 +12,9 @@
       <s:message code="prepaid.regist.charge" />
       <a href="javascript:" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body">
 
-      <table class="tblType01 mt20">
+    <div class="wj-dialog-body">
+      <table class="tblType01">
         <colgroup>
           <col class="w15" />
           <col class="w35" />
@@ -20,7 +22,7 @@
           <col class="w35" />
         </colgroup>
         <tbody>
-        <tr>
+        <tr <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if> >
           <th><s:message code="prepaid.storeCd"/></th>
           <td><input type="text" ng-model="storeCd" id="searchChargeStoreCd"/></td>
           <th><s:message code="prepaid.storeNm"/></th>
@@ -40,7 +42,7 @@
         <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('chargeCtrl')" ><s:message code="cmm.search" /></button>
       </div>
 
-      <div class="oh mt40">
+      <div class="oh mt10">
         <%--- 적용매장 그리드 --%>
         <div class="wj-TblWrap mr10" style="height:350px;" ng-controller="chargeCtrl">
 
@@ -72,12 +74,11 @@
               <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="*" ></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
-          <!--페이지 리스트-->
-          <!--//페이지 리스트-->
         </div>
       </div>
     </div>
   </div>
+
 </wj-popup>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/charge.js?ver=2018081701" charset="utf-8"></script>

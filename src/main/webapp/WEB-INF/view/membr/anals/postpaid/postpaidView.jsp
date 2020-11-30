@@ -39,21 +39,20 @@
         </jsp:include>
         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
       </td>
-      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
       <%-- 회원번호 --%>
       <th><s:message code="postpaid.membrNo" /></th>
       <td>
         <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="membrNo" />
       </td>
-    </tr>
-    <tr>
       <%-- 회원명 --%>
       <th><s:message code="postpaid.membrNm" /></th>
       <td>
         <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" />
       </td>
-      <th></th>
-      <td></td>
     </tr>
     </tbody>
   </table>

@@ -64,7 +64,7 @@ public class PostpaidServiceImpl implements PostpaidService {
         String[] storeCds = postpaidStoreVO.getStoreCds().split(",");
 
         postpaidStoreVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         postpaidStoreVO.setStoreCdList(storeCds);
 
@@ -73,8 +73,7 @@ public class PostpaidServiceImpl implements PostpaidService {
 
     /** 후불 대상 회원 조회 */
     @Override
-    public List<DefaultMap<Object>> getDepositMemberList(PostpaidStoreVO postpaidStoreVO,
-        SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getDepositMemberList(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO) {
 
         // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
         String defaultStoreCd = "";
@@ -84,7 +83,10 @@ public class PostpaidServiceImpl implements PostpaidService {
         }
 
         postpaidStoreVO.setDefaultStoreCd(defaultStoreCd);
-        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return mapper.getDepositMemberList(postpaidStoreVO);
     }
@@ -128,7 +130,7 @@ public class PostpaidServiceImpl implements PostpaidService {
     @Override
     public List<DefaultMap<Object>> getTaxBillList(TaxBillVO taxBillVO, SessionInfoVO sessionInfoVO) {
 
-        taxBillVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        taxBillVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         taxBillVO.setStatusFg(StatusFg.REQEUST); // 요청목록만 조회
 
         return mapper.getTaxBillList(taxBillVO);
@@ -154,7 +156,11 @@ public class PostpaidServiceImpl implements PostpaidService {
         // 외상입금 처리 // todo 이거 완료하고 나서 목록에서 매핑되는 세금계산서도 보여줘야 함.
         PostpaidStoreVO postpaidStoreVO = new PostpaidStoreVO();
 
-        postpaidStoreVO.setMembrOrgnCd(taxBillVO.getMembrOrgnCd());
+        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+//        postpaidStoreVO.setMembrOrgnCd(taxBillVO.getMembrOrgnCd());
         postpaidStoreVO.setMembrNo(taxBillVO.getMembrNo());
         postpaidStoreVO.setSaleDate(currentDateString());
         postpaidStoreVO.setPostpaidDt(dt);

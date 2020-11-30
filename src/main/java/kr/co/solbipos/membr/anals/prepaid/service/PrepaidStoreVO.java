@@ -21,6 +21,8 @@ import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidPayFg;
  */
 public class PrepaidStoreVO extends PageVO {
 
+    /** 회원소속코드 */
+    private String membrOrgnCd;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 매장코드 */
@@ -58,6 +60,10 @@ public class PrepaidStoreVO extends PageVO {
     private String[] storeCdList;
     /** 기본매장  */
     private String defaultStoreCd;
+
+    public String getMembrOrgnCd() { return membrOrgnCd; }
+
+    public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
 
     /**
      * @return the hqOfficeCd
