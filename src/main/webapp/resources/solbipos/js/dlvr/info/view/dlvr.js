@@ -115,8 +115,6 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(movedRows+1);
-                    $scope.flex.collectionView.items[i-1].pageNo = String(movedRows);
                 }
             }
         }
@@ -136,9 +134,6 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(movedRows-1);
-                    $scope.flex.collectionView.items[i+1].pageNo = String(movedRows);
-                    console.log(movedRows)
                 }
             }
         }
@@ -170,12 +165,13 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
         for (var s = 0; s < editItems.length; s++) {
             editItems[s].pageNo = (s + 1);
             $scope.flex.collectionView.editItem(editItems[s]);
+            editItems[s].status = "U";
             $scope.flex.collectionView.commitEdit();
         }
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            params.push($scope.flex.collectionView.itemsEdited[i]);
+        for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+            $scope.flex.collectionView.itemsEdited[u].status = "U";
+            params.push($scope.flex.collectionView.itemsEdited[u]);
         }
 
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
@@ -346,8 +342,6 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(movedRows+1);
-                    $scope.flex.collectionView.items[i-1].pageNo = String(movedRows);
                 }
             }
         }
@@ -367,8 +361,6 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
                     $scope.flex.collectionView.items[i] = tmpItem;
                     $scope.flex.collectionView.commitEdit();
                     $scope.flex.collectionView.refresh();
-                    $scope.flex.collectionView.items[i].pageNo = String(movedRows-1);
-                    $scope.flex.collectionView.items[i+1].pageNo = String(movedRows);
                 }
             }
         }
@@ -400,12 +392,13 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
         for (var s = 0; s < editItems.length; s++) {
             editItems[s].pageNo = (s + 1);
             $scope.flex.collectionView.editItem(editItems[s]);
+            editItems[s].status = "U";
             $scope.flex.collectionView.commitEdit();
         }
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            params.push($scope.flex.collectionView.itemsEdited[i]);
+        for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+            $scope.flex.collectionView.itemsEdited[u].status = "U";
+            params.push($scope.flex.collectionView.itemsEdited[u]);
         }
 
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
@@ -418,7 +411,6 @@ app.controller('dlvrManageDetailCtrl', ['$scope', '$http', function ($scope, $ht
                 $scope._popMsg(messages["dlvrManage.areaNm"] + messages["excelUpload.overLength"] + " 50 ");
                 return false;
             }
-
             $scope.flex.collectionView.itemsAdded[i].status = "I";
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
