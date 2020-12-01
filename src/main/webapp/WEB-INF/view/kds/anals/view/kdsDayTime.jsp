@@ -351,7 +351,7 @@
                                      binding="cntHh11" width="70" is-read-only="true"
                                      align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>"
-                                     binding="makeHh112" width="80" is-read-only="true"
+                                     binding="makeHh11" width="80" is-read-only="true"
                                      align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>"
                                      binding="picHh11" width="80" is-read-only="true"

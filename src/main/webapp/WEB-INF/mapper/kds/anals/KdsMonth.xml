@@ -51,8 +51,16 @@
         SUBSTR(toodkd.SALE_DATE, 0, 6), toodkd.STORE_CD, toodkd.PROD_CD ) C,
         TB_MS_STORE D
         WHERE
-            B.PROD_CD = C.PROD_CD
-        AND C.STORE_CD = D.STORE_CD(+)
+        C.PROD_CD (+)= B.PROD_CD
+        <choose>
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                AND D.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+            </when>
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                AND C.STORE_CD = B.STORE_CD
+            </when>
+        </choose>
+        AND C.STORE_CD = D.STORE_CD
         <if test = 'hqOfficeCd != null and hqOfficeCd != ""'>
             AND B.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
