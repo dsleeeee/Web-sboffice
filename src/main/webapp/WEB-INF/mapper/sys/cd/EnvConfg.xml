@@ -73,7 +73,7 @@
                 tce.ENVST_CD = #{envstCd}
             </if>
             <if test='envstNm != null and envstNm != ""'>
-                AND tce.ENVST_NM LIKE #{envstNm}||'%'
+                AND tce.ENVST_NM LIKE '%'||#{envstNm}||'%'
             </if>
             <if test='envstFg != null and envstFg != ""'>
                 AND tce.ENVST_FG = #{envstFg}

@@ -35,7 +35,7 @@
         <if test='nmcodeCd != null and nmcodeCd != ""'>
             AND NMCODE_CD LIKE #{nmcodeCd}||'%'
         </if><if test='nmcodeNm != null and nmcodeNm != ""'>
-            AND NMCODE_NM LIKE #{nmcodeNm}||'%'
+            AND NMCODE_NM LIKE '%'||#{nmcodeNm}||'%'
         </if>
         <if test='useTargetFg != null and useTargetFg != ""'>
             AND tcn.USE_TARGET_FG = #{useTargetFg}

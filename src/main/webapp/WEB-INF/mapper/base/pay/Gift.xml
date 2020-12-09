@@ -178,6 +178,8 @@
                 #{hqOfficeCd},
                 #{payTypeFg, jdbcType=VARCHAR},
                 #{payClassCd},
+                #{regDt},
+                #{regId},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
@@ -213,6 +215,8 @@
                 #{hqOfficeCd},
                 #{payTypeFg, jdbcType=VARCHAR},
                 #{payClassCd},
+                #{regDt},
+                #{regId},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
