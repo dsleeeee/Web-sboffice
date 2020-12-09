@@ -37,8 +37,8 @@
         ,       G.TOT_REFUND_CNT
         ,       G.MIN_SALE_YM
         ,       G.MAX_SALE_YM
-        ,       CASE WHEN G.MIN_SALE_DATE !='' THEN TO_CHAR(TO_DATE(G.MIN_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MIN_SALE_DATE
-        ,       CASE WHEN G.MAX_SALE_DATE !='' THEN TO_CHAR(TO_DATE(G.MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MAX_SALE_DATE
+        ,       CASE WHEN G.MIN_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(G.MIN_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MIN_SALE_DATE
+        ,       CASE WHEN G.MAX_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(G.MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MAX_SALE_DATE
         ,       H.P_BILL_CNT
         ,       H.P_SALE_CNT
         ,       H.P_RTN_SALE_CNT
