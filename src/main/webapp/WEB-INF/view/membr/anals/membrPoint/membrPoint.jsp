@@ -48,7 +48,7 @@
                     <s:message code="membrPoint.storeNm"/>
                 </th>
                 <td>
-                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
                         <jsp:param name="targetId" value="membrStore"/>
                     </jsp:include>
@@ -58,25 +58,6 @@
                         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                 </td>
             </c:if>
-            <%-- 회원번호 --%>
-            <th>
-                <s:message code="membrPoint.membrNo"/>
-            </th>
-            <td>
-                <input type="text" class="sb-input w100" id="srchMembrNo" ng-model="membrNo"/>
-            </td>
-            <c:if test="${orgnFg == 'STORE'}">
-                <td></td>
-            </c:if>
-        </tr>
-        <tr>
-            <%-- 회원명 --%>
-            <th>
-                <s:message code="membrPoint.membrNm"/>
-            </th>
-            <td>
-                <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm"/>
-            </td>
             <%-- 정렬 --%>
             <th>
                 <s:message code="membrPoint.array"/>
@@ -94,18 +75,39 @@
                     </wj-combo-box>
                 </div>
             </td>
+            <c:if test="${orgnFg == 'STORE'}">
+                <td></td>
+                <td></td>
+            </c:if>
+        </tr>
+        <tr>
+            <%-- 회원번호 --%>
+            <th>
+                <s:message code="membrPoint.membrNo"/>
+            </th>
+            <td>
+                <input type="text" class="sb-input w100" id="srchMembrNo" ng-model="membrNo"/>
+            </td>
+            <%-- 회원명 --%>
+            <th>
+                <s:message code="membrPoint.membrNm"/>
+            </th>
+            <td>
+                <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm"/>
+            </td>
         </tr>
         </tbody>
     </table>
     <div class="mt20 oh sb-select dkbr">
-        <button class="btn_skyblue mr5 mt5 fr" ng-click="excelDownload()">
-            <s:message code="member.excel"/>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down" />
         </button>
     </div>
     <%-- 그리드 --%>
     <div class="w100 fl mt10 mb20">
-        <div class="wj-TblWrapBr " style="height: 600px;">
-            <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-TblWrapBr " style="height: 470px;">
+            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <div class="row">
                     <wj-flex-grid
                             autoGenerateColumns="false"
@@ -118,36 +120,16 @@
                             is-read-only="true">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="membrPoint.storeNm"/>" binding="storeNm"
-                                             width="115"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.regDt"/>" binding="regDt" width="115"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.membrNo"/>" binding="membrNo"
-                                             width="115"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.membrNm"/>" binding="membrNm"
-                                             width="115"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.membrClassNm"/>" binding="membrClassNm"
-                                             width="115"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.membrSavePoint"/>"
-                                             binding="membrSavePoint"
-                                             width="115"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.membrUsePoint"/>"
-                                             binding="membrUsePoint"
-                                             width="115"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.saleAmt"/>" binding="saleAmt"
-                                             width="115"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.dcAmt"/>" binding="dcAmt" width="115"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPoint.realSaleAmt"/>" binding="realSaleAmt"
-                                             width="115"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.regDt"/>" binding="regDt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.membrNo"/>" binding="membrNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.membrNm"/>" binding="membrNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.membrClassNm"/>" binding="membrClassNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.membrSavePoint"/>" binding="membrSavePoint" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.membrUsePoint"/>" binding="membrUsePoint" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.saleAmt"/>" binding="saleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.dcAmt"/>" binding="dcAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPoint.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -156,8 +138,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPoint/membrPoint.js?ver=2019052801.11"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPoint/membrPoint.js?ver=2019052801.11" charset="utf-8"></script>
 
 <%-- 매장 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/store.jsp">

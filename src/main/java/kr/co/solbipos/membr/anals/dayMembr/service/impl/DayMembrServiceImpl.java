@@ -44,28 +44,21 @@ public class DayMembrServiceImpl implements DayMembrService {
 
     /** 일자별회원 구매내역*/
     @Override
-    public List<DefaultMap<Object>> getDayMembrList(DayMembrVO dayMembrVO,
-                                                             SessionInfoVO sessionInfoVO) {
-        // <-- PIVOT -->
-        DayVO dayVO = new DayVO();
+    public List<DefaultMap<Object>> getDayMembrList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO) {
 
-        // 결제수단 조회
-        List<DefaultMap<String>> payColList = dayMapper.getPayColList(dayVO);
-
-        // 결제수단 코드를 , 로 연결하는 문자열 생성
-        String pivotPayCol = "";
-        for(int i=0; i < payColList.size(); i++) {
-
-            //System.out.println(i +"번째 : "+ payColList.get(i).getStr("payCd"));
-            pivotPayCol += (pivotPayCol.equals("") ? "" : " ,") + "'" + payColList.get(i).getStr("payCd") + "'" +  " AS PAY" + payColList.get(i).getStr("payCd");
-        }
-        //System.out.println("PivotPayCol : " + pivotPayCol);
-        // <-- /PIVOT -->
-
-
-        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        dayMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 결제수단 array 값 세팅
+        dayMembrVO.setArrPayCol(dayMembrVO.getPayCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = dayMembrVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
         }
         dayMembrVO.setPivotPayCol(pivotPayCol);
 
@@ -74,10 +67,9 @@ public class DayMembrServiceImpl implements DayMembrService {
 
     /** 매출정보 상세조회 - 팝업 */
     @Override
-    public List<DefaultMap<Object>> getDayMembrPurchsList(DayMembrVO dayMembrVO,
-                                                    SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getDayMembrPurchsList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO) {
 
-        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -87,20 +79,18 @@ public class DayMembrServiceImpl implements DayMembrService {
 
     /** 회원정보 상세조회 - 팝업 */
     @Override
-    public DefaultMap<String> getDayMembrDetail(DayMembrVO dayMembrVO,
-                                                SessionInfoVO sessionInfoVO) {
+    public DefaultMap<String> getDayMembrDetail(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO) {
 
-        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         return mapper.getDayMembrDetail(dayMembrVO);
     }
 
     /** 회원정보 매출 상세조회 - 팝업 */
     @Override
-    public List<DefaultMap<Object>> getDayMembrDetailPurchsList(DayMembrVO dayMembrVO,
-                                                          SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getDayMembrDetailPurchsList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO) {
 
-        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

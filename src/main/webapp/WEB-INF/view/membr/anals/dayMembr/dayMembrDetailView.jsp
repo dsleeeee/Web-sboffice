@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="dayMembrDetailViewLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:570px;" fade-in="false" fade-out="false">
+<wj-popup control="dayMembrDetailViewLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:760px;height:570px;" fade-in="false" fade-out="false">
     <div ng-controller="dayMembrDetailCtrl">
 
         <%-- header --%>
@@ -151,13 +151,13 @@
                             is-read-only="true">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleDate"/>" binding="saleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleQty"/>" binding="saleQty" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleAmt"/>" binding="saleAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.membrSavePoint"/>" binding="membrSavePoint" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.membrUsePoint"/>" binding="membrUsePoint" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleDate"/>" binding="saleDate" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleQty"/>" binding="saleQty" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.realSaleAmt"/>" binding="realSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.membrSavePoint"/>" binding="membrSavePoint" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.membrUsePoint"/>" binding="membrUsePoint" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                         </wj-flex-grid>
                     </div>
@@ -178,4 +178,4 @@
     var smsRecvYnDataMap  = ${ccu.getCommCodeExcpAll("072")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembrDetail.js?ver=2019052801.31" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembrDetail.js?ver=20201203.01" charset="utf-8"></script>

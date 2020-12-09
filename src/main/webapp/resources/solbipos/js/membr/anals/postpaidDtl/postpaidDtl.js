@@ -54,8 +54,8 @@ app.controller('postpaidDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCds = $("#storeCd").val();
     /*params.startDate = '20190501';
     params.endDate = '20190506';*/
-    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');;
-    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');;
+    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
 
     $scope._inquiryMain("/membr/anals/postpaidDtl/postpaidDtl/getPostpaidDtlMemberList.sb", params, function() {}, false);
   };

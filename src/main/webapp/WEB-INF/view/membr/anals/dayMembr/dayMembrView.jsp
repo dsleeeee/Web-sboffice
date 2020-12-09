@@ -44,13 +44,14 @@
         </tbody>
     </table>
     <div class="mt20 oh sb-select dkbr">
-        <button class="btn_skyblue mr5 mt5 fr" ng-click="excelDownload()">
-            <s:message code="member.excel"/>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down" />
         </button>
     </div>
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:700px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <div class="row">
                 <wj-flex-grid
                         autoGenerateColumns="false"
@@ -63,46 +64,20 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="dayMembr.saleDate"/>" binding="saleDate"
-                                         width="115"
-                                         is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.saleFg"/>" binding="saleFg"
-                                         data-map="saleFgDataMap"
-                                         width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.membrNm"/>" binding="membrNm" width="130"
-                                         is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.membrCardNo"/>" binding="membrCardNo"
-                                         width="115"
-                                         is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.totSaleAmt"/>" binding="totSaleAmt"
-                                         width="115"
-                                         is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.vatAmt"/>" binding="vatAmt" width="115*"
-                                         is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.paycash"/>" binding="payCash" width="115"
-                                         is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.paycard"/>" binding="payCard" width="115"
-                                         is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.paygift"/>" binding="payGift" width="115"
-                                         is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.payother"/>" binding="payOther"
-                                         width="115"
-                                         is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.totDcAmt"/>" binding="totDcAmt"
-                                         width="115"
-                                         is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.membr.visit"/>" binding="visitDt"
-                                         width="115"
-                                         is-read-only="true" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.saleDate"/>" binding="saleDate" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.saleFg"/>" binding="saleFg" data-map="saleFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.membrNm"/>" binding="membrNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.membrCardNo"/>" binding="membrCardNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.vatAmt"/>" binding="vatAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <%-- 결제수단 컬럼 생성--%>
+                    <c:forEach var="payCol" items="${payColList}">
+                        <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    </c:forEach>
+                    <wj-flex-grid-column header="<s:message code="regist.membr.visit"/>" binding="visitDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%--팝업 조회시 필요--%>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.membrNo"/>" binding="membrNo" width="150"
-                                         is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.posNo"/>" binding="posNo" width="150"
-                                         is-read-only="true"
-                                         align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.billNo"/>" binding="billNo" width="150"
-                                         is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.membrNo"/>" binding="membrNo" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -111,12 +86,24 @@
 </div>
 
 <script type="text/javascript">
+    // 결제수단
+    var payColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="payCol" items="${payColList}">
+    var payParam       = {};
+    payParam.payCd     = "${payCol.payCd}";
+    payParam.payMethod = "${payCol.payMethod}";
+    payColList.push(payParam);
+    </c:forEach>
+
+    var payCol    = '${payCol}';
+    var arrPayCol = payCol.split(',');
+
     <%-- 판매구분 --%>
     var saleFgData = ${ccu.getCommCodeExcpAll("047")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=2019052801.16"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=20201203.02" charset="utf-8"></script>
 
 <%-- 매출 상세정보 --%>
 <c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrPurchsView.jsp">

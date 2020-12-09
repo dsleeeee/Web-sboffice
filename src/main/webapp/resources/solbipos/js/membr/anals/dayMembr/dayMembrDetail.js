@@ -110,7 +110,6 @@ app.controller('dayMembrDetailCtrl', ['$scope', '$http', function ($scope, $http
 
     // 회원정보 상세조회
     $scope.searchDayMembrDetail = function(){
-
         var params = {};
         params.membrNo = $scope.selectedStore.membrNo;
 
@@ -122,8 +121,8 @@ app.controller('dayMembrDetailCtrl', ['$scope', '$http', function ($scope, $http
 
     // 회원정보 매출 상세조회
     $scope.searchDayMembrDetailPurchs = function(){
-
         var params = {};
+        params.saleDate = $scope.selectedStore.saleDate;
         params.membrNo = $scope.selectedStore.membrNo;
 
         $scope._inquirySub("/membr/anals/dayMembr/dayMembr/getDayMembrDetailPurchsList.sb", params, function() {}, false);

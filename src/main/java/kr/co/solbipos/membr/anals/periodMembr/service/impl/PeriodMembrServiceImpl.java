@@ -39,10 +39,10 @@ public class PeriodMembrServiceImpl implements PeriodMembrService {
 
     /** 기간회원 구매내역*/
     @Override
-    public List<DefaultMap<Object>> getPeriodMembrList(PeriodMembrVO periodMembrVO,
-                                                    SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getPeriodMembrList(PeriodMembrVO periodMembrVO, SessionInfoVO sessionInfoVO) {
 
-        periodMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        periodMembrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        periodMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             periodMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

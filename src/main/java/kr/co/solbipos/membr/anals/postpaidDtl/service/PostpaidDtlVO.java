@@ -23,6 +23,8 @@ public class PostpaidDtlVO extends PageVO {
 
     /** 회원소속코드 */
     private String membrOrgnCd;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 회원번호 */
     private String membrNo;
     /** 회원명 */
@@ -41,6 +43,10 @@ public class PostpaidDtlVO extends PageVO {
     public void setMembrOrgnCd(String membrOrgnCd) {
         this.membrOrgnCd = membrOrgnCd;
     }
+
+    public String getHqOfficeCd() { return hqOfficeCd; }
+
+    public void setHqOfficeCd(String hqOfficeCd) {  this.hqOfficeCd = hqOfficeCd; }
 
     public String getMembrNo() {
         return membrNo;

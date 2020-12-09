@@ -39,7 +39,7 @@ app.controller('periodMembrCtrl', ['$scope', '$http', '$timeout', function ($sco
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "saleAmt" || col.binding === "membrNm") {
+        if (col.binding === "realSaleAmt" || col.binding === "membrNm") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -52,8 +52,10 @@ app.controller('periodMembrCtrl', ['$scope', '$http', '$timeout', function ($sco
         var col = ht.panel.columns[ht.col];
 
         // 구매액 클릭시 상세정보 조회
-        if (col.binding === "saleAmt") {
-          $scope.setSelectedStore(s.rows[ht.row].dataItem);
+        if (col.binding === "realSaleAmt") {
+          var params = s.rows[ht.row].dataItem;
+          params.gubun = "periodMembr";
+          $scope.setSelectedStore(params);
           $scope.dayMembrPurchsViewLayer.show(true);
           event.preventDefault();
         }
@@ -78,7 +80,7 @@ app.controller('periodMembrCtrl', ['$scope', '$http', '$timeout', function ($sco
     dataItem.membrNm = messages["periodMembr.membrNm"];
     dataItem.membrCardNo = messages["periodMembr.membrCardNo"];
     dataItem.saleCount = messages["periodMembr.saleCount"];
-    dataItem.saleAmt = messages["periodMembr.saleAmt"];
+    dataItem.realSaleAmt = messages["periodMembr.realSaleAmt"];
     dataItem.dcAmt = messages["periodMembr.dcAmt"];
     dataItem.membrSavePoint = messages["periodMembr.point"];
     dataItem.membrUsePoint = messages["periodMembr.point"];

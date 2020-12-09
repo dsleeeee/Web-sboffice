@@ -49,18 +49,18 @@
         </if>
         <if test='membrNo != null and membrNo != ""'>
             <![CDATA[
-           AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+              AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
            ]]>
         </if>
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
-             AND tmmp.STORE_CD = #{storeCd}
-             ]]>
+              AND tmmp.STORE_CD = #{storeCd}
+            ]]>
         </if>
         <if test='membrNm != null and membrNm != ""'>
             <![CDATA[
-           AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
-           ]]>
+              AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
+            ]]>
         </if>
         AND tmmp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ORDER BY tmmp.SALE_DATE DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
