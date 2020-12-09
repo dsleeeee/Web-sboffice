@@ -41,7 +41,7 @@ public class MembrNonBilClctServiceImpl implements MembrNonBilClctService {
     @Override
     public List<DefaultMap<Object>> getMembrNonBilClctList(MembrNonBilClctVO membrNonBilClctVO, SessionInfoVO sessionInfoVO) {
 
-        membrNonBilClctVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        membrNonBilClctVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             membrNonBilClctVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -53,7 +53,7 @@ public class MembrNonBilClctServiceImpl implements MembrNonBilClctService {
     @Override
     public List<DefaultMap<Object>> getMembrNonBilClctDetailList(MembrNonBilClctVO membrNonBilClctVO, SessionInfoVO sessionInfoVO) {
 
-        membrNonBilClctVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        membrNonBilClctVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             membrNonBilClctVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

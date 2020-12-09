@@ -20,15 +20,7 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('dayMembrCtrl', $scope, $http, true));
-  /*
-  // 접속사용자의 권한(H : 본사, S: 매장)
-  $scope.orgnFg = gvOrgnFg;
 
-  // 매장권한으로 로그인 한 경우, 본인매장만 내역 조회가능.
-  if($scope.orgnFg === 'S') {
-     $scope.storeCds = gvStoreCd;
-  }
- */
   // 검색조건에 조회기간
   var startDate = wcombo.genDateVal("#startDate", gvStartDate);
   var endDate = wcombo.genDateVal("#endDate", gvEndDate);
@@ -49,7 +41,7 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "totSaleAmt" || col.binding === "membrNm") {
+        if (col.binding === "realSaleAmt" || col.binding === "membrNm") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -62,8 +54,10 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var col = ht.panel.columns[ht.col];
 
         // 매출액 클릭시 상세정보 조회
-        if (col.binding === "totSaleAmt") {
-          $scope.setSelectedStore(s.rows[ht.row].dataItem);
+        if (col.binding === "realSaleAmt") {
+          var params = s.rows[ht.row].dataItem;
+          params.gubun = "dayMembr";
+          $scope.setSelectedStore(params);
           $scope.dayMembrPurchsViewLayer.show(true);
           event.preventDefault();
         }
@@ -90,9 +84,9 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
     var params = {};
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+    params.payCol    = payCol;
 
-    $scope._inquiryMain("/membr/anals/dayMembr/dayMembr/getDayMembrList.sb", params, function () {
-    }, false);
+    $scope._inquiryMain("/membr/anals/dayMembr/dayMembr/getDayMembrList.sb", params, function () {}, false);
   };
   // <-- //검색 호출 -->
 
@@ -139,7 +133,7 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
         includeColumns: function (column) {
           return column.visible;
         }
-      }, '회원관리_회원분석_일자별회원구매내역_' + getToday() + '.xlsx', function () {
+      }, '일자별회원구매내역_' + getToday() + '.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

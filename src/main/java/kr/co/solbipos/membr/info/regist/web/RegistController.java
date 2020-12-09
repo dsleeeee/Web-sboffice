@@ -683,4 +683,50 @@ public class RegistController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+
+    /**
+     * 회원정보 포인트변경내역 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 11. 27.
+     */
+    @RequestMapping(value = "base/getMemberInfoPointList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberInfoPointList(RegistVO registVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = registService.getMemberInfoPointList(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /**
+     * 회원정보 구매내역 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 11. 27.
+     */
+    @RequestMapping(value = "base/getMemberInfoBuyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberInfoBuyList(RegistVO registVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = registService.getMemberInfoBuyList(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
 }

@@ -727,4 +727,24 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
+    /** 회원정보 포인트 조회 */
+    @Override
+    public List<DefaultMap<String>> getMemberInfoPointList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        return mapper.getMemberInfoPointList(registVO);
+    }
+
+    /** 회원정보 구매내역 조회 */
+    @Override
+    public List<DefaultMap<String>> getMemberInfoBuyList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mapper.getMemberInfoBuyList(registVO);
+    }
 }

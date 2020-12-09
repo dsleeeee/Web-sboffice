@@ -1384,4 +1384,54 @@
         AND DLVR_ADDR_SEQ = #{dlvrAddrSeq}
     </delete>
 
+    <!-- 회원정보 포인트변경내역 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_HIST
+        COMMENTS :
+    -->
+    <select id="getMemberInfoPointList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberInfoPointList */
+        SELECT
+        tmmph.CHG_DATE,
+        tmmph.POINT_CHG_FG,
+        tmmph.CHG_POINT,
+        tmmph.REMARK
+        FROM TB_MB_MEMBER_POINT_HIST tmmph
+        WHERE 1=1
+        AND tmmph.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmmph.MEMBR_NO = #{membrNo}
+        ORDER BY tmmph.CHG_DATE DESC, tmmph.CHG_SEQ DESC
+    </select>
+
+    <!-- 회원정보 구매내역 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_MEMBR_PROD
+        COMMENTS :
+    -->
+    <select id="getMemberInfoBuyList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberInfoBuyList */
+        SELECT
+        tsdmp.SALE_DATE,
+        tms.STORE_NM,
+        tmp.PROD_NM,
+        tsdmp.TOT_SALE_QTY,
+        tsdmp.TOT_SALE_AMT,
+        tsdmp.MEMBR_SAVE_POINT,
+        tsdmp.MEMBR_USE_POINT
+        FROM TB_SL_DAILY_MEMBR_PROD tsdmp,
+        TB_MS_STORE tms,
+        TB_MS_PRODUCT tmp
+        WHERE 1=1
+        AND tsdmp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tmp.STORE_CD = #{storeCd}
+        </if>
+        AND tms.HQ_OFFICE_CD (+)= tsdmp.HQ_OFFICE_CD
+        AND tms.HQ_BRAND_CD (+)= tsdmp.HQ_BRAND_CD
+        AND tms.STORE_CD (+)= tsdmp.STORE_CD
+        AND tmp.HQ_BRAND_CD (+)= tsdmp.HQ_BRAND_CD
+        AND tmp.STORE_CD (+)= tsdmp.STORE_CD
+        AND tmp.PROD_CD (+)= tsdmp.PROD_CD
+    </select>
+
 </mapper>

@@ -87,77 +87,59 @@
         </tbody>
     </table>
 
-    <div class="mt20 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
-        </wj-combo-box>
-    </div>
+    <%--<div class="mt20 oh sb-select dkbr">--%>
+        <%--&lt;%&ndash; 페이지 스케일  &ndash;%&gt;--%>
+        <%--<wj-combo-box--%>
+                <%--class="w100px fl"--%>
+                <%--id="listScaleBox"--%>
+                <%--ng-model="listScale"--%>
+                <%--items-source="_getComboData('listScaleBox')"--%>
+                <%--display-member-path="name"--%>
+                <%--selected-value-path="value"--%>
+                <%--is-editable="false"--%>
+                <%--initialized="initComboBox(s)">--%>
+        <%--</wj-combo-box>--%>
+    <%--</div>--%>
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter"
-                    is-read-only="true">
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter"
+                is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="recomendr.orgnCd"/>" binding="orgnCd" width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.orgnNm"/>" binding="orgnNm" width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.empNo"/>" binding="empNo" width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.empNm"/>" binding="empNm" width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.membrNo"/>" binding="membrNo"
-                                     width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.membrNm"/>" binding="membrNm"
-                                     width="115"
-                                     is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.prodCd"/>" binding="prodCd"
-                                     width="115"
-                                     is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.prodNm"/>" binding="prodNm" width="115"
-                                     is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.total.sale"/>" binding="totalSale" width="115"
-                                     is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.total.discount"/>" binding="totalDiscount"
-                                     width="115"
-                                     is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="recomendr.real.sale"/>" binding="realSale"
-                                     width="115"
-                                     is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.orgnCd"/>" binding="orgnCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.orgnNm"/>" binding="orgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.empNo"/>" binding="empNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.empNm"/>" binding="empNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.membrNo"/>" binding="membrNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.membrNm"/>" binding="membrNm"  width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.prodCd"/>" binding="prodCd"  width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.total.sale"/>" binding="totalSale" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.total.discount"/>" binding="totalDiscount" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="recomendr.real.sale"/>" binding="realSale"  width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
     </div>
-
     <%-- 페이지 리스트 --%>
-    <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="membrPointCtrlPager" data-size="10">
-        </ul>
-    </div>
+    <%--<div class="pageNum mt20">--%>
+        <%--&lt;%&ndash; id &ndash;%&gt;--%>
+        <%--<ul id="membrPointCtrlPager" data-size="10">--%>
+        <%--</ul>--%>
+    <%--</div>--%>
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrRecomendr/membrRecomendr.js?ver=2020062901.11"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrRecomendr/membrRecomendr.js?ver=2020062901.11" charset="utf-8"></script>
 
 <%-- 매장 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/store.jsp">

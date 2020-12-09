@@ -20,7 +20,6 @@
             </button>
         </div>
     </div>
-
     <table class="searchTbl">
         <colgroup>
             <col class="w15"/>
@@ -45,13 +44,14 @@
         </tbody>
     </table>
     <div class="mt20 oh sb-select dkbr">
-        <button class="btn_skyblue mr5 mt5 fr" ng-click="excelDownload()">
-            <s:message code="member.excel"/>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down" />
         </button>
     </div>
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -63,37 +63,19 @@
                     is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="periodMembr.membrNo"/>" binding="membrNo" width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.membrNm"/>" binding="membrNm" width="130"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.membrCardNo"/>" binding="membrCardNo"
-                                     width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.saleCount"/>" binding="saleCount" width="115"
-                                     is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.saleAmt"/>" binding="saleAmt" width="115"
-                                     is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.dcAmt"/>" binding="dcAmt" width="115"
-                                     is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.membrSavePoint"/>" binding="membrSavePoint"
-                                     width="115" is-read-only="true" align="right"
-                                     aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.membrUsePoint"/>" binding="membrUsePoint"
-                                     width="115"
-                                     is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.minRegDt"/>" binding="minRegDt" width="130"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.maxRegDt"/>" binding="maxRegDt" width="130"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.membrNo"/>" binding="membrNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.membrNm"/>" binding="membrNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.membrCardNo"/>" binding="membrCardNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.saleCount"/>" binding="saleCount" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.realSaleAmt"/>" binding="realSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.dcAmt"/>" binding="dcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.membrSavePoint"/>" binding="membrSavePoint" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.membrUsePoint"/>" binding="membrUsePoint" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.minRegDt"/>" binding="minRegDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.maxRegDt"/>" binding="maxRegDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 <%--팝업 조회시 필요--%>
-                <wj-flex-grid-column header="<s:message code="periodMembr.saleDate"/>" binding="saleDate" width="115"
-                                     is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.posNo"/>" binding="posNo" width="115"
-                                     is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="periodMembr.billNo"/>" binding="billNo" width="115"
-                                     is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -101,8 +83,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/periodMembr/periodMembr.js?ver=2019052801.08"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/periodMembr/periodMembr.js?ver=20201203.01" charset="utf-8"></script>
 
 <%-- 매출 상세정보 --%>
 <c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrPurchsView.jsp">

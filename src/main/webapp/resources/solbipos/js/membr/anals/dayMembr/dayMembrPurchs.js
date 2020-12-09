@@ -40,7 +40,7 @@ app.controller('dayMembrPurchsCtrl', ['$scope', '$http', function ($scope, $http
         dataItem.storeNm    = messages["dayMembrPurchs.storeNm"];
         dataItem.prodNm    = messages["dayMembrPurchs.prodNm"];
         dataItem.saleQty    = messages["dayMembrPurchs.saleQty"];
-        dataItem.saleAmt    = messages["dayMembrPurchs.saleAmt"];
+        dataItem.realSaleAmt    = messages["dayMembrPurchs.realSaleAmt"];
         dataItem.membrSavePoint   = messages["dayMembrPurchs.point"];
         dataItem.membrUsePoint   = messages["dayMembrPurchs.point"];
 
@@ -109,9 +109,10 @@ app.controller('dayMembrPurchsCtrl', ['$scope', '$http', function ($scope, $http
 
         var params = {};
         params.saleDate = $scope.selectedStore.saleDate;
-        params.posNo = $scope.selectedStore.posNo;
-        params.billNo = $scope.selectedStore.billNo;
         params.membrNo = $scope.selectedStore.membrNo;
+        params.saleFg = $scope.selectedStore.saleFg;
+        params.membrCardNo = $scope.selectedStore.membrCardNo;
+        params.gubun = $scope.selectedStore.gubun;
 
         $scope._inquirySub("/membr/anals/dayMembr/dayMembr/getDayMembrPurchsList.sb", params, function() {}, false);
     };

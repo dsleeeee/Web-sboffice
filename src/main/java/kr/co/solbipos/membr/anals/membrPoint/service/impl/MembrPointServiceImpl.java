@@ -49,7 +49,7 @@ public class MembrPointServiceImpl implements MembrPointService {
 
         LOGGER.debug("sessionInfoVO.getOrgnGrpCd(): {}", sessionInfoVO.getOrgnGrpCd());
 
-        membrPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        membrPointVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             membrPointVO.setStoreCd(sessionInfoVO.getStoreCd());
         } else {

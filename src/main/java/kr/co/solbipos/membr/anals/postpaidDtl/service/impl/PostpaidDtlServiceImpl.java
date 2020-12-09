@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidService;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.anals.postpaid.service.impl.PostpaidMapper;
@@ -44,14 +45,16 @@ public class PostpaidDtlServiceImpl implements PostpaidDtlService {
 
     /** 후불 회원 외상, 입금 내역 상세*/
     @Override
-    public List<DefaultMap<Object>> getPostpaidDtlMemberList(PostpaidDtlVO postpaidDtlVO,
-                                                             SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getPostpaidDtlMemberList(PostpaidDtlVO postpaidDtlVO, SessionInfoVO sessionInfoVO) {
 
         String[] storeCds = postpaidDtlVO.getStoreCds().split(",");
-
-        postpaidDtlVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        postpaidDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
         postpaidDtlVO.setStoreCdList(storeCds);
+
+        postpaidDtlVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+//        postpaidDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            postpaidDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return mapper.getPostpaidDtlMemberList(postpaidDtlVO);
     }

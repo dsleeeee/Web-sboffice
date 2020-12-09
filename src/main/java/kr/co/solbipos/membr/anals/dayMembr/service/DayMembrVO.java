@@ -24,11 +24,11 @@ public class DayMembrVO extends PageVO {
     /** 회원소속코드 */
     private String membrOrgnCd;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     /** 조회매장 */
     private String storeCd;
-
-    /** PIVOT PAY_CD */
-    private String pivotPayCol;
 
     /** 영업일자 */
     private String saleDate;
@@ -42,6 +42,22 @@ public class DayMembrVO extends PageVO {
     /** 회원번호 */
     private String membrNo;
 
+    /** 판매구분 */
+    private String saleFg;
+
+    /** 회원카드번호 */
+    private String membrCardNo;
+
+    /** 결제수단컬럼 */
+    private String payCol;
+    /** 결제수단 array */
+    private String arrPayCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+    private String pivotPayCol;
+
+    /**  구분 */
+    private String gubun;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -50,20 +66,16 @@ public class DayMembrVO extends PageVO {
         this.membrOrgnCd = membrOrgnCd;
     }
 
+    public String getHqOfficeCd() { return hqOfficeCd; }
+
+    public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
+
     public String getStoreCd() {
         return storeCd;
     }
 
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
-    }
-
-    public String getPivotPayCol() {
-        return pivotPayCol;
-    }
-
-    public void setPivotPayCol(String pivotPayCol) {
-        this.pivotPayCol = pivotPayCol;
     }
 
     public String getSaleDate() {
@@ -96,5 +108,49 @@ public class DayMembrVO extends PageVO {
 
     public void setMembrNo(String membrNo) {
         this.membrNo = membrNo;
+    }
+
+    public String getSaleFg() {
+        return saleFg;
+    }
+
+    public void setSaleFg(String saleFg) {
+        this.saleFg = saleFg;
+    }
+
+    public String getMembrCardNo() {
+        return membrCardNo;
+    }
+
+    public void setMembrCardNo(String membrCardNo) {
+        this.membrCardNo = membrCardNo;
+    }
+
+    public String getPayCol() {
+        return payCol;
+    }
+
+    public void setPayCol(String payCol) {
+        this.payCol = payCol;
+    }
+
+    public String[] getArrPayCol() {
+        return arrPayCol;
+    }
+
+    public void setArrPayCol(String[] arrPayCol) {
+        this.arrPayCol = arrPayCol;
+    }
+
+    public String getPivotPayCol() { return pivotPayCol; }
+
+    public void setPivotPayCol(String pivotPayCol) { this.pivotPayCol = pivotPayCol; }
+
+    public String getGubun() {
+        return gubun;
+    }
+
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
     }
 }

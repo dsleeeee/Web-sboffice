@@ -8,6 +8,8 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.dayMembr.service.DayMembrService;
 import kr.co.solbipos.membr.anals.dayMembr.service.DayMembrVO;
+import kr.co.solbipos.sale.day.day.service.DayService;
+import kr.co.solbipos.sale.day.day.service.DayVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +49,14 @@ public class DayMembrController {
 
     private final DayMembrService service;
     private final SessionService sessionService;
+    private final DayService dayService;
 
     /** Constructor Injection */
     @Autowired
-    public DayMembrController(DayMembrService service, SessionService sessionService) {
+    public DayMembrController(DayMembrService service, SessionService sessionService, DayService dayService) {
         this.service = service;
         this.sessionService = sessionService;
+        this.dayService = dayService;
     }
 
     /**
@@ -65,7 +69,19 @@ public class DayMembrController {
     @RequestMapping(value = "dayMembr/dayMembrView.sb", method = RequestMethod.GET)
     public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
+        DayVO dayVO = new DayVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 결제수단 조회
+        List<DefaultMap<String>> payColList = dayService.getPayColList(dayVO, sessionInfoVO);
+
+        // 결제수단 코드를 , 로 연결하는 문자열 생성
+        String payCol = "";
+        for(int i=0; i < payColList.size(); i++) {
+            payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
+        }
+        model.addAttribute("payColList", payColList);
+        model.addAttribute("payCol", payCol);
 
         return "membr/anals/dayMembr/dayMembrView";
     }

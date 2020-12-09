@@ -44,14 +44,15 @@
         </tbody>
     </table>
     <div class="mt20 oh sb-select dkbr">
-        <button class="btn_skyblue mr5 mt5 fr" ng-click="excelDownload()">
-            <s:message code="member.excel"/>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down" />
         </button>
     </div>
     <%-- 그리드 --%>
     <div class="w100 fl mt10 mb20">
-        <div class="wj-TblWrapBr " style="height: 600px;">
-            <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-TblWrapBr " style="height: 470px;">
+            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <div class="row">
                     <wj-flex-grid
                             autoGenerateColumns="false"
@@ -64,33 +65,15 @@
                             is-read-only="true">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.storeNm"/>" binding="storeNm"
-                                             width="130"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.totCnt"/>" binding="totCnt"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.totAmt"/>" binding="totAmt"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.totMemCnt"/>" binding="totMemCnt"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.totMemAmt"/>" binding="totMemAmt"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.perMemCnt"/>" binding="perMemCnt"
-                                             width="115"
-                                             is-read-only="true" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.perMemAmt"/>" binding="perMemAmt"
-                                             width="115"
-                                             is-read-only="true" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.perCnt"/>" binding="perCnt"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrPossesn.perAmt"/>" binding="perAmt"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.storeNm"/>" binding="storeNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.totCnt"/>" binding="totCnt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.totAmt"/>" binding="totAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.totMemCnt"/>" binding="totMemCnt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.totMemAmt"/>" binding="totMemAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.perMemCnt"/>" binding="perMemCnt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.perMemAmt"/>" binding="perMemAmt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.perCnt"/>" binding="perCnt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrPossesn.perAmt"/>" binding="perAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -99,7 +82,4 @@
     </div>
 </div>
 
-</div>
-
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPossesn/membrPossesn.js?ver=2019052801.06"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPossesn/membrPossesn.js?ver=2019052801.06" charset="utf-8"></script>

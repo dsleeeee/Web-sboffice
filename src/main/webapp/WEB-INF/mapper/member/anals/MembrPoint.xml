@@ -33,7 +33,7 @@
         TB_SL_SALE_DTL tssd,
         TB_MB_MEMBER tmm
         WHERE 1=1
-        AND tsshm.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND tsshm.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
                 AND tsshm.STORE_CD = #{storeCd}
