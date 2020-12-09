@@ -334,6 +334,36 @@ function getToday() {
   return today;
 }
 
+function getCurDateTime(seperator_day)
+{
+    try
+    {
+        if(seperator_day == undefined)    seperator_day = "";
+
+        var seperator_space = (seperator_day == "" ? "" : " ");
+        var seperator_time  = (seperator_day == "" ? "" : ":");
+
+        var date = new Date();
+        var year   = date.getFullYear();
+        var month  = date.getMonth() + 1;
+        var day    = date.getDate();
+        var hour   = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+
+        if( (""+month).length  == 1 ) month  = "0"+month;
+        if( (""+day).length    == 1 ) day    = "0"+day;
+        if( (""+hour).length   == 1 ) hour   = "0"+hour;
+        if( (""+minute).length == 1 ) minute = "0"+minute;
+        if( (""+second).length == 1 ) second = "0"+second;
+
+        return (year + seperator_day + month + seperator_day + day + seperator_space + hour + seperator_time + minute + seperator_time + second);
+    }
+    catch(e)
+    {
+        //alert('udfMainFrm.js : '+e);
+    }
+}
 // 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )
 $(document).on('click', 'a[href="#"]', function (e) {
   e.preventDefault();

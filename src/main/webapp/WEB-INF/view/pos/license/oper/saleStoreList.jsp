@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8"%>
+<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -72,8 +73,9 @@
                     <s:message code="oper.manageVan" />
                 </th>
                 <td>
-                    <input type="text" id="manageVanNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchManageVan()">
+                    <input type="text" id="manageVanNm" value=<s:message code="cmm.all"/> class="sb-input w75" ng-readonly="true" ng-click="searchManageVan()" style="float: left;">
                     <input type="hidden" id="ssl_srchManageVanCd" ng-hide="true">
+                    <button type="button" class="btn_skyblue fl mr5" id="btnCancelManageVanCd" style="margin-left: 5px;" ng-click="delManageVanCd()"><s:message code="cmm.selectCancel"/></button>
                 </td>
                 <c:if test="${orgnFg == 'MASTER'}">
                     <%-- 관리업체 --%>
@@ -81,8 +83,9 @@
                         <s:message code="oper.agency" />
                     </th>
                     <td>
-                        <input type="text" id="agencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency()">
+                        <input type="text" id="agencyNm" value=<s:message code="cmm.all"/> class="sb-input w75" ng-readonly="true" ng-click="searchAgency()" style="float: left;">
                         <input type="hidden" id="ssl_srchAgencyCd" ng-hide="true">
+                        <button type="button" class="btn_skyblue fl mr5" id="btnCancelAgencyCd" style="margin-left: 5px;" ng-click="delAgencyCd()"><s:message code="cmm.selectCancel"/></button>
                     </td>
                 </c:if>
                 <c:if test="${orgnFg == 'AGENCY'}">
@@ -125,65 +128,61 @@
         </tbody>
     </table>
 
-    <div class="mt40 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-            class="w100px fl"
-            id="listScaleBox"
-            ng-model="listScaleSale"
-            items-source="_getComboData('listScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
-        </wj-combo-box>
-        <%--// 페이지 스케일  --%>
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
     </div>
+
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <div class="row">
                 <wj-flex-grid
+                    id="saleStoreListGrid"
                     autoGenerateColumns="false"
                     control="flex"
                     initialized="initGrid(s,e)"
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter"
+                    frozen-columns="4"
+                    item-formatter="_itemFormatter"cmm.excel.down
                     is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeCd"/>" binding="hqOfficeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeNm"/>" binding="hqOfficeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.storeCd"/>" binding="storeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.agency"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.posCnt"/>" binding="posCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.saleFg"/>" binding="saleFg" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.saleFgN"/>" binding="saleFgN" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.saleFgY"/>" binding="saleFgY" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.cardCnt"/>" binding="cardCnt" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.cashCnt"/>" binding="cashCnt" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.cashRecCnt"/>" binding="cashRecCnt" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.maxInstInsDt"/>" binding="maxInstInsDt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>" binding="sysOpenDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.maxSaleDate"/>" binding="maxSaleDate" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeCd"/>    " binding="hqOfficeCd"      width=" 60" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeNm"/>    " binding="hqOfficeNm"      width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.storeCd"/>       " binding="storeCd"         width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.storeNm"/>       " binding="storeNm"         width="150" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.sysStatNm"/>     " binding="sysStatNm"       width=" 50" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.vanNm"/>         " binding="vanNm"           width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>   " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.agency"/>        " binding="agencyNm"        width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posCnt"/>        " binding="posCnt"          width=" 60" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.billCnt"/>       " binding="billCnt"         width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.saleCnt"/>       " binding="saleCnt"         width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.rtnSaleCnt"/>    " binding="rtnSaleCnt"      width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.realSaleCnt"/>   " binding="realSaleCnt"     width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.pBillCnt"/>      " binding="pBillCnt"        width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.pSaleCnt"/>      " binding="pSaleCnt"        width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.pRtnSaleCnt"/>   " binding="pRtnSaleCnt"     width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.pRealSaleCnt"/>  " binding="pRealSaleCnt"    width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.pCardCnt"/>      " binding="pCardCnt"        width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.pCashCnt"/>      " binding="pCashCnt"        width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.pCashApprCnt"/>  " binding="pCashApprCnt"    width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.totGuestCnt"/>   " binding="totGuestCnt"     width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.totDlvrCnt"/>    " binding="totDlvrCnt"      width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.totResveCnt"/>   " binding="totResveCnt"     width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.totRefundCnt"/>  " binding="totRefundCnt"    width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.minSaleDate"/>   " binding="minSaleDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.maxSaleDate"/>   " binding="maxSaleDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.ownerNm"/>       " binding="ownerNm"         width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
         </div>
     </div>
-
-    <%-- 페이지 리스트 --%>
-    <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="saleStoreListCtrlPager" data-size="10">
-        </ul>
-    </div>
-    <%--//페이지 리스트--%>
 
 </div>
 
@@ -196,7 +195,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=20201116.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=20201210.01" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">
