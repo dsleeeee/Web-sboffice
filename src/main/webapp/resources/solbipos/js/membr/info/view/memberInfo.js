@@ -97,6 +97,11 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 if(col.binding == "regDt"){
                     e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
                 }
+
+                // 포인트 - 가용
+                if (col.binding === "avablPoint") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
             }
         });
 
@@ -105,6 +110,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             var ht = s.hitTest(e);
             if (ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
+
                 // 회원번호, 회원명 클릭시 상세정보 팝업
                 if (col.binding === "membrNo" || col.binding === "membrNm") {
                     var selectedData = s.rows[ht.row].dataItem;
@@ -121,6 +127,14 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                     // 해당 매장의 등록매장이 본사의 디폴트 매장과 동일할 경우에만 후불적용 매장을 등록할 수 있다.
                     $scope.setSelectedMember(selectedData);
                     $scope.postpaidStoreRegistLayer.show(true);
+                    event.preventDefault();
+                }
+
+                // 포인트 - 가용
+                if (col.binding === "avablPoint") {
+                    var selectedData = s.rows[ht.row].dataItem;
+                    $scope.setSelectedMember(selectedData);
+                    $scope.wjMemberInfoPointLayer.show(true);
                     event.preventDefault();
                 }
             }
@@ -378,6 +392,13 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         $scope.postpaidStoreRegistLayer.shown.addHandler(function (s) {
             setTimeout(function () {
                 $scope._broadcast('postpaidStoreRegistCtrl', $scope.getSelectedMember());
+            }, 50)
+        });
+
+        // 회원 구매내역,포인트 조회 팝업 핸들러 추가
+        $scope.wjMemberInfoPointLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('memberInfoPointCtrl', $scope.getSelectedMember());
             }, 50)
         });
     });
