@@ -152,4 +152,10 @@ public interface RegistService {
 
     /** 배달주소지 삭제 */
     int deleteDlvrAddrInfo(RegistVO registVO, SessionInfoVO si);
+
+    /** 회원정보 포인트변경내역 조회 */
+    List<DefaultMap<String>> getMemberInfoPointList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원정보 구매내역 조회 */
+    List<DefaultMap<String>> getMemberInfoBuyList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }
