@@ -7,7 +7,9 @@
 
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
-        <s:message code="regist.memberInfoPoint.info"/>
+        <%--<s:message code="regist.memberInfoPoint.info"/>--%>
+        <label id="lblMemberInfoPointMembrNo"></label>
+        <label id="lblMemberInfoPointMembrNm"></label>
         <a href="#" class="wj-hide btn_close"></a>
     </div>
 
@@ -75,4 +77,4 @@
     var pointChgFgData = ${ccu.getCommCodeExcpAll("031")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoPoint.js?ver=20201130.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoPoint.js?ver=20201130.03" charset="utf-8"></script>

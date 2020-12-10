@@ -53,6 +53,8 @@ app.controller('memberInfoPointCtrl', ['$scope', '$http', function ($scope, $htt
 
     $scope.searchMemberInfoPoint = function(){
         var params = $scope.getSelectedMember();
+        $("#lblMemberInfoPointMembrNo").text("[" + params.membrNo + "] ");
+        $("#lblMemberInfoPointMembrNm").text(params.membrNm);
 
         $scope._inquirySub("/membr/info/view/base/getMemberInfoPointList.sb", params, function() {
             $scope.$apply(function() {
