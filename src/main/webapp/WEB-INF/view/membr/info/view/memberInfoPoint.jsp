@@ -5,12 +5,10 @@
 
 <wj-popup control="wjMemberInfoPointLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:700px;" fade-in="false" fade-out="false">
 
-    <div ng-controller="memberInfoPointCtrl">
-        <%-- header --%>
-        <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="regist.memberInfoPoint.info"/>
-            <a href="#" class="wj-hide btn_close"></a>
-        </div>
+    <%-- header --%>
+    <div class="wj-dialog-header wj-dialog-header-font">
+        <s:message code="regist.memberInfoPoint.info"/>
+        <a href="#" class="wj-hide btn_close"></a>
     </div>
 
     <%-- body --%>
