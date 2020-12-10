@@ -61,15 +61,22 @@ public class InclnController {
    */
   @RequestMapping(value = "/incln/list.sb", method = RequestMethod.GET)
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
-    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
     return "membr/anals/incln/incln";
   }
 
+  /**
+   * 회원 구매성향 분석 조회
+   */
   @RequestMapping(value = "/incln/getInclnList.sb", method = RequestMethod.POST)
   @ResponseBody
   public Result getInclnList(InclnVO inclnVO, HttpServletRequest request) {
+
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
     List<DefaultMap<Object>> result = inclnService.getInclnList(inclnVO, sessionInfoVO);
+
     return ReturnUtil.returnListJson(Status.OK, result, inclnVO);
   }
+
 }

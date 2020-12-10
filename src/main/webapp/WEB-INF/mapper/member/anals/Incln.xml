@@ -3,188 +3,170 @@
 
 <mapper namespace="kr.co.solbipos.membr.anals.incln.service.impl.InclnMapper">
 
+    <!-- 회원 구매성향 분석 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
     <select id="getInclnList" parameterType="inclnVO" resultType="DefaultMap">
-
-        SELECT
-        C.LV1_CD
-        ,C.LV1_NM
-        ,C.LV2_CD
-        ,C.LV2_NM
-        ,A.LV3_CD
-        ,A.LV3_NM
-        <if test='option == ("AMT")'>
-            <![CDATA[
-        ,MAX(SUM_SALE_AMT) AS SUM_SALE
-        ,SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_F"
-        ,SUM( CASE WHEN GENDR_FG = 'M' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_M"
-        ,SUM( CASE WHEN GENDR_FG = 'N' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_Non"
-        ,SUM( CASE WHEN AGE >= 10 AND AGE < 20 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGETEENS"
-        ,SUM( CASE WHEN AGE >= 20 AND AGE < 30 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGETWENTIES"
-        ,SUM( CASE WHEN AGE >= 30 AND AGE < 40 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGETHIRTIES"
-        ,SUM( CASE WHEN AGE >= 40 AND AGE < 50 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGEFORTIES"
-        ,SUM( CASE WHEN AGE >= 50 AND AGE < 60 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGEFIFTIES"
-        ,SUM( CASE WHEN AGE >= 60 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGESIXTIES"
-        ]]>
-        </if>
-        <if test='option == "QTY"'>
-            <![CDATA[
-        ,MAX(SUM_SALE_QTY) AS SUM_SALE
-        ,SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_F"
-        ,SUM( CASE WHEN GENDR_FG = 'M' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_M"
-        ,SUM( CASE WHEN GENDR_FG = 'N' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_Non"
-        ,SUM( CASE WHEN AGE >= 10 AND AGE < 20 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGETEENS"
-        ,SUM( CASE WHEN AGE >= 20 AND AGE < 30 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGETWENTIES"
-        ,SUM( CASE WHEN AGE >= 30 AND AGE < 40 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGETHIRTIES"
-        ,SUM( CASE WHEN AGE >= 40 AND AGE < 50 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGEFORTIES"
-        ,SUM( CASE WHEN AGE >= 50 AND AGE < 60 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGEFIFTIES"
-        ,SUM( CASE WHEN AGE >= 60 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGESIXTIES"
-        ]]>
-        </if>
-        FROM
-        (
-        SELECT
-        -- MAX(tmmph.SALE_DATE),
+        /* InclnMapper.getInclnList */
         <choose>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                tmp.PROD_CLASS_CD AS LV3_CD,
-                tmpc.PROD_CLASS_NM AS LV3_NM,
-            </when>
+            <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                thp.PROD_CLASS_CD AS LV3_CD,
-                thpc.PROD_CLASS_NM AS LV3_NM,
-            </when>
-        </choose>
-        tmm.MEMBR_NO,
-        tmm.GENDR_FG,
-        SBPENC.D ( tmm.MEMBR_NM ) AS MEMBR_NM,
-        TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 ) AS AGE,
-        SUM( tssd.SALE_QTY ) AS SUM_SALE_QTY,
-        SUM( tssd.SALE_AMT ) AS SUM_SALE_AMT
-        FROM
-        TB_MB_MEMBER_POINT_HIST tmmph
-        LEFT JOIN TB_SL_SALE_DTL tssd ON tssd.STORE_CD = tmmph.STORE_CD
-        AND tssd.BILL_NO = tmmph.BILL_NO
-        AND tssd.POS_NO = tmmph.POS_NO
-        AND tssd.SALE_DATE = tmmph.SALE_DATE
-        <choose>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                LEFT JOIN TB_MS_PRODUCT tmp ON tmp.STORE_CD = tssd.STORE_CD
-                AND tmp.HQ_BRAND_CD = tssd.HQ_BRAND_CD
-                AND tmp.PROD_CD = tssd.PROD_CD
-                LEFT JOIN TB_MS_PRODUCT_CLASS tmpc ON tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
-                AND tmpc.STORE_CD = tmp.STORE_CD
-            </when>
-            <when test='orgnFg != null and orgnFg == "H"'>
-                LEFT JOIN TB_HQ_PRODUCT thp ON thp.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
-                AND thp.HQ_BRAND_CD = tssd.HQ_BRAND_CD
-                AND thp.PROD_CD = tssd.PROD_CD
-                LEFT JOIN TB_HQ_PRODUCT_CLASS thpc ON thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
-                AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-            </when>
-        </choose>
-        LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmph.MEMBR_NO
-        AND tmm.MEMBR_ORGN_CD = tmmph.MEMBR_ORGN_CD
-        WHERE 1=1
-        AND tmmph.MEMBR_ORGN_CD = #{membrOrgnCd}
-        <if test='orgnFg != null and orgnFg == "S"'>
-            AND tmmph.STORE_CD = #{storeCd}
-        </if>
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        GROUP BY
-        <choose>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                tmpc.PROD_CLASS_CD,
-                tmpc.PROD_CLASS_NM,
-                tmp.PROD_CLASS_CD,
-            </when>
-            <when test='orgnFg != null and orgnFg == "H"'>
-                thpc.PROD_CLASS_CD,
-                thpc.PROD_CLASS_NM,
-                thp.PROD_CLASS_CD,
-            </when>
-        </choose>
-        tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
-        tmm.GENDR_FG,
-        TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 )
-        ) A,
-        <choose>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                (SELECT
-                A.P_PROD_CLASS_CD AS LV1_CD,
-                ( SELECT SF_GET_PROD_CLASSES ( 'S', #{storeCd}, A.P_PROD_CLASS_CD ) FROM DUAL ) AS LV1_NM,
-                A.PROD_CLASS_CD AS LV2_CD,
-                A.PROD_CLASS_NM AS LV2_NM,
-                B.PROD_CLASS_CD AS LV3_CD,
-                B.PROD_CLASS_NM AS LV3_NM
+                SELECT
+                Level1,
+                FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, Level1, 'NM') AS Level1_NM,
+                Level2,
+                FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, Level2, 'NM') AS Level2_NM,
+                Level3,
+                FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, Level3, 'NM') AS Level3_NM,
+                <!-- 금액 -->
+                <if test='option == ("AMT")'>
+                    <![CDATA[
+                        SUM(SUM_SALE_AMT) AS SUM_SALE,
+                        SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_F",
+                        SUM( CASE WHEN GENDR_FG = 'M' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_M",
+                        SUM( CASE WHEN GENDR_FG = 'N' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_Non",
+                        SUM( CASE WHEN AGE < 20 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE10",
+                        SUM( CASE WHEN AGE >= 20 AND AGE < 30 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE20",
+                        SUM( CASE WHEN AGE >= 30 AND AGE < 40 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE30",
+                        SUM( CASE WHEN AGE >= 40 AND AGE < 50 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE40",
+                        SUM( CASE WHEN AGE >= 50 AND AGE < 60 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE50",
+                        SUM( CASE WHEN AGE >= 60 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE60"
+                    ]]>
+                </if>
+                <!-- 수량 -->
+                <if test='option == "QTY"'>
+                    <![CDATA[
+                        SUM(SUM_SALE_QTY) AS SUM_SALE,
+                        SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_F",
+                        SUM( CASE WHEN GENDR_FG = 'M' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_M",
+                        SUM( CASE WHEN GENDR_FG = 'N' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_Non",
+                        SUM( CASE WHEN AGE < 20 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE10",
+                        SUM( CASE WHEN AGE >= 20 AND AGE < 30 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE20",
+                        SUM( CASE WHEN AGE >= 30 AND AGE < 40 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE30",
+                        SUM( CASE WHEN AGE >= 40 AND AGE < 50 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE40",
+                        SUM( CASE WHEN AGE >= 50 AND AGE < 60 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE50",
+                        SUM( CASE WHEN AGE >= 60 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE60"
+                    ]]>
+                </if>
                 FROM
                 (
-                SELECT
-                STORE_CD,
-                P_PROD_CLASS_CD,
-                PROD_CLASS_CD,
-                PROD_CLASS_NM
-                FROM
-                TB_MS_PRODUCT_CLASS
-                WHERE
-                STORE_CD = #{storeCd}
-                AND P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND
-                P_PROD_CLASS_CD = '00000' )
-                ) A,
-                TB_MS_PRODUCT_CLASS B
-                WHERE
-                B.P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND
-                P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND
-                P_PROD_CLASS_CD = '00000' ) )
-                AND A.STORE_CD = B.STORE_CD
-                AND A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-                ) C
+                    SELECT
+                    REPLACE(SUBSTR(thpc_p.PATH, 0, 6) ,'▶','') AS Level1,
+                    REPLACE(SUBSTR(thpc_p.PATH, 7, 6) ,'▶','') AS Level2,
+                    REPLACE(SUBSTR(thpc_p.PATH, 13, 6) ,'▶','') AS Level3,
+                    thpc_p.PROD_CLASS_CD,
+                    thpc_p.PATH,
+                    tmm.GENDR_FG,
+                    TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 ) AS AGE,
+                    SUM(tssd.SALE_QTY) AS SUM_SALE_QTY,
+                    SUM(tssd.SALE_AMT) AS SUM_SALE_AMT
+                    FROM TB_MB_MEMBER tmm,
+                    TB_SL_SALE_DTL tssd,
+                    TB_HQ_PRODUCT thp,
+                    (
+                        SELECT
+                        thpc.HQ_OFFICE_CD,
+                        thpc.PROD_CLASS_CD,
+                        SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_CD,'▶') PATH
+                        FROM TB_HQ_PRODUCT_CLASS thpc
+                        WHERE 1=1
+                        AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                        START WITH thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                        CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    ) thpc_p
+                    WHERE 1=1
+                    AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+                    AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND tssd.MEMBR_NO IS NOT NULL
+                    AND thp.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+                    AND thp.PROD_CD = tssd.PROD_CD
+                    AND thpc_p.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpc_p.PROD_CLASS_CD = thp.PROD_CLASS_CD
+                    GROUP BY thpc_p.PROD_CLASS_CD, thpc_p.PATH, tmm.GENDR_FG, TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 )
+                )
+                GROUP BY Level1, Level2, Level3
             </when>
-            <when test='orgnFg != null and orgnFg == "H"'>
-                (
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                A.P_PROD_CLASS_CD AS LV1_CD,
-                ( SELECT SF_GET_PROD_CLASSES ( 'H', #{hqOfficeCd}, A.P_PROD_CLASS_CD ) FROM DUAL ) AS LV1_NM,
-                A.PROD_CLASS_CD AS LV2_CD,
-                A.PROD_CLASS_NM AS LV2_NM,
-                B.PROD_CLASS_CD AS LV3_CD,
-                B.PROD_CLASS_NM AS LV3_NM
+                Level1,
+                FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, Level1, 'NM') AS Level1_NM,
+                Level2,
+                FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, Level2, 'NM') AS Level2_NM,
+                Level3,
+                FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, Level3, 'NM') AS Level3_NM,
+                <!-- 금액 -->
+                <if test='option == ("AMT")'>
+                    <![CDATA[
+                        SUM(SUM_SALE_AMT) AS SUM_SALE,
+                        SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_F",
+                        SUM( CASE WHEN GENDR_FG = 'M' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_M",
+                        SUM( CASE WHEN GENDR_FG = 'N' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_Non",
+                        SUM( CASE WHEN AGE < 20 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE10",
+                        SUM( CASE WHEN AGE >= 20 AND AGE < 30 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE20",
+                        SUM( CASE WHEN AGE >= 30 AND AGE < 40 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE30",
+                        SUM( CASE WHEN AGE >= 40 AND AGE < 50 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE40",
+                        SUM( CASE WHEN AGE >= 50 AND AGE < 60 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE50",
+                        SUM( CASE WHEN AGE >= 60 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGE60"
+                    ]]>
+                </if>
+                <!-- 수량 -->
+                <if test='option == "QTY"'>
+                    <![CDATA[
+                        SUM(SUM_SALE_QTY) AS SUM_SALE,
+                        SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_F",
+                        SUM( CASE WHEN GENDR_FG = 'M' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_M",
+                        SUM( CASE WHEN GENDR_FG = 'N' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_Non",
+                        SUM( CASE WHEN AGE < 20 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE10",
+                        SUM( CASE WHEN AGE >= 20 AND AGE < 30 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE20",
+                        SUM( CASE WHEN AGE >= 30 AND AGE < 40 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE30",
+                        SUM( CASE WHEN AGE >= 40 AND AGE < 50 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE40",
+                        SUM( CASE WHEN AGE >= 50 AND AGE < 60 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE50",
+                        SUM( CASE WHEN AGE >= 60 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGE60"
+                    ]]>
+                </if>
                 FROM
                 (
-                SELECT
-                HQ_OFFICE_CD,
-                P_PROD_CLASS_CD,
-                PROD_CLASS_CD,
-                PROD_CLASS_NM
-                FROM
-                TB_HQ_PRODUCT_CLASS
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
-                AND P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_MS_PRODUCT_CLASS WHERE HQ_OFFICE_CD =
-                #{hqOfficeCd} AND
-                P_PROD_CLASS_CD = '00000' )
-                ) A,
-                TB_HQ_PRODUCT_CLASS B
-                WHERE
-                B.P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND
-                P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND
-                P_PROD_CLASS_CD = '00000' ) )
-                AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-                AND A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-                ) C
+                    SELECT
+                    REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'▶','') AS Level1,
+                    REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'▶','') AS Level2,
+                    REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'▶','') AS Level3,
+                    tmpc_p.PROD_CLASS_CD,
+                    tmpc_p.PATH,
+                    tmm.GENDR_FG,
+                    TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 ) AS AGE,
+                    SUM(tssd.SALE_QTY) AS SUM_SALE_QTY,
+                    SUM(tssd.SALE_AMT) AS SUM_SALE_AMT
+                    FROM TB_MB_MEMBER tmm,
+                    TB_SL_SALE_DTL tssd,
+                    TB_MS_PRODUCT tmp,
+                    (
+                        SELECT
+                        tmpc.STORE_CD,
+                        tmpc.PROD_CLASS_CD,
+                        SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_CD, '▶') PATH
+                        FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
+                        WHERE 1=1
+                        START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
+                        CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+                    ) tmpc_p
+                    WHERE 1=1
+                    AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+                    AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND tssd.MEMBR_NO IS NOT NULL
+                    AND tmp.STORE_CD = tssd.STORE_CD
+                    AND tmp.PROD_CD = tssd.PROD_CD
+                    AND tmpc_p.STORE_CD = tmp.STORE_CD
+                    AND tmpc_p.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+                    GROUP BY tmpc_p.PROD_CLASS_CD, tmpc_p.PATH, tmm.GENDR_FG, TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 )
+                )
+                GROUP BY Level1, Level2, Level3
             </when>
         </choose>
-        WHERE
-        C.LV3_CD = A.LV3_CD
-        GROUP BY
-        C.LV1_CD,
-        C.LV1_NM,
-        C.LV2_CD,
-        C.LV2_NM,
-        A.LV3_CD,
-        A.LV3_NM
     </select>
 
 </mapper>

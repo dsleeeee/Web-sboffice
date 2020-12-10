@@ -57,18 +57,16 @@
             FROM TB_MB_MEMBER_PAID_BALANCE
             WHERE REG_DT BETWEEN #{startDate} AND #{endDate}
             AND HQ_OFFICE_CD = #{hqOfficeCd}
-            <where>
-                <if test='storeCd != null and storeCd != ""'>
-                    <![CDATA[
-                        AND STORE_CD = #{storeCd}
-                    ]]>
-                </if>
-                <if test='membrNo != null and membrNo != ""'>
-                    <![CDATA[
-                        AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
-                    ]]>
-                </if>
-            </where>
+            <if test='storeCd != null and storeCd != ""'>
+                <![CDATA[
+                    AND STORE_CD = #{storeCd}
+                ]]>
+            </if>
+            <if test='membrNo != null and membrNo != ""'>
+                <![CDATA[
+                    AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
+                ]]>
+            </if>
             GROUP BY MEMBR_NO, HQ_OFFICE_CD
         ) tmmpbdt
         WHERE 1=1

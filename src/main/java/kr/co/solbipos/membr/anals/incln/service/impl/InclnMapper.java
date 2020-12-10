@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface InclnMapper {
 
+  /** 회원 구매성향 분석 조회 */
   List<DefaultMap<Object>> getInclnList(InclnVO inclnVO);
-
 }

@@ -29,22 +29,22 @@ public class InclnServiceImpl implements InclnService {
     this.inclnMapper = inclnMapper;
   }
 
+  /** 회원 구매성향 분석 조회 */
   @Override
   public List<DefaultMap<Object>> getInclnList(InclnVO inclnVo, SessionInfoVO sessionInfoVO) {
+
     LOGGER.debug("sessionInfoVO.getOrgnGrpCd(): {}", sessionInfoVO.getOrgnGrpCd());
     LOGGER.debug("sessionInfoVO.getOrgnFg(): {}", sessionInfoVO.getOrgnFg());
     LOGGER.debug("sessionInfoVO.getHqOfficeCd(): {}", sessionInfoVO.getHqOfficeCd());
     LOGGER.debug("sessionInfoVO.getStoreCd(): {}", sessionInfoVO.getStoreCd());
-    inclnVo.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
 
-    if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-      inclnVo.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-      inclnVo.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-      inclnVo.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-      inclnVo.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    inclnVo.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+    inclnVo.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
+    inclnVo.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
       inclnVo.setStoreCd(sessionInfoVO.getStoreCd());
     }
+
     return inclnMapper.getInclnList(inclnVo);
   }
 }

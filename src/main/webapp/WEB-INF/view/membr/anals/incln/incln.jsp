@@ -34,45 +34,42 @@
                 <s:message code="dlvrInfo.srchDate"/>
             </th>
             <td>
-                <%--          <span class="txtIn"> <input id="startDate" name="startDate" class="w200px"/></span>--%>
-                <%--          <span class="rg">~</span>--%>
-                <%--          <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>--%>
                 <div class="sb-select">
-            <span class="txtIn">
-              <div class="sb-select w115px">
-                <wj-input-date
-                        value="periodStartDate"
-                        ng-model="periodStartDate"
-                        control="periodStartDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+                    <span class="txtIn">
+                      <div class="sb-select w115px">
+                        <wj-input-date
+                                value="periodStartDate"
+                                ng-model="periodStartDate"
+                                control="periodStartDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
+                    </span>
                     <span class="rg">~</span>
                     <span class="txtIn">
-              <div class="sb-select w115px">
-                <wj-input-date
-                        value="periodEndDate"
-                        ng-model="periodEndDate"
-                        control="periodEndDateCombo"
-                        format="yyyy/MM/dd"
-                        min="2000-01-01"
-                        max="2099-12-31"
-                        initialized="_initDateBox(s)">
-                </wj-input-date>
-              </div>
-            </span>
+                      <div class="sb-select w115px">
+                        <wj-input-date
+                                value="periodEndDate"
+                                ng-model="periodEndDate"
+                                control="periodEndDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
                     </span>
                 </div>
             </td>
             <td>
                 <div class="sb-input">
-                    <input type="radio" name="searchOption" ng-model="searchOption" value="AMT" ng-checked="true"
-                           checked="checked">
+                    <%--금액--%>
+                    <input type="radio" name="searchOption" ng-model="searchOption" value="AMT" ng-checked="true" checked="checked">
                     <label class="mr5"><s:message code="incln.sum.amt"/></label>
+                    <%--수량--%>
                     <input type="radio" name="searchOption" ng-model="searchOption" value="QTY">
                     <label><s:message code="incln.sum.qty"/></label>
                 </div>
@@ -82,59 +79,41 @@
         </tbody>
     </table>
     <div class="mt20 oh sb-select dkbr">
-        <button class="btn_skyblue mr5 mt5 fr" ng-click="excelDownload()">
-            <s:message code="member.excel"/>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down" />
         </button>
     </div>
     <%-- 그리드 --%>
     <div class="w100 fl mt10 mb20">
-        <div class="wj-TblWrapBr " style="height: 600px;">
-            <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-TblWrapBr " style="height: 470px;">
+            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <div class="row">
                     <wj-flex-grid
-                            id="inclnGrid"
-                            autoGenerateColumns="false"
-                            control="flex"
-                            initialized="initGrid(s,e)"
-                            sticky-headers="true"
-                            selection-mode="Row"
-                            items-source="data"
-                            item-formatter="_itemFormatter"
-                    >
+                        id="inclnGrid"
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter">
+
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="incln.lv1Nm"/>" binding="lv1Nm" width="130"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.lv2Nm"/>" binding="lv2Nm" width="150"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.lv3Nm"/>" binding="lv3Nm" width="150"
-                                             is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.sumSale"/>" binding="sumSale" width="130"
-                                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.gendrF"/>" binding="sumGendrF" width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.gendrG"/>" binding="sumGendrM" width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.gendrNon"/>" binding="sumGendrNon"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.ageTeens"/>" binding="sumAgeTeens"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.ageTwenties"/>" binding="sumAgeTwenties"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.ageThirties"/>" binding="sumAgeThirties"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.ageForties"/>" binding="sumAgeForties"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.ageFifties"/>" binding="sumAgeFifties"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="incln.ageSixties"/>" binding="sumAgeSixties"
-                                             width="115"
-                                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.level1Nm"/>" binding="level1Nm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.level2Nm"/>" binding="level2Nm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.level3Nm"/>" binding="level3Nm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.sumSale"/>" binding="sumSale" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.gendrF"/>" binding="sumGendrF" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.gendrG"/>" binding="sumGendrM" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.gendrNon"/>" binding="sumGendrNon" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.sumAge10"/>" binding="sumAge10" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.sumAge20"/>" binding="sumAge20" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.sumAge30"/>" binding="sumAge30" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.sumAge40"/>" binding="sumAge40" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.sumAge50"/>" binding="sumAge50" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="incln.sumAge60"/>" binding="sumAge60" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+
                     </wj-flex-grid>
                 </div>
             </div>
@@ -143,5 +122,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/incln/incln.js?ver=2019052801.11"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/incln/incln.js?ver=20201207.04" charset="utf-8"></script>
