@@ -21,6 +21,6 @@ import java.util.List;
  */
 public interface InclnService {
 
+  /** 회원 구매성향 분석 조회 */
   List<DefaultMap<Object>> getInclnList(InclnVO inclnVO, SessionInfoVO sessionInfoVO);
-
 }
