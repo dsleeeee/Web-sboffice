@@ -13,45 +13,57 @@
 
     <!-- 회원 상품 구매내역-->
     <!--
-        TABLE    : TB_SL_SALE_DTL, TB_SL_SALE_HDR_MEMBR, TB_MS_PRODUCT
-        COMMENTS : [매출]상세 와 [매출]헤더_회원, [매장]상품
+        TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_DAILY_MEMBR_PROD, TB_MS_PRODUCT
+        COMMENTS : [매출]헤더_회원, [매출]상세, [매장]상품
     -->
     <select id="getMembrProdList"  parameterType="membrProdVO" resultType="DefaultMap">
         /* MembrProdMapper.getMembrProdList */
         SELECT
         tsshm.MEMBR_NO,
         SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
-        tssd.PROD_CD,
+        tsdmp.PROD_CD,
         tmp.PROD_NM,
-        SUM(tssd.SALE_QTY) AS SALE_QTY,
-        SUM(tssd.SALE_AMT) AS SALE_AMT,
-        SUM(tssd.DC_AMT) AS DC_AMT,
-        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM TB_SL_SALE_DTL tssd,
-        TB_SL_SALE_HDR_MEMBR tsshm,
+        SUM(tsdmp.TOT_SALE_QTY) AS SALE_QTY,
+        SUM(tsdmp.TOT_SALE_AMT) AS SALE_AMT,
+        SUM(tsdmp.TOT_DC_AMT) AS DC_AMT,
+        SUM(tsdmp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            STORE_CD,
+            SALE_DATE,
+            MEMBR_NO,
+            MEMBR_NM
+            FROM TB_SL_SALE_HDR_MEMBR
+            WHERE 1 = 1
+            AND HQ_OFFICE_CD = #{membrOrgnCd}
+            <if test='storeCd != null and storeCd != ""'>
+                <![CDATA[
+                    AND STORE_CD = #{storeCd}
+                ]]>
+            </if>
+            AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test="membrNm != null and membrNm != ''">
+                AND SBPENC.D ( MEMBR_NM ) LIKE '%'|| #{membrNm} ||'%'
+            </if>
+            GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, MEMBR_NO, MEMBR_NM
+            ORDER BY SALE_DATE, MEMBR_NO
+        ) tsshm,
+        TB_SL_DAILY_MEMBR_PROD tsdmp,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-                AND tssd.STORE_CD = #{storeCd}
-            ]]>
-        </if>
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test="membrNm != null and membrNm != ''">
-            AND SBPENC.D ( tsshm.MEMBR_NM ) LIKE '%'|| #{membrNm} ||'%'
-        </if>
-        AND tssd.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
-        AND tssd.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
-        AND tssd.STORE_CD = tsshm.STORE_CD
-        AND tssd.SALE_DATE = tsshm.SALE_DATE
-        AND tssd.POS_NO = tsshm.POS_NO
-        AND tssd.BILL_NO = tsshm.BILL_NO
-        AND tmp.HQ_BRAND_CD = tssd.HQ_BRAND_CD
-        AND tmp.STORE_CD = tssd.STORE_CD
-        AND tmp.PROD_CD = tssd.PROD_CD
-        GROUP BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tssd.PROD_CD, tmp.PROD_NM
-        ORDER BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tssd.PROD_CD
+        AND tsdmp.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
+        AND tsdmp.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
+        AND tsdmp.STORE_CD = tsshm.STORE_CD
+        AND tsdmp.SALE_DATE = tsshm.SALE_DATE
+        AND tsdmp.MEMBR_NO = tsshm.MEMBR_NO
+        AND tmp.HQ_BRAND_CD = tsdmp.HQ_BRAND_CD
+        AND tmp.STORE_CD = tsdmp.STORE_CD
+        AND tmp.PROD_CD = tsdmp.PROD_CD
+        GROUP BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsdmp.PROD_CD, tmp.PROD_NM
+        ORDER BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsdmp.PROD_CD
     </select>
 
     <!-- 회원 상품 구매내역-->

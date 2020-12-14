@@ -80,6 +80,9 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 일자별회원 구매내역 그리드 조회
   $scope.searchDayMembr = function () {
+    if (!$scope.valueCheck()) {
+      return false;
+    }
 
     var params = {};
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
@@ -87,6 +90,22 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.payCol    = payCol;
 
     $scope._inquiryMain("/membr/anals/dayMembr/dayMembr/getDayMembrList.sb", params, function () {}, false);
+  };
+
+  // 체크
+  $scope.valueCheck = function () {
+    // 최대 3달까지 선택가능합니다.
+    var msg = messages['dayMembr.dateError'];
+    var date1 = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+    var date2 = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+
+    var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDay > 93) {
+      $scope._popMsg(msg);
+      return false;
+    }
+
+    return true;
   };
   // <-- //검색 호출 -->
 
