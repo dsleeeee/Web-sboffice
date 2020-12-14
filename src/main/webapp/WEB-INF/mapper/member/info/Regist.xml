@@ -524,6 +524,7 @@
             #{modId}
         )
     </insert>
+
     <!-- 회원정보 등록 -->
     <!--
         TABLE    : TB_MB_MEMBER
@@ -594,8 +595,6 @@
             #{modId},
             #{cstCardUseFg}
         )
-
-
         ]]>
     </insert>
 
@@ -691,7 +690,6 @@
          AND tmm.MEMBR_NO = #{membrNo}
     </delete>
 
-
     <!-- 회원카드정보 수정(이전 카드정보 '폐기(code:1)'처리) -->
     <!--
         TABLE    : TB_MB_MEMBER_CARD
@@ -735,7 +733,6 @@
         AND	membr_card_no = #{membrCardNo}
         AND CST_CARD_STAT_FG = '0'
     </select>
-
 
     <!-- 회원정보 수정 Sec-->
     <!--
@@ -1044,7 +1041,6 @@
     }
     </select>
 
-
     <!-- 회원정보 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER
@@ -1163,7 +1159,6 @@
         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
         AND MEMBR_NO = #{membrNo}
     </select>
-
 
     <!-- 배달정보 추가 -->
     <!--
@@ -1387,7 +1382,7 @@
     <!-- 회원정보 포인트변경내역 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER_POINT_HIST
-        COMMENTS :
+        COMMENTS : [회원]회원_포인트_변경내역
     -->
     <select id="getMemberInfoPointList" parameterType="registVO" resultType="DefaultMap">
         /* RegistMapper.getMemberInfoPointList */
@@ -1405,8 +1400,8 @@
 
     <!-- 회원정보 구매내역 조회 -->
     <!--
-        TABLE    : TB_SL_DAILY_MEMBR_PROD
-        COMMENTS :
+        TABLE    : TB_SL_DAILY_MEMBR_PROD, TB_MS_STORE, TB_MS_PRODUCT
+        COMMENTS : [매출]일별_회원/상품별 매출, [매장]매장 정보, [매장]상품
     -->
     <select id="getMemberInfoBuyList" parameterType="registVO" resultType="DefaultMap">
         /* RegistMapper.getMemberInfoBuyList */
@@ -1432,6 +1427,32 @@
         AND tmp.HQ_BRAND_CD (+)= tsdmp.HQ_BRAND_CD
         AND tmp.STORE_CD (+)= tsdmp.STORE_CD
         AND tmp.PROD_CD (+)= tsdmp.PROD_CD
+    </select>
+
+    <!-- 회원 포인트 조회 팝업 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT, TB_MB_MEMBER
+        COMMENTS : [회원]회원_포인트정보, [회원]회원
+    -->
+    <select id="getSearchMemberPointList" parameterType="registVO" resultType="DefaultMap">
+    /* RegistMapper.getSearchMemberPointList */
+        SELECT
+        tmmp.MEMBR_NO,
+        tmm.MEMBR_NM,
+        tmmp.AVABL_POINT
+        FROM TB_MB_MEMBER_POINT tmmp,
+        TB_MB_MEMBER tmm
+        WHERE 1=1
+        AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
+        <if test="membrNo != null and membrNo != ''">
+            AND tmmp.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+        </if>
+        <if test="membrNm != null and membrNm != ''">
+            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+        </if>
+        AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD
+        AND tmm.MEMBR_NO = tmmp.MEMBR_NO
+        ORDER BY tmmp.MEMBR_NO
     </select>
 
 </mapper>

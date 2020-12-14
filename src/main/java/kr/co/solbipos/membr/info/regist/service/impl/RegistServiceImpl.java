@@ -747,4 +747,44 @@ public class RegistServiceImpl implements RegistService {
 
         return mapper.getMemberInfoBuyList(registVO);
     }
+
+    /** 회원 포인트 조회 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchMemberPointList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        return mapper.getSearchMemberPointList(registVO);
+    }
+
+    /** 회원 포인트 이관 팝업 - 저장 */
+    @Override
+    public int getMemberPointMoveSave(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        registVO.setRegDt(currentDt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(currentDt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        registVO.setChgDate(registVO.getRegDt().substring(0, registVO.getRegDt().length()-6));
+        registVO.setRegStoreCd(null);
+        registVO.setPointChgFg("2");
+        registVO.setRemark("[" + registVO.getMemberNoSend() + "] " + registVO.getMemberNmSend() + " 에서 " + "[" + registVO.getMemberNoReceive() + "] " + registVO.getMemberNmReceive() + " 로 " + registVO.getPointReceive() + " 포인트 이관");
+
+        // 보내는 회원
+        registVO.setMembrNo(registVO.getMemberNoSend());
+        registVO.setChgPoint(-registVO.getPointReceive());
+        mapper.insertMembrPointHist(registVO);
+
+        // 받는 회원
+        registVO.setMembrNo(registVO.getMemberNoReceive());
+        registVO.setChgPoint(registVO.getPointReceive());
+        mapper.insertMembrPointHist(registVO);
+
+        return procCnt;
+    }
 }

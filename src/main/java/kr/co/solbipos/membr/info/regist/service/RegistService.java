@@ -158,4 +158,10 @@ public interface RegistService {
 
     /** 회원정보 구매내역 조회 */
     List<DefaultMap<String>> getMemberInfoBuyList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원 포인트 조회 팝업 - 조회 */
+    List<DefaultMap<String>> getSearchMemberPointList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원 포인트 이관 팝업 - 저장 */
+    int getMemberPointMoveSave(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

@@ -181,6 +181,25 @@ public class RegistVO extends PageVO {
     private String storeNm;
 
     private boolean newMemberYn;
+
+    /** 보내는 회원번호 */
+    private String memberNoSend;
+
+    /** 보내는 회원명 */
+    private String memberNmSend;
+
+    /** 보내는 가용포인트 */
+    private int pointSend;
+
+    /** 받는 회원번호 */
+    private String memberNoReceive;
+
+    /** 받는 회원명 */
+    private String memberNmReceive;
+
+    /** 받는 포인트 */
+    private int pointReceive;
+
     /**
      * @return the orgnFg
      */
@@ -1118,6 +1137,54 @@ public class RegistVO extends PageVO {
 
     public void setNewMemberYn(boolean newMemberYn) {
         this.newMemberYn = newMemberYn;
+    }
+
+    public String getMemberNoSend() {
+        return memberNoSend;
+    }
+
+    public void setMemberNoSend(String memberNoSend) {
+        this.memberNoSend = memberNoSend;
+    }
+
+    public String getMemberNmSend() {
+        return memberNmSend;
+    }
+
+    public void setMemberNmSend(String memberNmSend) {
+        this.memberNmSend = memberNmSend;
+    }
+
+    public int getPointSend() {
+        return pointSend;
+    }
+
+    public void setPointSend(int pointSend) {
+        this.pointSend = pointSend;
+    }
+
+    public String getMemberNoReceive() {
+        return memberNoReceive;
+    }
+
+    public void setMemberNoReceive(String memberNoReceive) {
+        this.memberNoReceive = memberNoReceive;
+    }
+
+    public String getMemberNmReceive() {
+        return memberNmReceive;
+    }
+
+    public void setMemberNmReceive(String memberNmReceive) {
+        this.memberNmReceive = memberNmReceive;
+    }
+
+    public int getPointReceive() {
+        return pointReceive;
+    }
+
+    public void setPointReceive(int pointReceive) {
+        this.pointReceive = pointReceive;
     }
 
     @Override

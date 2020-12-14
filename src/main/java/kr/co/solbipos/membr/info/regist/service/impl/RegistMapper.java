@@ -205,4 +205,7 @@ public interface RegistMapper {
 
     /** 회원정보 구매내역 조회 */
     List<DefaultMap<String>> getMemberInfoBuyList(RegistVO registVO);
+
+    /** 회원 포인트 조회 팝업 조회 */
+    List<DefaultMap<String>> getSearchMemberPointList(RegistVO registVO);
 }
