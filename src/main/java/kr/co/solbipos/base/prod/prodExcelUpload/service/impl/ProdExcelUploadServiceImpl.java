@@ -83,7 +83,6 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
     public int getProdExcelUploadCheckDeleteAll(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        String currentDt = currentDateTimeString();
 
         prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
@@ -143,14 +142,12 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             // <-- 업로할때는 전부 명칭으로 들어간다 -->
             // 상품유형
             if (prodExcelUploadVO.getProdTypeFg() != null && !"".equals(prodExcelUploadVO.getProdTypeFg())) {
-                // 상품유형 조회
                 String prodTypeFg = prodExcelUploadMapper.getProdTypeFgCheck(prodExcelUploadVO);
                 prodExcelUploadVO.setProdTypeFg(prodTypeFg);
             }
 
             // 판매상품여부
             if (prodExcelUploadVO.getSaleProdYn() != null && !"".equals(prodExcelUploadVO.getSaleProdYn())) {
-                // 판매상품여부 조회
                 String saleProdYn = prodExcelUploadMapper.getSaleProdYnCheck(prodExcelUploadVO);
                 prodExcelUploadVO.setSaleProdYn(saleProdYn);
             }
@@ -161,16 +158,20 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 prodExcelUploadVO.setPoProdFg(poProdFg);
             }
 
+            // 발주단위
+            if (prodExcelUploadVO.getPoUnitFg() != null && !"".equals(prodExcelUploadVO.getPoUnitFg())) {
+                String poUnitFg = prodExcelUploadMapper.getPoUnitFgCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setPoUnitFg(poUnitFg);
+            }
+
             // 과세여부
             if (prodExcelUploadVO.getVatFg() != null && !"".equals(prodExcelUploadVO.getVatFg())) {
-                // 과세여부 조회
                 String vatFg = prodExcelUploadMapper.getVatFgCheck(prodExcelUploadVO);
                 prodExcelUploadVO.setVatFg(vatFg);
             }
 
             // 재고관리여부
             if (prodExcelUploadVO.getStockProdYn() != null && !"".equals(prodExcelUploadVO.getStockProdYn())) {
-                // 재고관리여부 조회
                 String stockProdYn = prodExcelUploadMapper.getStockProdYnCheck(prodExcelUploadVO);
                 prodExcelUploadVO.setStockProdYn(stockProdYn);
             }
@@ -308,10 +309,26 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 prodExcelUploadVO.setResult("최소발주수량을 입력해주세요.");
             }
 
+            // 발주단위수량
+            if (prodExcelUploadVO.getPoUnitQty() != null && !"".equals(prodExcelUploadVO.getPoUnitQty())) {
+                if (prodExcelUploadVO.getPoUnitQty() < 1) {
+                    prodExcelUploadVO.setResult("발주단위수량은 1이상 입력해주세요.");
+                }
+                if (prodExcelUploadVO.getPoUnitQty() > 999999999) {
+                    prodExcelUploadVO.setPoUnitQty(0);
+                    prodExcelUploadVO.setResult("발주단위수량 길이가 너무 깁니다.");
+                }
+            } else {
+                prodExcelUploadVO.setResult("발주단위수량를 입력해주세요.");
+            }
+
             // 발주단위
             if (prodExcelUploadVO.getPoUnitFg() != null && !"".equals(prodExcelUploadVO.getPoUnitFg())) {
-                if (prodExcelUploadVO.getPoUnitFg() < 1) {
-                    prodExcelUploadVO.setResult("발주단위는 1이상 입력해주세요.");
+                if(String.valueOf(1).equals(prodExcelUploadVO.getPoUnitFg())) {
+                    // 발주단위수량
+                    if (!prodExcelUploadVO.getPoUnitQty().equals(1)) {
+                        prodExcelUploadVO.setResult("발주단위가 낱개인 경우 발주단위수량은 1만 입력가능합니다.");
+                    }
                 }
             } else {
                 prodExcelUploadVO.setResult("발주단위를 입력해주세요.");
@@ -431,8 +448,6 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
     public int getProdExcelUploadCheckDelete(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        int i = 1;
-        String currentDt = currentDateTimeString();
 
         for(ProdExcelUploadVO prodExcelUploadVO : prodExcelUploadVOs) {
 

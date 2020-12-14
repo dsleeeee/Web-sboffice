@@ -51,6 +51,9 @@ public interface ProdExcelUploadMapper {
     /** 발주상품구분 검증 조회 */
     String getPoProdFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 
+    /** 발주단위구분 검증 조회 */
+    String getPoUnitFgCheck(ProdExcelUploadVO prodExcelUploadVO);
+
     /** 과세여부 검증 조회 */
     String getVatFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 
