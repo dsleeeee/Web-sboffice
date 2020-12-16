@@ -110,7 +110,7 @@ public class ProdExcelUploadVO extends PageVO {
     private Integer poUnitQty;
 
     /** 발주단위 */
-    private Integer poUnitFg;
+    private String poUnitFg;
 
     /** 발주최소수량 */
     private Integer poMinQty;
@@ -271,9 +271,9 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setPoUnitQty(Integer poUnitQty) { this.poUnitQty = poUnitQty; }
 
-    public Integer getPoUnitFg() { return poUnitFg; }
+    public String getPoUnitFg() { return poUnitFg; }
 
-    public void setPoUnitFg(Integer poUnitFg) { this.poUnitFg = poUnitFg; }
+    public void setPoUnitFg(String poUnitFg) { this.poUnitFg = poUnitFg; }
 
     public Integer getPoMinQty() { return poMinQty; }
 

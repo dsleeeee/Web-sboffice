@@ -232,8 +232,8 @@
             #{splyUprc},
             'Y', --SPLY_UPRC_USE_YN
             #{poProdFg},
-            #{poUnitFg},
-            '1', --PO_UNIT_QTY
+            #{poUnitFg}, --PO_UNIT_FG
+            #{poUnitQty}, --PO_UNIT_QTY
             '', --PO_UNIT_ALLOW_FG
             #{poMinQty},
             #{safeStockQty},
@@ -290,6 +290,20 @@
         FROM TB_CM_NMCODE
         WHERE NMCODE_GRP_CD = '092'
         AND NMCODE_NM = #{poProdFg}
+        GROUP BY NMCODE_CD
+    </select>
+
+    <!-- 발주단위구분 검증 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getPoUnitFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getPoUnitFgCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '093'
+        AND NMCODE_NM = #{poUnitFg}
         GROUP BY NMCODE_CD
     </select>
 

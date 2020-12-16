@@ -143,10 +143,6 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             if (numChkexp.test(jsonData[i].poUnitQty)) {
                 jsonData[i].poUnitQty = "";
             }
-            // 발주단위
-            if (numChkexp.test(jsonData[i].poUnitFg)) {
-                jsonData[i].poUnitFg = "";
-            }
             // 발주최소수량
             if (numChkexp.test(jsonData[i].poMinQty)) {
                 jsonData[i].poMinQty = "";

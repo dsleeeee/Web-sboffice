@@ -53,6 +53,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFgData, 'value', 'name'); // 상품유형구분
         $scope.saleProdYnDataMap = new wijmo.grid.DataMap(saleProdYnData, 'value', 'name'); // 판매상품여부
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
+        $scope.poUnitFgDataMap = new wijmo.grid.DataMap(poUnitFgData, 'value', 'name'); // 발주단위구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
@@ -87,6 +88,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.splyUprc = "1000";
         params.poProdFg = "1";
         params.poUnitFg = "1";
+        params.poUnitQty = "1";
         params.poMinQty = "1";
         params.barCd = "123456";
         params.vatFg = "1";
@@ -162,6 +164,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
         $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFgData, 'value', 'name'); // 상품유형구분
         $scope.saleProdYnDataMap = new wijmo.grid.DataMap(saleProdYnData, 'value', 'name'); // 판매상품여부
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
+        $scope.poUnitFgDataMap = new wijmo.grid.DataMap(poUnitFgData, 'value', 'name'); // 발주단위구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
@@ -269,23 +272,20 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                 var numChkexp = /[^0-9]/g;
                 if (numChkexp.test($scope.flex.collectionView.items[i].poMinQty)) {
                     $scope.flex.collectionView.items[i].poMinQty = "";
-                    result = messages["prodExcelUpload.poMinQtyInChk"]; // 최소발주수량는 숫자만 입력해주세요.
+                    result = messages["prodExcelUpload.poMinQtyInChk"]; // 최소발주수량은 숫자만 입력해주세요.
                 }
             }
 
-            // 발주단위
-            if($scope.flex.collectionView.items[i].poUnitFg === "" || $scope.flex.collectionView.items[i].poUnitFg === null) {
-                result = messages["prodExcelUpload.poUnitFgBlank"]; // 발주단위를 입력하세요.
+            // 발주단위수량
+            if($scope.flex.collectionView.items[i].poUnitQty === "" || $scope.flex.collectionView.items[i].poUnitQty === null) {
+                result = messages["prodExcelUpload.poUnitQtyBlank"]; // 발주단위수량을 입력하세요.
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].poUnitFg)) {
-                    $scope.flex.collectionView.items[i].poUnitFg = "";
-                    result = messages["prodExcelUpload.poUnitFgInChk"]; // 발주단위는 숫자만 입력해주세요.
+                if (numChkexp.test($scope.flex.collectionView.items[i].poUnitQty)) {
+                    $scope.flex.collectionView.items[i].poUnitQty = "";
+                    result = messages["prodExcelUpload.poUnitQtyInChk"]; // 발주단위수량은 숫자만 입력해주세요.
                 }
-
-                // 최대길이 체크
-                if(nvl($scope.flex.collectionView.items[i].poUnitFg, '').getByteLengthForOracle() > 2) { result = messages["prodExcelUpload.poUnitFgLengthChk"]; } // 발주단위 길이가 너무 깁니다.
             }
 
             // 공급단가
