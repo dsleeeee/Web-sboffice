@@ -38,7 +38,7 @@ public class HqEnvstVO extends CmmVO{
     /** 환경설정값 */
     private String envstVal;
     /** 대상구분 */
-    private TargtFg targtFg;
+    private String targtFg;
     /** 직접입력여부 */
     private String dirctInYn;
     /** 사용여부 */
@@ -132,13 +132,13 @@ public class HqEnvstVO extends CmmVO{
     /**
      * @return the targtFg
      */
-    public TargtFg getTargtFg() {
+    public String getTargtFg() {
         return targtFg;
     }
     /**
      * @param targtFg the targtFg to set
      */
-    public void setTargtFg(TargtFg targtFg) {
+    public void setTargtFg(String targtFg) {
         this.targtFg = targtFg;
     }
     /**

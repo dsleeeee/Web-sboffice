@@ -161,8 +161,9 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
               storeEnvHtml += '    <input type=\"hidden\" name=\"dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"targtFg\"     value=\"' + list[j].targtFg + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValCd\"  value=\"' + list[j].hqEnvstValCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValNm\"  value=\"' + list[j].hqEnvstValNm + '\">';
               storeEnvHtml += '  </td>';
-
             } else if(envType === "P") { // 포스환경 환경변수 그리기
               if (list[j].dirctInYn === "Y") { // 직접입력
                 storeEnvHtml += '    <input type=\"text\" name=\"pos_envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-input w100\">';
@@ -178,6 +179,8 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_targtFg\"     value=\"' + list[j].targtFg + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValCd\"  value=\"' + list[j].hqEnvstValCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValNm\"  value=\"' + list[j].hqEnvstValNm + '\">';
               storeEnvHtml += '  </td>';
             }
             //--------------------------------------------------------

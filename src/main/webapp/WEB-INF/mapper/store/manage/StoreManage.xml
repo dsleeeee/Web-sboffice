@@ -1790,7 +1790,9 @@
                tce2.TARGT_FG,
                DECODE(tms.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG,
                tms.ENVST_VAL AS SEL_ENVST_VAL,
-               tce3.ENVST_CD_CNT
+               tce3.ENVST_CD_CNT,
+               HDENV.HQ_ENVST_VAL_CD,
+               HDENV.HQ_ENVST_VAL_NM
           FROM (
           SELECT *
            FROM  (
@@ -1824,12 +1826,23 @@
            GROUP BY tce.ENVST_GRP_CD
                ) tce3,
                TB_MS_STORE_ENVST tms,
-               TB_CM_NMCODE tcn
+               TB_CM_NMCODE tcn,
+               (
+                    SELECT  A.ENVST_CD
+                    ,       NVL(A.ENVST_VAL, 'NO_DATA_FOUND')       HQ_ENVST_VAL_CD
+                    ,       DECODE(A.DIRCT_IN_YN, 'Y', NVL(A.ENVST_VAL, 'NO_DATA_FOUND'), NVL(B.ENVST_VAL_NM, 'NO_DATA_FOUND')) HQ_ENVST_VAL_NM
+                    FROM    TB_HQ_ENVST A
+                    ,       TB_CM_ENVST_DTL B
+                    WHERE   HQ_OFFICE_CD        =   (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
+                    AND     B.ENVST_CD      (+) =   A.ENVST_CD
+                    AND     B.ENVST_VAL_CD  (+) =   A.ENVST_VAL
+               ) HDENV
          WHERE tms.STORE_CD (+)= #{storeCd}
            AND tms.ENVST_CD (+)= tce2.ENVST_CD
            AND tcn.NMCODE_GRP_CD = '004'
            AND tcn.NMCODE_CD = tce2.ENVST_GRP_CD
            AND tce3.ENVST_GRP_CD = tce2.ENVST_GRP_CD
+           AND HDENV.ENVST_CD   (+) =   tce2.ENVST_CD
          ORDER BY tce2.ENVST_GRP_CD, tce2.ENVST_CD, tce2.ENVST_VAL_CD
         ]]>
     </select>

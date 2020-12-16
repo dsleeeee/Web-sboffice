@@ -244,7 +244,9 @@
   <update id="updateConfigStore" parameterType="DefaultMap">
     /* USE : HqBrandMapper.updateConfigStore */
     UPDATE TB_MS_STORE_ENVST
-       SET ENVST_VAL = #{envstVal}
+       SET ENVST_VAL = #{envstVal},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
      WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = #{hqBrandCd} )
        AND ENVST_CD = #{envstCd}
   </update>

@@ -109,6 +109,9 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.save = function(){
 
+    var storeScope  = agrid.getScope('storeManageCtrl');
+    var objhqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
+
     var objStatus       = document.getElementsByName("status");
     var objEnvstCd      = document.getElementsByName("envstCd");
     var objEnvstNm      = document.getElementsByName("envstNm");
@@ -117,6 +120,9 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var objEnvstValCd   = document.getElementsByName("envstValCd");
     var objDirctInYn    = document.getElementsByName("dirctInYn");
     var objOldEnvstVal  = document.getElementsByName("oldEnvstVal");
+    var objHqEnvstValCd = document.getElementsByName("hqEnvstValCd");
+    var objHqEnvstValNm = document.getElementsByName("hqEnvstValNm");
+    var objTargtFg      = document.getElementsByName("targtFg");
 
     // 봉사료 사용구분이 'Y'일 경우, 봉사료율이 설정되어야 함.
     var env2001 = $("#env2001").val();
@@ -138,6 +144,17 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
             + objEnvstCd[i].value + "] "
             + objEnvstNm[i].value
             + messages["storeManage.require.regist.inputEnv"];
+
+        $scope._popMsg(msgStr);
+        return false;
+      }
+
+      if(objhqOfficeCd !== "00000" && objTargtFg[i].value === "X" && objHqEnvstValCd[i].value !== objEnvstValCd[i].value){
+        var msgStr = "["
+            + objEnvstCd[i].value + "] "
+            + objEnvstNm[i].value
+            + messages["storeManage.require.regist.hqEnvstVal"]
+            + "( '"+objHqEnvstValNm[i].value+"' )";
 
         $scope._popMsg(msgStr);
         return false;

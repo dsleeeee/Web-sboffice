@@ -213,6 +213,7 @@ $("#envLayer #btnSave").click(function(){
   var objDefault = document.getElementsByName("default");
   var objEnvstValCd = document.getElementsByName("envstValCd");
   var objDirctInYn = document.getElementsByName("dirctInYn");
+  var objTargtFg = document.getElementsByName("targtFg");
 
   var paramArr = [];
 
@@ -236,6 +237,7 @@ $("#envLayer #btnSave").click(function(){
     param.envstGrpCd  = objEnvstGrpCd[i].value;
     param.envstVal    = objEnvstValCd[i].value;
     param.dirctInYn   = objDirctInYn[i].value;
+    param.targtFg     = objTargtFg[i].value;
 
     paramArr.push(param);
   }

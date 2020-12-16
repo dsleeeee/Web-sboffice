@@ -115,7 +115,7 @@ public class HqBrandServiceImpl implements HqBrandService{
 
             // 적용 타겟이 본사기준 매장까지인 경우, 매장까지 적용
             // 단독매장 제외(프렌차이즈만 해당)
-            if("00000".equals(hqEnvst.getHqOfficeCd()) && hqEnvst.getTargtFg() == TargtFg.BOTH ) {
+            if(!"00000".equals(hqEnvst.getHqOfficeCd()) && "X".equals(hqEnvst.getTargtFg())) {
                 procCnt += mapper.updateConfigStore(hqEnvst);
             }
         }
