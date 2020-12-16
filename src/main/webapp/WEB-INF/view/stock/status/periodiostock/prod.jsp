@@ -162,7 +162,7 @@
           <wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"				binding="prodCd"				width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"				binding="prodNm"				width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"				binding="poUnitQty"				width="70"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"				binding="poUnitFg"				width="70"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"				binding="poUnitFgNm"				width="70"		align="center"	is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"				binding="barcdCd"				width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
 
 
@@ -246,7 +246,7 @@
           <wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"				binding="prodCd"				width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"				binding="prodNm"				width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"				binding="poUnitQty"				width="70"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"				binding="poUnitFg"				width="70"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"				binding="poUnitFgNm"				width="70"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"				binding="barcdCd"				width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
 
 

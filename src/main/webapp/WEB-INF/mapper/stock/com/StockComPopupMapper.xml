@@ -1141,10 +1141,10 @@
 		      SELECT   '1'         AS   IO_GBN
 		      ,      '조회기간 전'   AS   IO_PROC_DATE
 		      ,      NULL      AS   IO_OCCR_FG
-		      <if test='unitFg == "0"'>
+		      <if test='unitFg == "1"'>
 		      ,       SUM(DECODE(THP.PO_UNIT_QTY, '0', NULL, (TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY)))   AS   IO_OCCR_QTY
 		      </if>
-		      <if test='unitFg == "1"'>
+		      <if test='unitFg == "0"'>
 		      ,       SUM(TPHS.IO_OCCR_QTY)   AS   IO_OCCR_QTY
 		      </if>
 		      FROM   TB_PO_HQ_STOCK   TPHS
@@ -1158,10 +1158,10 @@
 		      SELECT  '2'         AS   IO_GBN
 		      ,      TPHS.IO_PROC_DATE
 		      ,      TPHS.IO_OCCR_FG
-		      <if test='unitFg == "0"'>
+		      <if test='unitFg == "1"'>
 		      ,      SUM(DECODE(THP.PO_UNIT_QTY, '0', NULL, (TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY)))   AS IO_OCCR_QTY
 		      </if>
-		      <if test='unitFg == "1"'>
+		      <if test='unitFg == "0"'>
 		      ,       SUM(TPHS.IO_OCCR_QTY)   AS   IO_OCCR_QTY
 		      </if>
 		      FROM   TB_PO_HQ_STOCK   TPHS
@@ -1178,10 +1178,10 @@
 		      SELECT   '3'         AS   IO_GBN
 		      ,      '조회기간 후'   AS   IO_PROC_DATE
 		      ,      NULL      AS   IO_OCCR_FG
-		      <if test='unitFg == "0"'>
+		      <if test='unitFg == "1"'>
 		      ,      SUM(DECODE(THP.PO_UNIT_QTY, '0', NULL, (TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY)))   AS IO_OCCR_QTY
 		      </if>
-		      <if test='unitFg == "1"'>
+		      <if test='unitFg == "0"'>
 		      ,       SUM(TPHS.IO_OCCR_QTY)   AS   IO_OCCR_QTY
 		      </if>
 		      FROM   TB_PO_HQ_STOCK   TPHS
@@ -1217,10 +1217,10 @@
 		      SELECT   '1'         AS   IO_GBN
 		      ,      '조회기간 전'   AS   IO_PROC_DATE
 		      ,      NULL      AS   IO_OCCR_FG
-		      <if test='unitFg == "0"'>
+		      <if test='unitFg == "1"'>
 		      ,       SUM(DECODE(TMP.PO_UNIT_QTY, '0', NULL, (TPHS.IO_OCCR_QTY / TMP.PO_UNIT_QTY)))   AS   IO_OCCR_QTY
 		      </if>
-		      <if test='unitFg == "1"'>
+		      <if test='unitFg == "0"'>
 		      ,       SUM(TPHS.IO_OCCR_QTY)   AS   IO_OCCR_QTY
 		      </if>
 		      FROM   TB_PO_STORE_STOCK   TPHS
@@ -1234,10 +1234,10 @@
 		      SELECT  '2'         AS   IO_GBN
 		      ,      TPHS.IO_PROC_DATE
 		      ,      TPHS.IO_OCCR_FG
-		      <if test='unitFg == "0"'>
+		      <if test='unitFg == "1"'>
 		      ,       SUM(DECODE(TMP.PO_UNIT_QTY, '0', NULL, (TPHS.IO_OCCR_QTY / TMP.PO_UNIT_QTY)))   AS   IO_OCCR_QTY
 		      </if>
-		      <if test='unitFg == "1"'>
+		      <if test='unitFg == "0"'>
 		      ,       SUM(TPHS.IO_OCCR_QTY)   AS   IO_OCCR_QTY
 		      </if>
 		      FROM   TB_PO_STORE_STOCK   TPHS
@@ -1254,10 +1254,10 @@
 		      SELECT   '3'         AS   IO_GBN
 		      ,      '조회기간 후'   AS   IO_PROC_DATE
 		      ,      NULL      AS   IO_OCCR_FG
-		      <if test='unitFg == "0"'>
+		      <if test='unitFg == "1"'>
 		      ,       SUM(DECODE(TMP.PO_UNIT_QTY, '0', NULL, (TPHS.IO_OCCR_QTY / TMP.PO_UNIT_QTY)))   AS   IO_OCCR_QTY
 		      </if>
-		      <if test='unitFg == "1"'>
+		      <if test='unitFg == "0"'>
 		      ,       SUM(TPHS.IO_OCCR_QTY)   AS   IO_OCCR_QTY
 		      </if>
 		      FROM   TB_PO_STORE_STOCK   TPHS

@@ -42,7 +42,7 @@ public class StorageHqCurrServiceImpl implements StorageHqCurrService {
 	    	for(int i=0; i<storageHqCurrVO.getArrStorageCd().length; i++) {
 	    		String[] ArrStorageCd = storageHqCurrVO.getArrStorageCd();
 	    		System.out.println("??? :: "+storageHqCurrVO.getUnitFg());
-	    		if(storageHqCurrVO.getUnitFg().endsWith("0")) {
+	    		if(storageHqCurrVO.getUnitFg().endsWith("1")) {
 	    			sQuery1 += ", (B.CURR_QTY_"+ ArrStorageCd[i]+ "/ A.PO_UNIT_QTY) AS CURR_QTY_"+ ArrStorageCd[i] +"\n";
 	    		}else {
 	    			sQuery1 += ", B.CURR_QTY_"+ ArrStorageCd[i] +"\n";
@@ -99,7 +99,7 @@ public class StorageHqCurrServiceImpl implements StorageHqCurrService {
 	    	String sQuery1 = "";
 	    	for(int i=0; i<storageHqCurrVO.getArrStorageCd().length; i++) {
 	    		String[] ArrStorageCd = storageHqCurrVO.getArrStorageCd();
-	    		if(storageHqCurrVO.getUnitFg().endsWith("0")) {
+	    		if(storageHqCurrVO.getUnitFg().endsWith("1")) {
 	    			sQuery1 += ", (B.CURR_QTY_"+ ArrStorageCd[i]+ "/ A.PO_UNIT_QTY) AS CURR_QTY_"+ ArrStorageCd[i] +"\n";
 	    		}else {
 	    			sQuery1 += ", B.CURR_QTY_"+ ArrStorageCd[i] +"\n";

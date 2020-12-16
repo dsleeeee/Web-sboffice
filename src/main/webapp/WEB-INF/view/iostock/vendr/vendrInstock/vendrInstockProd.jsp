@@ -74,7 +74,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProd.js?ver=20201020.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProd.js?ver=20201020.04" charset="utf-8"></script>
 
 <%-- 상품 추가/변경 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockProdReg.jsp">

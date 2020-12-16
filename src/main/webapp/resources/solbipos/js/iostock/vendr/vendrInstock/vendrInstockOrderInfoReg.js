@@ -14,7 +14,7 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
 //    $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 //    
 //    comboParams         = {};
-    comboParams.nmcodeGrpCd = "097";
+    comboParams.nmcodeGrpCd = "093";
     url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -204,6 +204,14 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
       // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
       if (item.inTotQty === 0) {
         continue;
+      }
+      if (item.inUnitQty !== null && (0 > parseInt(item.inUnitQty))) {
+        $scope._popMsg(messages['vendrInstock.reg.above.zero.inUnitQty']); // 주문단위수량은 0이상 입력합니다.
+        return false;
+      }
+      if (item.inEtcQty !== null && (0 > parseInt(item.inEtcQty))) {
+        $scope._popMsg(messages['vendrInstock.reg.above.zero.inEtcQty']); //낱개수량은 0이상 입력합니다.
+        return false;
       }
       if (item.inEtcQty !== null && (parseInt(item.inEtcQty) >= parseInt(item.poUnitQty))) {
         $scope._popMsg(messages["vendrInstock.ord.not.inEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.

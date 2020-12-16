@@ -90,8 +90,9 @@
         ,       tmereg.EMP_NM AS REG_NM
         ,       DECODE(tpsvi.PROC_FG, 0, NULL, tpsvi.CONFM_DT) AS CONFM_DT
         ,       DECODE(tpsvi.PROC_FG, 0, NULL, tmeconfm.EMP_NM) AS CONFM_NM
-        ,       ABS(tpsvi.IN_TOT_QTY) * tpsvi.SLIP_FG AS IN_TOT_QTY
-        ,       ABS(tpsvi.IN_TOT) * tpsvi.SLIP_FG AS IN_TOT
+        ,       tpsvi.IN_TOT_QTY * tpsvi.SLIP_FG AS IN_TOT_QTY
+        ,       tpsvi.IN_TOT * tpsvi.SLIP_FG AS IN_TOT
+        ,       (SELECT MAX(STORAGE_CD) FROM TB_PO_STORE_VENDR_INSTOCK_PROD WHERE STORE_CD = #{storeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
         FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
         ,       TB_MS_VENDOR tmv
         ,       TB_MS_EMPLOYEE tmereg
@@ -548,6 +549,18 @@
         AND     SLIP_NO   = #{slipNo}
     </delete>
 
+    <!-- 거래처 입고/반출등록 - 입고/반출 PROD 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_VENDR_INSTOCK_PROD
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출 상품정보를 삭제한다.
+    -->
+    <delete id="deleteVendrInstockProdInfo" parameterType="vendrInstockVO">
+        /* USE : VendrInstockStoreMapper.deleteVendrInstockProdInfo */
+        DELETE  TB_PO_STORE_VENDR_INSTOCK_PROD
+        WHERE   STORE_CD  = #{storeCd}
+        AND     SLIP_NO   = #{slipNo}
+    </delete>
 
     <!-- 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 발주 DT 내역의 입고관련 정보 초기화 -->
     <!--
@@ -1035,7 +1048,7 @@
 					FROM    TB_PO_STORE_VENDR_INSTOCK_DTL
 					WHERE   STORE_CD    =   #{storeCd}
 					AND     SLIP_NO         =   #{slipNo}
-	    )
+	    )N
 	    ON           (
 	                     	 C.STORE_CD 	= N.STORE_CD
 			             AND C.SLIP_NO		= N.SLIP_NO
@@ -1094,6 +1107,33 @@
 										,		#{modId}
 								        )
 
+    </update>
+
+    <!-- 거래처 입고/반출등록 - 상품마스터 최종판매단가 update -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : vendrInstockVO
+        COMMENTS : 입고 시, 입력한 원가단가를 상품마스터의 최종판매단가에 update 한다.
+    -->
+    <update id="updateLastCostUprc" parameterType="vendrInstockVO">
+    /* USE : VendrInstockStoreMapper.updateLastCostUprc */
+		MERGE INTO TB_MS_PRODUCT C
+		USING
+		(
+		      	SELECT STORE_CD
+				,       PROD_CD
+				,       COST_UPRC
+				  FROM TB_PO_STORE_VENDR_INSTOCK_DTL
+				 WHERE STORE_CD = #{storeCd}
+				   AND SLIP_NO = #{slipNo}
+		) N
+		ON (
+            	 C.STORE_CD = N.STORE_CD
+             AND C.PROD_CD = N.PROD_CD
+		)
+		WHEN MATCHED THEN
+		UPDATE
+		SET 	C.LAST_COST_UPRC = N.COST_UPRC
     </update>
 
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 삭제 -->

@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.vendr.vendrOrder.service;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.adi.etc.cd.service.CdVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 
@@ -39,5 +40,11 @@ public interface VendrOrderService {
 
     /** 엑셀업로드 */
     int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO);
+
+    /** 거래처 발주타입관리 - 조회 */
+    List<DefaultMap<Object>> getVendrOrderTypeCdList(CdVO cdVO, SessionInfoVO sessionInfoVO);
+
+    /** 거래처 발주타입관리 - 저장 */
+    int saveVendrOrderTypeCdList(CdVO[] cdVOs, SessionInfoVO sessionInfoVO);
 
 }

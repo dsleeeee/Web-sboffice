@@ -65,6 +65,27 @@ public class ExcelUploadMPSServiceImpl implements ExcelUploadMPSService {
             }
             excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
+            // 상품코드 or 바코드 "'" 문자 제거
+            if (excelUploadMPSVO.getProdBarcdCd() != null && !"".equals(excelUploadMPSVO.getProdBarcdCd())) {
+                if(excelUploadMPSVO.getProdBarcdCd().contains("'")) {
+                    excelUploadMPSVO.setProdBarcdCd(excelUploadMPSVO.getProdBarcdCd().replaceAll("'",""));
+                }
+            }
+
+            // 상품코드 "'" 문자 제거
+            if (excelUploadMPSVO.getProdCd() != null && !"".equals(excelUploadMPSVO.getProdCd())) {
+                if(excelUploadMPSVO.getProdCd().contains("'")) {
+                    excelUploadMPSVO.setProdCd(excelUploadMPSVO.getProdCd().replaceAll("'",""));
+                }
+            }
+
+            // 바코드 "'" 문자 제거
+            if (excelUploadMPSVO.getBarcdCd() != null && !"".equals(excelUploadMPSVO.getBarcdCd())) {
+                if(excelUploadMPSVO.getBarcdCd().contains("'")) {
+                    excelUploadMPSVO.setBarcdCd(excelUploadMPSVO.getBarcdCd().replaceAll("'",""));
+                }
+            }
+
             result = excelUploadMPSMapper.insertExcelUpload(excelUploadMPSVO);
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             returnResult += result;

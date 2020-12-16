@@ -640,7 +640,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         }
 
         // 콤보박스 조회 공통로직(권한에 따라 각각의 본사/매장별 공통코드 조회 시 사용)
-        $scope._getComboDataQueryByAuth = function(code, comboNm) {
+        $scope._getComboDataQueryByAuth = function(code, comboNm, dataMapNm) {
 
             var params = {};
             params.nmcodeGrpCd = code;
@@ -657,8 +657,15 @@ function RootController(ctrlName, $scope, $http, isPicker) {
                     comboData.value = list[i].nmcodeCd;
                     comboArray.push(comboData);
                 }
-                $scope._setComboData(comboNm, comboArray);
 
+                // 콤보박스에 바인딩 하는 경우
+                if(comboNm !== null && comboNm !== undefined && comboNm !== ""){
+                    $scope._setComboData(comboNm, comboArray);
+                }
+                // 리스트 data-map에 바인딩 하는 경우
+                if(dataMapNm !== null && dataMapNm !== undefined && dataMapNm !== ""){
+                    $scope[dataMapNm] =  new wijmo.grid.DataMap(comboArray, 'value', 'name');
+                }
             });
         };
 
