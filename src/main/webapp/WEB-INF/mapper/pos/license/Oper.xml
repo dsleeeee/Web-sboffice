@@ -19,7 +19,7 @@
     <select id="getSaleStoreList"  parameterType="OperVO" resultType="DefaultMap">
         /* OperMapper.getSaleStoreList */
         SELECT  A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
-        ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG, A.OWNER_NM
+        ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG, B.OWNER_NM
         ,       C.NMCODE_NM SYS_STAT_NM
         ,       TO_CHAR(TO_DATE(B.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE
         ,       B.AGENCY_CD
@@ -196,7 +196,7 @@
         AND     J.STORE_CD      (+) =   B.STORE_CD
         ORDER
         BY      A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
-        ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG, A.OWNER_NM
+        ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG
     </select>
 
     <!-- 대리점인증현황탭 - 대리점인증현황조회-->
