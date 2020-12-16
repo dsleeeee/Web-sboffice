@@ -398,6 +398,7 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
       var params         = {};
       params.slipNo      = $scope.slipNo;
       params.procFg      = procFg;
+      params.slipFg      = $scope.slipFg
       params.outStorageCd	= $scope.slipInfo.outStorageCd;
 
       // 입고이면서 발주입고인 경우만 발주번호를 파라미터에 세팅

@@ -27,7 +27,7 @@
 			     , TPHSM.PO_UNIT_QTY
 			     , THP.PO_UNIT_FG
 			     , THPB.BARCD_CD
-			     <if test='unitFg == "0"'>
+			     <if test='unitFg == "1"'>
 				     , SF_ZERO_TO_NULL(SUM(TPHSM.BASE_QTY / THP.PO_UNIT_QTY))             AS BASE_QTY /* 기초재고수량 */
 	                 , SF_ZERO_TO_NULL(SUM(TPHSM.BASE_AMT))                               AS BASE_AMT /* 기초재고금액 */
 	                 , SF_ZERO_TO_NULL(SUM(TPHSM.VENDR_IN_QTY / THP.PO_UNIT_QTY))         AS IO_OCCR_QTY_01 /* 본사입고 수량*/
@@ -55,7 +55,7 @@
 	                 , SF_ZERO_TO_NULL(SUM(TPHSM.CLOSE_QTY / THP.PO_UNIT_QTY))            AS CLOSE_QTY /* 기말재고수량 */
 	                 , SF_ZERO_TO_NULL(SUM(TPHSM.CLOSE_AMT))                              AS CLOSE_AMT /* 기말재고금액 */    
                  </if>
-                 <if test='unitFg == "1"'>
+                 <if test='unitFg == "0"'>
                      , SF_ZERO_TO_NULL(SUM(TPHSM.BASE_QTY))             AS BASE_QTY /* 기초재고수량 */
                      , SF_ZERO_TO_NULL(SUM(TPHSM.BASE_AMT))             AS BASE_AMT /* 기초재고금액 */
                      , SF_ZERO_TO_NULL(SUM(TPHSM.VENDR_IN_QTY))         AS IO_OCCR_QTY_01 /* 본사입고 수량*/
@@ -206,7 +206,7 @@
 			     , TPSSM.PO_UNIT_QTY
 			     , TMP.PO_UNIT_FG
 			     , TMPB.BARCD_CD
-			     <if test='unitFg == "0"'>
+			     <if test='unitFg == "1"'>
 				     , SF_ZERO_TO_NULL(SUM(TPSSM.BASE_QTY / TMP.PO_UNIT_QTY))         AS BASE_QTY         /* 기초재고수량 */
 	                 , SF_ZERO_TO_NULL(SUM(TPSSM.BASE_AMT))                           AS BASE_AMT         /* 기초재고금액 */
 	                 , SF_ZERO_TO_NULL(SUM(TPSSM.STORE_IN_QTY / TMP.PO_UNIT_QTY))     AS IO_OCCR_QTY_03 /* 매장입고 수량*/
@@ -232,7 +232,7 @@
 	                 , SF_ZERO_TO_NULL(SUM(TPSSM.CLOSE_QTY / TMP.PO_UNIT_QTY))        AS CLOSE_QTY            /* 기말재고수량 */
 	                 , SF_ZERO_TO_NULL(SUM(TPSSM.CLOSE_AMT))                          AS CLOSE_AMT            /* 기말재고금액 */
                  </if>
-                 <if test='unitFg == "1"'>
+                 <if test='unitFg == "0"'>
                      , SF_ZERO_TO_NULL(SUM(TPSSM.BASE_QTY))         AS BASE_QTY         /* 기초재고수량 */
                      , SF_ZERO_TO_NULL(SUM(TPSSM.BASE_AMT))         AS BASE_AMT         /* 기초재고금액 */
                      , SF_ZERO_TO_NULL(SUM(TPSSM.STORE_IN_QTY))     AS IO_OCCR_QTY_03 /* 매장입고 수량*/

@@ -7,7 +7,7 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   var vendrOrderCtrlScope = agrid.getScope("vendrOrderCtrl");
   var url                 = '/iostock/vendr/vendrOrder/vendrOrderDtl/getOrderTypeCombo.sb';
   var comboParams         = {};
-  comboParams.nmcodeGrpCd = "AA1";
+  comboParams.nmcodeGrpCd = "024";
   // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
   vendrOrderCtrlScope._queryCombo("combo", "orderType", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
@@ -82,6 +82,15 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
           } else {
             $scope.btnSaveShowFg = false;
             $scope.btnDelShowFg  = false;
+          }
+
+          // 진행상태가 '완료' 인 경우, 진행상태 선택 dropdown과 진행상태변경 버튼 숨기기
+          if (data.procFg != "" && data.procFg == "5") {
+            $scope.btnProcFgShowFg = false;
+            $scope.btnProcFgShowFg  = false;
+          } else {
+            $scope.btnProcFgShowFg = true;
+            $scope.btnProcFgShowFg  = true;
           }
 
           // 진행상태 관련 레이어 show 여부
@@ -320,6 +329,12 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   $scope.vendrOrderDtlSelectVendrShow = function () {
     $scope._broadcast('vendrOrderDtlSelectVendrCtrl');
   };
+
+  // 발주타입관리 팝업
+  $scope.vendrOrderTypeRegPop = function () {
+    $scope.wjVendrOrderTypeRegPopLayer.show(true);
+    $scope._broadcast('vendrOrderTypeRegPopCtrl');
+  }
 
 
 }]);

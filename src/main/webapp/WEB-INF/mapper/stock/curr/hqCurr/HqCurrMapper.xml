@@ -33,7 +33,7 @@
         ,       thp.PO_UNIT_QTY
         ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
 
-        <if test='unitFg == "0"'>
+        <if test='unitFg == "1"'>
             ,       thp.PO_UNIT_FG AS PO_UNIT_FG
             ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = thp.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
             ,       (thp.SAFE_STOCK_QTY / thp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
@@ -52,9 +52,9 @@
             ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_OUT_QTY
             ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_IN_QTY
         </if>
-        <if test='unitFg == "1"'>
-            ,       thp.STOCK_UNIT_FG AS PO_UNIT_FG
-            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = thp.STOCK_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
             ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
             ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
             ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
@@ -200,7 +200,7 @@
         ,       tmpb.BARCD_CD
         ,       tmp.PO_UNIT_QTY
         ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
-        <if test='unitFg == "0"'>
+        <if test='unitFg == "1"'>
             ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
             ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = tmp.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
             ,       (tmp.SAFE_STOCK_QTY / tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
@@ -216,9 +216,9 @@
             ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY ) / tmp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
             ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_STORE_SALE_QTY
         </if>
-        <if test='unitFg == "1"'>
-            ,       tmp.STOCK_UNIT_FG AS PO_UNIT_FG
-            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = tmp.STOCK_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
             ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
             ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
             ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       )) AS ACC_STORE_IN_QTY
@@ -398,7 +398,7 @@
         ,       thp.PO_UNIT_QTY
         ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
 
-        <if test='unitFg == "0"'>
+        <if test='unitFg == "1"'>
             ,       thp.PO_UNIT_FG AS PO_UNIT_FG
             ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = thp.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
             ,       (thp.SAFE_STOCK_QTY / thp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
@@ -417,9 +417,9 @@
             ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_OUT_QTY
             ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_IN_QTY
         </if>
-        <if test='unitFg == "1"'>
-            ,       thp.STOCK_UNIT_FG AS PO_UNIT_FG
-            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = thp.STOCK_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
             ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
             ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
             ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
@@ -555,7 +555,7 @@
         ,       tmpb.BARCD_CD
         ,       tmp.PO_UNIT_QTY
         ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
-        <if test='unitFg == "0"'>
+        <if test='unitFg == "1"'>
             ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
             ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = tmp.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
             ,       (tmp.SAFE_STOCK_QTY / tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
@@ -571,9 +571,9 @@
             ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY ) / tmp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
             ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_STORE_SALE_QTY
         </if>
-        <if test='unitFg == "1"'>
-            ,       tmp.STOCK_UNIT_FG AS PO_UNIT_FG
-            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = tmp.STOCK_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
             ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
             ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
             ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       )) AS ACC_STORE_IN_QTY

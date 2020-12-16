@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.vendr.vendrOrder.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.adi.etc.cd.service.CdVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -76,4 +77,16 @@ public interface VendrOrderMapper {
 
     /** 거래처 발주등록 - 진행상태 조회 */
     String getChkProcFg(VendrOrderVO vendrOrderVO);
+
+    /** 거래처 발주타입관리 - 조회 */
+    List<DefaultMap<Object>> getVendrOrderTypeCdList(CdVO cdVO);
+
+    /** 거래처 발주타입관리 - 추가 */
+    int insertVendrOrderTypeCd(CdVO cdVO);
+
+    /** 거래처 발주타입관리 - 수정 */
+    int updateVendrOrderTypeCd(CdVO cdVO);
+
+    /** 거래처 발주타입관리 - 삭제 */
+    int deleteVendrOrderTypeCd(CdVO cdVO);
 }

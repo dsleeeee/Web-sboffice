@@ -17,7 +17,7 @@
 		,	A.PO_UNIT_QTY
 		,	A.CURR_AMT
 		,	A.PO_UNIT_FG
-		,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+		,	A.PO_UNIT_FG_NM      /* 본사 가상로그인시 */
 		,	A.SAFE_STOCK_QTY
 		,	A.CURR_QTY
 		,	A.ACC_VENDR_IN_QTY
@@ -39,7 +39,7 @@
 		,   C.LV3_CD
 		,   C.LV3_NM
 		,   B.HQ_OFFICE_CD
-		,   B.CURR_QTY_000      --매대
+		<!-- ,   B.CURR_QTY_000 -->
 		/*   동적 START */
 		${sQuery1}
 		/*   동적 END */
@@ -54,10 +54,11 @@
 		        ,       thpb.BARCD_CD
 		        ,       thp.PO_UNIT_QTY
 		        ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
-		        ,       thp.STOCK_UNIT_FG AS PO_UNIT_FG
-		        <if test='unitFg == "0"'>
-		        ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
-		        ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                                / thp.PO_UNIT_QTY)) AS CURR_QTY
+                ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+		        <if test='unitFg == "1"'>
+                ,       thp.PO_UNIT_FG AS PO_UNIT_FG
+                ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = thp.PO_UNIT_FG)  AS PO_UNIT_FG_NM
+                ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                                / thp.PO_UNIT_QTY)) AS CURR_QTY
 		        ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                        / thp.PO_UNIT_QTY)) AS ACC_VENDR_IN_QTY
 		        ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                       / thp.PO_UNIT_QTY)) AS ACC_VENDR_OUT_QTY
 		        ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                          / thp.PO_UNIT_QTY)) AS ACC_HQ_OUT_QTY
@@ -70,8 +71,9 @@
 		        ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                  / thp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_OUT_QTY
 		        ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                   / thp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_IN_QTY
 		        </if>
-		        <if test='unitFg == "1"'>
-		        ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+		        <if test='unitFg == "0"'>
+                ,       (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END) AS PO_UNIT_FG
+                ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM
                 ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
                 ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
                 ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      )) AS ACC_VENDR_OUT_QTY
@@ -121,7 +123,7 @@
 		      JOIN    (
 		            SELECT  B.HQ_OFFICE_CD
 		            ,      B.PROD_CD
-		            ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		            <!-- ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000 -->
 		            /* 동적 START */
 		            ${sQuery2}
 		            /* 동적 END */
@@ -249,12 +251,12 @@
         ,   C.LV3_CD
         ,   C.LV3_NM
         ,   B.STORE_CD
-        <if test='unitFg == "0"'>
+        <!-- <if test='unitFg == "1"'>
         ,	SF_ZERO_TO_NULL((B.CURR_QTY_000 / A.PO_UNIT_QTY))	AS CURR_QTY_000
         </if>
-        <if test='unitFg == "1"'>
-        ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000      --매대
-        </if>
+        <if test='unitFg == "0"'>
+        ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000      &#45;&#45;매대
+        </if> -->
         /*   동적 START */
         ${sQuery1}
         /*   동적 END */
@@ -269,8 +271,8 @@
                 ,       tmpb.BARCD_CD
                 ,       tmp.PO_UNIT_QTY
                 ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
-                ,       tmp.STOCK_UNIT_FG AS PO_UNIT_FG
-                <if test='unitFg == "0"'>
+                ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
+                <if test='unitFg == "1"'>
                 ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
                 ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                                / tmp.PO_UNIT_QTY)) AS CURR_QTY
                 /*,       SF_ZERO_TO_NULL((tsssc.ACC_VENDR_IN_QTY                        / tmp.PO_UNIT_QTY)) AS ACC_VENDR_IN_QTY
@@ -285,7 +287,7 @@
                 ,       SF_ZERO_TO_NULL((tsssc.ACC_SALE_VENDR_OUT_QTY                  / tmp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_OUT_QTY
                 ,       SF_ZERO_TO_NULL((tsssc.ACC_SALE_VENDR_IN_QTY                   / tmp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_IN_QTY */
                 </if>
-                <if test='unitFg == "1"'>
+                <if test='unitFg == "0"'>
                 ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
                 ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
                 /*,       SF_ZERO_TO_NULL((tsssc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
@@ -337,7 +339,7 @@
               JOIN    (
                     SELECT  B.STORE_CD
                     ,      B.PROD_CD
-                    ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+                    <!-- ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000 -->
                     /* 동적 START */
                     ${sQuery2}
                     /* 동적 END */
@@ -500,7 +502,7 @@
         ,   C.LV3_CD
         ,   C.LV3_NM
         ,   B.HQ_OFFICE_CD
-        ,   B.CURR_QTY_000      --매대
+        <!-- ,   B.CURR_QTY_000  -->
         /*   동적 START */
         ${sQuery1}
         /*   동적 END */
@@ -514,8 +516,8 @@
                 ,       thpb.BARCD_CD
                 ,       thp.PO_UNIT_QTY
                 ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
-                ,       thp.STOCK_UNIT_FG AS PO_UNIT_FG
-                <if test='unitFg == "0"'>
+                ,       thp.PO_UNIT_FG AS PO_UNIT_FG
+                <if test='unitFg == "1"'>
                 ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
                 ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                                / thp.PO_UNIT_QTY)) AS CURR_QTY
                 ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                        / thp.PO_UNIT_QTY)) AS ACC_VENDR_IN_QTY
@@ -530,7 +532,7 @@
                 ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                  / thp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_OUT_QTY
                 ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                   / thp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_IN_QTY
                 </if>
-                <if test='unitFg == "1"'>
+                <if test='unitFg == "0"'>
                 ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
                 ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
                 ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
@@ -582,7 +584,7 @@
               JOIN    (
                     SELECT  B.HQ_OFFICE_CD
                     ,      B.PROD_CD
-                    ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+                    <!-- ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000 -->
                     /* 동적 START */
                     ${sQuery2}
                     /* 동적 END */
@@ -708,12 +710,12 @@
         ,   C.LV3_CD
         ,   C.LV3_NM
         ,   B.STORE_CD
-		<if test='unitFg == "0"'>
+		<!-- <if test='unitFg == "1"'>
         ,	SF_ZERO_TO_NULL((B.CURR_QTY_000 / A.PO_UNIT_QTY))	AS CURR_QTY_000
         </if>
-        <if test='unitFg == "1"'>
-        ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000      --매대
-        </if>
+        <if test='unitFg == "0"'>
+        ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000
+        </if> -->
         /*   동적 START */
         ${sQuery1}
         /*   동적 END */
@@ -727,8 +729,8 @@
                 ,       tmpb.BARCD_CD
                 ,       tmp.PO_UNIT_QTY
                 ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
-                ,       tmp.STOCK_UNIT_FG AS PO_UNIT_FG
-                <if test='unitFg == "0"'>
+                ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
+                <if test='unitFg == "1"'>
                 ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
                 ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                                / tmp.PO_UNIT_QTY)) AS CURR_QTY
                 /*,       SF_ZERO_TO_NULL((tsssc.ACC_VENDR_IN_QTY                        / tmp.PO_UNIT_QTY)) AS ACC_VENDR_IN_QTY
@@ -743,7 +745,7 @@
                 ,       SF_ZERO_TO_NULL((tsssc.ACC_SALE_VENDR_OUT_QTY                  / tmp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_OUT_QTY
                 ,       SF_ZERO_TO_NULL((tsssc.ACC_SALE_VENDR_IN_QTY                   / tmp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_IN_QTY */
                 </if>
-                <if test='unitFg == "1"'>
+                <if test='unitFg == "0"'>
                 ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
                 ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
                 /*,       SF_ZERO_TO_NULL((tsssc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
@@ -795,7 +797,7 @@
               JOIN    (
                     SELECT  B.STORE_CD
                     ,      B.PROD_CD
-                    ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+                    <!-- ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000 -->
                     /* 동적 START */
                     ${sQuery2}
                     /* 동적 END */

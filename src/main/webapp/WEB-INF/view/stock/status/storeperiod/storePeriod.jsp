@@ -178,7 +178,7 @@
           <wj-flex-grid-column header="<s:message code="storePeriod.storeCd"/>"		binding="storeCd"			width="100"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.storeNm"/>"		binding="storeNm"			width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.poUnitQty"/>"	binding="poUnitQty"			width="80"		align="center"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storePeriod.poUnitFg"/>"	binding="poUnitFg"			width="80"		align="center"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storePeriod.poUnitFg"/>"	binding="poUnitFgNm"			width="80"		align="center"	is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.barcdCd"/>"		binding="barcdCd"			width="150"		align="center"	is-read-only="true" aggregate="Sum"	format="d"></wj-flex-grid-column>
 
 	      <wj-flex-grid-column header="<s:message code="storePeriod.qty"/>"			binding="ioOccrQty03"		width="80"		align="center"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
@@ -244,7 +244,7 @@
           <wj-flex-grid-column header="<s:message code="storePeriod.storeCd"/>"		binding="storeCd"			width="100"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.storeNm"/>"		binding="storeNm"			width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.poUnitQty"/>"	binding="poUnitQty"			width="80"		align="center"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storePeriod.poUnitFg"/>"	binding="poUnitFg"			width="80"		align="center"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storePeriod.poUnitFg"/>"	binding="poUnitFgNm"			width="80"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.barcdCd"/>"		binding="barcdCd"			width="150"		align="center"	is-read-only="true" aggregate="Sum"	format="d"></wj-flex-grid-column>
 
 	      <wj-flex-grid-column header="<s:message code="storePeriod.qty"/>"			binding="ioOccrQty03"		width="80"		align="center"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>

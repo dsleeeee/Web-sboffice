@@ -302,22 +302,20 @@ public class OutstockConfmController {
 
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
 
-//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-        iostockCmmVO.setSelectTable("TB_HQ_STORAGE");
-        iostockCmmVO.setSelectCd("STORAGE_CD");
-        iostockCmmVO.setSelectNm("STORAGE_NM");
-        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
-//        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+iostockCmmVO.getHqOfficeCd()+"'");
-            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
-//        }
-//        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-//            iostockCmmVO.setSelectTable("TB_MS_STORE_NMCODE");
-//            iostockCmmVO.setSelectCd("NMCODE_CD");
-//            iostockCmmVO.setSelectNm("NMCODE_NM");
-//            iostockCmmVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
-//            list = volmErrService.selectDynamicCodeList(iostockCmmVO);
-//        }
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            iostockCmmVO.setSelectTable("TB_HQ_STORAGE");
+            iostockCmmVO.setSelectCd("STORAGE_CD");
+            iostockCmmVO.setSelectNm("STORAGE_NM");
+            iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='" + sessionInfoVO.getHqOfficeCd() + "'");
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            iostockCmmVO.setSelectTable("TB_MS_STORAGE");
+            iostockCmmVO.setSelectCd("STORAGE_CD");
+            iostockCmmVO.setSelectNm("STORAGE_NM");
+            iostockCmmVO.setSelectWhere("STORE_CD='" + sessionInfoVO.getStoreCd() + "'");
+        }
 
+        list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
