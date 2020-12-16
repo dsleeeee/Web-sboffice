@@ -281,14 +281,13 @@
         /* USE : StoreManageMapper.getStoreCd */
         <if test='sysStatFg.toString() == "DEMO"'>
             SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 3, 6)), 0) + 1), 5, '0') AS STORE_CD
-            FROM TB_MS_STORE
-            WHERE SYS_STAT_FG = '9'
+              FROM TB_MS_STORE
+             WHERE STORE_CD LIKE 'DS%'
         </if>
         <if test='sysStatFg.toString() != "DEMO"'>
             SELECT 'S'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
-            FROM TB_MS_STORE
-            WHERE SYS_STAT_FG != '9'
-            AND STORE_CD NOT LIKE 'DS%'
+              FROM TB_MS_STORE
+             WHERE STORE_CD LIKE 'S%'
         </if>
     </select>
 
