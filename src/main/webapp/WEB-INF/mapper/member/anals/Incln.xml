@@ -156,6 +156,7 @@
                     WHERE 1=1
                     AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
                     AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tssd.STORE_CD = #{storeCd}
                     AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     AND tssd.MEMBR_NO IS NOT NULL
                     AND tmp.STORE_CD = tssd.STORE_CD
