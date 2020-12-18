@@ -56,7 +56,8 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)">
+                            initialized="_initComboBox(s)"
+                            control="vendorFgCombo">
                     </wj-combo-box>
                   </div>
                 </td>
@@ -73,7 +74,8 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)">
+                            initialized="_initComboBox(s)"
+                            control="vatIncldYnCombo">
                     </wj-combo-box>
                   </div>
                 </td>
@@ -88,7 +90,8 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)">
+                            initialized="_initComboBox(s)"
+                            control="useYnCombo">
                     </wj-combo-box>
                   </div>
                 </td>
@@ -150,4 +153,4 @@
   var useYnData        = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20200506.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20200507.01" charset="utf-8"></script>

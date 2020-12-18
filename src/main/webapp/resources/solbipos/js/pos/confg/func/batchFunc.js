@@ -101,8 +101,8 @@ app.controller('regFnkeyCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#bfFnkeyNo").val("");
         $("#bfFnkeyNm").val("");
 
-        $scope.batchStoreLayer.hide();
-        $scope.batchFuncLayer.hide();
+        /*$scope.batchStoreLayer.hide();
+        $scope.batchFuncLayer.hide();*/
 
     }
 
