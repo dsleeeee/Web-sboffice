@@ -48,7 +48,7 @@
         <%-- 발주타입 --%>
         <th><s:message code="vendrOrder.dtl.orderType"/></th>
         <td>
-          <div class="sb-select">
+          <div class="sb-select" style="float: left;">
             <span class="txtIn w150px">
               <wj-combo-box
                 id="orderType"
@@ -61,6 +61,9 @@
               </wj-combo-box>
             </span>
           </div>
+          <button type="button" id="btn" class="btn_skyblue ml5" ng-click="vendrOrderTypeRegPop()">
+            <s:message code="vendrOrder.dtl.vendrOrderType"/>
+          </button>
         </td>
       </tr>
       <tr>
@@ -132,12 +135,13 @@
             display-member-path="name"
             selected-value-path="value"
             is-editable="false"
-            initialized="_initComboBox(s)">
+            initialized="_initComboBox(s)"
+            ng-if="btnProcFgShowFg">
           </wj-combo-box>
         </span>
       <%--</div>--%>
       <%--<a href="#" class="btn_grayS2" ng-click=""><s:message code="vendrOrder.dtl.procFgUpdate"/></a>--%>
-      <button type="button" id="btnDtlProcFgUpdate" class="btn_skyblue ml5" ng-click="procFgUpdate()">
+      <button type="button" id="btnDtlProcFgUpdate" class="btn_skyblue ml5" ng-click="procFgUpdate()" ng-if="btnProcFgShowFg">
         <s:message code="vendrOrder.dtl.procFgUpdate"/></button>
     </div>
   </h3>
@@ -212,4 +216,9 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderDtl.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderDtl.js?ver=20181224.04" charset="utf-8"></script>
+
+<%-- 발주타입등록 팝업 레이어--%>
+<c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderTypeRegPop.jsp">
+</c:import>
+

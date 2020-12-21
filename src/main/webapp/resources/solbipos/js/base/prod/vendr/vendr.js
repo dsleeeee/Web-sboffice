@@ -51,14 +51,6 @@ app.controller('vendrCtrl', ['$scope', '$http', function ($scope, $http) {
                 var col = ht.panel.columns[ht.col];
                 // 거래처코드
                 if( col.binding == "vendrCd" ) {
-                    // vendr = s.rows[ht.row].dataItem;
-                    //
-                    // // 상세화면 조회
-                    // $scope.wjVendrInfoLayer.show();
-                    // $scope.setVendrInfo(vendr);
-                    // $scope._broadcast('vendrInfoCtrl', $scope.getVendrInfo());
-                    // event.preventDefault();
-
                     $scope.setVendrInfo(s.rows[ht.row].dataItem);
                     $scope.wjVendrInfoLayer.show(true);
                     event.preventDefault();
@@ -95,23 +87,14 @@ app.controller('vendrCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 거래처등록 팝업 오픈
     $scope.regVendr = function(){
-        // $scope.wjVendrRegistLayer.show();
-        //
-        // var data = {};
-        // data.type = "reg";
-        // data.vendrCd = "";
-        //
-        // $scope._broadcast('vendrRegistCtrl', data);
-        // event.preventDefault();
-
-        $scope.wjVendrRegistLayer.show(true);
-        event.preventDefault();
 
         var data = {};
         data.type = "reg";
         data.vendrCd = "";
 
+        $scope.wjVendrRegistLayer.show(true);
         $scope.setVendrInfo(data);
+        event.preventDefault();
     };
 
     // 화면 ready 된 후 설정

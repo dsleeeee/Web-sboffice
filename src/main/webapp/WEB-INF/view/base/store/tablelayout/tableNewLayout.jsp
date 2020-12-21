@@ -85,15 +85,15 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20200729.013" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20200729.013" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20201221.013" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20201221.013" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
 <div class="subCon2" ng-controller="tbLayoutCtrl">
 
     <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
     <div class="posWrap t2">
-    
+
     	<div class="tbLayoutWrap">
     		<div class="t-btn-wrap">
 	          <div class="flr">
@@ -102,14 +102,15 @@
 	              	   <button class="btn_skyblue fl ml5" id="btnInitLayout"><s:message code="cmm.init" /></button>
 	                  <button class="btn_skyblue fl ml5" id="btnfloorConfig"><s:message code="tableLayout.tableLayout" /></button>
 				    	<button class="btn_skyblue fl ml5" id="btnTblAddLayer"><%-- <s:message code="cmm.add" /> --%>테이블추가</button>
+				    	  <label for="btnSingleTableAddLayer" class="btnTableAdd"><input type="checkbox" class="wj-cell-check" id="btnSingleTableAddLayer">단건등록</label>
 	                  <button class="btn_skyblue fl ml5" id="btnSaveLayout"><s:message code="cmm.save" /></button>
 	              </div>
 	          </div>
 	         </div>
-	          <div class="clearfix"></div>        
+	          <div class="clearfix"></div>
         <%-- left --%>
         <div class="table-l">
-    
+
 	      <%--그룹--%>
 	      <div class="posBtnWrap">
 
@@ -118,8 +119,8 @@
 	              <%--<span><a href="#" class="on">2층</a></span> --%>
 	          </div>
 	      </div>
-	      <%--//그룹--%>     
-	      
+	      <%--//그룹--%>
+
 			<%--구성요소--%>
 			<div class="fl w110px" style="display: none;">
 				<h2 class="h2_tit2"><s:message code="tableLayout.component" /></h2>
@@ -130,7 +131,7 @@
 			  </div>
 			</div>
 			<%--//구성요소--%>
-	
+
 			<%-- 미리보기 --%>
 			<div style="width:850px;">
 				<div class="prev1 patternBg t2" id="contentLayout" tabindex="-1" style="width:886px; height:636px">
@@ -143,8 +144,8 @@
         <%-- //left --%>
 
 			<%--right--%>
-			<div class="table-r">					
-			
+			<div class="table-r">
+
 				<%--구성요소--%>
 				<div class="cfgWrap pd10" style="height:716px; width: 230px;">
 					<h2 class="h2_tit2 mt10 mb20" style="padding-bottom:10px; border-bottom:1px solid #ddd"><s:message code="tableLayout.component" /></h2>
@@ -153,9 +154,9 @@
 					    <div class="bk lh30 s12"><s:message code="todayDtl.dtl.tblNm" /></div>
 							<div class="mb5">
 					    	<input type="text" class="sb-input" style="width:100%" id="tableName">
-	
+
 					    </div>
-					</div>						
+					</div>
 					<%-- 테이블자리수/유형 --%>
 					<div class="touch-box mt10">
 				    <%-- 테이블자리수 --%>
@@ -197,7 +198,7 @@
 						</div>
 					</div>
 					<%-- //테이블자리수/유형 --%>
-					
+
 					<%-- 위치 --%>
 					<div class="touch-box mt10">
 					  <span class="bk lh30 s12"><s:message code="posFunc.pos"/></span>
@@ -220,7 +221,7 @@
 							    <input type="text" class="fr sb-input w50px tc" id="cellH" maxlength="4">
 							</div>
 						</div>
-						
+
 						<div>
 					    <div class="oh mt10">
 					      <span class="s12 fl lh30 bk mr10" style="display: none;"><s:message code="tableLayout.bgColor" /></span>
@@ -235,7 +236,7 @@
 									</a>
 				    		</div>
 							</div>
-							
+
 							<div class="oh mt10" id="cellImage" style="display: none;">
 								<span class="s12 fl lh30 bk mr10"><s:message code="tableLayout.cellImg" /></span>
 								<div class="txtIn fl bgfile w100" style="position:relative">
@@ -245,7 +246,7 @@
 									</a>
 							  </div>
 							</div>
-					
+
 							<div class="mt10" id="tableAlign" style="display:none; position:relative; height:70px">
 								<span class="s12 lh30 bk"><s:message code="tableLayout.align" /></span>
 								<span class="align" style="position:absolute; top:30px; left:0">
@@ -259,7 +260,7 @@
 									<a href="#" class="btn_objbottom" id="btnBottom"></a>
 								</span>
 							</div>
-					
+
 					  </div>
 					  <div class="clearfix"></div>
 					</div>
@@ -270,7 +271,7 @@
 			</div>
 			<%--//right--%>
 	  	</div>
-	  	
+
     </div>
     <%--// posWrap end --%>
 
@@ -414,6 +415,7 @@
                             <button class="btn_gray" id="btnInitAttr"><s:message code="cmm.init" /></button>
                             <button class="btn_blue"  style="display: none;" id="btnSaveAttr" ><s:message code="cmm.save" /></button>
                             <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.save" /></button> <%--typeSave-> save --%>
+                            <button class="btn_blue" id="btnPreviewTblAttr"><s:message code="tableAttr.preview" /></button>
                         </div>
                     </div>
                     <%--//설정--%>
@@ -423,17 +425,17 @@
                 <%-- right --%>
                 <div class="fl tch-inner">
 
-                	<span class="bk lh30 s12"><s:message code="tableAttr.preview" /></span>
+                	<span class="bk lh30 s12"><%-- <s:message code="tableAttr.preview" /> --%></span>
                 	<%-- 미리보기 start --%>
-                	<div class="tablethum mb20">
+<%--                 	<div class="tablethum mb20">
                 		<div class="thumarea">
 
-                			<%-- 미리보기 영역 --%>
+                			미리보기 영역
                 			<div id="previewTblAttr"></div>
 
                 		</div>
                 	</div>
-
+ --%>
                 	<%-- 미리보기 end --%>
 
                     <%-- 상세 폰트 설정 Start --%>
@@ -498,7 +500,53 @@
 </div>
 <%--//layer:For Center screen--%>
 
+<%-- 미리보기 팝업 --%>
+<div class="fullDimmed attrPreviewLayer" id="tblAttrMask" style="display: none;"></div>
+<div class="layer attrPreviewLayer" id="attrPreviewLayer" style="display: none;">
+    <div class="layer_inner">
+
+        <%--layerContent--%>
+        <div class="title previewPop" style="width:562px">
+            <p class="tit" id="tblAttrTitle" style="padding-left:20px;">
+                <s:message code="tableAttr.preview" />
+            </p>
+            <a href="#" class="btn_close _btnClose" id="btnX"></a>
+            <div class="pd20" style="padding-right:20px;>
+
+                <%--center--%>
+                <div class="fl previewPop" style="width:510px">
+                     <h2 class="h2_tit2">
+                        <s:message code="tableAttr.preview" />
+                    </h2>
+                    <%--미리보기--%>
+                    <div class="ml10" style="margin-top:26px">
+<!--                         <div class="prev1 patternBg" id="previewTblAttr" > -->
+                        <div class="prev1" id="previewTblAttr" >
+                            <%--점 패턴 background classname : "patternBg"--%>
+                            <%--510 * 510 pixel 입니다.--%>
+                        </div>
+                    </div>
+                    <%--//미리보기--%>
+
+                    <%--설정--%>
+<!--                     <div class="ml10" style="width:500px; padding:38px 30px 35px; background-color:#f4f4f4"> -->
+<!--                         <div class="btn_int tc" id="format"> -->
+<!--                             <button class="btn_gray" id="btnPreviewClose"><s:message code="cmm.close" /></button> -->
+<!--                         </div> -->
+<!--                     </div> -->
+                    <%--//설정--%>
+                </div>
+                <%--//center--%>
+            </div>
+        </div>
+
+    </div>
+</div>
+<%-- //미리보기 팝업 --%>
 <script>
+    //프리뷰 화면 노출 시 라이브러리 수정 플래그
+    var previewYN = 'N';
+
     $(document).ready(function() {
 
         $("#btnfloorConfig").click(function(e) {
@@ -507,6 +555,11 @@
         });
 
         $("#btnTblAddLayer").click(function(e) {
+        	//단건 등록 시 테이블 생성 팝업 생성 금지
+        	if(singleTableLayer == 'Y'){
+        		alert('테이블 단건추가 선택을 해제해주세요.');
+        		return false;
+        	}
             $("div.tableAddLayer").show();
             //wijmo.grid.FlexGrid.refreshAll();
         });
@@ -521,6 +574,21 @@
             $("div.floorLayer").hide();
             $("div.tableAddLayer").hide();
             $("div.tblAttrLayer").hide();
+        });
+
+        $("#btnPreviewTblAttr").click(function(e) {
+            $("div.tblAttrLayer").hide();
+            $("div.attrPreviewLayer").show();
+        });
+
+        $("#btnPreviewClose").click(function(e) {
+            $("div.attrPreviewLayer").hide();
+            $("div.tblAttrLayer").show();
+        });
+
+        $("#btnX").click(function(e) {
+            $("div.attrPreviewLayer").hide();
+            $("div.tblAttrLayer").show();
         });
 
     	var tblTypeFgComboBox = wijmo.Control.getControl("#tblTypeFgComboBox");
@@ -608,6 +676,15 @@
         /* $("#contentTblAttr").blur(function() {
         	$(this).focus();
         }); */
+
+        <%--테이블 단건 등록 버튼처리--%>
+        $("#btnSingleTableAddLayer").change(function(){
+            if($("#btnSingleTableAddLayer").is(":checked")){
+            	singleTableLayer = 'Y';
+            }else{
+            	singleTableLayer = 'N';
+            }
+        });
 
         if (!mxClient.isBrowserSupported()) {
             // Displays an error message if the browser is not supported.

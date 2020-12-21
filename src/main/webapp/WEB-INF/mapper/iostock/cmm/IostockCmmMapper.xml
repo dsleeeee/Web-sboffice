@@ -43,6 +43,7 @@
                 ,       thv.SHIP_FG, thv.VAT_INCLD_YN
                 FROM    TB_HQ_VENDOR thv
                 WHERE   thv.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     thv.USE_YN = 'Y'
                 ]]>
             </when>
             <!-- 가맹점 -->
@@ -52,6 +53,7 @@
                 ,       tmv.SHIP_FG, tmv.VAT_INCLD_YN
                 FROM    TB_MS_VENDOR tmv
                 WHERE   tmv.STORE_CD  = #{storeCd}
+                AND     tmv.USE_YN = 'Y'
                 ]]>
             </when>
         </choose>

@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.solbipos.adi.etc.cd.service.CdVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
@@ -24,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : VendrOrderController.java
@@ -300,14 +303,14 @@ public class VendrOrderController {
             iostockCmmVO.setSelectTable("TB_HQ_NMCODE");
             iostockCmmVO.setSelectCd("NMCODE_CD");
             iostockCmmVO.setSelectNm("NMCODE_NM");
-            iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+            iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' AND NMCODE_GRP_CD = '024' AND USE_YN = 'Y'");
             list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
             iostockCmmVO.setSelectTable("TB_MS_STORE_NMCODE");
             iostockCmmVO.setSelectCd("NMCODE_CD");
             iostockCmmVO.setSelectNm("NMCODE_NM");
-            iostockCmmVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+            iostockCmmVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = '024' AND USE_YN = 'Y'");
             list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
         }
 
@@ -384,5 +387,49 @@ public class VendrOrderController {
         int result = vendrOrderService.excelUpload(excelUploadMPSVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 거래처 발주타입관리 - 조회
+     *
+     * @param cdVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2020. 12. 15.
+     */
+    @RequestMapping(value = "/vendrOrderDtl/getVendrOrderTypeCdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrOrderTypeCdList(CdVO cdVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = vendrOrderService.getVendrOrderTypeCdList(cdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 거래처 발주타입관리 - 저장
+     *
+     * @param cdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2020. 12. 15.
+     */
+    @RequestMapping(value = "/vendrOrderDtl/saveVendrOrderTypeCdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveVendrOrderTypeCdList(@RequestBody CdVO[] cdVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = vendrOrderService.saveVendrOrderTypeCdList(cdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

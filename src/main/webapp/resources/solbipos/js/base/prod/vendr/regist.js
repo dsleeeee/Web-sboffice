@@ -35,7 +35,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$on("vendrRegistCtrl", function(event, data) {
 
         // 입력값 초기화
-        // $scope.infoInit();
+        $scope.infoInit();
 
         // 등록인지 수정인지 파악(탭 클릭 시 사용)
         valType = data.type;
@@ -62,9 +62,9 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                     $("#rVendrCd").val(data.vendrCd);
                     $("#rVendrNm").val(data.vendrNm);
                     $("#rOwnerNm").val(data.ownerNm);
-                    $("#rVendorFg").val(data.vendorFg);
-                    $("#rVatIncldYn").val(data.vatIncldYn);
-                    $("#rUseYn").val(data.useYn);
+                    $scope.vendorFgCombo.selectedValue = data.vendorFg;
+                    $scope.vatIncldYnCombo.selectedValue = data.vatIncldYn;
+                    $scope.useYnCombo.selectedValue = data.useYn;
                     $("#rBizNo1").val(data.bizNo1);
                     $("#rBizNo2").val(data.bizNo2);
                     $("#rBizNo3").val(data.bizNo3);
@@ -181,17 +181,22 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // 입력값 초기화
-    // $scope.infoInit = function(){
-    //
-    //     var inputArr = [
-    //         rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
-    //     ].forEach(function(element){element.value="";});
-    //
-    //     var selectArr = [
-    //         rVendorFg, rVatIncldYn, rUseYn
-    //     ].forEach(function(element){element.selectedIndex=0;});
-    //
-    // };
+    $scope.infoInit = function(){
+
+        var inputArr = [
+            rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
+        ].forEach(function(element){element.value="";});
+
+        /*var selectArr = [
+            rVendorFg, rVatIncldYn, rUseYn
+        ].forEach(function(element){element.selectedIndex=0;});*/
+
+        // 거래처구분, 부가세포함여부, 사용여부값 기본 셋팅
+        $scope.vendorFgCombo.selectedValue = '1';
+        $scope.vatIncldYnCombo.selectedValue = 'N';
+        $scope.useYnCombo.selectedValue = 'Y';
+
+    };
 
     // 탭변경
     $scope.changeTab = function(val) {
@@ -199,7 +204,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         if(val ==  "1"){ // 거래처 등록 Tab 클릭 시
 
         }else{ // 취급상품 Tab 클릭 시
-            
+
             if(valType == "reg"){
                 s_alert.pop(messages["vendr.request.regist.vendr"]);
                 return false;

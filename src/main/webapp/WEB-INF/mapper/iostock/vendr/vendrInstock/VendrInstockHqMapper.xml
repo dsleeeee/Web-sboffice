@@ -92,6 +92,7 @@
         ,       DECODE(tphvi.PROC_FG, 0, NULL, theconfm.EMP_NM) AS CONFM_NM
         ,       tphvi.IN_TOT_QTY * tphvi.SLIP_FG AS IN_TOT_QTY
         ,       tphvi.IN_TOT * tphvi.SLIP_FG AS IN_TOT
+        ,       (SELECT MAX(STORAGE_CD) FROM TB_PO_HQ_VENDR_INSTOCK_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
         FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
         ,       TB_HQ_VENDOR thv
         ,       TB_HQ_EMPLOYEE thereg
@@ -566,6 +567,19 @@
     <delete id="deleteVendrInstockHd" parameterType="vendrInstockVO">
         /* USE : VendrInstockHqMapper.deleteVendrInstockHd */
         DELETE  TB_PO_HQ_VENDR_INSTOCK
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+    <!-- 거래처 입고/반출등록 - 입고/반출 PROD 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_PROD
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출 상품정보를 삭제한다.
+    -->
+    <delete id="deleteVendrInstockProdInfo" parameterType="vendrInstockVO">
+        /* USE : VendrInstockHqMapper.deleteVendrInstockProdInfo */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK_PROD
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
     </delete>
@@ -1121,6 +1135,34 @@
 				,		#{modId}
 		 )
     </update>
+
+    <!-- 거래처 입고/반출등록 - 상품마스터 최종판매단가 update -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : vendrInstockVO
+        COMMENTS : 입고 시, 입력한 원가단가를 상품마스터의 최종판매단가에 update 한다.
+    -->
+    <update id="updateLastCostUprc" parameterType="vendrInstockVO">
+    /* USE : VendrInstockHqMapper.updateLastCostUprc */
+		MERGE INTO TB_HQ_PRODUCT C
+		USING
+		(
+		      	SELECT HQ_OFFICE_CD
+				,       PROD_CD
+				,       COST_UPRC
+				  FROM TB_PO_HQ_VENDR_INSTOCK_DTL
+				 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+				   AND SLIP_NO = #{slipNo}
+		) N
+		ON (
+            	 C.HQ_OFFICE_CD = N.HQ_OFFICE_CD
+             AND C.PROD_CD  	= N.PROD_CD
+		)
+		WHEN MATCHED THEN
+		UPDATE
+		SET 	C.LAST_COST_UPRC = N.COST_UPRC
+    </update>
+
     <insert id="saveVendrInstockProd" parameterType="vendrInstockVO">
     /* USE : VendrInstockHqMapper.saveVendrInstockProd */
     INSERT

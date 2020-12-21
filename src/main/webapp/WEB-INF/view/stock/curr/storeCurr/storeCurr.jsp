@@ -209,7 +209,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20181224.04" charset="utf-8"></script>
 
 <%-- 현재고현황 상세 레이어 --%>
 <%--<c:import url="/WEB-INF/view/stock/curr/storeCurr/storeCurrDtl.jsp">--%>

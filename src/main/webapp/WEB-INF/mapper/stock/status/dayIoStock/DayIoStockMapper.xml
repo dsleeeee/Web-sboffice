@@ -27,7 +27,7 @@
 			     , THP.PO_UNIT_QTY
 			     , THP.PO_UNIT_FG
 			     , THPB.BARCD_CD
-			     <if test='unitFg == "0"'>
+			     <if test='unitFg == "1"'>
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_01 /* 본사입고 금액*/
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_16 /* 업체반출 수량*/
@@ -51,7 +51,7 @@
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
 				 </if>
-				 <if test='unitFg == "1"'>
+				 <if test='unitFg == "0"'>
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
 	                 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_01 /* 본사입고 금액*/
 	                 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_16 /* 업체반출 수량*/
@@ -194,7 +194,7 @@
 			     , TMP.PO_UNIT_QTY
 			     , TMP.PO_UNIT_FG
 			     , TMPB.BARCD_CD
-			     <if test='unitFg == "0"'>
+			     <if test='unitFg == "1"'>
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_03 /* 매장입고 금액*/
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
@@ -216,7 +216,7 @@
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_22 /* 세트생성 금액*/
 			     </if>
-			     <if test='unitFg == "1"'>
+			     <if test='unitFg == "0"'>
                      , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
                      , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
                      , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
@@ -348,7 +348,7 @@
 			     , THP.PO_UNIT_QTY
 			     , THP.PO_UNIT_FG
 			     , THPB.BARCD_CD
-			     <if test='unitFg == "0"'>
+			     <if test='unitFg == "1"'>
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_01 /* 본사입고 금액*/
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_16 /* 업체반출 수량*/
@@ -372,7 +372,7 @@
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_QTY / THP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
 				 </if>
-				 <if test='unitFg == "1"'>
+				 <if test='unitFg == "0"'>
 					 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
 	                 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_01 /* 본사입고 금액*/
 	                 , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_16 /* 업체반출 수량*/
@@ -512,7 +512,7 @@
 			     , TMP.PO_UNIT_QTY
 			     , TMP.PO_UNIT_FG
 			     , TMPB.BARCD_CD
-			     <if test='unitFg == "0"'>
+			     <if test='unitFg == "1"'>
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_03 /* 매장입고 금액*/
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
@@ -534,7 +534,7 @@
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
 				     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_TOT, 0)))                   AS IO_OCCR_TOT_22 /* 세트생성 금액*/
 			     </if>
-			     <if test='unitFg == "1"'>
+			     <if test='unitFg == "0"'>
                      , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
                      , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
                      , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/

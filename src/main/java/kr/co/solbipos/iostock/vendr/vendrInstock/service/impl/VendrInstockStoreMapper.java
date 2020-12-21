@@ -32,6 +32,9 @@ public interface VendrInstockStoreMapper {
     /** 거래처 입고/반출등록 - 입고/반출정보 HD 삭제 */
     int deleteVendrInstockHd(VendrInstockVO vendrInstockVO);
 
+    /** 거래처 입고/반출등록 - 입고/반출정보 PROD 삭제 */
+    int deleteVendrInstockProdInfo(VendrInstockVO vendrInstockVO);
+
     /** 거래처 입고/반출등록 - 입고/반출정보 삭제시 상품이 있는지 여부 조회 */
     String getDtlProdExist(VendrInstockVO vendrInstockVO);
 
@@ -71,6 +74,9 @@ public interface VendrInstockStoreMapper {
     int mergeVendrInstockProd(VendrInstockVO vendrInstockVO);
     
     int mergeVendrInstockProdConfm(VendrInstockVO vendrInstockVO);
+
+    /** 거래처 입고/반출등록 - 상품마스터 최종판매단가 update */
+    int updateLastCostUprc(VendrInstockVO vendrInstockVO);
     
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 수정 */
     int updateVendrInstockDtl(VendrInstockVO vendrInstockVO);

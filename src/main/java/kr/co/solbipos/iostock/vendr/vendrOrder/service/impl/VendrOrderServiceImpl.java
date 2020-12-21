@@ -6,7 +6,10 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.adi.etc.cd.service.CdVO;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
@@ -327,5 +330,58 @@ public class VendrOrderServiceImpl implements VendrOrderService {
         vendrOrderVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         return vendrOrderVO;
+    }
+
+    /** 거래처 발주타입관리 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getVendrOrderTypeCdList(CdVO cdVO, SessionInfoVO sessionInfoVO) {
+
+        cdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            cdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            cdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return vendrOrderMapper.getVendrOrderTypeCdList(cdVO);
+    }
+
+    /** 거래처 발주타입관리 - 저장 */
+    @Override
+    public int saveVendrOrderTypeCdList(CdVO[] cdVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( CdVO cdVO : cdVOs) {
+
+            cdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+                cdVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                cdVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            }
+            cdVO.setRegDt(currentDt);
+            cdVO.setRegId(sessionInfoVO.getUserId());
+            cdVO.setModDt(currentDt);
+            cdVO.setModId(sessionInfoVO.getUserId());
+
+            // 추가
+            if ( cdVO.getStatus() == GridDataFg.INSERT ) {
+                result += vendrOrderMapper.insertVendrOrderTypeCd(cdVO);
+                // 수정
+            } else if ( cdVO.getStatus() == GridDataFg.UPDATE ) {
+                result += vendrOrderMapper.updateVendrOrderTypeCd(cdVO);
+                // 삭제
+            } else if ( cdVO.getStatus() == GridDataFg.DELETE ) {
+                result += vendrOrderMapper.deleteVendrOrderTypeCd(cdVO);
+            }
+        }
+
+        if ( result == cdVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
     }
 }

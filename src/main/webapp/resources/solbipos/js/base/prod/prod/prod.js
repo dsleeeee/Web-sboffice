@@ -84,8 +84,8 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('091', 'saleProdYnComboData');
   // 주문상품구분 콤보박스
   $scope._getComboDataQuery('092', 'poProdFgComboData');
-  // 주문단위 콤보박스
-  $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData');
+  // 주문단위 콤보박스와 data-map
+  $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData', 'poUnitFgComboDataMap');
   // 과세여부 콤보박스
   $scope._getComboDataQuery('039', 'vatFgComboData');
   // 품절여부 콤보박스
@@ -103,7 +103,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {
 
     // 그리드에서 사용하는 dataMap 초기화
-    $scope.useYnComboDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name');
+    $scope.useYnComboDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name'); // 사용여부
 
     // 그리드 포맷
     s.formatItem.addHandler(function (s, e) {

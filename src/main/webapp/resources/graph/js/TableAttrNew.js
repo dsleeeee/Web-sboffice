@@ -177,13 +177,13 @@ SidebarAttr.prototype.initUsed = function() {
     var parent = graph.getDefaultParent();
     var model = graph.getModel();
     var childCount = model.getChildCount(parent);
-    
+
     var fontFamilyComboBox 	= wijmo.Control.getControl("#fontFamily");
     var fontColorComboBox 	= wijmo.Control.getControl("#fontColor");
-    
+
     for (var i = 0; i < childCount; i++) {
         var cell = model.getChildAt(parent, i);
-        
+
         var styleObjArr = new Array;
 
     	if (cell.style != null && cell.style != undefined) {
@@ -205,26 +205,26 @@ SidebarAttr.prototype.initUsed = function() {
         	fontColorComboBox.text 		= styleObjArr[5].fontColor;
         	$("#fontSize .wj-numeric").val(styleObjArr[4].fontSize);
     	}
-    	
+
     	styleObjArr.forEach(function(value){
-  		  var obj_key = Object.keys(value); 
-  		  var obj_value = value[obj_key]; 
+  		  var obj_key = Object.keys(value);
+  		  var obj_value = value[obj_key];
 
   		  if(obj_key == "useYn"){
-  			    if(obj_value == "Y"){    		
+  			    if(obj_value == "Y"){
   				  tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
   	        	}else{
   	        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', false);
-  	        	}			  
+  	        	}
   		  }else if(obj_key == "opacity"){
-  			  if(obj_value == "100"){    		
+  			  if(obj_value == "100"){
   				  tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', true);
   	        	}else{
   	        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', false);
   	        	}
   		  }
   		});
-    	    	
+
     }
 };
 
@@ -312,10 +312,10 @@ SidebarAttr.prototype.makeGrid = function() {
                 var cellsTemp = [];
                 cellsTemp.push(cell);
                 if (show == 'true') {
-                
+
                     graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
-                    
+
                     graph.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
 
@@ -325,13 +325,13 @@ SidebarAttr.prototype.makeGrid = function() {
                 } else {
                     graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
-                    
+
                     graph.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
 
-                    
+
                 }
-                
+
                 if (used == 'true') {
                 	graph.setCellStyles('useYn', 'Y', cellsTemp);
                     preview.setCellStyles('useYn', 'Y', cellsTemp);
@@ -339,9 +339,9 @@ SidebarAttr.prototype.makeGrid = function() {
                 	graph.setCellStyles('useYn', 'N', cellsTemp);
                     preview.setCellStyles('useYn', 'N', cellsTemp);
                 }
-                
-            } 
-            
+
+            }
+
     	}
     }, false);
 
@@ -361,10 +361,10 @@ SidebarAttr.prototype.makeGrid = function() {
         //idx가져오기(0번째 항목)
         var idx = tblAttrGridTemp.getCellData(e.row, 0, true);
         var used = tblAttrGridTemp.getCellData(e.row, 3, true);
-        
+
         var fontFamilyComboBox 	= wijmo.Control.getControl("#fontFamily");
         var fontColorComboBox 	= wijmo.Control.getControl("#fontColor");
-        
+
         //사용중일 경우만 선택 활성화
         if (used) {
             var cell = graph.getModel().getCell(idx);
@@ -373,17 +373,17 @@ SidebarAttr.prototype.makeGrid = function() {
         	var selectedCell = cell.geometry;
         	var cellStyle = cell.style;
         	var styleObjArr = getCellStyle(cellStyle);
-        	
+
         	$("#attrCellX").val(selectedCell.x);
         	$("#attrCellY").val(selectedCell.y);
         	$("#attrCellW").val(selectedCell.width);
         	$("#attrCellH").val(selectedCell.height);
-        	        	
+
         	fontFamilyComboBox.text 	= styleObjArr[2].fontFamily;
         	fontColorComboBox.text 		= styleObjArr[5].fontColor;
         	$("#fontSize .wj-numeric").val(styleObjArr[4].fontSize);
-        	
-        	
+
+
             //맨앞으로 가져오기
             graph.orderCells(false);
             graph.container.focus();
@@ -684,9 +684,11 @@ PreViewAttr.prototype.init = function() {
     //그래프 영역의 배경 색 설정 - 기본설정
     //graph.setBackgroundImage(new mxImage(this.graphBackgroundImage, 600, 640));
 
-    preview.minimumGraphSize = new mxRectangle(0, 0, 100, 100);
-    preview.maximumGraphBounds = new mxRectangle(0, 0, 100, 100);
-
+//    preview.minimumGraphSize = new mxRectangle(0, 0, 100, 100);
+//    preview.maximumGraphBounds = new mxRectangle(0, 0, 100, 100);
+    //미리보기 그래프 영역 조절 사이즈 조절변경 (20201209)
+    preview.minimumGraphSize = new mxRectangle(0, 0, currentWidth, currentHeight);
+    preview.maximumGraphBounds = new mxRectangle(0, 0, currentWidth, currentHeight);
 
     //마우스를 영역 밖으로 드래그 했을 때 패닝이 되지 않도록 처리
     preview.setPanning(false);
@@ -908,7 +910,7 @@ FormatAttr.prototype.refresh = function() {
 //        //정렬 옵션
 //        document.getElementById('textAlign').style.display = 'block';
 //    }
-    
+
     //폰트 설정
     document.getElementById('fontStyle').style.display = 'block';
     //정렬 옵션
@@ -926,8 +928,9 @@ FormatAttr.prototype.previewDraw = function() {
     var enc = new mxCodec(mxUtils.createXmlDocument());
     node = enc.encode(graph.getModel());
 
+//    this.setGraphXml(preview, node, graph.container.offsetWidth, graph.container.offsetHeight);
     this.setGraphXml(preview, node, currentWidth, currentHeight);
-    this.resizeCells(preview);
+     this.resizeCells(preview);
 };
 
 /**
@@ -1211,8 +1214,8 @@ FormatAttr.prototype.open = function(isLoad) {
 //                    try {
                         var xml = mxUtils.parseXml(xmlStr);
                         this.setGraphXml(graph, xml.documentElement, graph.container.offsetWidth, graph.container.offsetHeight);
-                        this.setGraphXml(preview, xml.documentElement, currentWidth, currentHeight);
-                        this.resizeCells(preview);
+//                        this.setGraphXml(preview, xml.documentElement, graph.container.offsetWidth, graph.container.offsetHeight);
+                        // this.resizeCells(preview);
 
                         main.initValue();
                         if (!isLoad) {
@@ -1237,6 +1240,17 @@ FormatAttr.prototype.open = function(isLoad) {
  */
 FormatAttr.prototype.setGraphXml = function(graph, node, width, height) {
 
+	//미리보기 화면 사이즈 조절 추가 (20201209)
+    if(graph.container.id == 'previewTblAttr' || graph.container.id == 'contentLayout'){
+    	previewYN = 'Y';
+    	$('.previewPop').width(currentWidth+70);
+    	$('#previewTblAttr').width(currentWidth);
+    	$('#previewTblAttr').height(currentHeight);
+    }else{
+    	previewYN = 'N';
+    }
+
+    //기존소스
     if (node != null) {
         var dec = new mxCodec(node.ownerDocument);
         if (node.nodeName == 'mxGraphModel') {
@@ -1270,8 +1284,10 @@ FormatAttr.prototype.setGraphXml = function(graph, node, width, height) {
 
 FormatAttr.prototype.resizeCells = function(graph) {
 
-	currentHorizontalRatio = currentWidth / 500;
-	currentVerticalRatio = currentHeight / 500;
+//	currentHorizontalRatio = currentWidth / 500;
+//	currentVerticalRatio = currentHeight / 500;
+	currentHorizontalRatio = currentWidth / 460;
+	currentVerticalRatio = currentHeight / 460;
 
     //그래픽 영역의 Object를 체크해 사용여부 true 처리
     var parent = graph.getDefaultParent();

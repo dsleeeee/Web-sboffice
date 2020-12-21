@@ -1591,4 +1591,189 @@
         </choose>
     </delete>
     <!--                엑셀업로드 끝                 -->
+
+    <!-- 거래처 발주타입관리 - 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 발주타입 코드 목록을 조회한다.
+    -->
+    <select id="getVendrOrderTypeCdList" parameterType="cdVO" resultType="DefaultMap">
+        /* USE : VendrOrderMapper.getVendrOrderTypeCdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thn.NMCODE_GRP_CD,
+                        thn.NMCODE_CD,
+                        thn.NMCODE_NM,
+                        thn.NMCODE_ITEM_1,
+                        thn.NMCODE_ITEM_2,
+                        thn.USE_YN
+                  FROM TB_HQ_NMCODE thn
+                 WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+              ORDER BY thn.NMCODE_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmsn.NMCODE_GRP_CD,
+                        tmsn.NMCODE_CD,
+                        tmsn.NMCODE_NM,
+                        tmsn.NMCODE_ITEM_1,
+                        tmsn.NMCODE_ITEM_2,
+                        tmsn.USE_YN
+                  FROM TB_MS_STORE_NMCODE tmsn
+                 WHERE tmsn.STORE_CD = #{storeCd}
+                   AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+              ORDER BY tmsn.NMCODE_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 거래처 발주타입관리 - 추가 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 발주타입 코드를 추가한다.
+    -->
+    <insert id="insertVendrOrderTypeCd" parameterType="cdVO">
+        /* USE : VendrOrderMapper.insertVendrOrderTypeCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_NMCODE
+                (
+                HQ_OFFICE_CD,
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                #{nmcodeGrpCd},
+                #{nmcodeCd},
+                #{nmcodeCd},
+                #{nmcodeNm},
+                #{nmcodeItem1,jdbcType=VARCHAR},
+                #{nmcodeItem2,jdbcType=VARCHAR},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_STORE_NMCODE
+                (
+                STORE_CD,
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{nmcodeGrpCd},
+                #{nmcodeCd},
+                #{nmcodeCd},
+                #{nmcodeNm},
+                #{nmcodeItem1,jdbcType=VARCHAR},
+                #{nmcodeItem2,jdbcType=VARCHAR},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 거래처 발주타입관리 - 추가 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 발주타입 코드를 수정한다.
+    -->
+    <update id="updateVendrOrderTypeCd" parameterType="cdVO">
+        /* USE : VendrOrderMapper.updateVendrOrderTypeCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                TB_HQ_NMCODE
+                SET
+                NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
+                NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
+                NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
+                USE_YN = #{useYn}
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                TB_MS_STORE_NMCODE
+                SET
+                NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
+                NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
+                NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
+                USE_YN = #{useYn}
+                WHERE
+                STORE_CD = #{storeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 거래처 발주타입관리 - 삭제 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : iostockCmmVO
+        COMMENTS : 발주타입 코드를 삭제한다.
+    -->
+    <delete id="deleteVendrOrderTypeCd" parameterType="cdVO">
+        /* USE : VendrOrderMapper.deleteVendrOrderTypeCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM
+                TB_HQ_NMCODE
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM
+                TB_MS_STORE_NMCODE
+                WHERE
+                STORE_CD = #{storeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+        </choose>
+    </delete>
+
 </mapper>

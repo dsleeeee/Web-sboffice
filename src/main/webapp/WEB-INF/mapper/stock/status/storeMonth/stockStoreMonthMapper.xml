@@ -23,7 +23,7 @@
 					 , TPSSM.PO_UNIT_QTY
 					 , TMP.PO_UNIT_FG
 					 , TMPB.BARCD_CD
-					 <if test='unitFg == "0"'>
+					 <if test='unitFg == "1"'>
 						 , SF_ZERO_TO_NULL(SUM(TPSSM.BASE_QTY / TMP.PO_UNIT_QTY)         ) AS BASE_QTY            /* 기초재고수량 */
 						 , SF_ZERO_TO_NULL(SUM(TPSSM.STORE_IN_QTY / TMP.PO_UNIT_QTY)     ) AS IO_OCCR_QTY_03      /* 매장입고 수량*/
 						 , SF_ZERO_TO_NULL(SUM(TPSSM.STORE_OUT_QTY / TMP.PO_UNIT_QTY)    ) AS IO_OCCR_QTY_12      /* 매장반품 수량*/
@@ -37,7 +37,7 @@
 						 , SF_ZERO_TO_NULL(SUM(TPSSM.SET_IN_QTY / TMP.PO_UNIT_QTY)       ) AS IO_OCCR_QTY_22      /* 세트생성 수량*/
 						 , SF_ZERO_TO_NULL(SUM(TPSSM.CLOSE_QTY / TMP.PO_UNIT_QTY)        ) AS CLOSE_QTY           /* 기말재고수량 */
 					 </if>
-					 <if test='unitFg == "1"'>
+					 <if test='unitFg == "0"'>
                          , SF_ZERO_TO_NULL(SUM(TPSSM.BASE_QTY)         ) AS BASE_QTY        /* 기초재고수량 */
                          , SF_ZERO_TO_NULL(SUM(TPSSM.STORE_IN_QTY)     ) AS IO_OCCR_QTY_03  /* 매장입고 수량*/
                          , SF_ZERO_TO_NULL(SUM(TPSSM.STORE_OUT_QTY)    ) AS IO_OCCR_QTY_12  /* 매장반품 수량*/

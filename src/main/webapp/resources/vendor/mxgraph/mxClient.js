@@ -19362,6 +19362,14 @@ mxSvgCanvas2D.prototype.ellipse = function(x, y, w, h)
  */
 mxSvgCanvas2D.prototype.image = function(x, y, w, h, src, aspect, flipH, flipV)
 {
+    //미리보기 백드라운드 이미지 사이즈 조절을 위한 플레그 추가 (20201209)
+    if(previewYN){
+        if(previewYN == 'Y'){
+            aspect = false;
+        }else{
+            aspect = true;
+        }
+    }
 	src = this.converter.convert(src);
 	
 	// LATER: Add option for embedding images as base64.

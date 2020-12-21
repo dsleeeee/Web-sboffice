@@ -137,4 +137,4 @@
     }
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/batchFunc.js?ver=20200709.26" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/batchFunc.js?ver=20200709.27" charset="utf-8"></script>

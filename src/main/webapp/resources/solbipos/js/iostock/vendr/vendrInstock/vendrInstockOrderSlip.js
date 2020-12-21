@@ -70,7 +70,7 @@ app.controller('vendrInstockOrderSlipCtrl', ['$scope', '$http', function ($scope
     params.vendrCd = $("#vendrInstockOrderSlipSelectVendrCd").val();
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/iostock/vendr/vendrInstock/vendrInstockOrderSlip/list.sb", params);
+    $scope._inquirySub("/iostock/vendr/vendrInstock/vendrInstockOrderSlip/list.sb", params);
   };
 
 

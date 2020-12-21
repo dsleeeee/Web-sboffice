@@ -170,6 +170,9 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 
             result = vendrInstockHqMapper.deleteVendrInstockHd(vendrInstockVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            result = vendrInstockHqMapper.deleteVendrInstockProdInfo(vendrInstockVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
             dtlProdExist = vendrInstockStoreMapper.getDtlProdExist(vendrInstockVO);
@@ -178,6 +181,9 @@ public class VendrInstockServiceImpl implements VendrInstockService {
             }
 
             result = vendrInstockStoreMapper.deleteVendrInstockHd(vendrInstockVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            result = vendrInstockStoreMapper.deleteVendrInstockProdInfo(vendrInstockVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
@@ -233,6 +239,12 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 //                result = vendrInstockHqMapper.saveVendrInstockProd(vendrInstockVO);
                 result = vendrInstockHqMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 입고확정일 경우에만 입력한 원가단가 > 마스터의 최종판매단가에 update
+                if(vendrInstockVO.getSlipFg() == 1 && procFg.equals("1")){
+                    result = vendrInstockHqMapper.updateLastCostUprc(vendrInstockVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
             }
             // 확정취소
             else if(procFg.equals("0")) {
@@ -294,6 +306,12 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 //                result = vendrInstockStoreMapper.saveVendrInstockProd(vendrInstockVO);
                 result = vendrInstockStoreMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 입고확정일 경우에만 입력한 원가단가 > 마스터의 최종판매단가에 update
+                if(vendrInstockVO.getSlipFg() == 1 && procFg.equals("1")){
+                    result = vendrInstockStoreMapper.updateLastCostUprc(vendrInstockVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
             }
             // 확정취소
             else if(procFg.equals("0")) {
@@ -406,48 +424,50 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                 else if(vendrInstockVO.getInTotQty() != null) {
                     insFg = "I";
                 }
-                
+
                 int prevUnitQty  = (vendrInstockVO.getPrevInUnitQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInUnitQty()));
                 int prevEtcQty   = (vendrInstockVO.getPrevInEtcQty()  == null ? 0 : Math.abs(vendrInstockVO.getPrevInEtcQty()));
                 int prevTotQty  = (vendrInstockVO.getPrevInTotQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInTotQty()));
-                
+
                 Long prevAmt    = (vendrInstockVO.getPrevInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInAmt()));
                 Long prevVat    = (vendrInstockVO.getPrevInVat()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInVat()));
-                Long prevTot    = (vendrInstockVO.getPrevInTot()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInTot()));                
+                Long prevTot    = (vendrInstockVO.getPrevInTot()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInTot()));
 
                 if(!insFg.equals("D")) {
                     int slipFg       = vendrInstockVO.getSlipFg();
-                    int poUnitQty    = Math.abs(vendrInstockVO.getPoUnitQty());                    
+                    int poUnitQty    = Math.abs(vendrInstockVO.getPoUnitQty());
 //                    int prevUnitQty  = (vendrInstockVO.getPrevInUnitQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInUnitQty()));
 //                    int prevEtcQty   = (vendrInstockVO.getPrevInEtcQty()  == null ? 0 : Math.abs(vendrInstockVO.getPrevInEtcQty()));
 //                    int prevTotQty  = (vendrInstockVO.getPrevInTotQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInTotQty()));
-//                    
+//
 //                    Long prevAmt    = (vendrInstockVO.getPrevInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInAmt()));
 //                    Long prevVat    = (vendrInstockVO.getPrevInVat()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInVat()));
 //                    Long prevTot    = (vendrInstockVO.getPrevInTot()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInTot()));
-                    
-                    
+
+
                     int unitQty      = (vendrInstockVO.getInUnitQty()     == null ? 0 : Math.abs(vendrInstockVO.getInUnitQty()));
                     int etcQty       = (vendrInstockVO.getInEtcQty()      == null ? 0 : Math.abs(vendrInstockVO.getInEtcQty()));
-                    
-                                       
+
+
                     int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
                     int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
-                    int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : prevTotQty	+	Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
+                    //int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : prevTotQty	+	Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
+                    //int orderTotQty  = ((poUnitQty * Math.abs(orderUnitQty)) + orderEtcQty) * slipFg;
+                    int orderTotQty  = ((poUnitQty * orderUnitQty) + orderEtcQty);
                     Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : prevAmt	+	Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
                     Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : prevVat	+	Math.abs(vendrInstockVO.getInVat()))    * slipFg;
                     Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : prevTot	+	Math.abs(vendrInstockVO.getInTot()))    * slipFg;
-                    
-                    
+
+
 //                    int orderUnitQty = (unitQty + Integer.valueOf(etcQty) / poUnitQty) * slipFg;
 //                    int orderEtcQty  = Integer.valueOf(etcQty % poUnitQty) * slipFg;
 //                    int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
 //                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
 //                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : Math.abs(vendrInstockVO.getInVat()))    * slipFg;
 //                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : Math.abs(vendrInstockVO.getInTot()))    * slipFg;
-                    
-                    
-                    
+
+
+
                     vendrInstockVO.setPrevInUnitQty(prevUnitQty);
                     vendrInstockVO.setPrevInEtcQty(prevEtcQty);
                     vendrInstockVO.setPrevInTotQty(prevTotQty);

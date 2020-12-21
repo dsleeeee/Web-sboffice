@@ -5,9 +5,10 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/base/store/posfunc/"/>
 
-<div class="subCon">
+<div class="subCon" ng-controller="posFuncCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
@@ -55,6 +56,12 @@
             <%--<button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>--%>
             <%-- 전체접기 --%>
             <%--<button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>--%>
+           <button class="btn_skyblue" id="btnDefaultFunc" ng-click="defaultFunc()">
+            <s:message code="func.defaultFunc" />
+           </button>
+           <button class="btn_skyblue" id="btnBatchStore" ng-click="batchStore()">
+            <s:message code="func.batch" />
+           </button>
           </div>
         </div>
         <div id="storeGrid" style="height: 550px; overflow-x: hidden;"></div>
@@ -92,6 +99,15 @@
 </div>
 
 <script>
+
+  // 본사코드 가져오기
+  var orgnFg = "${orgnFg}";
+  var hqList = null;
+  if(orgnFg === "MASTER"){
+    hqList = ${ccu.getHqOfficeList()};
+  }else{
+    hqList = ${ccu.getHqOfficeListChkAgency(orgnCd, "A")};
+  }
 
   var posList;
   var selectedStore;
@@ -241,6 +257,50 @@
 
 </script>
 
+<script>
+  /**
+   * get application
+   */
+  var app = agrid.getApp();
+
+  /** 매장선택 controller */
+  app.controller('posFuncCtrl', ['$scope', '$http', function ($scope, $http) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('posFuncCtrl', $scope, $http, true));
+
+    $scope.$on('posFuncCtrl', function (event, data) {
+
+    });
+
+    // 기본기능적용
+    $scope.defaultFunc = function(){
+
+      // 레이어팝업 오픈
+      $scope.defaultFuncLayer.show(true, function(){
+
+        var regScope  = agrid.getScope('defaultFuncCtrl');
+        regScope._gridDataInit();
+      });
+
+      event.preventDefault();
+    };
+
+    // 일괄기능적용
+    $scope.batchStore = function(){
+
+      // 레이어팝업 오픈
+      $scope.batchStoreLayer.show(true, function(){
+
+        var regScope  = agrid.getScope('batchStoreCtrl');
+        regScope._gridDataInit();
+      });
+
+      event.preventDefault();
+    };
+
+  }]);
+</script>
+
 <%-- 포스기능 인증관리 상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuthDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
@@ -257,6 +317,18 @@
 <c:import url="/WEB-INF/view/base/store/posFunc/posFuncCopy.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 기본기능적용 팝업 --%>
+<c:import url="/WEB-INF/view/pos/confg/func/defaultFunc.jsp">
+</c:import>
+
+<%-- 일괄기능적용 매장리스트 팝업 --%>
+<c:import url="/WEB-INF/view/pos/confg/func/batchStore.jsp">
+</c:import>
+
+<%-- 일괄기능적용 팝업 --%>
+<c:import url="/WEB-INF/view/pos/confg/func/batchFunc.jsp">
 </c:import>
 
 

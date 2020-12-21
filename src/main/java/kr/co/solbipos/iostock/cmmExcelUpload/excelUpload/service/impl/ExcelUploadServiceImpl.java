@@ -48,6 +48,27 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
             }
             excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
+            // 상품코드 or 바코드 "'" 문자 제거
+            if (excelUploadVO.getProdBarcdCd() != null && !"".equals(excelUploadVO.getProdBarcdCd())) {
+                if(excelUploadVO.getProdBarcdCd().contains("'")) {
+                    excelUploadVO.setProdBarcdCd(excelUploadVO.getProdBarcdCd().replaceAll("'",""));
+                }
+            }
+
+            // 상품코드 "'" 문자 제거
+            if (excelUploadVO.getProdCd() != null && !"".equals(excelUploadVO.getProdCd())) {
+                if(excelUploadVO.getProdCd().contains("'")) {
+                    excelUploadVO.setProdCd(excelUploadVO.getProdCd().replaceAll("'",""));
+                }
+            }
+
+            // 바코드 "'" 문자 제거
+            if (excelUploadVO.getBarcdCd() != null && !"".equals(excelUploadVO.getBarcdCd())) {
+                if(excelUploadVO.getBarcdCd().contains("'")) {
+                    excelUploadVO.setBarcdCd(excelUploadVO.getBarcdCd().replaceAll("'",""));
+                }
+            }
+
             result = excelUploadMapper.insertExcelUpload(excelUploadVO);
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             returnResult += result;
