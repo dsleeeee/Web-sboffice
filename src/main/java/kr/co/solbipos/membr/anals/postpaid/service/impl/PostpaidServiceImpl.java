@@ -62,11 +62,12 @@ public class PostpaidServiceImpl implements PostpaidService {
         SessionInfoVO sessionInfoVO) {
 
         String[] storeCds = postpaidStoreVO.getStoreCds().split(",");
+        postpaidStoreVO.setStoreCdList(storeCds);
 
         postpaidStoreVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
         postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        postpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
-        postpaidStoreVO.setStoreCdList(storeCds);
 
         return mapper.getPostpaidMemberList(postpaidStoreVO);
     }

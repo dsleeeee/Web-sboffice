@@ -43,10 +43,11 @@ public class PrepaidDtlServiceImpl implements PrepaidDtlService {
                                                             SessionInfoVO sessionInfoVO) {
 
         String[] storeCds = prepaidDtlVO.getStoreCds().split(",");
+        prepaidDtlVO.setStoreCdList(storeCds);
 
         prepaidDtlVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        prepaidDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prepaidDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
-        prepaidDtlVO.setStoreCdList(storeCds);
 
         return mapper.getPrepaidDtlMemberList(prepaidDtlVO);
     }

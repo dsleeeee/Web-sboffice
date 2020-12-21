@@ -17,93 +17,101 @@
       COMMENTS : 선불 충전내역과 사용내역을 조회
   -->
   <select id="getPrepaidMemberList"  parameterType="prepaidStoreVO" resultType="DefaultMap">
-      /* PrepaidMapper.getPrepaidMemberList */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
-      SELECT tmmpb.HQ_OFFICE_CD,
-             tmmpb.STORE_CD,
-             tms.STORE_NM,
-             tmmpb.MEMBR_NO,
-             SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
-             tmmpb.PREPAID_AMT,
-             tmmpb.PREPAID_USE_AMT,
-             tmmpb.PREPAID_BAL_AMT
-      <include refid="CmmSQL.PagingTemplateCount"/>
+        /* PrepaidMapper.getPrepaidMemberList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tmmpb.HQ_OFFICE_CD,
+        tmmpb.STORE_CD,
+        tms.STORE_NM,
+        tmmpb.MEMBR_NO,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+        tmmpb.PREPAID_AMT,
+        tmmpb.PREPAID_USE_AMT,
+        tmmpb.PREPAID_BAL_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
-             TB_MB_MEMBER tmm,
-             TB_MS_STORE tms
-       WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-         AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
-         AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
-         AND tms.STORE_CD = tmmpb.STORE_CD
-      <if test='storeCds != null and storeCds != ""'>
-         AND tmmpb.STORE_CD IN
-        <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-          #{item}
-        </foreach>
-      </if>
-      <if test='membrNo != null and membrNo != ""'>
-        <![CDATA[
-         AND tmmpb.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
-         ]]>
-      </if>
-      <if test='storeCd != null and storeCd != ""'>
-        <![CDATA[
-         AND tmmpb.STORE_CD = #{storeCd}
-         ]]>
-      </if>
-      <if test='membrNm != null and membrNm != ""'>
-        <![CDATA[
-         AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
-         ]]>
-      </if>
-      ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
-      <include refid="CmmSQL.PagingTemplateBottom"/>
+        TB_MB_MEMBER tmm,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tmmpb.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+              AND tmmpb.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
+        AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
+        AND tms.STORE_CD = tmmpb.STORE_CD
+        <if test='membrNo != null and membrNo != ""'>
+            <![CDATA[
+              AND tmmpb.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+            ]]>
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            <![CDATA[
+              AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
+            ]]>
+        </if>
+        ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
 
-  <!-- 선불금 충전 회원 조회 -->
-  <!--
-      TABLE    : TB_MB_MEMBER
-      COMMENTS : 해당 본사의 회원을 조회한다.
-  -->
-  <select id="getChargeMemberList" parameterType="prepaidStoreVO" resultType="DefaultMap">
-      /* PrepaidMapper.getChargeMemberList */
-      SELECT tmm.REG_STORE_CD AS STORE_CD,
-             tms.STORE_NM,
-             tmm.MEMBR_NO,
-            SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
-      FROM TB_MB_MEMBER tmm,
-             TB_MS_STORE tms
-      WHERE tms.STORE_CD = tmm.REG_STORE_CD
-          AND MEMBR_ORGN_CD = #{membrOrgnCd}
-          <if test='storeCd != null and storeCd != ""'>
-              <![CDATA[
-                  AND tmm.REG_STORE_CD = #{storeCd}
-              ]]>
-          </if>
-          <if test='defaultStoreCd != null and defaultStoreCd != ""'>
-             AND tmm.REG_STORE_CD != #{defaultStoreCd}
-          </if>
-          <if test='prepaidStoreCd != null and prepaidStoreCd != ""'>
+    <!-- 선불금 충전 회원 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : 해당 본사의 회원을 조회한다.
+    -->
+    <select id="getChargeMemberList" parameterType="prepaidStoreVO" resultType="DefaultMap">
+        /* PrepaidMapper.getChargeMemberList */
+        SELECT
+        tmmp.STORE_CD AS STORE_CD,
+        tms.STORE_NM,
+        tmmp.MEMBR_NO,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+        FROM TB_MB_MEMBER_PREPAID_STORE tmmp,
+        TB_MB_MEMBER tmm,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+              AND tmmp.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD
+        AND tmm.MEMBR_NO = tmmp.MEMBR_NO
+        AND tms.STORE_CD = tmmp.STORE_CD
+        <if test='defaultStoreCd != null and defaultStoreCd != ""'>
+            AND tmm.REG_STORE_CD != #{defaultStoreCd}
+        </if>
+        <if test='prepaidStoreCd != null and prepaidStoreCd != ""'>
             AND tmm.REG_STORE_CD = #{prepaidStoreCd}
-          </if>
-          <if test='prepaidStoreNm != null and prepaidStoreNm != ""'>
+        </if>
+        <if test='prepaidStoreNm != null and prepaidStoreNm != ""'>
             <![CDATA[
-            AND tms.STORE_NM LIKE '%'|| #{prepaidStoreNm} ||'%'
+                AND tms.STORE_NM LIKE '%'|| #{prepaidStoreNm} ||'%'
             ]]>
-          </if>
-          <if test='membrNo != null and membrNo != ""'>
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
             <![CDATA[
-            AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+                AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
             ]]>
-          </if>
-          <if test='membrNm != null and membrNm != ""'>
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
             <![CDATA[
-            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
+                AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
             ]]>
-          </if>
-      ORDER BY tmm.REG_STORE_CD, tmm.MEMBR_NO
-  </select>
+        </if>
+        ORDER BY tmmp.STORE_CD, tmmp.MEMBR_NO
+    </select>
 
   <!-- 충전입금 -->
   <!--
