@@ -7,6 +7,9 @@ var currentCells = [];
 var backgroundColor;
 var currentGraph;
 
+//테이블 단건등록 플레그
+var singleTableLayer = 'N';
+
 // 지정된 영역에만 구성요소를 넣을 수 있도록 처리
 mxGraph.prototype.allowNegativeCoordinates = false;
 
@@ -60,7 +63,7 @@ TableLayout.prototype.init = function() {
     this.graph.addListener(mxEvent.EDITING_STOPPED, this.format.update);
     this.graph.getModel().addListener(mxEvent.CHANGE, this.format.update);
     this.graph.addListener(mxEvent.ROOT, this.format.update);
-    
+
     // 서버의 초기 설정 로드
     var openResult = this.format.open(true);
 };
@@ -111,7 +114,7 @@ SidebarLayout = function(graph) {
 /**
  * 매장구성요소 영역 초기화
  */
-SidebarLayout.prototype.init = function() {	
+SidebarLayout.prototype.init = function() {
     var tableSize = this.graph.defaultTableSize;
 
     // ts2는 xml과 message 파일에 정의되어야 함
@@ -218,7 +221,7 @@ Floor.prototype.init = function() {
 //            name: mxResources.get('tblGrpFgTogo')
             name: mxResources.get('tblGrpFgDelivery')
         } // 배달
-//        , // 포장 
+//        , // 포장
 //        {
 //            id: '3',
 //            name: mxResources.get('tblGrpFgDelivery')
@@ -377,8 +380,8 @@ Floor.prototype.initValue = function() {
             });
         }))(model.getChildAt(model.root, i));
     }
-    
-    graph.container.style.backgroundColor = '#CCCCCC'    
+
+    graph.container.style.backgroundColor = '#CCCCCC'
 
     // 데이터 생성, 변경사항 추적하도록 설정
     floorGrid.itemsSource = new wijmo.collections.CollectionView(data, {
@@ -398,7 +401,7 @@ Floor.prototype.refresh = function() {
     // 층버튼 생성
     var model = graph.getModel();
     var layerCount = model.getChildCount(model.root);
-    
+
     var template = '<span><a href="#" class="{on}">{name}</a></span>';
     var divFloor = document.getElementById('divLayers');
     divFloor.innerHTML = '';
@@ -462,7 +465,7 @@ Floor.prototype.visibleLayer = function(layer) {
     // 백그라운드컬러
 //    graph.container.style.backgroundColor = styles[mxConstants.STYLE_FILLCOLOR];
 //    backgroundColor.value = styles[mxConstants.STYLE_FILLCOLOR];
-    graph.container.style.backgroundColor = '#CCCCCC' 
+    graph.container.style.backgroundColor = '#CCCCCC'
     backgroundColor.value = '#CCCCCC';
 
     // 백그라운드이미지
@@ -554,10 +557,10 @@ GraphLayout.prototype.init = function() {
     graph.undoManager = graph.createUndoManager(graph);
     var rubberband = new mxRubberband(graph);
     graph.keyHandler = graph.createKeyHandler(graph);
-    
-    
+
+
     mxGraphHandler.prototype.isDelayedSelection = function(cell, me) {
-    	
+
         return true;
     };
 
@@ -573,14 +576,20 @@ GraphLayout.prototype.init = function() {
         var cell = graph.getCellAt(x, y);
         return cell && cell._type == 'phase' ? cell : null;
     };
-        
+
     var graphHandlermouseUp = mxGraphHandler.prototype.mouseUp;
     graph.graphHandler.mouseUp = function(sender, me) {
+
     	currentGraph = graph;
 
     	var tblTypeFgComboBox = wijmo.Control.getControl("#tblTypeFgComboBox");
     	var tblSeatCntComboBox = wijmo.Control.getControl("#tblSeatCntComboBox");
-    	
+
+    	//테이블 단건 생성일때는 초기화 금지
+    	if(singleTableLayer == "Y"){
+			return false;
+		}
+
     	if (me.state != null && me.state != undefined) {
 
     		var selectedCell = me.state.cell;
@@ -599,8 +608,8 @@ GraphLayout.prototype.init = function() {
         	$("#cellW").val(cell.width);
         	$("#cellH").val(cell.height);
         	$("#tableName").val(cellNm);
-        	
-        	
+
+
         	tblTypeFgComboBox.selectedValue = styleObjArr[0].tblTypeFg;
         	tblSeatCntComboBox.selectedValue = styleObjArr[1].tblSeatCnt;
 
@@ -631,9 +640,9 @@ GraphLayout.prototype.init = function() {
     // 구성요소 이동 시 처리
     var mxGraphHandlerMoveCells = mxGraphHandler.prototype.moveCells;
     graph.graphHandler.moveCells = function(cells, dx, dy, clone, target, evt) {
-    	
+
         var pt = graph.getPointForEvent(evt);
-        
+
         // 네 모서리에 셀이 있으면 이동 금지
         var x1 = this.bounds.x + dx;
         var y1 = this.bounds.y + dy;
@@ -663,7 +672,7 @@ GraphLayout.prototype.init = function() {
     // 셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
     var mxGraphResizeCell = mxGraph.prototype.resizeCell;
     graph.resizeCell = function(cell, bounds, recurse) {
-    	
+
         // 네 모서리에 셀이 있으면 이동 금지
         var x1 = bounds.x;
         var y1 = bounds.y;
@@ -959,11 +968,11 @@ FormatLayout.prototype.refresh = function() {
             vertexCnt++;
         }
     }
-    
+
     if (vertexCnt > 0) {
         // 셀 이미지
         document.getElementById('cellImage').style.display = 'block';
-        
+
 //      $("#btnTblAttConfig").show();
     }
 
@@ -972,9 +981,11 @@ FormatLayout.prototype.refresh = function() {
         document.getElementById('cellImage').style.display = 'none';
         // 테이블 정렬
         document.getElementById('tableAlign').style.display = 'block';
-        
+        // 테이블속성 설정
+        $("#btnTblAttConfig").hide();
+
 //        $("#btnTblAttConfig").show();
-        
+
     }
 
 };
@@ -993,8 +1004,8 @@ FormatLayout.prototype.tableAdd = function(style, image, x, y, w, h) {
             s = padString + s;
         return s;
     }
- 
-    graph.stopEditing(false);  
+
+    graph.stopEditing(false);
 
     var parent = graph.getDefaultParent();
 
@@ -1006,7 +1017,7 @@ FormatLayout.prototype.tableAdd = function(style, image, x, y, w, h) {
     style += "align=center;";
     style += "verticalAlign=middle;";
     style += "imageAspect=0;";
-    
+
 
     var image = graph.insertVertex(parent, null, lpad(graph.getModel().getChildCount(parent) + 1, 3, '0'), x, y, w, h, style);
 
@@ -1016,21 +1027,21 @@ FormatLayout.prototype.tableAdd = function(style, image, x, y, w, h) {
 };
 
 
-function getTableWhSize(tableCnt) { 
-	
+function getTableWhSize(tableCnt) {
+
 	 var tmpCnt;
 	   for(var k=0; k<=10; k++){
 	//   for(var k=0; k<=100; k++){
 	      //5 <= 100
-	      if(tableCnt <= (k*(k-1))){	         
-	         tmpCnt = (k*(k-1));	         
-	         break;
-	      } 
-	      else if(tableCnt <= (k*k)){	         
-	         tmpCnt = (k*k);	         
+	      if(tableCnt <= (k*(k-1))){
+	         tmpCnt = (k*(k-1));
 	         break;
 	      }
-	   }	 
+	      else if(tableCnt <= (k*k)){
+	         tmpCnt = (k*k);
+	         break;
+	      }
+	   }
 	var list = [];
 	var cnt = -1;
     for(var i=1; i<=tableCnt; i++){
@@ -1046,35 +1057,35 @@ function getTableWhSize(tableCnt) {
     if(list.length == 1){
        pos = 0;
     }if(list.length>1){
-       pos = Math.floor(eval(list.length/2)); 
+       pos = Math.floor(eval(list.length/2));
     }
-    
+
     if((list[pos][0] - list[pos][1]) > 1){
-    	
+
     	var list = [];
     	var cnt = -1;
         for(var j=1; j<=tmpCnt; j++){
            var ival = [];
-           
-           if(tmpCnt % j == 0){        	
+
+           if(tmpCnt % j == 0){
               cnt += 1;
               ival[0] = j;
               ival[1] = (tmpCnt / j);
               list[cnt] = ival;
            }
         }
-        
+
         var pos = -1;
         if(list.length == 1){
            pos = 0;
         }if(list.length>1){
-           pos = Math.floor(eval(list.length/2)); 
+           pos = Math.floor(eval(list.length/2));
         }
     }
-   
+
     return list[pos];
-    
-    
+
+
 }
 /**
  * 폰트/정렬 설정 초기화
@@ -1097,10 +1108,10 @@ FormatLayout.prototype.initElements = function() {
 
     // 테이블 추가 버튼
     addClickHandler(document.getElementById('btnAddTbl'), function() {
-    	
+
     	var layoutWidth = 891;
     	var layoutHeight = 641;
-    	
+
     	var tableWidthSum = 0;
     	var tableHeightSum = 0;
 
@@ -1108,31 +1119,31 @@ FormatLayout.prototype.initElements = function() {
 //    	var verticalCnt = 0;
 
     	var tableAmout = $("#tblAddAmount").val();
-    	
-    	if(tableAmout > 100){    		
+
+    	if(tableAmout > 100){
     		$("#tblAddAmount").val("100");
     		tableAmout = 100;
     		mxUtils.alert(mxResources.get('maxTblCnt'));
     	}
-        	
+
     	var list = getTableWhSize(tableAmout);
-    	
+
     	var horizontalCnt = list[0] + 1;
     	var verticalCnt = list[1];
 
     	var layoutVWidth = 800;
     	var layoutVHeight = 600;
-    	
-//    	var tableWidth = Math.floor(layoutWidth/list[0]) - (list[0]*20); 		
+
+//    	var tableWidth = Math.floor(layoutWidth/list[0]) - (list[0]*20);
 //    	var tableHeight = Math.floor(layoutHeight/list[1]) - (list[1]*20);
-    	var tableWidth = Math.floor(layoutVWidth/list[0]) ; 		
+    	var tableWidth = Math.floor(layoutVWidth/list[0]) ;
     	var tableHeight = Math.floor(layoutVHeight/list[1]) ;
 
-    	
-//    	if(tableWidth > 390){    		
+
+//    	if(tableWidth > 390){
     		//tableWidth = 389;
 //    	}
-    	
+
     	var tblTypeFgComboBox = wijmo.Control.getControl("#tblTypeFgComboBox");
     	var tblSeatCntComboBox = wijmo.Control.getControl("#tblSeatCntComboBox");
     	var cellImage = "";
@@ -1174,15 +1185,15 @@ FormatLayout.prototype.initElements = function() {
     	} else {
     		tableHeight = Number(tableHeight);
     	}
-    	
+
 //    	while ((horizontalCnt * tableWidth) + 20 < layoutHeight) {
 //    		while ((horizontalCnt * tableWidth) + 20 < layoutWidth) {
 //    		horizontalCnt++;
 //    	}
-    	
+
     	horizontalCnt = horizontalCnt -1;
     	// layoutWidth :: 891, horizontalCnt :: 6, tableWidth :: 100
-    	
+
     	var horizontalSpace = -1;
     	if(horizontalCnt > 1){
     		horizontalSpace = (layoutWidth - ((horizontalCnt * tableWidth) + 20)) / (horizontalCnt-1);
@@ -1190,7 +1201,7 @@ FormatLayout.prototype.initElements = function() {
     		horizontalSpace = (layoutWidth - tableWidth)/2;
     	}
     	//horizontalSpace = 10;
-    	
+
 //    	while ((verticalCnt * tableHeight) + 20 < layoutHeight) {
 //    		verticalCnt++;
 //    	}
@@ -1210,17 +1221,17 @@ FormatLayout.prototype.initElements = function() {
     	}
 
     	verticalCnt = verticalCntTemp + 1;
-    	
-    	var verticalSpace = 0; 
+
+    	var verticalSpace = 0;
     	if(verticalCntTemp != 0 ){
     		verticalSpace = (layoutHeight - (((verticalCnt) * tableHeight) + 20)) / (verticalCnt-1 );
     	}
     	else {
     		verticalSpace = 10;
     	}
-    	
+
     	var tableCnt = 0;
-    		
+
     	for (var j = 0; j < verticalCnt; j++) {
     		for (var i = 0; i < horizontalCnt; i++) {
 
@@ -1232,6 +1243,155 @@ FormatLayout.prototype.initElements = function() {
     						, cellImage
 	    					, 10 + (horizontalSpace * i) + (tableWidth * i)
 	    					, 10 + (verticalSpace * j) + (tableHeight * j)
+	    					, tableWidth
+	    					, tableHeight
+					);
+    			}
+    		}
+    	}
+    });
+
+
+ // 테이블 추가 버튼(단건)
+    addClickHandler(document.getElementById('contentLayout'), function() {
+    	if(singleTableLayer != 'Y'){
+    		return false;
+    	}
+    	var layoutWidth = 891;
+    	var layoutHeight = 641;
+
+    	var tableWidthSum = 0;
+    	var tableHeightSum = 0;
+
+//    	var horizontalCnt = 0;
+//    	var verticalCnt = 0;
+
+    	var tableAmout = $("#tblAddAmount").val();
+
+    	if(tableAmout > 100){
+    		$("#tblAddAmount").val("100");
+    		tableAmout = 100;
+    		mxUtils.alert(mxResources.get('maxTblCnt'));
+    	}
+
+    	var list = getTableWhSize(tableAmout);
+
+    	var horizontalCnt = list[0] + 1;
+    	var verticalCnt = list[1];
+
+    	var layoutVWidth = 800;
+    	var layoutVHeight = 600;
+
+//    	var tableWidth = Math.floor(layoutWidth/list[0]) - (list[0]*20);
+//    	var tableHeight = Math.floor(layoutHeight/list[1]) - (list[1]*20);
+//    	var tableWidth = Math.floor(layoutVWidth/list[0]) ;
+//    	var tableHeight = Math.floor(layoutVHeight/list[1]) ;
+    	var tableWidth = $("#cellW").val();
+    	var tableHeight = $("#cellH").val();
+
+//    	if(tableWidth > 390){
+    		//tableWidth = 389;
+//    	}
+
+    	var tblTypeFgComboBox = wijmo.Control.getControl("#tblTypeFgComboBox");
+    	var tblSeatCntComboBox = wijmo.Control.getControl("#tblSeatCntComboBox");
+
+    	var cellImage = "";
+    	var styleTemp = "";
+
+    	switch (tblTypeFgComboBox.selectedValue){
+    	    case "1" :
+    	    	cellImage = STENCIL_PATH + "/img_squere.png";
+    	    	styleTemp = "tblTypeFg=1;tblSeatCnt="+tblSeatCntComboBox.selectedValue+";";
+    	        break;
+    	    case "2" :
+    	    	cellImage = STENCIL_PATH + "/img_circle.png";
+    	    	styleTemp = "tblTypeFg=2;tblSeatCnt="+tblSeatCntComboBox.selectedValue+";";
+    	        break;
+    	    case "3" :
+//    	    	cellImage = STENCIL_PATH + "/img_squere.png";
+    	    	cellImage = STENCIL_PATH + "/img_etc.png";
+    	    	styleTemp = "tblTypeFg=3;tblSeatCnt=0;";
+    	        break;
+    	    default :
+    	    	cellImage = STENCIL_PATH + "/img_squere.png";
+    	    	styleTemp = "tblTypeFg=1;tblSeatCnt=2;";
+    	}
+
+    	if (tableAmout == undefined || tableAmout == "") {
+    		tableAmout = 1;
+    	} else {
+    		tableAmout = Number(tableAmout);
+    	}
+
+    	if (tableWidth == undefined || tableWidth == "") {
+    		tableWidth = 100;
+    	} else {
+    		tableWidth = Number(tableWidth);
+    	}
+
+    	if (tableHeight == undefined || tableHeight == "") {
+    		tableHeight = 100;
+    	} else {
+    		tableHeight = Number(tableHeight);
+    	}
+
+//    	while ((horizontalCnt * tableWidth) + 20 < layoutHeight) {
+//    		while ((horizontalCnt * tableWidth) + 20 < layoutWidth) {
+//    		horizontalCnt++;
+//    	}
+
+    	horizontalCnt = horizontalCnt -1;
+    	// layoutWidth :: 891, horizontalCnt :: 6, tableWidth :: 100
+
+    	var horizontalSpace = -1;
+    	if(horizontalCnt > 1){
+    		horizontalSpace = (layoutWidth - ((horizontalCnt * tableWidth) + 20)) / (horizontalCnt-1);
+    	}else{
+    		horizontalSpace = (layoutWidth - tableWidth)/2;
+    	}
+    	//horizontalSpace = 10;
+
+//    	while ((verticalCnt * tableHeight) + 20 < layoutHeight) {
+//    		verticalCnt++;
+//    	}
+
+    	var tableCnt = 0;
+    	var verticalCntTemp = 0;
+
+    	for (var j = 0; j < verticalCnt; j++) {
+    		for (var i = 0; i < horizontalCnt; i++) {
+
+    			tableCnt++;
+
+    			if ( tableCnt <= tableAmout) {
+    				verticalCntTemp = j;
+    			}
+    		}
+    	}
+
+    	verticalCnt = verticalCntTemp + 1;
+
+    	var verticalSpace = 0;
+    	if(verticalCntTemp != 0 ){
+    		verticalSpace = (layoutHeight - (((verticalCnt) * tableHeight) + 20)) / (verticalCnt-1 );
+    	}
+    	else {
+    		verticalSpace = 10;
+    	}
+
+    	var tableCnt = 0;
+    	for (var j = 0; j < verticalCnt; j++) {
+    		for (var i = 0; i < horizontalCnt; i++) {
+
+    			tableCnt++;
+
+    			if ( tableCnt <= tableAmout) {
+    				format.tableAdd(
+    						styleTemp
+    						, cellImage
+	    					, event.clientX - 240
+	    					, event.clientY - 255
 	    					, tableWidth
 	    					, tableHeight
 					);
@@ -1289,7 +1449,7 @@ FormatLayout.prototype.initElements = function() {
         		//graph.container.focus();
     		}
     	}
-    });    
+    });
 
     // 배경색 wijmo 컴포넌트 생성
     backgroundColor = new wijmo.input.InputColor('#bgColor', {
@@ -1300,15 +1460,15 @@ FormatLayout.prototype.initElements = function() {
             graphContainer.style.backgroundColor = s.value;
         }
     });
-    
-    
+
+
     // 셀 이미지 버튼
-    var tblTypeFgCell = mxUtils.bind(this, function(evt) {    	
+    var tblTypeFgCell = mxUtils.bind(this, function(evt) {
     	var cells = graph.getSelectionCells();
     	var model = graph.getModel();
-    	
+
 		for (var i = 0; i < cells.length; i++) {
-            if (model.isVertex(cells[i])) {            	
+            if (model.isVertex(cells[i])) {
             	var tblTypeFgComboBox = wijmo.Control.getControl("#tblTypeFgComboBox");
             	var cellImage = "";
             	var styleTemp = "";
@@ -1325,15 +1485,15 @@ FormatLayout.prototype.initElements = function() {
             	    default :
             	    	cellImage = STENCIL_PATH + "/img_squere.png";
             	}
-                graph.setCellStyles(mxConstants.STYLE_IMAGE, cellImage, [cells[i]]);                
+                graph.setCellStyles(mxConstants.STYLE_IMAGE, cellImage, [cells[i]]);
                 graph.refresh();
             }
         }
-    	     
+
     });
 
     mxEvent.addListener(document.getElementById('tblTypeFgComboBox'), 'change', tblTypeFgCell);
-    
+
     // 배경 이미지 버튼
     var apply = mxUtils.bind(this, function(evt) {
         var canvas = graph.view.canvas;
@@ -1482,7 +1642,7 @@ FormatLayout.prototype.initElements = function() {
     addClickHandler(document.getElementById('btnBottom'), function() {
         graph.alignCells(mxConstants.ALIGN_BOTTOM);
     });
-    
+
 };
 
 /**
@@ -1529,6 +1689,10 @@ FormatLayout.prototype.open = function(isLoad) {
  * Sets the XML node for the current diagram.
  */
 FormatLayout.prototype.setGraphXml = function(graph, node) {
+	// 미리보기 라이브러리 수정으로 인한 플래그값 추가 (20201209)
+	if(previewYN == 'N'){
+		previewYN = 'Y';
+	}
 
     if (node != null) {
         var dec = new mxCodec(node.ownerDocument);
@@ -1559,7 +1723,7 @@ FormatLayout.prototype.setGraphXml = function(graph, node) {
 FormatLayout.prototype.save = function() {
 
 	var graph = this.graph;
-	
+
 	if ($("#btnBgFile")[0].files && $("#btnBgFile")[0].files[0]) {
 
     	var file = $("#btnBgFile")[0].files[0];
@@ -1626,13 +1790,13 @@ function saveXml(data, graph) {
     /*var xmlPretty = mxUtils.getPrettyXml(node); mxLog.show();
     console.log(xmlPretty);*/
     //저장 될 XML을 보고 싶을 때 사용
-    
+
 //    var xmlPretty = mxUtils.getPrettyXml(node);
 //    mxLog.show();
 //    mxLog.write(xmlPretty);
-    	
+
     var xml = encodeURIComponent(mxUtils.getXml(node));
-    
+
     var params = {};
     params.sid = sid;
     params.xml = xml;
@@ -1655,7 +1819,7 @@ function saveXml(data, graph) {
     	    		mxUtils.alert(mxResources.get('invaildTblNm'));
     	    	}else {
         	        // Sucess시, 처리
-        	    	mxUtils.alert(mxResources.get('saved'));	
+        	    	mxUtils.alert(mxResources.get('saved'));
     	    	}
     	    	graph.container.focus();
     	    },
@@ -1667,10 +1831,10 @@ function saveXml(data, graph) {
     } else {
         mxUtils.alert(mxResources.get('drawingTooLarge'));
     }
-    
-    
+
+
     /*
-   
+
     try {
         if (xml.length < MAX_REQUEST_SIZE) {
             var onload = function(req) {
@@ -1691,7 +1855,7 @@ function saveXml(data, graph) {
     	console.log(e);
         mxUtils.alert(mxResources.get('errorSavingFile'));
     }
-    
+
     */
 
 }
