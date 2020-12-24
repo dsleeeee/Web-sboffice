@@ -176,7 +176,7 @@
                     $("#emr_mapEmpNo").val(dtlData.mapEmpNo);
                     $("#emr_adminFg").val(dtlData.adminFg);
                     $("#emr_mpNo").val(dtlData.mpNo);
-                    $("#erm_useYn").val(dtlData.useYn);
+                    $("#emr_useYn").val(dtlData.useYn);
                     $("#emr_smsRecvYn").val(dtlData.smsRecvYn);
                     $("#emr_remark").val(dtlData.remark);
 
