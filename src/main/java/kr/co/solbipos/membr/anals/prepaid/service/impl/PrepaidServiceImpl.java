@@ -87,13 +87,13 @@ public class PrepaidServiceImpl implements PrepaidService {
             defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
             defaultStoreCd.replace("*", "");
         }
+        prepaidStoreVO.setDefaultStoreCd(defaultStoreCd);
 
         prepaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prepaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        prepaidStoreVO.setDefaultStoreCd(defaultStoreCd);
 
         return mapper.getChargeMemberList(prepaidStoreVO);
     }

@@ -51,7 +51,7 @@ public class PostpaidDtlServiceImpl implements PostpaidDtlService {
         postpaidDtlVO.setStoreCdList(storeCds);
 
         postpaidDtlVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
-//        postpaidDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        postpaidDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             postpaidDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
