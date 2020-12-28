@@ -357,7 +357,11 @@ public class RegistServiceImpl implements RegistService {
             defaultStoreCd.replace("*", "");
         }
 
-        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd()); // 본사에서 조회하는 메뉴
+        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        postpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         postpaidStoreVO.setDefaultStoreCd(defaultStoreCd);
 
         List<DefaultMap<String>> resultList = null;
@@ -385,6 +389,7 @@ public class RegistServiceImpl implements RegistService {
 
         for (PostpaidStoreVO postpaidStoreVO : postpaidStoreVOs) {
 
+            postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             postpaidStoreVO.setUseYn(UseYn.Y);
             postpaidStoreVO.setRegDt(dt);
             postpaidStoreVO.setRegId(sessionInfoVO.getUserId());
@@ -407,8 +412,10 @@ public class RegistServiceImpl implements RegistService {
 
         for (PostpaidStoreVO postpaidStoreVO : postpaidStoreVOs) {
 
+            postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             postpaidStoreVO.setModDt(dt);
             postpaidStoreVO.setModId(sessionInfoVO.getUserId());
+
             result += mapper.deletePostpaidStore(postpaidStoreVO);
         }
         return result;

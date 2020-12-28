@@ -434,8 +434,15 @@
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                <%--본사--%>
                 <c:if test="${orgnFg == 'HQ'}">
                     <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
+                <%--단독매장--%>
+                <c:if test="${orgnFg == 'STORE'}">
+                    <c:if test="${hqOfficeCd eq '00000'}">
+                        <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                    </c:if>
                 </c:if>
                 <%--                <c:if test="visitStoreMembr === true">--%>
                 <wj-flex-grid-column header="<s:message code="regist.membr.point.add"/>" binding="storeTotSavePoint" width="75" align="center" ng-if="regStoreChk === true" is-read-only="true"></wj-flex-grid-column>
@@ -495,8 +502,15 @@
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                <%--본사--%>
                 <c:if test="${orgnFg == 'HQ'}">
                     <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
+                <%--단독매장--%>
+                <c:if test="${orgnFg == 'STORE'}">
+                    <c:if test="${hqOfficeCd eq '00000'}">
+                        <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                    </c:if>
                 </c:if>
                 <%--                <c:if test="visitStoreMembr === true">--%>
                 <wj-flex-grid-column header="<s:message code="regist.membr.point.add"/>" binding="storeTotSavePoint" width="75" align="center" ng-if="regStoreChk === true" is-read-only="true"></wj-flex-grid-column>

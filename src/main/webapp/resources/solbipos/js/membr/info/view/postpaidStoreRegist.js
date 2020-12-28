@@ -49,10 +49,8 @@ app.controller('postpaidStoreRegistCtrl', ['$scope', '$http', function ($scope, 
 
   // 등록된 매장 조회
   $scope.searchRegStore = function(){
-
     var params        = {};
     params.regYn      = 'Y';
-    params.storeCd    = $scope.selectedMembr.membrOrgnCd;
     params.membrNo   = $scope.selectedMembr.membrNo;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
@@ -90,7 +88,6 @@ app.controller('postpaidStoreRegistCtrl', ['$scope', '$http', function ($scope, 
 }]);
 
 
-
 /**
  *  후불 대상으로 등록된 매장 그리드 생성
  */
@@ -121,10 +118,8 @@ app.controller('postpaidStoreNoRegistCtrl', ['$scope', '$http', function ($scope
 
   // 미등록 매장 조회
   $scope.searchNoRegStore = function(){
-
     var params        = {};
     params.regYn      = 'N';
-    params.storeCd    = $scope.selectedMembr.membrOrgnCd;
     params.membrNo    = $scope.selectedMembr.membrNo;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
@@ -162,4 +157,3 @@ app.controller('postpaidStoreNoRegistCtrl', ['$scope', '$http', function ($scope
   };
 
 }]);
-

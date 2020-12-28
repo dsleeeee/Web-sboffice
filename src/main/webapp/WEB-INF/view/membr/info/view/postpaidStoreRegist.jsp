@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<wj-popup id="postpaidStoreRegistLayer" control="postpaidStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:850px; height:520px;">
+<wj-popup id="postpaidStoreRegistLayer" control="postpaidStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:800px; height:500px;">
   <div class="wj-dialog wj-dialog-columns title"  >
 
     <%-- header --%>
@@ -39,7 +39,6 @@
               <span class="fl bk lh20 s14"><s:message code="regist.membr.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
-
             <div id="regStoreGrid" style="height: 370px; overflow-y: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
@@ -52,12 +51,10 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.membrOrgnCd"/>" binding="membrOrgnCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
-
             <%-- 페이지 리스트 --%>
             <%--
             <div class="pageNum mt20">
@@ -102,12 +99,10 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.membrOrgnCd"/>" binding="membrOrgnCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
-
             <%-- 페이지 리스트 --%>
             <%--
             <div class="pageNum mt20">
@@ -117,7 +112,6 @@
             </div>
             --%>
             <%--//페이지 리스트--%>
-
           </div>
         </div>
       </div>
@@ -125,4 +119,5 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/postpaidStoreRegist.js?ver=2018110901" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/postpaidStoreRegist.js?ver=20201228.01" charset="utf-8"></script>

@@ -757,7 +757,7 @@
     -->
     <select id="getRegStoreList" parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* RegistMapper.getRegStoreList */
-        SELECT tmbcs.MEMBR_ORGN_CD,
+        SELECT
         tmbcs.MEMBR_NO,
         tmbcs.STORE_CD,
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmbcs.STORE_CD) AS STORE_NM
@@ -768,6 +768,7 @@
         <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
             AND tmbcs.STORE_CD != #{defaultStoreCd}
         </if>
+        ORDER BY tmbcs.STORE_CD
     </select>
 
     <!-- 후불회원 미등록매장 조회 -->
@@ -777,19 +778,25 @@
     -->
     <select id="getNoRegStoreList" parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* RegistMapper.getNoRegStoreList */
-        SELECT HQ_OFFICE_CD AS MEMBR_ORGN_CD,
+        SELECT
         STORE_CD,
         STORE_NM
         FROM TB_MS_STORE
-        WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
         AND STORE_CD NOT IN (SELECT STORE_CD
-        FROM TB_MB_MEMBER_POSTPAID_STORE
-        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND MEMBR_NO = #{membrNo}
-        AND USE_YN = 'Y')
+                                FROM TB_MB_MEMBER_POSTPAID_STORE
+                                WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+                                AND MEMBR_NO = #{membrNo}
+                                AND USE_YN = 'Y')
         <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
             AND STORE_CD != #{defaultStoreCd}
         </if>
+        ORDER BY STORE_CD
     </select>
 
     <!-- 후불회원 적용매장 삭제 -->
