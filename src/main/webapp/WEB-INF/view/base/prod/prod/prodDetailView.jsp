@@ -73,12 +73,15 @@
             <td id="_prodClassCdNm">
               {{prodDetail.prodClassCdNm}}
             </td>
-            <%--거래처 //TODO --%>
+            <%--거래처 --%>
             <th>
               <s:message code="prod.vendr"/>
             </th>
             <td id="_vendr">
-              <s:message code="prod.vendr"/> 등록은 준비중 입니다.
+              {{prodDetail.vendrNm}}
+              <div style="display: none;">
+                {{prodDetail.vendrCd}}
+              </div>
             </td>
           </tr>
           <tr>
@@ -162,14 +165,14 @@
             </td>
           </tr>
           <tr>
+            <%--바코드--%>
             <th>
               <s:message code="prod.barCd"/>
             </th>
             <td>
               {{prodDetail.barCd}}
             </td>
-            <th>
-            </th>
+            <td></td>
             <td></td>
           </tr>
           </tbody>
@@ -203,20 +206,16 @@
               </wj-combo-box>
               {{_stockProdYn}}
             </td>
-            <%--품절여부 //TODO --%>
-            <th>
-              <s:message code="prod.soldOutYn"/>
-            </th>
-            <td id="_soldOutYn">
-              <%--{{prodDetail.soldOutYnNm}}--%>
-            </td>
-          </tr>
-          <tr>
             <%--저장품코드 //TODO --%>
             <th>
               <s:message code="prod.saveProdCd"/>
             </th>
-            <td><a href="#" class="link" id="_saveProdCd"></a></td>
+            <td>
+              <%--<a href="#" class="link" id="_saveProdCd"></a>--%>
+              <s:message code="prod.saveProdCd"/> 준비중 입니다.
+            </td>
+          </tr>
+          <tr>
             <%--세트상품구분//TODO --%>
             <th>
               <s:message code="prod.setProdFg"/>
@@ -232,6 +231,22 @@
                 is-editable="false">
               </wj-combo-box>
               {{_setProdFg}}
+            </td>
+            <%--포인트적립여부--%>
+            <th>
+              <s:message code="prod.pointSaveYn"/>
+            </th>
+            <td>
+              <wj-combo-box
+                      ng-model="prodDetail.pointSaveYn"
+                      ng-hide="true"
+                      text="_pointSaveYn"
+                      items-source="_getComboData('useYnComboData')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false">
+              </wj-combo-box>
+              {{_pointSaveYn}}
             </td>
           </tr>
           <tr>
@@ -249,22 +264,15 @@
               </wj-combo-box>
               {{_sideProdYn}}
             </td>
-            <%--포인트적립여부--%>
-            <th>
-              <s:message code="prod.pointSaveYn"/>
+            <%--품절여부 //TODO --%>
+            <th style="display: none">
+              <s:message code="prod.soldOutYn"/>
             </th>
-            <td>
-              <wj-combo-box
-                ng-model="prodDetail.pointSaveYn"
-                ng-hide="true"
-                text="_pointSaveYn"
-                items-source="_getComboData('useYnComboData')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false">
-              </wj-combo-box>
-              {{_pointSaveYn}}
+            <td style="display: none">
+              <%--{{prodDetail.soldOutYnNm}}--%>
             </td>
+            <td></td>
+            <td></td>
           </tr>
           <tr ng-if="prodDetail.sideProdYn === 'Y'">
             <%--사이드속성분류코드(속성) --%>
@@ -318,10 +326,10 @@
               {{prodDetail.splyUprc}}
             </td>
             <%--공급단가사용여부--%>
-            <th>
+            <th style="display: none">
               <s:message code="prod.splyUprc"/><br><s:message code="cmm.useYn"/>
             </th>
-            <td>
+            <td style="display: none">
               <wj-combo-box
                 ng-model="prodDetail.splyUprcUseYn"
                 ng-hide="true"
@@ -333,8 +341,6 @@
               </wj-combo-box>
               {{_splyUprcUseYn}}
             </td>
-          </tr>
-          <tr>
             <%--원가단가--%>
             <th>
               <s:message code="prod.costUprc"/>
@@ -343,15 +349,15 @@
               {{prodDetail.costUprc}}
             </td>
             <%--최종원가단가--%>
-            <th>
+            <th style="display: none">
               <s:message code="prod.lastCostUprc"/>
             </th>
-            <td id="_lastCostUprc">
+            <td style="display: none">
               {{prodDetail.lastCostUprc}}
             </td>
           </tr>
           <tr>
-            <%--주문상품구분--%>
+            <%--발주상품구분--%>
             <th><s:message code="prod.poProdFg"/></th>
             <td>
               <wj-combo-box
@@ -365,17 +371,17 @@
               </wj-combo-box>
               {{_poProdFg}}
             </td>
-            <%--주문단위--%>
+            <%--발주단위--%>
             <th><s:message code="prod.poUnitFg"/></th>
             <td>
               <wj-combo-box
-                ng-model="prodDetail.poUnitFg"
-                ng-hide="true"
-                text="_poUnitFg"
-                items-source="_getComboData('poUnitFgComboData')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false">
+                      ng-model="prodDetail.poUnitFg"
+                      ng-hide="true"
+                      text="_poUnitFg"
+                      items-source="_getComboData('poUnitFgComboData')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false">
               </wj-combo-box>
               {{_poUnitFg}}
             </td>
@@ -386,25 +392,27 @@
             <td>
               {{prodDetail.poUnitQty}}
             </td>
-            <%--최소주문--%>
+            <%--최소발주수량--%>
             <th><s:message code="prod.poMinQty"/></th>
             <td>
               {{prodDetail.poMinQty}}
             </td>
           </tr>
           <tr>
-            <%--초기재고 //TODO --%>
-            <th>
-              <s:message code="prod.defaultStock"/>
-            </th>
-            <td id="_defaultStock">
-              {{prodDetail.defaultStock}}
-            </td>
             <%--안전재고--%>
             <th><s:message code="prod.safeStockQty"/></th>
             <td>
               {{prodDetail.safeStockQty}}
             </td>
+            <%--초기재고--%>
+            <th style="display: none">
+              <s:message code="prod.startStockQty"/>
+            </th>
+            <td style="display: none">
+              {{prodDetail.defaultStock}}
+            </td>
+            <td></td>
+            <td></td>
           </tr>
           </tbody>
         </table>
@@ -475,4 +483,5 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20200810.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20201224.01" charset="utf-8"></script>

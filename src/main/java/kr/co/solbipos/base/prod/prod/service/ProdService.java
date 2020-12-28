@@ -65,4 +65,7 @@ public interface ProdService {
 
     /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 */
     boolean getProdImageFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
+
+    /** 미적용 상품 거래처 조회 팝업 - 조회 */
+    List<DefaultMap<String>> getSearchNoProdVendrList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

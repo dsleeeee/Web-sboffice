@@ -147,4 +147,13 @@ public interface ProdMapper {
 
     /** 상품 이미지 삭제시 파일명 가져오기 */
     String getProdImageFileSaveImgFileNm(ProdVO ProdVO);
+
+    /** 미적용 상품 거래처 조회 팝업 - 조회 */
+    List<DefaultMap<String>> getSearchNoProdVendrList(ProdVO prodVO);
+
+    /** 거래처 삭제 */
+    int getVendorProdSaveUpdate(ProdVO prodVO);
+
+    /** 거래처 저장 */
+    int getVendorProdSaveInsert(ProdVO prodVO);
 }

@@ -31,7 +31,6 @@ var regOrgnFgComboData = [
   {"name": "매장", "value": "S"}
 ];
 
-
 /**
  * 상품정보관리 그리드 생성
  */
@@ -63,13 +62,13 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getProdInfo = function(){
     return $scope.prodInfo;
   };
+
   // 전체기간 체크박스
   $scope.isChecked = true;
   // 커스텀콤보 : 사이드메뉴-속성
   $scope._getComboDataQueryCustom('getSideMenuAttrClassCombo', 'sdattrClassCdComboData', 'S');
   // 커스텀콤보 : 사이드메뉴-선택메뉴
   $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData', 'S');
-
   // 콤보박스 데이터 Set
   $scope._setComboData('listScaleBox', gvListScaleBoxData);
   // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
@@ -101,7 +100,6 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
     // 그리드에서 사용하는 dataMap 초기화
     $scope.useYnComboDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name');
 
@@ -114,48 +112,36 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
     });
+
     // 그리드 선택 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        // 상품코드
         if( col.binding === "prodCd") {
-          $scope.searchProdDetail(selectedRow.prodCd);
+          // $scope.searchProdDetail(selectedRow.prodCd);
+          $scope.setProdInfo(selectedRow);
+          // 수정권한이 있을때
+          if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+            || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+              // 상품정보 수정 팝업
+              $scope.prodModifyLayer.show();
+          } else {
+              // 상품정보 상세 팝업
+              $scope.prodDetailLayer.show();
+          }
+        // 등록매장수
         } else if(col.binding === "storeCnt"){
           $scope.registProdStore(selectedRow);
         }
       }
     });
+
     // 전체기간 체크박스 선택에 따른 날짜선택 초기화
     $scope.srchStartDate.isReadOnly = $scope.isChecked;
     $scope.srchEndDate.isReadOnly = $scope.isChecked;
-
-  };
-  // 상품정보관리 그리드 조회
-  $scope.$on("prodCtrl", function(event, data) {
-
-    $scope.searchProdList();
-
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
-
-  // 상품 목록 조회
-  $scope.searchProdList = function(){
-    // 파라미터
-    var params = {};
-
-    // 등록일자 '전체기간' 선택에 따른 params
-    if(!$scope.isChecked){
-      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-    }
-
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function(){
-    });
-
   };
 
   // 전체기간 체크박스 클릭이벤트
@@ -164,34 +150,43 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
 
-  // 상세정보 팝업
-  $scope.searchProdDetail = function(prodCd) {
-    var detailPopUp = $scope.prodDetailLayer;
-    setTimeout(function() {
-      detailPopUp.show(true, function (s) {
-        // 수정 버튼 눌렀을때만
-        if (s.dialogResult === "wj-hide-apply") {
-          // 상품정보 수정 팝업
-          var modifyPopUp = $scope.prodModifyLayer;
-          modifyPopUp.show();
-          /*modifyPopUp.show(true, function (s) {
-            // 상품정보 수정 팝업 - 저장
-            if (s.dialogResult === "wj-hide-apply") {
-              // 팝업 속성에서 상품정보 get
-              var params = s.data;
-              // 저장수행
-              $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
-                $scope._popMsg(messages["cmm.saveSucc"]);
-              });
-            }
-          });*/
-        }
-      });
-    }, 50);
+  // 상품정보관리 그리드 조회
+  $scope.$on("prodCtrl", function(event, data) {
+    $scope.searchProdList();
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 상품 목록 조회
+  $scope.searchProdList = function(){
+    // 파라미터
+    var params = {};
+    // 등록일자 '전체기간' 선택에 따른 params
+    if(!$scope.isChecked){
+      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    }
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
+    $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function(){});
   };
 
-  $scope.currPageNo;
+  // 상세정보 팝업
+  // $scope.searchProdDetail = function(prodCd) {
+  //   var detailPopUp = $scope.prodDetailLayer;
+  //   setTimeout(function() {
+  //     detailPopUp.show(true, function (s) {
+  //       // 수정 버튼 눌렀을때만
+  //       if (s.dialogResult === "wj-hide-apply") {
+  //         // 상품정보 수정 팝업
+  //         var modifyPopUp = $scope.prodModifyLayer;
+  //         modifyPopUp.show();
+  //       }
+  //     });
+  //   }, 50);
+  // };
 
+  $scope.currPageNo;
   // 상품적용 매장 등록 팝업
   $scope.registProdStore = function(prodInfo) {
     $scope.setProdInfo(prodInfo);
@@ -235,7 +230,6 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.storeProdBatchListLayer.show(true);
   };
   
-
   // 상품분류정보 팝업
   $scope.popUpProdClass = function() {
     var popUp = $scope.prodClassPopUpLayer;
@@ -261,10 +255,11 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.delProdClass = function(){
     $scope.prodClassCd = "";
     $scope.prodClassCdNm = "";
-  }
+  };
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
+
     // 상품상세정보 팝업 핸들러 추가
     $scope.prodDetailLayer.shown.addHandler(function (s) {
       var selectedRow = $scope.flex.selectedRows[0]._data;
@@ -274,6 +269,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._broadcast('prodDetailCtrl', params);
       }, 50);
     });
+
     // 상품상세정보 수정 팝업 핸들러 추가
     $scope.prodModifyLayer.shown.addHandler(function (s) {
       setTimeout(function() {
@@ -284,6 +280,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
         });
       }, 50);
     });
+
     // 상품적용매장 등록 팝업 핸들러 추가
     $scope.prodStoreRegistLayer.shown.addHandler(function (s) {
       $("#prodTitle").text('['+$scope.getProdInfo().prodCd +'] '+$scope.getProdInfo().prodNm);
@@ -292,4 +289,5 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#hdProdClassCd").val($scope.getProdInfo().prodClassCd);
     });
   });
+
 }]);

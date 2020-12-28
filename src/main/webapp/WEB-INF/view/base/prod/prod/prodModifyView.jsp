@@ -41,7 +41,7 @@
                 <%--삭제--%>
                 <a id="btnDelProdImage" href="#" class="btn_grayS mt5 fr" ng-click="delProdImage()"><s:message code="cmm.delete" /></a>
               </td>
-              <%--단가구분 //TODO --%>
+              <%--상품유형 //TODO --%>
               <th><s:message code="prod.prodTypeFg"/></th>
               <td>
                 <div class="sb-select">
@@ -114,11 +114,12 @@
                        ng-click="popUpProdClass()"  />
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodModifyInfo.prodClassCd" disabled />
               </td>
-              <%--거래처 //TODO --%>
+              <%--거래처 --%>
               <th><s:message code="prod.vendr"/></th>
               <td>
-                <input type="text" id="_vendr" name="vendr" class="sb-input w100"
-                       ng-model="prodModifyInfo.orgplceCd" placeholder="<s:message code="prod.vendr"/> 등록은 준비중입니다." disabled />
+                <input type="text" class="sb-input w70" id="srchVendrNm" ng-model="prodModifyInfo.vendrNm" ng-click="popUpVendrCd()" style="float: left;"
+                       placeholder="<s:message code="prod.vendr" /> 선택" readonly/>
+                <input type="hidden" id="_vendrCd" name="vendrCd" ng-model="prodModifyInfo.vendrCd" disabled />
               </td>
             </tr>
             <tr>
@@ -228,8 +229,7 @@
               <td>
                 <input type="text" id="_barCd" name="barCd" class="sb-input w100" ng-model="prodModifyInfo.barCd" />
               </td>
-              <th>
-              </th>
+              <td></td>
               <td></td>
             </tr>
           </table>
@@ -265,32 +265,14 @@
                   </wj-combo-box>
                 </div>
               </td>
-                <%--품절여부 --%>
-                <th><s:message code="prod.soldOutYn"/></th>
-                <td>
-                  <div class="sb-select">
-                    <wj-combo-box id="_soldOutYn" name="soldOutYn"
-                      ng-model="prodModifyInfo.soldOutYn"
-                      items-source="_getComboData('soldOutYnComboData')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      initialized="_initComboBox(s)"
-                      required
-                      popover-enable="myForm.soldOutYn.$invalid"
-                      popover-placement="bottom-left"
-                      popover-trigger="'mouseenter'"
-                      uib-popover="<s:message code="prod.soldOutYn" />은(는) 필수 입력항목 입니다.">
-                    </wj-combo-box>
-                  </div>
-                </td>
-            </tr>
-            <tr>
               <%--저장품코드 //TODO --%>
               <th><s:message code="prod.saveProdCd"/></th>
               <td>
-                <a href="#" class="link" id="_saveProdCd"></a>
+                <%--<a href="#" class="link" id="_saveProdCd"></a>--%>
+                <s:message code="prod.saveProdCd"/> 준비중 입니다.
               </td>
+            </tr>
+            <tr>
               <%--세트상품구분//TODO --%>
               <th><s:message code="prod.setProdFg"/></th>
               <td>
@@ -307,6 +289,25 @@
                                 popover-placement="bottom-left"
                                 popover-trigger="'mouseenter'"
                                 uib-popover="<s:message code="prod.setProdFg" />은(는) 필수 입력항목 입니다.">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <%--포인트적립여부--%>
+              <th><s:message code="prod.pointSaveYn"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box id="_pointSaveYn" name="pointSaveYn"
+                                ng-model="prodModifyInfo.pointSaveYn"
+                                items-source="_getComboData('useYnComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                required
+                                popover-enable="myForm.pointSaveYn.$invalid"
+                                popover-placement="bottom-left"
+                                popover-trigger="'mouseenter'"
+                                uib-popover="<s:message code="prod.pointSaveYn" />은(는) 필수 입력항목 입니다.">
                   </wj-combo-box>
                 </div>
               </td>
@@ -332,25 +333,29 @@
                   </wj-combo-box>
                 </div>
               </td>
-              <%--포인트적립여부--%>
-              <th><s:message code="prod.pointSaveYn"/></th>
-              <td>
+              <%--품절여부 //TODO --%>
+              <th style="display: none">
+                <s:message code="prod.soldOutYn"/>
+              </th>
+              <td style="display: none">
                 <div class="sb-select">
-                  <wj-combo-box id="_pointSaveYn" name="pointSaveYn"
-                                ng-model="prodModifyInfo.pointSaveYn"
-                                items-source="_getComboData('useYnComboData')"
+                  <wj-combo-box id="_soldOutYn" name="soldOutYn"
+                                ng-model="prodModifyInfo.soldOutYn"
+                                items-source="_getComboData('soldOutYnComboData')"
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
                                 initialized="_initComboBox(s)"
                                 required
-                                popover-enable="myForm.pointSaveYn.$invalid"
+                                popover-enable="myForm.soldOutYn.$invalid"
                                 popover-placement="bottom-left"
                                 popover-trigger="'mouseenter'"
-                                uib-popover="<s:message code="prod.pointSaveYn" />은(는) 필수 입력항목 입니다.">
+                                uib-popover="<s:message code="prod.soldOutYn" />은(는) 필수 입력항목 입니다.">
                   </wj-combo-box>
                 </div>
               </td>
+              <td></td>
+              <td></td>
             </tr>
             <tr ng-if="prodModifyInfo.sideProdYn === 'Y'">
               <%--사이드속성분류코드(속성) --%>
@@ -408,8 +413,10 @@
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.splyUprc" />은(는) 필수 입력항목 입니다."/>
               <%--공급단가사용여부--%>
-              <th><s:message code="prod.splyUprc"/><br><s:message code="cmm.useYn"/></th>
-              <td>
+              <th style="display: none">
+                <s:message code="prod.splyUprc"/><br><s:message code="cmm.useYn"/>
+              </th>
+              <td style="display: none">
                 <div class="sb-select">
                   <wj-combo-box id="_splyUprcUseYn" name="splyUprcUseYn"
                     ng-model="prodModifyInfo.splyUprcUseYn"
@@ -426,8 +433,6 @@
                   </wj-combo-box>
                 </div>
               </td>
-            </tr>
-            <tr>
               <%--원가단가--%>
               <th><s:message code="prod.costUprc"/></th>
               <td>
@@ -440,8 +445,10 @@
                        uib-popover="<s:message code="prod.costUprc" />은(는) 필수 입력항목 입니다."/>
               </td>
               <%--최종원가단가--%>
-              <th><s:message code="prod.lastCostUprc"/></th>
-              <td>
+              <th style="display: none">
+                <s:message code="prod.lastCostUprc"/>
+              </th>
+              <td style="display: none">
                 <input type="text" id="prodModifyLastCostUprc" name="lastCostUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.lastCostUprc"
                        required
@@ -452,7 +459,7 @@
               </td>
             </tr>
             <tr>
-              <%--주문상품구분--%>
+              <%--발주상품구분--%>
               <th><s:message code="prod.poProdFg"/></th>
               <td>
                 <div class="sb-select">
@@ -471,22 +478,22 @@
                   </wj-combo-box>
                 </div>
               </td>
-              <%--주문단위--%>
+              <%--발주단위--%>
               <th><s:message code="prod.poUnitFg"/></th>
               <td>
                 <div class="sb-select">
                   <wj-combo-box id="_poUnitFg" name="poUnitFg"
-                    ng-model="prodModifyInfo.poUnitFg"
-                    items-source="_getComboData('poUnitFgComboData')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)"
-                    required
-                    popover-enable="myForm.poUnitFg.$invalid"
-                    popover-placement="bottom-left"
-                    popover-trigger="'mouseenter'"
-                    uib-popover="<s:message code="prod.poUnitFg" />은(는) 필수 입력항목 입니다.">
+                                ng-model="prodModifyInfo.poUnitFg"
+                                items-source="_getComboData('poUnitFgComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                required
+                                popover-enable="myForm.poUnitFg.$invalid"
+                                popover-placement="bottom-left"
+                                popover-trigger="'mouseenter'"
+                                uib-popover="<s:message code="prod.poUnitFg" />은(는) 필수 입력항목 입니다.">
                   </wj-combo-box>
                 </div>
               </td>
@@ -503,7 +510,7 @@
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.poUnitQty" />은(는) 필수 입력항목 입니다."/>
               </td>
-              <%--최소발주--%>
+              <%--최소발주수량--%>
               <th><s:message code="prod.poMinQty"/></th>
               <td>
                 <input type="text" id="prodModifyPoMinQty" name="poMinQty" class="sb-input w100"
@@ -516,17 +523,6 @@
               </td>
             </tr>
             <tr>
-              <%--초기재고 //TODO --%>
-              <th><s:message code="prod.defaultStock"/></th>
-              <td>
-                <input type="text" id="prodModifyDefaultStock" name="defaultStock" class="sb-input w100"
-                       ng-model="prodModifyInfo.defaultStock"
-                       required
-                       popover-enable="myForm.defaultStock.$invalid"
-                       popover-placement="bottom-left"
-                       popover-trigger="'mouseenter'"
-                       uib-popover="<s:message code="prod.defaultStock" />은(는) 필수 입력항목 입니다."/>
-              </td>
               <%--안전재고--%>
               <th><s:message code="prod.safeStockQty"/></th>
               <td>
@@ -538,6 +534,22 @@
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.safeStockQty" />은(는) 필수 입력항목 입니다."/>
               </td>
+              <%--초기재고--%>
+              <th id="thStartStockQty">
+                <s:message code="prod.startStockQty"/>
+              </th>
+              <td id="tdStartStockQty">
+                <%--defaultStock--%>
+                <input type="text" id="prodModifyStartStockQty" name="startStockQty" class="sb-input w100"
+                       ng-model="prodModifyInfo.startStockQty"
+                       required
+                       popover-enable="myForm.defaultStock.$invalid"
+                       popover-placement="bottom-left"
+                       popover-trigger="'mouseenter'"
+                       uib-popover="<s:message code="prod.startStockQty" />은(는) 필수 입력항목 입니다."/>
+              </td>
+              <td id="thStartStockQtyNo"></td>
+              <td id="tdStartStockQtyNo"></td>
             </tr>
             </tbody>
           </table>
@@ -552,8 +564,7 @@
           <tbody>
           <tr>
             <th class="gr lh20">
-              <input type="text" id="_remark" name="remark" class="sb-input w100"
-                     ng-model="prodModifyInfo.remark"/>
+              <input type="text" id="_remark" name="remark" class="sb-input w100" ng-model="prodModifyInfo.remark"/>
             </th>
           </tr>
           </tbody>
@@ -619,8 +630,14 @@
   var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20200814.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20201224.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 상품 거래처 조회 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/searchProdVendr.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

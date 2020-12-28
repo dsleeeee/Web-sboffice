@@ -24,10 +24,10 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.btnShowFg = false;
 
-  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-  || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-    $scope.btnShowFg = true;
-  }
+  // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+  // || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+  //   $scope.btnShowFg = true;
+  // }
 
   // 상품상세정보
   $scope.prodDetail = {};
@@ -37,8 +37,7 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params = data;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/detail.sb", params,
-      function(response){
+    $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/detail.sb", params, function(response){
         // 상품정보
         var prodDetail = response.data.data.list;
         // 상품상세정보 Set

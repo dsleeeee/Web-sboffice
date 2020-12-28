@@ -16,6 +16,8 @@ import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
+import kr.co.solbipos.stock.adj.adj.service.AdjVO;
+import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @ 2018.08.06  장혁수       최초생성
  * @ 2018.10.19  노현수       생성자 주입, 상품조회 관련 변경
  * @ 2019.06.03  이다솜       saveProductInfo 수정 (WorkMode 추가)
- * @ 2020.08.10  김설아       saveProductInfo 수정 (return : 상품코드 / int -> long)
+ * @ 2020.08.10  김설아       saveProductInfo 수정 (return : 상품코드 / int -> long -> String)
  *                            getProdImageFileSave 추가 (상품 이미지 업로드)
+ * @ 2020.12.16  김설아       saveProductInfo 수정 (초기재고, 거래처 추가)
  *
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
@@ -58,13 +61,15 @@ public class ProdServiceImpl implements ProdService {
     private final MessageService messageService;
     private final ProdMapper prodMapper;
     private final CmmEnvUtil cmmEnvUtil;
+    private final AdjMapper adjMapper; // 조정관리
 
     /** Constructor Injection */
     @Autowired
-    public ProdServiceImpl(ProdMapper prodMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public ProdServiceImpl(ProdMapper prodMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, AdjMapper adjMapper) {
         this.prodMapper = prodMapper;
         this.cmmEnvUtil = cmmEnvUtil;
         this.messageService = messageService;
+        this.adjMapper = adjMapper;
     }
 
     /** 상품목록 조회 */
@@ -154,6 +159,7 @@ public class ProdServiceImpl implements ProdService {
     public String saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
         String currentDt = currentDateTimeString();
+        String currentDate = currentDateString();
 
         // 소속구분 설정
         String orgnFg = sessionInfoVO.getOrgnFg().getCode();
@@ -259,7 +265,7 @@ public class ProdServiceImpl implements ProdService {
         if(priceEnvstVal == PriceEnvFg.HQ)  prodVO.setSalePrcFg("1");
         else                                prodVO.setSalePrcFg("2");
 
-        prodVO.setStartDate(currentDateString());
+        prodVO.setStartDate(currentDate);
         prodVO.setEndDate("99991231");
 
         int salePriceReeulst = prodMapper.saveSalePrice(prodVO);
@@ -272,6 +278,96 @@ public class ProdServiceImpl implements ProdService {
         // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
             String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+        }
+
+        // 초기재고
+        if (prodVO.getStartStockQty() != null && !"".equals(prodVO.getStartStockQty())) {
+            if (prodVO.getStartStockQty() > 0) {
+                AdjVO adjVO = new AdjVO();
+
+                adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                adjVO.setStoreCd(sessionInfoVO.getStoreCd());
+                adjVO.setAdjDate(currentDate);
+
+                String seqNo = "";
+                // 신규 seq 조회
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                    seqNo = adjMapper.getHqNewSeqNo(adjVO);
+                }
+                else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                    seqNo = adjMapper.getStNewSeqNo(adjVO);
+                }
+                adjVO.setSeqNo(adjVO.getSeqNo());
+                adjVO.setSeqNo(Integer.parseInt(seqNo));
+
+                adjVO.setRegId(sessionInfoVO.getUserId());
+                adjVO.setRegDt(currentDt);
+                adjVO.setModId(sessionInfoVO.getUserId());
+                adjVO.setModDt(currentDt);
+
+                adjVO.setHqBrandCd("00");
+                adjVO.setProdCd(prodVO.getProdCd());
+                adjVO.setCostUprc(Integer.parseInt(String.valueOf(Math.round(prodVO.getCostUprc()))));
+                adjVO.setPoUnitQty(prodVO.getPoUnitQty()); //주문단위-입수량
+                adjVO.setCurrQty(0); //현재고수량
+                adjVO.setAdjQty(prodVO.getStartStockQty()); //조정수량
+                adjVO.setAdjAmt(0); //조정금액
+
+                // DTL 등록
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                    result = adjMapper.insertHqAdjDtl(adjVO);
+                }
+                else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                    result = adjMapper.insertStAdjDtl(adjVO);
+                }
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                adjVO.setAdjTitle("상품등록 후 초기재고 생성");
+                adjVO.setProcFg("0"); // 0:등록, 1:확정
+                adjVO.setAdjStorageCd("001");
+                adjVO.setStorageCd("999");
+
+                // HD 등록
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                    result = adjMapper.insertHqAdjHd(adjVO);
+                }
+                else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                    result = adjMapper.insertStAdjHd(adjVO);
+                }
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                adjVO.setProcFg("1"); // 0:등록, 1:확정
+
+                // 확정시 확정일자,확정자 등록하려고(ProcFg 1일때만)
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                    // DTL 수정
+                    result = adjMapper.updateHqAdjDtl(adjVO);
+                    // HD 수정
+                    result = adjMapper.updateHqAdjHd(adjVO);
+                }
+                else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                    // DTL 수정
+                    result = adjMapper.updateStAdjDtl(adjVO);
+                    // HD 수정
+                    result = adjMapper.updateStAdjHd(adjVO);
+                }
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+        }
+
+        // 거래처 삭제
+        prodMapper.getVendorProdSaveUpdate(prodVO);
+
+        // 거래처코드
+        if (prodVO.getChkVendrCd() != null && !"".equals(prodVO.getChkVendrCd())) {
+            // 거래처코드 array 값 세팅
+            String chkVendrCd[] = prodVO.getChkVendrCd().split(",");
+            for(int i=0; i < chkVendrCd.length; i++) {
+                prodVO.setVendrCd(chkVendrCd[i]);
+
+                // 거래처 저장
+                prodMapper.getVendorProdSaveInsert(prodVO);
+            }
         }
 
         // 신규상품 이미지 등록시
@@ -717,4 +813,23 @@ public class ProdServiceImpl implements ProdService {
         return isSuccess;
     }
 
+    /** 미적용 상품 거래처 조회 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchNoProdVendrList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 거래처코드
+        if (prodVO.getChkVendrCd() != null && !"".equals(prodVO.getChkVendrCd())) {
+            // 거래처코드 array 값 세팅
+            String[] chkVendrCd = prodVO.getChkVendrCd().split(",");
+            prodVO.setVendrCdList(chkVendrCd);
+        }
+
+        return prodMapper.getSearchNoProdVendrList(prodVO);
+    }
 }
