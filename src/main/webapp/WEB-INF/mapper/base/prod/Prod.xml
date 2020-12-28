@@ -222,8 +222,8 @@
 
     <!-- 상품 상세 조회 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_IMAGE
-                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_IMAGE
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_IMAGE, TB_HQ_VENDOR_PROD, TB_HQ_VENDOR
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_IMAGE, TB_MS_VENDOR_PROD, TB_MS_VENDOR
         PARAM    : prodVO
         COMMENTS : 상품의 상세정보를 조회한다. ( 본사/매장 )
     -->
@@ -270,43 +270,57 @@
                 thp.USE_YN,                     -- 사용여부
                 NVL(thp.REMARK, '') AS REMARK,  -- 비고
                 thp.REG_DT,
-                thpi.IMG_URL
+                thpi.IMG_URL,
+                thvp.VENDR_CD,
+                thvp.VENDR_NM
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_HQ_PRODUCT_SALE_PRICE
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
+                    SELECT
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                AND SALE_PRC_FG = #{salePrcFg}
-                GROUP BY
-                HQ_OFFICE_CD, PROD_CD
+                    ]]>
+                    AND SALE_PRC_FG = #{salePrcFg}
+                    GROUP BY HQ_OFFICE_CD, PROD_CD
                 ) thpsp ON
                 thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
                 AND thp.PROD_CD = thpsp.PROD_CD
                 LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                IMG_URL || IMG_FILE_NM AS IMG_URL
-                FROM TB_HQ_PRODUCT_IMAGE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND IMG_FG = '001'
+                    SELECT
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    IMG_URL || IMG_FILE_NM AS IMG_URL
+                    FROM TB_HQ_PRODUCT_IMAGE
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND IMG_FG = '001'
                 ) thpi ON
                 thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
                 AND thp.PROD_CD = thpi.PROD_CD
-                WHERE
-                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                LEFT OUTER JOIN (
+                    SELECT
+                    thvp.HQ_OFFICE_CD,
+                    thvp.PROD_CD,
+                    LISTAGG(thvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_CD,
+                    LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
+                    FROM TB_HQ_VENDOR_PROD thvp,
+                    TB_HQ_VENDOR thv
+                    WHERE 1=1
+                    AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thvp.PROD_CD = #{prodCd}
+                    AND thvp.USE_YN = 'Y'
+                    AND thv.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
+                    AND thv.VENDR_CD = thvp.VENDR_CD
+                    GROUP BY thvp.HQ_OFFICE_CD, thvp.PROD_CD
+                ) thvp ON
+                thp.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
+                AND thp.PROD_CD = thvp.PROD_CD
+                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thp.PROD_CD = #{prodCd}
             </when>
             <!-- 가맹점 -->
@@ -349,43 +363,57 @@
                 tmp.USE_YN,                     -- 사용여부
                 NVL(tmp.REMARK, '') AS REMARK,  -- 비고
                 tmp.REG_DT,
-                tmpi.IMG_URL
+                tmpi.IMG_URL,
+                tmvp.VENDR_CD,
+                tmvp.VENDR_NM
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_MS_PRODUCT_SALE_PRICE
-                WHERE
-                STORE_CD = #{storeCd}
-                <![CDATA[
+                    SELECT
+                    STORE_CD,
+                    PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE STORE_CD = #{storeCd}
+                    <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                AND SALE_PRC_FG = #{salePrcFg}
-                GROUP BY
-                STORE_CD, PROD_CD
+                    ]]>
+                    AND SALE_PRC_FG = #{salePrcFg}
+                    GROUP BY STORE_CD, PROD_CD
                 ) tmpsp ON
                 tmp.STORE_CD = tmpsp.STORE_CD
                 AND tmp.PROD_CD = tmpsp.PROD_CD
                 LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                IMG_URL || IMG_FILE_NM AS IMG_URL
-                FROM TB_MS_PRODUCT_IMAGE
-                WHERE STORE_CD = #{storeCd}
-                AND IMG_FG = '001'
+                    SELECT
+                    STORE_CD,
+                    PROD_CD,
+                    IMG_URL || IMG_FILE_NM AS IMG_URL
+                    FROM TB_MS_PRODUCT_IMAGE
+                    WHERE STORE_CD = #{storeCd}
+                    AND IMG_FG = '001'
                 ) tmpi ON
                 tmp.STORE_CD = tmpi.STORE_CD
                 AND tmp.PROD_CD = tmpi.PROD_CD
-                WHERE
-                tmp.STORE_CD = #{storeCd}
+                LEFT OUTER JOIN (
+                    SELECT
+                    tmvp.STORE_CD,
+                    tmvp.PROD_CD,
+                    LISTAGG(tmvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_CD,
+                    LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                    FROM TB_MS_VENDOR_PROD tmvp,
+                    TB_MS_VENDOR tmv
+                    WHERE 1=1
+                    AND tmvp.STORE_CD = #{storeCd}
+                    AND tmvp.PROD_CD = #{prodCd}
+                    AND tmvp.USE_YN = 'Y'
+                    AND tmv.STORE_CD = tmvp.STORE_CD
+                    AND tmv.VENDR_CD = tmvp.VENDR_CD
+                    GROUP BY tmvp.STORE_CD, tmvp.PROD_CD
+                ) tmvp ON
+                tmp.STORE_CD = tmvp.STORE_CD
+                AND tmp.PROD_CD = tmvp.PROD_CD
+                WHERE tmp.STORE_CD = #{storeCd}
                 AND tmp.PROD_CD = #{prodCd}
             </when>
         </choose>
@@ -2153,5 +2181,168 @@
             </when>
         </choose>
     </select>
+
+    <!-- 미적용 상품 거래처 조회 팝업 - 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR_PROD, TB_HQ_VENDOR, TB_MS_VENDOR_PROD, TB_MS_VENDOR
+        COMMENTS : [본사]거래처별_취급상품, [본사]상품_거래처, [매장]거래처별_취급상품, [매장]상품_거래처
+    -->
+    <select id="getSearchNoProdVendrList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getSearchNoProdVendrList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thv.VENDR_CD,
+                thv.VENDR_NM
+                FROM TB_HQ_VENDOR thv
+                WHERE 1=1
+                AND thv.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='chkVendrCd != null and chkVendrCd != ""'>
+                    AND thv.VENDR_CD NOT IN
+                    <foreach collection="vendrCdList" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ORDER BY thv.VENDR_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmv.VENDR_CD,
+                tmv.VENDR_NM
+                FROM TB_MS_VENDOR tmv
+                WHERE 1=1
+                AND tmv.STORE_CD = #{storeCd}
+                <if test='chkVendrCd != null and chkVendrCd != ""'>
+                    AND tmv.VENDR_CD NOT IN
+                    <foreach collection="vendrCdList" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ORDER BY tmv.VENDR_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 거래처 삭제 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR_PROD, TB_MS_VENDOR_PROD
+        COMMENTS : [본사]상품_거래처별_취급상품, [매장]상품_거래처별_취급상품
+    -->
+    <delete id="getVendorProdSaveUpdate" parameterType="prodVO">
+        /* ProdMapper.getVendorProdSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                TB_HQ_VENDOR_PROD
+                SET
+                USE_YN = 'N',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                TB_MS_VENDOR_PROD
+                SET
+                USE_YN = 'N',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 거래처 저장 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR_PROD, TB_MS_VENDOR_PROD
+        COMMENTS : [본사]상품_거래처별_취급상품, [매장]상품_거래처별_취급상품
+    -->
+    <insert id="getVendorProdSaveInsert" parameterType="prodVO">
+        /* ProdMapper.getVendorProdSaveInsert */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_VENDOR_PROD thvp
+                    USING DUAL
+                    ON (thvp.HQ_OFFICE_CD = #{hqOfficeCd} AND thvp.VENDR_CD = #{vendrCd} AND thvp.PROD_CD = #{prodCd})
+                WHEN MATCHED THEN
+                    UPDATE
+                    SET
+                    thvp.SPLY_UPRC = #{splyUprc},
+                    thvp.USE_YN = 'Y',
+                    thvp.MOD_DT = #{modDt},
+                    thvp.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        HQ_OFFICE_CD,
+                        HQ_BRAND_CD,
+                        VENDR_CD,
+                        PROD_CD,
+                        SPLY_UPRC,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{hqOfficeCd},
+                        '0000000', --HQ_BRAND_CD
+                        #{vendrCd},
+                        #{prodCd},
+                        #{splyUprc},
+                        'Y',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_VENDOR_PROD tmvp
+                    USING DUAL
+                    ON (tmvp.STORE_CD = #{storeCd} AND tmvp.VENDR_CD = #{vendrCd} AND tmvp.PROD_CD = #{prodCd})
+                WHEN MATCHED THEN
+                    UPDATE
+                    SET
+                    tmvp.SPLY_UPRC = #{splyUprc},
+                    tmvp.USE_YN = 'Y',
+                    tmvp.MOD_DT = #{modDt},
+                    tmvp.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        STORE_CD,
+                        VENDR_CD,
+                        PROD_CD,
+                        SPLY_UPRC,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{storeCd},
+                        #{vendrCd},
+                        #{prodCd},
+                        #{splyUprc},
+                        'Y',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </when>
+        </choose>
+    </insert>
 
 </mapper>

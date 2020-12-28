@@ -57,6 +57,7 @@
                 initialized="_initDateBox(s)">
               </wj-input-date>
             </span>
+            <%--전체기간--%>
             <span class="chk ml10">
               <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
               <label for="chkDt">
@@ -124,7 +125,6 @@
   </table>
   <%--//searchTbl--%>
 
-
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
@@ -146,16 +146,16 @@
     </button>
     --%>
 
-      <div class="mt20 updownSet oh">
-        <div class="txtIn">
-          <button class="btn_skyblue" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
-            <s:message code="prod.title.storeProdBatch" />
-          </button>
-          <button class="btn_skyblue" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
-            <s:message code="prod.title.addProd" />
-          </button>
-        </div>
+    <div class="mt20 updownSet oh">
+      <div class="txtIn">
+        <button class="btn_skyblue" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
+          <s:message code="prod.title.storeProdBatch" />
+        </button>
+        <button class="btn_skyblue" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
+          <s:message code="prod.title.addProd" />
+        </button>
       </div>
+    </div>
   </div>
 
   <%--위즈모 테이블--%>
@@ -213,13 +213,14 @@
   <%--//페이지 리스트--%>
 
 </div>
+
 <script>
   var prodEnvstVal = "${prodEnvstVal}";
   var priceEnvstVal = "${priceEnvstVal}";
   var prodNoEnvFg = "${prodNoEnvFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201204.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
@@ -251,4 +252,3 @@
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-

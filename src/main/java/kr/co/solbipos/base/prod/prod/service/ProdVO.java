@@ -163,6 +163,24 @@ public class ProdVO extends PageVO {
     /** 상품이미지파일 삭제여부 */
     private String prodImageDelFg;
 
+    /** 초기재고 */
+    private Integer startStockQty;
+
+    /** 거래처코드 */
+    private String vendrCd;
+
+    /** 거래처명 */
+    private String vendrNm;
+
+    /** 거래처코드 */
+    private String chkVendrCd;
+
+    /** 거래처명 */
+    private String chkVendrNm;
+
+    /** 거래처코드 */
+    private String[] vendrCdList;
+
     /**
      * @return the hqOfficeCd
      */
@@ -866,4 +884,30 @@ public class ProdVO extends PageVO {
     public String getProdImageDelFg() { return prodImageDelFg; }
 
     public void setProdImageDelFg(String prodImageDelFg) { this.prodImageDelFg = prodImageDelFg; }
+
+    public Integer getStartStockQty() { return startStockQty; }
+
+    public void setStartStockQty(Integer startStockQty) { this.startStockQty = startStockQty; }
+
+    public String getVendrCd() { return vendrCd; }
+
+    public void setVendrCd(String vendrCd) { this.vendrCd = vendrCd; }
+
+    public String getVendrNm() { return vendrNm; }
+
+    public void setVendrNm(String vendrNm) { this.vendrNm = vendrNm; }
+
+    public String getChkVendrCd() { return chkVendrCd; }
+
+    public void setChkVendrCd(String chkVendrCd) { this.chkVendrCd = chkVendrCd; }
+
+    public String getChkVendrNm() { return chkVendrNm; }
+
+    public void setChkVendrNm(String chkVendrNm) { this.chkVendrNm = chkVendrNm; }
+
+    public String[] getVendrCdList() {
+        return vendrCdList;
+    }
+
+    public void setVendrCdList(String[] vendrCdList) { this.vendrCdList = vendrCdList; }
 }

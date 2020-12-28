@@ -23,7 +23,6 @@ app.controller('memberPointMoveCtrl', ['$scope', '$http', function ($scope, $htt
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
     };
 
     // <-- 검색 호출 -->
@@ -89,6 +88,12 @@ app.controller('memberPointMoveCtrl', ['$scope', '$http', function ($scope, $htt
         if (isNull($scope.pointReceive)) {
             $scope._popMsg(messages["regist.searchMemberPoint.pointReceiveBlank"]);
             return false;
+        } else {
+            // 이관포인트는 가용포인트 이상으로 이관 불가능합니다.
+            if ($scope.pointSend < $scope.pointReceive) {
+                $scope._popMsg(messages["regist.searchMemberPoint.pointMoveError"]);
+                return false;
+            }
         }
 
         var params = {};

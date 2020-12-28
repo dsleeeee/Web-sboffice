@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -294,5 +295,28 @@ public class ProdController {
         } else {
             return returnJson(Status.FAIL);
         }
+    }
+
+    /**
+     * 미적용 상품 거래처 조회 팝업 - 조회
+     *
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 12. 16.
+     */
+    @RequestMapping(value = "/getSearchNoProdVendrList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchNoProdVendrList(ProdVO prodVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchNoProdVendrList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
     }
 }

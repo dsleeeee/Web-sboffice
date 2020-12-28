@@ -425,7 +425,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                             adjVO.setAdjTitle("상품등록 후 초기재고 생성");
-                            adjVO.setProcFg("1"); // 0:등록, 1:확정
+                            adjVO.setProcFg("0"); // 0:등록, 1:확정
                             adjVO.setAdjStorageCd("001");
                             adjVO.setStorageCd("999");
 
@@ -438,12 +438,18 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                             }
                             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+                            adjVO.setProcFg("1"); // 0:등록, 1:확정
+
                             // 확정시 확정일자,확정자 등록하려고(ProcFg 1일때만)
                            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+                                // DTL 수정
+                                result = adjMapper.updateHqAdjDtl(adjVO);
                                 // HD 수정
                                 result = adjMapper.updateHqAdjHd(adjVO);
                             }
                             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+                                // DTL 수정
+                                result = adjMapper.updateStAdjDtl(adjVO);
                                 // HD 수정
                                 result = adjMapper.updateStAdjHd(adjVO);
                             }
