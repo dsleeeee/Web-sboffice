@@ -34,6 +34,9 @@ public interface SimpleMemberJoinMapper {
     /** 새로운 회원번호 조회 */
     String getNewMembrNo(SessionInfoVO sessionInfoVO);
 
+    /** 회원 분류 조회 */
+    String getNewMembrClass(MemberVO memberVO);
+
     /** 회원 등록 */
     int insertMember(MemberVO memberVO);
 
