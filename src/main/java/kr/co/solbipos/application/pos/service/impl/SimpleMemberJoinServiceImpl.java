@@ -73,7 +73,7 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         String membrNo = mapper.getNewMembrNo(sessionInfoVO);
         // 신규회원 분류 조회
         String membrClass = mapper.getNewMembrClass(memberVO);
-
+        System.out.println("TEST :" + membrClass);
         memberVO.setMembrNo(membrNo);                           //회원번호
         //TODO 2018.08.14 안동관. 현재는 회원분류코드를 하드코딩으로 넣고 있으나 나중에는 화면에서 받아서 처리해야함.
         memberVO.setMembrClassCd(membrClass);                   //회원분류코드

@@ -72,17 +72,17 @@
         /* USE : SimpleMemberJoinMapper.getNewMembrClass */
         SELECT SUBSTR(MAX(MEMBR_CLASS_CD),2)
           FROM (
-                 SELECT '9' || MEMBR_CLASS_CD MEMBR_CLASS_CD
-                   FROM TB_MB_MEMBER_CLASS
-                  WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-                    AND DEFLT_YN = 'Y'
-                  UNION ALL
-                 SELECT '8' || MAX(MEMBR_CLASS_CD) MEMBR_CLASS_CD
-                   FROM TB_MB_MEMBER_CLASS
-                  WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-                  UNION ALL
-                 SELECT '7' || '000' MEMBR_CLASS_CD
-                   FROM DUAL)
+                SELECT '9' || MEMBR_CLASS_CD MEMBR_CLASS_CD
+                  FROM TB_MB_MEMBER_CLASS
+                 WHERE MEMBR_ORGN_CD = '00001'
+                   AND DEFLT_YN = 'Y'
+                 UNION ALL
+                SELECT CASE WHEN COUNT(MEMBR_CLASS_CD) > 0 THEN '8' || MAX(MEMBR_CLASS_CD) END MEMBR_CLASS_CD
+                  FROM TB_MB_MEMBER_CLASS
+                 WHERE MEMBR_ORGN_CD = '00001'
+                 UNION ALL
+                SELECT '7' || '000' MEMBR_CLASS_CD
+                  FROM DUAL)
     </select>
 
     <!-- 신규 회원 저장 -->

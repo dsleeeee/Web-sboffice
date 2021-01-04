@@ -84,7 +84,7 @@
 <script>
     $(document).ready(function(){
 
-        var posMemberFgEnvstVal  = ${posMemberFgEnvstVal};
+        var posMemberFgEnvstVal  = 1;//${posMemberFgEnvstVal};
 
         // 환경변수값(1067)을 가져와 회원구분항목 display
         if(posMemberFgEnvstVal === 0){
