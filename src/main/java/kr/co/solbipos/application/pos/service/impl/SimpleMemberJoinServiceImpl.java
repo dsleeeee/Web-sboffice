@@ -19,7 +19,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : SimpleMemberJoinServiceImpl.java
- * @Description : POS 화면에서 간편 회원가입
+ * @Description : POS 화면에서 간편 회원가입(포스 회원등록)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -48,7 +48,7 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         return mapper.getEnvstVal(storeEnvVO);
     }
 
-    /** 회원 저장 */
+    /** 회원 저장(회원등록) */
     @Override
     public int save(MemberVO memberVO, SessionInfoVO sessionInfoVO) {
 
