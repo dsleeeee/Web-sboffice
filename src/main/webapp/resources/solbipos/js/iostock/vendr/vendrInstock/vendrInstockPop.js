@@ -21,6 +21,8 @@ app.controller('vendrInstockPopCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.prodShowFg = true;
       if($scope.slipFg === -1) {
         $scope.reportShowFg = true;
+      }else{
+        $scope.reportShowFg = false;
       }
     }
 

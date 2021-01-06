@@ -70,7 +70,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="vendrExact.vendrNm"/>" binding="vendrNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrExact.prevUnExcclcTot"/>" binding="prevUnExcclcTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrExact.inExcclcTot"/>" binding="inExcclcTot" width="0" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrExact.inExcclcTot"/>" binding="inExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrExact.payExcclcTot"/>" binding="payExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrExact.totExcclcTot"/>" binding="totExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrExact.afterExcclcTot"/>" binding="afterExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum" word-wrap="true"></wj-flex-grid-column>

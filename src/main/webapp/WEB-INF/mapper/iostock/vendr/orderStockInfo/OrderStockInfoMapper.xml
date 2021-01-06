@@ -16,34 +16,49 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <![CDATA[
-                SELECT  NVL(tphvo.SLIP_NO,'무발주') AS SLIP_NO, tphvo.ORDER_DATE, tphvo.VENDR_CD, thv.VENDR_NM
-                ,       tphvo.PROC_FG, tphvo.SLIP_FG, tphvo.DTL_CNT
-                ,       tphvi.SLIP_NO AS IN_SLIP_NO
-                ,       COUNT(tphvi.SLIP_NO) AS IN_CNT
-                ,       DECODE(tphvi.SLIP_NO, NULL, NULL, tphvo.IN_LAST_DATE) AS IN_LAST_DATE
-                ,       tphvo.ORDER_AMT, tphvo.ORDER_VAT, tphvo.ORDER_TOT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_AMT) AS IN_AMT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_VAT) AS IN_VAT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_TOT) AS IN_TOT
-                ,       tphvo.ORDER_DATE AS ORDERBY_DATE
+                SELECT		NVL(tphvo.SLIP_NO,'무발주') AS SLIP_NO
+                    ,		tphvo.ORDER_DATE
+                    , 		tphvo.VENDR_CD
+                    , 		thv.VENDR_NM
+                    ,       tphvo.PROC_FG
+                    ,       tphvo.SLIP_FG
+                    ,       COUNT(tphvi.SLIP_NO) AS IN_CNT
+                    ,       tphvo.IN_LAST_DATE
+                    ,       tphvo.ORDER_AMT
+                    , 		tphvo.ORDER_VAT
+                    , 		tphvo.ORDER_TOT
+                    ,       SUM(NVL(tphvi.IN_AMT, 0)) AS IN_AMT
+                    ,       SUM(NVL(tphvi.IN_VAT, 0)) AS IN_VAT
+                    ,       SUM(NVL(tphvi.IN_TOT, 0)) AS IN_TOT
+                    , (		SELECT COUNT(DISTINCT(PROD_CD))
+                              FROM TB_PO_HQ_VENDR_INSTOCK_PROD
+                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                               AND SLIP_NO IN (SELECT SLIP_NO
+                                                 FROM TB_PO_HQ_VENDR_INSTOCK
+                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                  AND ORDER_SLIP_NO = tphvi.ORDER_SLIP_NO)
+                              AND SLIP_FG = '1'
+                              AND CONFM_YN = 'Y'
+                      ) AS DTL_CNT
+                     , '' AS IN_SLIP_NO
                 FROM    TB_PO_HQ_VENDR_ORDER tphvo
                 ,       TB_PO_HQ_VENDR_INSTOCK tphvi
                 ,       TB_HQ_VENDOR thv
-                WHERE   tphvo.HQ_OFFICE_CD    = #{hqOfficeCd}
-                
-                AND     tphvo.PROC_FG         IN ('1', '4', '5')
-                AND     tphvo.SLIP_FG         = '1'
-                AND     tphvi.HQ_OFFICE_CD (+)= tphvo.HQ_OFFICE_CD
-                AND     tphvi.ORDER_SLIP_NO(+)= tphvo.SLIP_NO
-                AND     tphvi.PROC_FG      (+)= '1'
-                AND     thv.HQ_OFFICE_CD   (+)= tphvo.HQ_OFFICE_CD
-                AND     thv.VENDR_CD       (+)= tphvo.VENDR_CD
+                WHERE   tphvo.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tphvo.PROC_FG IN ('1', '4', '5')
+                AND     tphvo.SLIP_FG = '1'
+                AND     tphvi.HQ_OFFICE_CD = tphvo.HQ_OFFICE_CD
+                AND     tphvi.ORDER_SLIP_NO = tphvo.SLIP_NO
+                AND     tphvi.SLIP_FG = '1'
+                AND		tphvi.PROC_FG = '1'
+                AND     thv.HQ_OFFICE_CD = tphvo.HQ_OFFICE_CD
+                AND     thv.VENDR_CD = tphvo.VENDR_CD
                 ]]>
                 <if test='slipNo != null and slipNo != ""'>
                     AND tphvo.SLIP_NO = #{slipNo}
                 </if>
                 <if test='slipNo == null or slipNo == ""'>                	
-                	AND     tphvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
+                	AND     tphvo.ORDER_DATE BETWEEN #{startDate} AND #{endDate}
                 	<if test='arrVendrCd != null and arrVendrCd != ""'>
 	                    AND tphvo.VENDR_CD IN
 	                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
@@ -51,35 +66,44 @@
 	                    </foreach>
 	                </if>
                 </if>
-                
                 <![CDATA[
-                GROUP BY NVL(tphvo.SLIP_NO,'무발주'), tphvo.ORDER_DATE, tphvo.VENDR_CD, thv.VENDR_NM
-                ,       tphvo.PROC_FG, tphvo.SLIP_FG, tphvo.DTL_CNT
-                ,       tphvi.SLIP_NO
-                ,       DECODE(tphvi.SLIP_NO, NULL, NULL, tphvo.IN_LAST_DATE)
-                ,       tphvo.ORDER_AMT, tphvo.ORDER_VAT, tphvo.ORDER_TOT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_AMT)
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_VAT)
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_TOT)
+                GROUP BY NVL(tphvo.SLIP_NO,'무발주')
+                ,		tphvo.ORDER_DATE
+		        , 		tphvo.VENDR_CD
+		        , 		thv.VENDR_NM
+                ,       tphvo.PROC_FG
+                ,       tphvo.SLIP_FG
+                ,       tphvo.IN_LAST_DATE
+                ,       tphvo.ORDER_AMT
+                , 		tphvo.ORDER_VAT
+                , 		tphvo.ORDER_TOT
+                , 		tphvi.ORDER_SLIP_NO
                 UNION ALL
-                SELECT  '무발주' AS SLIP_NO, '' AS ORDER_DATE, tphvi.VENDR_CD, thv.VENDR_NM
-                ,       '5' AS PROC_FG, tphvi.SLIP_FG, tphvi.DTL_CNT
-                ,       SLIP_NO AS IN_SLIP_NO
-                ,       1 AS IN_CNT
-                ,       tphvi.INSTOCK_DATE AS IN_LAST_DATE
-                ,       NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
-                ,       tphvi.IN_AMT
-                ,       tphvi.IN_VAT
-                ,       tphvi.IN_TOT
-                ,       tphvi.INSTOCK_DATE AS ORDERBY_DATE
+                SELECT '무발주' AS SLIP_NO
+                        , '' AS ORDER_DATE
+                        , tphvi.VENDR_CD
+                        , thv.VENDR_NM
+                        , tphvi.PROC_FG
+                        , tphvi.SLIP_FG
+                        , 1 AS IN_CNT
+                        , tphvi.INSTOCK_DATE AS IN_LAST_DATE
+                        , NULL AS ORDER_AMT
+                        , NULL AS ORDER_VAT
+                        , NULL AS ORDER_TOT
+                        , tphvi.IN_AMT
+                        , tphvi.IN_VAT
+                        , tphvi.IN_TOT
+                        , tphvi.DTL_CNT
+                        , thpvi.SLIP_NO AS IN_SLIP_NO
                 FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
                 ,       TB_HQ_VENDOR thv
-                WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     tphvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate} 
-                AND     tphvi.PROC_FG         = '1'
-                AND     tphvi.ORDER_SLIP_NO   IS NULL
-                AND     thv.HQ_OFFICE_CD   (+)= tphvi.HQ_OFFICE_CD
-                AND     thv.VENDR_CD       (+)= tphvi.VENDR_CD
+                WHERE   tphvi.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tphvi.SLIP_FG = '1'
+                AND		tphvi.PROC_FG = '1'
+                AND     tphvi.ORDER_SLIP_NO IS NULL
+                AND     thv.HQ_OFFICE_CD = tphvi.HQ_OFFICE_CD
+                AND     thv.VENDR_CD = tphvi.VENDR_CD
+                AND     tphvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}
                 ]]>
                 <if test='slipNo != null and slipNo != ""'>
                     AND tphvi.ORDER_SLIP_NO = #{slipNo}
@@ -91,39 +115,55 @@
                     </foreach>
                 </if>
                 <![CDATA[
-                ORDER BY ORDERBY_DATE, ORDER_DATE
+                ORDER BY ORDER_DATE, IN_LAST_DATE, IN_SLIP_NO
                 ]]>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <![CDATA[
-                SELECT  NVL(tpsvo.SLIP_NO,'무발주') AS SLIP_NO, tpsvo.ORDER_DATE, tpsvo.VENDR_CD, thv.VENDR_NM
-                ,       tpsvo.PROC_FG, tpsvo.SLIP_FG, tpsvo.DTL_CNT
-                ,       '' AS IN_SLIP_NO
-                ,       COUNT(tpsvi.SLIP_NO) AS IN_CNT
-                ,       DECODE(tpsvi.SLIP_NO, NULL, NULL, tpsvo.IN_LAST_DATE) AS IN_LAST_DATE
-                ,       tpsvo.ORDER_AMT, tpsvo.ORDER_VAT, tpsvo.ORDER_TOT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_AMT) AS IN_AMT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_VAT) AS IN_VAT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_TOT) AS IN_TOT
-                ,       tpsvo.ORDER_DATE AS ORDERBY_DATE
-                FROM    TB_PO_STORE_VENDR_ORDER tpsvo
+                SELECT		    NVL(tpsvo.SLIP_NO,'무발주') AS SLIP_NO
+                        ,		tpsvo.ORDER_DATE
+                        , 		tpsvo.VENDR_CD
+                        , 		tmv.VENDR_NM
+                        ,       tpsvo.PROC_FG
+                        ,       tpsvo.SLIP_FG
+                        ,       COUNT(tpsvi.SLIP_NO) AS IN_CNT
+                        ,       tpsvo.IN_LAST_DATE
+                        ,       tpsvo.ORDER_AMT
+                        , 		tpsvo.ORDER_VAT
+                        , 		tpsvo.ORDER_TOT
+                        ,       SUM(NVL(tpsvi.IN_AMT, 0)) AS IN_AMT
+                        ,       SUM(NVL(tpsvi.IN_VAT, 0)) AS IN_VAT
+                        ,       SUM(NVL(tpsvi.IN_TOT, 0)) AS IN_TOT
+                        , (		SELECT COUNT(DISTINCT(PROD_CD))
+                                  FROM TB_PO_STORE_VENDR_INSTOCK_PROD
+                                 WHERE STORE_CD = #{storeCd}
+                                   AND SLIP_NO IN (SELECT SLIP_NO
+                                                     FROM TB_PO_STORE_VENDR_INSTOCK
+                                                    WHERE STORE_CD = #{storeCd}
+                                                      AND ORDER_SLIP_NO = tpsvi.ORDER_SLIP_NO)
+                                  AND SLIP_FG = '1'
+                                  AND CONFM_YN = 'Y'
+                          ) AS DTL_CNT
+                        , '' AS IN_SLIP_NO
+                FROM   TB_PO_STORE_VENDR_ORDER tpsvo
                 ,       TB_PO_STORE_VENDR_INSTOCK tpsvi
-                ,       TB_MS_VENDOR thv     /* HQ -> MS 수정 */
-                WHERE   tpsvo.STORE_CD        = #{storeCd}
-                AND     tpsvo.PROC_FG         IN ('1', '4', '5')
-                AND     tpsvo.SLIP_FG         = '1'
-                AND     tpsvi.STORE_CD     (+)= tpsvo.STORE_CD
-                AND     tpsvi.ORDER_SLIP_NO(+)= tpsvo.SLIP_NO
-                AND     tpsvi.PROC_FG      (+)= '1'
-                AND     thv.STORE_CD       (+)= tpsvo.STORE_CD
-                AND     thv.VENDR_CD       (+)= tpsvo.VENDR_CD
+                ,       TB_MS_VENDOR tmv
+                WHERE   tpsvo.STORE_CD = #{storeCd}
+                AND     tpsvo.PROC_FG IN ('1', '4', '5')
+                AND     tpsvo.SLIP_FG = '1'
+                AND     tpsvi.STORE_CD = tpsvo.STORE_CD
+                AND     tpsvi.ORDER_SLIP_NO = tpsvo.SLIP_NO
+                AND     tpsvi.SLIP_FG = '1'
+                AND		tpsvi.PROC_FG = '1'
+                AND     tmv.STORE_CD = tpsvo.STORE_CD
+                AND     tmv.VENDR_CD = tpsvo.VENDR_CD
                 ]]>
                 <if test='slipNo != null and slipNo != ""'>
                     AND tpsvo.SLIP_NO = #{slipNo}
                 </if>
                 <if test='slipNo == null or slipNo == ""'>                	
-                	AND     tpsvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
+                	AND     tpsvo.ORDER_DATE BETWEEN #{startDate} AND #{endDate}
                 	<if test='arrVendrCd != null and arrVendrCd != ""'>
 	                    AND tpsvo.VENDR_CD IN
 	                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
@@ -132,33 +172,43 @@
 	                </if>
                 </if>                
                 <![CDATA[
-                GROUP BY NVL(tpsvo.SLIP_NO,'무발주'), tpsvo.ORDER_DATE, tpsvo.VENDR_CD, thv.VENDR_NM
-                ,       tpsvo.PROC_FG, tpsvo.SLIP_FG, tpsvo.DTL_CNT
-                ,       ''
-                ,       DECODE(tpsvi.SLIP_NO, NULL, NULL, tpsvo.IN_LAST_DATE)
-                ,       tpsvo.ORDER_AMT, tpsvo.ORDER_VAT, tpsvo.ORDER_TOT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_AMT)
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_VAT)
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvi.IN_TOT)
+                GROUP BY NVL(tpsvo.SLIP_NO,'무발주')
+                ,		tpsvo.ORDER_DATE
+		        , 		tpsvo.VENDR_CD
+		        , 		tmv.VENDR_NM
+                ,       tpsvo.PROC_FG
+                ,       tpsvo.SLIP_FG
+                ,       tpsvo.IN_LAST_DATE
+                ,       tpsvo.ORDER_AMT
+                , 		tpsvo.ORDER_VAT
+                , 		tpsvo.ORDER_TOT
+                , 		tpsvi.ORDER_SLIP_NO
                 UNION ALL
-                SELECT  '무발주' AS SLIP_NO, '' AS ORDER_DATE, tpsvi.VENDR_CD, thv.VENDR_NM
-                ,       '5' AS PROC_FG, tpsvi.SLIP_FG, tpsvi.DTL_CNT
-                ,       SLIP_NO AS IN_SLIP_NO
-                ,       1 AS IN_CNT
-                ,       tpsvi.INSTOCK_DATE AS IN_LAST_DATE
-                ,       NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
-                ,       tpsvi.IN_AMT
-                ,       tpsvi.IN_VAT
-                ,       tpsvi.IN_TOT
-                ,       tpsvi.INSTOCK_DATE AS ORDERBY_DATE
+                SELECT '무발주' AS SLIP_NO
+                        , '' AS ORDER_DATE
+                        , tpsvi.VENDR_CD
+                        , tmv.VENDR_NM
+                        , tpsvi.PROC_FG
+                        , tpsvi.SLIP_FG
+                        , 1 AS IN_CNT
+                        , tpsvi.INSTOCK_DATE AS IN_LAST_DATE
+                        , NULL AS ORDER_AMT
+                        , NULL AS ORDER_VAT
+                        , NULL AS ORDER_TOT
+                        , tpsvi.IN_AMT
+                        , tpsvi.IN_VAT
+                        , tpsvi.IN_TOT
+                        , tpsvi.DTL_CNT
+                        , tpsvi.SLIP_NO AS IN_SLIP_NO
                 FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
-                ,       TB_MS_VENDOR thv		/* HQ -> MS 수정 */
+                 ,       TB_MS_VENDOR tmv
                 WHERE   tpsvi.STORE_CD      = #{storeCd}
-                AND     tpsvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}
-                AND     tpsvi.PROC_FG       = '1'
+                AND     tpsvi.SLIP_FG = '1'
+                AND		 tpsvi.PROC_FG = '1'
                 AND     tpsvi.ORDER_SLIP_NO IS NULL
-                AND     thv.STORE_CD    (+) = tpsvi.STORE_CD
-                AND     thv.VENDR_CD    (+) = tpsvi.VENDR_CD
+                AND     tmv.STORE_CD = tpsvi.STORE_CD
+                AND     tmv.VENDR_CD = tpsvi.VENDR_CD
+                AND     tpsvi.INSTOCK_DATE  BETWEEN #{startDate} AND #{endDate}
                 ]]>
                 <if test='slipNo != null and slipNo != ""'>
                     AND tpsvi.ORDER_SLIP_NO = #{slipNo}
@@ -170,7 +220,7 @@
                     </foreach>
                 </if>
                 <![CDATA[
-                ORDER BY ORDERBY_DATE, ORDER_DATE
+                ORDER BY ORDER_DATE, IN_LAST_DATE, IN_SLIP_NO
                 ]]>
             </when>
         </choose>
@@ -190,99 +240,97 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <![CDATA[
-                SELECT  o.PROD_CD
-				,       thp.PROD_NM
-				,		i.SLIP_NO		AS  IN_SLIP_NO
-				,       COUNT(DECODE(i.PROD_CD, o.PROD_CD, i.SLIP_NO))  AS IN_CNT
-				,       DECODE(i.PROC_FG, '1', o.IN_LAST_DATE) AS IN_LAST_DATE
-				,       o.ORDER_TOT_QTY, o.ORDER_AMT, o.ORDER_VAT, o.ORDER_TOT
-				,       DECODE(i.PROC_FG, '1', i.IN_TOT_QTY) AS IN_TOT_QTY
-				,       DECODE(i.PROC_FG, '1', i.IN_AMT) AS IN_AMT
-				,       DECODE(i.PROC_FG, '1', i.IN_VAT) AS IN_VAT
-				,       DECODE(i.PROC_FG, '1', i.IN_TOT) AS IN_TOT
-				FROM    (
-				        SELECT  tphvo.HQ_OFFICE_CD
-				        ,       tphvo.SLIP_NO
-				        ,       tphvod.PROD_CD
-				        ,       tphvo.IN_LAST_DATE
-				        ,       tphvod.ORDER_TOT_QTY
-				        ,       tphvod.ORDER_AMT
-				        ,       tphvod.ORDER_VAT
-				        ,       tphvod.ORDER_TOT        
-				        FROM    TB_PO_HQ_VENDR_ORDER tphvo
-				        ,       TB_PO_HQ_VENDR_ORDER_DTL tphvod
-				        WHERE   tphvod.HQ_OFFICE_CD     = tphvo.HQ_OFFICE_CD
-				        AND     tphvod.SLIP_NO          = tphvo.SLIP_NO
-				        AND     tphvo.HQ_OFFICE_CD      = #{hqOfficeCd}
-				        AND     tphvo.SLIP_NO           = #{slipNo}        
-				        )   o
-				,       (
-				        SELECT  tphvi.HQ_OFFICE_CD
-				        ,       tphvi.SLIP_NO
-				        ,       tphvi.ORDER_SLIP_NO
-				        ,       tphvid.PROD_CD
-				        ,       tphvi.PROC_FG
-				        ,       tphvid.IN_TOT_QTY
-				        ,       tphvid.IN_AMT
-				        ,       tphvid.IN_VAT
-				        ,       tphvid.IN_TOT        
-				        FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
-				        ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
-				        WHERE   tphvid.HQ_OFFICE_CD     = #{hqOfficeCd}
-				        AND     tphvid.SLIP_NO          = #{inSlipNo}
-				        AND     tphvi.ORDER_SLIP_NO     = #{slipNo}
-				        AND     tphvid.HQ_OFFICE_CD   = tphvi.HQ_OFFICE_CD
-				        AND     tphvid.SLIP_NO        = tphvi.SLIP_NO
-				        )   i
-				,       TB_HQ_PRODUCT thp        
-				WHERE   i.HQ_OFFICE_CD  (+) =   o.HQ_OFFICE_CD
-				AND     i.ORDER_SLIP_NO (+) =   o.SLIP_NO
-				AND     i.PROD_CD       (+) =   o.PROD_CD
-				AND     thp.HQ_OFFICE_CD    =   o.HQ_OFFICE_CD
-				AND     thp.PROD_CD         =   o.PROD_CD
-				GROUP BY o.PROD_CD, thp.PROD_NM
-				,       i.SLIP_NO
-				,       DECODE(i.PROC_FG, '1', o.IN_LAST_DATE) 
-				,       o.ORDER_TOT_QTY, o.ORDER_AMT, o.ORDER_VAT, o.ORDER_TOT
-				,       DECODE(i.PROC_FG, '1', i.IN_TOT_QTY) 
-				,       DECODE(i.PROC_FG, '1', i.IN_AMT) 
-				,       DECODE(i.PROC_FG, '1', i.IN_VAT) 
-				,       DECODE(i.PROC_FG, '1', i.IN_TOT) 
-				ORDER BY o.PROD_CD                
+                SELECT  tphvod.PROD_CD
+				       , thp.PROD_NM
+				       , COUNT(DECODE(tphvip.PROD_CD, tphvod.PROD_CD, tphvi.SLIP_NO)) AS IN_CNT
+                       , tphvo.IN_LAST_DATE
+                       , tphvod.ORDER_TOT_QTY
+                       , tphvod.ORDER_AMT
+                       , tphvod.ORDER_VAT
+                       , tphvod.ORDER_TOT
+                       , tphvod.IN_TOT_QTY
+                       , tphvod.IN_AMT
+                       , tphvod.IN_VAT
+                       , tphvod.IN_TOT
+				FROM    TB_PO_HQ_VENDR_ORDER tphvo
+                       , TB_PO_HQ_VENDR_ORDER_DTL tphvod
+                       , TB_PO_HQ_VENDR_INSTOCK tphvi
+                       , TB_PO_HQ_VENDR_INSTOCK_PROD tphvip
+                       , TB_HQ_PRODUCT thp
+                WHERE   tphvo.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND   tphvo.SLIP_NO = #{slipNo}
+                  AND   tphvo.PROC_FG IN ('1', '4', '5')
+                  AND   tphvo.SLIP_FG = '1'
+                  AND   tphvod.HQ_OFFICE_CD = tphvo.HQ_OFFICE_CD
+                  AND   tphvod.SLIP_NO = tphvo.SLIP_NO
+                  AND   tphvi.HQ_OFFICE_CD (+)= tphvo.HQ_OFFICE_CD
+                  AND   tphvi.ORDER_SLIP_NO (+)= tphvo.SLIP_NO
+                  AND   tphvi.SLIP_FG = '1'
+                  AND	tphvi.PROC_FG = '1'
+                  AND 	tphvip.HQ_OFFICE_CD = tphvi.HQ_OFFICE_CD
+                  AND   tphvip.SLIP_NO = tphvi.SLIP_NO
+                  AND   thp.HQ_OFFICE_CD = tphvod.HQ_OFFICE_CD
+                  AND   thp.PROD_CD = tphvod.PROD_CD
+            GROUP BY   tphvod.PROD_CD
+                      , thp.PROD_NM
+                      , tphvo.IN_LAST_DATE
+                      , tphvod.ORDER_TOT_QTY
+                      , tphvod.ORDER_AMT
+                      , tphvod.ORDER_VAT
+                      , tphvod.ORDER_TOT
+                      , tphvod.IN_TOT_QTY
+                      , tphvod.IN_AMT
+                      , tphvod.IN_VAT
+                      , tphvod.IN_TOT
+			ORDER BY   tphvod.PROD_CD
                 ]]>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <![CDATA[
-                SELECT  tpsvod.PROD_CD, tmp.PROD_NM
-                ,       COUNT(DECODE(tpsvid.PROD_CD, tpsvod.PROD_CD, tpsvi.SLIP_NO)) AS IN_CNT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvo.IN_LAST_DATE) AS IN_LAST_DATE
-                ,       tpsvod.ORDER_TOT_QTY, tpsvod.ORDER_AMT, tpsvod.ORDER_VAT, tpsvod.ORDER_TOT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT_QTY) AS IN_TOT_QTY
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_AMT) AS IN_AMT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_VAT) AS IN_VAT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT) AS IN_TOT
+                SELECT  tpsvod.PROD_CD
+                       , tmp.PROD_NM
+                       , COUNT(DECODE(tpsvip.PROD_CD, tpsvod.PROD_CD, tpsvi.SLIP_NO)) AS IN_CNT
+                       , tpsvo.IN_LAST_DATE
+                       , tpsvod.ORDER_TOT_QTY
+                       , tpsvod.ORDER_AMT
+                       , tpsvod.ORDER_VAT
+                       , tpsvod.ORDER_TOT
+                       , tpsvod.IN_TOT_QTY
+                       , tpsvod.IN_TOT_QTY
+                       , tpsvod.IN_AMT
+                       , tpsvod.IN_VAT
+                       , tpsvod.IN_TOT
                 FROM    TB_PO_STORE_VENDR_ORDER tpsvo
-                ,       TB_PO_STORE_VENDR_ORDER_DTL tpsvod
-                ,       TB_PO_STORE_VENDR_INSTOCK tpsvi
-                ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
-                ,       TB_MS_PRODUCT tmp
-                WHERE   tpsvo.STORE_CD        = #{storeCd}
-                AND     tpsvo.SLIP_NO         = #{slipNo}
-                AND     tpsvod.STORE_CD       = tpsvo.STORE_CD
-                AND     tpsvod.SLIP_NO        = tpsvo.SLIP_NO
-                AND     tpsvi.STORE_CD     (+)= tpsvo.STORE_CD
-                AND     tpsvi.ORDER_SLIP_NO(+)= tpsvo.SLIP_NO
-                AND     tpsvi.PROC_FG      (+)= '1'
-                AND     tmp.STORE_CD          = tpsvod.STORE_CD
-                AND     tmp.PROD_CD           = tpsvod.PROD_CD
-                GROUP BY tpsvod.PROD_CD, tmp.PROD_NM
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvo.IN_LAST_DATE)
-                ,       tpsvod.ORDER_TOT_QTY, tpsvod.ORDER_AMT, tpsvod.ORDER_VAT, tpsvod.ORDER_TOT
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT_QTY)
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_AMT)
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_VAT)
-                ,       DECODE(tpsvi.PROC_FG, '1', tpsvod.IN_TOT)
+                       , TB_PO_STORE_VENDR_ORDER_DTL tpsvod
+                       , TB_PO_STORE_VENDR_INSTOCK tpsvi
+                       , TB_PO_STORE_VENDR_INSTOCK_PROD tpsvip
+                       , TB_MS_PRODUCT tmp
+                WHERE   tpsvo.STORE_CD = #{storeCd}
+                  AND   tpsvo.SLIP_NO = #{slipNo}
+                  AND   tpsvo.PROC_FG IN ('1', '4', '5')
+                  AND   tpsvo.SLIP_FG = '1'
+                  AND   tpsvod.STORE_CD = tpsvo.STORE_CD
+                  AND   tpsvod.SLIP_NO = tpsvo.SLIP_NO
+                  AND   tpsvi.STORE_CD (+)= tpsvo.STORE_CD
+                  AND   tpsvi.ORDER_SLIP_NO (+)= tpsvo.SLIP_NO
+                  AND   tpsvi.PROC_FG = '1'
+                  AND	 tpsvi.PROC_FG = '1'
+                  AND 	 tpsvip.STORE_CD = tpsvi.STORE_CD
+                  AND   tpsvip.SLIP_NO = tpsvi.SLIP_NO
+                  AND   tmp.STORE_CD = tpsvod.STORE_CD
+                  AND   tmp.PROD_CD = tpsvod.PROD_CD
+                GROUP BY tpsvod.PROD_CD
+                        , tmp.PROD_NM
+                        , tpsvo.IN_LAST_DATE
+                        , tpsvod.ORDER_TOT_QTY
+                        , tpsvod.ORDER_AMT
+                        , tpsvod.ORDER_VAT
+                        , tpsvod.ORDER_TOT
+                        , tpsvod.IN_TOT_QTY
+                        , tpsvod.IN_AMT
+                        , tpsvod.IN_VAT
+                        , tpsvod.IN_TOT
                 ORDER BY tpsvod.PROD_CD
                 ]]>
             </when>
@@ -303,59 +351,77 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <![CDATA[
-                SELECT  tphvid.PROD_CD, thp.PROD_NM
-                ,       COUNT(DECODE(tphvi.PROC_FG, '1', tphvi.SLIP_NO)) AS IN_CNT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE) AS IN_LAST_DATE
-                ,       NULL AS ORDER_TOT_QTY, NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
-                ,       tphvid.IN_TOT_QTY
-                ,       tphvid.IN_AMT
-                ,       tphvid.IN_VAT
-                ,       tphvid.IN_TOT
-                FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
-                ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
-                ,       TB_HQ_PRODUCT thp
-                WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     tphvi.SLIP_NO         = #{inSlipNo}
-                AND     tphvid.HQ_OFFICE_CD   = tphvi.HQ_OFFICE_CD
-                AND     tphvid.SLIP_NO        = tphvi.SLIP_NO
-                AND     thp.HQ_OFFICE_CD      = tphvid.HQ_OFFICE_CD
-                AND     thp.PROD_CD           = tphvid.PROD_CD
-                GROUP BY tphvid.PROD_CD, thp.PROD_NM
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE)
-                ,       tphvid.IN_TOT_QTY
-                ,       tphvid.IN_AMT
-                ,       tphvid.IN_VAT
-                ,       tphvid.IN_TOT
-                ORDER BY tphvid.PROD_CD
+                SELECT  tphvid.PROD_CD
+                        , thp.PROD_NM
+                        , tphvi.SLIP_NO AS IN_SLIP_NO
+                        , '1' AS IN_CNT
+                        , tphvi.INSTOCK_DATE AS IN_LAST_DATE
+                        , NULL AS ORDER_TOT_QTY
+                        , NULL AS ORDER_AMT
+                        , NULL AS ORDER_VAT
+                        , NULL AS ORDER_TOT
+                        , tphvid.IN_TOT_QTY
+                        , tphvid.IN_AMT
+                        , tphvid.IN_VAT
+                        , tphvid.IN_TOT
+                FROM TB_PO_HQ_VENDR_INSTOCK tphvi
+                    , TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+                    , TB_HQ_PRODUCT thp
+                WHERE tphvi.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND tphvi.SLIP_NO = #{inSlipNo}
+                  AND tphvi.SLIP_FG = '1'
+                  AND tphvi.PROC_FG = '1'
+                  AND tphvid.HQ_OFFICE_CD = tphvi.HQ_OFFICE_CD
+                  AND tphvid.SLIP_NO = tphvi.SLIP_NO
+                  AND thp.HQ_OFFICE_CD = tphvid.HQ_OFFICE_CD
+                  AND thp.PROD_CD = tphvid.PROD_CD
+            GROUP BY tphvid.PROD_CD
+                      , thp.PROD_NM
+                      , tphvi.SLIP_NO
+                      , tphvi.INSTOCK_DATE
+                      , tphvid.IN_TOT_QTY
+                      , tphvid.IN_AMT
+                      , tphvid.IN_VAT
+                      , tphvid.IN_TOT
+             ORDER BY tphvid.PROD_CD
                 ]]>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <![CDATA[
-                SELECT  tpsvid.PROD_CD, tmp.PROD_NM
-                ,       COUNT(DECODE(tphvi.PROC_FG, '1', tphvi.SLIP_NO)) AS IN_CNT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE) AS IN_LAST_DATE
-                ,       NULL AS ORDER_TOT_QTY, NULL AS ORDER_AMT, NULL AS ORDER_VAT, NULL AS ORDER_TOT
-                ,       tpsvid.IN_TOT_QTY
-                ,       tpsvid.IN_AMT
-                ,       tpsvid.IN_VAT
-                ,       tpsvid.IN_TOT
-                FROM    TB_PO_STORE_VENDR_INSTOCK tphvi
-                ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
-                ,       TB_MS_PRODUCT tmp
-                WHERE   tphvi.STORE_CD    = #{storeCd}
-                AND     tphvi.SLIP_NO     = #{inSlipNo}
-                AND     tpsvid.STORE_CD   = tphvi.STORE_CD
-                AND     tpsvid.SLIP_NO    = tphvi.SLIP_NO
-                AND     tmp.STORE_CD      = tpsvid.STORE_CD
-                AND     tmp.PROD_CD       = tpsvid.PROD_CD
-                GROUP BY tpsvid.PROD_CD, tmp.PROD_NM
-                ,       DECODE(tphvi.PROC_FG, '1', tphvi.INSTOCK_DATE)
-                ,       tpsvid.IN_TOT_QTY
-                ,       tpsvid.IN_AMT
-                ,       tpsvid.IN_VAT
-                ,       tpsvid.IN_TOT
-                ORDER BY tpsvid.PROD_CD
+                SELECT  tpsvid.PROD_CD
+                        , tmp.PROD_NM
+                        , tpsvi.SLIP_NO AS IN_SLIP_NO
+                        , '1' AS IN_CNT
+                        , tpsvi.INSTOCK_DATE AS IN_LAST_DATE
+                        , NULL AS ORDER_TOT_QTY
+                        , NULL AS ORDER_AMT
+                        , NULL AS ORDER_VAT
+                        , NULL AS ORDER_TOT
+                        , tpsvid.IN_TOT_QTY
+                        , tpsvid.IN_AMT
+                        , tpsvid.IN_VAT
+                        , tpsvid.IN_TOT
+                  FROM   TB_PO_STORE_VENDR_INSTOCK tpsvi
+                        , TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
+                        , TB_MS_PRODUCT tmp
+                  WHERE tpsvi.STORE_CD    = #{storeCd}
+                    AND tpsvi.SLIP_NO     = #{inSlipNo}
+                    AND tpsvi.SLIP_FG = '1'
+                    AND	 tpsvi.PROC_FG = '1'
+                    AND tpsvid.STORE_CD = tpsvi.STORE_CD
+                    AND tpsvid.SLIP_NO = tpsvi.SLIP_NO
+                    AND tmp.STORE_CD = tpsvid.STORE_CD
+                    AND tmp.PROD_CD = tpsvid.PROD_CD
+               GROUP BY tpsvid.PROD_CD
+                        , tmp.PROD_NM
+                        , tpsvi.SLIP_NO
+                        , tpsvi.INSTOCK_DATE
+                        , tpsvid.IN_TOT_QTY
+                        , tpsvid.IN_AMT
+                        , tpsvid.IN_VAT
+                        , tpsvid.IN_TOT
+               ORDER BY tpsvid.PROD_CD
                 ]]>
             </when>
         </choose>

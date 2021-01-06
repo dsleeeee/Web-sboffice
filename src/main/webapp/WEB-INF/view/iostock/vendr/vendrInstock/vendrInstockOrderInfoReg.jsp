@@ -13,12 +13,9 @@
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="vendrInstock.ord.txt1"/></li>
-      </ul>
-
+      <span class="fl red lh30">※<s:message code="vendrInstock.ord.txt1"/></span>
       <div class="mt20 tr">
-      <%--출고창고 
+      <%--출고창고
 	   	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
 	   	<span class="txtIn w150px sb-select fl mr5">
 	       <wj-combo-box
@@ -86,4 +83,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockOrderInfoReg.js?ver=20181224.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockOrderInfoReg.js?ver=20181224.05" charset="utf-8"></script>

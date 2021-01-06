@@ -37,9 +37,9 @@
                             item-formatter="_itemFormatter">
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="vendrOrder.pop.code1"/>" binding="nmcodeCd" width="90" is-read-only="false" align="center" max-length="1"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="vendrOrder.pop.areaNm"/>" binding="nmcodeNm" width="120" is-read-only="false" align="left" max-length="15"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="vendrOrder.pop.useYn"/>" binding="useYn" width="80" data-map="useYnDataMap" align="center" is-read-only="false" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="vendrOrder.pop.code1"/>" binding="nmcodeCd" width="100" is-read-only="false" align="center" max-length="1"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="vendrOrder.pop.areaNm"/>" binding="nmcodeNm" width="180" is-read-only="false" align="left" max-length="15"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="vendrOrder.pop.useYn"/>" binding="useYn" width="80" data-map="useYnDataMap" align="center" is-read-only="false" align="right" visible="false"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -52,4 +52,4 @@
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderTypeRegPop.js?ver=20201210.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderTypeRegPop.js?ver=20201210.10" charset="utf-8"></script>

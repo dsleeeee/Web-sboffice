@@ -92,7 +92,7 @@
         ,       DECODE(tphvi.PROC_FG, 0, NULL, theconfm.EMP_NM) AS CONFM_NM
         ,       tphvi.IN_TOT_QTY * tphvi.SLIP_FG AS IN_TOT_QTY
         ,       tphvi.IN_TOT * tphvi.SLIP_FG AS IN_TOT
-        ,       (SELECT MAX(STORAGE_CD) FROM TB_PO_HQ_VENDR_INSTOCK_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
+        ,       (SELECT CASE WHEN MAX(STORAGE_CD) IS NULL THEN '000' ELSE MAX(STORAGE_CD) END FROM TB_PO_HQ_VENDR_INSTOCK_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
         FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
         ,       TB_HQ_VENDOR thv
         ,       TB_HQ_EMPLOYEE thereg
@@ -158,7 +158,7 @@
         AND     thv.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
         AND     thv.VENDR_CD        =   #{vendrCd}
         AND     thn.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
-        AND     thn.NMCODE_GRP_CD(+)=   '097'
+        AND     thn.NMCODE_GRP_CD(+)=   '093'
         AND     thn.NMCODE_CD    (+)=   thp.PO_UNIT_FG
         ORDER
         BY      tphvid.PROD_CD
@@ -769,6 +769,19 @@
         AND     SLIP_NO       = #{orderSlipNo}
     </update>
 
+    <!-- 거래처 입고/반출등록 - 입고/반출정보 현재 진행상태 값 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출정보의 현재 진행상태 값을 조회한다.
+    -->
+    <select id="getVendrInstockProcFg"  parameterType="vendrInstockVO" resultType="String">
+        /* VendrInstockHqMapper.getVendrInstockProcFg */
+        SELECT NVL(PROC_FG, -1) CHECK_PROC_FG
+          FROM TB_PO_HQ_VENDR_INSTOCK
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND SLIP_NO = #{slipNo}
+    </select>
 
     <!-- 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경 -->
     <!--

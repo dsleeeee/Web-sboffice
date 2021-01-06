@@ -8,20 +8,20 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     {"name": messages["vendrInstock.dtl.orderInstock"], "value": "Y"},
     {"name": messages["vendrInstock.dtl.notOrderInstock"], "value": "N"}
   ]);
-    
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("vendrInstockDtlCtrl", function (event, data) {
-	
+
 	  var comboParams         = {};
-	    
+
 	    // 출고창고
-	    var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';    
+	    var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';
 	    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
-	    $scope._queryCombo("combo", "saveVendrDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.	  
-	  
+	    $scope._queryCombo("combo", "saveVendrDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
     $scope.slipNo = data.slipNo;
     $scope.slipFg = data.slipFg;
-    
+
 
     // 발주/무발주입고에 대한 내용을 발주입고 상태로 layer show
     $scope.orderLayerShowFg = true;
@@ -398,7 +398,7 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
       var params         = {};
       params.slipNo      = $scope.slipNo;
       params.procFg      = procFg;
-      params.slipFg      = $scope.slipFg
+      params.slipFg      = $scope.slipFg;
       params.outStorageCd	= $scope.slipInfo.outStorageCd;
 
       // 입고이면서 발주입고인 경우만 발주번호를 파라미터에 세팅
@@ -521,7 +521,7 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     $scope._broadcast('vendrInstockDtlRtnSelectVendrCtrl');
   };
 
-  
+
   //DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
   // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
   // comboId : combo 생성할 ID
@@ -535,12 +535,12 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     if (url) {
       comboUrl = url;
     }
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -597,6 +597,6 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
         }, 10);
       }
     });
-  };  
+  };
 
 }]);

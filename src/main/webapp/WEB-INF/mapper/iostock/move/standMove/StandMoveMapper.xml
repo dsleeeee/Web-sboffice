@@ -139,7 +139,7 @@
 		            ,      A.STAND_CURR_QTY
 		            ,      A.STAND_CURR_UNIT_QTY
 		            ,      A.STAND_CURR_ETC_QTY
-		            ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000
+		            <!-- ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000 -->
 		            /* 동적 START */
 		            	${sQuery2}
 		            /* 동적 END */
@@ -167,7 +167,7 @@
 		                  JOIN    (
 		                        SELECT  B.STORE_CD
 		                        ,      B.PROD_CD
-		                        ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		                        <!-- ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000 -->
 		                        /* 동적 START */
 									${sQuery3}
 		                        /* 동적 END */
@@ -314,7 +314,7 @@
 		            ,      A.STAND_CURR_QTY
 		            ,      A.STAND_CURR_UNIT_QTY
 		            ,      A.STAND_CURR_ETC_QTY
-		            ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000
+		            <!-- ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000 -->
 		            /* 동적 START */
 		            	${sQuery2}
 		            /* 동적 END */
@@ -342,7 +342,7 @@
 		                  JOIN    (
 		                        SELECT  B.STORE_CD
 		                        ,      B.PROD_CD
-		                        ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		                        <!-- ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000 -->
 		                        /* 동적 START */
 									${sQuery3}
 		                        /* 동적 END */
@@ -490,7 +490,7 @@
 		            ,      A.STAND_CURR_QTY
 		            ,      A.STAND_CURR_UNIT_QTY
 		            ,      A.STAND_CURR_ETC_QTY
-		            ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000
+		            <!-- ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000 -->
 		            /* 동적 START */
 		            	${sQuery2}
 		            /* 동적 END */
@@ -518,7 +518,7 @@
 		                  JOIN    (
 		                        SELECT  B.STORE_CD
 		                        ,      B.PROD_CD
-		                        ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		                        <!-- ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000 -->
 		                        /* 동적 START */
 									${sQuery3}
 		                        /* 동적 END */

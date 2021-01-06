@@ -106,8 +106,14 @@ app.controller('vendrOrderTypeRegPopCtrl', ['$scope', '$http', '$compile', '$tim
 
         // 생성, 수정 Validation Check
         for (var m = 0; m < $scope.flex.collectionView.itemCount; m++) {
-            if(  $scope.flex.collectionView.items[m].nmcodeCd === null  || $scope.flex.collectionView.items[m].nmcodeNm === '') {
-                $scope._popMsg(messages['vendrOrder.pop.require']); // 코드와 명칭을 입력해주세요.
+
+            if( $scope.flex.collectionView.items[m].nmcodeCd === null || $scope.flex.collectionView.items[m].nmcodeCd === '' || isEmptyObject($scope.flex.collectionView.items[m].nmcodeCd)) {
+                $scope._popMsg(messages['vendrOrder.pop.code'] + messages['vendrOrder.pop.require']); // 코드을(를) 입력해주세요.
+                return;
+            }
+
+            if( $scope.flex.collectionView.items[m].nmcodeNm === null || $scope.flex.collectionView.items[m].nmcodeNm === '' || isEmptyObject($scope.flex.collectionView.items[m].nmcodeNm)) {
+                $scope._popMsg(messages['vendrOrder.pop.areaNm'] + messages['vendrOrder.pop.require']); // 명칭을(를) 입력해주세요.
                 return;
             }
         }

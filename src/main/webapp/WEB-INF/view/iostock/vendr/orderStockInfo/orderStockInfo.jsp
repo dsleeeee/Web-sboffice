@@ -114,7 +114,7 @@
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.prodCd"/>" binding="prodCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.slipNo"/>" binding="inSlipNo" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.slipNo"/>" binding="inSlipNo" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inCnt"/>" binding="inCnt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inLastDate"/>" binding="inLastDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.orderTotQty"/>" binding="orderTotQty" width="40" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
