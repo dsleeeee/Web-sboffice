@@ -73,6 +73,7 @@
 			         AND TPE.SALE_DATE = TPEC.SALE_DATE
 			         AND TPE.POS_NO = TPEC.POS_NO
 			         AND TPE.REG_SEQ = TPEC.REG_SEQ
+					 AND TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
 			       ),0) AS CASH_EXACT_AMT
 			--    , NVL(SUM(TPEC.CASH_EXACT_AMT),0)AS CASH_EXACT_AMT
 			------------------------------
