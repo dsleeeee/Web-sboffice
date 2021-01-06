@@ -23,55 +23,67 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT
-                    thn.NMCODE_GRP_CD,
-                    thn.NMCODE_CD,
-                    thn.NMCODE_NM,
-                    thn.NMCODE_ITEM_1,
-                    thn.NMCODE_ITEM_2,
-                    thn.USE_YN,
-                    (SELECT COUNT(*) FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = thn.HQ_OFFICE_CD AND NMCODE_GRP_CD = thn.NMCODE_CD) AS CNT
-                FROM
-                    TB_HQ_NMCODE thn
-                WHERE
-                    thn.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thn.NMCODE_GRP_CD = '000'
+                SELECT  NMCODE_GRP_CD
+                ,       NMCODE_CD
+                ,       PARENT_CD
+                ,       NMCODE_NM
+                ,       NMCODE_ITEM_1
+                ,       NMCODE_ITEM_2
+                ,       USE_COL_NM
+                ,       USE_TARGET_FG
+                ,       USE_SYSTEM_FG
+                ,       REG_DT
+                ,       REG_ID
+                ,       MOD_DT
+                ,       MOD_ID
+                FROM    TB_CM_NMCODE
+                WHERE   NMCODE_GRP_CD   =   '999'
+                AND     NMCODE_ITEM_1   IN  ('C', 'H')
+
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
-                    AND thn.NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
+                    AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>
                 <if test='nmcodeNm != null and nmcodeNm != ""'>
-                    AND thn.NMCODE_NM LIKE '%'||#{nmcodeNm}||'%'
+                    AND NMCODE_NM LIKE '%'||#{nmcodeNm}||'%'
                 </if>
                 <if test='useYn != null and useYn != ""'>
-                    AND thn.USE_YN = #{useYn}
+                    AND USE_YN = #{useYn}
                 </if>
-                ORDER BY thn.NMCODE_GRP_CD, thn.NMCODE_CD
+
+                ORDER
+                BY      NMCODE_GRP_CD, NMCODE_CD
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT
-                    tmsn.NMCODE_GRP_CD,
-                    tmsn.NMCODE_CD,
-                    tmsn.NMCODE_NM,
-                    tmsn.NMCODE_ITEM_1,
-                    tmsn.NMCODE_ITEM_2,
-                    tmsn.USE_YN,
-                    (SELECT COUNT(*) FROM TB_MS_STORE_NMCODE WHERE STORE_CD = tmsn.STORE_CD AND NMCODE_GRP_CD = tmsn.NMCODE_CD) AS CNT
-                FROM
-                    TB_MS_STORE_NMCODE tmsn
-                WHERE
-                    tmsn.STORE_CD = #{storeCd}
-                    AND tmsn.NMCODE_GRP_CD = '000'
+                SELECT  NMCODE_GRP_CD
+                ,       NMCODE_CD
+                ,       PARENT_CD
+                ,       NMCODE_NM
+                ,       NMCODE_ITEM_1
+                ,       NMCODE_ITEM_2
+                ,       USE_COL_NM
+                ,       USE_TARGET_FG
+                ,       USE_SYSTEM_FG
+                ,       REG_DT
+                ,       REG_ID
+                ,       MOD_DT
+                ,       MOD_ID
+                FROM    TB_CM_NMCODE
+                WHERE   NMCODE_GRP_CD   =   '999'
+                AND     NMCODE_ITEM_1   IN  ('C', 'S')
+
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
-                    AND tmsn.NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
+                    AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>
                 <if test='nmcodeNm != null and nmcodeNm != ""'>
-                    AND tmsn.NMCODE_NM LIKE '%'||#{nmcodeNm}||'%'
+                    AND NMCODE_NM LIKE '%'||#{nmcodeNm}||'%'
                 </if>
                 <if test='useYn != null and useYn != ""'>
-                    AND tmsn.USE_YN = #{useYn}
+                    AND USE_YN = #{useYn}
                 </if>
-                ORDER BY tmsn.NMCODE_GRP_CD, tmsn.NMCODE_CD
+
+                ORDER
+                BY      NMCODE_GRP_CD, NMCODE_CD
             </when>
         </choose>
     </select>
@@ -195,7 +207,7 @@
                     #{hqOfficeCd},
                     #{nmcodeGrpCd},
                     #{nmcodeCd},
-                    #{nmcodeCd},
+                    #{nmcodeGrpCd},
                     #{nmcodeNm},
                     #{nmcodeItem1,jdbcType=VARCHAR},
                     #{nmcodeItem2,jdbcType=VARCHAR},
@@ -226,7 +238,7 @@
                     #{storeCd},
                     #{nmcodeGrpCd},
                     #{nmcodeCd},
-                    #{nmcodeCd},
+                    #{nmcodeGrpCd},
                     #{nmcodeNm},
                     #{nmcodeItem1,jdbcType=VARCHAR},
                     #{nmcodeItem2,jdbcType=VARCHAR},

@@ -47,9 +47,9 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
           var item = s.rows[e.row].dataItem;
           if (item.status !== "I") {
             wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'wj-custom-readonly');
+            //wijmo.addClass(e.cell, 'wj-custom-readonly');
           } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
+            //wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
       }
@@ -71,7 +71,8 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
         var selectedRow = s.rows[ht.row].dataItem
         var col = ht.panel.columns[ht.col];
         if( col.binding === "nmcodeCd" && selectedRow.status !== "I") {
-          $scope._broadcast('detailCtrl', selectedRow.nmcodeCd);
+          //$scope._broadcast('detailCtrl', selectedRow.nmcodeCd);
+          $scope._broadcast('detailCtrl', selectedRow);
         }
       }
     });
@@ -85,9 +86,9 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/adi/etc/cd/cd/list.sb", params, function() {
       // 대표명칭 그리드 버튼 show
-      $("#btnAddRepresent").show();
-      $("#btnDelRepresent").show();
-      $("#btnSaveRepresent").show();
+      //$("#btnAddRepresent").show();
+      //$("#btnDelRepresent").show();
+      //$("#btnSaveRepresent").show();
     });
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -171,6 +172,14 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
             wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
         }
+        var itemChk = s.rows[e.row].dataItem;
+        if (itemChk.nmcodeGrpCd == "093" && (itemChk.nmcodeCd == "1" || itemChk.nmcodeCd == "2"))
+        {
+            if (col.binding === "gChk" || col.binding === "nmcodeNm" || col.binding === "nmcodeItem1" || col.binding === "nmcodeItem2")
+            {
+                wijmo.addClass(e.cell, 'wj-custom-readonly');
+            }
+        }
       }
     });
     // 대표명칭 그리드 에디팅 방지
@@ -182,6 +191,13 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
           elements.cancel = true;
         }
       }
+      var dataItemChk = s.rows[elements.row].dataItem;
+      if (dataItemChk.nmcodeGrpCd == "093" && (dataItemChk.nmcodeCd == "1" || dataItemChk.nmcodeCd == "2"))
+      {
+          if (col.binding === "gChk" || col.binding === "nmcodeNm" || col.binding === "nmcodeItem1" || col.binding === "nmcodeItem2") {
+              elements.cancel = true;
+          }
+      }
     });
   };
   // 세부명칭 그리드 초기화
@@ -192,17 +208,70 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.$on("detailCtrl", function(event, data) {
     // 파라미터
     var params = {};
-    params.nmcodeGrpCd = data;
+    params.nmcodeGrpCd = data.nmcodeCd;
+    params.nmcodeItem1 = data.nmcodeItem1;
+    params.nmcodeItem2 = data.nmcodeItem2;
     // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
     $scope._inquirySub("/adi/etc/cd/cd/list.sb", params, function() {
       // 세부명칭 그리드 버튼 show
-      $("#btnAddDetail").show();
-      $("#btnDelDetail").show();
-      $("#btnSaveDetail").show();
+        if( (gvOrgnFg == "H" && (params.nmcodeItem1 == "C" || params.nmcodeItem1 == "H"    )   )
+        ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "S" )                                   )
+        ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "C" && gvHqOfficeCd == "00000"      )   )
+          )
+        {
+          $("#btnAddDetail").show();
+          $("#btnDelDetail").show();
+          $("#btnSaveDetail").show();
+        }
+        else
+        {
+          $("#btnAddDetail").hide();
+          $("#btnDelDetail").hide();
+          $("#btnSaveDetail").hide();
+        }
     });
+
+    $("#s_nmcodeCd").val(data.nmcodeCd);
+    $("#s_nmcodeItem1").val(data.nmcodeItem1);
+    $("#s_nmcodeItem2").val(data.nmcodeItem2);
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
+    $scope.searchDetailCtrl = function(){
+        var params = {};
+        params.nmcodeGrpCd = $("#s_nmcodeCd").val(data.nmcodeCd);
+        params.nmcodeItem1 = $("#s_nmcodeCd").val(data.nmcodeItem1);
+        params.nmcodeItem2 = $("#s_nmcodeCd").val(data.nmcodeItem2);
+        // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
+        $scope._inquirySub("/adi/etc/cd/cd/list.sb", params, function() {
+          // 세부명칭 그리드 버튼 show
+            if( (gvOrgnFg == "H" && (params.nmcodeItem1 == "C" || params.nmcodeItem1 == "H"    )   )
+            ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "S" )                                   )
+            ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "C" && gvHqOfficeCd == "00000"      )   )
+              )
+            {
+              $("#btnAddDetail").show();
+              $("#btnDelDetail").show();
+              $("#btnSaveDetail").show();
+            }
+            else
+            {
+              $("#btnAddDetail").hide();
+              $("#btnDelDetail").hide();
+              $("#btnSaveDetail").hide();
+            }
+        });
+
+        $("#s_nmcodeCd").val(data.nmcodeCd);
+        $("#s_nmcodeItem1").val(data.nmcodeItem1);
+        $("#s_nmcodeItem2").val(data.nmcodeItem2);
+
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    };
+
   // 세부명칭 그리드 행 추가
   $scope.addRow = function() {
     var gridRepresent = agrid.getScope('representCtrl');
@@ -211,6 +280,7 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.nmcodeGrpCd = selectedRow.nmcodeCd;
     params.useYn = "Y";
+    params.gChk = false;
 
     $scope._addRow(params, 1);
   };
@@ -234,6 +304,22 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
+      if(item.nmcodeCd.length != $("#s_nmcodeItem2").val()){
+        $scope._popMsg(messages["cd.detail.require.nmcodeCdLengthChk"]+' ('+$("#s_nmcodeItem2").val()+')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
+        return false;
+      }
+
+      var check_nmcodeCd_cnt = 0;
+      for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+          if($scope.flex.collectionView.items[j].nmcodeCd == item.nmcodeCd) {
+              check_nmcodeCd_cnt++;
+          }
+      }
+      if(check_nmcodeCd_cnt > 1){
+        $scope._popMsg(messages["cd.detail.require.nmcodeCdChk"]+' ('+item.nmcodeCd+')'); // 코드중복 확인
+        return false;
+      }
+
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
@@ -242,16 +328,31 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsRemoved[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/adi/etc/cd/cd/save.sb", params);
+    $scope._save("/adi/etc/cd/cd/save.sb", params, function(){ $scope.allSearch() });
+
+    // 재조회
+    $scope.allSearch = function () {
+        $scope.searchDetailCtrl();
+    };
+
   }
   // 세부명칭 그리드 행 삭제
   $scope.deleteRow = function() {
-    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      var item = $scope.flex.collectionView.items[i];
-      if(item.gChk){
-        $scope.flex.collectionView.removeAt(i);
-      }
-    }
+        $scope._popConfirm(messages["cd.detail.require.delConfirm"], function() {
+            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                var item = $scope.flex.collectionView.items[i];
+                if(item.gChk) {
+                      if (item.nmcodeGrpCd == "093" && (item.nmcodeCd == "1" || item.nmcodeCd == "2"))
+                      {
+                        $scope._popMsg(messages["cd.detail.require.chk.093.1"]); // 093 발주단위 기본값 0 낱개 1 박스 는 삭제할 수 없습니다.
+                        return false;
+                      }
+                    $scope.flex.collectionView.removeAt(i);
+                }
+            }
+
+            $scope.save();
+        });
   }
 
 }]);

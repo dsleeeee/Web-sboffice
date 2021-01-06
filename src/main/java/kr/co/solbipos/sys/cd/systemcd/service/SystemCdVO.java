@@ -32,7 +32,7 @@ public class SystemCdVO extends CmmVO {
     /** 명칭코드항목1 */
     private String nmcodeItem1;
     /** 명칭코드항목2 */
-    private Date nmcodeItem2;
+    private String nmcodeItem2;
     /** 사용컬럼명 */
     private String useColNm;
     /** 사용대상구분 */
@@ -99,14 +99,14 @@ public class SystemCdVO extends CmmVO {
     /**
      * @return the nmcodeItem2
      */
-    public Date getNmcodeItem2() {
+    public String getNmcodeItem2() {
         return nmcodeItem2;
     }
 
     /**
      * @param nmcodeItem2 the nmcodeItem2 to set
      */
-    public void setNmcodeItem2(Date nmcodeItem2) {
+    public void setNmcodeItem2(String nmcodeItem2) {
         this.nmcodeItem2 = nmcodeItem2;
     }
 

@@ -7,6 +7,10 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sys/cd/systemCd/systemCd/" />
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+
 <div class="subCon">
 
   <div class="searchBar flddUnfld">
@@ -32,7 +36,7 @@
             <input type="text" class="sb-input w100" id="srchNmcodeNm" ng-model="nmcodeNm" />
         </td>
       </tr>
-      <tr>
+      <tr style='display:none;'>
         <%-- 사용여부 --%>
         <th><s:message code="cd.useYnFg" /></th>
         <td>
@@ -60,7 +64,11 @@
       <button class="btn_blue fr" ng-click="_broadcast('representCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
-  <div id="gridRepresent" class="w50 fl" style="width: 60%" ng-controller="representCtrl">
+  <input type="hidden" id="s_nmcodeCd" name="s_nmcodeCd" value="" />
+  <input type="hidden" id="s_nmcodeItem1" name="s_nmcodeItem1" value="" />
+  <input type="hidden" id="s_nmcodeItem2" name="s_nmcodeItem2" value="" />
+
+  <div id="gridRepresent" class="w50 fl" style="width: 40%" ng-controller="representCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
       <div class="updownSet oh mb10">
@@ -86,17 +94,17 @@
             sticky-headers="true"
             selection-mode="Row"
             items-source="data"
-            frozen-columns="3"
+            is-editable="false"
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cd.nmcodeGrpCd"/>" binding="nmcodeGrpCd" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cd.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cd.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cd.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="40" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.nmcodeItem1"/>" binding="nmcodeItem1" width="50" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.nmcodeItem2Cd"/>" binding="nmcodeItem2" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cd.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
           <%-- ColumnPicker 사용시 include --%>
@@ -109,8 +117,8 @@
     </div>
     <%--//위즈모 테이블--%>
   </div>
-  
-  <div id="gridDetail" class="w50 fr" style="width: 40%" ng-controller="detailCtrl">
+
+  <div id="gridDetail" class="w50 fr" style="width: 60%" ng-controller="detailCtrl">
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
       <div class="updownSet oh mb10">
@@ -136,16 +144,15 @@
           selection-mode="Row"
           items-source="data"
           item-formatter="_itemFormatter"
-          frozen-columns="2"
           sorted-column="toggleFreeze(false)">
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="50"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="50" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cd.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cd.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cd.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cd.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
@@ -159,4 +166,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20180915" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20210106001" charset="utf-8"></script>
