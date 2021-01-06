@@ -126,6 +126,9 @@ public class VendrInstockVO extends PageVO {
     
     /** 처리구분 0:확정취소 1:확정 */
     private String confmYn;
+
+    /** 입고상품 등록화면 구분 1:입고상품탭 2:상품추가/변경 3: 발주내역으로등록 */
+    private String prodRegFg;
     
     /**
      * @return the hqOfficeCd
@@ -757,8 +760,13 @@ public class VendrInstockVO extends PageVO {
 
 	public void setConfmYn(String confmYn) {
 		this.confmYn = confmYn;
-	}	
-	
-	
-	
+	}
+
+    public String getProdRegFg() {
+        return prodRegFg;
+    }
+
+    public void setProdRegFg(String prodRegFg) {
+        this.prodRegFg = prodRegFg;
+    }
 }

@@ -147,6 +147,7 @@ app.controller('vendrExactCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.newVendrExactRegist = function () {
     var params = {};
     $scope._broadcast('vendrExactRegistCtrl', params);
+    $scope.wjVendrExactRegistLayer.show(true);
   };
 
 
@@ -201,6 +202,7 @@ app.controller('vendrExactDtlCtrl', ['$scope', '$http', '$timeout', function ($s
           params.excclcDate = selectedRow.excclcDate;
           params.seqNo      = selectedRow.seqNo;
           $scope._broadcast('vendrExactRegistCtrl', params);
+          $scope.wjVendrExactRegistLayer.show(true);
         }
       }
     });

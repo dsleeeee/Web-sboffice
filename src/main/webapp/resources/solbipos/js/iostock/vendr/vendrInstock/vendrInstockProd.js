@@ -161,6 +161,8 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
             // 발주입고인 경우에만 발주내역으로 등록 버튼 활성화
             if (data.instockType === 'Y') {
               $scope.btnOrderInfoRegistIfFg = true;
+            }else{
+              $scope.btnOrderInfoRegistIfFg = false;
             }
             $scope.btnAddProdIfFg  = true;
             $scope.btnProdSaveIfFg = true;
@@ -220,6 +222,7 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
       item.slipFg    = $scope.slipFg;
       item.storageCd = "999";			//001 -> 999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.prodRegFg = "1"; // 입고상품탭에서 상품등록
 //      item.outStorageCd	= $scope.save.dtl.outStorageCd;
       
       params.push(item);

@@ -248,6 +248,7 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
       item.storageCd   = "999";			//001 -> 999
       item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.storeSplyFg = ($scope.storeSplyChk === true ? 'Y' : 'N');
+      item.prodRegFg = "2"; // 상품추가/변경에서 상품등록
 //      item.outStorageCd	= $scope.save.dtl.outStorageCd;
       
     

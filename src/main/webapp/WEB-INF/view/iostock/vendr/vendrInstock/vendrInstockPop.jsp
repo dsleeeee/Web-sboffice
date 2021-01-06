@@ -33,7 +33,7 @@
       </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockPop.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockPop.js?ver=20181224.02" charset="utf-8"></script>
 
 <%-- 입고/반출정보 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockDtl.jsp">

@@ -3,64 +3,52 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('vendrExactRegistCtrl', $scope, $http, true));
 
-  $scope.default = {
-    excclcDate: new Date(),
-    excclcTot : '',
-    remark    : ''
-  };
-
   $scope.excclcDate = wcombo.genDate("#excclcDate");
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on('vendrExactRegistCtrl', function (event, data) {
 
-    $timeout(function () {
-      // 신규등록 팝업 오픈시 거래처선택모듈의 값 초기화
-      $("#vendrExactRegistSelectVendrCd").val('');
-      $("#vendrExactRegistSelectVendrNm").val('선택');
-      // 기본값 세팅
-      $scope.vendrExact = angular.copy($scope.default);
-
-      // 삭제 버튼 비활성
-      $scope.btnDeleteIfFg = false;
-    }, 10);
-
-    $scope.vendrCd    = nvl(data.vendrCd, '');
-    $scope.excclcDate = nvl(data.excclcDate, '');
-    $scope.seqNo      = nvl(data.seqNo, '');
-
     // 신규등록인 경우
-    if (nvl($scope.vendrCd, '') === '') {
+    if (isEmptyObject(data)) {
+
+        // 기본값 세팅
+        $scope.excclcDate.value = getCurDate('-');
+        $scope.excclcTot = '';
+        $scope.seqNo = '';
+        $scope.remark = '';
+
+        // 삭제 버튼 비활성
+        $scope.btnDeleteIfFg = false;
     	$scope.excclcDateFg	= false;
-    	
+
     	//거래처선택 모듈 disabled 컨트롤
         $scope.vendrExactRegistSelectVendrNmDisabled  = false;
         $scope.vendrExactRegistSelectVendrBtnDisabled = false;
-        
-    	$scope.wjVendrExactRegistLayer.show(true);
-    } else {    	
-    	$scope.getExactInfo();
-    	
-    	$scope.excclcDateFg	= true;
+
+    } else {
+
+        $scope.excclcDateFg	= true;
+
+        // 조회
+    	$scope.getExactInfo(data);
     	
     	//거래처선택 모듈 disabled 컨트롤
         $scope.vendrExactRegistSelectVendrNmDisabled  = true;
         $scope.vendrExactRegistSelectVendrBtnDisabled = true;
-        
-    	
+
     }
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
+
   });
 
-
   // 지급액 상세 조회
-  $scope.getExactInfo = function () {
+  $scope.getExactInfo = function (data) {
     var params        = {};
-    params.vendrCd    = $scope.vendrCd;
-    params.excclcDate = $scope.excclcDate;
-    params.seqNo      = $scope.seqNo;
+    params.vendrCd    = data.vendrCd;
+    params.excclcDate = data.excclcDate;
+    params.seqNo      = data.seqNo;
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -76,19 +64,19 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
       if ($scope._httpStatusCheck(response, true)) {
         // 진행구분이 조정등록이 아니면 상품추가/변경 불가
         if (!$.isEmptyObject(response.data.data)) {
-          var data = response.data.data;
+          var rData = response.data.data;
 
           // 삭제 버튼 활성화
           $scope.btnDeleteIfFg = true;
           
           // 거래처 선택 모듈값 세팅
-          $("#vendrExactRegistSelectVendrCd").val(data.vendrCd);
-          $("#vendrExactRegistSelectVendrNm").val('[' + data.vendrCd + '] ' + data.vendrNm);
-          
-          data.excclcDate = new Date(getFormatDate(data.excclcDate, "-"));
-          data.excclcTot  = (nvl(data.excclcTot, '') !== '' ? addComma(data.excclcTot) : '');
-          
-          $scope.vendrExact = data;
+          $scope.excclcDate.value = new Date(getFormatDate(rData.excclcDate, "-"));
+          $("#vendrExactRegistSelectVendrCd").val(rData.vendrCd);
+          $("#vendrExactRegistSelectVendrNm").val("[" + rData.vendrCd + "] " + rData.vendrNm);
+          $scope.excclcTot = addComma(rData.excclcTot);
+          $scope.seqNo = rData.seqNo;
+          $scope.remark = rData.remark;
+
         } else {
           $scope.wjVendrExactRegistLayer.hide(true);
           $scope._popMsg(response.data.message);
@@ -124,10 +112,10 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
     var params        = {};
     params.vendrCd    = $("#vendrExactRegistSelectVendrCd").val();
     params.seqNo      = $scope.seqNo;
-    params.excclcDate = wijmo.Globalize.format($scope.vendrExact.excclcDate, 'yyyyMMdd');
-    params.excclcTot  = removeComma($scope.vendrExact.excclcTot);
+    params.excclcDate = wijmo.Globalize.format($scope.excclcDate.value, 'yyyyMMdd');
+    params.excclcTot  = removeComma($scope.excclcTot);
     params.excclcFg   = '2';
-    params.remark     = $scope.vendrExact.remark;
+    params.remark     = $scope.remark;
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -176,7 +164,7 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
       var params        = {};
       params.vendrCd    = $("#vendrExactRegistSelectVendrCd").val();
       params.seqNo      = $scope.seqNo;
-      params.excclcDate = wijmo.Globalize.format($scope.vendrExact.excclcDate, 'yyyyMMdd');
+      params.excclcDate = wijmo.Globalize.format($scope.excclcDate.value, 'yyyyMMdd');
       
       //가상로그인 session 설정
       if(document.getElementsByName('sessionId')[0]){
@@ -221,13 +209,21 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
 
   // 지급액 input onblur 시 함수호출. 값에 comma 추가
   $scope.excclcTotOnBlur = function ($event) {
-    $scope.vendrExact.excclcTot = addComma($scope.vendrExact.excclcTot);
+    $scope.excclcTot = addComma($scope.excclcTot);
   };
 
 
   // 지급액 input onfocus 시 함수호출. 값에 comma 제거
   $scope.excclcTotOnFocus = function ($event) {
-    $scope.vendrExact.excclcTot = removeComma($scope.vendrExact.excclcTot);
+    $scope.excclcTot = removeComma($scope.excclcTot);
+  };
+
+  // 팝업 닫기
+  $scope.close = function(){
+    // 거래처 초기화
+    $("#vendrExactRegistSelectVendrCd").val('');
+    $("#vendrExactRegistSelectVendrNm").val('선택');
+    $scope.wjVendrExactRegistLayer.hide();
   };
 
 }]);

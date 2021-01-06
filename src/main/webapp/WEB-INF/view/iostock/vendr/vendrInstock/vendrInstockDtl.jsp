@@ -131,6 +131,7 @@
 	         selected-value-path="value"
 	         is-editable="false"
 	         initialized="_initComboBox(s)"
+             control="outStorageCdCombo"
 	         >
 	       </wj-combo-box>
 	     </span>    
@@ -189,7 +190,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20201020.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20201020.08" charset="utf-8"></script>
 
 <%-- 발주번호선택 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockOrderSlip.jsp">
