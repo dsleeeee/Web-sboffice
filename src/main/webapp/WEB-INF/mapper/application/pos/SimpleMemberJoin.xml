@@ -74,12 +74,12 @@
           FROM (
                 SELECT '9' || MEMBR_CLASS_CD MEMBR_CLASS_CD
                   FROM TB_MB_MEMBER_CLASS
-                 WHERE MEMBR_ORGN_CD = '00001'
+                 WHERE MEMBR_ORGN_CD = #{orgnGrpCd}
                    AND DEFLT_YN = 'Y'
                  UNION ALL
                 SELECT CASE WHEN COUNT(MEMBR_CLASS_CD) > 0 THEN '8' || MAX(MEMBR_CLASS_CD) END MEMBR_CLASS_CD
                   FROM TB_MB_MEMBER_CLASS
-                 WHERE MEMBR_ORGN_CD = '00001'
+                 WHERE MEMBR_ORGN_CD = #{orgnGrpCd}
                  UNION ALL
                 SELECT '7' || '000' MEMBR_CLASS_CD
                   FROM DUAL)
