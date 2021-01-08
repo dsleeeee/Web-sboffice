@@ -631,8 +631,8 @@
         ,       B.VENDR_CD
         ,       B.VENDR_NM
         ,       A.LV1_NM
-        ,       A.LV2_NM_FULL
-        ,       A.LV3_NM_FULL
+        ,       A.LV2_NM
+        ,       A.LV3_NM
         ,       B.PROD_CD
         ,       B.PROD_NM
         ,       B.BARCD_CD

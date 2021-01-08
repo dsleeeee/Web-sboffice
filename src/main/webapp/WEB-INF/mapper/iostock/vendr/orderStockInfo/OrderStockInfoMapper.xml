@@ -94,7 +94,7 @@
                         , tphvi.IN_VAT
                         , tphvi.IN_TOT
                         , tphvi.DTL_CNT
-                        , thpvi.SLIP_NO AS IN_SLIP_NO
+                        , tphvi.SLIP_NO AS IN_SLIP_NO
                 FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
                 ,       TB_HQ_VENDOR thv
                 WHERE   tphvi.HQ_OFFICE_CD = #{hqOfficeCd}
