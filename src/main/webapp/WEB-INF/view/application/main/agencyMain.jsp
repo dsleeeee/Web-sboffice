@@ -9,20 +9,20 @@
     <div class="mainCon">
         <!--총 매장수-->
         <div class="w50 fl br bb stat_purple2">
-            <h2>총 매장수 <span>16,325</span></h2>
+            <h2>총 매장수 <span>0</span></h2>
             <div>
-                <p><span>오픈</span><span>8,126</span></p>
-                <p><span>폐점</span><span>7,978</span></p>
+                <p><span>오픈</span><span>0</span></p>
+                <p><span>폐점</span><span>0</span></p>
             </div>
         </div>
         <!--//총 매장수-->
         
         <!--총 포스수-->
         <div class="w50 fl bb stat_sky2">
-            <h2>총 포스수 <span>5,517</span></h2>
+            <h2>총 포스수 <span>0</span></h2>
             <div>
-                <p><span>오픈</span><span>4,526</span></p>
-                <p><span>폐점</span><span>517</span></p>
+                <p><span>오픈</span><span>0</span></p>
+                <p><span>폐점</span><span>0</span></p>
             </div>
         </div>
         <!--//총 포스수-->
@@ -33,61 +33,61 @@
             <div class="wizWrap" id="chart1" style="width:100%; height:255px;"></div>
         </div>
         <!--//주간 매출-->
-        
-        <!--날씨-->
-        <div class="w30 fl bb weather">
-           <div class="today"> 
-               <h2 class="hidden">날씨</h2>
-               <p class="date">
-                   <span>서울시</span>
-                   <span><em>11월 26일</em> <em>일요일</em></span>
-               </p>
-               <a href="#">날씨더보기</a>
-               <div class="temperatures">
-                   <p>
-                       <!--파란색 날씨아이콘 : weIc01~14까지-->
-                       <em class="weIc02"></em>
-                       <span>
-                           최고 <em>13°C</em><br />
-                           최저 <em>5°C</em>
-                       </span>
-                   </p> 
-               </div>
-           </div>
-           <ul>
-               <li>
-                   <!--검은색 날씨아이콘 : weIc01~14까지-->
-                   <span class="weIc11"></span>
-                   <span class="day">월</span>
-                   <span><em>5°C</em> / <em>13°C</em></span>
-               </li>
-               <li>
-                   <!--검은색 날씨아이콘 : weIc01~14까지-->
-                   <span class="weIc08"></span>
-                   <span class="day">화</span>
-                   <span><em>-3°C</em> / <em>10°C</em></span>
-               </li>
-           </ul>
+
+        <!--공지사항-->
+        <div class="w30 fl bb notice">
+            <h2>공지사항</h2>
+            <ul>
+                <c:forEach var="item" items="${noticeList}">
+                    <li><a href="#">${item.content}</a><span>${item.regDt}</span></li>
+                </c:forEach>
+            </ul>
         </div>
-        <!--//날씨-->
-        
+        <!--//공지사항-->
+
         <!--주간 설치현황-->
         <div class="w70 fl br bb graph">
             <h2>주간 설치현황<div class="square"><span class="blue">신규</span><span class="sky">재설치</span></div></h2>
             <div class="wizWrap" id="chart2" style="width:100%; height:255px;"></div>
         </div>
         <!--//주간 설치현황-->
-        
-        <!--공지사항-->
-        <div class="w30 fl bb notice">
-            <h2>공지사항</h2>
-            <ul>
-              <c:forEach var="item" items="${noticeList}">
-                <li><a href="#">${item.content}</a><span>${item.regDt}</span></li>
-              </c:forEach>
-            </ul> 
+
+        <!--날씨-->
+        <div class="w30 fl bb weather">
+            <%--<div class="today">--%>
+                <%--<h2 class="hidden">날씨</h2>--%>
+                <%--<p class="date">--%>
+                    <%--<span>서울시</span>--%>
+                    <%--<span><em>11월 26일</em> <em>일요일</em></span>--%>
+                <%--</p>--%>
+                <%--<a href="#">날씨더보기</a>--%>
+                <%--<div class="temperatures">--%>
+                    <%--<p>--%>
+                        <%--<!--파란색 날씨아이콘 : weIc01~14까지-->--%>
+                        <%--<em class="weIc02"></em>--%>
+                        <%--<span>--%>
+                           <%--최고 <em>13°C</em><br />--%>
+                           <%--최저 <em>5°C</em>--%>
+                       <%--</span>--%>
+                    <%--</p>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+            <%--<ul>--%>
+                <%--<li>--%>
+                    <%--<!--검은색 날씨아이콘 : weIc01~14까지-->--%>
+                    <%--<span class="weIc11"></span>--%>
+                    <%--<span class="day">월</span>--%>
+                    <%--<span><em>5°C</em> / <em>13°C</em></span>--%>
+                <%--</li>--%>
+                <%--<li>--%>
+                    <%--<!--검은색 날씨아이콘 : weIc01~14까지-->--%>
+                    <%--<span class="weIc08"></span>--%>
+                    <%--<span class="day">화</span>--%>
+                    <%--<span><em>-3°C</em> / <em>10°C</em></span>--%>
+                <%--</li>--%>
+            <%--</ul>--%>
         </div>
-        <!--//공지사항-->
+        <!--//날씨-->
         
         <!--순위테이블-->
         <div class="w100 fl mainTbl">
@@ -110,33 +110,33 @@
                 <tbody>
                     <tr>
                         <th>1</th>
-                        <td>외식</td>
-                        <td class="bk">거북솥삼겹살</td>
-                        <td>5,056</td>
+                        <td>-</td>
+                        <td class="bk">-</td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <th>2</th>
-                        <td>커피저문점</td>
-                        <td class="bk">스타벅스 코리아</td>
-                        <td>3,572</td>
+                        <td>-</td>
+                        <td class="bk">-</td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <th>3</th>
-                        <td>실내스크린골프점</td>
-                        <td class="bk">골프존파크 논현 토너먼트센터</td>
-                        <td>1,200</td>
+                        <td>-</td>
+                        <td class="bk">-</td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <th>4</th>
-                        <td>펜션.게스트하우스</td>
-                        <td class="bk">강원도 따뜻하고 행복한 HOUSE</td>
-                        <td>960</td>
+                        <td>-</td>
+                        <td class="bk">-</td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <th>5</th>
-                        <td>스포츠시설</td>
-                        <td class="bk">최고급 휘트니스 극동스포츠</td>
-                        <td>876</td>
+                        <td>-</td>
+                        <td class="bk">-</td>
+                        <td>0</td>
                     </tr>
                 </tbody>
             </table> 
@@ -175,7 +175,8 @@ function updateMenuHeader(menu, prefix, text) {
 }
 
 <%-- wijmo flexChart --%>
-var flexChartPoints = 7;
+// var flexChartPoints = 7;
+var flexChartPoints = 0;
 
 $(document).ready(function(){
   var chart1 = new wijmo.chart.FlexChart('#chart1');
