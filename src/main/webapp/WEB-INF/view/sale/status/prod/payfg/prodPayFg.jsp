@@ -13,34 +13,28 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="prodsale.fayfg"/></a>
     		<%-- 조회 --%>
-    		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodPayFgCtrlSrch')">
+    		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('prodPayFgCtrl',1)">
     			<s:message code="cmm.search"/>
     		</button>
 		</div>
     	<%-- 조회조건 --%>
     	<table class="searchTbl">
 			<colgroup>
-	        	<col class="w13"/>
-		        <col class="w37"/>
-		        <col class="w13"/>
-		        <col class="w37"/>
+	        	<col class="w15"/>
+		        <col class="w35"/>
+		        <col class="w15"/>
+		        <col class="w35"/>
       		</colgroup>
       		<tbody>
 	       	<%-- 조회일자 --%>
 			<tr>
 		    	<th><s:message code="cmm.search.date" /></th>
 	        	<td>
-		          	<div class="sb-select">
-		          		<span class="txtIn"><input id="srchPayFgStartDate" class="w120px"></span>
-		                <span class="rg">~</span>
-		                <span class="txtIn"><input id="srchPayFgEndDate" class="w120px"></span>
-		            	<span class="chk ml10" style="display: none;">
-							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-			              	<label for="chkDt">
-		                		<s:message code="cmm.all.day" />
-		              		</label>
-		            	</span>
-		          	</div>
+					<div class="sb-select">
+						<span class="txtIn"> <input id="startDatePayFg" name="startDate" class="w120px" /></span>
+						<span class="rg">~</span>
+						<span class="txtIn"> <input id="endDatePayFg" name="endDate" class="w120px" /></span>
+					</div>
 	        	</td>
 	        	<%-- 조회옵션 --%>
 				<th><s:message code="periodIostock.srchOption" /></th>
@@ -111,25 +105,23 @@
 	          sticky-headers="true"
 	          selection-mode="Row"
 	          items-source="data"
-	          frozen-columns="5"
+	          frozen-columns="3"
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassNm"/>"   binding="pathNm"        width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodNm"/>"		binding="prodNm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.barcdCd"/>" 		binding="barcdCd" 		width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleQty"/>" 	binding="totSaleQty" 	width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totDcAmt"/>" 	binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.netSaleAmt"/>" 	binding="totGaAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.vatAmt"/>" 		binding="totVatAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totTipAmt"/>" 	binding="totTipAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totEtcAmt"/>" 	binding="totEtcAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmtTot"/>" 	binding="payAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totPayAmt"/>" 	binding="totPayAmt"     width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <%-- 결제수단 컬럼 생성--%>
               <c:forEach var="payCol" items="${payColList}">
                 <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -163,25 +155,23 @@
 	          sticky-headers="true"
 	          selection-mode="Row"
 	          items-source="data"
-	          frozen-columns="5"
+	          frozen-columns="3"
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.netSaleAmt"/>" 	binding="totGaAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.vatAmt"/>" 		binding="totVatAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.totTipAmt"/>" 	binding="totTipAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.totEtcAmt"/>" 	binding="totEtcAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmtTot"/>" 	binding="payAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodrank.prodClassNm"/>"   binding="pathNm"        width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+		 	 <wj-flex-grid-column header="<s:message code="prodpayfg.prodNm"/>"		binding="prodNm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.barcdCd"/>" 		binding="barcdCd" 		width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+		 	 <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleQty"/>" 	binding="totSaleQty" 	width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		 	 <wj-flex-grid-column header="<s:message code="prodpayfg.totDcAmt"/>" 	binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.netSaleAmt"/>" 	binding="totGaAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		 	 <wj-flex-grid-column header="<s:message code="prodpayfg.vatAmt"/>" 		binding="totVatAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.totTipAmt"/>" 	binding="totTipAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.totEtcAmt"/>" 	binding="totEtcAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			 <wj-flex-grid-column header="<s:message code="prodpayfg.totPayAmt"/>" 	binding="totPayAmt"     width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <%-- 결제수단 컬럼 생성--%>
               <c:forEach var="payCol" items="${payColList}">
                 <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -198,6 +188,7 @@
 	    <%--//엑셀 리스트--%>
 	</div>
 </div>
+
 <script type="text/javascript">
 	var payColList = [];
 	<%--javascript에서 사용할 결제수단 json 데이터 생성--%>
@@ -211,7 +202,8 @@
 	var payCol      = '${payCol}';
 	var arrPayCol   = payCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/payFg/prodPayFg.js?ver=20190125.02" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/payFg/prodPayFg.js?ver=20200106.04" charset="utf-8"></script>
 
 <%-- 결제내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/payFg.jsp">

@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * @Class Name : TodayBillSaleDtlController.java
- * @Description : 매출관리 > 매출현황 > 분류별상품 상세현황
+ * @Class Name : ProdClassController.java
+ * @Description : 매출관리 > 매출현황 > 상품별 > 분류별상품 탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -52,7 +52,6 @@ public class ProdClassController {
         this.prodPayFgService = prodPayFgService;
     }
 
-
     /**
      * 분류별상품현황 - 페이지 이동
      * @param   request
@@ -80,18 +79,17 @@ public class ProdClassController {
         return "sale/status/prod/prodSale";
     }
 
-
     /**
-     * 상품별 매출 -분류별상품 리스트 조회 
+     * 분류별상품탭 - 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   prodRnakVO
+     * @param   prodClassVO
      * @return  String
      * @author  안동관
      * @since   2019. 02. 15.
      */
-    @RequestMapping(value = "/class/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/class/getProdClassList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdCalssList(HttpServletRequest request, HttpServletResponse response, Model model, ProdClassVO prodClassVO) {
 
@@ -103,17 +101,17 @@ public class ProdClassController {
     }
     
     /**
-     * 상품별 매출 -분류별상품 엑셀 조회 
+     * 분류별상품탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   prodRnakVO
+     * @param   prodClassVO
      * @return  String
      * @author  서재식
      * @since   2020. 04. 20.
      */
     
-    @RequestMapping(value = "/class/excelList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/class/getProdClassExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdCalssExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdClassVO prodClassVO) {
 

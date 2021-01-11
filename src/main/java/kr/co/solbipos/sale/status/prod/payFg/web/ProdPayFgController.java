@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * @Class Name : ProdPayFgController.java
- * @Description : 매출관리 > 매출현황 > 결제수단별 상세현황
+ * @Description : 매출관리 > 매출현황 > 상품별 > 결제수단별탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -48,9 +48,8 @@ public class ProdPayFgController {
         this.prodPayFgService = prodPayFgService;
     }
 
-
     /**
-     * 결제수단별현황 - 페이지 이동
+     * 결제수단별탭 - 페이지 이동
      * @param   request
      * @param   response
      * @param   model
@@ -60,8 +59,10 @@ public class ProdPayFgController {
      */
     @RequestMapping(value = "/PayFg/view.sb", method = RequestMethod.GET)
     public String prodPayFgView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
     	ProdPayFgVO prodPayFgVO = new ProdPayFgVO();
     	SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 결제수단 조회
         List<DefaultMap<String>> payColList = prodPayFgService.getPayColList(prodPayFgVO, sessionInfoVO);
 
@@ -76,9 +77,8 @@ public class ProdPayFgController {
         return "sale/status/prod/payFg/prodPayFg";
     }
 
-
     /**
-     * 상품별 매출 - 결제수단별 리스트 조회 
+     * 결제수단별탭 - 조회
      * @param   request
      * @param   response
      * @param   model
@@ -87,7 +87,7 @@ public class ProdPayFgController {
      * @author  김진
      * @since   2020. 01. 08.
      */
-    @RequestMapping(value = "/payFg/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/payFg/getProdPayFgList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdPayFgList(HttpServletRequest request, HttpServletResponse response, Model model, ProdPayFgVO prodPayFgVO) {
 
@@ -99,7 +99,7 @@ public class ProdPayFgController {
     }
     
     /**
-     * 상품별 매출 - 결제수단별 리스트 조회 
+     * 결제수단별탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
@@ -108,7 +108,7 @@ public class ProdPayFgController {
      * @author  서재식
      * @since   2020. 04. 21.
      */
-    @RequestMapping(value = "/payFg/excelList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/payFg/getProdPayFgExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdPayFgExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdPayFgVO prodPayFgVO) {
 

@@ -20,9 +20,12 @@ public interface RtnStatusDayMapper {
 	/** 반품현황 - 포스별 상세 리스트 조회 */
 	List<DefaultMap<String>> getRtnStatusPosDtlList(RtnStatusDayVO rtnStatusDayVO);
 
-	/** 반품현황 - 상품별 반품현황 리스트 조회 */
+	/** 반품현황 > 상품별 반품현황탭 - 조회 */
 	List<DefaultMap<String>> getRtnStatusProdList(RtnStatusDayVO rtnStatusDayVO);
-	
+
+	/** 반품현황 > 상품별 반품현황탭 - 엑셀 조회 */
+	List<DefaultMap<String>> getRtnStatusProdExcelList(RtnStatusDayVO rtnStatusDayVO);
+
 	/** 반품현황 - 일자별 전체 엑셀 리스트 조회 */
     List<DefaultMap<String>> getRtnstatusDayExcelList(RtnStatusDayVO rtnStatusDayVO);
     
@@ -31,7 +34,4 @@ public interface RtnStatusDayMapper {
 
 	/** 반품현황 - 포스별 전체 엑셀 상세 리스트 조회 */
 	List<DefaultMap<String>> getRtnStatusPosDtlExcelList(RtnStatusDayVO rtnStatusDayVO);
-	
-	/** 반품현황 - 상품별 반품현황 전체 엑셀 리스트 조회 */
-	List<DefaultMap<String>> getRtnStatusProdExcelList(RtnStatusDayVO rtnStatusDayVO);
 }

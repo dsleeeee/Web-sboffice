@@ -1,3 +1,14 @@
+/****************************************************************
+ *
+ * 파일명 : prodRank.js
+ * 설  명 : 상품별 >상품매출순위 탭 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2020.02.06     김진        1.0
+ * 2021.01.04     김설아      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -5,121 +16,91 @@ var app = agrid.getApp();
 
 /** 상품매출순위 상세현황 controller */
 app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('prodRankCtrl', $scope, $http, true));
 
-  // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
-  $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
-  $scope.orgnFg = gvOrgnFg;
-  $scope.isSearch = false;
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('prodRankCtrl', $scope, $http, true));
+
+	// 조회일자 세팅
+	var startDate = wcombo.genDateVal("#startDateProdRank", gvStartDate);
+	var endDate = wcombo.genDateVal("#endDateProdRank", gvEndDate);
+
+	// 콤보박스 데이터 Set
+	$scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+		// picker 사용시 호출 : 미사용시 호출안함
+		$scope._makePickColumns("prodRankCtrl");
+
+		// add the new GroupRow to the grid's 'columnFooters' panel
+		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+		// add a sigma to the header to show that this is a summary row
+		s.bottomLeftCells.setCellData(0, 0, '합계');
+	};
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("prodRankCtrl", function (event, data) {
+		$scope.searchProdRankList();
+		// 기능수행 종료 : 반드시 추가
+		event.preventDefault();
+	});
+
+	// 상품매출순위 리스트 조회
+	$scope.searchProdRankList = function () {
+		// 파라미터
+		var params       = {};
+		params.storeCd   = $("#prodRankSelectStoreCd").val();
+		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+
+		if(params.startDate > params.endDate){
+			$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+			return false;
+		}
+
+		// 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquiryMain("/sale/status/prod/rank/getProdRankList.sb", params, function() {});
+
+		// 상품매출순위별 바 차트
+		$scope._broadcast("prodRankChartCtrl", params);
+	};
   
-  // 콤보박스 데이터 Set
-  $scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
 
-  // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {
+	// 매장선택 모듈 팝업 사용시 정의
+	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+	$scope.prodRankSelectStoreShow = function () {
+		$scope._broadcast('prodRankSelectStoreCtrl');
+	};
 
-    // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("prodRankCtrl");
+	// 엑셀 다운로드
+	$scope.excelDownloadRank = function () {
+		var params       = {};
+		params.storeCd   = $("#prodRankSelectStoreCd").val();
+		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
 
-    // add the new GroupRow to the grid's 'columnFooters' panel
-    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
-    // add a sigma to the header to show that this is a summary row
-    s.bottomLeftCells.setCellData(0, 0, '합계');
+		$scope._broadcast('prodRankExcelCtrl', params);
+	};
 
-  };
+	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	$scope.isChkProdClassDisplay = function(){
+		var columns = $scope.flex.columns;
 
-  // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("prodRankCtrl", function (event, data) {
-    $scope.searchProdRankList(true);
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
+		for(var i=0; i<columns.length; i++){
+			if(columns[i].binding === 'pathNm'){
+				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			}
+		}
+	};
 
-  // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("prodRankCtrlSrch", function (event, data) {
-
-    $scope.searchProdRankList(false);
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
-
-  // 상품매출순위 리스트 조회
-  $scope.searchProdRankList = function (isPageChk) {
-
-    // 파라미터
-    var params       = {};
-    params.storeCd   = $("#prodRankSelectStoreCd").val();
-    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-	params.isPageChk = isPageChk;
-	params.orgnFg    = $scope.orgnFg;
-	
-	$scope.excelStartDate	= "";
-    $scope.excelEndDate		= "";
-    $scope.excelStoreCd		=	params.storeCd;
-	$scope.excelListScale	=	params.listScale;
-	$scope.excelOrgnFg		=	params.orgnFg;
-	$scope.isSearch			= true;
-
-    // 등록일자 '전체기간' 선택에 따른 params
-    if(!$scope.isChecked){
-      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-    }
-    
-    $scope.excelStartDate	=	params.startDate;
-    $scope.excelEndDate		=	params.endDate;
-    
-    if(params.startDate > params.endDate){
-   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-   	 	return false;
-    }
-	
-
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/status/prod/rank/list.sb", params, function() {});
-
-    // 상품매출순위별 바 차트
-    $scope._broadcast("prodRankChartCtrl", params);
-    
-  };
-  
-  //상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
-  $scope.isChkProdClassDisplay = function(){
-	  var columns = $scope.flex.columns;
-
-	  for(var i=0; i<columns.length; i++){
-		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
-			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
-		  }
-	  }
-  }
-  
-  // 전체기간 체크박스 클릭이벤트
-  $scope.isChkDt = function() {
-    $scope.srchStartDate.isReadOnly = $scope.isChecked;
-    $scope.srchEndDate.isReadOnly = $scope.isChecked;
-  };
-
-
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.prodRankSelectStoreShow = function () {
-    $scope._broadcast('prodRankSelectStoreCtrl');
-  };
-
-  // 엑셀 다운로드
-  $scope.excelDownloadRank = function () {
-	  var params       = {};
-    /* 엑셀다운로드 */
-    $scope._broadcast('prodRankExcelCtrl', params);    
-  };
 }]);
+
 
 //** 상품매출순위 차트 (상품별 바) controller *//
 app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+
 	angular.extend(this, new RootController('prodRankChartCtrl', $scope, $http, $timeout, true));
 
 	//메인그리드 조회후 상세그리드 조회.
@@ -133,52 +114,30 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
 	        easing: wijmo.chart.animation.Easing.Linear,
 	        duration: 400
 	    });
-
-	}
+	};
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodRankChartCtrl", function (event, data) {
-
-
-		var isPageChk = true;
-
 		if(data != undefined) {
-
+            $scope.storeCd = data.storeCd;
 			$scope.startDate = data.startDate;
 			$scope.endDate = data.endDate;
-			$scope.storeCd = data.storeCd;
-			$scope.posNo = data.posNo;
-			$scope.orgnFg = data.orgnFg;
-			isPageChk = data.isPageChk;
-
 		}
-
-	    $scope.prodRankBarChartList(isPageChk);
+	    $scope.prodRankBarChartList(data);
 	    // 기능수행 종료 : 반드시 추가
 	    //event.preventDefault();
 	});
 
 	// 코너별매출일자별 리스트 조회
-	$scope.prodRankBarChartList = function (isPageChk) {
-
-
+	$scope.prodRankBarChartList = function (data) {
 		// 파라미터
 		var params          = {};
-		params.listScale    = 10;
-		params.posNo        = $scope.posNo;
-		params.storeCd      = $scope.storeCd;
-		params.startDate    = $scope.startDate;
-		params.endDate      = $scope.endDate;
-		params.orgnFg		  = $scope.orgnFg;
-
-		if (isPageChk != null && isPageChk != undefined) {
-			params.isPageChk    = isPageChk;
-		} else {
-			params.isPageChk    = true;
-		}
+        params.storeCd = data.storeCd;
+        params.startDate = data.startDate;
+        params.endDate = data.endDate;
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/prod/rank/chartList.sb", params);
+		$scope._inquiryMain("/sale/status/prod/rank/getProdRankChartList.sb", params);
 	};
 
 	$scope.rendered = function(s, e) {
@@ -240,81 +199,71 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
 	}
 }]);
 
+
 //** 상품매출순위 엑셀 다운로드 controller *//
 app.controller('prodRankExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-	  // 상위 객체 상속 : T/F 는 picker
-	  angular.extend(this, new RootController('prodRankExcelCtrl', $scope, $http, true));
 
-	  // grid 초기화 : 생성되기전 초기화되면서 생성된다
-	  $scope.initGrid = function (s, e) {
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('prodRankExcelCtrl', $scope, $http, true));
 
-	    // add the new GroupRow to the grid's 'columnFooters' panel
-	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
-	    // add a sigma to the header to show that this is a summary row
-	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+		// add the new GroupRow to the grid's 'columnFooters' panel
+		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+		// add a sigma to the header to show that this is a summary row
+		s.bottomLeftCells.setCellData(0, 0, '합계');
+	};
 
-	  };
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("prodRankExcelCtrl", function (event, data) {
+		$scope.searchProdRankExcelList(data);
+		// 기능수행 종료 : 반드시 추가
+		event.preventDefault();
+	});
 
-	  // 다른 컨트롤러의 broadcast 받기
-	  $scope.$on("prodRankExcelCtrl", function (event, data) {
-	    $scope.searchProdRankExcelList(true);
-	  
-	  });
-	  
-	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
-	  $scope.isChkProdClassDisplay = function(){
-		  var columns = $scope.excelFlexSec.columns;
+	// 상품매출순위 리스트 조회
+	$scope.searchProdRankExcelList = function (data) {
+		// 파라미터
+		var params       = {};
+		params.storeCd = data.storeCd;
+		params.startDate = data.startDate;
+		params.endDate = data.endDate;
 
-		  for(var i=0; i<columns.length; i++){
-			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
-				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
-			  }
-		  }
-	  }
-	  
-	  // 상품매출순위 리스트 조회
-	  $scope.searchProdRankExcelList = function (isPageChk) {
-
-	    // 파라미터
-	    var params       = {};
-	    
-	    params.startDate	=	$scope.excelStartDate;
-	    params.endDate		=	$scope.excelEndDate;	
-	    params.storeCd 	=	$scope.excelStoreCd;
-		params.listScale  =	 $scope.excelListScale;
-		params.isPageChk = isPageChk;
-		params.orgnFg    = $scope.excelOrgnFg;
-				
-		
 		$scope.isChkProdClassDisplay();
-		
-	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquiryMain("/sale/status/prod/rank/excelList.sb", params, function() {
-	    	if ($scope.excelFlexSec.rows.length <= 0) {
-	    	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-	    	      return false;
-	    	    }
 
-	    	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-	    	    $timeout(function () {
-	    	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlexSec, {
-	    	        includeColumnHeaders: true,
-	    	        includeCellStyles   : true,
-	    	        includeColumns      : function (column) {
-	    	          return column.visible;
-	    	        }
-	    	      }, '매출현황_상품별_상품매출순위_'+getToday()+'.xlsx', function () {
-	    	        $timeout(function () {
-	    	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-	    	        }, 10);
-	    	      });
-	    	    }, 10);
-	    });
+		// 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquiryMain("/sale/status/prod/rank/getProdRankExcelList.sb", params, function() {
+			if ($scope.excelFlexSec.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+			}
 
+			$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			$timeout(function () {
+				wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlexSec, {
+					includeColumnHeaders: true,
+					includeCellStyles   : true,
+					includeColumns      : function (column) {
+						return column.visible;
+					}
+				}, '매출현황_상품별_상품매출순위_'+getToday()+'.xlsx', function () {
+					$timeout(function () {
+						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+					}, 10);
+				});
+			}, 10);
+		});
+	};
 
-	  };
-	  
-	  
-		
-	  	
-	}]);
+	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	$scope.isChkProdClassDisplay = function(){
+		var columns = $scope.excelFlexSec.columns;
+
+		for(var i=0; i<columns.length; i++){
+			if(columns[i].binding === 'pathNm'){
+				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			}
+		}
+	};
+
+}]);

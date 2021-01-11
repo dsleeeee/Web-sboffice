@@ -28,14 +28,15 @@
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/rtnStatus/rtnStatusSale.js?" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
-<%-- 일자별 --%>
+<%-- 반품현황 --%>
 <c:import url="/WEB-INF/view/sale/status/rtnStatus/rtnStatus.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 상품별 --%>
+<%-- 상품별 반품현황 --%>
 <c:import url="/WEB-INF/view/sale/status/rtnStatus/prod.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+<%-- //탭페이지 레이어 --%>

@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * @Class Name : ProdHourController.java
- * @Description : 매출관리 > 매출현황 > 시간대별별매출상세현황
+ * @Description : 매출관리 > 매출현황 > 상품별 > 시간대별 탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -48,7 +48,6 @@ public class ProdHourController {
         this.prodHourService = prodHourService;
     }
 
-
     /**
      * 시간대별현황 - 페이지 이동
      * @param   request
@@ -63,9 +62,8 @@ public class ProdHourController {
         return "sale/status/prod/hour/pordHour";
     }
 
-
     /**
-     * 상품별 매출 - 시간대별 리스트 조회 
+     * 시간대별탭 - 조회
      * @param   request
      * @param   response
      * @param   model
@@ -74,7 +72,7 @@ public class ProdHourController {
      * @author  김진
      * @since   2020. 01. 08.
      */
-    @RequestMapping(value = "/hour/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/hour/getProdHourList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdHourList(HttpServletRequest request, HttpServletResponse response, Model model, ProdHourVO prodHourVO) {
 
@@ -86,7 +84,7 @@ public class ProdHourController {
     }
     
     /**
-     * 상품별 매출 - 시간대별 엑셀 다운로드 조회 
+     * 시간대별탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
@@ -95,7 +93,7 @@ public class ProdHourController {
      * @author  서재식
      * @since   2020. 04. 23.
      */
-    @RequestMapping(value = "/hour/excelList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/hour/getProdHourExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdHourExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdHourVO prodHourVO) {
 

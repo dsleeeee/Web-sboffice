@@ -4,7 +4,6 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.status.pos.dayOfWeek.service.PosDayOfWeekVO;
 import kr.co.solbipos.sale.status.prod.rank.service.ProdRankService;
 import kr.co.solbipos.sale.status.prod.rank.service.ProdRankVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,11 @@ public class ProdRankServiceImpl implements ProdRankService {
         this.messageService = messageService;
     }
 
-
-    /** 상품별 매출 - 상품매출순위 리스트 조회 */
+    /** 상품매출순위탭 - 조회 */
     @Override
     public List<DefaultMap<String>> getProdRankList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO) {
 
+        prodRankVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(prodRankVO.getStoreCd()).equals("")) {
@@ -37,10 +36,11 @@ public class ProdRankServiceImpl implements ProdRankService {
         return prodRankMapper.getProdRankList(prodRankVO);
     }
 
-    /** 상품별 매출 - 차트 조회 */
+    /** 상품매출순위탭 - 차트 조회 */
     @Override
     public List<DefaultMap<String>> getProdRankChartList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO) {
 
+        prodRankVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
     	if (!StringUtil.getOrBlank(prodRankVO.getStoreCd()).equals("")) {
@@ -49,11 +49,12 @@ public class ProdRankServiceImpl implements ProdRankService {
 
         return prodRankMapper.getProdRankChartList(prodRankVO);
     }
-    
-    /** 상품별 매출 - 엑셀다운로드 조회 */
+
+    /** 상품매출순위탭 - 엑셀 조회 */
     @Override
     public List<DefaultMap<String>> getProdRankExcelList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO) {
 
+        prodRankVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
     	if (!StringUtil.getOrBlank(prodRankVO.getStoreCd()).equals("")) {

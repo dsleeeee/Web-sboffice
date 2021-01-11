@@ -16,14 +16,14 @@ public class ProdPayFgVO extends PageVO {
     private String prodCd;
     /** 상품명 */
     private String prodNm;
+
     /** 결제수단컬럼 */
     private String payCol;
     /** 결제수단 array */
     private String arrPayCol[];
-    /** 결제수단별, 동적 컬럼 생성을 위한 쿼리 문자열*/
-    private String sQuery1;
-    private String sQuery2;
-    private String sQuery3;
+    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+    private String pivotPayCol;
+
     /** 본사,매장 구분 */
     private String orgnFg;
     
@@ -110,30 +110,10 @@ public class ProdPayFgVO extends PageVO {
     public void setArrPayCol(String[] arrPayCol) {
         this.arrPayCol = arrPayCol;
     }
-    
-    public String getsQuery1() {
-        return sQuery1;
-    }
 
-    public void setsQuery1(String sQuery1) {
-        this.sQuery1 = sQuery1;
-    }
+    public String getPivotPayCol() { return pivotPayCol; }
 
-    public String getsQuery2() {
-        return sQuery2;
-    }
-
-    public void setsQuery2(String sQuery2) {
-        this.sQuery2 = sQuery2;
-    }
-    		
-    public String getsQuery3() {
-		return sQuery3;
-	}
-
-	public void setsQuery3(String sQuery3) {
-		this.sQuery3 = sQuery3;
-	}
+    public void setPivotPayCol(String pivotPayCol) { this.pivotPayCol = pivotPayCol; }
 
 	/**
      * @return the arrStoreCd

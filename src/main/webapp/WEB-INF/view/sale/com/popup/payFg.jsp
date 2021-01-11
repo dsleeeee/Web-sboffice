@@ -19,7 +19,7 @@
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
 	    <div class="w100 mt10">
-	      <div class="wj-gridWrap" style="height: 340px;">
+	      <div class="wj-gridWrap" style="height: 340px; overflow-y: hidden; overflow-x: hidden;" >
 	        <wj-flex-grid
 	          autoGenerateColumns="false"
 	          control="flex"
@@ -42,9 +42,11 @@
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.saleFg"/>" 		binding="saleFg" 		width="150" align="center" visible="false"></wj-flex-grid-column>
           	  <wj-flex-grid-column header="<s:message code="prodpayfg.posNm"/>" 		binding="posNo" 		width="140" align="center"></wj-flex-grid-column>
           	  <wj-flex-grid-column header="<s:message code="prodpayfg.billNo"/>" 		binding="billNo" 		width="140" align="center"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.billDt"/>" 		binding="billDt" 		width="*" align="center""></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.billDt"/>" 		binding="billDt" 		width="*" align="center"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmt"/>" 		binding="payAmt" 		width="150" align="right" aggregate="Sum"></wj-flex-grid-column>
-	      </div>
+			</wj-flex-grid>
+
+		  </div>
 	    </div>
 	    <%--//위즈모 테이블--%>
       </div>

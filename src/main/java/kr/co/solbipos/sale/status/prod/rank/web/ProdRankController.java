@@ -49,7 +49,6 @@ public class ProdRankController {
         this.prodRankService = prodRankService;
     }
 
-
     /**
      * 상품매출순위현황 - 페이지 이동
      * @param   request
@@ -64,9 +63,8 @@ public class ProdRankController {
         return "sale/status/prod/rank/pordRank";
     }
 
-
     /**
-     * 상품별 매출 - 상품매출순위 리스트 조회
+     * 상품매출순위탭 - 조회
      * @param   request
      * @param   response
      * @param   model
@@ -75,7 +73,7 @@ public class ProdRankController {
      * @author  김진
      * @since   2020. 01. 08.
      */
-    @RequestMapping(value = "/rank/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/rank/getProdRankList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdRankList(HttpServletRequest request, HttpServletResponse response, Model model, ProdRankVO prodRankVO) {
 
@@ -87,7 +85,7 @@ public class ProdRankController {
     }
 
     /**
-     * 상품별매출 - 상품매출순위 차트 조회
+     * 상품매출순위탭 - 차트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -96,7 +94,7 @@ public class ProdRankController {
      * @author  서재식
      * @since   2020. 04. 14.
      */
-    @RequestMapping(value = "/rank/chartList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/rank/getProdRankChartList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdRankChartList(HttpServletRequest request, HttpServletResponse response,
         Model model, ProdRankVO prodRankVO) {
@@ -104,11 +102,12 @@ public class ProdRankController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = prodRankService.getProdRankChartList(prodRankVO, sessionInfoVO);
+
         return ReturnUtil.returnListJson(Status.OK, list, prodRankVO);
     }
     
     /**
-     * 상품별매출 - 상품매출순위 엑셀다운로드 조회
+     * 상품매출순위탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
@@ -117,7 +116,7 @@ public class ProdRankController {
      * @author  서재식
      * @since   2020. 04. 21.
      */
-    @RequestMapping(value = "/rank/excelList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/rank/getProdRankExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdRankExcelList(HttpServletRequest request, HttpServletResponse response,
         Model model, ProdRankVO prodRankVO) {
@@ -125,6 +124,7 @@ public class ProdRankController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = prodRankService.getProdRankExcelList(prodRankVO, sessionInfoVO);
+
         return ReturnUtil.returnListJson(Status.OK, list, prodRankVO);
     }
     

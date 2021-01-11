@@ -130,16 +130,16 @@ public class RtnStatusDayController {
     }
     
     /**
-     * 코너별매출 일자별 - 리스트 조회
+     * 반품현황 > 상품별 반품현황탭 - 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   rtnStatusDayVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
      */
-    @RequestMapping(value = "/prod/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod/getRtnStatusProdList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getRtnstatusProdList(HttpServletRequest request, HttpServletResponse response,
         Model model, RtnStatusDayVO rtnStatusDayVO) {
@@ -147,9 +147,32 @@ public class RtnStatusDayController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         
         List<DefaultMap<String>> list = rtnStatusDayService.getRtnStatusProdList(rtnStatusDayVO, sessionInfoVO);
+
         return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
     }
-    
+
+    /**
+     * 반품현황 > 상품별 반품현황탭 - 엑셀 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   rtnStatusDayVO
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/prod/getRtnStatusProdExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRtnstatusProdExcelList(HttpServletRequest request, HttpServletResponse response,
+                                            Model model, RtnStatusDayVO rtnStatusDayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = rtnStatusDayService.getRtnStatusProdExcelList(rtnStatusDayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
+    }
+
     /**
      * 코너별매출 일자별 - 엑셀 전체 리스트 조회
      * @param   request
@@ -212,25 +235,5 @@ public class RtnStatusDayController {
         List<DefaultMap<String>> list = rtnStatusDayService.getRtnStatusPosDtlExcelList(rtnStatusDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
     }
-    
-    /**
-     * 상품별 반품현황 - 엑셀 전체 리스트 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   cornerDaylVO
-     * @return  String
-     * @author  박정은
-     * @since   2020. 04. 22.
-     */
-    @RequestMapping(value = "/prod/excelList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getRtnstatusProdExcelList(HttpServletRequest request, HttpServletResponse response,
-        Model model, RtnStatusDayVO rtnStatusDayVO) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
-        List<DefaultMap<String>> list = rtnStatusDayService.getRtnStatusProdExcelList(rtnStatusDayVO, sessionInfoVO);
-        return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
-    }
 }

@@ -43,8 +43,9 @@ public class RtnStatusDayVO extends PageVO {
     private String saleYn;
     /** 접속권한(본사, 매장) */
     private String orgnFg;
-    
-    
+
+	/** 전체기간체크 */
+	private boolean chkDt;
     
     public String getStoreCd() {
 		return storeCd;
@@ -163,4 +164,8 @@ public class RtnStatusDayVO extends PageVO {
 	public void setOrgnFg(String orgnFg) {
 		this.orgnFg = orgnFg;
 	}
+
+	public boolean getChkDt() { return chkDt; }
+
+	public void setChkDt(boolean chkDt) { this.chkDt = chkDt; }
 }

@@ -23,7 +23,7 @@ public class ProdClassServiceImpl implements ProdClassService {
     }
 
 
-    /** 상품별 매출 - 분류별 상품 리스트 조회 */
+    /** 분류별상품탭 - 조회 */
     @Override
     public List<DefaultMap<String>> getProdClassList(ProdClassVO prodClassVO, SessionInfoVO sessionInfoVO) {
   
@@ -36,7 +36,7 @@ public class ProdClassServiceImpl implements ProdClassService {
         return prodClassMapper.getProdClassList(prodClassVO);
     }
     
-    /** 상품별 매출 - 분류별 상품 엑셀 조회 */
+    /** 분류별상품탭 - 엑셀 조회 */
     @Override
     public List<DefaultMap<String>> getProdClassExcelList(ProdClassVO prodClassVO, SessionInfoVO sessionInfoVO) {
   

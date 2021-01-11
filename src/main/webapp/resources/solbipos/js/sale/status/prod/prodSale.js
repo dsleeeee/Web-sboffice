@@ -1,3 +1,14 @@
+/****************************************************************
+ *
+ * 파일명 : prodSale.js
+ * 설  명 : 상품별 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2020.02.06     김진        1.0
+ * 2021.01.04     김설아      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -34,9 +45,7 @@ app.controller('prodSaleCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodClassCtrl");
         scope.flex.refresh();
-        
     };
-
 
     // 상품매출순위 탭 보이기
     $scope.prodRankShow = function () {
@@ -57,9 +66,7 @@ app.controller('prodSaleCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodRankCtrl");
         scope.flex.refresh();       
-
     };
-
 
     // 결제수단별 탭 보이기
     $scope.prodPayFgShow = function () {
@@ -99,7 +106,6 @@ app.controller('prodSaleCtrl', ['$scope', function ($scope) {
         $("#prodDayView").hide();
         $("#prodPosView").hide();
         
-
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodHourCtrl");
         scope.flex.refresh();

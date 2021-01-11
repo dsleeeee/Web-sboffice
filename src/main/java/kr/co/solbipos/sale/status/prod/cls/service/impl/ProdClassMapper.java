@@ -10,9 +10,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ProdClassMapper {
-    /** 상품별 매출 - 분류별 리스트 조회 */
+    /** 분류별상품탭 - 조회 */
     List<DefaultMap<String>> getProdClassList(ProdClassVO prodClassVO);
     
-    /** 상품별 매출 - 분류별 엑셀 조회 */
+    /** 분류별상품탭 - 엑셀 조회 */
     List<DefaultMap<String>> getProdClassExcelList(ProdClassVO prodClassVO);
 }

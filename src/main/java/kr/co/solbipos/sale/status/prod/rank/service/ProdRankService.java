@@ -6,12 +6,13 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import java.util.List;
 
 public interface ProdRankService {
-	/** 상품별 매출 - 상품매출순위 리스트 조회 */
+
+    /** 상품매출순위탭 - 조회 */
     List<DefaultMap<String>> getProdRankList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO);
 
-    /** 상품별 매출 - 차트 조회 */
+    /** 상품매출순위탭 - 차트 조회 */
     List<DefaultMap<String>> getProdRankChartList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO);
-    
-    /** 상품별 매출 - 엑셀다운로드 조회 */
+
+    /** 상품매출순위탭 - 엑셀 조회 */
     List<DefaultMap<String>> getProdRankExcelList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO);
 }
