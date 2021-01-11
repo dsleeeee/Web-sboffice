@@ -29,7 +29,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : HqEmpController.java
- * @Description : 기초관리 > 매장관리 > 본사사원정보관리
+ * @Description : 기초관리 > 사원관리 > 사원정보관리(이전 : 기초관리 > 매장관리 > 본사사원정보관리)
  * @Modification Information
  * @
  * @  수정일      수정자      수정내용

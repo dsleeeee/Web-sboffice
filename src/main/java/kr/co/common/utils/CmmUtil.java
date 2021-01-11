@@ -109,7 +109,7 @@ public class CmmUtil {
         // ds 와 s로 시작하는 id는 본사 관리자 또는 매장 관리자의 id가 될 수 있어서
         // 해당 아이디로는 등록이 불가능하도록 함.
 
-        if( len > 12 || len < 6 ) {
+        if( len > 12 || len < 8 ) {
             return EmpResult.USER_ID_LENGHTH_REGEXP;
         } else if( flag == true ) {
             return EmpResult.USER_ID_CANNOT_USE_HANGEUL;

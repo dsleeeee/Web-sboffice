@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @Class Name : HqEmpService.java
- * @Description : 기초관리 > 매장관리 > 본사사원정보관리
+ * @Description : 기초관리 > 사원관리 > 사원정보관리(이전 : 기초관리 > 매장관리 > 본사사원정보관리)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
