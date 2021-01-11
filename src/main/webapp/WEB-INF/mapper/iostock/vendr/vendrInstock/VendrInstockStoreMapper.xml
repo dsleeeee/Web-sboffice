@@ -92,7 +92,7 @@
         ,       DECODE(tpsvi.PROC_FG, 0, NULL, tmeconfm.EMP_NM) AS CONFM_NM
         ,       tpsvi.IN_TOT_QTY * tpsvi.SLIP_FG AS IN_TOT_QTY
         ,       tpsvi.IN_TOT * tpsvi.SLIP_FG AS IN_TOT
-        ,       (SELECT MAX(STORAGE_CD) FROM TB_PO_STORE_VENDR_INSTOCK_PROD WHERE STORE_CD = #{storeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
+        ,       (SELECT CASE WHEN MAX(STORAGE_CD) IS NULL THEN '000' ELSE MAX(STORAGE_CD) END FROM TB_PO_STORE_VENDR_INSTOCK_PROD WHERE STORE_CD = #{storeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
         FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
         ,       TB_MS_VENDOR tmv
         ,       TB_MS_EMPLOYEE tmereg
@@ -224,12 +224,12 @@
 				        ,       tmp.PO_UNIT_FG
 				        ,       tmp.PO_UNIT_QTY
 				        ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
-				        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, ABS(tpsvid.IN_UNIT_QTY)*tpsvid.SLIP_FG)) AS PREV_IN_UNIT_QTY
-				        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY,  0, NULL, ABS(tpsvid.IN_ETC_QTY)*tpsvid.SLIP_FG )) AS PREV_IN_ETC_QTY
-				        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY,  0, NULL, ABS(tpsvid.IN_TOT_QTY)*tpsvid.SLIP_FG )) AS PREV_IN_TOT_QTY
-				        ,       TO_NUMBER(DECODE(tpsvid.IN_AMT    ,  0, NULL, ABS(tpsvid.IN_AMT)*tpsvid.SLIP_FG     )) AS IN_AMT
-				        ,       TO_NUMBER(DECODE(tpsvid.IN_VAT    ,  0, NULL, ABS(tpsvid.IN_VAT)*tpsvid.SLIP_FG     )) AS IN_VAT
-				        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT    ,  0, NULL, ABS(tpsvid.IN_TOT)*tpsvid.SLIP_FG     )) AS IN_TOT
+				        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, tpsvid.IN_UNIT_QTY*tpsvid.SLIP_FG)) AS PREV_IN_UNIT_QTY
+				        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY,  0, NULL, tpsvid.IN_ETC_QTY*tpsvid.SLIP_FG )) AS PREV_IN_ETC_QTY
+				        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY,  0, NULL, tpsvid.IN_TOT_QTY*tpsvid.SLIP_FG )) AS PREV_IN_TOT_QTY
+				        ,       TO_NUMBER(DECODE(tpsvid.IN_AMT    ,  0, NULL, tpsvid.IN_AMT*tpsvid.SLIP_FG     )) AS IN_AMT
+				        ,       TO_NUMBER(DECODE(tpsvid.IN_VAT    ,  0, NULL, tpsvid.IN_VAT*tpsvid.SLIP_FG     )) AS IN_VAT
+				        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT    ,  0, NULL, tpsvid.IN_TOT*tpsvid.SLIP_FG     )) AS IN_TOT
 				        ]]>
 				        <include refid="CmmSQL.PagingTemplateCount"/>
 				        <![CDATA[
@@ -746,6 +746,19 @@
         AND     SLIP_NO   = #{orderSlipNo}
     </update>
 
+    <!-- 거래처 입고/반출등록 - 입고/반출정보 현재 진행상태 값 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_VENDR_INSTOCK
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출정보의 현재 진행상태 값을 조회한다.
+    -->
+    <select id="getVendrInstockProcFg"  parameterType="vendrInstockVO" resultType="String">
+        /* VendrInstockStoreMapper.getVendrInstockProcFg */
+        SELECT NVL(PROC_FG, -1) CHECK_PROC_FG
+          FROM TB_PO_STORE_VENDR_INSTOCK
+         WHERE STORE_CD = #{storeCd}
+           AND SLIP_NO = #{slipNo}
+    </select>
 
     <!-- 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경 -->
     <!--

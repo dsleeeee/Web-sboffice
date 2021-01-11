@@ -132,7 +132,18 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
     /** 수량이 없는 경우 계산하지 않음.
         null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 */	
     if (nvl(item.inUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.inEtcQty, null) === null)) return false;
-    
+
+    //
+    if(item.poUnitQty === 1){ // 주문단위가 낱개일 때
+     if(nvl(item.inUnitQty, null) === null || nvl(item.costUprc, null) === null){ // 주문단위수량이나 발주원가가 없으면 계산 X
+        return false;
+     }
+    }else{ // 주문단위가 박스일 때
+      if((nvl(item.inUnitQty, null) === null && nvl(item.inEtcQty, null) === null) || nvl(item.costUprc, null) === null){ // 주문단위수량이나 나머지수량 둘다 없으면서 발주원가도 없으면 계산 X)
+        return false;
+      }
+    }
+
     var costUprc     = parseFloat(item.costUprc);
     var poUnitQty    = parseInt(item.poUnitQty);
     var vat01        = parseInt(item.vatFg01);
@@ -201,8 +212,8 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
       
-      // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
-      if (item.inTotQty === 0) {
+      // 총 주문수량 0인 경우 저장하지 않는다.
+      if (item.inTotQty === null || item.inTotQty === 0) {
         continue;
       }
       if (item.inUnitQty !== null && (0 > parseInt(item.inUnitQty))) {
@@ -221,9 +232,33 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
         $scope._popMsg(messages["vendrInstock.ord.not.overInTot"]); // 주문금액이 너무 큽니다.
         return false;
       }
-      
-      
-      
+
+      if(item.poUnitQty === 1){ // 주문단위가 낱개일 때
+
+          if(item.costUprc !== null && (parseInt(item.costUprc) >= 0)){
+              if(item.inUnitQty === null || 1 > parseInt(item.inUnitQty)){
+                  $scope._popMsg(messages['vendrInstock.reg.above.zero.inUnitQty']); // 주문단위수량은 0이상 입력합니다.
+                  return false;
+              }
+          }else{
+              $scope._popMsg(messages['vendrInstock.reg.inCostUprc']); // 발주원가를 입력합니다.
+              return false;
+          }
+
+      }else{ // 주문단위가 박스일 때
+
+          if(item.costUprc !== null && (parseInt(item.costUprc) >= 0)){
+              if((item.inUnitQty === null || 1 > parseInt(item.inUnitQty)) && (item.inEtcQty === null || 1 > parseInt(item.inEtcQty))){
+                  $scope._popMsg(messages['vendrInstock.reg.above.zero.inUnitQty']); // 주문단위수량은 0이상 입력합니다.
+                  return false;
+              }
+          }else{
+              $scope._popMsg(messages['vendrInstock.reg.inCostUprc']); // 발주원가를 입력합니다.
+              return false;
+          }
+      }
+
+
       var orderTot = (parseInt(item.orderUnitQty)*item.poUnitQty+(item.orderEtcQty === null ? null : item.orderEtcQty) );
       if(orderTot < item.inTotQty ) {
     	  $scope._popMsg(messages["vendrInstock.ord.not.orderTotQty"]); 
@@ -236,6 +271,7 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
       item.slipFg    = $scope.slipFg;
       item.storageCd = "999";			//001 -> 999      
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.prodRegFg = "3"; // 발주내역으로등록에서 상품등록
 //      item.outStorageCd	= $scope.save.dtl.outStorageCd;
       
       params.push(item);

@@ -129,9 +129,14 @@
             <%--// 페이지 스케일  --%>
 
             <%-- 저장 --%>
-            <button class="btn_skyblue fr" id="btnSave" ng-click="save()">
+            <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
+
+            <%-- 매장환경 복사 --%>
+            <%--<button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyDlvrProdNm()">
+                <s:message code="dlvrProd.nmCopy" />
+            </button>--%>
 
         </div>
         <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
@@ -174,4 +179,8 @@
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 상품명칭복사 --%>
+<c:import url="/WEB-INF/view/base/prod/dlvrProd/copyDlvrProdNm.jsp">
 </c:import>

@@ -163,28 +163,50 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 
         String dtlProdExist = "N";
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            dtlProdExist = vendrInstockHqMapper.getDtlProdExist(vendrInstockVO);
-            if(dtlProdExist.equals("Y")) {
-                throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.prodExist"));
+
+             /* 전표의 기존 진행상태를 조회하여, 정상로직인 경우만 전표삭제
+                chkProcFg = 0 (등록) 인 경우만 전표삭제 가능 */
+            String chkProcFg = vendrInstockHqMapper.getVendrInstockProcFg(vendrInstockVO);
+
+            if(chkProcFg.equals("0")) {
+
+                dtlProdExist = vendrInstockHqMapper.getDtlProdExist(vendrInstockVO);
+                if (dtlProdExist.equals("Y")) {
+                    throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.prodExist"));
+                }
+
+                result = vendrInstockHqMapper.deleteVendrInstockHd(vendrInstockVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                result = vendrInstockHqMapper.deleteVendrInstockProdInfo(vendrInstockVO);
+                //if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            }else{
+                throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.change.procFg"));
             }
-
-            result = vendrInstockHqMapper.deleteVendrInstockHd(vendrInstockVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-            result = vendrInstockHqMapper.deleteVendrInstockProdInfo(vendrInstockVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            dtlProdExist = vendrInstockStoreMapper.getDtlProdExist(vendrInstockVO);
-            if(dtlProdExist.equals("Y")) {
-                throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.prodExist"));
+
+            /* 전표의 기존 진행상태를 조회하여, 정상로직인 경우만 전표삭제
+                chkProcFg = 0 (등록) 인 경우만 전표삭제 가능 */
+            String chkProcFg = vendrInstockStoreMapper.getVendrInstockProcFg(vendrInstockVO);
+
+            if(chkProcFg.equals("0")) {
+
+                dtlProdExist = vendrInstockStoreMapper.getDtlProdExist(vendrInstockVO);
+                if (dtlProdExist.equals("Y")) {
+                    throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.prodExist"));
+                }
+
+                result = vendrInstockStoreMapper.deleteVendrInstockHd(vendrInstockVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                result = vendrInstockStoreMapper.deleteVendrInstockProdInfo(vendrInstockVO);
+                //if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            }else{
+                throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.change.procFg"));
             }
-
-            result = vendrInstockStoreMapper.deleteVendrInstockHd(vendrInstockVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-            result = vendrInstockStoreMapper.deleteVendrInstockProdInfo(vendrInstockVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         return result;
@@ -201,134 +223,157 @@ public class VendrInstockServiceImpl implements VendrInstockService {
         vendrInstockVO = setSessionValue(vendrInstockVO, sessionInfoVO, null);
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            result = vendrInstockHqMapper.updateProcFg(vendrInstockVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // 발주번호가 있는 경우
-            if(!StringUtil.getOrBlank(vendrInstockVO.getOrderSlipNo()).equals("")) {
-                // 발주 DT 내역의 입고관련 정보 초기화
-                result = vendrInstockHqMapper.updateDefaultVendrOrderDtl(vendrInstockVO);
+            /* 전표의 기존 진행상태를 조회하여, 정상로직인 경우만 변경 처리
+                procFg = 1 && chkProcFg = 0 인 경우만 확정 가능(등록 -> 확정)
+                procFg = 0 && chkProcFg = 1 인 경우만 확정취소 가능(확정 -> 등록(확정취소)) */
+            String chkProcFg = vendrInstockHqMapper.getVendrInstockProcFg(vendrInstockVO);
 
-                // 발주 DT 내역의 입고관련 정보 갱신
-                result = vendrInstockHqMapper.updateVendrInstockToOrderDtl(vendrInstockVO);
+            if((procFg.equals("1") && chkProcFg.equals("0")) || (procFg.equals("0") && chkProcFg.equals("1"))) {
 
-                // 입고DT에 있으면서 발주 DT 내역에 없는 내역은 신규로 생성
-                result = vendrInstockHqMapper.insertVendrInstockToOrderDtl(vendrInstockVO);
+                result = vendrInstockHqMapper.updateProcFg(vendrInstockVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                // 발주 DT 내역의 집계정보 HD에 수정
-                result = vendrInstockHqMapper.updateVendrOrderDtlSumHd(vendrInstockVO);
+                // 발주번호가 있는 경우
+                if (!StringUtil.getOrBlank(vendrInstockVO.getOrderSlipNo()).equals("")) {
+                    // 발주 DT 내역의 입고관련 정보 초기화
+                    result = vendrInstockHqMapper.updateDefaultVendrOrderDtl(vendrInstockVO);
 
-                // 발주 테이블의 진행구분 입고중으로 수정
-                vendrInstockVO.setProcFg("4");
-                result = vendrInstockHqMapper.updateVendrOrderProcFg(vendrInstockVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            
-            String getOutStorageCd = "";
-                        
-            // 확정
-            if(procFg.equals("1")) {
-            	vendrInstockVO.setConfmYn("1");
-                // 거래처정산 입력
-                result = vendrInstockHqMapper.insertVendrExact(vendrInstockVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                
-                result = vendrInstockHqMapper.deleteVendrInstockProdConfm(vendrInstockVO);
-                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
-                // TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y'
-//                result = vendrInstockHqMapper.saveVendrInstockProd(vendrInstockVO);
-                result = vendrInstockHqMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    // 발주 DT 내역의 입고관련 정보 갱신
+                    result = vendrInstockHqMapper.updateVendrInstockToOrderDtl(vendrInstockVO);
 
-                // 입고확정일 경우에만 입력한 원가단가 > 마스터의 최종판매단가에 update
-                if(vendrInstockVO.getSlipFg() == 1 && procFg.equals("1")){
-                    result = vendrInstockHqMapper.updateLastCostUprc(vendrInstockVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    // 입고DT에 있으면서 발주 DT 내역에 없는 내역은 신규로 생성
+                    result = vendrInstockHqMapper.insertVendrInstockToOrderDtl(vendrInstockVO);
+
+                    // 발주 DT 내역의 집계정보 HD에 수정
+                    result = vendrInstockHqMapper.updateVendrOrderDtlSumHd(vendrInstockVO);
+
+                    // 발주 테이블의 진행구분 입고중으로 수정
+                    vendrInstockVO.setProcFg("4");
+                    result = vendrInstockHqMapper.updateVendrOrderProcFg(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-            }
-            // 확정취소
-            else if(procFg.equals("0")) {
-            	getOutStorageCd = vendrInstockHqMapper.getOutStorageCd(vendrInstockVO);
-            	
-            	vendrInstockVO.setConfmYn				("0");
-            	vendrInstockVO.setDelFg					("Y");
-            	vendrInstockVO.setOutStorageCd			(getOutStorageCd);
-            	
-                // 거래처정산 삭제
-                result = vendrInstockHqMapper.deleteVendrExact(vendrInstockVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                
-                // TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y'
+
+                String getOutStorageCd = "";
+
+                // 확정
+                if (procFg.equals("1")) {
+                    vendrInstockVO.setConfmYn("1");
+                    vendrInstockVO.setDelFg("N");
+                    // 거래처정산 입력
+                    result = vendrInstockHqMapper.insertVendrExact(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    result = vendrInstockHqMapper.deleteVendrInstockProdConfm(vendrInstockVO);
+                    if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    // TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y'
+//                result = vendrInstockHqMapper.saveVendrInstockProd(vendrInstockVO);
+                    result = vendrInstockHqMapper.mergeVendrInstockProdConfm(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 입고확정일 경우에만 입력한 원가단가 > 마스터의 최종판매단가에 update
+                    if (vendrInstockVO.getSlipFg() == 1 && procFg.equals("1")) {
+                        result = vendrInstockHqMapper.updateLastCostUprc(vendrInstockVO);
+                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
+                }
+                // 확정취소
+                else if (procFg.equals("0")) {
+                    getOutStorageCd = vendrInstockHqMapper.getOutStorageCd(vendrInstockVO);
+
+                    vendrInstockVO.setConfmYn("0");
+                    vendrInstockVO.setDelFg("Y");
+                    vendrInstockVO.setOutStorageCd(getOutStorageCd);
+
+                    // 거래처정산 삭제
+                    result = vendrInstockHqMapper.deleteVendrExact(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y'
 //              result = vendrInstockHqMapper.saveVendrInstockProd(vendrInstockVO);
-              result = vendrInstockHqMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
-              if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
+                    result = vendrInstockHqMapper.mergeVendrInstockProdConfm(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+            }else{
+                throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.change.procFg"));
             }
         }
         else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            result = vendrInstockStoreMapper.updateProcFg(vendrInstockVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // 발주번호가 있는 경우
-            if(!StringUtil.getOrBlank(vendrInstockVO.getOrderSlipNo()).equals("")) {
+            /* 전표의 기존 진행상태를 조회하여, 정상로직인 경우만 변경 처리
+                procFg = 1 && chkProcFg = 0 인 경우만 확정 가능(등록 -> 확정)
+                procFg = 0 && chkProcFg = 1 인 경우만 확정취소 가능(확정 -> 등록(확정취소)) */
+            String chkProcFg = vendrInstockStoreMapper.getVendrInstockProcFg(vendrInstockVO);
 
-                // 발주 DT 내역의 입고관련 정보 초기화
-                result = vendrInstockStoreMapper.updateDefaultVendrOrderDtl(vendrInstockVO);
+            if((procFg.equals("1") && chkProcFg.equals("0")) || (procFg.equals("0") && chkProcFg.equals("1"))) {
 
-                // 발주 DT 내역의 입고관련 정보 갱신
-                result = vendrInstockStoreMapper.updateVendrInstockToOrderDtl(vendrInstockVO);
-
-                // 입고DT에 있으면서 발주 DT 내역에 없는 내역은 신규로 생성
-                result = vendrInstockStoreMapper.insertVendrInstockToOrderDtl(vendrInstockVO);
-
-                // 발주 DT 내역의 집계정보 HD에 수정
-                result = vendrInstockStoreMapper.updateVendrOrderDtlSumHd(vendrInstockVO);
-
-                // 발주 테이블의 진행구분 입고중으로 수정
-                vendrInstockVO.setProcFg("4");
-                result = vendrInstockStoreMapper.updateVendrOrderProcFg(vendrInstockVO);
+                result = vendrInstockStoreMapper.updateProcFg(vendrInstockVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
-            
-            String getOutStorageCd = "";
-            
-            // 확정
-            if(procFg.equals("1")) {
-            	vendrInstockVO.setConfmYn				("1");
-            	vendrInstockVO.setDelFg					("Y");
-            	
-                // 거래처정산 입력
-                result = vendrInstockStoreMapper.insertVendrExact(vendrInstockVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                
-                result = vendrInstockStoreMapper.deleteVendrInstockProdConfm(vendrInstockVO);
-                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
-                // TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y'
-//                result = vendrInstockStoreMapper.saveVendrInstockProd(vendrInstockVO);
-                result = vendrInstockStoreMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                // 입고확정일 경우에만 입력한 원가단가 > 마스터의 최종판매단가에 update
-                if(vendrInstockVO.getSlipFg() == 1 && procFg.equals("1")){
-                    result = vendrInstockStoreMapper.updateLastCostUprc(vendrInstockVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                // 발주번호가 있는 경우
+                if (!StringUtil.getOrBlank(vendrInstockVO.getOrderSlipNo()).equals("")) {
+
+                    // 발주 DT 내역의 입고관련 정보 초기화
+                    result = vendrInstockStoreMapper.updateDefaultVendrOrderDtl(vendrInstockVO);
+
+                    // 발주 DT 내역의 입고관련 정보 갱신
+                    result = vendrInstockStoreMapper.updateVendrInstockToOrderDtl(vendrInstockVO);
+
+                    // 입고DT에 있으면서 발주 DT 내역에 없는 내역은 신규로 생성
+                    result = vendrInstockStoreMapper.insertVendrInstockToOrderDtl(vendrInstockVO);
+
+                    // 발주 DT 내역의 집계정보 HD에 수정
+                    result = vendrInstockStoreMapper.updateVendrOrderDtlSumHd(vendrInstockVO);
+
+                    // 발주 테이블의 진행구분 입고중으로 수정
+                    vendrInstockVO.setProcFg("4");
+                    result = vendrInstockStoreMapper.updateVendrOrderProcFg(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-            }
-            // 확정취소
-            else if(procFg.equals("0")) {
-            	getOutStorageCd = vendrInstockStoreMapper.getOutStorageCd(vendrInstockVO);
-            	
-            	vendrInstockVO.setConfmYn				("0");
-            	vendrInstockVO.setDelFg					("Y");
-            	vendrInstockVO.setOutStorageCd			(getOutStorageCd);
-            	
-                // 거래처정산 삭제
-                result = vendrInstockStoreMapper.deleteVendrExact(vendrInstockVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                
-                // TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y'
+
+                String getOutStorageCd = "";
+
+                // 확정
+                if (procFg.equals("1")) {
+                    vendrInstockVO.setConfmYn("1");
+                    vendrInstockVO.setDelFg("N");
+
+                    // 거래처정산 입력
+                    result = vendrInstockStoreMapper.insertVendrExact(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    result = vendrInstockStoreMapper.deleteVendrInstockProdConfm(vendrInstockVO);
+                    if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    // TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y'
+//                result = vendrInstockStoreMapper.saveVendrInstockProd(vendrInstockVO);
+                    result = vendrInstockStoreMapper.mergeVendrInstockProdConfm(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 입고확정일 경우에만 입력한 원가단가 > 마스터의 최종판매단가에 update
+                    if (vendrInstockVO.getSlipFg() == 1 && procFg.equals("1")) {
+                        result = vendrInstockStoreMapper.updateLastCostUprc(vendrInstockVO);
+                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
+                }
+                // 확정취소
+                else if (procFg.equals("0")) {
+                    getOutStorageCd = vendrInstockStoreMapper.getOutStorageCd(vendrInstockVO);
+
+                    vendrInstockVO.setConfmYn("0");
+                    vendrInstockVO.setDelFg("Y");
+                    vendrInstockVO.setOutStorageCd(getOutStorageCd);
+
+                    // 거래처정산 삭제
+                    result = vendrInstockStoreMapper.deleteVendrExact(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y'
 //              result = vendrInstockStoreMapper.saveVendrInstockProd(vendrInstockVO);
-              result = vendrInstockStoreMapper.mergeVendrInstockProdConfm(vendrInstockVO);                
-              if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                
+                    result = vendrInstockStoreMapper.mergeVendrInstockProdConfm(vendrInstockVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+            }else{
+                throw new JsonException(Status.FAIL, messageService.get("vendrInstock.dtl.change.procFg"));
             }
         }
 
@@ -418,7 +463,10 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                     insFg = "U";
                     // 기주문수량이 있으면서 주문수량이 0 이나 null 인 경우 삭제
                     if(vendrInstockVO.getInTotQty() == 0 || vendrInstockVO.getInTotQty() == null) {
-                        insFg = "D";
+                        // '입고상품'탭 화면에서 등록한 경우만 삭제가능
+                        if("1".equals(vendrInstockVO.getProdRegFg())) {
+                            insFg = "D";
+                        }
                     }
                 }
                 else if(vendrInstockVO.getInTotQty() != null) {

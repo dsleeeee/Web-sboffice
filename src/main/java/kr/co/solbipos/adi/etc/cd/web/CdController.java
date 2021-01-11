@@ -97,6 +97,7 @@ public class CdController {
         // Parameter 값으로 대표/세부 명칭 코드목록을 조회 분기처리
         if ( "000".equals(cdVO.getNmcodeGrpCd()) ) {
             // 대표명칭 코드목록 조회
+            //20201.01.05 999 의 내역 중 코드항목 1  C:공통(본사기준, 단독매장수정가능), H:본사전용, S:매장전용
             list = cdService.getNmcodeGrpCdList(cdVO);
         } else {
             // 세부명칭 코드목록 조회

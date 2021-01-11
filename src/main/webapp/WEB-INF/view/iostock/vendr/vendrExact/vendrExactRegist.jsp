@@ -6,7 +6,7 @@
   <div id="vendrExactRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="vendrExactRegistCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="vendrExact.reg.title"/>
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="btn_close" ng-click="close()"></a>
     </div>
     <div class="wj-dialog-body">
       <form id="vendrExactForm" ng-submit="submitForm()" novalidate>
@@ -22,7 +22,7 @@
             <th><s:message code="vendrExact.reg.excclcDate"/></th>
             <td>
               <div class="sb-select">
-                <span class="txtIn"><input id="excclcDate" class="w120px" ng-disabled="excclcDateFg" ng-model="vendrExact.excclcDate"></span>
+                <span class="txtIn"><input id="excclcDate" class="w120px" ng-disabled="excclcDateFg" ng-model="excclcDate"></span>
               </div>
             </td>
             <th><s:message code="vendrExact.reg.vendr"/></th>
@@ -42,7 +42,7 @@
           <tr>
             <th><s:message code="vendrExact.reg.excclcTot"/></th>
             <td>
-              <input type="text" id="excclcTot" name="excclcTot" ng-model="vendrExact.excclcTot" class="sb-input w150px" maxlength="8"
+              <input type="text" id="excclcTot" name="excclcTot" ng-model="excclcTot" class="sb-input w150px" maxlength="8"
                      data-check="1,10,number" ng-required="true" ng-blur="excclcTotOnBlur($event)" ng-focus="excclcTotOnFocus($event)"/>
             </td>
           </tr>
@@ -50,7 +50,8 @@
             <th><s:message code="vendrExact.reg.remark"/></th>
             <td colspan="3">
               <div>
-                <textarea id="remark" class="w100 tArea1" style="height:100px;" ng-model="vendrExact.remark" data-check="1,10"></textarea>
+                <textarea id="remark" class="w100 tArea1" style="height:100px;" ng-model="remark" data-check="1,10"></textarea>
+                <input type="hidden" ng-model="seqNo"/>
               </div>
             </td>
           </tr>
@@ -69,4 +70,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrExact/vendrExactRegist.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrExact/vendrExactRegist.js?ver=20181224.05" charset="utf-8"></script>

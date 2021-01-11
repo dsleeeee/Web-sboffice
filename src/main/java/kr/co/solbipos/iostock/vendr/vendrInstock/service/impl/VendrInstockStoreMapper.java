@@ -38,6 +38,9 @@ public interface VendrInstockStoreMapper {
     /** 거래처 입고/반출등록 - 입고/반출정보 삭제시 상품이 있는지 여부 조회 */
     String getDtlProdExist(VendrInstockVO vendrInstockVO);
 
+    /** 거래처 입고/반출등록 - 입고/반출정보 현재 진행상태 값 조회 */
+    String getVendrInstockProcFg (VendrInstockVO vendrInstockVO);
+
     /** 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경 */
     int updateProcFg(VendrInstockVO vendrInstockVO);
 

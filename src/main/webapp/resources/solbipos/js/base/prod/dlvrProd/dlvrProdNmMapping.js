@@ -131,4 +131,9 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
         $scope.prodClassCdNm = "";
     }
 
+    // 상품명칭복사 팝업
+    $scope.copyDlvrProdNm = function(){
+        $scope.copyDlvrProdNmLayer.show(true);
+    };
+
 }]);
