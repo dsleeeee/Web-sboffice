@@ -118,6 +118,11 @@
         </tbody>
     </table>
 
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
+    </div>
+
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -163,4 +168,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthProdClass.js?ver=20200324.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthProdClass.js?ver=20200324.09" charset="utf-8"></script>
