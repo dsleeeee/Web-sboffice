@@ -58,6 +58,12 @@
   </table>
   <div style="clear: both;"></div>
 
+  <div class="mt10 oh sb-select dkbr">
+    <%-- 엑셀다운로드 --%>
+      <s:message code="day.dayTotal"/>
+    <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
+  </div>
+
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
