@@ -69,7 +69,7 @@ public class ProdPosController {
 
 
     /**
-     * 상품별매출 상품별 - 리스트 조회
+     * 포스별탭 - 조회
      * @param   request
      * @param   response
      * @param   model
@@ -111,18 +111,17 @@ public class ProdPosController {
                 }
 
                 prodPosVO.setArrStorePos(arrStorePos);
-
             }
-
         }
 
         List<DefaultMap<String>> list = prodPosService.getProdPosList(prodPosVO, sessionInfoVO);
         //System.out.println("list.size() :: "+posProdVO.getArrPosCd().length);
+
         return ReturnUtil.returnListJson(Status.OK, list, prodPosVO);
     }
     
     /**
-     * 상품별매출 상품별 - 리스트 조회
+     * 포스별탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
@@ -164,13 +163,12 @@ public class ProdPosController {
                 }
 
                 prodPosVO.setArrStorePos(arrStorePos);
-
             }
-
         }
 
         List<DefaultMap<String>> list = prodPosService.getProdPosExcelList(prodPosVO, sessionInfoVO);
         //System.out.println("list.size() :: "+posProdVO.getArrPosCd().length);
+
         return ReturnUtil.returnListJson(Status.OK, list, prodPosVO);
     }
     

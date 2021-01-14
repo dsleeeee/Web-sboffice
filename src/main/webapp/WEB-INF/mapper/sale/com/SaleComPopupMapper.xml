@@ -1057,7 +1057,7 @@
     -->
     <select id="getCardApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.getCardApprPopList */
-		SELECT TO_CHAR(TO_DATE(TSSPC.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+		SELECT TSSPC.SALE_DATE
 			, TSSPC.POS_NO
 			, DECODE(TSSPC.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN
 			, DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
@@ -1078,15 +1078,15 @@
             AND TSSPC.STORE_CD = #{storeCd}
         </if>
         <if test='arrStoreCornr != null and arrStoreCornr != ""'>
-                AND TSSPC.STORE_CD||'||'||TSSPC.CORNR_CD  IN
+			AND TSSPC.STORE_CD||'||'||TSSPC.CORNR_CD  IN
 	        <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
-	                        #{item}
+				#{item}
 	        </foreach>
         </if>
         <if test='arrStorePos != null and arrStorePos != ""'>
-                AND TSSPC.STORE_CD||'||'||TSSPC.POS_NO  IN
+			AND TSSPC.STORE_CD||'||'||TSSPC.POS_NO  IN
             <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
-                            #{item}
+				#{item}
             </foreach>
         </if>
         <if test='apprProcFg != null and apprProcFg != ""'>

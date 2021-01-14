@@ -22,43 +22,52 @@ public class ProdPosServiceImpl implements ProdPosService {
         this.messageService = messageService;
     }
 
-    /** 포스별매출상품별 - 매장 포스 리스트 조회 */
+    /** 포스별탭 - 매장 및 포스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStorePosList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
+
 		prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
 		return prodPosMapper.getStorePosList(prodPosVO);
 	}
 
-    /** 포스별매출상품별 - 리스트 조회 */
-    @Override
-    public List<DefaultMap<String>> getProdPosList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
-    	prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    /** 포스별탭 - 매장 포스 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getPosNmList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
+
+		prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		return prodPosMapper.getPosNmList(prodPosVO);
+	}
+
+	/** 포스별탭 - 조회 */
+	@Override
+	public List<DefaultMap<String>> getProdPosList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
+
+		prodPosVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
     	/*if (!StringUtil.getOrBlank(prodPosVO.getStoreCd()).equals("")) {
     		posProdVO.setArrStorePos(posProdVO.getStoreCd().split(","));
 		}*/
-    	
-    	if (prodPosVO.getPosNo() != null && !"".equals(prodPosVO.getPosNo())) {
+
+		if (prodPosVO.getPosNo() != null && !"".equals(prodPosVO.getPosNo())) {
 			String[] arrPosNo = prodPosVO.getPosNo().split(",");
 			if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				prodPosVO.setArrPosNo(arrPosNo);
-    			}
-    		}
+				if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+					prodPosVO.setArrPosNo(arrPosNo);
+				}
+			}
 		}
-        return prodPosMapper.getProdPosList(prodPosVO);
-    }
 
-    /** 포스별매출 - 매장 포스 리스트 조회 */
-	@Override
-	public List<DefaultMap<String>> getPosNmList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
-		prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		return prodPosMapper.getPosNmList(prodPosVO);
+		return prodPosMapper.getProdPosList(prodPosVO);
 	}
-	
-	/** 포스별매출상품별 - 엑셀다운로드 조회 */
+
+	/** 포스별탭 - 엑셀 조회 */
     @Override
     public List<DefaultMap<String>> getProdPosExcelList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
+
+		prodPosVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
 //    	if (!StringUtil.getOrBlank(posProdVO.getStoreCd()).equals("")) {
@@ -73,8 +82,8 @@ public class ProdPosServiceImpl implements ProdPosService {
     			}
     		}
 		}
+
         return prodPosMapper.getProdPosExcelList(prodPosVO);
     }
-
 
 }

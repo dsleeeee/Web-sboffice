@@ -86,7 +86,7 @@ app.controller('saleApprCardCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope.storeCd  	= data.storeCd;
     $scope.arrStoreCornr= data.cornrCd;
     $scope.arrStorePos	= data.posNo;
-    $scope.saleFg 		= data.saleFg
+    $scope.saleFg 		= data.saleFg;
     $scope.apprProcFg 	= data.apprProcFg;
     $scope.acquireCd  	= data.acquireCd;
     $scope.acquireNm  	= data.acquireNm;
@@ -110,7 +110,7 @@ app.controller('saleApprCardCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.storeCd   = $scope.storeCd;
     params.arrStoreCornr= $scope.arrStoreCornr;
     params.arrStorePos	= $scope.arrStorePos;
-    params.saleFg 		= $scope.saleFg
+    params.saleFg 		= $scope.saleFg;
     params.apprProcFg 	= $scope.apprProcFg;
     params.acquireCd  	= $scope.acquireCd;
     params.acquireNm  	= $scope.acquireNm;

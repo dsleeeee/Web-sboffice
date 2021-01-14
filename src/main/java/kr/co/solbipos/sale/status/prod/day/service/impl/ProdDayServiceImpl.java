@@ -22,11 +22,11 @@ public class ProdDayServiceImpl implements ProdDayService {
         this.messageService = messageService;
     }
 
-
-    /** 상품별 매출 - 일자별 상품 리스트 조회 */
+    /** 일자별탭 - 조회 */
     @Override
     public List<DefaultMap<String>> getProdDayList(ProdDayVO prodDayVO, SessionInfoVO sessionInfoVO) {
-  
+
+        prodDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(prodDayVO.getStoreCd()).equals("")) {
@@ -35,11 +35,12 @@ public class ProdDayServiceImpl implements ProdDayService {
         
         return prodDayMapper.getProdDayList(prodDayVO);
     }
-    
-    /** 상품별 매출 - 일자별 상품 엑셀 다운로드 조회 */
+
+    /** 일자별탭 - 엑셀 조회 */
     @Override
     public List<DefaultMap<String>> getProdDayExcelList(ProdDayVO prodDayVO, SessionInfoVO sessionInfoVO) {
-  
+
+        prodDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(prodDayVO.getStoreCd()).equals("")) {

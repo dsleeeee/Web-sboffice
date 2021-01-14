@@ -1,3 +1,14 @@
+/****************************************************************
+ *
+ * 파일명 : prodPos.js
+ * 설  명 : 상품별 >포스별별 탭 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2020.02.06     김진        1.0
+ * 2021.01.04     김설아      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -9,19 +20,15 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('prodPosCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", getToday());
-	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", getToday());
-	$scope.orgnFg = gvOrgnFg;
-	$scope.isSearch = false;
+	// 조회일자 세팅
+	var startDate = wcombo.genDateVal("#startDateProdPos", gvStartDate);
+	var endDate = wcombo.genDateVal("#endDateProdPos", gvEndDate);
 	
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
 
-	var checkInt = true;
-
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
-
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("prodPosCtrl");
 
@@ -39,9 +46,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		s.columnHeaders.rows.push(new wijmo.grid.Row());
 
 		for(var i = 0; i < s.columnHeaders.rows.length; i++) {
-			s.columnHeaders.setCellData(i, "lv1Nm", messages["prodrank.prodClassLNm"]);
-			s.columnHeaders.setCellData(i, "lv2Nm", messages["prodrank.prodClassMNm"]);
-			s.columnHeaders.setCellData(i, "lv3Nm", messages["prodrank.prodClassSNm"]);
+			s.columnHeaders.setCellData(i, "pathNm", messages["pos.prodClassNm"]);
 			s.columnHeaders.setCellData(i, "prodNm", messages["pos.prodNm"]);
 			s.columnHeaders.setCellData(i, "saleStoreCnt", messages["pos.saleStore"]);
 			s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
@@ -104,71 +109,36 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodPosCtrl", function (event, data) {
+		if( $("#posProdSelectStoreCd").val() === ''){
+			$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+			return false;
+		}
 
-		$scope.searchPosProdList(true);
-
-		var storeCd = $("#posProdSelectStoreCd").val();
-		var posCd = $("#posProdSelectPosCd").val();
-
-		$scope.getRePosNmList(storeCd, posCd, true);
-	});
-
-	// 다른 컨트롤러의 broadcast 받기
-	$scope.$on("prodPosCtrlSrch", function (event, data) {
-
-	    if( $("#posProdSelectStoreCd").val() === ''){
-	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-	   	 	return false;
-	    }
-
-		$scope.searchPosProdList(false);
+		$scope.searchPosProdList();
 
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
-
 		$scope.getRePosNmList(storeCd, posCd, true);
 	});
 
 	// 포스별매출상품별 리스트 조회
-	$scope.searchPosProdList = function (isPageChk) {
-
+	$scope.searchPosProdList = function () {
 		// 파라미터
 		var params = {};
 		params.storeCd = $("#posProdSelectStoreCd").val();
 		params.posNo = $("#posProdSelectPosCd").val();
-		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
 		params.arrPosCd = $scope.comboArray; //-포스정보
-		params.isPageChk = isPageChk;
-	    params.orgnFg    = $scope.orgnFg;
-	    
-	    $scope.excelStartDate	= "";
-		$scope.excelEndDate 	= "";
-		$scope.excelStoreCd		= params.storeCd;
-		$scope.excelPosNo		= params.posNo;
-		$scope.excelListScale	= params.listScale;
-		$scope.excelArrPosCd	= params.arrPosCd;
-		$scope.excelOrgnFg		= params.orgnFg;
-		$scope.isSearch			= true;
-
-		//등록일자 '전체기간' 선택에 따른 params
-		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
-			params.endDate = wijmo.Globalize.format($scope.srchPosProdEndDate.value, 'yyyyMMdd');
-		}
-		
-		$scope.excelStartDate	= params.startDate;
-		$scope.excelEndDate 	= params.endDate;
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 
 		if(params.startDate > params.endDate){
 			$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 			return false;
 		}
-		
-		
-		
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/prod/prodPos/list.sb", params, function() {
-
 			// var flex = $scope.flex;
 			//row수가 0이면
 			// if(flex.rows.length === 0){
@@ -179,14 +149,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			//           grid.columns.removeAt(grid.columns.length-1);
 			//     }
 			// }
-
 		});
-	};
-
-	//전체기간 체크박스 클릭이벤트
-	$scope.isChkDt = function() {
-		$scope.srchPosProdStartDate.isReadOnly = $scope.isChecked;
-		$scope.srchPosProdEndDate.isReadOnly = $scope.isChecked;
 	};
 
     // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
@@ -194,7 +157,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   	  var columns = $scope.flex.columns;
 
   	  for(var i=0; i<columns.length; i++){
-  		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+  		  if(columns[i].binding === 'pathNm'){
   			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
   		  }
   	  }
@@ -214,7 +177,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		$scope._broadcast('posProdSelectPosCtrl');
 	};
 
-
+	// <-- 포스 검색 -->
 	//매장의 포스(pos) 리스트 조회
 	$scope.getPosNmList = function () {
 //		var url             = '/sale/status/pos/pos/posNmList.sb';
@@ -270,13 +233,11 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	  };
 
 	  $scope.makeDataGrid = function () {
-
 		  var grid = wijmo.Control.getControl("#posProdGrid");
-
 		  var colLength = grid.columns.length;
 
-		  if (grid.columns.length > 9) {
-			  for(var i = 9; i < colLength; i++) {
+		  if (grid.columns.length > 7) {
+			  for(var i = 7; i < colLength; i++) {
 				  grid.columns.removeAt(grid.columns.length-1);
 			  }
 		  }
@@ -313,7 +274,6 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
-
 			  }
 		  }
 
@@ -361,9 +321,9 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
 	  };
+	// <-- //포스 검색 -->
 
 	  $scope.loadedRows = function (s, e) {
-
 		  var rowLength = s.rows.length;
 		  var arrPosCd = storePosCd.split(',');
 		  var arrPosNm = storePosNm.split(',');
@@ -404,8 +364,13 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	  };
 
 	 $scope.excelDownloadPos = function () {
-		  var params       = {};
-		/* 엑셀다운로드 */
+	 	 var params       = {};
+		 params.storeCd = $("#posProdSelectStoreCd").val();
+		 params.posNo = $("#posProdSelectPosCd").val();
+		 params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+		 params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+		 params.arrPosCd = $scope.comboArray; //-포스정보
+
 		$scope._broadcast('prodPosExcelCtrl', params);
 	  };
 
@@ -417,11 +382,8 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('prodPosExcelCtrl', $scope, $http, $timeout, true));
 
-	var checkInt = true;
-
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
-
 		// add the new GroupRow to the grid's 'columnFooters' panel
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 		// add a sigma to the header to show that this is a summary row
@@ -436,9 +398,7 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 		s.columnHeaders.rows.push(new wijmo.grid.Row());
 
 		for(var i = 0; i < s.columnHeaders.rows.length; i++) {
-			s.columnHeaders.setCellData(i, "lv1Nm", messages["prodrank.prodClassLNm"]);
-			s.columnHeaders.setCellData(i, "lv2Nm", messages["prodrank.prodClassMNm"]);
-			s.columnHeaders.setCellData(i, "lv3Nm", messages["prodrank.prodClassSNm"]);
+			s.columnHeaders.setCellData(i, "pathNm", messages["pos.prodClassNm"]);
 			s.columnHeaders.setCellData(i, "prodNm", messages["pos.prodNm"]);
 			s.columnHeaders.setCellData(i, "saleStoreCnt", messages["pos.saleStore"]);
 			s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
@@ -482,39 +442,27 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 			}
 		}
 		// <-- //그리드 헤더2줄 -->
-
-		
 	};
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodPosExcelCtrl", function (event, data) {
-
-		$scope.searchPosProdExcelList(true);
+		$scope.searchPosProdExcelList(data);
 	});
 
-	
-
 	// 포스별매출상품별 리스트 조회
-	$scope.searchPosProdExcelList = function (isPageChk) {
-
+	$scope.searchPosProdExcelList = function (data) {
 		// 파라미터
 		var params = {};
-		params.startDate	=	$scope.excelStartDate;
-		params.endDate		=	$scope.excelEndDate;
-		params.storeCd		=	$scope.excelStoreCd;
-		params.posNo		=	$scope.excelPosNo;
-		params.listScale	=	$scope.excelListScale;
-		params.arrPosCd		=	$scope.excelArrPosCd;
-		params.orgnFg		=	$scope.excelOrgnFg;
-		
-		$scope.getRePosNmExcelList($scope.excelStoreCd, $("#posProdSelectPosCd").val());
+		params.storeCd = data.storeCd;
+		params.posNo = data.posNo;
+		params.startDate = data.startDate;
+		params.endDate = data.endDate;
+		params.arrPosCd = data.arrPosCd;
 
-		
+		$scope.getRePosNmExcelList(data.storeCd, $("#posProdSelectPosCd").val());
 
 		$scope.isChkProdClassDisplay();
-		
-		
-		
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/prod/prodPos/excelList.sb", params, function() {
 			
@@ -585,28 +533,23 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    });
 	  };
 
-
     // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
     $scope.isChkProdClassDisplay = function(){
   	  var columns = $scope.excelFlex.columns;
 
   	  for(var i=0; i<columns.length; i++){
-  		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+  		  if(columns[i].binding === 'pathNm'){
   			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
   		  }
   	  }
     };
 
-	
-
-	  $scope.makeDataGrid = function () {
-
+	$scope.makeDataGrid = function () {
 		  var grid = wijmo.Control.getControl("#posProdExcelGrid");
-
 		  var colLength = grid.columns.length;
 
-		  if (grid.columns.length > 9) {
-			  for(var i = 9; i < colLength; i++) {
+		  if (grid.columns.length > 7) {
+			  for(var i = 7; i < colLength; i++) {
 				  grid.columns.removeAt(grid.columns.length-1);
 			  }
 		  }
@@ -643,7 +586,6 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
-
 			  }
 		  }
 
@@ -732,4 +674,5 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 			  }
 		  }
 	  }
+
 }]);
