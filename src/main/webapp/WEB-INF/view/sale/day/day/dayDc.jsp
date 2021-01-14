@@ -110,5 +110,5 @@
   var dcCol    = '${dcCol}';
   var arrDcCol = dcCol.split(',');
 </script>--%>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayDc.js?ver=20190220.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayDc.js?ver=20190220.02" charset="utf-8"></script>
 

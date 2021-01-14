@@ -112,4 +112,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTable.js?ver=20200121.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTable.js?ver=20200121.03" charset="utf-8"></script>

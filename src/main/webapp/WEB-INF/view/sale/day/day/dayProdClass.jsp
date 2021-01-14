@@ -148,4 +148,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20200324" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20200325" charset="utf-8"></script>
