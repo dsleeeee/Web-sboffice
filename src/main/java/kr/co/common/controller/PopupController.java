@@ -213,6 +213,26 @@ public class PopupController {
     }
 
 
+    /**
+     * [본사 + 매장 선택 팝업] 해당 세션의 본사 + 매장 목록 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2021.01.11
+     */
+    @RequestMapping(value = "/getHqStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = popupService.getHqStoreList(storeManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, storeManageVO);
+    }
 
 }

@@ -1,17 +1,18 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<input type="hidden" id="<c:out value="${param.targetId}Fg"/>" /><%--선택한 코드가 본사인지 매장인지 구분하는 flag--%>
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>" />
 <input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:200px;" <c:if test="${empty param.modiFg}"> ng-click="<c:out value="${param.targetId}"/>Show()" </c:if> readonly/>
 <c:if test="${empty param.modiFg}">
 <button type="button" class="btn_skyblue fl mr5" id="<c:out value="${param.targetId}SelectCancelBtn"/>">
-  <s:message code="outstockReqDate.selectCancel"/></button>
+  <s:message code="cmm.selectCancel"/></button>
 </c:if>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="cmm.store.select"/>
+      <s:message code="cmm.hqStore.select"/>
       <a href="#" class="wj-hide btn_close" ng-click="closePopup()"></a>
     </div>
     <div class="wj-dialog-body">
@@ -20,23 +21,23 @@
         <%-- 조회 조건 --%>
         <table class="tblType01 mt5">
           <colgroup>
-            <col class="w15" />
-            <col class="w35" />
-            <col class="w15" />
-            <col class="w35" />
+            <col class="w20" />
+            <col class="w30" />
+            <col class="w20" />
+            <col class="w30" />
           </colgroup>
           <tbody>
           <tr>
-            <th><s:message code="cmm.storeCd"/></th>
+            <th><s:message code="cmm.hqStoreCd"/></th>
             <td><input type="text" id="srchStoreCd" ng-model="storeCd"/></td>
-            <th><s:message code="cmm.storeNm"/></th>
+            <th><s:message code="cmm.hqStoreNm"/></th>
             <td><input type="text" id="srchStoreNm" ng-model="storeNm"/></td>
           </tr>
           </tbody>
         </table>
         <%-- 조회 --%>
         <div class="mt10 tr">
-          <button class="btn_skyblue" id="btnSearch" ng-click="getStoreList();" ><s:message code="cmm.search" /></button>
+          <button class="btn_skyblue" id="btnSearch" ng-click="getHqStoreList();" ><s:message code="cmm.search" /></button>
         </div>
 
 
@@ -53,8 +54,9 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="*" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="" binding="orgnFg" width="100" align="center" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.hqStoreCd"/>" binding="storeCd" width="120" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.hqStoreNm"/>" binding="storeNm" width="*" align="left"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -112,6 +114,7 @@
           var col         = ht.panel.columns[ht.col];
           var selectedRow = s.rows[ht.row].dataItem;
           if (col.binding === "storeCd") {
+            $("#" + $scope.targetId + "Fg").val(selectedRow.orgnFg);
             $("#" + $scope.targetId + "Cd").val(selectedRow.storeCd);
             $("#" + $scope.targetId + "Nm").val("[" + selectedRow.storeCd + "] " + selectedRow.storeNm);
             eval('$scope.wj' + $scope.targetId + 'LayerS.hide(true)');
@@ -134,31 +137,31 @@
       });
 
       // if ($scope.searchFg == "N") {
-        $scope.searchStore();
+        $scope.searchHqStore();
       // }
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
     // 조회버튼 클릭 시 매장목록 조회
-    $scope.getStoreList= function () {
+    $scope.getHqStoreList= function () {
       $scope._pageView( $scope.targetId + "Ctrl", 1);
     };
 
-    $scope.searchStore = function () {
+    $scope.searchHqStore = function () {
       // 파라미터
       var params = {};
-      params.storeCd = $scope.storeCd;
+      params.srchStoreCd = $scope.storeCd;
       params.storeNm = $scope.storeNm;
-      $scope._inquirySub("/popup/getStoreList.sb", params, function () {
+      $scope._inquirySub("/popup/getHqStoreList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };
 
     // 닫을때 초기화 로직 추가
     $scope.closePopup = function(){
-        $scope.storeCd = "";
-        $scope.storeNm = "";
+      $scope.storeCd = "";
+      $scope.storeNm = "";
     };
 
   }]);
@@ -166,6 +169,7 @@
   $(document).ready(function () {
     <%-- 선택취소 버튼 클릭 --%>
     $("#${param.targetId}SelectCancelBtn").click(function () {
+      $("#${param.targetId}Fg").val("");
       $("#${param.targetId}Cd").val("");
       $("#${param.targetId}Nm").val(("${param.displayNm}" === "" ? messages["cmm.select"] : "${param.displayNm}"));
     });
