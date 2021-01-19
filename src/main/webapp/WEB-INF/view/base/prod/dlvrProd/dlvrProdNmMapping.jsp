@@ -5,6 +5,8 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="subCon" ng-controller="dlvrProdNmMappingCtrl">
     <%--searchTbl--%>
@@ -113,6 +115,35 @@
     </table>
     <%--//searchTbl--%>
 
+    <%--엑셀업로드 관련 comment --%>
+    <table class="searchTbl mt10">
+        <colgroup>
+            <col class="w100" />
+        </colgroup>
+        <tbody>
+        <tr class="brt">
+            <th class="oh gr fl w50" style="height: 75px;">
+                <p class="s12 bk lh20">
+                     * 상품코드와 정상 매핑된 명칭만 저장됩니다.<br />
+                     * 매핑명칭은 최대 30자 입니다.(30자 이상 인 경우, 잘라서 저장됩니다.)<br />
+                     * 상품코드에 공백이 들어가지 않도록 주의하세요.<br />
+                </p>
+            </th>
+            <th class="oh gr fr w50" style="height: 75px; font-size:15px">
+                <%-- excel 업로드 --%>
+                <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
+                    <s:message code="dlvrProd.excelUpload" />
+                </button>
+
+                <%-- excel 양식 다운로드 --%>
+                <button class="btn_skyblue ml5 fr" id="btnExcelDownload" ng-click="excelDownload()">
+                    <s:message code="dlvrProd.sampleDownload" />
+                </button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
     <div id="grid" class="w100">
         <div class="mt20 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
@@ -128,15 +159,15 @@
             </wj-combo-box>
             <%--// 페이지 스케일  --%>
 
+            <%-- 매장환경 복사 - 본사/프랜차이즈 매장만 사용 --%>
+            <button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyDlvrProdNm()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd eq '00000'}">style="display: none;"</c:if>>
+                <s:message code="dlvrProd.nmCopy" />
+            </button>
+
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
-
-            <%-- 매장환경 복사 --%>
-            <%--<button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyDlvrProdNm()">
-                <s:message code="dlvrProd.nmCopy" />
-            </button>--%>
 
         </div>
         <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
@@ -155,7 +186,7 @@
                     <wj-flex-grid-column header="<s:message code="dlvrProd.prodNm"/>" binding="prodNm" width="200" is-read-only="true"></wj-flex-grid-column>
                     <%-- 배달앱 구분코드 컬럼 생성--%>
                     <c:forEach var="dlvrCol" items="${dlvrColList}">
-                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]" binding="dlvrProdNm${dlvrCol.dlvrCd}" width="150" max-length="50"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]" binding="dlvrProdNm${dlvrCol.dlvrCd}" width="150" max-length=30></wj-flex-grid-column>
                     </c:forEach>
 
                 </wj-flex-grid>
@@ -173,9 +204,11 @@
 
 <script type="text/javascript">
   var dlvrCol = '${dlvrCol}';
+  var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20201016.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20201016.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -183,4 +216,8 @@
 
 <%-- 상품명칭복사 --%>
 <c:import url="/WEB-INF/view/base/prod/dlvrProd/copyDlvrProdNm.jsp">
+</c:import>
+
+<%-- 상품명칭 엑셀업로드 --%>
+<c:import url="/WEB-INF/view/base/prod/dlvrProd/excelUploadDlvrProdNm.jsp">
 </c:import>

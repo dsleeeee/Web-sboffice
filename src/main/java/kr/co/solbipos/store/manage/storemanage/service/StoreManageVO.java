@@ -127,6 +127,9 @@ public class StoreManageVO extends PageVO {
     /** 권한 그룹 코드 */
     private String authGrpCd;
 
+    /** 조회용 매장코드 */
+    private String srchStoreCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -695,4 +698,12 @@ public class StoreManageVO extends PageVO {
     public String getAuthGrpCd() { return authGrpCd; }
 
     public void setAuthGrpCd(String authGrpCd) { this.authGrpCd = authGrpCd; }
+
+    public String getSrchStoreCd() {
+        return srchStoreCd;
+    }
+
+    public void setSrchStoreCd(String srchStoreCd) {
+        this.srchStoreCd = srchStoreCd;
+    }
 }

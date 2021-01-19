@@ -48,4 +48,7 @@ public interface PopupService {
 
     /** 상품 목록 조회 */
     List<DefaultMap<String>> getProductList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사 + 매장 목록 조회 */
+    List<DefaultMap<String>> getHqStoreList(StoreManageVO storeManageVO , SessionInfoVO sessionInfoVO);
 }

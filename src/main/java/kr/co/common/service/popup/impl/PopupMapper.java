@@ -51,5 +51,8 @@ public interface PopupMapper {
 
     /** 상품 조회 */
     List<DefaultMap<String>> getProductList(ProdVO prodVO);
+
+    /** 본사 + 매장목록 조회 */
+    List<DefaultMap<String>> getHqStoreList(StoreManageVO storeManageVO);
 }
 

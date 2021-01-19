@@ -52,6 +52,18 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장상태
   $scope.sysStatFgVal;
   $scope.setSysStatFgVal = function(s){
+
+     // 데모매장이 아닌 매장은 데모매장으로 수정 불가
+    if($("#hdSysStatFg").val() !== null && $("#hdSysStatFg").val() !== "" && $("#hdSysStatFg").val() !== "9"){
+        // 매장상태를 데모매장으로 변경할 수 없습니다.
+        var msg = messages["storeManage.require.notSelectDemo"];
+        if(s.selectedValue === "9"){
+            $scope._popMsg(msg);
+            s.selectedValue = $("#hdSysStatFg").val();
+            return false;
+        }
+    }
+
     $scope.sysStatFgVal = s.selectedValue;
   };
   $scope.getSysStatFgVal = function(){
@@ -104,6 +116,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var storeScope = agrid.getScope('storeManageCtrl');
 
+    // 기존 매장상태구분 값 hidden 초기화
+    $("#hdSysStatFg").val("");
+    
     if($.isEmptyObject(storeScope.getSelectedStore()) ) {
       $scope.resetForm();
     } else {
@@ -143,6 +158,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.areaCdCombo.selectedIndex    = 0;
     $scope.store.installPosCnt.isReadOnly = false;
     $scope.store.installPosCnt          = '';
+    $("#hdSysStatFg").val("");
 
     $scope.store.bizNo1 ="";
     $scope.store.bizNo2 ="";
@@ -214,11 +230,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.sysOpenDateCombo.isReadOnly     = true;
       $scope.store.installPosCnt.isReadOnly = true;
       $("#installPosCnt").css('background-color', '#F0F0F0');
+      $("#hdSysStatFg").val(storeDetailInfo.sysStatFg);
 
       if(storeDetailInfo.sysStatFg === '9'){
-        $scope.sysStatFgCombo.isReadOnly = true;
+          $scope.sysStatFgCombo.isReadOnly = true;
       } else {
-        $scope.sysStatFgCombo.isReadOnly = false;
+          $scope.sysStatFgCombo.isReadOnly = false;
       }
 
       $scope.store.storeCdInputType = "";
@@ -300,6 +317,16 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     if( isNull( $scope.store.sysStatFg ) ) {
       $scope._popMsg(msg);
       return false;
+    }
+
+    // 데모매장이 아닌 매장은 데모매장으로 수정 불가
+    if($("#hdSysStatFg").val() !== null && $("#hdSysStatFg").val() !== "" && $("#hdSysStatFg").val() !== "9"){
+        // 매장상태를 데모매장으로 변경할 수 없습니다.
+        var msg = messages["storeManage.require.notSelectDemo"];
+        if( $scope.store.sysStatFg === "9") {
+            $scope._popMsg(msg);
+            return false;
+        }
     }
 
     // 용도를 선택해주세요.

@@ -264,4 +264,105 @@
         </choose>
     </insert>
 
+    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 전 기존데이터 삭제 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_DLVR_PROD_NM
+        PARAM    : dlvrProdVO
+        COMMENTS : 기준매장의 배달상품명칭을 복사하기 전 적용대상매장의 배달상품명칭을 삭제한다.
+    -->
+    <delete id="deleteStoreDlvrProdNm" parameterType="dlvrProdVO">
+        /* DlvrProdMapper.deleteAllDlvrProdNm */
+        DELETE
+          FROM TB_MS_PRODUCT_DLVR_PROD_NM
+         WHERE STORE_CD = #{targetStoreCd}
+    </delete>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_DLVR_PROD_NM
+        PARAM    : dlvrProdVO
+        COMMENTS : 기준매장의 배달상품명칭을 복사하여 적용대상매장에 등록한다.
+    -->
+    <insert id="copyStoreDlvrProdNm" parameterType="dlvrProdVO">
+      /* USE : DlvrProdMapper.copyStoreDlvrProdNm */
+      INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM
+      (
+          STORE_CD
+        , PROD_CD
+        , DLVR_NAME_CD
+        , DLVR_PROD_NM
+        , REG_DT
+		, REG_ID
+		, MOD_DT
+		, MOD_ID
+      )
+      <choose>
+        <!-- 기준매장이 본사인 경우 -->
+        <when test='originalStoreFg != null and originalStoreFg == "H"'>
+            SELECT  #{targetStoreCd} AS STORE_CD
+                    , PROD_CD
+                    , DLVR_NAME_CD
+                    , DLVR_PROD_NM
+                    , #{regDt}
+                    , #{regId}
+                    , #{modDt}
+                    , #{modId}
+              FROM TB_HQ_PRODUCT_DLVR_PROD_NM
+             WHERE HQ_OFFICE_CD = #{originalStoreCd}
+               AND DLVR_NAME_CD IN (SELECT NMCODE_CD
+                                       FROM TB_CM_NMCODE
+                                      WHERE NMCODE_GRP_CD = '112'
+                                        AND NMCODE_CD != '1')
+        </when>
+        <!-- 기준매장이 매장인 경우 -->
+        <when test='originalStoreFg != null and originalStoreFg == "S"'>
+          SELECT  #{targetStoreCd} AS STORE_CD
+                   , PROD_CD
+                   , DLVR_NAME_CD
+                   , DLVR_PROD_NM
+                   , #{regDt}
+                   , #{regId}
+                   , #{modDt}
+                   , #{modId}
+            FROM TB_MS_PRODUCT_DLVR_PROD_NM
+           WHERE STORE_CD = #{originalStoreCd}
+             AND DLVR_NAME_CD IN (SELECT NMCODE_CD
+                                     FROM TB_CM_NMCODE
+                                    WHERE NMCODE_GRP_CD = '112'
+                                      AND NMCODE_CD != '1')
+        </when>
+      </choose>
+    </insert>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : dlvrProdVO
+        COMMENTS : 상품명칭 엑셀 업로드 전 유효한 상품코드인지 체크한다.
+    -->
+    <select id="chkDlvrProd" parameterType="dlvrProdVO" resultType="integer">
+        /* USE : DlvrProdMapper.chkDlvrProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT COUNT(PROD_CD)
+                  FROM TB_HQ_PRODUCT
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD IN
+                <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT COUNT(PROD_CD)
+                  FROM TB_MS_PRODUCT
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROD_CD IN
+                <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+    </select>
 </mapper>

@@ -57,6 +57,16 @@ public class DlvrProdVO extends PageVO {
     private String arrDlvrCol[];
     /** 쿼리문의 PIVOT IN에 사용할 배달앱 구분코드 컬럼 문자열 */
     private String pivotDlvrCol;
+    /** 기준매장 구분 Flag (본사 : H / 매장 : S) */
+    private String originalStoreFg;
+    /** 기준매장코드 */
+    private String originalStoreCd;
+    /** 적용대상매장코드 */
+    private String targetStoreCd;
+    /** 업로드 상품코드 컬럼  */
+    private String prodCdCol;
+    /** 업로드 상품코드 array */
+    private String arrProdCdCol[];
 
    /* *//** 페이코앱 *//*
     private String dlvrProdNm2;
@@ -188,5 +198,45 @@ public class DlvrProdVO extends PageVO {
 
     public void setPivotDlvrCol(String pivotDlvrCol) {
         this.pivotDlvrCol = pivotDlvrCol;
+    }
+
+    public String getOriginalStoreFg() {
+        return originalStoreFg;
+    }
+
+    public void setOriginalStoreFg(String originalStoreFg) {
+        this.originalStoreFg = originalStoreFg;
+    }
+
+    public String getOriginalStoreCd() {
+        return originalStoreCd;
+    }
+
+    public void setOriginalStoreCd(String originalStoreCd) {
+        this.originalStoreCd = originalStoreCd;
+    }
+
+    public String getTargetStoreCd() {
+        return targetStoreCd;
+    }
+
+    public void setTargetStoreCd(String targetStoreCd) {
+        this.targetStoreCd = targetStoreCd;
+    }
+
+    public String getProdCdCol() {
+        return prodCdCol;
+    }
+
+    public void setProdCdCol(String prodCdCol) {
+        this.prodCdCol = prodCdCol;
+    }
+
+    public String[] getArrProdCdCol() {
+        return arrProdCdCol;
+    }
+
+    public void setArrProdCdCol(String[] arrProdCdCol) {
+        this.arrProdCdCol = arrProdCdCol;
     }
 }
