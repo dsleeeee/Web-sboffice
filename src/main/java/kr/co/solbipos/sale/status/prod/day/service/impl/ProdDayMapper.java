@@ -10,9 +10,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ProdDayMapper {
-    /** 상품별 매출 - 일자별 리스트 조회 */
+    /** 일자별탭 - 조회 */
     List<DefaultMap<String>> getProdDayList(ProdDayVO prodDayVO);
     
-    /** 상품별 매출 - 일자별 엑셀 다운로드 조회 */
+    /** 일자별탭 - 엑셀 조회 */
     List<DefaultMap<String>> getProdDayExcelList(ProdDayVO prodDayVO);
 }

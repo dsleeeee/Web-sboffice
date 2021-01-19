@@ -17,7 +17,7 @@
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height: 340px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -28,20 +28,20 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.saleDate"/>" 	binding="saleDate" 		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.posNo"/>" 		binding="posNo"			width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprGuBun"/>" 	binding="apprGubun"		width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprProcFg"/>" 	binding="apprProcFg" 	width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.acquireNm"/>" 	binding="acquireNm" 	width="150" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.cardNo"/>" 		binding="cardNo"		width="150" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.saleDate"/>" 	binding="saleDate" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.posNo"/>" 		binding="posNo"			width="70" 		align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprGuBun"/>" 	binding="apprGubun"		width="70" 		align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprProcFg"/>" 	binding="apprProcFg" 	width="70" 		align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.acquireNm"/>" 	binding="acquireNm" 	width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.cardNo"/>" 		binding="cardNo"		width="120" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.saleAmt"/>" 	binding="saleAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>            
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.tipAmt"/>" 		binding="tipAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>     
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.vatAmt"/>" 		binding="vatAmt"		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>          
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.instCntNm"/>" 	binding="instCntNm" 	width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.instCnt"/>" 	binding="instCnt" 		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.exDate"/>" 		binding="exDate" 		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprDt"/>" 		binding="apprDt" 		width="150" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprNo"/>" 		binding="apprNo" 		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.instCntNm"/>" 	binding="instCntNm" 	width="70" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.instCnt"/>" 	binding="instCnt" 		width="70" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.exDate"/>" 		binding="exDate" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprDt"/>" 		binding="apprDt" 		width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprNo"/>" 		binding="apprNo" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprAmt"/>" 	binding="apprAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>

@@ -12,31 +12,26 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="prodsale.pos"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_broadcast('prodPosCtrlSrch')">
+		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_pageView('prodPosCtrl',1)">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
 	<table class="searchTbl">
 		<colgroup>
-			<col class="w13"/>
-			<col class="w37"/>
-			<col class="w13"/>
-        	<col class="w37"/>
+			<col class="w15"/>
+			<col class="w35"/>
+			<col class="w15"/>
+        	<col class="w35"/>
        	</colgroup>
        	<tbody>
        		<tr>
+				<%--조회일자--%>
        			<th><s:message code="cmm.search.date"/></th>
        			<td>
 					<div class="sb-select">
-						<span class="txtIn"><input id="srchPosProdStartDate" class="w120px"></span>
+						<span class="txtIn"><input id="startDateProdPos" class="w120px"></span>
 						<span class="rg">~</span>
-						<span class="txtIn"><input id="srchPosProdEndDate" class="w120px"></span>
-						<span class="chk ml10" style="display: none;">
-							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-							<label for="chkDt">
-								<s:message code="cmm.all.day" />
-							</label>
-						</span>
+						<span class="txtIn"><input id="endDateProdPos" class="w120px"></span>
 					</div>
 				</td>
 				<%-- 조회옵션 --%>
@@ -70,7 +65,6 @@
 				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 					<input type="hidden" id="posProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
 				</c:if>
-
 				<input type="hidden" id="posProdSelectPosCd" value=""/>
 				<input type="hidden" id="posProdSelectPosName" value=""/>
 				<tr>
@@ -125,18 +119,16 @@
 				initialized="initGrid(s,e)"
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
-				frozen-columns="9"
+				frozen-columns="7"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
-				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodClassNm"/>" 		binding="pathNm" 		width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"		binding="saleStoreCnt" width="60" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			</wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
 			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -168,18 +160,16 @@
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
 				<%--frozen-columns="9"--%>
-				frozen-columns="6"
+				frozen-columns="7"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
-				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodClassNm"/>" 		binding="pathNm" 		width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"		binding="saleStoreCnt" width="60" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			</wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
 			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -191,7 +181,4 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/pos/prodPos.js?ver=20190125.02" charset="utf-8"></script>
-
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/pos/prodPos.js?ver=20200111.02" charset="utf-8"></script>

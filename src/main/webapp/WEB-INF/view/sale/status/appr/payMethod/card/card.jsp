@@ -38,7 +38,6 @@
             </span>
         </div>
         </td>
-
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="apprCardSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
@@ -55,7 +54,6 @@
         </td>
       </c:if>
       </tr>
-
       <tr>
         <%-- 포스선택 --%>
         <th><s:message code="pos.pos" /></th>
@@ -68,7 +66,6 @@
             </jsp:include>
             <%--// 포스선택 모듈 멀티 선택 사용시 include --%>
         </td>
-
         <%-- 코너표시 --%>
         <th><s:message code="corner.cornrNm" /></th>
         <td>
@@ -79,7 +76,6 @@
             </jsp:include>
         </td>
       </tr>
-
       <tr>
         <%-- 승인구분 --%>
         <th><s:message code="dayMcoupn.apprProcFg" /></th>
@@ -115,7 +111,6 @@
                 </span>
           </div>
         </td>
-
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="apprCardSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
@@ -163,20 +158,20 @@
           is-read-only="true"
           item-formatter="_itemFormatter">
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"            />"     binding="storeCd"         width="100" is-read-only="true" align="center" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"            />"     binding="storeNm"         width="200" is-read-only="true" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"            />"     binding="storeCd"         width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"            />"     binding="storeNm"         width="150" is-read-only="true" align="center" ></wj-flex-grid-column>
 
-          <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cnt"             width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmt"         width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmt"         width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cnt"             width="80" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmt"         width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmt"         width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
 
-          <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntA"            width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtA"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtA"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntA"            width="80" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtA"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtA"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
 
-          <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntB"            width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtB"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtB"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntB"            width="80" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtB"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtB"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
@@ -210,17 +205,17 @@
                 is-read-only="true"
                 item-formatter="_itemFormatter">
                 <!-- define columns -->
-		        <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"            />"     binding="storeCd"         width="100" is-read-only="true" align="center" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"            />"     binding="storeNm"         width="200" is-read-only="true" align="center" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cnt"             width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmt"         width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmt"         width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntA"            width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtA"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtA"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntB"            width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtB"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-		        <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtB"        width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"            />"     binding="storeCd"         width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"            />"     binding="storeNm"         width="150" is-read-only="true" align="center" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cnt"             width="80" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmt"         width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmt"         width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntA"            width="80" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtA"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtA"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"     binding="cntB"            width="80" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="taxBill.requestAmt"           />"     binding="saleAmtB"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+		        <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"     binding="apprAmtB"        width="100" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>

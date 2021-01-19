@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * @Class Name :  ProdDayController.java
- * @Description : 매출관리 > 매출현황 > 일자별 상세현황
+ * @Description : 매출관리 > 매출현황 > 상품별 > 일자별탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -48,7 +48,6 @@ public class ProdDayController {
         this.prodDayService = prodClassService;
     }
 
-
     /**
      * 일자별상품현황 - 페이지 이동
      * @param   request
@@ -63,9 +62,8 @@ public class ProdDayController {
     	return "sale/status/prod/day/prodDay";
     }
 
-
     /**
-     * 상품별 매출 -일자별상품 리스트 조회 
+     * 일자별탭 - 조회
      * @param   request
      * @param   response
      * @param   model
@@ -74,7 +72,7 @@ public class ProdDayController {
      * @author  김진
      * @since   2020. 01. 15.
      */
-    @RequestMapping(value = "/day/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/day/getProdDayList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdDayList(HttpServletRequest request, HttpServletResponse response, Model model, ProdDayVO prodDayVO) {
 
@@ -86,7 +84,7 @@ public class ProdDayController {
     }
     
     /**
-     * 상품별 매출 -일자별상품 엑셀 다운로드 조회 
+     * 일자별탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
@@ -95,7 +93,7 @@ public class ProdDayController {
      * @author  서재식
      * @since   2020. 04. 22.
      */
-    @RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/day/getProdDayExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdDayExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdDayVO prodDayVO) {
 
