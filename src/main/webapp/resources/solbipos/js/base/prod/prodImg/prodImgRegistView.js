@@ -102,7 +102,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.imgCancel("001", 'A');
         $scope.imgCancel("002", 'A');
         $scope.imgCancel("003", 'A');
-        
+
         // 파라미터
         var params = {};
         params.listScale = 15;
@@ -256,7 +256,8 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
             // ie 일때
-            $("#" + element).replaceWith( $("#" + element).clone(true) );
+            //$("#" + element).replaceWith( $("#" + element).clone(true) );
+            $("#" + element).val("");
         } else {
             // other browser 일때
             $("#" + element).val("");
@@ -341,7 +342,6 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                         $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
 
                         $scope.$broadcast('loadingPopupInactive');
-                        $scope.close();
                     }
                     else if (result.status === "FAIL") {
                         $scope._popMsg('Ajax Fail By HTTP Request');
@@ -418,7 +418,6 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                         $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
 
                         $scope.$broadcast('loadingPopupInactive');
-                        $scope.close();
                     }
                     else if (result.status === "FAIL") {
                         $scope._popMsg('Ajax Fail By HTTP Request');

@@ -34,35 +34,15 @@
             <th><s:message code="prodImg.regDate" /></th>
             <td colspan="3" style="text-align: left;">
                 <div class="sb-select">
-            <span class="txtIn w110px">
-              <wj-input-date
-                      id="srchTimeStartDate"
-                      value="startDate"
-                      ng-model="startDate"
-                      control="startDateCombo"
-                      min="2000-01-01"
-                      max="2099-12-31"
-                      initialized="_initDateBox(s)">
-              </wj-input-date>
-            </span>
+                    <span class="txtIn"><input id="srchTimeStartDate" class="w120px"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn w110px">
-              <wj-input-date
-                      id="srchTimeEndDate"
-                      value="endDate"
-                      ng-model="endDate"
-                      control="endDateCombo"
-                      min="2000-01-01"
-                      max="2099-12-31"
-                      initialized="_initDateBox(s)">
-              </wj-input-date>
-            </span>
+                    <span class="txtIn"><input id="srchTimeEndDate" class="w120px"></span>
                     <span class="chk ml10">
-              <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
-              <label for="chkDt">
-                <s:message code="cmm.all.day" />
-              </label>
-            </span>
+                       <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
+                        <label for="chkDt">
+                            <s:message code="cmm.all.day" />
+                        </label>
+		            </span>
                 </div>
             </td>
         </tr>
@@ -176,21 +156,22 @@
                         <td><div class="imgCell" id="imgKiosk"></div></td>
                         <td><div class="imgCell" id="imgDid"></div></td>
                     </tr>
-                    <f:form id="regForm" name="regForm" >
-                    <tr>
-                        <td>
-                            <input type="file" id="fileProd" name="fileProd" class="form-control" accept="image/x-png" onchange="imagePreview(this, '001')"/>
-                            <input type="hidden" id="hdProdFileNm" />
-                        </td>
-                        <td>
-                            <input type="file" id="fileKiosk" name="fileKiosk" class="form-control" accept="image/x-png" onchange="imagePreview(this, '002')"/>
-                            <input type="hidden" id="hdKioskFileNm" />
-                        </td>
-                        <td>
-                            <input type="file" id="fileDid" name="fileDid" class="form-control" accept="image/x-png" onchange="imagePreview(this, '003')"/>
-                            <input type="hidden" id="hdDidFileNm" />
-                        </td>
-                    </tr>
+                    <f:form id="regForm" name="regForm" method="post" enctype="multipart/form-data">
+                        <tr>
+                            <td>
+                                <input type="file" id="fileProd" name="fileProd" class="form-control" accept="image/x-png" onchange="imagePreview(this, '001')"/>
+                                <input type="hidden" id="hdProdFileNm" />
+                            </td>
+                            <td>
+                                <input type="file" id="fileKiosk" name="fileKiosk" class="form-control" accept="image/x-png" onchange="imagePreview(this, '002')"/>
+                                <input type="hidden" id="hdKioskFileNm" />
+                            </td>
+                            <td>
+                                <input type="file" id="fileDid" name="fileDid" class="form-control" accept="image/x-png" onchange="imagePreview(this, '003')"/>
+                                <input type="hidden" id="hdDidFileNm" />
+                            </td>
+                        </tr>
+                    </f:form>
                     <tr>
                         <td align="center">
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('001', 'F')"><s:message code="cmm.selectCancel" /></button>
@@ -207,10 +188,6 @@
                             <button type="button" class="btn_skyblue" ng-click="regImg('003')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('003')"><s:message code="cmm.del" /></button>
                         </td>
-                    </tr>
-                    </f:form>
-                    <tr>
-
                     </tr>
                 </tbody>
             </table>
@@ -250,7 +227,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20200819.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20200819.06" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -116,13 +116,19 @@ public class ProdImgServiceImpl implements ProdImgService {
             prodImgVO.setRegDt(dt);
 
             // 서버 저장 경로 (imgFg -> 001: 기본이미지, 002: KIOSK이미지, 003: DID이미지)
+            // 서버용 - 개발/운영 서버에 반영할 진짜 경로!!!!!!
             String pre_path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/";
             String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/" + prodImgVO.getImgFg() + "/";
+
+            // 로컬 테스트용 - 로컬에서 파일 업로드가 잘되는지 확인하기 위해 임의로 설정한 경로
+            //String pre_path = "D:\\prod_img\\" + path_folder + "/";
+            //String path = "D:\\prod_img\\" + path_folder + "/" + prodImgVO.getImgFg() + "/";
 
             // DB 저장 경로
             String path_table = multi.getRequestURL().toString().replace(multi.getRequestURI(),"") + "/ProdImg/" + path_folder + "/" + prodImgVO.getImgFg();
 
             // 서버 저장 위치에 해당 폴더가 존재하는지 확인 후 없으면 폴더 생성
+            // 부모-자식 폴더 동시에 생성 불가하기 때문에 pre_path 폴더 생성 후 path 폴더 생성
             File pre_dir = new File(pre_path);
             if(!pre_dir.isDirectory()){
                 pre_dir.mkdir();
