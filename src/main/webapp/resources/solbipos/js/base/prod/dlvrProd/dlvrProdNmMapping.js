@@ -78,7 +78,7 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
         // 파라미터 설정
         var params = new Array();
-
+        
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             for(var j = 0; j < arr.length; j++) {
 
@@ -134,6 +134,33 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
     // 상품명칭복사 팝업
     $scope.copyDlvrProdNm = function(){
         $scope.copyDlvrProdNmLayer.show(true);
+    };
+
+    // 상품명칭복사 excelUpload
+    $scope.excelUpload = function () {
+        var vScope = agrid.getScope('excelUploadDlvrProdNmCtrl');
+        var msg = messages["dlvrProd.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+
+        s_alert.popConf(msg, function () {
+
+            /* 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+            vScope.parentCtrl = 'dlvrProdNmMappingCtrl';
+
+            $("#excelUpFile").val('');
+            $("#excelUpFile").trigger('click');
+
+        });
+    };
+
+    /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */
+    $scope.uploadCallBack = function () {
+        $scope._pageView('dlvrProdNmMappingCtrl', 1);
+    };
+
+    // 상품명칭복사 양식 다운로드
+    $scope.excelDownload = function () {
+        var vScope = agrid.getScope('excelUploadDlvrProdNmCtrl');
+        vScope.excelFormDownload();
     };
 
 }]);

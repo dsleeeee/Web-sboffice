@@ -21,8 +21,8 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
   angular.extend(this, new RootController('storeManageCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("clsFg", clsFg);
-  $scope._setComboData("sysStatFg", sysStatFg);
+  $scope._setComboData("srchClsFg", clsFg);
+  $scope._setComboData("srchSysStatFg", sysStatFg);
 
   // 선택 매장
   $scope.selectedStore;
@@ -58,7 +58,7 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
         // var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "storeCd" ||  col.binding === "storeNm") {
           $scope.setSelectedStore(s.rows[ht.row].dataItem);
-          var popup = $scope.storeInfoLayer;
+          /*var popup = $scope.storeInfoLayer;
           // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
           popup.shown.addHandler(function (s) {
             setTimeout(function() {
@@ -68,7 +68,10 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
 
           // 팝업 닫을때
           popup.show(true, function (s) {
-          });
+          });*/
+
+          $scope.storeInfoLayer.show(true);
+          $scope._broadcast('storeInfoCtrl');
 
           event.preventDefault();
         }
@@ -94,7 +97,7 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     $scope.setSelectedStore(null);
 
-    var popup = $scope.storeInfoLayer;
+    /*var popup = $scope.storeInfoLayer;
     // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
     popup.shown.addHandler(function (s) {
       setTimeout(function() {
@@ -104,7 +107,10 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 팝업 닫을때
     popup.show(true, function (s) {
-    });
+    });*/
+
+    $scope.storeInfoLayer.show(true);
+    $scope._broadcast('storeInfoCtrl');
 
     event.preventDefault();
   };

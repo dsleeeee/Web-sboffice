@@ -58,7 +58,7 @@
             <wj-combo-box
                     id="srchClsFg"
                     ng-model="clsFg"
-                    items-source="_getComboData('clsFg')"
+                    items-source="_getComboData('srchClsFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
@@ -75,7 +75,7 @@
             <wj-combo-box
                     id="srchSysStatFg"
                     ng-model="sysStatFg"
-                    items-source="_getComboData('sysStatFg')"
+                    items-source="_getComboData('srchSysStatFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
@@ -188,7 +188,7 @@ var pAgencyCd = "${pAgencyCd}";
 var authHqList = ${authHqList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20200423.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20200423.09" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">

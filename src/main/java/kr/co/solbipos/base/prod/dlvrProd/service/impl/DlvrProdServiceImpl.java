@@ -114,4 +114,53 @@ public class DlvrProdServiceImpl implements DlvrProdService {
 
     }
 
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 */
+    @Override
+    public int copyDlvrProdNm(DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        dlvrProdVO.setRegDt(currentDt);
+        dlvrProdVO.setRegId(sessionInfoVO.getUserId());
+        dlvrProdVO.setModDt(currentDt);
+        dlvrProdVO.setModId(sessionInfoVO.getUserId());
+
+        // 필수 값 체크
+        if(dlvrProdVO.getOriginalStoreFg() != null && !"".equals(dlvrProdVO.getOriginalStoreFg()) &&
+            dlvrProdVO.getOriginalStoreCd() != null && !"".equals(dlvrProdVO.getOriginalStoreCd()) &&
+            dlvrProdVO.getTargetStoreCd() != null && !"".equals(dlvrProdVO.getTargetStoreCd())){
+
+            // 1. 배달상품명칭 복사 전 기존데이터 삭제
+            dlvrProdMapper.deleteStoreDlvrProdNm(dlvrProdVO);
+
+            // 2. 기준매장의 배달상품명칭을 복사하여 적용대상매장에 등록
+            result = dlvrProdMapper.copyStoreDlvrProdNm(dlvrProdVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }else{
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        return result;
+    }
+
+    /** 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크 */
+    @Override
+    public int chkDlvrProd(DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        dlvrProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            dlvrProdVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+        } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            dlvrProdVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
+
+        // 상품코드 array 값 세팅
+        dlvrProdVO.setArrProdCdCol(dlvrProdVO.getProdCdCol().split(","));
+
+        return dlvrProdMapper.chkDlvrProd(dlvrProdVO);
+    }
+
 }

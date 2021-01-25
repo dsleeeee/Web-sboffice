@@ -37,4 +37,13 @@ public interface DlvrProdMapper {
 
     /** 배달시스템 상품 명칭 매핑 - 배달상품명칭등록 */
     int insertDlvrProdNm(DlvrProdVO dlvrProdVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 전 기존데이터 삭제 */
+    int deleteStoreDlvrProdNm(DlvrProdVO dlvrProdVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 */
+    int copyStoreDlvrProdNm(DlvrProdVO dlvrProdVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크 */
+    int chkDlvrProd(DlvrProdVO dlvrProdVO);
 }

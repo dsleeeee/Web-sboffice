@@ -140,4 +140,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTime.js?ver=20190623" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTime.js?ver=20190624" charset="utf-8"></script>

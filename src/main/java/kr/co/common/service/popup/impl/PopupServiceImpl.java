@@ -131,4 +131,15 @@ public class PopupServiceImpl implements PopupService{
 
         return popupMapper.getProductList(prodVO);
     }
+
+    /** 본사 + 매장목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getHqStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return popupMapper.getHqStoreList(storeManageVO);
+    }
 }

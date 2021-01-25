@@ -128,6 +128,45 @@ public class DlvrProdController {
         return returnListJson(Status.OK, regCnt);
     }
 
+    /**
+     * 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사
+     *
+     * @param dlvrProdVO
+     * @param request
+     * @author 이다솜
+     * @since 2021.01.12
+     * @return
+     */
+    @RequestMapping(value = "/dlvrProd/copyDlvrProdNm.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyDlvrProdNm(@RequestBody DlvrProdVO dlvrProdVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int regCnt = dlvrProdService.copyDlvrProdNm(dlvrProdVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, regCnt);
+    }
+
+    /**
+     * 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크
+     *
+     * @param dlvrProdVO
+     * @param request
+     * @author 이다솜
+     * @since 2021.01.15
+     * @return
+     */
+    @RequestMapping(value = "/dlvrProd/chkDlvrProd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkDlvrProd(DlvrProdVO dlvrProdVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int getCnt = dlvrProdService.chkDlvrProd(dlvrProdVO, sessionInfoVO);
+
+        return returnJson(Status.OK, getCnt);
+    }
 
 }
