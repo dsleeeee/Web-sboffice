@@ -32,29 +32,33 @@
                 <th>
                     <s:message code="month.month" />
                 </th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"> <input id="startMonthMonthProdClass" name="startDate" class="w120px" /></span>
                         <span class="rg">~</span>
                         <span class="txtIn"> <input id="endMonthMonthProdClass" name="endDate" class="w120px" /></span>
                     </div>
                 </td>
-            </tr>
-            <tr <c:if test="${orgnFg == 'STORE'}">style="display: none;"</c:if> >
-                <%-- 매장코드 --%>
-                <th><s:message code="month.store"/></th>
-                <td colspan="3">
-                    <%-- 매장선택 모듈 싱글 선택 사용시 include
-                         param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                      displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                      modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                      closeFunc - 팝업 닫기시 호출할 함수
-                    --%>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="monthProdClassStore"/>
-                    </jsp:include>
-                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-                </td>
+                <c:if test="${orgnFg == 'HQ'}">
+                    <%-- 매장코드 --%>
+                    <th><s:message code="month.store"/></th>
+                    <td>
+                            <%-- 매장선택 모듈 싱글 선택 사용시 include
+                                 param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                              displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                              modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                              closeFunc - 팝업 닫기시 호출할 함수
+                            --%>
+                        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                            <jsp:param name="targetId" value="monthProdClassStore"/>
+                        </jsp:include>
+                            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                    </td>
+                </c:if>
+                <c:if test="${orgnFg == 'STORE'}">
+                    <td></td>
+                    <td></td>
+                </c:if>
             </tr>
             <tr>
                 <%-- 분류표시 --%>
@@ -62,7 +66,7 @@
                     <s:message code="month.level" />
                 </th>
                 <td>
-                    <div class="sb-select fl w200px">
+                    <div class="sb-select fl w120px">
                         <wj-combo-box
                             id="monthProdClassLevel"
                             ng-model="level"
@@ -112,7 +116,7 @@
                     <input type="hidden" id="_monthProdClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                     <button type="button" class="btn_skyblue fl mr5" id="btnCancelMonthProdClassCd" style="margin-left: 5px;" ng-click="delMonthProdClass()"><s:message code="cmm.selectCancel"/></button>
                 </td>
-                <th></th>
+                <td></td>
                 <td></td>
             </tr>
         </tbody>
@@ -143,7 +147,6 @@
                     <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-
                     <%-- 컬럼 생성--%>
                     <c:forEach var="i" begin="1" end="200" step="1">
                         <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="pay${i}SaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
@@ -168,4 +171,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthProdClass.js?ver=20200324.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthProdClass.js?ver=20210118.01" charset="utf-8"></script>

@@ -27,19 +27,17 @@
         <tr>
             <%-- 조회일자 --%>
             <th><s:message code="cmm.search.date"/></th>
-            <td colspan="3">
+            <td>
                 <div class="sb-select">
                     <span class="txtIn"><input id="srchProdClassStartDate" ng-model="startDate" class="w120px"></span>
                     <span class="rg">~</span>
                     <span class="txtIn"><input id="srchProdClassEndDate" ng-model="endDate" class="w120px"></span>
                 </div>
             </td>
-        </tr>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <tr>
-                    <%-- 매장코드 --%>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <%-- 매장코드 --%>
                 <th><s:message code="day.time.store"/></th>
-                <td colspan="3">
+                <td>
                         <%-- 매장선택 모듈 싱글 선택 사용시 include
                              param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                                           displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -51,15 +49,17 @@
                     </jsp:include>
                         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                 </td>
-            </tr>
-        </c:if>
-        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-            <input type="hidden" id="dayProdClassSelectStoreCd" value="${sessionInfo.storeCd}"/>
-        </c:if>
+            </c:if>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <input type="hidden" id="dayProdClassSelectStoreCd" value="${sessionInfo.storeCd}"/>
+                <td></td>
+                <td></td>
+            </c:if>
+        </tr>
         <tr>
             <th><s:message code="day.prodClass.level"/></th>
             <td>
-                <div class="sb-select fl w200px">
+                <div class="sb-select fl w120px">
                     <wj-combo-box
                             id="level"
                             ng-model="level"
@@ -97,7 +97,7 @@
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
-            <th></th>
+            <td></td>
             <td></td>
         </tr>
         </tbody>
@@ -127,7 +127,6 @@
                 <wj-flex-grid-column header="<s:message code="day.prodClass.yoil"/>" binding="yoil" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.totSaleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
                 <%-- 컬럼 생성--%>
                 <c:forEach var="i" begin="1" end="200" step="1">
                     <wj-flex-grid-column header="<s:message code="day.prodClass.realSaleAmt"/>" binding="pay${i}SaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
@@ -148,4 +147,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20200324" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20210118.01" charset="utf-8"></script>

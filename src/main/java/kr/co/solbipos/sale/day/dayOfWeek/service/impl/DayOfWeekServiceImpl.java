@@ -202,7 +202,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
     public List<DefaultMap<Object>> getDayOfWeekProdClassList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+//        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayOfWeekVO.setLevel("Level" + dayOfWeekVO.getLevel());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
@@ -210,8 +210,10 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
             String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
             dayOfWeekVO.setStoreCdList(storeCds);
         }
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
+            dayOfWeekVO.setStoreCdList(storeCds);
         }
 
         // 레벨에 따른 분류값 가져와서 배열변수에 넣음.

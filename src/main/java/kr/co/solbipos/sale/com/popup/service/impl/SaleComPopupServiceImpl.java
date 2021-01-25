@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupService;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupVO;
 
@@ -59,9 +60,10 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
         	saleComPopupVO.setArrCornrCd(saleComPopupVO.getCornrCd().split(","));
         }
 
-    	if(saleComPopupVO.getChkPop().equals("tablePop")) {
-    		return saleComPopupMapper.getProdPopList(saleComPopupVO);
-    	}else if(saleComPopupVO.getChkPop().equals("empPop")) {
+//    	if(saleComPopupVO.getChkPop().equals("tablePop")) {
+//    		return saleComPopupMapper.getProdPopList(saleComPopupVO);
+//    	}else
+		if(saleComPopupVO.getChkPop().equals("empPop")) {
     		return saleComPopupMapper.getEmpPopList(saleComPopupVO);
     	}else if(saleComPopupVO.getChkPop().equals("posPop")) {
     		return saleComPopupMapper.getPosPopList(saleComPopupVO);
@@ -69,7 +71,12 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     		return saleComPopupMapper.getPosMonthPopList(saleComPopupVO);
     	}else if(saleComPopupVO.getChkPop().equals("posHourPop")) {
     		return saleComPopupMapper.getPosHourPopList(saleComPopupVO);
-    	}
+
+		// 매출관리>매출현황>코너별>일자별탭, 요일별탭, 월별탭
+    	} else if(saleComPopupVO.getChkPop().equals("cornerDayProdPop")) {
+			return saleComPopupMapper.getCornerDayProdPopList(saleComPopupVO);
+		}
+
         return null;
     }
 

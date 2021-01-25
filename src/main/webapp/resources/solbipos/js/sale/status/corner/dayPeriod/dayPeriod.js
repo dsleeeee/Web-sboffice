@@ -294,7 +294,7 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 		  var columns = $scope.flex.columns;
 
 		  for(var i=0; i<columns.length; i++){
-			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  if(columns[i].binding === 'pathNm'){
 				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			  }
 		  }
@@ -466,13 +466,13 @@ app.controller('cornerDayPeriodDtlExcelCtrl', ['$scope', '$http','$timeout', fun
 	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 	    // add a sigma to the header to show that this is a summary row
 	    s.bottomLeftCells.setCellData(0, 0, '합계');
-	  }
+	  };
 
 	  $scope.$on("chkProdClassDisplay", function (event) {
 		  var columns = $scope.excelFlex.columns;
 
 		  for(var i=0; i<columns.length; i++){
-			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  if(columns[i].binding === 'pathNm'){
 				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			  }
 		  }

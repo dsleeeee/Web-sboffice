@@ -60,7 +60,6 @@
 			</span>
         </div>
         </td>
-
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="cornerMonthSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
@@ -87,7 +86,6 @@
                 <input type="hidden" id="cornerMonthSelectExcelCornerCd" value=""/>
                 <input type="hidden" id="cornerMonthSelectExcelCornerName" value=""/>
       </tr>
-
       <tr>
         <%-- 코너표시 --%>
         <th><s:message code="corner.cornrDisplay" /></th>
@@ -182,6 +180,4 @@
     </div>
 </div>
 
-<script type="text/javascript">
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/month/month.js?ver=20190125.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/month/month.js?ver=20200125.01" charset="utf-8"></script>

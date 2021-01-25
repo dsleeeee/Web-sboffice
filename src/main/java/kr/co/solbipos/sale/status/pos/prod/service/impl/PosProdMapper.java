@@ -11,16 +11,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface PosProdMapper {
-	/** 포스별매출 상품별 탭 - 매장 및 포스 리스트 조회 */
+	/** 상품별탭 - 매장 및 포스 리스트 조회 */
     List<DefaultMap<String>> getStorePosList(PosProdVO posProdVO);
 
-    /** 포스별매출 상품별 탭 - 리스트 조회 */
+    /** 상품별탭 - 매장 코너 리스트 조회 */
+    List<DefaultMap<String>> getPosNmList(PosProdVO posProdVO);
+
+    /** 상품별탭 - 조회 */
     List<DefaultMap<String>> getPosProdList(PosProdVO posProdVO);
 
-    /** 포스별매출 상품별 탭 - 리스트 조회 (엑셀) */
+    /** 상품별탭 - 엑셀 조회 */
     List<DefaultMap<String>> getPosProdExcelList(PosProdVO posProdVO);
-
-    /** 포스별매출 - 매장 코너 리스트 조회 */
-	List<DefaultMap<String>> getPosNmList(PosProdVO posProdVO);
-
 }

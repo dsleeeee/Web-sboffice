@@ -300,7 +300,7 @@ public class DayServiceImpl implements DayService {
     /** 일자별(상품분류 탭) - 상품분류별 리스트 조회 */
     public List<DefaultMap<String>> getDayProdClassList(DayVO dayVO, SessionInfoVO sessionInfoVO){
 
-        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+//        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dayVO.setpProdClassCd("00000");
         dayVO.setLevel("Level" + dayVO.getLevel());
@@ -310,6 +310,8 @@ public class DayServiceImpl implements DayService {
             if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
                 dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
             }
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setArrStoreCd(sessionInfoVO.getStoreCd().split(","));
         }
 
         // 레벨에 따른 분류값 가져와서 배열변수에 넣음.

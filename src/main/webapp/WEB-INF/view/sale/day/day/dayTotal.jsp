@@ -60,7 +60,6 @@
 
   <div class="mt10 oh sb-select dkbr">
     <%-- 엑셀다운로드 --%>
-      <s:message code="day.dayTotal"/>
     <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
   </div>
 

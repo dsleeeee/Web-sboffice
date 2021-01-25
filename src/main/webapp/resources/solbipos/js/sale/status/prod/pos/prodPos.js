@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : prodPos.js
- * 설  명 : 상품별 >포스별별 탭 JavaScript
+ * 설  명 : 상품별 >포스별 탭 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -180,9 +180,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// <-- 포스 검색 -->
 	//매장의 포스(pos) 리스트 조회
 	$scope.getPosNmList = function () {
-//		var url             = '/sale/status/pos/pos/posNmList.sb';
-		var comboParams     = {};
-
+// 		var comboParams     = {};
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
 		$scope.getRePosNmList(storeCd,posCd,false)
@@ -313,7 +311,6 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 					  wijmo.addClass(cell, 'wj-custom-readonly');
 				  }
 			  }
-
 		  };
 
 		  $scope.flex.refresh();
@@ -625,7 +622,6 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 					  wijmo.addClass(cell, 'wj-custom-readonly');
 				  }
 			  }
-
 		  };
 
 		  $scope.excelFlex.refresh();

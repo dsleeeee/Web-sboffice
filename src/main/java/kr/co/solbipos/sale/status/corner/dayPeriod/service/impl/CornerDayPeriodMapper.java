@@ -11,16 +11,15 @@ import kr.co.solbipos.sale.status.corner.dayPeriod.service.CornerDayPeriodVO;
 @Mapper
 @Repository
 public interface CornerDayPeriodMapper {
-    /** 코너별매출 설정기간별 탭 - 리스트 조회 */
+    /** 설정기간별탭 - 조회 */
     List<DefaultMap<String>> getCornerDayPeriodList(CornerDayPeriodVO cornerDayPeriodVO);
 
-    /** 코너별매출 설정기간별 탭 - 리스트 상세 조회 */
-	List<DefaultMap<String>> getCornerDayPeriodDtlList(CornerDayPeriodVO cornerDayPeriodVO);
-
-	/** 코너별매출 설정기간별 탭 - 엑셀 리스트 조회 */
+	/** 설정기간별탭 - 엑셀 조회 */
 	List<DefaultMap<String>> getCornerDayPeriodExcelList(CornerDayPeriodVO cornerDayPeriodVO);
 
-	/** 코너별매출 설정기간별 탭 - 엑셀 리스트 상세 조회 */
-	List<DefaultMap<String>> getCornerDayPeriodDtlExcelList(CornerDayPeriodVO cornerDayPeriodVO);
+	/** 설정기간별탭 - 상세 조회 */
+	List<DefaultMap<String>> getCornerDayPeriodDtlList(CornerDayPeriodVO cornerDayPeriodVO);
 
+	/** 설정기간별탭 - 상세 엑셀 조회 */
+	List<DefaultMap<String>> getCornerDayPeriodDtlExcelList(CornerDayPeriodVO cornerDayPeriodVO);
 }

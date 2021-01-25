@@ -19,6 +19,9 @@ var vLevel = [
     {"name":"2레벨","value":"2"},
     {"name":"3레벨","value":"3"}
 ];
+var vLevelNo = [
+    {"name":"분류없음","value":"0"}
+];
 
 /**
  *  상품분류별 매출 조회 그리드 생성
@@ -32,14 +35,19 @@ app.controller('dayOfWeekProdClassCtrl', ['$scope', '$http', '$timeout', functio
     var startDate = wcombo.genDateVal("#startDateDayOfWeekProdClass", gvStartDate);
     var endDate = wcombo.genDateVal("#endDateDayOfWeekProdClass", gvEndDate);
 
-    // 본사/매장 별 사용하는 최대 분류레벨 값을 파악하여 분류표시 selectBox 선택 값 셋팅
-    if(maxLevel == 1) {
-        vLevel.splice(1,2);
-    } else if (maxLevel == 2) {
-        vLevel.splice(2,1);
+    if(maxLevel == 0) {
+        // 조회조건 콤보박스 데이터 Set
+        $scope._setComboData("srchDayOfWeekProdClassLevelCombo", vLevelNo);
+    } else {
+        // 본사/매장 별 사용하는 최대 분류레벨 값을 파악하여 분류표시 selectBox 선택 값 셋팅
+        if(maxLevel == 1) {
+            vLevel.splice(1,2);
+        } else if (maxLevel == 2) {
+            vLevel.splice(2,1);
+        }
+        // 조회조건 콤보박스 데이터 Set
+        $scope._setComboData("srchDayOfWeekProdClassLevelCombo", vLevel);
     }
-    // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("srchDayOfWeekProdClassLevelCombo", vLevel);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -116,15 +124,18 @@ app.controller('dayOfWeekProdClassCtrl', ['$scope', '$http', '$timeout', functio
             var grid = wijmo.Control.getControl("#wjDayOfWeekProdClassList");
             var columns = grid.columns;
             var arr = $("#hdDayOfWeekProdClassNm").val().split(",");
-            var start = 4;
-            var end = (arr.length * 2) + 3;
 
-            // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
-            for(var i = 4; i <= 199; i++){
-                if(i >= start && i <= end){
-                    columns[i].visible = true;
-                }else{
-                    columns[i].visible = false;
+            if($("#hdDayOfWeekProdClassNm").val() != "") {
+                var start = 4;
+                var end = (arr.length * 2) + 3;
+
+                // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
+                for(var i = 4; i <= 199; i++){
+                    if(i >= start && i <= end){
+                        columns[i].visible = true;
+                    }else{
+                        columns[i].visible = false;
+                    }
                 }
             }
 

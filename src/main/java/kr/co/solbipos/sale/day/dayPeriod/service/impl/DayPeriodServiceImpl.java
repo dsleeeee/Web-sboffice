@@ -86,8 +86,10 @@ public class DayPeriodServiceImpl implements DayPeriodService {
             String[] storeCds = dayPeriodVO.getStoreCds().split(",");
             dayPeriodVO.setStoreCdList(storeCds);
         }
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayPeriodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
+            dayPeriodVO.setStoreCdList(storeCds);
         }
 
         return dayPeriodMapper.getDayPeriodProdClassList(dayPeriodVO);
@@ -105,8 +107,10 @@ public class DayPeriodServiceImpl implements DayPeriodService {
             String[] storeCds = dayPeriodVO.getStoreCds().split(",");
             dayPeriodVO.setStoreCdList(storeCds);
         }
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayPeriodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
+            dayPeriodVO.setStoreCdList(storeCds);
         }
 
         return dayPeriodMapper.getDayPeriodProdClassDetailList(dayPeriodVO);

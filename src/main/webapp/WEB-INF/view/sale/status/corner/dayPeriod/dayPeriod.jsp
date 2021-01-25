@@ -130,10 +130,10 @@
 					item-formatter="_itemFormatter">
 
 					<!-- define columns -->
-					<wj-flex-grid-column header="<s:message code="corner.cornr"/>" binding="cornrCd" 	width="250" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.cornrNm"/>" binding="cornrNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.cornr"/>" binding="cornrCd" 	width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.cornrNm"/>" binding="cornrNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
 				</wj-flex-grid>
 				<%-- ColumnPicker 사용시 include --%>
 				<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -192,13 +192,11 @@
 					item-formatter="_itemFormatter">
 
 					<!-- define columns -->
-					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.prodNm"/>"	binding="prodNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="100" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.prodClassNm"/>" 	binding="pathNm" 		width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.prodNm"/>"	binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
 				</wj-flex-grid>
 				<%-- ColumnPicker 사용시 include --%>
 				<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -231,10 +229,10 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="corner.cornr"/>" binding="cornrCd"    width="250" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="corner.cornrNm"/>" binding="cornrNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.cornr"/>" binding="cornrCd"    width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.cornrNm"/>" binding="cornrNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
         </wj-flex-grid>
      </div>
     </div>
@@ -253,13 +251,11 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>"     binding="lv1Nm"         width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>"     binding="lv2Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>"     binding="lv3Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="corner.prodNm"/>" binding="prodNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="100" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.prodClassNm"/>"     binding="pathNm"         width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.prodNm"/>" binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>
@@ -267,4 +263,5 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayPeriod/dayPeriod.js?ver=20190125.05" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayPeriod/dayPeriod.js?ver=20210114.01" charset="utf-8"></script>

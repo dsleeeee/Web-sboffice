@@ -116,9 +116,9 @@
                       is-read-only="true"
                       item-formatter="_itemFormatter">
                       <!-- define columns -->
-                      <wj-flex-grid-column header="<s:message code="pos.pos"/>"                 binding="storeNmPosNo"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="saleCnt"        width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="pos.pos"/>"                 binding="storeNmPosNo"          width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="saleCnt"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -147,9 +147,9 @@
                       is-read-only="true"
                       item-formatter="_itemFormatter">
                       <!-- define columns -->
-                      <wj-flex-grid-column header="<s:message code="pos.pos"/>"                 binding="storeNmPosNo"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="saleCnt"        width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="pos.pos"/>"                 binding="storeNmPosNo"          width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="saleCnt"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
              </div>
@@ -188,11 +188,9 @@
                           is-read-only="true"
                           item-formatter="_itemFormatter">
                           <!-- define columns -->
-                          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="corner.prodNm"/>"           binding="prodNm"        width="*"   align="center"   is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="pos.prodClassNm"/>" 	binding="pathNm" 		width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="pos.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="pos.prodNm"/>"           binding="prodNm"        width="150"   align="center"   is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"             binding="totSaleQty"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="pos.realSaleAmt"/>"         binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         </wj-flex-grid>
@@ -224,11 +222,9 @@
                          is-read-only="true"
                          item-formatter="_itemFormatter">
                          <!-- define columns -->
-                         <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>"    binding="lv1Nm"         width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>"   binding="lv2Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>"   binding="lv3Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="corner.prodNm"/>"           binding="prodNm"        width="*"   align="center"   is-read-only="true"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="pos.prodClassNm"/>"    binding="pathNm"         width="300" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="pos.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="pos.prodNm"/>"           binding="prodNm"        width="150"   align="center"   is-read-only="true"></wj-flex-grid-column>
                          <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"             binding="totSaleQty"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                          <wj-flex-grid-column header="<s:message code="pos.realSaleAmt"/>"         binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                        </wj-flex-grid>
@@ -242,5 +238,5 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/dayPeriod/dayPeriod.js" charset="utf-8"></script>
 
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/dayPeriod/dayPeriod.js" charset="utf-8"></script>

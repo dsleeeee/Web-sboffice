@@ -19,8 +19,11 @@ public interface SaleComPopupMapper {
     List<DefaultMap<String>> getTablePopList(SaleComPopupVO saleComPopupVO);
         
     /** 매출공통팝업 - 상품매출내역 팝업(수량 클릭) */
-    List<DefaultMap<String>> getProdPopList(SaleComPopupVO saleComPopupVO);
-    
+//    List<DefaultMap<String>> getProdPopList(SaleComPopupVO saleComPopupVO);
+
+    /** 매출공통팝업 - 상품매출내역 팝업(수량 클릭) */
+    List<DefaultMap<String>> getCornerDayProdPopList(SaleComPopupVO saleComPopupVO);
+
     /** 매출공통팝업 - 상품매출내역 팝업(판매자별) */
     List<DefaultMap<String>> getEmpPopList(SaleComPopupVO saleComPopupVO);
     
@@ -32,7 +35,7 @@ public interface SaleComPopupMapper {
     
     /** 매출공통팝업 - 상품매출내역 팝업(포스별-시간대별) */
     List<DefaultMap<String>> getPosHourPopList(SaleComPopupVO saleComPopupVO);
-    
+
 	/** 매출공통팝업 - 승인현황(매장현황) 팝업(카드) */
     List<DefaultMap<String>> getCardApprPopList(SaleComPopupVO saleComPopupVO);
     
@@ -56,7 +59,7 @@ public interface SaleComPopupMapper {
     
 	/** 매출공통팝업 - 승인현황(매장현황) 팝업(비매출현금) */
     List<DefaultMap<String>> getNcashApprPopList(SaleComPopupVO saleComPopupVO);
-    
+
     /** 매출공통팝업 - 상품선택(대분류) 팝업 리스트 조회 */
     List<DefaultMap<String>> getClassProdList(SaleComPopupVO saleComPopupVO);
     
@@ -65,7 +68,7 @@ public interface SaleComPopupMapper {
     
     /** 매출공통팝업 - 상품선택(상품) - 결제수단별탭 팝업 리스트 조회 */
     List<DefaultMap<String>> getPayFgList(SaleComPopupVO saleComPopupVO);
-    
+
     /** 결제수단 컬럼 리스트 조회 */
     List<DefaultMap<String>> getPayColList(SaleComPopupVO saleComPopupVO);
     

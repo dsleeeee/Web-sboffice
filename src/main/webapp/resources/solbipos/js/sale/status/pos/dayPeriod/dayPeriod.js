@@ -257,7 +257,7 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 		  var columns = $scope.flex.columns;
 
 		  for(var i=0; i<columns.length; i++){
-			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  if(columns[i].binding === 'pathNm'){
 				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			  }
 		  }
@@ -369,7 +369,7 @@ app.controller('posDayPeriodDtlExcelCtrl', ['$scope', '$http','$timeout', functi
 		  var columns = $scope.excelFlex.columns;
 
 		  for(var i=0; i<columns.length; i++){
-			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  if(columns[i].binding === 'pathNm'){
 				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			  }
 		  }
@@ -397,8 +397,8 @@ app.controller('posDayPeriodDtlExcelCtrl', ['$scope', '$http','$timeout', functi
 	    var params          = {};
 	    params.posNo        = $scope.excelPosNo;
 	    params.storeCd      = $scope.excelStoreCd;
-	    params.startDate    = $scope.excelStartDateForDt;
-	    params.endDate      = $scope.excelEndDateForDt;
+	    params.startDate    = $scope.excelStartDate;
+	    params.endDate      = $scope.excelEndDate;
 	    params.orgnFg    	= $scope.excelOrgnFg;
 
 	    if(params.startDate > params.endDate){

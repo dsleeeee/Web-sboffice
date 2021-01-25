@@ -32,18 +32,17 @@
                 <th>
                     <s:message code="dayofweek.date" />
                 </th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="startDateDayOfWeekProdClass" name="startDate" class="w200px" /></span>
+                        <span class="txtIn"> <input id="startDateDayOfWeekProdClass" name="startDate" class="w120px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="endDateDayOfWeekProdClass" name="endDate" class="w200px" /></span>
+                        <span class="txtIn"> <input id="endDateDayOfWeekProdClass" name="endDate" class="w120px" /></span>
                     </div>
                 </td>
-            </tr>
-            <tr <c:if test="${orgnFg == 'STORE'}">style="display: none;"</c:if> >
-                <%-- 매장코드 --%>
-                <th><s:message code="dayofweek.store"/></th>
-                <td colspan="3">
+                <c:if test="${orgnFg == 'HQ'}">
+                    <%-- 매장코드 --%>
+                    <th><s:message code="dayofweek.store"/></th>
+                    <td>
                     <%-- 매장선택 모듈 싱글 선택 사용시 include
                          param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                                       displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -54,15 +53,22 @@
                         <jsp:param name="targetId" value="dayOfWeekProdClassStore"/>
                     </jsp:include>
                     <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-                </td>
+                    </td>
+                </c:if>
+                <c:if test="${orgnFg == 'STORE'}">
+                    <td></td>
+                    <td></td>
+                </c:if>
             </tr>
+            <%--<tr <c:if test="${orgnFg == 'STORE'}">style="display: none;"</c:if> >--%>
+            <%--</tr>--%>
             <tr>
                 <%-- 분류표시 --%>
                 <th>
                     <s:message code="dayofweek.level" />
                 </th>
                 <td>
-                    <div class="sb-select fl w200px">
+                    <div class="sb-select fl w120px">
                         <wj-combo-box
                             id="dayOfWeekProdClassLevel"
                             ng-model="level"
@@ -112,7 +118,7 @@
                     <input type="hidden" id="_dayOfWeekProdClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                     <button type="button" class="btn_skyblue fl mr5" id="btnCancelDayOfWeekProdClassCd" style="margin-left: 5px;" ng-click="delDayOfWeekProdClass()"><s:message code="cmm.selectCancel"/></button>
                 </td>
-                <th></th>
+                <td></td>
                 <td></td>
             </tr>
         </tbody>
@@ -138,7 +144,6 @@
                     <wj-flex-grid-column header="<s:message code="dayofweek.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayofweek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayofweek.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-
                     <%-- 컬럼 생성--%>
                     <c:forEach var="i" begin="1" end="200" step="1">
                         <wj-flex-grid-column header="<s:message code="dayofweek.realSaleAmt"/>" binding="pay${i}SaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
@@ -163,7 +168,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekProdClass.js?ver=20200323.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekProdClass.js?ver=20210118.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>

@@ -38,34 +38,32 @@
             </span>
         </div>
         </td>
-
-      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="hidden" id="cornerDaySelectStoreCd" valaue=""/>
-        <%-- 매장코드 --%>
-        <th><s:message code="todayBillSaleDtl.store"/></th>
-        <td>
-            <%-- 매장선택 모듈 싱글 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                            closeFunc - 팝업 닫기시 호출할 함수
-            --%>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
-                <jsp:param name="targetId" value="cornerDaySelectStore"/>
-                <jsp:param name="subTargetId" value="cornerDaySelectCorner"/>
-                <jsp:param name="closeFunc" value="closeSelectStore"/>
-            </jsp:include>
-        </td>
-      </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <input type="hidden" id="cornerDaySelectStoreCd" valaue=""/>
+            <%-- 매장코드 --%>
+            <th><s:message code="todayBillSaleDtl.store"/></th>
+            <td>
+                <%-- 매장선택 모듈 싱글 선택 사용시 include
+                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                closeFunc - 팝업 닫기시 호출할 함수
+                --%>
+                <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
+                    <jsp:param name="targetId" value="cornerDaySelectStore"/>
+                    <jsp:param name="subTargetId" value="cornerDaySelectCorner"/>
+                    <jsp:param name="closeFunc" value="closeSelectStore"/>
+                </jsp:include>
+            </td>
+        </c:if>
+        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="cornerDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
-      </c:if>
-                <input type="hidden" id="cornerDaySelectCornerCd" value=""/>
-                <input type="hidden" id="cornerDaySelectCornerName" value=""/>
-                <input type="hidden" id="cornerDaySelectExcelCornerCd" value=""/>
-                <input type="hidden" id="cornerDaySelectExcelCornerName" value=""/>
+        </c:if>
+        <input type="hidden" id="cornerDaySelectCornerCd" value=""/>
+        <input type="hidden" id="cornerDaySelectCornerName" value=""/>
+        <input type="hidden" id="cornerDaySelectExcelCornerCd" value=""/>
+        <input type="hidden" id="cornerDaySelectExcelCornerName" value=""/>
       </tr>
-
       <tr>
         <%-- 코너표시 --%>
         <th><s:message code="corner.cornrDisplay" /></th>
@@ -117,7 +115,6 @@
           frozen-columns="4"
           item-formatter="_itemFormatter">
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="corner.storeCd"/>"          binding="storeCd"          width="0" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.saleDate"/>"          binding="saleDate"          width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.yoil"/>"              binding="yoil"              width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.totRealSaleAmt"/>"    binding="totRealSaleAmt"    width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -163,6 +160,4 @@
     </div>
 </div>
 
-<script type="text/javascript">
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/day/day.js?ver=20200904.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/day/day.js?ver=20210121.01" charset="utf-8"></script>

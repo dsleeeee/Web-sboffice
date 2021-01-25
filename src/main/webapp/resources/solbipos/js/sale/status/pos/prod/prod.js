@@ -1,3 +1,14 @@
+/****************************************************************
+ *
+ * 파일명 : prod.js
+ * 설  명 : 포스별 >상품별 탭 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2020.01.21     이승규        1.0
+ * 2021.01.04     김설아      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -9,23 +20,15 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('posProdCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", getToday());
-	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", getToday());
-	$scope.orgnFg = gvOrgnFg;
-	$scope.excelFg = false;
+	// 조회일자 세팅
+	var startDate = wcombo.genDateVal("#startDateProd", gvStartDate);
+	var endDate = wcombo.genDateVal("#endDateProd", gvEndDate);
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
 
-	var checkInt = true;
-
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
-
-		var storeCd = $("#posProdSelectStoreCd").val();
-
-//		$scope.getRePosNmList(storeCd);
-
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("posProdCtrl");
 
@@ -56,9 +59,8 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		s.columnHeaders.rows.push(new wijmo.grid.Row());
 
 		for(var i = 0; i < s.columnHeaders.rows.length; i++) {
-			s.columnHeaders.setCellData(i, "lv1Nm", messages["prodrank.prodClassLNm"]);
-			s.columnHeaders.setCellData(i, "lv2Nm", messages["prodrank.prodClassMNm"]);
-			s.columnHeaders.setCellData(i, "lv3Nm", messages["prodrank.prodClassSNm"]);
+			s.columnHeaders.setCellData(i, "pathNm", messages["pos.prodClassNm"]);
+            s.columnHeaders.setCellData(i, "prodCd", messages["pos.prodCd"]);
 			s.columnHeaders.setCellData(i, "prodNm", messages["pos.prodNm"]);
 			s.columnHeaders.setCellData(i, "saleStoreCnt", messages["pos.saleStore"]);
 			s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
@@ -106,55 +108,28 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posProdCtrl", function (event, data) {
-
-		$scope.searchPosProdList(true);
-
-		var storeCd = $("#posProdSelectStoreCd").val();
-		var posCd = $("#posProdSelectPosCd").val();
-
-		$scope.getRePosNmList(storeCd, posCd);
-	});
-
-	// 다른 컨트롤러의 broadcast 받기
-	$scope.$on("posProdCtrlSrch", function (event, data) {
-
 	    if( $("#posProdSelectStoreCd").val() === ''){
 	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 	   	 	return false;
 	    }
 
-		$scope.searchPosProdList(false);
+		$scope.searchPosProdList();
 
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
-
-		$scope.getRePosNmList(storeCd, posCd);
+		$scope.getRePosNmList(storeCd, posCd, true);
 	});
 
 	// 포스별매출상품별 리스트 조회
-	$scope.searchPosProdList = function (isPageChk) {
-
+	$scope.searchPosProdList = function () {
 		// 파라미터
 		var params = {};
 		params.storeCd = $("#posProdSelectStoreCd").val();
 		params.posNo = $("#posProdSelectPosCd").val();
-		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
 		params.arrPosCd = $scope.comboArray; //-포스정보
-		params.isPageChk = isPageChk;
-	    params.orgnFg    = $scope.orgnFg;
-	    
-	    $scope.searchStoreCd   = params.storeCd;
-	    $scope.searchPosNo     = params.posNo;
-	    $scope.searchChecked = $scope.isChecked;
-
-		//등록일자 '전체기간' 선택에 따른 params
-		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
-			params.endDate = wijmo.Globalize.format($scope.srchPosProdEndDate.value, 'yyyyMMdd');
-			
-			$scope.searchStartDate = params.startDate;
-	        $scope.searchEndDate   = params.endDate;
-		}
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 
 		if(params.startDate > params.endDate){
 			$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -163,26 +138,18 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/pos/prod/list.sb", params, function() {
-
-			var flex = $scope.flex;
-			//row수가 0이면
-			if(flex.rows.length === 0){
-
-				var grid = wijmo.Control.getControl("#posProdGrid");
-				//컬럼 삭제
-				while(grid.columns.length > 10){
-			          grid.columns.removeAt(grid.columns.length-1);
-			    }
-			}
-
+			// var flex = $scope.flex;
+			//
+			// //row수가 0이면
+			// if(flex.rows.length === 0){
+			//
+			// 	var grid = wijmo.Control.getControl("#posProdGrid");
+			// 	//컬럼 삭제
+			// 	while(grid.columns.length > 10){
+			//           grid.columns.removeAt(grid.columns.length-1);
+			//     }
+			// }
 		});
-		$scope.excelFg = true;
-	};
-
-	//전체기간 체크박스 클릭이벤트
-	$scope.isChkDt = function() {
-		$scope.srchPosProdStartDate.isReadOnly = $scope.isChecked;
-		$scope.srchPosProdEndDate.isReadOnly = $scope.isChecked;
 	};
 
 	// 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
@@ -190,14 +157,11 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	  var columns = $scope.flex.columns;
 
 	  for(var i=0; i<columns.length; i++){
-		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+		  if(columns[i].binding === 'pathNm'){
 			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 		  }
-		  $scope._broadcast("chkProdClassDisplay");
 	  }
-
-	  $scope._broadcast('isChkProdClassExcelDisplay');
-	}
+	};
 
 	//매장선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -213,23 +177,16 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		$scope._broadcast('posProdSelectPosCtrl');
 	};
 
-	//엑셀 다운로드
-	$scope.excelDownloadDay = function () {
-		// 파라미터
-		var params = {};
-		$scope._broadcast('posProdExcelCtrl',params);
-	};
-
 	//매장의 포스(pos) 리스트 조회
 	$scope.getPosNmList = function () {
-		var url             = '/sale/status/pos/pos/posNmList.sb';
-		var comboParams     = {};
-
-		comboParams.storeCd = $("#posProdSelectStoreCd").val();
+		// var comboParams     = {};
+		var storeCd = $("#posProdSelectStoreCd").val();
+		var posCd = $("#posProdSelectPosCd").val();
+		$scope.getRePosNmList(storeCd,posCd, false)
 	};
 
 	//매장의 포스 리스트 재생성
-	$scope.getRePosNmList = function (storeCd, posCd) {
+	$scope.getRePosNmList = function (storeCd, posCd, gridSet) {
 		var url = "/sale/status/pos/pos/posNmList.sb";
 		var params = {};
 	    params.storeCd = storeCd;
@@ -260,11 +217,9 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    			storePosCd = $("#posProdSelectPosCd").val();
 	    			storePosNm = $("#posProdSelectPosName").val();
 
-//	    			if (!checkInt) {
-	    				$scope.makeDataGrid();
-//	    			} else {
-//	    				checkInt = false;
-//	    			}
+                    if(gridSet){
+                        $scope.makeDataGrid();
+                    }
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -276,13 +231,11 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	  };
 
 	  $scope.makeDataGrid = function () {
-
 		  var grid = wijmo.Control.getControl("#posProdGrid");
-
 		  var colLength = grid.columns.length;
 
-		  if (grid.columns.length > 10) {
-			  for(var i = 10; i < colLength; i++) {
+		  if (grid.columns.length > 8) {
+			  for(var i = 8; i < colLength; i++) {
 				  grid.columns.removeAt(grid.columns.length-1);
 			  }
 		  }
@@ -318,7 +271,6 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
-
 			  }
 		  }
 
@@ -335,10 +287,6 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 		    		var params       = {};
 		    		params.chkPop	= "posPop";
-		    		if(!$scope.isChecked){
-		    			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
-		    			params.endDate = wijmo.Globalize.format($scope.srchPosProdEndDate.value, 'yyyyMMdd');
-		    		}
 		    		params.prodCd   = selectedRow.prodCd;
 
 		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
@@ -398,14 +346,13 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 					  wijmo.addClass(cell, 'wj-custom-readonly');
 				  }
 			  }
-
-		  }
+		  };
 
 		  $scope.flex.refresh();
 
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
-	  }
+	  };
 
 	  $scope.loadedRows = function (s, e) {
 
@@ -446,8 +393,23 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  }
 			  }
 		  }
-	  }
+	  };
+
+	//엑셀 다운로드
+	$scope.excelDownloadDay = function () {
+		// 파라미터
+		var params = {};
+		params.storeCd = $("#posProdSelectStoreCd").val();
+		params.posNo = $("#posProdSelectPosCd").val();
+		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+		params.arrPosCd = $scope.comboArray; //-포스정보
+
+		$scope._broadcast('posProdExcelCtrl',params);
+	};
+
 }]);
+
 
 /** 상품별(포스별 매출) controller */
 app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -457,7 +419,6 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
-
 		// add the new GroupRow to the grid's 'columnFooters' panel
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 		// add a sigma to the header to show that this is a summary row
@@ -472,9 +433,8 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 		s.columnHeaders.rows.push(new wijmo.grid.Row());
 
 		for(var i = 0; i < s.columnHeaders.rows.length; i++) {
-			s.columnHeaders.setCellData(i, "lv1Nm", messages["prodrank.prodClassLNm"]);
-			s.columnHeaders.setCellData(i, "lv2Nm", messages["prodrank.prodClassMNm"]);
-			s.columnHeaders.setCellData(i, "lv3Nm", messages["prodrank.prodClassSNm"]);
+			s.columnHeaders.setCellData(i, "pathNm", messages["pos.prodClassNm"]);
+            s.columnHeaders.setCellData(i, "prodCd", messages["pos.prodCd"]);
 			s.columnHeaders.setCellData(i, "prodNm", messages["pos.prodNm"]);
 			s.columnHeaders.setCellData(i, "saleStoreCnt", messages["pos.saleStore"]);
 			s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
@@ -522,46 +482,27 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posProdExcelCtrl", function (event, data) {
-		if(data != undefined && $scope.excelFg) {
-
-			var storeCd = $scope.searchStoreCd;
-			var posCd = $scope.searchPosNo;
-
-			$scope.getRePosNmList(storeCd, posCd);
-
-		}else{
-			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-			return false;
-		}
-
+		$scope.searchPosProdExcelList(data);
 	});
 
 	// 포스별매출상품별 리스트 조회
-	$scope.searchPosProdExcelList = function (isPageChk) {
-
+	$scope.searchPosProdExcelList = function (data) {
 		// 파라미터
 		var params = {};
-		params.storeCd 		= $scope.searchStoreCd;
-		params.posNo 		= storePosCd;
-		params.listScale 	= $scope.listScaleCombo.text; //-페이지 스케일 갯수
-		params.arrPosCd 	= $scope.comboArray; //-포스정보
-	    params.orgnFg    	= $scope.orgnFg;
+		params.storeCd = data.storeCd;
+		params.posNo = data.posNo;
+		params.startDate = data.startDate;
+		params.endDate = data.endDate;
+		params.arrPosCd = data.arrPosCd;
 
-		//등록일자 '전체기간' 선택에 따른 params
-		if(!$scope.searchChecked){
-			params.startDate = $scope.searchStartDate;
-			params.endDate = $scope.searchEndDate;
-		}
+		$scope.getRePosNmList(data.storeCd, $("#posProdSelectPosCd").val());
 
-//		if(params.startDate > params.endDate){
-//			$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-//			return false;
-//		}
+		$scope.isChkProdClassDisplay();
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquirySub("/sale/status/pos/prod/excelList.sb", params, function() {
-
 			var flex = $scope.excelFlex;
+
 			//row수가 0이면
 			if(flex.rows.length === 0){
 
@@ -585,7 +526,7 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 					includeColumns      : function (column) {
 						return column.visible;
 					}
-				}, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.prod"]+'_'+getToday()+'.xlsx', function () {
+				}, '매출현황_포스별_상품별별_'+getToday()+'.xlsx', function () {
 					$timeout(function () {
 						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 					}, 10);
@@ -596,16 +537,15 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 	};
 
 	// 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
-	$scope.$on("chkProdClassDisplay", function (event) {
-		  var columns = $scope.excelFlex.columns;
+	$scope.isChkProdClassDisplay = function(){
+		var columns = $scope.excelFlex.columns;
 
-		  for(var i=0; i<columns.length; i++){
-			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
-				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
-			  }
-		  }
-	  });
-
+		for(var i=0; i<columns.length; i++){
+			if(columns[i].binding === 'pathNm'){
+				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			}
+		}
+	};
 
 	//매장의 포스 리스트 재생성
 	$scope.getRePosNmList = function (storeCd, posCd) {
@@ -639,11 +579,7 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    			storePosCd = $scope.arrStorePosExcel;
 	    			storePosNm = $scope.arrStorePosNmExcel;
 
-//	    			if (!checkInt) {
-	    				$scope.makeDataGrid();
-//	    			} else {
-//	    				checkInt = false;
-//	    			}
+					$scope.makeDataGrid();
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -655,9 +591,7 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 	  };
 
 	  $scope.makeDataGrid = function () {
-
 		  var grid = wijmo.Control.getControl("#posProdExcelGrid");
-
 		  var colLength = grid.columns.length;
 
 		  if (grid.columns.length > 10) {
@@ -697,7 +631,6 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
-
 			  }
 		  }
 
@@ -714,10 +647,6 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 		    		var params       = {};
 		    		params.chkPop	= "posPop";
-		    		if(!$scope.isChecked){
-		    			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
-		    			params.endDate = wijmo.Globalize.format($scope.srchPosProdEndDate.value, 'yyyyMMdd');
-		    		}
 		    		params.prodCd   = selectedRow.prodCd;
 
 		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
@@ -777,16 +706,13 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 					  wijmo.addClass(cell, 'wj-custom-readonly');
 				  }
 			  }
-
-		  }
+		  };
 
 		  $scope.flex.refresh();
 
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
-
-		  $scope.searchPosProdExcelList(true);
-	  }
+	  };
 
 	  $scope.loadedRows = function (s, e) {
 
@@ -828,4 +754,5 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 			  }
 		  }
 	  }
+
 }]);

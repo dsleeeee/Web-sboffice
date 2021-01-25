@@ -56,26 +56,24 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
-        	params.chkPop   = "tablePop";
-        	var storeCornr   = $("#cornerDaySelectCornerCd").val().split(",");
-        	var arrStoreCornr     = [];
-    		for(var i=0; i < storeCornr.length; i++) {
-    			var temp = storeCornr[i];
-    			arrStoreCornr.push(temp);
-    		}
-        	params.startDate = selectedRow.saleDate;
-        	params.endDate   = selectedRow.saleDate;
-        	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
-    			params.arrStoreCornr	 = arrStoreCornr;
-    			params.storeCd	 = selectedRow.storeCd; //$("#cornerDaySelectStoreCd").val();
-            	$scope._broadcast('saleComProdCtrl', params);
-            }else if(col.binding.substring(0, 7) === "saleQty") {
-            	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
-            	if(gvOrgnFg == "S"){
-            		params.storeCd	 = selectedRow.storeCd; //$("#cornerDaySelectStoreCd").val();
-            	}
-        		$scope._broadcast('saleComProdCtrl', params);
-            }
+	    params.chkPop   = "cornerDayProdPop"; // 매출관리>매출현황>코너별>일자별탭
+	    params.startDate = selectedRow.saleDate.replaceAll("-","");
+	    params.endDate   = selectedRow.saleDate.replaceAll("-","");
+	    params.storeCd = $("#cornerDaySelectStoreCd").val();
+		var storeCornr   = $("#cornerDaySelectCornerCd").val().split(",");
+		var arrStoreCornr     = [];
+		for(var i=0; i < storeCornr.length; i++) {
+			var temp = storeCornr[i];
+			arrStoreCornr.push(temp);
+		}
+
+		if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
+			params.arrStoreCornr	 = arrStoreCornr;
+			$scope._broadcast('saleComProdCtrl', params);
+		}else if(col.binding.substring(0, 7) === "saleQty") {
+			params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
+			$scope._broadcast('saleComProdCtrl', params);
+		}
       }
     });
 

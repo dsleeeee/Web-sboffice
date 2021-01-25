@@ -22,42 +22,44 @@ public class PosProdServiceImpl implements PosProdService {
         this.messageService = messageService;
     }
 
-    /** 포스별매출상품별 - 매장 포스 리스트 조회 */
+    /** 상품별탭 - 매장 및 포스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStorePosList(PosProdVO posProdVO, SessionInfoVO sessionInfoVO) {
+
 		posProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
 		return posProdMapper.getStorePosList(posProdVO);
 	}
 
-    /** 포스별매출상품별 - 리스트 조회 */
+    /** 상품별탭 - 매장 코너 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getPosNmList(PosProdVO posProdVO, SessionInfoVO sessionInfoVO) {
+
+        if (sessionInfoVO.getHqOfficeCd() != null && !"".equals(sessionInfoVO.getHqOfficeCd())) {
+            posProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+
+        return posProdMapper.getPosNmList(posProdVO);
+    }
+
+    /** 상품별탭 - 조회 */
     @Override
     public List<DefaultMap<String>> getPosProdList(PosProdVO posProdVO, SessionInfoVO sessionInfoVO) {
+
+        posProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	posProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-//    	if (!StringUtil.getOrBlank(posProdVO.getStoreCd()).equals("")) {
-//    		posProdVO.setArrStoreCd(posProdVO.getStoreCd().split(","));
-//		}
         return posProdMapper.getPosProdList(posProdVO);
     }
 
-    /** 포스별매출상품별 - 리스트 조회 (엑셀) */
+    /** 상품별탭 - 엑셀 조회 */
     @Override
     public List<DefaultMap<String>> getPosProdExcelList(PosProdVO posProdVO, SessionInfoVO sessionInfoVO) {
+
+        posProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	posProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-//    	if (!StringUtil.getOrBlank(posProdVO.getStoreCd()).equals("")) {
-//    		posProdVO.setArrStoreCd(posProdVO.getStoreCd().split(","));
-//		}
         return posProdMapper.getPosProdExcelList(posProdVO);
     }
 
-    /** 포스별매출 - 매장 포스 리스트 조회 */
-	@Override
-	public List<DefaultMap<String>> getPosNmList(PosProdVO posProdVO, SessionInfoVO sessionInfoVO) {
-		if (sessionInfoVO.getHqOfficeCd() != null && !"".equals(sessionInfoVO.getHqOfficeCd())) {
-			posProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		}
-		return posProdMapper.getPosNmList(posProdVO);
-	}
-
-}
+ }

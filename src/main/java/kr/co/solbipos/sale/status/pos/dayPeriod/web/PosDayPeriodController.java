@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * @Class Name : TodayBillSaleDtlController.java
- * @Description : 매출관리 > 매출현황 > 영수증별매출상세현황
+ * @Class Name : PosDayPeriodController.java
+ * @Description : 매출관리 > 매출현황 > 포스별
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -49,13 +49,12 @@ public class PosDayPeriodController {
         this.posDayPeriodService = posDayPeriodService;
     }
 
-
     /**
-     * 코너별매출 일자별 - 리스트 조회
+     * 설정기간별탭 - 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   posDayPeriodVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -71,13 +70,33 @@ public class PosDayPeriodController {
         return ReturnUtil.returnListJson(Status.OK, list, posDayPeriodVO);
     }
 
-
     /**
-     * 코너별매출 일자별 - 리스트 조회
+     * 설정기간별탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   posDayPeriodVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 01. 13.
+     */
+    @RequestMapping(value = "/pos/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosDayPeriodExcelList(HttpServletRequest request, HttpServletResponse response,
+                                           Model model, PosDayPeriodVO posDayPeriodVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = posDayPeriodService.getPosDayPeriodExcelList(posDayPeriodVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, posDayPeriodVO);
+    }
+
+    /**
+     * 설정기간별탭 - 상세 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   posDayPeriodVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -94,33 +113,11 @@ public class PosDayPeriodController {
     }
 
     /**
-     * 코너별매출 일자별 - 리스트 조회 (엑셀)
+     * 설정기간별탭 - 상세 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
-     * @return  String
-     * @author  조동훤
-     * @since   2020. 01. 13.
-     */
-    @RequestMapping(value = "/pos/excelList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getPosDayPeriodExcelList(HttpServletRequest request, HttpServletResponse response,
-        Model model, PosDayPeriodVO posDayPeriodVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = posDayPeriodService.getPosDayPeriodExcelList(posDayPeriodVO, sessionInfoVO);
-        return ReturnUtil.returnListJson(Status.OK, list, posDayPeriodVO);
-    }
-
-
-    /**
-     * 코너별매출 일자별 - 상세 리스트 조회 (엑셀)
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   cornerDaylVO
+     * @param   posDayPeriodVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -135,4 +132,5 @@ public class PosDayPeriodController {
         List<DefaultMap<String>> list = posDayPeriodService.getPosDayPeriodDtlExcelList(posDayPeriodVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, posDayPeriodVO);
     }
+
 }

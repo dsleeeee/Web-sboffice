@@ -52,7 +52,6 @@ public class PosProdController {
         this.posProdService = posProdService;
     }
 
-
     /**
      * 포스별매출 상품별 - 페이지 이동
      * @param   request
@@ -67,9 +66,8 @@ public class PosProdController {
         return "sale/status/pos/posSale";
     }
 
-
     /**
-     * 포스별매출 상품별 - 리스트 조회
+     * 상품별탭 - 조회
      * @param   request
      * @param   response
      * @param   model
@@ -99,9 +97,7 @@ public class PosProdController {
         	}
 
             List<DefaultMap<String>> list = posProdService.getPosNmList(posProdVO, sessionInfoVO);
-
             if (list.size() > 0) {
-
             	String arrStorePos[] = new String[list.size()];
 
                 for (int i = 0; i < list.size(); i++) {
@@ -111,9 +107,7 @@ public class PosProdController {
                 }
 
                 posProdVO.setArrStorePos(arrStorePos);
-
             }
-
         }
 
         if (posProdVO.getArrStorePos() == null) {
@@ -126,7 +120,7 @@ public class PosProdController {
     }
 
     /**
-     * 포스별매출 상품별 - 리스트 조회 (엑셀)
+     * 상품별탭 - 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
@@ -156,9 +150,7 @@ public class PosProdController {
         	}
 
             List<DefaultMap<String>> list = posProdService.getPosNmList(posProdVO, sessionInfoVO);
-
             if (list.size() > 0) {
-
             	String arrStorePos[] = new String[list.size()];
 
                 for (int i = 0; i < list.size(); i++) {
@@ -168,9 +160,7 @@ public class PosProdController {
                 }
 
                 posProdVO.setArrStorePos(arrStorePos);
-
             }
-
         }
 
         if (posProdVO.getArrStorePos() == null) {

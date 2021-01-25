@@ -6,15 +6,15 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import java.util.List;
 
 public interface PosDayPeriodService {
-    /** 포스별별매출 - 리스트 조회 */
+    /** 설정기간별탭 - 조회 */
     List<DefaultMap<String>> getPosDayPeriodList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO);
 
-    /** 포스별매출 - 상세 리스트 조회 */
-	List<DefaultMap<String>> getPosDayPeriodDtlList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO);
-
-	/** 포스별별매출 - 리스트 조회 (엑셀)*/
+    /** 설정기간별탭 - 엑셀 조회 */
     List<DefaultMap<String>> getPosDayPeriodExcelList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO);
 
-    /** 포스별매출 - 상세 리스트 조회 (엑셀)*/
+    /** 설정기간별탭 - 상세 조회 */
+	List<DefaultMap<String>> getPosDayPeriodDtlList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO);
+
+    /** 설정기간별탭 - 상세 엑셀 조회 */
 	List<DefaultMap<String>> getPosDayPeriodDtlExcelList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO);
 }

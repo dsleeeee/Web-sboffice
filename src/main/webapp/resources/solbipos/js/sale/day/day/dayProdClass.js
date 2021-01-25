@@ -9,21 +9,29 @@ var vLevel = [
     {"name":"2레벨","value":"2"},
     {"name":"3레벨","value":"3"}
 ];
+var vLevelNo = [
+    {"name":"분류없음","value":"0"}
+];
 
 /** 상품분류별 controller */
 app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dayProdClassCtrl', $scope, $http, true));
 
-    // 본사/매장 별 사용하는 최대 분류레벨 값을 파악하여 분류표시 selectBox 선택 값 셋팅
-    if(maxLevel == 1){
-        vLevel.splice(1,2);
-    }else if (maxLevel == 2){
-        vLevel.splice(2,1);
-    }
+    if(maxLevel == 0) {
+        // 조회조건 콤보박스 데이터 Set
+        $scope._setComboData("srchLevelCombo", vLevelNo);
+    } else {
+        // 본사/매장 별 사용하는 최대 분류레벨 값을 파악하여 분류표시 selectBox 선택 값 셋팅
+        if(maxLevel == 1){
+            vLevel.splice(1,2);
+        }else if (maxLevel == 2){
+            vLevel.splice(2,1);
+        }
 
-    // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("srchLevelCombo", vLevel);
+        // 조회조건 콤보박스 데이터 Set
+        $scope._setComboData("srchLevelCombo", vLevel);
+    }
 
     $scope.srchStartDate = wcombo.genDateVal("#srchProdClassStartDate", gvStartDate);
     $scope.srchEndDate   = wcombo.genDateVal("#srchProdClassEndDate", gvEndDate);
@@ -220,15 +228,18 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
             var grid = wijmo.Control.getControl("#wjDayProdClassList");
             var columns = grid.columns;
             var arr = $("#hdProdClassNm").val().split(",");
-            var start = 4;
-            var end = (arr.length * 2) + 3;
-            
-            // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
-            for(var i = 4; i <= 199; i++){
-                if(i >= start && i <= end){
-                    columns[i].visible = true;
-                }else{
-                    columns[i].visible = false;
+
+            if($("#hdProdClassNm").val() != "") {
+                var start = 4;
+                var end = (arr.length * 2) + 3;
+
+                // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
+                for (var i = 4; i <= 199; i++) {
+                    if (i >= start && i <= end) {
+                        columns[i].visible = true;
+                    } else {
+                        columns[i].visible = false;
+                    }
                 }
             }
 

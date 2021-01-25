@@ -54,28 +54,22 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
-        	params.chkPop   = "tablePop";
-        	params.startDate = selectedRow.saleYm;
-        	params.endDate   = (selectedRow.saleYm).split("-");
-        	var endDay 		 = ( new Date(params.endDate[0],params.endDate[1], 0) ).getDate();
-        	params.endDate 	 = selectedRow.saleYm + "-" + endDay;
-
-        	var storeCornr   = $("#cornerMonthSelectCornerCd").val().split(",");
-    		var arrStoreCornr     = [];
-    		for(var i=0; i < storeCornr.length; i++) {
-    			var temp = storeCornr[i];
-    			arrStoreCornr.push(temp);
-    		}
+		params.chkPop   = "cornerDayProdPop"; // 매출관리>매출현황>코너별>월별탭
+		params.startDate = selectedRow.saleYm.replace("-", "") + "01";
+		params.endDate   = selectedRow.saleYm.replace("-", "") + "31";
+		params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
+		var storeCornr   = $("#cornerMonthSelectCornerCd").val().split(",");
+		var arrStoreCornr     = [];
+		for(var i=0; i < storeCornr.length; i++) {
+			var temp = storeCornr[i];
+			arrStoreCornr.push(temp);
+		}
 
         if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
 			params.arrStoreCornr	 = arrStoreCornr;
-			params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
         	$scope._broadcast('saleComProdCtrl', params);
         }else if(col.binding.substring(0, 7) === "saleQty") {
         	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
-        	if(gvOrgnFg == "S"){
-        		params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
-        	}
         	$scope._broadcast('saleComProdCtrl', params);
         }
 

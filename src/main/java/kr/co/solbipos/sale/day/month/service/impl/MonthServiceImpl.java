@@ -201,7 +201,7 @@ public class MonthServiceImpl implements MonthService {
     public List<DefaultMap<Object>> getMonthProdClassList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+//        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         monthVO.setLevel("Level" + monthVO.getLevel());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
@@ -209,8 +209,10 @@ public class MonthServiceImpl implements MonthService {
             String[] storeCds = monthVO.getStoreCds().split(",");
             monthVO.setStoreCdList(storeCds);
         }
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = monthVO.getStoreCds().split(",");
+            monthVO.setStoreCdList(storeCds);
         }
 
         // 레벨에 따른 분류값 가져와서 배열변수에 넣음.

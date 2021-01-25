@@ -12,16 +12,15 @@ import java.util.List;
 @Repository
 public interface PosDayPeriodMapper {
 
-    /** 코너별매출 일자별 탭 - 리스트 조회 */
+    /** 설정기간별탭 - 조회 */
     List<DefaultMap<String>> getPosDayPeriodList(PosDayPeriodVO posDayPeriodVO);
 
-    /** 코너별매출 일자별 탭 - 리스트 조회 */
-	List<DefaultMap<String>> getPosDayPeriodDtlList(PosDayPeriodVO posDayPeriodVO);
-
-	/** 코너별매출 일자별 탭 - 리스트 조회(엑셀) */
+    /** 설정기간별탭 - 엑셀 조회 */
     List<DefaultMap<String>> getPosDayPeriodExcelList(PosDayPeriodVO posDayPeriodVO);
 
-    /** 코너별매출 일자별 탭 - 상세 리스트 조회(엑셀) */
-	List<DefaultMap<String>> getPosDayPeriodDtlExcelList(PosDayPeriodVO posDayPeriodVO);
+    /** 설정기간별탭 - 상세 조회 */
+	List<DefaultMap<String>> getPosDayPeriodDtlList(PosDayPeriodVO posDayPeriodVO);
 
+    /** 설정기간별탭 - 상세 엑셀 조회 */
+	List<DefaultMap<String>> getPosDayPeriodDtlExcelList(PosDayPeriodVO posDayPeriodVO);
 }

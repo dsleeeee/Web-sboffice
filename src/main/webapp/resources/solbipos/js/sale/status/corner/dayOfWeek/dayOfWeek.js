@@ -17,10 +17,9 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 	  
-	  var storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
-	  $scope.getReCornerNmList(storeCd, "", false);
+  var storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
+  $scope.getReCornerNmList(storeCd, "", false);
 	  
-
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("cornerDayOfWeekCtrl");
 
@@ -55,30 +54,25 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
-        	params.chkPop   = "tablePop";
+		    params.chkPop   = "cornerDayOfWeekProdPop"; // 매출관리>매출현황>코너별>요일별탭
+		    params.storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
+		    params.yoil	 	 = selectedRow.yoil;
+		    if(!$scope.isChecked){
+			  params.startDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekStartDate.value, 'yyyyMMdd');
+			  params.endDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekEndDate.value, 'yyyyMMdd');
+		    }
         	var storeCornr   = $("#cornerDayOfWeekSelectCornerCd").val().split(",");
         	var arrStoreCornr     = [];
     		for(var i=0; i < storeCornr.length; i++) {
     			var temp = storeCornr[i];
     			arrStoreCornr.push(temp);
     		}
-    		params.chkPop   = "tablePop";
-    		if(!$scope.isChecked){
-				params.startDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekStartDate.value, 'yyyyMMdd');
-				params.endDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekEndDate.value, 'yyyyMMdd');
-			}
-//        	params.startDate = $scope.startDateForDt;
-//        	params.endDate   = $scope.endDateForDt;
-        	params.yoil	 	 = selectedRow.yoil;
+
         	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
     			params.arrStoreCornr	 = arrStoreCornr;
-    			params.storeCd	 = selectedRow.storeCd; //$("#cornerDayOfWeekSelectStoreCd").val();
             	$scope._broadcast('saleComProdCtrl', params);
             }else if(col.binding.substring(0, 7) === "saleQty") {
             	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
-            	if(gvOrgnFg == "S"){
-            		params.storeCd	 = selectedRow.storeCd; //$("#cornerDayOfWeekSelectStoreCd").val();
-            	}
             	$scope._broadcast('saleComProdCtrl', params);
             }
       }
