@@ -275,10 +275,11 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
           $scope.billGuestInfo = data;
           $scope.$broadcast('loadingPopupInactive');
-
-          // 영수증 상품내역 리스트 조회
-          $scope.searchBillInfoProdList();
         }
+
+        // 영수증 상품내역 리스트 조회
+        $scope.searchBillInfoProdList();
+
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
@@ -321,6 +322,30 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
         $scope._broadcast('orgBillInfoCtrl', params);
       }
     });
+  };
+
+
+  // 팝업 닫기
+  $scope.close = function(){
+
+    // 초기화
+    var oScope = agrid.getScope("billInfoCtrl");
+    $("#billSubTitle").val("");
+    $scope.billInfo = "";
+    $scope.billPayInfo = "";
+    $scope.billGuestInfo = "";
+    oScope._gridDataInit();
+
+    if($scope.saleYn === "N") {
+      var scope = agrid.getScope("orgBillInfoCtrl");
+      $("#orgBillSubTitle").val("");
+      scope.orgBillInfo = "";
+      scope.orgBillPayInfo = "";
+      scope.orgBillGuestInfo = "";
+      scope._gridDataInit();
+    }
+
+    $scope.wjBillInfoLayer.hide();
   };
 
 }]);
@@ -569,9 +594,10 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
           $scope.orgBillGuestInfo = data;
           $scope.$broadcast('loadingPopupInactive');
 
-          // 영수증 상품내역 리스트 조회
-          $scope.searchOrgBillInfoProdList();
         }
+
+        // 영수증 상품내역 리스트 조회
+        $scope.searchOrgBillInfoProdList();
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs

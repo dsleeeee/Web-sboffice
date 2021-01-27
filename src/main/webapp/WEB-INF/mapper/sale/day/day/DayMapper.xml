@@ -100,6 +100,8 @@
         tmp.POS_NM
         FROM TB_MS_POS tmp
         WHERE 1=1
+          AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD  = #{hqOfficeCd})
+          AND tmp.USE_YN = 'Y'
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
                 AND tmp.STORE_CD = #{storeCd}

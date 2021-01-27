@@ -58,8 +58,11 @@
                     FROM    TB_MS_COUPON
                     WHERE   STORE_CD  IN  ( SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
         ]]>
-                    <if test='storeCd != null and storeCd != ""'>
-                        AND STORE_CD = #{storeCd}
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                        AND STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
                     </if>
         <![CDATA[
                 ) tmc
@@ -67,8 +70,11 @@
         WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tssdd.SALE_DATE           =   #{saleDate}
         ]]>
-        <if test='storeCd != null and storeCd != ""'>
-            AND tssdd.STORE_CD = #{storeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tssdd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test='posNo != null and posNo != ""'>
             AND tssdd.POS_NO = #{posNo}
@@ -315,8 +321,11 @@
         WHERE   tsshd.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tsshd.SALE_DATE           =   #{saleDate}
         ]]>
-        <if test='storeCd != null and storeCd != ""'>
-            AND tsshd.STORE_CD = #{storeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsshd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test='posNo != null and posNo != ""'>
             AND tsshd.POS_NO = #{posNo}

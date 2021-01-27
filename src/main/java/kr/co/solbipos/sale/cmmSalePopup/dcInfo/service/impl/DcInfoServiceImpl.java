@@ -2,7 +2,9 @@ package kr.co.solbipos.sale.cmmSalePopup.dcInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.cmmSalePopup.dcInfo.service.DcInfoService;
 import kr.co.solbipos.sale.cmmSalePopup.dcInfo.service.DcInfoVO;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,13 @@ public class DcInfoServiceImpl implements DcInfoService {
     @Override
     public List<DefaultMap<String>> getCoupnDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            dcInfoVO.setArrStoreCd(dcInfoVO.getStoreCd().split(","));
+        }
         return dcInfoMapper.getCoupnDcList(dcInfoVO);
     }
 
@@ -89,6 +98,13 @@ public class DcInfoServiceImpl implements DcInfoService {
     @Override
     public List<DefaultMap<String>> getVcoupnDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            dcInfoVO.setArrStoreCd(dcInfoVO.getStoreCd().split(","));
+        }
         return dcInfoMapper.getVcoupnDcList(dcInfoVO);
     }
 

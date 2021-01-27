@@ -12,7 +12,7 @@
   <div id="billInfoLayer" class="wj-dialog wj-dialog-columns" ng-controller="billInfoCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <span id="billSubTitle"></span>
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <%-- 영수증내역 --%>
@@ -320,4 +320,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.13" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.17" charset="utf-8"></script>
