@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/sale/cmmSalePopup/dayPayInfo/dayEmpCard/"/>
 
 <wj-popup id="wjDayEmpCardLayer" control="wjDayEmpCardLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
-  <div id="dayEmpCardLayer" class="wj-dialog wj-dialog-columns" ng-controller="dayEmpCardCtrl">
+  <div id="dayEmpCardLayer" class="wj-dialog wj-dialog-columns" ng-controller="dayEmpcardCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="dayEmpCard.dayEmpCardPay"/>
       <span id="spanDtlTitle"></span>
@@ -33,8 +33,8 @@
             <wj-flex-grid-column header="<s:message code="dayEmpCard.officeEmpNo"/>" binding="officeEmpNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayEmpCard.officeEmpNm"/>" binding="officeEmpNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayEmpCard.accountFg"/>" binding="accountFg" width="80" align="center" is-read-only="true" data-map="accountFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayEmpCard.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayEmpCard.remainAmt"/>" binding="remainAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayEmpCard.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayEmpCard.remainAmt"/>" binding="remainAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -44,4 +44,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayEmpCard.js?ver=20191219" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayEmpCard.js?ver=20191219.01" charset="utf-8"></script>

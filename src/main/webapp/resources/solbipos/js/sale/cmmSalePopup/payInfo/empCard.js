@@ -4,9 +4,9 @@
 var app = agrid.getApp();
 
 /** 사원카드 상세 내역 controller */
-app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('empcardCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('empCardCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('empcardCtrl', $scope, $http, true));
 
   $scope.accountFgMap = new wijmo.grid.DataMap([
     {id: "01", name: messages["empCard.accountFg01"]},
@@ -39,7 +39,7 @@ app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("empCardCtrl", function (event, data) {
+  $scope.$on("empcardCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
     $scope.posNo    = nvl(data.posNo, '');

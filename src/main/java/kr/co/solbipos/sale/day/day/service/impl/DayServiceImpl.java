@@ -64,11 +64,10 @@ public class DayServiceImpl implements DayService {
     /** 포스별 탭 - 포스 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPosColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
-
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-
         return dayMapper.getPosColList(dayVO);
     }
 
@@ -119,6 +118,14 @@ public class DayServiceImpl implements DayService {
     @Override
     public List<DefaultMap<String>> getDayStoreDcList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+        }
 
         // 할인구분 array 값 세팅
         dayVO.setArrDcCol(dayVO.getDcCol().split(","));

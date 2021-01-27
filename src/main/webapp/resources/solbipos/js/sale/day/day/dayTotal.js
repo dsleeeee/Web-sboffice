@@ -65,7 +65,7 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
-        params.storeCd  = $scope.searchedStoreCd;
+        params.storeCd  = $("#dayTotalSelectStoreCd").val();
         params.saleDate = selectedRow.saleDate;
         params.gubun = "day";
 
@@ -87,7 +87,7 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
             // 값이 있으면 링크
             if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
-              callCtrl = 'day'+payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase() + 'Ctrl';
+              callCtrl = 'day'+ (payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
               $scope._broadcast(callCtrl, params);
             }
           }

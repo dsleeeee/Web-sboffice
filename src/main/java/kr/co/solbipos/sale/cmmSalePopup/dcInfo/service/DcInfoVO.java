@@ -23,6 +23,8 @@ public class DcInfoVO extends PageVO {
      * 프렌차이즈인 경우 본사코드, 단독매장인 경우 자기자신의 매장코드, 시스템 or 대리점인 경우 AGENCY_CD
      */
     private String orgnGrpCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
 
     /**
      * @return the hqOfficeCd
@@ -122,4 +124,11 @@ public class DcInfoVO extends PageVO {
         this.orgnGrpCd = orgnGrpCd;
     }
 
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
+    }
 }

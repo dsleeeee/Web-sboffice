@@ -177,7 +177,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/today/todayDtl/todayDtl/list.sb", params, function () {
       var params       = {};
-      params.saleYn    = '';
+      params.saleYn    = 'Y';
       params.startDate = $scope.searchedStartDate;
       params.storeCd   = $scope.searchedStoreCd;
       params.posNo     = $scope.searchedPosNo;
@@ -379,7 +379,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
 
             // 값이 있으면 링크
             if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
-              $scope._broadcast(payColList[i].payMethod.toLowerCase() + 'Ctrl', params);
+              $scope._broadcast(payColList[i].payMethod.toLowerCase().replaceAll('_','') + 'Ctrl', params);
             }
           }
         }

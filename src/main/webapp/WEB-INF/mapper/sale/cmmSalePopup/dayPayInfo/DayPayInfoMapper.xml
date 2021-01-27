@@ -301,8 +301,8 @@
             </foreach>
         </if>
         <![CDATA[
-        AND     tcn.NMCODE_GRP_CD         =   '081'
-        AND     tcn.NMCODE_CD             =   tsspm.MPAY_CD
+        AND     tcn.NMCODE_GRP_CD         (+)=   '081'
+        AND     tcn.NMCODE_CD             (+)=   tsspm.MPAY_CD
         GROUP
         BY      tsspm.MPAY_CD, tcn.NMCODE_NM
         ORDER
