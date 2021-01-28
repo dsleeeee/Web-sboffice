@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!--right-->
-<div class="contents">
+<div class="contents" ng-controller="agencyMainCtrl">
     <!--메인컨텐츠-->
     <div class="mainCon">
         <!--총 매장수-->
@@ -144,6 +144,24 @@
         <!--//순위테이블-->
     </div>
     <!--//메인컨텐츠-->
+    <!--팝업-->
+    <div id="divDimmed" class="fullDimmed" style="display: none;"></div>
+    <div id="divPopup" class="layer" style="display: none;">
+        <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
+            <!--layerContent-->
+            <div class="title" style="width:560px;">
+                <a href="#" class="btn_close" ng-click="close()"></a>
+                <div class="con">
+                    <img src="/resource/solbipos/css/img/popUp/20210127.jpg" style="width:100%" alt="2021 상반기 프린터 할인행사" />
+                </div>
+                <div class="btnSet">
+                    <span><a href="#" class="btn_blue" id="btnCloseToday" ng-click="closeToday()">오늘하루 열지않기</a></span>
+                    <span><a href="#" class="btn_blue" id="btnClose" ng-click="close()"><s:message code="cmm.close" /></a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--팝업-->
 </div>
 <!--//right-->
 
@@ -221,8 +239,83 @@ $(document).ready(function(){
   chart2.endUpdate();
 });
 
+<%-- angularJs --%>
+app.controller('agencyMainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    angular.extend(this, new RootController('agencyMainCtrl', $scope, $http, true));
+
+    // 팝업 게시 기간
+    var startDate = '20210201';
+    var endDate = '20210331';
+
+    // 오늘 날짜
+    var date = new Date();
+    var year = new String(date.getFullYear());
+    var month = new String(date.getMonth()+1);
+    var day = new String(date.getDate());
+
+    // 한자리수일 경우 0을 채워준다.
+    if(month.length == 1){
+        month = "0" + month;
+    }
+    if(day.length == 1){
+        day = "0" + day;
+    }
+    var now = year + "" + month + "" + day;
+
+    // 1. 쿠키 만들기
+    function setCookie(name, value, expiredays) {
+        var today = new Date();
+        today.setDate(today.getDate() + expiredays);
+        document.cookie = name + '=' + escape(value) + '; path=/; expires=' + today.toGMTString() + ';'
+    }
+
+    //2. 쿠키 가져오기
+    function getCookie(name){
+        var cName = name + "=";
+        var x = 0;
+        while ( x <= document.cookie.length )
+        {
+            var y = (x+cName.length);
+            if ( document.cookie.substring( x, y ) == cName )
+            {
+                if ( (endOfCookie=document.cookie.indexOf( ";", y )) == -1 )
+                    endOfCookie = document.cookie.length;
+                return unescape( document.cookie.substring( y, endOfCookie ) );
+            }
+            x = document.cookie.indexOf( " ", x ) + 1;
+            if ( x == 0 )
+                break;
+        }
+        return "";
+    }
+
+    //alert(getCookie("notToday"));
+
+    // 날짜 비교하여 팝업 띄우기
+    if(Number(now) >= Number(startDate)){
+        if(Number(endDate) >= Number(now)){
+            if(getCookie("notToday")!="Y") {
+                $("#divDimmed").css('display', 'block');
+                $("#divPopup").css('display', 'block');
+            }
+        }
+    }
+
+    // 오늘하루 열지않기
+    $scope.closeToday = function(){
+        setCookie('notToday','Y', 1);
+        $("#divDimmed").css('display', 'none');
+        $("#divPopup").css('display', 'none');
+    }
+
+    // 닫기
+    $scope.close = function(){
+     $("#divDimmed").css('display', 'none');
+     $("#divPopup").css('display', 'none');
+    }
+
+}]);
+
 
 </script>
-
-
-
