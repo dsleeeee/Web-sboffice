@@ -4,7 +4,7 @@
 var app = agrid.getApp();
 
 /** 당일매출종합현황 그리드 controller */
-app.controller('todayGnrlzCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('todayGnrlzCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('todayGnrlzCtrl', $scope, $http, true));
 
@@ -54,11 +54,35 @@ app.controller('todayGnrlzCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._broadcast('todayGnrlzSelectStoreCtrl');
   };
 
+  // 매출종합 엑셀 다운로드
+  $scope.excelDownload = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      },
+          messages["todayGnrlz.todayGnrlz"] + '(' + messages["todayGnrlz.todaySaleTotal"] + '_' + messages["todayGnrlz.subTitleGnrlz"] + ')_' + getCurDateTime() +'.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+    }, 10);
+  };
+
 }]);
 
 
 /** 결제수단별 매출 그리드 controller */
-app.controller('todayGnrlzPayCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('todayGnrlzPayCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('todayGnrlzPayCtrl', $scope, $http, true));
 
@@ -93,11 +117,35 @@ app.controller('todayGnrlzPayCtrl', ['$scope', '$http', function ($scope, $http)
     $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlzPay/list.sb", params, null, false);
   };
 
+  // 결제수단별 엑셀 다운로드
+  $scope.excelDownload = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      },
+          messages["todayGnrlz.todayGnrlz"] + '(' + messages["todayGnrlz.todaySaleTotal"] + '_' + messages["todayGnrlz.subTitlePay"] + ')_' + getCurDateTime() +'.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+    }, 10);
+  };
+
 }]);
 
 
 /** 회원 Point 적립/사용 그리드 controller */
-app.controller('todayGnrlzMemberCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('todayGnrlzMemberCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('todayGnrlzMemberCtrl', $scope, $http, true));
 
@@ -132,11 +180,35 @@ app.controller('todayGnrlzMemberCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlzMember/list.sb", params, null, false);
   };
 
+  // 회원 Point 적립/사용 엑셀 다운로드
+  $scope.excelDownload = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      },
+          messages["todayGnrlz.todayGnrlz"] + '(' + messages["todayGnrlz.todaySaleTotal"] + '_' + messages["todayGnrlz.subTitleMember"] + ')_' + getCurDateTime() +'.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+    }, 10);
+  };
+
 }]);
 
 
 /** 상품별 매출현황 그리드 controller */
-app.controller('todayGnrlzProdCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('todayGnrlzProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('todayGnrlzProdCtrl', $scope, $http, true));
 
@@ -169,6 +241,30 @@ app.controller('todayGnrlzProdCtrl', ['$scope', '$http', function ($scope, $http
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlzProd/list.sb", params, null, false);
+  };
+
+  // 상품별 다운로드
+  $scope.excelDownload = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      },
+          messages["todayGnrlz.todayGnrlz"] + '(' + messages["todayGnrlz.todaySaleTotal"] + '_' + messages["todayGnrlz.subTitleProd"] + ')_' + getCurDateTime() +'.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+    }, 10);
   };
 
 }]);

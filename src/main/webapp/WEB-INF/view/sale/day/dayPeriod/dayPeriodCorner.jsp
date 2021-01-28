@@ -64,6 +64,9 @@
         <div class="wj-TblWrap mt20 mb20 w50 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
                 <s:message code="dayPeriod.corner"/>
+                <%-- 코너별 엑셀다운로드 --%>
+                <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSaleCorner()"><s:message code="cmm.excel.down"/></button>
+
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
@@ -101,6 +104,9 @@
     <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="dayPeriodCornerDetailCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
             <s:message code="dayPeriod.saleDtl"/>
+            <%-- 매출상세 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSaleDtl()"><s:message code="cmm.excel.down"/></button>
+
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
@@ -138,4 +144,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodCorner.js?ver=20200204.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodCorner.js?ver=20200204.08" charset="utf-8"></script>
