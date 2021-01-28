@@ -71,7 +71,7 @@
       </tbody>
     </table>
 
-  <div class="wj-TblWrap mt10" style="height: 500px;">
+    <div class="wj-TblWrap mt10" style="height: 500px;">
       <div class="w100 mt10">
         <div class="oh sb-select mb10">
           <%-- 매출 엑셀다운로드 --%>
@@ -131,9 +131,10 @@
       </div>
 
       <div style="clear: both"></div>
+
       <div class="w100 mt10" ng-controller="todayDtlDetailCtrl">
         <div class="oh sb-select mb10">
-          <%-- 매출상세 엑셀다운로드 --%>
+          <%-- 매출 엑셀다운로드 --%>
           <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSaleDtl()"><s:message code="cmm.excel.down"/></button>
         </div>
         <div class="wj-TblWrapBr">
@@ -222,7 +223,7 @@
   var arrDcCol    = dcCol.split(',');
   var arrGuestCol = guestCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20190124.19" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20190125.05" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
