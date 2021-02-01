@@ -234,7 +234,9 @@ $("#envLayer #btnSave").click(function(){
       return false;
     }
 
+
     if (objOldEnvstVal[i].value !== $("#env" + objEnvstCd[i].value).val()) {
+
       arrChg.push(i);
       chngCnt++;
     }
@@ -265,16 +267,16 @@ $("#envLayer #btnSave").click(function(){
     */
 
     for(var i=0; i<arrChg.length; i++) {
-
+      var x = arrChg[i];
       var param = {};
       param.hqOfficeCd  = selectedHq.hqOfficeCd;
-      param.status      = objStatus[i].value;
-      param.envstCd     = objEnvstCd[i].value;
-      param.envstNm     = objEnvstNm[i].value;
-      param.envstGrpCd  = objEnvstGrpCd[i].value;
-      param.envstVal    = objEnvstValCd[i].value;
-      param.dirctInYn   = objDirctInYn[i].value;
-      param.targtFg     = objTargtFg[i].value;
+      param.status      = objStatus[x].value;
+      param.envstCd     = objEnvstCd[x].value;
+      param.envstNm     = objEnvstNm[x].value;
+      param.envstGrpCd  = objEnvstGrpCd[x].value;
+      param.envstVal    = objEnvstValCd[x].value;
+      param.dirctInYn   = objDirctInYn[x].value;
+      param.targtFg     = objTargtFg[x].value;
 
       params.push(param);
     }
