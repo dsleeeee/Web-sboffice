@@ -73,7 +73,7 @@
 
     <div class="wj-TblWrap mt10" style="height: 500px;">
       <div class="w100 mt10">
-        <div class="oh sb-select mb10">
+        <div class="oh sb-select mb10" style="display:none">
           <%-- 매출 엑셀다운로드 --%>
           <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSale()"><s:message code="cmm.excel.down"/></button>
         </div>
@@ -133,7 +133,7 @@
       <div style="clear: both"></div>
 
       <div class="w100 mt10" ng-controller="todayDtlDetailCtrl">
-        <div class="oh sb-select mb10">
+        <div class="oh sb-select mb10" style="display:none">
           <%-- 매출 엑셀다운로드 --%>
           <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSaleDtl()"><s:message code="cmm.excel.down"/></button>
         </div>
