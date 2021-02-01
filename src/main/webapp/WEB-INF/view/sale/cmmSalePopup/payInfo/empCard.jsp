@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/sale/cmmSalePopup/payInfo/empCard/"/>
 
 <wj-popup id="wjEmpCardLayer" control="wjEmpCardLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="empCardLayer" class="wj-dialog wj-dialog-columns" ng-controller="empCardCtrl">
+  <div id="empCardLayer" class="wj-dialog wj-dialog-columns" ng-controller="empcardCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="empCard.empCardPay"/>
       <span id="spanDtlTitle"></span>
@@ -45,4 +45,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/payInfo/empCard.js?ver=20190212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/payInfo/empCard.js?ver=20190212.02" charset="utf-8"></script>

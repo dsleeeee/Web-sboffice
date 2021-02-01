@@ -121,4 +121,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTotal.js?ver=20191219.20" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTotal.js?ver=20191219.22" charset="utf-8"></script>

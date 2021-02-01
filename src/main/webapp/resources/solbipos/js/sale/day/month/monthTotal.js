@@ -174,7 +174,7 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                         // 값이 있으면 링크
                         if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '' && nvl(selectedRow[("pay" + payColList[i].payCd)], '') != "0") {
-                            callCtrl = 'day'+payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase() + 'Ctrl';
+                            callCtrl = 'day'+ (payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
                             // 포인트 이름이 안맞음(dayMembr->dayPoint)
                             if(callCtrl == 'dayMembrCtrl') {
                                 callCtrl = 'dayPointCtrl';

@@ -177,7 +177,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/today/todayDtl/todayDtl/list.sb", params, function () {
       var params       = {};
-      params.saleYn    = '';
+      params.saleYn    = 'Y';
       params.startDate = $scope.searchedStartDate;
       params.storeCd   = $scope.searchedStoreCd;
       params.posNo     = $scope.searchedPosNo;
@@ -274,6 +274,30 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
         }, 10);
       }
     });
+  };
+
+  // 매출 엑셀 다운로드
+  $scope.excelDownloadPeriodSale = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      },
+          messages["todayGnrlz.todayGnrlz"] + '(' + messages["todayDtl.todaySaleDtl"] + ')_' + getCurDateTime() +'.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+    }, 10);
   };
 
 }]);
@@ -379,7 +403,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
 
             // 값이 있으면 링크
             if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
-              $scope._broadcast(payColList[i].payMethod.toLowerCase() + 'Ctrl', params);
+              $scope._broadcast(payColList[i].payMethod.toLowerCase().replaceAll('_','') + 'Ctrl', params);
             }
           }
         }
@@ -515,6 +539,30 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/today/todayDtl/todayDtlDetail/list.sb", params);
+  };
+
+  // 매출상세 엑셀 다운로드
+  $scope.excelDownloadPeriodSaleDtl = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      },
+          messages["todayGnrlz.todayGnrlz"] + '(' + messages["todayDtl.todaySaleDtl"] + '_' + messages["todayDtl.saleDtl"] + ')_' + getCurDateTime() +'.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+    }, 10);
   };
 
 }]);

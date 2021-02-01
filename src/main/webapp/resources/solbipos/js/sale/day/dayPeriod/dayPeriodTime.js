@@ -99,6 +99,31 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope._broadcast('dayPeriodTimeStoreCtrl');
     };
 
+
+    // 시간대별 엑셀 다운로드
+    $scope.excelDownloadPeriodSaleTime = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                messages["dayperiod.dayPeriod"] + '(' + messages["dayPeriod.time"] + ')_' + getCurDateTime() +'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
+
 }]);
 
 /**
@@ -146,5 +171,29 @@ app.controller('dayPeriodTimeDetailCtrl', ['$scope', '$http', '$timeout', functi
         $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodTimeDetailList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+    // 매출상세 엑셀 다운로드
+    $scope.excelDownloadPeriodSaleDtl = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                messages["dayperiod.dayPeriod"] + '(' + messages["dayPeriod.time"] + '_' + messages["dayPeriod.saleDtl"] + ')_' + getCurDateTime() +'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
 
 }]);

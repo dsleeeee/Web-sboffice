@@ -250,8 +250,8 @@
         <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspm.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspm.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        AND     tcn.NMCODE_GRP_CD         =   '081'
-        AND     tcn.NMCODE_CD             =   tsspm.MPAY_CD
+        AND     tcn.NMCODE_GRP_CD     (+)=   '081'
+        AND     tcn.NMCODE_CD         (+)=   tsspm.MPAY_CD
         ]]>
     </select>
 

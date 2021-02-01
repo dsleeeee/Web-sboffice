@@ -93,7 +93,7 @@ function getConfigList(){
 
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
 
-            envHtml += "      <th>" + list[j].envstCd + (list[j].existFg === "N" ? "<em><span style=\"color:red;\">*</span></em> " : "") + '</th>';
+            envHtml += "      <th>" + list[j].envstCd + (list[j].existFg === "N" ? "<em><span style=\"color:#ff0000;\">*</span></em> " : "") + '</th>';
             envHtml += "      <td>" + list[j].envstNm + "</td>";
             envHtml += "      <td>";
 
@@ -109,6 +109,7 @@ function getConfigList(){
             envHtml += "        <input type='hidden' name='envstGrpCd'value='"+ list[j].envstGrpCd +"'>";
             envHtml += "        <input type='hidden' name='defltYn'   value='"+ list[j].defltYn +"'>";
             envHtml += "        <input type='hidden' name='dirctInYn' value='"+ list[j].dirctInYn +"'>";
+            envHtml += "        <input type='hidden' name='oldEnvstVal' value='"+ list[j].selEnvstVal +"'>";
             envHtml += "        <input type='hidden' name='targtFg'   value='"+ list[j].targtFg +"'>";
             envHtml += "      </td>";
 
@@ -213,21 +214,44 @@ $("#envLayer #btnSave").click(function(){
   var objDefault = document.getElementsByName("default");
   var objEnvstValCd = document.getElementsByName("envstValCd");
   var objDirctInYn = document.getElementsByName("dirctInYn");
+  var objOldEnvstVal  = document.getElementsByName("oldEnvstVal");
   var objTargtFg = document.getElementsByName("targtFg");
 
-  var paramArr = [];
+  var chngCnt  = 0; // 변경된 건수
+  var arrChg = []; //  변경된 환경변수 배열 Key 값
+  var params = [];
 
-  for(var i=0; i<objEnvstCd.length; i++){
+  // var paramArr = [];
 
-    if(objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == ""){
+  for(var i=0; i<objEnvstCd.length; i++) {
+
+    if (objDirctInYn[i].value === "Y" && objEnvstValCd[i].value === "") {
       var msgStr = "<s:message code='hqManage.envSetting' /> "
-                 + "[ " + objEnvstCd[i].value + "] "+ objEnvstNm[i].value
-                 + " <s:message code='hqManage.require.regist.inputEnv' /> ";
+              + "[ " + objEnvstCd[i].value + "] " + objEnvstNm[i].value
+              + " <s:message code='hqManage.require.regist.inputEnv' /> ";
 
       s_alert.pop(msgStr);
-      return;
+      return false;
     }
 
+
+    if (objOldEnvstVal[i].value !== $("#env" + objEnvstCd[i].value).val()) {
+
+      arrChg.push(i);
+      chngCnt++;
+    }
+  }
+
+  if (chngCnt === 0) {
+    s_alert.pop(messages["cmm.not.modify"]);
+    return false;
+  }
+
+  s_alert.popConf( messages["cmm.choo.save"], function() {
+
+    var hqScope = agrid.getScope('hqManageCtrl');
+
+    /*
     var param = {};
 
     param.hqOfficeCd  = selectedHq.hqOfficeCd;
@@ -240,16 +264,31 @@ $("#envLayer #btnSave").click(function(){
     param.targtFg     = objTargtFg[i].value;
 
     paramArr.push(param);
-  }
+    */
 
-  $.postJSONArray("/store/hq/hqManage/config/save.sb", paramArr, function(result) {
-    //console.log(result);
-    s_alert.pop("<s:message code='cmm.saveSucc' />");
-  },
-  function(result) {
-    s_alert.pop(result.message);
-  });
+    for(var i=0; i<arrChg.length; i++) {
+      var x = arrChg[i];
+      var param = {};
+      param.hqOfficeCd  = selectedHq.hqOfficeCd;
+      param.status      = objStatus[x].value;
+      param.envstCd     = objEnvstCd[x].value;
+      param.envstNm     = objEnvstNm[x].value;
+      param.envstGrpCd  = objEnvstGrpCd[x].value;
+      param.envstVal    = objEnvstValCd[x].value;
+      param.dirctInYn   = objDirctInYn[x].value;
+      param.targtFg     = objTargtFg[x].value;
 
+      params.push(param);
+    }
+
+    $.postJSONArray("/store/hq/hqManage/config/save.sb", params, function(result) {
+              //console.log(result);
+        s_alert.pop("<s:message code='cmm.saveSucc' />");
+      },
+      function(result) {
+        s_alert.pop(result.message);
+      });
+    });
 });
 
 <%-- 기본값 설정 버튼 클릭 --%>
