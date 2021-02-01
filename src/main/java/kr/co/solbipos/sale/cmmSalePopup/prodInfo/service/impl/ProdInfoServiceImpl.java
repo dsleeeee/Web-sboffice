@@ -24,7 +24,6 @@ public class ProdInfoServiceImpl implements ProdInfoService {
     public List<DefaultMap<Object>> getProdSaleDtlList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
 
 //        System.out.println("test1111");
-
         prodInfoVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
@@ -34,8 +33,10 @@ public class ProdInfoServiceImpl implements ProdInfoService {
             String[] storeCds = prodInfoVO.getStoreCds().split(",");
             prodInfoVO.setStoreCdList(storeCds);
         }
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            prodInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
         }
 
         // 기간별매출 > 일자별 탭 > 상품분류별 탭
