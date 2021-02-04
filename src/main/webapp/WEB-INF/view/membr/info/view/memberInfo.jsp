@@ -9,6 +9,13 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
+<%-- 우편번호 찾기 팝업 --%>
+<%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
+<%-- jsp:param 방식은 API 호출 시, 파라미터 사용을 불허하기 때문에 호출이 거부됨. --%>
+<%-- memberBasic.jsp에서 주소검색을 사용하고 있으나, 알 수 없는 parameter값이 넘어가기 때문에 부모페이지에 지정함. --%>
+<input type="hidden" id="pageNm" value="memberBasic" />
+<%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
+
 <div class="subCon" ng-controller="memberCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>

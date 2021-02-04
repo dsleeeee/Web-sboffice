@@ -83,9 +83,9 @@
            AREA_CD = #{areaCd},
            EMAIL_ADDR = #{emailAddr},
            HMPG_ADDR = #{hmpgAddr},
-           <!--POST_NO = #{postNo},-->
+           POST_NO = #{postNo},
            ADDR = #{addr},
-           <!--ADDR_DTL = #{addrDtl},-->
+           ADDR_DTL = #{addrDtl},
            MOD_DT = #{modDt},
            MOD_ID = #{modId}
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}

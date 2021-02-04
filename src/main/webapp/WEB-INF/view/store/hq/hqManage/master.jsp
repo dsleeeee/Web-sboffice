@@ -7,6 +7,12 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
+<%-- 우편번호 찾기 팝업 --%>
+<%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
+<%-- jsp:param 방식은 API 호출 시, 파라미터 사용을 불허하기 때문에 호출이 거부됨. --%>
+<input type="hidden" id="pageNm" value="hqInfo" />
+<%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
+
 <%--
 * id 규칙
  1. v로 시작하는 id는 단순 조회용 데이터
@@ -246,10 +252,12 @@
                     <div class="impWrap"><s:message code="hqManage.addr" /><em class="imp">*</em></div>
                   </th>
                   <td colspan="3">
-                    <input type="text" id="rPostNo" style="width:80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
-                    <a href="#" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
+                    <input type="text" id="rPostNo" style="width:80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" readonly/>
+                    <a href="#" class="btn_grayS" onclick="searchAddr()">
+                      <s:message code="hqManage.findAddr" />
+                    </a>
                     <br/>
-                    <input type="text" id="rAddr" placeholder="주소1" style="margin:4px 0px;"/>
+                    <input type="text" id="rAddr" placeholder="주소1" style="margin:4px 0px;" readonly/>
                     <input type="text" id="rAddrDtl" placeholder="주소2"/>
                   </td>
                 </tr>
@@ -625,11 +633,6 @@
     }
   });
 
-  <%-- 주소찾기 버튼 클릭 --%>
-  $("#btnFindAddr").click(function(e){
-    //TODO 주소검색 공통 추가 필요
-  });
-
   <%-- 신규등록 버튼 클릭 --%>
   $("#btnReg").click(function(e){
     chkVal("/store/hq/hqManage/master/regist.sb");
@@ -700,4 +703,3 @@
   });
 
 </script>
-

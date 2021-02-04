@@ -2,14 +2,22 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+
+<%-- 우편번호 찾기 팝업 --%>
+<%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
+<%-- jsp:param 방식은 API 호출 시, 파라미터 사용을 불허하기 때문에 호출이 거부됨. --%>
+<input type="hidden" id="pageNm" value="myInfo" />
+<%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
+
 <div class="subCon">
-  <form id="myInfoForm" method="post" action="/base/store/myInfo/myInfo/save.sb">
+  <%--<form id="myInfoForm" method="post" action="/base/store/myInfo/myInfo/save.sb">--%>
     <h2 class="h2_tit oh lh30">
       <s:message code="myInfo.title1" />
       <div class="txtIn fr">
-        <button class="btn_skyblue"><s:message code="cmm.save" /></button>
+        <button class="btn_skyblue" onclick="saveMyInfo()"><s:message code="cmm.save" /></button>
       </div>
     </h2>
     <table class="searchTbl mt10">
@@ -24,97 +32,77 @@
           <%--본사코드 --%>
           <th><s:message code="myInfo.myInfo.hqOfficeCd" /></th>
           <td>
-            <div class="sb-select">
-              <input id="hqOfficeCd" type="text" value="${myInfo.hqOfficeCd}" disabled="disabled">
-            </div>
+            <input id="hqOfficeCd" class="sb-input w100" type="text" value="${myInfo.hqOfficeCd}" disabled="disabled">
           </td>
           <%-- 본사명 --%>
           <th><s:message code="myInfo.myInfo.hqOfficeNm" /></th>
           <td>
-            <div class="sb-select">
-              <input id="hqOfficeNm" type="text" value="${myInfo.hqOfficeNm}" disabled="disabled">
-            </div>
+            <input id="hqOfficeNm" class="sb-input w100" type="text" value="${myInfo.hqOfficeNm}" disabled="disabled">
           </td>
         </tr>
         <tr class="brt">
           <%-- 대표자명 --%>
           <th><s:message code="myInfo.myInfo.ownerNm" /></th>
           <td>
-            <div class="sb-select">
-              <input id="ownerNm" name="ownerNm" type="text" value="${myInfo.ownerNm}" maxlength="25">
-            </div>
+            <input id="ownerNm" name="ownerNm" class="sb-input w100" type="text" value="${myInfo.ownerNm}" maxlength="25">
           </td>
           <%--사업자번호 --%>
           <th><s:message code="hqManage.bizNo" /></th>
           <td>
-            <div class="sb-select">
-              <input id="bizNo" type="text" value="${myInfo.bizNo}" disabled="disabled">
-            </div>
+            <input id="bizNo" type="text" class="sb-input w100" value="${myInfo.bizNo}" disabled="disabled">
           </td>
         </tr>
         <tr class="brt">
           <%-- 상호명 --%>
           <th><s:message code="myInfo.myInfo.bizStoreNm" /></th>
           <td>
-            <div class="sb-select">
-              <input id="bizStoreNm" name="bizStoreNm" type="text" value="${myInfo.bizStoreNm}" maxlength="25">
-            </div>
+            <input id="bizStoreNm" name="bizStoreNm" class="sb-input w100" type="text" value="${myInfo.bizStoreNm}" maxlength="25">
           </td>
           <%-- 전화번호 --%>
           <th><s:message code="myInfo.myInfo.telNo" /></th>
           <td>
-            <div class="sb-select">
-              <input id="telNo" name="telNo" type="text" value="${myInfo.telNo}" maxlength="15">
-            </div>
+            <input id="telNo" name="telNo" class="sb-input w100" type="text" value="${myInfo.telNo}" maxlength="15">
           </td>
         </tr>
         <tr class="brt">
           <%-- 날씨표시지역 --%>
           <th><s:message code="myInfo.myInfo.areaCd" /></th>
           <td>
-            <div class="sb-select">
-              <select id="areaCd" name="areaCd" type="text" value="${myInfo.areaCd}">
+              <select class="sb-select w30" id="areaCd" name="areaCd" type="text" value="${myInfo.areaCd}">
               <c:forEach items="${areaCds}" var="l">
                 <option value="${l.nmcodeCd}">${l.nmcodeNm}</option>
               </c:forEach>
               </select>
-            </div>
           </td>
           <%-- 팩스번호 --%>
           <th><s:message code="myInfo.myInfo.faxNo" /></th>
           <td>
-            <div class="sb-select">
-              <input id="faxNo" name="faxNo" type="text" value="${myInfo.faxNo}" maxlength="15">
-            </div>
+            <input id="faxNo" name="faxNo" class="sb-input w100" type="text" value="${myInfo.faxNo}" maxlength="15">
           </td>
         </tr>
         <tr class="brt">
           <%-- 홈페이지 --%>
           <th><s:message code="myInfo.myInfo.hmpgAddr" /></th>
           <td>
-            <div class="sb-select">
-              <input id="hmpgAddr" name="hmpgAddr" type="text" value="${myInfo.hmpgAddr}" maxlength="70">
-            </div>
+            <input id="hmpgAddr" name="hmpgAddr" class="sb-input w100" type="text" value="${myInfo.hmpgAddr}" maxlength="70">
           </td>
           <%-- 이메일 --%>
           <th><s:message code="myInfo.myInfo.emailAddr" /></th>
           <td>
-            <div class="sb-select">
-              <input id="emailAddr" name="emailAddr" type="text" value="${myInfo.emailAddr}" maxlength="50">
-            </div>
+            <input id="emailAddr" name="emailAddr" class="sb-input w100" type="text" value="${myInfo.emailAddr}" maxlength="50">
           </td>
         </tr>
         <tr class="brt">
           <%-- 주소 --%>
           <th><s:message code="myInfo.myInfo.addr" /></th>
           <td colspan="3">
-            <input type="text" class="sb-input w30 mb5" />
-            <a href="#" class="btn_grayS ml5"><s:message code="myInfo.myInfo.addrSearch" /></a>
-            <br>
+            <input type="text" id="postNo" name="postNo" class="sb-input w80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="${myInfo.postNo}" readonly/>
+            <a href="#" class="btn_grayS ml5" onclick="searchAddr()">
+              <s:message code="myInfo.myInfo.addrSearch" />
+            </a><br/>
             <%-- 주소상세 --%>
-            <div class="sb-select">
-              <input id="addr" name="addr" type="text" value="${myInfo.addr}" maxlength="100">
-            </div>
+            <input type="text" class="sb-input w100" id="addr" name="addr" placeholder="주소1" style="margin:4px 0px;" value="${myInfo.addr}" readonly/>
+            <input type="text" class="sb-input w100" id="addrDtl" name="addrDtl" placeholder="주소2" value="${myInfo.addrDtl}"/>
           </td>
         </tr>
         <tr class="brt">
@@ -149,7 +137,7 @@
         </tr>
       </tbody>
     </table>
-  </form>
+  <%--</form>--%>
   <%-- 매장형태 --%>
   <h2 class="h2_tit mt40"><s:message code="myInfo.title2" /></h2>
   <div class="updownSet oh">
@@ -250,13 +238,13 @@ function arrayCopy( items ){
 
 var win = window,
     doc = document,
-    myInfoFormComponent = generateWijmoComponent([
+    /*myInfoFormComponent = generateWijmoComponent([
       "hqOfficeCd", "hqOfficeNm", "ownerNm", "bizNo", "bizStoreNm",
-      "telNo", "faxNo", "areaCd", "emailAddr", "hmpgAddr", "addr"
-    ]),
+      "telNo", "faxNo", "areaCd", "emailAddr", "hmpgAddr"
+    ]),*/
     gridIds = [ "storeType", "grp", "hour", "guest" ];
 
-$( "#myInfoForm" ).submit(function( e ){
+/*$( "#myInfoForm" ).submit(function( e ){
   e.preventDefault();
 
   $.postJSONSave( this.action,
@@ -264,7 +252,45 @@ $( "#myInfoForm" ).submit(function( e ){
     function( result ){ win.s_alert.pop( messages["cmm.modify"] ); },
     function( result ){ win.s_alert.pop( messages["cmm.modify.fail"] ); }
   );
-});
+});*/
+
+// 기초정보 저장
+function saveMyInfo(){
+
+  var url = "/base/store/myInfo/myInfo/save.sb";
+  var msg = "";
+  var params = {};
+
+  params.hqOfficeCd = $("#hqOfficeCd").val();
+  params.ownerNm = $("#ownerNm").val();
+  params.bizStoreNm = $("#bizStoreNm").val();
+  params.telNo = $("#telNo").val();
+  params.faxNo = $("#faxNo").val();
+  params.areaCd = $("#areaCd").val();
+  params.hmpgAddr = $("#hmpgAddr").val();
+  params.emailAddr = $("#emailAddr").val();
+  params.postNo = $("#postNo").val();;
+  params.addr = $("#addr").val();;
+  params.addrDtl = $("#addrDtl").val();
+
+  $.ajax({
+    type: "POST",
+    url: url,
+    data:  JSON.stringify(params),
+    success: function(result){
+      if (result.status === "OK") {
+        msg = "<s:message code='cmm.saveSucc' />";
+      }else{
+        msg = "<s:message code='cmm.saveFail' />";
+      }
+      s_alert.popOk(msg, function() {});
+    },
+    cache: false,
+    dataType: "json",
+    contentType : 'application/json'
+  });
+
+}
 
 gridIds.forEach(function( gridId ){
   var selector = "#" + gridId,

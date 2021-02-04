@@ -238,7 +238,7 @@ public class MyInfoServiceImpl implements MyInfoService{
                 modId = sessionInfo.getUserId(),
                 modDt = currentDateTimeString();
 
-        myInfo.setHqOfficeCd( hqOfficeCd );
+        //myInfo.setHqOfficeCd( hqOfficeCd );
         myInfo.setModId( modId );
         myInfo.setModDt( modDt );
 
