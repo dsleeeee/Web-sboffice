@@ -8,6 +8,12 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
+<%-- 우편번호 찾기 팝업 --%>
+<%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
+<%-- jsp:param 방식은 API 호출 시, 파라미터 사용을 불허하기 때문에 호출이 거부됨. --%>
+<input type="hidden" id="pageNm" value="agencyInfo" />
+<%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
+
 <div id="agencyInfoView" class="subCon" style="display:none;">
 
     <%--============================================= 탭 =============================================--%>
@@ -95,16 +101,16 @@
                 <tr>
                     <%-- 주소 --%>
                     <th rowspan="3"><s:message code="instlAgency.addr" /></th>
-                    <td colspan="3"><input type="text" id="ai_postNo" name="ai_postNo" ng-model="ai_postNo" maxlength="5" style="width:90px;"/>
-                                      <a href="#" class="btn_grayS ml5"><s:message code="instlAgency.addrSearch" /></a>
+                    <td colspan="3"><input type="text" id="ai_postNo" name="ai_postNo" ng-model="ai_postNo" placeholder="우편번호" style="width: 80px;" maxlength="5" readonly/>
+                                      <a href="#" class="btn_grayS ml5" onclick="searchAddr()"><s:message code="instlAgency.addrSearch" /></a>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><input type="text" id="ai_addr" name="ai_addr" ng-model="ai_addr" maxlength="100"/>
+                    <td colspan="3"><input type="text" id="ai_addr" name="ai_addr" ng-model="ai_addr" placeholder="주소1" maxlength="100" readonly/>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><input type="text" id="ai_addrDtl" name="ai_addrDtl" ng-model="ai_addrDtl" maxlength="100"/>
+                    <td colspan="3"><input type="text" id="ai_addrDtl" name="ai_addrDtl" ng-model="ai_addrDtl" placeholder="주소2" maxlength="100"/>
                     </td>
                 </tr>
                 <tr>

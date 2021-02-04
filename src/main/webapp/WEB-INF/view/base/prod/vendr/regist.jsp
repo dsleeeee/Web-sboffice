@@ -6,6 +6,12 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
+<%-- 우편번호 찾기 팝업 --%>
+<%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
+<%-- jsp:param 방식은 API 호출 시, 파라미터 사용을 불허하기 때문에 호출이 거부됨. --%>
+<input type="hidden" id="pageNm" value="vendrRegist" />
+<%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
+
 <wj-popup id="wjVendrRegistLayer" control="wjVendrRegistLayer"  show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;">
   <div id="vendrRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="vendrRegistCtrl">
     <div class="layer_inner">
@@ -116,10 +122,12 @@
               <tr>
                 <th><s:message code="vendr.addr" /></th>
                 <td colspan="3">
-                  <input type="text" id="rPostNo" ng-model="rPostNo" class="sb-input w30" style="width:100px;" maxlength="5"/>
-                  <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()"><s:message code="storeManage.srchAddr" /></a>
-                  <input type="text" id="rAddr" ng-model="rAddr" class="sb-input w100" maxlength="100" style="margin-top:5px; margin-bottom: 5px;"/>
-                  <input type="text" id="rAddrDtl" ng-model="rAddrDtl" class="sb-input w100" maxlength="100"/>
+                  <input type="text" id="rPostNo" ng-model="rPostNo" class="sb-input" placeholder="우편번호" maxlength="5" style="width: 80px;" readonly/>
+                  <a id="btnSrchAddr" href="#" class="btn_grayS ml5" onclick="searchAddr()">
+                    <s:message code="storeManage.srchAddr" />
+                  </a>
+                  <input type="text" id="rAddr" ng-model="rAddr" class="sb-input w100" placeholder="주소1" maxlength="100" style="margin:4px 0px;" readonly/>
+                  <input type="text" id="rAddrDtl" ng-model="rAddrDtl" class="sb-input w100" placeholder="주소2" maxlength="100"/>
                 </td>
               </tr>
               <tr>

@@ -3,6 +3,12 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<%-- 우편번호 찾기 팝업 --%>
+<%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
+<%-- jsp:param 방식은 API 호출 시, 파라미터 사용을 불허하기 때문에 호출이 거부됨. --%>
+<input type="hidden" id="pageNm" value="storeInfo" />
+<%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
+
 <wj-popup id="storeInfoLayer" control="storeInfoLayer" show-trigger="Click" hide-trigger="Click" style="width:800px;height:600px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="storeInfoCtrl">
 
@@ -202,15 +208,15 @@
               </td>
             </tr>
             <tr>
-              <%-- 주소 //TODO 주소검색 추가 필요 --%>
+              <%-- 주소 --%>
               <th><s:message code="storeManage.addr" /><em class="imp">*</em></th>
               <td colspan="3">
-                <input type="text" id="postNo" ng-model="store.postNo" class="sb-input w30" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
-                <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
+                <input type="text" id="postNo" ng-model="store.postNo" class="sb-input w80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" readonly/>
+                <a id="btnSrchAddr" href="#" class="btn_grayS ml5" onclick="searchAddr()">
                   <s:message code="storeManage.srchAddr" />
                 </a>
                 <br>
-                <input type="text" id="addr" ng-model="store.addr" class="sb-input w100" maxlength="60" placeholder="주소1"/>
+                <input type="text" id="addr" ng-model="store.addr" class="sb-input w100" maxlength="60" placeholder="주소1" style="margin:4px 0px;" readonly/>
                 <input type="text" id="addrDtl" ng-model="store.addrDtl" class="sb-input w100" maxlength="60" placeholder="주소2"/>
               </td>
             </tr>
@@ -363,7 +369,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20200818.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20200818.07" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

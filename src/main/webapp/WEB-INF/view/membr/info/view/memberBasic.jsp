@@ -255,13 +255,13 @@
                     <%-- 주소 //TODO 주소검색 추가 필요 --%>
                     <th><s:message code="regist.addr"/></th>
                     <td colspan="3">
-                        <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo" class="sb-input w30" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
-                        <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
+                        <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo" class="sb-input w80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" readonly/>
+                        <a id="btnSrchAddr" href="#" class="btn_grayS ml5" onclick="searchAddr()">
                             <s:message code="regist.srchAddr"/>
                         </a>
                         <br>
-                        <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100" maxlength="60" style="margin:2px 0px;"/>
-                        <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl" class="sb-input w100" maxlength="60"/>
+                        <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100" placeholder="주소1" maxlength="60" style="margin:4px 0px;" readonly/>
+                        <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl" class="sb-input w100" placeholder="주소2" maxlength="60"/>
                     </td>
                 </tr>
                 <tr>
