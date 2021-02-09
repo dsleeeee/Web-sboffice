@@ -31,7 +31,7 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 회원번호 --%>
+                <%-- 영업일자 --%>
                 <th><s:message code="dlvrReceipt.sale.date"/></th>
                 <td colspan="3">
                 <span class="txtIn">
@@ -171,11 +171,11 @@
                 </div>
             </div>
             <%-- 페이지 리스트 --%>
-            <div class="pageNum mt10">
-                <%-- id --%>
+            <%--<div class="pageNum mt10">
+                &lt;%&ndash; id &ndash;%&gt;
                 <ul id="dlvrReceiptDetailCtrlPager" data-size="10">
                 </ul>
-            </div>
+            </div>--%>
             <%--//페이지 리스트--%>
         </div>
     </div>
@@ -185,7 +185,7 @@
     <%--var dlvrFirstList = ${dlvrFirstList};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrReceipt/dlvrReceipt.js?ver=2020062901.12"
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrReceipt/dlvrReceipt.js?ver=2020062901.17"
         charset="utf-8"></script>
 
 <%-- 영수증상세 --%>

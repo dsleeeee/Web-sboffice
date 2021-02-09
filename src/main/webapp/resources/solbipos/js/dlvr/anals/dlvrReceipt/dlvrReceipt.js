@@ -57,6 +57,11 @@ app.controller('dlvrReceiptCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 조회
     $scope.dlvrReceiptSearch = function () {
+
+        // 배달지별 내역 조회 후 상세 그리드 초기화
+        var dlvrReceiptDetailScope = agrid.getScope('dlvrReceiptDetailCtrl');
+        dlvrReceiptDetailScope.dtlGridDefault();
+
         var params = {};
         params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
         params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
@@ -65,8 +70,7 @@ app.controller('dlvrReceiptCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._inquirySub("/dlvr/manage/anals/dlvrZone/getDlvrReceiptList.sb", params, function () {
         }, false);
     };
-}])
-;
+}]);
 
 app.controller('dlvrReceiptDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
@@ -114,61 +118,33 @@ app.controller('dlvrReceiptDetailCtrl', ['$scope', '$http', function ($scope, $h
             }
         });
     };
+
     $scope.$on("dlvrReceiptDetailCtrl", function (event, data) {
         $scope.setSelectedMember(data);
         $scope.getReceiptDetailList(data);
         event.preventDefault();
     });
+
     // 상세 조회
     $scope.getReceiptDetailList = function (data) {
         var params = {};
-        // params.hqOfficeCd = $scope.getSelectedMember().hqOfficeCd;
-        // params.hqBrandCd = $scope.getSelectedMember().hqBrandCd;
-        // params.periodStartDate = $scope.getSelectedMember().periodStartDate;
-        // params.periodEndDate = $scope.getSelectedMember().periodEndDate;
-        // params.posNo = $scope.getSelectedMember().posNo;
-        // params.listScale = $scope.listScaleDatail;
         params.hqOfficeCd = data.hqOfficeCd;
         params.hqBrandCd = data.hqBrandCd;
         params.periodStartDate = data.periodStartDate;
         params.periodEndDate = data.periodEndDate;
-        params.posNo = data.posNo;
+        params.dlvrAddr = data.dlvrAddr;
         params.listScale  = $scope.listScale;
 
         $scope._inquirySub("/dlvr/manage/anals/dlvrZone/getDlvrReceiptDetailList.sb", params, function () {
         }, false);
-        //     $scope.$broadcast('loadingPopupActive');
-        //     // ajax 통신 설정
-        //     $http({
-        //         method: 'POST', //방식
-        //         url: '/dlvr/manage/anals/dlvrZone/getDlvrReceiptDetailList.sb', /* 통신할 URL */
-        //         params: params, /* 파라메터로 보낼 데이터 */
-        //         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-        //     }).then(function successCallback(response) {
-        //         // 로딩바 hide
-        //         $scope.$broadcast('loadingPopupInactive');
-        //         if (response.data.data.list.length === undefined || response.data.data.list.length === 0) {
-        //             $scope.data = new wijmo.collections.CollectionView([]);
-        //         } else {
-        //             var data = new wijmo.collections.CollectionView(response.data.data.list);
-        //             data.trackChanges = true;
-        //             $scope.data = data;
-        //         }
-        //     }, function errorCallback(response) {
-        //         $scope.$broadcast('loadingPopupInactive');
-        //         if (response.data.message) {
-        //             $scope._popMsg(response.data.message);
-        //         } else {
-        //             $scope._popMsg(messages['cmm.error']);
-        //         }
-        //         return false;
-        //     }).then(function () {
-        //         // 'complete' code here
-        //         if (typeof callback === 'function') {
-        //             setTimeout(function () {
-        //                 callback();
-        //             }, 10);
-        //         }
-        //     });
     };
+
+    // 상세 그리드 초기화
+    $scope.dtlGridDefault = function () {
+        var cv          = new wijmo.collections.CollectionView([]);
+        cv.trackChanges = true;
+        $scope.data     = cv;
+        $scope.flex.refresh();
+    };
+
 }]);

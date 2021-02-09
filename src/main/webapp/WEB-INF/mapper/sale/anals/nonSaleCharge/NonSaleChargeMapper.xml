@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    NonSaleChargeMapper.xml
+    비매출충전내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.02.04     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sale.anals.nonSaleCharge.service.impl.NonSaleChargeMapper">
+    <!-- 비매출 충전내역 조회 -->
+    <!--
+        TABLE    : TB_NS_NONSALE_PAY_SEQ, TB_NS_NONSALE_HDR, TB_NS_NONSALE_PAY_CARD, TB_NS_NONSALE_PAY_CASH, TB_MS_STORE, TB_CM_NMCODE
+        PARAM    : nonSaleChargeVO
+        COMMENTS : 비매출 충전내역을 조회한다.
+    -->
+    <select id="getNonSaleChargeList" parameterType="nonSaleChargeVO" resultType="DefaultMap">
+      /* USE : NonSaleChargeMapper.getNonSaleChargeList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT hdr.STORE_CD,
+                tms.STORE_NM,
+                hdr.SALE_DATE,
+                hdr.POS_NO,
+                hdr.BILL_NO,
+                hdr.NONSALE_TYPE_NO,
+                SUBSTR(hdr.NONSALE_TYPE_NO, 13) AS CARD_NO,
+                seq.PAY_CD,
+                tcn.NMCODE_NM AS PAY_NM,
+                seq.PAY_SEQ,
+          CASE seq.PAY_CD
+                WHEN '01' THEN card.VAN_TERMNL_NO
+                WHEN '02' THEN cash.VAN_TERMNL_NO
+           END AS VAN_TERMNL_NO,
+          CASE seq.PAY_CD
+                WHEN '01' THEN card.APPR_NO
+                WHEN '02' THEN cash.APPR_NO
+           END AS APPR_NO,
+          CASE seq.PAY_CD
+                WHEN '01' THEN card.APPR_DT
+                WHEN '02' THEN cash.APPR_DT
+           END AS APPR_DT,
+                seq.PAY_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_NS_NONSALE_PAY_SEQ seq
+          LEFT OUTER JOIN TB_NS_NONSALE_HDR hdr
+                         ON seq.STORE_CD = hdr.STORE_CD
+                        AND seq.SALE_DATE = hdr.SALE_DATE
+                        AND seq.POS_NO = hdr.POS_NO
+                        AND seq.BILL_NO = hdr.BILL_NO
+          LEFT OUTER JOIN TB_NS_NONSALE_PAY_CARD card
+                         ON seq.STORE_CD = card.STORE_CD
+                        AND seq.SALE_DATE = card.SALE_DATE
+                        AND seq.POS_NO = card.POS_NO
+                        AND seq.BILL_NO = card.BILL_NO
+                        AND seq.LINE_NO = card.LINE_NO
+          LEFT OUTER JOIN TB_NS_NONSALE_PAY_CASH cash
+                         ON seq.STORE_CD = cash.STORE_CD
+                        AND seq.SALE_DATE = cash.SALE_DATE
+                        AND seq.POS_NO = cash.POS_NO
+                        AND seq.BILL_NO = cash.BILL_NO
+                        AND seq.LINE_NO = cash.LINE_NO
+          LEFT OUTER JOIN TB_MS_STORE tms
+                         ON seq.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND seq.STORE_CD = tms.STORE_CD
+          LEFT OUTER JOIN TB_CM_NMCODE tcn
+                         ON tcn.NMCODE_GRP_CD = '024'
+                        AND seq.PAY_CD = tcn.NMCODE_CD
+        WHERE 1=1
+           AND seq.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+           AND seq.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <if test='storeCd != null and storeCd != ""'>
+                    AND seq.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                AND seq.STORE_CD = #{storeCd}
+            </when>
+        </choose>
+           AND EXISTS (
+                            SELECT *
+                              FROM TB_NS_NONSALE_HDR hdr
+                             WHERE hdr.NONSALE_TYPE_FG = '3'
+                               AND hdr.STORE_CD = seq.STORE_CD
+                               AND hdr.SALE_DATE = seq.SALE_DATE
+                               AND hdr.POS_NO = seq.POS_NO
+                               AND hdr.BILL_NO = seq.BILL_NO
+                        )
+        ORDER
+           BY seq.STORE_CD,
+              seq.SALE_DATE,
+              seq.POS_NO,
+              seq.BILL_NO,
+              seq.PAY_SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 비매출 충전내역 조회 Excel 다운로드 -->
+    <!--
+        TABLE    : TB_NS_NONSALE_PAY_SEQ, TB_NS_NONSALE_HDR, TB_NS_NONSALE_PAY_CARD, TB_NS_NONSALE_PAY_CASH, TB_MS_STORE, TB_CM_NMCODE
+        PARAM    : nonSaleChargeVO
+        COMMENTS : 비매출 충전내역 엑셀로 다운로드 한다.
+    -->
+    <select id="getNonSaleChargeExcelList" parameterType="nonSaleChargeVO" resultType="DefaultMap">
+        /* USE : NonSaleChargeMapper.getNonSaleChargeExcelList */
+        SELECT hdr.STORE_CD,
+                tms.STORE_NM,
+                hdr.SALE_DATE,
+                hdr.POS_NO,
+                hdr.BILL_NO,
+                hdr.NONSALE_TYPE_NO,
+                TO_CHAR('''' || SUBSTR(hdr.NONSALE_TYPE_NO, 13)) AS CARD_NO,
+                seq.PAY_CD,
+                tcn.NMCODE_NM AS PAY_NM,
+                seq.PAY_SEQ,
+           CASE seq.PAY_CD
+                WHEN '01' THEN card.VAN_TERMNL_NO
+                WHEN '02' THEN cash.VAN_TERMNL_NO
+           END AS VAN_TERMNL_NO,
+           CASE seq.PAY_CD
+                WHEN '01' THEN card.APPR_NO
+                WHEN '02' THEN cash.APPR_NO
+           END AS APPR_NO,
+           CASE seq.PAY_CD
+                WHEN '01' THEN card.APPR_DT
+                WHEN '02' THEN cash.APPR_DT
+            END AS APPR_DT,
+                seq.PAY_AMT
+          FROM TB_NS_NONSALE_PAY_SEQ seq
+          LEFT OUTER JOIN TB_NS_NONSALE_HDR hdr
+                         ON seq.STORE_CD = hdr.STORE_CD
+                        AND seq.SALE_DATE = hdr.SALE_DATE
+                        AND seq.POS_NO = hdr.POS_NO
+                        AND seq.BILL_NO = hdr.BILL_NO
+          LEFT OUTER JOIN TB_NS_NONSALE_PAY_CARD card
+                         ON seq.STORE_CD = card.STORE_CD
+                        AND seq.SALE_DATE = card.SALE_DATE
+                        AND seq.POS_NO = card.POS_NO
+                        AND seq.BILL_NO = card.BILL_NO
+                        AND seq.LINE_NO = card.LINE_NO
+          LEFT OUTER JOIN TB_NS_NONSALE_PAY_CASH cash
+                         ON seq.STORE_CD = cash.STORE_CD
+                        AND seq.SALE_DATE = cash.SALE_DATE
+                        AND seq.POS_NO = cash.POS_NO
+                        AND seq.BILL_NO = cash.BILL_NO
+                        AND seq.LINE_NO = cash.LINE_NO
+          LEFT OUTER JOIN TB_MS_STORE tms
+                         ON seq.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND seq.STORE_CD = tms.STORE_CD
+          LEFT OUTER JOIN TB_CM_NMCODE tcn
+                         ON tcn.NMCODE_GRP_CD = '024'
+                        AND seq.PAY_CD = tcn.NMCODE_CD
+        WHERE 1=1
+          AND seq.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+          AND seq.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <if test='storeCd != null and storeCd != ""'>
+                    AND seq.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                AND seq.STORE_CD = #{storeCd}
+            </when>
+        </choose>
+        AND EXISTS (
+                        SELECT *
+                          FROM TB_NS_NONSALE_HDR hdr
+                         WHERE hdr.NONSALE_TYPE_FG = '3'
+                           AND hdr.STORE_CD = seq.STORE_CD
+                           AND hdr.SALE_DATE = seq.SALE_DATE
+                           AND hdr.POS_NO = seq.POS_NO
+                           AND hdr.BILL_NO = seq.BILL_NO
+                    )
+        ORDER
+           BY seq.STORE_CD,
+              seq.SALE_DATE,
+              seq.POS_NO,
+              seq.BILL_NO,
+              seq.PAY_SEQ
+    </select>
+
+</mapper>

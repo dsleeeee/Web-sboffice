@@ -4,78 +4,78 @@
 <mapper namespace="kr.co.solbipos.dlvr.anals.dlvrReceipt.service.impl.DlvrReceiptMapper">
     <select id="getDlvrReceiptList" parameterType="dlvrReceiptVO" resultType="DefaultMap">
         /* DlvrReceiptMapper.getDlvrReceiptList */
-        /*  AND tssd.DLVR_PACK_FG = '2'*/
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        tsshd.STORE_CD,
-        tsshd.DLVR_ADDR,
-        tsshd.POS_NO,
-        COUNT(tsshd.BILL_NO) AS BILL_COUNT,
-        SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+        SELECT tsshd.STORE_CD,
+                tsshd.DLVR_ADDR,
+                COUNT(tsshd.BILL_NO) AS BILL_COUNT,
+                SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM
-        TB_SL_SALE_HDR_DLVR tsshd, TB_SL_SALE_HDR tssh
-        WHERE 1=1
-        AND tsshd.STORE_CD = tssh.STORE_CD
-        AND tsshd.POS_NO = tssh.POS_NO
-        AND tsshd.SALE_DATE = tssh.SALE_DATE
-        AND tsshd.BILL_NO = tssh.BILL_NO
-        AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
-        AND tssh.DLVR_YN = 'Y'
+          FROM TB_SL_SALE_HDR_DLVR tsshd,
+                TB_SL_SALE_HDR tssh
+         WHERE 1=1
+           AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+           AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+           AND tsshd.STORE_CD = tssh.STORE_CD
+           AND tsshd.SALE_DATE = tssh.SALE_DATE
+           AND tsshd.POS_NO = tssh.POS_NO
+           AND tsshd.BILL_NO = tssh.BILL_NO
         <if test = 'storeCd != null and storeCd != ""'>
             AND tsshd.STORE_CD = #{storeCd}
         </if>
-        GROUP BY
-        tsshd.STORE_CD,
-        tsshd.DLVR_ADDR,
-        tsshd.SALE_DATE,
-        tsshd.POS_NO
+           AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
+           AND tssh.DLVR_YN = 'Y'
+         GROUP
+            BY tsshd.STORE_CD,
+               tsshd.DLVR_ADDR
+         ORDER
+            BY tsshd.DLVR_ADDR
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <select id="getDlvrReceiptDetailList" parameterType="dlvrReceiptVO" resultType="DefaultMap">
         /* DlvrReceiptMapper.getDlvrReceiptDetailList */
-        /* AND tssd.DLVR_PACK_FG = '2' */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        tsshd.SALE_DATE,
-        tsshd.BILL_NO,
-        tsshd.POS_NO,
-        tsshd.STORE_CD,
-        MAX(SBPENC.D(tsshm.MEMBR_NM)) AS MEMBR_NM,
-        tme.EMP_NM,
-        SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM
-        TB_SL_SALE_HDR_DLVR tsshd,
-        TB_SL_SALE_HDR tssh,
-        TB_MS_EMPLOYEE tme,
-        TB_SL_SALE_HDR_MEMBR tsshm
-        WHERE 1=1
-        AND tsshm.POS_NO (+)= tsshd.POS_NO
-        AND tsshm.BILL_NO (+)= tsshd.BILL_NO
-        AND tsshm.STORE_CD (+)= tsshd.STORE_CD
-        AND tsshm.SALE_DATE (+)= tsshd.SALE_DATE
-        AND tsshd.POS_NO = tssh.POS_NO
-        AND tsshd.BILL_NO = tssh.BILL_NO
-        AND tsshd.STORE_CD = tssh.STORE_CD
-        AND tsshd.SALE_DATE = tssh.SALE_DATE
-        AND tme.STORE_CD (+)= tsshd.STORE_CD
-        AND tme.EMP_NO (+)= tsshd.DLVR_EMP_NO
-        AND tsshd.STORE_CD = #{storeCd}
-        AND tsshd.POS_NO = #{posNo}
-        AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
-        AND tssh.DLVR_YN = 'Y'
-        GROUP BY
-        tsshd.SALE_DATE,
-        tsshd.POS_NO,
-        tsshd.BILL_NO,
-        tsshd.DLVR_ADDR,
-        tsshd.STORE_CD,
-        tme.EMP_NM
-        ORDER BY
-        tsshd.SALE_DATE
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <!-- <include refid="CmmSQL.PagingTemplateHeader"/> -->
+        SELECT tsshd.STORE_CD,
+                tsshd.SALE_DATE,
+                tsshd.POS_NO,
+                tsshd.BILL_NO,
+                SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                MAX(SBPENC.D(tsshm.MEMBR_NM)) AS MEMBR_NM,
+                tme.EMP_NM
+        <!--  <include refid="CmmSQL.PagingTemplateCount"/> -->
+          FROM TB_SL_SALE_HDR_DLVR tsshd,
+                TB_SL_SALE_HDR tssh,
+                TB_MS_EMPLOYEE tme,
+                TB_SL_SALE_HDR_MEMBR tsshm
+         WHERE 1=1
+           AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+           AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+           AND tsshd.STORE_CD = tssh.STORE_CD
+           AND tsshd.SALE_DATE = tssh.SALE_DATE
+           AND tsshd.POS_NO = tssh.POS_NO
+           AND tsshd.BILL_NO = tssh.BILL_NO
+           AND tsshm.HQ_OFFICE_CD (+)= tsshd.HQ_OFFICE_CD
+           AND tsshm.HQ_BRAND_CD (+)= tsshd.HQ_BRAND_CD
+           AND tsshm.STORE_CD (+)= tsshd.STORE_CD
+           AND tsshm.SALE_DATE (+)= tsshd.SALE_DATE
+           AND tsshm.POS_NO (+)= tsshd.POS_NO
+           AND tsshm.BILL_NO (+)= tsshd.BILL_NO
+           AND tme.STORE_CD (+)= tsshd.STORE_CD
+           AND tme.EMP_NO (+)= tsshd.DLVR_EMP_NO
+           AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
+           AND tsshd.STORE_CD = #{storeCd}
+           AND tsshd.DLVR_ADDR = #{dlvrAddr}
+           AND tssh.DLVR_YN = 'Y'
+         GROUP
+            BY tsshd.STORE_CD,
+               tsshd.SALE_DATE,
+               tsshd.POS_NO,
+               tsshd.BILL_NO,
+               tme.EMP_NM
+        ORDER
+           BY tsshd.SALE_DATE,
+              tsshd.BILL_NO
+        <!-- <include refid="CmmSQL.PagingTemplateBottom"/> -->
     </select>
 
 </mapper>
