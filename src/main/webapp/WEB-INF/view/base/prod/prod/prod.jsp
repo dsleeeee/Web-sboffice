@@ -155,9 +155,9 @@
           <s:message code="prod.title.addProd" />
         </button>
         <%-- 상품엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>><s:message code="cmm.excel.down"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
         <%-- 전체상품엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>><s:message code="cmm.excel.downTotal"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
 
       </div>
     </div>
