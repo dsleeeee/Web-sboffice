@@ -220,6 +220,110 @@
         </choose>
     </select>
 
+
+    <!-- 상품 조회(엑셀다운로드용) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : prodVO
+        COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getProdExcelList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdExcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thp.PROD_CD,
+                thp.PROD_NM,
+                thp.PROD_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                NVL(thp.COST_UPRC, 0) COST_UPRC,
+                NVL(thp.SPLY_UPRC, 0) SPLY_UPRC,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                thp.PO_UNIT_FG,
+                thp.USE_YN,
+                (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD )
+                    AS STORE_CNT
+                FROM
+                TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN (
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_HQ_PRODUCT_SALE_PRICE
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY
+                HQ_OFFICE_CD, PROD_CD
+                ) thpsp ON
+                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                WHERE
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                ORDER BY thp.PROD_CD ASC
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                tmp.PROD_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                NVL(tmp.COST_UPRC, 0) COST_UPRC,
+                NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                tmp.PO_UNIT_FG,
+                tmp.USE_YN
+                FROM
+                TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN (
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_MS_PRODUCT_SALE_PRICE
+                WHERE
+                STORE_CD = #{storeCd}
+                <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY
+                STORE_CD, PROD_CD
+                ) thpsp ON
+                tmp.STORE_CD = thpsp.STORE_CD
+                AND tmp.PROD_CD = thpsp.PROD_CD
+                INNER JOIN TB_MS_STORE tms ON
+                tms.STORE_CD  = tmp.STORE_CD
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
+                WHERE
+                tmp.STORE_CD = #{storeCd}
+                ORDER BY tmp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
+
     <!-- 상품 상세 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_IMAGE, TB_HQ_VENDOR_PROD, TB_HQ_VENDOR

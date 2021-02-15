@@ -154,6 +154,11 @@
         <button class="btn_skyblue" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
           <s:message code="prod.title.addProd" />
         </button>
+        <%-- 상품엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>><s:message code="cmm.excel.down"/></button>
+        <%-- 전체상품엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>><s:message code="cmm.excel.downTotal"/></button>
+
       </div>
     </div>
   </div>
@@ -211,6 +216,46 @@
   </div>
   <%--//페이지 리스트--%>
 
+    <%--엑셀 리스트--%>
+    <div class="wj-TblWrapBr mt10" ng-controller="totalExcelCtrl" style="display: none;">
+      <div class="wj-gridWrap" id="qn">
+        <wj-flex-grid
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                loaded-rows="loadedRows(s,e)"
+                is-read-only="true"
+                frozen-columns="6"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter">
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="prod.prodClassCd"/>" binding="prodClassCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
+          <c:if test="${orgnFg == 'HQ'}">
+            <wj-flex-grid-column header="<s:message code="prod.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+          </c:if>
+          <wj-flex-grid-column header="<s:message code="prod.costUprc"/>" binding="costUprc" width="100" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.splyUprc"/>" binding="splyUprc" width="100" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column><!--// todo 원산지명 조회 필요-->
+          <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="80" data-map="poUnitFgComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="80" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+
+          <wj-flex-grid-column header="<s:message code="prod.brandCd"/>" binding="hqBrandCd" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandN" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.sideProdYn"/>" binding="sideProdYn" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassCd" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+      <%--//엑셀 리스트--%>
+    </div>
 </div>
 
 <script>
@@ -219,7 +264,7 @@
   var prodNoEnvFg = "${prodNoEnvFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

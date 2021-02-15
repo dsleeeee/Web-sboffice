@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayGnrlz/todayGnrlz/"/>
 
-<div id="todayGnrlzView" class="subCon" ng-controller="todayGnrlzCtrl">
+<div id="todayGnrlzView" class="subCon">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl"><s:message code="todayGnrlz.todaySaleTotal"/></a>
   </div>
@@ -28,7 +28,7 @@
       </td>
     </tr>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-    <tr>
+    <tr ng-controller="storeCtrl">
       <%-- 매장코드 --%>
       <th><s:message code="todayGnrlz.store"/></th>
       <td>
@@ -53,11 +53,11 @@
 
   <div class="w40 fl" style="width:44%;">
     <%-- 매출종합 --%>
-    <div class="w100 mt10">
+    <div class="w100 mt10" ng-controller="todayGnrlzCtrl">
       <div class="oh sb-select mb10">
         <span class="fl bk lh30"><s:message code='todayGnrlz.subTitleGnrlz'/></span>
         <%-- 매출총합 엑셀다운로드 --%>
-<%--        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadGnrlz()"><s:message code="cmm.excel.down"/></button>--%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadGnrlz()"><s:message code="cmm.excel.down"/></button>
 
       </div>
 
@@ -94,7 +94,7 @@
         <span class="fl bk lh30"><s:message code='todayGnrlz.subTitlePay'/></span>
 
         <%-- 결제수단별 엑셀다운로드 --%>
-<%--        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPay()"><s:message code="cmm.excel.down"/></button>--%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPay()"><s:message code="cmm.excel.down"/></button>
       </div>
 
       <%--위즈모 테이블--%>
@@ -128,7 +128,7 @@
       <div class="oh sb-select mb10">
         <span class="fl bk lh30"><s:message code='todayGnrlz.subTitleMember'/></span>
         <%-- 회원 point 적립/사용 엑셀다운로드 --%>
-<%--        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadMember()"><s:message code="cmm.excel.down"/></button>--%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadMember()"><s:message code="cmm.excel.down"/></button>
       </div>
 
       <%--위즈모 테이블--%>
@@ -162,9 +162,9 @@
     <%-- 상품별 매출현황 --%>
     <div class="w100 mt10" ng-controller="todayGnrlzProdCtrl">
       <div class="oh sb-select mb10">
-        <span class="fl bk lh30"><s:message code='todayGnrlz.subTitleProd'/></span>
+       ` <span class="fl bk lh30"><s:message code='todayGnrlz.subTitleProd'/></span>
         <%-- 상품별 엑셀다운로드 --%>
-<%--        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadProd()"><s:message code="cmm.excel.down"/></button>--%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadProd()"><s:message code="cmm.excel.down"/></button>
       </div>
 
       <%--위즈모 테이블--%>
@@ -197,5 +197,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20190122.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20190122.09" charset="utf-8"></script>
 
