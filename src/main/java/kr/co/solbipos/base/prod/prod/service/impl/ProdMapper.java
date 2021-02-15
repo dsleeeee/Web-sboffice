@@ -35,6 +35,13 @@ public interface ProdMapper {
     List<DefaultMap<String>> getProdList(ProdVO prodVO);
 
     /**
+     * 상품 조회(엑셀다운로드용)
+     * @param prodVO
+     * @return List
+     */
+    List<DefaultMap<String>> getProdExcelList(ProdVO prodVO);
+
+    /**
      * 상품 상세 조회
      * @param prodVO
      * @return DefaultMap

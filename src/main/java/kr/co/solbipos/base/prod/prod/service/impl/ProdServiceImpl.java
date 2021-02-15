@@ -107,6 +107,42 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getProdList(prodVO);
     }
 
+    /** 상품목록 조회(엑셀다운로드용) */
+    @Override
+    public List<DefaultMap<String>> getProdExcelList(@RequestBody ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
+        // 소속구분 설정
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(hqOfficeCd);
+        prodVO.setStoreCd(storeCd);
+
+        /*
+          단독매장의 경우 SALE_PRC_FG = '2'
+          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
+          본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
+          본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
+        */
+        if("00000".equals(hqOfficeCd)) { // 단독매장
+            prodVO.setSalePrcFg("2");
+        } else {
+
+            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+            if( StringUtil.isEmpties(storeCd)) { // 본사일때
+                prodVO.setSalePrcFg("1");
+            } else {                             // 매장일때
+                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
+                else                     prodVO.setSalePrcFg("2");
+            }
+        }
+        return prodMapper.getProdExcelList(prodVO);
+    }
+
+
     /** 상품 상세정보 조회 */
     @Override
     public DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO) {

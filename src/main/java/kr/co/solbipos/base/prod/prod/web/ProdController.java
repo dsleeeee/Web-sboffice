@@ -114,6 +114,24 @@ public class ProdController {
     }
 
     /**
+     * 상품전체조회(엑셀다운로드용)
+     *
+     * @param prodVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/getProdExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdExcelList(ProdVO prodVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodService.getProdExcelList(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodVO);
+    }
+
+    /**
      * 상품상세조회
      * @param prodVO ProdVO
      * @param request HttpServletRequest

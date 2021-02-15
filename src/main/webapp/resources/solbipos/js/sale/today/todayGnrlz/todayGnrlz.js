@@ -3,6 +3,15 @@
  */
 var app = agrid.getApp();
 
+app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.todayGnrlzSelectStoreShow = function () {
+    $scope._broadcast('todayGnrlzSelectStoreCtrl');
+  };
+}]);
+
 /** 당일매출종합현황 그리드 controller */
 app.controller('todayGnrlzCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
@@ -55,7 +64,7 @@ app.controller('todayGnrlzCtrl', ['$scope', '$http', '$timeout', function ($scop
   };
 
   // 매출종합 엑셀 다운로드
-  $scope.excelDownload = function () {
+  $scope.excelDownloadGnrlz = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
@@ -118,7 +127,7 @@ app.controller('todayGnrlzPayCtrl', ['$scope', '$http', '$timeout', function ($s
   };
 
   // 결제수단별 엑셀 다운로드
-  $scope.excelDownload = function () {
+  $scope.excelDownloadPay = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
@@ -181,7 +190,7 @@ app.controller('todayGnrlzMemberCtrl', ['$scope', '$http', '$timeout', function 
   };
 
   // 회원 Point 적립/사용 엑셀 다운로드
-  $scope.excelDownload = function () {
+  $scope.excelDownloadMember = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
@@ -243,8 +252,8 @@ app.controller('todayGnrlzProdCtrl', ['$scope', '$http', '$timeout', function ($
     $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlzProd/list.sb", params, null, false);
   };
 
-  // 상품별 다운로드
-  $scope.excelDownload = function () {
+  // 상품별 엑셀 다운로드
+  $scope.excelDownloadProd = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;

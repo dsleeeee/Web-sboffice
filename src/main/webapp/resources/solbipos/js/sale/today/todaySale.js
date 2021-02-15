@@ -7,7 +7,9 @@ app.controller('todaySaleCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
         $("#todayGnrlzView").show();
+        $("#todayProdView").show();
         $("#todayDtlView").hide();
+        $("#todayDtlView2").hide();
         $("#todayBillSaleDtlView").hide();
         // $("#nonSalelView").hide();
     };
@@ -20,7 +22,9 @@ app.controller('todaySaleCtrl', ['$scope', function ($scope) {
         //$("#noneSaleTab").removeClass("on");
 
         $("#todayGnrlzView").show();
+        $("#todayProdView").show();
         $("#todayDtlView").hide();
+        $("#todayDtlView2").hide();
         $("#todayBillSaleDtlView").hide();
         //$("#nonSalelView").hide();
 
@@ -47,7 +51,9 @@ app.controller('todaySaleCtrl', ['$scope', function ($scope) {
         //$("#noneSaleTab").removeClass("on");
 
         $("#todayGnrlzView").hide();
+        $("#todayProdView").hide();
         $("#todayDtlView").show();
+        $("#todayDtlView2").show();
         $("#todayBillSaleDtlView").hide();
         //$("#nonSalelView").hide();
 
@@ -69,7 +75,9 @@ app.controller('todaySaleCtrl', ['$scope', function ($scope) {
         //$("#noneSaleTab").removeClass("on");
 
         $("#todayGnrlzView").hide();
+        $("#todayProdView").hide();
         $("#todayDtlView").hide();
+        $("#todayDtlView2").hide();
         $("#todayBillSaleDtlView").show();
         //$("#nonSalelView").hide();
 
