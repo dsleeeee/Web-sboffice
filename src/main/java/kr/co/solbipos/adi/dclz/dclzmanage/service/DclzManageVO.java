@@ -22,6 +22,17 @@ import kr.co.solbipos.application.common.service.PageVO;
 public class DclzManageVO extends PageVO {
 
     private static final long serialVersionUID = -8695988598318969816L;
+
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
     /** 매장코드 array */
@@ -40,14 +51,30 @@ public class DclzManageVO extends PageVO {
     private String empOutDt;
     /** 근무시간 분단위 */
     private Long workTime;
-    /** 입력구분 > 입력구분 공통코드:087 */
+    /** 입력구분 010:POS, 020:WEB */
     private DclzInFg inFg;
     /** 입력 구분 이름 */
     private String inFgNm;
     /** 비고 */
     private String remark;
-    
-    
+
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
     /**
      * @return the storeCd
      */

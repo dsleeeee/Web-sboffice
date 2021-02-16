@@ -28,7 +28,7 @@ import java.util.List;
 public interface DclzManageMapper {
 
     /**
-     * 근태 관리 리스트 조회
+     * 근태관리 리스트 조회
      *
      * @param dclzManageVO
      * @return
@@ -36,31 +36,7 @@ public interface DclzManageMapper {
     List<DefaultMap<String>> selectDclzManage(DclzManageVO dclzManageVO);
 
     /**
-     * 근태 등록
-     *
-     * @param dclzManageVO
-     * @return
-     */
-    int insertDclzManage(DclzManageVO dclzManageVO);
-
-    /**
-     * 근태 수정
-     *
-     * @param dclzManageVO
-     * @return
-     */
-    int updateDclzManage(DclzManageVO dclzManageVO);
-
-    /**
-     * 근태 삭제
-     *
-     * @param dclzManageVO
-     * @return
-     */
-    int deleteDclzManage(DclzManageVO dclzManageVO);
-
-    /**
-     * 임직원 조회 > 근태 등록시에 해당되는 매장의 근태 등록 가능한 임직원 목록을 조회
+     * 매장 사원 조회
      *
      * @param dclzManageVO
      * @return
@@ -68,10 +44,42 @@ public interface DclzManageMapper {
     List<DefaultMap<String>> selectStoreEmployee(DclzManageVO dclzManageVO);
 
     /**
-     * 해당 근무일에 근태가 있는지 확인
+     * 근태등록
+     *
+     * @param dclzManageVO
+     * @return
+     */
+    int insertDclzManage(DclzManageVO dclzManageVO);
+
+    /**
+     * 근태수정
+     *
+     * @param dclzManageVO
+     * @return
+     */
+    int updateDclzManage(DclzManageVO dclzManageVO);
+
+    /**
+     * 근태삭제
+     *
+     * @param dclzManageVO
+     * @return
+     */
+    int deleteDclzManage(DclzManageVO dclzManageVO);
+
+    /**
+     * 근태 등록여부 확인
      *
      * @param dclzManageVO
      * @return
      */
     int selectWorkCheck(DclzManageVO dclzManageVO);
+
+    /**
+     * 근태상세정보 조회
+     *
+     * @param dclzManageVO
+     * @return
+     */
+    DefaultMap<String> selectDclzManageDtl(DclzManageVO dclzManageVO);
 }

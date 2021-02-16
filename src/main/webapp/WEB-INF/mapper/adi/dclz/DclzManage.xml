@@ -1,52 +1,92 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    DclzManage.xml
+
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       정용길     2018.05.01     최초작성
+-->
+
 <mapper namespace="kr.co.solbipos.adi.dclz.dclzmanage.service.impl.DclzManageMapper">
 
+  <!-- 근태관리 리스트 조회 -->
+  <!--
+      TABLE    : TB_PS_EMPLOYEE_COMMTE, TB_MS_EMPLOYEE, TB_MS_STORE
+      PARAM    : dclzManageVO
+      COMMENTS : 근태내역을 조회한다.
+  -->
   <select id="selectDclzManage" parameterType="dclzManageVO" resultType="DefaultMap">
     /* DclzManageMapper.selectDclzManage */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT
-          A.STORE_CD,
-          (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = A.STORE_CD) STORE_NM,
-          A.EMP_NO,
-          (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE EMP_NO = A.EMP_NO AND STORE_CD = A.STORE_CD) EMP_NM,
-          A.EMP_IN_DATE,
-          A.POS_NO,
-          TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') SALE_DATE,
-          TO_CHAR(TO_DATE(A.EMP_IN_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_IN_DT,
-          TO_CHAR(TO_DATE(A.EMP_OUT_DT, 'yyyymmddhh24mi'), 'yyyy-mm-dd hh:mi') EMP_OUT_DT,
-          A.WORK_TIME,
-          A.IN_FG,
-          (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='087' AND NMCODE_CD = A.IN_FG) IN_FG_NM,
-          A.REMARK,
-          A.REG_DT,
-          A.REG_ID,
-          A.MOD_DT,
-          A.MOD_ID
-          <include refid="CmmSQL.PagingTemplateCount"/>
-    FROM TB_PS_EMPLOYEE_COMMTE A
-    <where>
+      SELECT tpec.STORE_CD,
+              tms.STORE_NM,
+              TO_CHAR(TO_DATE(tpec.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+              tpec.EMP_NO,
+              tme.EMP_NM,
+              tpec.EMP_IN_DATE,
+              TO_CHAR(TO_DATE(tpec.EMP_IN_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') AS EMP_IN_DT,
+              TO_CHAR(TO_DATE(tpec.EMP_OUT_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') AS EMP_OUT_DT,
+              <!-- tpec.WORK_TIME, -->
+              LPAD((TRUNC(tpec.WORK_TIME / 60)), 2,'0') || ':' || LPAD((MOD(tpec.WORK_TIME, 60)), 2, '0') AS WORK_TIME,
+              tpec.IN_FG,
+              tpec.REMARK
+        FROM TB_PS_EMPLOYEE_COMMTE tpec,
+              TB_MS_EMPLOYEE tme,
+              TB_MS_STORE tms
+        WHERE 1=1
+          AND tpec.STORE_CD = tme.STORE_CD
+          AND tpec.EMP_NO = tme.EMP_NO
+          AND tpec.STORE_CD = tms.STORE_CD
+          AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+       <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+          AND tpec.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+       </if>
       <if test='inFg != null and inFg.toString() != ""'>
-        AND A.IN_FG = #{inFg}
+          AND tpec.IN_FG = #{inFg}
       </if>
-      <if test='storeCd != null and storeCd != ""'>
-        AND A.STORE_CD IN
-        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-          #{item}
-        </foreach>
-      </if>
-      <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-        AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-      </if>
-    </where>
-    ORDER BY A.SALE_DATE DESC
-    <include refid="CmmSQL.PagingTemplateBottom"/>
+      <choose>
+          <!-- 본사 -->
+          <when test='orgnFg != null and orgnFg == "H"'>
+              <if test='storeCd != null and storeCd != ""'>
+                  AND tpec.STORE_CD IN
+                  <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                      #{item}
+                  </foreach>
+              </if>
+          </when>
+          <!-- 가맹점 -->
+          <when test='orgnFg != null and orgnFg == "S"'>
+              AND tpec.STORE_CD = #{storeCd}
+          </when>
+      </choose>
+       ORDER
+          BY tpec.SALE_DATE, tpec.EMP_IN_DT DESC
   </select>
 
+  <!-- 매장 사원 조회 -->
+  <!--
+      TABLE    : TB_MS_EMPLOYEE
+      PARAM    : dclzManageVO
+      COMMENTS : 매장 사원을 조회한다.
+  -->
+  <select id="selectStoreEmployee" parameterType="dclzManageVO" resultType="DefaultMap">
+    /* DclzManageMapper.selectStoreEmployee */
+     SELECT tme.EMP_NO AS value,
+             tme.EMP_NM AS name
+       FROM TB_MS_EMPLOYEE tme
+      WHERE tme.STORE_CD = #{storeCd}
+  </select>
+
+  <!-- 근태 등록 -->
+  <!--
+      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      PARAM    : dclzManageVO
+      COMMENTS : 근태정보를 등록한다.
+  -->
   <insert id="insertDclzManage" parameterType="dclzManageVO">
     /* DclzManageMapper.insertDclzManage */
-    <![CDATA[
     INSERT INTO TB_PS_EMPLOYEE_COMMTE
     (
       STORE_CD,
@@ -81,56 +121,84 @@
       #{modDt},
       #{modId}
     )
-    ]]>
-  </insert>
+    </insert>
 
+  <!-- 근태 수정 -->
+  <!--
+      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      PARAM    : dclzManageVO
+      COMMENTS : 근태정보를 수정한다.
+  -->
   <update id="updateDclzManage" parameterType="dclzManageVO">
-  <![CDATA[
     /* DclzManageMapper.updateDclzManage */
-    UPDATE TB_PS_EMPLOYEE_COMMTE A
-       SET A.EMP_IN_DATE = #{empInDate},
-           A.SALE_DATE = #{saleDate},
-           A.EMP_IN_DT = #{empInDt},
-           A.EMP_OUT_DT = #{empOutDt},
-           A.WORK_TIME = #{workTime},
-           A.REMARK = #{remark},
-           A.MOD_DT = #{modDt},
-           A.MOD_ID = #{modId}
-     WHERE A.STORE_CD = #{storeCd}
-       AND A.EMP_NO = #{empNo}
-       AND A.EMP_IN_DATE = #{empInDate}
-  ]]>
+    UPDATE TB_PS_EMPLOYEE_COMMTE tpec
+       SET tpec.EMP_IN_DATE = #{empInDate},
+            tpec.SALE_DATE = #{saleDate},
+            tpec.EMP_IN_DT = #{empInDt},
+            tpec.EMP_OUT_DT = #{empOutDt},
+            tpec.WORK_TIME = #{workTime},
+            tpec.REMARK = #{remark},
+            tpec.MOD_DT = #{modDt},
+            tpec.MOD_ID = #{modId}
+     WHERE tpec.STORE_CD = #{storeCd}
+       AND tpec.EMP_NO = #{empNo}
+       AND tpec.EMP_IN_DATE = #{empInDate}
+       AND tpec.IN_FG = #{inFg}
   </update>
 
+  <!-- 근태 삭제 -->
+  <!--
+      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      PARAM    : dclzManageVO
+      COMMENTS : 근태정보를 삭제한다.
+  -->
   <delete id="deleteDclzManage" parameterType="dclzManageVO">
-  <![CDATA[
-    /* DclzManageMapper.deleteDclzManage */
+  /* DclzManageMapper.deleteDclzManage */
     DELETE
-      FROM TB_PS_EMPLOYEE_COMMTE A
-     WHERE A.STORE_CD = #{storeCd}
-       AND A.EMP_NO = #{empNo}
-       AND A.EMP_IN_DATE = #{empInDate}
-  ]]>
+      FROM TB_PS_EMPLOYEE_COMMTE tpec
+     WHERE tpec.STORE_CD = #{storeCd}
+       AND tpec.EMP_NO = #{empNo}
+       AND tpec.EMP_IN_DATE = #{empInDate}
+       AND tpec.IN_FG = #{inFg}
   </delete>
 
-  <select id="selectStoreEmployee" parameterType="dclzManageVO" resultType="DefaultMap">
-  <![CDATA[
-    /* DclzManageMapper.selectStoreEmployee */
-    SELECT A.STORE_CD,
-           A.EMP_NO,
-           A.EMP_NM
-      FROM TB_MS_EMPLOYEE A
-     WHERE A.STORE_CD = #{storeCd}
-  ]]>
-  </select>
-
+  <!-- 근태 등록여부 확인 -->
+  <!--
+      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      PARAM    : dclzManageVO
+      COMMENTS : 해당날짜에 등록한 근태내역이 있는지 확인한다.
+  -->
   <select id="selectWorkCheck" parameterType="dclzManageVO" resultType="integer">
     /* DclzManageMapper.selectWorkCheck */
     SELECT COUNT(*)
-      FROM TB_PS_EMPLOYEE_COMMTE A
-     WHERE A.STORE_CD = #{storeCd}
-       AND A.EMP_NO = #{empNo}
-       AND A.EMP_IN_DATE = #{empInDate}
+      FROM TB_PS_EMPLOYEE_COMMTE tpec
+     WHERE tpec.STORE_CD = #{storeCd}
+       AND tpec.EMP_NO = #{empNo}
+       AND tpec.EMP_IN_DATE = #{empInDate}
+       AND tpec.IN_FG = #{inFg}
+  </select>
+
+  <!-- 근태상세정보 조회 -->
+  <!--
+      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      PARAM    : dclzManageVO
+      COMMENTS : 근태상세정보를 조회한다.
+  -->
+  <select id="selectDclzManageDtl" parameterType="dclzManageVO" resultType="DefaultMap">
+    /* DclzManageMapper.selectDclzManageDtl */
+    SELECT STORE_CD,
+            SALE_DATE,
+            EMP_NO,
+            EMP_IN_DATE,
+            EMP_IN_DT,
+            EMP_OUT_DT,
+            IN_FG,
+            REMARK
+      FROM TB_PS_EMPLOYEE_COMMTE
+     WHERE STORE_CD = #{storeCd}
+       AND EMP_NO = #{empNo}
+       AND EMP_IN_DATE = #{empInDate}
+       AND IN_FG = #{inFg}
   </select>
 
 </mapper>

@@ -27,7 +27,6 @@
             <td>
                 <div class="sb-select">
                     <span class="txtIn"> <input id="saleMonth" name="saleMonth" class="w120px" /></span>
-                    </span>
                 </div>
             </td>
         </tr>
@@ -64,7 +63,7 @@
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
 
-        <%-- 거래처 등록 --%>
+        <%-- 엑셀 다운로드 --%>
         <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
             <s:message code="cmm.excel.down" />
         </button>
@@ -114,8 +113,8 @@
     </div>
     <%--//페이지 리스트--%>
 
-        <%-- 엑셀 다운로드 그리드 --%>
-        <div class="w100 mt10 mb20" style="display:none;" ng-controller="nonSaleChargeExcelCtrl">
+    <%-- 엑셀 다운로드 그리드 --%>
+    <div class="w100 mt10 mb20" style="display:none;" ng-controller="nonSaleChargeExcelCtrl">
             <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"

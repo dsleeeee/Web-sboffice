@@ -1,6 +1,7 @@
 package kr.co.solbipos.adi.dclz.dclzmanage.service;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
 
@@ -23,24 +24,31 @@ import java.util.List;
 public interface DclzManageService {
 
     /**
-     * 근태 관리 리스트 조회
+     * 근태관리 리스트 조회
      *
      * @param dclzManageVO
      * @return
      */
-    List<DefaultMap<String>> selectDclzManage(DclzManageVO dclzManageVO);
+    List<DefaultMap<String>> selectDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 근태 등록
+     * 매장 사원 조회
      *
      * @param dclzManageVO
-     * @param userId
      * @return
      */
-    int insertDclzManage(DclzManageVO dclzManageVO, String userId);
+    List<DefaultMap<String>> selectStoreEmployee(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 근태 수정
+     * 근태등록
+     *
+     * @param dclzManageVO
+     * @return
+     */
+    int insertDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 근태수정
      *
      * @param dclzManageVO
      * @param userId
@@ -49,26 +57,18 @@ public interface DclzManageService {
     int updateDclzManage(DclzManageVO dclzManageVO, String userId);
 
     /**
-     * 근태 삭제
+     * 근태삭제
      *
      * @param dclzManageVO
      * @return
      */
-    int deleteDclzManage(DclzManageVO dclzManageVO);
+    int deleteDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 임직원 조회 > 근태 등록시에 해당되는 매장의 근태 등록 가능한 임직원 목록을 조회
+     * 근태상세정보 조회
      *
      * @param dclzManageVO
      * @return
      */
-    List<DefaultMap<String>> selectStoreEmployee(DclzManageVO dclzManageVO);
-
-    /**
-     * 해당 근무일에 근태가 있는지 확인
-     *
-     * @param dclzManageVO
-     * @return
-     */
-    int selectWorkCheck(DclzManageVO dclzManageVO);
+    DefaultMap<String> selectDclzManageDtl(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
 }
