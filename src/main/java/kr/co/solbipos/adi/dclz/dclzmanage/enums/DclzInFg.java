@@ -27,10 +27,10 @@ public enum DclzInFg implements CodeEnum {
 
     /** 전체 */
     ALL("")
-    /** 웹 입력 */
-    ,WEB("010")
     /** 포스 입력 */
-    ,POS("020")
+    ,POS("010")
+    /** 웹 입력 */
+    ,WEB("020")
     /**  */
     ,SVR("030");
 

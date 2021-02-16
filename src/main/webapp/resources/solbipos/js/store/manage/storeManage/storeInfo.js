@@ -417,7 +417,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 주소를 입력해주세요.
     var msg = messages["storeManage.addr"]+messages["cmm.require.text"];
-    if( isNull( $scope.store.postNo ) || isNull( $scope.store.addr ) || isNull( $scope.store.addrDtl )) {
+    if($("#postNo").val() === "" || $("#addr").val() === "" || $("#addrDtl").val() === "") {
       $scope._popMsg(msg);
       return false;
     }
@@ -466,6 +466,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params         = $scope.store;
     params.sysOpenDate = dateToDaystring($scope.store.sysOpenDate);
+    params.postNo = $("#postNo").val();
+    params.addr = $("#addr").val();
+    params.addrdtl = $("#addrDtl").val();
 
     console.log('params',params);
 

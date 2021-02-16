@@ -269,8 +269,8 @@ function saveMyInfo(){
   params.areaCd = $("#areaCd").val();
   params.hmpgAddr = $("#hmpgAddr").val();
   params.emailAddr = $("#emailAddr").val();
-  params.postNo = $("#postNo").val();;
-  params.addr = $("#addr").val();;
+  params.postNo = $("#postNo").val();
+  params.addr = $("#addr").val();
   params.addrDtl = $("#addrDtl").val();
 
   $.ajax({

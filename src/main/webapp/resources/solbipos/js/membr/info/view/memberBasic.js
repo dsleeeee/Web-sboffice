@@ -387,6 +387,9 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         if (!$scope.valueCheck()) return false;
 
         var params = $scope.member;
+        params.postNo  = $("#rPostNo").val();
+        params.addr  = $("#rAddr").val();
+        params.addrDtl  = $("#rAddrDtl").val();
 
         /*if($scope.member.telNo === ''){
             $scope.member.telNo = '01000000000';
