@@ -119,11 +119,14 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzManage.js?ver=20210209.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzManage.js?ver=20210209.06" charset="utf-8"></script>
+
+<%-- 근태 상세 팝업 --%>
+<c:import url="/WEB-INF/view/adi/dclz/dclzmanage/dclzDetail.jsp">
+</c:import>
 
 <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-  <%-- 근태 신규등록 --%>
+  <%-- 근태 신규등록 팝업 --%>
   <c:import url="/WEB-INF/view/adi/dclz/dclzmanage/dclzRegist.jsp">
   </c:import>
 </c:if>
-

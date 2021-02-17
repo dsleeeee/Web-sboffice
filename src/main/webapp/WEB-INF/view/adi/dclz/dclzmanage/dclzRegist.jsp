@@ -36,7 +36,7 @@
                     <tr>
                         <th><s:message code="dclzManage.empNm" /></th>
                         <td>
-                            <div class="sb-select fl w150px">
+                            <div class="sb-select fl w180px">
                                 <wj-combo-box
                                         id="empNo"
                                         ng-model="empNo"
@@ -188,4 +188,4 @@
     var empList = ${empList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzRegist.js?ver=20210210.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzRegist.js?ver=20210210.10" charset="utf-8"></script>

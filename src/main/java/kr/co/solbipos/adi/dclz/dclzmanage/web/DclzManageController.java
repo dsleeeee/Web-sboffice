@@ -121,6 +121,27 @@ public class DclzManageController {
     }
 
     /**
+     * 근태수정
+     *
+     * @param dclzManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "modify.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result dclzManageModify(@RequestBody DclzManageVO dclzManageVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dclzManageService.updateDclzManage(dclzManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 근태삭제
      *
      * @param dclzManageVO
@@ -138,29 +159,6 @@ public class DclzManageController {
 
         int result = dclzManageService.deleteDclzManage(dclzManageVO, sessionInfoVO);
 
-        return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 근태수정
-     *
-     * @param dclzManageVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "modify.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result dclzManageModify(@RequestBody DclzManageVO dclzManageVO, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
-
-        SessionInfoVO si = sessionService.getSessionInfo(request);
-
-        String empInDt = dclzManageVO.getEmpInDt();
-        dclzManageVO.setEmpInDate(empInDt.substring(0, 8));
-
-        int result = dclzManageService.updateDclzManage(dclzManageVO, si.getUserId());
         return returnJson(Status.OK, result);
     }
 

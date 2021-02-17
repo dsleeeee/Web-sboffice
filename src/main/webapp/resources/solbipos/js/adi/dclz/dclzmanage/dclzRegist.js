@@ -65,37 +65,41 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("empOutDtMmCombo", MmSs);
     $scope._setComboData("empOutDtSsCombo", MmSs);
 
-    // grid 초기화 : 생성되기전 초기화되면서 생성된다
-    $scope.initGrid = function (s, e) {
-
-    };
-
     $scope.$on("dclzRegistCtrl", function (event, data) {
 
         // 초기화
         $scope.resetInput();
 
-        // 수정 모드 시, 기존 정보 조회
+        // 수정모드 시, 기존 정보 조회
         if(!isEmptyObject(data)){
+            
+            // 수정모드
             $("#saveType").val("mod");
 
+            // 수정모드에서는 영업일자, 사원명 수정 불가
             $("#saleDate").attr("disabled", true);
             $("#saleDate").css('background-color', '#F0F0F0');
             $("#empNo").attr("disabled", true);
             $("#empNo").css('background-color', '#F0F0F0');
-
+            
+            // 수정모드에서는 삭제 가능
             $("#btnDel").css("display", "");
-
-            $scope.getInfo(data);
+            
+            // 기존 정보 불러오기
+            $scope.getInfo(data);   
 
         }else{
+            
+            // 등록모드
             $("#saveType").val("reg");
-
+            
+            // 등록모드에서는 영업일자, 사원명 등록 가능
             $("#saleDate").attr("disabled", false);
             $("#saleDate").css('background-color', '#FFFFFF');
             $("#empNo").attr("disabled", false);
             $("#empNo").css('background-color', '#FFFFFF');
-
+            
+            // 등록모드에서는 삭제 불가
             $("#btnDel").css("display", "none");
         }
 
@@ -107,8 +111,8 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var params = {};
         params.storeCd = data.storeCd;
-        params.empInDate = data.empInDate;
         params.empNo = data.empNo;
+        params.empInDate = data.empInDate;
         params.inFg = data.inFg;
 
         $scope._postJSONQuery.withOutPopUp( "/adi/dclz/dclzmanage/dclzmanage/detail.sb", params, function(response){
@@ -130,25 +134,44 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope.remark = result.remark; // 비고
 
+            // 필요한 키값 hidden에 가지고 있기(수정, 삭제시 사용)
             $("#hdStoreCd").val(result.storeCd);
             $("#hdEmpInDate").val(result.empInDate);
             $("#hdInFg").val(result.inFg);
 
-
         });
-
     };
     
-    // 등록
+    // 등록 및 수정
     $scope.regist = function () {
 
         var params = {};
-        params.saleDate = wijmo.Globalize.format(saleDate.value, 'yyyyMMdd');
-        params.empNo = $scope.empNo;
-        params.empInDate = wijmo.Globalize.format(empInDt.value, 'yyyyMMdd');
-        params.empInDt = wijmo.Globalize.format(empInDt.value, 'yyyyMMdd') + $scope.empInDtHh + $scope.empInDtMm + $scope.empInDtSs;
-        params.empOutDt = wijmo.Globalize.format(empOutDt.value, 'yyyyMMdd') + $scope.empOutDtHh + $scope.empOutDtMm + $scope.empOutDtSs;
-        params.remark = $scope.remark;
+        var url = "";
+
+        if($("#saveType").val() === "reg"){
+
+            params.saleDate = wijmo.Globalize.format(saleDate.value, 'yyyyMMdd');
+            params.empNo = $scope.empNo;
+            params.empInDate = wijmo.Globalize.format(saleDate.value, 'yyyyMMdd'); // 출근일자 - 현재는 영업일자와 동일하게 사용(추후 변경 가능성 유)
+            params.empInDt = wijmo.Globalize.format(empInDt.value, 'yyyyMMdd') + $scope.empInDtHh + $scope.empInDtMm + $scope.empInDtSs;
+            params.empOutDt = wijmo.Globalize.format(empOutDt.value, 'yyyyMMdd') + $scope.empOutDtHh + $scope.empOutDtMm + $scope.empOutDtSs;
+            params.remark = $scope.remark;
+
+            url = "/adi/dclz/dclzmanage/dclzmanage/regist.sb";
+
+        }else{
+
+            params.storeCd = $("#hdStoreCd").val();
+            params.empNo = $scope.empNo;
+            params.empInDate = $("#hdEmpInDate").val();
+            params.inFg = $("#hdInFg").val();
+            params.empInDt = wijmo.Globalize.format(empInDt.value, 'yyyyMMdd') + $scope.empInDtHh + $scope.empInDtMm + $scope.empInDtSs;
+            params.empOutDt = wijmo.Globalize.format(empOutDt.value, 'yyyyMMdd') + $scope.empOutDtHh + $scope.empOutDtMm + $scope.empOutDtSs;
+            params.remark = $scope.remark;
+
+            url = "/adi/dclz/dclzmanage/dclzmanage/modify.sb";
+        }
+
 
         /** 퇴근시간이 출근시간보다 빠르거나 같습니다. */
         var msg = messages["dclzManage.dtChkMsg"];
@@ -158,13 +181,13 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withPopUp("/adi/dclz/dclzmanage/dclzmanage/regist.sb", params, function (response) {
+        $scope._postJSONSave.withPopUp(url, params, function (response) {
 
             if (response.data.status === "OK") {
                 // 성공 메시지
                 $scope._popMsg(messages["cmm.saveSucc"]);
 
-                // 재조회
+                // 리스트 부모창 재조회
                 var dclzManageScope = agrid.getScope("dclzManageCtrl");
                 dclzManageScope.dclzSearch();
 
@@ -177,15 +200,15 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 삭제
     $scope.delete = function () {
 
-        if($("#saveType").val() === "mod"){
+        if($("#saveType").val() === "mod"){ // 수정모드시에만 삭제가능
 
             /** 해당 근태정보를 삭제하시겠습니까? */
             var msg = messages["dclzManage.delMsg"];
-            s_alert.popConf(msg, function () {
+            $scope._popConfirm(msg, function () {
                 var params = {};
                 params.storeCd = $("#hdStoreCd").val();
-                params.empInDate = $("#hdEmpInDate").val();
                 params.empNo = $scope.empNo;
+                params.empInDate = $("#hdEmpInDate").val();
                 params.inFg = $("#hdInFg").val();
 
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -195,7 +218,7 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                         // 성공 메시지
                         $scope._popMsg(messages["cmm.delSucc"]);
 
-                        // 재조회
+                        // 리스트 부모창 재조회
                         var dclzManageScope = agrid.getScope("dclzManageCtrl");
                         dclzManageScope.dclzSearch();
 
@@ -209,10 +232,10 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     
     // 닫기
     $scope.close = function () {
-
         // 초기화
         $scope.resetInput();
 
+        $scope.wjDclzDetailLayer.hide();
         $scope.wjDclzRegistLayer.hide();
     }
 
@@ -243,11 +266,10 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         // 등록인지 수정인지 구분자
         $("#saveType").val("");
 
-        //
+        // hidden에 갖고 있던 키값
         $("#hdStoreCd").val("");
         $("#hdEmpInDate").val("");
         $("#hdInFg").val("");
     }
-
 
 }]);
