@@ -27,6 +27,7 @@ public interface DclzManageService {
      * 근태관리 리스트 조회
      *
      * @param dclzManageVO
+     * @param sessionInfoVO
      * @return
      */
     List<DefaultMap<String>> selectDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
@@ -35,6 +36,7 @@ public interface DclzManageService {
      * 매장 사원 조회
      *
      * @param dclzManageVO
+     * @param sessionInfoVO
      * @return
      */
     List<DefaultMap<String>> selectStoreEmployee(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
@@ -43,6 +45,7 @@ public interface DclzManageService {
      * 근태등록
      *
      * @param dclzManageVO
+     * @param sessionInfoVO
      * @return
      */
     int insertDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
@@ -51,15 +54,16 @@ public interface DclzManageService {
      * 근태수정
      *
      * @param dclzManageVO
-     * @param userId
+     * @param sessionInfoVO
      * @return
      */
-    int updateDclzManage(DclzManageVO dclzManageVO, String userId);
+    int updateDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 근태삭제
      *
      * @param dclzManageVO
+     * @param sessionInfoVO
      * @return
      */
     int deleteDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);
@@ -68,6 +72,7 @@ public interface DclzManageService {
      * 근태상세정보 조회
      *
      * @param dclzManageVO
+     * @param sessionInfoVO
      * @return
      */
     DefaultMap<String> selectDclzManageDtl(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO);

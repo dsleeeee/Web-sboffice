@@ -113,11 +113,15 @@ public class DclzManageServiceImpl implements DclzManageService {
 
     /** 근태수정 */
     @Override
-    public int updateDclzManage(DclzManageVO dclzManageVO, String userId) {
+    public int updateDclzManage(DclzManageVO dclzManageVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
 
         // 기본값 세팅
-        dclzManageVO.setModDt(currentDateTimeString());
-        dclzManageVO.setModId(userId);
+        dclzManageVO.setWorkTime(calShift(dclzManageVO.getEmpInDt(), dclzManageVO.getEmpOutDt())); // 출근일시 퇴근일시로 근무시간을 계산
+        dclzManageVO.setModDt(dt);
+        dclzManageVO.setModId(sessionInfoVO.getUserId());
 
         // 근태 등록여부 확인
         int check = dclzManageMapper.selectWorkCheck(dclzManageVO);
@@ -126,12 +130,13 @@ public class DclzManageServiceImpl implements DclzManageService {
             String arg[] = {dclzManageVO.getEmpInDate()};
             // 해당 사원의 {0}일의 근태가 존재하지 않습니다.
             String msg = messageService.get("dclzManage.empty.dclz", arg);
-            throw new JsonException(Status.FAIL, msg);
+            throw new JsonException(Status.SERVER_ERROR, msg);
+
+        }else{
+            result = dclzManageMapper.updateDclzManage(dclzManageVO);
         }
 
-        dclzManageVO.setWorkTime(calShift(dclzManageVO.getEmpInDt(), dclzManageVO.getEmpOutDt()));
-
-        return dclzManageMapper.updateDclzManage(dclzManageVO);
+        return result;
     }
 
     /** 근태삭제 */

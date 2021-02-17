@@ -61,11 +61,11 @@ app.controller('dclzManageCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (col.binding === "empNm") { // 사원명 클릭
                     var params    = {};
                     params.storeCd = selectedRow.storeCd;
-                    params.empInDate = selectedRow.empInDate;
                     params.empNo = selectedRow.empNo;
+                    params.empInDate = selectedRow.empInDate;
                     params.inFg = selectedRow.inFg;
-                    $scope.wjDclzRegistLayer.show(true);
-                    $scope._broadcast('dclzRegistCtrl', params);
+                    $scope.wjDclzDetailLayer.show(true);
+                    $scope._broadcast('dclzDetailCtrl', params);
                 }
             }
         });
