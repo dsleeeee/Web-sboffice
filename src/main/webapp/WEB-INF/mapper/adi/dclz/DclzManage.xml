@@ -62,7 +62,7 @@
           </when>
       </choose>
        ORDER
-          BY tpec.SALE_DATE, tpec.EMP_IN_DT DESC
+          BY tpec.SALE_DATE DESC, tpec.EMP_IN_DT ASC
   </select>
 
   <!-- 매장 사원 조회 -->
@@ -131,19 +131,17 @@
   -->
   <update id="updateDclzManage" parameterType="dclzManageVO">
     /* DclzManageMapper.updateDclzManage */
-    UPDATE TB_PS_EMPLOYEE_COMMTE tpec
-       SET tpec.EMP_IN_DATE = #{empInDate},
-            tpec.SALE_DATE = #{saleDate},
-            tpec.EMP_IN_DT = #{empInDt},
-            tpec.EMP_OUT_DT = #{empOutDt},
-            tpec.WORK_TIME = #{workTime},
-            tpec.REMARK = #{remark},
-            tpec.MOD_DT = #{modDt},
-            tpec.MOD_ID = #{modId}
-     WHERE tpec.STORE_CD = #{storeCd}
-       AND tpec.EMP_NO = #{empNo}
-       AND tpec.EMP_IN_DATE = #{empInDate}
-       AND tpec.IN_FG = #{inFg}
+    UPDATE TB_PS_EMPLOYEE_COMMTE
+       SET EMP_IN_DT = #{empInDt},
+            EMP_OUT_DT = #{empOutDt},
+            WORK_TIME = #{workTime},
+            REMARK = #{remark},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+     WHERE STORE_CD = #{storeCd}
+       AND EMP_NO = #{empNo}
+       AND EMP_IN_DATE = #{empInDate}
+       AND IN_FG = #{inFg}
   </update>
 
   <!-- 근태 삭제 -->
@@ -155,11 +153,11 @@
   <delete id="deleteDclzManage" parameterType="dclzManageVO">
   /* DclzManageMapper.deleteDclzManage */
     DELETE
-      FROM TB_PS_EMPLOYEE_COMMTE tpec
-     WHERE tpec.STORE_CD = #{storeCd}
-       AND tpec.EMP_NO = #{empNo}
-       AND tpec.EMP_IN_DATE = #{empInDate}
-       AND tpec.IN_FG = #{inFg}
+      FROM TB_PS_EMPLOYEE_COMMTE
+     WHERE STORE_CD = #{storeCd}
+       AND EMP_NO = #{empNo}
+       AND EMP_IN_DATE = #{empInDate}
+       AND IN_FG = #{inFg}
   </delete>
 
   <!-- 근태 등록여부 확인 -->
@@ -171,11 +169,11 @@
   <select id="selectWorkCheck" parameterType="dclzManageVO" resultType="integer">
     /* DclzManageMapper.selectWorkCheck */
     SELECT COUNT(*)
-      FROM TB_PS_EMPLOYEE_COMMTE tpec
-     WHERE tpec.STORE_CD = #{storeCd}
-       AND tpec.EMP_NO = #{empNo}
-       AND tpec.EMP_IN_DATE = #{empInDate}
-       AND tpec.IN_FG = #{inFg}
+      FROM TB_PS_EMPLOYEE_COMMTE
+     WHERE STORE_CD = #{storeCd}
+       AND EMP_NO = #{empNo}
+       AND EMP_IN_DATE = #{empInDate}
+       AND IN_FG = #{inFg}
   </select>
 
   <!-- 근태상세정보 조회 -->
@@ -186,19 +184,23 @@
   -->
   <select id="selectDclzManageDtl" parameterType="dclzManageVO" resultType="DefaultMap">
     /* DclzManageMapper.selectDclzManageDtl */
-    SELECT STORE_CD,
-            SALE_DATE,
-            EMP_NO,
-            EMP_IN_DATE,
-            EMP_IN_DT,
-            EMP_OUT_DT,
-            IN_FG,
-            REMARK
-      FROM TB_PS_EMPLOYEE_COMMTE
-     WHERE STORE_CD = #{storeCd}
-       AND EMP_NO = #{empNo}
-       AND EMP_IN_DATE = #{empInDate}
-       AND IN_FG = #{inFg}
+    SELECT tpec.STORE_CD,
+            tpec.SALE_DATE,
+            tpec.EMP_NO,
+            tme.EMP_NM,
+            tpec.EMP_IN_DATE,
+            tpec.EMP_IN_DT,
+            tpec.EMP_OUT_DT,
+            tpec.IN_FG,
+            tpec.REMARK
+      FROM TB_PS_EMPLOYEE_COMMTE tpec,
+            TB_MS_EMPLOYEE tme
+     WHERE tpec.STORE_CD = tme.STORE_CD
+       AND tpec.EMP_NO = tme.EMP_NO
+       AND tpec.STORE_CD = #{storeCd}
+       AND tpec.EMP_NO = #{empNo}
+       AND tpec.EMP_IN_DATE = #{empInDate}
+       AND tpec.IN_FG = #{inFg}
   </select>
 
 </mapper>
