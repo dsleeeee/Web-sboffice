@@ -820,7 +820,7 @@
                 #{orgplceCd},
                 #{sdattrClassCd},
                 #{sdselGrpCd},
-                'N',
+                #{pointSaveYn},
                 #{prodDcFg},
                 #{vatFg},
                 #{prodTipYn},
