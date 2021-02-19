@@ -956,6 +956,15 @@
                     item.totSavePoint = 0;
                 }
 
+                // 가용포인트는 누적포인트보다 클 수 없습니다.
+                if (item.avablPoint > item.totSavePoint)
+                {
+                    msg = messages["member.excel.upload.check.avablPoint"]; // 가용포인트는 누적포인트보다 클 수 없습니다.
+                    item.result = msg;
+                    failCnt++;
+                    continue;
+                }
+
                 if (failCnt > 0) {
                     return false;
                 }
