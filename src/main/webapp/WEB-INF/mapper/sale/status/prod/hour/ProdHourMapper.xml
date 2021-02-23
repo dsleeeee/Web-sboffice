@@ -35,7 +35,7 @@
 			tmp.PROD_NM,
             SUBSTR(tsdp.SALE_DATE, 5, 2) AS SALE_TIME
             ${sQuery1}
-			FROM TB_SL_DAILY_PROD tsdp,
+			FROM TB_SL_DAILY_PROD_TIME tsdp,
 			TB_MS_PRODUCT tmp
 			WHERE 1=1
 			AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -48,7 +48,7 @@
 			AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 			AND tmp.STORE_CD = tsdp.STORE_CD
 			AND tmp.PROD_CD = tsdp.PROD_CD
-			GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SALE_DATE
+			GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SALE_DATE, tsdp.SALE_HOUR
 		)
 		GROUP BY PROD_CD, PROD_NM, PATH_NM
 		ORDER BY PROD_CD
@@ -76,7 +76,7 @@
             tmp.PROD_NM,
             SUBSTR(tsdp.SALE_DATE, 5, 2) AS SALE_TIME
             ${sQuery1}
-            FROM TB_SL_DAILY_PROD tsdp,
+            FROM TB_SL_DAILY_PROD_TIME tsdp,
             TB_MS_PRODUCT tmp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -89,7 +89,7 @@
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             AND tmp.STORE_CD = tsdp.STORE_CD
             AND tmp.PROD_CD = tsdp.PROD_CD
-            GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SALE_DATE
+            GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SALE_DATE, tsdp.SALE_HOUR
         )
         GROUP BY PROD_CD, PROD_NM, PATH_NM
         ORDER BY PROD_CD

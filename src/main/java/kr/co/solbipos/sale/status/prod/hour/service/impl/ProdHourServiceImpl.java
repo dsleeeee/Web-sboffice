@@ -29,11 +29,11 @@ public class ProdHourServiceImpl implements ProdHourService {
 
         prodHourVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
         if(!StringUtil.getOrBlank(prodHourVO.getStoreCd()).equals("")) {
         	prodHourVO.setArrStoreCd(prodHourVO.getStoreCd().split(","));
         }
-        
+
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
         String sQuery2 = "";
@@ -47,8 +47,8 @@ public class ProdHourServiceImpl implements ProdHourService {
                 // 10보다 작은건 01~09
                 isSaleHour = i < 10 ? "0" + String.valueOf(i) : String.valueOf(i);
 
-                sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
-                sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
+                sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
+                sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
 
                 sQuery2 +=", NVL(SUM(TOT_SALE_QTY_T" + isSaleHour + ") , 0) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
                 sQuery2 +=", NVL(SUM(TOT_SALE_AMT_T" + isSaleHour + ") , 0) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
@@ -57,8 +57,8 @@ public class ProdHourServiceImpl implements ProdHourService {
 
             isSaleHour = prodHourVO.getSaleTime();
 
-            sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
-            sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
+            sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
+            sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
 
             sQuery2 +=", NVL(SUM(TOT_SALE_QTY_T" + isSaleHour + ") , 0) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
             sQuery2 +=", NVL(SUM(TOT_SALE_AMT_T" + isSaleHour + ") , 0) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
@@ -76,7 +76,7 @@ public class ProdHourServiceImpl implements ProdHourService {
 
         prodHourVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
         if(!StringUtil.getOrBlank(prodHourVO.getStoreCd()).equals("")) {
         	prodHourVO.setArrStoreCd(prodHourVO.getStoreCd().split(","));
         }
@@ -94,8 +94,8 @@ public class ProdHourServiceImpl implements ProdHourService {
                 // 10보다 작은건 01~09
                 isSaleHour = i < 10 ? "0" + String.valueOf(i) : String.valueOf(i);
 
-                sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
-                sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
+                sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
+                sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
 
                 sQuery2 +=", NVL(SUM(TOT_SALE_QTY_T" + isSaleHour + ") , 0) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
                 sQuery2 +=", NVL(SUM(TOT_SALE_AMT_T" + isSaleHour + ") , 0) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
@@ -104,8 +104,8 @@ public class ProdHourServiceImpl implements ProdHourService {
 
             isSaleHour = prodHourVO.getSaleTime();
 
-            sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
-            sQuery1 +=", (CASE WHEN tsdp.SALE_DATE = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
+            sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_QTY) ELSE 0 END) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
+            sQuery1 +=", (CASE WHEN tsdp.SALE_HOUR = '"+ isSaleHour + "' THEN SUM(tsdp.TOT_SALE_AMT) ELSE 0 END) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
 
             sQuery2 +=", NVL(SUM(TOT_SALE_QTY_T" + isSaleHour + ") , 0) AS TOT_SALE_QTY_T" + isSaleHour + "\n";
             sQuery2 +=", NVL(SUM(TOT_SALE_AMT_T" + isSaleHour + ") , 0) AS TOT_SALE_AMT_T" + isSaleHour + "\n";
