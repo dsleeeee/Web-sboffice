@@ -22,9 +22,8 @@
   <div class="wj-TblWrap mt20">
     <%-- 왼쪽 --%>
     <div class="w50 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:500px;">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:540px;">
         <div class="sb-select dkbr mb10 oh">
-          <div id="theComboBox3" class="w130px fl"></div>
           <div class="fl">
             <%-- 전체펼치기 --%>
             <button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>
@@ -41,7 +40,9 @@
           </div>
         </div>
         <%--위즈모 트리--%>
-        <div class="theTreeAll_cls" id="clsTree" class="mt20" style="height:380px;"></div>
+        <div class="wj-TblWrapBr pd20" style="height:470px;">
+          <div class="theTreeAll_cls" id="clsTree" class="mt20" style="height:440px;"></div>
+        </div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -49,11 +50,11 @@
     <%--- 오른쪽 --%>
     <div class="w50 fl">
       <div class="wj-TblWrap ml10 pd10" style="height:500px;">
-        <p class="tl s14 mt30 lh15">▶ [상품분류]는 삭제할 수 없습니다.</p>
-        <p class="tl s14 mt30 lh15">▶ 초기 분류 등록시 [상품분류]를 선택 후, [추가]버튼을 클릭하여 분류를 등록해 주세요.</p>
-        <p class="tl s14 mt30 lh15">▶ 분류 선택 후 [추가]버튼 클릭시, 하위 분류를 추가할 수 있습니다.</p>
-        <p class="tl s14 mt30 lh15">▶ 분류 삭제시, 해당 분류의 하위 분류가 등록되어 있으면 분류 삭제가 불가능합니다.</p>
-        <p class="tl s14 mt30 lh15">▶ 분류 삭제시, 해당 분류에 등록된 상품이 있으면 분류 삭제가 불가능합니다.</p>
+        <%--<p class="tl s14 mt30 lh15">▶ [상품분류]는 삭제할 수 없습니다.</p>--%>
+        <%--<p class="tl s14 mt30 lh15">▶ 초기 분류 등록시 [상품분류]를 선택 후, [추가]버튼을 클릭하여 분류를 등록해 주세요.</p>--%>
+        <p class="tl s14 mt30 lh15">▶ 분류추가 : 상위분류 선택 후 [추가]버튼 클릭시, 하위 분류를 추가할 수 있습니다.</p>
+        <%--<p class="tl s14 mt30 lh15">▶ 분류 삭제시, 해당 분류의 하위 분류가 등록되어 있으면 분류 삭제가 불가능합니다.</p>--%>
+        <%--<p class="tl s14 mt30 lh15">▶ 분류 삭제시, 해당 분류에 등록된 상품이 있으면 분류 삭제가 불가능합니다.</p>--%>
         <p class="tl s14 mt30 lh15">▶ 분류 추가/삭제 후, [저장]버튼을 클릭해야 변경이 적용됩니다.</p>
       </div>
     </div>
@@ -82,7 +83,12 @@
       childItemsPath: 'items',
       expandOnClick : true,
       isReadOnly: false,
-      showCheckboxes: false
+      showCheckboxes: false,
+      nodeEditStarting: function (s, e) {
+        if (e.node.level == 0 ) {
+          e.cancel = true;
+        }
+      }
     });
 
     var view = new wijmo.collections.CollectionView(tree.itemsSource);
@@ -141,7 +147,7 @@
           var root = {status : "I",
                       hqOfficeCd : "${storeCd}",
                       storeCd : "${orgnCd}",
-                      prodClassNm : "상품분류" ,
+                      prodClassNm : "상품분류정보관리" ,
                       prodClassCd : "00000" ,
                       pProdClassCd : null,
                       level : 0 };
@@ -174,9 +180,19 @@
     <%-- 추가 버튼 클릭 --%>
     $("#btnAdd").click(function(){
 
-      <%-- 선택된 노드가 없으면, 분류를 선택해주세요. --%>
+      var theItem;
+      var theNode;
+
       if(tree.selectedNode == undefined){
-        s_alert.pop("<s:message code='info.require.select.node' />");
+        // 선택한 노드가 없을 때, root 분류 아래 Level에 새 분류 추가하도록
+        theItem = findItem(tree.itemsSource, '00000');
+        theNode = tree.getNode(theItem);
+        theNode.select();
+      }
+
+      <%-- 상위분류 저장 후 하위분류를 입력해주세요. --%>
+      if(tree.selectedNode.dataItem.prodClassCd === undefined){
+        s_alert.pop("<s:message code='info.require.save.pClsNm' />");
         return;
       }
 
@@ -193,9 +209,24 @@
                   level : level};
 
       var node = tree.selectedNode;
-      tree.selectedNode = node.addChildNode(0, newItem);
+
+      if (node) {
+        var index = node.nodes ? node.nodes.length : 0;
+        tree.selectedNode = node.addChildNode(index, newItem);
+      }
+      else {
+        var index = tree.nodes ? tree.nodes.length : 0;
+        tree.selectedNode = tree.addChildNode(index, newItem);
+      }
+
       view.itemsAdded.push(newItem);
       tree.loadTree();
+
+      // 다시 부모노드로 focus 하여, 부모노드를 다시 클릭해야하는 번거로움 없앰.
+      theItem = findItem(tree.itemsSource, pProdClassCd);
+      theNode = tree.getNode(theItem);
+      theNode.select();
+
     });
 
     <%-- 삭제 버튼 클릭 --%>
@@ -221,23 +252,48 @@
       } else {
 
         var delItem = tree.selectedNode.dataItem;
-        delItem.status = "D";
 
-        view.itemsRemoved.push(delItem);
+        // 해당 분류로 등록된 상품여부 확인
+        var params = {};
+        params.prodClassCd = delItem.prodClassCd;
 
-        var parent  = tree.selectedNode.parentNode;
-        var arr     = parent ? parent.dataItem[tree.childItemsPath] : tree.itemsSource;
-        var index   = arr.indexOf(tree.selectedItem);
+        $.postJSON("/base/prod/info/class/chkProdCnt.sb", params, function(result) {
 
-        arr.splice(index, 1);
-        tree.loadTree();
+            // 해당 분류에 속한 상품이 없을 때
+            if(result.data === 0) {
+
+                // 이번에 추가한(저장된 적 없는) 분류를 삭제할 때
+                if (delItem.status === 'I') {
+                    // 삭제하려는 분류와, 이번에 추가하려고 했던 분류값을 비교하여 값을 찾아내 삭제
+                    for (var i = 0; i < view.itemsAdded.length; i++) {
+                        if ((delItem.prodClassNm === view.itemsAdded[i].prodClassNm) && (delItem.pProdClassCd === view.itemsAdded[i].pProdClassCd) && (delItem.level === view.itemsAdded[i].level)) {
+                            view.itemsAdded.splice(i, 1);
+                        }
+                    }
+                } else { // 이미 저장되어 있는 분류를 삭제할 때
+                    delItem.status = "D";
+                    view.itemsRemoved.push(delItem);
+                }
+
+                // 트리뷰 적용
+                var parent = tree.selectedNode.parentNode;
+                var arr = parent ? parent.dataItem[tree.childItemsPath] : tree.itemsSource;
+                var index = arr.indexOf(tree.selectedItem);
+
+                arr.splice(index, 1);
+                tree.loadTree();
+            }
+        },
+        function(result) {
+          s_alert.pop(result.message);
+        });
       }
     });
 
     <%-- 저장 버튼 클릭 --%>
     $("#btnSave").click(function(){
 
-      var msg = "<s:message code='info.require.clsNm'/>";
+      var msg = "<s:message code='info.require.input.clsNm'/>";
       var paramArr = [];
 
       for(var i = 0; i < view.itemsAdded.length; i++) {
@@ -246,7 +302,7 @@
           return;
         }
         if(view.itemsAdded[i].prodClassNm.length > 15 ) {
-          s_alert.pop("<s:message code='info.require.clsNm'/><s:message code='cmm.regexp' arguments='15'/>");
+          s_alert.pop("<s:message code='info.prodClassNm'/><s:message code='cmm.regexp' arguments='15'/>");
           return;
         }
         paramArr.push(view.itemsAdded[i]);
@@ -287,4 +343,23 @@
       });
     });
   });
+
+  // 상위노드 item 찾기
+  function findItem(items, text) {
+    var node = null;
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.prodClassCd == text) {
+        return item;
+      }
+      if (item.items) {
+        item = findItem(item.items, text);
+        if (item) {
+          return item;
+        }
+      }
+    }
+    return null; //  not found
+  }
+
 </script>

@@ -212,4 +212,31 @@ public class InfoServiceImpl implements InfoService {
         }
     }
 
+    /** 해당 분류로 등록된 상품 조회 */
+    @Override
+    public int chkProdCnt(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO){
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {   // 본사
+            productClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {    // 매장
+            productClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
+        productClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+
+        // 해당 분류로 상품이 등록되어있으면 삭제 불가능
+        int chkProdCnt = mapper.chkProdCnt(productClassVO);
+
+        //본사권한인 경우, 매장에서도 해당 분류로 상품이 등록되어 있는지 확인 추가 : 2019.08.12_이다솜
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            chkProdCnt += mapper.chkProdCntinStore(productClassVO);
+        }
+
+        if(chkProdCnt > 0) {
+            throw new JsonException(Status.FAIL, messageService.get("info.delete.fail"));
+        }else{
+            return chkProdCnt;
+        }
+    }
+
 }
