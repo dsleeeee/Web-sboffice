@@ -147,6 +147,12 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                         registVO.setModDt(nowDt);
                         registMapper.insertMembrPointHist(registVO); // 회원포인트 등록
                     }
+
+                    registVO.setUseYn("Y");
+
+                    // 선불회원 등록 (자점회원)
+                    result = registMapper.registMemberPrepaid(registVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
 
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
