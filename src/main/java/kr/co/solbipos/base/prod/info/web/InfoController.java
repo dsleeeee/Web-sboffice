@@ -149,4 +149,26 @@ public class InfoController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 해당 분류로 등록된 상품 조회
+     * @param productClassVO
+     * @param request
+     * @param response
+     * @param model
+     * @return Result
+     * @author  이다솜
+     * @since   2021. 02. 22.
+     */
+    @RequestMapping(value = "/class/chkProdCnt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkProdCnt(ProductClassVO productClassVO, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.chkProdCnt(productClassVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

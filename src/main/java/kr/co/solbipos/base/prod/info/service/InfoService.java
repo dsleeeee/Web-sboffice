@@ -26,4 +26,7 @@ public interface InfoService {
 
     /** 분류 저장 */
     int productClassSave(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO);
+
+    /** 해당 분류로 등록된 상품 조회 */
+    int chkProdCnt(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO);
 }
