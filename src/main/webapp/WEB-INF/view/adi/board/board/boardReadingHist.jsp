@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<wj-popup control="wjBoardReadingHistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:500px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardReadingHistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:470px;" fade-in="false" fade-out="false">
     <div ng-controller="boardReadingHistCtrl">
 
         <%-- header --%>
@@ -17,17 +17,7 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
-            <%-- 조회조건 --%>
-            <div class="searchBar flddUnfld">
-                <a href="#" class="open fl"></a>
-                <%-- 조회 --%>
-                <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                    <button class="btn_blue fr" ng-click="_broadcast('boardReadingHistCtrl',1)">
-                        <s:message code="cmm.search" />
-                    </button>
-                </div>
-            </div>
-            <table class="searchTbl">
+            <table class="tblType01">
                 <colgroup>
                     <col class="w15" />
                     <col class="w35" />
@@ -71,6 +61,12 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="mt10 tr">
+                <div class="oh sb-select dkbr">
+                    <%--조회--%>
+                    <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('boardReadingHistCtrl', 1)" ><s:message code="cmm.search" /></button>
+                </div>
+            </div>
 
             <%-- 그리드 --%>
             <div class="w100 mt10 mb20">
