@@ -1426,8 +1426,9 @@
         WHERE 1=1
         AND tsdmp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
-            AND tmp.STORE_CD = #{storeCd}
+            AND tsdmp.STORE_CD = #{storeCd}
         </if>
+        AND tsdmp.MEMBR_NO = #{membrNo}
         AND tms.HQ_OFFICE_CD (+)= tsdmp.HQ_OFFICE_CD
         AND tms.HQ_BRAND_CD (+)= tsdmp.HQ_BRAND_CD
         AND tms.STORE_CD (+)= tsdmp.STORE_CD
