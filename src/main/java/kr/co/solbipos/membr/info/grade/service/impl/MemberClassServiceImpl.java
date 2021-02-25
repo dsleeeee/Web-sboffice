@@ -171,7 +171,11 @@ public class MemberClassServiceImpl implements MemberClassService {
             // 기존에 N으로 저장되어있어 && N으로 저장할거야 // 기존에 Y으로 저장되어있어 && Y으로 저장할거야 // 기존에 N으로 저장되어있어 && Y으로 저장할거야
             } else {
                 classResult = mapper.updateClassInfo(membrClassVO);
-                classPayRateResult = mapper.updateClassPayRateInfo(membrClassVO);
+                // 포인트적립구분 변경시에만 0으로
+                if(!membrClassVO.getPointSaveFg().equals(membrClassVO.getPrePointSaveFg())) {
+                    // 적립금 0으로 update
+                    classPayRateResult = mapper.updateClassPayRateInfo(membrClassVO);
+                }
                 if (classResult > 0 && "Y".equals(defltYn)) {
                     membrClassVO.setDefltYn("N");
                     classResult = mapper.defaultUpdateClassInfo(membrClassVO);

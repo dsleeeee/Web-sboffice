@@ -153,7 +153,7 @@
                     <input type="text" id="anvsrSavePoint" ng-readonly="detailData.anvsrPointSaveFg === ''" class="sb-input w10 fl " ng-model="detailData.anvsrSavePoint" maxlength="3"/>
                     <span class="txtIn mt10"><s:message code="grade.membr.per"/> <s:message code="grade.membr.plus"/></span>
                 </td>
-                <%-- 포인트 사용 구분 --%>
+                <%-- 포인트적립구분 --%>
                 <th><s:message code="grade.membr.point.save.fg"/></th>
                 <td ng-switch on="detailData.pointSaveFg">
                     <div class="sb-select w50 fl">
@@ -168,6 +168,7 @@
                                 initialized="_initComboBox(s)">
                         </wj-combo-box>
                     </div>
+                    {{detailData.prePointSaveFg}}
                     <span class="txtIn mt10" ng-switch-when="1"> % 적립</span>
                     <span class="txtIn mt10" ng-switch-when="2"> 원당 1Point</span>
                 </td>
@@ -313,4 +314,4 @@
     var membrClassList = ${membrClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberClass.js?ver=20201111.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberClass.js?ver=20210225.01" charset="utf-8"></script>

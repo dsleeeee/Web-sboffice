@@ -52,6 +52,7 @@
               , MEMBR_CLASS_NM
               , DC_RATE
               , POINT_SAVE_FG
+              , POINT_SAVE_FG AS PRE_POINT_SAVE_FG
               , DEFLT_YN
               , NEW_JOIN_SAVE_POINT
               , FIRST_SALE_SAVE_POINT

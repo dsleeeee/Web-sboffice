@@ -51,6 +51,7 @@ public class MembrClassVO extends CmmVO {
      * [포인트적립구분] TB_CM_NMCODE(NMCODE_GRP_CD='054')
      */
     private String pointSaveFg;
+    private String prePointSaveFg;
     /**
      * [기본여부] Y:기본 N:기본아님
      */
@@ -221,6 +222,14 @@ public class MembrClassVO extends CmmVO {
      */
     public void setPointSaveFg(String pointSaveFg) {
         this.pointSaveFg = pointSaveFg;
+    }
+
+    public String getPrePointSaveFg() {
+        return prePointSaveFg;
+    }
+
+    public void setPrePointSaveFg(String prePointSaveFg) {
+        this.prePointSaveFg = prePointSaveFg;
     }
 
     /**
