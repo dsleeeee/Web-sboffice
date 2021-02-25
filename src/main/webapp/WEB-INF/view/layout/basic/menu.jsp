@@ -2,9 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<c:set var="sessionId" value="${param.sid}" />
 
   <%--로고영역--%>
-  <h1><a href="/main.sb" class="on">
+  <%--메인페이지 좌측 메뉴리스트 상단 SOLBIPOS 로고--%>
+  <%--가상로그인 후 로고 클릭시 세션없어짐 2021.02.16 김설아--%>
+  <h1><a href="/main.sb?sid=${sessionId}" class="on">
   <span><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
   <%--//로고영역--%>
 
