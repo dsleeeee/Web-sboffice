@@ -498,7 +498,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
-        // 재료-상품 등록 팝업 핸들러 추가
+        // 상품 거래처 조회 팝업 핸들러 추가
         $scope.wjSearchProdVendrLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('searchNoProdVendrTotalCtrl', $scope.getProdModifyInfo());
