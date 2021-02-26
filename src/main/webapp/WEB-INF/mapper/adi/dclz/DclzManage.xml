@@ -135,13 +135,13 @@
        SET EMP_IN_DT = #{empInDt},
             EMP_OUT_DT = #{empOutDt},
             WORK_TIME = #{workTime},
+            IN_FG = '020', <!-- POS에서 등록해도 WEB에서 수정하면 입력구분 값이 '020'으로 수정된다. -->
             REMARK = #{remark},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
      WHERE STORE_CD = #{storeCd}
        AND EMP_NO = #{empNo}
        AND EMP_IN_DATE = #{empInDate}
-       AND IN_FG = #{inFg}
   </update>
 
   <!-- 근태 삭제 -->
@@ -157,7 +157,6 @@
      WHERE STORE_CD = #{storeCd}
        AND EMP_NO = #{empNo}
        AND EMP_IN_DATE = #{empInDate}
-       AND IN_FG = #{inFg}
   </delete>
 
   <!-- 근태 등록여부 확인 -->
@@ -173,7 +172,6 @@
      WHERE STORE_CD = #{storeCd}
        AND EMP_NO = #{empNo}
        AND EMP_IN_DATE = #{empInDate}
-       AND IN_FG = #{inFg}
   </select>
 
   <!-- 근태상세정보 조회 -->
@@ -200,7 +198,6 @@
        AND tpec.STORE_CD = #{storeCd}
        AND tpec.EMP_NO = #{empNo}
        AND tpec.EMP_IN_DATE = #{empInDate}
-       AND tpec.IN_FG = #{inFg}
   </select>
 
 </mapper>

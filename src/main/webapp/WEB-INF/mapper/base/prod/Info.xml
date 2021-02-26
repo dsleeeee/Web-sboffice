@@ -22,7 +22,7 @@
     /* USE : InfoMapper.getHqProdClsList */
     SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
            '00000' AS PROD_CLASS_CD,
-           '상품분류' AS PROD_CLASS_NM,
+           '상품분류정보관리' AS PROD_CLASS_NM,
            NULL AS P_PROD_CLASS_CD
       FROM DUAL
      UNION
@@ -43,7 +43,7 @@
     /* USE : InfoMapper.getStoreProdClsList */
     SELECT #{storeCd} AS STORE_CD,
            '00000' AS PROD_CLASS_CD,
-           '상품분류' AS PROD_CLASS_NM,
+           '상품분류정보관리' AS PROD_CLASS_NM,
            NULL AS P_PROD_CLASS_CD
       FROM DUAL
      UNION
