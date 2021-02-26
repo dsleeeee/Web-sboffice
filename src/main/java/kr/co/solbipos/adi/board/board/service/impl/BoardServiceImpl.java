@@ -244,7 +244,7 @@ public class BoardServiceImpl implements BoardService {
                     orgFileName = orgFileName.substring(1);
                 }
 
-                if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
 //                    orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
                     // 파일경로
                     boardInfo.setFilePath(path);
