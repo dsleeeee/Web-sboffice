@@ -153,7 +153,7 @@ public class ProdImgServiceImpl implements ProdImgService {
                 orgFileName = mFile.getOriginalFilename();
                 fileExt = FilenameUtils.getExtension(orgFileName);
 
-                if(orgFileName.lastIndexOf('.') > 1) {
+                if(orgFileName.lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
 
                     prodImgVO.setImgUrl(path_table);
                     prodImgVO.setImgFileNm(newFileName + "." + fileExt);

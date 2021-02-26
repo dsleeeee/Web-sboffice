@@ -783,7 +783,7 @@ public class ProdServiceImpl implements ProdService {
                     orgFileName = orgFileName.substring(1);
                 }
 
-                if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
                     // 파일경로
                     prodInfo.setFilePath(path_table);
                     // 파일명 (물리적으로 저장되는 파일명)

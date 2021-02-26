@@ -85,7 +85,7 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20201221.013" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20210219.001" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20201221.013" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
@@ -301,7 +301,7 @@
             </div>
             <div class="btnSet">
                 <span>
-                	<a href="#" class="btn_blue _btnClose" id="btnFloorApply"><s:message code="cmm.apply" /></a>
+                	<a href="#" class="btn_blue " id="btnFloorApply"><s:message code="cmm.apply" /></a>
                 </span>
                 <span>
                 	<a href="#" class="btn_gray _btnClose"><s:message code="cmm.close" /></a>
@@ -507,11 +507,11 @@
 
         <%--layerContent--%>
         <div class="title previewPop" style="width:562px">
-            <p class="tit" id="tblAttrTitle" style="padding-left:20px;">
+            <p class="tit" id="tblAttrTitleView" style="padding-left:20px;">
                 <s:message code="tableAttr.preview" />
             </p>
             <a href="#" class="btn_close _btnClose" id="btnX"></a>
-            <div class="pd20" style="padding-right:20px;>
+            <div class="pd20" style="padding-right:20px;">
 
                 <%--center--%>
                 <div class="fl previewPop" style="width:510px">

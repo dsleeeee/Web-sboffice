@@ -131,7 +131,7 @@
                 <c:forEach var="i" begin="0" end="23" step="1">
                     <c:set var="time"><fmt:formatNumber value="${i}" pattern="00"/></c:set>
                     <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQtyT${time}" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmtT${time}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodhour.realSaleAmt"/>" binding="totSaleAmtT${time}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 </c:forEach>
 
             </wj-flex-grid>
