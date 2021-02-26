@@ -18,6 +18,7 @@ floorName=그룹명
 tblGrpFg=그룹 구분
 del=삭제
 background=홀
+checkFloorName=그룹명을 입력하여 주십시오.
 
 ts2=2인사각테이블
 ts4=4인사각테이블

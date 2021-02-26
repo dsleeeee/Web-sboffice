@@ -306,8 +306,23 @@ Floor.prototype.init = function() {
     // 적용 버튼 추가 이벤트
     addClickHandler(document.getElementById('btnFloorApply'), function() {
         var view = floorGrid.collectionView;
+        var failCnt = 0;
 
         if (graph.isEnabled()) {
+
+            // 그룹명 오류 처리
+            for (var i = 0; i < view.items.length; i++) {
+                var item = view.items[i];
+                var itemName = nvl(item.name, ' ');
+
+                if(itemName.trim() == '')
+                {
+                    mxUtils.alert(mxResources.get('checkFloorName'));
+                    failCnt++;
+                    return false;
+                }
+            }
+
             graph.model.beginUpdate();
             try {
 
@@ -344,14 +359,23 @@ Floor.prototype.init = function() {
                 }
 
             } finally {
-                graph.model.endUpdate();
+                if(failCnt == 0) graph.model.endUpdate();
             }
         }
 
-        floor.refresh();
+        if(failCnt == 0) floor.refresh();
 
         // 적용한 후에는 view에 데이터 clear
-        view.clearChanges();
+        if(failCnt == 0) view.clearChanges();
+
+        // _btnClose 적용
+        if(failCnt == 0)
+        {
+            $("div.floorLayer").hide();
+            $("div.tableAddLayer").hide();
+            $("div.tblAttrLayer").hide();
+        }
+
     });
 };
 
@@ -374,7 +398,7 @@ Floor.prototype.initValue = function() {
         (mxUtils.bind(this, function(layer) {
             data.push({
                 id: layer.id,
-                name: layer.value || mxResources.get('background'),
+                name: nvl(layer.value, ' ') || mxResources.get('background'),
                 tblGrpFg: graph.getCellStyle(layer)['tblGrpFg'] || '1',
                 layer: layer // graph Cell 정보 추가, add/remove/rename에 사용!
             });
@@ -410,9 +434,8 @@ Floor.prototype.refresh = function() {
     for (var i = 0; i < layerCount; i++) {
 
         (mxUtils.bind(this, function(layer) {
-
             var tag = wijmo.format(template, {
-                name: layer.value,
+                name: nvl(layer.value, ' '),
                 on: (layer == graph.getDefaultParent() ? 'on' : '')
             });
             var elt = wijmo.createElement(tag);
