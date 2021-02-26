@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjFoodAllergyProdLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;height:670px;" fade-in="false" fade-out="false">
+<wj-popup control="wjFoodAllergyProdLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;height:630px;" fade-in="false" fade-out="false">
 
     <div ng-controller="foodAllergyProdCtrl">
         <%-- header --%>
@@ -17,17 +17,7 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
-            <%-- 조회조건 --%>
-            <div class="searchBar flddUnfld">
-                <a href="#" class="open fl"></a>
-                <%-- 조회 --%>
-                <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                    <button class="btn_blue fr" ng-click="_broadcast('foodAllergyProdCtrl', 1)">
-                        <s:message code="cmm.search" />
-                    </button>
-                </div>
-            </div>
-            <table class="searchTbl">
+            <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
                     <col class="w35"/>
@@ -56,15 +46,24 @@
                     <th>
                         <s:message code="foodAllergyProd.srchClass" />
                     </th>
-                    <td colspan="3">
+                    <td>
                         <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
                                placeholder="<s:message code="recpProd.srchClass" /> 선택" readonly/>
                         <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                    </td>
+                    <td>
                         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                     </td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
+            <div class="mt10 tr">
+                <div class="oh sb-select dkbr">
+                    <%--조회--%>
+                    <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('foodAllergyProdCtrl', 1)" ><s:message code="cmm.search" /></button>
+                </div>
+            </div>
 
             <%-- 그리드 --%>
             <div class="w100 mt10 mb20">

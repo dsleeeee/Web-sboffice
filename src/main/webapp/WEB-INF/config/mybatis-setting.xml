@@ -124,6 +124,8 @@
 
     <!-- 기초관리 > 매장정보관리 > OKPOS-KCP 데이터 이관 -->
     <typeAlias alias="migDataMappingVO" type="kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO"/>
+    <!-- 기초관리 > 매장정보관리 > 환경변수일괄변경 -->
+    <!--<typeAlias alias="envConfgBatchChangeVO" type="kr.co.solbipos.store.manage.envConfgBatchChange.service.EnvConfgBatchChangeVO"/>-->
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
