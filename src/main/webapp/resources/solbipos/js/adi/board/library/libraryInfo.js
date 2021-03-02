@@ -122,6 +122,15 @@ app.controller('libraryInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
+        // 이미지명 형식 체크
+        if($("#file").val() !== null && $("#file").val() !== undefined && $("#file").val() !== "") {
+            var imgFullNm = $("#file").val().substring($("#file").val().lastIndexOf('\\') + 1);
+            if (1 > imgFullNm.lastIndexOf('.')) {
+                $scope._popMsg(messages["libraryInfo.fileNmChk.msg"]);
+                return;
+            }
+        }
+
         var params = {};
         // 신규, 수정
         params.status = $("#lblStatus").text();

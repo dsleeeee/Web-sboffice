@@ -61,6 +61,15 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 저장
   $scope.regist = function(){
 
+    // 이미지명 형식 체크
+    if($("#file").val() !== null && $("#file").val() !== undefined && $("#file").val() !== "") {
+      var imgFullNm = $("#file").val().substring($("#file").val().lastIndexOf('\\') + 1);
+      if (1 > imgFullNm.lastIndexOf('.')) {
+        $scope._popMsg(messages["verManage.fileNmChk.msg"]);
+        return;
+      }
+    }
+
     var formData = new FormData($("#regForm")[0]);
 
     formData.append("verSerNo", $scope.version.verSerNo);

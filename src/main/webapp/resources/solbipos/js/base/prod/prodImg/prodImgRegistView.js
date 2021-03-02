@@ -301,14 +301,21 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
 
+        // 이미지명 형식 체크
+        var imgFullNm = $("#" + element).val().substring($("#" + element).val().lastIndexOf('\\') + 1);
+        if(1 > imgFullNm.lastIndexOf('.')){
+            $scope._popMsg(messages["prodImg.fileNmChk.msg"]);
+            return;
+        }
+
         // 이미지(.png) 확장자 체크
         var reg = /(.*?)\.(png|PNG)$/;
 
         if(! $("#" + element).val().match(reg)) {
            $scope._popMsg(messages["prodImg.fileExtensionChk.msg"]);
            return;
-        } 
-        
+        }
+
 
         // 이미지를 등록하시겠습니까?
         var msg = messages["prodImg.fileReg.msg"];

@@ -205,6 +205,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         }
+        // 이미지명 형식 체크
+        if($("#file").val() !== null && $("#file").val() !== undefined && $("#file").val() !== "") {
+            var imgFullNm = $("#file").val().substring($("#file").val().lastIndexOf('\\') + 1);
+            if (1 > imgFullNm.lastIndexOf('.')) {
+                $scope._popMsg(messages["prod.fileNmChk.msg"]);
+                return;
+            }
+        }
         // 분류조회
         if (isNull($scope.prodModifyInfo.prodClassCd)) {
             $scope._popMsg(messages["prod.prodClassCdNmChk.msg"]);
