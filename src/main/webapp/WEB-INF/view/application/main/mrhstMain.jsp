@@ -548,7 +548,7 @@
     <%--&lt;%&ndash; // wijmo flexChart &ndash;%&gt;--%>
 <%--</script>--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/main/mrhstMain.js?ver=20210222.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/main/mrhstMain.js?ver=20210223.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

@@ -1328,45 +1328,77 @@
 
     <!-- 매장 - 오늘의 매출건수 -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY
-        COMMENTS : [매출]일별_종합,
+        TABLE    : TB_SL_DAILY_TOTAL
+        COMMENTS : [매출]일별_종합
     -->
     <select id="getDaySaleCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getDaySaleCntList */
         SELECT
-        NVL(TO_CHAR(tsdt.REAL_SALE_CNT,'999,999,999,999'), 0) AS REAL_SALE_CNT_TOTAL
-        FROM TB_SL_DAILY_TOTAL tsdt
-        WHERE 1=1
-        AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdt.STORE_CD = #{storeCd}
-        AND tsdt.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        TO_CHAR(REAL_SALE_CNT_TOTAL,'999,999,999,999') AS REAL_SALE_CNT_TOTAL
+        FROM
+        (
+            (
+                SELECT
+                NVL(tsdt.REAL_SALE_CNT, 0) AS REAL_SALE_CNT_TOTAL
+                FROM TB_SL_DAILY_TOTAL tsdt
+                WHERE 1=1
+                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdt.STORE_CD = #{storeCd}
+                AND tsdt.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+            )
+            UNION ALL
+            (
+                SELECT
+                0 AS REAL_SALE_CNT_TOTAL
+                FROM dual
+            )
+            ORDER BY REAL_SALE_CNT_TOTAL DESC
+        )
+       <![CDATA[
+            WHERE ROWNUM = 1
+        ]]>
     </select>
 
     <!-- 매장 - 오늘의 매출금액 -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY
-        COMMENTS : [매출]일별_종합,
+        TABLE    : TB_SL_DAILY_PAY
+        COMMENTS :
     -->
     <select id="getDaySaleAmtList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getDaySaleAmtList */
         SELECT
-        NVL(TO_CHAR(REAL_SALE_AMT_TOTAL,'999,999,999,999'), 0) AS REAL_SALE_AMT_TOTAL,
-        NVL(TO_CHAR(CARD_AMT,'999,999,999,999'), 0) AS CARD_AMT,
-        NVL(TO_CHAR(CASH_AMT,'999,999,999,999'), 0) AS CASH_AMT,
-        NVL(TO_CHAR(ETC_AMT,'999,999,999,999'), 0) AS ETC_AMT
+        TO_CHAR(REAL_SALE_AMT_TOTAL,'999,999,999,999') AS REAL_SALE_AMT_TOTAL,
+        TO_CHAR(CARD_AMT,'999,999,999,999') AS CARD_AMT,
+        TO_CHAR(CASH_AMT,'999,999,999,999') AS CASH_AMT,
+        TO_CHAR(ETC_AMT,'999,999,999,999') AS ETC_AMT
         FROM
         (
-            SELECT
-            SUM(tsdp.TOT_PAY_AMT) AS REAL_SALE_AMT_TOTAL,
-            SUM((CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT ELSE 0 END)) AS CARD_AMT,
-            SUM((CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT ELSE 0 END)) AS CASH_AMT,
-            SUM((CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END)) AS ETC_AMT
-            FROM TB_SL_DAILY_PAY tsdp
-            WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.STORE_CD = #{storeCd}
-            AND tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+            (
+                SELECT
+                NVL(SUM(tsdp.TOT_PAY_AMT), 0) AS REAL_SALE_AMT_TOTAL,
+                NVL(SUM((CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT ELSE 0 END)), 0) AS CARD_AMT,
+                NVL(SUM((CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT ELSE 0 END)), 0) AS CASH_AMT,
+                NVL(SUM((CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END)), 0) AS ETC_AMT
+                FROM TB_SL_DAILY_PAY tsdp
+                WHERE 1=1
+                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdp.STORE_CD = #{storeCd}
+                AND tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+            )
+            UNION ALL
+            (
+                SELECT
+                0 AS REAL_SALE_AMT_TOTAL,
+                0 AS CARD_AMT,
+                0 AS CASH_AMT,
+                0 AS ETC_AMT
+                FROM dual
+            )
+            ORDER BY REAL_SALE_AMT_TOTAL DESC
         )
+       <![CDATA[
+            WHERE ROWNUM = 1
+        ]]>
     </select>
 
 </mapper>
