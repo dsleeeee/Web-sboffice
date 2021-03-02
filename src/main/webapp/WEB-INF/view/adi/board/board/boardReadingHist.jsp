@@ -104,4 +104,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardReadingHist.js?ver=20200224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardReadingHist.js?ver=20210302.01" charset="utf-8"></script>

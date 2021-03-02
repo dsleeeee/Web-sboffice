@@ -18,16 +18,8 @@
 
     <!-- 일반게시판 조회 -->
     <!--
-        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO,
-                   TB_HQ_EMPLOYEE, TB_HQ_OFFICE,
-                   TB_MS_EMPLOYEE, TB_MS_STORE,
-                   TB_CM_EMPLOYEE, TB_CM_AGENCY,
-                   TB_WB_BOARD_PART_STORE
-        COMMENTS : 게시판 정보, 웹 사용자 정보, 권한 그룹 정보,
-                   [본사]사원 정보, [본사]본사 정보,
-                   [매장]사원 정보, [매장]매장 정보,
-                   [공통]시스템/대리점 사원 정보, [공통]대리점 정보,
-                   게시판 일부 매장
+        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
     <select id="getBoardList"  parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardList */
@@ -39,19 +31,15 @@
         twbi.VIEW_CNT,
         twbi.TARGET_FG,
         twbi.APPR_FG,
-        (CASE WHEN twagi.AUTH_GRP_NM = 'HQ' THEN (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = UPPER(twbi.USER_ID)) --본사
-               WHEN twagi.AUTH_GRP_NM = 'STORE' THEN (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = UPPER(twbi.USER_ID))  --매장
-               WHEN twagi.AUTH_GRP_NM IN ('SYSTEM','AGENCY') THEN (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD =(SELECT AGENCY_CD FROM TB_CM_EMPLOYEE WHERE USER_ID = twbi.USER_ID)) --관리자,총판
-              ELSE null END
-        ) AS AGENCY_NM,
+        twuidv01.ORGN_FG,
+        twuidv01.ORGN_NM  AS AGENCY_NM,
         twbi.USER_ID,
         twbi.USER_NM,
         (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE,
         twbi.REMARK
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_WB_BOARD_INFO twbi,
-        TB_WB_USER_INFO twui,
-        TB_WB_AUTHOR_GRP_INFO twagi
+        TB_WB_USER_INFO_DTL_V01 twuidv01
         WHERE 1=1
         AND twbi.BOARD_CD = #{boardCd}
         AND twbi.USE_YN = 'Y'
@@ -79,7 +67,7 @@
                 <!-- 작성자 -->
                 <if test='gubunCombo == "4"'>
                     <![CDATA[
-                        AND tce.EMP_NM LIKE '%'||#{gubunName}||'%'
+                        AND twuidv01.USER_NM LIKE '%'||#{gubunName}||'%'
                     ]]>
                 </if>
             </when>
@@ -89,13 +77,13 @@
                 <!-- 본사 -->
                 <if test='orgnFg == "H"'>
                     <![CDATA[
-                        AND twagi.AUTH_GRP_NM IN ('HQ','STORE')
+                        AND twuidv01.ORGN_FG IN ('H','S')
                     ]]>
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     <![CDATA[
-                        AND twagi.AUTH_GRP_NM IN ('HQ','STORE')
+                        AND twuidv01.ORGN_FG IN ('H','S')
                         AND (
                                 (twbi.APPR_FG = '2')
                                 OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
@@ -110,7 +98,7 @@
                 <!-- 시스템 -->
                 <if test='orgnFg == "M"'>
                     <![CDATA[
-                        AND twagi.AUTH_GRP_NM = 'SYSTEM'
+                        AND twuidv01.ORGN_FG IN ('M','A')
                         AND (
                                 (twbi.APPR_FG = '2')
                                 OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
@@ -121,7 +109,7 @@
                 <!-- 대리점 -->
                 <if test='orgnFg == "A"'>
                     <![CDATA[
-                        AND twagi.AUTH_GRP_NM = 'SYSTEM'
+                         AND twuidv01.ORGN_FG IN ('M','A')
                         AND twbi.APPR_FG = '2'
                         AND twbi.START_DATE <= #{date}
                         AND twbi.END_DATE >= #{date}
@@ -129,8 +117,7 @@
                 </if>
             </when>
         </choose>
-        AND twui.USER_ID (+)= twbi.USER_ID
-        AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
+        AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.MOD_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -160,16 +147,16 @@
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_BOARD_MASTER twbm,
         (
-          SELECT
-          twbps.BOARD_CD,
-          twbps.BOARD_SEQ_NO,
-          LISTAGG(twbps.PART_ORGN_CD, ',') WITHIN GROUP (ORDER BY twbps.PART_ORGN_CD) AS PART_ORGN_CD,
-          LISTAGG(tms.STORE_NM, ',') WITHIN GROUP (ORDER BY tms.STORE_NM) AS PART_ORGN_NM
-          FROM TB_WB_BOARD_PART_STORE twbps,
-          TB_MS_STORE tms
-          WHERE 1=1
-          AND tms.STORE_CD (+)= twbps.PART_ORGN_CD
-          GROUP BY twbps.BOARD_CD, twbps.BOARD_SEQ_NO
+            SELECT
+            twbps.BOARD_CD,
+            twbps.BOARD_SEQ_NO,
+            LISTAGG(twbps.PART_ORGN_CD, ',') WITHIN GROUP (ORDER BY twbps.PART_ORGN_CD) AS PART_ORGN_CD,
+            LISTAGG(tms.STORE_NM, ',') WITHIN GROUP (ORDER BY tms.STORE_NM) AS PART_ORGN_NM
+            FROM TB_WB_BOARD_PART_STORE twbps,
+            TB_MS_STORE tms
+            WHERE 1=1
+            AND tms.STORE_CD (+)= twbps.PART_ORGN_CD
+            GROUP BY twbps.BOARD_CD, twbps.BOARD_SEQ_NO
         ) twbps
         WHERE 1=1
         AND twbi.BOARD_CD = #{boardCd}
@@ -720,14 +707,8 @@
 
     <!-- 열람자목록 팝업 - 검색 -->
     <!--
-        TABLE    : TB_WB_BOARD_READNG_HIST, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO,
-                   TB_HQ_EMPLOYEE, TB_HQ_OFFICE,
-                   TB_MS_EMPLOYEE, TB_MS_STORE,
-                   TB_CM_EMPLOYEE, TB_CM_AGENCY
-        COMMENTS : 게시판 열람 이력, 웹 사용자 정보, 권한 그룹 정보,
-                   [본사]사원 정보, [본사]본사 정보,
-                   [매장]사원 정보, [매장]매장 정보,
-                   [공통]시스템/대리점 사원 정보, [공통]대리점 정보
+        TABLE    : TB_WB_BOARD_READNG_HIST, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 게시판 열람 이력, 웹 사용자 정보 veiw
     -->
     <select id="getBoardReadingHistList"  parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardReadingHistList */
@@ -737,127 +718,47 @@
             SELECT
             twbrh.BOARD_CD,
             twbrh.BOARD_SEQ_NO,
-            tce.HQ_OFFICE_NM,
-            tce.STORE_NM,
-            (CASE WHEN twagi.AUTH_GRP_NM = 'SYSTEM' THEN 'M'
-                  WHEN twagi.AUTH_GRP_NM = 'AGENCY' THEN 'A'
-                  WHEN twagi.AUTH_GRP_NM = 'HQ' THEN 'H'
-                  WHEN twagi.AUTH_GRP_NM = 'STORE' THEN 'S'
-                  ELSE null END
-            ) AS AUTH_GRP_NM,
+            twuidv01.HQ_OFFICE_NM AS HQ_OFFICE_NM,
+            twuidv01.STORE_NM AS STORE_NM,
+            twuidv01.ORGN_FG AS AUTH_GRP_NM,
             --부서구분
-            tce.USER_NM,
+            twuidv01.USER_NM,
             MAX(twbrh.READNG_DT) AS READNG_DT
             FROM TB_WB_BOARD_READNG_HIST twbrh,
-            (
-                (
-                    --본사
-                    SELECT
-                    A.USER_ID,
-                    'H' AS ORGN_FG,
-                    A.HQ_OFFICE_CD AS ORGN_CD,
-                    B.HQ_OFFICE_NM AS ORGN_NM,
-                    A.EMP_NM AS USER_NM,
-                    A.EMP_NO,
-                    '' AS STORE_CD,
-                    '' AS STORE_NM,
-                    A.HQ_OFFICE_CD,
-                    B.HQ_OFFICE_NM,
-                    A.HQ_OFFICE_CD AS ORGN_GRP_CD,
-                    B.HQ_OFFICE_NM AS ORGN_GRP_NM,
-                    '' AS P_AGENCY_CD
-                    FROM
-                    TB_HQ_EMPLOYEE A,
-                    TB_HQ_OFFICE B
-                    WHERE 1=1
-                    AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-                )
-                UNION ALL
-                (
-                    --매장
-                    SELECT
-                    A.USER_ID,
-                    'S' AS ORGN_FG,
-                    A.STORE_CD AS ORGN_CD,
-                    B.STORE_NM AS ORGN_NM,
-                    A.EMP_NM AS USER_NM,
-                    A.EMP_NO,
-                    A.STORE_CD AS STORE_CD,
-                    B.STORE_NM AS STORE_NM,
-                    C.HQ_OFFICE_CD,
-                    C.HQ_OFFICE_NM,
-                    DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) AS ORGN_GRP_CD,
-                    DECODE( C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM ) AS ORGN_GRP_NM,
-                    '' AS P_AGENCY_CD
-                    FROM
-                    TB_MS_EMPLOYEE A,
-                    TB_MS_STORE B,
-                    TB_HQ_OFFICE C
-                    WHERE 1=1
-                    AND A.STORE_CD = B.STORE_CD
-                    AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
-                )
-                UNION ALL
-                (
-                    --관리자,총판
-                    SELECT
-                    A.USER_ID,
-                    DECODE( A.ADMIN_FG, 'A', 'M', 'A' ) AS ORGN_FG,
-                    A.AGENCY_CD AS ORGN_CD,
-                    B.AGENCY_NM AS ORGN_NM,
-                    A.EMP_NM AS USER_NM,
-                    A.EMP_NO,
-                    '' AS STORE_CD,
-                    '' AS STORE_NM,
-                    '' AS HQ_OFFICE_CD,
-                    '' AS HQ_OFFICE_NM,
-                    A.AGENCY_CD AS ORGN_GRP_CD,
-                    B.AGENCY_NM AS ORGN_GRP_NM,
-                    B.P_AGENCY_CD AS P_AGENCY_CD
-                    FROM
-                    TB_CM_EMPLOYEE A,
-                    TB_CM_AGENCY B
-                    WHERE 1=1
-                    AND A.AGENCY_CD = B.AGENCY_CD
-                )
-            ) tce,
-            TB_WB_USER_INFO twui,
-            TB_WB_AUTHOR_GRP_INFO twagi
+            TB_WB_USER_INFO_DTL_V01 twuidv01
             WHERE 1=1
             AND twbrh.BOARD_CD = #{boardCd}
             AND twbrh.BOARD_SEQ_NO = #{boardSeqNo}
-            AND tce.USER_NM LIKE '%'||#{userNm}||'%'
+            AND twuidv01.USER_NM LIKE '%'||#{userNm}||'%'
             <choose>
                 <!-- 전체 체크박스 제외 -->
                 <when test='authGrpNm != null and authGrpNm != "" and authGrpNm != "all"'>
                     <!-- 본사 로그인시 전체 체크박스 -->
                     <if test='authGrpNm == "allHQ"'>
                         <![CDATA[
-                            AND twagi.AUTH_GRP_NM IN ('HQ','STORE')
+                            AND twuidv01.ORGN_FG IN ('H','S')
                         ]]>
                     </if>
                     <!-- 나머지(시스템,대리점,본사,매장 만) -->
                     <if test='authGrpNm != "allHQ"'>
                         <![CDATA[
-                            AND twagi.AUTH_GRP_NM = #{authGrpNm}
+                            AND twuidv01.ORGN_FG = #{authGrpNm}
                         ]]>
                     </if>
                 </when>
             </choose>
             <if test='membrOrgnCd != null and membrOrgnCd != ""'>
                 <![CDATA[
-                    AND tce.HQ_OFFICE_CD = #{membrOrgnCd}
+                    AND twuidv01.HQ_OFFICE_CD = #{membrOrgnCd}
                 ]]>
             </if>
             <if test='storeCd != null and storeCd != ""'>
                 <![CDATA[
-                    AND tce.STORE_CD = #{storeCd}
+                    AND twuidv01.STORE_CD = #{storeCd}
                 ]]>
             </if>
-            AND tce.USER_ID (+)= twbrh.USER_ID
-            AND twui.USER_ID (+)= twbrh.USER_ID
-            AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
-            GROUP BY twbrh.BOARD_CD, twbrh.BOARD_SEQ_NO, tce.HQ_OFFICE_NM, tce.STORE_NM, twagi.AUTH_GRP_NM, tce.USER_NM
+            AND twuidv01.USER_ID (+)= twbrh.USER_ID
+            GROUP BY twbrh.BOARD_CD, twbrh.BOARD_SEQ_NO, twuidv01.HQ_OFFICE_NM, twuidv01.STORE_NM, twuidv01.ORGN_FG, twuidv01.USER_NM
         )
         WHERE 1=1
         ORDER BY READNG_DT DESC

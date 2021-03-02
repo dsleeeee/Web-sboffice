@@ -27,7 +27,7 @@ app.controller('boardReadingHistCtrl', ['$scope', '$http', function ($scope, $ht
     if(orgnFg == "HQ"){
         userAuth = "allHQ"; // 본사로 로그인시 전체 체크박스
     } else if(orgnFg == "STORE") {
-        userAuth = "STORE"; // 매장으로 로그인시 매장만 체크
+        userAuth = "S"; // 매장으로 로그인시 매장만 체크
     }else {
         userAuth = "all"; // 시스템,대리점 로그인시 전체 체크박스
     }
@@ -87,7 +87,7 @@ app.controller('boardReadingHistCtrl', ['$scope', '$http', function ($scope, $ht
         if(orgnFg == "HQ"){
             userAuth = "allHQ"; // 본사로 로그인시 전체 체크박스
         } else if(orgnFg == "STORE") {
-            userAuth = "STORE"; // 매장으로 로그인시 매장만 체크
+            userAuth = "S"; // 매장으로 로그인시 매장만 체크
         }else {
             userAuth = "all"; // 시스템,대리점 로그인시 전체 체크박스
         }
@@ -98,7 +98,7 @@ app.controller('boardReadingHistCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.agencyYn = false;
         $scope.hqOfficeYn = false;
         $scope.storeYn = false;
-        userAuth = "SYSTEM"; // M
+        userAuth = "M"; // M
     };
     // 대리점
     $scope.agencyYnChk = function(){
@@ -106,7 +106,7 @@ app.controller('boardReadingHistCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.systemYn = false;
         $scope.hqOfficeYn = false;
         $scope.storeYn = false;
-        userAuth = "AGENCY"; // A
+        userAuth = "A"; // A
     };
     // 본사
     $scope.hqOfficeYnChk = function(){
@@ -114,7 +114,7 @@ app.controller('boardReadingHistCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.systemYn = false;
         $scope.agencyYn = false;
         $scope.storeYn = false;
-        userAuth = "HQ"; // H
+        userAuth = "H"; // H
     };
     // 매장
     $scope.storeYnChk = function(){
@@ -122,7 +122,7 @@ app.controller('boardReadingHistCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.systemYn = false;
         $scope.agencyYn = false;
         $scope.hqOfficeYn = false;
-        userAuth = "STORE"; // S
+        userAuth = "S"; // S
     };
     // <-- 체크박스 이벤트 -->
 

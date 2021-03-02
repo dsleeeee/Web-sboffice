@@ -287,8 +287,8 @@
 
     <!-- 관리자 - 공지사항 -->
     <!--
-        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO
-        COMMENTS : 게시판 정보, 웹 사용자 정보, 권한 그룹 정보
+        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
     <select id="getNoticeList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeList */
@@ -301,8 +301,7 @@
             twbi.TITLE,
             TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
             FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO twui,
-            TB_WB_AUTHOR_GRP_INFO twagi
+            TB_WB_USER_INFO_DTL_V01 twuidv01
             WHERE 1=1
             AND twbi.BOARD_CD = '01'
             AND twbi.USE_YN = 'Y'
@@ -312,9 +311,8 @@
                 AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-            AND twagi.AUTH_GRP_NM = 'SYSTEM'
-            AND twui.USER_ID (+)= twbi.USER_ID
-            AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
+            AND twuidv01.ORGN_FG IN ('M','A')
+            AND twuidv01.USER_ID (+)= twbi.USER_ID
             ORDER BY twbi.REG_DT DESC
         )
         WHERE 1=1
@@ -325,8 +323,8 @@
 
     <!-- 총판/대리점 - 공지사항 -->
     <!--
-        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO
-        COMMENTS : 게시판 정보, 웹 사용자 정보, 권한 그룹 정보
+        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
     <select id="getNoticeAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeAgencyList */
@@ -339,8 +337,7 @@
             twbi.TITLE,
             TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
             FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO twui,
-            TB_WB_AUTHOR_GRP_INFO twagi
+            TB_WB_USER_INFO_DTL_V01 twuidv01
             WHERE 1=1
             AND twbi.BOARD_CD = '01'
             AND twbi.USE_YN = 'Y'
@@ -350,9 +347,8 @@
                 AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-            AND twagi.AUTH_GRP_NM = 'SYSTEM'
-            AND twui.USER_ID (+)= twbi.USER_ID
-            AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
+            AND twuidv01.ORGN_FG IN ('M','A')
+            AND twuidv01.USER_ID (+)= twbi.USER_ID
             ORDER BY twbi.REG_DT DESC
         )
         WHERE 1=1
@@ -363,8 +359,8 @@
 
     <!-- 본사 - 공지사항 -->
     <!--
-        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO
-        COMMENTS : 게시판 정보, 웹 사용자 정보, 권한 그룹 정보
+        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
     <select id="getNoticeHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeHqList */
@@ -377,8 +373,7 @@
             twbi.TITLE,
             TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
             FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO twui,
-            TB_WB_AUTHOR_GRP_INFO twagi
+            TB_WB_USER_INFO_DTL_V01 twuidv01
             WHERE 1=1
             AND twbi.BOARD_CD = '01'
             AND twbi.USE_YN = 'Y'
@@ -388,9 +383,8 @@
                 AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-            AND twagi.AUTH_GRP_NM IN ('HQ','STORE')
-            AND twui.USER_ID (+)= twbi.USER_ID
-            AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
+            AND twuidv01.ORGN_FG IN ('H','S')
+            AND twuidv01.USER_ID (+)= twbi.USER_ID
             ORDER BY twbi.REG_DT DESC
         )
         WHERE 1=1
@@ -401,8 +395,8 @@
 
     <!-- 매장 - 공지사항 -->
     <!--
-        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO
-        COMMENTS : 게시판 정보, 웹 사용자 정보, 권한 그룹 정보
+        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
     <select id="getNoticeStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeStoreList */
@@ -415,8 +409,7 @@
             twbi.TITLE,
             TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
             FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO twui,
-            TB_WB_AUTHOR_GRP_INFO twagi
+            TB_WB_USER_INFO_DTL_V01 twuidv01
             WHERE 1=1
             AND twbi.BOARD_CD = '01'
             AND twbi.USE_YN = 'Y'
@@ -430,9 +423,8 @@
                 AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-            AND twagi.AUTH_GRP_NM IN ('HQ','STORE')
-            AND twui.USER_ID (+)= twbi.USER_ID
-            AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
+            AND twuidv01.ORGN_FG IN ('H','S')
+            AND twuidv01.USER_ID (+)= twbi.USER_ID
             ORDER BY twbi.REG_DT DESC
         )
         WHERE 1=1
