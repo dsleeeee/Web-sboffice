@@ -61,6 +61,18 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 저장
   $scope.regist = function(){
 
+    // 버전일련번호 체크
+    if($("#verSerNo").val() === null || $("#verSerNo").val() === undefined || $("#verSerNo").val() === "") {
+      $scope._popMsg(messages["verManage.verSerNo"] + " " + messages["cmm.require.text"]);
+      return;
+    }
+
+    // 버전적용명 체크
+    if($("#verSerNm").val() === null || $("#verSerNm").val() === undefined || $("#verSerNm").val() === "") {
+      $scope._popMsg(messages["verManage.verSerNm"] + " " + messages["cmm.require.text"]);
+      return;
+    }
+
     // 이미지명 형식 체크
     if($("#file").val() !== null && $("#file").val() !== undefined && $("#file").val() !== "") {
       var imgFullNm = $("#file").val().substring($("#file").val().lastIndexOf('\\') + 1);
@@ -75,7 +87,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("verSerNo", $scope.version.verSerNo);
     formData.append("verSerNm", $scope.version.verSerNo);
     formData.append("fileSize", $scope.version.fileSize);
-    formData.append("fileDesc", $scope.version.fileDesc);
+    formData.append("fileDesc", $scope.version.fileDesc === undefined ? "" : $scope.version.fileDesc);
     formData.append("progFg", $scope.versionProgFgCombo.selectedValue);
     formData.append("pgmYn", $('input:checkbox[id="pgm"]').is(":checked"));
     formData.append("dbYn",  $('input:checkbox[id="db"]').is(":checked"));

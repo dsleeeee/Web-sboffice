@@ -122,12 +122,15 @@ app.controller('libraryInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
-        // 이미지명 형식 체크
+        // 이미지명 형식 체크(multiple check)
         if($("#file").val() !== null && $("#file").val() !== undefined && $("#file").val() !== "") {
-            var imgFullNm = $("#file").val().substring($("#file").val().lastIndexOf('\\') + 1);
-            if (1 > imgFullNm.lastIndexOf('.')) {
-                $scope._popMsg(messages["libraryInfo.fileNmChk.msg"]);
-                return;
+            var files = $("#file")[0].files;
+            for(var i = 0; i < files.length; i++){
+                var imgFullNm = files[i].name.substring(files[i].name.lastIndexOf('\\') + 1);
+                if (1 > imgFullNm.lastIndexOf('.')) {
+                    $scope._popMsg(messages["libraryInfo.fileNmChk.msg"]  + "<br/>[파일명 : " + imgFullNm + "]");
+                    return false;
+                }
             }
         }
 
