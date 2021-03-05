@@ -63,6 +63,10 @@
 
 <script>
 
+  // 분류명 수정 여부 확인을 위한 Map 변수
+  var orgTree = new Map();
+  var modTree = new Map();
+
   $(document).ready(function() {
 
     <%--- 본사/매장 구분에 따라 middel url 다름. --%>
@@ -95,8 +99,8 @@
 
     getClsTreeData();
 
-    <%-- 트리 데이터 수정시 --%>
-    tree.nodeEditEnded.addHandler(function(s, e) {
+    <%-- 트리 데이터 수정시 : 제대로 event를 인식하지 못하여 사용안함(2021.03.03) --%>
+    <%-- tree.nodeEditEnded.addHandler(function(s, e) {
 
       var level = tree.selectedNode.level;
       var item = tree.selectedNode.dataItem;
@@ -128,7 +132,7 @@
       if(!isData) {
         view.itemsEdited.push(editItem);
       }
-    });
+    }); --%>
 
 
     <%-- 분류 데이터 조회 --%>
@@ -161,6 +165,10 @@
 
         view = new wijmo.collections.CollectionView(tree.itemsSource);
         view.trackChanges = true;
+
+        // 초기 분류 값 가지고 있기(후에 수정한 분류명을 찾아내기 위해)
+        getOrgTree(tree.itemsSource);
+
       },
       function(result) {
         s_alert.pop(result.message);
@@ -296,6 +304,9 @@
       var msg = "<s:message code='info.require.input.clsNm'/>";
       var paramArr = [];
 
+      // 수정한 분류정보 가져오기
+      getEditItem();
+
       for(var i = 0; i < view.itemsAdded.length; i++) {
         if(view.itemsAdded[i].prodClassNm == "" || view.itemsAdded[i].prodClassNm == msg) {
           s_alert.pop("<s:message code='info.require.clsNm'/>");
@@ -342,11 +353,40 @@
         s_alert.pop(result.message);
       });
     });
+
+    // 수정한 분류정보 가져오기
+    function getEditItem() {
+
+      // 초기화
+      view.itemsEdited.length = 0;
+      modTree.clear();
+
+      // 수정한 분류 map에 담아 비교
+      getModTree(tree.itemsSource);
+
+      var editItem = {};
+
+      modTree.forEach(function(value,key,map){
+        if(value !== orgTree.get(key)){
+          editItem = {
+            status : "U",
+            hqOfficeCd : "${storeCd}",
+            storeCd : "${orgnCd}",
+            prodClassNm : value.split('││')[1],
+            prodClassCd : key,
+            pProdClassCd : value.split('││')[0],
+            level : 0
+          };
+
+          view.itemsEdited.push(editItem);
+        }
+      });
+    };
+
   });
 
   // 상위노드 item 찾기
   function findItem(items, text) {
-    var node = null;
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
       if (item.prodClassCd == text) {
@@ -360,6 +400,38 @@
       }
     }
     return null; //  not found
+  }
+
+  // 초기 상품 분류 값을 Map 변수에 Setting
+  function getOrgTree(items){
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.prodClassCd) {
+        orgTree.set(item.prodClassCd, item.pProdClassCd + "││" + item.prodClassNm);
+      }
+      if (item.items) {
+        item = getOrgTree(item.items);
+        if (item) {
+          orgTree.set(item.prodClassCd, item.pProdClassCd + "││" + item.prodClassNm);
+        }
+      }
+    }
+  }
+
+  // 수정한 상품 분류 값을 Map 변수에 Setting
+  function getModTree(items){
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.prodClassCd) {
+        modTree.set(item.prodClassCd, item.pProdClassCd + "││" + item.prodClassNm);
+      }
+      if (item.items) {
+        item = getModTree(item.items);
+        if (item) {
+          modTree.set(item.prodClassCd, item.pProdClassCd + "││" + item.prodClassNm);
+        }
+      }
+    }
   }
 
 </script>
