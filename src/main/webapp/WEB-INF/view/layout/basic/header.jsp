@@ -10,10 +10,16 @@
 
 <%-- 사용자정보영역 --%>
 <div class="topBar">
-  <div class="menuControl">
+  <div class="menuControl" style="float:left;">
     <a href="#" id="_arrow" class="arrowOpen">
       <span></span>
     </a>
+  </div>
+  <div style="width:100%; height:100%; color:#FFFFFF; line-height:49px;">
+     <span>
+       <em>[${sessionScope.sessionInfo.orgnCd}]</em>
+       <em>${sessionScope.sessionInfo.orgnNm}</em>
+     </span>
   </div>
   <div class="userInfo">
     <%--새로운 공지 있는경우 span추가--%>
