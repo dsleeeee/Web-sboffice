@@ -89,12 +89,6 @@
         <if test="useYn != null and useYn != ''">
             AND thp.USE_YN = #{useYn} --사용여부
         </if>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
         ORDER BY thp.PROD_CD ASC
     </select>
 
@@ -125,6 +119,7 @@
       <if test='sysStatFg != null and sysStatFg.toString() != ""'>
           AND tms.SYS_STAT_FG = #{sysStatFg}
       </if>
+        ORDER BY tms.STORE_CD, tmpp.PRTER_NO
     </select>
 
     <!-- 연결된 프린터 연결 해제 -->
@@ -149,20 +144,25 @@
     -->
     <select id="getUnlinkList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
         /* USE : ProdKitchenprintLinkMapper.getUnlinkList */
-        SELECT tms.STORE_NM,
-               tms.STORE_CD,
-               tmp2.PRTER_NO,
-               tmp2.PRTER_NM
-        FROM TB_MS_STORE tms,TB_MS_PRINTER tmp2, TB_MS_PRODUCT tmp
-             LEFT JOIN TB_MS_PRINTER_PROD tmpp
-                    ON tmp.STORE_CD = tmpp.STORE_CD
-                   AND tmp.PROD_CD = tmpp.PROD_CD
-        WHERE tmp.STORE_CD = tms.STORE_CD
-          AND tmp.STORE_CD = tmp2.STORE_CD
-          AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-          AND TMP.USE_YN ='Y'
-          AND TMP.PROD_CD = #{prodCd}
-          AND TMPP.PRTER_NO IS NULL
+        SELECT  tms.STORE_CD,
+                tms.STORE_NM,
+                tmp2.PRTER_NO,
+                tmp2.PRTER_NM
+           FROM TB_MS_STORE tms,
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRINTER tmp2
+          WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tmp.STORE_CD = tms.STORE_CD
+            AND tmp.PROD_CD = #{prodCd}
+            AND tmp.USE_YN = 'Y'
+            AND tmp2.STORE_CD = tms.STORE_CD
+            AND (tmp2.STORE_CD, tmp2.PRTER_NO) NOT IN (
+                                                        SELECT  STORE_CD
+                                                        ,       PRTER_NO
+                                                        FROM    TB_MS_PRINTER_PROD tmpp
+                                                        WHERE   tmpp.STORE_CD = tms.STORE_CD
+                                                        AND     tmpp.PROD_CD = #{prodCd}
+                                                    )
         <if test='arrStoreCd != null and arrStoreCd.toString() != ""'>
             AND tms.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -172,6 +172,7 @@
         <if test='sysStatFg != null and sysStatFg.toString() != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}
         </if>
+        ORDER BY tms.STORE_CD, tmp2.PRTER_NO
     </select>
 
     <!-- 안연결된 프린터 연결 -->
