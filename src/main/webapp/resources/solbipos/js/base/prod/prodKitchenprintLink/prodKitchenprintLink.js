@@ -93,14 +93,19 @@ app.controller('prodKitchenprintLinkCtrl', ['$scope', '$http', function ($scope,
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodKitchenprintLinkCtrl", function(event, data) {
+    var linked = agrid.getScope('prodKitchenprintLinkedCtrl');
+    var nulink = agrid.getScope('prodKitchenprintUnlinkCtrl');
+    linked._gridDataInit();   // 그리드 초기화
+    nulink._gridDataInit();   // 그리드 초기화
 
     $scope.searchProdList();
-    // 기능수행 종료 : 반드시 추가
+    // 기능수행 종료 : 반드시 추가prodKitchenprintLinkCtrl
     event.preventDefault();
   });
 
   // 상품 목록 조회
   $scope.searchProdList = function(){
+    prodNmChange('','');
     // 파라미터
     var params = {};
     // 등록일자 '전체기간' 선택에 따른 params
@@ -190,7 +195,7 @@ app.controller('prodKitchenprintLinkedCtrl', ['$scope', '$http', function ($scop
     $.postJSONArray("/base/prod/prodKitchenprintLink/prodKitchenprintLinked/unlink.sb", params, function(result) {
           $scope._popMsg(messages['cmm.saveSucc']);
           // 연결된 프린터
-          $scope.searchProdKitchenprintLinkedList($("#prodCd").text());
+          $scope._broadcast('prodKitchenprintLinkedCtrl', $("#prodCd").text());
           // 안연결된 프린터
           $scope._broadcast('prodKitchenprintUnlinkCtrl', $("#prodCd").text());
       },
@@ -241,9 +246,9 @@ app.controller('prodKitchenprintUnlinkCtrl', ['$scope', '$http', function ($scop
           $scope._popMsg(messages['cmm.saveSucc']);
 
           // 연결된 프린터
-          $scope._broadcast('prodKitchenprintLinkedCtrl',$("#prodCd").text());
+          $scope._broadcast('prodKitchenprintLinkedCtrl', $("#prodCd").text());
           // 안연결된 프린터
-          $scope.searchProdKitchenprintUnlinkList($("#prodCd").text());
+          $scope._broadcast('prodKitchenprintUnlinkCtrl', $("#prodCd").text());
         },
         function(result) {
           s_alert.pop(result.message);
