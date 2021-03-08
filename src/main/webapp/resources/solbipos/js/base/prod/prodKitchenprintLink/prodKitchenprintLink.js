@@ -47,7 +47,7 @@ app.controller('prodKitchenprintLinkCtrl', ['$scope', '$http', function ($scope,
   $scope.isChecked = true;
   // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
   $scope._setComboData('useYnAllComboData', useYnAllComboData);
-  $scope._getComboDataQuery('005', 'sysStatFg', 'A');
+  $scope._setComboData("srchSysStatFg", sysStatFg);
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
