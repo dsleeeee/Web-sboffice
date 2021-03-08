@@ -6,9 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
-<c:set var="priceEnvstVal" value="${priceEnvstVal}" />
-<c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />
+
 
 <div class="subCon" ng-controller="prodKitchenprintLinkCtrl">
   <%--searchTbl--%>
@@ -123,13 +121,12 @@
                   text-changed="sysStatFgChange()"
                   id="srchSysStatFg"
                   ng-model="sysStatFg"
-                  items-source="_getComboData('srchSysStatFg')"
+                  items-source="_getComboData('sysStatFg')"
                   display-member-path="name"
                   selected-value-path="value"
                   is-editable="false"
                   initialized="_initComboBox(s)"
-                  selected-index="1"
-          >
+                  selected-Index="1">
           </wj-combo-box>
         </div>
       </td>
@@ -245,14 +242,29 @@
     <%--//위즈모 테이블--%>
   </div>
 </div>
-<script>
-  var prodEnvstVal = "${prodEnvstVal}";
-  var priceEnvstVal = "${priceEnvstVal}";
-  var prodNoEnvFg = "${prodNoEnvFg}";
-</script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/prodKitchenprintLink.js?ver=20201224.02" charset="utf-8"></script>
 
-<script type="text/javascript">
-  var sysStatFg = ${ccu.getCommCodeSelect("005")};
-</script>
+<%-- 레이어 팝업 : 상품정보 입력/수정 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 상품별 적용매장 선택 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodStoreRegistView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 매장 리스트 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/storeProdBatchList.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 매장별 상품 일괄적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/storeProdBatchRegist.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
