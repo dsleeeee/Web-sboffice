@@ -77,21 +77,26 @@
                 <!-- 본사 -->
                 <if test='orgnFg == "H"'>
                     <![CDATA[
-                        AND twuidv01.ORGN_FG IN ('H','S')
+                        AND twuidv01.ORGN_FG IN ('H')
+                        AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
                     ]]>
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     <![CDATA[
-                        AND twuidv01.ORGN_FG IN ('H','S')
                         AND (
-                                (twbi.APPR_FG = '2')
-                                OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
-                                OR (twbi.APPR_FG = '3' AND twbi.USER_ID = #{userId})
-                            )
-                        AND (
-                              ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
-                               OR (twbi.TARGET_FG = '1')
+                                (
+                                    twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND twbi.APPR_FG = '2'
+                                    AND (
+                                            ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
+                                            OR (twbi.TARGET_FG = '1')
+                                        )
+                                )
+                                OR
+                                (
+                                    twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
+                                )
                             )
                     ]]>
                 </if>

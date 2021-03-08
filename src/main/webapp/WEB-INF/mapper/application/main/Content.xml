@@ -292,33 +292,25 @@
     -->
     <select id="getNoticeList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeList */
-        SELECT *
-        FROM
-        (
-            SELECT
-            twbi.BOARD_CD,
-            twbi.BOARD_SEQ_NO,
-            twbi.TITLE,
-            TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
-            FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO_DTL_V01 twuidv01
-            WHERE 1=1
-            AND twbi.BOARD_CD = '01'
-            AND twbi.USE_YN = 'Y'
-            AND twbi.NOTICE_YN = 'Y'
-            AND twbi.APPR_FG = '2'
-            <![CDATA[
-                AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-            AND twuidv01.ORGN_FG IN ('M','A')
-            AND twuidv01.USER_ID (+)= twbi.USER_ID
-            ORDER BY twbi.REG_DT DESC
-        )
+        SELECT
+        twbi.BOARD_CD,
+        twbi.BOARD_SEQ_NO,
+        twbi.TITLE,
+        TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
+        FROM TB_WB_BOARD_INFO twbi,
+        TB_WB_USER_INFO_DTL_V01 twuidv01
         WHERE 1=1
+        AND twbi.BOARD_CD = '01'
+        AND twbi.USE_YN = 'Y'
+        AND twbi.NOTICE_YN = 'Y'
+        AND twbi.APPR_FG = '2'
         <![CDATA[
-            AND ROWNUM <= 4
+            AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
+        AND twuidv01.ORGN_FG IN ('M','A')
+        AND twuidv01.USER_ID (+)= twbi.USER_ID
+        ORDER BY twbi.REG_DT DESC
     </select>
 
     <!-- 총판/대리점 - 공지사항 -->
@@ -328,33 +320,25 @@
     -->
     <select id="getNoticeAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeAgencyList */
-        SELECT *
-        FROM
-        (
-            SELECT
-            twbi.BOARD_CD,
-            twbi.BOARD_SEQ_NO,
-            twbi.TITLE,
-            TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
-            FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO_DTL_V01 twuidv01
-            WHERE 1=1
-            AND twbi.BOARD_CD = '01'
-            AND twbi.USE_YN = 'Y'
-            AND twbi.NOTICE_YN = 'Y'
-            AND twbi.APPR_FG = '2'
-            <![CDATA[
-                AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-            AND twuidv01.ORGN_FG IN ('M','A')
-            AND twuidv01.USER_ID (+)= twbi.USER_ID
-            ORDER BY twbi.REG_DT DESC
-        )
+        SELECT
+        twbi.BOARD_CD,
+        twbi.BOARD_SEQ_NO,
+        twbi.TITLE,
+        TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
+        FROM TB_WB_BOARD_INFO twbi,
+        TB_WB_USER_INFO_DTL_V01 twuidv01
         WHERE 1=1
+        AND twbi.BOARD_CD = '01'
+        AND twbi.USE_YN = 'Y'
+        AND twbi.NOTICE_YN = 'Y'
+        AND twbi.APPR_FG = '2'
         <![CDATA[
-            AND ROWNUM <= 4
+            AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
+        AND twuidv01.ORGN_FG IN ('M','A')
+        AND twuidv01.USER_ID (+)= twbi.USER_ID
+        ORDER BY twbi.REG_DT DESC
     </select>
 
     <!-- 본사 - 공지사항 -->
@@ -364,33 +348,26 @@
     -->
     <select id="getNoticeHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeHqList */
-        SELECT *
-        FROM
-        (
-            SELECT
-            twbi.BOARD_CD,
-            twbi.BOARD_SEQ_NO,
-            twbi.TITLE,
-            TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
-            FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO_DTL_V01 twuidv01
-            WHERE 1=1
-            AND twbi.BOARD_CD = '01'
-            AND twbi.USE_YN = 'Y'
-            AND twbi.NOTICE_YN = 'Y'
-            AND twbi.APPR_FG = '2'
-            <![CDATA[
-                AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-            AND twuidv01.ORGN_FG IN ('H','S')
-            AND twuidv01.USER_ID (+)= twbi.USER_ID
-            ORDER BY twbi.REG_DT DESC
-        )
+        SELECT
+        twbi.BOARD_CD,
+        twbi.BOARD_SEQ_NO,
+        twbi.TITLE,
+        TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
+        FROM TB_WB_BOARD_INFO twbi,
+        TB_WB_USER_INFO_DTL_V01 twuidv01
         WHERE 1=1
+        AND twbi.BOARD_CD = '01'
+        AND twbi.USE_YN = 'Y'
+        AND twbi.NOTICE_YN = 'Y'
+        AND twbi.APPR_FG = '2'
         <![CDATA[
-            AND ROWNUM <= 3
+            AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
+        AND twuidv01.ORGN_FG IN ('H')
+        AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND twuidv01.USER_ID (+)= twbi.USER_ID
+        ORDER BY twbi.REG_DT DESC
     </select>
 
     <!-- 매장 - 공지사항 -->
@@ -400,37 +377,37 @@
     -->
     <select id="getNoticeStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getNoticeStoreList */
-        SELECT *
-        FROM
-        (
-            SELECT
-            twbi.BOARD_CD,
-            twbi.BOARD_SEQ_NO,
-            twbi.TITLE,
-            TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
-            FROM TB_WB_BOARD_INFO twbi,
-            TB_WB_USER_INFO_DTL_V01 twuidv01
-            WHERE 1=1
-            AND twbi.BOARD_CD = '01'
-            AND twbi.USE_YN = 'Y'
-            AND twbi.NOTICE_YN = 'Y'
-            AND twbi.APPR_FG = '2'
-            AND (
-                    ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
-                    OR (twbi.TARGET_FG = '1')
-                )
-            <![CDATA[
-                AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-            AND twuidv01.ORGN_FG IN ('H','S')
-            AND twuidv01.USER_ID (+)= twbi.USER_ID
-            ORDER BY twbi.REG_DT DESC
-        )
+        SELECT
+        twbi.BOARD_CD,
+        twbi.BOARD_SEQ_NO,
+        twbi.TITLE,
+        TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
+        FROM TB_WB_BOARD_INFO twbi,
+        TB_WB_USER_INFO_DTL_V01 twuidv01
         WHERE 1=1
+        AND twbi.BOARD_CD = '01'
+        AND twbi.USE_YN = 'Y'
+        AND twbi.NOTICE_YN = 'Y'
+        AND twbi.APPR_FG = '2'
+        AND (
+                (
+                twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND (
+                        ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
+                        OR (twbi.TARGET_FG = '1')
+                    )
+            )
+            OR
+            (
+                twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
+            )
+        )
         <![CDATA[
-            AND ROWNUM <= 3
+            AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
+        AND twuidv01.USER_ID (+)= twbi.USER_ID
+        ORDER BY twbi.REG_DT DESC
     </select>
 
     <!-- 관리자 - 주간 POS 설치현황(신규설치/재설치) -->
