@@ -205,21 +205,23 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         }
-        // 이미지명 형식 체크
+        // 이미지파일이 있을 때
         if($("#file").val() !== null && $("#file").val() !== undefined && $("#file").val() !== "") {
+
+            // 이미지명 형식 체크
             var imgFullNm = $("#file").val().substring($("#file").val().lastIndexOf('\\') + 1);
             if (1 > imgFullNm.lastIndexOf('.')) {
                 $scope._popMsg(messages["prod.fileNmChk.msg"]);
                 return false;
             }
-        }
 
-        // 이미지(.png) 확장자 체크
-        var reg = /(.*?)\.(png|PNG)$/;
+            // 이미지(.png) 확장자 체크
+            var reg = /(.*?)\.(png|PNG)$/;
 
-        if(! $("#file").val().match(reg)) {
-            $scope._popMsg(messages["prod.fileExtensionChk.msg"]);
-            return;
+            if(! $("#file").val().match(reg)) {
+                $scope._popMsg(messages["prod.fileExtensionChk.msg"]);
+                return;
+            }
         }
 
         // 분류조회
