@@ -46,7 +46,29 @@ app.controller('searchMemberPointCtrl', ['$scope', '$http', function ($scope, $h
                 if ( col.binding === "membrNo") {
                     var selectedRow = s.rows[ht.row].dataItem;
                     $scope.setSelectedMember(selectedRow);
+
+                    var scope = agrid.getScope('memberPointMoveCtrl');
+                    $scope.$apply(function() {
+                        // 보내는 회원
+                        if($("#lblGubun").text() == "send") {
+                            scope.memberNmSend = $scope.getSelectedMember().membrNm;
+                            scope.memberNoSend = $scope.getSelectedMember().membrNo;
+                            scope.pointSend = $scope.getSelectedMember().avablPoint;
+
+                        // 받는 회원
+                        } else if($("#lblGubun").text() == "receive") {
+                            scope.memberNmReceive = $scope.getSelectedMember().membrNm;
+                            scope.memberNoReceive = $scope.getSelectedMember().membrNo;
+                        }
+                    });
+
+                    // 검색조건 지움
+                    $scope.membrNo = "";
+                    $scope.membrNm = "";
+                    $scope.telNo = "";
+
                     $scope.wjSearchMemberPointLayer.hide();
+                    event.preventDefault();
                 }
             }
         });
@@ -57,6 +79,17 @@ app.controller('searchMemberPointCtrl', ['$scope', '$http', function ($scope, $h
 
     // <-- 검색 호출 -->
     $scope.$on("searchMemberPointCtrl", function(event, data) {
+        $("#lblGubun").text(data.gubun);
+        $("#lblGubunMemberNo").text(data.gubunMemberNo);
+
+        // 보내는 회원
+        if(data.gubun == "send") {
+            $("#lblTitle").text("보내는 ");
+            // 받는 회원
+        } else if(data.gubun == "receive") {
+            $("#lblTitle").text("받는 ");
+        }
+
         $scope.searchMemberPointMove();
         event.preventDefault();
     });
@@ -65,6 +98,9 @@ app.controller('searchMemberPointCtrl', ['$scope', '$http', function ($scope, $h
         var params = {};
         params.membrNo = $scope.membrNo;
         params.membrNm = $scope.membrNm;
+        params.telNo = $scope.telNo;
+        params.gubun = $("#lblGubun").text();
+        params.gubunMemberNo = $("#lblGubunMemberNo").text();
 
         $scope._inquirySub("/membr/info/view/base/getSearchMemberPointList.sb", params, function() {}, false);
     };
@@ -77,6 +113,16 @@ app.controller('searchMemberPointCtrl', ['$scope', '$http', function ($scope, $h
     };
     $scope.getSelectedMember = function(){
         return $scope.selectedMember;
+    };
+
+    // 팝업 닫기
+    $scope.close = function() {
+        // 검색조건 지움
+        $scope.membrNo = "";
+        $scope.membrNm = "";
+        $scope.telNo = "";
+
+        $scope.wjSearchMemberPointLayer.hide();
     };
 
 }]);

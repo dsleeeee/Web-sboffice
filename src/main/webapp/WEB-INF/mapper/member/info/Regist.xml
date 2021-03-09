@@ -1437,30 +1437,71 @@
         AND tmp.PROD_CD (+)= tsdmp.PROD_CD
     </select>
 
-    <!-- 회원 포인트 조회 팝업 조회 -->
+    <!-- 회원 포인트 조회 팝업 조회(보내는 회원) -->
     <!--
         TABLE    : TB_MB_MEMBER_POINT, TB_MB_MEMBER
         COMMENTS : [회원]회원_포인트정보, [회원]회원
     -->
     <select id="getSearchMemberPointList" parameterType="registVO" resultType="DefaultMap">
-    /* RegistMapper.getSearchMemberPointList */
+        /* RegistMapper.getSearchMemberPointList */
         SELECT
-        tmmp.MEMBR_NO,
+        tmm.MEMBR_NO,
         tmm.MEMBR_NM,
-        tmmp.AVABL_POINT
-        FROM TB_MB_MEMBER_POINT tmmp,
-        TB_MB_MEMBER tmm
+        NVL(tmmp.AVABL_POINT, 0) AS AVABL_POINT
+        FROM TB_MB_MEMBER tmm,
+        TB_MB_MEMBER_POINT tmmp
         WHERE 1=1
-        AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         <if test="membrNo != null and membrNo != ''">
-            AND tmmp.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+            AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
         <if test="membrNm != null and membrNm != ''">
             AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
         </if>
-        AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD
-        AND tmm.MEMBR_NO = tmmp.MEMBR_NO
-        ORDER BY tmmp.MEMBR_NO
+        <if test="telNo != null and telNo != ''">
+            AND tmm.SHORT_NO = #{telNo}
+            AND tmm.TEL_NO = #{telNo}
+        </if>
+        <if test="gubunMemberNo != null and gubunMemberNo != ''">
+            AND tmm.MEMBR_NO != #{gubunMemberNo}
+        </if>
+        AND tmmp.AVABL_POINT > 0
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        ORDER BY tmm.MEMBR_NO
+    </select>
+
+    <!-- 회원 포인트 조회 팝업 조회(받는 회원) -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT, TB_MB_MEMBER
+        COMMENTS : [회원]회원_포인트정보, [회원]회원
+    -->
+    <select id="getSearchMemberPointReceiveList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getSearchMemberPointReceiveList */
+        SELECT
+        tmm.MEMBR_NO,
+        tmm.MEMBR_NM,
+        NVL(tmmp.AVABL_POINT, 0) AS AVABL_POINT
+        FROM TB_MB_MEMBER tmm,
+        TB_MB_MEMBER_POINT tmmp
+        WHERE 1=1
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        <if test="membrNo != null and membrNo != ''">
+            AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+        </if>
+        <if test="membrNm != null and membrNm != ''">
+            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND tmm.SHORT_NO = #{telNo}
+            AND tmm.TEL_NO = #{telNo}
+        </if>
+        <if test="gubunMemberNo != null and gubunMemberNo != ''">
+            AND tmm.MEMBR_NO != #{gubunMemberNo}
+        </if>
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        ORDER BY tmm.MEMBR_NO
     </select>
 
 </mapper>

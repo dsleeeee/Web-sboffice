@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -760,8 +761,22 @@ public class RegistServiceImpl implements RegistService {
     public List<DefaultMap<String>> getSearchMemberPointList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
         registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        if (registVO.getTelNo() != null && !"".equals(registVO.getTelNo())) {
+            registVO.setTelNo(registVO.getTelNo().replaceAll("-",""));
+        }
 
-        return mapper.getSearchMemberPointList(registVO);
+        List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
+        // 보내는 회원
+        if(registVO.getGubun().equals("send")) {
+            result = mapper.getSearchMemberPointList(registVO);
+
+        // 받는 회원
+        } else if(registVO.getGubun().equals("receive")) {
+            result = mapper.getSearchMemberPointReceiveList(registVO);
+        }
+
+        return result;
     }
 
     /** 회원 포인트 이관 팝업 - 저장 */

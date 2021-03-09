@@ -73,7 +73,7 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPointMove.js?ver=20201210.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPointMove.js?ver=20210310.08" charset="utf-8"></script>
 
 <%-- 회원 포인트 조회 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/searchMemberPoint.jsp">

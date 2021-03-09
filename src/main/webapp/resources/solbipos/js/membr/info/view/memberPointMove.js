@@ -35,36 +35,72 @@ app.controller('memberPointMoveCtrl', ['$scope', '$http', function ($scope, $htt
     // 보내는 회원
     // 회원 포인트 조회 팝업
     $scope.popUpMemberSend = function() {
-        var popUp = $scope.wjSearchMemberPointLayer;
-        popUp.show(true, function (s) {
-            var scope = agrid.getScope('searchMemberPointCtrl');
-            scope._broadcast('searchMemberPointCtrl' , null);
-            scope.$apply(function(){
-                scope._gridDataInit();
-                if( !$.isEmptyObject(scope.getSelectedMember())  ){
-                    $scope.memberNmSend = scope.getSelectedMember().membrNm;
-                    $scope.memberNoSend = scope.getSelectedMember().membrNo;
-                    $scope.pointSend = scope.getSelectedMember().avablPoint;
-                }
-            });
-        });
+        var params = {};
+        params.gubun = "send";
+        params.gubunMemberNo = $scope.memberNoReceive;
+        $scope.setSelectedMemberPointMove(params);
+
+        $scope.wjSearchMemberPointLayer.show(true);
+        event.preventDefault();
+
+        // var popUp = $scope.wjSearchMemberPointLayer;
+        // popUp.show(true, function (s) {
+        //     var scope = agrid.getScope('searchMemberPointCtrl');
+        //     scope._broadcast('searchMemberPointCtrl' , null);
+        //     scope.$apply(function(){
+        //         scope._gridDataInit();
+        //         if( !$.isEmptyObject(scope.getSelectedMember())  ){
+        //             $scope.memberNmSend = scope.getSelectedMember().membrNm;
+        //             $scope.memberNoSend = scope.getSelectedMember().membrNo;
+        //             $scope.pointSend = scope.getSelectedMember().avablPoint;
+        //         }
+        //     });
+        // });
     };
 
     // 받는 회원
     // 회원 포인트 조회 팝업
     $scope.popUpMemberReceive = function() {
-        var popUp = $scope.wjSearchMemberPointLayer;
-        popUp.show(true, function (s) {
-            var scope = agrid.getScope('searchMemberPointCtrl');
-            scope._broadcast('searchMemberPointCtrl' , null);
-            scope.$apply(function(){
-                scope._gridDataInit();
-                if( !$.isEmptyObject(scope.getSelectedMember())  ){
-                    $scope.memberNmReceive = scope.getSelectedMember().membrNm;
-                    $scope.memberNoReceive = scope.getSelectedMember().membrNo;
-                }
-            });
+        var params = {};
+        params.gubun = "receive";
+        params.gubunMemberNo = $scope.memberNoSend;
+        $scope.setSelectedMemberPointMove(params);
+
+        $scope.wjSearchMemberPointLayer.show(true);
+        event.preventDefault();
+
+        // var popUp = $scope.wjSearchMemberPointLayer;
+        // popUp.show(true, function (s) {
+        //     var scope = agrid.getScope('searchMemberPointCtrl');
+        //     scope._broadcast('searchMemberPointCtrl' , null);
+        //     scope.$apply(function(){
+        //         scope._gridDataInit();
+        //         if( !$.isEmptyObject(scope.getSelectedMember())  ){
+        //             $scope.memberNmReceive = scope.getSelectedMember().membrNm;
+        //             $scope.memberNoReceive = scope.getSelectedMember().membrNo;
+        //         }
+        //     });
+        // });
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 상품 거래처 조회 팝업 핸들러 추가
+        $scope.wjSearchMemberPointLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('searchMemberPointCtrl', $scope.getSelectedMemberPointMove());
+            }, 50)
         });
+    });
+
+    // 선택 회원
+    $scope.selectedMemberPointMove;
+    $scope.setSelectedMemberPointMove = function(member) {
+        $scope.selectedMemberPointMove = member;
+    };
+    $scope.getSelectedMemberPointMove = function(){
+        return $scope.selectedMemberPointMove;
     };
 
     // 저장
@@ -89,6 +125,19 @@ app.controller('memberPointMoveCtrl', ['$scope', '$http', function ($scope, $htt
             $scope._popMsg(messages["regist.searchMemberPoint.pointReceiveBlank"]);
             return false;
         } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test($scope.pointReceive)) {
+                // 음수 가능
+                var numChkexp2 = /^-[0-9]/g;
+                if (numChkexp2.test($scope.pointReceive)) {
+                // 그외 문자 불가능
+                } else if (numChkexp2.test($scope.pointReceive) == false) {
+                    $scope._popMsg(messages["regist.searchMemberPoint.pointMoveChk"]); // 이관포인트는 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+
             // 이관포인트는 가용포인트 이상으로 이관 불가능합니다.
             if ($scope.pointSend < $scope.pointReceive) {
                 $scope._popMsg(messages["regist.searchMemberPoint.pointMoveError"]);

@@ -3,13 +3,16 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSearchMemberPointLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;height:400px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSearchMemberPointLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;height:430px;" fade-in="false" fade-out="false">
 
     <div class="wj-dialog wj-dialog-columns" ng-controller="searchMemberPointCtrl">
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
+            <span id="lblTitle"></span>
             <s:message code="regist.searchMemberPoint.info"/>
-            <a href="#" class="wj-hide btn_close"></a>
+            <label id="lblGubun" style="display: none"></label>
+            <label id="lblGubunMemberNo" style="display: none"></label>
+            <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
         <%-- body --%>
@@ -36,6 +39,15 @@
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" />
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 단축번호/전화번호 --%>
+                    <th colspan="2">
+                        <s:message code="regist.searchMemberPoint.telNo"/>
+                    </th>
+                    <td colspan="2">
+                        <input type="text" class="sb-input w100" id="srchTelNo" ng-model="telNo" />
                     </td>
                 </tr>
                 </tbody>
@@ -71,4 +83,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/searchMemberPoint.js?ver=20201210.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/searchMemberPoint.js?ver=20210310.01" charset="utf-8"></script>

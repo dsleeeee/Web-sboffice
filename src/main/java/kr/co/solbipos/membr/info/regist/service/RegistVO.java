@@ -200,6 +200,12 @@ public class RegistVO extends PageVO {
     /** 받는 포인트 */
     private int pointReceive;
 
+    /** 구분 */
+    private String gubun;
+
+    /** 구분 */
+    private String gubunMemberNo;
+
     /**
      * @return the orgnFg
      */
@@ -1185,6 +1191,22 @@ public class RegistVO extends PageVO {
 
     public void setPointReceive(int pointReceive) {
         this.pointReceive = pointReceive;
+    }
+
+    public String getGubun() {
+        return gubun;
+    }
+
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
+    }
+
+    public String getGubunMemberNo() {
+        return gubunMemberNo;
+    }
+
+    public void setGubunMemberNo(String gubunMemberNo) {
+        this.gubunMemberNo = gubunMemberNo;
     }
 
     @Override
