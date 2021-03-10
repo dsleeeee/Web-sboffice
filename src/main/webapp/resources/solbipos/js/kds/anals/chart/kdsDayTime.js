@@ -374,60 +374,62 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
         }).then(function successCallback(response) {
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
-            if (response.data.status === "OK") {
-                list = response.data.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    $scope.data = new wijmo.collections.CollectionView([]);
-                    chart1.itemsSource
-                    if (true && response.data.message) {
-                        $scope._popMsg(response.data.message);
+            if ($scope._httpStatusCheck(response, true)) {
+                if (response.data.status === "OK") {
+                    list = response.data.data.list;
+                    if (list.length === undefined || list.length === 0) {
+                        $scope.data = new wijmo.collections.CollectionView([]);
+                        chart1.itemsSource
+                        if (true && response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        }
+
+                        // 데이터가 없는경우 차트영역 숨기기
+                        $("#divChart").css("display", "none");
+
+                        return false;
                     }
+                    var data = new wijmo.collections.CollectionView(list);
+                    data.trackChanges = true;
+                    $scope.data = data;
 
-                    // 데이터가 없는경우 차트영역 숨기기
-                    $("#divChart").css("display", "none");
+                    // 시간대 조회조건에 따라 리스트에서 보여지는 시간대 조정
+                    var grid = wijmo.Control.getControl("#wjGridList");
+                    var columns = grid.columns;
+                    var start = 0;
+                    var end = 0;
 
-                    return false;
-                }
-                var data = new wijmo.collections.CollectionView(list);
-                data.trackChanges = true;
-                $scope.data = data;
+                    start = 3 * parseInt($scope.timeZone);
+                    end = 3 * parseInt($scope.timeZoneSec);
 
-                // 시간대 조회조건에 따라 리스트에서 보여지는 시간대 조정
-                var grid = wijmo.Control.getControl("#wjGridList");
-                var columns = grid.columns;
-                var start = 0;
-                var end = 0;
+                    if (orgnFg === 'HQ') {
+                        start = start + 3;
+                        end = end + 5;
 
-                start =  3 * parseInt($scope.timeZone);
-                end = 3 * parseInt($scope.timeZoneSec);
+                        for (var i = 3; i <= 74; i++) {
+                            if (i >= start && i <= end) {
+                                columns[i].visible = true;
+                            } else {
+                                columns[i].visible = false;
+                            }
+                        }
 
-                if(orgnFg === 'HQ') {
-                    start = start + 3;
-                    end = end + 5;
+                    } else {
+                        start = start + 1;
+                        end = end + 3;
 
-                    for(var i = 3; i <= 74; i++){
-                        if(i >= start && i <= end){
-                            columns[i].visible = true;
-                        }else{
-                            columns[i].visible = false;
+                        for (var i = 1; i <= 72; i++) {
+                            if (i >= start && i <= end) {
+                                columns[i].visible = true;
+                            } else {
+                                columns[i].visible = false;
+                            }
                         }
                     }
 
-                }else{
-                    start = start + 1;
-                    end = end + 3;
-
-                    for(var i = 1; i <= 72; i++){
-                        if(i >= start && i <= end){
-                            columns[i].visible = true;
-                        }else{
-                            columns[i].visible = false;
-                        }
-                    }
+                    // 차트 조회
+                    $scope.chartKds();
                 }
-                
-                // 차트 조회
-                $scope.chartKds();
             }
         }, function errorCallback(response) {
             // 로딩바 hide
@@ -493,21 +495,23 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
         }).then(function successCallback(response) {
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
-            if (response.data.status === "OK") {
-                list = response.data.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    if (true && response.data.message) {
-                        $scope._popMsg(response.data.message);
+            if ($scope._httpStatusCheck(response, true)) {
+                if (response.data.status === "OK") {
+                    list = response.data.data.list;
+                    if (list.length === undefined || list.length === 0) {
+                        if (true && response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        }
+                        return false;
                     }
-                    return false;
-                }
-                var data = new wijmo.collections.CollectionView(list);
-                data.trackChanges = true;
-                if (chart1 === '') {
-                    chartList(list);
-                } else {
-                    chart1.itemsSource = getData(list);
-                    // chart1.itemsSource = testList();
+                    var data = new wijmo.collections.CollectionView(list);
+                    data.trackChanges = true;
+                    if (chart1 === '') {
+                        chartList(list);
+                    } else {
+                        chart1.itemsSource = getData(list);
+                        // chart1.itemsSource = testList();
+                    }
                 }
             }
         }, function errorCallback(response) {

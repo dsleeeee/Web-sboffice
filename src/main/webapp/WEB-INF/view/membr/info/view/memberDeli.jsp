@@ -199,4 +199,4 @@
     <%--var lZoneList = ${lZoneList};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberDlvr.js?ver=20201123.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberDlvr.js?ver=20201123.02" charset="utf-8"></script>

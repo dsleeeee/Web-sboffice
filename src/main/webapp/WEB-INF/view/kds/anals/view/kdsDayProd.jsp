@@ -274,7 +274,7 @@
     var regstrStoreList = ${regstrStoreList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProd.js?ver=2020070801.14"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProd.js?ver=2020070801.15"
         charset="utf-8"></script>
 <style>
     .circle span.orange:before {
