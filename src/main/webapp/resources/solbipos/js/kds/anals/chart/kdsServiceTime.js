@@ -463,37 +463,39 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
         }).then(function successCallback(response) {
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
-            if (response.data.status === "OK") {
-                list = response.data.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    $scope.data = new wijmo.collections.CollectionView([]);
-                    chart1.itemsSource = [];
-                    chart2.itemsSource = [];
-                    theChartSelector1.itemsSource = [];
-                    theChartSelector2.itemsSource  = [];
-                    if (true && response.data.message) {
-                        $scope._popMsg(response.data.message);
+            if ($scope._httpStatusCheck(response, true)) {
+                if (response.data.status === "OK") {
+                    list = response.data.data.list;
+                    if (list.length === undefined || list.length === 0) {
+                        $scope.data = new wijmo.collections.CollectionView([]);
+                        chart1.itemsSource = [];
+                        chart2.itemsSource = [];
+                        theChartSelector1.itemsSource = [];
+                        theChartSelector2.itemsSource = [];
+                        if (true && response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        }
+
+                        // 데이터가 없는경우 차트영역 숨기기
+                        $("#divChart").css("display", "none");
+
+                        return false;
                     }
-
-                    // 데이터가 없는경우 차트영역 숨기기
-                    $("#divChart").css("display", "none");
-
-                    return false;
-                }
-                var data = new wijmo.collections.CollectionView(list);
-                data.trackChanges = true;
-                $scope.data = data;
-                if (chart1 === '') {
-                    chartList(list);
-                } else {
-                    chart1.itemsSource = getData(list);
-                    theChartSelector1.itemsSource = getData(list);
-                }
-                if (chart2 === '') {
-                    chartList(list);
-                } else {
-                    chart2.itemsSource = getData(list);
-                    theChartSelector2.itemsSource = getData(list);
+                    var data = new wijmo.collections.CollectionView(list);
+                    data.trackChanges = true;
+                    $scope.data = data;
+                    if (chart1 === '') {
+                        chartList(list);
+                    } else {
+                        chart1.itemsSource = getData(list);
+                        theChartSelector1.itemsSource = getData(list);
+                    }
+                    if (chart2 === '') {
+                        chartList(list);
+                    } else {
+                        chart2.itemsSource = getData(list);
+                        theChartSelector2.itemsSource = getData(list);
+                    }
                 }
             }
         }, function errorCallback(response) {

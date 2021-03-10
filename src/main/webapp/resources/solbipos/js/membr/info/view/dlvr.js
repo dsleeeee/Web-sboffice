@@ -116,6 +116,11 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
                 $scope._popMsg(res.data.message);
             }
             return false;
+        } else if (res.data.status === undefined) {
+            if (isMsg) {
+                location.href = "/";
+            }
+            return false;
         } else {
             if (isMsg) {
                 var msg = res.data.status + ' : ' + res.data.message;

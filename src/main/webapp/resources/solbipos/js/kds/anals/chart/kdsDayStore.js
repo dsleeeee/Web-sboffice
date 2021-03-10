@@ -251,60 +251,62 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         }).then(function successCallback(response) {
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
-            if (response.data.status === "OK") {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (response.data.status === "OK") {
 
-                // 상품코드, 상품명, 상품분류가 있는 경우 리스트에서 보여지는 컬럼이 다름
-                // 세 요소 중 하나라도 있으면 prodChk에 임의의 값을 넣고, 리스트에서 값이 있는지 여부를 판단하여 컬럼을 보여준다.
-                $scope.prodChk = "";
-                if(($scope.prodCd !== '' && !isEmptyObject($scope.prodCd)) ||
-                    ($scope.prodNm !== '' && !isEmptyObject($scope.prodNm)) ||
-                    ($scope.prodClassCd !== '' && !isEmptyObject($scope.prodClassCd))){
-                    $scope.prodChk = "Search Detail";
-                }
-
-                $scope.storeNmChk = $("#regStoreNm").val();
-                $scope.conStoreNmChk = $("#conRegStoreNm").val();
-                $scope.dataItem.saleDate = messages["kds.saleDate"];
-                $scope.dataItem.prodCd = messages["kds.search.store"] + " " + $scope.storeNmChk;
-                $scope.dataItem.prodNm = messages["kds.search.store"] + " " + $scope.storeNmChk;
-                $scope.dataItem.saleQty = messages["kds.search.store"] + " " + $scope.storeNmChk;
-                $scope.dataItem.conProdCd = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
-                $scope.dataItem.conProdNm = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
-                $scope.dataItem.conSaleQty = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
-                $scope.dataItem.orderCnt = messages["kds.search.store"] + " " + $scope.storeNmChk;
-                $scope.dataItem.avgMake = messages["kds.search.store"] + " " + $scope.storeNmChk;
-                $scope.dataItem.avgPic = messages["kds.search.store"] + " " + $scope.storeNmChk;
-                $scope.dataItem.conOrderCnt = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
-                $scope.dataItem.conAvgMake = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
-                $scope.dataItem.conAvgPic = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
-
-                $scope.flex.columnHeaders.rows[0].dataItem = $scope.dataItem;
-                list = response.data.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    $scope.data = new wijmo.collections.CollectionView([]);
-                    chart1.itemsSource = [];
-                    chart2.itemsSource = [];
-                    if (true && response.data.message) {
-                        $scope._popMsg(response.data.message);
+                    // 상품코드, 상품명, 상품분류가 있는 경우 리스트에서 보여지는 컬럼이 다름
+                    // 세 요소 중 하나라도 있으면 prodChk에 임의의 값을 넣고, 리스트에서 값이 있는지 여부를 판단하여 컬럼을 보여준다.
+                    $scope.prodChk = "";
+                    if (($scope.prodCd !== '' && !isEmptyObject($scope.prodCd)) ||
+                        ($scope.prodNm !== '' && !isEmptyObject($scope.prodNm)) ||
+                        ($scope.prodClassCd !== '' && !isEmptyObject($scope.prodClassCd))) {
+                        $scope.prodChk = "Search Detail";
                     }
 
-                    // 데이터가 없는경우 차트영역 숨기기
-                    $("#divChart").css("display", "none");
+                    $scope.storeNmChk = $("#regStoreNm").val();
+                    $scope.conStoreNmChk = $("#conRegStoreNm").val();
+                    $scope.dataItem.saleDate = messages["kds.saleDate"];
+                    $scope.dataItem.prodCd = messages["kds.search.store"] + " " + $scope.storeNmChk;
+                    $scope.dataItem.prodNm = messages["kds.search.store"] + " " + $scope.storeNmChk;
+                    $scope.dataItem.saleQty = messages["kds.search.store"] + " " + $scope.storeNmChk;
+                    $scope.dataItem.conProdCd = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
+                    $scope.dataItem.conProdNm = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
+                    $scope.dataItem.conSaleQty = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
+                    $scope.dataItem.orderCnt = messages["kds.search.store"] + " " + $scope.storeNmChk;
+                    $scope.dataItem.avgMake = messages["kds.search.store"] + " " + $scope.storeNmChk;
+                    $scope.dataItem.avgPic = messages["kds.search.store"] + " " + $scope.storeNmChk;
+                    $scope.dataItem.conOrderCnt = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
+                    $scope.dataItem.conAvgMake = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
+                    $scope.dataItem.conAvgPic = messages["kds.con.store"] + " " + $scope.conStoreNmChk;
 
-                    return false;
-                }
-                var data = new wijmo.collections.CollectionView(list);
-                data.trackChanges = true;
-                $scope.data = data;
-                if (chart1 === '') {
-                    chartList(list);
-                } else {
-                    chart1.itemsSource = getData(list);
-                }
-                if (chart2 === '') {
-                    chartList(list);
-                } else {
-                    chart2.itemsSource = getData(list);
+                    $scope.flex.columnHeaders.rows[0].dataItem = $scope.dataItem;
+                    list = response.data.data.list;
+                    if (list.length === undefined || list.length === 0) {
+                        $scope.data = new wijmo.collections.CollectionView([]);
+                        chart1.itemsSource = [];
+                        chart2.itemsSource = [];
+                        if (true && response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        }
+
+                        // 데이터가 없는경우 차트영역 숨기기
+                        $("#divChart").css("display", "none");
+
+                        return false;
+                    }
+                    var data = new wijmo.collections.CollectionView(list);
+                    data.trackChanges = true;
+                    $scope.data = data;
+                    if (chart1 === '') {
+                        chartList(list);
+                    } else {
+                        chart1.itemsSource = getData(list);
+                    }
+                    if (chart2 === '') {
+                        chartList(list);
+                    } else {
+                        chart2.itemsSource = getData(list);
+                    }
                 }
             }
         }, function errorCallback(response) {
@@ -365,20 +367,22 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         }).then(function successCallback(response) {
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
-            if (response.data.status === "OK") {
-                list = response.data.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    if (true && response.data.message) {
-                        $scope._popMsg(response.data.message);
+            if ($scope._httpStatusCheck(response, true)) {
+                if (response.data.status === "OK") {
+                    list = response.data.data.list;
+                    if (list.length === undefined || list.length === 0) {
+                        if (true && response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        }
+                        return false;
                     }
-                    return false;
-                }
-                var data = new wijmo.collections.CollectionView(list);
-                data.trackChanges = true;
-                if (chart1 === '') {
-                    chartList(list);
-                } else {
-                    chart1.itemsSource = getData(list);
+                    var data = new wijmo.collections.CollectionView(list);
+                    data.trackChanges = true;
+                    if (chart1 === '') {
+                        chartList(list);
+                    } else {
+                        chart1.itemsSource = getData(list);
+                    }
                 }
             }
         }, function errorCallback(response) {

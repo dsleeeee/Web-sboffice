@@ -92,7 +92,7 @@
   var posFg       = ${ccu.getCommCodeExcpAll("027")};
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20200518.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20200518.08" charset="utf-8"></script>
 
 
 <%-- 매장선택 --%>
