@@ -180,7 +180,7 @@
     <!-- 시스템관리 > 관리자기능 > POS 시스템 로그 송신-->
     <typeAlias alias="logSendVO" type="kr.co.solbipos.sys.admin.logSend.service.LogSendVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
-    <typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>
+    <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--
     <typeAlias alias="storeTrnsitnVO" type="kr.co.solbipos.sys.stats.storetrnsitn.service.StoreTrnsitnVO"/>
     <typeAlias alias="userVO" type="kr.co.solbipos.sys.admin.user.service.UserVO"/>
