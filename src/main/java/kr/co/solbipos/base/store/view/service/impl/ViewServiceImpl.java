@@ -171,6 +171,10 @@ public class ViewServiceImpl implements ViewService {
                 // 배달메뉴 키 복사
                 copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_DELIVERY.getCode());
                 procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
+
+                // 셀프키 복사
+                copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_SELF.getCode());
+                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
             }
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.POS_TOUCHKEY) { // 판매터치키
 
