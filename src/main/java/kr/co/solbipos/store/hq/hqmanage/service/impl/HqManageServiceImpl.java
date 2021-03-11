@@ -44,6 +44,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class HqManageServiceImpl implements HqManageService{
 
     private final String DEFAULT_POS_EMPNO = "0000";    // 기본 포스 직원번호
+    private final String HQ_AUTH_GRP_CD = "000007"; // TODO 보나비용 사용자 그룹코드 (화면에서 사용자 그룹 선택 필요)
     private final String DEFAULT_POS_PASSWORD = "1234"; // 기본 포스 패스워드
     private final String SYS_CLOSURE_DATE = "99991231"; // 시스템 종료일
 
@@ -129,6 +130,7 @@ public class HqManageServiceImpl implements HqManageService{
         hqManage.setUserPwd(wUserPwd);
         hqManage.setPosEmpNo(pEmpNo);
         hqManage.setPosUserPwd(pUserPwd);
+        hqManage.setAuthGrpCd(HQ_AUTH_GRP_CD);   //본사사용자 기본값 "000007"
 
         int result = 0;
 
