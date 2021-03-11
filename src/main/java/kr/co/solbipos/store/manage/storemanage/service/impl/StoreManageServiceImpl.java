@@ -402,6 +402,10 @@ public class StoreManageServiceImpl implements StoreManageService{
                         confgXmlVO.setConfgFg(ConfgFg.POS_FN_DELIVERY); // 포스 기능키 (배달메뉴)
                         procCnt += mapper.copyPosConfXml(confgXmlVO);
 
+                        LOGGER.info(">>>>>>>>>>>>>>>>>> SELF >>>>>>>>>>>>>>>");
+                        confgXmlVO.setConfgFg(ConfgFg.FUNC_KEY_SELF); // 포스 기능키 (셀프키)
+                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+
                         // 포스기능키별 적용매장 등록(TB_CM_POS_FNKEY_STORE)
                         procCnt += mapper.registPosFnkeyStore(storeFnkeyVO);
 
@@ -700,6 +704,17 @@ public class StoreManageServiceImpl implements StoreManageService{
 
 //        System.out.println(">>>>>>>>>>>>>>> rightConfXML : "+ rightConfXML);
 
+        // 오른쪽
+        param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_DELIVERY.getCode());
+        String deliveryConfXML = mapper.getFuncKeyXml(param);
+
+//        System.out.println(">>>>>>>>>>>>>>> rightConfXML : "+ rightConfXML);
+        // 오른쪽
+        param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_SELF.getCode());
+        String selfConfXML = mapper.getFuncKeyXml(param);
+
+//        System.out.println(">>>>>>>>>>>>>>> rightConfXML : "+ rightConfXML);
+
         // 포스기능키 XML 저장 (왼쪽)
         param.put("xml", leftConfXML);
         param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_LEFT.getCode());
@@ -711,6 +726,20 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 포스기능키 XML 조회 (오른쪽)
         param.replace("xml", rightConfXML);
         param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_RIGHT.getCode());
+        param.replace("posNo", storePosEnvVO.getTargetPosNo());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+
+        // 포스기능키 XML 조회 (배달메뉴)
+        param.replace("xml", deliveryConfXML);
+        param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_DELIVERY.getCode());
+        param.replace("posNo", storePosEnvVO.getTargetPosNo());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+
+        // 포스기능키 XML 조회 (셀프메뉴)
+        param.replace("xml", selfConfXML);
+        param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_SELF.getCode());
         param.replace("posNo", storePosEnvVO.getTargetPosNo());
 
         procCnt = mapper.insertFuncKeyConfgXml(param);

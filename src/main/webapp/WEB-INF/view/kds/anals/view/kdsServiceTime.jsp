@@ -281,7 +281,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsServiceTime.js?ver=2020070801.11"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsServiceTime.js?ver=2020070801.12"
         charset="utf-8"></script>
 
 

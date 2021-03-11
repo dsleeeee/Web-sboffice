@@ -168,6 +168,11 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(res.data.message);
             }
             return false;
+        } else if (res.data.status === undefined) {
+            if (isMsg) {
+                location.href = "/";
+            }
+            return false;
         } else {
             if (isMsg) {
                 var msg = res.data.status + ' : ' + res.data.message;
@@ -358,7 +363,7 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
             params: params, /* 파라메터로 보낼 데이터 */
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
-            $scope.pageData = response.data.data.page;
+            //$scope.pageData = response.data.data.page;
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
             if (_httpStatusCheck(response, true)) {
@@ -440,6 +445,11 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
             } else if (res.data.status === 'SERVER_ERROR') {
                 if (isMsg) {
                     $scope._popMsg(res.data.message);
+                }
+                return false;
+            } else if (res.data.status === undefined) {
+                if (isMsg) {
+                    location.href = "/";
                 }
                 return false;
             } else {

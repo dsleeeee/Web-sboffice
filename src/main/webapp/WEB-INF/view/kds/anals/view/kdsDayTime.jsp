@@ -506,5 +506,5 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayTime.js?ver=2020070801.18"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayTime.js?ver=2020070801.19"
         charset="utf-8"></script>

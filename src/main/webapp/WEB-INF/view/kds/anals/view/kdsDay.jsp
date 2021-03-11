@@ -234,6 +234,6 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDay.js?ver=2020070802.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDay.js?ver=2020070802.12" charset="utf-8"></script>
 
 

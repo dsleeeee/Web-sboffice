@@ -339,22 +339,23 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
     }).then(function successCallback(response) {
       // 로딩바 hide
       $scope.$broadcast('loadingPopupInactive');
-
-      var list = response.data.data.list;
-      if (list.length === undefined || list.length === 0) {
-        $scope.data = new wijmo.collections.CollectionView([]);
-        if (response.data.message) {
-          s_alert.pop(response.data.message);
-          // $scope._popMsg(response.data.message);
+      if ($scope._httpStatusCheck(response, true)) {
+        var list = response.data.data.list;
+        if (list.length === undefined || list.length === 0) {
+          $scope.data = new wijmo.collections.CollectionView([]);
+          if (response.data.message) {
+            s_alert.pop(response.data.message);
+            // $scope._popMsg(response.data.message);
+          }
+          return false;
         }
-        return false;
+
+        var data = new wijmo.collections.CollectionView(list);
+        data.trackChanges = true;
+        $scope.data = data;
+
+        $("button").show();
       }
-
-      var data = new wijmo.collections.CollectionView(list);
-      data.trackChanges = true;
-      $scope.data = data;
-
-      $("button").show();
 
     }, function errorCallback(response) {
       // 로딩바 hide

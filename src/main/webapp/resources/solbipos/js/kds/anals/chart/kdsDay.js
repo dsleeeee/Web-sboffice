@@ -179,27 +179,29 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         }).then(function successCallback(response) {
             // 로딩바 hide
             $scope.$broadcast('loadingPopupInactive');
-            if (response.data.status === "OK") {
-                list = response.data.data.list;
-                if (list.length === undefined || list.length === 0) {
-                    $scope.data = new wijmo.collections.CollectionView([]);
-                    chart1.itemsSource = [];
-                    if (true && response.data.message) {
-                        $scope._popMsg(response.data.message);
-                    }
-                    
-                    // 데이터가 없는경우 차트영역 숨기기
-                    $("#divChart").css("display", "none");
+            if ($scope._httpStatusCheck(response, true)) {
+                if (response.data.status === "OK") {
+                    list = response.data.data.list;
+                    if (list.length === undefined || list.length === 0) {
+                        $scope.data = new wijmo.collections.CollectionView([]);
+                        chart1.itemsSource = [];
+                        if (true && response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        }
 
-                    return false;
-                }
-                var data = new wijmo.collections.CollectionView(list);
-                data.trackChanges = true;
-                $scope.data = data;
-                if (chart1 === '') {
-                    chartList(list);
-                } else {
-                    chart1.itemsSource = getData(list);
+                        // 데이터가 없는경우 차트영역 숨기기
+                        $("#divChart").css("display", "none");
+
+                        return false;
+                    }
+                    var data = new wijmo.collections.CollectionView(list);
+                    data.trackChanges = true;
+                    $scope.data = data;
+                    if (chart1 === '') {
+                        chartList(list);
+                    } else {
+                        chart1.itemsSource = getData(list);
+                    }
                 }
             }
         }, function errorCallback(response) {

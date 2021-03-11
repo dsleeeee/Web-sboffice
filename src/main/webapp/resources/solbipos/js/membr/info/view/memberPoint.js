@@ -289,8 +289,10 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
                 headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
             }).then(function successCallback(response) {
                 $scope.$broadcast('loadingPopupInactive');
-                $scope._popMsg(messages["cmm.saveSucc"]);
-                $scope.data = new wijmo.collections.CollectionView([]);
+                if ($scope._httpStatusCheck(response, true)) {
+                    $scope._popMsg(messages["cmm.saveSucc"]);
+                    $scope.data = new wijmo.collections.CollectionView([]);
+                }
             }, function errorCallback(response) {
                 // 로딩바 hide
                 $scope.$broadcast('loadingPopupInactive');

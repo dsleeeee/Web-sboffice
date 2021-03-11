@@ -506,7 +506,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProdTime.js?ver=2020070801.18"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProdTime.js?ver=2020070801.19"
         charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>

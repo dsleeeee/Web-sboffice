@@ -214,7 +214,7 @@
 
         $scope.$on('funcKeyCtrl', function (event, data) {
 
-            if (data.fnkeyFg === "6020" || data.fnkeyFg === "6021"|| data.fnkeyFg === "6022") {
+            if (data.fnkeyFg === "6020" || data.fnkeyFg === "6021"|| data.fnkeyFg === "6022"|| data.fnkeyFg === "6023") {
                 $scope._broadcast('posFuncUseXmlCtrl', data);
                 funckeyGraph.format.openByGrid(true);
 

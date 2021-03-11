@@ -139,6 +139,12 @@ public class PosFuncServiceImpl implements PosFuncService{
         param.replace("confgFg", ConfgFg.FUNC_KEY_RIGHT.getCode());
         String rightConfXML = mapper.getFuncKeyXml(param);
 
+        param.replace("confgFg", ConfgFg.FUNC_KEY_DELIVERY.getCode());
+        String deliveryConfXML = mapper.getFuncKeyXml(param);
+
+        param.replace("confgFg", ConfgFg.FUNC_KEY_SELF.getCode());
+        String selfConfXML = mapper.getFuncKeyXml(param);
+
         // 포스기능키 XML 저장 (왼쪽)
         param.put("xml", leftConfXML);
         param.replace("confgFg", ConfgFg.FUNC_KEY_LEFT.getCode());
@@ -150,6 +156,22 @@ public class PosFuncServiceImpl implements PosFuncService{
         // 포스기능키 XML 조회 (오른쪽)
         param.replace("xml", rightConfXML);
         param.replace("confgFg", ConfgFg.FUNC_KEY_RIGHT.getCode());
+        param.replace("posNo", posFuncVO.getTargetPos());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
+
+        // 포스기능키 XML 조회 (배달메뉴)
+        param.replace("xml", deliveryConfXML);
+        param.replace("confgFg", ConfgFg.FUNC_KEY_DELIVERY.getCode());
+        param.replace("posNo", posFuncVO.getTargetPos());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
+
+        // 포스기능키 XML 조회 (셀프메뉴)
+        param.replace("xml", selfConfXML);
+        param.replace("confgFg", ConfgFg.FUNC_KEY_SELF.getCode());
         param.replace("posNo", posFuncVO.getTargetPos());
 
         procCnt = mapper.insertFuncKeyConfgXml(param);
@@ -188,6 +210,8 @@ public class PosFuncServiceImpl implements PosFuncService{
         // 포스기능키 : 배달메뉴
         } else if ("6022".equals(posFuncVO.getFnkeyFg())) {
             param.put("confgFg", ConfgFg.FUNC_KEY_DELIVERY.getCode());
+        } else if ("6023".equals(posFuncVO.getFnkeyFg())) {
+            param.put("confgFg", ConfgFg.FUNC_KEY_SELF.getCode());
         }
 
         // 터치키 구성정보가 저장되어있는 XML
