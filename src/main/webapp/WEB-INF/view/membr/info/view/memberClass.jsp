@@ -167,8 +167,10 @@
                                 is-editable="false"
                                 initialized="_initComboBox(s)">
                         </wj-combo-box>
+                        <div style="display: none">
+                            {{detailData.prePointSaveFg}}
+                        </div>
                     </div>
-                    {{detailData.prePointSaveFg}}
                     <span class="txtIn mt10" ng-switch-when="1"> % 적립</span>
                     <span class="txtIn mt10" ng-switch-when="2"> 원당 1Point</span>
                 </td>
