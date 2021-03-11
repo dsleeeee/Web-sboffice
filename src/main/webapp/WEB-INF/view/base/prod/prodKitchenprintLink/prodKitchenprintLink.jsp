@@ -119,7 +119,6 @@
       <td>
         <div class="sb-select">
           <wj-combo-box
-                  text-changed="sysStatFgChange()"
                   id="srchSysStatFg"
                   ng-model="sysStatFg"
                   items-source="_getComboData('srchSysStatFg')"
@@ -128,6 +127,7 @@
                   is-editable="false"
                   initialized="_initComboBox(s)"
                   selected-index="1"
+                  text-changed="sysStatFgChange()"
           >
           </wj-combo-box>
         </div>
@@ -248,7 +248,7 @@
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/prodKitchenprintLink.js?ver=20201224.02" charset="utf-8"></script>
 
 <script type="text/javascript">
-  var sysStatFg = ${ccu.getCommCodeSelect("005")};
+  var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
