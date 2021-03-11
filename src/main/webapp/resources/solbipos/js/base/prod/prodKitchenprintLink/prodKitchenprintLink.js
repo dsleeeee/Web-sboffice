@@ -192,6 +192,10 @@ app.controller('prodKitchenprintLinkedCtrl', ['$scope', '$http', function ($scop
         params.push(param);
       }
     }
+    if (params.length <= 0) {
+      $scope._popMsg(messages["cmm.not.modify"]);
+      return false;
+    }
     $.postJSONArray("/base/prod/prodKitchenprintLink/prodKitchenprintLinked/unlink.sb", params, function(result) {
           $scope._popMsg(messages['cmm.saveSucc']);
           // 연결된 프린터
@@ -241,6 +245,10 @@ app.controller('prodKitchenprintUnlinkCtrl', ['$scope', '$http', function ($scop
         param.prodCd = $("#prodCd").text();
         params.push(param);
       }
+    }
+    if (params.length <= 0) {
+      $scope._popMsg(messages["cmm.not.modify"]);
+      return false;
     }
     $.postJSONArray("/base/prod/prodKitchenprintLink/prodKitchenprintUnlink/linked.sb", params, function(result) {
           $scope._popMsg(messages['cmm.saveSucc']);
