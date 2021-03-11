@@ -127,6 +127,14 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(messages["foodAllergy.allergieNmBlank"]);
                 return false;
             }
+            if($scope.flex.collectionView.items[i].recipesNm.length > 100) {
+                $scope._popMsg(messages["foodAllergy.recipesNmMax"]);
+                return false;
+            }
+            if($scope.flex.collectionView.items[i].allergieNm.length > 133) {
+                $scope._popMsg(messages["foodAllergy.allergieNmMax"]);
+                return false;
+            }
         }
 
         // 파라미터 설정
