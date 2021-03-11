@@ -200,15 +200,18 @@ public interface RegistMapper {
     /** 배달주소지 삭제 */
     int deleteDlvrAddrInfo(RegistVO registVO);
 
-    /** 회원정보 포인트변경내역 조회 */
+    /** 회원정보 포인트변경내역 - 조회 */
     List<DefaultMap<String>> getMemberInfoPointList(RegistVO registVO);
 
-    /** 회원정보 구매내역 조회 */
+    /** 회원정보 구매내역 - 조회 */
     List<DefaultMap<String>> getMemberInfoBuyList(RegistVO registVO);
 
-    /** 회원 포인트 조회 팝업 조회(보내는 회원) */
+    /** 회원 포인트 조회 팝업 - 조회(보내는 회원) */
     List<DefaultMap<String>> getSearchMemberPointList(RegistVO registVO);
 
-    /** 회원 포인트 조회 팝업 조회(받는 회원) */
+    /** 회원 포인트 조회 팝업 - 조회(받는 회원) */
     List<DefaultMap<String>> getSearchMemberPointReceiveList(RegistVO registVO);
+
+    /** 회원 등급 조회 팝업 - 조회 */
+    List<DefaultMap<String>> getSearchMemberClassList(RegistVO registVO);
 }

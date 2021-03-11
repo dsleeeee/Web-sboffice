@@ -412,6 +412,10 @@
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointMove()">
             <s:message code="regist.memberPointMove"/>
         </button>
+        <%-- 회원 포인트 조정 --%>
+        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointAdjust()">
+            <s:message code="regist.memberPointAdjust"/>
+        </button>
     </div>
 
     <%-- 회원목록 그리드 --%>
@@ -577,7 +581,7 @@
     <%--var rCstCardStatFgList = ${ccu.getCommCodeExcpAll("300")};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20201210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210310.01" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
@@ -599,6 +603,12 @@
 
 <%-- 회원 포인트 이관 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberPointMove.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원 포인트 조정 팝업 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberPointAdjust.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

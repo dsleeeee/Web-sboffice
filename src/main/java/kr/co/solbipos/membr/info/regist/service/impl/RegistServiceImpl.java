@@ -809,4 +809,42 @@ public class RegistServiceImpl implements RegistService {
 
         return procCnt;
     }
+
+    /** 회원 등급 조회 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchMemberClassList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        if (registVO.getTelNo() != null && !"".equals(registVO.getTelNo())) {
+            registVO.setTelNo(registVO.getTelNo().replaceAll("-",""));
+        }
+
+        return mapper.getSearchMemberClassList(registVO);
+    }
+
+    /** 회원 포인트 조정 팝업 - 저장 */
+    @Override
+    public int getMemberPointAdjustSave(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        registVO.setRegDt(currentDt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(currentDt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        registVO.setChgDate(registVO.getRegDt().substring(0, registVO.getRegDt().length()-6));
+        registVO.setRegStoreCd(null);
+        registVO.setPointChgFg("3");
+
+        registVO.setMembrNo(registVO.getMembrNo());
+        registVO.setChgPoint(Integer.parseInt(registVO.getAvablPoint()));
+        registVO.setRemark(registVO.getRemark());
+
+        mapper.insertMembrPointHist(registVO);
+
+        return procCnt;
+    }
 }

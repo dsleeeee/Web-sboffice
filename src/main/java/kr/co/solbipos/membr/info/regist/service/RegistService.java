@@ -164,4 +164,10 @@ public interface RegistService {
 
     /** 회원 포인트 이관 팝업 - 저장 */
     int getMemberPointMoveSave(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원 등급 조회 팝업 - 조회 */
+    List<DefaultMap<String>> getSearchMemberClassList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원 포인트 조정 팝업 - 저장 */
+    int getMemberPointAdjustSave(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

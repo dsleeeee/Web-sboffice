@@ -1386,7 +1386,7 @@
         AND DLVR_ADDR_SEQ = #{dlvrAddrSeq}
     </delete>
 
-    <!-- 회원정보 포인트변경내역 조회 -->
+    <!-- 회원정보 포인트변경내역 - 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER_POINT_HIST
         COMMENTS : [회원]회원_포인트_변경내역
@@ -1405,7 +1405,7 @@
         ORDER BY tmmph.CHG_DATE DESC, tmmph.CHG_SEQ DESC
     </select>
 
-    <!-- 회원정보 구매내역 조회 -->
+    <!-- 회원정보 구매내역 - 조회 -->
     <!--
         TABLE    : TB_SL_DAILY_MEMBR_PROD, TB_MS_STORE, TB_MS_PRODUCT
         COMMENTS : [매출]일별_회원/상품별 매출, [매장]매장 정보, [매장]상품
@@ -1437,7 +1437,7 @@
         AND tmp.PROD_CD (+)= tsdmp.PROD_CD
     </select>
 
-    <!-- 회원 포인트 조회 팝업 조회(보내는 회원) -->
+    <!-- 회원 포인트 조회 팝업 - 조회(보내는 회원) -->
     <!--
         TABLE    : TB_MB_MEMBER_POINT, TB_MB_MEMBER
         COMMENTS : [회원]회원_포인트정보, [회원]회원
@@ -1459,8 +1459,7 @@
             AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
         </if>
         <if test="telNo != null and telNo != ''">
-            AND tmm.SHORT_NO = #{telNo}
-            AND tmm.TEL_NO = #{telNo}
+            AND (tmm.SHORT_NO = #{telNo} OR tmm.TEL_NO = #{telNo})
         </if>
         <if test="gubunMemberNo != null and gubunMemberNo != ''">
             AND tmm.MEMBR_NO != #{gubunMemberNo}
@@ -1471,7 +1470,7 @@
         ORDER BY tmm.MEMBR_NO
     </select>
 
-    <!-- 회원 포인트 조회 팝업 조회(받는 회원) -->
+    <!-- 회원 포인트 조회 팝업 - 조회(받는 회원) -->
     <!--
         TABLE    : TB_MB_MEMBER_POINT, TB_MB_MEMBER
         COMMENTS : [회원]회원_포인트정보, [회원]회원
@@ -1493,8 +1492,7 @@
             AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
         </if>
         <if test="telNo != null and telNo != ''">
-            AND tmm.SHORT_NO = #{telNo}
-            AND tmm.TEL_NO = #{telNo}
+            AND (tmm.SHORT_NO = #{telNo} OR tmm.TEL_NO = #{telNo})
         </if>
         <if test="gubunMemberNo != null and gubunMemberNo != ''">
             AND tmm.MEMBR_NO != #{gubunMemberNo}
@@ -1502,6 +1500,57 @@
         AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
         ORDER BY tmm.MEMBR_NO
+    </select>
+
+    <!-- 회원 등급 조회 팝업 - 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : [회원]회원
+    -->
+    <select id="getSearchMemberClassList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getSearchMemberClassList */
+        SELECT
+        MEMBR_NO,
+        MEMBR_NM,
+        POINT_SAVE_FG,
+        NVL(PAY01, 0) AS CARD,
+        NVL(PAY02, 0) AS CASH
+        FROM
+        (
+            SELECT
+            tmm.MEMBR_NO,
+            tmm.MEMBR_NM,
+            tmm.MEMBR_CLASS_CD,
+            tmmc.POINT_SAVE_FG,
+            tmmcpr.PAY_CD,
+            tmmcpr.ACC_RATE
+            FROM TB_MB_MEMBER tmm,
+            TB_MB_MEMBER_CLASS tmmc,
+            TB_MB_MEMBER_CLASS_PAY_RATE tmmcpr
+            WHERE 1=1
+            AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+            <if test="membrNo != null and membrNo != ''">
+                AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+            </if>
+            <if test="membrNm != null and membrNm != ''">
+                AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            </if>
+            <if test="telNo != null and telNo != ''">
+                AND (tmm.SHORT_NO = #{telNo} OR tmm.TEL_NO = #{telNo})
+            </if>
+            AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+            AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+            AND tmmcpr.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+            AND tmmcpr.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+            ORDER BY tmm.MEMBR_NO
+        )
+        PIVOT
+        (
+            SUM(ACC_RATE)
+            FOR PAY_CD
+            IN ('01' AS PAY01, '02' AS PAY02)
+        )
+        ORDER BY MEMBR_NO
     </select>
 
 </mapper>

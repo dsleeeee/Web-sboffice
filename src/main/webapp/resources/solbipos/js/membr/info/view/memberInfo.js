@@ -408,6 +408,13 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 $scope._broadcast('memberPointMoveCtrl', null);
             }, 50)
         });
+
+        // 회원 포인트 조정 팝업 핸들러 추가
+        $scope.wjMemberPointAdjustLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('memberPointAdjustCtrl', null);
+            }, 50)
+        });
     });
 
     // 신규회원 등록
@@ -463,6 +470,12 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     // 회원 포인트 이관
     $scope.memberPointMove = function () {
         $scope.wjMemberPointMoveLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 회원 포인트 조정
+    $scope.memberPointAdjust = function () {
+        $scope.wjMemberPointAdjustLayer.show(true);
         event.preventDefault();
     };
 

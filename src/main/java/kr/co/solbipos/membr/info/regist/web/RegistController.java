@@ -766,12 +766,58 @@ public class RegistController {
      */
     @RequestMapping(value = "/base/getMemberPointMoveSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getLibraryInfoSave(@RequestBody RegistVO registVO, HttpServletRequest request,
+    public Result getMemberPointMoveSave(@RequestBody RegistVO registVO, HttpServletRequest request,
                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = registService.getMemberPointMoveSave(registVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 회원 등급 조회 팝업 - 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 10.
+     */
+    @RequestMapping(value = "base/getSearchMemberClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchMemberClassList(RegistVO registVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = registService.getSearchMemberClassList(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /**
+     * 회원 포인트 조정 팝업 - 저장
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 10.
+     */
+    @RequestMapping(value = "/base/getMemberPointAdjustSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberPointAdjustSave(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = registService.getMemberPointAdjustSave(registVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
