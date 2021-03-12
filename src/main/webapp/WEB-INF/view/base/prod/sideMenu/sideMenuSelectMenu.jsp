@@ -12,7 +12,6 @@
       <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="sideMenuSelectGroupCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
-            <c:if test="${((orgnFg eq 'HQ' and hqOfficeCd ne 'A0001') or (orgnFg eq 'STORE'))}">
               <button class="btn_skyblue" id="btnAddSelGroup" style="display: none;" ng-click="addRow()" ng-show="btnShowFg">
                 <s:message code="cmm.add" />
               </button>
@@ -22,7 +21,6 @@
               <button class="btn_skyblue" id="btnSaveSelGroup" style="display: none;" ng-click="save()" ng-show="btnShowFg">
                 <s:message code="cmm.save" />
               </button>
-            </c:if>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -54,7 +52,6 @@
       <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="sideMenuSelectClassCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselClass' /></span>
-          <c:if test="${((orgnFg eq 'HQ' and hqOfficeCd ne 'A0001') or (orgnFg eq 'STORE'))}">
             <button class="btn_up" id="btnUpSelClass" style="display: none;" ng-click="rowMoveUp()" ng-show="btnShowFg">
               <s:message code="cmm.up" />
             </button>
@@ -70,7 +67,6 @@
             <button class="btn_skyblue" id="btnSaveSelClass" style="display: none;" ng-click="save()" ng-show="btnShowFg">
               <s:message code="cmm.save" />
             </button>
-          </c:if>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -103,7 +99,6 @@
       <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="sideMenuSelectProdCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselProd' /></span>
-          <c:if test="${((orgnFg eq 'HQ' and hqOfficeCd ne 'A0001') or (orgnFg eq 'STORE'))}">
             <button class="btn_up" id="btnUpSelProd" style="display: none;" ng-click="rowMoveUp()" ng-show="btnShowFg">
               <s:message code="cmm.up" />
             </button>
@@ -119,7 +114,6 @@
             <button class="btn_skyblue" id="btnSaveSelProd" style="display: none;" ng-click="save()" ng-show="btnShowFg">
               <s:message code="cmm.save" />
             </button>
-          </c:if>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
