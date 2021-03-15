@@ -192,7 +192,12 @@ public class StoreEmpServiceImpl implements StoreEmpService {
         storeEmpVO.setRegIp(sessionInfoVO.getLoginIp());
 
         if( storeEmpVO.getWebUseYn() == UseYn.Y) {
-            storeEmpVO.setAuthGrpCd(STORE_AUTH_GRP_CD);
+            // 단독매장
+            if(sessionInfoVO.getHqOfficeCd().equals("00000")) {
+                storeEmpVO.setAuthGrpCd("000004");
+            } else {
+                storeEmpVO.setAuthGrpCd(STORE_AUTH_GRP_CD); //todo 매장권한코드 추후 수정 필요 // 000008
+            }
         }
 
         if( storeEmpMapper.updateStoreEmpInfo(storeEmpVO) != 1 ) {

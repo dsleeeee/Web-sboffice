@@ -540,6 +540,7 @@
                     thpsg.HQ_BRAND_CD,
                     thpsg.SDSEL_GRP_CD,
                     thpsg.SDSEL_GRP_NM,
+                    thpsg.PROD_CD,
                     (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND thpsg.USE_YN  = 'Y') AS CNT
                 FROM
                     TB_HQ_PRODUCT_SDSEL_GROUP thpsg

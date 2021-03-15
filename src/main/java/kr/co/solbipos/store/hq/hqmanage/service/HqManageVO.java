@@ -92,6 +92,8 @@ public class HqManageVO extends PageVO {
     private String posEmpNo;
     /** 포스 사용자 패스워드 */
     private String posUserPwd;
+    /** 권한 그룹 코드 */
+    private String authGrpCd;
 
 
     public String getOrgnFg() {
@@ -450,4 +452,12 @@ public class HqManageVO extends PageVO {
      * @param posUserPwd the posUserPwd to set
      */
     public void setPosUserPwd(String posUserPwd) { this.posUserPwd = posUserPwd; }
+
+    public String getAuthGrpCd() {
+        return authGrpCd;
+    }
+
+    public void setAuthGrpCd(String authGrpCd) {
+        this.authGrpCd = authGrpCd;
+    }
 }
