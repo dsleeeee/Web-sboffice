@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSearchMemberPointLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;height:440px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSearchMemberPointLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;height:440px;">
 
     <div class="wj-dialog wj-dialog-columns" ng-controller="searchMemberPointCtrl">
         <%-- header --%>

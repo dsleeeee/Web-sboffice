@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSearchMemberClassLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;height:440px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSearchMemberClassLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;height:440px;">
 
     <div class="wj-dialog wj-dialog-columns" ng-controller="searchMemberClassCtrl">
         <%-- header --%>
@@ -72,8 +72,8 @@
 
                         <%--팝업 조회시 필요--%>
                         <wj-flex-grid-column header="<s:message code="regist.searchMemberClass.pointSaveFg"/>" binding="pointSaveFg" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.searchMemberClass.card"/>" binding="card" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.searchMemberClass.cash"/>" binding="cash" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.searchMemberClass.memberCard"/>" binding="memberCard" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.searchMemberClass.memberCash"/>" binding="memberCash" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -84,4 +84,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/searchMemberPointClass.js?ver=20210311.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/searchMemberPointClass.js?ver=20210316.01" charset="utf-8"></script>

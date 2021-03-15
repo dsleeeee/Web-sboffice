@@ -94,8 +94,8 @@ app.controller('searchMemberClassCtrl', ['$scope', '$http', function ($scope, $h
         $scope.membrNm = "";
         $scope.telNo = "";
 
-        var scope = agrid.getScope('searchMemberClassCtrl');
-        scope._gridDataInit();
+        $scope.wjSearchMemberClassLayer.hide();
+        event.preventDefault();
     };
 
 }]);

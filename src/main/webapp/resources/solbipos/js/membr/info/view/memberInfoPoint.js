@@ -24,35 +24,76 @@ app.controller('memberInfoPointCtrl', ['$scope', '$http', function ($scope, $htt
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
-        $scope.pointChgFgDataMap = new wijmo.grid.DataMap(pointChgFgData, 'value', 'name'); //공개대상
+        $scope.pointChgFgDataMap = new wijmo.grid.DataMap(pointChgFgData, 'value', 'name'); // 구분
 
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 재료코드
+                if (col.binding === "pointChgFg") {
+                    var item = s.rows[e.row].dataItem;
+                    // 값이 있으면 링크 효과
+                    if (nvl(item[("pointChgFg")], '') == '3') {
+                        wijmo.addClass(e.cell, 'wijLink');
+                    }
+                }
+            }
+        });
+
+        // 그리드 선택 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function(e) {
+            var ht = s.hitTest(e);
+            if( ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+
+                // 구분 클릭시 상세정보 조회
+                if ( col.binding === "pointChgFg") {
+                    var selectedRow = s.rows[ht.row].dataItem;
+
+                    // 값이 있으면 링크
+                    if (nvl(selectedRow[("pointChgFg")], '') == '3') {
+                        var params = $scope.getSelectedMemberInfoPoint();
+                        params.gubun = "memberInfoPointDtl";
+                        params.chgDate = selectedRow.chgDate;
+                        params.chgSeq = selectedRow.chgSeq;
+
+                        $scope.setSelectedMemberInfoPoint(params);
+                        $scope.wjMemberPointAdjustDtlLayer.show(true);
+                        event.preventDefault();
+                    }
+                }
+            }
+        });
     };
 
     // 선택 회원
-    $scope.selectedMember;
-    $scope.setSelectedMember = function (data) {
-        $scope.selectedMember = data;
+    $scope.selectedMemberInfoPoint;
+    $scope.setSelectedMemberInfoPoint = function (data) {
+        $scope.selectedMemberInfoPoint = data;
     };
-    $scope.getSelectedMember = function () {
-        return $scope.selectedMember;
+    $scope.getSelectedMemberInfoPoint = function () {
+        return $scope.selectedMemberInfoPoint;
     };
 
     // <-- 검색 호출 -->
     $scope.$on("memberInfoPointCtrl", function(event, data) {
         if( !isEmptyObject(data) ) {
-            $scope.setSelectedMember(data);
+            $scope.setSelectedMemberInfoPoint(data);
             $scope.searchMemberInfoPoint();
         }
         event.preventDefault();
     });
 
     $scope.searchMemberInfoPoint = function(){
-        var params = $scope.getSelectedMember();
+        var params = $scope.getSelectedMemberInfoPoint();
         $("#lblMemberInfoPointMembrNo").text("[" + params.membrNo + "] ");
         $("#lblMemberInfoPointMembrNm").text(params.membrNm);
 
@@ -64,6 +105,29 @@ app.controller('memberInfoPointCtrl', ['$scope', '$http', function ($scope, $htt
         }, false);
     };
     // <-- //검색 호출 -->
+
+    // 회원 포인트 조정
+    $scope.memberInfoPointAdjust = function () {
+        var params = $scope.getSelectedMemberInfoPoint();
+        params.gubun = "memberInfoPoint";
+        params.chgDate = "";
+        params.chgSeq = "";
+
+        $scope.setSelectedMemberInfoPoint(params);
+        $scope.wjMemberPointAdjustDtlLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 회원 포인트 조정 팝업 핸들러 추가
+        $scope.wjMemberPointAdjustDtlLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('memberPointAdjustDtlCtrl', $scope.getSelectedMemberInfoPoint());
+            }, 50)
+        });
+    });
 
 }]);
 
@@ -141,25 +205,25 @@ app.controller('memberInfoBuyCtrl', ['$scope', '$http', function ($scope, $http)
     };
 
     // 선택 회원
-    $scope.selectedMember;
-    $scope.setSelectedMember = function (data) {
-        $scope.selectedMember = data;
+    $scope.selectedMemberInfoPointBuy;
+    $scope.setSelectedMemberInfoPointBuy = function (data) {
+        $scope.selectedMemberInfoPointBuy = data;
     };
-    $scope.getSelectedMember = function () {
-        return $scope.selectedMember;
+    $scope.getSelectedMemberInfoPointBuy = function () {
+        return $scope.selectedMemberInfoPointBuy;
     };
 
     // <-- 검색 호출 -->
     $scope.$on("memberInfoBuyCtrl", function(event, data) {
         if( !isEmptyObject(data) ) {
-            $scope.setSelectedMember(data);
+            $scope.setSelectedMemberInfoPointBuy(data);
             $scope.searchMemberInfoBuy();
         }
         event.preventDefault();
     });
 
     $scope.searchMemberInfoBuy = function(){
-        var params = $scope.getSelectedMember();
+        var params = $scope.getSelectedMemberInfoPointBuy();
 
         $scope._inquirySub("/membr/info/view/base/getMemberInfoBuyList.sb", params, function() {}, false);
     };

@@ -214,4 +214,10 @@ public interface RegistMapper {
 
     /** 회원 등급 조회 팝업 - 조회 */
     List<DefaultMap<String>> getSearchMemberClassList(RegistVO registVO);
+
+    /** 회원 포인트 조정 팝업 - 저장 update */
+    int getMemberPointAdjustSaveUpdate(RegistVO registVO);
+
+    /** 회원 포인트 조정 팝업 - 조회 */
+    DefaultMap<String> getMemberPointAdjustList(RegistVO registVO);
 }

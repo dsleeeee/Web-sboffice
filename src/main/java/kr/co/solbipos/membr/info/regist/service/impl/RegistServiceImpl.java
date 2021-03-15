@@ -767,6 +767,10 @@ public class RegistServiceImpl implements RegistService {
 
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         // 보내는 회원
         if(registVO.getGubun().equals("send")) {
             result = mapper.getSearchMemberPointList(registVO);
@@ -819,6 +823,10 @@ public class RegistServiceImpl implements RegistService {
             registVO.setTelNo(registVO.getTelNo().replaceAll("-",""));
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return mapper.getSearchMemberClassList(registVO);
     }
 
@@ -835,16 +843,36 @@ public class RegistServiceImpl implements RegistService {
         registVO.setModId(sessionInfoVO.getUserId());
 
         registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
-        registVO.setChgDate(registVO.getRegDt().substring(0, registVO.getRegDt().length()-6));
-        registVO.setRegStoreCd(null);
-        registVO.setPointChgFg("3");
 
-        registVO.setMembrNo(registVO.getMembrNo());
-        registVO.setChgPoint(Integer.parseInt(registVO.getAvablPoint()));
-        registVO.setRemark(registVO.getRemark());
+        if(registVO.getGubun().equals("memberInfoPointDtl")) {
+            // 비고 수정
+            mapper.getMemberPointAdjustSaveUpdate(registVO);
 
-        mapper.insertMembrPointHist(registVO);
+        } else {
+            registVO.setChgDate(registVO.getRegDt().substring(0, registVO.getRegDt().length()-6));
+            registVO.setRegStoreCd(null);
+            registVO.setPointChgFg("3");
+
+            registVO.setMembrNo(registVO.getMembrNo());
+            registVO.setChgPoint(Integer.parseInt(registVO.getAvablPoint()));
+            registVO.setRemark(registVO.getRemark());
+
+            mapper.insertMembrPointHist(registVO);
+        }
 
         return procCnt;
+    }
+
+    /** 회원 포인트 조정 팝업 - 조회 */
+    @Override
+    public DefaultMap<String> getMemberPointAdjustList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        DefaultMap<String> resultMap = new DefaultMap<String>();
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        resultMap = mapper.getMemberPointAdjustList(registVO);
+
+        return resultMap;
     }
 }

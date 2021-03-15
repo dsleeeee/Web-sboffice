@@ -338,8 +338,8 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         params.gendrFg = $scope.gendrFg;
         params.memberSaleFg = $scope.memberSaleFg;
         params.memberPointFg = $scope.memberPointFg;
-        // params.useYn = $scope.useYn;
-        params.useYn = 'Y';
+        params.useYn = $scope.useYn;
+        // params.useYn = 'Y';
 
         // console.log('params ', params);
         if (orgnFg === "HQ") {

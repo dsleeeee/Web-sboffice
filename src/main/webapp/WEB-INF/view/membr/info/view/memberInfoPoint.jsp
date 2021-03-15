@@ -17,7 +17,11 @@
     <div class="wj-dialog-body">
         <div ng-controller="memberInfoPointCtrl">
             <%-- 그리드 --%>
-            <s:message code="regist.memberInfoPoint.infoPoint"/>
+            <div class="oh mb10">
+                <s:message code="regist.memberInfoPoint.infoPoint"/>
+                <%-- 회원 포인트 조정 --%>
+                <button class="btn_skyblue fr" id="btnMemberInfoPointAdjust" ng-click="memberInfoPointAdjust()"><s:message code='regist.memberPointAdjust' /></button>
+            </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:260px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
@@ -30,10 +34,13 @@
                         item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.chgDate"/>" binding="chgDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.pointChgFg"/>" binding="pointChgFg" data-map="pointChgFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.chgPoint"/>" binding="chgPoint" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.remark"/>" binding="remark" width="280" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.chgDate"/>" binding="chgDate" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.pointChgFg"/>" binding="pointChgFg" data-map="pointChgFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.chgPoint"/>" binding="chgPoint" width="90" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.remark"/>" binding="remark" width="320" is-read-only="true" align="left"></wj-flex-grid-column>
+
+                        <%--팝업 조회시 필요--%>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.chgSeq"/>" binding="chgSeq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -46,22 +53,22 @@
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:270px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
-                    autoGenerateColumns.="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter">
+                        autoGenerateColumns.="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter">
 
-                    <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.saleDate"/>" binding="saleDate" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.totSaleQty"/>" binding="totSaleQty" width="70" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.membrSavePoint"/>" binding="membrSavePoint" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.membrUsePoint"/>" binding="membrUsePoint" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.saleDate"/>" binding="saleDate" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.totSaleQty"/>" binding="totSaleQty" width="70" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.membrSavePoint"/>" binding="membrSavePoint" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.memberInfoPoint.membrUsePoint"/>" binding="membrUsePoint" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -77,4 +84,4 @@
     var pointChgFgData = ${ccu.getCommCodeExcpAll("031")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoPoint.js?ver=20201130.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoPoint.js?ver=20210316.01" charset="utf-8"></script>

@@ -209,6 +209,15 @@ public class RegistVO extends PageVO {
     /** 포인트적립구분 */
     private String pointSaveFg;
 
+    /** 변경순번 */
+    private String chgSeq;
+
+    /** 현금 적립률 */
+    private String memberCash;
+
+    /** 신용카드 적립률 */
+    private String memberCard;
+
     /**
      * @return the orgnFg
      */
@@ -1218,6 +1227,30 @@ public class RegistVO extends PageVO {
 
     public void settPointSaveFg(String pointSaveFg) {
         this.pointSaveFg = pointSaveFg;
+    }
+
+    public String getChgSeq() {
+        return chgSeq;
+    }
+
+    public void setChgSeq(String chgSeq) {
+        this.chgSeq = chgSeq;
+    }
+
+    public String getMemberCash() {
+        return memberCash;
+    }
+
+    public void setMemberCash(String memberCash) {
+        this.memberCash = memberCash;
+    }
+
+    public String getMemberCard() {
+        return memberCard;
+    }
+
+    public void setMemberCard(String memberCard) {
+        this.memberCard = memberCard;
     }
 
     @Override

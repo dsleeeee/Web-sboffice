@@ -48,7 +48,8 @@
     <select id="getMemberList" parameterType="registVO" resultType="DefaultMap">
         /* RegistMapper.getMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmm.MEMBR_NO,
+        SELECT
+        tmm.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
@@ -94,11 +95,50 @@
             tmmps.TOT_SALE_AMT AS STORE_TOT_SALE_AMT,
         </if>
         tmm.REG_DT,
-        '후불적용매장등록' AS POSTPAID_STORE
+        '후불적용매장등록' AS POSTPAID_STORE,
+        tmmcpr.POINT_SAVE_FG,
+        tmmcpr.PAY01 AS MEMBER_CARD,
+        tmmcpr.PAY02 AS MEMBER_CASH
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_CLASS tmmc,
         TB_MS_STORE tms,
+        (
+            SELECT
+            MEMBR_ORGN_CD,
+            MEMBR_NO,
+            MEMBR_CLASS_CD,
+            POINT_SAVE_FG,
+            NVL(PAY01, 0) AS PAY01,
+            NVL(PAY02, 0) AS PAY02
+            FROM
+            (
+                SELECT
+                tmm.MEMBR_ORGN_CD,
+                tmm.MEMBR_NO,
+                tmm.MEMBR_CLASS_CD,
+                tmmc.POINT_SAVE_FG,
+                tmmcpr.PAY_CD,
+                tmmcpr.ACC_RATE
+                FROM TB_MB_MEMBER tmm,
+                TB_MB_MEMBER_CLASS tmmc,
+                TB_MB_MEMBER_CLASS_PAY_RATE tmmcpr
+                WHERE 1=1
+                AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+                AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+                AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+                AND tmmcpr.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+                AND tmmcpr.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+                ORDER BY tmm.MEMBR_NO
+            )
+            PIVOT
+            (
+                SUM(ACC_RATE)
+                FOR PAY_CD
+                IN ('01' AS PAY01, '02' AS PAY02)
+            )
+            ORDER BY MEMBR_NO
+        ) tmmcpr,
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             TB_MB_MEMBER_POINT_STORE tmmps,
         </if>
@@ -108,14 +148,17 @@
         AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmm.REG_STORE_CD
-        AND tmm.MEMBR_NO = tmmp.MEMBR_NO(+)
-        AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD(+)
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmcpr.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmcpr.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+        AND tmmcpr.MEMBR_NO (+)= tmm.MEMBR_NO
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
-            AND tmm.REG_STORE_CD = tmmps.MEMBR_ORGN_CD (+)
-            AND tmm.REG_STORE_CD = tmmps.CHG_MEMBR_ORGN_CD (+)
-            AND tmm.MEMBR_NO = tmmps.MEMBR_NO (+)
+            AND tmmps.MEMBR_ORGN_CD (+) = tmm.REG_STORE_CD
+            AND tmmps.CHG_MEMBR_ORGN_CD (+)= tmm.REG_STORE_CD
+            AND tmmps.MEMBR_NO (+)= tmm.MEMBR_NO
             <if test='visitStoreMembr == "true"'>
-                AND tmmps.CHG_MEMBR_ORGN_CD =  #{storeCd}
+                AND tmmps.CHG_MEMBR_ORGN_CD = #{storeCd}
             </if>
             <if test='regUseStoreCd != null and !regUseStoreCd.equals("")'>
                 AND tmmps.CHG_MEMBR_ORGN_CD IN
@@ -186,7 +229,7 @@
                 AND tmm.WEDDINGDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
         </if>
-        <if test='useYn != null and useYn != ""'>
+        <if test="useYn != null and useYn != ''">
             AND tmm.USE_YN = #{useYn}
         </if>
         <if test='startSaveSale != null and startSaveSale != "" and endSaveSale != null and endSaveSale != ""'>
@@ -231,7 +274,8 @@
     -->
     <select id="getMemberListExcel" parameterType="registVO" resultType="DefaultMap">
         /* RegistMapper.getMemberListExcel */
-        SELECT tmm.MEMBR_NO,
+        SELECT
+        tmm.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
@@ -277,10 +321,49 @@
             tmmps.TOT_SALE_AMT AS STORE_TOT_SALE_AMT,
         </if>
         tmm.REG_DT,
-        '후불적용매장등록' AS POSTPAID_STORE
+        '후불적용매장등록' AS POSTPAID_STORE,
+        tmmcpr.POINT_SAVE_FG,
+        tmmcpr.PAY01 AS MEMBER_CARD,
+        tmmcpr.PAY02 AS MEMBER_CASH
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_CLASS tmmc,
         TB_MS_STORE tms,
+        (
+            SELECT
+            MEMBR_ORGN_CD,
+            MEMBR_NO,
+            MEMBR_CLASS_CD,
+            POINT_SAVE_FG,
+            NVL(PAY01, 0) AS PAY01,
+            NVL(PAY02, 0) AS PAY02
+            FROM
+            (
+                SELECT
+                tmm.MEMBR_ORGN_CD,
+                tmm.MEMBR_NO,
+                tmm.MEMBR_CLASS_CD,
+                tmmc.POINT_SAVE_FG,
+                tmmcpr.PAY_CD,
+                tmmcpr.ACC_RATE
+                FROM TB_MB_MEMBER tmm,
+                TB_MB_MEMBER_CLASS tmmc,
+                TB_MB_MEMBER_CLASS_PAY_RATE tmmcpr
+                WHERE 1=1
+                AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+                AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+                AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+                AND tmmcpr.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+                AND tmmcpr.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+                ORDER BY tmm.MEMBR_NO
+            )
+            PIVOT
+            (
+                SUM(ACC_RATE)
+                FOR PAY_CD
+                IN ('01' AS PAY01, '02' AS PAY02)
+            )
+            ORDER BY MEMBR_NO
+        ) tmmcpr,
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             TB_MB_MEMBER_POINT_STORE tmmps,
         </if>
@@ -290,14 +373,17 @@
         AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmm.REG_STORE_CD
-        AND tmm.MEMBR_NO = tmmp.MEMBR_NO(+)
-        AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD(+)
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmcpr.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmcpr.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+        AND tmmcpr.MEMBR_NO (+)= tmm.MEMBR_NO
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
-            AND tmm.REG_STORE_CD = tmmps.MEMBR_ORGN_CD (+)
-            AND tmm.REG_STORE_CD = tmmps.CHG_MEMBR_ORGN_CD (+)
-            AND tmm.MEMBR_NO = tmmps.MEMBR_NO (+)
+            AND tmmps.MEMBR_ORGN_CD (+) = tmm.REG_STORE_CD
+            AND tmmps.CHG_MEMBR_ORGN_CD (+)= tmm.REG_STORE_CD
+            AND tmmps.MEMBR_NO (+)= tmm.MEMBR_NO
             <if test='visitStoreMembr == "true"'>
-                AND tmmps.CHG_MEMBR_ORGN_CD =  #{storeCd}
+                AND tmmps.CHG_MEMBR_ORGN_CD = #{storeCd}
             </if>
             <if test='regUseStoreCd != null and !regUseStoreCd.equals("")'>
                 AND tmmps.CHG_MEMBR_ORGN_CD IN
@@ -1396,6 +1482,7 @@
         SELECT
         tmmph.CHG_DATE,
         tmmph.POINT_CHG_FG,
+        tmmph.CHG_SEQ,
         tmmph.CHG_POINT,
         tmmph.REMARK
         FROM TB_MB_MEMBER_POINT_HIST tmmph
@@ -1452,6 +1539,9 @@
         TB_MB_MEMBER_POINT tmmp
         WHERE 1=1
         AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tmm.REG_STORE_CD = #{storeCd}
+        </if>
         <if test="membrNo != null and membrNo != ''">
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
@@ -1485,6 +1575,9 @@
         TB_MB_MEMBER_POINT tmmp
         WHERE 1=1
         AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tmm.REG_STORE_CD = #{storeCd}
+        </if>
         <if test="membrNo != null and membrNo != ''">
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
@@ -1513,8 +1606,8 @@
         MEMBR_NO,
         MEMBR_NM,
         POINT_SAVE_FG,
-        NVL(PAY01, 0) AS CARD,
-        NVL(PAY02, 0) AS CASH
+        NVL(PAY01, 0) AS MEMBER_CARD,
+        NVL(PAY02, 0) AS MEMBER_CASH
         FROM
         (
             SELECT
@@ -1529,6 +1622,9 @@
             TB_MB_MEMBER_CLASS_PAY_RATE tmmcpr
             WHERE 1=1
             AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+            <if test="storeCd != null and storeCd != ''">
+                AND tmm.REG_STORE_CD = #{storeCd}
+            </if>
             <if test="membrNo != null and membrNo != ''">
                 AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
             </if>
@@ -1551,6 +1647,44 @@
             IN ('01' AS PAY01, '02' AS PAY02)
         )
         ORDER BY MEMBR_NO
+    </select>
+
+    <!-- 회원 포인트 조정 팝업 - 저장 update -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_HIST
+        COMMENTS : [회원]회원_포인트_변경내역
+    -->
+    <update id="getMemberPointAdjustSaveUpdate" parameterType="registVO">
+        /* RegistMapper.getMemberPointAdjustSaveUpdate */
+        UPDATE
+        TB_MB_MEMBER_POINT_HIST
+        SET
+        REMARK = #{remark},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_NO = #{membrNo}
+        AND CHG_DATE = #{chgDate}
+        AND CHG_SEQ = #{chgSeq}
+    </update>
+
+    <!-- 회원 포인트 조정 팝업 - 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_HIST
+        COMMENTS : [회원]회원_포인트_변경내역
+    -->
+    <select id="getMemberPointAdjustList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberPointAdjustList */
+        SELECT
+        tmmph.CHG_POINT AS AVABL_POINT,
+        tmmph.REMARK
+        FROM TB_MB_MEMBER_POINT_HIST tmmph
+        WHERE 1=1
+        AND tmmph.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmmph.MEMBR_NO = #{membrNo}
+        AND tmmph.CHG_DATE = #{chgDate}
+        AND tmmph.CHG_SEQ = #{chgSeq}
     </select>
 
 </mapper>

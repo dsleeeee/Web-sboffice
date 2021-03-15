@@ -474,6 +474,12 @@
                 <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="lastSaleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.day"/>" binding="regDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.addr"/>" binding="addr" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+
+                <%--팝업 조회시 필요--%>
+                <wj-flex-grid-column header="<s:message code="regist.membr.pointSaveFg"/>" binding="pointSaveFg" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.memberCard"/>" binding="memberCard" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.memberCash"/>" binding="memberCash" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+
             </wj-flex-grid>
         </div>
     </div>
@@ -542,6 +548,12 @@
                 <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="lastSaleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.day"/>" binding="regDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.addr"/>" binding="addr" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+
+                <%--팝업 조회시 필요--%>
+                <wj-flex-grid-column header="<s:message code="regist.membr.pointSaveFg"/>" binding="pointSaveFg" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.memberCard"/>" binding="memberCard" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.memberCash"/>" binding="memberCash" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+
             </wj-flex-grid>
         </div>
     </div>
@@ -581,7 +593,7 @@
     <%--var rCstCardStatFgList = ${ccu.getCommCodeExcpAll("300")};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210310.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210316.01" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
@@ -609,6 +621,18 @@
 
 <%-- 회원 포인트 조정 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberPointAdjust.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원 포인트 조정 팝업 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberPointAdjustDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원 등급 조회 팝업 --%>
+<c:import url="/WEB-INF/view/membr/info/view/searchMemberPointClass.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

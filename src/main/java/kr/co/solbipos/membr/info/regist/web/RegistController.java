@@ -821,4 +821,31 @@ public class RegistController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 회원 포인트 조정 팝업 - 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 10.
+     */
+    @RequestMapping(value = "base/getMemberPointAdjustList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberPointAdjustList(RegistVO registVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = registService.getMemberPointAdjustList(registVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
 }

@@ -170,4 +170,7 @@ public interface RegistService {
 
     /** 회원 포인트 조정 팝업 - 저장 */
     int getMemberPointAdjustSave(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원 포인트 조정 팝업 - 조회 */
+    DefaultMap<String> getMemberPointAdjustList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }
