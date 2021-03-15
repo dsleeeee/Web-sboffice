@@ -93,6 +93,7 @@ app.controller('searchMemberClassCtrl', ['$scope', '$http', function ($scope, $h
         $scope.membrNo = "";
         $scope.membrNm = "";
         $scope.telNo = "";
+        $scope.setSelectedMemberClass(null);
 
         $scope.wjSearchMemberClassLayer.hide();
         event.preventDefault();

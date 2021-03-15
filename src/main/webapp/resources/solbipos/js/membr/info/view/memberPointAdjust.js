@@ -33,6 +33,19 @@ app.controller('memberPointAdjustCtrl', ['$scope', '$http', function ($scope, $h
 
     // 회원 등급 조회 팝업
     $scope.popUpMemberClass = function() {
+        $scope.membrNm = "";
+        $scope.membrNo = "";
+        $scope.pointSaveFg = "";
+        $scope.memberCash = "";
+        $scope.memberCard = "";
+
+        $scope.cash = "";
+        $("#lblCash").text("");
+        $scope.card = "";
+        $("#lblCard").text("");
+        $scope.adjustPoint = "";
+        $scope.remark = "";
+
         var popUp = $scope.wjSearchMemberClassLayer;
         popUp.show(true, function (s) {
             var scope = agrid.getScope('searchMemberClassCtrl');
