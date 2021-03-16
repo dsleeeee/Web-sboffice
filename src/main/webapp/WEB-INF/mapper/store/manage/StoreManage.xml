@@ -1038,34 +1038,63 @@
     -->
     <insert id="insertPosEnvInfo" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertPosEnvInfo */
-        INSERT INTO TB_MS_POS_ENVST
-        (
-            STORE_CD,
-            POS_NO,
-            ENVST_CD,
-            ENVST_VAL,
-            DIRCT_IN_YN,
-            POS_FG,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        SELECT #{storeCd},
-               POS_NO,
-               ENVST_CD,
-               ENVST_VAL,
-               DIRCT_IN_YN,
-               POS_FG,
-               USE_YN,
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId}
-          FROM TB_MS_POS_ENVST
-         WHERE STORE_CD = #{copyStoreCd}
-           AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
+
+            MERGE INTO TB_MS_POS_ENVST A
+            USING   (
+                        SELECT  #{storeCd}      AS STORE_CD
+                        ,       POS_NO          AS POS_NO
+                        ,       ENVST_CD        AS ENVST_CD
+                        ,       ENVST_VAL       AS ENVST_VAL
+                        ,       DIRCT_IN_YN     AS DIRCT_IN_YN
+                        ,       POS_FG          AS POS_FG
+                        ,       USE_YN          AS USE_YN
+                        FROM    TB_MS_POS_ENVST
+                        WHERE   STORE_CD = #{copyStoreCd}
+                        AND     POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
+                    ) B
+            ON      (
+                        B.STORE_CD  =   A.STORE_CD
+                    AND B.POS_NO    =   A.POS_NO
+                    AND B.ENVST_CD  =   A.ENVST_CD
+                    )
+            WHEN MATCHED THEN
+            UPDATE
+            SET     A.ENVST_VAL     =   B.ENVST_VAL
+            ,       A.DIRCT_IN_YN   =   B.DIRCT_IN_YN
+            ,       A.POS_FG        =   B.POS_FG
+            ,       A.USE_YN        =   B.USE_YN
+            ,       A.MOD_DT        =   #{modDt}
+            ,       A.MOD_ID        =   #{modId}
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.STORE_CD
+            ,   A.POS_NO
+            ,   A.ENVST_CD
+            ,   A.ENVST_VAL
+            ,   A.DIRCT_IN_YN
+            ,   A.POS_FG
+            ,   A.USE_YN
+            ,   A.REG_DT
+            ,   A.REG_ID
+            ,   A.MOD_DT
+            ,   A.MOD_ID
+            )
+            VALUES
+            (
+                B.STORE_CD
+            ,   B.POS_NO
+            ,   B.ENVST_CD
+            ,   B.ENVST_VAL
+            ,   B.DIRCT_IN_YN
+            ,   B.POS_FG
+            ,   B.USE_YN
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+
     </insert>
 
     <!-- 포스 기능키 등록 -->
