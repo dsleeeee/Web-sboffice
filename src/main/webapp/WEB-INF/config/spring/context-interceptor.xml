@@ -33,6 +33,7 @@
 
       <mvc:exclude-mapping path="/application/pos/posLogin.sb" />
 	  <mvc:exclude-mapping path="/sample/tonymory/*.sb" />
+      <mvc:exclude-mapping path="/mobile/auth/log*.sb" />
 	  
       <bean class="kr.co.common.interceptor.AuthenticationInterceptor" />
     </mvc:interceptor>

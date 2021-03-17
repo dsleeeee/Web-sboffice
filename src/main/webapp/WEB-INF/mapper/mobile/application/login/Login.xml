@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Login.xml
+    어플리케이션 > 세션 > 인증
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.03.11     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.mobile.application.session.auth.service.impl.MobileAuthMapper">
+
+    <select id="selectWebUser" parameterType="sessionInfoVO" resultType="sessionInfoVO">
+        /* MobileAuthMapper.selectWebUser */
+        SELECT
+        twui.USER_ID,
+        twui.USER_PWD,
+        info.USER_NM,
+        twui.AUTH_GRP_CD,
+        info.ORGN_FG,
+        info.ORGN_GRP_CD,
+        info.ORGN_GRP_NM,
+        info.ORGN_CD,
+        info.ORGN_NM,
+        info.STORE_CD,
+        info.STORE_NM,
+        info.HQ_OFFICE_CD,
+        info.HQ_OFFICE_NM,
+        info.EMP_NO,
+        twui.LAST_LOGIN_DT,
+        twui.LAST_PWD_CHG_DT,
+        twui.LOGIN_FAIL_CNT,
+        twui.USER_STAT_FG,
+        info.P_AGENCY_CD,
+        twui.AREA_FG,
+        #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
+        FROM
+        TB_WB_USER_INFO twui
+        INNER JOIN (
+        SELECT
+        USER_ID,
+        ORGN_FG,
+        ORGN_CD,
+        ORGN_NM,
+        USER_NM,
+        EMP_NO,
+        STORE_CD,
+        STORE_NM,
+        HQ_OFFICE_CD,
+        HQ_OFFICE_NM,
+        ORGN_GRP_CD,
+        ORGN_GRP_NM,
+        P_AGENCY_CD
+        FROM
+        (
+        SELECT
+        A.USER_ID,
+        'S' AS ORGN_FG,
+        A.STORE_CD AS ORGN_CD,
+        B.STORE_NM AS ORGN_NM,
+        A.EMP_NM AS USER_NM,
+        A.EMP_NO,
+        B.STORE_CD AS STORE_CD,
+        B.STORE_NM AS STORE_NM,
+        C.HQ_OFFICE_CD,
+        C.HQ_OFFICE_NM,
+        DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) AS ORGN_GRP_CD,
+        DECODE( C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM ) AS ORGN_GRP_NM,
+        '' AS P_AGENCY_CD
+        FROM
+        TB_MS_EMPLOYEE A,
+        TB_MS_STORE B,
+        TB_HQ_OFFICE C
+        WHERE
+        A.STORE_CD = B.STORE_CD
+        AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+        AND A.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            AND A.WEB_USE_YN = 'Y'
+            AND A.USE_YN = 'Y'
+            AND A.SERVICE_FG = '1'
+            AND B.SYS_STAT_FG IN ('1', '9')
+            AND C.SYS_STAT_FG IN ('1', '9')
+        </if>
+        UNION ALL
+        SELECT
+        A.USER_ID,
+        'H' AS ORGN_FG,
+        A.HQ_OFFICE_CD AS ORGN_CD,
+        B.HQ_OFFICE_NM AS ORGN_NM,
+        A.EMP_NM AS USER_NM,
+        A.EMP_NO,
+        '' AS STORE_CD,
+        '' AS STORE_NM,
+        A.HQ_OFFICE_CD,
+        B.HQ_OFFICE_NM,
+        A.HQ_OFFICE_CD AS ORGN_GRP_CD,
+        B.HQ_OFFICE_NM AS ORGN_GRP_NM,
+        '' AS P_AGENCY_CD
+        FROM
+        TB_HQ_EMPLOYEE A,
+        TB_HQ_OFFICE B
+        WHERE
+        A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND A.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            AND A.WEB_USE_YN = 'Y'
+            AND A.USE_YN = 'Y'
+            AND A.SERVICE_FG = '1'
+            AND B.SYS_STAT_FG IN ('1', '9')
+        </if>
+        UNION ALL
+        SELECT
+        A.USER_ID,
+        DECODE( A.ADMIN_FG, 'A', 'M', 'A' ) AS ORGN_FG,
+        A.AGENCY_CD AS ORGN_CD,
+        B.AGENCY_NM AS ORGN_NM,
+        A.EMP_NM AS USER_NM,
+        A.EMP_NO,
+        '' AS STORE_CD,
+        '' AS STORE_NM,
+        '' AS HQ_OFFICE_CD,
+        '' AS HQ_OFFICE_NM,
+        A.AGENCY_CD AS ORGN_GRP_CD,
+        B.AGENCY_NM AS ORGN_GRP_NM,
+        B.P_AGENCY_CD AS P_AGENCY_CD
+        FROM
+        TB_CM_EMPLOYEE A,
+        TB_CM_AGENCY B
+        WHERE
+        A.AGENCY_CD = B.AGENCY_CD
+        AND A.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            AND A.WEB_USE_YN = 'Y'
+            AND A.USE_YN = 'Y'
+            AND A.SERVICE_FG = '1'
+            AND B.USE_YN = 'Y'
+        </if>
+        )
+        WHERE
+        ROWNUM = 1 ) info ON
+        twui.USER_ID = info.USER_ID
+        WHERE
+        twui.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            AND twui.USE_YN = 'Y'
+        </if>
+
+    </select>
+
+    <insert id="insertLoginHist" parameterType="loginHistVO">
+      /* MobileAuthMapper.insertLoginHist */
+        INSERT INTO TB_WB_LOGIN_HIST
+        (
+          SEQ,
+          USER_ID,
+          STAT_CD,
+          LOGIN_ORGN,
+          LOGIN_IP,
+          BRWSR_INFO,
+          LOGIN_DATE,
+          LOGIN_DT,
+          V_USER_ID
+        )
+        VALUES
+        (
+          SQ_WB_LOGIN_HIST.NEXTVAL,
+          #{userId},
+          #{statCd},
+          #{loginOrgn},
+          #{loginIp},
+          #{brwsrInfo},
+          #{loginDate},
+          #{loginDt},
+          #{vUserId}
+        )
+    </insert>
+
+    <update id="updateLoginInfo" parameterType="sessionInfoVO">
+        /* MobileAuthMapper.updateLoginInfo */
+        UPDATE TB_WB_USER_INFO
+        SET
+        LAST_LOGIN_DT = #{lastLoginDt}
+        <if test="loginFailCnt != null">
+            , LOGIN_FAIL_CNT = #{loginFailCnt}
+        </if><if test='userStatFg.toString() != null and userStatFg.toString() != ""'>
+        , USER_STAT_FG = #{userStatFg}
+    </if>
+        WHERE
+        USER_ID = #{userId}
+    </update>
+
+</mapper>
