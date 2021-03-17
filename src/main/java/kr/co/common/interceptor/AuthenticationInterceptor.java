@@ -6,6 +6,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +49,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     private final SessionService sessionService;
     private final CmmMenuService cmmMenuService;
     private final MessageService messageService;
+
+    String ROOT_PATH = "/";
 
     /** Constructor Injection */
     @Autowired
@@ -86,6 +90,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
+        //
+        ROOT_PATH = "/";
+        if(WebUtils.getCookie(request, "sb_login_fg") != null){
+            if(WebUtils.getCookie(request, "sb_login_fg").getValue().equals(BaseEnv.SB_LOGIN_FG)){
+                ROOT_PATH = "/mobile/";
+            };
+        }
+
         // 세션 종료 처리
         if (!isSessionValid) {
             // 로그 기록. inValidation 처리시 쉽게 알아보기 위함.
@@ -98,9 +110,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 String msg1 = messageService.get("cmm.move.login");
                 // 로그 기록
                 LOGGER.info("AuthenticationInterceptor :: isJsonRequest :: " + msg);
-                throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, "/");
+                throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, ROOT_PATH.equals("/") ? ROOT_PATH : ROOT_PATH + "auth/login.sb");
             } else {
-                response.sendRedirect("/");
+                response.sendRedirect(ROOT_PATH.equals("/") ? ROOT_PATH : ROOT_PATH + "auth/login.sb");
                 return false;
             }
 
@@ -206,7 +218,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean checkUrl(HttpServletRequest request, String url, SessionInfoVO sessionInfoVO) {
         // main 주소는 제외
-        if (url.equals("/main.sb") || url.equals("/sample/tonymory/Login.sb")) {
+        if (url.equals(ROOT_PATH + "main.sb") || url.equals("/sample/tonymory/Login.sb")) {
             return true;
         }
         // url 파라미터 제거
@@ -215,26 +227,26 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         // main.sb 호출 시, 로그인한 사람의 권한에 따라 다른 메인 URL redirect
-        if(url.contains("/application/main/content/")){
+        if(url.contains(ROOT_PATH + "application/main/content/")){
 
             // 관리자
             if (sessionInfoVO.getOrgnFg() == OrgnFg.MASTER){
-                if(!("/application/main/content/sys.sb").equals(url)){ return false; }
+                if(!(ROOT_PATH + "application/main/content/sys.sb").equals(url)){ return false; }
             }
 
             // 대리점
             if(sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
-                if(!("/application/main/content/agency.sb").equals(url)){ return false; }
+                if(!(ROOT_PATH + "application/main/content/agency.sb").equals(url)){ return false; }
             }
 
             // 본사
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-                if(!("/application/main/content/hq.sb").equals(url)){ return false; }
+                if(!(ROOT_PATH +"application/main/content/hq.sb").equals(url)){ return false; }
             }
 
             // 매장
             if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
-                if(!("/application/main/content/store.sb").equals(url)){ return false; }
+                if(!(ROOT_PATH + "application/main/content/store.sb").equals(url)){ return false; }
             }
 
             return true;
