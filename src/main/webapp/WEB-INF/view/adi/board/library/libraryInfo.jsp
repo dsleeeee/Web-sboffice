@@ -83,4 +83,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/library/libraryInfo.js?ver=20200311.24" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/library/libraryInfo.js?ver=20200311.25" charset="utf-8"></script>

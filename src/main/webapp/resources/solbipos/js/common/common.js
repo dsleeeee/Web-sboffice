@@ -113,9 +113,9 @@
           else if(result.status === "SERVER_ERROR") {
             s_alert.pop(result.message);
           }
-          else if(result.status === undefined) {
+          /*else if(result.status === undefined) {
             location.href = "/";
-          }
+          }*/
           else {
             var msg = result.status + " : " + result.message;
             //alert(msg);
@@ -167,9 +167,9 @@
           else if(result.status === "SERVER_ERROR") {
             s_alert.pop(result.message);
           }
-          else if(result.status === undefined) {
+          /*else if(result.status === undefined) {
             location.href = "/";
-          }
+          }*/
           else {
             var msg = result.status + " : " + result.message;
             alert(msg);
@@ -218,9 +218,9 @@
           else if(result.status === "SERVER_ERROR") {
             s_alert.pop(result.message);
           }
-          else if(result.status === undefined) {
+          /*else if(result.status === undefined) {
             location.href = "/";
-          }
+          }*/
           else {
             var msg = result.status + " : " + result.message;
             alert(msg);
