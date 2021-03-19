@@ -160,7 +160,7 @@
      <!--
            TABLE    : TB_WB_USER_INFO
            PARAM    : hqEmpVO
-           COMMENTS : 본사 사원이 웹 사용시, 웹 사용자 정보를 등록한다.
+           COMMENTS : 본사 사원이 웹 사용시, 웹 사용자 정보를 등록한다. 본사 000007 -> FN_TB_WB_AUTHOR_GRP_USE_CD
      -->
     <insert id="insertWbUserInfo" parameterType="hqEmpVO">
         /* USE : HqEmpMapper.insertWbUserInfo */
@@ -170,7 +170,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
-            LAST_PWD_CHG_DT,
+            LAST_PWD_CHG_DT,AUTH_GRP_CD
             USE_YN,
             REG_DT,
             REG_ID,
@@ -181,7 +181,7 @@
         (
             LOWER(#{userId}),
             #{userPwd},
-            #{authGrpCd},
+            (SELECT FN_TB_WB_AUTHOR_GRP_USE_CD(#{hqOfficeCd}, 'H') FROM DUAL),
             0,
             #{regDt},
             #{webUseYn},
@@ -231,7 +231,7 @@
     <!--
           TABLE    : TB_WB_USER_INFO
           PARAM    : hqEmpVO
-          COMMENTS : 본사 웹 사용자 정보가 있으면 수정, 없으면 insert
+          COMMENTS : 본사 웹 사용자 정보가 있으면 수정, 없으면 insert 본사 000007 -> FN_TB_WB_AUTHOR_GRP_USE_CD
     -->
     <update id="saveWbUserInfo" parameterType="hqEmpVO">
         /* USE : HqEmpMapper.saveWbUserInfo */
@@ -264,7 +264,7 @@
        (
            #{userId},
            #{userPwd},
-           #{authGrpCd},
+           (SELECT FN_TB_WB_AUTHOR_GRP_USE_CD(#{hqOfficeCd}, 'H') FROM DUAL),
            '0',
            #{webUseYn},
            #{regDt},

@@ -383,7 +383,7 @@
     <!--
         TABLE    : TB_WB_USER_INFO
         PARAM    : hqManageVO
-        COMMENTS : 웹 사용자를 등록한다.
+        COMMENTS : 웹 사용자를 등록한다. 본사 000007 -> FN_TB_WB_AUTHOR_GRP_USE_CD
     -->
     <insert id="registWebUser" parameterType="DefaultMap">
         /* USE : HqManageMapper.registWebUser */
@@ -405,7 +405,7 @@
         (
             #{userId},
             #{userPwd},
-            #{authGrpCd}, -- TODO 보나비용 임시 권한(화면에서 사용자 권한 선택 추가 필요)
+            (SELECT FN_TB_WB_AUTHOR_GRP_USE_CD(#{hqOfficeCd}, 'H') FROM DUAL),
             0,
             #{regDt},
             '99',
