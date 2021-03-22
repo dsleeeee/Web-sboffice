@@ -46,7 +46,7 @@
         COMMENTS : [매장]코너, [매장]매장 정보
     -->
     <select id="getCornerColList"  parameterType="dayVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getCornerColList */
+        /* DayMapper.getCornerColList */
         SELECT
         tmc.STORE_CD,
         (CASE WHEN tmc.STORE_CD = '0000000' THEN '단독매장' ELSE tms.STORE_NM END) AS STORE_NM,
@@ -73,7 +73,7 @@
         COMMENTS : [매장]테이블
     -->
     <select id="getTableColList"  parameterType="dayVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getTableColList */
+        /* DayMapper.getTableColList */
         SELECT
         tmt.STORE_CD,
         tmt.TBL_CD,
@@ -94,7 +94,7 @@
         COMMENTS : [매장]포스 정보
     -->
     <select id="getPosColList"  parameterType="dayVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getPosColList */
+        /* DayMapper.getPosColList */
         SELECT
         tmp.POS_NO,
         tmp.POS_NM
