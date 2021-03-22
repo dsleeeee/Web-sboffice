@@ -173,8 +173,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekProdClass.js?ver=20210118.02" charset="utf-8"></script>
-
-<%-- 상품분류 팝업 --%>
-<%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>
-<%--</c:import>--%>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekProdClass.js?ver=20210322.01" charset="utf-8"></script>

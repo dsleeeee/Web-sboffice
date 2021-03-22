@@ -35,9 +35,12 @@
                 <a id="dayOfWeekCornerTab" href="#" ng-click="dayOfWeekCornerShow()"><s:message code="dayofweek.corner"/></a>
             </li>
             <%-- 외식테이블 탭 --%>
-            <li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if> >
-                <a id="dayOfWeekTableTab" href="#" ng-click="dayOfWeekTableShow()"><s:message code="dayofweek.table"/></a>
-            </li>
+            <c:if test="${orgnFg == 'STORE'}">
+                <li>
+                <%--<li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if> >--%>
+                    <a id="dayOfWeekTableTab" href="#" ng-click="dayOfWeekTableShow()"><s:message code="dayofweek.table"/></a>
+                </li>
+            </c:if>
             <%-- 포스별 탭 --%>
             <li>
                 <a id="dayOfWeekPosTab" href="#" ng-click="dayOfWeekPosShow()"><s:message code="dayofweek.pos"/></a>
@@ -122,7 +125,7 @@
     var maxLevel    = '${maxLevel}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayOfWeekSale/dayOfWeekSale.js?ver=20200924.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayOfWeekSale/dayOfWeekSale.js?ver=20210322.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 주간종합 레이어 --%>
@@ -161,11 +164,13 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 외식테이블 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/dayOfWeek/dayOfWeekTable.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<c:if test="${orgnFg == 'STORE'}">
+    <%-- 외식테이블 레이어 --%>
+    <c:import url="/WEB-INF/view/sale/day/dayOfWeek/dayOfWeekTable.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+</c:if>
 
 <%-- 포스별 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/dayOfWeek/dayOfWeekPos.jsp">
@@ -175,42 +180,6 @@
 <%-- //탭페이지 레이어 --%>
 
 <%-- 팝업 레이어 시작 --%>
-<%-- 매장별 매출현황 팝업 레이어 --%>
-<%--<c:import url="/WEB-INF/view/sale/day/day/dayStoreDtl.jsp">--%>
-    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
-
-<%-- 상품매출 상세 팝업 레이어 --%>
-<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">--%>
-    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
-
-<%-- 매장별 할인내역 팝업 레이어 --%>
-<%--<c:import url="/WEB-INF/view/sale/day/day/dayStoreDc.jsp">--%>
-    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
-
-<%-- 매장별 영수건수 팝업 레이어 --%>
-<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayBillInfo/dayStoreBill.jsp">--%>
-    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
-
-<%-- 상품매출 상세내역 팝업 레이어 --%>
-<%--<c:import url="/WEB-INF/view/sale/day/day/dayProdSaleDtl.jsp">--%>
-    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
-
-<%-- 매출 상세내역 (매출) 팝업 레이어 --%>
-<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/saleInfo/saleDtl.jsp">--%>
-    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
-
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
