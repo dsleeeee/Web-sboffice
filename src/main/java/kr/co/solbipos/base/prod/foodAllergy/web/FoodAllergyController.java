@@ -75,6 +75,31 @@ public class FoodAllergyController {
     }
 
     /**
+     * 브랜드 콤보박스 리스트 조회
+     *
+     * @param foodAllergyVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021. 03. 22.
+     */
+    @RequestMapping(value = "/foodAllergy/getBrandComboList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBrandComboList(FoodAllergyVO foodAllergyVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        foodAllergyVO.setHqOfficeCd(request.getParameter("hqOfficeCd"));
+
+        List<DefaultMap<Object>> result = foodAllergyService.getBrandComboList(foodAllergyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, foodAllergyVO);
+    }
+
+    /**
      * 식품 알레르기 정보관리 저장
      *
      * @param foodAllergyVOs

@@ -12,6 +12,7 @@
             <label id="lblFoodAllergyProdRecipesCd" style="display: none;"></label>
             <label id="lblFoodAllergyProRecipesNm" style="display: none;"></label>
             <label id="lblFoodAllergyProdAllergieNm" style="display: none;"></label>
+            <label id="lblFoodAllergyProdhqBrandCd" style="display: none;"></label>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 

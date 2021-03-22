@@ -21,6 +21,10 @@ public class RecpOriginVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
+    private String hqOfficeCd;
+
+    private String hqBrandCd;
+
     /**
      * 소속구분
      * M : 시스템
@@ -53,6 +57,23 @@ public class RecpOriginVO extends PageVO {
 
     /** 상품분류코드 */
     private String prodClassCd;
+
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
 
     public String getOrgnFg() { return orgnFg; }
 

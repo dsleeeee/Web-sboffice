@@ -75,4 +75,7 @@ public interface ProdService {
 
     /** 미적용 상품 거래처 조회 팝업 - 조회 */
     List<DefaultMap<String>> getSearchNoProdVendrList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 브랜드 콤보박스 리스트 조회 */
+    List<DefaultMap<String>> getBrandComboList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

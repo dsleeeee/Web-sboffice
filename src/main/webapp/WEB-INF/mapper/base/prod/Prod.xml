@@ -1089,8 +1089,11 @@
         /* USE : ProdMapper.getStoreList */
         SELECT tms.HQ_OFFICE_CD,
         tho.HQ_OFFICE_NM,
+        tms.HQ_BRAND_CD,
+        NVL(thb.HQ_BRAND_NM,'기본브랜드') as HQ_BRAND_NM,
         tms.STORE_CD,
         tms.STORE_NM,
+        tms.SYS_STAT_FG,
         NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN,
         thpsp.SALE_UPRC AS HQ_SALE_UPRC,
         tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
@@ -1108,6 +1111,7 @@
         FROM TB_MS_STORE tms,
         TB_HQ_OFFICE tho,
         TB_HQ_PRODUCT_STORE thps,
+        TB_HQ_BRAND thb,
         (
         SELECT thp.HQ_OFFICE_CD ,
         thp.PROD_CD,
@@ -1162,6 +1166,14 @@
         AND tmpsp.HQ_OFFICE_CD (+)= #{hqOfficeCd}
         AND tmpsp.STORE_CD (+)= tms.STORE_CD
         AND tmpsp.PROD_CD (+)= #{prodCd}
+        AND thb.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        AND thb.HQ_BRAND_CD (+)= tms.HQ_BRAND_CD
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='hqBrandCd != null and hqBrandCd.toString() != ""'>
+            AND tms.HQ_BRAND_CD = #{hqBrandCd}
+        </if>
         <if test='storeCd != null and storeCd.toString() != ""'>
             AND tms.STORE_CD = #{storeCd}
         </if>
@@ -1175,6 +1187,18 @@
             AND thps.STORE_CD IS NULL
         </if>
         ORDER BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 브랜드 콤보박스 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : prodVO
+        COMMENTS : 콤보박스에 넣을 브랜드를 조회한다.
+    -->
+    <select id="getBrandComboList" parameterType="prodVO" resultType="DefaultMap">
+        SELECT HQ_BRAND_CD AS NMCODE_CD, HQ_BRAND_NM AS NMCODE_NM
+        FROM TB_HQ_BRAND
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
     </select>
 
     <!-- 상품 적용 매장 등록 -->
