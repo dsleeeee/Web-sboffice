@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EnvConfgBatchChange.xml
+    환경변수일괄변경
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.02.17     최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.envConfgBatchChange.service.impl.EnvConfgBatchChangeMapper">
+
+    <!-- 본사환경탭 - 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_ENVST, TB_MS_STORE, TB_MS_STORE_ENVST, TB_CM_ENVST
+        COMMENTS : [본사]본사 정보, [본사]본사_환경설정, [매장]매장 정보, [매장]환경설정, [공통]환경설정
+    -->
+    <select id="getEnvConfgBatchChangeHqList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeHqList */
+        SELECT
+        the.HQ_OFFICE_CD,
+        the.HQ_OFFICE_NM,
+        the.ENVST_CD,
+        the.ENVST_VAL,
+        the.EXIST_FG,
+        NVL(tms.TOT_STORE_CNT , 0) AS TOT_STORE_CNT,
+        NVL(tmse.STORE_CNT, 0) AS STORE_CNT
+        FROM
+        (
+            SELECT
+            tho.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            tce.ENVST_CD,
+            the.ENVST_VAL,
+            DECODE(the.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG
+            FROM TB_HQ_OFFICE tho,
+            TB_HQ_ENVST the,
+            TB_CM_ENVST tce
+            WHERE 1=1
+            AND tho.HQ_OFFICE_CD != '00000'
+            <if test='orgnFg != null and orgnFg == "A"'>
+                AND tho.AGENCY_CD = #{agencyCd}
+            </if>
+            AND the.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+            AND the.ENVST_CD (+)= tce.ENVST_CD
+            ORDER BY tho.HQ_OFFICE_CD
+        ) the,
+        (
+            SELECT
+            tms.HQ_OFFICE_CD,
+            COUNT(tms.STORE_CD) AS TOT_STORE_CNT
+            FROM TB_MS_STORE tms,
+            TB_HQ_OFFICE tho
+            WHERE 1=1
+            AND tms.HQ_OFFICE_CD != '00000'
+            <if test='orgnFg != null and orgnFg == "A"'>
+                AND tho.AGENCY_CD = #{agencyCd}
+            </if>
+            AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            GROUP BY tms.HQ_OFFICE_CD
+        ) tms,
+        (
+            SELECT
+            tms.HQ_OFFICE_CD,
+            tmse.ENVST_CD,
+            COUNT(tmse.STORE_CD) AS STORE_CNT
+            FROM TB_MS_STORE_ENVST tmse,
+            TB_MS_STORE tms,
+            TB_HQ_OFFICE tho
+            WHERE 1=1
+            AND tms.HQ_OFFICE_CD != '00000'
+            <if test='orgnFg != null and orgnFg == "A"'>
+                AND tho.AGENCY_CD = #{agencyCd}
+            </if>
+            AND tms.STORE_CD (+)= tmse.STORE_CD
+            AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            GROUP BY tms.HQ_OFFICE_CD, tmse.ENVST_CD
+        ) tmse
+        WHERE 1=1
+        <if test="hqOfficeCd != null and hqOfficeCd != ''">
+            AND the.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+        </if>
+        <if test="hqOfficeNm != null and hqOfficeNm != ''">
+            AND the.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND the.EXIST_FG = #{useYn}
+        </if>
+        AND the.ENVST_CD = #{envstCd}
+        AND tms.HQ_OFFICE_CD (+)= the.HQ_OFFICE_CD
+        AND tmse.HQ_OFFICE_CD (+)= the.HQ_OFFICE_CD
+        AND tmse.ENVST_CD (+)= the.ENVST_CD
+        ORDER BY the.HQ_OFFICE_CD
+    </select>
+
+    <!-- 환경설정 조회 팝업 - 조회(본사환경) -->
+    <!--
+        TABLE    : TB_CM_ENVST, TB_CM_NMCODE
+        COMMENTS : [공통]환경설정, [공통]명칭코드
+    -->
+    <select id="getSearchEnvConfgList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getSearchEnvConfgList */
+        SELECT
+        tce.ENVST_CD,
+        tce.ENVST_NM,
+        tce.DIRCT_IN_YN,
+        tce.TARGT_FG,
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '038' AND NMCODE_CD = tce.TARGT_FG) AS TARGT_FG_NM
+        FROM TB_CM_ENVST tce
+        WHERE 1=1
+        AND tce.TARGT_FG IN ('H','C','X','Z') -- H:본사전용, C:공통(매장에서변경가능), N:No, S:매장전용, X:공통(매장에서사용하지만_본사기준), Z:본사+단독매장
+        AND tce.ENVST_FG IN ('00','01')
+        AND tce.USE_YN = 'Y'
+        ORDER BY tce.ENVST_CD
+    </select>
+
+    <!-- 환경설정 조회 팝업 - 조회(매장환경) -->
+    <!--
+        TABLE    : TB_CM_ENVST, TB_CM_NMCODE
+        COMMENTS : [공통]환경설정, [공통]명칭코드
+    -->
+    <select id="getSearchEnvConfgStoreList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getSearchEnvConfgStoreList */
+        SELECT
+        tce.ENVST_CD,
+        tce.ENVST_NM,
+        tce.DIRCT_IN_YN,
+        tce.TARGT_FG,
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '038' AND NMCODE_CD = tce.TARGT_FG) AS TARGT_FG_NM
+        FROM TB_CM_ENVST tce
+        WHERE 1=1
+        AND tce.TARGT_FG IN ('C','S','X','Z') -- H:본사전용, C:공통(매장에서변경가능), N:No, S:매장전용, X:공통(매장에서사용하지만_본사기준), Z:본사+단독매장
+        AND tce.ENVST_FG IN ('00','01')
+        AND tce.USE_YN = 'Y'
+        ORDER BY tce.ENVST_CD
+    </select>
+
+    <!-- 환경설정 조회 팝업 - 조회(매장포스환경) -->
+    <!--
+        TABLE    : TB_CM_ENVST, TB_CM_NMCODE
+        COMMENTS : [공통]환경설정, [공통]명칭코드
+    -->
+    <select id="getSearchEnvConfgStorePosList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getSearchEnvConfgStorePosList */
+        SELECT
+        tce.ENVST_CD,
+        tce.ENVST_NM,
+        tce.DIRCT_IN_YN,
+        tce.TARGT_FG,
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '038' AND NMCODE_CD = tce.TARGT_FG) AS TARGT_FG_NM
+        FROM TB_CM_ENVST tce
+        WHERE 1=1
+        AND tce.TARGT_FG IN ('C','S','Z') -- H:본사전용, C:공통(매장에서변경가능), N:No, S:매장전용, X:공통(매장에서사용하지만_본사기준), Z:본사+단독매장
+        AND tce.ENVST_FG IN ('03')
+        AND tce.USE_YN = 'Y'
+        ORDER BY tce.ENVST_CD
+    </select>
+
+    <!-- 본사환경탭 - 환경변수값 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        COMMENTS : [공통]환경설정_상세
+    -->
+    <select id="getEnvstValComboList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getEnvstValComboList */
+        SELECT
+        tced.ENVST_VAL_CD AS VALUE,
+        tced.ENVST_VAL_NM AS NAME
+        FROM TB_CM_ENVST_DTL tced
+        WHERE 1=1
+        AND tced.ENVST_CD = #{envstCd}
+        AND tced.USE_YN = 'Y'
+        ORDER BY tced.ENVST_CD
+    </select>
+
+    <!-- 본사환경탭 - 저장 insert, update -->
+    <!--
+        TABLE    : TB_HQ_ENVST
+        COMMENTS : [본사]본사_환경설정
+    -->
+    <update id="getEnvConfgBatchChangeHqSave" parameterType="EnvConfgBatchChangeVO">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeHqSave */
+        MERGE INTO TB_HQ_ENVST
+        USING DUAL ON
+        (
+            HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = #{envstCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            ENVST_VAL = #{envstVal},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = #{envstCd}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                HQ_OFFICE_CD,
+                ENVST_CD,
+                ENVST_VAL,
+                DIRCT_IN_YN,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{envstCd},
+                #{envstVal},
+                #{dirctInYn},
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </update>
+
+    <!-- 매장환경탭 - 저장 insert, update -->
+    <!--
+        TABLE    : TB_MS_STORE_ENVST
+        COMMENTS : [매장]환경설정
+    -->
+    <update id="getEnvConfgBatchChangeHqStoreSave" parameterType="EnvConfgBatchChangeVO">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeHqStoreSave */
+        MERGE INTO TB_MS_STORE_ENVST
+        USING DUAL ON
+        (
+            STORE_CD = #{storeCd} AND ENVST_CD = #{envstCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            ENVST_VAL = #{envstVal},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+            WHERE STORE_CD = #{storeCd} AND ENVST_CD = #{envstCd}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                STORE_CD,
+                ENVST_CD,
+                ENVST_VAL,
+                DIRCT_IN_YN,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{storeCd},
+                #{envstCd},
+                #{envstVal},
+                #{dirctInYn},
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </update>
+
+    <!-- 본사환경탭 - 매장코드 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getStoreCdList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getStoreCdList */
+        SELECT tms.STORE_CD
+        FROM TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 매장환경탭 - 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_MS_STORE, TB_MS_STORE_ENVST, TB_CM_ENVST
+        COMMENTS : [본사]본사 정보, [매장]매장 정보, [매장]환경설정, [공통]환경설정
+    -->
+    <select id="getEnvConfgBatchChangeStoreList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeStoreList */
+        SELECT
+        HQ_OFFICE_CD,
+        HQ_OFFICE_NM,
+        STORE_CD,
+        STORE_NM,
+        ENVST_CD,
+        ENVST_VAL,
+        EXIST_FG
+        FROM
+        (
+            SELECT
+            tms.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tce.ENVST_CD,
+            tmse.ENVST_VAL,
+            DECODE(tmse.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG
+            FROM TB_MS_STORE tms,
+            TB_HQ_OFFICE tho,
+            TB_MS_STORE_ENVST tmse,
+            TB_CM_ENVST tce
+            WHERE 1=1
+            AND tms.STORE_CD != '0000000'
+            <choose>
+                <when test='targtFg != null'>
+                    <!-- H:본사전용, C:공통(매장에서변경가능), N:No, S:매장전용, X:공통(매장에서사용하지만_본사기준), Z:본사+단독매장 -->
+                    <if test='targtFg == "Z"'>
+                        <![CDATA[
+                            AND tms.HQ_OFFICE_CD = '00000'
+                        ]]>
+                    </if>
+                </when>
+            </choose>
+            <if test='orgnFg != null and orgnFg == "A"'>
+                AND tms.AGENCY_CD = #{agencyCd}
+            </if>
+            AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND tmse.STORE_CD (+)= tms.STORE_CD
+            AND tmse.ENVST_CD (+)= tce.ENVST_CD
+            ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
+        )
+        WHERE 1=1
+        <if test="hqOfficeCd != null and hqOfficeCd != ''">
+            AND HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+        </if>
+        <if test="hqOfficeNm != null and hqOfficeNm != ''">
+            AND HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND STORE_CD LIKE '%'|| #{storeCd} ||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND EXIST_FG = #{useYn}
+        </if>
+        AND ENVST_CD = #{envstCd}
+        ORDER BY HQ_OFFICE_CD, STORE_CD
+    </select>
+
+    <!-- 매장포스환경탭 - 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_MS_STORE, TB_MS_POS, TB_MS_POS_ENVST, TB_CM_ENVST
+        COMMENTS : [본사]본사 정보, [매장]매장 정보, [매장]포스 정보, [매장]포스 환경설정, [공통]환경설정
+    -->
+    <select id="getEnvConfgBatchChangeStorePosList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeStorePosList */
+        SELECT
+        HQ_OFFICE_CD,
+        HQ_OFFICE_NM,
+        STORE_CD,
+        STORE_NM,
+        POS_NO,
+        POS_NM,
+        ENVST_CD,
+        ENVST_VAL,
+        EXIST_FG
+        FROM
+        (
+            SELECT
+            tms.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tmp.POS_NO,
+            tmp.POS_NM,
+            tce.ENVST_CD,
+            tmpe.ENVST_VAL,
+            DECODE(tmpe.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG
+            FROM TB_MS_POS tmp,
+            TB_MS_STORE tms,
+            TB_HQ_OFFICE tho,
+            TB_MS_POS_ENVST tmpe,
+            TB_CM_ENVST tce
+            WHERE 1=1
+            AND tms.STORE_CD != '0000000'
+            <choose>
+                <when test='targtFg != null'>
+                    <!-- H:본사전용, C:공통(매장에서변경가능), N:No, S:매장전용, X:공통(매장에서사용하지만_본사기준), Z:본사+단독매장 -->
+                    <if test='targtFg == "Z"'>
+                        <![CDATA[
+                            AND tms.HQ_OFFICE_CD = '00000'
+                        ]]>
+                    </if>
+                </when>
+            </choose>
+            <if test='orgnFg != null and orgnFg == "A"'>
+                AND tms.AGENCY_CD = #{agencyCd}
+            </if>
+            AND tms.STORE_CD (+)= tmp.STORE_CD
+            AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND tmpe.STORE_CD (+)= tms.STORE_CD
+            AND tmpe.ENVST_CD (+)= tce.ENVST_CD
+            ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD, tmp.POS_NO
+        )
+        WHERE 1=1
+        <if test="hqOfficeCd != null and hqOfficeCd != ''">
+            AND HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+        </if>
+        <if test="hqOfficeNm != null and hqOfficeNm != ''">
+            AND HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND STORE_CD LIKE '%'|| #{storeCd} ||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND EXIST_FG = #{useYn}
+        </if>
+        AND ENVST_CD = #{envstCd}
+        ORDER BY HQ_OFFICE_CD, STORE_CD, POS_NO
+    </select>
+
+    <!-- 매장포스환경탭 - 저장 insert, update -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        COMMENTS : [매장]포스 환경설정
+    -->
+    <update id="getEnvConfgBatchChangeStorePosSave" parameterType="EnvConfgBatchChangeVO">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeStorePosSave */
+        MERGE INTO TB_MS_POS_ENVST
+        USING DUAL ON
+        (
+            STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = #{envstCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            ENVST_VAL = #{envstVal},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+            WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = #{envstCd}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                STORE_CD,
+                POS_NO,
+                ENVST_CD,
+                ENVST_VAL,
+                DIRCT_IN_YN,
+                POS_FG,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{storeCd},
+                #{posNo},
+                #{envstCd},
+                #{envstVal},
+                #{dirctInYn},
+                'W',
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </update>
+
+</mapper>
