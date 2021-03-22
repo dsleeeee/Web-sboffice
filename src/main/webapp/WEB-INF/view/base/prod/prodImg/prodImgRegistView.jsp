@@ -227,7 +227,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20200819.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20200819.10" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -273,9 +273,9 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope._popMsg(result.message);
                     $scope.$broadcast('loadingPopupInactive');
                 }
-                else if(result.status === undefined) {
+                /*else if(result.status === undefined) {
                     location.href = "/";
-                }
+                }*/
                 else {
                     var msg = result.status + " : " + result.message;
                     $scope._popMsg(msg);
@@ -319,9 +319,9 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope._popMsg(result.message);
                     $scope.$broadcast('loadingPopupInactive');
                 }
-                else if(result.status === undefined) {
+                /*else if(result.status === undefined) {
                     location.href = "/";
-                }
+                }*/
                 else {
                     var msg = result.status + " : " + result.message;
                     $scope._popMsg(msg);

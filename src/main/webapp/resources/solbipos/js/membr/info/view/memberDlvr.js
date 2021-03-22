@@ -168,12 +168,12 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(res.data.message);
             }
             return false;
-        } else if (res.data.status === undefined) {
+        } /*else if (res.data.status === undefined) {
             if (isMsg) {
                 location.href = "/";
             }
             return false;
-        } else {
+        }*/ else {
             if (isMsg) {
                 var msg = res.data.status + ' : ' + res.data.message;
                 $scope._popMsg(msg);
@@ -447,12 +447,12 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
                     $scope._popMsg(res.data.message);
                 }
                 return false;
-            } else if (res.data.status === undefined) {
+            } /*else if (res.data.status === undefined) {
                 if (isMsg) {
                     location.href = "/";
                 }
                 return false;
-            } else {
+            }*/ else {
                 if (isMsg) {
                     var msg = res.data.status + ' : ' + res.data.message;
                     $scope._popMsg(msg);

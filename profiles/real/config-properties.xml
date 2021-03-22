@@ -83,4 +83,10 @@
   <!-- 수불유형 -->
   <entry key="neoe.cdQtiotp">400</entry>
 
+  <!-- ====================================-->
+  <!--  mobile Properties-->
+  <!-- ====================================-->
+  <!-- 모바일 로그인 여부 -->
+  <entry key="mobile.sb.login.fg">M</entry>
+
 </properties>

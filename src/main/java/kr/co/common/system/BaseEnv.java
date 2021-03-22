@@ -80,6 +80,11 @@ public class BaseEnv {
 
     public static String NEOE_CD_QTIOTP;
 
+    /**
+     * 모바일 관련
+     */
+    public static String SB_LOGIN_FG;
+
 
     @Value("#{config['profile']}")
     public void setProfile(String profile) {
@@ -203,4 +208,13 @@ public class BaseEnv {
     public void setNeoeCdOtiotp(String neoeCdOtiotp) {
         NEOE_CD_QTIOTP = neoeCdOtiotp;
     }
+
+    /**
+     * 모바일 관련
+     */
+    @Value("#{config['mobile.sb.login.fg']}")
+    public void setSbLoginFg(String sbLoginFg) {
+        SB_LOGIN_FG = sbLoginFg;
+    }
+
 }

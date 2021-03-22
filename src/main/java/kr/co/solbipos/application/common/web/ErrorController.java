@@ -2,6 +2,7 @@ package kr.co.solbipos.application.common.web;
 
 import kr.co.common.data.enums.CodeType;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,6 +52,8 @@ public class ErrorController {
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
+    String ROOT_PATH = "";
+
     /** 에러페이지는 인터셉터를 수행하지 않으므로, 세션처리를 별도로 하여 가상로그인 사용시 에러를 방지한다. */
     private void setSessionInfo(HttpServletRequest request) {
 
@@ -68,6 +72,14 @@ public class ErrorController {
             session.setAttribute("sessionInfo", sessionInfoVO);
         }
 
+        //
+        ROOT_PATH = "";
+        if(WebUtils.getCookie(request, "sb_login_fg") != null){
+            if(WebUtils.getCookie(request, "sb_login_fg").getValue().equals(BaseEnv.SB_LOGIN_FG)){
+                ROOT_PATH = "mobile/";
+            };
+        }
+
     }
 
     @RequestMapping(value = "/403.sb")
@@ -75,7 +87,7 @@ public class ErrorController {
         // 세션처리 수행 : 가상로그인 사용시 오류 방지
         setSessionInfo(request);
 
-        return "error/403";
+        return ROOT_PATH + "error/403";
     }
 
     @RequestMapping(value = "/application/pos/403.sb")
@@ -88,7 +100,7 @@ public class ErrorController {
         // 세션처리 수행 : 가상로그인 사용시 오류 방지
         setSessionInfo(request);
 
-        return "error/404";
+        return ROOT_PATH + "error/404";
     }
 
     @RequestMapping(value = "/500.sb")
@@ -96,7 +108,7 @@ public class ErrorController {
         // 세션처리 수행 : 가상로그인 사용시 오류 방지
         setSessionInfo(request);
 
-        return "error/500";
+        return ROOT_PATH + "error/500";
     }
 
     /**

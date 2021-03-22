@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -107,6 +108,9 @@ public class AuthController {
         // 아이디 저장 쿠키 처리
         WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, params.getUserId(), params.isChk() ? -1 : 0);
 
+        // 웹에서 로그인 시, 모바일 로그인 쿠키 제거
+        WebUtil.removeCookie(WebUtils.getCookie( request, "sb_login_fg" ));
+
         params.setLoginIp(getClientIp(request));
         params.setBrwsrInfo(request.getHeader("User-Agent"));
 
@@ -183,9 +187,27 @@ public class AuthController {
       */
     @RequestMapping(value = "logout.sb", method = RequestMethod.GET)
     public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        String rUrl = "redirect:/auth/login.sb";
+
+
+        if(sessionInfoVO.getSbLoginFg() != null){
+            if(sessionInfoVO.getSbLoginFg().equals(BaseEnv.SB_LOGIN_FG)){
+                rUrl = "redirect:/mobile/auth/login.sb";
+            }
+        }else{
+            if(WebUtils.getCookie(request, "sb_login_fg") != null){
+                if(WebUtils.getCookie(request, "sb_login_fg").getValue().equals(BaseEnv.SB_LOGIN_FG)){
+                    rUrl = "redirect:/mobile/auth/login.sb";
+                }
+            }
+        }
+
         // 로그아웃 처리
         authService.logout(request, response);
-        return "redirect:/auth/login.sb";
+
+        return rUrl;
     }
 
     @RequestMapping(value = "logdenied.sb", method = RequestMethod.GET)
