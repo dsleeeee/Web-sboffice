@@ -59,7 +59,7 @@ var prter = [
   {"name":"라벨프린터","value":"1"}
 ];
 var prterKind   = ${cnv.getEnvCodeExcpAll("4030")};
-var prterLabelKind  = ${cnv.getEnvCodeExcpAll("4052")};
+var prterLabelKind  = ${ccu.getCommCodeExcpAll("113")};
 var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};

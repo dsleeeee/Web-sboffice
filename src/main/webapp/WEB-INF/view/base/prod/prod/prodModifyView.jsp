@@ -153,7 +153,7 @@
               <%--판매단가--%>
               <th><s:message code="prod.saleUprc"/></th>
               <td>
-                <input type="text" id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
+                <input type="text" maxlength="9" numberOnly id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.saleUprc"
                        required
                        popover-enable="myForm.saleUprc.$invalid"
@@ -405,7 +405,7 @@
               <%--공급단가--%>
               <th><s:message code="prod.splyUprc"/></th>
               <td>
-                <input type="text" id="prodModifySplyUprc" name="splyUprc" class="sb-input w100"
+                <input type="text" maxlength="9" numberOnly id="prodModifySplyUprc" name="splyUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.splyUprc"
                        required
                        popover-enable="myForm.splyUprc.$invalid"
@@ -436,7 +436,7 @@
               <%--원가단가--%>
               <th><s:message code="prod.costUprc"/></th>
               <td>
-                <input type="text" id="prodModifyCostUprc" name="costUprc" class="sb-input w100"
+                <input type="text" maxlength="9" numberOnly id="prodModifyCostUprc" name="costUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.costUprc"
                        required
                        popover-enable="myForm.costUprc.$invalid"
@@ -628,6 +628,12 @@
   var orgnFg = "${orgnFg}";
   var hqOfficeCd = "${hqOfficeCd}";
   var storeCd = "${storeCd}";
+
+  $(function(){
+    $("input:text[numberOnly]").on("keyup", function() {
+      $(this).val($(this).val().replace(/[^0-9]/g,""));
+    });
+  });
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20201224.10" charset="utf-8"></script>

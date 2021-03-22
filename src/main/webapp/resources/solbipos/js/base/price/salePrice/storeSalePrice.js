@@ -200,8 +200,24 @@ console.log('params', params);
 
     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
       if($scope.flex.collectionView.items[i].gChk) {
+        if($scope.flex.collectionView.items[i].saleUprc <= 1000000000){ // 판매금액 상한가 지정
           $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
           params.push($scope.flex.collectionView.items[i]);
+        } else {
+          $scope._popMsg(messages["salePrice.saleUprcMax"]);
+          return false;
+        }
+        // 변경판매가 숫자만 입력가능하도록
+        if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
+          result = messages["salePrice.saleUprcBlank"]; // 변경판매가를 입력하세요.
+        } else {
+          // 숫자만 입력
+          var numChkexp = /[^0-9]/g;
+          if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
+            $scope.flex.collectionView.items[i].saleUprc = "";
+            result = messages["salePrice.saleUprcInChk"]; // 변경판매가는 숫자만 입력해주세요.
+          }
+        }
       }
     }
 

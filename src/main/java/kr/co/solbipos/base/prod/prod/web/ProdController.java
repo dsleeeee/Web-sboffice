@@ -337,4 +337,29 @@ public class ProdController {
 
         return ReturnUtil.returnListJson(Status.OK, result, prodVO);
     }
+
+    /**
+     * 브랜드 콤보박스 리스트 조회
+     *
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2020. 12. 16.
+     */
+    @RequestMapping(value = "/getBrandComboList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBrandComboList(ProdVO prodVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        prodVO.setHqOfficeCd(request.getParameter("hqOfficeCd"));
+
+        List<DefaultMap<String>> result = prodService.getBrandComboList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
 }

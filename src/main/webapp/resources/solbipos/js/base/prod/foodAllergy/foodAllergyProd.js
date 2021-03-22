@@ -32,6 +32,7 @@ app.controller('foodAllergyProdCtrl', ['$scope', '$http', function ($scope, $htt
         $("#lblFoodAllergyProdRecipesCd").text(data.recipesCd);
         $("#lblFoodAllergyProRecipesNm").text(data.recipesNm);
         $("#lblFoodAllergyProdAllergieNm").text(data.allergieNm);
+        $("#lblFoodAllergyProdhqBrandCd").text(data.hqBrandCd);
         $scope.searchFoodAllergyProd();
         event.preventDefault();
     });
@@ -39,6 +40,10 @@ app.controller('foodAllergyProdCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.searchFoodAllergyProd = function(){
         var params = {};
         params.recipesCd = $("#lblFoodAllergyProdRecipesCd").text();
+        params.hqBrandCd = $("#lblFoodAllergyProdhqBrandCd").text();
+        if (params.hqBrandCd == '0') {
+            params.hqBrandCd = null;
+        }
 
         $scope._inquiryMain("/base/prod/foodAllergy/foodAllergy/getFoodAllergyProdList.sb", params, function() {}, false);
     };
@@ -79,6 +84,9 @@ app.controller('foodAllergyProdCtrl', ['$scope', '$http', function ($scope, $htt
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].status = "I";
                 $scope.flex.collectionView.items[i].recipesCd = $("#lblFoodAllergyProdRecipesCd").text();
+                if($("#lblFoodAllergyProdhqBrandCd").text() != '0'){
+                    $scope.flex.collectionView.items[i].hqBrandCd = $("#lblFoodAllergyProdhqBrandCd").text();
+                }
                 params.push($scope.flex.collectionView.items[i]);
             }
         }

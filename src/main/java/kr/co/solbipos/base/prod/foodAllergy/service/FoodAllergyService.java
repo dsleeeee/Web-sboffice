@@ -25,6 +25,9 @@ public interface FoodAllergyService {
     /** 식품 알레르기 정보관리 조회 */
     List<DefaultMap<Object>> getFoodAllergyList(FoodAllergyVO foodAllergyVO, SessionInfoVO sessionInfoVO);
 
+    /** 브랜드 콤보박스 리스트 조회 */
+    List<DefaultMap<Object>> getBrandComboList(FoodAllergyVO foodAllergyVO, SessionInfoVO sessionInfoVO);
+
     /** 식품 알레르기 정보관리 저장 */
     int getFoodAllergySave(FoodAllergyVO[] foodAllergyVOs, SessionInfoVO sessionInfoVO);
 

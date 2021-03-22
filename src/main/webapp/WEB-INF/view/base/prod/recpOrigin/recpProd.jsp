@@ -12,6 +12,7 @@
             <label id="lblRecpProdRecipesCd" style="display: none;"></label>
             <label id="lblRecpProdRecipesNm" style="display: none;"></label>
             <label id="lblRecpProdOrgplceNm" style="display: none;"></label>
+            <label id="lblRecpProdhqBrandCd" style="display: none;"></label>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 

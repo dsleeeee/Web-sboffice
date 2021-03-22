@@ -75,6 +75,31 @@ public class RecpOriginController {
     }
 
     /**
+     * 브랜드 콤보박스 리스트 조회
+     *
+     * @param recpOriginVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021. 03. 18.
+     */
+    @RequestMapping(value = "/recpOrigin/getBrandComboList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBrandComboList(RecpOriginVO recpOriginVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        recpOriginVO.setHqOfficeCd(request.getParameter("hqOfficeCd"));
+
+        List<DefaultMap<Object>> result = recpOriginService.getBrandComboList(recpOriginVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, recpOriginVO);
+    }
+
+    /**
      * 원산지관리 저장
      *
      * @param recpOriginVOs

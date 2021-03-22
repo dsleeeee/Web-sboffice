@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="subCon">
 
@@ -48,7 +49,9 @@
                                 <wj-flex-grid-column header="<s:message code="foodAllergy.recipesCd"/>" binding="recipesCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="foodAllergy.recipesNm"/>" binding="recipesNm" width="100" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="foodAllergy.allergieNm"/>" binding="allergieNm" width="100" align="center"></wj-flex-grid-column>
-
+                                <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
+                                    <wj-flex-grid-column header="<s:message code="recpOrigin.hqBrandNm"/>" binding="hqBrandCd" data-map="hqBrandFgMap" width="70" align="center" ></wj-flex-grid-column>
+                                </c:if>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -95,6 +98,9 @@
 
 </div>
 
+<script type="text/javascript">
+    var hqOfficeCd = "${hqOfficeCd}";
+</script>
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20201006.03" charset="utf-8"></script>
 
 <%-- 알레르기-상품 등록 팝업 --%>

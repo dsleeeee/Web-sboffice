@@ -55,6 +55,12 @@ public class FoodAllergyServiceImpl implements FoodAllergyService {
         return foodAllergyMapper.getFoodAllergyList(foodAllergyVO);
     }
 
+    /** 브랜드 콤보박스 리스트 조회 */
+    @Override
+    public List<DefaultMap<Object>> getBrandComboList(FoodAllergyVO foodAllergyVO, SessionInfoVO sessionInfoVO) {
+        return foodAllergyMapper.getBrandComboList(foodAllergyVO);
+    }
+
     /** 식품 알레르기 정보관리 저장 */
     @Override
     public int getFoodAllergySave(FoodAllergyVO[] foodAllergyVOs, SessionInfoVO sessionInfoVO) {

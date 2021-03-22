@@ -868,4 +868,11 @@ public class ProdServiceImpl implements ProdService {
 
         return prodMapper.getSearchNoProdVendrList(prodVO);
     }
+
+    /** 브랜드 콤보박스 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getBrandComboList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        return prodMapper.getBrandComboList(prodVO);
+    }
 }
