@@ -199,19 +199,19 @@ console.log('params', params);
     var saleAmtOption = $scope.prodInfo.saleAmtOption;
 
     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      // 변경판매가 숫자만 입력가능하도록
-      if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
-        $scope._popMsg(messages["salePrice.saleUprcBlank"]); // 변경판매가를 입력하세요.
-        return false;
-      } else {
-        // 숫자만 입력
-        var numChkexp = /[^0-9]/g;
-        if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
-          $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
-          return false;
-        }
-      }
       if($scope.flex.collectionView.items[i].gChk) {
+        // 변경판매가 숫자만 입력가능하도록
+        if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
+          $scope._popMsg(messages["salePrice.saleUprcBlank"]); // 변경판매가를 입력하세요.
+          return false;
+        } else {
+          // 숫자만 입력
+          var numChkexp = /[^0-9]/g;
+          if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
+            $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+            return false;
+          }
+        }
         if($scope.flex.collectionView.items[i].saleUprc <= 1000000000){ // 판매금액 상한가 지정
           $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
           params.push($scope.flex.collectionView.items[i]);
