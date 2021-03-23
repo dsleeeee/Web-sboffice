@@ -91,14 +91,14 @@
     -->
     <select id="getPosDayPeriodDtlList" parameterType="posDayPeriodVO" resultType="DefaultMap">
         /* USE : PosDayPeriodMapper.getPosDayPeriodDtlList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <!--<include refid="CmmSQL.PagingTemplateHeader"/>-->
         SELECT
         FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
         tsdpp.PROD_CD,
         tmp.PROD_NM,
         SUM(tsdpp.TOT_SALE_QTY) AS TOT_SALE_QTY,
         SUM(tsdpp.REAL_SALE_AMT) AS REAL_SALE_AMT
-        <include refid="CmmSQL.PagingTemplateCount"/>
+        <!--<include refid="CmmSQL.PagingTemplateCount"/>-->
         FROM TB_SL_DAILY_POS_PROD tsdpp,
         TB_MS_PRODUCT tmp
         WHERE 1=1
@@ -114,7 +114,7 @@
         AND tmp.PROD_CD = tsdpp.PROD_CD
         GROUP BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdpp.PROD_CD, tmp.PROD_NM
         ORDER BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdpp.PROD_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <!--<include refid="CmmSQL.PagingTemplateBottom"/>-->
     </select>
 
     <!-- 설정기간별탭 - 상세 엑셀 조회 -->
