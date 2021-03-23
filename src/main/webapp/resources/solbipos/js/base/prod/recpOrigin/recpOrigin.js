@@ -99,7 +99,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
         params.recipesCd="자동채번";
         params.recipesNm = "";
         params.orgplceNm = "";
-        params.hqBrandCd = "기본브랜드";
+        params.hqBrandCd = "선택";
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params);
@@ -142,7 +142,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(messages["recpOrigin.orgplceNmMax"]);
                 return false;
             }
-            if($scope.flex.collectionView.items[i].hqBrandCd == '0' || $scope.flex.collectionView.items[i].hqBrandCd == '기본브랜드') {
+            if($scope.flex.collectionView.items[i].hqBrandCd == '0' || $scope.flex.collectionView.items[i].hqBrandCd == '선택') {
                 $scope.flex.collectionView.items[i].hqBrandCd = null;
             }
         }
@@ -225,7 +225,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
                         comboArray = [];
                         comboData      = {};
                         comboData.id   = "0";
-                        comboData.name = "기본브랜드";
+                        comboData.name = "선택";
                         comboArray.push(comboData);
 
                         for (var i = 0; i < list.length; i++) {
