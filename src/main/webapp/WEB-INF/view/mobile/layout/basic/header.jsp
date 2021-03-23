@@ -11,7 +11,7 @@
 <%-- 사용자정보영역 --%>
 <div class="topBar">
   <div class="menuControl" style="float:left;">
-    <a href="#" id="_arrow" class="arrowOpen">
+    <a href="#" id="_arrow" class="arrowClose">
       <span></span>
     </a>
   </div>

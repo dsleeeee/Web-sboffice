@@ -18,7 +18,8 @@
         twui.USER_ID,
         twui.USER_PWD,
         info.USER_NM,
-        twui.AUTH_GRP_CD,
+        <!-- twui.AUTH_GRP_CD, -->
+        (SELECT FN_TB_WB_AUTHOR_GRP_USE_CD(#{userId}, 'MOB') FROM DUAL) AS AUTH_GRP_CD,
         info.ORGN_FG,
         info.ORGN_GRP_CD,
         info.ORGN_GRP_NM,
