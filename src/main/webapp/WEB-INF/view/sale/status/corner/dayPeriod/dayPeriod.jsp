@@ -52,40 +52,42 @@
 	            	</span>
 				</td>
 			</tr>
-			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-				<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="" />
-				<tr>
-				<%-- 매장코드 --%>
-				<th><s:message code="todayBillSaleDtl.store" /></th>
-				<td colspan="3">
-					<%-- 매장선택 모듈 싱글 선택 사용시 include
-						param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                           displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                           modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                           closeFunc - 팝업 닫기시 호출할 함수            --%>
-                       <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
-						<jsp:param name="targetId" value="cornerDayPeriodSelectStore" />
-						<jsp:param name="subTargetId" value="cornerDayPeriodSelectCorner" />
-						<jsp:param name="closeFunc" value="closeSelectStore" />
-					</jsp:include> <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-				</td>
-				</tr>
-			</c:if>
-			<c:if test="${sessionInfo.orgnFg == 'STORE'}">
-				<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}" />
-			</c:if>
-			<input type="hidden" id="cornerDayPeriodSelectCornerCd" value="" />
-			<input type="hidden" id="cornerDayPeriodSelectCornerName" value="" />
 			<tr>
+				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+					<%-- 매장코드 --%>
+					<th><s:message code="todayBillSaleDtl.store" /></th>
+					<td>
+						<%-- 매장선택 모듈 싱글 선택 사용시 include
+							param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+							   displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+							   modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+							   closeFunc - 팝업 닫기시 호출할 함수            --%>
+						   <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
+							<jsp:param name="targetId" value="cornerDayPeriodSelectStore" />
+							<jsp:param name="subTargetId" value="cornerDayPeriodSelectCorner" />
+							<jsp:param name="closeFunc" value="closeSelectStore" />
+						</jsp:include> <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+					</td>
+					<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="" />
+				</c:if>
+				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+					<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}" />
+				</c:if>
+				<input type="hidden" id="cornerDayPeriodSelectCornerCd" value="" />
+				<input type="hidden" id="cornerDayPeriodSelectCornerName" value="" />
 				<%-- 코너표시 --%>
 				<th><s:message code="corner.cornrDisplay" /></th>
-				<td colspan="3">
+				<td>
 					<jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
 						<jsp:param name="targetId" value="cornerDayPeriodSelectCorner" />
 						<jsp:param name="targetStoreId" value="cornerDayPeriodSelectStore" />
 						<jsp:param name="closeFunc" value="closeSelectCorner" />
 					</jsp:include>
 				</td>
+				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+					<td></td>
+					<td></td>
+				</c:if>
 			</tr>
 		</tbody>
 	</table>
@@ -158,18 +160,18 @@
 			<div class="oh sb-select mb10">
 				<%--          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span> --%>
 				<%-- 페이지 스케일  --%>
-				<wj-combo-box
-				    class="w100px fl"
-				    id="cornerDayPeriodDtlListScaleBox"
-					ng-model="cornerDayPeriodDtlListScale"
-					items-source="_getComboData('cornerDayPeriodDtlListScaleBox')"
-					display-member-path="name"
-					selected-value-path="value"
-					initialized="initComboBox(s)"
-					control="listScaleCombo"
-                    is-editable="true"
-                    text-changed="_checkValidation(s)">
-			    </wj-combo-box>
+				<%--<wj-combo-box--%>
+				    <%--class="w100px fl"--%>
+				    <%--id="cornerDayPeriodDtlListScaleBox"--%>
+					<%--ng-model="cornerDayPeriodDtlListScale"--%>
+					<%--items-source="_getComboData('cornerDayPeriodDtlListScaleBox')"--%>
+					<%--display-member-path="name"--%>
+					<%--selected-value-path="value"--%>
+					<%--initialized="initComboBox(s)"--%>
+					<%--control="listScaleCombo"--%>
+                    <%--is-editable="true"--%>
+                    <%--text-changed="_checkValidation(s)">--%>
+			    <%--</wj-combo-box>--%>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="text" id="cornerDayPeriodDtlSelectStoreStoreNum" ng-model="storeNum" class="inputTxt" />
 				</c:if>
@@ -207,10 +209,10 @@
 			</div>
 			<%--//위즈모 테이블--%>
 			<%-- 페이지 리스트 --%>
-			<div class="pageNum3 mt20">
-				<%-- id --%>
-				<ul id="cornerDayPeriodDtlCtrlPager" data-size="10"></ul>
-			</div>
+			<%--<div class="pageNum3 mt20">--%>
+				<%--&lt;%&ndash; id &ndash;%&gt;--%>
+				<%--<ul id="cornerDayPeriodDtlCtrlPager" data-size="10"></ul>--%>
+			<%--</div>--%>
 			<%--//페이지 리스트--%>
 		</div>
 	</div>
