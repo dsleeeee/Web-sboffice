@@ -168,12 +168,14 @@ app.controller('monthProdClassCtrl', ['$scope', '$http', '$timeout', function ($
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params      = {};
                         params.yearMonth = selectedRow.yearMonth.replace("-", "");
-                        params.strProdClassCd = $("#hdMonthProdClassCd").val();
+                        // params.strProdClassCd = $("#hdMonthProdClassCd").val();
+                        params.strProdClassCd = arr[i];
                         params.level = $scope.level;
                         params.prodCd = $scope.prodCd;
                         params.prodNm = $scope.prodNm;
                         params.barCd = $scope.barCd;
-                        params.prodClassCd = arr[i];
+                        // params.prodClassCd = arr[i];
+                        params.prodClassCd = $scope.prodClassCd;
                         params.storeCd = $("#monthProdClassStoreCd").val();
                         params.gubun = "monthProdClass";
 
@@ -229,7 +231,7 @@ app.controller('monthProdClassCtrl', ['$scope', '$http', '$timeout', function ($
 
             // 헤더머지 컬럼 생성
             for (var i = 1; i <= arr.length; i++) {
-                dataItem['pay' + i + "SaleAmt"] = arr[i-1];
+                dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
                 dataItem['pay' + i + "SaleQty"] = arr[i-1];
             }
             grid.columnHeaders.rows[0].dataItem = dataItem

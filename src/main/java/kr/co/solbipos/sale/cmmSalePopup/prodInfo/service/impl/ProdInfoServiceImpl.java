@@ -24,7 +24,7 @@ public class ProdInfoServiceImpl implements ProdInfoService {
     public List<DefaultMap<Object>> getProdSaleDtlList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
 
 //        System.out.println("test1111");
-        prodInfoVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
 
@@ -50,4 +50,5 @@ public class ProdInfoServiceImpl implements ProdInfoService {
 
         return prodInfoMapper.getProdSaleDtlList(prodInfoVO);
     }
+
 }

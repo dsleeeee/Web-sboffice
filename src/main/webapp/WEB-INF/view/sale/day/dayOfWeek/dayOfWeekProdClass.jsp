@@ -151,7 +151,7 @@
                     <wj-flex-grid-column header="<s:message code="dayofweek.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 컬럼 생성--%>
                     <c:forEach var="i" begin="1" end="200" step="1">
-                        <wj-flex-grid-column header="<s:message code="dayofweek.realSaleAmt"/>" binding="pay${i}SaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayofweek.realSaleAmt"/>" binding="pay${i}RealSaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayofweek.saleQty"/>" binding="pay${i}SaleQty" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
 

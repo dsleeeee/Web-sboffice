@@ -33,6 +33,9 @@ public class ProdInfoVO extends PageVO {
     /** 회원소속코드 */
     private String membrOrgnCd;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     /** 매장코드 */
     private String[] storeCdList;
 
@@ -84,6 +87,10 @@ public class ProdInfoVO extends PageVO {
     public void setMembrOrgnCd(String membrOrgnCd) {
         this.membrOrgnCd = membrOrgnCd;
     }
+
+    public String getHqOfficeCd() { return hqOfficeCd; }
+
+    public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
 
     public String[] getStoreCdList() {
         return storeCdList;

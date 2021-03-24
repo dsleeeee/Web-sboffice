@@ -311,33 +311,33 @@
                 SELECT
                 YEAR_MONTH,
                 COUNT(DISTINCT STORE_CD) AS STORE_CNT,
-                SUM(SALE_AMT) AS TOT_REAL_SALE_AMT,
+                SUM(REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
                 SUM(SALE_QTY) AS TOT_SALE_QTY
                 FROM
                 (
                     SELECT
-                    TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-                    tssd.STORE_CD,
-                    tssd.PROD_CD,
+                    TO_CHAR(TO_DATE(tsmp.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                    tsmp.STORE_CD,
+                    tsmp.PROD_CD,
                     tmp.PROD_NM,
                     tmpb.BARCD_CD,
-                    tssd.SALE_AMT,
-                    tssd.SALE_QTY,
+                    tsmp.REAL_SALE_AMT AS REAL_SALE_AMT,
+                    tsmp.TOT_SALE_QTY AS SALE_QTY,
                     FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH
-                    FROM TB_SL_SALE_DTL tssd,
+                    FROM TB_SL_MONTHLY_PROD tsmp,
                     TB_MS_PRODUCT tmp,
                     TB_MS_PRODUCT_BARCD tmpb
                     WHERE 1=1
-                    AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+                    AND tsmp.HQ_OFFICE_CD = #{membrOrgnCd}
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tssd.STORE_CD IN
+                        AND tsmp.STORE_CD IN
                         <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                             #{item}
                         </foreach>
                     </if>
-                    AND tssd.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                    AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                     <if test="prodCd != null and prodCd != ''">
-                        AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                        AND tsmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
                     </if>
                     <if test="prodNm != null and prodNm != ''">
                         AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
@@ -345,8 +345,8 @@
                     <if test="barCd != null and barCd != ''">
                         AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                     </if>
-                    AND tmp.STORE_CD = tssd.STORE_CD
-                    AND tmp.PROD_CD = tssd.PROD_CD
+                    AND tmp.STORE_CD = tsmp.STORE_CD
+                    AND tmp.PROD_CD = tsmp.PROD_CD
                     AND tmpb.STORE_CD (+)= tmp.STORE_CD
                     AND tmpb.PROD_CD (+)= tmp.PROD_CD
                 )
@@ -371,45 +371,44 @@
                     ${pivotProdClassCol2}
                     FROM
                     (
-                        SELECT *
+                        SELECT
+                        YEAR_MONTH,
+                        STORE_CD,
+                        REAL_SALE_AMT,
+                        SALE_QTY,
+                        SUBSTR(PATH, 0, 5) AS Level1,
+                        SUBSTR(PATH, 7, 5) AS Level2,
+                        SUBSTR(PATH, 13, 5) AS Level3
                         FROM
                         (
                             SELECT
                             YEAR_MONTH,
                             STORE_CD,
-                            PROD_CD,
-                            PROD_NM,
-                            BARCD_CD,
-                            SALE_AMT,
+                            REAL_SALE_AMT,
                             SALE_QTY,
-                            REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS Level1,
-                            REPLACE(SUBSTR(PATH, 7, 6) ,'▶','') AS Level2,
-                            REPLACE(SUBSTR(PATH, 13, 6) ,'▶','') AS Level3
+                            FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH
                             FROM
                             (
                                 SELECT
-                                TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-                                tssd.STORE_CD,
-                                tssd.PROD_CD,
-                                tmp.PROD_NM,
-                                tmpb.BARCD_CD,
-                                tssd.SALE_AMT,
-                                tssd.SALE_QTY,
-                                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH
-                                FROM TB_SL_SALE_DTL tssd,
+                                TO_CHAR(TO_DATE(tsmp.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                                tsmp.STORE_CD,
+                                tmp.PROD_CLASS_CD,
+                                SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                                SUM(tsmp.TOT_SALE_QTY) AS SALE_QTY
+                                FROM TB_SL_MONTHLY_PROD tsmp,
                                 TB_MS_PRODUCT tmp,
                                 TB_MS_PRODUCT_BARCD tmpb
                                 WHERE 1=1
-                                AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+                                AND tsmp.HQ_OFFICE_CD = #{membrOrgnCd}
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tssd.STORE_CD IN
+                                    AND tsmp.STORE_CD IN
                                     <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                                         #{item}
                                     </foreach>
                                 </if>
-                                AND tssd.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                                AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                                 <if test="prodCd != null and prodCd != ''">
-                                    AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                                    AND tsmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
                                 </if>
                                 <if test="prodNm != null and prodNm != ''">
                                     AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
@@ -417,31 +416,31 @@
                                 <if test="barCd != null and barCd != ''">
                                     AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                                 </if>
-                                AND tmp.STORE_CD = tssd.STORE_CD
-                                AND tmp.PROD_CD = tssd.PROD_CD
+                                <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                                </if>
+                                AND tmp.STORE_CD = tsmp.STORE_CD
+                                AND tmp.PROD_CD = tsmp.PROD_CD
                                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
                                 AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                                GROUP BY tsmp.SALE_YM, tsmp.STORE_CD, tmp.PROD_CLASS_CD
                             )
-                        WHERE 1=1
-                        <if test="prodClassCd != null and prodClassCd != ''">
-                            AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-                        </if>
+                        )
+                        <!--WHERE 1=1-->
+                        <!--AND ${level} IN-->
+                        <!--<foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">-->
+                            <!--#{item}-->
+                        <!--</foreach>-->
                     )
-                    WHERE 1=1
-                    AND ${level} IN
-                    <foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">
-                        ${item}
-                    </foreach>
-                )
-                PIVOT
-                (
-                    SUM(SALE_AMT) AS SALE_AMT,
-                    SUM(SALE_QTY) AS SALE_QTY
-                    FOR ${level} IN (${pivotProdClassCol3})
-                )
-                GROUP BY YEAR_MONTH
-            ) tba
-            ORDER BY tba.YEAR_MONTH
+                    PIVOT
+                    (
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                        SUM(SALE_QTY) AS SALE_QTY
+                        FOR ${level} IN (${pivotProdClassCol3})
+                    )
+                    GROUP BY YEAR_MONTH
+                ) tba
+                ORDER BY tba.YEAR_MONTH
             </when>
         </choose>
         <!--<choose>-->

@@ -149,7 +149,7 @@
                     <wj-flex-grid-column header="<s:message code="month.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 컬럼 생성--%>
                     <c:forEach var="i" begin="1" end="200" step="1">
-                        <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="pay${i}SaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="pay${i}RealSaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="month.saleQty"/>" binding="pay${i}SaleQty" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
 
@@ -171,4 +171,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthProdClass.js?ver=20210118.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthProdClass.js?ver=20210118.03" charset="utf-8"></script>
