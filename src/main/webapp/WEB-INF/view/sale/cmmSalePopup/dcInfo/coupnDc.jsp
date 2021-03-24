@@ -18,7 +18,7 @@
     <div class="wj-dialog-body sc2" style="height: 360px;">
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px; overflow-y: hidden; overflow-x: hidden;"">
+        <div class="wj-gridWrap" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
