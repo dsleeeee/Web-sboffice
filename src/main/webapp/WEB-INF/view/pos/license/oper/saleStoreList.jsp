@@ -155,6 +155,8 @@
                     <wj-flex-grid-column header="<s:message code="oper.hqOfficeNm"/>    " binding="hqOfficeNm"      width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.storeCd"/>       " binding="storeCd"         width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.storeNm"/>       " binding="storeNm"         width="150" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.bizNo"/>         " binding="bizNo"           width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.vendorTermnlNo"/>" binding="vendorTermnlNo"  width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysStatNm"/>     " binding="sysStatNm"       width=" 50" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.vanNm"/>         " binding="vanNm"           width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>   " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
