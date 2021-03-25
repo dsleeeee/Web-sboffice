@@ -61,14 +61,106 @@ public class ProdInfoController {
      * @author  김설아
      * @since   2019. 12. 11.
      */
-    @RequestMapping(value = "/prodSaleDtl/list.sb", method = RequestMethod.POST)
+//    @RequestMapping(value = "/prodSaleDtl/list.sb", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Result getProdSaleDtlList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+//                                           HttpServletResponse response, Model model) {
+//
+//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+//
+//        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlList(prodInfoVO, sessionInfoVO);
+//
+//        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
+//    }
+
+    /**
+     * 매출공통팝업 - 상품매출 상세내역 조회
+     *
+     * @param prodInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 24.
+     */
+    @RequestMapping(value = "/prodSaleDtl/getProdSaleDtlDayList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdSaleDtlList(ProdInfoVO prodInfoVO, HttpServletRequest request,
-                                           HttpServletResponse response, Model model) {
+    public Result getProdSaleDtlDayList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlList(prodInfoVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlDayList(prodInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
+    }
+
+    /**
+     * 매출공통팝업 - 상품매출 상세내역 조회
+     *
+     * @param prodInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 24.
+     */
+    @RequestMapping(value = "/prodSaleDtl/getProdSaleDtlMonthList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleDtlMonthList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlMonthList(prodInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
+    }
+
+    /**
+     * 매출공통팝업 - 상품매출 상세내역 조회
+     *
+     * @param prodInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 24.
+     */
+    @RequestMapping(value = "/prodSaleDtl/getProdSaleDtlDayProdClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleDtlDayProdClassList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlDayProdClassList(prodInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
+    }
+
+    /**
+     * 매출공통팝업 - 상품매출 상세내역 조회
+     *
+     * @param prodInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 24.
+     */
+    @RequestMapping(value = "/prodSaleDtl/getProdSaleDtlMonthProdClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleDtlMonthProdClassList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlMonthProdClassList(prodInfoVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
     }

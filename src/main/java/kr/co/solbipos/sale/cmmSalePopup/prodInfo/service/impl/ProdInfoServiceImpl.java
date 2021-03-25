@@ -20,12 +20,85 @@ public class ProdInfoServiceImpl implements ProdInfoService {
     }
 
     /** 매출공통팝업 - 상품매출 상세내역 조회 */
-    @Override
-    public List<DefaultMap<Object>> getProdSaleDtlList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+//    @Override
+//    public List<DefaultMap<Object>> getProdSaleDtlList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+//
+////        System.out.println("test1111");
+//        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+//        prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
+//
+//        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+//            // 매장 array 값 세팅
+//            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+//            prodInfoVO.setStoreCdList(storeCds);
+//        }
+//        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+//            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+//            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+//            prodInfoVO.setStoreCdList(storeCds);
+//        }
+//
+//        // 기간별매출 > 일자별 탭 > 상품분류별 탭
+//        // 기간별매출 > 월별 탭 > 상품분류별 탭
+//        if(("dayProdClass").equals(prodInfoVO.getGubun()) || ("monthProdClass").equals(prodInfoVO.getGubun())) {
+//            if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {
+//                // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+//                prodInfoVO.setArrProdClassCd(prodInfoVO.getStrProdClassCd().split(","));
+//            }
+//        }
+//
+//        return prodInfoMapper.getProdSaleDtlList(prodInfoVO);
+//    }
 
-//        System.out.println("test1111");
-        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    /** 매출공통팝업 - 상품매출 상세내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDtlDayList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+
         prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
+        }
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
+        }
+
+        return prodInfoMapper.getProdSaleDtlDayList(prodInfoVO);
+    }
+
+    /** 매출공통팝업 - 상품매출 상세내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDtlMonthList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
+        }
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
+        }
+
+        return prodInfoMapper.getProdSaleDtlMonthList(prodInfoVO);
+    }
+
+    /** 매출공통팝업 - 상품매출 상세내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDtlDayProdClassList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
@@ -39,16 +112,38 @@ public class ProdInfoServiceImpl implements ProdInfoService {
             prodInfoVO.setStoreCdList(storeCds);
         }
 
-        // 기간별매출 > 일자별 탭 > 상품분류별 탭
-        // 기간별매출 > 월별 탭 > 상품분류별 탭
-        if(("dayProdClass").equals(prodInfoVO.getGubun()) || ("monthProdClass").equals(prodInfoVO.getGubun())) {
-            if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {
-                // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
-                prodInfoVO.setArrProdClassCd(prodInfoVO.getStrProdClassCd().split(","));
-            }
+        if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {
+            // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+            prodInfoVO.setArrProdClassCd(prodInfoVO.getStrProdClassCd().split(","));
         }
 
-        return prodInfoMapper.getProdSaleDtlList(prodInfoVO);
+        return prodInfoMapper.getProdSaleDtlDayProdClassList(prodInfoVO);
     }
 
+    /** 매출공통팝업 - 상품매출 상세내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDtlMonthProdClassList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
+        }
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
+        }
+
+        if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {
+            // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+            prodInfoVO.setArrProdClassCd(prodInfoVO.getStrProdClassCd().split(","));
+        }
+
+        return prodInfoMapper.getProdSaleDtlMonthProdClassList(prodInfoVO);
+    }
 }

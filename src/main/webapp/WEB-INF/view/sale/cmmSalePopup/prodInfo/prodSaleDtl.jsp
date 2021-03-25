@@ -52,4 +52,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/prodInfo/prodSaleDtl.js?ver=20210201.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/prodInfo/prodSaleDtl.js?ver=20210201.04" charset="utf-8"></script>
