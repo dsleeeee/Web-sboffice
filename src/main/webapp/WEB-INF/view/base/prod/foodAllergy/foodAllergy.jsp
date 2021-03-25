@@ -25,8 +25,8 @@
         <%-- left --%>
         <div class="wj-TblWrap mt20 mb20 w40 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+                <s:message code="foodAllergy.foodAllergy"/>
                 <div class="updownSet oh mb10">
-                    <span class="fl bk lh30"><s:message code="foodAllergy.foodAllergy"/></span>
                     <button class="btn_skyblue" id="btnFoodAllergyAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
                     <button class="btn_skyblue" id="btnFoodAllergySave" ng-click="save()"><s:message code='cmm.save' /></button>
                     <button class="btn_skyblue" id="btnFoodAllergyDel" ng-click="del()"><s:message code='cmm.del' /></button>
@@ -61,11 +61,11 @@
     <%--right--%>
     <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="foodAllergyDetailCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+            <s:message code="foodAllergy.allergyProd"/>
             <label id="lblRecipesCd"></label>
             <label id="lblRecipesNm"></label>
             <label id="lblAllergieNm"></label>
             <div class="updownSet oh mb10">
-                <span class="fl bk lh30"><s:message code="foodAllergy.allergyProd"/></span>
                 <button class="btn_skyblue" id="btnFoodAllergyProdAdd" ng-click="add()"><s:message code='cmm.add' /></button>
                 <button class="btn_skyblue" id="btnFoodAllergyProdDel" ng-click="del()"><s:message code='cmm.del' /></button>
             </div>
