@@ -153,7 +153,7 @@
               <%--판매단가--%>
               <th><s:message code="prod.saleUprc"/></th>
               <td>
-                <input type="text" maxlength="9" numberOnly id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
+                <input type="text" maxlength="10" numberOnly id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.saleUprc"
                        required
                        popover-enable="myForm.saleUprc.$invalid"
@@ -631,7 +631,7 @@
 
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
-      $(this).val($(this).val().replace(/[^0-9]/g,""));
+      $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
     });
   });
 </script>
