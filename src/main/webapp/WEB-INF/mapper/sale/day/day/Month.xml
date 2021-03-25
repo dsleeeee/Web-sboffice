@@ -19,49 +19,37 @@
     <select id="getMonthTotalList"  parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTotalList */
         SELECT
-        tsshpd.YEAR_MONTH,
-        tsshpd.STORE_CNT,
-        tsshpd.SALE_CNT,
-        tsshpd.TOT_SALE_AMT,
-        tsshpd.TOT_DC_AMT,
-        tsshpd.REAL_SALE_AMT,
-        tsshpd.BILL_CNT,
-        tsshpd.BILL_UPRC,
-        tsshpd.GA_AMT,
-        tsshpd.VAT_AMT,
-        tsshpd.TOT_TIP_AMT,
-        tsshpd.TOT_ETC_AMT,
-        <foreach collection="arrPayCol" item="item" separator="+">
-            NVL(tsshpd.PAY${item}, 0)
-        </foreach> AS TOT_PAY_AMT,
+        tssh.YEAR_MONTH,
+        tssh.STORE_CNT,
+        tssh.SALE_CNT,
+        tssh.TOT_SALE_AMT,
+        tssh.TOT_DC_AMT,
+        tssh.REAL_SALE_AMT,
+        tssh.BILL_CNT,
+        tssh.BILL_UPRC,
+        tssh.GA_AMT,
+        tssh.VAT_AMT,
+        tssh.TOT_TIP_AMT,
+        tssh.TOT_ETC_AMT,
         <foreach collection="arrPayCol" item="item" separator=",">
-            NVL(tsshpd.PAY${item}, 0) AS PAY${item}
+            tsshpd.PAY${item}
         </foreach> ,
-        tsshpd.GEN_REAL_SALE_AMT,
-        NVL(ROUND(tsshpd.GEN_REAL_SALE_AMT/tsshpd.REAL_SALE_AMT*100),0) AS GEN_REAL_SALE_AMT_PER,
-        tsshpd.DLVR_REAL_SALE_AMT,
-        NVL(ROUND(tsshpd.DLVR_REAL_SALE_AMT/tsshpd.REAL_SALE_AMT*100),0) AS DLVR_REAL_SALE_AMT_PER,
-        tsshpd.PACK_REAL_SALE_AMT,
-        NVL(ROUND(tsshpd.PACK_REAL_SALE_AMT/tsshpd.REAL_SALE_AMT*100),0) AS PACK_REAL_SALE_AMT_PER
+        tsshpd.TOT_PAY_AMT
         FROM
         (
             SELECT
-            HQ_OFFICE_CD,
             YEAR_MONTH,
             COUNT(DISTINCT STORE_CD) AS STORE_CNT,
             COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
             SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
             SUM(TOT_DC_AMT) AS TOT_DC_AMT,
             SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-            COUNT(BILL_NO) AS BILL_CNT,
-            ROUND(SUM(REAL_SALE_AMT) / COUNT(BILL_NO)) AS BILL_UPRC,
+            SUM(BILL_CNT) AS BILL_CNT,
+            ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC,
             SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
             SUM(VAT_AMT) AS VAT_AMT,
             SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
             SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
-            <foreach collection="arrPayCol" item="item" separator=",">
-                SUM(PAY${item}) AS PAY${item}
-            </foreach> ,
             SUM(GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
             SUM(DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
             SUM(PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
@@ -72,20 +60,17 @@
                 TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
                 tssh.HQ_OFFICE_CD,
                 tssh.STORE_CD,
-                tssh.TOT_SALE_AMT,
-                tssh.TOT_DC_AMT,
-                tssh.REAL_SALE_AMT,
-                tssh.BILL_NO,
-                tssh.VAT_AMT,
-                tssh.TOT_TIP_AMT,
-                tssh.TOT_ETC_AMT,
-                tsshp.PAY_CD,
-                tsshp.PAY_AMT,
-                tssd.GEN_REAL_SALE_AMT,
-                tssd.DLVR_REAL_SALE_AMT,
-                tssd.PACK_REAL_SALE_AMT
+                SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
+                SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                COUNT(tssh.BILL_NO) AS BILL_CNT,
+                SUM(tssh.VAT_AMT) AS VAT_AMT,
+                SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                SUM(tssd.GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
+                SUM(tssd.DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
+                SUM(tssd.PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
                 FROM TB_SL_SALE_HDR tssh,
-                TB_SL_SALE_HDR_PAY tsshp,
                 (
                     SELECT
                     HQ_OFFICE_CD,
@@ -109,48 +94,205 @@
                         #{item}
                     </foreach>
                 </if>
-                AND tsshp.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
-                AND tsshp.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
-                AND tsshp.STORE_CD (+)= tssh.STORE_CD
-                AND tsshp.SALE_DATE (+)= tssh.SALE_DATE
-                AND tsshp.POS_NO (+)= tssh.POS_NO
-                AND tsshp.BILL_NO (+)= tssh.BILL_NO
                 AND tssd.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
                 AND tssd.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
                 AND tssd.STORE_CD (+)= tssh.STORE_CD
                 AND tssd.SALE_DATE (+)= tssh.SALE_DATE
                 AND tssd.POS_NO (+)= tssh.POS_NO
                 AND tssd.BILL_NO (+)= tssh.BILL_NO
+                GROUP BY tssh.SALE_DATE, tssh.HQ_OFFICE_CD, tssh.STORE_CD
             )
-            PIVOT
+            GROUP BY YEAR_MONTH, HQ_OFFICE_CD
+        ) tssh,
+        (
+            SELECT
+            <foreach collection="arrPayCol" item="item" separator="+">
+                NVL(PAY${item}, 0)
+            </foreach> AS TOT_PAY_AMT,
+            <foreach collection="arrPayCol" item="item" separator=",">
+                NVL(PAY${item}, 0) AS PAY${item}
+            </foreach> ,
+            YEAR_MONTH
+            FROM
             (
-                SUM(PAY_AMT)
-                FOR PAY_CD
-                IN (${pivotPayCol})
-                /* IN ('01' AS PAY01,
-                '02' AS PAY02,
-                '03' AS PAY03,
-                '04' AS PAY04,
-                '05' AS PAY05,
-                '06' AS PAY06,
-                '07' AS PAY07,
-                '08' AS PAY08,
-                '09' AS PAY09,
-                '10' AS PAY10,
-                '11' AS PAY11,
-                '12' AS PAY12,
-                '13' AS PAY13,
-                '14' AS PAY14,
-                '15' AS PAY15,
-                '16' AS PAY16,
-                '17' AS PAY17,
-                '18' AS PAY18)*/
+                SELECT
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    SUM(PAY${item}) AS PAY${item}
+                </foreach> ,
+                YEAR_MONTH
+                FROM
+                (
+                    SELECT
+                    tsshp.SALE_DATE,
+                    TO_CHAR(TO_DATE(tsshp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
+                    tsshp.PAY_CD,
+                    tsshp.PAY_AMT
+                    FROM TB_SL_SALE_HDR_PAY tsshp
+                    WHERE 1=1
+                    AND tsshp.HQ_OFFICE_CD = #{membrOrgnCd}
+                    AND tsshp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tsshp.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                )
+                PIVOT
+                (
+                    SUM(PAY_AMT)
+                    FOR PAY_CD
+                    IN (${pivotPayCol})
+                )
+                GROUP BY  YEAR_MONTH
             )
-            GROUP BY HQ_OFFICE_CD, YEAR_MONTH
+            WHERE 1=1
+            ORDER BY YEAR_MONTH
         ) tsshpd
-        WHERE 1=1
-        ORDER BY tsshpd.YEAR_MONTH
+        WHERE tsshpd.YEAR_MONTH = tssh.YEAR_MONTH
+
     </select>
+
+    <!-- 월별종합탭 - 월별종합조회-->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_DTL
+        COMMENTS : [매출]헤더 와 [매출]헤더_결제, [매출]상세
+    -->
+    <!--<select id="getMonthTotalList"  parameterType="MonthVO" resultType="DefaultMap">-->
+        <!--/* MonthMapper.getMonthTotalList */-->
+        <!--SELECT-->
+        <!--tsshpd.YEAR_MONTH,-->
+        <!--tsshpd.STORE_CNT,-->
+        <!--tsshpd.SALE_CNT,-->
+        <!--tsshpd.TOT_SALE_AMT,-->
+        <!--tsshpd.TOT_DC_AMT,-->
+        <!--tsshpd.REAL_SALE_AMT,-->
+        <!--tsshpd.BILL_CNT,-->
+        <!--tsshpd.BILL_UPRC,-->
+        <!--tsshpd.GA_AMT,-->
+        <!--tsshpd.VAT_AMT,-->
+        <!--tsshpd.TOT_TIP_AMT,-->
+        <!--tsshpd.TOT_ETC_AMT,-->
+        <!--<foreach collection="arrPayCol" item="item" separator="+">-->
+            <!--NVL(tsshpd.PAY${item}, 0)-->
+        <!--</foreach> AS TOT_PAY_AMT,-->
+        <!--<foreach collection="arrPayCol" item="item" separator=",">-->
+            <!--NVL(tsshpd.PAY${item}, 0) AS PAY${item}-->
+        <!--</foreach> ,-->
+        <!--tsshpd.GEN_REAL_SALE_AMT,-->
+        <!--NVL(ROUND(tsshpd.GEN_REAL_SALE_AMT/tsshpd.REAL_SALE_AMT*100),0) AS GEN_REAL_SALE_AMT_PER,-->
+        <!--tsshpd.DLVR_REAL_SALE_AMT,-->
+        <!--NVL(ROUND(tsshpd.DLVR_REAL_SALE_AMT/tsshpd.REAL_SALE_AMT*100),0) AS DLVR_REAL_SALE_AMT_PER,-->
+        <!--tsshpd.PACK_REAL_SALE_AMT,-->
+        <!--NVL(ROUND(tsshpd.PACK_REAL_SALE_AMT/tsshpd.REAL_SALE_AMT*100),0) AS PACK_REAL_SALE_AMT_PER-->
+        <!--FROM-->
+        <!--(-->
+            <!--SELECT-->
+            <!--HQ_OFFICE_CD,-->
+            <!--YEAR_MONTH,-->
+            <!--COUNT(DISTINCT STORE_CD) AS STORE_CNT,-->
+            <!--COUNT(DISTINCT SALE_DATE) AS SALE_CNT,-->
+            <!--SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,-->
+            <!--SUM(TOT_DC_AMT) AS TOT_DC_AMT,-->
+            <!--SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,-->
+            <!--COUNT(BILL_NO) AS BILL_CNT,-->
+            <!--ROUND(SUM(REAL_SALE_AMT) / COUNT(BILL_NO)) AS BILL_UPRC,-->
+            <!--SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,-->
+            <!--SUM(VAT_AMT) AS VAT_AMT,-->
+            <!--SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,-->
+            <!--SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,-->
+            <!--<foreach collection="arrPayCol" item="item" separator=",">-->
+                <!--SUM(PAY${item}) AS PAY${item}-->
+            <!--</foreach> ,-->
+            <!--SUM(GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,-->
+            <!--SUM(DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,-->
+            <!--SUM(PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT-->
+            <!--FROM-->
+            <!--(-->
+                <!--SELECT-->
+                <!--tssh.SALE_DATE,-->
+                <!--TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,-->
+                <!--tssh.HQ_OFFICE_CD,-->
+                <!--tssh.STORE_CD,-->
+                <!--tssh.TOT_SALE_AMT,-->
+                <!--tssh.TOT_DC_AMT,-->
+                <!--tssh.REAL_SALE_AMT,-->
+                <!--tssh.BILL_NO,-->
+                <!--tssh.VAT_AMT,-->
+                <!--tssh.TOT_TIP_AMT,-->
+                <!--tssh.TOT_ETC_AMT,-->
+                <!--tsshp.PAY_CD,-->
+                <!--tsshp.PAY_AMT,-->
+                <!--tssd.GEN_REAL_SALE_AMT,-->
+                <!--tssd.DLVR_REAL_SALE_AMT,-->
+                <!--tssd.PACK_REAL_SALE_AMT-->
+                <!--FROM TB_SL_SALE_HDR tssh,-->
+                <!--TB_SL_SALE_HDR_PAY tsshp,-->
+                <!--(-->
+                    <!--SELECT-->
+                    <!--HQ_OFFICE_CD,-->
+                    <!--HQ_BRAND_CD,-->
+                    <!--STORE_CD,-->
+                    <!--SALE_DATE,-->
+                    <!--POS_NO,-->
+                    <!--BILL_NO,-->
+                    <!--SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,-->
+                    <!--SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,-->
+                    <!--SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT-->
+                    <!--FROM TB_SL_SALE_DTL-->
+                    <!--GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO-->
+                <!--) tssd-->
+                <!--WHERE 1=1-->
+                <!--AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}-->
+                <!--AND tssh.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'-->
+                <!--<if test='storeCds != null and storeCds != ""'>-->
+                    <!--AND tssh.STORE_CD IN-->
+                    <!--<foreach collection="storeCdList" item="item" open="("  separator="," close=")" >-->
+                        <!--#{item}-->
+                    <!--</foreach>-->
+                <!--</if>-->
+                <!--AND tsshp.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD-->
+                <!--AND tsshp.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD-->
+                <!--AND tsshp.STORE_CD (+)= tssh.STORE_CD-->
+                <!--AND tsshp.SALE_DATE (+)= tssh.SALE_DATE-->
+                <!--AND tsshp.POS_NO (+)= tssh.POS_NO-->
+                <!--AND tsshp.BILL_NO (+)= tssh.BILL_NO-->
+                <!--AND tssd.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD-->
+                <!--AND tssd.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD-->
+                <!--AND tssd.STORE_CD (+)= tssh.STORE_CD-->
+                <!--AND tssd.SALE_DATE (+)= tssh.SALE_DATE-->
+                <!--AND tssd.POS_NO (+)= tssh.POS_NO-->
+                <!--AND tssd.BILL_NO (+)= tssh.BILL_NO-->
+            <!--)-->
+            <!--PIVOT-->
+            <!--(-->
+                <!--SUM(PAY_AMT)-->
+                <!--FOR PAY_CD-->
+                <!--IN (${pivotPayCol})-->
+                <!--/* IN ('01' AS PAY01,-->
+                <!--'02' AS PAY02,-->
+                <!--'03' AS PAY03,-->
+                <!--'04' AS PAY04,-->
+                <!--'05' AS PAY05,-->
+                <!--'06' AS PAY06,-->
+                <!--'07' AS PAY07,-->
+                <!--'08' AS PAY08,-->
+                <!--'09' AS PAY09,-->
+                <!--'10' AS PAY10,-->
+                <!--'11' AS PAY11,-->
+                <!--'12' AS PAY12,-->
+                <!--'13' AS PAY13,-->
+                <!--'14' AS PAY14,-->
+                <!--'15' AS PAY15,-->
+                <!--'16' AS PAY16,-->
+                <!--'17' AS PAY17,-->
+                <!--'18' AS PAY18)*/-->
+            <!--)-->
+            <!--GROUP BY HQ_OFFICE_CD, YEAR_MONTH-->
+        <!--) tsshpd-->
+        <!--WHERE 1=1-->
+        <!--ORDER BY tsshpd.YEAR_MONTH-->
+    <!--</select>-->
 
     <!-- 할인구별별탭 - 할인구분별 매출조회-->
     <!--
