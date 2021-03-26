@@ -211,7 +211,9 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
+                            <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        </c:if>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesCd"/>" binding="recipesCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>

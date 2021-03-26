@@ -44,6 +44,8 @@ app.controller('recpOriginTabCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodRecpOriginCtrl");
         scope.flex.refresh();
+        var scope1 = agrid.getScope("prodRecpOriginDetailCtrl");
+        scope1.flex.refresh();
     };
 
 }]);
