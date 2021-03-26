@@ -10,6 +10,7 @@
     p:maxTotal="#{config['redis.pool.maxTotal']}"
     p:minIdle="#{config['redis.pool.minIdle']}"
     p:maxIdle="#{config['redis.pool.maxIdle']}"
+    p:maxWaitMillis="#{config['redis.pool.maxWaitMillis']}"
     />
 
   <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
