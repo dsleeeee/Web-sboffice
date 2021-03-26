@@ -1085,6 +1085,13 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                     </if>
                     AND thp.USE_YN = 'Y'
+                    AND thp.PROD_CD NOT IN (
+                                            SELECT prod_cd
+                                              FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp
+                                             WHERE thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                               AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                                               AND thpsp.USE_YN = 'Y'
+                                            )
                 ORDER BY
                     thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -1113,6 +1120,13 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                     </if>
                     AND tmp.USE_YN = 'Y'
+                    AND thp.PROD_CD NOT IN (
+                                            SELECT prod_cd
+                                            FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp
+                                            WHERE thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                                            AND thpsp.USE_YN = 'Y'
+                                            )
                 ORDER BY
                     tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>

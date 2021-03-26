@@ -145,9 +145,9 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodClassCd"/>" binding="prodClassCd" data-map="prodClassCdDataMap" width="150" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleUprc"/>" binding="saleUprc" data-type="Number" max-length="9" width="70" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleUprc"/>" binding="saleUprc" max-length="10" width="70" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprc"/>" binding="splyUprc" data-type="Number" max-length="9" width="80" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprc"/>" binding="splyUprc" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poUnitFg"/>" binding="poUnitFg" data-map="poUnitFgDataMap" width="70" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poUnitQty"/>" binding="poUnitQty" width="85" align="center"></wj-flex-grid-column>
@@ -155,7 +155,7 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.barCd"/>" binding="barCd" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.stockProdYn"/>" binding="stockProdYn" data-map="stockProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" data-type="Number" max-length="9" width="70" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" width="70" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.safeStockQty"/>" binding="safeStockQty" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.startStockQty"/>" binding="startStockQty" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60"  align="center"></wj-flex-grid-column>

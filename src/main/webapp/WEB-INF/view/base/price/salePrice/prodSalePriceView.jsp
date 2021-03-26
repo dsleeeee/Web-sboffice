@@ -72,7 +72,7 @@
           </wj-combo-box>
         </div>
         <span>
-          <input type="text" maxlength="9" numberOnly class="inSty2 w130" id="inputSaleAmt"ng-model="prodInfo.inputSaleAmt" ng-readonly="inputSaleAmtReadOnly" />
+          <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputSaleAmt"ng-model="prodInfo.inputSaleAmt" ng-readonly="inputSaleAmtReadOnly" />
         </span> 원
         <a href="#" class="btn_grayS ml10" ng-click="changeAmt()">일괄적용</a>
         <a href="#" class="btn_grayS" style="display:none;" ng-click="changeExcelAmt()">엑셀판매가 일괄적용</a> <!-- // todo -->
@@ -156,7 +156,7 @@
         <wj-flex-grid-column header="<s:message code="salePrice.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.costUprc"/>" binding="costUprc" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.saleUprcP"/>" binding="saleUprcP" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.saleUprc"/>" binding="saleUprc" width="*" align="right" align="right" max-length="9" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.saleUprc"/>" binding="saleUprc" width="*" align="right" align="right" max-length="10" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeSplyUprc"/>" binding="storeSplyUprc" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginAmt"/>" binding="hqMarginAmt" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginRate"/>" binding="hqMarginRate" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
@@ -189,7 +189,7 @@
   // console.log('priceEnvstVal >> ', priceEnvstVal);
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
-      $(this).val($(this).val().replace(/[^0-9]/g,""));
+      $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
     });
   });
 </script>
