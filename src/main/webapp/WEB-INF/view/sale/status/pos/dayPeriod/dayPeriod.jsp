@@ -159,18 +159,18 @@
         <div class="w50 fr" ng-controller="posDayPeriodDtlCtrl">
         <div class="mt20 oh sb-select dkbr mb10">
            <%-- 페이지 스케일  --%>
-           <wj-combo-box
-                   class="w100px fl"
-                   id="posDayPeriodDtlListScaleBox"
-                   ng-model="posDayPeriodDtlListScale"
-                   items-source="_getComboData('posDayPeriodDtlListScaleBox')"
-                   display-member-path="name"
-                   selected-value-path="value"
-                   initialized="initComboBox(s)"
-                   control="listScaleCombo"
-                   is-editable="true"
-                   text-changed="_checkValidation(s)">
-           </wj-combo-box>
+           <%--<wj-combo-box--%>
+                   <%--class="w100px fl"--%>
+                   <%--id="posDayPeriodDtlListScaleBox"--%>
+                   <%--ng-model="posDayPeriodDtlListScale"--%>
+                   <%--items-source="_getComboData('posDayPeriodDtlListScaleBox')"--%>
+                   <%--display-member-path="name"--%>
+                   <%--selected-value-path="value"--%>
+                   <%--initialized="initComboBox(s)"--%>
+                   <%--control="listScaleCombo"--%>
+                   <%--is-editable="true"--%>
+                   <%--text-changed="_checkValidation(s)">--%>
+           <%--</wj-combo-box>--%>
            <%-- 엑셀 다운로드 //TODO --%>
            <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriodDtl()"><s:message code="cmm.excel.down" />
            </button>
@@ -202,10 +202,10 @@
                     </div>
                 </div>
               <%-- 페이지 리스트 --%>
-              <div class="pageNum3 mt20">
-                <ul id="posDayPeriodDtlCtrlPager" data-size="10">
-                </ul>
-              </div>
+              <%--<div class="pageNum3 mt20">--%>
+                <%--<ul id="posDayPeriodDtlCtrlPager" data-size="10">--%>
+                <%--</ul>--%>
+              <%--</div>--%>
               <%--//페이지 리스트--%>
 
               <div class="w50 fr" ng-controller="posDayPeriodDtlExcelCtrl" style="display:none;">

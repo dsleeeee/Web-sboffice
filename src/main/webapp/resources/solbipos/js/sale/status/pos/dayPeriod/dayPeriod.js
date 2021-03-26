@@ -15,7 +15,7 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 	  //조회조건 콤보박스 데이터 Set
 	  $scope._setComboData("posDayPeriodListScaleBox", gvListScaleBoxData);
-	  $scope._setComboData("posDayPeriodDtlListScaleBox", gvListScaleBoxData);
+	  // $scope._setComboData("posDayPeriodDtlListScaleBox", gvListScaleBoxData);
 	  $scope.orgnFg = gvOrgnFg;
 
 	  //전체기간 체크박스 클릭이벤트
@@ -301,7 +301,7 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	  $scope.searchPosDayPeriodDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params          = {};
-	    params.listScale    = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+	    // params.listScale    = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.posNo        = $scope.posNo;
 	    params.storeCd      = $scope.storeCd;
 	    params.orgnFg    	= $scope.orgnFg;

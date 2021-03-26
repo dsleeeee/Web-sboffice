@@ -48,7 +48,7 @@
                             <s:message code="recpProd.srchClass" />
                         </th>
                         <td>
-                            <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
+                            <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
                                    placeholder="<s:message code="recpProd.srchClass" /> 선택" readonly/>
                             <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                         </td>
@@ -102,8 +102,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpProd.js?ver=20200715.01" charset="utf-8"></script>
-
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-</c:import>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpProd.js?ver=20210327.01" charset="utf-8"></script>

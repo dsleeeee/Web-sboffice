@@ -35,9 +35,12 @@
                 <a id="monthCornerTab" href="#" ng-click="monthCornerShow()"><s:message code="month.corner"/></a>
             </li>
             <%-- 외식테이블 탭 --%>
-            <li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>>
-                <a id="monthTableTab" href="#" ng-click="monthTableShow()"><s:message code="month.table"/></a>
-            </li>
+            <c:if test="${orgnFg == 'STORE'}">
+                <li>
+                <%--<li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>>--%>
+                    <a id="monthTableTab" href="#" ng-click="monthTableShow()"><s:message code="month.table"/></a>
+                </li>
+            </c:if>
             <%-- 포스별 탭 --%>
             <li>
                 <a id="monthPosTab" href="#" ng-click="monthPosShow()"><s:message code="month.pos"/></a>
@@ -122,7 +125,7 @@
     var maxLevel    = '${maxLevel}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/monthSale/monthSale.js?ver=20200924.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/monthSale/monthSale.js?ver=20210322.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 월별종합 레이어 --%>
@@ -161,11 +164,13 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 외식테이블 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/month/monthTable.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<c:if test="${orgnFg == 'STORE'}">
+    <%-- 외식테이블 레이어 --%>
+    <c:import url="/WEB-INF/view/sale/day/dayOfWeek/dayOfWeekTable.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+</c:if>
 
 <%-- 포스별 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/month/monthPos.jsp">
@@ -204,12 +209,6 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-
-<%-- 매출 상세내역 (매출) 팝업 레이어 --%>
-<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/saleInfo/saleDtl.jsp">--%>
-    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
-    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

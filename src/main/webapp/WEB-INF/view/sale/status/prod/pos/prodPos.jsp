@@ -45,40 +45,41 @@
 	            	</span>
 				</td>
 			</tr>
+			<tr>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<input type="hidden" id="posProdSelectStoreCd" value=""/>
-					<tr>
-						<%-- 매장코드 --%>
-						<th><s:message code="todayBillSaleDtl.store"/></th>
-						<td colspan="3">
-							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+					<%-- 매장코드 --%>
+					<th><s:message code="todayBillSaleDtl.store"/></th>
+					<td>
+						<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
-								<jsp:param name="targetId" value="posProdSelectStore"/>
-								<jsp:param name="subTargetId" value="posProdSelectPos"/>
-								<jsp:param name="closeFunc" value="getPosNmList"/>
-							</jsp:include>
-							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-						</td>
-					</tr>
+						<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
+							<jsp:param name="targetId" value="posProdSelectStore"/>
+							<jsp:param name="subTargetId" value="posProdSelectPos"/>
+							<jsp:param name="closeFunc" value="getPosNmList"/>
+						</jsp:include>
+						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+					</td>
+					<input type="hidden" id="posProdSelectStoreCd" value=""/>
 				</c:if>
 				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 					<input type="hidden" id="posProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
 				</c:if>
 				<input type="hidden" id="posProdSelectPosCd" value=""/>
 				<input type="hidden" id="posProdSelectPosName" value=""/>
-				<tr>
-					<%-- 포스선택 --%>
-					<th><s:message code="pos.pos" /></th>
-					<td colspan="3">
-						<%-- 포스선택 모듈 멀티 선택 사용시 include --%>
-						<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectPosM.jsp" flush="true">
-							<jsp:param name="targetId" value="posProdSelectPos"/>
-							<jsp:param name="targetStoreId" value="posProdSelectStore"/>
-						</jsp:include>
-						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-					</td>
-				</tr>
+				<%-- 포스선택 --%>
+				<th><s:message code="pos.pos" /></th>
+				<td>
+					<%-- 포스선택 모듈 멀티 선택 사용시 include --%>
+					<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectPosM.jsp" flush="true">
+						<jsp:param name="targetId" value="posProdSelectPos"/>
+						<jsp:param name="targetStoreId" value="posProdSelectStore"/>
+					</jsp:include>
+					<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+				</td>
+				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+					<td></td>
+					<td></td>
+				</c:if>
 			</tr>
 		</tbody>
 	</table>

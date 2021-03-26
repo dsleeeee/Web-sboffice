@@ -19,9 +19,12 @@
                 <a id="dayPeriodProdClassTab" href="#" ng-click="dayPeriodProdClassShow()"><s:message code="dayPeriod.prodClass"/></a>
             </li>
             <%-- 외식테이블 탭 --%>
-            <li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if> >
-                <a id="dayPeriodTableTab" href="#" ng-click="dayPeriodTableShow()"><s:message code="dayPeriod.table"/></a>
-            </li>
+            <c:if test="${orgnFg == 'STORE'}">
+                <li>
+                <%--<li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if> >--%>
+                    <a id="dayPeriodTableTab" href="#" ng-click="dayPeriodTableShow()"><s:message code="dayPeriod.table"/></a>
+                </li>
+            </c:if>
             <%-- 코너별 탭 --%>
             <li>
                 <a id="dayPeriodCornerTab" href="#" ng-click="dayPeriodCornerShow()"><s:message code="dayPeriod.corner"/></a>
@@ -52,11 +55,13 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 외식테이블 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/dayPeriod/dayPeriodTable.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<c:if test="${orgnFg == 'STORE'}">
+    <%-- 외식테이블 레이어 --%>
+    <c:import url="/WEB-INF/view/sale/day/dayPeriod/dayPeriodTable.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+</c:if>
 
 <%-- 코너별 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/dayPeriod/dayPeriodCorner.jsp">

@@ -40,48 +40,56 @@ app.controller('prodSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     $scope.searchProdSaleDtlList = function(data){
         var params = {};
-        // 기간별매출 > 일자별 탭 > 과면세별,포스별,코너별 탭
-        if(data.gubun == "day" ||  data.gubun == "dayCorner") {
-            params.saleDate = data.saleDate;
-        }
-        // 기간별매출 > 월별 탭 > 과면세별,포스별,코너별 탭
-        if(data.gubun == "month" ||  data.gubun == "monthCorner") {
-            params.yearMonth = data.yearMonth;
-        }
-        // 기간별매출 > 일자별 탭 > 포스별 탭
-        if(data.gubun == "dayPos") {
-            params.saleDate = data.saleDate;
-            params.posNo  = data.posNo;
-        }
-        // 기간별매출 > 월별 탭 > 포스별 탭
-        if(data.gubun == "monthPos") {
-            params.yearMonth = data.yearMonth;
-            params.posNo  = data.posNo;
-        }
-        // 기간별매출 > 일자별 탭 > 상품분류별 탭
-        if(data.gubun == "dayProdClass") {
-            params.saleDate = data.saleDate;
-            params.strProdClassCd  = data.strProdClassCd;
-            params.level = data.level;
-            params.prodCd = data.prodCd;
-            params.prodNm = data.prodNm;
-            params.barCd = data.barCd;
-            params.prodClassCd = data.prodClassCd;
-        }
-        // 기간별매출 > 월별 탭 > 상품분류별 탭
-        if(data.gubun == "monthProdClass") {
-            params.yearMonth = data.yearMonth;
-            params.strProdClassCd  = data.strProdClassCd;
-            params.level = data.level;
-            params.prodCd = data.prodCd;
-            params.prodNm = data.prodNm;
-            params.barCd = data.barCd;
-            params.prodClassCd = data.prodClassCd;
-        }
         params.storeCds  = data.storeCd;
         params.gubun  = data.gubun;
 
-        $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/list.sb", params, function() {}, false);
+        // 기간별매출 > 일자별 탭 > 과면세별,포스별,코너별 탭
+        if(data.gubun == "day" ||  data.gubun == "dayCorner") {
+            params.saleDate = data.saleDate;
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayList.sb", params, function() {}, false);
+        }
+        // 기간별매출 > 일자별 탭 > 포스별 탭
+        else if(data.gubun == "dayPos") {
+            params.saleDate = data.saleDate;
+            params.posNo  = data.posNo;
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayList.sb", params, function() {}, false);
+        }
+        // 기간별매출 > 월별 탭 > 과면세별,포스별,코너별 탭
+        else if(data.gubun == "month" ||  data.gubun == "monthCorner") {
+            params.yearMonth = data.yearMonth;
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlMonthList.sb", params, function() {}, false);
+        }
+        // 기간별매출 > 월별 탭 > 포스별 탭
+        else if(data.gubun == "monthPos") {
+            params.yearMonth = data.yearMonth;
+            params.posNo  = data.posNo;
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlMonthList.sb", params, function() {}, false);
+        }
+        // 기간별매출 > 일자별 탭 > 상품분류별 탭
+        else if(data.gubun == "dayProdClass") {
+            params.saleDate = data.saleDate;
+            params.strProdClassCd  = data.strProdClassCd;
+            params.level = data.level;
+            params.prodCd = data.prodCd;
+            params.prodNm = data.prodNm;
+            params.barCd = data.barCd;
+            params.prodClassCd = data.prodClassCd;
+
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayProdClassList.sb", params, function() {}, false);
+        }
+        // 기간별매출 > 월별 탭 > 상품분류별 탭
+        else if(data.gubun == "monthProdClass") {
+            params.yearMonth = data.yearMonth;
+            params.strProdClassCd  = data.strProdClassCd;
+            params.level = data.level;
+            params.prodCd = data.prodCd;
+            params.prodNm = data.prodNm;
+            params.barCd = data.barCd;
+            params.prodClassCd = data.prodClassCd;
+
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlMonthProdClassList.sb", params, function() {}, false);
+        }
+        // $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/list.sb", params, function() {}, false);
     };
 
 }]);

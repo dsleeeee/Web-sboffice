@@ -63,7 +63,7 @@ app.controller('foodAllergyProdCtrl', ['$scope', '$http', function ($scope, $htt
                 $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
                     function(response){
                         $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassCdNm = response.data.data;
+                        $scope.prodClassNm = response.data.data;
                     }
                 );
             }
@@ -73,7 +73,7 @@ app.controller('foodAllergyProdCtrl', ['$scope', '$http', function ($scope, $htt
     // 상품분류정보 선택취소
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
-        $scope.prodClassCdNm = "";
+        $scope.prodClassNm = "";
     };
 
     // 저장
@@ -98,6 +98,11 @@ app.controller('foodAllergyProdCtrl', ['$scope', '$http', function ($scope, $htt
     // 팝업 닫기
     $scope.close = function(){
         $scope.wjFoodAllergyProdLayer.hide();
+
+        $scope.prodCd = "";
+        $scope.prodNm = "";
+        $scope.prodClassNm = "";
+        $scope.prodClassCd = "";
 
         var params = {};
         params.recipesCd = $("#lblFoodAllergyProdRecipesCd").text();

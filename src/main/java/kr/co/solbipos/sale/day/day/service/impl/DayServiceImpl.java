@@ -332,10 +332,10 @@ public class DayServiceImpl implements DayService {
         String strQty = "";
 
         for(int i=0; i<  dayVO.getArrProdClassCd().length; i++) {
-            strAmt += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_AMT, 0)";
+            strAmt += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_REAL_SALE_AMT, 0)";
             strQty += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_QTY, 0)";
-            pivotProdClassCol1 += (pivotProdClassCol1.equals("") ? "" : ",") + "tba.PAY" + (i+1) + "_SALE_AMT, tba.PAY" + (i+1) + "_SALE_QTY";
-            pivotProdClassCol2 += (pivotProdClassCol2.equals("") ? "" : ",") + "SUM(PAY" + (i+1) + "_SALE_AMT) AS PAY" + (i+1) + "_SALE_AMT, SUM(PAY" + (i+1) + "_SALE_QTY) AS PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol1 += (pivotProdClassCol1.equals("") ? "" : ",") + "tba.PAY" + (i+1) + "_REAL_SALE_AMT, tba.PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol2 += (pivotProdClassCol2.equals("") ? "" : ",") + "SUM(PAY" + (i+1) + "_REAL_SALE_AMT) AS PAY" + (i+1) + "_REAL_SALE_AMT, SUM(PAY" + (i+1) + "_SALE_QTY) AS PAY" + (i+1) + "_SALE_QTY";
             pivotProdClassCol3 += (pivotProdClassCol3.equals("") ? "" : ",") + "'" + dayVO.getArrProdClassCd()[i]  + "' AS PAY" + (i+1);
         }
         strAmt = "(" + strAmt + ") AS TOT_REAL_SALE_AMT,";

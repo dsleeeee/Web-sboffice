@@ -19,10 +19,428 @@
         COMMENTS : [매출]상세, [본사]상품, [본사]상품_분류,
                    [매장]상품, [매장]상품_분류
     -->
-    <select id="getProdSaleDtlList" parameterType="ProdInfoVO" resultType="DefaultMap">
-        /* ProdInfoMapper.getProdSaleDtlList */
+    <!--<select id="getProdSaleDtlList" parameterType="ProdInfoVO" resultType="DefaultMap">-->
+        <!--/* ProdInfoMapper.getProdSaleDtlList */-->
+        <!--SELECT-->
+        <!--PATH_NM,-->
+        <!--PROD_CD,-->
+        <!--PROD_NM,-->
+        <!--SUM(SALE_QTY) AS SALE_QTY,-->
+        <!--SUM(SALE_AMT) AS TOT_SALE_AMT,-->
+        <!--SUM(DC_AMT) AS TOT_DC_AMT,-->
+        <!--SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,-->
+        <!--SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,-->
+        <!--SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,-->
+        <!--SUM(VAT_AMT) AS VAT_AMT,-->
+        <!--SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,-->
+        <!--SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS NET_SALE_AMT-->
+        <!--FROM-->
+        <!--(-->
+            <!--SELECT-->
+            <!--STORE_CD,-->
+            <!--PATH_NM,-->
+            <!--SUBSTR(PATH, 0, 5) AS Level1,-->
+            <!--SUBSTR(PATH, 7, 5) AS Level2,-->
+            <!--SUBSTR(PATH, 13, 5) AS Level3,-->
+            <!--PROD_CD,-->
+            <!--PROD_NM,-->
+            <!--SALE_AMT,-->
+            <!--SALE_QTY,-->
+            <!--DC_AMT,-->
+            <!--REAL_SALE_AMT,-->
+            <!--TAX_SALE_AMT,-->
+            <!--VAT_AMT,-->
+            <!--NO_TAX_SALE_AMT-->
+            <!--FROM-->
+            <!--(-->
+                <!--SELECT-->
+                <!--STORE_CD,-->
+                <!--FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH,-->
+                <!--FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,-->
+                <!--PROD_CD,-->
+                <!--PROD_NM,-->
+                <!--SALE_AMT,-->
+                <!--SALE_QTY,-->
+                <!--DC_AMT,-->
+                <!--REAL_SALE_AMT,-->
+                <!--TAX_SALE_AMT,-->
+                <!--VAT_AMT,-->
+                <!--NO_TAX_SALE_AMT-->
+                <!--FROM-->
+                <!--(-->
+                    <!--SELECT-->
+                    <!--tssd.SALE_DATE,-->
+                    <!--tssd.STORE_CD,-->
+                    <!--tmp.PROD_CLASS_CD,-->
+                    <!--tssd.PROD_CD,-->
+                    <!--tmp.PROD_NM,-->
+                    <!--SUM(tssd.SALE_QTY) AS SALE_QTY,-->
+                    <!--SUM(tssd.SALE_AMT) AS SALE_AMT,-->
+                    <!--SUM(tssd.DC_AMT) AS DC_AMT,-->
+                    <!--SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,-->
+                    <!--SUM(CASE WHEN tssd.VAT_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS TAX_SALE_AMT,-->
+                    <!--SUM(tssd.VAT_AMT) AS VAT_AMT,-->
+                    <!--SUM(CASE WHEN tssd.VAT_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS NO_TAX_SALE_AMT-->
+                    <!--FROM TB_SL_SALE_DTL tssd,-->
+                    <!--TB_MS_PRODUCT tmp,-->
+                    <!--TB_MS_PRODUCT_BARCD tmpb-->
+                    <!--WHERE 1=1-->
+                    <!--AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}-->
+                    <!--<if test='storeCds != null and storeCds != ""'>-->
+                    <!--AND tssd.STORE_CD IN-->
+                        <!--<foreach collection="storeCdList" item="item" open="( " separator="," close=")" >-->
+                            <!--#{item}-->
+                        <!--</foreach>-->
+                    <!--</if>-->
+                    <!--<choose>-->
+                        <!--<when test='gubun != null'>-->
+                            <!--&lt;!&ndash; 기간별매출 > 일자별 탭 > 과면세별,포스별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "day"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE = #{saleDate}-->
+                                <!--]]>-->
+                            <!--</if>-->
+                            <!--&lt;!&ndash; 기간별매출 > 월별 탭 > 과면세별,포스별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "month"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'-->
+                                <!--]]>-->
+                            <!--</if>-->
+                            <!--&lt;!&ndash; 기간별매출 > 일자별 탭 > 코너별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "dayCorner"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE = #{saleDate}-->
+                                <!--]]>-->
+                            <!--</if>-->
+                            <!--&lt;!&ndash; 기간별매출 > 월별 탭 > 코너별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "monthCorner"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'-->
+                                <!--]]>-->
+                            <!--</if>-->
+                            <!--&lt;!&ndash; 기간별매출 > 일자별 탭 > 포스별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "dayPos"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE = #{saleDate}-->
+                                    <!--AND tssd.POS_NO = #{posNo}-->
+                                <!--]]>-->
+                            <!--</if>-->
+                            <!--&lt;!&ndash; 기간별매출 > 월별 탭 > 포스별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "monthPos"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'-->
+                                    <!--AND tssd.POS_NO = #{posNo}-->
+                                <!--]]>-->
+                            <!--</if>-->
+                            <!--&lt;!&ndash; 기간별매출 > 일자별 탭 > 상품분류별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "dayProdClass"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE = #{saleDate}-->
+                                <!--]]>-->
+                                <!--<if test="prodCd != null and prodCd != ''">-->
+                                    <!--AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'-->
+                                <!--</if>-->
+                                <!--<if test="prodNm != null and prodNm != ''">-->
+                                    <!--AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'-->
+                                <!--</if>-->
+                                <!--<if test="barCd != null and barCd != ''">-->
+                                    <!--AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'-->
+                                <!--</if>-->
+                                <!--<if test="prodClassCd != null and prodClassCd != ''">-->
+                                    <!--AND tmp.PROD_CLASS_CD = #{prodClassCd}-->
+                                <!--</if>-->
+                            <!--</if>-->
+                            <!--&lt;!&ndash; 기간별매출 > 월별 탭 > 상품분류별 탭 &ndash;&gt;-->
+                            <!--<if test='gubun == "monthProdClass"'>-->
+                                <!--<![CDATA[-->
+                                    <!--AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'-->
+                                <!--]]>-->
+                                <!--<if test="prodCd != null and prodCd != ''">-->
+                                    <!--AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'-->
+                                <!--</if>-->
+                                <!--<if test="prodNm != null and prodNm != ''">-->
+                                    <!--AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'-->
+                                <!--</if>-->
+                                <!--<if test="barCd != null and barCd != ''">-->
+                                    <!--AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'-->
+                                <!--</if>-->
+                                <!--<if test="prodClassCd != null and prodClassCd != ''">-->
+                                    <!--AND tmp.PROD_CLASS_CD = #{prodClassCd}-->
+                                <!--</if>-->
+                            <!--</if>-->
+                        <!--</when>-->
+                    <!--</choose>-->
+                    <!--AND tmp.STORE_CD = tssd.STORE_CD-->
+                    <!--AND tmp.PROD_CD = tssd.PROD_CD-->
+                    <!--AND tmpb.STORE_CD (+)= tmp.STORE_CD-->
+                    <!--AND tmpb.PROD_CD (+)= tmp.PROD_CD-->
+                    <!--GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.PROD_CD, tmp.PROD_NM, tmp.PROD_CLASS_CD-->
+                <!--)-->
+            <!--)-->
+        <!--)-->
+        <!--WHERE 1=1-->
+        <!--<choose>-->
+            <!--<when test='gubun != null'>-->
+                <!--&lt;!&ndash; 기간별매출 > 일자별,월별 탭 > 상품분류별 탭 &ndash;&gt;-->
+                <!--<if test='gubun == "dayProdClass" or gubun == "monthProdClass"'>-->
+                    <!--&lt;!&ndash; 분류있음 &ndash;&gt;-->
+                    <!--<if test='level != null and level != "Level0"'>-->
+                        <!--AND ${level} IN-->
+                        <!--<foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">-->
+                            <!--#{item}-->
+                        <!--</foreach>-->
+                    <!--</if>-->
+                <!--</if>-->
+            <!--</when>-->
+        <!--</choose>-->
+        <!--GROUP BY PATH_NM, PROD_CD, PROD_NM-->
+        <!--ORDER BY PROD_CD-->
+    <!--</select>-->
+
+    <!-- 매출공통팝업 - 상품매출 상세내역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleDtlDayList" parameterType="ProdInfoVO" resultType="DefaultMap">
+        /* ProdInfoMapper.getProdSaleDtlDayList */
         SELECT
-        STORE_CD,
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            HQ_OFFICE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(HQ_OFFICE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            STORE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        PROD_CLASS_CD,
+        PROD_CD,
+        PROD_NM,
+        SUM(SALE_QTY) AS SALE_QTY,
+        SUM(SALE_AMT) AS TOT_SALE_AMT,
+        SUM(DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+        SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+        SUM(VAT_AMT) AS VAT_AMT,
+        SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS NET_SALE_AMT
+        FROM
+        (
+            SELECT
+            <!-- 본사 -->
+            <if test='orgnFg == "H"'>
+                HQ_OFFICE_CD,
+            </if>
+            <!-- 매장 -->
+            <if test='orgnFg == "S"'>
+                STORE_CD,
+            </if>
+            PROD_CLASS_CD,
+            PROD_CD,
+            PROD_NM,
+            SALE_AMT,
+            SALE_QTY,
+            DC_AMT,
+            REAL_SALE_AMT,
+            TAX_SALE_AMT,
+            VAT_AMT,
+            NO_TAX_SALE_AMT
+            FROM
+            (
+                SELECT
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    tssd.HQ_OFFICE_CD,
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    tssd.STORE_CD,
+                </if>
+                tmp.PROD_CLASS_CD,
+                tssd.PROD_CD,
+                tmp.PROD_NM,
+                SUM(tssd.SALE_QTY) AS SALE_QTY,
+                SUM(tssd.SALE_AMT) AS SALE_AMT,
+                SUM(tssd.DC_AMT) AS DC_AMT,
+                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(CASE WHEN tssd.VAT_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS TAX_SALE_AMT,
+                SUM(tssd.VAT_AMT) AS VAT_AMT,
+                SUM(CASE WHEN tssd.VAT_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS NO_TAX_SALE_AMT
+                FROM TB_SL_SALE_DTL tssd,
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_BARCD tmpb
+                WHERE 1=1
+                AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tssd.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="posNo != null and posNo != ''">
+                    AND tssd.POS_NO = #{posNo}
+                </if>
+                AND tssd.SALE_DATE = #{saleDate}
+                AND tmp.STORE_CD (+)= tssd.STORE_CD
+                AND tmp.PROD_CD (+)= tssd.PROD_CD
+                AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    GROUP BY tssd.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tssd.PROD_CD, tmp.PROD_NM
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    GROUP BY tssd.STORE_CD, tmp.PROD_CLASS_CD, tssd.PROD_CD, tmp.PROD_NM
+                </if>
+            )
+        )
+        WHERE 1=1
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            GROUP BY HQ_OFFICE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            GROUP BY STORE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        ORDER BY PROD_CD
+    </select>
+
+    <!-- 매출공통팝업 - 상품매출 상세내역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleDtlMonthList" parameterType="ProdInfoVO" resultType="DefaultMap">
+        /* ProdInfoMapper.getProdSaleDtlMonthList */
+        SELECT
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            HQ_OFFICE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(HQ_OFFICE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            STORE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        PROD_CLASS_CD,
+        PROD_CD,
+        PROD_NM,
+        SUM(SALE_QTY) AS SALE_QTY,
+        SUM(SALE_AMT) AS TOT_SALE_AMT,
+        SUM(DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+        SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+        SUM(VAT_AMT) AS VAT_AMT,
+        SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS NET_SALE_AMT
+        FROM
+        (
+            SELECT
+            <!-- 본사 -->
+            <if test='orgnFg == "H"'>
+                HQ_OFFICE_CD,
+            </if>
+            <!-- 매장 -->
+            <if test='orgnFg == "S"'>
+                STORE_CD,
+            </if>
+            PROD_CLASS_CD,
+            PROD_CD,
+            PROD_NM,
+            SALE_AMT,
+            SALE_QTY,
+            DC_AMT,
+            REAL_SALE_AMT,
+            TAX_SALE_AMT,
+            VAT_AMT,
+            NO_TAX_SALE_AMT
+            FROM
+            (
+                SELECT
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    tsmp.HQ_OFFICE_CD,
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    tsmp.STORE_CD,
+                </if>
+                tmp.PROD_CLASS_CD,
+                tsmp.PROD_CD,
+                tmp.PROD_NM,
+                SUM(tsmp.TOT_SALE_QTY) AS SALE_QTY,
+                SUM(tsmp.TOT_SALE_AMT) AS SALE_AMT,
+                SUM(tsmp.TOT_DC_AMT) AS DC_AMT,
+                SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tsmt.TAX_SALE_AMT) AS TAX_SALE_AMT,
+                SUM(tsmt.VAT_AMT) AS VAT_AMT,
+                SUM(tsmt.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+                FROM
+                <if test='gubun != "monthPos"'>
+                    TB_SL_MONTHLY_PROD tsmp,
+                </if>
+                <if test='gubun == "monthPos"'>
+                    TB_SL_MONTHLY_POS_PROD tsmp,
+                </if>
+                TB_SL_MONTHLY_TOTAL tsmt,
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_BARCD tmpb
+                WHERE 1=1
+                AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsmp.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="posNo != null and posNo != ''">
+                    AND tsmp.POS_NO = #{posNo}
+                </if>
+                AND tsmp.SALE_YM = #{yearMonth}
+                AND tsmt.HQ_OFFICE_CD (+)= tsmp.HQ_OFFICE_CD
+                AND tsmt.STORE_CD (+)= tsmp.STORE_CD
+                AND tsmt.SALE_YM (+)= tsmp.SALE_YM
+                AND tmp.STORE_CD (+)= tsmp.STORE_CD
+                AND tmp.PROD_CD (+)= tsmp.PROD_CD
+                AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    GROUP BY tsmp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsmp.PROD_CD, tmp.PROD_NM
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    GROUP BY tsmp.STORE_CD, tmp.PROD_CLASS_CD, tsmp.PROD_CD, tmp.PROD_NM
+                </if>
+            )
+        )
+        WHERE 1=1
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            GROUP BY HQ_OFFICE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            GROUP BY STORE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        ORDER BY PROD_CD
+    </select>
+
+    <!-- 매출공통팝업 - 상품매출 상세내역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleDtlDayProdClassList" parameterType="ProdInfoVO" resultType="DefaultMap">
+        /* ProdInfoMapper.getProdSaleDtlDayProdClassList */
+        SELECT
         PATH_NM,
         PROD_CD,
         PROD_NM,
@@ -38,12 +456,10 @@
         FROM
         (
             SELECT
-            STORE_CD,
             PATH_NM,
-            PATH,
-            REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS Level1,
-            REPLACE(SUBSTR(PATH, 7, 6) ,'▶','') AS Level2,
-            REPLACE(SUBSTR(PATH, 13, 6) ,'▶','') AS Level3,
+            SUBSTR(PATH, 0, 5) AS Level1,
+            SUBSTR(PATH, 7, 5) AS Level2,
+            SUBSTR(PATH, 13, 5) AS Level3,
             PROD_CD,
             PROD_NM,
             SALE_AMT,
@@ -56,129 +472,185 @@
             FROM
             (
                 SELECT
-                tssd.SALE_DATE,
-                tssd.STORE_CD,
-                tssd.PROD_CD,
-                tmp.PROD_NM,
-                tmpb.BARCD_CD,
-                tssd.SALE_AMT,
-                tssd.SALE_QTY,
-                tssd.DC_AMT,
-                tssd.REAL_SALE_AMT,
-                (CASE WHEN tssd.VAT_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS TAX_SALE_AMT,
-                tssd.VAT_AMT,
-                (CASE WHEN tssd.VAT_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS NO_TAX_SALE_AMT,
-                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH,
-                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
-                FROM TB_SL_SALE_DTL tssd,
-                TB_MS_PRODUCT tmp,
-                TB_MS_PRODUCT_BARCD tmpb
-                WHERE 1=1
-                AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
-                <if test='storeCds != null and storeCds != ""'>
-                AND tssd.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
-                        #{item}
-                    </foreach>
-                </if>
-                <choose>
-                    <when test='gubun != null'>
-                        <!-- 기간별매출 > 일자별 탭 > 과면세별,포스별 탭 -->
-                        <if test='gubun == "day"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE = #{saleDate}
-                            ]]>
-                        </if>
-                        <!-- 기간별매출 > 월별 탭 > 과면세별,포스별 탭 -->
-                        <if test='gubun == "month"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
-                            ]]>
-                        </if>
-                        <!-- 기간별매출 > 일자별 탭 > 코너별 탭 -->
-                        <if test='gubun == "dayCorner"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE = #{saleDate}
-                            ]]>
-                        </if>
-                        <!-- 기간별매출 > 월별 탭 > 코너별 탭 -->
-                        <if test='gubun == "monthCorner"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
-                            ]]>
-                        </if>
-                        <!-- 기간별매출 > 일자별 탭 > 포스별 탭 -->
-                        <if test='gubun == "dayPos"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE = #{saleDate}
-                                AND tssd.POS_NO = #{posNo}
-                            ]]>
-                        </if>
-                        <!-- 기간별매출 > 월별 탭 > 포스별 탭 -->
-                        <if test='gubun == "monthPos"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
-                                AND tssd.POS_NO = #{posNo}
-                            ]]>
-                        </if>
-                        <!-- 기간별매출 > 일자별 탭 > 상품분류별 탭 -->
-                        <if test='gubun == "dayProdClass"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE = #{saleDate}
-                            ]]>
-                            <if test="prodCd != null and prodCd != ''">
-                                AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'
-                            </if>
-                            <if test="prodNm != null and prodNm != ''">
-                                AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
-                            </if>
-                            <if test="barCd != null and barCd != ''">
-                                AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
-                            </if>
-                        </if>
-                        <!-- 기간별매출 > 월별 탭 > 상품분류별 탭 -->
-                        <if test='gubun == "monthProdClass"'>
-                            <![CDATA[
-                                AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
-                            ]]>
-                            <if test="prodCd != null and prodCd != ''">
-                                AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'
-                            </if>
-                            <if test="prodNm != null and prodNm != ''">
-                                AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
-                            </if>
-                            <if test="barCd != null and barCd != ''">
-                                AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
-                            </if>
-                        </if>
-                    </when>
-                </choose>
-                AND tmp.STORE_CD = tssd.STORE_CD
-                AND tmp.PROD_CD = tssd.PROD_CD
-                AND tmpb.STORE_CD (+)= tmp.STORE_CD
-                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH,
+                FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                PROD_CD,
+                PROD_NM,
+                SALE_AMT,
+                SALE_QTY,
+                DC_AMT,
+                REAL_SALE_AMT,
+                TAX_SALE_AMT,
+                VAT_AMT,
+                NO_TAX_SALE_AMT
+                FROM
+                (
+                    SELECT
+                    tssd.STORE_CD,
+                    tmp.PROD_CLASS_CD,
+                    tssd.PROD_CD,
+                    tmp.PROD_NM,
+                    SUM(tssd.SALE_QTY) AS SALE_QTY,
+                    SUM(tssd.SALE_AMT) AS SALE_AMT,
+                    SUM(tssd.DC_AMT) AS DC_AMT,
+                    SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                    SUM(CASE WHEN tssd.VAT_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS TAX_SALE_AMT,
+                    SUM(tssd.VAT_AMT) AS VAT_AMT,
+                    SUM(CASE WHEN tssd.VAT_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS NO_TAX_SALE_AMT
+                    FROM TB_SL_SALE_DTL tssd,
+                    TB_MS_PRODUCT tmp,
+                    TB_MS_PRODUCT_BARCD tmpb
+                    WHERE 1=1
+                    AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tssd.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    AND tssd.SALE_DATE = #{saleDate}
+                    <if test="prodCd != null and prodCd != ''">
+                        AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                        AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                    </if>
+                    <if test="barCd != null and barCd != ''">
+                        AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                    </if>
+                    <if test="prodClassCd != null and prodClassCd != ''">
+                        AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                    </if>
+                    AND tmp.STORE_CD = tssd.STORE_CD
+                    AND tmp.PROD_CD = tssd.PROD_CD
+                    AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                    AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                    GROUP BY tssd.STORE_CD, tssd.PROD_CD, tmp.PROD_NM, tmp.PROD_CLASS_CD
+                )
             )
         )
         WHERE 1=1
-        <choose>
-            <when test='gubun != null'>
-                <!-- 기간별매출 > 일자별,월별 탭 > 상품분류별 탭 -->
-                <if test='gubun == "dayProdClass" or gubun == "monthProdClass"'>
-                    <if test="prodClassCd != null and prodClassCd != ''">
-                        AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-                    </if>
-                    <!-- 분류있음 -->
-                    <if test='level != null and level != "Level0"'>
-                        AND ${level} IN
-                        <foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">
-                            ${item}
+        <!-- 분류있음 -->
+        <if test='level != null and level != "Level0"'>
+            AND ${level} IN
+            <foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY PATH_NM, PROD_CD, PROD_NM
+        ORDER BY PROD_CD
+    </select>
+
+    <!-- 매출공통팝업 - 상품매출 상세내역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleDtlMonthProdClassList" parameterType="ProdInfoVO" resultType="DefaultMap">
+        /* ProdInfoMapper.getProdSaleDtlMonthProdClassList */
+        SELECT
+        PATH_NM,
+        PROD_CD,
+        PROD_NM,
+        SUM(SALE_QTY) AS SALE_QTY,
+        SUM(SALE_AMT) AS TOT_SALE_AMT,
+        SUM(DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+        SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+        SUM(VAT_AMT) AS VAT_AMT,
+        SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS NET_SALE_AMT
+        FROM
+        (
+            SELECT
+            PATH_NM,
+            SUBSTR(PATH, 0, 5) AS Level1,
+            SUBSTR(PATH, 7, 5) AS Level2,
+            SUBSTR(PATH, 13, 5) AS Level3,
+            PROD_CD,
+            PROD_NM,
+            SALE_AMT,
+            SALE_QTY,
+            DC_AMT,
+            REAL_SALE_AMT,
+            TAX_SALE_AMT,
+            VAT_AMT,
+            NO_TAX_SALE_AMT
+            FROM
+            (
+                SELECT
+                FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH,
+                FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                PROD_CD,
+                PROD_NM,
+                SALE_AMT,
+                SALE_QTY,
+                DC_AMT,
+                REAL_SALE_AMT,
+                TAX_SALE_AMT,
+                VAT_AMT,
+                NO_TAX_SALE_AMT
+                FROM
+                (
+                    SELECT
+                    tsmp.STORE_CD,
+                    tmp.PROD_CLASS_CD,
+                    tsmp.PROD_CD,
+                    tmp.PROD_NM,
+                    SUM(tsmp.TOT_SALE_QTY) AS SALE_QTY,
+                    SUM(tsmp.TOT_SALE_AMT) AS SALE_AMT,
+                    SUM(tsmp.TOT_DC_AMT) AS DC_AMT,
+                    SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                    SUM(tsmt.TAX_SALE_AMT) AS TAX_SALE_AMT,
+                    SUM(tsmt.VAT_AMT) AS VAT_AMT,
+                    SUM(tsmt.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+                    FROM TB_SL_MONTHLY_PROD tsmp,
+                    TB_SL_MONTHLY_TOTAL tsmt,
+                    TB_MS_PRODUCT tmp,
+                    TB_MS_PRODUCT_BARCD tmpb
+                    WHERE 1=1
+                    AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tsmp.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
+                            #{item}
                         </foreach>
                     </if>
-                </if>
-            </when>
-        </choose>
-        GROUP BY STORE_CD, PATH_NM, PROD_CD, PROD_NM
-        ORDER BY STORE_CD, PROD_CD
+                    AND tsmp.SALE_YM = #{yearMonth}
+                    <if test="prodCd != null and prodCd != ''">
+                        AND tsmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                        AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                    </if>
+                    <if test="barCd != null and barCd != ''">
+                        AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                    </if>
+                    <if test="prodClassCd != null and prodClassCd != ''">
+                        AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                    </if>
+                    AND tsmt.HQ_OFFICE_CD (+)= tsmp.HQ_OFFICE_CD
+                    AND tsmt.STORE_CD (+)= tsmp.STORE_CD
+                    AND tsmt.SALE_YM (+)= tsmp.SALE_YM
+                    AND tmp.STORE_CD = tsmp.STORE_CD
+                    AND tmp.PROD_CD = tsmp.PROD_CD
+                    AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                    AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                    GROUP BY tsmp.STORE_CD, tsmp.PROD_CD, tmp.PROD_NM, tmp.PROD_CLASS_CD
+                )
+            )
+        )
+        WHERE 1=1
+        <!-- 분류있음 -->
+        <if test='level != null and level != "Level0"'>
+            AND ${level} IN
+            <foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY PATH_NM, PROD_CD, PROD_NM
+        ORDER BY PROD_CD
     </select>
 
 </mapper>

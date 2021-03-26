@@ -108,7 +108,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        $scope._popConfirm(messages["recpOrigin.delConfirm"], function() {
+        $scope._popConfirm(messages["cmm.choo.delete"], function() {
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
 
@@ -251,6 +251,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 }]);
 
+
 /**
  *  재료-상품 등록 그리드 생성
  */
@@ -275,13 +276,13 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
             $("#lblRecipesCd").text(" ( [ " + $scope.selectedStore.recipesCd + " ]");
             $("#lblRecipesNm").text($scope.selectedStore.recipesNm + " / ");
             $("#lblOrgplceNm").text($scope.selectedStore.orgplceNm + " )");
+            $scope.searchRecpOriginDetail();
+
         } else if(addSelected === "N") {
             $("#lblRecipesCd").text("");
             $("#lblRecipesNm").text("");
             $("#lblOrgplceNm").text("");
         }
-
-        $scope.searchRecpOriginDetail();
         event.preventDefault();
     });
 
@@ -312,7 +313,7 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
             $scope.wjRecpProdLayer.show(true);
             event.preventDefault();
         } else if(addSelected === "N" ) {
-                $scope._popMsg(messages["recpOrigin.recipesCdBlank"]);
+                $scope._popMsg(messages["recpOrigin.recipesCdBlank"]); // 재료코드를 선택해주세요.
                 return false;
         }
     };
@@ -331,22 +332,31 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        $scope._popConfirm(messages["recpOrigin.delConfirm"], function() {
-            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-                var item = $scope.flex.collectionView.items[i];
+        if(!$.isEmptyObject($scope.selectedStore) ) {
+            addSelected = "Y";
+        }
 
-                if(item.gChk) {
-                    $scope.flex.collectionView.removeAt(i);
+        if(addSelected === "Y") {
+            $scope._popConfirm(messages["cmm.choo.delete"], function() {
+                for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                    var item = $scope.flex.collectionView.items[i];
+
+                    if(item.gChk) {
+                        $scope.flex.collectionView.removeAt(i);
+                    }
                 }
-            }
 
-            // 저장
-            $scope.save();
-        });
+                // 저장
+                $scope.delSave();
+            });
+
+        } else if(addSelected === "N" ) {
+            $scope._popMsg(messages["recpOrigin.recipesCdBlank"]); // 재료코드를 선택해주세요.
+            return false;
+        }
     };
-    // <-- //그리드 행 삭제 -->
 
-    $scope.save = function() {
+    $scope.delSave = function() {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
@@ -358,4 +368,6 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/recpOrigin/recpOrigin/getRecpOriginDetailSave.sb", params, function(){});
     };
+    // <-- //그리드 행 삭제 -->
+
 }]);

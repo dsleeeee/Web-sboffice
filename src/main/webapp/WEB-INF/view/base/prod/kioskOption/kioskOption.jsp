@@ -167,10 +167,10 @@
                 <button class="btn_down" id="btnProdDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
                 <%-- 추가 --%>
                 <button class="btn_skyblue" id="btnProdAdd" ng-click="add()"><s:message code='cmm.add' /></button>
-                <%-- 삭제 --%>
-                <button class="btn_skyblue" id="btnProdDel" ng-click="del()"><s:message code='cmm.del' /></button>
                 <%-- 저장 --%>
                 <button class="btn_skyblue" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                <%-- 삭제 --%>
+                <button class="btn_skyblue" id="btnProdDel" ng-click="del()"><s:message code='cmm.del' /></button>
             </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
@@ -199,7 +199,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOption.js?ver=20200824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOption.js?ver=20210326.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

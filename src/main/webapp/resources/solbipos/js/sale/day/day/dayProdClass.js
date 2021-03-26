@@ -158,12 +158,14 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params = {};
                         params.saleDate = selectedRow.saleDate;
-                        params.strProdClassCd = $("#hdProdClassCd").val();
+                        // params.strProdClassCd = $("#hdProdClassCd").val();
+                        params.strProdClassCd = arr[i];
                         params.level = $scope.level;
                         params.prodCd = $scope.prodCd;
                         params.prodNm = $scope.prodNm;
                         params.barCd = $scope.barCd;
-                        params.prodClassCd = arr[i];
+                        // params.prodClassCd = arr[i];
+                        params.prodClassCd = $scope.prodClassCd;
                         params.storeCd = $("#dayProdClassSelectStoreCd").val();
                         params.gubun = "dayProdClass";
 
@@ -252,7 +254,7 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
 
             // 결제수단 헤더머지 컬럼 생성
             for (var i = 1; i <= arr.length; i++) {
-                dataItem['pay' + i + "SaleAmt"] = arr[i-1];
+                dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
                 dataItem['pay' + i + "SaleQty"] = arr[i-1];
             }
             grid.columnHeaders.rows[0].dataItem = dataItem

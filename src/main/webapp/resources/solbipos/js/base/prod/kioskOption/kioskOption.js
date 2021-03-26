@@ -163,12 +163,12 @@ app.controller('kioskOptionDetailCtrl', ['$scope', '$http', function ($scope, $h
         if(addSelected === "Y") {
             $("#lblProdCd").text("[ " + $scope.selectedStore.prodCd + " ]");
             $("#lblProdNm").text($scope.selectedStore.prodNm);
+            $scope.searchKioskOptionDetail();
+
         } else if(addSelected === "N") {
             $("#lblProdCd").text("");
             $("#lblProdNm").text("");
         }
-
-        $scope.searchKioskOptionDetail();
         event.preventDefault();
     });
 
@@ -223,7 +223,7 @@ app.controller('kioskOptionDetailCtrl', ['$scope', '$http', function ($scope, $h
         }
 
         if(addSelected === "Y") {
-            $scope._popConfirm(messages["kioskOption.delConfirm"], function() {
+            $scope._popConfirm(messages["cmm.choo.delete"], function() {
                 // 파라미터 설정
                 var params = new Array();
                 for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -241,6 +241,7 @@ app.controller('kioskOptionDetailCtrl', ['$scope', '$http', function ($scope, $h
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
                 $scope._save("/base/prod/kioskOption/kioskOption/getKioskOptionSaveDelete.sb", params, function(){ $scope.allSearch() });
             });
+
         } else if(addSelected === "N" ) {
             $scope._popMsg(messages["kioskOption.prodCdBlank"]);
             return false;
@@ -288,19 +289,31 @@ app.controller('kioskOptionDetailCtrl', ['$scope', '$http', function ($scope, $h
 
     // 저장
     $scope.save = function() {
-        var dispSeq = 1;
-
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            $scope.flex.collectionView.items[i].prodCd = $scope.selectedStore.prodCd;
-            $scope.flex.collectionView.items[i].dispSeq = dispSeq;
-            params.push($scope.flex.collectionView.items[i]);
-            dispSeq++;
+        if(!$.isEmptyObject($scope.selectedStore) ) {
+            addSelected = "Y";
         }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/kioskOption/kioskOption/getKioskOptionSaveUpdate.sb", params, function(){ $scope.allSearch() });
+        if(addSelected === "Y") {
+            $scope._popConfirm(messages["cmm.choo.save"], function() {
+                var dispSeq = 1;
+
+                // 파라미터 설정
+                var params = new Array();
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    $scope.flex.collectionView.items[i].prodCd = $scope.selectedStore.prodCd;
+                    $scope.flex.collectionView.items[i].dispSeq = dispSeq;
+                    params.push($scope.flex.collectionView.items[i]);
+                    dispSeq++;
+                }
+
+                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                $scope._save("/base/prod/kioskOption/kioskOption/getKioskOptionSaveUpdate.sb", params, function(){ $scope.allSearch() });
+            });
+
+        } else if(addSelected === "N" ) {
+            $scope._popMsg(messages["kioskOption.prodCdBlank"]);
+            return false;
+        }
     };
 
     // 재조회

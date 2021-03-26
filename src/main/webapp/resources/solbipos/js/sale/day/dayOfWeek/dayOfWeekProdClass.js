@@ -148,7 +148,7 @@ app.controller('dayOfWeekProdClassCtrl', ['$scope', '$http', '$timeout', functio
 
             // 헤더머지 컬럼 생성
             for (var i = 1; i <= arr.length; i++) {
-                dataItem['pay' + i + "SaleAmt"] = arr[i-1];
+                dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
                 dataItem['pay' + i + "SaleQty"] = arr[i-1];
             }
             grid.columnHeaders.rows[0].dataItem = dataItem

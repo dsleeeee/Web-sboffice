@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon">
+<div id="recpOriginView" class="subCon" style="display: none;">
 
     <div ng-controller="recpOriginCtrl">
         <%-- 조회조건 --%>
@@ -88,6 +88,7 @@
                         <wj-flex-grid-column header="<s:message code="recpOrigin.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpOrigin.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpOrigin.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+
                     </wj-flex-grid>
                 </div>
             </div>
@@ -100,7 +101,8 @@
 <script type="text/javascript">
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20200715.04" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20210327.01" charset="utf-8"></script>
 
 <%-- 재료-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpProd.jsp">
