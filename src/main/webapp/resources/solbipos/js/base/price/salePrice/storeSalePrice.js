@@ -205,20 +205,62 @@ console.log('params', params);
           $scope._popMsg(messages["salePrice.saleUprcBlank"]); // 변경판매가를 입력하세요.
           return false;
         } else {
-          // 숫자만 입력
-          var numChkexp = /[^0-9]/g;
-          if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
+          if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){ // 소수점있으면 거름
+            $scope.flex.collectionView.items[i].saleUprc = "";
             $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+            return false;
+          } else {
+            // 숫자만 입력
+            var numchkexp = /[^0-9]/g;
+            if (numchkexp.test($scope.flex.collectionView.items[i].saleUprc)) { // 음수
+              var numchkexp2 = /^-[0-9]/g;
+              if (numchkexp2.test($scope.flex.collectionView.items[i].saleUprc)) {
+                $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
+                params.push($scope.flex.collectionView.items[i]);
+              } else if((numchkexp2.test($scope.flex.collectionView.items[i].saleUprc) == false)){
+                $scope.flex.collectionView.items[i].saleUprc = "";
+                $scope._popMsg(messages["salePrice.saleUprcInChk"]);
+                return false;
+              }
+            } else if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){ // 양수 max값
+              $scope.flex.collectionView.items[i].saleUprc = "";
+              $scope._popMsg(messages["salePrice.saleUprcInChk"]);
+              return false;
+            } else {
+              $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
+              params.push($scope.flex.collectionView.items[i]);
+            }
+          }
+        }
+
+
+
+        /*else {
+          // 숫자만 입력
+          var numchkexp = /[^0-9]/g;
+          if (numchkexp.test($scope.flex.collectionView.items[i].saleUprc)) { // 음수
+            var numchkexp2 = /^-[0-9]/g;
+            if (numchkexp2.test($scope.flex.collectionView.items[i].saleUprc)) {
+            } else if((numchkexp2.test($scope.flex.collectionView.items[i].saleUprc) == false)){
+              $scope.flex.collectionView.items[i].saleUprc = "";
+              $scope._popMsg(messages["salePrice.saleUprcInChk"]);
+              return false;
+            }
+          } else if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){ // 양수 max값
+            $scope.flex.collectionView.items[i].saleUprc = "";
+            $scope._popMsg(messages["salePrice.saleUprcInChk"]);
             return false;
           }
         }
+
+
         if($scope.flex.collectionView.items[i].saleUprc <= 1000000000){ // 판매금액 상한가 지정
           $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
           params.push($scope.flex.collectionView.items[i]);
         } else {
-          $scope._popMsg(messages["salePrice.saleUprcMax"]);
+          $scope._popMsg(messages["salePrice.saleUprcInChk"]);
           return false;
-        }
+        }*/
       }
     }
 

@@ -6,6 +6,7 @@
   <div class="wj-dialog wj-dialog-columns" ng-controller="sideMenuProdCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="sideMenu.selectMenu.selProd" />
+      <label id="lblsdselClassCd" style="display:none"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 

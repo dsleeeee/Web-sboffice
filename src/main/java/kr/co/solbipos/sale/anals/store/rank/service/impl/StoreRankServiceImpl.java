@@ -39,7 +39,7 @@ public class StoreRankServiceImpl implements StoreRankService {
         
         if(storeRankVO.getChkPay().equals("Y")) {
             List<DefaultMap<String>> payCd = storeRankMapper.getPayColList(storeRankVO);
-            	sQuery1 +=", M.PAY0" + "\n";
+            	sQuery1 +=", N.PAY0" + "\n";
             	sQuery2 +=", NVL(SUM(TSDP.TOT_PAY_AMT),0) AS PAY0" + "\n";
             for(int i = 0; i < payCd.size(); i++) {
             	int j = Integer.parseInt(payCd.get(i).get("payCd"));
@@ -47,10 +47,10 @@ public class StoreRankServiceImpl implements StoreRankService {
             	sQuery2 +=",  NVL(SUM(CASE WHEN TSDP.PAY_CD = "+ j + " THEN TSDP.TOT_PAY_AMT ELSE NULL END),0) AS PAY" + j +  "\n";
             }
         }else {
-        	sQuery1 +=", M.PAY0" + "\n";
-        	sQuery1 +=", M.PAY1" + "\n";
-        	sQuery1 +=", M.PAY2" + "\n";
-        	sQuery1 +=", M.PAY3" + "\n";
+        	sQuery1 +=", N.PAY0" + "\n";
+        	sQuery1 +=", N.PAY1" + "\n";
+        	sQuery1 +=", N.PAY2" + "\n";
+        	sQuery1 +=", N.PAY3" + "\n";
         	sQuery2 +=", NVL(SUM(TSDP.TOT_PAY_AMT),0) AS PAY0" + "\n";
         	sQuery2 +=", NVL(SUM(CASE WHEN TSDP.PAY_CD = '01' THEN TSDP.TOT_PAY_AMT ELSE NULL END),0) AS PAY1" + "\n";
         	sQuery2 +=", NVL(SUM(CASE WHEN TSDP.PAY_CD = '02' THEN TSDP.TOT_PAY_AMT ELSE NULL END),0) AS PAY2" + "\n";	
