@@ -26,25 +26,27 @@
 
   <!-- ====================================-->
   <!--  Redis Properties-->
+  <!--  port:6379->6380,maxTotal:500,minIdle:500,maxIdle:500,maxWaitMillis:5000 변경됨 20210326 kjs-->
   <!-- ====================================-->
   <entry key="redis.hostName">192.168.0.160</entry>
   <entry key="redis.port">6380</entry>
   <entry key="redis.password"></entry>
   <entry key="redis.usePool">true</entry>
-<!--   web session  -->
+  <!--   web session  -->
   <entry key="redis.web.prefix">sbp:web:dev:</entry>
-<!--   web 공통 코드  -->
+  <!--   web 공통 코드  -->
   <entry key="redis.code.prefix">sbp:cmm:dev:</entry>
-<!-- pool config -->
-  <entry key="redis.pool.maxTotal">50</entry>
-  <entry key="redis.pool.minIdle">50</entry>
-  <entry key="redis.pool.maxIdle">50</entry>
+  <!-- pool config -->
+  <entry key="redis.pool.maxTotal">500</entry>
+  <entry key="redis.pool.minIdle">500</entry>
+  <entry key="redis.pool.maxIdle">500</entry>
+  <entry key="redis.pool.maxWaitMillis">5000</entry>
 
 
   <!-- ====================================-->
   <!--  login Properties-->
   <!-- ====================================-->
-<!--   패스워드 변경 유효기간 -->
+  <!--   패스워드 변경 유효기간 -->
   <entry key="login.pwd.chg.days">90</entry>
   <entry key="login.check.id.save">saveid</entry>
   <entry key="login.otp.limit.minute">3</entry>
@@ -54,7 +56,7 @@
   <!-- ====================================-->
   <!--  session Properties-->
   <!-- ====================================-->
-<!--   세션 타임 타웃 분단위 -->
+  <!--   세션 타임 타웃 분단위 -->
   <entry key="session.timeout.min">30</entry>
   <entry key="session.hist.menu.size">20</entry>
 
