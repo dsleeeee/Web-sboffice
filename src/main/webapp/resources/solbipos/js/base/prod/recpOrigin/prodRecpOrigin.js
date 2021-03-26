@@ -56,6 +56,24 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
         $scope.startDateCombo.isReadOnly = $scope.isChecked;
         $scope.endDateCombo.isReadOnly = $scope.isChecked;
 
+        var url                = '/base/prod/recpOrigin/recpOrigin/getBrandComboList.sb';
+        var comboParams        = {};
+        comboParams.hqOfficeCd = hqOfficeCd;
+        $scope._queryCombo("map", null, "hqBrandFgMap", url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 재료코드
+                if (col.binding === "recipesCd") {
+                    // var item = s.rows[e.row].dataItem;
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+            }
+        });
+
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -78,10 +96,15 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
                 // 상품코드 클릭시 상세정보 조회
                 if ( col.binding === "prodCd") {
                     var selectedRow = s.rows[ht.row].dataItem;
-                    var params      = {};
+                    var params = {};
                     params.prodCd = selectedRow.prodCd;
                     params.prodNm = selectedRow.prodNm;
                     params.hqBrandCd = selectedRow.hqBrandCd;
+
+                    if(selectedRow.hqBrandCd != selectedRow.hqBrandCdCombo) {
+                        $scope._popMsg(messages["prodRecpOrigin.hqBrandCdBlank"]); // 브랜드를 변경하셨습니다. 저장 후 다시 선택해주세요.
+                        return false;
+                    }
 
                     var storeScope = agrid.getScope('prodRecpOriginDetailCtrl');
                     storeScope._broadcast('prodRecpOriginDetailCtrl', params);
@@ -114,6 +137,23 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
             });
         }, false);
     };
+
+    // 재료 및 원산지 등록 팝업 - 닫을때 때문에
+    $scope.$on("prodRecpOriginPopupCtrl", function(event, data) {
+        $scope.searchProdRecpOriginPopup();
+        event.preventDefault();
+    });
+
+    $scope.searchProdRecpOriginPopup = function(){
+        var params = {};
+        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+        params.chkDt = $scope.isChecked;
+        params.useYn = $scope.useYn;
+        params.recpOriginUseYn = $scope.recpOriginUseYn;
+
+        $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginList.sb", params, function() {}, false);
+    };
     // <-- //검색 호출 -->
 
     // 상품분류정보 팝업
@@ -141,6 +181,106 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
         $scope.prodClassCdNm = "";
+    };
+
+    // <-- 저장 -->
+    // 현재 A0001 본사만 사용되게 로직 구성됨
+    $scope.prodRecpOriginSave = function() {
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginSave.sb", params, function(){ $scope.allSearch() });
+        });
+    };
+
+    // 재조회
+    $scope.allSearch = function () {
+        $scope.searchProdRecpOrigin();
+    };
+    // <-- //저장 -->
+
+    // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+        var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+        if (url) {
+            comboUrl = url;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : comboUrl, /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data.list)) {
+                    var list       = response.data.data.list;
+                    var comboArray = [];
+                    var comboData  = {};
+
+                    if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+                        comboArray = [];
+                        if (option === "A") {
+                            comboData.name  = messages["cmm.all"];
+                            comboData.value = "";
+                            comboArray.push(comboData);
+                        } else if (option === "S") {
+                            comboData.name  = messages["cmm.select"];
+                            comboData.value = "";
+                            comboData.id    = "0";
+                            comboArray.push(comboData);
+                        }
+
+                        for (var i = 0; i < list.length; i++) {
+                            comboData       = {};
+                            comboData.name  = list[i].nmcodeNm;
+                            comboData.value = list[i].nmcodeCd;
+                            comboArray.push(comboData);
+                        }
+                        $scope._setComboData(comboId, comboArray);
+                    }
+
+                    if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+                        comboArray = [];
+                        comboData      = {};
+                        comboData.id   = "0";
+                        comboData.name = "선택";
+                        comboArray.push(comboData);
+
+                        for (var i = 0; i < list.length; i++) {
+                            comboData      = {};
+                            comboData.id   = list[i].nmcodeCd;
+                            comboData.name = list[i].nmcodeNm;
+                            comboArray.push(comboData);
+                        }
+                        $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+                    }
+                }
+            }
+        }, function errorCallback(response) {
+            $scope._popMsg(messages["cmm.error"]);
+            return false;
+        }).then(function () {
+            if (typeof callback === 'function') {
+                $timeout(function () {
+                    callback();
+                }, 10);
+            }
+        });
     };
 
 }]);
@@ -256,7 +396,13 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){});
+        $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){
+            $scope.$apply(function() {
+                var storeScope = agrid.getScope('prodRecpOriginCtrl');
+                storeScope._gridDataInit();
+                storeScope._broadcast('prodRecpOriginCtrl');
+            });
+        });
     };
     // <-- //그리드 행 삭제 -->
 

@@ -75,6 +75,7 @@ app.controller('prodRecpOriginAddCtrl', ['$scope', '$http', function ($scope, $h
 
         // 저장기능 수행후 재조회
         $scope._broadcast('prodRecpOriginDetailCtrl', params);
+        $scope._broadcast('prodRecpOriginPopupCtrl', params);
     };
 
 }]);

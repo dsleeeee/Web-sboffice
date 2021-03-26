@@ -598,7 +598,8 @@
                 thp.PROD_CD,
                 thp.PROD_NM,
                 NVL(thprp.RECP_ORIGIN_CNT, 0) AS RECP_ORIGIN_CNT,
-                thp.HQ_BRAND_CD
+                thp.HQ_BRAND_CD,
+                thp.HQ_BRAND_CD AS HQ_BRAND_CD_COMBO
                 FROM
                 (
                     SELECT
@@ -645,8 +646,16 @@
                     thprp.PROD_CD,
                     COUNT(thprp.RECIPES_CD) AS RECP_ORIGIN_CNT
                     FROM TB_HQ_PRODUCT_RECP_PROD thprp
+                    <if test="hqOfficeCd == 'A0001'">
+                        , TB_HQ_PRODUCT thp
+                    </if>
                     WHERE 1=1
                     AND thprp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test="hqOfficeCd == 'A0001'">
+                        AND thp.HQ_OFFICE_CD = thprp.HQ_OFFICE_CD
+                        AND thp.PROD_CD = thprp.PROD_CD
+                        AND thp.HQ_BRAND_CD = thprp.HQ_BRAND_CD
+                    </if>
                     GROUP BY thprp.HQ_OFFICE_CD, thprp.PROD_CD
                     ORDER BY thprp.PROD_CD
                 ) thprp
@@ -753,6 +762,8 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
+                thprp.HQ_BRAND_CD,
+                (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = thprp.HQ_BRAND_CD) AS HQ_BRAND_NM,
                 thprp.RECIPES_CD,
                 thpro.RECIPES_NM,
                 thpro.ORGPLCE_NM,
@@ -774,6 +785,8 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
+                tmprp.HQ_BRAND_CD,
+                (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = tmprp.HQ_BRAND_CD) AS HQ_BRAND_NM,
                 tmprp.RECIPES_CD,
                 tmpro.RECIPES_NM,
                 tmpro.ORGPLCE_NM,
@@ -892,5 +905,23 @@
             </when>
         </choose>
     </select>
+
+    <!-- 상품-원산지관리탭 - 저장 update -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        COMMENTS : [본사]상품
+    -->
+    <update id="getProdRecpOriginSave" parameterType="EnvConfgBatchChangeVO">
+        /* RecpOriginMapper.getProdRecpOriginSave */
+        UPDATE
+        TB_HQ_PRODUCT
+        SET
+        HQ_BRAND_CD = #{hqBrandCd},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+    </update>
 
 </mapper>

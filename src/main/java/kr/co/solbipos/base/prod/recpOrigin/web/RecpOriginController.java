@@ -282,4 +282,27 @@ public class RecpOriginController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 상품-원산지관리탭 - 저장
+     *
+     * @param recpOriginVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 07. 10.
+     */
+    @RequestMapping(value = "/prodRecpOrigin/getProdRecpOriginSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRecpOriginSave(@RequestBody RecpOriginVO[] recpOriginVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = recpOriginService.getProdRecpOriginSave(recpOriginVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

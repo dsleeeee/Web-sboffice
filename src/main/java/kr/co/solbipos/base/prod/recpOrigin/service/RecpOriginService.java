@@ -51,4 +51,7 @@ public interface RecpOriginService {
 
     /** 재료 및 원산지 등록 팝업 - 저장 */
     int getProdRecpOriginAddSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품-원산지관리탭 - 저장 */
+    int getProdRecpOriginSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
 }

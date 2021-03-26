@@ -74,4 +74,7 @@ public interface RecpOriginMapper {
 
    /** 원산지출력순서 조회(자동채번)  */
    String getRecpSeq(RecpOriginVO recpOriginVO);
+
+   /** 상품-원산지관리탭 - 저장 update */
+   int getProdRecpOriginSave(RecpOriginVO recpOriginVO);
 }

@@ -238,4 +238,27 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         return procCnt;
     }
 
+    /** 상품-원산지관리탭 - 저장 */
+    @Override
+    public int getProdRecpOriginSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(RecpOriginVO recpOriginVO : recpOriginVOs) {
+
+            recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            recpOriginVO.setModDt(currentDt);
+            recpOriginVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt = recpOriginMapper.getProdRecpOriginSave(recpOriginVO);
+        }
+
+        return procCnt;
+    }
+
 }

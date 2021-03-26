@@ -14,7 +14,7 @@
     <div ng-controller="prodRecpOriginCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
-            <a href="#" class="open fl">${menuNm}</a>
+            <a href="#" class="open fl"><s:message code="recpOriginTab.prodRecpOrigin" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <button class="btn_blue fr" ng-click="_broadcast('prodRecpOriginCtrl',1)">
@@ -143,6 +143,12 @@
         <%-- left --%>
         <div class="wj-TblWrap mt20 mb20 w60 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+                <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
+                    <div class="updownSet oh mb10">
+                            <%-- 저장 --%>
+                        <button class="btn_skyblue" id="btnProdRecpOriginSave" ng-click="prodRecpOriginSave()"><s:message code='cmm.save' /></button>
+                    </div>
+                </c:if>
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row">
@@ -158,14 +164,14 @@
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="prodRecpOrigin.pathNm"/>" binding="pathNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="prodRecpOrigin.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpOriginCnt"/>" binding="recpOriginCnt" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
-                                    <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandCdCombo" data-map="hqBrandFgMap" width="80" align="center"></wj-flex-grid-column>
                                 </c:if>
 
                                 <%--팝업 조회시 필요--%>
-                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandCd"/>" binding="hqBrandCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prodRecpOriginAdd.hqBrandCd"/>" binding="hqBrandCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                             </wj-flex-grid>
                         </div>
@@ -187,11 +193,11 @@
                 <%-- DOWN --%>
                 <button class="btn_down" id="btnProdDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
                 <%-- 추가 --%>
-                <button class="btn_skyblue" id="btnProdRecpOriginAdd" ng-click="add()"><s:message code='cmm.add' /></button>
+                <button class="btn_skyblue" id="btnProdRecpOriginDetailAdd" ng-click="add()"><s:message code='cmm.add' /></button>
                 <%-- 저장 --%>
-                <button class="btn_skyblue" id="btnProdRecpOriginSave" ng-click="save()"><s:message code='cmm.save' /></button>
+                <button class="btn_skyblue" id="btnProdRecpOriginDetailSave" ng-click="save()"><s:message code='cmm.save' /></button>
                 <%-- 삭제 --%>
-                <button class="btn_skyblue" id="btnProdRecpOriginDel" ng-click="del()"><s:message code='cmm.del' /></button>
+                <button class="btn_skyblue" id="btnProdRecpOriginDetailDel" ng-click="del()"><s:message code='cmm.del' /></button>
             </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
@@ -205,12 +211,11 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesCd"/>" binding="recipesCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesCd"/>" binding="recipesCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-
-                        <%--팝업 조회시 필요--%>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpSeq"/>" binding="recpSeq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpSeq"/>" binding="recpSeq" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -222,10 +227,6 @@
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/prodRecpOrigin.js?ver=20210326.08" charset="utf-8"></script>
-
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-</c:import>
 
 <%-- 재료 및 원산지 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/prodRecpOriginAdd.jsp">

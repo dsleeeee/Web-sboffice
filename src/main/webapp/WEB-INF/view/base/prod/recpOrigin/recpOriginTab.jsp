@@ -36,3 +36,7 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 <%-- 탭페이지 레이어 끝 --%>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
