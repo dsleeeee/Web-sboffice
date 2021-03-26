@@ -101,7 +101,7 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        $scope._popConfirm(messages["foodAllergy.delConfirm"], function() {
+        $scope._popConfirm(messages["cmm.choo.delete"], function() {
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
 
@@ -188,13 +188,13 @@ app.controller('foodAllergyDetailCtrl', ['$scope', '$http', function ($scope, $h
             $("#lblRecipesCd").text(" ( [ " + $scope.selectedStore.recipesCd + " ]");
             $("#lblRecipesNm").text($scope.selectedStore.recipesNm + " / ");
             $("#lblAllergieNm").text($scope.selectedStore.allergieNm + " )");
+            $scope.searchFoodAllergyDetail();
+
         } else if(addSelected === "N") {
             $("#lblRecipesCd").text("");
             $("#lblRecipesNm").text("");
             $("#lblAllergieNm").text("");
         }
-
-        $scope.searchFoodAllergyDetail();
         event.preventDefault();
     });
 
@@ -244,18 +244,28 @@ app.controller('foodAllergyDetailCtrl', ['$scope', '$http', function ($scope, $h
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        $scope._popConfirm(messages["foodAllergy.delConfirm"], function() {
-            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-                var item = $scope.flex.collectionView.items[i];
+        if(!$.isEmptyObject($scope.selectedStore) ) {
+            addSelected = "Y";
+        }
 
-                if(item.gChk) {
-                    $scope.flex.collectionView.removeAt(i);
+        if(addSelected === "Y") {
+            $scope._popConfirm(messages["cmm.choo.delete"], function() {
+                for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                    var item = $scope.flex.collectionView.items[i];
+
+                    if(item.gChk) {
+                        $scope.flex.collectionView.removeAt(i);
+                    }
                 }
-            }
 
-            // 저장
-            $scope.save();
-        });
+                // 저장
+                $scope.save();
+            });
+
+        } else if(addSelected === "N" ) {
+            $scope._popMsg(messages["foodAllergy.recipesCdBlank"]);
+            return false;
+        }
     };
     // <-- //그리드 행 삭제 -->
 
@@ -271,4 +281,5 @@ app.controller('foodAllergyDetailCtrl', ['$scope', '$http', function ($scope, $h
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/foodAllergy/foodAllergy/getFoodAllergyDetailSave.sb", params, function(){});
     };
+
 }]);

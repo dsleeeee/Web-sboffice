@@ -95,7 +95,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20201006.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20210326.04" charset="utf-8"></script>
 
 <%-- 알레르기-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/foodAllergy/foodAllergyProd.jsp">
