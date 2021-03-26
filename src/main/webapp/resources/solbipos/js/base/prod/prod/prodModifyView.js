@@ -240,6 +240,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#prodModifySaleUprc").focus();
           return false;
         }
+        // 판매단가 최대값/특수문자(-) 체크
+        if($("#prodModifySaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#prodModifySaleUprc").val().substring(1))){
+            $scope._popMsg(messages["prod.saleUprcFilter.msg"]);
+            $("#prodModifySaleUprc").focus();
+            return false;
+        }
         // 공급단가
         if (isNull($("#prodModifySplyUprc").val())) {
           $scope._popMsg(messages["prod.splyUprcChk.msg"]);

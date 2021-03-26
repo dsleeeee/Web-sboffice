@@ -181,6 +181,17 @@ public class ProdVO extends PageVO {
     /** 거래처코드 */
     private String[] vendrCdList;
 
+    /** 매장상태 */
+    private String sysStatFg;
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
     /**
      * @return the hqOfficeCd
      */

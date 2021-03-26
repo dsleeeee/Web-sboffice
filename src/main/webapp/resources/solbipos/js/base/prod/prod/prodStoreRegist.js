@@ -16,7 +16,18 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {};
+  $scope.initGrid = function (s, e) {
+    $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+    var url             = '/base/prod/prod/prod/getBrandComboList.sb';
+    var comboParams     = {};
+    comboParams.hqOfficeCd = hqOfficeCd;
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "srchHqBrand", null, url, comboParams, "A", null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+  };
+
+  // 콤보박스 데이터 Set
+  $scope._setComboData("srchSysStatFg", sysStatFg);
 
   // 등록 매장 그리드 조회
   $scope.$on("regStoreCtrl", function(event, data) {
@@ -37,7 +48,9 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd    = '';
     params.storeNm    = '';
     params.prodCd     = prodScope.getProdInfo().prodCd;
-    params.hqBrandCd  = prodScope.getProdInfo().hqBrandCd;
+    params.sysStatFg  = $scope.sysStatFg;
+    params.hqBrandCd  = $scope.hqBrandCd;
+    // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'Y';
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
@@ -87,6 +100,77 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     noRegStoreGrid.searchNoRegStore();
   };
 
+  // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+  // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+  // comboId : combo 생성할 ID
+  // gridMapId : grid 에서 사용할 Map ID
+  // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+  // params : 데이터 조회할 url에 보낼 파라미터
+  // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+  // callback : queryCombo 후 callback 할 함수
+  $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+    var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+    if (url) {
+      comboUrl = url;
+    }
+
+    // ajax 통신 설정
+    $http({
+      method : 'POST', //방식
+      url    : comboUrl, /* 통신할 URL */
+      params : params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        if (!$.isEmptyObject(response.data.data.list)) {
+          var list       = response.data.data.list;
+          var comboArray = [];
+          var comboData  = {};
+
+          if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+            comboArray = [];
+            if (option === "A") {
+              comboData.name  = messages["cmm.all"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            } else if (option === "S") {
+              comboData.name  = messages["cmm.select"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            }
+            for (var i = 0; i < list.length; i++) {
+              comboData       = {};
+              comboData.name  = list[i].nmcodeNm;
+              comboData.value = list[i].nmcodeCd;
+              comboArray.push(comboData);
+            }
+            $scope._setComboData(comboId, comboArray);
+          }
+
+          if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+            comboArray = [];
+            for (var i = 0; i < list.length; i++) {
+              comboData      = {};
+              comboData.id   = list[i].nmcodeCd;
+              comboData.name = list[i].nmcodeNm;
+              comboArray.push(comboData);
+            }
+            $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+          }
+        }
+      }
+    }, function errorCallback(response) {
+      $scope._popMsg(messages["cmm.error"]);
+      return false;
+    }).then(function () {
+      if (typeof callback === 'function') {
+        $timeout(function () {
+          callback();
+        }, 10);
+      }
+    });
+  };
+
 }]);
 
 /**
@@ -96,7 +180,9 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('noRegStoreCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {};
+  $scope.initGrid = function (s, e) {
+    $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+  };
 
   // 미등록 매장 그리드 조회
   $scope.$on("noRegStoreCtrl", function(event, data) {
@@ -113,7 +199,9 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd    = $("#srchStoreCd").val();
     params.storeNm    = $("#srchStoreNm").val();
     params.prodCd     = prodScope.getProdInfo().prodCd;
-    params.hqBrandCd  = prodScope.getProdInfo().hqBrandCd;
+    params.sysStatFg  = $scope.sysStatFg;
+    params.hqBrandCd  = $scope.hqBrandCd;
+    // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'N';
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);

@@ -158,6 +158,9 @@ public interface ProdMapper {
     /** 미적용 상품 거래처 조회 팝업 - 조회 */
     List<DefaultMap<String>> getSearchNoProdVendrList(ProdVO prodVO);
 
+    /** 브랜드 콤보박스 리스트 조회 */
+    List<DefaultMap<String>> getBrandComboList(ProdVO prodVO);
+
     /** 거래처 삭제 */
     int getVendorProdSaveUpdate(ProdVO prodVO);
 

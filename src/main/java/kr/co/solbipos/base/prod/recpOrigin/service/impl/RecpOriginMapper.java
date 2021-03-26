@@ -30,6 +30,9 @@ public interface RecpOriginMapper {
    /** 원산지관리 조회 */
    List<DefaultMap<Object>> getRecpOriginList(RecpOriginVO recpOriginVO);
 
+   /** 브랜드 콤보박스 리스트 조회 */
+   List<DefaultMap<Object>> getBrandComboList(RecpOriginVO recpOriginVO);
+
    /** 재료코드(자동채번) */
    String getRecpOriginRecipesCd(RecpOriginVO recpOriginVO);
 

@@ -55,6 +55,12 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         return recpOriginMapper.getRecpOriginList(recpOriginVO);
     }
 
+    /** 브랜드 콤보박스 리스트 조회 */
+    @Override
+    public List<DefaultMap<Object>> getBrandComboList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+        return recpOriginMapper.getBrandComboList(recpOriginVO);
+    }
+
     /** 원산지관리 저장 */
     @Override
     public int getRecpOriginSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO) {

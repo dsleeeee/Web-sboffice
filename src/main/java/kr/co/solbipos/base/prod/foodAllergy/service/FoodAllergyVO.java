@@ -21,6 +21,10 @@ public class FoodAllergyVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
+    private String hqOfficeCd;
+
+    private String hqBrandCd;
+
     /**
      * 소속구분
      * M : 시스템
@@ -53,6 +57,22 @@ public class FoodAllergyVO extends PageVO {
 
     /** 알레르기명 */
     private String allergieNm;
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
 
     public String getOrgnFg() { return orgnFg; }
 

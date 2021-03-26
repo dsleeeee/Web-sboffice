@@ -30,7 +30,7 @@
   <div class="wrap ${userCss}">
 
     <%-- 왼쪽 메뉴 --%>
-    <nav id="_nav" class="menuOpen">
+    <nav id="_nav" class="menuClose">
       <tiles:insertAttribute name="menu" />
     </nav>
 

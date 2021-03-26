@@ -25,6 +25,9 @@ public interface RecpOriginService {
     /** 원산지관리 조회 */
     List<DefaultMap<Object>> getRecpOriginList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
 
+    /** 브랜드 콤보박스 리스트 조회 */
+    List<DefaultMap<Object>> getBrandComboList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
     /** 원산지관리 저장 */
     int getRecpOriginSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
 

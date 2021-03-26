@@ -141,7 +141,7 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w50 fl">
+        <div class="wj-TblWrap mt20 mb20 w60 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -177,7 +177,7 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="prodRecpOriginDetailCtrl">
+    <div class="wj-TblWrap mt20 mb20 w40 fr" ng-controller="prodRecpOriginDetailCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
             <s:message code="prodRecpOrigin.recpProd"/>
             <label id="lblProd"></label>
@@ -206,8 +206,8 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesCd"/>" binding="recipesCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
                         <%--팝업 조회시 필요--%>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpSeq"/>" binding="recpSeq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>

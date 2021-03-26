@@ -29,6 +29,9 @@ public interface FoodAllergyMapper {
     /** 식품 알레르기 정보관리 조회 */
     List<DefaultMap<Object>> getFoodAllergyList(FoodAllergyVO foodAllergyVO);
 
+    /** 브랜드 콤보박스 리스트 조회 */
+    List<DefaultMap<Object>> getBrandComboList(FoodAllergyVO foodAllergyVO);
+
     /** 재료코드(자동채번) */
     String getFoodAllergyRecipesCd(FoodAllergyVO foodAllergyVO);
 

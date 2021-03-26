@@ -32,6 +32,7 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#lblRecpProdRecipesCd").text(data.recipesCd);
         $("#lblRecpProdRecipesNm").text(data.recipesNm);
         $("#lblRecpProdOrgplceNm").text(data.orgplceNm);
+        $("#lblRecpProdhqBrandCd").text(data.hqBrandCd);
         $scope.searchRecpProd();
         event.preventDefault();
     });
@@ -39,6 +40,10 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchRecpProd = function(){
         var params = {};
         params.recipesCd = $("#lblRecpProdRecipesCd").text();
+        params.hqBrandCd = $("#lblRecpProdhqBrandCd").text();
+        if (params.hqBrandCd == '0') {
+            params.hqBrandCd = null;
+        }
 
         $scope._inquiryMain("/base/prod/recpOrigin/recpProd/getRecpProdList.sb", params, function() {}, false);
     };
@@ -79,6 +84,9 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].status = "I";
                 $scope.flex.collectionView.items[i].recipesCd = $("#lblRecpProdRecipesCd").text();
+                if($("#lblRecpProdhqBrandCd").text() != '0'){
+                    $scope.flex.collectionView.items[i].hqBrandCd = $("#lblRecpProdhqBrandCd").text();
+                }
                 params.push($scope.flex.collectionView.items[i]);
             }
         }

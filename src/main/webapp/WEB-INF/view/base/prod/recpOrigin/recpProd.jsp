@@ -12,6 +12,7 @@
             <label id="lblRecpProdRecipesCd" style="display: none;"></label>
             <label id="lblRecpProdRecipesNm" style="display: none;"></label>
             <label id="lblRecpProdOrgplceNm" style="display: none;"></label>
+            <label id="lblRecpProdhqBrandCd" style="display: none;"></label>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
@@ -101,7 +102,7 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpProd.js?ver=20210325.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpProd.js?ver=20210327.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -206,6 +206,20 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         if ($scope.flex.collectionView.items[i].saleUprcP !== $scope.flex.collectionView.items[i].saleUprc) {
+
+          // 변경판매가 숫자만 입력가능하도록
+          if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
+            $scope._popMsg(messages["salePrice.saleUprcBlank"]);
+            return false;
+          } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
+              $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+              return false;
+            }
+          }
+
           $scope.flex.collectionView.items.saleAmtOption = saleAmtOption;
           params.push($scope.flex.collectionView.items[i]);
         }

@@ -12,6 +12,7 @@
             <label id="lblFoodAllergyProdRecipesCd" style="display: none;"></label>
             <label id="lblFoodAllergyProRecipesNm" style="display: none;"></label>
             <label id="lblFoodAllergyProdAllergieNm" style="display: none;"></label>
+            <label id="lblFoodAllergyProdhqBrandCd" style="display: none;"></label>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
@@ -101,7 +102,7 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergyProd.js?ver=20210326.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergyProd.js?ver=20210327.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

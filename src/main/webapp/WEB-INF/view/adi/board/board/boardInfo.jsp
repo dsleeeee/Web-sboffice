@@ -235,7 +235,8 @@
 
 <%-- 글쓰기 summernote 에디터 --%>
 <!-- include libraries(jQuery, bootstrap) -->
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<%--<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">--%>
+<link rel="stylesheet" type="text/css" href="/resource/vendor/bootstrap/css/bootstrap_3.3.5.css?ver=20210319.04">
 <%--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>--%>
 <!-- include summernote css/js -->

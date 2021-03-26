@@ -24,10 +24,14 @@
                 SELECT
                 thpro.RECIPES_CD,
                 thpro.RECIPES_NM,
-                thpro.ORGPLCE_NM
-                FROM TB_HQ_PRODUCT_RECP_ORIGIN thpro
+                thpro.ORGPLCE_NM,
+                NVL(thb.HQ_BRAND_CD,'0') as HQ_BRAND_CD
+                FROM TB_HQ_PRODUCT_RECP_ORIGIN thpro,
+                TB_HQ_BRAND thb
                 WHERE 1=1
                 AND thpro.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thb.HQ_OFFICE_CD (+)= THPRO.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD (+)= thpro.HQ_BRAND_CD
                 ORDER BY thpro.RECIPES_CD
             </when>
             <!-- 매장 -->
@@ -42,6 +46,20 @@
                 ORDER BY tmpro.RECIPES_CD
             </when>
         </choose>
+    </select>
+
+    <!-- 브랜드 콤보박스 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : RecpOriginVO
+        COMMENTS : 콤보박스에 넣을 브랜드를 조회한다.
+    -->
+    <select id="getBrandComboList" parameterType="RecpOriginVO" resultType="DefaultMap">
+        SELECT
+        HQ_BRAND_CD AS NMCODE_CD,
+        HQ_BRAND_NM AS NMCODE_NM
+        FROM TB_HQ_BRAND
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
     </select>
 
     <!-- 재료코드(자동채번) -->
@@ -84,6 +102,9 @@
                 INSERT INTO TB_HQ_PRODUCT_RECP_ORIGIN
                 (
                     HQ_OFFICE_CD,
+                    <if test="hqBrandCd != null and hqBrandCd != ''">
+                        HQ_BRAND_CD,
+                    </if>
                     RECIPES_CD,
                     RECIPES_NM,
                     ORGPLCE_NM,
@@ -92,6 +113,10 @@
                     MOD_DT,
                     MOD_ID
                 ) VALUES (
+                    #{hqOfficeCd},
+                    <if test="hqBrandCd != null and hqBrandCd != ''">
+                        #{hqBrandCd},
+                    </if>
                     #{hqOfficeCd},
                     #{recipesCd},
                     #{recipesNm},
@@ -141,6 +166,9 @@
                 UPDATE
                 TB_HQ_PRODUCT_RECP_ORIGIN
                 SET
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    HQ_BRAND_CD = #{hqBrandCd},
+                </if>
                 RECIPES_NM = #{recipesNm},
                 ORGPLCE_NM = #{orgplceNm},
                 MOD_DT = #{modDt},
@@ -347,6 +375,9 @@
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thpc.PROD_CLASS_CD = #{prodClassCd}
                 </if>
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND thp.HQ_BRAND_CD = #{hqBrandCd}
+                </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpc_p.PROD_CLASS_CD = thpc.PROD_CLASS_CD
@@ -424,7 +455,7 @@
     <!-- 재료-상품 등록 팝업 - 재료-상품 저장 insert -->
     <!--
         TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_PROD
-        COMMENTS : [매장]재료-원산지정보, [본사]재료-원산지정보
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <insert id="getRecpProdSaveInsert" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpProdSaveInsert */
@@ -434,7 +465,9 @@
                 INSERT INTO TB_HQ_PRODUCT_RECP_PROD
                 (
                     HQ_OFFICE_CD,
-                    HQ_BRAND_CD,
+                    <if test="hqBrandCd != null and hqBrandCd != ''">
+                        HQ_BRAND_CD,
+                    </if>
                     RECIPES_CD,
                     PROD_CD,
                     REG_DT,
@@ -444,7 +477,9 @@
                     RECP_SEQ
                 ) VALUES (
                     #{hqOfficeCd},
-                    #{hqBrandCd},
+                    <if test="hqBrandCd != null and hqBrandCd != ''">
+                        #{hqBrandCd},
+                    </if>
                     #{recipesCd},
                     #{prodCd},
                     #{regDt},
@@ -483,7 +518,7 @@
     <!-- 재료-상품 등록 팝업 - 재료-상품 저장 delete -->
     <!--
         TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_PROD
-        COMMENTS : [매장]재료-원산지정보, [본사]재료-원산지정보
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <delete id="getRecpProdSaveDelete" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpProdSaveDelete */
@@ -512,7 +547,7 @@
     <!-- 재료-상품 등록 팝업 - 재료-상품 저장 update -->
     <!--
         TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_PROD
-        COMMENTS : [매장]재료-원산지정보, [본사]재료-원산지정보
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <update id="getRecpProdSaveUpdate" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpProdSaveUpdate */
@@ -550,7 +585,8 @@
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_BARCD, TB_HQ_PRODUCT_RECP_PROD
                    TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD, TB_MS_PRODUCT_RECP_PROD
-        COMMENTS :
+        COMMENTS : [본사]상품, [본사]상품_바코드, [본사]재료-원산지정보
+                   [매장]상품, [매장]상품_바코드, [매장]재료-원산지정보
     -->
     <select id="getProdRecpOriginList"  parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getProdRecpOriginList */
@@ -708,7 +744,8 @@
     <!--
         TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_HQ_PRODUCT_RECP_ORIGIN
                    TB_MS_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_ORIGIN
-        COMMENTS :
+        COMMENTS : [본사]재료-원산지정보, [본사]재료-원산지정보
+                   [매장]재료-원산지정보, [매장]재료-원산지정보
     -->
     <select id="getProdRecpOriginDetailList"  parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getProdRecpOriginDetailList */
@@ -757,7 +794,8 @@
     <!--
         TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_HQ_PRODUCT_RECP_ORIGIN
                    TB_MS_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_ORIGIN
-        COMMENTS :
+        COMMENTS : [본사]재료-원산지정보, [본사]재료-원산지정보
+                   [매장]재료-원산지정보, [매장]재료-원산지정보
     -->
     <select id="getProdRecpOriginAddList"  parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getProdRecpOriginAddList */

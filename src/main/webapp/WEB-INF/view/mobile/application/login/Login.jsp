@@ -55,7 +55,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
       </button>
     </div>
     <div class="idsave">
-      <span> <input type="checkbox" id="chkAutoLogin" name="chkAutoLogin"
+      <span> <input type="checkbox" id="chkAutoLogin" name="chkAutoLogin" onclick="idSaveChk()"
         ${empty cAutoLogin ? '' : 'checked="checked"' } />
           <label for="chkAutoLogin">
             <s:message code="login.autoLogin" />
@@ -103,6 +103,11 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
   		$("#fullDimmedPw").show();
       	$("#layerpw").show();
 	</c:if>
+
+  // 자동로그인 체크 시, 아이디 저장 자동 체크
+  function idSaveChk(){
+    $("input:checkbox[id='chk']").prop("checked", true);
+  }
 </script>
 
 
