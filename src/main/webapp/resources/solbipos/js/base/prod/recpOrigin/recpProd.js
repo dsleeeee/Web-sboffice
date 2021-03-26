@@ -58,7 +58,7 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
                     function(response){
                         $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassCdNm = response.data.data;
+                        $scope.prodClassNm = response.data.data;
                     }
                 );
             }
@@ -68,7 +68,7 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상품분류정보 선택취소
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
-        $scope.prodClassCdNm = "";
+        $scope.prodClassNm = "";
     };
 
     // 저장
@@ -90,6 +90,11 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 팝업 닫기
     $scope.close = function(){
         $scope.wjRecpProdLayer.hide();
+
+        $scope.prodCd = "";
+        $scope.prodNm = "";
+        $scope.prodClassNm = "";
+        $scope.prodClassCd = "";
 
         var params = {};
         params.recipesCd = $("#lblRecpProdRecipesCd").text();

@@ -48,7 +48,7 @@ public class RecpOriginController {
     @RequestMapping(value = "/recpOrigin/list.sb", method = RequestMethod.GET)
     public String recpOriginView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        return "base/prod/recpOrigin/recpOrigin";
+        return "base/prod/recpOrigin/recpOriginTab";
     }
 
     /**
@@ -162,6 +162,98 @@ public class RecpOriginController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = recpOriginService.getRecpOriginDetailSave(recpOriginVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상품-원산지관리탭 - 조회
+     *
+     * @param recpOriginVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 25.
+     */
+    @RequestMapping(value = "/prodRecpOrigin/getProdRecpOriginList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRecpOriginList(RecpOriginVO recpOriginVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = recpOriginService.getProdRecpOriginList(recpOriginVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, recpOriginVO);
+    }
+
+    /**
+     * 상품-원산지관리탭 - 재료 및 원산지 등록 조회
+     *
+     * @param recpOriginVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 25.
+     */
+    @RequestMapping(value = "/prodRecpOrigin/getProdRecpOriginDetailList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRecpOriginDetailList(RecpOriginVO recpOriginVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = recpOriginService.getProdRecpOriginDetailList(recpOriginVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, recpOriginVO);
+    }
+
+    /**
+     * 재료 및 원산지 등록 팝업 - 조회
+     *
+     * @param recpOriginVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 25.
+     */
+    @RequestMapping(value = "/prodRecpOriginAdd/getProdRecpOriginAddList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRecpOriginAddList(RecpOriginVO recpOriginVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = recpOriginService.getProdRecpOriginAddList(recpOriginVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, recpOriginVO);
+    }
+
+    /**
+     * 재료 및 원산지 등록 팝업 - 저장
+     *
+     * @param recpOriginVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 03. 25.
+     */
+    @RequestMapping(value = "/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRecpOriginAddSave(@RequestBody RecpOriginVO[] recpOriginVOs, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = recpOriginService.getProdRecpOriginAddSave(recpOriginVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="subCon">
+<div id="recpOriginView" class="subCon" style="display: none;">
 
     <div ng-controller="recpOriginCtrl">
         <%-- 조회조건 --%>
@@ -95,7 +95,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20200715.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20210326.01" charset="utf-8"></script>
 
 <%-- 재료-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpProd.jsp">

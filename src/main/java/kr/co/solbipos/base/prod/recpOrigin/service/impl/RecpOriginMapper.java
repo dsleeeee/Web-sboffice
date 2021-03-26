@@ -51,9 +51,24 @@ public interface RecpOriginMapper {
    /** 재료-상품 등록 팝업 - 상품조회 */
    List<DefaultMap<Object>> getRecpProdList(RecpOriginVO recpOriginVO);
 
-   /** 재료-상품 저장 insert */
+   /** 재료-상품 등록 팝업 - 재료-상품 저장 insert */
    int getRecpProdSaveInsert(RecpOriginVO recpOriginVO);
 
-   /** 재료-상품 저장 delete */
+   /** 재료-상품 등록 팝업 - 재료-상품 저장 delete */
    int getRecpProdSaveDelete(RecpOriginVO recpOriginVO);
+
+   /** 재료-상품 등록 팝업 - 재료-상품 저장 update */
+   int getRecpProdSaveUpdate(RecpOriginVO recpOriginVO);
+
+   /** 상품-원산지관리탭 - 조회 */
+   List<DefaultMap<Object>> getProdRecpOriginList(RecpOriginVO recpOriginVO);
+
+   /** 상품-원산지관리탭 - 재료 및 원산지 등록 조회 */
+   List<DefaultMap<Object>> getProdRecpOriginDetailList(RecpOriginVO recpOriginVO);
+
+   /** 재료 및 원산지 등록 팝업 - 조회 */
+   List<DefaultMap<Object>> getProdRecpOriginAddList(RecpOriginVO recpOriginVO);
+
+   /** 원산지출력순서 조회(자동채번)  */
+   String getRecpSeq(RecpOriginVO recpOriginVO);
 }

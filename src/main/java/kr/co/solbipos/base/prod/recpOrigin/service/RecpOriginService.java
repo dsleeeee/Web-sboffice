@@ -34,6 +34,18 @@ public interface RecpOriginService {
     /** 재료-상품 등록 팝업 - 상품조회 */
     List<DefaultMap<Object>> getRecpProdList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
 
-    /** 재료-상품 저장 */
+    /** 재료-상품 등록 팝업 - 재료-상품 저장 */
     int getRecpOriginDetailSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품-원산지관리탭 - 조회 */
+    List<DefaultMap<Object>> getProdRecpOriginList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품-원산지관리탭 - 재료 및 원산지 등록 조회 */
+    List<DefaultMap<Object>> getProdRecpOriginDetailList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
+    /** 재료 및 원산지 등록 팝업 - 조회 */
+    List<DefaultMap<Object>> getProdRecpOriginAddList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
+    /** 재료 및 원산지 등록 팝업 - 저장 */
+    int getProdRecpOriginAddSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
 }

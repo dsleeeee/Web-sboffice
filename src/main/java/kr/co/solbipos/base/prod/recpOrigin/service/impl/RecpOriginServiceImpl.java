@@ -47,7 +47,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
     public List<DefaultMap<Object>> getRecpOriginList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
 
         recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -66,7 +66,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         for(RecpOriginVO recpOriginVO : recpOriginVOs) {
 
             recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
@@ -102,7 +102,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
     public List<DefaultMap<Object>> getRecpOriginDetailList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
 
         recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -115,7 +115,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
     public List<DefaultMap<Object>> getRecpProdList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
 
         recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -123,7 +123,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         return recpOriginMapper.getRecpProdList(recpOriginVO);
     }
 
-    /** 재료-상품 저장 */
+    /** 재료-상품 등록 팝업 - 재료-상품 저장 */
     @Override
     public int getRecpOriginDetailSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO) {
 
@@ -133,7 +133,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
 
         for(RecpOriginVO recpOriginVO : recpOriginVOs) {
             recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
@@ -143,6 +143,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
             if (recpOriginVO.getStatus() == GridDataFg.INSERT) {
                 recpOriginVO.setRegDt(currentDt);
                 recpOriginVO.setRegId(sessionInfoVO.getUserId());
+                recpOriginVO.setRecpSeq("");
 
                 procCnt = recpOriginMapper.getRecpProdSaveInsert(recpOriginVO);
 
@@ -153,4 +154,82 @@ public class RecpOriginServiceImpl implements RecpOriginService {
 
         return procCnt;
     }
+
+    /** 상품-원산지관리탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdRecpOriginList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+
+        recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return recpOriginMapper.getProdRecpOriginList(recpOriginVO);
+    }
+
+    /** 상품-원산지관리탭 - 재료 및 원산지 등록 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdRecpOriginDetailList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+
+        recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return recpOriginMapper.getProdRecpOriginDetailList(recpOriginVO);
+    }
+
+    /** 재료 및 원산지 등록 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdRecpOriginAddList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+
+        recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return recpOriginMapper.getProdRecpOriginAddList(recpOriginVO);
+    }
+
+    /** 재료 및 원산지 등록 팝업 - 저장 */
+    @Override
+    public int getProdRecpOriginAddSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(RecpOriginVO recpOriginVO : recpOriginVOs) {
+            recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            recpOriginVO.setModDt(currentDt);
+            recpOriginVO.setModId(sessionInfoVO.getUserId());
+
+            if (recpOriginVO.getStatus() == GridDataFg.INSERT) {
+                recpOriginVO.setRegDt(currentDt);
+                recpOriginVO.setRegId(sessionInfoVO.getUserId());
+
+                // 원산지출력순서 조회(자동채번)
+                String recpSeq = recpOriginMapper.getRecpSeq(recpOriginVO);
+                recpOriginVO.setRecpSeq(recpSeq);
+
+                procCnt = recpOriginMapper.getRecpProdSaveInsert(recpOriginVO);
+
+            } else if (recpOriginVO.getStatus() == GridDataFg.UPDATE) {
+                procCnt = recpOriginMapper.getRecpProdSaveUpdate(recpOriginVO);
+
+
+            } else if (recpOriginVO.getStatus() == GridDataFg.DELETE) {
+                procCnt = recpOriginMapper.getRecpProdSaveDelete(recpOriginVO);
+            }
+        }
+
+        return procCnt;
+    }
+
 }
