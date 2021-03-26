@@ -22,7 +22,7 @@
 		      , M.TOT_GUEST_CNT
 		      , ROUND(M.TOT_SALE_AMT/M.BILL_CNT,0) AS TOT_BILL_AMT
 		      , ROUND(RATIO_TO_REPORT(M.REAL_SALE_AMT) OVER(), 2) *100 AS STORE_RAT
-	 		  ${sQuery1}
+			  ${sQuery1}
 		FROM (
 			SELECT TSDT.STORE_CD
 			     , TMS.STORE_NM
@@ -41,16 +41,11 @@
 			     		AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}
 			     	</if>
 			     ) AS SALE_DATE_CNT
-		 		 ${sQuery2}
 			  FROM TB_SL_DAILY_TOTAL TSDT
-			     , TB_SL_DAILY_PAY TSDP
 			     , TB_MS_STORE TMS
-			 WHERE TSDT.STORE_CD = TSDP.STORE_CD
-			   AND TSDT.SALE_DATE = TSDP.SALE_DATE
-			   AND TSDT.STORE_CD = TMS.STORE_CD
-            	AND TSDP.HQ_OFFICE_CD = TSDP.HQ_OFFICE_CD
-         		AND TSDP.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
-			   AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+			 WHERE TSDT.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
+               AND TSDT.STORE_CD = TMS.STORE_CD
+			   AND TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 			<if test='startDate != null and startDate != ""'>
 			   AND TSDT.SALE_DATE >= #{startDate}
 			</if>
@@ -70,9 +65,29 @@
 			<if test='chkSort == "2"'>
 			 ORDER BY SUM(TSDT.TOT_SALE_AMT) ASC
 			</if>
-		 ) M
-		 <if test='rowNum != null and rowNum != "" and chkRank == "N"'>
-            WHERE ROWNUM <![CDATA[<= ]]> #{rowNum}
+		 ) M,
+		(
+			SELECT STORE_CD
+				  ${sQuery2}
+			  FROM TB_SL_DAILY_PAY TSDP
+			 WHERE TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+				<if test='startDate != null and startDate != ""'>
+					AND TSDP.SALE_DATE >= #{startDate}
+				</if>
+				<if test='endDate != null and endDate != ""'>
+					AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+				</if>
+				<if test='storeCd != null and storeCd != ""'>
+					AND TSDP.STORE_CD IN
+					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+			GROUP BY TSDP.STORE_CD
+		) N
+		WHERE M.STORE_CD = N.STORE_CD
+		<if test='rowNum != null and rowNum != "" and chkRank == "N"'>
+            AND ROWNUM <![CDATA[<= ]]> #{rowNum}
 	     </if>
     </select>
 

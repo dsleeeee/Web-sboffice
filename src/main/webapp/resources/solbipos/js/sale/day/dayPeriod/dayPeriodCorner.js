@@ -77,7 +77,7 @@ app.controller('dayPeriodCornerCtrl', ['$scope', '$http', '$timeout', function (
         event.preventDefault();
     });
 
-    $scope.excelDownloadPeriodSaleCorner = function() {
+    $scope.searchDayPeriodCorner = function() {
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간

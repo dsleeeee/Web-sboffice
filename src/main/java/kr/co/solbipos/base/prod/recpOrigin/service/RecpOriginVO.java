@@ -21,10 +21,6 @@ public class RecpOriginVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
-    private String hqOfficeCd;
-
-    private String hqBrandCd;
-
     /**
      * 소속구분
      * M : 시스템
@@ -36,6 +32,12 @@ public class RecpOriginVO extends PageVO {
 
     /** 회원소속코드 */
     private String membrOrgnCd;
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+
+    /** 본사명 */
+    private String hqOfficeNm;
 
     /** 조회매장 */
     private String storeCd;
@@ -58,6 +60,34 @@ public class RecpOriginVO extends PageVO {
     /** 상품분류코드 */
     private String prodClassCd;
 
+    /** 전체기간체크 */
+    private boolean chkDt;
+
+    /** 바코드 */
+    private String barCd;
+
+    /** 사용여부 */
+    private String useYn;
+
+    /** 원산지등록 사용여부 */
+    private String recpOriginUseYn;
+
+    /** 원산지출력순서 */
+    private String recpSeq;
+
+    /** 브랜드코드 */
+    private String hqBrandCd;
+
+    /** 브랜드코드 */
+    private String hqBrandCdCombo;
+
+    public String getOrgnFg() { return orgnFg; }
+
+    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+
+    public String getMembrOrgnCd() { return membrOrgnCd; }
+
+    public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -67,21 +97,13 @@ public class RecpOriginVO extends PageVO {
         this.hqOfficeCd = hqOfficeCd;
     }
 
-    public String getHqBrandCd() {
-        return hqBrandCd;
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
     }
 
-    public void setHqBrandCd(String hqBrandCd) {
-        this.hqBrandCd = hqBrandCd;
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
     }
-
-    public String getOrgnFg() { return orgnFg; }
-
-    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
-
-    public String getMembrOrgnCd() { return membrOrgnCd; }
-
-    public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
 
     public String getStoreCd() { return storeCd; }
 
@@ -110,4 +132,32 @@ public class RecpOriginVO extends PageVO {
     public String getProdClassCd() { return prodClassCd; }
 
     public void setProdClassCd(String prodClassCd) { this.prodClassCd = prodClassCd; }
+
+    public boolean getChkDt() { return chkDt; }
+
+    public void setChkDt(boolean chkDt) { this.chkDt = chkDt; }
+
+    public String getBarCd() { return barCd; }
+
+    public void setBarCd(String barCd) { this.barCd = barCd; }
+
+    public String getUseYn() { return useYn; }
+
+    public void setUseYn(String useYn) { this.useYn = useYn; }
+
+    public String getRecpOriginUseYn() { return recpOriginUseYn; }
+
+    public void setRecpOriginUseYn(String recpOriginUseYn) { this.recpOriginUseYn = recpOriginUseYn; }
+
+    public String getRecpSeq() { return recpSeq; }
+
+    public void setRecpSeq(String recpSeq) { this.recpSeq = recpSeq; }
+
+    public String getHqBrandCd() { return hqBrandCd; }
+
+    public void setHqBrandCd(String hqBrandCd) { this.hqBrandCd = hqBrandCd; }
+
+    public String getHqBrandCdCombo() { return hqBrandCdCombo; }
+
+    public void setHqBrandCdCombo(String hqBrandCdCombo) { this.hqBrandCdCombo = hqBrandCdCombo; }
 }

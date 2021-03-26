@@ -13,7 +13,7 @@
 /**
  *  사이드메뉴 상품선택 그리드 생성
  */
-app.controller('sideMenuProdCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function ($scope, $http, sdselClassCd) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuProdCtrl', $scope, $http, false));
   // 콤보박스 데이터 Set
@@ -39,7 +39,9 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', function ($scope, $http) 
 
   // 사이드메뉴 상품선택 그리드 조회
   $scope.$on("sideMenuProdCtrl", function(event, data) {
+    $("#lblsdselClassCd").text(data);
     var params = {};
+    params.sdselClassCd = $("#lblsdselClassCd").text();
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/sideMenu/menuProd/getProdList.sb', params);
     // 기능수행 종료 : 반드시 추가

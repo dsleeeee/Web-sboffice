@@ -594,7 +594,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       popUp.show(true, function (s) {
         // 수정 버튼 눌렀을때만
         if (s.dialogResult === "wj-hide-apply") {
-          var scope = agrid.getScope('sideMenuProdCtrl');
+          var scope = agrid.getScope('sideMenuProdCtrl', $scope.getSdselClassCd());
           for (var i = 0; i < scope.flex.collectionView.items.length; i++) {
             if (scope.flex.collectionView.items[i].gChk) {
               var prodCd = scope.flex.collectionView.items[i].prodCd;
@@ -627,7 +627,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // 상품상세정보 팝업 핸들러 추가
     $scope.sideMenuProdLayer.shown.addHandler(function (s) {
       setTimeout(function () {
-        $scope._broadcast('sideMenuProdCtrl');
+        $scope._broadcast('sideMenuProdCtrl', $scope.getSdselClassCd());
       }, 50);
     });
   });

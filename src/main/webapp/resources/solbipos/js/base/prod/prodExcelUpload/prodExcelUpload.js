@@ -304,11 +304,23 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
             if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
                 result = messages["prodExcelUpload.saleUprcBlank"]; // 판매단가를 입력하세요.
             } else {
-                // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
+                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){ // 소수점있으면 거름
                     $scope.flex.collectionView.items[i].saleUprc = "";
-                    result = messages["prodExcelUpload.saleUprcInChk"]; // 판매단가 숫자만 입력해주세요.
+                    result = messages["simpleProd.saleUprcInChk"];
+                } else {
+                    // 숫자만 입력
+                    var numchkexp = /[^0-9]/g;
+                    if (numchkexp.test($scope.flex.collectionView.items[i].saleUprc)) { // 음수
+                        var numchkexp2 = /^-[0-9]/g;
+                        if (numchkexp2.test($scope.flex.collectionView.items[i].saleUprc)) {
+                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].saleUprc) == false)){
+                            $scope.flex.collectionView.items[i].saleUprc = "";
+                            result = messages["prodExcelUpload.saleUprcInChk"];
+                        }
+                    } else if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){ // 양수 max값
+                        $scope.flex.collectionView.items[i].saleUprc = "";
+                        result = messages["prodExcelUpload.saleUprcInChk"];
+                    }
                 }
             }
 

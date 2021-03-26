@@ -307,17 +307,14 @@
                 SELECT
                 YOIL,
                 COUNT(DISTINCT STORE_CD) AS STORE_CNT,
-                SUM(SALE_AMT) AS TOT_REAL_SALE_AMT,
+                SUM(REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
                 SUM(SALE_QTY) AS TOT_SALE_QTY
                 FROM
                 (
                     SELECT
                     TO_CHAR(TO_DATE(tssd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
                     tssd.STORE_CD,
-                    tssd.PROD_CD,
-                    tmp.PROD_NM,
-                    tmpb.BARCD_CD,
-                    tssd.SALE_AMT,
+                    tssd.REAL_SALE_AMT,
                     tssd.SALE_QTY,
                     FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH
                     FROM TB_SL_SALE_DTL tssd,
@@ -359,11 +356,11 @@
                 tba.YOIL,
                 tba.STORE_CNT,
                 ${pivotProdClassCol1}
---                 (NVL(tba.PAY1_SALE_AMT, 0)+NVL(tba.PAY2_SALE_AMT, 0)) AS TOT_REAL_SALE_AMT,
+--                 (NVL(tba.PAY1_REAL_SALE_AMT, 0)+NVL(tba.PAY2_REAL_SALE_AMT, 0)) AS TOT_REAL_REAL_SALE_AMT,
 --                 (NVL(tba.PAY1_SALE_QTY, 0)+NVL(tba.PAY2_SALE_QTY, 0)) AS TOT_SALE_QTY,
---                 tba.PAY1_SALE_AMT,
+--                 tba.PAY1_REAL_SALE_AMT,
 --                 tba.PAY1_SALE_QTY,
---                 tba.PAY2_SALE_AMT,
+--                 tba.PAY2_REAL_SALE_AMT,
 --                 tba.PAY2_SALE_QTY
                 FROM
                 (
@@ -371,37 +368,36 @@
                     YOIL,
                     COUNT(DISTINCT STORE_CD) AS STORE_CNT,
                     ${pivotProdClassCol2}
---                     SUM(PAY1_SALE_AMT) AS PAY1_SALE_AMT,
+--                     SUM(PAY1_REAL_SALE_AMT) AS PAY1_REAL_SALE_AMT,
 --                     SUM(PAY1_SALE_QTY) AS PAY1_SALE_QTY,
---                     SUM(PAY2_SALE_AMT) AS PAY2_SALE_AMT,
+--                     SUM(PAY2_REAL_SALE_AMT) AS PAY2_REAL_SALE_AMT,
 --                     SUM(PAY2_SALE_QTY) AS PAY2_SALE_QTY
                     FROM
                     (
-                        SELECT *
+                        SELECT
+                        YOIL,
+                        STORE_CD,
+                        REAL_SALE_AMT,
+                        SALE_QTY,
+                        SUBSTR(PATH, 0, 5) AS Level1,
+                        SUBSTR(PATH, 7, 5) AS Level2,
+                        SUBSTR(PATH, 13, 5) AS Level3
                         FROM
                         (
                             SELECT
                             YOIL,
                             STORE_CD,
-                            PROD_CD,
-                            PROD_NM,
-                            BARCD_CD,
-                            SALE_AMT,
+                            REAL_SALE_AMT,
                             SALE_QTY,
-                            REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS Level1,
-                            REPLACE(SUBSTR(PATH, 7, 6) ,'▶','') AS Level2,
-                            REPLACE(SUBSTR(PATH, 13, 6) ,'▶','') AS Level3
+                            FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH
                             FROM
                             (
                                 SELECT
                                 TO_CHAR(TO_DATE(tssd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
                                 tssd.STORE_CD,
-                                tssd.PROD_CD,
-                                tmp.PROD_NM,
-                                tmpb.BARCD_CD,
-                                tssd.SALE_AMT,
-                                tssd.SALE_QTY,
-                                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH
+                                tmp.PROD_CLASS_CD,
+                                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                                SUM(tssd.SALE_QTY) AS SALE_QTY
                                 FROM TB_SL_SALE_DTL tssd,
                                 TB_MS_PRODUCT tmp,
                                 TB_MS_PRODUCT_BARCD tmpb
@@ -423,26 +419,29 @@
                                 <if test="barCd != null and barCd != ''">
                                     AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                                 </if>
+                                <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                                </if>
                                 AND tmp.STORE_CD = tssd.STORE_CD
                                 AND tmp.PROD_CD = tssd.PROD_CD
                                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
                                 AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                                GROUP BY TO_CHAR(TO_DATE(tssd.SALE_DATE, 'YYYYMMDD'), 'DY'), tssd.STORE_CD, tmp.PROD_CLASS_CD
                             )
-                            WHERE 1=1
-                            <if test="prodClassCd != null and prodClassCd != ''">
-                                AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-                            </if>
+                            <!--WHERE 1=1-->
+                            <!--<if test="prodClassCd != null and prodClassCd != ''">-->
+                                <!--AND PATH LIKE '%'|| #{prodClassCd} ||'%'-->
+                            <!--</if>-->
                         )
-                        WHERE 1=1
 --                 AND Level1 IN (00052,00053,00054,00055,00056,00057,00058,00059)
-                        AND ${level} IN
-                        <foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">
-                            ${item}
-                        </foreach>
+                        <!--AND ${level} IN-->
+                        <!--<foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">-->
+                            <!--#{item}-->
+                        <!--</foreach>-->
                     )
                     PIVOT
                     (
-                        SUM(SALE_AMT) AS SALE_AMT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
                         SUM(SALE_QTY) AS SALE_QTY
 --                 FOR Level1 IN ('00052' AS PAY1,'00053' AS PAY2,'00054' AS PAY3,'00055' AS PAY4,'00056' AS PAY5,'00057' AS PAY6,'00058' AS PAY7,'00059' AS PAY8)
                         FOR ${level} IN (${pivotProdClassCol3})

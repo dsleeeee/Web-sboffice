@@ -46,7 +46,7 @@
         COMMENTS : [매장]코너, [매장]매장 정보
     -->
     <select id="getCornerColList"  parameterType="dayVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getCornerColList */
+        /* DayMapper.getCornerColList */
         SELECT
         tmc.STORE_CD,
         (CASE WHEN tmc.STORE_CD = '0000000' THEN '단독매장' ELSE tms.STORE_NM END) AS STORE_NM,
@@ -73,7 +73,7 @@
         COMMENTS : [매장]테이블
     -->
     <select id="getTableColList"  parameterType="dayVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getTableColList */
+        /* DayMapper.getTableColList */
         SELECT
         tmt.STORE_CD,
         tmt.TBL_CD,
@@ -94,7 +94,7 @@
         COMMENTS : [매장]포스 정보
     -->
     <select id="getPosColList"  parameterType="dayVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getPosColList */
+        /* DayMapper.getPosColList */
         SELECT
         tmp.POS_NO,
         tmp.POS_NM
@@ -536,8 +536,6 @@
 	            )tssh
         ORDER
         BY tssh.SALE_DATE
-
-
         ]]>
     </select>
 
@@ -548,6 +546,7 @@
         COMMENTS : 일자별(상품분류 탭) - 상품분류 MAX(depth) 값 가져온다.(분류 레벨 selectBox 값 설정을 위해)
     -->
     <select id="getDayProdClassMaxLevel" parameterType="dayVO" resultType="Integer">
+        /* DayMapper.getDayProdClassMaxLevel */
         <choose>
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT NVL(MAX(LEVEL), 0)
@@ -721,7 +720,7 @@
                 SELECT
                 SALE_DATE,
                 YOIL,
-                SUM(SALE_AMT) AS TOT_REAL_SALE_AMT,
+                SUM(REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
                 SUM(SALE_QTY) AS TOT_SALE_QTY
                 FROM
                 (
@@ -732,7 +731,7 @@
                     tssd.PROD_CD,
                     tmp.PROD_NM,
                     tmpb.BARCD_CD,
-                    tssd.SALE_AMT,
+                    tssd.REAL_SALE_AMT,
                     tssd.SALE_QTY,
                     FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH
                     FROM TB_SL_SALE_DTL tssd,
@@ -782,33 +781,33 @@
                     ${pivotProdClassCol2}
                     FROM
                     (
-                        SELECT *
+                        SELECT
+                        SALE_DATE,
+                        YOIL,
+                        STORE_CD,
+                        REAL_SALE_AMT,
+                        SALE_QTY,
+                        SUBSTR(PATH, 0, 5) AS Level1,
+                        SUBSTR(PATH, 7, 5) AS Level2,
+                        SUBSTR(PATH, 13, 5) AS Level3
                         FROM
                         (
                             SELECT
                             SALE_DATE,
                             YOIL,
                             STORE_CD,
-                            PROD_CD,
-                            PROD_NM,
-                            BARCD_CD,
-                            SALE_AMT,
+                            REAL_SALE_AMT,
                             SALE_QTY,
-                            REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS Level1,
-                            REPLACE(SUBSTR(PATH, 7, 6) ,'▶','') AS Level2,
-                            REPLACE(SUBSTR(PATH, 13, 6) ,'▶','') AS Level3
+                            FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH
                             FROM
                             (
                                 SELECT
                                 tssd.SALE_DATE,
                                 TO_CHAR(TO_DATE(tssd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
                                 tssd.STORE_CD,
-                                tssd.PROD_CD,
-                                tmp.PROD_NM,
-                                tmpb.BARCD_CD,
-                                tssd.SALE_AMT,
-                                tssd.SALE_QTY,
-                                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH
+                                tmp.PROD_CLASS_CD,
+                                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                                SUM(tssd.SALE_QTY) AS SALE_QTY
                                 FROM TB_SL_SALE_DTL tssd,
                                 TB_MS_PRODUCT tmp,
                                 TB_MS_PRODUCT_BARCD tmpb
@@ -830,25 +829,25 @@
                                 <if test="barCd != null and barCd != ''">
                                     AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                                 </if>
+                                <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                                </if>
                                 AND tmp.STORE_CD = tssd.STORE_CD
                                 AND tmp.PROD_CD = tssd.PROD_CD
                                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
                                 AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tmp.PROD_CLASS_CD
                             )
-                            WHERE 1=1
-                            <if test="prodClassCd != null and prodClassCd != ''">
-                                AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-                            </if>
                         )
-                        WHERE 1=1
-                        AND ${level} IN
-                        <foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">
-                            ${item}
-                        </foreach>
+                        <!--WHERE 1=1-->
+                        <!--AND ${level} IN-->
+                        <!--<foreach collection="arrProdClassCd" item="item" open="(" close=")" separator=",">-->
+                        <!--#{item}-->
+                        <!--</foreach>-->
                     )
                     PIVOT
                     (
-                        SUM(SALE_AMT) AS SALE_AMT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
                         SUM(SALE_QTY) AS SALE_QTY
                         FOR ${level} IN (${pivotProdClassCol3})
                     )

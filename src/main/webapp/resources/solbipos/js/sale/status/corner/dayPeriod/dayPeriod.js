@@ -13,7 +13,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("cornerDayPeriodListScaleBox", gvListScaleBoxData);
-	$scope._setComboData("cornerDayPeriodDtlListScaleBox", gvListScaleBoxData);
+	// $scope._setComboData("cornerDayPeriodDtlListScaleBox", gvListScaleBoxData);
 	$scope.orgnFg = gvOrgnFg;
 
 	//매장선택 모듈 팝업 사용시 정의
@@ -328,7 +328,7 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	            $scope.endDateForDt = "";
 	        }		  
 	    
-	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+	    // params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.startDate = $scope.startDateForDt;
 	    params.endDate   = $scope.endDateForDt;
 	    params.storeCd   = $scope.storeCd;
