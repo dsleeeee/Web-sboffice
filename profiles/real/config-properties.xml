@@ -37,9 +37,9 @@
     <!--   web 공통 코드  -->
     <entry key="redis.code.prefix">sbp:cmm:real:</entry>
     <!-- pool config -->
-    <entry key="redis.pool.maxTotal">50</entry>
-    <entry key="redis.pool.minIdle">50</entry>
-    <entry key="redis.pool.maxIdle">50</entry>
+    <entry key="redis.pool.maxTotal">500</entry>
+    <entry key="redis.pool.minIdle">500</entry>
+    <entry key="redis.pool.maxIdle">500</entry>
     <entry key="redis.pool.maxWaitMillis">5000</entry>
 
 
