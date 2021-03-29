@@ -99,11 +99,13 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
                     var params = {};
                     params.prodCd = selectedRow.prodCd;
                     params.prodNm = selectedRow.prodNm;
-                    params.hqBrandCd = selectedRow.hqBrandCd;
+                    if(($scope.hqOfficeCd == "A0001") && ($scope.orgnFg == "HQ")) {
+                        params.hqBrandCd = selectedRow.hqBrandCd;
 
-                    if(selectedRow.hqBrandCd != selectedRow.hqBrandCdCombo) {
-                        $scope._popMsg(messages["prodRecpOrigin.hqBrandCdBlank"]); // 브랜드를 변경하셨습니다. 저장 후 다시 선택해주세요.
-                        return false;
+                        if(selectedRow.hqBrandCd != selectedRow.hqBrandCdCombo) {
+                            $scope._popMsg(messages["prodRecpOrigin.hqBrandCdBlank"]); // 브랜드를 변경하셨습니다. 저장 후 다시 선택해주세요.
+                            return false;
+                        }
                     }
 
                     var storeScope = agrid.getScope('prodRecpOriginDetailCtrl');
@@ -319,7 +321,9 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
     $scope.searchProdRecpOriginDetail = function(){
         var params = {};
         params.prodCd = $scope.selectedProd.prodCd;
-        params.hqBrandCd = $scope.selectedProd.hqBrandCd;
+        if(($scope.hqOfficeCd == "A0001") && ($scope.orgnFg == "HQ")) {
+            params.hqBrandCd = $scope.selectedProd.hqBrandCd;
+        }
 
         $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginDetailList.sb", params, function() {}, false);
     };
@@ -397,19 +401,20 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){
+            // 순번 저장
+            $scope.saveSave();
+
             $scope.$apply(function() {
                 var params1 = {};
                 params1.prodCd = $scope.selectedProd.prodCd;
                 params1.prodNm = $scope.selectedProd.prodNm;
-                params1.hqBrandCd = $scope.selectedProd.hqBrandCd;
+                if(($scope.hqOfficeCd == "A0001") && ($scope.orgnFg == "HQ")) {
+                    params1.hqBrandCd = $scope.selectedProd.hqBrandCd;
+                }
 
-                var storeScope = agrid.getScope('prodRecpOriginPopupCtrl');
+                var storeScope = agrid.getScope('prodRecpOriginCtrl');
                 storeScope._gridDataInit();
                 storeScope._broadcast('prodRecpOriginPopupCtrl', params1);
-
-                var storeScope1 = agrid.getScope('prodRecpOriginDetailCtrl');
-                storeScope1._gridDataInit();
-                storeScope1._broadcast('prodRecpOriginDetailCtrl', params1);
             });
         });
     };
@@ -461,26 +466,31 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
 
         if(addSelectedProd === "Y") {
             $scope._popConfirm(messages["cmm.choo.save"], function() {
-                var recpSeq = 1;
-
-                // 파라미터 설정
-                var params = new Array();
-                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                    $scope.flex.collectionView.items[i].status = "U";
-                    $scope.flex.collectionView.items[i].prodCd = $scope.selectedProd.prodCd;
-                    $scope.flex.collectionView.items[i].recpSeq = recpSeq;
-                    params.push($scope.flex.collectionView.items[i]);
-                    recpSeq++;
-                }
-
-                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-                $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){ $scope.allSearch() });
+                // 순번 저장
+                $scope.saveSave();
             });
 
         } else if(addSelectedProd === "N" ) {
             $scope._popMsg(messages["prodRecpOrigin.prodCdBlank"]); // 상품코드를 선택해주세요.
             return false;
         }
+    };
+
+    $scope.saveSave = function () {
+        var recpSeq = 1;
+
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            $scope.flex.collectionView.items[i].status = "U";
+            $scope.flex.collectionView.items[i].prodCd = $scope.selectedProd.prodCd;
+            $scope.flex.collectionView.items[i].recpSeq = recpSeq;
+            params.push($scope.flex.collectionView.items[i]);
+            recpSeq++;
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){ $scope.allSearch() });
     };
     // <-- //저장 -->
 
