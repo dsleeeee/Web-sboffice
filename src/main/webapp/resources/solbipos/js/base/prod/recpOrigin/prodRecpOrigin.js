@@ -99,13 +99,11 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
                     var params = {};
                     params.prodCd = selectedRow.prodCd;
                     params.prodNm = selectedRow.prodNm;
-                    if(($scope.hqOfficeCd == "A0001") && ($scope.orgnFg == "HQ")) {
-                        params.hqBrandCd = selectedRow.hqBrandCd;
+                    params.hqBrandCd = selectedRow.hqBrandCd;
 
-                        if(selectedRow.hqBrandCd != selectedRow.hqBrandCdCombo) {
-                            $scope._popMsg(messages["prodRecpOrigin.hqBrandCdBlank"]); // 브랜드를 변경하셨습니다. 저장 후 다시 선택해주세요.
-                            return false;
-                        }
+                    if(selectedRow.hqBrandCd != selectedRow.hqBrandCdCombo) {
+                        $scope._popMsg(messages["prodRecpOrigin.hqBrandCdBlank"]); // 브랜드를 변경하셨습니다. 저장 후 다시 선택해주세요.
+                        return false;
                     }
 
                     var storeScope = agrid.getScope('prodRecpOriginDetailCtrl');
@@ -321,9 +319,7 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
     $scope.searchProdRecpOriginDetail = function(){
         var params = {};
         params.prodCd = $scope.selectedProd.prodCd;
-        if(($scope.hqOfficeCd == "A0001") && ($scope.orgnFg == "HQ")) {
-            params.hqBrandCd = $scope.selectedProd.hqBrandCd;
-        }
+        params.hqBrandCd = $scope.selectedProd.hqBrandCd;
 
         $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginDetailList.sb", params, function() {}, false);
     };
@@ -408,9 +404,7 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
                 var params1 = {};
                 params1.prodCd = $scope.selectedProd.prodCd;
                 params1.prodNm = $scope.selectedProd.prodNm;
-                if(($scope.hqOfficeCd == "A0001") && ($scope.orgnFg == "HQ")) {
-                    params1.hqBrandCd = $scope.selectedProd.hqBrandCd;
-                }
+                params1.hqBrandCd = $scope.selectedProd.hqBrandCd;
 
                 var storeScope = agrid.getScope('prodRecpOriginCtrl');
                 storeScope._gridDataInit();
