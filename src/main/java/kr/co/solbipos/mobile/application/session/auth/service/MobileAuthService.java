@@ -66,4 +66,11 @@ public interface MobileAuthService {
      */
     int loginHist(LoginHistVO loginHistVO);
 
+    /**
+     * 자동로그인 Serial 업데이트
+     * @param sessionInfoVO
+     * @return
+     */
+    int updateLoginAutoSerial(SessionInfoVO sessionInfoVO);
+
 }

@@ -25,7 +25,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     </c:if>
 
     <c:if test="${cookie.sb_login_auto_serial.value != '' && cookie.sb_login_auto_serial.value ne null}">
-      <c:set var="cAutoLogin" value="${cookie.sb_login_auto_serial.value}" />
+      <c:set var="cLoginAuto" value="${cookie.sb_login_auto_serial.value}" />
     </c:if>
 
     <div class="writeInfo">
@@ -44,7 +44,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     </div>
 
     <div class="idsave">
-      <span> <input type="checkbox" id="chk" name="chk"
+      <span> <input type="checkbox" id="chk" name="chk" onclick="idSaveClick()"
         ${empty cid ? '' : 'checked="checked"' } />
         <label for="chk">
           <s:message code="login.rememberId" />
@@ -55,10 +55,10 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
       </button>
     </div>
     <div class="idsave">
-      <span> <input type="checkbox" id="chkAutoLogin" name="chkAutoLogin" onclick="idSaveChk()"
-        ${empty cAutoLogin ? '' : 'checked="checked"' } />
-          <label for="chkAutoLogin">
-            <s:message code="login.autoLogin" />
+      <span> <input type="checkbox" id="chkLoginAuto" name="chkLoginAuto" onclick="loginAutoClick()"
+        ${empty cLoginAuto ? '' : 'checked="checked"' } />
+          <label for="chkLoginAuto">
+            <s:message code="login.loginAuto" />
           </label>
         </span>
     </div>
@@ -104,8 +104,15 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
       	$("#layerpw").show();
 	</c:if>
 
-  // 자동로그인 체크 시, 아이디 저장 자동 체크
-  function idSaveChk(){
+  // 자동로그인이 체크되어 있을 때 아이디저장 체크 해제 시, 자동로그인도 함께 체크 해제
+  function idSaveClick(){
+    if(!$('#chk').is(":checked")){
+      $("input:checkbox[id='chkLoginAuto']").prop("checked", false);
+    }
+  }
+
+  // 자동로그인 체크박스 클릭 시 아이디 저장도 함께 체크
+  function loginAutoClick(){
     $("input:checkbox[id='chk']").prop("checked", true);
   }
 </script>

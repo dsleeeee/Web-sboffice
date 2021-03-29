@@ -12,6 +12,7 @@ import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +93,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         //
         ROOT_PATH = "/";
-        if(WebUtils.getCookie(request, "sb_login_fg") != null){
-            if(WebUtils.getCookie(request, "sb_login_fg").getValue().equals(BaseEnv.SB_LOGIN_FG)){
+        if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
+            if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
                 ROOT_PATH = "/mobile/";
             };
         }
@@ -227,7 +228,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         // main.sb 호출 시, 로그인한 사람의 권한에 따라 다른 메인 URL redirect
-        if(url.contains(ROOT_PATH + "application/main/content/")){
+        if(url.contains("application/main/content/")){
 
             // 관리자
             if (sessionInfoVO.getOrgnFg() == OrgnFg.MASTER){

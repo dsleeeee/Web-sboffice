@@ -36,6 +36,7 @@
         twui.USER_STAT_FG,
         info.P_AGENCY_CD,
         twui.AREA_FG,
+        twui.LOGIN_AUTO_SERIAL,
         #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
         FROM
         TB_WB_USER_INFO twui
@@ -186,11 +187,19 @@
         LAST_LOGIN_DT = #{lastLoginDt}
         <if test="loginFailCnt != null">
             , LOGIN_FAIL_CNT = #{loginFailCnt}
-        </if><if test='userStatFg.toString() != null and userStatFg.toString() != ""'>
-        , USER_STAT_FG = #{userStatFg}
-    </if>
+        </if>
+        <if test='userStatFg.toString() != null and userStatFg.toString() != ""'>
+            , USER_STAT_FG = #{userStatFg}
+        </if>
         WHERE
         USER_ID = #{userId}
+    </update>
+
+    <update id="updateLoginAutoSerial" parameterType="sessionInfoVO">
+      /* MobileAuthMapper.updateLoginAutoSerial */
+      UPDATE TB_WB_USER_INFO
+         SET  LOGIN_AUTO_SERIAL = #{loginAutoSerial}
+       WHERE USER_ID = #{userId}
     </update>
 
 </mapper>
