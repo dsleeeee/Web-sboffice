@@ -37,7 +37,7 @@
 
         <div class="w35 fl br bb stat_sky2_2" style="height: 230px;">
             <h2 class="bb">오늘의 매출건수<span id="totalSaleCnt"></span></h2>
-            <h2>오늘의 매출금액<span id="totalSaleAmt"></span></h2>
+            <h2 class="pdt10">오늘의 매출금액<span id="totalSaleAmt"></span></h2>
             <div>
                 <p><span>신용카드</span><span id="cardSaleAmt"></span></p>
                 <p><span>현금</span><span id="cashSaleAmt"></span></p>

@@ -27,12 +27,12 @@
 
         <div class="w35 fl br bb stat_purple3" style="height: 230px;">
             <!--총 매장수-->
-            <div class="bb pdb15">
+            <div class="bb pdb30 pdt5">
                 <h2>총 매장수 (오픈)<span id="totalStoreCnt"></span></h2>
             </div>
             <!--//총 매장수-->
             <!--총 포스수-->
-            <div>
+            <div class="pdt20">
                 <h2>총 포스수 (오픈)<span id="totalPosCnt"></span></h2>
             </div>
             <!--//총 포스수-->
