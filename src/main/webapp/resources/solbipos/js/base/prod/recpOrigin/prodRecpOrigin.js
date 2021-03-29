@@ -398,9 +398,18 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){
             $scope.$apply(function() {
-                var storeScope = agrid.getScope('prodRecpOriginCtrl');
+                var params1 = {};
+                params1.prodCd = $scope.selectedProd.prodCd;
+                params1.prodNm = $scope.selectedProd.prodNm;
+                params1.hqBrandCd = $scope.selectedProd.hqBrandCd;
+
+                var storeScope = agrid.getScope('prodRecpOriginPopupCtrl');
                 storeScope._gridDataInit();
-                storeScope._broadcast('prodRecpOriginCtrl');
+                storeScope._broadcast('prodRecpOriginPopupCtrl', params1);
+
+                var storeScope1 = agrid.getScope('prodRecpOriginDetailCtrl');
+                storeScope1._gridDataInit();
+                storeScope1._broadcast('prodRecpOriginDetailCtrl', params1);
             });
         });
     };

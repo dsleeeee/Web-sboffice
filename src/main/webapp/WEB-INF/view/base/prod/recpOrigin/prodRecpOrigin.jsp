@@ -228,7 +228,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/prodRecpOrigin.js?ver=20210326.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/prodRecpOrigin.js?ver=20210326.10" charset="utf-8"></script>
 
 <%-- 재료 및 원산지 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/prodRecpOriginAdd.jsp">
