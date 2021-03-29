@@ -20,6 +20,8 @@ public enum LoginOrigin implements CodeEnum  {
     , POS("POS")
     /** 가상 로그인 */
     , VIR("VIR")
+    /** 모바일 로그인 */
+    , MOBILE("MOBILE")
     /** 기타 */
     , ETC("ETC")
     ;

@@ -6,6 +6,7 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,8 +75,8 @@ public class ErrorController {
 
         //
         ROOT_PATH = "";
-        if(WebUtils.getCookie(request, "sb_login_fg") != null){
-            if(WebUtils.getCookie(request, "sb_login_fg").getValue().equals(BaseEnv.SB_LOGIN_FG)){
+        if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
+            if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
                 ROOT_PATH = "mobile/";
             };
         }

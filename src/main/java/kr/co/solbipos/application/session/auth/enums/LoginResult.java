@@ -28,6 +28,8 @@ public enum LoginResult implements CodeEnum {
     , PASSWORD_EXPIRE("EXP")
     /** 로그인횟수 초과 */
     , LOGIN_FAIL_CNT_OVER("CNT")
+    /** 자동 로그인 실패 */
+    , LOGIN_AUTO_FAIL("LAF")
     ;
     
   private String code;

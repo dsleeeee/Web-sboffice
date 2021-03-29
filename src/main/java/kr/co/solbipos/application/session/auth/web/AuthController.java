@@ -9,6 +9,7 @@ import kr.co.common.validate.Login;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,10 +107,13 @@ public class AuthController {
         }
 
         // 아이디 저장 쿠키 처리
-        WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, params.getUserId(), params.isChk() ? -1 : 0);
+        WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, params.getUserId(), params.isChk() ? 30*24*60*6 : 0);
 
-        // 웹에서 로그인 시, 모바일 로그인 쿠키 제거
-        WebUtil.removeCookie(WebUtils.getCookie( request, "sb_login_fg" ));
+        // 웹에서 로그인 시, 모바일 로그인 여부 쿠키 제거
+        WebUtil.removeCookie(WebUtils.getCookie( request, BaseEnv.SB_LOGIN_FG ));
+
+        // 웹에서 로그인 시, 자동로그인 쿠키 제거
+        WebUtil.removeCookie(WebUtils.getCookie( request, BaseEnv.SB_LOGIN_AUTO_SERIAL ));
 
         params.setLoginIp(getClientIp(request));
         params.setBrwsrInfo(request.getHeader("User-Agent"));
@@ -192,13 +196,13 @@ public class AuthController {
         String rUrl = "redirect:/auth/login.sb";
 
 
-        if(sessionInfoVO.getSbLoginFg() != null){
-            if(sessionInfoVO.getSbLoginFg().equals(BaseEnv.SB_LOGIN_FG)){
+        if(sessionInfoVO.getLoginFg() != null){
+            if(sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())){
                 rUrl = "redirect:/mobile/auth/login.sb";
             }
         }else{
-            if(WebUtils.getCookie(request, "sb_login_fg") != null){
-                if(WebUtils.getCookie(request, "sb_login_fg").getValue().equals(BaseEnv.SB_LOGIN_FG)){
+            if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
+                if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
                     rUrl = "redirect:/mobile/auth/login.sb";
                 }
             }
@@ -206,6 +210,12 @@ public class AuthController {
 
         // 로그아웃 처리
         authService.logout(request, response);
+
+        // 웹에서 로그아웃 시, 모바일 로그인 여부 쿠키 제거
+        WebUtil.removeCookie(WebUtils.getCookie( request, BaseEnv.SB_LOGIN_FG ));
+
+        // 웹에서 로그아웃 시, 자동로그인 쿠키 제거
+        WebUtil.removeCookie(WebUtils.getCookie( request, BaseEnv.SB_LOGIN_AUTO_SERIAL ));
 
         return rUrl;
     }

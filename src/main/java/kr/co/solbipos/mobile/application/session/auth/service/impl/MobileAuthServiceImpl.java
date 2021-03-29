@@ -77,22 +77,30 @@ public class MobileAuthServiceImpl implements MobileAuthService {
             return result;
         }
 
-        // 로그인실패 횟수
-        Long loginFailCnt = result.getLoginFailCnt() + 1;
-        Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CHECK_CNT ? true : false;
-
-        /** 패스워드 체크 */
-        if (!loginPasswordCheck(params, result)) {
-            if ( isFailOver ) {
-                result.setLoginResult(LoginResult.LOGIN_FAIL_CNT_OVER);
-                result.setUserStatFg(UserStatFg.LOGIN_FAIL_CNT_OVER);
-            } else {
-                result.setLoginResult(LoginResult.PASSWORD_ERROR);
+        if(!isEmpty(params.getLoginAutoSerial())){
+            /** 자동로그인인 경우, Serial 체크 */
+            if (!loginAutoSerialCheck(params, result)) {
+                result.setLoginResult(LoginResult.LOGIN_AUTO_FAIL);
+                return result;
             }
-            result.setLoginFailCnt(loginFailCnt);
-            mobileAuthMapper.updateLoginInfo(result);
+        }else{
+            // 로그인실패 횟수
+            Long loginFailCnt = result.getLoginFailCnt() + 1;
+            Boolean isFailOver = loginFailCnt > BaseEnv.LOGIN_FAIL_CHECK_CNT ? true : false;
 
-            return result;
+            /** 패스워드 체크 */
+            if (!loginPasswordCheck(params, result)) {
+                if ( isFailOver ) {
+                    result.setLoginResult(LoginResult.LOGIN_FAIL_CNT_OVER);
+                    result.setUserStatFg(UserStatFg.LOGIN_FAIL_CNT_OVER);
+                } else {
+                    result.setLoginResult(LoginResult.PASSWORD_ERROR);
+                }
+                result.setLoginFailCnt(loginFailCnt);
+                mobileAuthMapper.updateLoginInfo(result);
+
+                return result;
+            }
         }
 
         /** 사용여부 */
@@ -133,6 +141,12 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         result.setLastLoginDt(currentDateTimeString());
         // TODO: 정상 로그인시 로그인 실패횟수 초기화 시킬건지 정의 필요.
         result.setLoginFailCnt(0L);
+
+        // 자동로그인 시, 실패횟수 초기화 안함.
+        if(!isEmpty(params.getLoginAutoSerial())){
+            result.setLoginFailCnt(null);
+        }
+
         mobileAuthMapper.updateLoginInfo(result);
 
         result.setLoginResult(LoginResult.SUCCESS);
@@ -218,7 +232,7 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         loginHistVO.setStatCd(sessionInfoVO.getLoginResult());
 
         loginHistVO.setUserId(sessionInfoVO.getUserId());
-        loginHistVO.setLoginOrgn(LoginOrigin.WEB);
+        loginHistVO.setLoginOrgn(LoginOrigin.MOBILE);
         loginHistVO.setBrwsrInfo(sessionInfoVO.getBrwsrInfo());
         loginHistVO.setLoginIp(sessionInfoVO.getLoginIp());
         loginHistVO.setLoginDate(currentDateString());
@@ -231,6 +245,51 @@ public class MobileAuthServiceImpl implements MobileAuthService {
     public int loginHist(LoginHistVO loginHistVO) {
         LOGGER.debug(loginHistVO.toString());
         return mobileAuthMapper.insertLoginHist(loginHistVO);
+    }
+
+    /**
+     * 자동로그인 Serial 업데이트
+     * @param sessionInfoVO
+     * @return
+     */
+    @Override
+    public int updateLoginAutoSerial(SessionInfoVO sessionInfoVO) {
+        return mobileAuthMapper.updateLoginAutoSerial(sessionInfoVO);
+    }
+
+    /**
+     * 자동로그인 Serial 체크
+     * @param sessionInfoVO
+     * @param webUser
+     * @return
+     */
+    private boolean loginAutoSerialCheck(SessionInfoVO sessionInfoVO, SessionInfoVO webUser) {
+
+        if (isEmpty(sessionInfoVO) || isEmpty(webUser)) {
+            LOGGER.warn("serial check object null...");
+            return false;
+        }
+
+        // 자동로그인 Serial
+        String inputSerial = sessionInfoVO.getLoginAutoSerial();
+
+        // 조회된 Serial
+        String userSerial = webUser.getLoginAutoSerial();
+
+        LOGGER.info("inputSerial :{}, userSerial :{}", inputSerial, userSerial);
+
+        // 둘중 하나라도 비었다면 오류
+        if (isEmpty(inputSerial) || isEmpty(userSerial)) {
+            LOGGER.warn("serial string null, inputSerial empty:{}, userSerial empty:{}", isEmpty(inputSerial), isEmpty(userSerial));
+            return false;
+        }
+
+        // Serial이 일치하는지 확인
+        if (inputSerial.equals(userSerial)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
