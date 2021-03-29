@@ -85,6 +85,8 @@ public class BaseEnv {
      */
     public static String SB_LOGIN_FG;
 
+    public static String SB_LOGIN_AUTO_SERIAL;
+
 
     @Value("#{config['profile']}")
     public void setProfile(String profile) {
@@ -212,9 +214,13 @@ public class BaseEnv {
     /**
      * 모바일 관련
      */
-    @Value("#{config['mobile.sb.login.fg']}")
+    @Value("#{config['sb.login.fg']}")
     public void setSbLoginFg(String sbLoginFg) {
         SB_LOGIN_FG = sbLoginFg;
     }
 
+    @Value("#{config['sb.login.auto.serial']}")
+    public void setSbLoginAutoSerial(String sbLoginAutoSerial) {
+        SB_LOGIN_AUTO_SERIAL = sbLoginAutoSerial;
+    }
 }

@@ -46,4 +46,7 @@ public interface MobileAuthMapper {
      */
     int insertLoginHist(LoginHistVO loginHistVO);
 
+    /** 자동로그인 Serial 업데이트 */
+    int updateLoginAutoSerial(SessionInfoVO sessionInfoVO);
+
 }

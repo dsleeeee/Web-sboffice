@@ -89,6 +89,8 @@
   <!--  mobile Properties-->
   <!-- ====================================-->
   <!-- 모바일 로그인 여부 -->
-  <entry key="mobile.sb.login.fg">M</entry>
+  <entry key="sb.login.fg">sb_login_fg</entry>
+  <!-- 모바일 자동로그인 Serial -->
+  <entry key="sb.login.auto.serial">sb_login_auto_serial</entry>
 
 </properties>

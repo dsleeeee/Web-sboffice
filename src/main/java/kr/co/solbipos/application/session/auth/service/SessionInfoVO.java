@@ -123,7 +123,7 @@ public class SessionInfoVO extends CmmVO {
     /** 로그인 화면 : 아이디 저장 여부 */
     private boolean chk;
     /** 로그인 화면 : 자동로그인 여부 */
-    private boolean chkAutoLogin;
+    private boolean chkLoginAuto;
     /** 메뉴 관련 데이터 */
     private String startDate;
     /** 조회 종료 일자 */
@@ -159,10 +159,10 @@ public class SessionInfoVO extends CmmVO {
     private String areaFg;
 
     /** 모바일 로그인 여부 */
-    private String sbLoginFg;
+    private String loginFg;
 
     /** 모바일 자동로그인 Serial No */
-    private String sbLoginAutoSerial;
+    private String loginAutoSerial;
 
 
 	
@@ -473,12 +473,12 @@ public class SessionInfoVO extends CmmVO {
         this.chk = chk;
     }
 
-    public boolean isChkAutoLogin() {
-        return chkAutoLogin;
+    public boolean isChkLoginAuto() {
+        return chkLoginAuto;
     }
 
-    public void setChkAutoLogin(boolean chkAutoLogin) {
-        this.chkAutoLogin = chkAutoLogin;
+    public void setChkLoginAuto(boolean chkLoginAuto) {
+        this.chkLoginAuto = chkLoginAuto;
     }
 
     /**
@@ -642,19 +642,19 @@ public class SessionInfoVO extends CmmVO {
 		this.areaFg = areaFg;
 	}
 
-    public String getSbLoginFg() {
-        return sbLoginFg;
+    public String getLoginFg() {
+        return loginFg;
     }
 
-    public void setSbLoginFg(String sbLoginFg) {
-        this.sbLoginFg = sbLoginFg;
+    public void setLoginFg(String loginFg) {
+        this.loginFg = loginFg;
     }
 
-    public String getSbLoginAutoSerial() {
-        return sbLoginAutoSerial;
+    public String getLoginAutoSerial() {
+        return loginAutoSerial;
     }
 
-    public void setSbLoginAutoSerial(String sbLoginAutoSerial) {
-        this.sbLoginAutoSerial = sbLoginAutoSerial;
+    public void setLoginAutoSerial(String loginAutoSerial) {
+        this.loginAutoSerial = loginAutoSerial;
     }
 }
