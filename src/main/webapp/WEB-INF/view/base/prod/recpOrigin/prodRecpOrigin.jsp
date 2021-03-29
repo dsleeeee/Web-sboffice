@@ -132,7 +132,8 @@
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
-                                initialized="_initComboBox(s)">
+                                initialized="_initComboBox(s)"
+                                selected-index="1">
                         </wj-combo-box>
                     </div>
                 </td>
@@ -141,7 +142,7 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w60 fl">
+        <div class="wj-TblWrap mt20 mb20 w50 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
                     <div class="updownSet oh mb10">
@@ -183,7 +184,7 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w40 fr" ng-controller="prodRecpOriginDetailCtrl">
+    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="prodRecpOriginDetailCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
             <s:message code="prodRecpOrigin.recpProd"/>
             <label id="lblProd"></label>
@@ -216,7 +217,7 @@
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesCd"/>" binding="recipesCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpSeq"/>" binding="recpSeq" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
