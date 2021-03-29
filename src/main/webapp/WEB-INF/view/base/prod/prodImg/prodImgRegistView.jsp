@@ -159,15 +159,15 @@
                     <f:form id="regForm" name="regForm" method="post" enctype="multipart/form-data">
                         <tr>
                             <td>
-                                <input type="file" id="fileProd" name="fileProd" class="form-control" accept="image/x-png" onchange="imagePreview(this, '001')"/>
+                                <input type="file" id="fileProd" name="fileProd" class="form-control" accept="image/x-png, image/jpeg" onchange="imagePreview(this, '001')"/>
                                 <input type="hidden" id="hdProdFileNm" />
                             </td>
                             <td>
-                                <input type="file" id="fileKiosk" name="fileKiosk" class="form-control" accept="image/x-png" onchange="imagePreview(this, '002')"/>
+                                <input type="file" id="fileKiosk" name="fileKiosk" class="form-control" accept="image/x-png, image/jpeg" onchange="imagePreview(this, '002')"/>
                                 <input type="hidden" id="hdKioskFileNm" />
                             </td>
                             <td>
-                                <input type="file" id="fileDid" name="fileDid" class="form-control" accept="image/x-png" onchange="imagePreview(this, '003')"/>
+                                <input type="file" id="fileDid" name="fileDid" class="form-control" accept="image/x-png, image/jpeg" onchange="imagePreview(this, '003')"/>
                                 <input type="hidden" id="hdDidFileNm" />
                             </td>
                         </tr>
@@ -227,7 +227,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20200819.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20210329.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
