@@ -105,7 +105,8 @@
             <input type="text" class="sb-input w100" id="addrDtl" name="addrDtl" placeholder="주소2" value="${myInfo.addrDtl}"/>
           </td>
         </tr>
-        <tr class="brt">
+        <tr class="brt" style="display: none;">
+          <%--상단 로고 이미지--%>
           <th><s:message code="myInfo.myInfo.image.title1" /></th>
           <td>
             <p class="shopimg fl">
@@ -120,6 +121,7 @@
               <span class="yes"><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span><!--등록한 이미지가 있는 경우-->
             </div>
           </td>
+          <%--도장이미지--%>
           <th><s:message code="myInfo.myInfo.image.title2" /></th>
           <td>
             <p class="shopimg fl">
@@ -138,9 +140,13 @@
       </tbody>
     </table>
   <%--</form>--%>
-  <%-- 매장형태 --%>
+
+
+<div style="display: none;">
+  <%--기초코드관리--%>
   <h2 class="h2_tit mt40"><s:message code="myInfo.title2" /></h2>
   <div class="updownSet oh">
+    <%-- 매장형태 --%>
     <span class="fl bk lh30"><s:message code="myInfo.storeType.title" /></span>
     <div class="txtIn">
       <button id="storeTypeAddRowBtn" name="addRowBtn" class="btn_skyblue"><s:message code="cmm.add" /></button>
@@ -180,6 +186,9 @@
   </div>
   <div id="guestGrid" class="mt10"></div>
 </div>
+
+</div>
+
 <script>
 function generateWijmoComponent( elementIds ){
   var dropComponent = wijmo.input.ComboBox,
