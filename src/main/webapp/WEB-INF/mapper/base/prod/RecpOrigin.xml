@@ -785,8 +785,6 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                tmprp.HQ_BRAND_CD,
-                (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = tmprp.HQ_BRAND_CD) AS HQ_BRAND_NM,
                 tmprp.RECIPES_CD,
                 tmpro.RECIPES_NM,
                 tmpro.ORGPLCE_NM,
