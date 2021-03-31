@@ -50,13 +50,8 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('boardDetailCtrl', $scope, $http, true));
 
-    // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("apprFgBoardDetail", apprFgData); //승인구분
-    $scope._setComboData("targetFgBoardDetail", targetFgData); //공개대상
-
     // <-- 검색 호출 -->
     $scope.$on("boardDetailCtrl", function(event, data) {
-
         // 파일과 댓글 DIV 값 초기화
         $("#fileContent").html("");
         $("#divComment").html("");
@@ -126,7 +121,6 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         params.boardSeqNo = $scope.selectedBoardDetail.boardSeqNo;
 
         $scope._postJSONQuery.withOutPopUp("/adi/board/board/board/getBoardDetailAnswerList.sb", params, function(response) {
-
             var list = response.data.data.list;
             var innerHtml = "";
 

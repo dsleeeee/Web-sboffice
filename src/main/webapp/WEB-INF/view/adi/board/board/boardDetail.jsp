@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:710px;height:900px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:750px;" fade-in="false" fade-out="false">
 
     <div ng-controller="boardDetailCtrl">
 
@@ -15,7 +15,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="height: 840px;">
+        <div class="wj-dialog-body sc2" style="overflow:auto; height:700px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
@@ -119,7 +119,7 @@
                                 <td><input type="text" style="border: 1px solid #d0d0d0;" id="srchContent" ng-model="content" placeholder="댓글을 입력해주세요"/></td>
                                 <td>
                                     <%-- 댓글등록 --%>
-                                    <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="saveAnswer()">
+                                    <button class="btn_skyblue m15 fr" id="btnAddRepresent" ng-click="saveAnswer()">
                                         <s:message code="boardDetail.newAnswer" />
                                     </button>
                                 </td>
@@ -147,30 +147,10 @@
 </wj-popup>
 
 <script type="text/javascript">
-    <%-- 공개대상 --%>
-    targetFgData = ${ccu.getCommCodeExcpAll("106")};
-    /*var targetFgData = [
-        {"name":"전체","value":"1"},
-        {"name":"특정매장","value":"2"}
-    ];*/
-    <%-- 승인구분 --%>
-    var apprFgData = ${ccu.getCommCodeExcpAll("107")};
-    /*var apprFgData = [
-        {"name":"기안","value":"1"},
-        {"name":"승인","value":"2"},
-        {"name":"반려","value":"3"}
-    ];*/
-
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200318.27" charset="utf-8"></script>
-
-<%-- 게시판 신규등록,수정 팝업 --%>
-<%--<c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">--%>
-<%--<c:param name="menuCd" value="${menuCd}"/>--%>
-<%--<c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210331.01" charset="utf-8"></script>
 
 <%-- 열람자목록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardReadingHist.jsp">
