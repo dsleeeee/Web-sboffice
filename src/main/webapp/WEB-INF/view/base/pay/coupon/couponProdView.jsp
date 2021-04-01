@@ -19,6 +19,7 @@
           <col class="w15" />
           <col class="w35" />
         </colgroup>
+        <label for="payClasssCd"><input id="payClasssCd"></label>
         <tbody>
         <tr>
           <th>적용대상쿠폰</th>

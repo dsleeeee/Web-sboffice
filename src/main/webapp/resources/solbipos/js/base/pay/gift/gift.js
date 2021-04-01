@@ -22,14 +22,14 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
   //상품권은 프랜차이즈의 경우 무조건 본사에서 등록, 매장은 조회만 가능
   //         단독매장의 경우 무조건 매장에서 등록, 조회 가능
-  $scope.userUseYn = false;
-
+  $scope.userUseYn = true;
+ /*
   if(gvHqOfficeCd === '00000') { // 단독매장
     $scope.userUseYn = true;
   } else { // 프랜차이즈는 본사만 추가 가능
     if(gvStoreCd === '' ) $scope.userUseYn = true;
   }
-
+*/
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
@@ -58,17 +58,12 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
           if(selectedRow.status === "I") {
             e.cancel = false;
           } else if(selectedRow.useYn === "N") {
-            $scope._popMsg(messages["gift.not.use.payClassCd"]);
-            // s_alert.pop(messages["gift.not.use.payClassCd"]);
-            var giftGrid = agrid.getScope('giftCtrl');
-            giftGrid.$apply(function(){
-              giftGrid._gridDataInit();
-            });
-            return false;
-          } else {
-            $("#giftSubTitle").text(" [" + selectedRow.payClassNm+ "]");
+            $("#giftSubTitle").html(" [" + selectedRow.payClassCd+ "]" + selectedRow.payClassNm + "<label style='color: red'>(미사용)</label>");
             $("#hdPayClassCd").val(selectedRow.payClassCd);
-            //$scope._broadcast('giftCtrl', selectedRow);
+            $scope._pageView('giftCtrl', 1);
+          } else {
+            $("#giftSubTitle").text(" [" + selectedRow.payClassCd+ "]" + selectedRow.payClassNm );
+            $("#hdPayClassCd").val(selectedRow.payClassCd);
             $scope._pageView('giftCtrl', 1);
           }
         }
@@ -99,7 +94,13 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub(baseUrl + "class/getGiftClassList.sb", params, function() {}, false);
+    $scope._inquirySub(baseUrl + "class/getGiftClassList.sb", params, function() {
+      $("#giftSubTitle").text(" []");
+      var giftScope = agrid.getScope('giftCtrl');
+      giftScope.$apply(function(){
+        giftScope._gridDataInit();
+      });
+    }, false);
   };
 
   // 상품권 분류 그리드 행 추가
@@ -132,23 +133,78 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
   //   }
   // };
 
+
+  $scope.maxChk = function (val){
+    var str = val;
+    var strLength = 0;
+    var strTitle = "";
+    var strPiece = "";
+    for (i = 0; i < str.length; i++){
+      var code = str.charCodeAt(i);
+      var ch = str.substr(i,1).toUpperCase();
+      //체크 하는 문자를 저장
+      strPiece = str.substr(i,1)
+      code = parseInt(code);
+      if ((ch < "0" || ch > "9") && (ch < "A" || ch > "Z") && ((code > 255) || (code < 0))){
+        strLength = strLength + 3; //UTF-8 3byte 로 계산
+      }else{
+        strLength = strLength + 1;
+      }
+      if(strLength > 50){ //제한 길이 확인
+        return false;
+      }else{
+        strTitle = strTitle+strPiece; //제한길이 보다 작으면 자른 문자를 붙여준다.
+      }
+    }
+    return true;
+  };
+
   // 상품권분류 그리드 저장
   $scope.save = function() {
     // 파라미터 설정
     var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+    var orgChk = 0;
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++){
+      if($scope.flex.collectionView.itemsEdited[i].payClassNm == undefined || $scope.flex.collectionView.itemsEdited[i].payClassNm.length == 0) {
+        $scope._popMsg(messages["gift.require.payClassNm"]);
+        return false;
+      }
+      if($scope.maxChk($scope.flex.collectionView.itemsEdited[i].payClassNm)) {
+        if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[i].payClassCd > 799)) { //본사이거나 매장일때는 권종구분코드가 799이상인거만 수정가능
+          $scope.flex.collectionView.itemsEdited[i].status = "U";
+          params.push($scope.flex.collectionView.itemsEdited[i]);
+        } else if ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[i].payClassCd <= 799 && orgChk == 0){
+          orgChk = 1;
+        }
+      } else {
+        $scope._popMsg(messages["gift.payClassNm"] + " " + messages["gift.maxChk"]);
+        return false;
+      }
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
-      params.push($scope.flex.collectionView.itemsAdded[i]);
+      if($scope.flex.collectionView.itemsAdded[i].payClassNm == undefined || $scope.flex.collectionView.itemsAdded[i].payClassNm.length == 0) {
+        $scope._popMsg(messages["gift.require.payClassNm"]);
+        return false;
+      }
+      if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].payClassNm)) {
+        $scope.flex.collectionView.itemsAdded[i].status = "I";
+        params.push($scope.flex.collectionView.itemsAdded[i]);
+      } else {
+        $scope._popMsg(messages["gift.payClassNm"] + " " + messages["gift.maxChk"]);
+        return false;
+      }
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
       $scope.flex.collectionView.itemsRemoved[i].status = "D";
       params.push($scope.flex.collectionView.itemsRemoved[i]);
     }
 
+    if(orgChk==1){
+      s_alert.pop(messages["gift.payClassCd.edited"]);
+      if (params.length == 0){
+        return false;
+      }
+    }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save(baseUrl + "class/saveGiftClassList.sb", params, function(){ $scope.allSearch() });
   };
@@ -169,14 +225,14 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
 
   //상품권은 프랜차이즈의 경우 무조건 본사에서 등록, 매장은 조회만 가능
   //         단독매장의 경우 무조건 매장에서 등록, 조회 가능
-  $scope.userUseYn = false;
-
+  $scope.userUseYn = true;
+  /*
   if(gvHqOfficeCd === '00000') { // 단독매장
     $scope.userUseYn = true;
   } else { // 프랜차이즈는 본사만 추가 가능
     if(gvStoreCd === '' ) $scope.userUseYn = true;
   }
-
+*/
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
@@ -278,8 +334,13 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+  // 그리드 초기화
+  $scope._gridDataInit = function () {
+    $scope.data = new wijmo.collections.CollectionView([]);
+  };
 
   $scope.$on("giftCtrl", function(event, data) {
+
     $scope.searchGift();
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -289,12 +350,26 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchGift = function(){
     var params = {};
     params.payClassCd = $("#hdPayClassCd").val();
+    if((orgnFg != null && orgnFg == "STORE") && params.payClassCd <= 799) { // 본사에서 등록한 권종분류코드
+      $('#btnGiftAdd').hide();
+      $('#btnClassDel').hide();
+      $('#btnGiftSave').hide();
+    } else {
+      $('#btnGiftAdd').show();
+      $('#btnClassDel').show();
+      $('#btnGiftSave').show();
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getGiftList.sb", params, function(){}, false);
   };
 
   // 상품권 그리드 행 추가
   $scope.addRow = function() {
+    if ($("#giftSubTitle").text().length <= 3) {
+      $scope._popMsg(messages["gift.null.payClassCd"]);
+      return false;
+    }
+
     var gridRepresent = agrid.getScope("giftClassCtrl");
     var selectedRow = gridRepresent.flex.selectedRows[0]._data;
 
@@ -321,17 +396,60 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
     }
   };
 
+  $scope.maxChk = function (val){
+    var str = val;
+    var strLength = 0;
+    var strTitle = "";
+    var strPiece = "";
+    for (i = 0; i < str.length; i++){
+      var code = str.charCodeAt(i);
+      var ch = str.substr(i,1).toUpperCase();
+      //체크 하는 문자를 저장
+      strPiece = str.substr(i,1)
+      code = parseInt(code);
+      if ((ch < "0" || ch > "9") && (ch < "A" || ch > "Z") && ((code > 255) || (code < 0))){
+        strLength = strLength + 3; //UTF-8 3byte 로 계산
+      }else{
+        strLength = strLength + 1;
+      }
+      if(strLength > 50){ //제한 길이 확인
+        return false;
+      }else{
+        strTitle = strTitle+strPiece; //제한길이 보다 작으면 자른 문자를 붙여준다.
+      }
+    }
+    return true;
+  };
+
   // 상품권 저장
   $scope.save = function() {
     // 파라미터 설정
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+      if($scope.flex.collectionView.itemsEdited[i].giftNm == undefined || $scope.flex.collectionView.itemsEdited[i].giftNm.length == 0) {
+        $scope._popMsg(messages["gift.require.giftNm"]);
+        return false;
+      }
+      if($scope.maxChk($scope.flex.collectionView.itemsEdited[i].giftNm)) {
+        $scope.flex.collectionView.itemsEdited[i].status = "U";
+        params.push($scope.flex.collectionView.itemsEdited[i]);
+      } else {
+        $scope._popMsg(messages["gift.giftNm"] + " " + messages["gift.maxChk"]);
+        return false;
+      }
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
-      params.push($scope.flex.collectionView.itemsAdded[i]);
+      if($scope.flex.collectionView.itemsAdded[i].giftNm == undefined || $scope.flex.collectionView.itemsAdded[i].giftNm.length == 0) {
+        $scope._popMsg(messages["gift.require.giftNm"]);
+        return false;
+      }
+      if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].giftNm)) {
+        $scope.flex.collectionView.itemsAdded[i].status = "I";
+        params.push($scope.flex.collectionView.itemsAdded[i]);
+      } else {
+        $scope._popMsg(messages["gift.giftNm"] + " " + messages["gift.maxChk"]);
+        return false;
+      }
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
       $scope.flex.collectionView.itemsRemoved[i].status = "D";
@@ -339,15 +457,10 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "class/saveGiftList.sb", params, function(){ $scope.allSearch() });
+    $scope._save(baseUrl + "class/saveGiftList.sb", params, function(){
+      $scope.searchGift();
+    });
   }
-
-  // 저장 완료 후처리 (상품권분류, 상품권 재조회)
-  $scope.allSearch = function () {
-    var giftClassGrid = agrid.getScope("giftClassCtrl");
-    giftClassGrid.searchGiftClass();
-    $scope.searchGift();
-  };
 
 }]);
 
