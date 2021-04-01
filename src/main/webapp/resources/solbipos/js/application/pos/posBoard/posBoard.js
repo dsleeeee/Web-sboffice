@@ -88,7 +88,7 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
         params.listScale = 10;
         params.boardCd = "01";
 
-        $scope._inquiryMain("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
+        $scope._inquirySub("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
             // 공지팝업 여부(미열람 공지사항 띄움)
             if(noticePopupYn == "Y") {
                 $scope.$apply(function() {
@@ -171,7 +171,7 @@ app.controller('posBoardPopupCtrl', ['$scope', '$http', function ($scope, $http)
         params.boardCd = data.boardCd;
         params.gubunReadCombo = "N";
 
-        $scope._inquiryMain("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
+        $scope._inquirySub("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
             if($scope.flex.rows.length > 0) {
                 var selectedRow = $scope.flex.selectedRows[0]._data;
 
