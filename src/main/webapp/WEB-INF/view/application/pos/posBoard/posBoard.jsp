@@ -99,7 +99,8 @@
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="posBoard.title"/>" binding="title" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="posBoard.viewCnt"/>" binding="viewCnt" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="posBoard.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <%-- 공개대상 현재 웹에선 매장일때 히든 --%>
+                            <wj-flex-grid-column header="<s:message code="posBoard.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="65" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="posBoard.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="posBoard.agencyNm"/>" binding="agencyNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="posBoard.userNm"/>" binding="userNm" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -140,7 +141,8 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="posBoard.title"/>" binding="title" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posBoard.viewCnt"/>" binding="viewCnt" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="posBoard.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <%-- 공개대상 현재 웹에선 매장일때 히든 --%>
+                        <wj-flex-grid-column header="<s:message code="posBoard.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="65" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posBoard.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posBoard.agencyNm"/>" binding="agencyNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posBoard.userNm"/>" binding="userNm" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -172,7 +174,7 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210401.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210401.03" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업(포스용) --%>
 <c:import url="/WEB-INF/view/application/pos/posBoard/posBoardDetail.jsp">
