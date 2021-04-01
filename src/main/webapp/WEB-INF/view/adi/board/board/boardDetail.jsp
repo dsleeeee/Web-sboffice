@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:750px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:800px;" fade-in="false" fade-out="false">
 
     <div ng-controller="boardDetailCtrl">
 
@@ -15,7 +15,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="overflow:auto; height:700px;">
+        <div class="wj-dialog-body sc2" style="overflow:auto; height:750px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
@@ -69,7 +69,7 @@
                                     <input type="checkbox" id="noticeYnBoardDetail" name="noticeYnChk" ng-model="boardDetail.noticeYn" disabled="true" >
                                     <label for="noticeYnBoardDetail"><s:message code='boardDetail.noticeYn' /></label>
                                 </span>
-                                <span class="chk ml10">
+                                <span class="chk ml10" style="display: none;">
                                     <input type="checkbox" id="smsYnBoardDetail" name="smsYnChk" ng-model="boardDetail.smsYn" disabled="true" >
                                     <label for="smsYnBoardDetail"><s:message code='boardDetail.smsYn' /></label>
                                 </span>
@@ -150,7 +150,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210331.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210401.08" charset="utf-8"></script>
 
 <%-- 열람자목록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardReadingHist.jsp">

@@ -14,9 +14,9 @@
 var app = agrid.getApp();
 
 // 공개대상
-var targetFgData1 = [
-    {"name":"전체","value":"1"}
-];
+// var targetFgData1 = [
+//     {"name":"전체","value":"1"}
+// ];
 
 /**
  *  팝업 그리드 생성
@@ -32,11 +32,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("apprFg", apprFgData); //승인구분
     // 본사권한으로 로그인 한 경우, 매장선택 가능.
-    if($scope.orgnFg === 'H') {
-        $scope._setComboData("targetFg", targetFgData); //공개대상
-    } else {
-        $scope._setComboData("targetFg", targetFgData1); //공개대상
-    }
+    // if($scope.orgnFg === 'H') {
+        $scope._setComboData("targetFg", targetFgData); // 공개대상
+    // } else {
+    //     $scope._setComboData("targetFg", targetFgData1); // 공개대상
+    // }
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -208,6 +208,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         // 신규, 수정
         params.status = $("#lblStatus").text();
         params.title = $scope.title;
+        params.userId = userId;
         params.userNm = $scope.userNm;
         params.apprFg = $scope.apprFg;
         params.targetFg = $scope.targetFg;
@@ -294,6 +295,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         var formData = new FormData($("#boradForm")[0]);
         formData.append("boardCd", data.boardCd);
         formData.append("boardSeqNo", data.boardSeqNo);
+        formData.append("userId", data.userId);
 
         var url = '/adi/board/board/board/getBoardInfoAtchSave.sb';
 
@@ -377,7 +379,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 글쓰기 에디터
     $(document).ready(function() {
         $('#summernote').summernote( {
-            height: 200,
+            height: 190,
             toolbar: [
                 /*['fontname', ['fontname']],*/
                 ['fontsize', ['fontsize']],

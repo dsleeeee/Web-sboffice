@@ -113,9 +113,9 @@ public class BoardServiceImpl implements BoardService {
         String currentDt = currentDateTimeString();
 
         boardVO.setModDt(currentDt);
-        boardVO.setModId(sessionInfoVO.getUserId());
+        boardVO.setModId(boardVO.getUserId());
         boardVO.setRegDt(currentDt);
-        boardVO.setRegId(sessionInfoVO.getUserId());
+        boardVO.setRegId(boardVO.getUserId());
 
         if (boardVO.getStatus() == GridDataFg.INSERT) {
             // 게시판 게시일련번호 조회(자동채번)
@@ -204,10 +204,12 @@ public class BoardServiceImpl implements BoardService {
             // 현재 일자
             String currentDt = currentDateTimeString();
 
+            boardInfo.setUserId((String)multi.getParameter("userId"));
+
             boardInfo.setModDt(currentDt);
-            boardInfo.setModId(sessionInfo.getUserId());
+            boardInfo.setModId(boardInfo.getUserId());
             boardInfo.setRegDt(currentDt);
-            boardInfo.setRegId(sessionInfo.getUserId());
+            boardInfo.setRegId(boardInfo.getUserId());
 
             boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
             boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
