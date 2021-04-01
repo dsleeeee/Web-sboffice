@@ -25,7 +25,7 @@
 
     <%-- 상품권분류등록 --%>
     <div class="mb20 mt20" >
-      <div class="wj-TblWrapBr mr10 pd20" style="height:495px;">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:400px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
           <%-- 페이지 스케일  --%>
@@ -41,12 +41,12 @@
                   visible="false">
           </wj-combo-box>
           <%--// 페이지 스케일  --%>
-          <button class="btn_skyblue" id="btnClassAdd"    ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
-          <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
-          <button class="btn_skyblue" id="btnClassSave"   ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
+          <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
+<%--          <button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
+          <button class="btn_skyblue" id="btnClassSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
         </div>
         <%-- 상품권분류등록 그리드 --%>
-        <div id="giftClassGrid" class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
+        <div id="giftClassGrid" class="wj-gridWrap" style="height:280px; overflow-y: hidden;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -57,7 +57,6 @@
                   item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="gift.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="gift.payClassCd"/>" binding="payClassCd" width="100" maxLength="3" is-read-only="true"></wj-flex-grid-column>
@@ -80,7 +79,7 @@
   </div>
   <%-- 상품권등록  --%>
   <div class="mb40" ng-controller="giftCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:495px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.gift' /> <span id="giftSubTitle"></span> </span>
         <%-- 페이지 스케일  --%>
@@ -96,12 +95,12 @@
                 visible="false">
         </wj-combo-box>
         <button class="btn_skyblue" id="btnGiftAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
-        <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>
+<%--        <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>--%>
         <button class="btn_skyblue" id="btnGiftSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
       </div>
       <input type="hidden" id="hdPayClassCd"/>
       <%-- 상품권등록 그리드 --%>
-      <div id="giftGrid" class="wj-gridWrap" style="height:370px;overflow-y: hidden;">
+      <div id="giftGrid" class="wj-gridWrap" style="height:280px;overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -112,12 +111,12 @@
                 item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+<%--          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
           <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.giftCd"/>" binding="giftCd" width="*" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.giftNm"/>" binding="giftNm" maxLength="15" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.payClassCd"/>" binding="payClassCd" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.giftUprc"/>" binding="giftUprc" width="*" maxLength="8"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="gift.giftUprc"/>" binding="giftUprc" width="*" max-length="9"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="*" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
 

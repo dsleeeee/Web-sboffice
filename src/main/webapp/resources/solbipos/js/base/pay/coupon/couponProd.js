@@ -17,16 +17,16 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regProdCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {
-    if(coupnEnvstVal === "2" && orgnFg === "STORE") { // 본사통제인데 매장으로 접근시
+  $scope.initGrid = function (s, e) {};
+
+  // 쿠폰등록 상품 그리드 조회
+  $scope.$on("regProdCtrl", function(event, data) {
+    if ($("#couponProdTitle").text().substr(1,3) < 800 && orgnFg == "STORE") { // 매장이 본사에서 등록한 쿠폰에 상품등록X
       $("#couponProdLayer .btn_grayS2").hide();
     } else {
       $("#couponProdLayer .btn_grayS2").show();
     }
-  };
 
-  // 쿠폰등록 상품 그리드 조회
-  $scope.$on("regProdCtrl", function(event, data) {
     $scope.searchRegProd();
     // 등록상품 조회 후, 미등록상품 조회
     var noRegCouponGrid = agrid.getScope("noRegProdCtrl");

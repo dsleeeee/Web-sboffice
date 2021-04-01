@@ -97,23 +97,19 @@
     -->
     <select id="getPayMethodClassCd" parameterType="DefaultMap" resultType="String">
         /* USE : CouponMapper.getPayMethodClassCd */
-        <if test="coupnEnvstVal != null and coupnEnvstVal.toString() == 'HQ'">
-            SELECT
-                LPAD( NVL(MAX(PAY_CLASS_CD), 0) + 1, 3, '0')
-            FROM
-                TB_HQ_PAY_METHOD_CLASS
-            WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
-                AND PAY_TYPE_FG = #{payTypeFg}
+<!--        <if test="coupnEnvstVal != null and coupnEnvstVal.toString() == 'HQ'">-->
+        <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
+            SELECT LPAD( NVL(MAX(PAY_CLASS_CD), 0) + 1, 3, '0')
+            FROM TB_HQ_PAY_METHOD_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            AND PAY_TYPE_FG = #{payTypeFg}
         </if>
-        <if test="coupnEnvstVal != null and coupnEnvstVal.toString() == 'STORE'">
-            SELECT
-                LPAD( NVL(MAX(PAY_CLASS_CD), 0) + 1, 3, '0')
-            FROM
-                TB_MS_PAY_METHOD_CLASS
-            WHERE
-                STORE_CD = #{storeCd}
-                AND PAY_TYPE_FG = #{payTypeFg}
+        <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
+            SELECT LPAD( NVL(MAX(PAY_CLASS_CD), 799) + 1, 3, '0')
+            FROM TB_MS_PAY_METHOD_CLASS
+            WHERE STORE_CD = #{storeCd}
+            AND PAY_TYPE_FG = #{payTypeFg}
+            AND PAY_CLASS_CD > 799
         </if>
     </select>
 
@@ -354,7 +350,7 @@
         WHERE
             thc.HQ_OFFICE_CD = #{hqOfficeCd}
             AND thc.PAY_CLASS_CD = #{payClassCd}
-            AND thc.USE_YN = 'Y'
+--             AND thc.USE_YN = 'Y'
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -377,6 +373,7 @@
             tmc.COUPN_APPLY_FG,
             tmc.USE_YN,
             tmc.REG_ID,
+            tmc.COUPN_TARGET_FG,
             (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.PAY_CLASS_CD = tmc.PAY_CLASS_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
@@ -384,7 +381,7 @@
         WHERE
             tmc.STORE_CD = #{storeCd}
             AND tmc.PAY_CLASS_CD = #{payClassCd}
-            AND tmc.USE_YN = 'Y'
+--             AND tmc.USE_YN = 'Y'
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -395,7 +392,7 @@
     -->
     <select id="getCouponCd" parameterType="DefaultMap" resultType="String">
         /* USE : CouponMapper.getCouponCd */
-        <if test="coupnEnvstVal != null and coupnEnvstVal.toString() == 'HQ'">
+        <if test="orgnFg != null and orgnFg.toString() == 'HQ'">
             SELECT
                 LPAD( NVL(MAX(COUPN_CD), 0) + 1, 4, '0') AS COUPN_CD
             FROM
@@ -404,7 +401,7 @@
                 HQ_OFFICE_CD = #{hqOfficeCd}
                 AND PAY_CLASS_CD = #{payClassCd}
         </if>
-        <if test="coupnEnvstVal != null and coupnEnvstVal.toString == 'STORE'">
+        <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
             SELECT
                 LPAD( NVL(MAX(COUPN_CD), 0) + 1, 4, '0') AS COUPN_CD
             FROM
@@ -620,6 +617,7 @@
             COUPN_DC_RATE = #{coupnDcRate},
             COUPN_DC_AMT = #{coupnDcAmt},
             COUPN_APPLY_FG = #{coupnApplyFg},
+            COUPN_TARGET_FG = #{coupnTargetFg},
             USE_YN = #{useYn},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
@@ -657,38 +655,64 @@
     -->
     <select id="getHqProdList" parameterType="couponProdVO" resultType="DefaultMap">
         /* USE : CouponMapper.getHqProdList */
-        SELECT
-            thp.HQ_OFFICE_CD,
-            thp.PROD_CLASS_CD,
-            thpc.PROD_CLASS_NM,
-            thp.PROD_CD,
-            thp.PROD_NM,
-            thp.COST_UPRC,
-            NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN
-        FROM
-            TB_HQ_PRODUCT thp,
-            TB_HQ_PRODUCT_CLASS thpc,
-            TB_HQ_COUPON_PROD thcp
-        WHERE
-            thp.USE_YN = 'Y'
-            AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
-            AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
-            AND thcp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
-            AND thcp.PAY_CLASS_CD (+)=  #{payClassCd}
-            AND thcp.COUPN_CD (+)= #{coupnCd}
-            AND thcp.PROD_CD (+)= thp.PROD_CD
-        <if test='prodCd != null and prodCd != ""'>
-            AND thp.PROD_CD = #{prodCd}
-        </if>
-        <if test='prodNm != null and prodNm != ""'>
-            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
-        </if>
         <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
-            AND thcp.PROD_CD IS NOT NULL
+            SELECT p.HQ_OFFICE_CD,
+                   p.PROD_CLASS_CD,
+                   p.PROD_CLASS_NM,
+                   thcp.PROD_CD,
+                   NVL(p.PROD_NM,'삭제된 메뉴') AS PROD_NM,
+                   p.COST_UPRC,
+                   NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN
+              FROM TB_HQ_COUPON_PROD thcp LEFT OUTER JOIN
+                   (SELECT thp.HQ_OFFICE_CD,
+                           thp.PROD_CLASS_CD,
+                           thpc.PROD_CLASS_NM,
+                           thp.PROD_CD,
+                           thp.PROD_NM,
+                           thp.COST_UPRC
+                      FROM TB_HQ_PRODUCT thp,
+                           TB_HQ_PRODUCT_CLASS thpc
+                     WHERE thp.HQ_OFFICE_CD = THPC.HQ_OFFICE_CD
+                       AND thp.PROD_CLASS_CD = THPC.PROD_CLASS_CD
+                       AND THP.HQ_OFFICE_CD = #{hqOfficeCd}) p
+                ON thcp.HQ_OFFICE_CD = p.HQ_OFFICE_CD
+               AND thcp.PROD_CD = p.prod_cd
+             WHERE thcp.HQ_OFFICE_CD = #{hqOfficeCd}
+               AND thcp.PAY_CLASS_CD = #{payClassCd}
+               AND thcp.COUPN_CD = #{coupnCd}
+            <if test='prodCd != null and prodCd != ""'>
+                AND p.PROD_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND p.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
         </if>
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
-            AND thcp.PROD_CD IS NULL
+            SELECT thp.HQ_OFFICE_CD,
+                   thp.PROD_CLASS_CD,
+                   thpc.PROD_CLASS_NM,
+                   thp.PROD_CD,
+                   thp.PROD_NM,
+                   thp.COST_UPRC,
+                   NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN
+              FROM TB_HQ_PRODUCT thp,
+                   TB_HQ_PRODUCT_CLASS thpc,
+                   TB_HQ_COUPON_PROD thcp
+             WHERE thp.USE_YN = 'Y'
+               AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+               AND thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+               AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
+               AND thcp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+               AND thcp.PAY_CLASS_CD (+)=  #{payClassCd}
+               AND thcp.COUPN_CD (+)= #{coupnCd}
+               AND thcp.PROD_CD (+)= thp.PROD_CD
+            <if test='prodCd != null and prodCd != ""'>
+                AND thp.PROD_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+               AND thcp.PROD_CD IS NULL
         </if>
     </select>
 
@@ -699,32 +723,64 @@
     -->
     <select id="getStoreProdList" parameterType="couponProdVO" resultType="DefaultMap">
         /* USE : CouponMapper.getStoreProdList */
-        SELECT
-            tmp.STORE_CD,
-            tmp.PROD_CLASS_CD,
-            tmpc.PROD_CLASS_NM,
-            tmp.PROD_CD,
-            tmp.PROD_NM,
-            tmp.COST_UPRC,
-            NVL2(tmcp.PROD_CD, 'Y', 'N') AS REG_YN
-        FROM
-            TB_MS_PRODUCT tmp,
-            TB_MS_PRODUCT_CLASS tmpc,
-            TB_MS_COUPON_PROD tmcp
-        WHERE
-            tmp.USE_YN = 'Y'
-            AND tmp.STORE_CD = #{storeCd}
-            AND tmp.STORE_CD = tmpc.STORE_CD
-            AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
-            AND tmcp.STORE_CD (+)= tmp.STORE_CD
-            AND tmcp.PAY_CLASS_CD (+)= #{payClassCd}
-            AND tmcp.COUPN_CD (+)= #{coupnCd}
-            AND tmcp.PROD_CD (+)= tmp.PROD_CD
         <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
-            AND tmcp.PROD_CD IS NOT NULL
+            SELECT p.STORE_CD,
+                   p.PROD_CLASS_CD,
+                   p.PROD_CLASS_NM,
+                   tmcp.PROD_CD,
+                   NVL(p.PROD_NM,'삭제된 메뉴') AS PROD_NM,
+                   p.COST_UPRC,
+                   NVL2(tmcp.PROD_CD, 'Y', 'N') AS REG_YN
+              FROM TB_ms_COUPON_PROD tmcp LEFT OUTER JOIN
+                    (SELECT tmp.STORE_CD,
+                            tmp.PROD_CLASS_CD,
+                            tmpc.PROD_CLASS_NM,
+                            tmp.PROD_CD,
+                            tmp.PROD_NM,
+                            tmp.COST_UPRC
+                       FROM TB_MS_PRODUCT tmp,
+                            TB_MS_PRODUCT_CLASS tmpc
+                      WHERE tmp.STORE_CD = tmpc.STORE_CD
+                        AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                        AND tmp.STORE_CD = #{storeCd}) p
+                 ON tmcp.STORE_CD = p.STORE_CD
+                AND tmcp.PROD_CD = p.prod_cd
+              WHERE tmcp.STORE_CD = #{storeCd}
+                AND tmcp.PAY_CLASS_CD = #{payClassCd}
+                AND tmcp.COUPN_CD = #{coupnCd}
+            <if test='prodCd != null and prodCd != ""'>
+                AND p.PROD_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND p.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
         </if>
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
-            AND tmcp.PROD_CD IS NULL
+            SELECT tmp.STORE_CD,
+                   tmp.PROD_CLASS_CD,
+                   tmpc.PROD_CLASS_NM,
+                   tmp.PROD_CD,
+                   tmp.PROD_NM,
+                   tmp.COST_UPRC,
+                   NVL2(tmcp.PROD_CD, 'Y', 'N') AS REG_YN
+              FROM TB_MS_PRODUCT tmp,
+                   TB_MS_PRODUCT_CLASS tmpc,
+                   TB_MS_COUPON_PROD tmcp
+             WHERE tmp.USE_YN = 'Y'
+               AND tmp.STORE_CD = #{storeCd}
+               AND tmp.STORE_CD = tmpc.STORE_CD
+               AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+               AND tmcp.STORE_CD (+)= tmp.STORE_CD
+               AND tmcp.PAY_CLASS_CD (+)= #{payClassCd}
+               AND tmcp.COUPN_CD (+)= #{coupnCd}
+               AND tmcp.PROD_CD (+)= tmp.PROD_CD
+            <if test='prodCd != null and prodCd != ""'>
+                AND thp.PROD_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+               AND tmcp.PROD_CD IS NULL
         </if>
     </select>
 

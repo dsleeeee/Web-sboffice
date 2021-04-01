@@ -86,10 +86,9 @@ public class CouponServiceImpl implements CouponService {
             payMethodClassVO.setModDt(currentDt);
             payMethodClassVO.setModId(sessionInfoVO.getUserId());
             payMethodClassVO.setPayTypeFg(PayTypeFg.COUPON);
+            payMethodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-            // 본사 통제
-            if (payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
-
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사에서 등록
                 PayMethodClassVO resultVO = new PayMethodClassVO();
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
@@ -116,29 +115,27 @@ public class CouponServiceImpl implements CouponService {
                     String payMethodClassResult = couponMapper.deleteHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
                 }
-
-            // 매장 통제
-            } else if (payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
+            } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)  { //매장에서 등록
                 payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-                if (payMethodClassVO.getStatus() == GridDataFg.INSERT) {
+                if (payMethodClassVO.getStoreCd() == null){
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.access.denied"));
+                }else {
+                    if (payMethodClassVO.getStatus() == GridDataFg.INSERT) {
 
-                    String payMethodClassCd = couponMapper.getPayMethodClassCd(payMethodClassVO);
-                    payMethodClassVO.setPayClassCd(payMethodClassCd);
+                        String payMethodClassCd = couponMapper.getPayMethodClassCd(payMethodClassVO);
+                        payMethodClassVO.setPayClassCd(payMethodClassCd);
 
-                    procCnt = couponMapper.insertStoreCouponClass(payMethodClassVO);
-                    if (procCnt <= 0) {
-                        throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        procCnt = couponMapper.insertStoreCouponClass(payMethodClassVO);
+                        if (procCnt <= 0) {
+                            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                    } else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
+                        procCnt = couponMapper.updateStoreCouponClass(payMethodClassVO);
+                    } else if (payMethodClassVO.getStatus() == GridDataFg.DELETE) {
+                        procCnt = couponMapper.deleteStoreCouponClass(payMethodClassVO);
                     }
-                } else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt = couponMapper.updateStoreCouponClass(payMethodClassVO);
-                } else if (payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-                    procCnt = couponMapper.deleteStoreCouponClass(payMethodClassVO);
                 }
-
-            // 권한 확인 필요
-            } else {
-                throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
             }
         }
 
@@ -160,9 +157,9 @@ public class CouponServiceImpl implements CouponService {
             payMethodClassVO.setModDt(dt);
             payMethodClassVO.setModId(sessionInfoVO.getUserId());
             payMethodClassVO.setPayTypeFg(PayTypeFg.COUPON);
+            payMethodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-            // 쿠폰등록주체가 본사통제일 경우
-            if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
 
                 PayMethodClassVO resultVO = new PayMethodClassVO();
 
@@ -226,12 +223,12 @@ public class CouponServiceImpl implements CouponService {
             couponVO.setRegId(sessionInfoVO.getUserId());
             couponVO.setModDt(dt);
             couponVO.setModId(sessionInfoVO.getUserId());
-
             LOGGER.debug(couponVO.getProperties());
 
-            // 본사 통제
-            if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+            //본사
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
 
+                couponVO.setOrgnFg("HQ");
                 couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
                 if(couponVO.getStatus() == GridDataFg.INSERT) {
@@ -252,9 +249,9 @@ public class CouponServiceImpl implements CouponService {
                     String couponResult = couponMapper.deleteHqCouponToStore01(couponVO);
                 }
             }
-            // 매장 통제
-            else if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
-
+            // 매장
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                couponVO.setOrgnFg("STORE");
                 couponVO.setStoreCd(sessionInfoVO.getStoreCd());
                 couponVO.setCoupnRegFg(CoupnRegFg.STORE.getCode());
 
@@ -291,13 +288,13 @@ public class CouponServiceImpl implements CouponService {
 
         List<DefaultMap<String>> resultProdList = null;
 
-        // 본사권한
-        if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+        // 본사
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             resultProdList = couponMapper.getHqProdList(couponProdVO);
         }
-        // 매장권한
-        else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
+        // 매장
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             couponProdVO.setStoreCd(sessionInfoVO.getStoreCd());
             resultProdList = couponMapper.getStoreProdList(couponProdVO);
         }
@@ -320,7 +317,7 @@ public class CouponServiceImpl implements CouponService {
             couponProdVO.setModDt(currentDt);
             couponProdVO.setModId(sessionInfoVO.getUserId());
 
-            if (couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 procCnt += couponMapper.insertHqCouponProd(couponProdVO);
 
                 // 본사통제여부가 'Y'일 경우, 매장에도 본사의 쿠폰 적용.
@@ -328,7 +325,7 @@ public class CouponServiceImpl implements CouponService {
                 couponResult = couponMapper.insertHqCouponProdToStore01(couponProdVO);
                 resultVO.setResult(couponResult);
 
-            } else if (couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                 procCnt += couponMapper.insertStoreCouponProd(couponProdVO);
             }
         }
@@ -349,7 +346,7 @@ public class CouponServiceImpl implements CouponService {
             couponProdVO.setModDt(currentDt);
             couponProdVO.setModId(sessionInfoVO.getUserId());
 
-            if (couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
 
                 procCnt += couponMapper.deleteHqCouponProd(couponProdVO);
 
@@ -358,7 +355,7 @@ public class CouponServiceImpl implements CouponService {
                 couponResult = couponMapper.deleteHqCouponProdToStore01(couponProdVO);
                 resultVO.setResult(couponResult);
 
-            } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                 procCnt += couponMapper.deleteStoreCouponProd(couponProdVO);
             }
         }

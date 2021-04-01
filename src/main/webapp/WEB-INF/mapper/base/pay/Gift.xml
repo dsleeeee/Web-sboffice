@@ -84,10 +84,11 @@
            AND PAY_TYPE_FG = #{payTypeFg}
         </if>
         <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
-        SELECT LPAD( NVL(MAX(PAY_CLASS_CD), 0) + 1, 3, '0')
+        SELECT LPAD( NVL(MAX(PAY_CLASS_CD), 799) + 1, 3, '0')
           FROM TB_MS_PAY_METHOD_CLASS
          WHERE STORE_CD = #{storeCd}
            AND PAY_TYPE_FG = #{payTypeFg}
+           AND PAY_CLASS_CD > 799
         </if>
     </select>
 
@@ -357,9 +358,10 @@
            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
         <if test="orgnFg != null and orgnFg.toString == 'STORE'">
-          SELECT LPAD( NVL(MAX(GIFT_CD), 0) + 1, 4, '0') AS GIFT_CD
+          SELECT LPAD( NVL(MAX(GIFT_CD), 7999) + 1, 4, '0') AS GIFT_CD
             FROM TB_MS_GIFT
            WHERE STORE_CD = #{storeCd}
+             AND GIFT_CD > 7999
         </if>
     </select>
 
@@ -556,7 +558,7 @@
     <update id="deleteStoreGift" parameterType="DefaultMap">
         /* USE : GiftMapper.deleteStoreGift */
         UPDATE TB_MS_GIFT
-           SET USE_YN = #{useYn, jdbcType=VARCHAR},
+           SET USE_YN = 'N',
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
