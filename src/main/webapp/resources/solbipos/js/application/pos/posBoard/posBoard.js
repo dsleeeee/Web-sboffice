@@ -64,7 +64,6 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
             var ht = s.hitTest(e);
             if( ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
-
                 // 제목 클릭시 상세정보 조회
                 if ( col.binding === "title") {
                     $scope.setSelectedStore(s.rows[ht.row].dataItem);
@@ -85,6 +84,28 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     $scope.searchPosBoard = function(){
+        var params = {};
+        params.listScale = 10;
+        params.boardCd = "01";
+
+        $scope._inquiryMain("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
+            // 공지팝업 여부(미열람 공지사항 띄움)
+            if(noticePopupYn == "Y") {
+                $scope.$apply(function() {
+                    var scope = agrid.getScope('posBoardPopupCtrl');
+                    scope._gridDataInit();
+                    scope._broadcast('posBoardPopupCtrl', params);
+                });
+            }
+        }, false);
+    };
+
+    $scope.$on("posBoardListCtrl", function(event, data) {
+        $scope.searchPosBoardList();
+        event.preventDefault();
+    });
+
+    $scope.searchPosBoardList = function(){
         var params = {};
         params.listScale = 10;
         params.boardCd = "01";
@@ -112,5 +133,58 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
             }, 50)
         });
     });
+
+    // 공지팝업 여부(미열람 공지사항 띄움)
+    $scope.posBoardPopupOpen = function(params){
+        $scope.setSelectedStore(params);
+        $scope.wjPosBoardDetailLayer.show(true);
+        event.preventDefault();
+    };
+
+}]);
+
+
+/**
+ *  게시판관리 그리드 생성 - 공지팝업 여부(미열람 공지사항 띄움)
+ */
+app.controller('posBoardPopupCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('posBoardPopupCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.targetFgDataMap = new wijmo.grid.DataMap(targetFgData, 'value', 'name'); //공개대상
+        $scope.apprFgDataMap = new wijmo.grid.DataMap(apprFgData, 'value', 'name'); //승인여부
+    };
+
+    // <-- 검색 호출 -->
+    $scope.$on("posBoardPopupCtrl", function(event, data) {
+        $scope.searchPosBoardPopup(data);
+        event.preventDefault();
+    });
+
+    $scope.searchPosBoardPopup = function(data){
+        var params = {};
+        params.listScale = data.listScale;
+        params.boardCd = data.boardCd;
+        params.gubunReadCombo = "N";
+
+        $scope._inquiryMain("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
+            if($scope.flex.rows.length > 0) {
+                var selectedRow = $scope.flex.selectedRows[0]._data;
+
+                var params = {};
+                params.boardCd = selectedRow.boardCd;
+                params.boardSeqNo = selectedRow.boardSeqNo;
+
+                // 공지팝업 여부(미열람 공지사항 띄움)
+                var scope = agrid.getScope('posBoardCtrl');
+                scope.posBoardPopupOpen(params);
+            }
+        }, false);
+    };
+    // <-- //검색 호출 -->
 
 }]);

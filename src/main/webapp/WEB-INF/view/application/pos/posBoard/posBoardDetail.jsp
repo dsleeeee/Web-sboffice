@@ -63,14 +63,14 @@
                     </th>
                     <td colspan="3">
                         <div class="sb-select">
-                                <span class="chk ml10">
-                                    <input type="checkbox" id="noticeYnPosBoardDetail" name="noticeYnChk" ng-model="posBoardDetail.noticeYn" disabled="true" >
-                                    <label for="noticeYnPosBoardDetail"><s:message code='posBoardDetail.noticeYn' /></label>
-                                </span>
                             <span class="chk ml10">
-                                    <input type="checkbox" id="smsYnPosBoardDetail" name="smsYnChk" ng-model="posBoardDetail.smsYn" disabled="true" >
-                                    <label for="smsYnPosBoardDetail"><s:message code='posBoardDetail.smsYn' /></label>
-                                </span>
+                                <input type="checkbox" id="noticeYnPosBoardDetail" name="noticeYnChk" ng-model="posBoardDetail.noticeYn" disabled="true" >
+                                <label for="noticeYnPosBoardDetail"><s:message code='posBoardDetail.noticeYn' /></label>
+                            </span>
+                            <span class="chk ml10" style="display: none;">
+                                <input type="checkbox" id="smsYnPosBoardDetail" name="smsYnChk" ng-model="posBoardDetail.smsYn" disabled="true" >
+                                <label for="smsYnPosBoardDetail"><s:message code='posBoardDetail.smsYn' /></label>
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -142,4 +142,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoardDetail.js?ver=20210331.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoardDetail.js?ver=20210331.02" charset="utf-8"></script>

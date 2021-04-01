@@ -96,6 +96,19 @@ public class PosBoardController {
     }
 
     /**
+     * 공지사항 메뉴 사용 권한 에러
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "boardMenuAuth.sb", method = RequestMethod.GET)
+    public String boardMenuAuthView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        return "application/pos/posBoard/boardMenuAuth";
+    }
+
+    /**
      * TODO
      * POS 화면에서 띄우는건 메뉴등이 필요없기때문에 tiles 에 예외등록해두고 우선은 해당 컨트롤러에서 STORE_CD 와 HW_AUTH_KEY 로 인증체크 후 세션을 맺도록 함.
      * POS 화면 웹 로그인
@@ -126,13 +139,22 @@ public class PosBoardController {
             returnUrl = "application/pos/posBoard/"+request.getParameter("url");
 
 
+            LOGGER.info("posLogin userId : {} , readYn : {} , noticePopupYn : {}", request.getParameter("userId"), request.getParameter("readYn"), request.getParameter("noticePopupYn"));
+
             /** 포스에서 받아올 값 */
             // PosBoardVO posBoardVO = new PosBoardVO();
             // posBoardVO.setReadYn(readYn);
             // 열람구분(포스에서 받는 수신여부)
             String readYn = request.getParameter("readYn");
             model.addAttribute("readYn", readYn);
+            // 공지팝업 여부(미열람 공지사항 띄움)
+            String noticePopupYn = request.getParameter("noticePopupYn");
+            model.addAttribute("noticePopupYn", noticePopupYn);
 
+            /** userId 체크 */
+            if(isEmpty(request.getParameter("userId"))) {
+                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
+            }
 
             /** 공지사항 페이지이동 권한체크 */
             SessionInfoVO sessionInfoVO_check = sessionService.getSessionInfo(request);
@@ -152,9 +174,9 @@ public class PosBoardController {
                     }
                 }
             }
-            model.addAttribute("board_auth", board_auth);
+//            model.addAttribute("board_auth", board_auth);
             if(board_auth == "N") {
-                throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");
+                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
             }
         }
         else {

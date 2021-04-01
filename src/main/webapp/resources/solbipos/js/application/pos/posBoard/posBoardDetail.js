@@ -135,10 +135,10 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
                     innerHtml += "<tr style=\"height: 10px;\">";
                     innerHtml += "<th>" + list[i].userNm +" | " + list[i].modDt + " </th>";
                     // 본인이 쓴 글만 수정/삭제 가능
-                    if(userId == list[i].regId){
+                    if(userId == list[i].regId) {
                         innerHtml += "<th><a href=\"#\" style=\"font-size: 12px; color: black;\" onclick=\"viewAnswerArea(\'"+ list[i].idx + "\', \'open\');\">수정</a> | ";
                         innerHtml += "<a href=\"#\" style=\"font-size: 12px; color: black;\" onclick=\"viewDelAnswer(\'" + list[i].idx + "\')\">삭제</a></th>";
-                    }else{
+                    } else {
                         innerHtml += "<th></th>";
                     }
                     innerHtml += "</tr>";
@@ -270,7 +270,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
         $scope.content = "";
 
         // 게시판 목록 재조회(댓글 변동에 따른 리스트 제목 옆 댓글 갯수 알림을 위해)
-        $scope._broadcast('posBoardCtrl');
+        $scope._broadcast('posBoardListCtrl');
     };
 
     // 팝업 닫기
@@ -281,7 +281,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
         $scope.wjPosBoardDetailLayer.hide();
 
         // 재조회
-        $scope._broadcast('posBoardCtrl');
+        $scope._broadcast('posBoardListCtrl');
     };
 
 }]);

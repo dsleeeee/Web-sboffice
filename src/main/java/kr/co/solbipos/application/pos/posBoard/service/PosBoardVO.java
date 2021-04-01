@@ -115,6 +115,9 @@ public class PosBoardVO extends PageVO {
     /** 열람구분(포스에서 받는 수신여부) */
     private String readYn;
 
+    /** 공지팝업 여부(미열람 공지사항 띄움) */
+    private String noticePopupYn;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -251,5 +254,11 @@ public class PosBoardVO extends PageVO {
 
     public void setReadYn(String readYn) {
         this.readYn = readYn;
+    }
+
+    public String getNoticePopupYn() { return noticePopupYn; }
+
+    public void setNoticePopupYn(String noticePopupYn) {
+        this.noticePopupYn = noticePopupYn;
     }
 }

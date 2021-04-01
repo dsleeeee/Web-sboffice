@@ -11,5 +11,6 @@
     요청url : <input type="text" id="url" name="url" value="posBoard"/>
     <button type="submit" class="btn_skyblue">gogogogo</button>
 
-    수신여부 : <input type="text" id="readYn" name="readYn" value="Y"/>
+    열람구분(포스에서 받는 수신여부) : <input type="text" id="readYn" name="readYn" value="Y"/>
+    공지팝업 여부(미열람 공지사항 띄움) : <input type="text" id="noticePopupYn" name="noticePopupYn" value="Y"/>
 </f:form>

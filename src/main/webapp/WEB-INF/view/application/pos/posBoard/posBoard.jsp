@@ -19,7 +19,7 @@
                     <a href="#" class="open fl"><s:message code="posBoard.info"/></a>
                     <%-- 조회 --%>
                     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('posBoardCtrl')">
+                        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('posBoardListCtrl')">
                             <s:message code="cmm.search" />
                         </button>
                     </div>
@@ -123,6 +123,39 @@
                 </div>
                 <%--//페이지 리스트--%>
             </div>
+
+            <%-- 그리드 --%>
+            <div ng-controller="posBoardPopupCtrl" style="display: none;">
+                <div class="wj-gridWrap" style="height:260px; overflow-y: hidden; overflow-x: hidden;">
+                    <wj-flex-grid
+                            autoGenerateColumns="false"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="data"
+                            item-formatter="_itemFormatter"
+                            is-read-only="true">
+
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="posBoard.title"/>" binding="title" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.viewCnt"/>" binding="viewCnt" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.agencyNm"/>" binding="agencyNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.userNm"/>" binding="userNm" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.noticeDate"/>" binding="noticeDate" width="160" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.remark"/>" binding="remark" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+
+                        <%--팝업 조회시 필요--%>
+                        <wj-flex-grid-column header="<s:message code="posBoard.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.boardSeqNo"/>" binding="boardSeqNo" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.userId"/>" binding="userId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+
+                    </wj-flex-grid>
+                </div>
+            </div>
+
         </div>
     </div>
 </body>
@@ -130,8 +163,8 @@
 <script type="text/javascript">
     // 열람구분(포스에서 받는 수신여부)
     var readYn = "${readYn}";
-    // 공지사항 more 페이지 이동시 권한체크
-    <%--var board_auth = "${board_auth}";--%>
+    // 공지팝업 여부(미열람 공지사항 띄움)
+    var noticePopupYn = "${noticePopupYn}";
 
     <%-- 공개대상 --%>
     var targetFgData = ${ccu.getCommCodeExcpAll("106")};
@@ -139,7 +172,7 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210331.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210401.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업(포스용) --%>
 <c:import url="/WEB-INF/view/application/pos/posBoard/posBoardDetail.jsp">
