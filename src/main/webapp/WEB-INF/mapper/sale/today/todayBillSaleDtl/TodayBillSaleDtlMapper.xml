@@ -17,7 +17,8 @@
         ,       tssh.BILL_NO
         ,       tssh.SALE_YN
         ,       tmt.TBL_NM AS TBL_NM
-        ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
+--         ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
+        ,       SUBSTR(tssh.BILL_DT, 9, 2) || ':' || SUBSTR(tssh.BILL_DT, 11, 2) || ':' || SUBSTR(tssh.BILL_DT, 13, 2) AS BILL_DT
         ,       tssd.PROD_CD
         ,       tmpb.BARCD_CD
         ,       tmp.PROD_NM
