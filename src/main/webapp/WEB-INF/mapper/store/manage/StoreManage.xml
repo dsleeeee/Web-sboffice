@@ -1023,6 +1023,7 @@
         MERGE INTO TB_MS_COUPON A
         USING   (
                     SELECT  #{storeCd}          AS STORE_CD
+                    ,       'H'                 AS COUPN_DC_FG
                     ,       PAY_CLASS_CD
                     ,       COUPN_CD
                     ,       COUPN_NM
@@ -1043,6 +1044,7 @@
                     WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
                 ) B
         ON      (           A.STORE_CD          =   B.STORE_CD
+                AND         A.COUPN_DC_FG       =   B.COUPN_DC_FG
                 AND         A.PAY_CLASS_CD      =   B.PAY_CLASS_CD
                 AND         A.COUPN_CD          =   B.COUPN_CD
                 )
@@ -1064,6 +1066,7 @@
         INSERT
         (
                 A.STORE_CD
+        ,       A.COUPN_DC_FG
         ,       A.PAY_CLASS_CD
         ,       A.COUPN_CD
         ,       A.COUPN_NM
@@ -1084,6 +1087,7 @@
         VALUES
         (
                 B.STORE_CD
+        ,       B.COUPN_DC_FG
         ,       B.PAY_CLASS_CD
         ,       B.COUPN_CD
         ,       B.COUPN_NM
