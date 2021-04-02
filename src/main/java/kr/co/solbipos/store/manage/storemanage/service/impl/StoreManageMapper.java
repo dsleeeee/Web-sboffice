@@ -102,6 +102,15 @@ public interface StoreManageMapper {
     /** 회원 기본등급 등록 */
     int insertMemberClass(MemberClassVO memberClassVO);
 
+    /** 결제수단분류 생성 */
+    int insertTbMsPayMethodClass(StoreManageVO storeManageVO);
+
+    /** 상품권 생성 */
+    int insertTbMsGift(StoreManageVO storeManageVO);
+
+    /** 쿠폰 생성 */
+    int insertTbMsCoupon(StoreManageVO storeManageVO);
+
     /** 테이블 기본 그룹 생성 */
     int insertTabGroup(TableGroupVO tableGroupVO);
 
