@@ -37,7 +37,7 @@
                 <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
                 <span class="goodsYes" id="goodsYes"><img id="imgProdImage" /></span>
                 <%--첨부파일--%>
-                <input type="file" id="file" name="file" accept="image/x-png, image/jpeg" onchange="angular.element(this).scope().changeProdImage(this)"/>
+                <input type="file" id="file" name="file" accept="image/x-png, .jpg" onchange="angular.element(this).scope().changeProdImage(this)"/>
                 <%--삭제--%>
                 <a id="btnDelProdImage" href="#" class="btn_grayS mt5 fr" ng-click="delProdImage()"><s:message code="cmm.delete" /></a>
               </td>
