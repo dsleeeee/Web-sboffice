@@ -516,6 +516,9 @@
 
     <!-- POS 화면 웹사용 - 간편 회원 가입 -->
     <typeAlias alias="memberVO" type="kr.co.solbipos.application.pos.service.MemberVO"/>
+    <!-- POS 화면에서 게시판(포스용) -->
+    <typeAlias alias="posBoardVO" type="kr.co.solbipos.application.pos.posBoard.service.PosBoardVO"/>
+
     <!-- 수불 -->
     <typeAlias alias="storeLoanManageVO" type="kr.co.solbipos.iostock.loan.storeLoanManage.service.StoreLoanManageVO"/>
     <typeAlias alias="storeLoanInfoVO" type="kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO"/>

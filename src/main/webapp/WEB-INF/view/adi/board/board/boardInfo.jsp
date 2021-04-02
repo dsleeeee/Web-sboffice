@@ -2,9 +2,10 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="userNm" value="${sessionScope.sessionInfo.userNm}" />
 
-<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:980px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:800px;" fade-in="false" fade-out="false">
     <div ng-controller="boardInfoCtrl">
 
         <%-- header --%>
@@ -15,7 +16,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="height: 940px;">
+        <div class="wj-dialog-body sc2" style="height:750px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
@@ -63,7 +64,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr ng-if="orgnFg == 'H'">
                         <%-- 공개대상 --%>
                         <th>
                             <s:message code="boardInfo.targetFg"/>
@@ -107,7 +108,7 @@
                                     <input type="checkbox" id="noticeYn" name="noticeYnChk" ng-model="noticeYn" >
                                     <label for="noticeYn"><s:message code='boardInfo.noticeYn' /></label>
                                </span>
-                                <span class="chk ml10">
+                                <span class="chk ml10" style="display: none;">
                                     <input type="checkbox" id="smsYn" name="smsYnChk" ng-model="smsYn" >
                                     <label for="smsYn"><s:message code='boardInfo.smsYn' /></label>
                                 </span>
@@ -179,7 +180,7 @@
 
             <%-- 첨부파일 그리드 --%>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:150px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:100px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -229,7 +230,6 @@
         {"name":"반려","value":"3"}
     ];*/
 
-
     var userNm = "${userNm}";
 </script>
 
@@ -243,4 +243,4 @@
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200318.22" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210401.06" charset="utf-8"></script>
