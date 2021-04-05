@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="userNm" value="${sessionScope.sessionInfo.userNm}" />
 
@@ -64,39 +65,41 @@
                             </div>
                         </td>
                     </tr>
-                    <tr ng-if="orgnFg == 'H'">
-                        <%-- 공개대상 --%>
-                        <th>
-                            <s:message code="boardInfo.targetFg"/>
-                        </th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                    id="srchTargetFg"
-                                    ng-model="targetFg"
-                                    items-source="_getComboData('targetFg')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    initialized="_initComboBox(s)">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                        <td colspan="2">
-                            <div ng-if="targetFg == '2'">
-                                <%-- 매장선택 모듈 싱글 선택 사용시 include
-                                    param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                                 displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                                 modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                                 closeFunc - 팝업 닫기시 호출할 함수
-                                --%>
-                                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                                    <jsp:param name="targetId" value="boardInfoStore"/>
-                                </jsp:include>
-                                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-                            </div>
-                        </td>
-                    </tr>
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <tr>
+                            <%-- 공개대상 --%>
+                            <th>
+                                <s:message code="boardInfo.targetFg"/>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                        id="srchTargetFg"
+                                        ng-model="targetFg"
+                                        items-source="_getComboData('targetFg')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <td colspan="2">
+                                <div ng-if="targetFg == '2'">
+                                    <%-- 매장선택 모듈 싱글 선택 사용시 include
+                                        param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                                     displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                                     modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                                     closeFunc - 팝업 닫기시 호출할 함수
+                                    --%>
+                                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                                        <jsp:param name="targetId" value="boardInfoStore"/>
+                                    </jsp:include>
+                                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:if>
                     <tr>
                         <%-- 알림여부 --%>
                         <th>
