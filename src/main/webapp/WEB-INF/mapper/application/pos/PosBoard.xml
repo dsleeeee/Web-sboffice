@@ -19,105 +19,99 @@
     <select id="getPosBoardList"  parameterType="PosBoardVO" resultType="DefaultMap">
         /* PosBoardMapper.getPosBoardList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        twbi.BOARD_CD,
-        twbi.BOARD_SEQ_NO,
-        twbi.TITLE || ' [' || twbi.ANSWER_CNT || ']' AS TITLE,
-        twbi.VIEW_CNT,
-        twbi.TARGET_FG,
-        twbi.APPR_FG,
-        twuidv01.ORGN_FG,
-        twuidv01.ORGN_NM  AS AGENCY_NM,
-        twbi.USER_ID,
-        twbi.USER_NM,
-        (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE,
-        twbi.REMARK,
-        twbrh.VIEW_CNT_YN
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_WB_BOARD_INFO twbi,
-        TB_WB_USER_INFO_DTL_V01 twuidv01,
+        SELECT *
+        FROM
         (
             SELECT
-            BOARD_CD,
-            BOARD_SEQ_NO,
-            USER_ID,
-            COUNT(IDX) AS VIEW_CNT_YN
-            FROM TB_WB_BOARD_READNG_HIST
+            twbi.BOARD_CD,
+            twbi.BOARD_SEQ_NO,
+            twbi.TITLE || ' [' || twbi.ANSWER_CNT || ']' AS TITLE,
+            twbi.VIEW_CNT,
+            twbi.TARGET_FG,
+            twbi.APPR_FG,
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_NM  AS AGENCY_NM,
+            twbi.USER_ID,
+            twbi.USER_NM,
+            (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE,
+            twbi.REMARK,
+            DECODE(twbrh.VIEW_YN, null, 'N', 'Y') AS VIEW_YN
+            <include refid="CmmSQL.PagingTemplateCount"/>
+            FROM TB_WB_BOARD_INFO twbi,
+            TB_WB_USER_INFO_DTL_V01 twuidv01,
+            (
+                SELECT
+                BOARD_CD,
+                BOARD_SEQ_NO,
+                USER_ID,
+                COUNT(IDX) AS VIEW_YN
+                FROM TB_WB_BOARD_READNG_HIST
+                WHERE 1=1
+                AND BOARD_CD = #{boardCd}
+                AND USER_ID = #{userId}
+                GROUP BY BOARD_CD, BOARD_SEQ_NO, USER_ID
+            ) twbrh
             WHERE 1=1
-            AND BOARD_CD = #{boardCd}
-            AND USER_ID = #{userId}
-            GROUP BY BOARD_CD, BOARD_SEQ_NO, USER_ID
-        ) twbrh
+            AND twbi.BOARD_CD = #{boardCd}
+            AND twbi.USE_YN = 'Y'
+            AND twbi.APPR_FG = '2'
+            AND (
+                    (
+                        twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND (
+                                ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
+                                OR (twbi.TARGET_FG = '1')
+                            )
+                    )
+                    OR
+                    (
+                        twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
+                    )
+                )
+            <![CDATA[
+                AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+            <choose>
+                <when test='gubunCombo != null'>
+                    <!-- 제목 -->
+                    <if test='gubunCombo == "1"'>
+                        <![CDATA[
+                            AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
+                        ]]>
+                    </if>
+                    <!-- 내용 -->
+                    <if test='gubunCombo == "2"'>
+                        <![CDATA[
+                            AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
+                        ]]>
+                    </if>
+                    <!-- 제목 + 내용 -->
+                    <if test='gubunCombo == "3"'>
+                        <![CDATA[
+                            AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
+                            AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
+                        ]]>
+                    </if>
+                    <!-- 작성자 -->
+                    <if test='gubunCombo == "4"'>
+                        <![CDATA[
+                            AND twuidv01.USER_NM LIKE '%'||#{gubunName}||'%'
+                        ]]>
+                    </if>
+                </when>
+            </choose>
+            AND twuidv01.USER_ID (+)= twbi.USER_ID
+            AND twbrh.BOARD_CD (+)= twbi.BOARD_CD
+            AND twbrh.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
+            ORDER BY twbi.MOD_DT DESC
+        )
         WHERE 1=1
-        AND twbi.BOARD_CD = #{boardCd}
-        AND twbi.USE_YN = 'Y'
-        AND twbi.APPR_FG = '2'
-        AND (
-                (
-                    twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND (
-                            ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
-                            OR (twbi.TARGET_FG = '1')
-                        )
-                )
-                OR
-                (
-                    twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
-                )
-            )
-        <![CDATA[
-            AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ]]>
-        <choose>
-            <when test='gubunCombo != null'>
-                <!-- 제목 -->
-                <if test='gubunCombo == "1"'>
-                    <![CDATA[
-                        AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
-                    ]]>
-                </if>
-                <!-- 내용 -->
-                <if test='gubunCombo == "2"'>
-                    <![CDATA[
-                        AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
-                    ]]>
-                </if>
-                <!-- 제목 + 내용 -->
-                <if test='gubunCombo == "3"'>
-                    <![CDATA[
-                        AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
-                        AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
-                    ]]>
-                </if>
-                <!-- 작성자 -->
-                <if test='gubunCombo == "4"'>
-                    <![CDATA[
-                        AND twuidv01.USER_NM LIKE '%'||#{gubunName}||'%'
-                    ]]>
-                </if>
-            </when>
-        </choose>
-        <choose>
-            <when test='gubunReadCombo != null'>
-                <!-- 미열람 -->
-                <if test='gubunReadCombo == "N"'>
-                    <![CDATA[
-                        AND twbrh.VIEW_CNT_YN IS NULL
-                    ]]>
-                </if>
-                <!-- 열람 -->
-                <if test='gubunReadCombo == "Y"'>
-                    <![CDATA[
-                         AND twbrh.VIEW_CNT_YN IS NOT NULL
-                    ]]>
-                </if>
-            </when>
-        </choose>
-        AND twuidv01.USER_ID (+)= twbi.USER_ID
-        AND twbrh.BOARD_CD (+)= twbi.BOARD_CD
-        AND twbrh.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
-        ORDER BY twbi.MOD_DT DESC
+        <if test='gubunReadCombo != null'>
+            <![CDATA[
+                AND VIEW_YN = #{gubunReadCombo}
+            ]]>
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

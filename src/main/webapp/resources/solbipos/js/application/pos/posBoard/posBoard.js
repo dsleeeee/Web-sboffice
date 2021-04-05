@@ -43,8 +43,9 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
-        $scope.targetFgDataMap = new wijmo.grid.DataMap(targetFgData, 'value', 'name'); //공개대상
-        $scope.apprFgDataMap = new wijmo.grid.DataMap(apprFgData, 'value', 'name'); //승인여부
+        $scope.viewYnDataMap = new wijmo.grid.DataMap(gubunReadComboData, 'value', 'name'); // 열람구분
+        $scope.targetFgDataMap = new wijmo.grid.DataMap(targetFgData, 'value', 'name'); // 공개대상
+        $scope.apprFgDataMap = new wijmo.grid.DataMap(apprFgData, 'value', 'name'); // 승인여부
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -155,8 +156,9 @@ app.controller('posBoardPopupCtrl', ['$scope', '$http', function ($scope, $http)
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
-        $scope.targetFgDataMap = new wijmo.grid.DataMap(targetFgData, 'value', 'name'); //공개대상
-        $scope.apprFgDataMap = new wijmo.grid.DataMap(apprFgData, 'value', 'name'); //승인여부
+        $scope.viewYnDataMap = new wijmo.grid.DataMap(gubunReadComboData, 'value', 'name'); // 열람구분
+        $scope.targetFgDataMap = new wijmo.grid.DataMap(targetFgData, 'value', 'name'); // 공개대상
+        $scope.apprFgDataMap = new wijmo.grid.DataMap(apprFgData, 'value', 'name'); // 승인여부
     };
 
     // <-- 검색 호출 -->

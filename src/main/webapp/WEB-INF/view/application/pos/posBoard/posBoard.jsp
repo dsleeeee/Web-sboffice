@@ -50,13 +50,13 @@
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
-                        </td>
+                         </td>
                          <td>
                              <input type="text" class="sb-input w100" id="srchGubunName" ng-model="gubunName" />
                          </td>
                          <%--열람구분 --%>
                         <th>
-                            <s:message code="posBoard.srchReadGubun" />
+                            <s:message code="posBoard.srchGubunRead" />
                         </th>
                         <td>
                             <div class="sb-select">
@@ -99,6 +99,7 @@
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="posBoard.title"/>" binding="title" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="posBoard.viewCnt"/>" binding="viewCnt" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="posBoard.viewYn"/>" binding="viewYn" data-map="viewYnDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                             <%-- 공개대상 현재 웹에선 매장일때 히든 --%>
                             <wj-flex-grid-column header="<s:message code="posBoard.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="65" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="posBoard.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -141,6 +142,7 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="posBoard.title"/>" binding="title" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posBoard.viewCnt"/>" binding="viewCnt" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="posBoard.viewYn"/>" binding="viewYn" data-map="viewYnDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                         <%-- 공개대상 현재 웹에선 매장일때 히든 --%>
                         <wj-flex-grid-column header="<s:message code="posBoard.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="65" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posBoard.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -174,7 +176,7 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210401.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210405.03" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업(포스용) --%>
 <c:import url="/WEB-INF/view/application/pos/posBoard/posBoardDetail.jsp">
