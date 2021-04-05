@@ -6,101 +6,167 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayDtl/todayDtl/"/>
 
-<div id="todayDtlView" class="subCon" style="display: none;" ng-controller="todayDtlCtrl">
-    <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="todayDtl.todaySaleDtl"/></a>
-      <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayDtlCtrl')">
-        <s:message code="cmm.search"/>
-      </button>
-    </div>
-    <table class="searchTbl">
-      <colgroup>
-        <col class="w25"/>
-        <col class="w75"/>
-      </colgroup>
-      <tbody>
-      <tr>
-        <%-- 조회일자 --%>
-        <th><s:message code="cmm.search.date"/></th>
-        <td>
-          <div class="sb-select">
-            <span class="txtIn"><input id="srchTodayDtlStartDate" class="w120px"></span>
-          </div>
-        </td>
-      </tr>
-      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+<div class="subCon">
+  <div id="todayDtlView" style="display: none;" ng-controller="todayDtlCtrl">
+      <div class="searchBar flddUnfld">
+        <a href="#" class="open fl"><s:message code="todayDtl.todaySaleDtl"/></a>
+        <%-- 조회 --%>
+        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayDtlCtrl')">
+          <s:message code="cmm.search"/>
+        </button>
+      </div>
+      <table class="searchTbl">
+        <colgroup>
+          <col class="w25"/>
+          <col class="w75"/>
+        </colgroup>
+        <tbody>
         <tr>
-            <%-- 매장코드 --%>
-          <th><s:message code="todayDtl.store"/></th>
+          <%-- 조회일자 --%>
+          <th><s:message code="cmm.search.date"/></th>
           <td>
-              <%-- 매장선택 모듈 싱글 선택 사용시 include
-                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                closeFunc - 팝업 닫기시 호출할 함수
-              --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
-              <jsp:param name="targetId" value="todayDtlSelectStore"/>
-              <jsp:param name="closeFunc" value="getStorePosList"/>
-            </jsp:include>
-              <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+            <div class="sb-select">
+              <span class="txtIn"><input id="srchTodayDtlStartDate" class="w120px"></span>
+            </div>
           </td>
         </tr>
-      </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-        <input type="hidden" id="todayDtlSelectStoreCd" value="${sessionInfo.storeCd}"/>
-      </c:if>
-      <tr>
-        <%-- 포스번호 --%>
-        <th><s:message code="todayDtl.dtl.posNo"/></th>
-        <td>
-          <span class="txtIn w150px sb-select fl mr5">
-            <wj-combo-box
-              id="srchPosNo"
-              ng-model="posNo"
-              items-source="_getComboData('srchPosNo')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
-          </span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+          <tr>
+              <%-- 매장코드 --%>
+            <th><s:message code="todayDtl.store"/></th>
+            <td>
+                <%-- 매장선택 모듈 싱글 선택 사용시 include
+                     param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                  displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                  modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                  closeFunc - 팝업 닫기시 호출할 함수
+                --%>
+              <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+                <jsp:param name="targetId" value="todayDtlSelectStore"/>
+                <jsp:param name="closeFunc" value="getStorePosList"/>
+              </jsp:include>
+                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+            </td>
+          </tr>
+        </c:if>
+        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+          <input type="hidden" id="todayDtlSelectStoreCd" value="${sessionInfo.storeCd}"/>
+        </c:if>
+        <tr>
+          <%-- 포스번호 --%>
+          <th><s:message code="todayDtl.dtl.posNo"/></th>
+          <td>
+            <span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="srchPosNo"
+                ng-model="posNo"
+                items-source="_getComboData('srchPosNo')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
 
-    <div class="wj-TblWrap mt10" style="height: 250px;">
+      <div class="wj-TblWrap mt10" style="height: 190px;">
+        <div class="w100 mt10">
+          <div class="oh sb-select mb10">
+            <%-- 매출 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSale()"><s:message code="cmm.excel.down"/></button>
+          </div>
+          <div class="wj-TblWrapBr">
+            <%--위즈모 테이블--%>
+            <div class="wj-gridWrap" style="height: 140px; overflow-x: hidden; overflow-y: hidden;">
+              <wj-flex-grid
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="flex"
+                initialized="initGrid(s,e)"
+                is-read-only="true"
+                item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="todayDtl.saleYn"/>" binding="saleYn" width="60" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.gaAmt"/>" binding="gaAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.vatAmt"/>" binding="vatAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.totTipAmt"/>" binding="totTipAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.totEtcAmt"/>" binding="totEtcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.billCnt"/>" binding="billCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.billUprc"/>" binding="billUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <%-- 결제수단 컬럼 생성--%>
+                <c:forEach var="payCol" items="${payColList}">
+                  <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                </c:forEach>
+                <%-- 할인 컬럼 생성--%>
+                <c:forEach var="dcCol" items="${dcColList}">
+                  <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                </c:forEach>
+                <wj-flex-grid-column header="<s:message code="todayDtl.totGuestCnt"/>" binding="totGuestCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <%-- 객수 컬럼 생성--%>
+                <c:forEach var="guestCol" items="${guestColList}">
+                  <wj-flex-grid-column header="${guestCol.guestNm}" binding="guest${guestCol.guestCd}" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                </c:forEach>
+                <wj-flex-grid-column header="<s:message code="todayDtl.guestUprc"/>" binding="guestUprc" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+              </wj-flex-grid>
+              <%-- ColumnPicker 사용시 include --%>
+              <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                <jsp:param name="pickerTarget" value="todayDtlCtrl"/>
+              </jsp:include>
+              <%--// ColumnPicker 사용시 include --%>
+            </div>
+            <%--//위즈모 테이블--%>
+          </div>
+        </div>
+        <div style="clear: both"></div>
+      </div>
+  </div>
+
+  <div id="todayDtlView2" style="display: none;" ng-controller="todayDtlDetailCtrl">
+    <div class="wj-TblWrap mt10" style="height: 370px;">
       <div class="w100 mt10">
         <div class="oh sb-select mb10">
           <%-- 매출 엑셀다운로드 --%>
-          <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSale()"><s:message code="cmm.excel.down"/></button>
+          <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSaleDtl()"><s:message code="cmm.excel.down"/></button>
         </div>
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 200px; overflow-x: hidden; overflow-y: hidden;">
+          <div class="wj-gridWrap" style="height: 320px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
-              autoGenerateColumns="false"
-              selection-mode="Row"
-              items-source="data"
-              control="flex"
-              initialized="initGrid(s,e)"
-              is-read-only="true"
-              item-formatter="_itemFormatter">
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    items-source="data"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    is-read-only="true"
+                    item-formatter="_itemFormatter">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="todayDtl.saleYn"/>" binding="saleYn" width="60" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.gaAmt"/>" binding="gaAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.vatAmt"/>" binding="vatAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.totTipAmt"/>" binding="totTipAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.totEtcAmt"/>" binding="totEtcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.billCnt"/>" binding="billCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.billUprc"/>" binding="billUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+              <%--<wj-flex-grid-column header="<s:message code="todayDtl.dtl.billDt"/>" binding="billDt" width="80" align="center" is-read-only="true" format="time"></wj-flex-grid-column>--%>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.billDt"/>" binding="billDt" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.saleYn"/>" binding="saleYn" width="50" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.realSaleAmt"/>" binding="realSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.gaAmt"/>" binding="gaAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.vatAmt"/>" binding="vatAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totTipAmt"/>" binding="totTipAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totEtcAmt"/>" binding="totEtcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.membrNo"/>" binding="membrNo" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.membrNm"/>" binding="membrNm" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.tblNm"/>" binding="tblNm" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <%-- 결제수단 컬럼 생성--%>
               <c:forEach var="payCol" items="${payColList}">
                 <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -109,92 +175,23 @@
               <c:forEach var="dcCol" items="${dcColList}">
                 <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               </c:forEach>
-
-              <wj-flex-grid-column header="<s:message code="todayDtl.totGuestCnt"/>" binding="totGuestCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
+              <%--<wj-flex-grid-column header="<s:message code="todayDtl.dtl.firstOrderDt"/>" binding="firstOrderDt" width="100" align="center" is-read-only="true" format="time"></wj-flex-grid-column>--%>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totGuestCnt"/>" binding="totGuestCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <%-- 객수 컬럼 생성--%>
               <c:forEach var="guestCol" items="${guestColList}">
                 <wj-flex-grid-column header="${guestCol.guestNm}" binding="guest${guestCol.guestCd}" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               </c:forEach>
-
-              <wj-flex-grid-column header="<s:message code="todayDtl.guestUprc"/>" binding="guestUprc" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.guestUprc"/>" binding="guestUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-              <jsp:param name="pickerTarget" value="todayDtlCtrl"/>
+              <jsp:param name="pickerTarget" value="todayDtlDetailCtrl"/>
             </jsp:include>
             <%--// ColumnPicker 사용시 include --%>
           </div>
           <%--//위즈모 테이블--%>
         </div>
-      </div>
-      <div style="clear: both"></div>
-    </div>
-</div>
-<div id="todayDtlView2" class="subCon" style="display: none;" ng-controller="todayDtlDetailCtrl">
-  <div class="wj-TblWrap mt10" style="height: 250px;">
-    <div class="w100 mt10">
-      <div class="oh sb-select mb10">
-        <%-- 매출 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSaleDtl()"><s:message code="cmm.excel.down"/></button>
-      </div>
-      <div class="wj-TblWrapBr">
-        <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 200px; overflow-x: hidden; overflow-y: hidden;">
-          <wj-flex-grid
-                  autoGenerateColumns="false"
-                  selection-mode="Row"
-                  items-source="data"
-                  control="flex"
-                  initialized="initGrid(s,e)"
-                  is-read-only="true"
-                  item-formatter="_itemFormatter">
-
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <%--<wj-flex-grid-column header="<s:message code="todayDtl.dtl.billDt"/>" binding="billDt" width="80" align="center" is-read-only="true" format="time"></wj-flex-grid-column>--%>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.billDt"/>" binding="billDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.saleYn"/>" binding="saleYn" width="50" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.realSaleAmt"/>" binding="realSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.gaAmt"/>" binding="gaAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.vatAmt"/>" binding="vatAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totTipAmt"/>" binding="totTipAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totEtcAmt"/>" binding="totEtcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.membrNo"/>" binding="membrNo" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.membrNm"/>" binding="membrNm" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.tblNm"/>" binding="tblNm" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <%-- 결제수단 컬럼 생성--%>
-            <c:forEach var="payCol" items="${payColList}">
-              <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            </c:forEach>
-            <%-- 할인 컬럼 생성--%>
-            <c:forEach var="dcCol" items="${dcColList}">
-              <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            </c:forEach>
-
-            <%--<wj-flex-grid-column header="<s:message code="todayDtl.dtl.firstOrderDt"/>" binding="firstOrderDt" width="100" align="center" is-read-only="true" format="time"></wj-flex-grid-column>--%>
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totGuestCnt"/>" binding="totGuestCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
-            <%-- 객수 컬럼 생성--%>
-            <c:forEach var="guestCol" items="${guestColList}">
-              <wj-flex-grid-column header="${guestCol.guestNm}" binding="guest${guestCol.guestCd}" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            </c:forEach>
-
-            <wj-flex-grid-column header="<s:message code="todayDtl.dtl.guestUprc"/>" binding="guestUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-
-          </wj-flex-grid>
-          <%-- ColumnPicker 사용시 include --%>
-          <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-            <jsp:param name="pickerTarget" value="todayDtlDetailCtrl"/>
-          </jsp:include>
-          <%--// ColumnPicker 사용시 include --%>
-        </div>
-        <%--//위즈모 테이블--%>
       </div>
     </div>
   </div>
@@ -226,6 +223,7 @@
   var arrDcCol    = dcCol.split(',');
   var arrGuestCol = guestCol.split(',');
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20190125.05" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
@@ -372,6 +370,3 @@
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 <%-- //할인 팝업 레이어 시작 --%>
-
-
-
