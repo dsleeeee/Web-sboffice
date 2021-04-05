@@ -21,6 +21,13 @@ var gubunComboData = [
     {"name":"작성자","value":"4"}
 ];
 
+// 열람구분
+var gubunReadComboData = [
+    {"name":"전체","value":""},
+    {"name":"미열람","value":"N"},
+    {"name":"열람","value":"Y"}
+];
+
 /**
  *  일반게시판 그리드 생성
  */
@@ -34,10 +41,12 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("gubunCombo", gubunComboData); // 조회구분
+    $scope._setComboData("gubunReadCombo", gubunReadComboData); // 열람구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
+        $scope.viewYnDataMap = new wijmo.grid.DataMap(gubunReadComboData, 'value', 'name'); // 열람구분
         $scope.targetFgDataMap = new wijmo.grid.DataMap(targetFgData, 'value', 'name'); //공개대상
         $scope.apprFgDataMap = new wijmo.grid.DataMap(apprFgData, 'value', 'name'); //승인여부
 

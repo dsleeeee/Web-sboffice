@@ -23,9 +23,10 @@
     <table class="searchTbl">
         <colgroup>
             <col class="w15" />
-            <col class="w35" />
+            <col class="w20" />
+            <col class="w20" />
             <col class="w15" />
-            <col class="w35" />
+            <col class="w30" />
         </colgroup>
         <tbody>
             <tr>
@@ -47,9 +48,25 @@
                     </div>
                 </td>
                 <td>
-                    <input type="text" class="sb-input w200" id="srchGubunName" ng-model="gubunName" />
+                    <input type="text" class="sb-input w100" id="srchGubunName" ng-model="gubunName" />
                 </td>
-                <td></td>
+                <%--열람구분 --%>
+                <th>
+                    <s:message code="board.srchGubunRead" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchGubunReadCombo"
+                                ng-model="gubunReadCombo"
+                                items-source="_getComboData('gubunReadCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -92,6 +109,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewCnt"/>" binding="viewCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.viewYn"/>" binding="viewYn" data-map="viewYnDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                 <c:if test="${orgnFg == 'HQ'}">
                     <wj-flex-grid-column header="<s:message code="board.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
@@ -138,7 +156,7 @@
     var boardCd = "${boardCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210401.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.02" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

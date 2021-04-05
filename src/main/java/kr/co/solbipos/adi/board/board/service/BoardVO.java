@@ -111,6 +111,9 @@ public class BoardVO extends PageVO {
     /** 비고 */
     private String remark;
 
+    /** 열람구분 */
+    private String gubunReadCombo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -234,4 +237,12 @@ public class BoardVO extends PageVO {
     public String getRemark() { return remark; }
 
     public void seRemark(String remark) { this.remark = remark; }
+
+    public String getGubunReadCombo() {
+        return gubunReadCombo;
+    }
+
+    public void setGubunReadCombo(String gubunReadCombo) {
+        this.gubunReadCombo = gubunReadCombo;
+    }
 }
