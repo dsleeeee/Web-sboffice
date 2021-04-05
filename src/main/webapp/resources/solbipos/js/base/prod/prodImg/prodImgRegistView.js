@@ -309,7 +309,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 이미지(.png) 확장자 체크
-        var reg = /(.*?)\.(png|PNG)$/;
+        var reg = /(.*?)\.(png|PNG|jpg|JPG)$/;
 
         if(! $("#" + element).val().match(reg)) {
            $scope._popMsg(messages["prodImg.fileExtensionChk.msg"]);

@@ -286,6 +286,16 @@ public class StoreManageServiceImpl implements StoreManageService{
                 procCnt += mapper.insertMemberClass(memberClassVO);
             }
 
+            // 프랜차이즈매장: 본사에 등록된 결제수단분류/쿠폰/상품권 생성
+            if(!storeManageVO.getHqOfficeCd().equals("00000")) {
+                //결제수단분류 생성
+                procCnt += mapper.insertTbMsPayMethodClass(storeManageVO);
+                //상품권 생성
+                procCnt += mapper.insertTbMsGift(storeManageVO);
+                //쿠폰 생성하지 않음
+                //procCnt += mapper.insertTbMsCoupon(storeManageVO);
+            }
+
             // 기본 테이블 그룹 생성
             TableGroupVO tableGroupVO = new TableGroupVO();
             tableGroupVO.setStoreCd(storeCd);

@@ -37,7 +37,7 @@
                 <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
                 <span class="goodsYes" id="goodsYes"><img id="imgProdImage" /></span>
                 <%--첨부파일--%>
-                <input type="file" id="file" name="file" accept="image/x-png" onchange="angular.element(this).scope().changeProdImage(this)"/>
+                <input type="file" id="file" name="file" accept="image/x-png, .jpg" onchange="angular.element(this).scope().changeProdImage(this)"/>
                 <%--삭제--%>
                 <a id="btnDelProdImage" href="#" class="btn_grayS mt5 fr" ng-click="delProdImage()"><s:message code="cmm.delete" /></a>
               </td>
@@ -636,7 +636,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20201224.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210405.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -170,7 +170,7 @@
             USER_PWD,
             AUTH_GRP_CD,
             LOGIN_FAIL_CNT,
-            LAST_PWD_CHG_DT,AUTH_GRP_CD
+            LAST_PWD_CHG_DT,
             USE_YN,
             REG_DT,
             REG_ID,

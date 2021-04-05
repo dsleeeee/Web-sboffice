@@ -820,27 +820,27 @@ public class ProdServiceImpl implements ProdService {
                 }
             }
 
-            // 선택한 파일이 없으면
-            if(fileList.size() == 0) {
-                // 삭제시
-                if(String.valueOf(prodInfo.getProdImageDelFg()).equals("DEL")) {
-                    // 상품 이미지 삭제시 파일명 가져오기
-                    String pathFull = prodMapper.getProdImageFileSaveImgFileNm(prodInfo);
+            // 선택한 파일이 없으면 // 크롬시 안먹음
+//            if(fileList.size() == 0) {
+            // 삭제시
+            if(String.valueOf(prodInfo.getProdImageDelFg()).equals("DEL")) {
+                // 상품 이미지 삭제시 파일명 가져오기
+                String pathFull = prodMapper.getProdImageFileSaveImgFileNm(prodInfo);
 
-                    // 상품 이미지 저장 delete
-                    if(prodMapper.getProdImageFileSaveDelete(prodInfo) > 0) {
-                        // 파일 삭제
+                // 상품 이미지 저장 delete
+                if(prodMapper.getProdImageFileSaveDelete(prodInfo) > 0) {
+                    // 파일 삭제
 //                        File delFile = new File("D:\\Workspace\\javaWeb\\testProdImg\\" + pathFull);
-                        File delFile = new File(BaseEnv.FILE_UPLOAD_DIR + pathFull);
-                        if(delFile.exists()) {
-                            delFile.delete();
-                        }
-                        isSuccess = true;
-                    } else {
-                        isSuccess = false;
+                    File delFile = new File(BaseEnv.FILE_UPLOAD_DIR + pathFull);
+                    if(delFile.exists()) {
+                        delFile.delete();
                     }
+                    isSuccess = true;
+                } else {
+                    isSuccess = false;
                 }
             }
+//            }
 
         }catch(Exception e){
 

@@ -92,7 +92,9 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewCnt"/>" binding="viewCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="board.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${orgnFg == 'HQ'}">
+                    <wj-flex-grid-column header="<s:message code="board.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="board.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.agencyNm"/>" binding="agencyNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.userNm"/>" binding="userNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -136,7 +138,7 @@
     var boardCd = "${boardCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20200317.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210401.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

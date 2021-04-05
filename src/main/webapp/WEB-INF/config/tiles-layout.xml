@@ -97,6 +97,12 @@
         <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     </definition>
 
+    <!-- POS 화면에서 게시판(포스용) -->
+    <definition name="application/pos/posBoard/*" extends="posEmptyLayout">
+        <put-attribute name="body" value="/WEB-INF/view/application/pos/posBoard/{1}.jsp"/>
+        <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
+    </definition>
+
     <!-- POS 화면용 웹 설정 끝 -->
 
     <!-- 에러화면 -->

@@ -215,11 +215,6 @@ public class GiftServiceImpl implements GiftService {
             giftVO.setModId(sessionInfoVO.getUserId());
             giftVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-            /*
-             * 상품권은 프랜차이즈의 경우 무조건 본사에서 등록
-             *          단독매장의 경우 무조건 매장에서 등록
-             */
-
             // 본사에서 접속시
             if(StringUtil.isEmpties(storeCd)) {
 
@@ -253,6 +248,7 @@ public class GiftServiceImpl implements GiftService {
 
                     // 매장 상품권 테이블에도 적용
                     procResult = giftMapper.deleteHqGiftToStoreGift(giftVO);
+                    System.out.println(procResult);
                 }
             }
             // 매장에서 접속시
