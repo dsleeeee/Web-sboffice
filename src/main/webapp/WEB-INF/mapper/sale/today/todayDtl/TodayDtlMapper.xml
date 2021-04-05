@@ -221,7 +221,8 @@
         <![CDATA[
         SELECT  tssh.POS_NO
         ,       tssh.BILL_NO
-        ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
+--         ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
+	    , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
         ,       tssh.SALE_YN
         ,       tssh.TOT_SALE_AMT
         ,       tssh.TOT_DC_AMT
