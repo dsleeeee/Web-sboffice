@@ -195,17 +195,16 @@ public class AuthController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         String rUrl = "redirect:/auth/login.sb";
 
-
-        if(sessionInfoVO.getLoginFg() != null){
-            if(sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())){
+        if(sessionInfoVO != null){
+            if(sessionInfoVO.getLoginFg() != null && sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())){
                 rUrl = "redirect:/mobile/auth/login.sb";
             }
-        }else{
-            if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
-                if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
-                    rUrl = "redirect:/mobile/auth/login.sb";
-                }
+        }else if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
+            if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
+                rUrl = "redirect:/mobile/auth/login.sb";
             }
+        }else if (request.getRequestURI().substring(0, 8).equals("/mobile/")){
+            rUrl = "redirect:/mobile/auth/login.sb";
         }
 
         // 로그아웃 처리

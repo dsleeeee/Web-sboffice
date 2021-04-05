@@ -53,7 +53,7 @@
   </div>
 
   <%-- 레이어 팝업 추가 --%>
-  <c:import url="/WEB-INF/view/application/layer/alert.jsp">
+  <c:import url="/WEB-INF/view/mobile/application/layer/alert.jsp">
   </c:import>
 
   <%-- 로딩 이미지 추가 --%>
@@ -65,9 +65,9 @@
   </c:import>
 
   <%-- 즐겨찾기관리 팝업 추가 --%>
-  <c:import url="/WEB-INF/view/application/layer/bkmk.jsp">
-  </c:import>
+  <%--<c:import url="/WEB-INF/view/application/layer/bkmk.jsp">
+  </c:import>--%>
 
-  <script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/body.js?ver=2018100401" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/body.js?ver=20210402.02" charset="utf-8"></script>
 
 </body>

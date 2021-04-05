@@ -58,14 +58,14 @@
     </definition>
     <!--   모바일 화면 전용 레이아웃 -->
 
-    <!-- 에러화면 -->
+    <!-- 모바일 에러화면 -->
     <definition name="mobile/error/*" extends="mLayout">
         <put-attribute name="view" value="Error"/>
         <put-attribute name="menu" cascade="true" value="/WEB-INF/view/mobile/layout/basic/menu.jsp"/>
         <put-attribute name="header" cascade="true" value="/WEB-INF/view/mobile/layout/basic/header.jsp"/>
         <put-attribute name="content" cascade="true" value="/WEB-INF/view/mobile/error/{1}.jsp"/>
     </definition>
-    <!-- 에러화면 -->
+    <!-- 모바일 에러화면 -->
 
     <!-- =================================== 모바일 관련 tiles END =================================== -->
 

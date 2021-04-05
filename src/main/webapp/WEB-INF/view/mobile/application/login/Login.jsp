@@ -44,47 +44,38 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     </div>
 
     <div class="idsave">
+      <button class="btn_login">
+        <s:message code="login.submit" />
+      </button>
       <span> <input type="checkbox" id="chk" name="chk" onclick="idSaveClick()"
         ${empty cid ? '' : 'checked="checked"' } />
         <label for="chk">
           <s:message code="login.rememberId" />
         </label>
       </span>
-      <button class="btn_login">
-        <s:message code="login.submit" />
-      </button>
-    </div>
-    <div class="idsave">
       <span> <input type="checkbox" id="chkLoginAuto" name="chkLoginAuto" onclick="loginAutoClick()"
         ${empty cLoginAuto ? '' : 'checked="checked"' } />
           <label for="chkLoginAuto">
             <s:message code="login.loginAuto" />
           </label>
-        </span>
+      </span>
     </div>
   </f:form>
 
   <div class="linkArea">
-    <span class="find"> <a href="/user/idFind.sb" class="fdId">
+    <span class="find">
+      <a href="/user/idFind.sb" class="fdId">
         <s:message code="login.find.id" />
-      </a> <a href="/user/pwdFind.sb" class="fdPw">
+      </a>
+      <a href="/user/pwdFind.sb" class="fdPw">
         <s:message code="login.find.pw" />
       </a>
     </span>
-    <a href="<%=mobile_url%>" class="btn_mobile_login">
-    <s:message code="mobile.login.submit" />
-    </a>
-    <a href="http://www.solbipos.com" target="_blank" class="distributor">
-      <s:message code="login.add.dist" />
-    </a>
-    <a href="http://www.solbipos.com" target="_blank" class="agency">
-      <s:message code="login.add.agency" />
-    </a>
   </div>
 
 </div>
 
-<c:import url="/WEB-INF/view/application/layer/alert.jsp">
+<c:import url="/WEB-INF/view/mobile/application/layer/alert.jsp">
 </c:import>
 
 <c:if test="${type == 'pwChg' || type == 'pwExpire'}">

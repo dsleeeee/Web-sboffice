@@ -7,6 +7,7 @@
 <c:set var="fixedMenuData" value="${sessionScope.sessionInfo.fixedMenuData}" />
 <c:set var="historyMenuSize" value="${fn:length(historyMenuData)}" />
 <c:set var="sessionId" value="${param.sid}" />
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}" />
 
 <%-- 사용자정보영역 --%>
 <div class="topBar">
@@ -15,10 +16,10 @@
       <span></span>
     </a>
   </div>
-  <div style="width:100%; height:100%; color:#FFFFFF; line-height:49px;">
+  <div class="userNm">
      <span>
        <em>[${sessionScope.sessionInfo.orgnCd}]</em>
-       <em>${sessionScope.sessionInfo.orgnNm}</em>
+       <em><label id="lblOrgnNm"></label></em>
      </span>
   </div>
   <div class="userInfo">
@@ -52,16 +53,16 @@
 
 
 <%--고정메뉴--%>
-<div class="fixedMenu">
+<%--<div class="fixedMenu">
 
-  <%--고정메뉴 없는경우--%>
+  &lt;%&ndash;고정메뉴 없는경우&ndash;%&gt;
   <p class="empty" style="display: none;">즐겨찾기에서 고정메뉴를 등록하여 편리하게 사용하세요!</p>
-  <%--//고정메뉴 없는경우--%>
+  &lt;%&ndash;//고정메뉴 없는경우&ndash;%&gt;
 
-  <%--고정메뉴 있는경우--%>
+  &lt;%&ndash;고정메뉴 있는경우&ndash;%&gt;
   <nav>
     <ul id="_fixMenu">
-      <%-- 즐겨찾기 메뉴 --%>
+      &lt;%&ndash; 즐겨찾기 메뉴 &ndash;%&gt;
       <c:forEach var="item" items="${fixedMenuData}" varStatus="status">
         <li id="${item.resrceCd}">
           <c:if test="${sessionId ne null}">
@@ -74,7 +75,7 @@
         </li>
       </c:forEach>
 
-      <%-- 히스토리 메뉴 --%>
+      &lt;%&ndash; 히스토리 메뉴 &ndash;%&gt;
       <c:forEach var="item" items="${historyMenuData}" varStatus="status">
         <li id="${item.resrceCd}">
           <c:if test="${sessionId ne null}">
@@ -94,15 +95,27 @@
     </div>
 
   </nav>
-  <%--고정메뉴 있는경우--%>
+  &lt;%&ndash;고정메뉴 있는경우&ndash;%&gt;
 
-  <%-- 비밀번호 변경 레이어 팝업 가져오기 --%>
+  &lt;%&ndash; 비밀번호 변경 레이어 팝업 가져오기 &ndash;%&gt;
   <c:import url="/WEB-INF/view/application/layer/pwChgPop.jsp">
     <c:param name="type" value="user" />
   </c:import>
   
-</div>
+</div>--%>
 <%--//고정메뉴--%>
 
 <script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/header.js?ver=2018100401" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var str = "${orgnNm}";
+    var length = 13; // 표시할 글자수 기준
+
+    if (str.length > length) {
+      str = str.substr(0, length-2) + '...';
+    }
+    $("#lblOrgnNm").text(str);
+  });
+</script>
