@@ -75,10 +75,16 @@ public class ErrorController {
 
         //
         ROOT_PATH = "";
-        if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
+        if(sessionInfoVO != null){
+            if(sessionInfoVO.getLoginFg() != null && sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())){
+                ROOT_PATH = "mobile/";
+            }
+        }else if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
             if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
                 ROOT_PATH = "mobile/";
-            };
+            }
+        }else if (request.getRequestURI().substring(0, 8).equals("/mobile/")){
+            ROOT_PATH = "mobile/";
         }
 
     }

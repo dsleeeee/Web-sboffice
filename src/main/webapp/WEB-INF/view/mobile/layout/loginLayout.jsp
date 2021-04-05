@@ -17,27 +17,27 @@
 
 <body>
   <div class="login">
-    <header>
+    <%--<header>
       <a href="/">
         <img src="/resource/solbipos/css/img/logo_login.png?v=20210219" alt="솔비포스" />
       </a>
       <h1>모바일 <s:message code="title.web"/></h1>
-    </header>
-    <div class="content">
+    </header>--%>
+    <%--<div class="content">--%>
       <!--광고배너영역-->
-      <div class="bannerArea">
+     <%-- <div class="bannerArea">
         <div class="slider">
           <input type="radio" name="slide_switch" id="id1" checked="checked" /> 
           <label for="id1"></label> <img src="/resource/solbipos/css/img/banner03.png" alt="" />
           <input type="radio" name="slide_switch" id="id2" /> 
           <label for="id2"></label> <img src="/resource/solbipos/css/img/banner04.png" alt="" />
         </div>
-      </div>
+      </div>--%>
       <!--//광고배너영역-->
       
       <tiles:insertAttribute name="body"/>
       
-    </div>
+    <%--</div>--%>
   </div>
 </body>
 </html>

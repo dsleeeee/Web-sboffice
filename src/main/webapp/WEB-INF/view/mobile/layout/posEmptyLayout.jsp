@@ -15,7 +15,7 @@
     <tiles:insertAttribute name="body"/>
 
     <%-- 레이어 팝업 추가 --%>
-    <c:import url="/WEB-INF/view/application/layer/alert.jsp">
+    <c:import url="/WEB-INF/view/mobile/application/layer/alert.jsp">
     </c:import>
 
     <%-- 로딩 이미지 추가 --%>

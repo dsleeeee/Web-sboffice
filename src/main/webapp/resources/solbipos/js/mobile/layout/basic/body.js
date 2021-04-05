@@ -7,6 +7,7 @@
  * ------------  ---------   -------------  --------------------
  * 2018.08.03    노현수       1.0
  * 2018.10.22    노현수       1.1
+ * 2021.04.02    이다솜       1.2           Grid 닫고 열기 추가
  *
  * **************************************************************/
 // 검색 조건 닫고 열기
@@ -20,3 +21,25 @@ $(".flddUnfld").click(function(e) {
 
   $(".searchTbl").toggle();
 });
+
+// Grid 닫고 열기
+function girdFldUnfld(Id){
+  $("#" + Id).children("a").toggleClass("open");
+  $("#" + Id).children("a").toggleClass("close");
+  
+  $("#" + Id + "Grid").slideToggle('slow');
+}
+
+// Grid 조회 시, 닫혀있는 Grid Open
+function gridOpen(Id){
+  
+  // 기존 Class 제거
+  $("#" + Id).children("a").removeClass("open");
+  $("#" + Id).children("a").removeClass("close");
+
+  // Open 상태로 셋팅
+  $("#" + Id).children("a").addClass("open");
+  $("#" + Id + "Grid").css("display", "block");
+}
+
+

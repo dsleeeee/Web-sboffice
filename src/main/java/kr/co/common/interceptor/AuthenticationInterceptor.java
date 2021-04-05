@@ -93,10 +93,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         //
         ROOT_PATH = "/";
-        if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
+        if(sessionInfoVO != null){
+            if(sessionInfoVO.getLoginFg() != null && sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())){
+                ROOT_PATH = "/mobile/";
+            }
+        }else if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
             if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
                 ROOT_PATH = "/mobile/";
-            };
+            }
+        }else if (request.getRequestURI().substring(0, 8).equals("/mobile/")){
+            ROOT_PATH = "/mobile/";
         }
 
         // 세션 종료 처리
@@ -132,14 +138,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 //            checkStoreCd(request, sessionInfoVO);
 //        } else
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            String storeCd = request.getParameter("storeCd");
-            if (!isEmpty(storeCd)) {
-                if (!storeCd.equals(sessionInfoVO.getOrgnCd())) {
-                    // 유효하지 않는 매장코드 입니다.
-                    String msg = messageService.get("cmm.not.storecd");
-                    // 로그 기록
-                    LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
-                    throw new AuthenticationException(msg, "/error/403.sb");
+            if(!sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())) { // 모바일에서는 다중매장 사용 때문에 제외...
+                String storeCd = request.getParameter("storeCd");
+                if (!isEmpty(storeCd)) {
+                    if (!storeCd.equals(sessionInfoVO.getOrgnCd())) {
+                        // 유효하지 않는 매장코드 입니다.
+                        String msg = messageService.get("cmm.not.storecd");
+                        // 로그 기록
+                        LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
+                        throw new AuthenticationException(msg, "/error/403.sb");
+                    }
                 }
             }
         }
