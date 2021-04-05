@@ -726,7 +726,7 @@
     <!-- KDS -->
     <typeAlias alias="kdsVO" type="kr.co.solbipos.kds.anals.chart.service.KdsVO"/>
 
- -    <!-- ====================================== 모바일 시작 ====================================== -->
+    <!-- ====================================== 모바일 시작 ====================================== -->
     <!--모바일 매출현황 > 상품별매출현황 -->
     <typeAlias alias="mobileProdSaleVO" type="kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO"/>
 
