@@ -69,7 +69,7 @@
             </wj-combo-box>
           </div>
         </td>
-        <%-- 상태 --%>
+        <%-- 매장상태 --%>
         <th><s:message code="virtualLogin.sysStatFgNm" /></th>
         <td>
           <div class="sb-select">
