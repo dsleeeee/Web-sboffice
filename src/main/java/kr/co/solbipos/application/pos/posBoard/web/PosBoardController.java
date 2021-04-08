@@ -119,72 +119,72 @@ public class PosBoardController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "posLogin.sb", method = RequestMethod.POST)
-    public String posLoginProcess(@Validated(Login.class) SessionInfoVO sessionInfoVO,
-                                  BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response, Model model) {
-
-        String returnUrl = "";
-
-        if(!isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
-            LOGGER.info("posLogin store : {} , hwAuthKey : {} , url : {}", request.getParameter("storeCd"), request.getParameter("hwAuthKey"), request.getParameter("url"));
-
-            sessionInfoVO.setLoginIp(getClientIp(request));
-            sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
-
-            // 로그인 시도
-            SessionInfoVO posSi = authService.posLogin(sessionInfoVO);
-            // 세션 생성
-            sessionService.setSessionInfo(request, response, posSi);
-
-            returnUrl = "application/pos/posBoard/"+request.getParameter("url");
-
-
-            LOGGER.info("posLogin userId : {} , readYn : {} , noticePopupYn : {}", request.getParameter("userId"), request.getParameter("readYn"), request.getParameter("noticePopupYn"));
-
-            /** 포스에서 받아올 값 */
-            // PosBoardVO posBoardVO = new PosBoardVO();
-            // posBoardVO.setReadYn(readYn);
-            // 열람구분(포스에서 받는 수신여부)
-            String readYn = request.getParameter("readYn");
-            model.addAttribute("readYn", readYn);
-            // 공지팝업 여부(미열람 공지사항 띄움)
-            String noticePopupYn = request.getParameter("noticePopupYn");
-            model.addAttribute("noticePopupYn", noticePopupYn);
-
-            /** userId 체크 */
-            if(isEmpty(request.getParameter("userId"))) {
-                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
-            }
-
-            /** 공지사항 페이지이동 권한체크 */
-            SessionInfoVO sessionInfoVO_check = sessionService.getSessionInfo(request);
-            String board_auth = "N";
-            // 세션 권한이 사용할 수 있는 메뉴 목록
-            List<ResrceInfoBaseVO> menuList = sessionInfoVO_check.getMenuData();
-            // url 값 비교
-            for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
-                String authUrl = resrceInfoBaseVO.getUrl();
-                if ( !isEmpty(authUrl) ) {
-                    // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-                    if ( authUrl.contains("?") ) {
-                        authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-                    }
-                    if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
-                        board_auth = "Y";
-                    }
-                }
-            }
-//            model.addAttribute("board_auth", board_auth);
-            if(board_auth == "N") {
-                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
-            }
-        }
-        else {
-            throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");
-        }
-
-        return returnUrl;
-    }
+//    @RequestMapping(value = "posLogin.sb", method = RequestMethod.POST)
+//    public String posLoginProcess(@Validated(Login.class) SessionInfoVO sessionInfoVO,
+//                                  BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response, Model model) {
+//
+//        String returnUrl = "";
+//
+//        if(!isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
+//            LOGGER.info("posLogin store : {} , hwAuthKey : {} , url : {}", request.getParameter("storeCd"), request.getParameter("hwAuthKey"), request.getParameter("url"));
+//
+//            sessionInfoVO.setLoginIp(getClientIp(request));
+//            sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
+//
+//            // 로그인 시도
+//            SessionInfoVO posSi = authService.posLogin(sessionInfoVO);
+//            // 세션 생성
+//            sessionService.setSessionInfo(request, response, posSi);
+//
+//            returnUrl = "application/pos/posBoard/"+request.getParameter("url");
+//
+//
+//            LOGGER.info("posLogin userId : {} , readYn : {} , noticePopupYn : {}", request.getParameter("userId"), request.getParameter("readYn"), request.getParameter("noticePopupYn"));
+//
+//            /** 포스에서 받아올 값 */
+//            // PosBoardVO posBoardVO = new PosBoardVO();
+//            // posBoardVO.setReadYn(readYn);
+//            // 열람구분(포스에서 받는 수신여부)
+//            String readYn = request.getParameter("readYn");
+//            model.addAttribute("readYn", readYn);
+//            // 공지팝업 여부(미열람 공지사항 띄움)
+//            String noticePopupYn = request.getParameter("noticePopupYn");
+//            model.addAttribute("noticePopupYn", noticePopupYn);
+//
+//            /** userId 체크 */
+//            if(isEmpty(request.getParameter("userId"))) {
+//                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
+//            }
+//
+//            /** 공지사항 페이지이동 권한체크 */
+//            SessionInfoVO sessionInfoVO_check = sessionService.getSessionInfo(request);
+//            String board_auth = "N";
+//            // 세션 권한이 사용할 수 있는 메뉴 목록
+//            List<ResrceInfoBaseVO> menuList = sessionInfoVO_check.getMenuData();
+//            // url 값 비교
+//            for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
+//                String authUrl = resrceInfoBaseVO.getUrl();
+//                if ( !isEmpty(authUrl) ) {
+//                    // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
+//                    if ( authUrl.contains("?") ) {
+//                        authUrl = authUrl.substring(0, authUrl.indexOf("?"));
+//                    }
+//                    if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
+//                        board_auth = "Y";
+//                    }
+//                }
+//            }
+////            model.addAttribute("board_auth", board_auth);
+//            if(board_auth == "N") {
+//                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
+//            }
+//        }
+//        else {
+//            throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");
+//        }
+//
+//        return returnUrl;
+//    }
 
     /**
      * 게시판 조회
