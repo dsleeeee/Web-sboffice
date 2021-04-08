@@ -87,6 +87,9 @@ public interface BoardMapper {
     List<DefaultMap<Object>> getBoardDetailAnswerList(BoardVO boardVO);
 
 
+    /** 사용자이름 조회 */
+    String getBoardUserNm(BoardVO boardVO);
+
     /** 게시판 댓글번호 조회(자동채번) */
     String getBoardAnswerIdx(BoardVO boardVO);
 

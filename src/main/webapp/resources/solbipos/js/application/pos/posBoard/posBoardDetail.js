@@ -56,13 +56,6 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
         $("#fileContent").html("");
         $("#divComment").html("");
 
-        if(userId !== data.userId) {
-            $("#delButton").hide();
-            $("#modifyButton").hide();
-        } else if (userId === data.userId) {
-            $("#delButton").show();
-            $("#modifyButton").show();
-        }
         $scope.setSelectedPosBoardDetail(data);
         $scope.searchPosBoardDetail();
         $scope.searchPosBoardDetailAnswer();
@@ -74,6 +67,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
         params.boardCd = $scope.selectedPosBoardDetail.boardCd;
         params.boardSeqNo = $scope.selectedPosBoardDetail.boardSeqNo;
+        params.userId = userId;
 
         $scope._postJSONQuery.withOutPopUp( "/adi/board/board/board/getBoardDetailList.sb", params, function(response){
             var posBoardDetail = response.data.data.result;
@@ -119,6 +113,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
         params.boardCd = $scope.selectedPosBoardDetail.boardCd;
         params.boardSeqNo = $scope.selectedPosBoardDetail.boardSeqNo;
+        params.userId = userId;
 
         $scope._postJSONQuery.withOutPopUp("/adi/board/board/board/getBoardDetailAnswerList.sb", params, function(response) {
             var list = response.data.data.list;
@@ -228,6 +223,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
         params.boardSeqNo = $scope.selectedPosBoardDetail.boardSeqNo;
         params.content = $scope.content;
         params.status = "I";
+        params.userId = userId;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardDetailAnswerSave.sb", params, function () { $scope.allSearch(); });
@@ -243,6 +239,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
             params.boardSeqNo = $scope.selectedPosBoardDetail.boardSeqNo;
             params.idx = data.idx;
             params.status = "D";
+            params.userId = userId;
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardDetailAnswerSave.sb", params, function () { $scope.allSearch(); });
@@ -257,6 +254,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
         params.idx = data.idx;
         params.content = data.content;
         params.status = "U";
+        params.userId = userId;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardDetailAnswerSave.sb", params, function () { $scope.allSearch(); });

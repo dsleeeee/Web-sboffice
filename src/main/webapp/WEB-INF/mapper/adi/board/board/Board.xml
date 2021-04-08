@@ -555,6 +555,19 @@
         ORDER BY twba.REG_DT DESC
     </select>
 
+    <!-- 사용자이름 조회 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 웹 사용자 정보 veiw
+    -->
+    <select id="getBoardUserNm"  parameterType="BoardVO" resultType="String">
+        /* BoardMapper.getBoardUserNm */
+        SELECT twuidv01.USER_NM
+        FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+        WHERE 1=1
+        AND twuidv01.USER_ID = #{userId}
+    </select>
+
     <!-- 게시판 댓글번호 조회(자동채번) -->
     <!--
         TABLE    : TB_WB_BOARD_ANSWER

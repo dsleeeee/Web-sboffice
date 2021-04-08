@@ -78,7 +78,7 @@ public class BoardServiceImpl implements BoardService {
         String currentDt = currentDateTimeString();
 
         boardVO.setRegDt(currentDt);
-        boardVO.setRegId(sessionInfoVO.getUserId());
+        boardVO.setRegId(boardVO.getUserId());
 
         // 게시판 열람 이력 인덱스 조회(자동채번)
         String Idx = boardMapper.getBoardReadingHistIdx(boardVO);
@@ -293,7 +293,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<DefaultMap<Object>> getBoardDetailAnswerList(BoardVO boardVO, SessionInfoVO sessionInfoVO) {
 
-        boardVO.setUserId(sessionInfoVO.getUserId());
+        boardVO.setUserId(boardVO.getUserId());
 
         return boardMapper.getBoardDetailAnswerList(boardVO);
     }
@@ -306,14 +306,18 @@ public class BoardServiceImpl implements BoardService {
         String currentDt = currentDateTimeString();
 
         boardVO.setModDt(currentDt);
-        boardVO.setModId(sessionInfoVO.getUserId());
+        boardVO.setModId(boardVO.getUserId());
 
         if (boardVO.getStatus() == GridDataFg.INSERT) {
 
             boardVO.setRegDt(currentDt);
-            boardVO.setRegId(sessionInfoVO.getUserId());
-            boardVO.setUserId(sessionInfoVO.getUserId());
-            boardVO.setUserNm(sessionInfoVO.getUserNm());
+            boardVO.setRegId(boardVO.getUserId());
+            boardVO.setUserId(boardVO.getUserId());
+//            boardVO.setUserNm(boardVO.getUserNm());
+
+            // 사용자이름 조회(포스용 공지사항때문에)
+            String userNm = boardMapper.getBoardUserNm(boardVO);
+            boardVO.setUserNm(userNm);
 
             // 게시판 댓글번호 조회(자동채번)
             String idx = boardMapper.getBoardAnswerIdx(boardVO);

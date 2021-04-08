@@ -107,7 +107,7 @@
             ORDER BY twbi.MOD_DT DESC
         )
         WHERE 1=1
-        <if test='gubunReadCombo != null'>
+        <if test='gubunReadCombo != null and gubunReadCombo != ""'>
             <![CDATA[
                 AND VIEW_YN = #{gubunReadCombo}
             ]]>

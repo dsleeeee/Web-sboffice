@@ -74,6 +74,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.boardCd = $scope.selectedBoardDetail.boardCd;
         params.boardSeqNo = $scope.selectedBoardDetail.boardSeqNo;
+        params.userId = userId;
 
         $scope._postJSONQuery.withOutPopUp( "/adi/board/board/board/getBoardDetailList.sb", params, function(response){
             var boardDetail = response.data.data.result;
@@ -119,6 +120,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.boardCd = $scope.selectedBoardDetail.boardCd;
         params.boardSeqNo = $scope.selectedBoardDetail.boardSeqNo;
+        params.userId = userId;
 
         $scope._postJSONQuery.withOutPopUp("/adi/board/board/board/getBoardDetailAnswerList.sb", params, function(response) {
             var list = response.data.data.list;
@@ -228,6 +230,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         params.boardSeqNo = $scope.selectedBoardDetail.boardSeqNo;
         params.content = $scope.content;
         params.status = "I";
+        params.userId = userId;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardDetailAnswerSave.sb", params, function () { $scope.allSearch(); });
@@ -243,6 +246,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             params.boardSeqNo = $scope.selectedBoardDetail.boardSeqNo;
             params.idx = data.idx;
             params.status = "D";
+            params.userId = userId;
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardDetailAnswerSave.sb", params, function () { $scope.allSearch(); });
@@ -257,6 +261,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         params.idx = data.idx;
         params.content = data.content;
         params.status = "U";
+        params.userId = userId;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardDetailAnswerSave.sb", params, function () { $scope.allSearch(); });

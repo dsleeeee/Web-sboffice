@@ -169,6 +169,8 @@
     var readYn = "${readYn}";
     // 공지팝업 여부(미열람 공지사항 띄움)
     var noticePopupYn = "${noticePopupYn}";
+    // 사용자ID(포스에서 받는 사용자ID)
+    var userId = "${userId}";
 
     <%-- 공개대상 --%>
     var targetFgData = ${ccu.getCommCodeExcpAll("106")};
@@ -176,7 +178,7 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210405.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210408.03" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업(포스용) --%>
 <c:import url="/WEB-INF/view/application/pos/posBoard/posBoardDetail.jsp">

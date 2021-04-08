@@ -58,7 +58,7 @@ public class PosBoardServiceImpl implements PosBoardService {
             posBoardVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        posBoardVO.setUserId(sessionInfoVO.getUserId());
+        posBoardVO.setUserId(posBoardVO.getUserId());
 
         return posBoardMapper.getPosBoardList(posBoardVO);
     }

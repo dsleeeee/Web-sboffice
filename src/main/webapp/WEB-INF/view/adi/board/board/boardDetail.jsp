@@ -150,7 +150,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210401.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.06" charset="utf-8"></script>
 
 <%-- 열람자목록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardReadingHist.jsp">

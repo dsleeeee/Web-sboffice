@@ -7,11 +7,13 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.validate.Login;
+import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.pos.service.MemberVO;
 import kr.co.solbipos.application.pos.service.SimpleMemberJoinService;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
+import kr.co.solbipos.application.pos.posBoard.service.PosBoardVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.List;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -150,6 +154,53 @@ public class SimpleMemberJoinController {
             storeEnvVO.setEnvstCd(POS_MEMBER_FG_ENVST_CD);
 
             model.addAttribute("posMemberFgEnvstVal", service.getEnvstVal(storeEnvVO).toString());
+
+
+            // POS 화면에서 게시판(포스용)
+            if(request.getParameter("url").equals("posBoard/posBoard")){
+                LOGGER.info("posLogin userId : {} , readYn : {} , noticePopupYn : {}", request.getParameter("userId"), request.getParameter("readYn"), request.getParameter("noticePopupYn"));
+
+                /** 포스에서 받아올 값 */
+                // PosBoardVO posBoardVO = new PosBoardVO();
+                // posBoardVO.setReadYn(readYn);
+                // 열람구분(포스에서 받는 수신여부)
+                String readYn = request.getParameter("readYn");
+                model.addAttribute("readYn", readYn);
+                // 공지팝업 여부(미열람 공지사항 띄움)
+                String noticePopupYn = request.getParameter("noticePopupYn");
+                model.addAttribute("noticePopupYn", noticePopupYn);
+
+                /** userId 체크 */
+                if(isEmpty(request.getParameter("userId"))) {
+                    throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
+                } else {
+                     // 사용자ID(포스에서 받는 사용자ID)
+                     String userId = request.getParameter("userId");
+                     model.addAttribute("userId", userId);
+                }
+
+                /** 공지사항 페이지이동 권한체크 */
+                SessionInfoVO sessionInfoVO_check = sessionService.getSessionInfo(request);
+                String board_auth = "N";
+                // 세션 권한이 사용할 수 있는 메뉴 목록
+                List<ResrceInfoBaseVO> menuList = sessionInfoVO_check.getMenuData();
+                // url 값 비교
+                for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
+                    String authUrl = resrceInfoBaseVO.getUrl();
+                    if ( !isEmpty(authUrl) ) {
+                        // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
+                        if ( authUrl.contains("?") ) {
+                            authUrl = authUrl.substring(0, authUrl.indexOf("?"));
+                        }
+                        if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
+                            board_auth = "Y";
+                        }
+                    }
+                }
+                if(board_auth == "N") {
+                    throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
+                }
+            }
         }
         else {
             throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");

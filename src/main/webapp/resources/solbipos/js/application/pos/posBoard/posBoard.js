@@ -39,6 +39,7 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("gubunCombo", gubunComboData); // 조회구분
     $scope._setComboData("gubunReadCombo", gubunReadComboData); // 열람구분
+    $scope.gubunReadCombo = readYn;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -88,6 +89,8 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.listScale = 10;
         params.boardCd = "01";
+        params.userId = userId;
+        params.gubunReadCombo = $scope.gubunReadCombo;
 
         $scope._inquirySub("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
             // 공지팝업 여부(미열람 공지사항 띄움)
@@ -110,6 +113,8 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.listScale = 10;
         params.boardCd = "01";
+        params.userId = userId;
+        params.gubunReadCombo = $scope.gubunReadCombo;
 
         $scope._inquiryMain("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {}, false);
     };
@@ -171,6 +176,7 @@ app.controller('posBoardPopupCtrl', ['$scope', '$http', function ($scope, $http)
         var params = {};
         params.listScale = data.listScale;
         params.boardCd = data.boardCd;
+        params.userId = userId;
         params.gubunReadCombo = "N";
 
         $scope._inquirySub("/application/pos/posBoard/posBoard/getPosBoardList.sb", params, function() {
