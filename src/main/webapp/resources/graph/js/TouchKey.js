@@ -237,12 +237,12 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // 저장수행
             $scope._postJSONSave.withPopUp("/base/prod/touchKey/touchKey/copyTouchKeyGrp.sb", params, function (response) {
-              
+
               // 메시지
               $scope._popMsg(messages["cmm.saveSucc"]);
 
               var scope = agrid.getScope("touchKeyCtrl");
-              
+
               // 새로 저장한 그룹코드 값으로 selectBox 셋팅
               setTimeout(function () {
                 scope.touchKeyGrp = response.data.data;
@@ -1132,7 +1132,7 @@ Graph.prototype.initValue = function (rowPerPage) {
   var graph = this;
 
   //새로운 셀 생성을 위한 다음 index 값 초기값 계산
-  //첫번째 상품 선택을 위한 
+  //첫번째 상품 선택을 위한
   var model = graph.getModel();
   var parent = graph.getDefaultParent();
 
@@ -1392,7 +1392,7 @@ function deleteClassCell(format) {
       document.getElementById('classWrap').scrollLeft = 0;
       // 페이지번호 계산
       var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
-      var pageNo = Math.ceil(firstCell.geometry.x/scrollWidth);
+      var pageNo = Math.ceil(firstCell.geometry.x+1/scrollWidth);
       // 페이지번호 설정
       graph.pageNo = pageNo;
       // 스크롤
@@ -2232,7 +2232,7 @@ Format.prototype.save = function () {
             document.getElementById('btnSrchTouchKey').click();
 
           }, 50);
-          
+
           // 터치키 그룹 코드 재조회
           $.ajax({
             type: 'POST',
@@ -2399,10 +2399,18 @@ Graph.prototype.initClassArea = function (prodArea) {
     var parent = graph.getDefaultParent();
     // 터치키분류 ID 중복방지를 위해 체크
     var grpId = graph.classPrefix + graph.nextGrpId;
-    if ( graph.model.getCell(grpId) ) {
-      graph.nextGrpId++;
-      grpId = graph.classPrefix + graph.nextGrpId;
+    for(var i=0; i<9999; i++){
+        if( graph.model.getCell(grpId) )
+        {
+              graph.nextGrpId++;
+              grpId = graph.classPrefix + graph.nextGrpId;
+        }
+        else
+        {
+            break;
+        }
     }
+
     // 상품영역과 id 공유를 위해 classCd 커스텀태그로 별도 관리 : 20180920 노현수
     var classCd = "000" + graph.nextGrpId;
     classCd = graph.classPrefix + classCd.slice(-4);
