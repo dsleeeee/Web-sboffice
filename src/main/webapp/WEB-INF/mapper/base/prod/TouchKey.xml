@@ -30,53 +30,53 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                thp.PROD_CD,
-                thp.PROD_NM,
-                thpc.PROD_CLASS_CD,
-                thpc.PROD_CLASS_NM,
-                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                'N' AS TOUCHKEY_USED
+                    thp.PROD_CD,
+                    thp.PROD_NM,
+                    thpc.PROD_CLASS_CD,
+                    thpc.PROD_CLASS_NM,
+                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
+                    'N' AS TOUCHKEY_USED
                 FROM
-                TB_HQ_PRODUCT thp
+                    TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_PRODUCT_CLASS thpc ON
-                thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
-                AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
+                    thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+                    AND thp.PROD_CLASS_CD = thpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_HQ_PRODUCT_SALE_PRICE
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
+                    SELECT
+                        HQ_OFFICE_CD,
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                        ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                AND SALE_PRC_FG = #{salePrcFg}
-                GROUP BY
-                HQ_OFFICE_CD, PROD_CD ) thpsp ON
-                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
+                        AND SALE_PRC_FG = #{salePrcFg}
+                    GROUP BY
+                        HQ_OFFICE_CD, PROD_CD ) thpsp ON
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
                 WHERE
-                thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND thp.USE_YN = 'Y'
+                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM
-                    TB_HQ_PRODUCT_CLASS
-                    WHERE
-                    HQ_OFFICE_CD = #{hqOfficeCd}
-                    START WITH
-                    PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    CONNECT BY
-                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    )
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_HQ_PRODUCT_CLASS
+                                                WHERE
+                                                    HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                             )
                 </if>
                 <if test="prodNm != null and prodNm != ''">
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
@@ -86,53 +86,53 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                tmp.PROD_CD,
-                tmp.PROD_NM,
-                tmpc.PROD_CLASS_CD,
-                tmpc.PROD_CLASS_NM,
-                NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                'N' AS TOUCHKEY_USED
+                    tmp.PROD_CD,
+                    tmp.PROD_NM,
+                    tmpc.PROD_CLASS_CD,
+                    tmpc.PROD_CLASS_NM,
+                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
+                    'N' AS TOUCHKEY_USED
                 FROM
-                TB_MS_PRODUCT tmp
+                    TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_PRODUCT_CLASS tmpc ON
-                tmp.STORE_CD = tmpc.STORE_CD
-                AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                    tmp.STORE_CD = tmpc.STORE_CD
+                    AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
                 LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_MS_PRODUCT_SALE_PRICE
-                WHERE
-                STORE_CD = #{storeCd}
-                <![CDATA[
+                    SELECT
+                        STORE_CD,
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                        ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_MS_PRODUCT_SALE_PRICE
+                    WHERE
+                        STORE_CD = #{storeCd}
+                        <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                AND SALE_PRC_FG = #{salePrcFg}
-                GROUP BY
-                STORE_CD, PROD_CD ) tmpsp ON
-                tmp.STORE_CD = tmpsp.STORE_CD
-                AND tmp.PROD_CD = tmpsp.PROD_CD
+                        AND SALE_PRC_FG = #{salePrcFg}
+                    GROUP BY
+                        STORE_CD, PROD_CD ) tmpsp ON
+                    tmp.STORE_CD = tmpsp.STORE_CD
+                    AND tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
-                tmp.STORE_CD = #{storeCd}
-                AND tmp.USE_YN = 'Y'
+                    tmp.STORE_CD = #{storeCd}
+                    AND tmp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM
-                    TB_MS_PRODUCT_CLASS
-                    WHERE
-                    STORE_CD = #{storeCd}
-                    START WITH
-                    PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY
-                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
-                    )
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_MS_PRODUCT_CLASS
+                                                WHERE
+                                                    STORE_CD = #{storeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                             )
                 </if>
                 <if test="prodNm != null and prodNm != ''">
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
@@ -151,46 +151,46 @@
     <select id="getTouchKeyPageStyleCd" parameterType="touchKeyClassVO" resultType="java.lang.String">
         /* USE : TouchKeyMapper.getTouchKeyPageStyleCd */
         <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT
+        <!-- 본사 -->
+        <when test='orgnFg != null and orgnFg == "H"'>
+            SELECT
                 tkc.STYLE_CD
-                FROM
+            FROM
                 (
                 SELECT
-                ROWNUM AS rnum,
-                thtkc.STYLE_CD
+                    ROWNUM AS rnum,
+                    thtkc.STYLE_CD
                 FROM
-                TB_HQ_TOUCH_KEY_CLASS thtkc
+                    TB_HQ_TOUCH_KEY_CLASS thtkc
                 WHERE
-                thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND thtkc.TUKEY_GRP_CD = #{tukeyGrpCd}
-                AND thtkc.PAGE_NO = #{pageNo}
+                    thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thtkc.TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND thtkc.PAGE_NO = #{pageNo}
                 ORDER BY
-                TUKEY_CLASS_CD ) tkc
-                WHERE
+                    TUKEY_CLASS_CD ) tkc
+            WHERE
                 tkc.rnum = 1
-            </when>
-            <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT
+        </when>
+        <!-- 매장 -->
+        <when test='orgnFg != null and orgnFg == "S"'>
+            SELECT
                 tkc.STYLE_CD
-                FROM
+            FROM
                 (
                 SELECT
-                ROWNUM AS rnum,
-                tmtkc.STYLE_CD
+                    ROWNUM AS rnum,
+                    tmtkc.STYLE_CD
                 FROM
-                TB_MS_TOUCH_KEY_CLASS tmtkc
+                    TB_MS_TOUCH_KEY_CLASS tmtkc
                 WHERE
-                tmtkc.STORE_CD = #{storeCd}
-                AND tmtkc.TUKEY_GRP_CD = #{tukeyGrpCd}
-                AND tmtkc.PAGE_NO = #{pageNo}
+                    tmtkc.STORE_CD = #{storeCd}
+                    AND tmtkc.TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND tmtkc.PAGE_NO = #{pageNo}
                 ORDER BY
-                tmtkc.TUKEY_CLASS_CD ) tkc
-                WHERE
+                    tmtkc.TUKEY_CLASS_CD ) tkc
+            WHERE
                 tkc.rnum = 1
-            </when>
+        </when>
         </choose>
     </select>
 
@@ -222,23 +222,23 @@
     <select id="getTouchKeyStyleList" parameterType="touchKeyStyleVO" resultType="DefaultMap">
         /* USE : TouchkeyMapper.getTouchKeyStyleList */
         SELECT
-        tctksd.STYLE_CD,
-        tctksd.BUTTON_FG,
-        tctksd.BUTTON_TAG_FG,
-        tctksd.BUTTON_ON_COLOR,
-        tctksd.BUTTON_OFF_COLOR,
-        tctksd.FONT_ON_COLOR,
-        tctksd.FONT_OFF_COLOR,
-        tctksd.FONT_SIZE
+            tctksd.STYLE_CD,
+            tctksd.BUTTON_FG,
+            tctksd.BUTTON_TAG_FG,
+            tctksd.BUTTON_ON_COLOR,
+            tctksd.BUTTON_OFF_COLOR,
+            tctksd.FONT_ON_COLOR,
+            tctksd.FONT_OFF_COLOR,
+            tctksd.FONT_SIZE
         FROM
-        TB_CM_TOUCH_KEY_STYLE_DTL tctksd
+            TB_CM_TOUCH_KEY_STYLE_DTL tctksd
         <where>
             <if test='styleCd != "" and styleCd != null'>
-                tctksd.STYLE_CD = #{styleCd}
+            tctksd.STYLE_CD = #{styleCd}
             </if>
         </where>
         ORDER BY
-        tctksd.STYLE_CD, tctksd.BUTTON_FG
+            tctksd.STYLE_CD, tctksd.BUTTON_FG
     </select>
 
     <!-- 터치키 스타일 비교값 조회 -->
@@ -274,26 +274,26 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                XML
+                    XML
                 FROM
-                TB_WB_HQ_CONFG_XML twhcx
+                    TB_WB_HQ_CONFG_XML twhcx
                 WHERE
-                twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND twhcx.CONFG_FG = #{confgFg}
-                AND twhcx.GRP_CD = #{tukeyGrpCd}
-                AND twhcx.USE_YN = 'Y'
+                    twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND twhcx.CONFG_FG = #{confgFg}
+                    AND twhcx.GRP_CD = #{tukeyGrpCd}
+                    AND twhcx.USE_YN = 'Y'
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                XML
+                    XML
                 FROM
-                TB_WB_STORE_CONFG_XML twscx
+                    TB_WB_STORE_CONFG_XML twscx
                 WHERE
-                twscx.STORE_CD = #{storeCd}
-                AND twscx.CONFG_FG = #{confgFg}
-                AND twscx.GRP_CD = #{tukeyGrpCd}
-                AND twscx.USE_YN = 'Y'
+                    twscx.STORE_CD = #{storeCd}
+                    AND twscx.CONFG_FG = #{confgFg}
+                    AND twscx.GRP_CD = #{tukeyGrpCd}
+                    AND twscx.USE_YN = 'Y'
             </when>
         </choose>
     </select>
@@ -310,78 +310,78 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                thtk.PROD_CD,
-                thp.PROD_NM,
-                TO_CHAR(NVL(thpsp.SALE_UPRC, 0), 'FM9,999,999') AS SALE_UPRC
+                    thtk.PROD_CD,
+                    thp.PROD_NM,
+                    TO_CHAR(NVL(thpsp.SALE_UPRC, 0), 'FM9,999,999') AS SALE_UPRC
                 FROM
-                TB_HQ_TOUCH_KEY thtk
+                    TB_HQ_TOUCH_KEY thtk
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
-                thtk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thtk.PROD_CD = thp.PROD_CD
+                    thtk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thtk.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_HQ_PRODUCT_SALE_PRICE
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
+                    SELECT
+                        HQ_OFFICE_CD,
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE
+                        HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                GROUP BY
-                HQ_OFFICE_CD, PROD_CD ) thpsp ON
-                thtk.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                AND thtk.PROD_CD = thpsp.PROD_CD
+                    GROUP BY
+                    HQ_OFFICE_CD, PROD_CD ) thpsp ON
+                    thtk.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thtk.PROD_CD = thpsp.PROD_CD
                 WHERE
-                thtk.HQ_OFFICE_CD = #{hqOfficeCd}
+                    thtk.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thtk.TUKEY_GRP_CD = #{tukeyGrpCd}
                 GROUP BY
-                thtk.PROD_CD, thp.PROD_NM, thpsp.SALE_UPRC
+                    thtk.PROD_CD, thp.PROD_NM, thpsp.SALE_UPRC
                 ORDER BY
-                thtk.PROD_CD
+                    thtk.PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                tmtk.PROD_CD,
-                tmp.PROD_NM,
-                NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
+                    tmtk.PROD_CD,
+                    tmp.PROD_NM,
+                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
                 FROM
-                TB_MS_TOUCH_KEY tmtk
+                    TB_MS_TOUCH_KEY tmtk
                 LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
-                tmtk.STORE_CD = tmp.STORE_CD
-                AND tmtk.PROD_CD = tmp.PROD_CD
+                    tmtk.STORE_CD = tmp.STORE_CD
+                    AND tmtk.PROD_CD = tmp.PROD_CD
                 LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_MS_PRODUCT_SALE_PRICE
-                WHERE
-                STORE_CD = #{storeCd}
-                <![CDATA[
+                    SELECT
+                        STORE_CD,
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                            ORDER BY
+                        START_DATE DESC ) AS SALE_UPRC
+                    FROM
+                        TB_MS_PRODUCT_SALE_PRICE
+                    WHERE
+                        STORE_CD = #{storeCd}
+                        <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                GROUP BY
-                STORE_CD, PROD_CD ) tmpsp ON
-                tmtk.STORE_CD = tmpsp.STORE_CD
-                AND tmtk.PROD_CD = tmpsp.PROD_CD
+                    GROUP BY
+                        STORE_CD, PROD_CD ) tmpsp ON
+                    tmtk.STORE_CD = tmpsp.STORE_CD
+                    AND tmtk.PROD_CD = tmpsp.PROD_CD
                 WHERE
-                tmtk.STORE_CD = #{storeCd}
+                    tmtk.STORE_CD = #{storeCd}
                 AND tmtk.TUKEY_GRP_CD = #{tukeyGrpCd}
                 GROUP BY
-                tmtk.PROD_CD, tmp.PROD_NM, tmpsp.SALE_UPRC
+                    tmtk.PROD_CD, tmp.PROD_NM, tmpsp.SALE_UPRC
                 ORDER BY
-                tmtk.PROD_CD
+                    tmtk.PROD_CD
             </when>
         </choose>
     </select>
@@ -399,42 +399,42 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_WB_HQ_CONFG_XML twhcx
                 (
-                twhcx.HQ_OFFICE_CD,
-                twhcx.CONFG_FG,
-                twhcx.XML,
-                twhcx.USE_YN,
-                twhcx.REG_DT,
-                twhcx.REG_ID,
-                twhcx.GRP_CD
+                    twhcx.HQ_OFFICE_CD,
+                    twhcx.CONFG_FG,
+                    twhcx.XML,
+                    twhcx.USE_YN,
+                    twhcx.REG_DT,
+                    twhcx.REG_ID,
+                    twhcx.GRP_CD
                 ) VALUES (
-                #{hqOfficeCd},
-                #{confgFg},
-                #{xml:CLOB},
-                #{useYn},
-                #{regDt},
-                #{regId},
-                #{tukeyGrpCd}
+                    #{hqOfficeCd},
+                    #{confgFg},
+                    #{xml:CLOB},
+                    #{useYn},
+                    #{regDt},
+                    #{regId},
+                    #{tukeyGrpCd}
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 INSERT INTO TB_WB_STORE_CONFG_XML twscx
                 (
-                twscx.STORE_CD,
-                twscx.CONFG_FG,
-                twscx.XML,
-                twscx.USE_YN,
-                twscx.REG_DT,
-                twscx.REG_ID,
-                twscx.GRP_CD
+                    twscx.STORE_CD,
+                    twscx.CONFG_FG,
+                    twscx.XML,
+                    twscx.USE_YN,
+                    twscx.REG_DT,
+                    twscx.REG_ID,
+                    twscx.GRP_CD
                 ) VALUES (
-                #{storeCd},
-                #{confgFg},
-                #{xml:CLOB},
-                #{useYn},
-                #{regDt},
-                #{regId},
-                #{tukeyGrpCd}
+                    #{storeCd},
+                    #{confgFg},
+                    #{xml:CLOB},
+                    #{useYn},
+                    #{regDt},
+                    #{regId},
+                    #{tukeyGrpCd}
                 )
             </when>
         </choose>
@@ -452,30 +452,30 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 UPDATE
-                TB_WB_HQ_CONFG_XML twhcx
+                    TB_WB_HQ_CONFG_XML twhcx
                 SET
-                twhcx.XML = #{xml:CLOB},
-                twhcx.USE_YN = #{useYn},
-                twhcx.MOD_DT = #{regDt},
-                twhcx.MOD_ID = #{regId}
+                    twhcx.XML = #{xml:CLOB},
+                    twhcx.USE_YN = #{useYn},
+                    twhcx.MOD_DT = #{regDt},
+                    twhcx.MOD_ID = #{regId}
                 WHERE
-                twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND twhcx.CONFG_FG = #{confgFg}
-                AND twhcx.GRP_CD = #{tukeyGrpCd}
+                    twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND twhcx.CONFG_FG = #{confgFg}
+                    AND twhcx.GRP_CD = #{tukeyGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 UPDATE
-                TB_WB_STORE_CONFG_XML twscx
+                    TB_WB_STORE_CONFG_XML twscx
                 SET
-                twscx.XML = #{xml:CLOB},
-                twscx.USE_YN = #{useYn},
-                twscx.MOD_DT = #{regDt},
-                twscx.MOD_ID = #{regId}
+                    twscx.XML = #{xml:CLOB},
+                    twscx.USE_YN = #{useYn},
+                    twscx.MOD_DT = #{regDt},
+                    twscx.MOD_ID = #{regId}
                 WHERE
-                twscx.STORE_CD = #{storeCd}
-                AND twscx.CONFG_FG = #{confgFg}
-                AND twscx.GRP_CD = #{tukeyGrpCd}
+                    twscx.STORE_CD = #{storeCd}
+                    AND twscx.CONFG_FG = #{confgFg}
+                    AND twscx.GRP_CD = #{tukeyGrpCd}
             </when>
         </choose>
     </update>
@@ -493,21 +493,21 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 DELETE
                 FROM
-                TB_WB_HQ_CONFG_XML twhcx
+                    TB_WB_HQ_CONFG_XML twhcx
                 WHERE
-                twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND twhcx.CONFG_FG = #{confgFg}
-                AND twhcx.GRP_CD = #{tukeyGrpCd}
+                    twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND twhcx.CONFG_FG = #{confgFg}
+                    AND twhcx.GRP_CD = #{tukeyGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM
-                TB_WB_STORE_CONFG_XML twscx
+                    TB_WB_STORE_CONFG_XML twscx
                 WHERE
-                twscx.STORE_CD = #{storeCd}
-                AND twscx.CONFG_FG = #{confgFg}
-                AND twscx.GRP_CD = #{tukeyGrpCd}
+                    twscx.STORE_CD = #{storeCd}
+                    AND twscx.CONFG_FG = #{confgFg}
+                    AND twscx.GRP_CD = #{tukeyGrpCd}
             </when>
         </choose>
     </delete>
@@ -525,7 +525,7 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_WB_HQ_CONFG_XML twhcx
                 (
-                twhcx.HQ_OFFICE_CD
+                        twhcx.HQ_OFFICE_CD
                 ,       twhcx.CONFG_FG
                 ,       twhcx.XML
                 ,       twhcx.USE_YN
@@ -549,7 +549,7 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 INSERT INTO TB_WB_STORE_CONFG_XML twscx
                 (
-                twscx.STORE_CD
+                        twscx.STORE_CD
                 ,       twscx.CONFG_FG
                 ,       twscx.XML
                 ,       twscx.USE_YN
@@ -584,91 +584,91 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_HQ_TOUCH_KEY_CLASS thtkc (
-                thtkc.HQ_OFFICE_CD,
-                thtkc.TUKEY_GRP_CD,
-                thtkc.TUKEY_CLASS_CD,
-                thtkc.TUKEY_CLASS_NM,
-                thtkc.PAGE_NO,
-                thtkc.PAGE_ROWS,
-                thtkc.X,
-                thtkc.Y,
-                thtkc.WIDTH,
-                thtkc.HEIGHT,
-                thtkc.STYLE_CD,
-                thtkc.FONT_SIZE,
-                thtkc.FONT_COLOR,
-                thtkc.FILL_COLOR,
-                thtkc.IMG_NM,
-                thtkc.REG_DT,
-                thtkc.REG_ID,
-                thtkc.MOD_DT,
-                thtkc.MOD_ID
+                    thtkc.HQ_OFFICE_CD,
+                    thtkc.TUKEY_GRP_CD,
+                    thtkc.TUKEY_CLASS_CD,
+                    thtkc.TUKEY_CLASS_NM,
+                    thtkc.PAGE_NO,
+                    thtkc.PAGE_ROWS,
+                    thtkc.X,
+                    thtkc.Y,
+                    thtkc.WIDTH,
+                    thtkc.HEIGHT,
+                    thtkc.STYLE_CD,
+                    thtkc.FONT_SIZE,
+                    thtkc.FONT_COLOR,
+                    thtkc.FILL_COLOR,
+                    thtkc.IMG_NM,
+                    thtkc.REG_DT,
+                    thtkc.REG_ID,
+                    thtkc.MOD_DT,
+                    thtkc.MOD_ID
                 ) VALUES (
-                #{hqOfficeCd},
-                #{tukeyGrpCd},
-                #{tukeyClassCd},
-                #{tukeyClassNm},
-                #{pageNo},
-                #{pageRows},
-                #{x},
-                #{y},
-                #{width},
-                #{height},
-                #{styleCd},
-                #{fontSize, jdbcType=NUMERIC},
-                #{fontColor, jdbcType=VARCHAR},
-                #{fillColor, jdbcType=VARCHAR},
-                #{imgNm, jdbcType=VARCHAR},
-                #{regDt},
-                #{regId},
-                #{regDt},
-                #{regId}
+                    #{hqOfficeCd},
+                    #{tukeyGrpCd},
+                    #{tukeyClassCd},
+                    #{tukeyClassNm},
+                    #{pageNo},
+                    #{pageRows},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 INSERT INTO TB_MS_TOUCH_KEY_CLASS tmtkc (
-                tmtkc.STORE_CD,
-                tmtkc.TUKEY_GRP_CD,
-                tmtkc.TUKEY_CLASS_CD,
-                tmtkc.TUKEY_CLASS_NM,
-                tmtkc.PAGE_NO,
-                tmtkc.PAGE_ROWS,
-                tmtkc.X,
-                tmtkc.Y,
-                tmtkc.WIDTH,
-                tmtkc.HEIGHT,
-                tmtkc.STYLE_CD,
-                tmtkc.FONT_SIZE,
-                tmtkc.FONT_COLOR,
-                tmtkc.FILL_COLOR,
-                tmtkc.IMG_NM,
-                tmtkc.IN_FG,
-                tmtkc.REG_DT,
-                tmtkc.REG_ID,
-                tmtkc.MOD_DT,
-                tmtkc.MOD_ID
+                    tmtkc.STORE_CD,
+                    tmtkc.TUKEY_GRP_CD,
+                    tmtkc.TUKEY_CLASS_CD,
+                    tmtkc.TUKEY_CLASS_NM,
+                    tmtkc.PAGE_NO,
+                    tmtkc.PAGE_ROWS,
+                    tmtkc.X,
+                    tmtkc.Y,
+                    tmtkc.WIDTH,
+                    tmtkc.HEIGHT,
+                    tmtkc.STYLE_CD,
+                    tmtkc.FONT_SIZE,
+                    tmtkc.FONT_COLOR,
+                    tmtkc.FILL_COLOR,
+                    tmtkc.IMG_NM,
+                    tmtkc.IN_FG,
+                    tmtkc.REG_DT,
+                    tmtkc.REG_ID,
+                    tmtkc.MOD_DT,
+                    tmtkc.MOD_ID
                 ) VALUES (
-                #{storeCd},
-                #{tukeyGrpCd},
-                #{tukeyClassCd},
-                #{tukeyClassNm},
-                #{pageNo},
-                #{pageRows},
-                #{x},
-                #{y},
-                #{width},
-                #{height},
-                #{styleCd},
-                #{fontSize, jdbcType=NUMERIC},
-                #{fontColor, jdbcType=VARCHAR},
-                #{fillColor, jdbcType=VARCHAR},
-                #{imgNm, jdbcType=VARCHAR},
-                #{inFg},
-                #{regDt},
-                #{regId},
-                #{regDt},
-                #{regId}
+                    #{storeCd},
+                    #{tukeyGrpCd},
+                    #{tukeyClassCd},
+                    #{tukeyClassNm},
+                    #{pageNo},
+                    #{pageRows},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{inFg},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
             </when>
         </choose>
@@ -687,19 +687,19 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 DELETE
                 FROM
-                TB_HQ_TOUCH_KEY_CLASS
+                    TB_HQ_TOUCH_KEY_CLASS
                 WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
-                AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM
-                TB_MS_TOUCH_KEY_CLASS
+                    TB_MS_TOUCH_KEY_CLASS
                 WHERE
-                STORE_CD = #{storeCd}
-                AND TUKEY_GRP_CD  = #{tukeyGrpCd}
+                    STORE_CD = #{storeCd}
+                    AND TUKEY_GRP_CD  = #{tukeyGrpCd}
             </when>
         </choose>
     </delete>
@@ -717,7 +717,7 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_HQ_TOUCH_KEY_CLASS thtkc
                 (
-                thtkc.HQ_OFFICE_CD
+                        thtkc.HQ_OFFICE_CD
                 ,       thtkc.TUKEY_GRP_CD
                 ,       thtkc.TUKEY_CLASS_CD
                 ,       thtkc.TUKEY_CLASS_NM
@@ -764,7 +764,7 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 INSERT INTO TB_MS_TOUCH_KEY_CLASS tmtkc
                 (
-                tmtkc.STORE_CD
+                        tmtkc.STORE_CD
                 ,       tmtkc.TUKEY_GRP_CD
                 ,       tmtkc.TUKEY_CLASS_CD
                 ,       tmtkc.TUKEY_CLASS_NM
@@ -824,95 +824,95 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_HQ_TOUCH_KEY thtk (
-                thtk.HQ_OFFICE_CD,
-                thtk.TUKEY_CLASS_CD,
-                thtk.TUKEY_GRP_CD,
-                thtk.TUKEY_CD,
-                thtk.TUKEY_FG,
-                thtk.PROD_CD,
-                thtk.PAGE_NO,
-                thtk.X,
-                thtk.Y,
-                thtk.WIDTH,
-                thtk.HEIGHT,
-                thtk.STYLE_CD,
-                thtk.FONT_SIZE,
-                thtk.FONT_COLOR,
-                thtk.FILL_COLOR,
-                thtk.IMG_NM,
-                thtk.REG_DT,
-                thtk.REG_ID,
-                thtk.MOD_DT,
-                thtk.MOD_ID
+                    thtk.HQ_OFFICE_CD,
+                    thtk.TUKEY_CLASS_CD,
+                    thtk.TUKEY_GRP_CD,
+                    thtk.TUKEY_CD,
+                    thtk.TUKEY_FG,
+                    thtk.PROD_CD,
+                    thtk.PAGE_NO,
+                    thtk.X,
+                    thtk.Y,
+                    thtk.WIDTH,
+                    thtk.HEIGHT,
+                    thtk.STYLE_CD,
+                    thtk.FONT_SIZE,
+                    thtk.FONT_COLOR,
+                    thtk.FILL_COLOR,
+                    thtk.IMG_NM,
+                    thtk.REG_DT,
+                    thtk.REG_ID,
+                    thtk.MOD_DT,
+                    thtk.MOD_ID
                 ) VALUES (
-                #{hqOfficeCd},
-                #{tukeyClassCd},
-                #{tukeyGrpCd},
-                #{tukeyCd},
-                #{tukeyFg},
-                #{prodCd},
-                #{pageNo},
-                #{x},
-                #{y},
-                #{width},
-                #{height},
-                #{styleCd},
-                #{fontSize, jdbcType=NUMERIC},
-                #{fontColor, jdbcType=VARCHAR},
-                #{fillColor, jdbcType=VARCHAR},
-                #{imgNm, jdbcType=VARCHAR},
-                #{regDt},
-                #{regId},
-                #{regDt},
-                #{regId}
+                    #{hqOfficeCd},
+                    #{tukeyClassCd},
+                    #{tukeyGrpCd},
+                    #{tukeyCd},
+                    #{tukeyFg},
+                    #{prodCd},
+                    #{pageNo},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 INSERT INTO TB_MS_TOUCH_KEY tmtk (
-                tmtk.STORE_CD,
-                tmtk.TUKEY_CLASS_CD,
-                tmtk.TUKEY_GRP_CD,
-                tmtk.TUKEY_CD,
-                tmtk.TUKEY_FG,
-                tmtk.PROD_CD,
-                tmtk.PAGE_NO,
-                tmtk.X,
-                tmtk.Y,
-                tmtk.WIDTH,
-                tmtk.HEIGHT,
-                tmtk.STYLE_CD,
-                tmtk.FONT_SIZE,
-                tmtk.FONT_COLOR,
-                tmtk.FILL_COLOR,
-                tmtk.IMG_NM,
-                tmtk.IN_FG,
-                tmtk.REG_DT,
-                tmtk.REG_ID,
-                tmtk.MOD_DT,
-                tmtk.MOD_ID
+                    tmtk.STORE_CD,
+                    tmtk.TUKEY_CLASS_CD,
+                    tmtk.TUKEY_GRP_CD,
+                    tmtk.TUKEY_CD,
+                    tmtk.TUKEY_FG,
+                    tmtk.PROD_CD,
+                    tmtk.PAGE_NO,
+                    tmtk.X,
+                    tmtk.Y,
+                    tmtk.WIDTH,
+                    tmtk.HEIGHT,
+                    tmtk.STYLE_CD,
+                    tmtk.FONT_SIZE,
+                    tmtk.FONT_COLOR,
+                    tmtk.FILL_COLOR,
+                    tmtk.IMG_NM,
+                    tmtk.IN_FG,
+                    tmtk.REG_DT,
+                    tmtk.REG_ID,
+                    tmtk.MOD_DT,
+                    tmtk.MOD_ID
                 ) VALUES (
-                #{storeCd},
-                #{tukeyClassCd},
-                #{tukeyGrpCd},
-                #{tukeyCd},
-                #{tukeyFg},
-                #{prodCd},
-                #{pageNo},
-                #{x},
-                #{y},
-                #{width},
-                #{height},
-                #{styleCd},
-                #{fontSize, jdbcType=NUMERIC},
-                #{fontColor, jdbcType=VARCHAR},
-                #{fillColor, jdbcType=VARCHAR},
-                #{imgNm, jdbcType=VARCHAR},
-                #{inFg},
-                #{regDt},
-                #{regId},
-                #{regDt},
-                #{regId}
+                    #{storeCd},
+                    #{tukeyClassCd},
+                    #{tukeyGrpCd},
+                    #{tukeyCd},
+                    #{tukeyFg},
+                    #{prodCd},
+                    #{pageNo},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{inFg},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
             </when>
         </choose>
@@ -931,18 +931,18 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 DELETE
                 FROM
-                TB_HQ_TOUCH_KEY
+                    TB_HQ_TOUCH_KEY
                 WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
+                    HQ_OFFICE_CD = #{hqOfficeCd}
                 AND TUKEY_GRP_CD = #{tukeyGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM
-                TB_MS_TOUCH_KEY
+                    TB_MS_TOUCH_KEY
                 WHERE
-                STORE_CD = #{storeCd}
+                    STORE_CD = #{storeCd}
                 AND TUKEY_GRP_CD = #{tukeyGrpCd}
             </when>
         </choose>
@@ -958,20 +958,20 @@
     <select id="getStoreList" parameterType="touchKeyVO" resultType="DefaultMap">
         /* USE : TouchkeyMapper.getStoreList */
         SELECT
-        tms.STORE_CD,
-        tms.STORE_NM,
-        tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
-        tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
+            tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
         FROM
-        TB_MS_STORE tms
+            TB_MS_STORE tms
         LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
-        tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
-        AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
+            tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
         LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_stat_fg ON
-        tms.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
-        AND tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
+            tms.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
+            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
         WHERE
-        tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            tms.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
@@ -1166,23 +1166,23 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                TUKEY_GRP_CD AS NAME,
-                TUKEY_GRP_CD AS VALUE
+                      TUKEY_GRP_CD AS NAME,
+                      TUKEY_GRP_CD AS VALUE
                 FROM
-                TB_HQ_TOUCH_KEY_CLASS
+                      TB_HQ_TOUCH_KEY_CLASS
                 WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
+                      HQ_OFFICE_CD = #{hqOfficeCd}
                 GROUP BY TUKEY_GRP_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                TUKEY_GRP_CD AS NAME,
-                TUKEY_GRP_CD AS VALUE
+                      TUKEY_GRP_CD AS NAME,
+                      TUKEY_GRP_CD AS VALUE
                 FROM
-                TB_MS_TOUCH_KEY_CLASS
+                      TB_MS_TOUCH_KEY_CLASS
                 WHERE
-                STORE_CD = #{storeCd}
+                      STORE_CD = #{storeCd}
                 GROUP BY TUKEY_GRP_CD
             </when>
         </choose>
@@ -1234,18 +1234,18 @@
                 GRP_CD
                 )
                 SELECT HQ_OFFICE_CD,
-                CONFG_FG,
-                XML,
-                USE_YN,
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId},
-                #{tukeyGrpCd}
-                FROM TB_WB_HQ_CONFG_XML
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND CONFG_FG = '10'
-                AND GRP_CD = #{copyTukeyGrpCd}
+                        CONFG_FG,
+                        XML,
+                        USE_YN,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{tukeyGrpCd}
+                  FROM TB_WB_HQ_CONFG_XML
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND CONFG_FG = '10'
+                    AND GRP_CD = #{copyTukeyGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1262,18 +1262,18 @@
                 GRP_CD
                 )
                 SELECT STORE_CD,
-                CONFG_FG,
-                XML,
-                USE_YN,
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId},
-                #{tukeyGrpCd}
-                FROM TB_WB_STORE_CONFG_XML
-                WHERE STORE_CD = #{storeCd}
-                AND CONFG_FG = '10'
-                AND GRP_CD = #{copyTukeyGrpCd}
+                        CONFG_FG,
+                        XML,
+                        USE_YN,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{tukeyGrpCd}
+                  FROM TB_WB_STORE_CONFG_XML
+                 WHERE STORE_CD = #{storeCd}
+                   AND CONFG_FG = '10'
+                   AND GRP_CD = #{copyTukeyGrpCd}
             </when>
         </choose>
     </insert>
@@ -1312,27 +1312,27 @@
                 MOD_ID
                 )
                 SELECT HQ_OFFICE_CD,
-                #{tukeyGrpCd},
-                TUKEY_CLASS_CD,
-                TUKEY_CLASS_NM,
-                PAGE_NO,
-                PAGE_ROWS,
-                X,
-                Y,
-                WIDTH,
-                HEIGHT,
-                STYLE_CD,
-                FONT_SIZE,
-                FONT_COLOR,
-                FILL_COLOR,
-                IMG_NM,
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
-                FROM TB_HQ_TOUCH_KEY_CLASS
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
+                        #{tukeyGrpCd},
+                        TUKEY_CLASS_CD,
+                        TUKEY_CLASS_NM,
+                        PAGE_NO,
+                        PAGE_ROWS,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        STYLE_CD,
+                        FONT_SIZE,
+                        FONT_COLOR,
+                        FILL_COLOR,
+                        IMG_NM,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_HQ_TOUCH_KEY_CLASS
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1360,28 +1360,28 @@
                 MOD_ID
                 )
                 SELECT STORE_CD,
-                #{tukeyGrpCd},
-                TUKEY_CLASS_CD,
-                TUKEY_CLASS_NM,
-                PAGE_NO,
-                PAGE_ROWS,
-                X,
-                Y,
-                WIDTH,
-                HEIGHT,
-                STYLE_CD,
-                FONT_SIZE,
-                FONT_COLOR,
-                FILL_COLOR,
-                IMG_NM,
-                IN_FG,
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
-                FROM TB_MS_TOUCH_KEY_CLASS
-                WHERE STORE_CD = #{storeCd}
-                AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
+                        #{tukeyGrpCd},
+                        TUKEY_CLASS_CD,
+                        TUKEY_CLASS_NM,
+                        PAGE_NO,
+                        PAGE_ROWS,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        STYLE_CD,
+                        FONT_SIZE,
+                        FONT_COLOR,
+                        FILL_COLOR,
+                        IMG_NM,
+                        IN_FG,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_MS_TOUCH_KEY_CLASS
+                 WHERE STORE_CD = #{storeCd}
+                   AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
             </when>
         </choose>
     </insert>
@@ -1421,28 +1421,28 @@
                 TUKEY_GRP_CD
                 )
                 SELECT HQ_OFFICE_CD,
-                TUKEY_CLASS_CD,
-                TUKEY_CD,
-                TUKEY_FG,
-                PROD_CD,
-                PAGE_NO,
-                X,
-                Y,
-                WIDTH,
-                HEIGHT,
-                STYLE_CD,
-                FONT_SIZE,
-                FONT_COLOR,
-                FILL_COLOR,
-                IMG_NM,
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId},
-                #{tukeyGrpCd}
-                FROM TB_HQ_TOUCH_KEY
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
+                        TUKEY_CLASS_CD,
+                        TUKEY_CD,
+                        TUKEY_FG,
+                        PROD_CD,
+                        PAGE_NO,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        STYLE_CD,
+                        FONT_SIZE,
+                        FONT_COLOR,
+                        FILL_COLOR,
+                        IMG_NM,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{tukeyGrpCd}
+                  FROM TB_HQ_TOUCH_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>

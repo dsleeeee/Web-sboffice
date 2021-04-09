@@ -1392,7 +1392,8 @@ function deleteClassCell(format) {
       document.getElementById('classWrap').scrollLeft = 0;
       // 페이지번호 계산
       var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
-      var pageNo = Math.ceil(firstCell.geometry.x+1/scrollWidth);
+      var intx = firstCell.geometry.x*1+1;
+      var pageNo = Math.ceil(intx/scrollWidth);
       // 페이지번호 설정
       graph.pageNo = pageNo;
       // 스크롤
