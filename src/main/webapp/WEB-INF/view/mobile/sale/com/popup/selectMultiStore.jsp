@@ -10,7 +10,7 @@
        id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:245px;" ng-click="<c:out value="${param.targetId}"/>Show()"
        value="[${sessionInfo.storeCd}] ${sessionInfo.storeNm}" readonly/>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:350px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:85%;">
     <div class="wj-dialog wj-dialog-columns">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="cmm.multiStore.select"/>
@@ -24,7 +24,7 @@
                 </div>
 
                 <%--위즈모 테이블--%>
-                <div class="theGrid mt10" style="height:250px;">
+                <div class="popGrid mt5" style="height:250px;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             selection-mode="Row"

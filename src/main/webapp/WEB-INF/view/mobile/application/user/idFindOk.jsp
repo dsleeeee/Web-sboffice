@@ -19,14 +19,12 @@
 
   <div class="linkArea">
     <span class="find">
-      <a href="/auth/login.sb" class="fdId">
+      <a href="/mobile/auth/login.sb" class="fdId">
         <s:message code="login.go" />
       </a>
-      <a href="/user/pwdFind.sb" class="fdPw">
+      <a href="/mobile/user/pwdFind.sb" class="fdPw">
         <s:message code="login.find.pw" />
       </a>
     </span>
   </div>
 </div>
-
-

@@ -4,7 +4,7 @@
 <div id="_saveTent" class="fullDimmed" style="display: none;"></div>
 <div id="_saving" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="noTitle w300px">
+    <div class="noTitle w80">
       <p class="bk">
         <s:message code="cmm.saving" />
       </p>

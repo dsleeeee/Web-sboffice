@@ -42,7 +42,7 @@
         <span>${sessionScope.sessionInfo.userNm}</span>
       </p>
       <ul>
-        <li><a href="#">내 정보 변경</a></li>
+        <%--<li><a href="#">내 정보 변경</a></li>--%>
         <li><a href="#" id="pwchg">비밀번호 변경</a></li>
         <li><a href="/mobile/auth/logout.sb">로그아웃</a></li>
       </ul>
@@ -51,59 +51,10 @@
 </div>
 <%--//사용자정보영역--%>
 
-
-<%--고정메뉴--%>
-<%--<div class="fixedMenu">
-
-  &lt;%&ndash;고정메뉴 없는경우&ndash;%&gt;
-  <p class="empty" style="display: none;">즐겨찾기에서 고정메뉴를 등록하여 편리하게 사용하세요!</p>
-  &lt;%&ndash;//고정메뉴 없는경우&ndash;%&gt;
-
-  &lt;%&ndash;고정메뉴 있는경우&ndash;%&gt;
-  <nav>
-    <ul id="_fixMenu">
-      &lt;%&ndash; 즐겨찾기 메뉴 &ndash;%&gt;
-      <c:forEach var="item" items="${fixedMenuData}" varStatus="status">
-        <li id="${item.resrceCd}">
-          <c:if test="${sessionId ne null}">
-            <a href="${item.url}?sid=${sessionId}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
-          </c:if>
-          <c:if test="${sessionId eq null}">
-            <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
-          </c:if>
-          <a href="#" class="btn_close favClose" data-value="${item.resrceCd}" ></a>
-        </li>
-      </c:forEach>
-
-      &lt;%&ndash; 히스토리 메뉴 &ndash;%&gt;
-      <c:forEach var="item" items="${historyMenuData}" varStatus="status">
-        <li id="${item.resrceCd}">
-          <c:if test="${sessionId ne null}">
-            <a href="${item.url}?sid=${sessionId}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
-          </c:if>
-          <c:if test="${sessionId eq null}">
-            <a href="${item.url}" class="${item.activation == true ? 'on' : ''}">${item.resrceNm}</a>
-          </c:if>
-          <a href="#" class="btn_close histClose" data-value="${item.resrceCd}"></a>
-        </li>
-      </c:forEach>
-    </ul>
-
-    <div class="moveBtn">
-      <a href="#" class="mL" title="왼쪽으로 메뉴 이동"></a>
-      <a href="#" class="mR" title="오른쪽으로 메뉴 이동"></a>
-    </div>
-
-  </nav>
-  &lt;%&ndash;고정메뉴 있는경우&ndash;%&gt;
-
-  &lt;%&ndash; 비밀번호 변경 레이어 팝업 가져오기 &ndash;%&gt;
-  <c:import url="/WEB-INF/view/application/layer/pwChgPop.jsp">
-    <c:param name="type" value="user" />
-  </c:import>
-  
-</div>--%>
-<%--//고정메뉴--%>
+<%-- 비밀번호 변경 레이어 팝업 가져오기 --%>
+<c:import url="/WEB-INF/view/mobile/application/layer/pwChgPop.jsp">
+  <c:param name="type" value="user" />
+</c:import>
 
 <script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/header.js?ver=2018100401" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>

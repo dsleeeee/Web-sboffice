@@ -138,18 +138,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 //            checkStoreCd(request, sessionInfoVO);
 //        } else
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            //if(!sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())) { // 모바일에서는 다중매장 사용 때문에 제외...
-                String storeCd = request.getParameter("storeCd");
-                if (!isEmpty(storeCd)) {
-                    if (!storeCd.equals(sessionInfoVO.getOrgnCd())) {
-                        // 유효하지 않는 매장코드 입니다.
-                        String msg = messageService.get("cmm.not.storecd");
-                        // 로그 기록
-                        LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
-                        throw new AuthenticationException(msg, "/error/403.sb");
-                    }
+            String storeCd = request.getParameter("storeCd");
+            if (!isEmpty(storeCd)) {
+                if (!storeCd.equals(sessionInfoVO.getOrgnCd())) {
+                    // 유효하지 않는 매장코드 입니다.
+                    String msg = messageService.get("cmm.not.storecd");
+                    // 로그 기록
+                    LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
+                    throw new AuthenticationException(msg, "/error/403.sb");
                 }
-            //}
+            }
         }
 
         // 메뉴 권한 체크

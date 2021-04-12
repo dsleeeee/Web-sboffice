@@ -1,4 +1,4 @@
-package kr.co.solbipos.application.session.user.web;
+package kr.co.solbipos.mobile.application.session.user.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
@@ -13,11 +13,11 @@ import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.common.validate.*;
-import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.application.session.user.enums.PwFindResult;
 import kr.co.solbipos.application.session.user.service.*;
+import kr.co.solbipos.mobile.application.session.auth.service.MobileAuthService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,31 +45,31 @@ import static kr.co.common.utils.spring.StringUtil.strMaskingHalf;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
- * @Class Name : UserController.java
+ * @Class Name : MobileUserController.java
  * @Description : 어플리케이션 > 세션 > 사용자
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2018.05.01  정용길      최초생성
+ * @ 2021.04.08  이다솜      최초생성
  *
- * @author NHN한국사이버결제 KCP 정용길
- * @since 2018. 05.01
+ * @author 솔비포스 WEB개발팀 이다솜
+ * @since 2021.04.08
  * @version 1.0
  * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/user")
-public class UserController {
+@RequestMapping(value = "/mobile/user")
+public class MobileUserController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     UserService userService;
     @Autowired
-    AuthService authService;
+    MobileAuthService mobileAuthService;
     @Autowired
     MessageService messageService;
     @Autowired
@@ -86,7 +86,7 @@ public class UserController {
     @RequestMapping(value = "sendNum.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result sendNum(@Validated(AuthNumber.class) UserVO userVO, BindingResult bindingResult,
-            HttpServletRequest request, HttpServletResponse response, Model model) {
+                          HttpServletRequest request, HttpServletResponse response, Model model) {
 
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
@@ -173,7 +173,7 @@ public class UserController {
     }
 
     /**
-     * 아이디 찾기 페이지 이동
+     * 모바일 아이디 찾기 페이지 이동
      *
      * @param request
      * @param response
@@ -182,7 +182,7 @@ public class UserController {
      */
     @RequestMapping(value = "idFind.sb", method = RequestMethod.GET)
     public String idFind(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "user/login:idFind";
+        return "user/mlogin:idFind";
     }
 
     /**
@@ -195,10 +195,10 @@ public class UserController {
      */
     @RequestMapping(value = "idFind.sb", method = RequestMethod.POST)
     public String idFindProcess(@Validated(IdFind.class) UserVO userVO, BindingResult bindingResult,
-            HttpServletRequest request, HttpServletResponse response, Model model) {
+                                HttpServletRequest request, HttpServletResponse response, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "user/login:idFind";
+            return "user/mlogin:idFind";
         }
 
         // id, 이름으로 유져 조회 - 아이디 마스킹
@@ -210,17 +210,17 @@ public class UserController {
             String msg = messageService.get("login.userId")
                     + messageService.get("cmm.not.find");
             model.addAttribute("msg", msg);
-            return "user/login:idFind";
+            return "user/mlogin:idFind";
         }
 
         // 찾은 아이디를 마스킹해서 보여줌
         model.addAttribute("userId", findUsers.get(0).getUserId());
 
-        return "user/login:idFindOk";
+        return "user/mlogin:idFindOk";
     }
 
     /**
-     * 패스워드 찾기 페이지 이동
+     * 모바일 패스워드 찾기 페이지 이동
      *
      * @param request
      * @param response
@@ -229,9 +229,9 @@ public class UserController {
      */
     @RequestMapping(value = "pwdFind.sb", method = RequestMethod.GET)
     public String passwordFind(HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+                               Model model) {
         model.addAttribute("otpLimit", BaseEnv.OTP_LIMIT_MINUTE);
-        return "user/login:pwdFind";
+        return "user/mlogin:pwdFind";
     }
 
     /**
@@ -245,8 +245,8 @@ public class UserController {
     @RequestMapping(value = "pwdFind.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result passwordFindProcess(@Validated(PwFind.class) UserVO userVO,
-            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+                                      BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+                                      Model model) {
 
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
@@ -277,7 +277,7 @@ public class UserController {
     }
 
     /**
-     * 패스워드 변경 페이지 이동(어디서 쓰는지...)
+     * 모바일 패스워드 변경 페이지 이동(어디서 쓰는지...)
      *
      * @param request
      * @param response
@@ -286,13 +286,13 @@ public class UserController {
      */
     @RequestMapping(value = "pwdChg.sb", method = RequestMethod.GET)
     public String passwordChange(HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+                                 Model model) {
         // 잘못된 접근입니다.
         throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
     }
 
     /**
-     * 패스워드 변경 페이지 이동
+     * 모바일 패스워드 변경 페이지 이동
      *
      * @param request
      * @param response
@@ -301,7 +301,7 @@ public class UserController {
      */
     @RequestMapping(value = "pwdChg.sb", method = RequestMethod.POST)
     public String passwordChangeProcess(UserVO userVO, String uuid, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
+                                        HttpServletResponse response, Model model) {
 
         // 필수 값 체크
         if (ObjectUtil.isEmpty(userVO) || isEmpty(userVO.getUserId()) || isEmpty(userVO.getEmpNm())
@@ -336,7 +336,7 @@ public class UserController {
                 && !StringUtil.isEmpty(userVO.getUserId())) {
             model.addAttribute("userId", strMaskingHalf(userVO.getUserId()));
             model.addAttribute("uuid", uuid);
-            return "user/login:pwdChg";
+            return "user/mlogin:pwdChg";
         } else {
             // 실패 처리 > 잘못된 접근입니다.
             throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
@@ -344,7 +344,7 @@ public class UserController {
     }
 
     /**
-     * 패스워드 변경
+     * 모바일 패스워드 변경
      *
      * @param request
      * @param response
@@ -353,12 +353,12 @@ public class UserController {
      */
     @RequestMapping(value = "pwdChgOk.sb", method = RequestMethod.POST)
     public String pwdChgOk(@Validated(PwChange.class) PwdChgVO pwdChgVO, BindingResult bindingResult,
-            HttpServletRequest request, HttpServletResponse response, Model model) {
+                           HttpServletRequest request, HttpServletResponse response, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("userId", pwdChgVO.getHalfId());
             model.addAttribute("uuid", pwdChgVO.getUuid());
-            return "user/login:pwdChg";
+            return "user/mlogin:pwdChg";
         }
 
         /**
@@ -420,17 +420,17 @@ public class UserController {
         } else if (pcr == PwChgResult.UUID_LIMIT_ERROR) {
             // 인증유효 시간이 지났습니다. 다시 인증 해주세요.
             throw new AuthenticationException(messageService.get("login.pw.find.limit"),
-                    "/user/pwdFind.sb");
+                    "/mobile/user/pwdFind.sb");
         } else if (pcr == PwChgResult.CHECK_OK) {
             // 패스워드 변경 성공
-            return "user/login:pwdChgOk";
+            return "user/mlogin:pwdChgOk";
         } else {
             throw new AuthenticationException(messageService.get("cmm.invalid.access"), "");
         }
     }
 
     /**
-     * 메인 화면에서 비밀번호 변경
+     * 모바일 메인 화면에서 비밀번호 변경
      *
      * @param pwdChgVO
      * @param bindingResult
@@ -442,8 +442,8 @@ public class UserController {
     @RequestMapping(value = "userPwdChg.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result userPwdChg(@Validated(UserPwChange.class) PwdChgVO pwdChgVO,
-            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+                             BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+                             Model model) {
 
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
@@ -510,13 +510,13 @@ public class UserController {
 
         HashMap<String, String> returnData = new HashMap<>();
         returnData.put("msg", messageService.get("login.pw.find.h2.1") + messageService.get("login.pw.find.h2.2"));
-        returnData.put("url", "/auth/logout.sb");
+        returnData.put("url", "/mobile/auth/logout.sb");
 
         return returnJson(Status.OK, returnData);
     }
 
     /**
-     * 비밀번호 연장
+     * 모바일 비밀번호 연장
      *
      * @param pwdChgVO
      * @param bindingResult
@@ -528,8 +528,8 @@ public class UserController {
     @RequestMapping(value = "pwdExtension.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result pwdExtension(@Validated(Login.class) PwdChgVO pwdChgVO,
-            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+                               BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+                               Model model) {
 
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
@@ -538,7 +538,7 @@ public class UserController {
         SessionInfoVO sessionInfoVO = new SessionInfoVO();
         sessionInfoVO.setUserId(pwdChgVO.getUserId());
 
-        SessionInfoVO sessionInfo = authService.selectWebUser(sessionInfoVO);
+        SessionInfoVO sessionInfo = mobileAuthService.selectWebUser(sessionInfoVO);
 
         /**
          * 기존 패스워드 비교
@@ -562,10 +562,8 @@ public class UserController {
         HashMap<String, String> result = new HashMap<>();
         result.put("msg", messageService.get("login.pw.find.h2.1") +  messageService.get("login.pw.find.h2.2"));
 
-        result.put("url", "/auth/logout.sb");
+        result.put("url", "/mobile/auth/logout.sb");
 
         return returnJson(Status.OK, result);
     }
 }
-
-

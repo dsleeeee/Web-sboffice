@@ -15,7 +15,7 @@
       </span>
   </p>
 
-  <f:form id="frm" method="post" action="/user/pwdChg.sb" modelAttribute="userVO" class="loginF">
+  <f:form id="frm" method="post" action="/mobile/user/pwdChg.sb" modelAttribute="userVO" class="loginF">
 <%--    <f:form class="loginF"> --%>
 
     <div class="writeInfo">
@@ -67,7 +67,7 @@ genEvent($("#authNumber"), $("#authNumberError"));
     param.empNm = $("#empNm").val();
     param.authNumber = $("#authNumber").val();
 
-    $.postJSON("/user/pwdFind.sb", param, function(result) {
+    $.postJSON("/mobile/user/pwdFind.sb", param, function(result) {
       if(result.status === "OK") {
         document.forms.frm.elements.uuid.value = result.data.uuid;
         document.forms.frm.submit();
@@ -85,7 +85,7 @@ genEvent($("#authNumber"), $("#authNumberError"));
     param.userId = $("#userId").val();
     param.empNm = $("#empNm").val();
 
-    $.postJSON("/user/sendNum.sb", param, function(result) {
+    $.postJSON("/mobile/user/sendNum.sb", param, function(result) {
       if (result.status === "OK") {
         startTimer();
         $("#otpBtn").hide();

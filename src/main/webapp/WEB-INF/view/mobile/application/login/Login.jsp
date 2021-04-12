@@ -64,10 +64,10 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
 
   <div class="linkArea">
     <span class="find">
-      <a href="/user/idFind.sb" class="fdId">
+      <a href="/mobile/user/idFind.sb" class="fdId">
         <s:message code="login.find.id" />
       </a>
-      <a href="/user/pwdFind.sb" class="fdPw">
+      <a href="/mobile/user/pwdFind.sb" class="fdPw">
         <s:message code="login.find.pw" />
       </a>
     </span>

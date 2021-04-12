@@ -14,6 +14,8 @@ public class MobileProdSaleVO extends PageVO {
     private String startDate;
     /** 검색 종료 날짜 */
     private String endDate;
+    /** 매장코드 (조회용) */
+    private String srchStoreCd;
     /** 다중매장코드 array */
     private String arrStoreCd[];
     /** 당일 Best3 매출 조회 여부 */
@@ -53,6 +55,14 @@ public class MobileProdSaleVO extends PageVO {
     @Override
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getSrchStoreCd() {
+        return srchStoreCd;
+    }
+
+    public void setSrchStoreCd(String srchStoreCd) {
+        this.srchStoreCd = srchStoreCd;
     }
 
     public String[] getArrStoreCd() {

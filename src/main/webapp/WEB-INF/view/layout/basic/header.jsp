@@ -41,7 +41,7 @@
         <span>${sessionScope.sessionInfo.userNm}</span>
       </p>
       <ul>
-        <li><a href="#">내 정보 변경</a></li>
+        <%--<li><a href="#">내 정보 변경</a></li>--%>
         <li><a href="#" id="pwchg">비밀번호 변경</a></li>
         <li><a href="/auth/logout.sb">로그아웃</a></li>
       </ul>
