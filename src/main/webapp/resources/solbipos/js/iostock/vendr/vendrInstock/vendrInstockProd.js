@@ -55,7 +55,7 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
 
     // 헤더머지
     s.allowMerging  = 2;
-    s.itemFormatter = function (panel, r, c, cell) {
+      s.itemFormatter = function (panel, r, c, cell) {
       if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
         //align in center horizontally and vertically
         panel.rows[r].allowMerging    = true;

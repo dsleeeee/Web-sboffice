@@ -19,7 +19,7 @@
     </p>
   </div>
 
-  <f:form class="loginF" method="post" modelAttribute="pwdChg" action="/user/pwdChgOk.sb" onsubmit="return inputChk();">
+  <f:form class="loginF" method="post" modelAttribute="pwdChg" action="/mobile/user/pwdChgOk.sb" onsubmit="return inputChk();">
     <div class="writeInfo">
       <div>
         <input type="password" id="newPw" name="newPw" placeholder="<s:message code="login.pw.chg.new" />" class="pw" /><label for="newPw"></label>

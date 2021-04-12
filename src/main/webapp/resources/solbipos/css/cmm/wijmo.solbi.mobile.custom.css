@@ -129,8 +129,8 @@
 }
 
 .wj-listbox .wj-listbox-item {
-    padding: 4px 6px;
-    font-size:12px;
+    padding: 12px 6px;
+    font-size:16px;
 }
 
 .wj-cell {
@@ -217,20 +217,20 @@
     z-index: 1600 !important;
 }
 .wj-popup .wj-dialog-header {
-    height: 50px;
+    height: 35px;
     border-bottom: 1px solid #dbdbdb;
-    line-height: 50px;
-    padding: 0 30px;
+    line-height: 35px;
+    padding: 0 10px;
     color: #222;
     background: initial;
 }
-.wj-dialog-header .btn_close {position: absolute;right: 10px;top: 5px;}
-.wj-dialog-header .btn_close {display: inline-block;width: 45px;height: 40px;border-radius: 5px;transition: all 0.3s;}
+.wj-dialog-header .btn_close {position: absolute;right: 5px; top: 5px;}
+.wj-dialog-header .btn_close {display: inline-block;width: 30px;height: 25px;border-radius: 5px;transition: all 0.3s;}
 .wj-dialog-header .btn_close:hover {background:#e8e8e8; transition:all 0.3s;}
 .wj-dialog-header .btn_close:hover:before {transform:rotate(225deg);}
 .wj-dialog-header .btn_close:hover:after {transform:rotate(135deg);}
-.wj-dialog-header .btn_close:before {content: ''; position: absolute; top: 18px; right: 10px; width: 24px; height: 3px; background: #aeaeae; border-radius: 20%; transform: rotate(45deg); transition: all 0.3s;}
-.wj-dialog-header .btn_close:after {content: ''; position: absolute; top: 18px; right: 10px; width: 24px; height: 3px; background: #aeaeae; border-radius: 20%; transform: rotate(-45deg); transition: all 0.3s;}
+.wj-dialog-header .btn_close:before {content: ''; position: absolute; top: 10px; right: 5px; width: 18px; height: 3px; background: #aeaeae; border-radius: 20%; transform: rotate(45deg); transition: all 0.3s;}
+.wj-dialog-header .btn_close:after {content: ''; position: absolute; top: 10px; right: 5px; width: 18px; height: 3px; background: #aeaeae; border-radius: 20%; transform: rotate(-45deg); transition: all 0.3s;}
 
 .wj-popup .wj-dialog-header-font {
     font-family: 'NotoR', Malgun Gothic, '맑은 고딕', Dotum, '돋움', sans-serif;
@@ -238,7 +238,7 @@
     font-size: 16px;
 }
 .wj-popup .wj-dialog-body {
-    padding: 20px 30px;
+    padding: 10px 15px;
 }
 .wj-popup .wj-popup-loading {
     padding: 20px 0;

@@ -5,7 +5,7 @@
 <div id="_alertTent" class="fullDimmed" style="display: none; z-index:5000;"></div>
 <div id="_layerOk" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="noTitle w300px">
+    <div class="noTitle w80">
       <p class="bk"></p>
       <div class="btnSet">
         <span>
@@ -20,7 +20,7 @@
 
 <div id="_layerConf" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="noTitle w300px">
+    <div class="noTitle w80">
       <p class="bk"></p>
       <div class="btnSet">
         <span>
@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<wj-popup control="_alertPopup" class="wj-dialog-index" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 300px;">
+<wj-popup control="_alertPopup" class="wj-dialog-index" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 80%;">
   <div class="wj-dialog-body">
     <div class="wj-popup-alert">
       <p class="bk" ng-bind-html="s_alert_msg">
@@ -50,7 +50,7 @@
   </div>
 </wj-popup>
 
-<wj-popup control="_alertConfirm" class="wj-dialog-index" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 300px;">
+<wj-popup control="_alertConfirm" class="wj-dialog-index" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="display: none;width: 80%;">
   <div class="wj-dialog-body">
     <div class="wj-popup-alert">
       <p class="bk" ng-bind-html="s_confirm_msg">

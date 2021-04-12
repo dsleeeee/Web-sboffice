@@ -79,7 +79,7 @@
             USER_ID = #{userId}
             AND AUTH_FG = #{authFg}
         ORDER BY
-            REQ_DT DESC )
+            REQ_DATE DESC , REQ_DT DESC )
     WHERE
         ROWNUM = 1
   </select>

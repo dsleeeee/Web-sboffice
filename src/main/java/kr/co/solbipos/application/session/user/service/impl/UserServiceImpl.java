@@ -161,6 +161,7 @@ public class UserServiceImpl implements UserService {
 
         // 패스워드 세팅 및 변경
         sessionInfoVO.setUserId(userId);
+        sessionInfoVO.setUserStatFg(UserStatFg.NORMAL);
         sessionInfoVO.setLastPwdChgDt(currentDateTimeString());
         sessionInfoVO.setUserPwd(newPassword);
         int r1 = updateUserPwd(sessionInfoVO);

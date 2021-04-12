@@ -27,7 +27,8 @@ function girdFldUnfld(Id){
   $("#" + Id).children("a").toggleClass("open");
   $("#" + Id).children("a").toggleClass("close");
   
-  $("#" + Id + "Grid").slideToggle('slow');
+  //$("#" + Id + "Grid").slideToggle('fast');
+  $("#" + Id + "Grid").toggle();
 }
 
 // Grid 조회 시, 닫혀있는 Grid Open
@@ -41,5 +42,15 @@ function gridOpen(Id){
   $("#" + Id).children("a").addClass("open");
   $("#" + Id + "Grid").css("display", "block");
 }
+
+// Grid 조회 후, 데이터 유무에 따른 Msg 띄우기
+function gridShowMsg(Id, type){
+  if(type === "Y") {
+    $("#" + Id + "Msg").css("display", "block");
+  }else {
+    $("#" + Id + "Msg").css("display", "none");
+  }
+}
+
 
 

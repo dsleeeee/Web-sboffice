@@ -310,10 +310,10 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:350px; padding-l
 .distributor, .agency {font-size:0.875em; text-decoration:underline;}
 .agency {margin-left:20px;}
 
-.Area_crtNum input.crtNum {width:180px;}
-.Area_crtNum div {width:130px; height:50px; float:right;}
+.Area_crtNum input.crtNum {width:59.5%;}
+.Area_crtNum div {width:39.5%; height:50px; float:right;}
 .Area_crtNum div span {background:#f6f6f6; height:50px; border:1px solid #dbdbdb; border-radius:4px; line-height:50px; display:block; text-align:center; color:#444;}
-.Area_crtNum .btn_crtNum {width:100%; height:50px; font-size:1em; background:#f6f6f6; color:#888; border:1px solid #dbdbdb; display:inline-block; border-radius:4px; cursor:pointer; transition:all 0.3s;}
+.Area_crtNum .btn_crtNum {width:100%; height:50px; font-size:0.875em; background:#f6f6f6; color:#888; border:1px solid #dbdbdb; display:inline-block; border-radius:4px; cursor:pointer; transition:all 0.3s;}
 .Area_crtNum .btn_crtNum:hover {background:#dbdbdb; transition:all 0.3s;}
 
 .idInfo {position:relative; margin:0 50px; margin-bottom:40px; background:#f0f0f0; border:1px solid #e0e1e2; border-radius:4px; padding:20px 0;}
@@ -1039,10 +1039,10 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 
 /*위즈모 달력*/
 .wj-calendar {background:#fff!important;}
-.wj-calendar-header .wj-month-select span {font-size:12px;}
+.wj-calendar-header .wj-month-select span {font-size:16px;}
 .wj-calendar-header .wj-month-select .wj-glyph-down {position:relative; top:-1px;}
-.wj-calendar-month td {font-size:12px;}
-.wj-calendar-year td {font-size:12px;}
+.wj-calendar-month td {font-size:16px;}
+.wj-calendar-year td {font-size:16px;}
 .rg {position:relative; top:-6px; margin:0 5px; }
 .chk {position:relative; top:-7px;}
 .chk label {font-size:12px;}
@@ -1317,15 +1317,15 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 
 .title {border-radius:4px; background:#fff; padding:0 0 40px 0; z-index:500; position:relative; box-shadow: 0 0 20px 0px #222;}
 
-.tit {height:50px; border-bottom:1px solid #dbdbdb; line-height:50px; padding:0 30px; color:#222;}
+.tit {height:35px; border-bottom:1px solid #dbdbdb; line-height:35px; padding:0 10px; color:#222;}
 
-.title .btn_close {position:absolute; right:10px; top:5px;}
-.title .btn_close {display:inline-block; width:45px; height:40px; border-radius:5px; transition:all 0.3s;}
+.title .btn_close {position:absolute; right:5px; top:5px;}
+.title .btn_close {display:inline-block; width:30px; height:25px; border-radius:5px; transition:all 0.3s;}
 .title .btn_close:hover {background:#e8e8e8; transition:all 0.3s;}
 .title .btn_close:hover:before {transform:rotate(225deg);}
 .title .btn_close:hover:after {transform:rotate(135deg);}
-.title .btn_close:before {content:''; position:absolute; top:18px; right:10px; width:24px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(45deg); transition:all 0.3s;}
-.title .btn_close:after {content:''; position:absolute; top:18px; right:10px; width:24px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(-45deg); transition:all 0.3s;}
+.title .btn_close:before {content:''; position:absolute; top:10px; right:5px; width:18px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(45deg); transition:all 0.3s;}
+.title .btn_close:after {content:''; position:absolute; top:10px; right:5px; width:18px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(-45deg); transition:all 0.3s;}
 
 .con {padding:20px 30px 0;}
 
@@ -2408,9 +2408,16 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 #btnSingleTableAddLayer{margin-right:5px;}
 #btnSingleTableAddLayer:checked+label {background:#fff;}
 
-/* 모바일 Grid 상단 Title Bar - 20210402 추가   */
+/* 모바일 Grid 상단 Title Bar - 20210402 추가 */
 .gridBar {position:relative; border:1px solid #93cbfc; height:25px; background:#ebf5ff; border-top-left-radius:7px; border-top-right-radius:7px; text-align:center;}
 .gridBar a {display:block; height:100%; line-height:22px; color:#337dde;  padding:0 30px 0 0; font-size:0.8em; position:relative;}
 .gridBar a:before {content:''; position:absolute; right:15px; top:7px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
 .gridBar a.open:before {transform:rotate(-90deg);}
 .gridBar a.close:before {transform:rotate(90deg);}
+
+/* 모바일 Popup Grid CSS - 20210407 추가 */
+.popGrid .wj-cell{padding:9px 5px; font-size:13px;}
+.popGrid .wj-cell .wj-cell-check {width:22px; height:22px;}
+
+/* 모바일 Grid Msg CSS = 20210408 추가 */
+.wj-gridWrap .gridMsg{position:absolute; left:50%; transform:translateX(-50%); z-index: 1; color:#222; font-size: 12px;}

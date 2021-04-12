@@ -13,7 +13,7 @@
     <s:message code="login.id.find.info" />
   </p>
 
-  <f:form method="post" modelAttribute="user" action="/user/idFind.sb" class="loginF">
+  <f:form method="post" modelAttribute="user" action="/mobile/user/idFind.sb" class="loginF">
     <div class="writeInfo">
 
       <div>
@@ -35,10 +35,10 @@
 
   <div class="linkArea">
     <span class="find">
-      <a href="/auth/login.sb" class="fdId">
+      <a href="/mobile/auth/login.sb" class="fdId">
         <s:message code="login.go" />
       </a>
-      <a href="/user/pwdFind.sb" class="fdPw">
+      <a href="/mobile/user/pwdFind.sb" class="fdPw">
         <s:message code="login.find.pw" />
       </a>
     </span>

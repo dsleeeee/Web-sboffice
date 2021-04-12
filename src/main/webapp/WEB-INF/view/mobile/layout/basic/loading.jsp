@@ -4,7 +4,7 @@
 <div id="_loadTent" class="fullDimmed" style="display: none;"></div>
 <div id="_loading" class="layer" style="display: none;">
   <div class="layer_inner">
-    <div class="noTitle w300px">
+    <div class="noTitle w80">
       <p class="bk">
         <s:message code="cmm.loading" />
       </p>
@@ -14,7 +14,7 @@
     </div>
   </div>
 </div>
-<wj-popup control="_loadingPopup" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="width: 300px;">
+<wj-popup control="_loadingPopup" fade-in="false" fade-out="false" show-trigger="Click" hide-trigger="Click" style="width: 80%;">
   <div class="wj-dialog-body">
   </div>
 </wj-popup>
