@@ -63,6 +63,19 @@ public class PosFuncController {
         this.sessionService = sessionService;
         this.cmmCodeUtil = cmmCodeUtil;
     }
+    /**
+     * 포스기능정의 화면 - 본사에서 접속
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  권지현
+     * @since   2021. 04. 08.
+     */
+    @RequestMapping(value = "/use/hqView.sb", method = RequestMethod.GET)
+    public String hqList(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "base/store/posFunc/posFunc";
+    }
 
     /**
      * 포스기능정의 화면

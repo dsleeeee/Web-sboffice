@@ -71,9 +71,12 @@ app.controller('storeCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장 조회
   $scope.searchStore = function(){
     var params = {};
-
-    params.hqOfficeCd = $("#srchHqOfficeCd").val();
-    params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    if (orgnFg != 'HQ') {
+      params.hqOfficeCd = $("#srchHqOfficeCd").val();
+      params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    } else if (orgnFg == 'HQ'){
+      params.hqOfficeCd = hqOfficeCd;
+    }
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
     params.clsFg = $scope.clsFg;

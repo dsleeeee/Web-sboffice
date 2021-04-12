@@ -6,6 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/base/store/posfunc/"/>
 
 <div class="subCon" ng-controller="posFuncCtrl">
@@ -26,14 +27,16 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <tr>
-      <%-- 본사코드 --%>
-      <th><s:message code="posFunc.hqOfficeCd" /></th>
-      <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" /></td>
-      <%-- 본사명 --%>
-      <th><s:message code="posFunc.hqOfficeNm" /></th>
-      <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" /></td>
-    </tr>
+    <c:if test="${orgnFg != 'HQ'}">
+      <tr>
+        <%-- 본사코드 --%>
+        <th><s:message code="posFunc.hqOfficeCd" /></th>
+        <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" /></td>
+        <%-- 본사명 --%>
+        <th><s:message code="posFunc.hqOfficeNm" /></th>
+        <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" /></td>
+      </tr>
+    </c:if>
     <tr>
       <%-- 매장코드 --%>
       <th><s:message code="posFunc.storeCd" /></th>
@@ -102,6 +105,7 @@
 
   // 본사코드 가져오기
   var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}";
   var hqList = null;
   if(orgnFg === "MASTER"){
     hqList = ${ccu.getHqOfficeList()};
@@ -167,14 +171,15 @@
       // 오른쪽 화면 숨기기
       $("#posFuncManageArea").hide();
       $("#posFuncAuthArea").hide();
-
-      if($("#srchHqOfficeCd").val().length > 5) {
-        s_alert.pop("<s:message code='posFunc.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
-        return;
-      }
-      if($("#srchHqOfficeNm").val().length > 15) {
-        s_alert.pop("<s:message code='posFunc.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
-        return;
+      if(orgnFg != 'HQ'){
+        if($("#srchHqOfficeCd").val().length > 5) {
+          s_alert.pop("<s:message code='posFunc.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
+          return;
+        }
+        if($("#srchHqOfficeNm").val().length > 15) {
+          s_alert.pop("<s:message code='posFunc.hqOfficeNm'/><s:message code='cmm.regexp' arguments='15'/>");
+          return;
+        }
       }
 
       if($("#srchStoreCd").val().length > 7) {
@@ -187,8 +192,12 @@
       }
 
       var param = {};
+      if(orgnFg != 'HQ') {
+        param.hqOfficeCd = $("#srchHqOfficeCd").val();
+      } else if(orgnFg == 'HQ'){
+        param.hqOfficeCd = hqOfficeCd;
+      }
 
-      param.hqOfficeCd = $("#srchHqOfficeCd").val();
       param.hqOfficeNm = $("#srchHqOfficeNm").val();
       param.storeCd = $("#srchStoreCd").val();
       param.storeNm = $("#srchStoreNm").val();

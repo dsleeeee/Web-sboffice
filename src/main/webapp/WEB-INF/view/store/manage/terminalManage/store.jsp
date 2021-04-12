@@ -1,6 +1,10 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <wj-popup id="storeLayer" control="storeLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:950px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="storeCtrl">
@@ -17,12 +21,14 @@
           <col class="w35" />
         </colgroup>
         <tbody>
-          <tr>
-            <th><s:message code="terminalManage.hqOfficeCd"/></th>
-            <td><input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" /></td>
-            <th><s:message code="terminalManage.hqOfficeNm"/></th>
-            <td><input type="text" id="srchHqOfficeNm" ng-model="hqOfficeNm" /></td>
-          </tr>
+          <c:if test="${orgnFg != 'HQ'}">
+            <tr>
+              <th><s:message code="terminalManage.hqOfficeCd"/></th>
+              <td><input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" /></td>
+              <th><s:message code="terminalManage.hqOfficeNm"/></th>
+              <td><input type="text" id="srchHqOfficeNm" ng-model="hqOfficeNm" /></td>
+            </tr>
+          </c:if>
           <tr>
             <th><s:message code="terminalManage.storeCd"/></th>
             <td><input type="text" id="srchStoreCd" ng-model="storeCd" /></td>
@@ -95,8 +101,10 @@
 
                 <!-- define columns -->
                 <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
-                <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeCd"/>" binding="hqOfficeCd" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeCd"/>" binding="hqOfficeNm" ></wj-flex-grid-column>
+                <c:if test="${orgnFg != 'HQ'}">
+                  <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeCd"/>" binding="hqOfficeCd" ></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeCd"/>" binding="hqOfficeNm" ></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="terminalManage.storeNm"/>" binding="storeNm" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="terminalManage.clsFg"/>" binding="clsFg" data-map="clsFgDataMap"></wj-flex-grid-column>
@@ -114,5 +122,6 @@
 <script type="text/javascript">
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
+  var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=2018100601.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=2018100601.12" charset="utf-8"></script>

@@ -61,7 +61,11 @@ app.controller('batchStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 파라미터
         var params = {};
-        params.hqOfficeCd = $scope.hqOfficeCd;
+        if(orgnFg != 'HQ') {
+            params.hqOfficeCd = $scope.hqOfficeCd;
+        } else if(orgnFg == 'HQ') {
+            params.hqOfficeCd = hqOfficeCd;
+        }
         params.storeCd = $scope.storeCd;
         params.storeNm = $scope.storeNm;
         params.orgnFg = orgnFg;

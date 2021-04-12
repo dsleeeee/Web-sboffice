@@ -5,18 +5,16 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <%--<c:set var="baseUrl" value="/pos/confg/verRecv/storeRecv/"/>--%>
 
-<div class="subCon" ng-controller="storeRecvCtrl">
-  <%-- 탭 --%>
-  <ul class="subTab mb20">
-    <li><a href="#" id="verrecv" onclick="changeTab('R')"><s:message code="verRecv.verrecv" /></a></li>
-    <li><a href="#" id="storerecv" class="on" onclick="changeTab('S')"><s:message code="verRecv.storerecv" /></a></li>
-    <li><a href="#" id="verstore" onclick="changeTab('V')"><s:message code="verRecv.verstore" /></a></li>
-  </ul>
-
+<div class="subCon" ng-controller="storeRecvCtrl" id="storeRecvView">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl">
+      <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
+      <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.storeRecv" /></c:if>
+  </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSearch" onclick="getStoreList()">
@@ -32,11 +30,11 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-      <tr>
+      <tr <c:if test="${orgnFg == 'HQ'}"> style="display:none"</c:if>>
         <%-- 본사코드 --%>
         <th><s:message code="verRecv.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="hqOfficeCd" name="hqOfficeCd" ng-model="hqOfficeCd" class="sb-input w100" size="50">
+          <input type="text" id="hqOfficeCd" name="hqOfficeCd" ng-model="hqOfficeCd" class="sb-input w100" size="50" <c:if test="${orgnFg == 'HQ'}"> value="A0001"</c:if>>
         </td>
         <%-- 본사명 --%>
         <th><s:message code="verRecv.hqOfficeNm" /></th>
@@ -93,8 +91,10 @@
   var mainYn = ${cnv.getEnvCodeExcpAll("4021")};
   var posFg  = ${cnv.getEnvCodeExcpAll("4020")};
   var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
+  var hqOfficeCd = "${hqOfficeCd}";
+  var orgnFg = "${orgnFg}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=2019011002" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=2019011003" charset="utf-8"></script>
 
 <%-- 매장추가 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/verrecv/storeRecvDtl.jsp">

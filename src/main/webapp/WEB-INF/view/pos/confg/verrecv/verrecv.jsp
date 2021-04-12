@@ -5,19 +5,16 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <%--<c:set var="baseUrl" value="/pos/confg/verRecv/verRecv/"/>--%>
 
-<div class="subCon">
-
-  <%-- 탭 --%>
-  <ul class="subTab mb20">
-    <li><a href="#" id="verrecv" class="on" onclick="changeTab('R')"><s:message code="verRecv.verrecv" /></a></li>
-    <li><a href="#" id="storerecv" onclick="changeTab('S')"><s:message code="verRecv.storerecv" /></a></li>
-    <li><a href="#" id="verstore" onclick="changeTab('V')"><s:message code="verRecv.verstore" /></a></li>
-  </ul>
-
+<div class="subCon" id="verRecvView">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl">
+      <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
+      <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.verRecv" /></c:if>
+    </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSearch" onclick="searchPosVerList();">
@@ -131,6 +128,9 @@
             <wj-flex-grid-column header="<s:message code="verRecv.storeCd"/>" binding="storeCd" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="verRecv.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
+            <c:if test="${orgnFg == 'HQ'}">
+              <wj-flex-grid-column header="<s:message code="verRecv.verRecvFg"/>" binding="verRecvFg" data-map="verRecvFgDatMap" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
+            </c:if>
             <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt"  align="center" width="120" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt"  align="center" width="120" is-read-only="true"></wj-flex-grid-column>
 
@@ -171,4 +171,7 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20200805.08" charset="utf-8"></script>
+<script>
+  var hqOfficeCd = "${hqOfficeCd}"
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20200805.09" charset="utf-8"></script>

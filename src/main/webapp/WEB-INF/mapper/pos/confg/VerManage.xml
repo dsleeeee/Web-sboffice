@@ -45,9 +45,19 @@
                        NVL(SUM(DECODE(VER_RECV_FG, '1', 1, '2', 1, 0)), 0) REG_CNT,
                        NVL(SUM(DECODE(VER_RECV_FG, '2', 1, 0)), 0) RECV_CNT
                   FROM TB_CM_POS_VERSN_STORE
+                  <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+                    WHERE STORE_CD IN (SELECT tms.STORE_CD
+                                         FROM TB_MS_STORE tms
+                                        WHERE tms.HQ_OFFICE_CD =#{hqOfficeCd})
+                  </if>
                  GROUP BY VER_SER_NO
                ) tcpvs
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            WHERE tcpvs.VER_SER_NO = tcpv.VER_SER_NO
+        </if>
+        <if test='hqOfficeCd == null or hqOfficeCd == ""'>
          WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+        </if>
         <if test='verSerNo != null and verSerNo != ""'>
            AND tcpv.VER_SER_NO LIKE '%' || #{verSerNo} || '%'
         </if>

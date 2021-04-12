@@ -88,6 +88,9 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 매장목록 조회
   $scope.getStoreList = function(){
     var params = {};
+    if(orgnFg == 'HQ') {
+      params.hqOfficeCd = hqOfficeCd;
+    }
     $scope._inquiryMain("/store/manage/storeManage/storeManage/getStoreList.sb", params, function() {
     });
   };
@@ -154,7 +157,9 @@ app.controller('storeManageExcelCtrl', ['$scope', '$http', '$timeout', function 
 
     $scope.getStoreExcelList = function(){
       var params = {};
-
+      if(orgnFg == 'HQ') {
+        params.hqOfficeCd = hqOfficeCd;
+      }
       $scope._inquiryMain("/store/manage/storeManage/storeManage/getStoreExcelList.sb", params, function() {
 
         if ($scope.excelFlex.rows.length <= 0) {

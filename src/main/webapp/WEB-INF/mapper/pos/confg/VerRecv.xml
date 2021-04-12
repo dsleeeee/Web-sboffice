@@ -38,9 +38,19 @@
                 SUM(DECODE(VER_RECV_FG, '2', 1, 0)) RECV_CNT,
                 SUM(DECODE(VER_RECV_FG, '3', 1, 0)) ERROR_CNT
            FROM TB_CM_POS_VERSN_STORE
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+           WHERE STORE_CD IN (SELECT tms.STORE_CD
+                                FROM TB_MS_STORE tms
+                               WHERE tms.HQ_OFFICE_CD =#{hqOfficeCd})
+        </if>
           GROUP BY VER_SER_NO
                ) tcpvs
-         WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            WHERE tcpvs.VER_SER_NO = tcpv.VER_SER_NO
+        </if>
+        <if test='hqOfficeCd == null or hqOfficeCd == ""'>
+            WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+        </if>
           <if test='verSerNo != null and verSerNo != ""'>
            AND tcpv.VER_SER_NO = #{verSerNo}
           </if>
@@ -50,6 +60,8 @@
          ORDER BY tcpv.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+
+
 
     <!-- 버전별 수신현황 > 버전별 매장수신정보 -->
     <!--
@@ -75,6 +87,9 @@
                TB_MS_STORE tms
          WHERE tcpvs.VER_SER_NO = #{verSerNo}
            AND tms.STORE_CD = tcpvs.STORE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
         <if test='verRecvYn != null and verRecvYn != ""'>
            AND tcpvs.VER_RECV_FG = #{verRecvYn}
         </if>
@@ -107,6 +122,9 @@
         <if test='verRecvYn != null and verRecvYn != ""'>
             AND tcpvs.VER_RECV_FG = #{verRecvYn}
         </if>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
         ORDER BY tcpvs.STORE_CD
     </select>
 
@@ -118,12 +136,16 @@
     -->
     <select id="selectStoreRecvList" parameterType="verRecvVO" resultType="DefaultMap">
         /* VerRecvMapper.selectStoreRecvList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
         SELECT tho.HQ_OFFICE_CD,
           	   tho.HQ_OFFICE_NM,
           	   tms.STORE_CD,
           	   tms.STORE_NM,
           	   NVL(tmp.POS_CNT, 0) AS POS_CNT
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
           FROM TB_HQ_OFFICE tho,
                TB_MS_STORE tms,
                (
@@ -148,6 +170,7 @@
            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
         </if>
          ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 매장별 수신현황 > 버전정보 상세 -->
@@ -194,10 +217,20 @@
           FROM TB_CM_POS_VERSN tcpv,
                (
                 SELECT VER_SER_NO, COUNT(STORE_CD) AS STORE_CNT
-                  FROM TB_CM_POS_VERSN_STORE
+                  FROM  TB_CM_POS_VERSN_STORE
+                   <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+                    WHERE STORE_CD IN (SELECT tms.STORE_CD
+                                         FROM TB_MS_STORE tms
+                                        WHERE tms.HQ_OFFICE_CD =#{hqOfficeCd})
+                   </if>
                  GROUP BY VER_SER_NO
                ) tcpvs
-         WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            WHERE tcpvs.VER_SER_NO = tcpv.VER_SER_NO
+        </if>
+        <if test='hqOfficeCd == null or hqOfficeCd == ""'>
+            WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+        </if>
         <if test='verSerNo != null and verSerNo != ""'>
            AND tcpv.VER_SER_NO = #{verSerNo}
         </if>
@@ -229,6 +262,9 @@
                TB_MS_STORE tms
          WHERE tcpvs.VER_SER_NO = #{verSerNo}
            AND tms.STORE_CD = tcpvs.STORE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
          <if test='verRecvYn != null and verRecvYn == "Y"'>
            AND tcpvs.VER_RECV_DT IS NOT NULL
          </if>

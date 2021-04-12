@@ -5,18 +5,16 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/pos/confg/verRecv/verStore/"/>
 
-<div class="subCon">
-  <%-- 탭 --%>
-  <ul class="subTab mb20">
-    <li><a href="#" id="verrecv" onclick="changeTab('R')"><s:message code="verRecv.verrecv" /></a></li>
-    <li><a href="#" id="storerecv" onclick="changeTab('S')"><s:message code="verRecv.storerecv" /></a></li>
-    <li><a href="#" id="verstore" class="on" onclick="changeTab('V')"><s:message code="verRecv.verstore" /></a></li>
-  </ul>
-
+<div class="subCon" id="verStoreView">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl">
+          <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
+          <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.verStore" /></c:if>
+    </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSearch" onclick="getVersionList()">
@@ -148,5 +146,7 @@
 <script>
   var posFg  = ${cnv.getEnvCodeExcpAll("4020")};
   var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
+  var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}"
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verStore.js?ver=2019011002" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verStore.js?ver=2019011003" charset="utf-8"></script>
