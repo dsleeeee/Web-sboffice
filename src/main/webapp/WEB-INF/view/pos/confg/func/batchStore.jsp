@@ -6,6 +6,7 @@
 
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <wj-popup id="batchStoreLayer" control="batchStoreLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="batchStoreCtrl">
@@ -36,23 +37,26 @@
                         <col class="w35" />
                     </colgroup>
                     <tbody>
-                    <tr>
-                        <th><s:message code="func.hqOffice" /></th>
-                        <td colspan="3">
-                            <div class="sb-select w50">
-                                <wj-combo-box
-                                        id="bsHqOfficeCd"
-                                        ng-model="hqOfficeCd"
-                                        control="bsHqOfficeCd"
-                                        items-source="_getComboData('bsHqOfficeCd')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </tr>
+
+                    <c:if test="${orgnFg != 'HQ'}">
+                        <tr>
+                            <th><s:message code="func.hqOffice" /></th>
+                            <td colspan="3">
+                                <div class="sb-select w50">
+                                    <wj-combo-box
+                                            id="bsHqOfficeCd"
+                                            ng-model="hqOfficeCd"
+                                            control="bsHqOfficeCd"
+                                            items-source="_getComboData('bsHqOfficeCd')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:if>
                     <tr>
                         <th><s:message code="func.storeCd" /></th>
                         <td><input type="text" id="bsStoreCd" ng-model="storeCd" class="sb-input w100"/></td>
@@ -86,5 +90,6 @@
 <script>
     var orgnFg = "${orgnFg}";
     var orgnCd = "${orgnCd}";
+    var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/batchStore.js?ver=20200708.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/batchStore.js?ver=20200708.07" charset="utf-8"></script>

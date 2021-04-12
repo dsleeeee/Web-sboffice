@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/store/manage/terminalManage/" />
 
 <div class="subCon">
@@ -44,7 +45,7 @@
       <div class="wj-TblWrapBr pd20" style="height:470px; overflow-y: hidden;">
 
         <%-- 터미널 선택 --%>
-        <div class="updownSet oh mb10" ng-controller="terminalCtrl">
+        <div class="updownSet oh mb10" ng-controller="terminalCtrl" style="height:45px;">
           <%-- 터미널 선택 --%>
           <div class="sb-select w30 fl">
             <wj-combo-box
@@ -162,6 +163,7 @@ var vendorFg = ${ccu.getCommCodeExcpAll("078")};
 var vandorList = ${vendorList};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
+var hqOfficeCd = "${hqOfficeCd}";
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018100602" charset="utf-8"></script>
 

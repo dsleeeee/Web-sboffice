@@ -5,10 +5,15 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon" ng-controller="verManageCtrl">
+<div class="subCon" ng-controller="verManageCtrl" id="verManageView">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl">
+      <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
+      <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.verManage" /></c:if>
+    </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('verManageCtrl', 1)">
@@ -54,11 +59,12 @@
             is-editable="false"
             initialized="initComboBox(s)">
     </wj-combo-box>
-
-    <%-- 신규버전등록 --%>
-    <button class="btn_skyblue ml5 fr" id="btnRegist" ng-click="registVersion()">
-      <s:message code="verManage.regist.new" />
-    </button>
+    <c:if test="${orgnFg != 'HQ'}">
+      <%-- 신규버전등록 --%>
+      <button class="btn_skyblue ml5 fr" id="btnRegist" ng-click="registVersion()">
+        <s:message code="verManage.regist.new" />
+      </button>
+    </c:if>
   </div>
 
   <%-- 버전관리 그리드 --%>
@@ -104,8 +110,9 @@
   var clsFg       = ${ccu.getCommCodeExcpAll("059")};
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
   var hqList = ${ccu.getHqOfficeList()};
+  var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20190110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20190110.02" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/vermanage/verInfoDtl.jsp">

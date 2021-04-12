@@ -3,6 +3,9 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+
 <%-- 웹사이트 메뉴 권한  --%>
 <div id="webMenuArea">
     <%-- 탭 --%>
@@ -28,19 +31,21 @@
                 <%-- 메뉴권한복사 --%>
                 <th><s:message code="storeManage.copy.authorExcept" /></th>
                 <td colspan="3">
-                    <div class="sb-select fl w60 mr10">
-                        <wj-combo-box
-                                id="hqOfficeCdCombo"
-                                ng-model="hqOfficeCd"
-                                control="hqOfficeCdCombo"
-                                items-source="_getComboData('hqOfficeCdCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                selected-index-changed="setStoreCd(s)">
-                        </wj-combo-box>
-                    </div>
+                    <c:if test="${orgnFg != 'HQ'}">
+                        <div class="sb-select fl w60 mr10">
+                            <wj-combo-box
+                                    id="hqOfficeCdCombo"
+                                    ng-model="hqOfficeCd"
+                                    control="hqOfficeCdCombo"
+                                    items-source="_getComboData('hqOfficeCdCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    selected-index-changed="setStoreCd(s)">
+                            </wj-combo-box>
+                        </div>
+                    </c:if>
                     <div class="sb-select fl w60 mr10">
                         <wj-combo-box
                                 id="storeCdCombo"
@@ -130,6 +135,7 @@
 
 </div>
 <script>
-
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20200514.26" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20200514.27" charset="utf-8"></script>

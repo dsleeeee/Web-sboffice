@@ -75,6 +75,7 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.listScale = $scope.listScaleVer;
     params.curr = $scope._getPagingInfo('curr');
+    params.hqOfficeCd = hqOfficeCd;
 
     $scope._inquiryMain("/pos/confg/verManage/verInfo/list.sb", params, function() {
     });

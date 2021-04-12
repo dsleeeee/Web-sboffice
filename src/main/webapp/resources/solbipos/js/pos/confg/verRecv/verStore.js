@@ -99,6 +99,9 @@ app.controller('verInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.curr = $scope._getPagingInfo('curr');
     params.verSerNo  = $("#verSerNo").val();
     params.verSerNm  = $("#verSerNm").val();
+    if (orgnFg == 'HQ'){
+      params.hqOfficeCd = hqOfficeCd;
+    }
 
     // console.log('params', params);
 
@@ -156,6 +159,9 @@ app.controller('verInfoDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     params.curr = $scope._getPagingInfo('curr');
     params.verSerNo  = $scope.getSelectVersion().verSerNo;
     params.verRecvYn = verScope.verRecvYn;
+    if (orgnFg == 'HQ'){
+      params.hqOfficeCd = hqOfficeCd;
+    }
 
     $scope._inquiryMain("/pos/confg/verRecv/verStore/storeList.sb", params, function() {
     });

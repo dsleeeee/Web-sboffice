@@ -1,6 +1,8 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:370px;">
   <div class="wj-dialog wj-dialog-columns title">
@@ -91,8 +93,10 @@
           </f:form>
         </div>
         <div class="btnSet2">
-          <%-- 수정 --%>
-          <span><a href="#" class="btn_blue pd20" ng-click="modify()"><s:message code="regist.modify" /></a></span>
+          <c:if test="${orgnFg != 'HQ'}">
+            <%-- 수정 --%>
+            <span><a href="#" class="btn_blue pd20" ng-click="modify()"><s:message code="regist.modify" /></a></span>
+          </c:if>
           <%-- 닫기 --%>
           <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
         </div>

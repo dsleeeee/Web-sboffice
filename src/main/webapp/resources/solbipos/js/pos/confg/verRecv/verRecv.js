@@ -99,7 +99,7 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.curr = $scope._getPagingInfo('curr');
     params.verSerNo = $("#verSerNo").val();
     params.verSerNm = $("#verSerNm").val();
-
+    params.hqOfficeCd = hqOfficeCd;
 
     $scope._inquiryMain("/pos/confg/verRecv/verRecv/list.sb", params, function() {
       $scope.$apply(function() {
@@ -134,6 +134,7 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.verRecvFgDatMap = new wijmo.grid.DataMap(verRecvFg, 'value', 'name');
   };
 
   // 조회 버튼 클릭
@@ -156,6 +157,7 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
     params.curr = $scope._getPagingInfo('curr');
     params.verSerNo = $scope.getSelectVersion().verSerNo;
     params.verRecvYn = scope.verRecvYn;
+    params.hqOfficeCd = hqOfficeCd;
 
     // console.log('dtl params', params);
 
@@ -206,6 +208,7 @@ app.controller('verRecvStoreExcelCtrl', ['$scope', '$http', '$timeout', function
     params.curr = data.curr;
     params.verSerNo = data.verSerNo;
     params.verRecvYn = data.verRecvYn;
+    params.hqOfficeCd = hqOfficeCd;
 
     $scope._inquiryMain("/pos/confg/verRecv/verRecv/storeExcelList.sb", params, function() {
 

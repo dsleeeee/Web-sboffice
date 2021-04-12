@@ -147,7 +147,7 @@
                     selection-mode="Row"
                     items-source="data"
                     frozen-columns="4"
-                    item-formatter="_itemFormatter"cmm.excel.down
+                    item-formatter="_itemFormatter"
                     is-read-only="true">
 
                     <!-- define columns -->

@@ -46,6 +46,22 @@ public class VerRecvController {
         this.verRecvService = verRecvService;
     }
 
+
+    /**
+     * 버전별수신현황 - 페이지 이동
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "list.sb", method = RequestMethod.GET)
+    public String view(HttpServletRequest request, HttpServletResponse response,
+                              Model model) {
+        return "pos/confg/verrecv/verrecv";
+    }
+
+
     /**
      * 버전별수신현황 - 페이지 이동
      *
@@ -57,7 +73,7 @@ public class VerRecvController {
     @RequestMapping(value = "verRecv/list.sb", method = RequestMethod.GET)
     public String verrecvlist(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "pos/confg/verrecv/verrecv";
+        return "pos/confg/verrecv/verView";
     }
 
     /**

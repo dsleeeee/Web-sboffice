@@ -88,7 +88,11 @@ app.controller('storeRecvCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.listScale = 30;
     params.curr = $scope._getPagingInfo('curr');
-    params.hqOfficeCd = $("#hqOfficeCd").val();
+    if (orgnFg == 'HQ'){
+      params.hqOfficeCd = hqOfficeCd;
+    } else {
+      params.hqOfficeCd = $("#hqOfficeCd").val();
+    }
     params.hqOfficeNm = $("#hqOfficeNm").val();
     params.storeCd = $("#storeCd").val();
     params.storeNm = $("#storeNm").val();

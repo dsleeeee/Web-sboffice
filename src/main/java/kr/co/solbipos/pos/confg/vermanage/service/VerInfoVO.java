@@ -22,6 +22,8 @@ import kr.co.solbipos.application.common.service.PageVO;
 public class VerInfoVO extends PageVO {
 
     private static final long serialVersionUID = -1179266936609857210L;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 버전일련번호 */
     private String verSerNo;
     /** 버전일련번호 */
@@ -54,6 +56,14 @@ public class VerInfoVO extends PageVO {
     private UseYn useYn;
     /**  상태 */
     private String sysStatFg;
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     /**
      * @return the verSerNo
