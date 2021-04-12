@@ -5,6 +5,9 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
+<c:set var="userIdChk" value="${sessionScope.sessionInfo.userId}"/>
+<c:set var="vUserIdChk" value="${sessionScope.sessionInfo.vUserId}"/>
+
 <div class="subCon" ng-controller="storeListCtrl">
 
   <div class="searchBar flddUnfld">
@@ -102,9 +105,11 @@
     </wj-combo-box>
 
     <%-- 매장환경 복사 --%>
-    <button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyStoreEnv()"  style="display: none;">
-      <s:message code="storeView.copy.store" />
-    </button>
+    <c:if test="${((vUserIdChk eq 'solbi7') or (userIdChk eq 'solbi7'))}">
+        <button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyStoreEnv()">
+          <s:message code="storeView.copy.store" />
+        </button>
+    </c:if>
 
     <%-- 엑셀다운로드 --%>
     <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
