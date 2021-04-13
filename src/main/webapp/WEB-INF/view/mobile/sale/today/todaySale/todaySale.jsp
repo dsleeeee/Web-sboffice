@@ -321,4 +321,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/today/todaySale/todaySale.js?ver=20210412.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/today/todaySale/todaySale.js?ver=20210412.05" charset="utf-8"></script>
