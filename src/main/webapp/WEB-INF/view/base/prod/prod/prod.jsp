@@ -107,7 +107,8 @@
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
-                    initialized="_initComboBox(s)">
+                    initialized="_initComboBox(s)"
+                    selected-index="1">
             </wj-combo-box>
           </div>
         </td>
