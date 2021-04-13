@@ -65,6 +65,6 @@ public interface CmmMenuMapper {
     List<DefaultMap<String>> getAuthedBkmk(DefaultMap<String> map);
 
     /** 유효 메뉴 여부 확인 */
-    int menuResrceChk(String url);
+    int menuResrceChk(ResrceInfoVO resrceInfoVO);
 
 }

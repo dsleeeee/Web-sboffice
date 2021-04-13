@@ -10,6 +10,7 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
+import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
@@ -260,7 +261,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         // 유효 메뉴 여부 확인(화면 URL만 체크, Event URL은 skip)
-        if(cmmMenuService.menuResrceChk(url) < 1){
+        String dispLevel = "3"; // 웹은 메뉴 3depth로 사용
+        if(("/mobile/").equals(ROOT_PATH)){
+            dispLevel = "2";  // 모바일은 메뉴 2depth로 사용
+        }
+
+        ResrceInfoVO resrceInfoVO = new ResrceInfoVO();
+        resrceInfoVO.setUrl(url);
+        resrceInfoVO.setDispLevel(Long.valueOf(dispLevel));
+
+        if(cmmMenuService.menuResrceChk(resrceInfoVO) < 1){
             LOGGER.info("Event URL : " + url);
             LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
             return true;
