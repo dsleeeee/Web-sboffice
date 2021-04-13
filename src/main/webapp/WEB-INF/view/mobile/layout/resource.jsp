@@ -8,7 +8,7 @@
 
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/mobile.style.css?ver=20210408.01" media="all"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/mobile.wijmo.css?ver=20210408.01"/>
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.mobile.custom.css?ver=20210408.01"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.mobile.custom.css?ver=20210413.01"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=470" />
 <%-- third-party plug-in --%>
 <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>

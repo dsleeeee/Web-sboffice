@@ -140,6 +140,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     /*padding:9px 5px;*/
+    padding:4px 2px 4px 2px; /*20210413 김설아 - BBQ 모바일 : 그리드 합계글씨 짤림*/
     line-height:15px;
     outline: none;
     color:#666;
