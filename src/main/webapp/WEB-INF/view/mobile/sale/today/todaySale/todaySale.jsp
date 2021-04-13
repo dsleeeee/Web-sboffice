@@ -35,7 +35,7 @@
         <c:if test="${multiStoreFg ne 0}">
             <tr>
                 <%-- (다중)매장코드 --%>
-                <th><s:message code="mobileProdSale.store"/></th>
+                <th><s:message code="mobile.todaySale.store"/></th>
                 <td>
                     <%-- 다중매장선택 모듈 멀티 선택 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/mobile/sale/com/popup/selectMultiStore.jsp" flush="true">
@@ -80,13 +80,13 @@
                 </tr>
                 <tr>
                     <td class="tr br bl">
-                        {{todaySale.saleCnt}}
+                        <label id="lblSaleCnt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.returnSaleCnt}}
+                        <label id="lblReturnSaleCnt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.billCnt}}
+                        <label id="lblBillCnt"></label>
                     </td>
                 </tr>
                 <tr>
@@ -105,13 +105,13 @@
                 </tr>
                 <tr>
                     <td class="tr br bl">
-                        {{todaySale.totSaleAmt}}
+                        <label id="lblTotSaleAmt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.totDcAmt}}
+                        <label id="lblTotDcAmt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.realSaleAmt}}
+                        <label id="lblRealSaleAmt"></label>
                     </td>
                 </tr>
                 <tr>
@@ -130,13 +130,13 @@
                 </tr>
                 <tr>
                     <td class="tr br bl">
-                        {{todaySale.totGuestCnt}}
+                        <label id="lblTotGuestCnt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.guestUprc}}
+                        <label id="lblGuestUprc"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.billUprc}}
+                        <label id="lblBillUprc"></label>
                     </td>
                 </tr>
                 <tr>
@@ -152,10 +152,10 @@
                 </tr>
                 <tr>
                     <td class="tr br bl">
-                        {{todaySale.tblCnt}}
+                        <label id="lblTblCnt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.tblUprc}}
+                        <label id="lblTblUprcc"></label>
                     </td>
                     <td class="tr br"></td>
                 </tr>
@@ -175,13 +175,13 @@
                 </tr>
                 <tr>
                     <td class="tr br bl">
-                        {{todaySale.cardAmt}}
+                        <label id="lblCardAmt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.cashAmt}}
+                        <label id="lblCashAmt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.etcAmt}}
+                        <label id="lblEtcAmt"></label>
                     </td>
                 </tr>
                 <tr>
@@ -200,13 +200,13 @@
                 </tr>
                 <tr>
                     <td class="tr br bl">
-                        {{todaySale.dcAmt}}
+                        <label id="lblDcAmt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.coupnDcAmt}}
+                        <label id="lblCoupnDcAmt"></label>
                     </td>
                     <td class="tr br">
-                        {{todaySale.totalDcAmt}}
+                        <label id="lblTotalDcAmt"></label>
                     </td>
                 </tr>
                 </tbody>
@@ -321,4 +321,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/today/todaySale/todaySale.js?ver=20210407.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/today/todaySale/todaySale.js?ver=20210412.03" charset="utf-8"></script>

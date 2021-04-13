@@ -43,23 +43,23 @@ app.controller('todaySaleTotalCtrl', ['$scope', '$http', function ($scope, $http
             $scope.todaySale = todaySale;
 
             if(response.data.data.result != null) {
-                $scope.todaySale.saleCnt = $scope.todaySale.saleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.returnSaleCnt = $scope.todaySale.returnSaleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.billCnt = $scope.todaySale.billCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.totSaleAmt = $scope.todaySale.totSaleAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.totDcAmt = $scope.todaySale.totDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.realSaleAmt = $scope.todaySale.realSaleAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.totGuestCnt = $scope.todaySale.totGuestCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.guestUprc = $scope.todaySale.guestUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.billUprc = $scope.todaySale.billUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.tblCnt = $scope.todaySale.tblCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.tblUprc = $scope.todaySale.tblUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.cardAmt = $scope.todaySale.cardAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.cashAmt = $scope.todaySale.cashAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.etcAmt = $scope.todaySale.etcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.dcAmt = $scope.todaySale.dcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.coupnDcAmt = $scope.todaySale.coupnDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $scope.todaySale.totalDcAmt = $scope.todaySale.totalDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $("#lblSaleCnt").text($scope.todaySale.saleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblReturnSaleCnt").text($scope.todaySale.returnSaleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblBillCnt").text($scope.todaySale.billCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblTotSaleAmt").text($scope.todaySale.totSaleAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblTotDcAmt").text($scope.todaySale.totDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblRealSaleAmt").text($scope.todaySale.realSaleAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblTotGuestCnt").text($scope.todaySale.totGuestCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblGuestUprc").text($scope.todaySale.guestUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblBillUprc").text($scope.todaySale.billUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblTblCnt").text($scope.todaySale.tblCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblTblUprcc").text($scope.todaySale.tblUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblCardAmt").text($scope.todaySale.cardAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblCashAmt").text($scope.todaySale.cashAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblEtcAmt").text($scope.todaySale.etcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblDcAmt").text($scope.todaySale.dcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblCoupnDcAmt").text($scope.todaySale.coupnDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblTotalDcAmt").text($scope.todaySale.totalDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             }
         });
     };
@@ -113,8 +113,10 @@ app.controller('todaySaleCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.searchTodaySalePay = function(){
         var params = {};
-        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        // params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.storeCd = $("#mobileTodaySaleStoreCd").val();
+
+        params.startDate = "20200513"; // 조회기간
 
         $scope._inquirySub("/mobile/sale/today/todaySale/todaySale/getTodaySalePayList.sb", params, function() {
             // 매출종합현황
