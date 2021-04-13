@@ -49,8 +49,10 @@ public class TodaySaleServiceImpl implements TodaySaleService {
     public DefaultMap<String> getTodaySaleList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
 
         todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getStoreCd()).equals("")) {
-            todaySaleVO.setArrStoreCd(todaySaleVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
         }
 
         DefaultMap<String> resultMap = new DefaultMap<String>();
@@ -70,8 +72,10 @@ public class TodaySaleServiceImpl implements TodaySaleService {
     public List<DefaultMap<Object>> getTodaySalePayList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
 
         todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getStoreCd()).equals("")) {
-            todaySaleVO.setArrStoreCd(todaySaleVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
         }
 
         return todaySaleMapper.getTodaySalePayList(todaySaleVO);
@@ -82,8 +86,10 @@ public class TodaySaleServiceImpl implements TodaySaleService {
     public List<DefaultMap<Object>> getTodaySaleDcList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
 
         todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getStoreCd()).equals("")) {
-            todaySaleVO.setArrStoreCd(todaySaleVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
         }
 
         return todaySaleMapper.getTodaySaleDcList(todaySaleVO);
@@ -94,8 +100,10 @@ public class TodaySaleServiceImpl implements TodaySaleService {
     public List<DefaultMap<Object>> getTodaySaleDlvrList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
 
         todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getStoreCd()).equals("")) {
-            todaySaleVO.setArrStoreCd(todaySaleVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
         }
 
         return todaySaleMapper.getTodaySaleDlvrList(todaySaleVO);
@@ -106,8 +114,10 @@ public class TodaySaleServiceImpl implements TodaySaleService {
     public List<DefaultMap<Object>> getTodaySaleTimeList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
 
         todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getStoreCd()).equals("")) {
-            todaySaleVO.setArrStoreCd(todaySaleVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
         }
 
         return todaySaleMapper.getTodaySaleTimeList(todaySaleVO);

@@ -36,7 +36,7 @@ app.controller('todaySaleTotalCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
         params.startDate = data.startDate;
         params.endDate = data.endDate;
-        params.storeCd = data.storeCd;
+        params.srchStoreCd = data.srchStoreCd;
 
         $scope._postJSONQuery.withOutPopUp( "/mobile/sale/today/todaySale/todaySale/getTodaySaleList.sb", params, function(response){
             var todaySale = response.data.data.result;
@@ -113,10 +113,8 @@ app.controller('todaySaleCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.searchTodaySalePay = function(){
         var params = {};
-        // params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
-        params.storeCd = $("#mobileTodaySaleStoreCd").val();
-
-        params.startDate = "20200513"; // 조회기간
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.srchStoreCd = $("#mobileTodaySaleStoreCd").val();
 
         $scope._inquirySub("/mobile/sale/today/todaySale/todaySale/getTodaySalePayList.sb", params, function() {
             // 매출종합현황
@@ -175,7 +173,7 @@ app.controller('todaySaleDcCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.startDate = data.startDate;
         params.endDate = data.endDate;
-        params.storeCd = data.storeCd;
+        params.srchStoreCd = data.srchStoreCd;
 
         $scope._inquirySub("/mobile/sale/today/todaySale/todaySale/getTodaySaleDcList.sb", params, function() {}, false);
     };
@@ -210,7 +208,7 @@ app.controller('todaySaleDlvrCtrl', ['$scope', '$http', function ($scope, $http)
         var params = {};
         params.startDate = data.startDate;
         params.endDate = data.endDate;
-        params.storeCd = data.storeCd;
+        params.srchStoreCd = data.srchStoreCd;
 
         $scope._inquirySub("/mobile/sale/today/todaySale/todaySale/getTodaySaleDlvrList.sb", params, function() {}, false);
     };
@@ -245,7 +243,7 @@ app.controller('todaySaleTimeCtrl', ['$scope', '$http', function ($scope, $http)
         var params = {};
         params.startDate = data.startDate;
         params.endDate = data.endDate;
-        params.storeCd = data.storeCd;
+        params.srchStoreCd = data.srchStoreCd;
 
         $scope._inquirySub("/mobile/sale/today/todaySale/todaySale/getTodaySaleTimeList.sb", params, function() {}, false);
     };

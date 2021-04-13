@@ -27,6 +27,9 @@ public class TodaySaleVO extends PageVO {
     /** 조회매장 */
     private String storeCd;
 
+    /** 매장코드 (조회용) */
+    private String srchStoreCd;
+
     /** 다중매장코드 array */
     private String arrStoreCd[];
 
@@ -41,6 +44,14 @@ public class TodaySaleVO extends PageVO {
     public String getStoreCd() { return storeCd; }
 
     public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+
+    public String getSrchStoreCd() {
+        return srchStoreCd;
+    }
+
+    public void setSrchStoreCd(String srchStoreCd) {
+        this.srchStoreCd = srchStoreCd;
+    }
 
     public String[] getArrStoreCd() {
         return arrStoreCd;
