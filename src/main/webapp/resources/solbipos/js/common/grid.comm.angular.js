@@ -804,17 +804,19 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         }
         s.collapseToLevel(0);
 
-        var initMenu = $scope._getInitMenu();
-        // 초기 메뉴(현재 메뉴) 설정
-        if (initMenu) {
-            for (node = s.getFirstNode(); node; node = node.next()) {
-                if (isEmpty(node.nodes)) {
-                    if (!isEmpty(node.dataItem) && node.dataItem.resrceCd === initMenu) {
-                        s.selectedItem = node.dataItem;
+        setTimeout(function() {
+            var initMenu = $scope._getInitMenu();
+            // 초기 메뉴(현재 메뉴) 설정
+            if (initMenu) {
+                for (node = s.getFirstNode(); node; node = node.next()) {
+                    if (isEmpty(node.nodes)) {
+                        if (!isEmpty(node.dataItem) && node.dataItem.resrceCd === initMenu) {
+                            s.selectedItem = node.dataItem;
+                        }
                     }
                 }
-            }
-        }
+            };
+        }, 100)
     }
 
     // 선택된 메뉴가 변경 되었을 때 이벤트
