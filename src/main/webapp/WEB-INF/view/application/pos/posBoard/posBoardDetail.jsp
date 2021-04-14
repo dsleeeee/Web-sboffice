@@ -2,8 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="wjPosBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;height:620px;" fade-in="false" fade-out="false">
-
+<wj-popup control="wjPosBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;height:520px;" fade-in="false" fade-out="false">
     <div ng-controller="posBoardDetailCtrl">
 
         <%-- header --%>
@@ -96,7 +95,7 @@
             </table>
 
             <%-- 게시글내용 --%>
-            <div id="summernoteDetail" style="overflow:auto; height:250px; padding:10px;"></div>
+            <div id="summernoteDetail" style="overflow:auto; height:150px; padding:10px;"></div>
 
             <%-- 첨부파일 --%>
             <div id="fileContent"></div>
@@ -126,12 +125,10 @@
                     </table>
                 </div>
             </div>
-
             <div class="btnSet tc mt20 mb10">
                 <%-- 닫기 --%>
                 <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
             </div>
-
         </div>
         <%-- //body --%>
 

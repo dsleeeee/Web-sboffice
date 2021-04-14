@@ -2,6 +2,7 @@ package kr.co.solbipos.application.pos.posBoard.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.pos.posBoard.service.PosBoardVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +29,7 @@ public interface PosBoardMapper {
 
     /** 게시판 조회 */
     List<DefaultMap<Object>> getPosBoardList(PosBoardVO posBoardVO);
+
+    /** 게시판 메뉴 권한 조회 */
+    String getBoardAuth(SessionInfoVO sessionInfoVO);
 }

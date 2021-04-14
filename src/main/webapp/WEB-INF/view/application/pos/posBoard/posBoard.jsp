@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <style type="text/css">
-    .cusWrap {width: 100%; min-height: 768px; height: 100%; display: table;}
+    .cusWrap {width: 100%; min-height: 568px; height: 100%; display: table;}
     /*.cusWrap {width: 760px; min-height: 590px; height: 100%; display: table;}*/
     .content-middle {width: 100%; height: 100%; display: table-cell; vertical-align: middle;}
     /*.cusTitle {display:block; width:100%; height:100%; line-height:45px; color:#337dde;  padding:0 15px; font-size:0.875em; position:relative;}*/
@@ -85,7 +85,7 @@
 
                 <%-- 그리드 --%>
                 <div class="mb5">
-                    <div class="wj-gridWrap" style="height:260px; overflow-y: hidden; overflow-x: hidden;">
+                    <div class="wj-gridWrap" style="height:330px; overflow-y: hidden; overflow-x: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -116,7 +116,6 @@
                         </wj-flex-grid>
                     </div>
                 </div>
-
                 <%-- 페이지 리스트 --%>
                 <div class="pageNum mt10">
                     <%-- id --%>
@@ -128,7 +127,7 @@
 
             <%-- 그리드 --%>
             <div ng-controller="posBoardPopupCtrl" style="display: none;">
-                <div class="wj-gridWrap" style="height:260px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:330px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -178,7 +177,7 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210408.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210414.05" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업(포스용) --%>
 <c:import url="/WEB-INF/view/application/pos/posBoard/posBoardDetail.jsp">

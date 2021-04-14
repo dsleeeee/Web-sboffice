@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.pos.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
@@ -13,7 +14,7 @@ import kr.co.solbipos.application.pos.service.SimpleMemberJoinService;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
-import kr.co.solbipos.application.pos.posBoard.service.PosBoardVO;
+import kr.co.solbipos.application.pos.posBoard.service.PosBoardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,9 @@ public class SimpleMemberJoinController {
     AuthService authService;
     @Autowired
     MessageService messageService;
+
+    @Autowired
+    PosBoardService posBoardService;
 
     private final String POS_MEMBER_FG_ENVST_CD = "1067"; // 포스회원등록 구분
 
@@ -180,24 +184,9 @@ public class SimpleMemberJoinController {
                 }
 
                 /** 공지사항 페이지이동 권한체크 */
-                SessionInfoVO sessionInfoVO_check = sessionService.getSessionInfo(request);
-                String board_auth = "N";
-                // 세션 권한이 사용할 수 있는 메뉴 목록
-                List<ResrceInfoBaseVO> menuList = sessionInfoVO_check.getMenuData();
-                // url 값 비교
-                for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
-                    String authUrl = resrceInfoBaseVO.getUrl();
-                    if ( !isEmpty(authUrl) ) {
-                        // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-                        if ( authUrl.contains("?") ) {
-                            authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-                        }
-                        if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
-                            board_auth = "Y";
-                        }
-                    }
-                }
-                if(board_auth == "N") {
+                String boardAuth = posBoardService.getBoardAuth(sessionInfoVO);
+                LOGGER.info("posLogin boardAuth : {}", boardAuth);
+                if(boardAuth.equals("0")) {
                     throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
                 }
             }

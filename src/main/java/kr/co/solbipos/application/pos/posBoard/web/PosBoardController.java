@@ -157,25 +157,9 @@ public class PosBoardController {
 //            }
 //
 //            /** 공지사항 페이지이동 권한체크 */
-//            SessionInfoVO sessionInfoVO_check = sessionService.getSessionInfo(request);
-//            String board_auth = "N";
-//            // 세션 권한이 사용할 수 있는 메뉴 목록
-//            List<ResrceInfoBaseVO> menuList = sessionInfoVO_check.getMenuData();
-//            // url 값 비교
-//            for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
-//                String authUrl = resrceInfoBaseVO.getUrl();
-//                if ( !isEmpty(authUrl) ) {
-//                    // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-//                    if ( authUrl.contains("?") ) {
-//                        authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-//                    }
-//                    if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
-//                        board_auth = "Y";
-//                    }
-//                }
-//            }
-////            model.addAttribute("board_auth", board_auth);
-//            if(board_auth == "N") {
+//            String boardAuth = posBoardService.getBoardAuth(sessionInfoVO);
+//            LOGGER.info("posLogin boardAuth : {}", boardAuth);
+//            if(boardAuth.equals("0")) {
 //                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posBoard/boardMenuAuth.sb");
 //            }
 //        }

@@ -115,4 +115,21 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 게시판 메뉴 권한 조회 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO
+        COMMENTS : 권한 그룹 리소스, 웹 사용자 정보
+    -->
+    <select id="getBoardAuth"  parameterType="sessionInfoVO" resultType="String">
+        /* PosBoardMapper.getBoardAuth */
+        SELECT COUNT(twagr.USE_YN)
+        FROM TB_WB_AUTHOR_GRP_RESRCE twagr,
+        TB_WB_USER_INFO twui
+        WHERE 1=1
+        AND twagr.RESRCE_CD = '000328'
+        AND twagr.USE_YN = 'Y'
+        AND twui.USER_ID = #{userId}
+        AND twui.AUTH_GRP_CD (+)= twagr.AUTH_GRP_CD
+    </select>
+
 </mapper>

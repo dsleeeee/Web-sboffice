@@ -62,4 +62,11 @@ public class PosBoardServiceImpl implements PosBoardService {
 
         return posBoardMapper.getPosBoardList(posBoardVO);
     }
+
+    /** 게시판 메뉴 권한 조회 */
+    @Override
+    public String getBoardAuth(SessionInfoVO sessionInfoVO) {
+
+        return posBoardMapper.getBoardAuth(sessionInfoVO);
+    }
 }

@@ -24,4 +24,7 @@ public interface PosBoardService {
 
     /** 게시판 조회 */
     List<DefaultMap<Object>> getPosBoardList(PosBoardVO posBoardVO, SessionInfoVO sessionInfoVO);
+
+    /** 게시판 메뉴 권한 조회 */
+    String getBoardAuth(SessionInfoVO sessionInfoVO);
 }
