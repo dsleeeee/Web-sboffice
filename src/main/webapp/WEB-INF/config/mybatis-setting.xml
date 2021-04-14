@@ -266,11 +266,12 @@
 
     <!-- 가격관리 -->
     <typeAlias alias="salePriceVO" type="kr.co.solbipos.base.price.salePrice.service.SalePriceVO"/>
+    <!-- 기초관리 > 가격관리 > 판매가관리(매장용) -->
+    <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salePriceManage.service.SalePriceManageVO"/>
 
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
         <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
-        <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salepricemanage.service.SalePriceManageVO"/>
         <typeAlias alias="salePriceVO" type="kr.co.solbipos.base.price.saleprice.service.SalePriceVO"/>
         <typeAlias alias="storePriceVO" type="kr.co.solbipos.base.price.storeprice.service.StorePriceVO"/>
         <typeAlias alias="storePriceHistVO" type="kr.co.solbipos.base.price.storepricehist.service.StorePriceHistVO"/>
