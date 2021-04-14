@@ -171,7 +171,7 @@ public class ProdImgServiceImpl implements ProdImgService {
                     try {
                         File destFile = new File(path + newFileName + "." + fileExt);
                         mFile.transferTo(destFile);
-                        Runtime.getRuntime().exec("chmod -R 664 " + destFile);
+                        Runtime.getRuntime().exec("chmod -R 640 " + destFile);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
