@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import kr.co.common.exception.JsonException;
+import kr.co.common.data.enums.Status;
+
 import java.io.File;
 import java.util.List;
 
@@ -88,9 +91,9 @@ public class ProdImgServiceImpl implements ProdImgService {
 
     /**  상품이미지관리 - 상품이미지저장 */
     @Override
-    public boolean saveProdImg(MultipartHttpServletRequest multi, ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO) {
+    public String saveProdImg(MultipartHttpServletRequest multi, ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO) {
 
-        boolean isSuccess = true;
+        String isSuccess = "";
 
         try{
 
@@ -153,6 +156,12 @@ public class ProdImgServiceImpl implements ProdImgService {
                 orgFileName = mFile.getOriginalFilename();
                 fileExt = FilenameUtils.getExtension(orgFileName);
 
+                if(!fileExt.equals("png") && !fileExt.equals("PNG") && !fileExt.equals("jpg") && !fileExt.equals("JPG") )
+                {
+                    isSuccess = "3";
+                    break;
+                }
+
                 if(orgFileName.lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
 
                     prodImgVO.setImgUrl(path_table);
@@ -160,7 +169,9 @@ public class ProdImgServiceImpl implements ProdImgService {
 
                     // 서버 파일 업로드
                     try {
-                        mFile.transferTo(new File(path + newFileName + "." + fileExt));
+                        File destFile = new File(path + newFileName + "." + fileExt);
+                        mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 664 " + destFile);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -172,9 +183,9 @@ public class ProdImgServiceImpl implements ProdImgService {
                     // 2. 기존이미지가 없는경우 INSERT, 있는경우 UPDATE
                     if(imgFileNm == null) {
                         if(prodImgMapper.saveProdImg(prodImgVO) > 0) {
-                            isSuccess = true;
+                            isSuccess = "0";
                         } else {
-                            isSuccess = false;
+                            isSuccess = "1";
                         }
                     } else {
                         if(prodImgMapper.updateProgImg(prodImgVO) > 0) {
@@ -183,9 +194,9 @@ public class ProdImgServiceImpl implements ProdImgService {
                             if(delFile.exists()) {
                                 delFile.delete();
                             }
-                            isSuccess = true;
+                            isSuccess = "0";
                         } else {
-                            isSuccess = false;
+                            isSuccess = "1";
                         }
                     }
                 }
@@ -193,7 +204,7 @@ public class ProdImgServiceImpl implements ProdImgService {
 
         }catch(Exception e){
 
-            isSuccess = false;
+            isSuccess = "1";
         }
         return isSuccess;
     }
