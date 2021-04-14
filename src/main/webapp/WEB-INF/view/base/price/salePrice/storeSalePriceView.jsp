@@ -5,7 +5,7 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
-<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
+<%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
 <c:set var="priceEnvstVal" value="${priceEnvstVal}" />
 
 <div class="subCon" id="storeSalePriceArea" ng-controller="storeSalePriceCtrl" style="display:none;">
@@ -80,7 +80,7 @@
         <%-- 판매가 변경 비율 --%>
         <div class="sb-select fl">
           <span>
-            <input type="text" class="inSty2 w80px" id="inputSaleRate"ng-model="prodInfo.inputSaleRate" ng-readonly="inputSaleRateReadOnly" />
+            <input type="text" class="inSty2 w80px" id="inputSaleRate" ng-model="prodInfo.inputSaleRate" ng-readonly="inputSaleRateReadOnly" />
           </span>
         </div>
         <div class="sb-select fl w5px mr5 mt10">
@@ -150,7 +150,7 @@
     </tbody>
   </table>--%>
 
-  <div class="mt40 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"
@@ -170,14 +170,13 @@
       <s:message code="cmm.excel.down" />
     </button>
     --%>
-    <button class="btn_skyblue fr" ng-click="saveProdPrice()">
-      <s:message code="cmm.save" />
-    </button>
+    <%-- 저장 --%>
+    <button class="btn_skyblue fr" ng-click="saveProdPrice()"><s:message code="cmm.save" /></button>
   </div>
 
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10">
-    <div id="theGridStore" style="height: 370px;">
+    <div id="theGridStore" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"
@@ -207,9 +206,9 @@
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
-      <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-        <jsp:param name="pickerTarget" value="storeSalePriceCtrl"/>
-      </jsp:include>
+      <%--<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">--%>
+        <%--<jsp:param name="pickerTarget" value="storeSalePriceCtrl"/>--%>
+      <%--</jsp:include>--%>
     </div>
   </div>
   <%--//위즈모 테이블--%>
@@ -223,10 +222,12 @@
   <%--//페이지 리스트--%>
 
 </div>
+
 <script>
   var priceEnvstVal = "${priceEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=2018122604" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20210414.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
