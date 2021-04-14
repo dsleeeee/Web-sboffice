@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import kr.co.common.service.message.MessageService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -43,12 +45,14 @@ public class ProdImgController {
 
     private final SessionService sessionService;
     private final ProdImgService prodImgService;
+    private final MessageService messageService;
 
     @Autowired
-    public ProdImgController(SessionService sessionService, ProdImgService prodImgService) {
+    public ProdImgController(SessionService sessionService, ProdImgService prodImgService, MessageService messageService) {
 
         this.sessionService = sessionService;
         this.prodImgService = prodImgService;
+        this.messageService = messageService;
     }
 
     /**
@@ -118,9 +122,16 @@ public class ProdImgController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if(prodImgService.saveProdImg(request, prodImgVO, sessionInfoVO)) {
+        String result = prodImgService.saveProdImg(request, prodImgVO, sessionInfoVO);
+
+        if(result.equals("0")) {
             return returnJson(Status.OK);
-        } else {
+        } else if(result.equals("1")) {
+            return returnJson(Status.FAIL);
+        } else if(result.equals("3")) {
+            //return returnJson(Status.OK, );
+            return returnJson(Status.FAIL, "msg", messageService.get("prodImg.fileExtensionChk.msg"));
+        } else{
             return returnJson(Status.FAIL);
         }
     }

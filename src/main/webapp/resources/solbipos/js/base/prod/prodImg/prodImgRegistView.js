@@ -248,7 +248,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.resetFile(element);
 
     }
-    
+
     // 브라우저에 따른 첨부파일 초기화
     $scope.resetFile = function(element){
 
@@ -341,7 +341,6 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                 contentType: false,
                 cache: false,
                 success: function(result) {
-
                     if (result.status === "OK") {
                         $scope._popMsg("등록되었습니다.");
 
@@ -351,7 +350,8 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                         $scope.$broadcast('loadingPopupInactive');
                     }
                     else if (result.status === "FAIL") {
-                        $scope._popMsg('Ajax Fail By HTTP Request');
+                        var msg = result.status + " : " + result.data.msg;
+                        $scope._popMsg(msg);
                         $scope.$broadcast('loadingPopupInactive');
                     }
                     else if (result.status === "SERVER_ERROR") {
@@ -372,7 +372,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.$broadcast('loadingPopupInactive');
                 }
             },function(){
-                $scope._popMsg("Ajax Fail By HTTP Request");
+                $scope._popMsg("Ajax Fail By HTTP Request 2");
                 $scope.$broadcast('loadingPopupInactive');
             });
         });

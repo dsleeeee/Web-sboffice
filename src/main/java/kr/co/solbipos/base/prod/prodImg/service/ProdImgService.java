@@ -31,7 +31,7 @@ public interface ProdImgService {
     List<DefaultMap<String>> getProdImg(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);
 
     /** 상품이미지관리 - 상품이미지저장 */
-    boolean saveProdImg(MultipartHttpServletRequest multi, ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);
+    String saveProdImg(MultipartHttpServletRequest multi, ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);
 
     /** 상품이미지관리 - 상품이미지삭제 */
     boolean delProdImg(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);

@@ -295,7 +295,8 @@ public class BoardController {
 //        System.out.println("test1111 : " + boardVO.getFileNm());
 
 //        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\", boardVO.getFileNm());
-        File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/", boardVO.getFileNm());
+        String reFileNM = boardVO.getFileNm().replaceAll(".", "").replaceAll("/", "");
+        File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/", reFileNM);
 
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 
@@ -306,12 +307,12 @@ public class BoardController {
         String fileExt;
         if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
             //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩
-            fileName = URLEncoder.encode(boardVO.getFileNm(), "UTF-8");
+            fileName = URLEncoder.encode(reFileNM, "UTF-8");
             orginlFileNm = URLEncoder.encode(boardVO.getOrginlFileNm(), "UTF-8");
             fileExt = URLEncoder.encode(boardVO.getFileExt(), "UTF-8");
         } else {
             //나머지 브라우저에서 인코딩
-            fileName = new String(boardVO.getFileNm().getBytes("UTF-8"), "iso-8859-1");
+            fileName = new String(reFileNM.getBytes("UTF-8"), "iso-8859-1");
             orginlFileNm = new String(boardVO.getOrginlFileNm().getBytes("UTF-8"), "iso-8859-1");
             fileExt = new String(boardVO.getFileExt().getBytes("UTF-8"), "iso-8859-1");
         }
