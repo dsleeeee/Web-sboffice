@@ -295,7 +295,7 @@ public class BoardController {
 //        System.out.println("test1111 : " + boardVO.getFileNm());
 
 //        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\", boardVO.getFileNm());
-        String reFileNM = boardVO.getFileNm().replaceAll(".", "").replaceAll("/", "");
+        String reFileNM = boardVO.getFileNm().replaceAll("..", "").replaceAll("/", "");
         File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/", reFileNM);
 
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
