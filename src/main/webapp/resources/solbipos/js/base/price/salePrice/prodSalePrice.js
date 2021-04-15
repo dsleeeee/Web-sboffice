@@ -199,6 +199,13 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
       return false;
     }
 
+    // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
+    Number.isInteger = Number.isInteger || function(value) {
+      return typeof value === "number" &&
+          isFinite(value) &&
+          Math.floor(value) === value;
+    };
+
     // 파라미터 설정
     var params = new Array();
     var saleAmtOption = $scope.prodInfo.saleAmtOption;
