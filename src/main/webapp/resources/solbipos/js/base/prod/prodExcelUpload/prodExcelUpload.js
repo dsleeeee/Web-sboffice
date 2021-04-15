@@ -228,6 +228,13 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
             // 상품명 중복체크
             $scope.flex.collectionView.items[i].chkProdNm = $scope.isChecked;
 
+            // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
+            Number.isInteger = Number.isInteger || function(value) {
+                return typeof value === "number" &&
+                    isFinite(value) &&
+                    Math.floor(value) === value;
+            };
+
             // <-- 검증 -->
             var result = "";
 
