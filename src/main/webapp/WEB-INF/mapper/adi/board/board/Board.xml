@@ -141,7 +141,12 @@
             AND twuidv01.USER_ID (+)= twbi.USER_ID
             AND twbrh.BOARD_CD (+)= twbi.BOARD_CD
             AND twbrh.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
-            ORDER BY twbi.MOD_DT DESC
+            ORDER BY 1
+                    <!-- 시스템 -->
+                    <if test='orgnFg == "M"'>
+                    ,   twbi.REG_DT DESC
+                    </if>
+                    ,   twbi.MOD_DT DESC
         )
         WHERE 1=1
         <if test='gubunReadCombo != null'>

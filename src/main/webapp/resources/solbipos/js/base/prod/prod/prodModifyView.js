@@ -240,7 +240,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#prodModifySaleUprc").focus();
           return false;
         }
-        // 판매단가 최대값/특수문자(-) 체크
+        // 판매단가 최대값/특수문자(-) 체크ㄹ
         if($("#prodModifySaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#prodModifySaleUprc").val().substring(1))){
             $scope._popMsg(messages["prod.saleUprcFilter.msg"]);
             $("#prodModifySaleUprc").focus();
