@@ -292,7 +292,7 @@ public class BoardController {
                                        HttpServletResponse response, Model model) throws Exception {
 
 //System.out.println("kjs: request.getParameter(fileNm): "  + request.getParameter("fileNm"));
-//System.out.println("kjs: boardVO.getFileNm() : "  + boardVO.getFileNm());
+System.out.println("kjs: boardVO.getFileNm() : "  + boardVO.getFileNm());
 
 //        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\", boardVO.getFileNm());
         String reFileNM = boardVO.getFileNm().replaceAll("../", "");
