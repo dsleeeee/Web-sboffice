@@ -295,7 +295,7 @@ public class BoardController {
 System.out.println("kjs: boardVO.getFileNm() : "  + boardVO.getFileNm());
 
 //        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\", boardVO.getFileNm());
-        String reFileNM = boardVO.getFileNm().replaceAll("../", "");
+        String reFileNM = boardVO.getFileNm().replaceAll("../", "").replaceAll("/", "");
 
 System.out.println("kjs: reFileNM : " + reFileNM);
         File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/", reFileNM);
