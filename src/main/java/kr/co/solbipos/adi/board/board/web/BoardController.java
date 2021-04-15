@@ -291,11 +291,12 @@ public class BoardController {
     public void getBoardDetailAtchDownload(BoardVO boardVO, HttpServletRequest request,
                                        HttpServletResponse response, Model model) throws Exception {
 
-System.out.println("kjs: request.getParameter(fileNm): "  + request.getParameter("fileNm"));
-System.out.println("kjs: boardVO.getFileNm() : "  + boardVO.getFileNm());
+//System.out.println("kjs: request.getParameter(fileNm): "  + request.getParameter("fileNm"));
+//System.out.println("kjs: boardVO.getFileNm() : "  + boardVO.getFileNm());
 
 //        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\", boardVO.getFileNm());
-        String reFileNM = boardVO.getFileNm().replaceAll("..", "").replaceAll("/", "");
+        String reFileNM = boardVO.getFileNm().replaceAll("../", "");
+
 System.out.println("kjs: reFileNM : " + reFileNM);
         File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/", reFileNM);
 
