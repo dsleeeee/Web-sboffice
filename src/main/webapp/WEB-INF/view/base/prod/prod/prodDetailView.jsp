@@ -172,8 +172,22 @@
             <td>
               {{prodDetail.barCd}}
             </td>
-            <td></td>
-            <td></td>
+              <%-- 가격관리구분 --%>
+              <th>
+                <s:message code="prod.prcCtrlFg"/>
+              </th>
+            <td>
+              <wj-combo-box
+                      ng-model="prodDetail.prcCtrlFg"
+                      ng-hide="true"
+                      text="_prcCtrlFg"
+                      items-source="_getComboData('prcCtrlFgComboData')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false">
+              </wj-combo-box>
+              {{_prcCtrlFg}}
+            </td>
           </tr>
           </tbody>
         </table>
@@ -484,4 +498,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20201224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20210415.01" charset="utf-8"></script>

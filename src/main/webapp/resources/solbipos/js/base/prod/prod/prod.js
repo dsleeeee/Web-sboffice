@@ -93,6 +93,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._getComboDataQuery('095', 'setProdFgComboData');
   // 봉사료포함여부 콤보박스
   $scope._getComboDataQuery('058', 'prodTipYnComboData');
+  // 과세여부 콤보박스
+  $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);

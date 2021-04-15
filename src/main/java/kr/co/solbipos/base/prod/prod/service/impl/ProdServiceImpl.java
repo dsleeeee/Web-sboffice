@@ -246,9 +246,9 @@ public class ProdServiceImpl implements ProdService {
             prodExist = prodMapper.getProdExistInfo(prodVO);
         }
 
-        // 매장에서 매장상품 등록시에 가격관리 구분 등록
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
-        else                                        prodVO.setPrcCtrlFg("S"); //매장
+        // 매장에서 매장상품 등록시에 가격관리 구분 등록 -> 콤보박스로 처리
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
+//        else                                        prodVO.setPrcCtrlFg("S"); //매장
 
 
         // 상품정보 저장
@@ -679,7 +679,6 @@ public class ProdServiceImpl implements ProdService {
 
             // 본사상품이 사이드 선택메뉴를 사용하는 경우, 매장에도 사이드 선택메뉴를 넣어준다.
             if(prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0){
-
                 // 매장 사이드 선택메뉴 그룹/분류/상품 저장
                 //그룹(sdselGrp)
                 prodMapper.insertSdselGrpToStore(prodVO);
@@ -688,11 +687,9 @@ public class ProdServiceImpl implements ProdService {
                 //상품(sdselProd)
                 prodMapper.insertSdselProdToStore(prodVO);
             }
-
         }
 
         return procCnt;
-
     }
 
     /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 */
