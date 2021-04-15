@@ -5,13 +5,12 @@ var app = agrid.getApp();
 
 /** 매장현황 controller */
 app.controller('saleApprNcardCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('saleApprNcardCtrl', $scope, $http, true));
 
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
@@ -80,13 +79,11 @@ app.controller('saleApprNcardCtrl', ['$scope', '$http', '$timeout', function ($s
     }
   };
 
-
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("saleApprNcardCtrl", function (event, data) {
-
     $scope.storeCd  	= data.storeCd;
     $scope.arrStorePos	= data.posNo;
-    $scope.saleYn 		= data.saleYn
+    $scope.saleYn 		= data.saleYn;
     $scope.apprProcFg 	= data.apprProcFg;
     $scope.acquireCd	= data.acquireCd;
     $scope.startDate 	= data.startDate;
@@ -101,14 +98,13 @@ app.controller('saleApprNcardCtrl', ['$scope', '$http', '$timeout', function ($s
     event.preventDefault();
   });
 
-
   // 테이블별 리스트 조회
   $scope.searchSaleComNcardList = function () {
     // 파라미터
     var params       = {};
     params.storeCd   = $scope.storeCd;
     params.arrStorePos	= $scope.arrStorePos;
-    params.saleYn 		= $scope.saleYn
+    params.saleYn 		= $scope.saleYn;
     params.apprProcFg 	= $scope.apprProcFg;
     params.acquireCd = $scope.acquireCd;
     params.startDate = $scope.startDate;
@@ -118,5 +114,28 @@ app.controller('saleApprNcardCtrl', ['$scope', '$http', '$timeout', function ($s
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/appr/view.sb", params);
   };
+
+    // 엑셀 다운로드
+    $scope.excelDownload = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, '승인현황_매장현황_' + getToday() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
+    };
 
 }]);
