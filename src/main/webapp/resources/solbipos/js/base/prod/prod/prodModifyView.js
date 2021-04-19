@@ -58,12 +58,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         params.vatFg = "1"; // 과세여부
         params.useYn = "Y"; // 사용여부
         params.barCd = ""; // 바코드
-        // 가격관리구분
-        if(orgnFg == "HQ") {
-            params.prcCtrlFg = "H";
-        } else {
-            params.prcCtrlFg = "S";
-        }
         // 상품부가정보
         params.stockProdYn = "Y"; // 재고관리여부
         params.soldOutYn = "N"; // 품절여부
@@ -329,13 +323,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 등록/수정 모드에 따른 VIEW 변경
     $scope.chkSaveMode = function(data){
-
-        // 가격관리구분
-        if(orgnFg == "HQ") {
-            $("#_prcCtrlFg").attr("disabled", false);
-        } else {
-            $("#_prcCtrlFg").attr("disabled", true);
-        }
 
         // 수정 모드 시
         if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== ""){

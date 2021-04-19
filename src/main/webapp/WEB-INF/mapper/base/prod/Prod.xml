@@ -245,7 +245,7 @@
                 thp.PO_UNIT_FG,
                 thp.USE_YN,
                 (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD )
-                    AS STORE_CNT
+                AS STORE_CNT
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
@@ -368,52 +368,51 @@
                 thp.REG_DT,
                 thpi.IMG_URL,
                 thvp.VENDR_CD,
-                thvp.VENDR_NM,
-                thp.PRC_CTRL_FG
+                thvp.VENDR_NM
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    PROD_CD,
-                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                    <![CDATA[
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_HQ_PRODUCT_SALE_PRICE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                     ]]>
-                    AND SALE_PRC_FG = #{salePrcFg}
-                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY HQ_OFFICE_CD, PROD_CD
                 ) thpsp ON
                 thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
                 AND thp.PROD_CD = thpsp.PROD_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    PROD_CD,
-                    IMG_URL || IMG_FILE_NM AS IMG_URL
-                    FROM TB_HQ_PRODUCT_IMAGE
-                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND IMG_FG = '001'
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                IMG_URL || IMG_FILE_NM AS IMG_URL
+                FROM TB_HQ_PRODUCT_IMAGE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND IMG_FG = '001'
                 ) thpi ON
                 thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
                 AND thp.PROD_CD = thpi.PROD_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                    thvp.HQ_OFFICE_CD,
-                    thvp.PROD_CD,
-                    LISTAGG(thvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_CD,
-                    LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
-                    FROM TB_HQ_VENDOR_PROD thvp,
-                    TB_HQ_VENDOR thv
-                    WHERE 1=1
-                    AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thvp.PROD_CD = #{prodCd}
-                    AND thvp.USE_YN = 'Y'
-                    AND thv.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
-                    AND thv.VENDR_CD = thvp.VENDR_CD
-                    GROUP BY thvp.HQ_OFFICE_CD, thvp.PROD_CD
+                SELECT
+                thvp.HQ_OFFICE_CD,
+                thvp.PROD_CD,
+                LISTAGG(thvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_CD,
+                LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
+                FROM TB_HQ_VENDOR_PROD thvp,
+                TB_HQ_VENDOR thv
+                WHERE 1=1
+                AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thvp.PROD_CD = #{prodCd}
+                AND thvp.USE_YN = 'Y'
+                AND thv.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
+                AND thv.VENDR_CD = thvp.VENDR_CD
+                GROUP BY thvp.HQ_OFFICE_CD, thvp.PROD_CD
                 ) thvp ON
                 thp.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
                 AND thp.PROD_CD = thvp.PROD_CD
@@ -462,52 +461,51 @@
                 tmp.REG_DT,
                 tmpi.IMG_URL,
                 tmvp.VENDR_CD,
-                tmvp.VENDR_NM,
-                tmp.PRC_CTRL_FG
+                tmvp.VENDR_NM
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
-                    SELECT
-                    STORE_CD,
-                    PROD_CD,
-                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM TB_MS_PRODUCT_SALE_PRICE
-                    WHERE STORE_CD = #{storeCd}
-                    <![CDATA[
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                     ]]>
-                    AND SALE_PRC_FG = #{salePrcFg}
-                    GROUP BY STORE_CD, PROD_CD
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY STORE_CD, PROD_CD
                 ) tmpsp ON
                 tmp.STORE_CD = tmpsp.STORE_CD
                 AND tmp.PROD_CD = tmpsp.PROD_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                    STORE_CD,
-                    PROD_CD,
-                    IMG_URL || IMG_FILE_NM AS IMG_URL
-                    FROM TB_MS_PRODUCT_IMAGE
-                    WHERE STORE_CD = #{storeCd}
-                    AND IMG_FG = '001'
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                IMG_URL || IMG_FILE_NM AS IMG_URL
+                FROM TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                AND IMG_FG = '001'
                 ) tmpi ON
                 tmp.STORE_CD = tmpi.STORE_CD
                 AND tmp.PROD_CD = tmpi.PROD_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                    tmvp.STORE_CD,
-                    tmvp.PROD_CD,
-                    LISTAGG(tmvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_CD,
-                    LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
-                    FROM TB_MS_VENDOR_PROD tmvp,
-                    TB_MS_VENDOR tmv
-                    WHERE 1=1
-                    AND tmvp.STORE_CD = #{storeCd}
-                    AND tmvp.PROD_CD = #{prodCd}
-                    AND tmvp.USE_YN = 'Y'
-                    AND tmv.STORE_CD = tmvp.STORE_CD
-                    AND tmv.VENDR_CD = tmvp.VENDR_CD
-                    GROUP BY tmvp.STORE_CD, tmvp.PROD_CD
+                SELECT
+                tmvp.STORE_CD,
+                tmvp.PROD_CD,
+                LISTAGG(tmvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_CD,
+                LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                FROM TB_MS_VENDOR_PROD tmvp,
+                TB_MS_VENDOR tmv
+                WHERE 1=1
+                AND tmvp.STORE_CD = #{storeCd}
+                AND tmvp.PROD_CD = #{prodCd}
+                AND tmvp.USE_YN = 'Y'
+                AND tmv.STORE_CD = tmvp.STORE_CD
+                AND tmv.VENDR_CD = tmvp.VENDR_CD
+                GROUP BY tmvp.STORE_CD, tmvp.PROD_CD
                 ) tmvp ON
                 tmp.STORE_CD = tmvp.STORE_CD
                 AND tmp.PROD_CD = tmvp.PROD_CD
@@ -612,124 +610,121 @@
                 TB_HQ_PRODUCT thp
                 USING DUAL ON
                 (
-                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thp.PROD_CD = #{prodCd}
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.PROD_CD = #{prodCd}
                 )
                 WHEN MATCHED THEN
-                    UPDATE
-                    SET
-                    PROD_NM = #{prodNm},
-                    PROD_CLASS_CD  = #{prodClassCd},
-                    CORNR_CD = #{cornrCd},
-                    ORGPLCE_CD = #{orgplceCd},
-                    SDATTR_CLASS_CD = #{sdattrClassCd},
-                    SDSEL_GRP_CD = #{sdselGrpCd},
-                    POINT_SAVE_YN = #{pointSaveYn, jdbcType=VARCHAR},
-                    PROD_DC_FG = #{prodDcFg},
-                    VAT_FG = #{vatFg},
-                    PROD_TIP_YN = #{prodTipYn, jdbcType=VARCHAR},
-                    PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
-                    PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
-                    PROD_TYPE_FG = #{prodTypeFg},
-                    SALE_PROD_YN = #{saleProdYn},
-                    STOCK_PROD_YN = #{stockProdYn},
-                    SIDE_PROD_YN = #{sideProdYn, jdbcType=VARCHAR},
-                    SET_PROD_FG = #{setProdFg},
-                    COST_UPRC = #{costUprc, jdbcType=NUMERIC},
-                    LAST_COST_UPRC = #{lastCostUprc, jdbcType=NUMERIC},
-                    SPLY_UPRC = #{splyUprc, jdbcType=NUMERIC},
-                    SPLY_UPRC_USE_YN = #{splyUprcUseYn, jdbcType=VARCHAR},
-                    PO_PROD_FG = #{poProdFg},
-                    PO_UNIT_FG = #{poUnitFg},
-                    PO_UNIT_QTY = #{poUnitQty, jdbcType=NUMERIC},
-                    PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
-                    PO_MIN_QTY = #{poMinQty, jdbcType=NUMERIC},
-                    SAFE_STOCK_QTY = #{safeStockQty, jdbcType=NUMERIC},
-                    STOCK_UNIT_FG = #{stockUnitFg},
-                    USE_YN = #{useYn},
-                    REMARK = #{remark},
-                    MOD_DT = #{modDt},
-                    MOD_ID = #{modId},
-                    PRC_CTRL_FG = #{prcCtrlFg}
+                UPDATE
+                SET
+                PROD_NM = #{prodNm},
+                PROD_CLASS_CD  = #{prodClassCd},
+                CORNR_CD = #{cornrCd},
+                ORGPLCE_CD = #{orgplceCd},
+                SDATTR_CLASS_CD = #{sdattrClassCd},
+                SDSEL_GRP_CD = #{sdselGrpCd},
+                POINT_SAVE_YN = #{pointSaveYn, jdbcType=VARCHAR},
+                PROD_DC_FG = #{prodDcFg},
+                VAT_FG = #{vatFg},
+                PROD_TIP_YN = #{prodTipYn, jdbcType=VARCHAR},
+                PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
+                PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
+                PROD_TYPE_FG = #{prodTypeFg},
+                SALE_PROD_YN = #{saleProdYn},
+                STOCK_PROD_YN = #{stockProdYn},
+                SIDE_PROD_YN = #{sideProdYn, jdbcType=VARCHAR},
+                SET_PROD_FG = #{setProdFg},
+                COST_UPRC = #{costUprc, jdbcType=NUMERIC},
+                LAST_COST_UPRC = #{lastCostUprc, jdbcType=NUMERIC},
+                SPLY_UPRC = #{splyUprc, jdbcType=NUMERIC},
+                SPLY_UPRC_USE_YN = #{splyUprcUseYn, jdbcType=VARCHAR},
+                PO_PROD_FG = #{poProdFg},
+                PO_UNIT_FG = #{poUnitFg},
+                PO_UNIT_QTY = #{poUnitQty, jdbcType=NUMERIC},
+                PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
+                PO_MIN_QTY = #{poMinQty, jdbcType=NUMERIC},
+                SAFE_STOCK_QTY = #{safeStockQty, jdbcType=NUMERIC},
+                STOCK_UNIT_FG = #{stockUnitFg},
+                USE_YN = #{useYn},
+                REMARK = #{remark},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        HQ_OFFICE_CD,
-                        PROD_CD,
-                        PROD_NM,
-                        PROD_CLASS_CD,
-                        CORNR_CD,
-                        ORGPLCE_CD,
-                        SDATTR_CLASS_CD,
-                        SDSEL_GRP_CD,
-                        POINT_SAVE_YN,
-                        PROD_DC_FG,
-                        VAT_FG,
-                        PROD_TIP_YN,
-                        PROD_PACK_AMT,
-                        PROD_DLVR_AMT,
-                        PROD_TYPE_FG,
-                        SALE_PROD_YN,
-                        STOCK_PROD_YN,
-                        SIDE_PROD_YN,
-                        SET_PROD_FG,
-                        COST_UPRC,
-                        LAST_COST_UPRC,
-                        SPLY_UPRC,
-                        SPLY_UPRC_USE_YN,
-                        PO_PROD_FG,
-                        PO_UNIT_FG,
-                        PO_UNIT_QTY,
-                        PO_UNIT_ALLOW_FG,
-                        PO_MIN_QTY,
-                        SAFE_STOCK_QTY,
-                        STOCK_UNIT_FG,
-                        USE_YN,
-                        REMARK,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID,
-                        PRC_CTRL_FG
-                    ) VALUES (
-                        #{hqOfficeCd},
-                        #{prodCd},
-                        #{prodNm},
-                        #{prodClassCd},
-                        '00',
-                        #{orgplceCd},
-                        #{sdattrClassCd},
-                        #{sdselGrpCd},
-                        #{pointSaveYn, jdbcType=VARCHAR},
-                        #{prodDcFg},
-                        #{vatFg},
-                        #{prodTipYn, jdbcType=VARCHAR},
-                        #{prodPackAmt, jdbcType=NUMERIC},
-                        #{prodDlvrAmt, jdbcType=NUMERIC},
-                        #{prodTypeFg},
-                        #{saleProdYn},
-                        #{stockProdYn},
-                        #{sideProdYn, jdbcType=VARCHAR},
-                        #{setProdFg},
-                        #{costUprc, jdbcType=NUMERIC},
-                        #{lastCostUprc, jdbcType=NUMERIC},
-                        #{splyUprc, jdbcType=NUMERIC},
-                        #{splyUprcUseYn, jdbcType=VARCHAR},
-                        #{poProdFg},
-                        #{poUnitFg},
-                        #{poUnitQty, jdbcType=NUMERIC},
-                        #{poUnitAllowFg},
-                        #{poMinQty, jdbcType=NUMERIC},
-                        #{safeStockQty, jdbcType=NUMERIC},
-                        #{stockUnitFg},
-                        #{useYn},
-                        #{remark},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId},
-                        #{prcCtrlFg}
-                    )
+                INSERT
+                (
+                HQ_OFFICE_CD,
+                PROD_CD,
+                PROD_NM,
+                PROD_CLASS_CD,
+                CORNR_CD,
+                ORGPLCE_CD,
+                SDATTR_CLASS_CD,
+                SDSEL_GRP_CD,
+                POINT_SAVE_YN,
+                PROD_DC_FG,
+                VAT_FG,
+                PROD_TIP_YN,
+                PROD_PACK_AMT,
+                PROD_DLVR_AMT,
+                PROD_TYPE_FG,
+                SALE_PROD_YN,
+                STOCK_PROD_YN,
+                SIDE_PROD_YN,
+                SET_PROD_FG,
+                COST_UPRC,
+                LAST_COST_UPRC,
+                SPLY_UPRC,
+                SPLY_UPRC_USE_YN,
+                PO_PROD_FG,
+                PO_UNIT_FG,
+                PO_UNIT_QTY,
+                PO_UNIT_ALLOW_FG,
+                PO_MIN_QTY,
+                SAFE_STOCK_QTY,
+                STOCK_UNIT_FG,
+                USE_YN,
+                REMARK,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                #{prodCd},
+                #{prodNm},
+                #{prodClassCd},
+                '00',
+                #{orgplceCd},
+                #{sdattrClassCd},
+                #{sdselGrpCd},
+                #{pointSaveYn, jdbcType=VARCHAR},
+                #{prodDcFg},
+                #{vatFg},
+                #{prodTipYn, jdbcType=VARCHAR},
+                #{prodPackAmt, jdbcType=NUMERIC},
+                #{prodDlvrAmt, jdbcType=NUMERIC},
+                #{prodTypeFg},
+                #{saleProdYn},
+                #{stockProdYn},
+                #{sideProdYn, jdbcType=VARCHAR},
+                #{setProdFg},
+                #{costUprc, jdbcType=NUMERIC},
+                #{lastCostUprc, jdbcType=NUMERIC},
+                #{splyUprc, jdbcType=NUMERIC},
+                #{splyUprcUseYn, jdbcType=VARCHAR},
+                #{poProdFg},
+                #{poUnitFg},
+                #{poUnitQty, jdbcType=NUMERIC},
+                #{poUnitAllowFg},
+                #{poMinQty, jdbcType=NUMERIC},
+                #{safeStockQty, jdbcType=NUMERIC},
+                #{stockUnitFg},
+                #{useYn},
+                #{remark},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -737,124 +732,124 @@
                 TB_MS_PRODUCT tmp
                 USING DUAL ON
                 (
-                    tmp.STORE_CD = #{storeCd}
-                    AND tmp.PROD_CD = #{prodCd}
+                tmp.STORE_CD = #{storeCd}
+                AND tmp.PROD_CD = #{prodCd}
                 )
                 WHEN MATCHED THEN
-                    UPDATE
-                    SET
-                    PROD_NM = #{prodNm},
-                    PROD_CLASS_CD  = #{prodClassCd},
-                    CORNR_CD = #{cornrCd},
-                    ORGPLCE_CD = #{orgplceCd},
-                    SDATTR_CLASS_CD = #{sdattrClassCd},
-                    SDSEL_GRP_CD = #{sdselGrpCd},
-                    POINT_SAVE_YN = #{pointSaveYn},
-                    PROD_DC_FG = #{prodDcFg},
-                    VAT_FG = #{vatFg},
-                    PROD_TIP_YN = #{prodTipYn},
-                    PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
-                    PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
-                    PROD_TYPE_FG = #{prodTypeFg},
-                    SALE_PROD_YN = #{saleProdYn},
-                    STOCK_PROD_YN = #{stockProdYn},
-                    SIDE_PROD_YN = #{sideProdYn},
-                    SET_PROD_FG = #{setProdFg},
-                    PRC_CTRL_FG = #{prcCtrlFg},
-                    COST_UPRC = #{costUprc},
-                    LAST_COST_UPRC = #{lastCostUprc},
-                    SPLY_UPRC = #{splyUprc},
-                    SPLY_UPRC_USE_YN = #{splyUprcUseYn},
-                    PO_PROD_FG = #{poProdFg},
-                    PO_UNIT_FG = #{poUnitFg},
-                    PO_UNIT_QTY = #{poUnitQty},
-                    PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
-                    PO_MIN_QTY = #{poMinQty},
-                    SAFE_STOCK_QTY = #{safeStockQty},
-                    STOCK_UNIT_FG = #{stockUnitFg},
-                    USE_YN = #{useYn},
-                    REMARK = #{remark},
-                    MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                UPDATE
+                SET
+                PROD_NM = #{prodNm},
+                PROD_CLASS_CD  = #{prodClassCd},
+                CORNR_CD = #{cornrCd},
+                ORGPLCE_CD = #{orgplceCd},
+                SDATTR_CLASS_CD = #{sdattrClassCd},
+                SDSEL_GRP_CD = #{sdselGrpCd},
+                POINT_SAVE_YN = #{pointSaveYn},
+                PROD_DC_FG = #{prodDcFg},
+                VAT_FG = #{vatFg},
+                PROD_TIP_YN = #{prodTipYn},
+                PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
+                PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
+                PROD_TYPE_FG = #{prodTypeFg},
+                SALE_PROD_YN = #{saleProdYn},
+                STOCK_PROD_YN = #{stockProdYn},
+                SIDE_PROD_YN = #{sideProdYn},
+                SET_PROD_FG = #{setProdFg},
+                PRC_CTRL_FG = #{prcCtrlFg},
+                COST_UPRC = #{costUprc},
+                LAST_COST_UPRC = #{lastCostUprc},
+                SPLY_UPRC = #{splyUprc},
+                SPLY_UPRC_USE_YN = #{splyUprcUseYn},
+                PO_PROD_FG = #{poProdFg},
+                PO_UNIT_FG = #{poUnitFg},
+                PO_UNIT_QTY = #{poUnitQty},
+                PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
+                PO_MIN_QTY = #{poMinQty},
+                SAFE_STOCK_QTY = #{safeStockQty},
+                STOCK_UNIT_FG = #{stockUnitFg},
+                USE_YN = #{useYn},
+                REMARK = #{remark},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        STORE_CD,
-                        PROD_CD,
-                        PROD_NM,
-                        PROD_CLASS_CD,
-                        CORNR_CD,
-                        ORGPLCE_CD,
-                        SDATTR_CLASS_CD,
-                        SDSEL_GRP_CD,
-                        POINT_SAVE_YN,
-                        PROD_DC_FG,
-                        VAT_FG,
-                        PROD_TIP_YN,
-                        PROD_PACK_AMT,
-                        PROD_DLVR_AMT,
-                        PROD_TYPE_FG,
-                        SALE_PROD_YN,
-                        STOCK_PROD_YN,
-                        SIDE_PROD_YN,
-                        SET_PROD_FG,
-                        PRC_CTRL_FG,
-                        COST_UPRC,
-                        LAST_COST_UPRC,
-                        SPLY_UPRC,
-                        SPLY_UPRC_USE_YN,
-                        PO_PROD_FG,
-                        PO_UNIT_FG,
-                        PO_UNIT_QTY,
-                        PO_UNIT_ALLOW_FG,
-                        PO_MIN_QTY,
-                        SAFE_STOCK_QTY,
-                        STOCK_UNIT_FG,
-                        USE_YN,
-                        REMARK,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{storeCd},
-                        #{prodCd},
-                        #{prodNm},
-                        #{prodClassCd},
-                        '00',
-                        #{orgplceCd},
-                        #{sdattrClassCd},
-                        #{sdselGrpCd},
-                        #{pointSaveYn},
-                        #{prodDcFg},
-                        #{vatFg},
-                        #{prodTipYn},
-                        #{prodPackAmt, jdbcType=NUMERIC},
-                        #{prodDlvrAmt, jdbcType=NUMERIC},
-                        #{prodTypeFg},
-                        #{saleProdYn},
-                        #{stockProdYn},
-                        'N',
-                        #{setProdFg},
-                        #{prcCtrlFg},
-                        #{costUprc},
-                        #{lastCostUprc},
-                        #{splyUprc},
-                        #{splyUprcUseYn},
-                        #{poProdFg},
-                        #{poUnitFg},
-                        #{poUnitQty},
-                        #{poUnitAllowFg},
-                        #{poMinQty},
-                        #{safeStockQty},
-                        #{stockUnitFg},
-                        #{useYn},
-                        #{remark},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
+                INSERT
+                (
+                STORE_CD,
+                PROD_CD,
+                PROD_NM,
+                PROD_CLASS_CD,
+                CORNR_CD,
+                ORGPLCE_CD,
+                SDATTR_CLASS_CD,
+                SDSEL_GRP_CD,
+                POINT_SAVE_YN,
+                PROD_DC_FG,
+                VAT_FG,
+                PROD_TIP_YN,
+                PROD_PACK_AMT,
+                PROD_DLVR_AMT,
+                PROD_TYPE_FG,
+                SALE_PROD_YN,
+                STOCK_PROD_YN,
+                SIDE_PROD_YN,
+                SET_PROD_FG,
+                PRC_CTRL_FG,
+                COST_UPRC,
+                LAST_COST_UPRC,
+                SPLY_UPRC,
+                SPLY_UPRC_USE_YN,
+                PO_PROD_FG,
+                PO_UNIT_FG,
+                PO_UNIT_QTY,
+                PO_UNIT_ALLOW_FG,
+                PO_MIN_QTY,
+                SAFE_STOCK_QTY,
+                STOCK_UNIT_FG,
+                USE_YN,
+                REMARK,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{prodCd},
+                #{prodNm},
+                #{prodClassCd},
+                '00',
+                #{orgplceCd},
+                #{sdattrClassCd},
+                #{sdselGrpCd},
+                #{pointSaveYn},
+                #{prodDcFg},
+                #{vatFg},
+                #{prodTipYn},
+                #{prodPackAmt, jdbcType=NUMERIC},
+                #{prodDlvrAmt, jdbcType=NUMERIC},
+                #{prodTypeFg},
+                #{saleProdYn},
+                #{stockProdYn},
+                'N',
+                #{setProdFg},
+                #{prcCtrlFg},
+                #{costUprc},
+                #{lastCostUprc},
+                #{splyUprc},
+                #{splyUprcUseYn},
+                #{poProdFg},
+                #{poUnitFg},
+                #{poUnitQty},
+                #{poUnitAllowFg},
+                #{poMinQty},
+                #{safeStockQty},
+                #{stockUnitFg},
+                #{useYn},
+                #{remark},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
             </when>
         </choose>
     </update>
@@ -1213,6 +1208,7 @@
         COMMENTS : 본사 상품을 적용할 매장을 등록한다.
     -->
     <insert id="insertProdStore" parameterType="prodVO">
+
         /* USE : ProdMapper.insertProdStore */
         INSERT INTO TB_HQ_PRODUCT_STORE
         (
@@ -1283,8 +1279,7 @@
                     thp.REG_DT,
                     thp.REG_ID,
                     thp.MOD_DT,
-                    thp.MOD_ID,
-                    thp.PRC_CTRL_FG
+                    thp.MOD_ID
                FROM
                    TB_HQ_PRODUCT thp
                WHERE
@@ -1312,8 +1307,7 @@
                tmp.STOCK_PROD_YN       = thp.STOCK_PROD_YN,
                tmp.SIDE_PROD_YN        = thp.SIDE_PROD_YN,
                tmp.SET_PROD_FG         = thp.SET_PROD_FG,
---                tmp.PRC_CTRL_FG         = 'H',           -- 가격관리구분 (본사에서 매장으로 내려줌)
-               tmp.PRC_CTRL_FG         = thp.PRC_CTRL_FG,
+               tmp.PRC_CTRL_FG         = 'H',           -- 가격관리구분 (본사에서 매장으로 내려줌)
                tmp.COST_UPRC           = thp.COST_UPRC,
                tmp.LAST_COST_UPRC      = thp.LAST_COST_UPRC,
                tmp.SPLY_UPRC           = thp.SPLY_UPRC,
@@ -1393,8 +1387,7 @@
             thp.STOCK_PROD_YN,
             thp.SIDE_PROD_YN,
             thp.SET_PROD_FG,
---             'H',                -- 가격관리구분 (본사에서 매장으로 내려줌)
-            thp.PRC_CTRL_FG,
+            'H',                -- 가격관리구분 (본사에서 매장으로 내려줌)
             thp.COST_UPRC,
             thp.LAST_COST_UPRC,
             thp.SPLY_UPRC,
@@ -2398,76 +2391,76 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 MERGE INTO TB_HQ_VENDOR_PROD thvp
-                    USING DUAL
-                    ON (thvp.HQ_OFFICE_CD = #{hqOfficeCd} AND thvp.VENDR_CD = #{vendrCd} AND thvp.PROD_CD = #{prodCd})
+                USING DUAL
+                ON (thvp.HQ_OFFICE_CD = #{hqOfficeCd} AND thvp.VENDR_CD = #{vendrCd} AND thvp.PROD_CD = #{prodCd})
                 WHEN MATCHED THEN
-                    UPDATE
-                    SET
-                    thvp.SPLY_UPRC = #{splyUprc},
-                    thvp.USE_YN = 'Y',
-                    thvp.MOD_DT = #{modDt},
-                    thvp.MOD_ID = #{modId}
+                UPDATE
+                SET
+                thvp.SPLY_UPRC = #{splyUprc},
+                thvp.USE_YN = 'Y',
+                thvp.MOD_DT = #{modDt},
+                thvp.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        HQ_OFFICE_CD,
-                        HQ_BRAND_CD,
-                        VENDR_CD,
-                        PROD_CD,
-                        SPLY_UPRC,
-                        USE_YN,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{hqOfficeCd},
-                        '0000000', --HQ_BRAND_CD
-                        #{vendrCd},
-                        #{prodCd},
-                        #{splyUprc},
-                        'Y',
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
+                INSERT
+                (
+                HQ_OFFICE_CD,
+                HQ_BRAND_CD,
+                VENDR_CD,
+                PROD_CD,
+                SPLY_UPRC,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                '0000000', --HQ_BRAND_CD
+                #{vendrCd},
+                #{prodCd},
+                #{splyUprc},
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 MERGE INTO TB_MS_VENDOR_PROD tmvp
-                    USING DUAL
-                    ON (tmvp.STORE_CD = #{storeCd} AND tmvp.VENDR_CD = #{vendrCd} AND tmvp.PROD_CD = #{prodCd})
+                USING DUAL
+                ON (tmvp.STORE_CD = #{storeCd} AND tmvp.VENDR_CD = #{vendrCd} AND tmvp.PROD_CD = #{prodCd})
                 WHEN MATCHED THEN
-                    UPDATE
-                    SET
-                    tmvp.SPLY_UPRC = #{splyUprc},
-                    tmvp.USE_YN = 'Y',
-                    tmvp.MOD_DT = #{modDt},
-                    tmvp.MOD_ID = #{modId}
+                UPDATE
+                SET
+                tmvp.SPLY_UPRC = #{splyUprc},
+                tmvp.USE_YN = 'Y',
+                tmvp.MOD_DT = #{modDt},
+                tmvp.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        STORE_CD,
-                        VENDR_CD,
-                        PROD_CD,
-                        SPLY_UPRC,
-                        USE_YN,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{storeCd},
-                        #{vendrCd},
-                        #{prodCd},
-                        #{splyUprc},
-                        'Y',
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
+                INSERT
+                (
+                STORE_CD,
+                VENDR_CD,
+                PROD_CD,
+                SPLY_UPRC,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{vendrCd},
+                #{prodCd},
+                #{splyUprc},
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
             </when>
         </choose>
     </insert>
