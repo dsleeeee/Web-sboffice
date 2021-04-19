@@ -144,12 +144,17 @@
                 <wj-flex-grid-column header="<s:message code="salePriceManage.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.poUnitQty"/>" binding="poUnitQty" visible="false" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
+                <c:if test="${orgnFg eq 'STORE' or storeCd eq '00000'}">
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.storeSplyUprc"/>" binding="storeSplyUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
+                <c:if test="${orgnFg eq 'STORE' or storeCd eq '00000'}">
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.storeSaleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.saleUprc"/>" binding="saleUprc" width="*" align="right" align="right"></wj-flex-grid-column>
+
                 <wj-flex-grid-column header="<s:message code="salePriceManage.hqMarginAmt"/>" binding="hqMarginAmt" is-read-only="true" width="*" align="right" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.hqMarginRate"/>" binding="hqMarginRate" is-read-only="true" width="*" align="right" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.storeMarginAmt"/>" binding="storeMarginAmt" is-read-only="true" width="*" align="right" align="right" visible="false"></wj-flex-grid-column>

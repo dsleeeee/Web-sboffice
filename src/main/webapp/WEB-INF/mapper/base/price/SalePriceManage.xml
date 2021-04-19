@@ -18,58 +18,151 @@
     -->
     <select id="getSalePriceManageList"  parameterType="SalePriceManageVO" resultType="DefaultMap">
         /* SalePriceManageMapper.getSalePriceManageList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        tmp.PROD_CD,
-        tmp.PROD_NM,
-        thp.PROD_CLASS_CD,  -- 상품분류코드
-        tmp.PO_UNIT_QTY, -- 입수
-        thp.COST_UPRC AS HQ_COST_UPRC,   -- 본사원가
-        thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
-        tmp.SPLY_UPRC AS STORE_SPLY_UPRC,   -- 매장공급가
-        thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
-        tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
-        tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
-        tmp.PRC_CTRL_FG
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_MS_PRODUCT tmp,
-        TB_HQ_PRODUCT thp,
-        (
-            SELECT HQ_OFFICE_CD, PROD_CD,
-            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-            FROM TB_HQ_PRODUCT_SALE_PRICE
-            WHERE 1 = 1
-            <![CDATA[
-               AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-               AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-             ]]>
-            AND SALE_PRC_FG = '1'
-            GROUP BY HQ_OFFICE_CD, PROD_CD
-        ) thpsp,
-        (
-            SELECT STORE_CD, PROD_CD,
-            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-            FROM TB_MS_PRODUCT_SALE_PRICE
-            WHERE 1 = 1
-            <![CDATA[
-                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-            AND SALE_PRC_FG = '1'
-            GROUP BY STORE_CD, PROD_CD
-        ) tmpsp
-        WHERE 1=1
-        AND tmp.STORE_CD = #{storeCd}
-        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='prodClassCd != null and prodClassCd != ""'>
-            AND thp.PROD_CLASS_CD = #{prodClassCd}
-        </if>
-        AND thp.PROD_CD = tmp.PROD_CD
-        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-        AND thpsp.PROD_CD = thp.PROD_CD
-        AND tmpsp.STORE_CD = tmp.STORE_CD
-        AND tmpsp.PROD_CD = tmp.PROD_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                thp.PROD_CLASS_CD,  -- 상품분류코드
+                tmp.PO_UNIT_QTY, -- 입수
+                thp.COST_UPRC AS HQ_COST_UPRC,   -- 본사원가
+                thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+                tmp.SPLY_UPRC AS STORE_SPLY_UPRC,   -- 매장공급가
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
+                tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+                tmp.PRC_CTRL_FG
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_PRODUCT tmp,
+                TB_HQ_PRODUCT thp,
+                (
+                    SELECT HQ_OFFICE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                     ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                ) thpsp,
+                (
+                    SELECT STORE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY STORE_CD, PROD_CD
+                ) tmpsp
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND thp.PROD_CLASS_CD = #{prodClassCd}
+                </if>
+                AND thp.PROD_CD = tmp.PROD_CD
+                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsp.PROD_CD = thp.PROD_CD
+                AND tmpsp.STORE_CD = tmp.STORE_CD
+                AND tmpsp.PROD_CD = tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
+                SELECT
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                thp.PROD_CLASS_CD,  -- 상품분류코드
+                tmp.PO_UNIT_QTY, -- 입수
+                thp.COST_UPRC AS HQ_COST_UPRC,   -- 본사원가
+                thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+                tmp.SPLY_UPRC AS STORE_SPLY_UPRC,   -- 매장공급가
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
+                tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+                tmp.PRC_CTRL_FG
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_PRODUCT tmp,
+                TB_HQ_PRODUCT thp,
+                (
+                    SELECT HQ_OFFICE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                     ]]>
+                    AND SALE_PRC_FG = '2'
+                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                ) thpsp,
+                (
+                    SELECT STORE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '2'
+                    GROUP BY STORE_CD, PROD_CD
+                ) tmpsp
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND thp.PROD_CLASS_CD = #{prodClassCd}
+                </if>
+                AND thp.PROD_CD = tmp.PROD_CD
+                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsp.PROD_CD = thp.PROD_CD
+                AND tmpsp.STORE_CD = tmp.STORE_CD
+                AND tmpsp.PROD_CD = tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!--  단독매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd == "00000"'>
+                SELECT
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                tmp.PROD_CLASS_CD,  -- 상품분류코드
+                tmp.PO_UNIT_QTY, -- 입수
+                tmp.SPLY_UPRC AS STORE_SPLY_UPRC,   -- 매장공급가
+                tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
+                tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+                tmp.PRC_CTRL_FG
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_PRODUCT tmp,
+                (
+                    SELECT STORE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND SALE_PRC_FG = '2'
+                    GROUP BY STORE_CD, PROD_CD
+                ) tmpsp
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                </if>
+                AND tmpsp.STORE_CD = tmp.STORE_CD
+                AND tmpsp.PROD_CD = tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
     </select>
 
 </mapper>
