@@ -58,6 +58,8 @@ public class SalePriceManageServiceImpl implements SalePriceManageService {
     @Override
     public List<DefaultMap<Object>> getSalePriceManageList(SalePriceManageVO salePriceManageVO, SessionInfoVO sessionInfoVO) {
 
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        salePriceManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         salePriceManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             salePriceManageVO.setStoreCd(sessionInfoVO.getStoreCd());

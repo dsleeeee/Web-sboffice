@@ -184,13 +184,8 @@ public class ProdVO extends PageVO {
     /** 매장상태 */
     private String sysStatFg;
 
-    public String getSysStatFg() {
-        return sysStatFg;
-    }
-
-    public void setSysStatFg(String sysStatFg) {
-        this.sysStatFg = sysStatFg;
-    }
+    /** 상품등록구분 */
+    private String regFg;
 
     /**
      * @return the hqOfficeCd
@@ -921,4 +916,20 @@ public class ProdVO extends PageVO {
     }
 
     public void setVendrCdList(String[] vendrCdList) { this.vendrCdList = vendrCdList; }
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
+    public String getRegFg() {
+        return regFg;
+    }
+
+    public void setRegFg(String regFg) {
+        this.regFg = regFg;
+    }
 }

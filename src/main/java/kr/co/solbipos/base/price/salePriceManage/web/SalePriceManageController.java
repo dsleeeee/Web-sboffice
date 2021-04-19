@@ -5,9 +5,11 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.price.salePriceManage.service.SalePriceManageService;
 import kr.co.solbipos.base.price.salePriceManage.service.SalePriceManageVO;
+import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,14 +30,16 @@ public class SalePriceManageController {
 
     private final SessionService sessionService;
     private final SalePriceManageService salePriceManageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SalePriceManageController(SessionService sessionService, SalePriceManageService salePriceManageService) {
+    public SalePriceManageController(SessionService sessionService, SalePriceManageService salePriceManageService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.salePriceManageService = salePriceManageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -47,6 +51,13 @@ public class SalePriceManageController {
      */
     @RequestMapping(value = "/salePriceManage/list.sb", method = RequestMethod.GET)
     public String salePriceManageView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 판매가 본사 통제여부
+        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+        model.addAttribute("priceEnvstVal", priceEnvstVal);
 
         return "base/price/salePriceManage/salePriceManage";
     }
