@@ -214,8 +214,8 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
 
     // 저장
     $scope.saveProdPrice = function(){
-        if(priceEnvstVal === 'STORE'){
-            $scope._popMsg("판매가 본사통제여부가 '매장'로 설정되었습니다.");
+        if(priceEnvstVal === 'HQ'){
+            $scope._popMsg("판매가 본사통제여부가 '본사'로 설정되었습니다.");
             return false;
         }
 

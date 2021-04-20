@@ -180,7 +180,7 @@
     var priceEnvstVal = "${priceEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceManage/salePriceManage.js?ver=20200215.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceManage/salePriceManage.js?ver=20200215.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

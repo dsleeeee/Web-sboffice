@@ -84,7 +84,7 @@ public class SalePriceManageServiceImpl implements SalePriceManageService {
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-            salePriceVO.setPrcCtrlFg("1"); // 본사에서 등록
+            salePriceVO.setPrcCtrlFg("2"); // 매장에서 등록
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
 
