@@ -1153,7 +1153,7 @@
 			,TSSPC.TIP_AMT
 			,TSSPC.VAT_AMT
 			,CASH_BILL_CARD_NO
-			,DECODE(TSSPC.CASH_BILL_CARD_TYPE_FG, 1, '소득공제', 2, '지출증빙', 3, '자진발급') AS CASH_BILL_CARD_TYPE_FG
+			,DECODE(TSSPC.CASH_BILL_CARD_TYPE_FG, 1, '카드', 2, '주민번호', 3, '휴대폰', 4, '사업자') AS CASH_BILL_CARD_TYPE_FG
 			,TO_CHAR(TO_DATE(TSSPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
 			,TSSPC.APPR_NO
 			,TSSPC.SALE_AMT AS APPR_AMT
@@ -1178,7 +1178,7 @@
         <if test='apprProcFg != null and apprProcFg != ""'>
             AND TSSPC.APPR_PROC_FG = #{apprProcFg}
         </if>
-        <if test='apprProcFg == null and apprProcFg == ""'>
+        <if test='apprProcFg == null or apprProcFg == ""'>
             AND TSSPC.APPR_PROC_FG IN ('1','2')
         </if>
         <if test='saleFg != null and saleFg != ""'>

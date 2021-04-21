@@ -61,7 +61,7 @@
         <if test='apprProcFg != null and apprProcFg != ""'>
             AND APPR_PROC_FG = #{apprProcFg}
         </if>
-        <if test='apprProcFg == null and apprProcFg == ""'>
+        <if test='apprProcFg == null or apprProcFg == ""'>
             AND APPR_PROC_FG IN ('1','2')
         </if>
         <if test='startDate != null and startDate != ""'>
@@ -102,7 +102,7 @@
         <if test='apprProcFg != null and apprProcFg != ""'>
             AND APPR_PROC_FG = #{apprProcFg}
         </if>
-        <if test='apprProcFg == null and apprProcFg == ""'>
+        <if test='apprProcFg == null or apprProcFg == ""'>
             AND APPR_PROC_FG IN ('1','2')
         </if>
         <if test='startDate != null and startDate != ""'>
@@ -182,7 +182,7 @@
         <if test='apprProcFg != null and apprProcFg != ""'>
             AND APPR_PROC_FG = #{apprProcFg}
         </if>
-        <if test='apprProcFg == null and apprProcFg == ""'>
+        <if test='apprProcFg == null or apprProcFg == ""'>
             AND APPR_PROC_FG IN ('1','2')
         </if>
         <if test='startDate != null and startDate != ""'>
@@ -223,7 +223,7 @@
         <if test='apprProcFg != null and apprProcFg != ""'>
             AND APPR_PROC_FG = #{apprProcFg}
         </if>
-        <if test='apprProcFg == null and apprProcFg == ""'>
+        <if test='apprProcFg == null or apprProcFg == ""'>
             AND APPR_PROC_FG IN ('1','2')
         </if>
         <if test='startDate != null and startDate != ""'>
