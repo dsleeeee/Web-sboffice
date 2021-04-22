@@ -28,6 +28,9 @@ public class SalePriceVO extends PageVO {
     /** 상품코드 */
     private String prodCd;
 
+    /** 상품명 */
+    private String prodNm;
+
     /** 변경전 매장 판매가 */
     private String saleUprcP;
 
@@ -73,7 +76,6 @@ public class SalePriceVO extends PageVO {
     /** 상품분류코드 */
     private String prodClassCd;
 
-
     /**
      * @return the hqOfficeCd
      */
@@ -117,6 +119,14 @@ public class SalePriceVO extends PageVO {
      */
     public void setProdCd(String prodCd) {
         this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 
     /**
