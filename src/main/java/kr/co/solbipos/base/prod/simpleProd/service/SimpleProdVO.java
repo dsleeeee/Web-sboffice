@@ -130,6 +130,12 @@ public class SimpleProdVO extends PageVO {
     /** 구분 */
     private String gubun;
 
+    /** 가격관리구분 */
+    private String prcCtrlFg;
+
+    /** 상품등록구분 */
+    private String regFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -297,4 +303,18 @@ public class SimpleProdVO extends PageVO {
     public String getGubun() { return gubun; }
 
     public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getPrcCtrlFg() {
+        return prcCtrlFg;
+    }
+
+    public void setPrcCtrlFg(String prcCtrlFg) { this.prcCtrlFg = prcCtrlFg; }
+
+    public String getRegFg() {
+        return regFg;
+    }
+
+    public void setRegFg(String regFg) {
+        this.regFg = regFg;
+    }
 }
