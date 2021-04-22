@@ -42,6 +42,6 @@
 </script>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=2018112001" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=2018112002" charset="utf-8"></script>
 
 

@@ -59,6 +59,20 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === 'sdattrClassCd' && selectedRow.status !== 'I') {
+          $("#sideMenuAttrTitle").html(" [" + selectedRow.sdattrClassCd+ "]" + selectedRow.sdattrClassNm );
+          if (orgnFg == 'STORE' && selectedRow.sdattrClassCd <= 79999) {
+            $("#btnUpAttr").hide();
+            $("#btnDownAttr").hide();
+            $("#btnAddAttr").hide();
+            $("#btnDelAttr").hide();
+            $("#btnSaveAttr").hide();
+          } else {
+            $("#btnUpAttr").show();
+            $("#btnDownAttr").show();
+            $("#btnAddAttr").show();
+            $("#btnDelAttr").show();
+            $("#btnSaveAttr").show();
+          }
           $scope._broadcast('sideMenuAttrAttrCtrl', selectedRow.sdattrClassCd);
         }
       }
@@ -69,12 +83,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
     // 파라미터
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain('/base/prod/sideMenu/attrClass/list.sb', params, function() {
-      $('#btnAddClass').show();
-      $('#btnDelClass').show();
-      $('#btnSaveClass').show();
-
-    });
+    $scope._inquiryMain('/base/prod/sideMenu/attrClass/list.sb', params);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -91,63 +100,140 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
 
   // 속성분류 그리드 행 삭제
   $scope.deleteRow = function() {
-    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      var item = $scope.flex.collectionView.items[i];
 
-      if(item.gChk){
-        if(item.cnt > 0){
-          $scope._popMsg("속성이 등록된 분류는 삭제할 수 없습니다. ");
-          return false;
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      // 파라미터 설정
+      var params = [];
+      for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i--){
+        var item = $scope.flex.collectionView.items[i];
+        if(item.gChk) {
+          if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && item.sdattrClassCd > 79999)){
+            if(item.cnt == 0){
+              $scope.flex.collectionView.removeAt(i);
+            } else {
+              $scope._popMsg("속성이 등록된 분류는 삭제할 수 없습니다. ");
+              return false;
+            }
+          } else  {
+            $scope._popMsg("본사에서 등록한 속성은 변경 할 수 없습니다");
+            $scope._broadcast('sideMenuAttrClassCtrl');
+            return false;
+          }
         }
-        $scope.flex.collectionView.removeAt(i);
       }
-    }
+
+      for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+        $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+        params.push($scope.flex.collectionView.itemsRemoved[d]);
+      }
+
+      // 삭제기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save('/base/prod/sideMenu/attrClass/save.sb', params, function () {
+        // 저장 후 재조회
+        $scope._broadcast('sideMenuAttrClassCtrl');
+        $("#sideMenuAttrTitle").html("");
+        var attrScope = agrid.getScope('sideMenuAttrAttrCtrl');
+        attrScope._gridDataInit();   // 그리드 초기화
+      });
+    });
   };
 
   // 저장
   $scope.save = function() {
-
-    $scope.flex.collectionView.commitEdit();
-
-    // 파라미터 설정
-    var params = [];
-
-    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
-      params.push($scope.flex.collectionView.itemsRemoved[d]);
-    }
-
-    // dispSeq 재설정
-    var editItems = [];
-    for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-      if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-        editItems.push($scope.flex.collectionView.items[s]);
-      }
-    }
-
-    for (var s = 0; s < editItems.length; s++) {
-      editItems[s].dispSeq = (s + 1);
-      console.log(editItems);
-      $scope.flex.collectionView.editItem(editItems[s]);
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
       $scope.flex.collectionView.commitEdit();
-    }
 
-    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-      $scope.flex.collectionView.itemsEdited[u].status = 'U';
-      params.push($scope.flex.collectionView.itemsEdited[u]);
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = 'I';
-      params.push($scope.flex.collectionView.itemsAdded[i]);
-    }
+      // 파라미터 설정
+      var params = [];
+      var orgChk = 0;
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save('/base/prod/sideMenu/attrClass/save.sb', params, function() {
-      // 저장 후 재조회
-      $scope._broadcast('sideMenuAttrClassCtrl');
+      // dispSeq 재설정
+      var editItems = [];
+      for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+        if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+          editItems.push($scope.flex.collectionView.items[s]);
+        }
+      }
+
+      for (var s = 0; s < editItems.length; s++) {
+        editItems[s].dispSeq = (s + 1);
+        console.log(editItems);
+        $scope.flex.collectionView.editItem(editItems[s]);
+        $scope.flex.collectionView.commitEdit();
+      }
+
+      for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+        if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[u].sdattrClassCd > 79999)){
+          if($scope.flex.collectionView.itemsEdited[u].sdattrClassNm == ""){
+            $scope._popMsg(messages["sideMenu.attr.sdattrClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
+            return false;
+          }
+          if($scope.maxChk($scope.flex.collectionView.itemsEdited[u].sdattrClassNm)){
+            $scope.flex.collectionView.itemsEdited[u].status = 'U';
+            params.push($scope.flex.collectionView.itemsEdited[u]);
+          } else {
+            $scope._popMsg(messages["cmm.max50Chk"]);
+            return false;
+          }
+        } else if(orgChk == 0) {
+          orgChk = 1;
+        }
+      }
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        if($scope.flex.collectionView.itemsAdded[i].sdattrClassNm == ""){
+          $scope._popMsg(messages["sideMenu.attr.sdattrClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
+          return false;
+        }
+        if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].sdattrClassNm)){
+          $scope.flex.collectionView.itemsAdded[i].status = 'I';
+          params.push($scope.flex.collectionView.itemsAdded[i]);
+        } else {
+          $scope._popMsg(messages["cmm.max50Chk"]);
+          return false;
+        }
+      }
+
+      if (orgChk) {
+        $scope._popMsg("본사에서 등록한 속성은 변경 할 수 없습니다");
+        orgChk = 0;
+        return false;
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save('/base/prod/sideMenu/attrClass/save.sb', params, function () {
+        // 저장 후 재조회
+        $scope._broadcast('sideMenuAttrClassCtrl');
+        $("#sideMenuAttrTitle").html("");
+        var attrScope = agrid.getScope('sideMenuAttrAttrCtrl');
+        attrScope._gridDataInit();   // 그리드 초기화
+      });
     });
   }
 
+  $scope.maxChk = function (val){
+    var str = val;
+    var strLength = 0;
+    var strTitle = "";
+    var strPiece = "";
+    for (i = 0; i < str.length; i++){
+      var code = str.charCodeAt(i);
+      var ch = str.substr(i,1).toUpperCase();
+      //체크 하는 문자를 저장
+      strPiece = str.substr(i,1)
+      code = parseInt(code);
+      if ((ch < "0" || ch > "9") && (ch < "A" || ch > "Z") && ((code > 255) || (code < 0))){
+        strLength = strLength + 3; //UTF-8 3byte 로 계산
+      }else{
+        strLength = strLength + 1;
+      }
+      if(strLength > 50){ //제한 길이 확인
+        return false;
+      }else{
+        strTitle = strTitle+strPiece; //제한길이 보다 작으면 자른 문자를 붙여준다.
+      }
+    }
+    return true;
+  };
 }]);
 
 /**
@@ -179,18 +265,6 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
   };
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    // ReadOnly 효과설정
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        if (col.binding === 'sdattrCd') {
-          var item = s.rows[e.row].dataItem;
-          if (item.status !== 'I') {
-            wijmo.addClass(e.cell, 'wijLink');
-          }
-        }
-      }
-    });
     // 속성 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
@@ -210,19 +284,16 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
     var params = {};
     params.sdattrClassCd = data;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain('/base/prod/sideMenu/attrCd/list.sb', params, function() {
-      $('#btnUpAttr').show();
-      $('#btnDownAttr').show();
-      $('#btnAddAttr').show();
-      $('#btnDelAttr').show();
-      $('#btnSaveAttr').show();
-
-    });
+    $scope._inquiryMain('/base/prod/sideMenu/attrCd/list.sb', params);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
   // 속성 그리드 행 추가
   $scope.addRow = function() {
+    if ($("#sideMenuAttrTitle").html() == ""){
+      $scope._popMsg("속성분류를 선택해주세요.");
+      return false;
+    }
     // 파라미터 설정
     var params = {};
     params.sdattrClassCd = $scope.getSdattrClassCd();
@@ -235,59 +306,116 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
 
   // 속성 그리드 행 삭제
   $scope.deleteRow = function() {
-    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      var item = $scope.flex.collectionView.items[i];
-      if(item.gChk){
-        $scope.flex.collectionView.removeAt(i);
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+        var item = $scope.flex.collectionView.items[i];
+        if (item.gChk) {
+          $scope.flex.collectionView.removeAt(i);
+        }
       }
-    }
+      var params = [];
+
+      for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+        $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+        params.push($scope.flex.collectionView.itemsRemoved[d]);
+      }
+
+      // 삭제기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save('/base/prod/sideMenu/attrCd/save.sb', params, function() {
+        // 삭제 후 재조회
+        $scope._broadcast('sideMenuAttrAttrCtrl', $scope.getSdattrClassCd());
+        $scope._broadcast('sideMenuAttrClassCtrl');
+      });
+    });
   };
 
   // 저장
   $scope.save = function() {
-
-    $scope.flex.collectionView.commitEdit();
-
-    // 파라미터 설정
-    var params = [];
-
-    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = 'D';
-      params.push($scope.flex.collectionView.itemsRemoved[d]);
-    }
-
-    // dispSeq 재설정
-    var editItems = [];
-    for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-      if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-        editItems.push($scope.flex.collectionView.items[s]);
-      }
-    }
-
-    for (var s = 0; s < editItems.length; s++) {
-      editItems[s].dispSeq = (s + 1);
-      console.log(editItems);
-      $scope.flex.collectionView.editItem(editItems[s]);
-      editItems[s].status = "U";
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
       $scope.flex.collectionView.commitEdit();
-    }
 
+      // 파라미터 설정
+      var params = [];
 
-    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-      $scope.flex.collectionView.itemsEdited[u].status = 'U';
-      params.push($scope.flex.collectionView.itemsEdited[u]);
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = 'I';
-      params.push($scope.flex.collectionView.itemsAdded[i]);
-    }
+      // dispSeq 재설정
+      var editItems = [];
+      for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+        if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+          editItems.push($scope.flex.collectionView.items[s]);
+        }
+      }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save('/base/prod/sideMenu/attrCd/save.sb', params, function() {
-      // 저장 후 재조회
-      $scope._broadcast('sideMenuAttrAttrCtrl', $scope.getSdattrClassCd());
+      for (var s = 0; s < editItems.length; s++) {
+        editItems[s].dispSeq = (s + 1);
+        console.log(editItems);
+        $scope.flex.collectionView.editItem(editItems[s]);
+        editItems[s].status = "U";
+        $scope.flex.collectionView.commitEdit();
+      }
+
+      for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+        if($scope.flex.collectionView.itemsEdited[u].sdattrNm == ""){
+          $scope._popMsg(messages["sideMenu.attr.sdattrNm"] + messages["sideMenu.selectMenu.inputEnv"]);
+          return false;
+        }
+        if($scope.maxChk($scope.flex.collectionView.itemsEdited[u].sdattrNm)){
+          $scope.flex.collectionView.itemsEdited[u].status = 'U';
+          params.push($scope.flex.collectionView.itemsEdited[u]);
+        } else {
+          $scope._popMsg(messages["cmm.max50Chk"]);
+          return false;
+        }
+      }
+
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        if($scope.flex.collectionView.itemsAdded[i].sdattrNm == ""){
+          $scope._popMsg(messages["sideMenu.attr.sdattrNm"] + messages["sideMenu.selectMenu.inputEnv"]);
+          return false;
+        }
+        if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].sdattrNm)){
+          $scope.flex.collectionView.itemsAdded[i].status = 'I';
+          params.push($scope.flex.collectionView.itemsAdded[i]);
+        } else {
+          $scope._popMsg(messages["cmm.max50Chk"]);
+          return false;
+        }
+
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save('/base/prod/sideMenu/attrCd/save.sb', params, function() {
+        // 저장 후 재조회
+        $scope._broadcast('sideMenuAttrAttrCtrl', $scope.getSdattrClassCd());
+        $scope._broadcast('sideMenuAttrClassCtrl');
+      });
     });
   };
+  // MAX값 따지는 함수 50byte
+  $scope.maxChk = function (val){
+    var str = val;
+    var strLength = 0;
+    var strTitle = "";
+    var strPiece = "";
+    for (i = 0; i < str.length; i++){
+      var code = str.charCodeAt(i);
+      var ch = str.substr(i,1).toUpperCase();
+      //체크 하는 문자를 저장
+      strPiece = str.substr(i,1)
+      code = parseInt(code);
+      if ((ch < "0" || ch > "9") && (ch < "A" || ch > "Z") && ((code > 255) || (code < 0))){
+        strLength = strLength + 3; //UTF-8 3byte 로 계산
+      }else{
+        strLength = strLength + 1;
+      }
+      if(strLength > 50){ //제한 길이 확인
+        return false;
+      }else{
+        strTitle = strTitle+strPiece; //제한길이 보다 작으면 자른 문자를 붙여준다.
+      }
+    }
+    return true;
+  };
+
   // 위로 옮기기 버튼
   $scope.rowMoveUp = function() {
     var movedRows = 0;

@@ -27,7 +27,7 @@
                     thpsc.HQ_BRAND_CD,
                     thpsc.SDATTR_CLASS_CD,
                     thpsc.SDATTR_CLASS_NM,
-                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDATTR WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDATTR_CLASS_CD = thpsc.SDATTR_CLASS_CD AND thpsc.USE_YN = 'Y' ) AS CNT
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDATTR WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDATTR_CLASS_CD = thpsc.SDATTR_CLASS_CD AND USE_YN = 'Y' ) AS CNT
                 FROM
                     TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 WHERE
@@ -42,7 +42,7 @@
                     tmpsc.MS_BRAND_CD,
                     tmpsc.SDATTR_CLASS_CD,
                     tmpsc.SDATTR_CLASS_NM,
-                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDATTR WHERE STORE_CD = tmpsc.STORE_CD AND SDATTR_CLASS_CD = tmpsc.SDATTR_CLASS_CD AND tmpsc.USE_YN = 'Y') AS CNT
+                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDATTR WHERE STORE_CD = tmpsc.STORE_CD AND SDATTR_CLASS_CD = tmpsc.SDATTR_CLASS_CD AND USE_YN = 'Y') AS CNT
                 FROM
                     TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                 WHERE
@@ -68,9 +68,10 @@
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
+                SELECT LPAD(NVL(MAX(SDATTR_CLASS_CD), '79999') + 1, 5, '0')
                 FROM TB_MS_PRODUCT_SDATTR_CLASS
                 WHERE STORE_CD = #{storeCd}
+                  AND SDATTR_CLASS_CD > 79999
             </when>
         </choose>
     </select>
@@ -322,9 +323,10 @@
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
+                SELECT LPAD(NVL(MAX(SDATTR_CD), '7999999999') + 1, 10, '0')
                 FROM TB_MS_PRODUCT_SDATTR
                 WHERE STORE_CD = #{storeCd}
+                  AND SDATTR_CD > 7999999999
             </when>
         </choose>
     </select>
@@ -541,7 +543,7 @@
                     thpsg.SDSEL_GRP_CD,
                     thpsg.SDSEL_GRP_NM,
                     thpsg.PROD_CD,
-                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND thpsg.USE_YN  = 'Y') AS CNT
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT
                 FROM
                     TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 WHERE
@@ -556,7 +558,7 @@
                     tmpsg.MS_BRAND_CD,
                     tmpsg.SDSEL_GRP_CD,
                     tmpsg.SDSEL_GRP_NM,
-                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND tmpsg.USE_YN  = 'Y') AS CNT
+                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT
                 FROM
                     TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 WHERE
@@ -582,9 +584,10 @@
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+                SELECT LPAD(NVL(MAX(SDSEL_GRP_CD), '799999') + 1, 6, '0')
                 FROM TB_MS_PRODUCT_SDSEL_GROUP
                 WHERE STORE_CD = #{storeCd}
+                  AND SDSEL_GRP_CD > 799999
             </when>
         </choose>
     </select>
@@ -795,7 +798,7 @@
                     thpsc.SDSEL_GRP_CD,
                     thpsc.DISP_SEQ,
                     thpsc.SDSEL_QTY,
-                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD  = thpsc.HQ_OFFICE_CD AND SDSEL_GRP_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD  = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT
               FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
@@ -840,9 +843,10 @@
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+                SELECT LPAD(NVL(MAX(SDSEL_CLASS_CD), '799999') + 1, 6, '0')
                 FROM TB_MS_PRODUCT_SDSEL_CLASS
                 WHERE STORE_CD = #{storeCd}
+                  AND SDSEL_CLASS_CD > 799999
             </when>
         </choose>
     </select>
