@@ -50,9 +50,19 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   // 탭 조회
   $scope.queryTab = function() {
     if ( $scope.isMenuTab ) {
+      $("#sideMenuAttrTitle").html("");
+      var attrScope = agrid.getScope('sideMenuAttrAttrCtrl');
+      attrScope._gridDataInit();   // 그리드 초기화
       // 속성 조회
       $scope._broadcast("sideMenuAttrClassCtrl");
     } else {
+      $("#sideSelectGroupTitle").html("");
+      var attrScope = agrid.getScope('sideMenuSelectClassCtrl');
+      attrScope._gridDataInit();   // 그리드 초기화
+
+      $("#sideClassTitle").html("");
+      var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
+      prodScope._gridDataInit();   // 그리드 초기화
       // 선택그룹 조회
       $scope._broadcast("sideMenuSelectGroupCtrl");
     }
