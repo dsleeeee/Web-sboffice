@@ -45,6 +45,9 @@ public class SalePriceManageVO extends PageVO {
     /** 상품코드 */
     private String prodCd;
 
+    /** 상품명 */
+    private String prodNm;
+
     /** 매장판매가 */
     private String saleUprc;
 
@@ -68,9 +71,7 @@ public class SalePriceManageVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) { this.prodClassCd = prodClassCd; }
 
-    public String getPrcCtrlFg() {
-        return prcCtrlFg;
-    }
+    public String getPrcCtrlFg() { return prcCtrlFg; }
 
     public void setPrcCtrlFg(String prcCtrlFg) {
         this.prcCtrlFg = prcCtrlFg;
@@ -82,6 +83,14 @@ public class SalePriceManageVO extends PageVO {
 
     public void setProdCd(String prodCd) {
         this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 
     public String getSaleUprc() {
