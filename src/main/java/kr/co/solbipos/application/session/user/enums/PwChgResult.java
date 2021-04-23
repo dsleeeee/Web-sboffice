@@ -42,6 +42,8 @@ public enum PwChgResult implements CodeEnum  {
     ID_NOT_MATCH("ID_NOT_MATCH"),
     /** 사용하지 않는 계정 */
     NOT_USE("NOT_USE"),
+    /** ID가 없습니다 */
+    ID_IS_NULL("ID_IS_NULL"),
     /** 체크 오류 */
     CHECK_NOK("CHECK_NOK"),
     /** 체크 완료 */
