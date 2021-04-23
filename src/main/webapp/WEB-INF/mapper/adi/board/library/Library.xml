@@ -33,17 +33,19 @@
         AND twbi.USE_YN = 'Y'
         <choose>
             <when test='gubunCombo != null'>
-                <!-- 자료명 -->
-                <if test='gubunCombo == "1"'>
-                    <![CDATA[
-                        AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
-                    ]]>
-                </if>
-                <!-- 작성자 -->
-                <if test='gubunCombo == "2"'>
-                    <![CDATA[
-                        AND twbi.USER_NM LIKE '%'||#{gubunName}||'%'
-                    ]]>
+                <if test="gubunName != null and gubunName != ''">
+                    <!-- 자료명 -->
+                    <if test='gubunCombo == "1"'>
+                        <![CDATA[
+                            AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
+                        ]]>
+                    </if>
+                    <!-- 작성자 -->
+                    <if test='gubunCombo == "2"'>
+                        <![CDATA[
+                            AND twbi.USER_NM LIKE '%'||#{gubunName}||'%'
+                        ]]>
+                    </if>
                 </if>
             </when>
         </choose>
