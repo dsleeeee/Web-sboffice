@@ -231,20 +231,11 @@ public class PosTemplateServiceImpl implements PosTemplateService {
             posTemplateVO.setModDt(currentDt);
             posTemplateVO.setModId(sessionInfoVO.getUserId());
 
-            System.out.println("본사코드" + posTemplateVO.getHqOfficeCd());
-            System.out.println("매장코드" + posTemplateVO.getStoreCd());
-            System.out.println("prtClassCd" + posTemplateVO.getPrtClassCd());
-            System.out.println("templtRegFg" + posTemplateVO.getTempltRegFg());
-            System.out.println("templtCd" + posTemplateVO.getTempltCd());
-            System.out.println("modId" + posTemplateVO.getModId());
-
             // 프로시저호출 : 호출하면서 VO에 결과값 담겨있다.
             result = result + posTemplateMapper.applyToStoreReal(posTemplateVO);
 
-            System.out.println("result" + result);
         }
 
-        System.out.println("끝 result" + result);
         if ( result == posTemplateVOs.length) {
             return result;
         } else {
