@@ -5,7 +5,6 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.day.day.service.DayVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,98 +185,23 @@ public class DayServiceImpl implements DayService {
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
         String sQuery2 = "";
-        String sQuery3 = "";
-        String sQuery4 = "";
-        String sIn = "";
-
-        //매출 발생 시간
-        String sSaleDate ="";
 
         // 매출 시간대 설정
-        int iSaleDateStart = 0;
-        int iSaleDateEnd = 23;
+        int iSaleDateStart = Integer.parseInt(dayVO.getStartTime());
+        int iSaleDateEnd = Integer.parseInt(dayVO.getEndTime());
 
-        // 시간대 '전체' 선택 시
-        if(dayVO.getSaleTime() == null){
+        for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+            sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
+            sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
+            sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
 
-            for(int i = 0; i <= 3; i++) {
-                sQuery1 +=", tssh.REAL_SALE_AMT_T"  + i +  "\n";
-                sQuery1 +=", tssh.SALE_CNT_T"  + i +  "\n";
-                sQuery1 +=", tssh.TOT_GUEST_CNT_T"  + i +  "\n";
-
-                sQuery2 += ", SUM(tssh.REAL_SALE_AMT_T" + i + ") AS REAL_SALE_AMT_T" + i + "\n";
-                sQuery2 += ", SUM(tssh.SALE_CNT_T" + i + ") AS SALE_CNT_T" + i + "\n";
-                sQuery2 += ", SUM(tssh.TOT_GUEST_CNT_T" + i + ") AS TOT_GUEST_CNT_T" + i + "\n";
-
-            }
-
-            sQuery3 += ", SUM(REAL_SALE_AMT) AS REAL_SALE_AMT \n";
-            sQuery3 += ", SUM(SALE_FG) AS SALE_CNT \n";
-            sQuery3 += ", SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT \n";
-
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T0" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T0" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T0" + "\n";
-
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('07','08','09','10') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T1" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('07','08','09','10') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T1" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('07','08','09','10') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T1" + "\n";
-
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('11','12','13','14','15') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T2" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('11','12','13','14','15') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T2" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('11','12','13','14','15') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T2" + "\n";
-
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T3" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T3" + "\n";
-            sQuery4 +=", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T3" + "\n";
-
-        }else{
-
-            // 매출 시간대 설정(심야,아침,점심,저녁)
-            if(dayVO.getSaleTime() == SaleTimeFg.NIGHT){
-                iSaleDateStart = 0;
-                iSaleDateEnd = 6;
-            }else if(dayVO.getSaleTime() == SaleTimeFg.MORNING){
-                iSaleDateStart = 7;
-                iSaleDateEnd = 10;
-            }else if(dayVO.getSaleTime() == SaleTimeFg.LUNCH){
-                iSaleDateStart = 11;
-                iSaleDateEnd = 15;
-            }else if(dayVO.getSaleTime() == SaleTimeFg.EVENING){
-                iSaleDateStart = 16;
-                iSaleDateEnd = 23;
-            }
-
-            for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
-
-                sSaleDate = i < 10 ? "0" + String.valueOf(i) : String.valueOf(i);
-
-                sIn += ",'" + sSaleDate + "'";
-
-                sQuery1 += ", tssh.REAL_SALE_AMT_" + sSaleDate + "\n";
-                sQuery1 += ", tssh.SALE_CNT_" + sSaleDate + "\n";
-                sQuery1 += ", tssh.TOT_GUEST_CNT_" + sSaleDate + "\n";
-
-                sQuery2 += ", SUM(tssh.REAL_SALE_AMT_" + sSaleDate + ") AS REAL_SALE_AMT_" + sSaleDate + "\n";
-                sQuery2 += ", SUM(tssh.SALE_CNT_" + sSaleDate + ") AS SALE_CNT_" + sSaleDate + "\n";
-                sQuery2 += ", SUM(tssh.TOT_GUEST_CNT_" + sSaleDate + ") AS TOT_GUEST_CNT_" + sSaleDate + "\n";
-
-                sQuery4 += ", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) = '" + sSaleDate + "' THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_" + sSaleDate + "\n";
-                sQuery4 += ", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) = '" + sSaleDate + "' THEN SALE_FG ELSE 0 END) AS SALE_CNT_" + sSaleDate + "\n";
-                sQuery4 += ", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) = '" + sSaleDate + "' THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_" + sSaleDate + "\n";
-            }
-
-            sQuery3 += ", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN (" + sIn.substring(1, sIn.length()) + ") THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT" + "\n";
-            sQuery3 += ", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN (" + sIn.substring(1, sIn.length()) + ") THEN SALE_FG ELSE 0 END) AS SALE_CNT" + "\n";
-            sQuery3 += ", SUM(CASE WHEN SUBSTR(REG_DT, 9, 2) IN (" + sIn.substring(1, sIn.length()) + ") THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT" + "\n";
+            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
+            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
+            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
 
         }
-
         dayVO.setsQuery1(sQuery1);
         dayVO.setsQuery2(sQuery2);
-        dayVO.setsQuery3(sQuery3);
-        dayVO.setsQuery4(sQuery4);
-
         return dayMapper.getDayTimeList(dayVO);
     }
 

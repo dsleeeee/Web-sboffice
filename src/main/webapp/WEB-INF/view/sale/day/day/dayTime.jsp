@@ -59,15 +59,33 @@
             <th><s:message code="day.time.time"/></th>
             <td colspan="3">
                 <div class="sb-select fl w200px">
-                    <wj-combo-box
-                            id="saleTime"
-                            ng-model="saleTime"
-                            items-source="_getComboData('srchSaleTimeCombo')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
+                    <div class="sb-slect fl" style="width:65px;">
+                        <wj-combo-box
+                                id="startTime"
+                                ng-model="startTime"
+                                items-source="_getComboData('startTimeCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="startTimeCombo"
+                                initialized="_initComboBox(s)">
+                                </wj-combo-box>
+                    </div>
+                    <div class="fl pd5" style="padding-right: 15px;">
+                        <label> ~ </label>
+                    </div>
+                    <div class="sb-select fl" style="width:65px;">
+                                <wj-combo-box
+                                        id="endTime"
+                                        ng-model="endTime"
+                                        items-source="_getComboData('endTimeCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="endTimeCombo"
+                                        initialized="_initComboBox(s)">
+                                </wj-combo-box>
+                    </div>
                 </div>
             </td>
         </tr>
@@ -102,29 +120,11 @@
                 <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
                 <%-- 시간대 컬럼 생성--%>
-                <c:forEach var="i" begin="0" end="23" step="1">
-                    <c:set var="time"><fmt:formatNumber value="${i}" pattern="00"/></c:set>
-                    <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmt${time}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCnt${time}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCnt${time}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <c:forEach var="i" begin="0" end="23">
+                    <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmtT${i}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCntT${i}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT${i}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 </c:forEach>
-
-                <%-- 시간대 '전체' 선택 시 보이는 컬럼 --%>
-                <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmtT0" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCntT0" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT0" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmtT1" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCntT1" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT1" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmtT2" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCntT2" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT2" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmtT3" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCntT3" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT3" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
@@ -140,4 +140,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTime.js?ver=20190624" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTime.js?ver=20190625" charset="utf-8"></script>
