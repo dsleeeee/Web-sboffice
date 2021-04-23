@@ -309,6 +309,15 @@
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
         AND twuidv01.ORGN_FG IN ('M','A')
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -337,6 +346,15 @@
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
         AND twuidv01.ORGN_FG IN ('M','A')
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -366,6 +384,15 @@
         ]]>
         AND twuidv01.ORGN_FG IN ('H')
         AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -393,7 +420,7 @@
                 (
                 twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND (
-                        ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
+                        ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{storeCd}) AND USE_YN = 'Y')) )
                         OR (twbi.TARGET_FG = '1')
                     )
             )
@@ -406,6 +433,15 @@
             AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
