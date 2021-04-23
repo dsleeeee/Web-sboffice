@@ -59,7 +59,7 @@
                     (
                         twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND (
-                                ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
+                                ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd}) AND USE_YN = 'Y')) )
                                 OR (twbi.TARGET_FG = '1')
                             )
                     )
@@ -74,30 +74,32 @@
             ]]>
             <choose>
                 <when test='gubunCombo != null'>
-                    <!-- 제목 -->
-                    <if test='gubunCombo == "1"'>
-                        <![CDATA[
-                            AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
-                        ]]>
-                    </if>
-                    <!-- 내용 -->
-                    <if test='gubunCombo == "2"'>
-                        <![CDATA[
-                            AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
-                        ]]>
-                    </if>
-                    <!-- 제목 + 내용 -->
-                    <if test='gubunCombo == "3"'>
-                        <![CDATA[
-                            AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
-                            AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
-                        ]]>
-                    </if>
-                    <!-- 작성자 -->
-                    <if test='gubunCombo == "4"'>
-                        <![CDATA[
-                            AND twuidv01.USER_NM LIKE '%'||#{gubunName}||'%'
-                        ]]>
+                    <if test="gubunName != null and gubunName != ''">
+                        <!-- 제목 -->
+                        <if test='gubunCombo == "1"'>
+                            <![CDATA[
+                                AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
+                            ]]>
+                        </if>
+                        <!-- 내용 -->
+                        <if test='gubunCombo == "2"'>
+                            <![CDATA[
+                                AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
+                            ]]>
+                        </if>
+                        <!-- 제목 + 내용 -->
+                        <if test='gubunCombo == "3"'>
+                            <![CDATA[
+                                AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
+                                AND twbi.CONTENT LIKE '%'||#{gubunName}||'%'
+                            ]]>
+                        </if>
+                        <!-- 작성자 -->
+                        <if test='gubunCombo == "4"'>
+                            <![CDATA[
+                                AND twuidv01.USER_NM LIKE '%'||#{gubunName}||'%'
+                            ]]>
+                        </if>
                     </if>
                 </when>
             </choose>
