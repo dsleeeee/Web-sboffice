@@ -47,4 +47,10 @@ public interface PosTemplateService {
     /** 출력물템플릿 매장적용 */
     int applyToStoreTemplate(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장 조회 */
+    List<DefaultMap<String>> getRegStoreList(PosTemplateVO posTemplateVO);
+
+    /** 실제출력물 매장적용 */
+    int applyToStoreReal(PosTemplateVO[] posTemplateVOs, SessionInfoVO sessionInfoVO);
+
 }

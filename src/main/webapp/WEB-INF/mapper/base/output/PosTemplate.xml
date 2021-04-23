@@ -399,6 +399,77 @@
 
     </insert>
 
+    <!-- 실제출력물템플릿 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEMPL, TB_MS_PRINT_TEMPL
+        PARAM    : posTemplateVO
+        COMMENTS : 출력물템플릿을 저장/수정한다.
+    -->
+<!--    <select id="applyToStoreReal" statementType="CALLABLE"  parameterType="posTemplateVO">-->
+<!--        /* USE : PosServiceMapper.applyToStoreReal */-->
+<!--        {-->
+<!--            CALL PKG_HQ_PRINT_TEMPL.SP_STORE_PRINT_FROM_HQ_U-->
+<!--            (-->
+<!--                #{hqOfficeCd},-->
+<!--                #{prtClassCd},-->
+<!--                #{templtRegFg},-->
+<!--                #{templtCd},-->
+<!--                #{modId},-->
+<!--                #{result, mode=OUT, jdbcType=VARCHAR}-->
+<!--            )-->
+<!--        }-->
+<!--    </select>-->
+    <update id="applyToStoreReal" parameterType="posTemplateVO">
+        MERGE INTO TB_MS_PRINT tmp
+            USING DUAL
+            ON (
+                    tmp.STORE_CD = #{storeCd}
+                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
+                )
+            WHEN NOT MATCHED THEN
+                INSERT(
+                       STORE_CD,
+                       PRT_CLASS_CD,
+                       TEMPLT_REG_FG,
+                       TEMPLT_CD,
+                       PRT_FORM,
+                       REG_DT,
+                       REG_ID,
+                       MOD_DT,
+                       MOD_ID
+                    ) VALUES (
+                                 #{storeCd},
+                                 #{prtClassCd},
+                                 #{templtRegFg},
+                                 #{templtCd},
+                                 (SELECT PRT_FORM
+                                  FROM TB_hq_PRINT_TEMPL
+                                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND PRT_CLASS_CD = #{prtClassCd}
+                                    AND TEMPLT_CD = #{templtCd}
+                                    AND TEMPLT_REG_FG='H'),
+                                 #{modDt},
+                                 #{modId},
+                                 #{modDt},
+                                 #{modId}
+                             )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET TEMPLT_REG_FG = #{templtRegFg},
+                        TEMPLT_CD = #{templtCd},
+                        PRT_FORM = (SELECT PRT_FORM
+                                    FROM TB_hq_PRINT_TEMPL
+                                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                      AND PRT_CLASS_CD = #{prtClassCd}
+                                      AND TEMPLT_CD = #{templtCd}
+                                      AND TEMPLT_REG_FG='H'),
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+            WHERE STORE_CD = #{storeCd}
+            AND PRT_CLASS_CD = #{prtClassCd}
+    </update>
+
+
     <!-- 실제출력물 템플릿 생성 -->
     <!--
         TABLE    : TB_MS_PRINT
@@ -481,6 +552,31 @@
             </when>
         </choose>
     </update>
+
+    <!-- 매장 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : posTemplateVO
+        COMMENTS : 매장을 조회한다.
+    -->
+    <select id="getRegStoreList" parameterType="posTemplateVO" resultType="DefaultMap">
+        /* USE : PosServiceMapper.getRegStoreList */
+        SELECT tms.STORE_CD,
+               tms.STORE_NM,
+               tms.SYS_STAT_FG
+          FROM TB_MS_STORE tms
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='storeCd != null and storeCd.toString() != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm.toString() != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tms.STORE_CD ASC
+    </select>
 
     <!-- 매장 출력물템플릿 수정 : 프로시저 호출 -->
     <!--

@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/base/output/pos/" />
 
-<div class="subCon" ng-controller="templateCtrl">
+<div class="subCon" ng-controller="templateCtrl" style="overflow-y: hidden; overflow-x: auto;">
 
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}
@@ -52,9 +52,9 @@
     </tbody>
   </table>
 
-  <div class="wj-TblWrap mt20">
+  <div class="wj-TblWrap mt20" style="display: flex; width: 1050px;">
     <%-- 템플릿 --%>
-    <div class="w25 fl mt10 mr10">
+    <div class="fl mt10 mr10" style="width: 250px;">
       <%--위즈모 테이블--%>
       <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;">
         <div class="updownSet oh mb10">
@@ -98,7 +98,7 @@
     </div>
 
     <%-- 코드리스트 --%>
-    <div class="w20 fl mt10 mr10">
+    <div class="fl mt10 mr10" style="width: 160px;">
       <div class="wj-TblWrapBr pd20" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
@@ -133,13 +133,16 @@
     </div>
 
     <%-- 미리보기 영역 --%>
-    <div class="fl mt10" style="width: 325px;">
+    <div class="fl mt10" style="width: 330px;">
       <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
           <c:if test="${orgnFg == 'HQ'}">
-            <button class="btn_skyblue" id="btnApplyStoreTemplate" ng-if="showBtnApplyStore" ng-click="applyToStoreTemplate()">
-              <s:message code="posTemplate.applyToStore" />
+            <button class="btn_skyblue" id="btnApplyStoreTemplate" ng-if="showBtnApplyStore" ng-click="applyToStoreReal()" style="font-size:0.7em; padding:0 5px;">
+              <s:message code="posTemplate.prtFormToStore" />
+            </button>
+            <button class="btn_skyblue" id="btnApplyStoreTemplate" ng-if="showBtnApplyStore" ng-click="applyToStoreTemplate()" style="font-size:0.7em; padding:0 5px;">
+              <s:message code="posTemplate.templtToStore" />
             </button>
           </c:if>
         </div>
@@ -154,4 +157,9 @@
 <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181112.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181112.03" charset="utf-8"></script>
+<%-- 레이어 팝업 : 적용매장 선택 팝업 --%>
+<c:import url="/WEB-INF/view/base/output/posTemplate/storePosTemplate.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

@@ -200,4 +200,57 @@ public class PosTemplateServiceImpl implements PosTemplateService {
         }
     }
 
+    /** 매장 조회 */
+    @Override
+    public List<DefaultMap<String>> getRegStoreList(PosTemplateVO posTemplateVO) {
+        return posTemplateMapper.getRegStoreList(posTemplateVO);
+    }
+
+    /** 실제출력물 매장적용 */
+    @Override
+    public int applyToStoreReal(PosTemplateVO[] posTemplateVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        PosTemplateVO posTemplateVO = new PosTemplateVO();
+
+        System.out.println("길이" + posTemplateVOs.length);
+
+        for (int i = 0; i < posTemplateVOs.length ; i++) {
+            System.out.println("회전" + i );
+            // 소속구분 설정
+            posTemplateVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            posTemplateVO.setStoreCd(posTemplateVOs[i].getStoreCd());
+            posTemplateVO.setPrtClassCd(posTemplateVOs[i].getPrtClassCd());
+            posTemplateVO.setTempltRegFg(posTemplateVOs[i].getTempltRegFg());
+            posTemplateVO.setTempltCd(posTemplateVOs[i].getTempltCd());
+
+            posTemplateVO.setRegDt(currentDt);
+            posTemplateVO.setRegId(sessionInfoVO.getUserId());
+            posTemplateVO.setModDt(currentDt);
+            posTemplateVO.setModId(sessionInfoVO.getUserId());
+
+            System.out.println("본사코드" + posTemplateVO.getHqOfficeCd());
+            System.out.println("매장코드" + posTemplateVO.getStoreCd());
+            System.out.println("prtClassCd" + posTemplateVO.getPrtClassCd());
+            System.out.println("templtRegFg" + posTemplateVO.getTempltRegFg());
+            System.out.println("templtCd" + posTemplateVO.getTempltCd());
+            System.out.println("modId" + posTemplateVO.getModId());
+
+            // 프로시저호출 : 호출하면서 VO에 결과값 담겨있다.
+            result = result + posTemplateMapper.applyToStoreReal(posTemplateVO);
+
+            System.out.println("result" + result);
+        }
+
+        System.out.println("끝 result" + result);
+        if ( result == posTemplateVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+    }
+
 }
