@@ -214,10 +214,7 @@ public class PosTemplateServiceImpl implements PosTemplateService {
 
         PosTemplateVO posTemplateVO = new PosTemplateVO();
 
-        System.out.println("길이" + posTemplateVOs.length);
-
         for (int i = 0; i < posTemplateVOs.length ; i++) {
-            System.out.println("회전" + i );
             // 소속구분 설정
             posTemplateVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
