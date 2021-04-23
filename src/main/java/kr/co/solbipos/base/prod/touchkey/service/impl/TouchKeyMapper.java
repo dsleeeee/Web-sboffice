@@ -57,11 +57,20 @@ public interface TouchKeyMapper {
     /** 판매터치키 XML 정보 수정 */
     int updateTouchKeyConfgXml(DefaultMap<String> param);
 
+    /** 판매터치키 XML 정보 삭제 */
+    int deleteTouchKeyConfgXml(DefaultMap<String> param);
+
+    /** 판매터치키 XML 기본값 세팅 */
+    int defaultTouchKeyConfgXml(DefaultMap<String> param);
+
     /** 판매터치키 분류 생성 */
     int insertTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 분류 삭제 */
     int deleteTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
+
+    /** 판매터치키 분류 기본값 세팅 */
+    int defaultTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 생성 */
     int insertTouchKey(TouchKeyVO touchKeyVO);

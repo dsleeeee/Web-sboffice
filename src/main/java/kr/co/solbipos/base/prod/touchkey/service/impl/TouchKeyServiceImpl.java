@@ -356,6 +356,17 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         // 매장/본사의 현재 터치키 정보 삭제
         keyMapper.deleteTouchKey(tParams);
 
+        //저장할 터치키 분류 없는 경우 xml/터치키분류 기본값으로 변경
+        if(touchKeyClassVOS.size() == 0)
+        {
+            //터치키 XML
+            keyMapper.deleteTouchKeyConfgXml(param);
+            keyMapper.defaultTouchKeyConfgXml(param);
+            //터치키 분류
+            tcParams.setRegId(sessionInfoVO.getUserId());
+            keyMapper.defaultTouchKeyClass(tcParams);
+        }
+
         // 리스트의 아이템을 DB에 Merge
         for(TouchKeyClassVO touchKeyClassVO : touchKeyClassVOS) {
 

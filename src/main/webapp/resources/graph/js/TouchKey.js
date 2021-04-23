@@ -2023,7 +2023,11 @@ Format.prototype.setElementsValue = function () {
       this.setBtnStyle();
 
     } else {
-      style = graph.getCellStyle(cell);
+      var cellTypeComboValueChk = graph.cellTypeCombo.selectedValue;
+      var childrenNode = 0;
+      if(cellTypeComboValueChk == '03') childrenNode = 1;
+      else                              childrenNode = 0;
+      style = graph.getCellStyle(cell.children[childrenNode]);
       initFontSize = style['fontSize'];
       initFontColor = style['fontColor'];
       initFillColor = style['fillColor'];

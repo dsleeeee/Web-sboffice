@@ -195,6 +195,13 @@
       <%-- 상품페이지 버튼 --%>
       <div id="divProdNavWrap" class="prodNavWrap">
         <div id="keyStyle" class="oh keyStyleWrap hideNav">
+          <div id="colorStyleWrap" class="mb5">
+            <span class="s12 fl lh30 bk mt5"><s:message code="touchKey.fill"/></span>
+            <div class="sb-select txtIn w100">
+              <%-- 채우기 --%>
+              <div id="fillColor"></div>
+            </div>
+          </div>
           <div id="fontStyleWrap">
             <span class="s12 fl lh30 bk"><s:message code="touchKey.cellType"/></span>
             <div class="sb-select txtIn fl w100 mb5">
@@ -208,13 +215,6 @@
             <div class="sb-select txtIn fl w100 mb5">
               <%-- 폰트사이즈 --%>
               <div id="fontSize"></div>
-            </div>
-          </div>
-          <div id="colorStyleWrap" class="mb5">
-            <span class="s12 fl lh30 bk mt5"><s:message code="touchKey.fill"/></span>
-            <div class="sb-select txtIn w100">
-              <%-- 채우기 --%>
-              <div id="fillColor"></div>
             </div>
           </div>
         </div>
@@ -330,5 +330,5 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210409.001"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210416.001"
         charset="utf-8"></script>
