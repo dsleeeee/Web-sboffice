@@ -100,6 +100,9 @@ app.controller('pwdChangeCtrl', ['$scope', '$http', function ($scope, $http) {
       } else if(result === 'PASSWORD_SAME_CHAR') { // 동일한 문자 또는 숫자를 3자 이상 사용할 수 없습니다.
         $scope._popMsg(messages["login.pw.cannot.be.used.same.char"]);
         return false;
+      } else if(result === 'ID_IS_NULL') { // 사용자 ID가 없는경우
+        $scope._popMsg(messages["login.pw.cannot.be.used.id.null"]);
+        return false;
       } else { // 저장실패
         $scope._popMsg(messages["cmm.registFail"]);
         return false;

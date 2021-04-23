@@ -108,7 +108,10 @@ public class DayVO extends PageVO {
     private String startDate;
     /** 검색 종료 날짜 */
     private String endDate;
-
+    /** 검색 시작 시간 */
+    private String startTime;
+    /** 검색 종료 시간 */
+    private String endTime;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -490,5 +493,21 @@ public class DayVO extends PageVO {
     @Override
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

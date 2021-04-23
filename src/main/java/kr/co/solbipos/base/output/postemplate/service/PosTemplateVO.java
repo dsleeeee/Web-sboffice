@@ -32,6 +32,8 @@ public class PosTemplateVO extends CmmVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장명 */
+    private String storeNm;
     /** 출력물분류코드 */
     private String prtClassCd;
     /** 등록구분 */
@@ -52,6 +54,8 @@ public class PosTemplateVO extends CmmVO {
     private String prtCd;
     /** 출력물코드 예제 */
     private String content;
+    /** 매장상태 */
+    private String sysStatFg;
 
     /** 출력물 관련 프로시져 실행 결과 */
     private String result;
@@ -97,6 +101,14 @@ public class PosTemplateVO extends CmmVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
     }
 
     /**
@@ -237,6 +249,14 @@ public class PosTemplateVO extends CmmVO {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
     }
 
     /**

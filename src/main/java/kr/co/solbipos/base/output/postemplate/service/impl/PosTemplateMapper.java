@@ -57,4 +57,10 @@ public interface PosTemplateMapper {
     /** 매장 출력물템플릿 수정 : 프로시저 호출  */
     String updatePosTemplateForStoreFromHq(PosTemplateVO posTemplateVO);
 
+    /** 매장 조회 */
+    List<DefaultMap<String>> getRegStoreList(PosTemplateVO posTemplateVO);
+
+    /** 실제출력물 매장적용 */
+    int applyToStoreReal(PosTemplateVO posTemplateVO);
+
 }

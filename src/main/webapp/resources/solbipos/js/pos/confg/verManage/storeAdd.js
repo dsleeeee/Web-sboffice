@@ -111,6 +111,9 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.verSerNo    = ver;
     params.searchSatus = 'Y';
     params.hqOfficeCd  = $("#srchHqOffice").val();
+    params.storeCd = $("#srchStoreCd").val();
+    params.storeNm = $("#srchStoreNm").val();
+    params.sysStatFg = $("#srchSysStatFg").val();
 
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
