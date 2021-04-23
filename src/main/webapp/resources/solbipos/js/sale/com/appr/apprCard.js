@@ -1,5 +1,6 @@
 /**
  * get application
+ * test
  */
 var app = agrid.getApp();
 
