@@ -61,6 +61,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('addStoreCtrl', $scope, $http, false));
 
+  $scope.hqOfficeCd = gvHqOfficeCd;
   // 조회조건
   $scope._setComboData("hqOffice", hqList);
 
@@ -72,10 +73,11 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회 버튼 클릭
   $scope.$on("addStoreCtrl", function(event, data) {
-    $scope.addStoreSearch();
+
     if($("#srchHqOffice").val() != '' || $("#srchHqOffice").val() != null || $("#srchHqOffice").val() != undefined){
       $scope.selectedHqOffice = $("#srchHqOffice").val();
     }
+    $scope.addStoreSearch();
     event.preventDefault();
   });
 
@@ -110,11 +112,10 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     params.verSerNo    = ver;
     params.searchSatus = 'Y';
-    params.hqOfficeCd  = $("#srchHqOffice").val();
+    params.hqOfficeCd  = $scope.hqOfficeCd;
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
-    params.sysStatFg = $("#srchSysStatFg").val();
-
+    params.sysStatFg = $scope.sysStatFg;
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
@@ -192,10 +193,10 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     params.verSerNo    = ver;
     params.searchSatus = 'N';
-    params.hqOfficeCd = addStoreScope.getSelectedHqOffice();
+    params.hqOfficeCd  = addStoreScope.hqOfficeCd;
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
-    params.sysStatFg = addStoreScope.getSelectedSysStatFg();
+    params.sysStatFg = addStoreScope.sysStatFg;
 
     // 복수검색 기능 사용여부
     if ($("#chkMulti").prop("checked")) {
