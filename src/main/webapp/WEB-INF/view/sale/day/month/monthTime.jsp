@@ -61,15 +61,33 @@
                 <th><s:message code="month.srchTime"/></th>
                 <td colspan="3">
                     <div class="sb-select fl w200px">
-                        <wj-combo-box
-                            id="srchSaleTime"
-                            ng-model="monthSaleTime"
-                            items-source="_getComboData('saleTimeCombo')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                        </wj-combo-box>
+                        <div class="sb-slect fl" style="width:65px;">
+                            <wj-combo-box
+                                    id="startTime"
+                                    ng-model="startTime"
+                                    items-source="_getComboData('startTimeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="startTimeCombo"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                        <div class="fl pd5" style="padding-right: 15px;">
+                            <label> ~ </label>
+                        </div>
+                        <div class="sb-select fl" style="width:65px;">
+                            <wj-combo-box
+                                    id="endTime"
+                                    ng-model="endTime"
+                                    items-source="_getComboData('endTimeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="endTimeCombo"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -98,36 +116,17 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="month.yearMonth"/>" binding="yearMonth" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center" ng-if="orgnFg == 'H'"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="realSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.saleCnt"/>" binding="saleCnt" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.time.saleCnt"/>" binding="saleCnt" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.totGuestCnt"/>" binding="totGuestCnt" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
                     <%-- 시간대 컬럼 생성--%>
-                    <c:forEach var="i" begin="0" end="23" step="1">
-                        <c:set var="time"><fmt:formatNumber value="${i}" pattern="00"/></c:set>
-                        <wj-flex-grid-column header="<s:message code="month.time.realSaleAmt"/>" binding="realSaleAmtT${time}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.time.saleCnt"/>" binding="saleCntT${time}" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.time.totGuestCnt"/>" binding="totGuestCntT${time}" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <c:forEach var="i" begin="0" end="23">
+                        <wj-flex-grid-column header="<s:message code="month.time.realSaleAmt"/>" binding="realSaleAmtT${i}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="month.time.saleCnt"/>" binding="saleCntT${i}" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="month.time.totGuestCnt"/>" binding="totGuestCntT${i}" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                     </c:forEach>
-
-                    <%-- 시간대 '전체' 선택 시 보이는 컬럼 --%>
-                    <wj-flex-grid-column header="<s:message code="month.time.realSaleAmt"/>" binding="realSaleAmtT0" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.saleCnt"/>" binding="saleCntT0" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.totGuestCnt"/>" binding="totGuestCntT0" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                    <wj-flex-grid-column header="<s:message code="month.time.realSaleAmt"/>" binding="realSaleAmtT1" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.saleCnt"/>" binding="saleCntT1" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.totGuestCnt"/>" binding="totGuestCntT1" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                    <wj-flex-grid-column header="<s:message code="month.time.realSaleAmt"/>" binding="realSaleAmtT2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.saleCnt"/>" binding="saleCntT2" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.totGuestCnt"/>" binding="totGuestCntT2" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                    <wj-flex-grid-column header="<s:message code="month.time.realSaleAmt"/>" binding="realSaleAmtT3" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.saleCnt"/>" binding="saleCntT3" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.time.totGuestCnt"/>" binding="totGuestCntT3" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
                 </wj-flex-grid>
 
                 <%-- ColumnPicker 사용시 include --%>
@@ -146,4 +145,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20200117.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20200117.03" charset="utf-8"></script>

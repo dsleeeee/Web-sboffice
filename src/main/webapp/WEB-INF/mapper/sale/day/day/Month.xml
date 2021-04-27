@@ -407,33 +407,33 @@
     -->
     <select id="getMonthTimeList"  parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTimeList */
-        SELECT
-        tssh.YEAR_MONTH,
-        COUNT(DISTINCT tssh.STORE_CD) AS STORE_CNT,
-        SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-        SUM(tssh.SALE_FG) AS SALE_CNT,
-        SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
-        ${sQuery1}
-        FROM
-        (
-            SELECT
-            TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-            STORE_CD,
-            REAL_SALE_AMT,
-            SALE_FG,
-            TOT_GUEST_CNT
-            ${sQuery2}
-            FROM TB_SL_SALE_HDR
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{membrOrgnCd}
-            AND SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
-            <if test='storeCds != null and storeCds != ""'>
-                AND STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
-                </foreach>
-            </if>
-        ) tssh
+        SELECT tssh.YEAR_MONTH
+            , COUNT(tssh.STORE_cd) AS STORE_CNT
+            , SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+            , SUM(tssh.SALE_CNT) AS SALE_CNT
+            , SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+            ${sQuery1}
+        FROM (
+                SELECT TO_CHAR(TO_DATE(SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH
+                     , STORE_CD
+                     , SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                     , SUM(SALE_CNT) AS SALE_CNT
+                     , SUM(GUEST_CNT_1) AS TOT_GUEST_CNT
+                     ${sQuery2}
+                  FROM TB_SL_MONTHLY_TIME
+                 WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+                   AND SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                   <if test='startTime != "0" and endTime != "23"'>
+                       AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+                   </if>
+                    GROUP BY SALE_YM, STORE_CD
+                ) tssh
         GROUP BY tssh.YEAR_MONTH
         ORDER BY tssh.YEAR_MONTH
     </select>
