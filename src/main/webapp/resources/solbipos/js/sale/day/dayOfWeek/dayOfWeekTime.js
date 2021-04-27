@@ -13,14 +13,15 @@
  */
 var app = agrid.getApp();
 
-// 시간대 DropBoxDataMap
-var saleTimeFgData = [
-    {"name":"전체","value":""},
-    {"name":"심야","value":"0"},
-    {"name":"아침","value":"1"},
-    {"name":"점심","value":"2"},
-    {"name":"저녁","value":"3"}
-];
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+    var timeVal = i.toString();
+    if(i>=0 && i<=9){
+        timeVal = "0" + timeVal;
+    }
+    Hh[i] = {"name":timeVal,"value":timeVal}
+}
 
 /**
  *  시간대별 매출 조회 그리드 생성
@@ -35,7 +36,10 @@ app.controller('dayOfWeekTimeCtrl', ['$scope', '$http', '$timeout', function ($s
     var endDate = wcombo.genDateVal("#endDateDayOfWeekTime", gvEndDate);
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("saleTimeCombo", saleTimeFgData);
+    $scope._setComboData("startTimeCombo", Hh);
+    $scope._setComboData("endTimeCombo", Hh);
+    $scope.startTime     = "0";
+    $scope.endTime       = "23";
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -66,35 +70,11 @@ app.controller('dayOfWeekTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         var j=0;
         for (var i = 0; i < 24; i++) {
             j=i + 1;
-            if(i<10){
-                dataItem['realSaleAmtT0' + i] = i + "시 ~ " + j + "시";
-                dataItem['saleCntT0' + i] = i + "시 ~ " + j + "시";
-                dataItem['totGuestCntT0' + i] = i + "시 ~ " + j + "시";
-
-            }else{
-                dataItem['realSaleAmtT' + i] = i + "시 ~ " + j + "시";
-                dataItem['saleCntT' + i] = i + "시 ~ " + j + "시";
-                dataItem['totGuestCntT' + i] = i + "시 ~ " + j + "시";
-            }
+            dataItem['realSaleAmtT' + i] = i + "시 ~ " + j + "시";
+            dataItem['saleCntT' + i] = i + "시 ~ " + j + "시";
+            dataItem['totGuestCntT' + i] = i + "시 ~ " + j + "시";
             j=0;
         }
-
-        // 시간대 '전체' 선택 시 보이는 컬럼
-        dataItem.realSaleAmtT0  = messages["dayofweek.time.T0"];
-        dataItem.saleCntT0  = messages["dayofweek.time.T0"];
-        dataItem.totGuestCntT0  = messages["dayofweek.time.T0"];
-
-        dataItem.realSaleAmtT1  = messages["dayofweek.time.T1"];
-        dataItem.saleCntT1  = messages["dayofweek.time.T1"];
-        dataItem.totGuestCntT1  = messages["dayofweek.time.T1"];
-
-        dataItem.realSaleAmtT2  = messages["dayofweek.time.T2"];
-        dataItem.saleCntT2  = messages["dayofweek.time.T2"];
-        dataItem.totGuestCntT2  = messages["dayofweek.time.T2"];
-
-        dataItem.realSaleAmtT3  = messages["dayofweek.time.T3"];
-        dataItem.saleCntT3  = messages["dayofweek.time.T3"];
-        dataItem.totGuestCntT3  = messages["dayofweek.time.T3"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -140,6 +120,11 @@ app.controller('dayOfWeekTimeCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // <-- 검색 호출 -->
     $scope.$on("dayOfWeekTimeCtrl", function(event, data) {
+        if($scope.startTime*1 > $scope.endTime*1){ // *1하는이유 : Time들이 String이라 int로 바꿀라고
+            $scope._popMsg(messages["day.time.startEnd"]); // 검색 시작 시간대가 검색 종료 시간대보다 큽니다.
+            return false;
+        }
+
         $scope.searchDayOfWeekTime();
         event.preventDefault();
     });
@@ -149,44 +134,28 @@ app.controller('dayOfWeekTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.storeCds = $("#dayofweekTimeStoreCd").val();
-        params.saleTime = $scope.dayOfWeekSaleTime;
+        params.startTime = $scope.startTime;
+        params.endTime = $scope.endTime;
 
         $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekTimeList.sb", params, function() {}, false);
 
         // 선택한 시간대에 따른 리스트 항목 visible
         var grid = wijmo.Control.getControl("#wjGridDayofweekTimeList");
         var columns = grid.columns;
-        var start = 0;
-        var end = 0;
+        var start = $scope.startTime*1;
+        var end = $scope.endTime*1;
+        var defaultCol = 4;
 
-        if($scope.dayOfWeekSaleTime === "0") { //심야
-            start = 5;
-            end = 25;
-        } else if($scope.dayOfWeekSaleTime  === "1") { //아침
-            start = 26;
-            end = 37;
-        } else if($scope.dayOfWeekSaleTime  === "2") { //점심
-            start = 38;
-            end = 52;
-        } else if($scope.dayOfWeekSaleTime  === "3") { //저녁
-            start = 53;
-            end = 76;
-        } else if($scope.dayOfWeekSaleTime === "") { //전체
-            start = 77;
-            end = 88;
+        if($scope.orgnFg === 'H') {
+            defaultCol++;
         }
 
-        // 본사권한인 경우, 보여야 하는 컬럼 항목이 늘어나야 함(StoreCnt)
-        // if($scope.orgnFg === 'H') {
-        //     start++;
-        //     end++;
-        // }
-
-        for(var i = 5; i <= 89; i++) {
-            if(i >= start && i <= end) {
-                columns[i].visible = true;
-            } else {
-                columns[i].visible = false;
+        for(var i = defaultCol; i <= columns.length; i++){ //72번 돈다
+            columns[i].visible = false;
+            for(var j = start; j <= end; j++) {
+                if (columns[i].binding == 'realSaleAmtT'+j || columns[i].binding == 'saleCntT'+j || columns[i].binding == 'totGuestCntT'+j) {
+                    columns[i].visible = true;
+                }
             }
         }
     };

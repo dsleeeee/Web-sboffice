@@ -261,35 +261,34 @@
     -->
     <select id="getDayOfWeekTimeList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekTimeList */
-        SELECT
-        tssh.YOIL,
-        COUNT(DISTINCT tssh.STORE_CD) AS STORE_CNT,
-        SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-        SUM(tssh.SALE_FG) AS SALE_CNT,
-        SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
-        ${sQuery1}
-        FROM
-        (
-            SELECT
-            TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-            STORE_CD,
-            REAL_SALE_AMT,
-            SALE_FG,
-            TOT_GUEST_CNT
-            ${sQuery2}
-            FROM TB_SL_SALE_HDR
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{membrOrgnCd}
-            AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            <if test='storeCds != null and storeCds != ""'>
-                AND STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
-                </foreach>
-            </if>
-        ) tssh
-        GROUP BY tssh.YOIL
-        ORDER BY tssh.YOIL
+        SELECT tssh.YOIL
+             , COUNT(tssh.STORE_cd) AS STORE_CNT
+             , SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+             , SUM(tssh.SALE_CNT) AS SALE_CNT
+             , SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+             ${sQuery1}
+        FROM ( SELECT TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                    , STORE_CD
+                    , SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    , SUM(SALE_CNT) AS SALE_CNT
+                    , SUM(GUEST_CNT_1) AS TOT_GUEST_CNT
+                      ${sQuery2}
+                FROM TB_SL_DAILY_TIME
+               WHERE HQ_OFFICE_CD = #{membrOrgnCd}
+                 AND SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='startTime != "0" and endTime != "23"'>
+                    AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+                </if>
+                GROUP BY SALE_DATE, STORE_CD
+            ) tssh
+        GROUP BY YOIL
+        ORDER BY YOIL
     </select>
 
     <!-- 상품분류별탭 - 상품분류별 매출조회-->
