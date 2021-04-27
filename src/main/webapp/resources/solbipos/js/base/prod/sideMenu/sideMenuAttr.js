@@ -60,7 +60,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === 'sdattrClassCd' && selectedRow.status !== 'I') {
           $("#sideMenuAttrTitle").html(" [" + selectedRow.sdattrClassCd+ "]" + selectedRow.sdattrClassNm );
-          if (orgnFg == 'STORE' && selectedRow.sdattrClassCd <= 79999) {
+          if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdattrClassCd <= 79999) {
             $("#btnUpAttr").hide();
             $("#btnDownAttr").hide();
             $("#btnAddAttr").hide();
@@ -107,7 +107,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
       for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i--){
         var item = $scope.flex.collectionView.items[i];
         if(item.gChk) {
-          if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && item.sdattrClassCd > 79999)){
+          if ((orgnFg != null && orgnFg == "HQ") || hqOfficeCd == '00000' || ((orgnFg != null && orgnFg == "STORE") && item.sdattrClassCd > 79999)){
             if(item.cnt == 0){
               $scope.flex.collectionView.removeAt(i);
             } else {

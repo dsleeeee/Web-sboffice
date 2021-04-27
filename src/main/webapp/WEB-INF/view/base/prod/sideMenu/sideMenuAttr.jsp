@@ -6,6 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div id="attrArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isAttrTab">
   <div class="w50 fl">
@@ -39,7 +40,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrClassCd"/>" binding="sdattrClassCd" width="100" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrClassNm"/>" binding="sdattrClassNm" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="100"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="100" is-read-only="true"></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
@@ -96,7 +97,8 @@
 </div>
 <script>
   var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=2018122003.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=2018122003.03" charset="utf-8"></script>
 
 

@@ -75,7 +75,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
         if ( col.binding === 'sdselGrpCd' && selectedRow.status !== 'I') {
           $("#sideSelectGroupTitle").html(" [" + selectedRow.sdselGrpCd+ "]" + selectedRow.sdselGrpNm );
           $("#sideClassTitle").html("");
-          if (orgnFg == 'STORE' && selectedRow.sdselGrpCd <= 799999) {
+          if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselGrpCd <= 799999) {
             $("#btnUpSelClass").hide();
             $("#btnDownSelClass").hide();
             $("#btnAddSelClass").hide();
@@ -137,7 +137,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
         var item = $scope.flex.collectionView.items[i];
         if (item.gChk) {
-          if((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && item.sdselGrpCd > 799999)) {
+          if((orgnFg != null && orgnFg == "HQ") || hqOfficeCd == '00000' || ((orgnFg != null && orgnFg == "STORE") && item.sdselGrpCd > 799999)) {
             if (item.cnt == 0) {
               $scope.flex.collectionView.removeAt(i);
             } else {
