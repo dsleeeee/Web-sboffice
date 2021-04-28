@@ -432,7 +432,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             keyMapper.deleteTouchKeyClassToStore(touchKeyVO);
             keyMapper.deleteTouchKeyToStore(touchKeyVO);
             // 터치키 매장적용
-            result = keyMapper.insertTouchKeyClassToStore(touchKeyVO);
+            result  = keyMapper.mergeStoreEnvst(touchKeyVO);
+            result += keyMapper.insertTouchKeyClassToStore(touchKeyVO);
             result += keyMapper.insertTouchKeyToStore(touchKeyVO);
 
         }

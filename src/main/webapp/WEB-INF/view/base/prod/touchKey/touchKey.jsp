@@ -330,5 +330,5 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210416.001"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.001"
         charset="utf-8"></script>

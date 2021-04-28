@@ -1153,7 +1153,7 @@ Graph.prototype.initValue = function (rowPerPage) {
     graphSizeY += (graph.ROW_PER_PAGE - 1) * this.btnBorder;
   }
   // x축 길이 설정
-  graphSizeX = graphSizeX * graph.MAX_PAGE;
+  graphSizeX = 2499;
 
   // graph 에 길이 설정
   graph.minimumGraphSize = new mxRectangle(0, 0, graphSizeX, graphSizeY);
