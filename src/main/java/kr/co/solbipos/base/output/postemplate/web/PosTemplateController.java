@@ -227,4 +227,48 @@ public class PosTemplateController {
 
     }
 
+    /**
+     * 포스출력물관리 - 매장조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param posTemplateVO PosTemplateVO
+     * @param model Model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 10. 04.
+     */
+    @RequestMapping(value = "/template/getRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRegStoreList(HttpServletRequest request, HttpServletResponse response,
+                                   PosTemplateVO posTemplateVO, Model model) {
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 출력물코드 목록 조회
+        list = posTemplateService.getRegStoreList(posTemplateVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, posTemplateVO);
+
+    }
+
+    /**
+     * 포스출력물관리 - 출력물템플릿 매장적용
+     *
+     * @param posTemplateVOs PosTemplateVO[]
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 10. 04.
+     */
+    @RequestMapping(value = "/template/applyToStoreReal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result applyToStoreReal(@RequestBody PosTemplateVO[] posTemplateVOs, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = posTemplateService.applyToStoreReal(posTemplateVOs, sessionInfoVO);
+        return returnJson(Status.OK, result);
+    }
+
 }

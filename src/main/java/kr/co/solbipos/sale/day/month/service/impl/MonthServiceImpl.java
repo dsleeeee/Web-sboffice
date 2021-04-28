@@ -130,64 +130,18 @@ public class MonthServiceImpl implements MonthService {
         String sSaleDate ="";
 
         // 매출 시간대 설정
-        int iSaleDateStart = 0;
-        int iSaleDateEnd = 23;
+        int iSaleDateStart = Integer.parseInt(monthVO.getStartTime());
+        int iSaleDateEnd = Integer.parseInt(monthVO.getEndTime());
 
-        // 시간대 '전체' 선택 시
-        if(monthVO.getSaleTime() == null) {
+        for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+            sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
+            sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
+            sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
 
-            for(int i = 0; i <= 3; i++) {
-                sQuery1 += ", SUM(tssh.REAL_SALE_AMT_T" + i + ") AS REAL_SALE_AMT_T" + i + "\n";
-                sQuery1 += ", SUM(tssh.SALE_CNT_T" + i + ") AS SALE_CNT_T" + i + "\n";
-                sQuery1 += ", SUM(tssh.TOT_GUEST_CNT_T" + i + ") AS TOT_GUEST_CNT_T" + i + "\n";
-            }
+            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
+            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
+            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
 
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T0" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T0" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T0" + "\n";
-
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('07','08','09','10') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T1" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('07','08','09','10') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T1" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('07','08','09','10') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T1" + "\n";
-
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('11','12','13','14','15') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T2" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('11','12','13','14','15') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T2" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('11','12','13','14','15') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T2" + "\n";
-
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T3" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T3" + "\n";
-            sQuery2 +=", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T3" + "\n";
-        }
-        else
-        {
-            // 매출 시간대 설정(심야,아침,점심,저녁)
-            if(monthVO.getSaleTime() == SaleTimeFg.NIGHT) {
-                iSaleDateStart = 0;
-                iSaleDateEnd = 6;
-            } else if(monthVO.getSaleTime() == SaleTimeFg.MORNING) {
-                iSaleDateStart = 7;
-                iSaleDateEnd = 10;
-            } else if(monthVO.getSaleTime() == SaleTimeFg.LUNCH) {
-                iSaleDateStart = 11;
-                iSaleDateEnd = 15;
-            } else if(monthVO.getSaleTime() == SaleTimeFg.EVENING) {
-                iSaleDateStart = 16;
-                iSaleDateEnd = 23;
-            }
-
-            for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
-
-                // 10보다 작은건 01~09
-                sSaleDate = i < 10 ? "0" + String.valueOf(i) : String.valueOf(i);
-
-                sQuery1 += ", SUM(tssh.REAL_SALE_AMT_T" + sSaleDate + ") AS REAL_SALE_AMT_T" + sSaleDate + "\n";
-                sQuery1 += ", SUM(tssh.SALE_CNT_T" + sSaleDate + ") AS SALE_CNT_T" + sSaleDate + "\n";
-                sQuery1 += ", SUM(tssh.TOT_GUEST_CNT_T" + sSaleDate + ") AS TOT_GUEST_CNT_T" + sSaleDate + "\n";
-
-                sQuery2 += ", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('" + sSaleDate + "') THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T" + sSaleDate + "\n";
-                sQuery2 += ", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('" + sSaleDate + "') THEN SALE_FG ELSE 0 END) AS SALE_CNT_T" + sSaleDate + "\n";
-                sQuery2 += ", (CASE WHEN SUBSTR(REG_DT, 9, 2) IN ('" + sSaleDate + "') THEN TOT_GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T" + sSaleDate + "\n";
-            }
         }
 
         monthVO.setsQuery1(sQuery1);

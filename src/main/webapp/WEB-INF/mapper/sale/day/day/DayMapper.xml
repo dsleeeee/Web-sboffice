@@ -490,53 +490,37 @@
     -->
     <select id="getDayTimeList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getDayTimeList */
-        <![CDATA[
         SELECT tssh.SALE_DATE
-      	,      tssh.YOIL
-      	,      tssh.STORE_CNT
-      	,      tssh.REAL_SALE_AMT
-      	,      tssh.SALE_CNT
-      	,      tssh.TOT_GUEST_CNT
-		       ${sQuery1}
-        FROM
-      	        (
-      				SELECT tssh.SALE_DATE
-      				,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
-      				,       COUNT(tssh.STORE_CD) AS STORE_CNT
-      				,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
-				    ,       SUM(tssh.SALE_CNT) AS SALE_CNT
-				    ,       SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
-                            ${sQuery2}
-      				FROM
-      				   	   (
-
-		      					SELECT SALE_DATE
-			                    ,       STORE_CD
-                                        ${sQuery3}
-                                        ${sQuery4}
-			                    FROM   TB_SL_SALE_HDR
-				                WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
-		]]>
-
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                AND STORE_CD IN
-                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                    #{item}
-                                </foreach>
-                    </if>
-
-        <![CDATA[
-                                 AND   SALE_DATE  BETWEEN #{startDate} AND #{endDate}
-				                 GROUP
-				                 BY      SALE_DATE, STORE_CD
-
-		                   )tssh
-		            GROUP
-		            BY tssh.SALE_DATE
-	            )tssh
-        ORDER
-        BY tssh.SALE_DATE
-        ]]>
+             , tssh.YOIL
+             , COUNT(tssh.STORE_cd) AS STORE_CNT
+             , SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+             , SUM(tssh.SALE_CNT) AS SALE_CNT
+             , SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+            ${sQuery1}
+        FROM (
+                 SELECT SALE_DATE
+                      , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                      , STORE_CD
+                      , SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                      , SUM(SALE_CNT) AS SALE_CNT
+                      , SUM(GUEST_CNT_1) AS TOT_GUEST_CNT
+                        ${sQuery2}
+                 FROM TB_SL_DAILY_TIME
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='startTime != "0" and endTime != "23"'>
+                    AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+                </if>
+                 GROUP BY SALE_DATE, STORE_CD
+             ) tssh
+        GROUP BY SALE_DATE, YOIL
+        ORDER BY SALE_DATE DESC
     </select>
 
     <!-- 일자별(상품분류 탭) - 상품분류 MAX(depth) 값 가져오기  -->

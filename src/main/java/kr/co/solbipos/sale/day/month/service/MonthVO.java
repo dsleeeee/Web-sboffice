@@ -75,6 +75,10 @@ public class MonthVO extends PageVO {
     private String sQuery2;
     /** 매출 발생 시간대 */
     private SaleTimeFg saleTime;
+    /** 검색 시작 시간 */
+    private String startTime;
+    /** 검색 종료 시간 */
+    private String endTime;
 
     /** 팝업호출시 구분 */
     private String gubun;
@@ -229,6 +233,22 @@ public class MonthVO extends PageVO {
 
     public void setSaleTime(SaleTimeFg saleTime) {
         this.saleTime = saleTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getGubun() { return gubun; }

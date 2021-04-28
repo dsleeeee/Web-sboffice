@@ -397,44 +397,94 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_WB_HQ_CONFG_XML twhcx
+                MERGE INTO TB_WB_HQ_CONFG_XML A
+                USING   (
+                            SELECT  #{hqOfficeCd}    AS HQ_OFFICE_CD
+                            ,       #{confgFg}       AS CONFG_FG
+                            ,       #{xml:CLOB}      AS XML
+                            ,       #{useYn}         AS USE_YN
+                            ,       #{regDt}         AS REG_DT
+                            ,       #{regId}         AS REG_ID
+                            ,       #{tukeyGrpCd}    AS GRP_CD
+                            FROM    DUAL
+                        ) B
+                ON      (
+                            B.HQ_OFFICE_CD  =   A.HQ_OFFICE_CD
+                        AND B.CONFG_FG      =   A.CONFG_FG
+                        AND B.GRP_CD        =   A.GRP_CD
+                        )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.XML       =   B.XML
+                ,       A.USE_YN    =   B.USE_YN
+                ,       A.MOD_DT    =   B.REG_DT
+                ,       A.MOD_ID    =   B.REG_ID
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
-                    twhcx.HQ_OFFICE_CD,
-                    twhcx.CONFG_FG,
-                    twhcx.XML,
-                    twhcx.USE_YN,
-                    twhcx.REG_DT,
-                    twhcx.REG_ID,
-                    twhcx.GRP_CD
-                ) VALUES (
-                    #{hqOfficeCd},
-                    #{confgFg},
-                    #{xml:CLOB},
-                    #{useYn},
-                    #{regDt},
-                    #{regId},
-                    #{tukeyGrpCd}
+                        A.HQ_OFFICE_CD
+                ,       A.CONFG_FG
+                ,       A.XML
+                ,       A.USE_YN
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.GRP_CD
+                )
+                VALUES
+                (
+                        B.HQ_OFFICE_CD
+                ,       B.CONFG_FG
+                ,       B.XML
+                ,       B.USE_YN
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.GRP_CD
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_WB_STORE_CONFG_XML twscx
+                MERGE INTO TB_WB_STORE_CONFG_XML A
+                USING   (
+                            SELECT  #{storeCd}       AS STORE_CD
+                            ,       #{confgFg}       AS CONFG_FG
+                            ,       #{xml:CLOB}      AS XML
+                            ,       #{useYn}         AS USE_YN
+                            ,       #{regDt}         AS REG_DT
+                            ,       #{regId}         AS REG_ID
+                            ,       #{tukeyGrpCd}    AS GRP_CD
+                            FROM    DUAL
+                        ) B
+                ON      (
+                            B.STORE_CD      =   A.STORE_CD
+                        AND B.CONFG_FG      =   A.CONFG_FG
+                        AND B.GRP_CD        =   A.GRP_CD
+                        )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.XML       =   B.XML
+                ,       A.USE_YN    =   B.USE_YN
+                ,       A.MOD_DT    =   B.REG_DT
+                ,       A.MOD_ID    =   B.REG_ID
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
-                    twscx.STORE_CD,
-                    twscx.CONFG_FG,
-                    twscx.XML,
-                    twscx.USE_YN,
-                    twscx.REG_DT,
-                    twscx.REG_ID,
-                    twscx.GRP_CD
-                ) VALUES (
-                    #{storeCd},
-                    #{confgFg},
-                    #{xml:CLOB},
-                    #{useYn},
-                    #{regDt},
-                    #{regId},
-                    #{tukeyGrpCd}
+                        A.STORE_CD
+                ,       A.CONFG_FG
+                ,       A.XML
+                ,       A.USE_YN
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.GRP_CD
+                )
+                VALUES
+                (
+                        B.STORE_CD
+                ,       B.CONFG_FG
+                ,       B.XML
+                ,       B.USE_YN
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.GRP_CD
                 )
             </when>
         </choose>
@@ -607,7 +657,7 @@
                     #{hqOfficeCd},
                     #{tukeyGrpCd},
                     #{tukeyClassCd},
-                    #{tukeyClassNm},
+                    SUBSTRB(#{tukeyClassNm}, 1, 50),
                     #{pageNo},
                     #{pageRows},
                     #{x},
@@ -652,7 +702,7 @@
                     #{storeCd},
                     #{tukeyGrpCd},
                     #{tukeyClassCd},
-                    #{tukeyClassNm},
+                    SUBSTRB(#{tukeyClassNm}, 1, 50),
                     #{pageNo},
                     #{pageRows},
                     #{x},
@@ -1015,6 +1065,65 @@
             AND TUKEY_GRP_CD  = #{tukeyGrpCd}
     </delete>
 
+    <!-- 터치키 매장적용 본사 라인수 적용(HQ: 0041, MS:1041) -->
+    <!--
+        TABLE    : TB_MS_STORE_ENVST
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키 매장적용 본사 라인수 적용(TB_HQ_ENVST: 0041, TB_MS_STORE_ENVST:1041)
+    -->
+    <insert id="mergeStoreEnvst" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.mergeStoreEnvst */
+            MERGE INTO TB_MS_STORE_ENVST A
+            USING   (
+                        SELECT  #{storeCd}      AS STORE_CD
+                        ,       '1041'          AS ENVST_CD
+                        ,       ENVST_VAL       AS ENVST_VAL
+                        ,       DIRCT_IN_YN     AS DIRCT_IN_YN
+                        ,       USE_YN          AS USE_YN
+                        ,       #{regDt}        AS REG_DT
+                        ,       #{regId}        AS REG_ID
+                        FROM    TB_HQ_ENVST the
+                        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                        AND     ENVST_CD        =   '0041'
+                    ) B
+            ON      (
+                        B.STORE_CD      =   A.STORE_CD
+                    AND B.ENVST_CD      =   A.ENVST_CD
+                    )
+            WHEN MATCHED THEN
+            UPDATE
+            SET     A.ENVST_VAL     =   B.ENVST_VAL
+            ,       A.DIRCT_IN_YN   =   B.DIRCT_IN_YN
+            ,       A.USE_YN        =   B.USE_YN
+            ,       A.MOD_DT        =   B.REG_DT
+            ,       A.MOD_ID        =   B.REG_ID
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                    A.STORE_CD
+            ,       A.ENVST_CD
+            ,       A.ENVST_VAL
+            ,       A.DIRCT_IN_YN
+            ,       A.USE_YN
+            ,       A.REG_DT
+            ,       A.REG_ID
+            ,       A.MOD_DT
+            ,       A.MOD_ID
+            )
+            VALUES
+            (
+                    B.STORE_CD
+            ,       B.ENVST_CD
+            ,       B.ENVST_VAL
+            ,       B.DIRCT_IN_YN
+            ,       B.USE_YN
+            ,       B.REG_DT
+            ,       B.REG_ID
+            ,       B.REG_DT
+            ,       B.REG_ID
+            )
+    </insert>
+
     <!-- 판매터치키 분류 생성 -->
     <!--
         TABLE    : TB_MS_TOUCH_KEY_CLASS
@@ -1022,9 +1131,30 @@
         COMMENTS : 매장에 판매터치키 분류 정보를 생성한다.
     -->
     <insert id="insertTouchKeyClassToStore" parameterType="touchKeyVO">
-
-        /* USE : TouchkeyMapper.insertTouchKey */
-        INSERT INTO TB_MS_TOUCH_KEY_CLASS
+        /* USE : TouchkeyMapper.insertTouchKeyClassToStore */
+        INSERT INTO TB_MS_TOUCH_KEY_CLASS tmtkc
+        (
+                tmtkc.STORE_CD
+        ,       tmtkc.TUKEY_GRP_CD
+        ,       tmtkc.TUKEY_CLASS_CD
+        ,       tmtkc.TUKEY_CLASS_NM
+        ,       tmtkc.PAGE_NO
+        ,       tmtkc.PAGE_ROWS
+        ,       tmtkc.X
+        ,       tmtkc.Y
+        ,       tmtkc.WIDTH
+        ,       tmtkc.HEIGHT
+        ,       tmtkc.STYLE_CD
+        ,       tmtkc.FONT_SIZE
+        ,       tmtkc.FONT_COLOR
+        ,       tmtkc.FILL_COLOR
+        ,       tmtkc.IMG_NM
+        ,       tmtkc.IN_FG
+        ,       tmtkc.REG_DT
+        ,       tmtkc.REG_ID
+        ,       tmtkc.MOD_DT
+        ,       tmtkc.MOD_ID
+        )
         SELECT
             #{storeCd} AS STORE_CD,
             TUKEY_GRP_CD,
@@ -1061,9 +1191,31 @@
         COMMENTS : 매장에 판매터치키 정보를 생성한다.
     -->
     <insert id="insertTouchKeyToStore" parameterType="touchKeyVO">
-
         /* USE : TouchkeyMapper.insertTouchKeyToStore */
-        INSERT INTO TB_MS_TOUCH_KEY
+        INSERT INTO TB_MS_TOUCH_KEY thtk
+        (
+            thtk.STORE_CD,
+            thtk.TUKEY_CLASS_CD,
+            thtk.TUKEY_CD,
+            thtk.TUKEY_FG,
+            thtk.PROD_CD,
+            thtk.PAGE_NO,
+            thtk.X,
+            thtk.Y,
+            thtk.WIDTH,
+            thtk.HEIGHT,
+            thtk.STYLE_CD,
+            thtk.FONT_SIZE,
+            thtk.FONT_COLOR,
+            thtk.FILL_COLOR,
+            thtk.IMG_NM,
+            thtk.IN_FG,
+            thtk.REG_DT,
+            thtk.REG_ID,
+            thtk.MOD_DT,
+            thtk.MOD_ID,
+            thtk.TUKEY_GRP_CD
+        )
         SELECT
             #{storeCd} AS STORE_CD,
             TUKEY_CLASS_CD,

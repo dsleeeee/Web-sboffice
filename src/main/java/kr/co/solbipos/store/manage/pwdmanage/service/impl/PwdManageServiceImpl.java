@@ -81,6 +81,11 @@ public class PwdManageServiceImpl implements PwdManageService {
     @Override
     public PwChgResult modifyPwd(PwdManageVO pwdManageVO) {
 
+        /** 사용자 ID가 없는지 체크 */
+        if ((pwdManageVO.getUserId() == "" || pwdManageVO.getUserId() == null) && pwdManageVO.getPwdChgFg() == PwdChgFg.WEB){
+            return PwChgResult.ID_IS_NULL;
+        }
+
         // 기존 비밀번호 조회
         String oldPassword = pwdManageMapper.getOldPassword(pwdManageVO);
 
@@ -126,7 +131,9 @@ public class PwdManageServiceImpl implements PwdManageService {
         pwdManageVO.setRegDt(currentDateTimeString());
         pwdManageVO.setRegIp(HttpUtils.getClientIp(WebUtil.getRequest()));
 
-        int insertResult = pwdManageMapper.insertPasswordHistory(pwdManageVO);
+        if ( pwdManageVO.getPwdChgFg() == PwdChgFg.WEB ) {
+            int insertResult = pwdManageMapper.insertPasswordHistory(pwdManageVO);
+        }
 
         return PwChgResult.CHECK_OK;
 

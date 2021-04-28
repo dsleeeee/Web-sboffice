@@ -63,6 +63,9 @@ public interface TouchKeyMapper {
     /** 판매터치키 XML 기본값 세팅 */
     int defaultTouchKeyConfgXml(DefaultMap<String> param);
 
+    /** 터치키 매장적용 본사 라인수 적용(HQ: 0041, MS:1041) */
+    int mergeStoreEnvst(TouchKeyVO touchKeyVO);
+
     /** 판매터치키 분류 생성 */
     int insertTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 

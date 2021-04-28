@@ -200,4 +200,45 @@ public class PosTemplateServiceImpl implements PosTemplateService {
         }
     }
 
+    /** 매장 조회 */
+    @Override
+    public List<DefaultMap<String>> getRegStoreList(PosTemplateVO posTemplateVO) {
+        return posTemplateMapper.getRegStoreList(posTemplateVO);
+    }
+
+    /** 실제출력물 매장적용 */
+    @Override
+    public int applyToStoreReal(PosTemplateVO[] posTemplateVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        PosTemplateVO posTemplateVO = new PosTemplateVO();
+
+        for (int i = 0; i < posTemplateVOs.length ; i++) {
+            // 소속구분 설정
+            posTemplateVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            posTemplateVO.setStoreCd(posTemplateVOs[i].getStoreCd());
+            posTemplateVO.setPrtClassCd(posTemplateVOs[i].getPrtClassCd());
+            posTemplateVO.setTempltRegFg(posTemplateVOs[i].getTempltRegFg());
+            posTemplateVO.setTempltCd(posTemplateVOs[i].getTempltCd());
+
+            posTemplateVO.setRegDt(currentDt);
+            posTemplateVO.setRegId(sessionInfoVO.getUserId());
+            posTemplateVO.setModDt(currentDt);
+            posTemplateVO.setModId(sessionInfoVO.getUserId());
+
+            // 프로시저호출 : 호출하면서 VO에 결과값 담겨있다.
+            result = result + posTemplateMapper.applyToStoreReal(posTemplateVO);
+
+        }
+
+        if ( result == posTemplateVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+    }
+
 }

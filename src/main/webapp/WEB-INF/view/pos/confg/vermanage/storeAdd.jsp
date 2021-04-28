@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
-<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <%-- 매장추가 레이어 --%>
 <wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:1160px;height:710px;">
@@ -56,7 +56,7 @@
                   </wj-combo-box>
                   </c:if>
                 <c:if test="${orgnFg == 'HQ'}">
-                  <input type="text" id="srchHqOffice" value="${hqOfficeCd}" readonly/>
+                  <input type="text" id="srchHqOffice" ng-model="hqOfficeCd" readonly/>
                 </c:if>
                 </div>
               </td>
@@ -180,7 +180,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20200423.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20200423.07" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

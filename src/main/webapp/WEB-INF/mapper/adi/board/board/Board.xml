@@ -107,7 +107,7 @@
                                         twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
                                         AND twbi.APPR_FG = '2'
                                         AND (
-                                                ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd}) AND USE_YN = 'Y')) )
+                                                ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')) )
                                                 OR (twbi.TARGET_FG = '1')
                                             )
                                     )
