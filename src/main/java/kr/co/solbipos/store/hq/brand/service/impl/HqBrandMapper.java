@@ -27,17 +27,31 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HqBrandMapper {
 
-    /** 브랜드 목록 조회 */
-    List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrand);
+    /** 본사 브랜드 목록 조회 */
+    List<DefaultMap<String>> getHqBrandlist(HqBrandVO hqBrand);
+
+    /** 매장 브랜드 목록 조회 */
+    List<DefaultMap<String>> getMsBrandlist(HqBrandVO hqBrand);
 
     /** 브랜드 코드 조회 */
     String getHqBrandCd(HqBrandVO hqBrandVO);
 
-    /** 브랜드 추가 */
-    int insertBrand(HqBrandVO hqBrandVO);
+    /** 본사 하위 매장 조회 */
+    List<DefaultMap<String>> getStoreList(HqBrandVO hqBrand);
 
-    /** 브랜드 수정 */
-    int updateBrand(HqBrandVO hqBrandVO);
+    /** 본사 브랜드 추가 */
+    int insertHqBrand(HqBrandVO hqBrandVO);
+    /** 본사-매장 브랜드 추가 */
+    int insertHqMsBrand(HqBrandVO hqBrandVO);
+    /** 매장 브랜드 추가 */
+    int insertMsBrand(HqBrandVO hqBrandVO);
+
+    /** 본사 브랜드 수정 */
+    int updateHqBrand(HqBrandVO hqBrandVO);
+    /** 본사-매장 브랜드 수정 */
+    int updateHqMsBrand(HqBrandVO hqBrandVO);
+    /** 매장 브랜드 수정 */
+    int updateMsBrand(HqBrandVO hqBrandVO);
 
     /** 브랜드 삭제 */
     int deleteBrand(HqBrandVO hqBrandVO);

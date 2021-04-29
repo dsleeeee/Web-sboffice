@@ -56,7 +56,7 @@ public class HqBrandManageController {
     }
 
     /**
-     * 브랜드정보관리 화면 이동
+     * 브랜드정보관리 화면 이동(본사에서 접근)
      * @param   request
      * @param   response
      * @param   model
@@ -71,8 +71,23 @@ public class HqBrandManageController {
     }
 
     /**
+     * 브랜드정보관리 화면 이동(매장에서 접근)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "brandManage/list.sb", method = RequestMethod.GET)
+    public String storeList(HttpServletRequest request, HttpServletResponse response,
+                       Model model) {
+        return "store/hq/hqBrand/hqBrandManage";
+    }
+
+    /**
      * 브랜드 목록 조회
-     * @param   hqBrand
+     * @param   hqBrandVO
      * @param   request
      * @param   response
      * @param   model
@@ -82,12 +97,14 @@ public class HqBrandManageController {
      */
     @RequestMapping(value = "hqBrandManage/getBrandlist.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getBrandlist(HqBrandVO hqBrand, HttpServletRequest request,
+    public Result getBrandlist(HqBrandVO hqBrandVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getBrandlist(hqBrand);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        return returnListJson(Status.OK, list, hqBrand);
+        List<DefaultMap<String>> list = service.getBrandlist(hqBrandVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, hqBrandVO);
     }
 
     /**
