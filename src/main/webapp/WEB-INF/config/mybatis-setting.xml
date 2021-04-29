@@ -259,7 +259,7 @@
     <typeAlias alias="prodExcelUploadVO" type="kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO"/>
     <!-- 기초관리 > 상품관리 > 식품 알레르기 정보관리 -->
     <typeAlias alias="foodAllergyVO" type="kr.co.solbipos.base.prod.foodAllergy.service.FoodAllergyVO"/>
-    <!-- 기초관리 > 상품관리 > 상품정보 일괄변경 -->
+    <!-- 기초관리 > 상품관리 > 상품정보일괄변경 -->
     <!--<typeAlias alias="prodBatchChangeVO" type="kr.co.solbipos.base.prod.prodBatchChange.service.ProdBatchChangeVO"/>-->
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
