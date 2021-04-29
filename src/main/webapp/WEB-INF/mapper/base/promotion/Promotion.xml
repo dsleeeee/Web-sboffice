@@ -1,0 +1,1461 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Promotion.xml
+    본사 프로모션관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.04.13     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.promotion.promotion.service.impl.PromotionMapper">
+
+    <!-- 프로모션관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_H, TB_HQ_PROMO_CONDI, TB_MS_PROMO_H, TB_MS_PROMO_CONDI
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 리스트를 조회한다.
+    -->
+    <select id="getPromotionList" parameterType="promotionVO" resultType="DefaultMap">
+        /* USE : PromotionMapper.getPromotionList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            SELECT thph.HQ_OFFICE_CD,
+                    thph.PROMOTION_CD,
+                    thph.PROMOTION_NM,
+                    thph.MEMO,
+                    thph.USE_YN,
+                    CASE WHEN thpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS START_YMD,
+                    CASE WHEN thpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS END_YMD
+              FROM TB_HQ_PROMO_H thph,
+                    TB_HQ_PROMO_CONDI thpc
+             WHERE thph.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+               AND thph.PROMOTION_CD = thpc.PROMOTION_CD
+               AND thph.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='promotionNm != null and promotionNm != ""'>
+                    AND thph.PROMOTION_NM LIKE '%' || #{promotionNm} || '%'
+                </if>
+               <if test='useYn != null and useYn != ""'>
+                  AND thph.USE_YN = #{useYn}
+               </if>
+               <if test='promotionDate != null and promotionDate != ""'>
+                  AND thpc.DATE_YN = 'Y'
+                  AND #{promotionDate} BETWEEN thpc.START_YMD  AND thpc.END_YMD
+               </if>
+             ORDER
+                BY thph.REG_DT DESC
+          </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+              SELECT tmph.STORE_CD,
+                      tmph.PROMOTION_CD,
+                      tmph.PROMOTION_NM,
+                      tmph.MEMO,
+                      tmph.USE_YN,
+                      CASE WHEN tmpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(tmpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS START_YMD,
+                      CASE WHEN tmpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(tmpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS END_YMD
+                FROM TB_MS_PROMO_H tmph,
+                      TB_MS_PROMO_CONDI tmpc
+               WHERE tmph.STORE_CD = tmpc.STORE_CD
+                 AND tmph.PROMOTION_CD = tmpc.PROMOTION_CD
+                 AND tmph.STORE_CD = #{storeCd}
+              <if test='promotionNm != null and promotionNm != ""'>
+                  AND tmph.PROMOTION_NM LIKE '%' || #{promotionNm} || '%'
+              </if>
+              <if test='useYn != null and useYn != ""'>
+                  AND tmph.USE_YN = #{useYn}
+              </if>
+              <if test='promotionDate != null and promotionDate != ""'>
+                  AND tmpc.DATE_YN = 'Y'
+                  AND #{promotionDate} BETWEEN tmpc.START_YMD  AND tmpc.END_YMD
+              </if>
+              ORDER
+                 BY tmph.REG_DT DESC
+          </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_H, TB_MS_PROMO_H
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 생성 시, 프로모션 코드를 생성한다.
+    -->
+    <select id="getPromotionCode" parameterType="promotionVO" resultType="String">
+        /* USE : PromotionMapper.getPromotionCode */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(PROMOTION_CD), '0') + 1, 5, '0')
+                  FROM TB_HQ_PROMO_H
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(PROMOTION_CD), '80000') + 1, 5, '0')
+                  FROM TB_MS_PROMO_H
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROMOTION_CD > 80000
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 마스터 정보 저장 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_H, TB_MS_PROMO_H
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 마스터 정보가 있으면 update, 없으면 insert
+    -->
+    <update id="savePromotionH" parameterType="promotionVO">
+        /* USE : PromotionMapper.savePromotionH */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PROMO_H A
+                     USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                                      #{promotionCd} AS PROMOTION_CD,
+                                      #{promotionNm} AS PROMOTION_NM,
+                                      #{memo} AS MEMO,
+                                      #{useYn} AS USE_YN,
+                                      #{regDt} AS REG_DT,
+                                      #{regId} AS REG_ID,
+                                      #{modDt} AS MOD_DT,
+                                      #{modId} AS MOD_ID
+                                FROM DUAL
+                            ) B
+                        ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
+                      WHEN MATCHED THEN
+                    UPDATE
+                       SET A.PROMOTION_NM = B.PROMOTION_NM,
+                           A.MEMO = B.MEMO,
+                           A.USE_YN = B.USE_YN,
+                           A.MOD_ID = B.MOD_ID,
+                           A.MOD_DT = B.MOD_DT
+                     WHEN NOT MATCHED THEN
+                   INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.PROMOTION_CD,
+                           A.PROMOTION_NM,
+                           A.MEMO,
+                           A.AUTO_YN,
+                           A.USE_YN,
+                           A.OVERLAP_YN,
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+                    VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.PROMOTION_CD,
+                           B.PROMOTION_NM,
+                           B.MEMO,
+                           'N',
+                           B.USE_YN,
+                           'N',
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PROMO_H A
+                     USING ( SELECT #{storeCd} AS STORE_CD,
+                                      #{promotionCd} AS PROMOTION_CD,
+                                      #{promotionNm} AS PROMOTION_NM,
+                                      #{memo} AS MEMO,
+                                      #{useYn} AS USE_YN,
+                                      #{regFg} AS REG_FG,
+                                      #{regDt} AS REG_DT,
+                                      #{regId} AS REG_ID,
+                                      #{modDt} AS MOD_DT,
+                                      #{modId} AS MOD_ID
+                                 FROM DUAL
+                            ) B
+                        ON (A.STORE_CD = B.STORE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
+                      WHEN MATCHED THEN
+                    UPDATE
+                      SET A.PROMOTION_NM = B.PROMOTION_NM,
+                            A.MEMO = B.MEMO,
+                            A.USE_YN = B.USE_YN,
+                            A.REG_FG = B.REG_FG,
+                            A.MOD_ID = B.MOD_ID,
+                            A.MOD_DT = B.MOD_DT
+                      WHEN NOT MATCHED THEN
+                    INSERT
+                    (       A.STORE_CD,
+                            A.PROMOTION_CD,
+                            A.PROMOTION_NM,
+                            A.MEMO,
+                            A.AUTO_YN,
+                            A.USE_YN,
+                            A.OVERLAP_YN,
+                            A.REG_FG,
+                            A.REG_DT,
+                            A.REG_ID,
+                            A.MOD_DT,
+                            A.MOD_ID
+                    )
+                    VALUES
+                    (       B.STORE_CD,
+                            B.PROMOTION_CD,
+                            B.PROMOTION_NM,
+                            B.MEMO,
+                            'N',
+                            B.USE_YN,
+                            'N',
+                            B.REG_FG,
+                            B.REG_DT,
+                            B.REG_ID,
+                            B.MOD_DT,
+                            B.MOD_ID
+                    )
+            </when>
+        </choose>
+    </update>
+
+    <!-- 프로모션 적용조건 정보 저장 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_CONDI, TB_MS_PROMO_CONDI
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 적용조건 정보가 있으면 update, 없으면 insert
+    -->
+    <update id="savePromotionCondi" parameterType="promotionVO">
+        /* USE : PromotionMapper.savePromotionCondi */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PROMO_CONDI A
+                     USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                                      #{promotionCd} AS PROMOTION_CD,
+                                      #{dateYn} AS DATE_YN,
+                                      #{startYmd} AS START_YMD,
+                                      #{endYmd} AS END_YMD,
+                                      #{timeYn} AS TIME_YN,
+                                      #{startTime} AS START_TIME,
+                                      #{endTime} AS END_TIME,
+                                      #{weekYn} AS WEEK_YN,
+                                      #{monYn} AS MON_YN,
+                                      #{tueYn} AS TUE_YN,
+                                      #{wedYn} AS WED_YN,
+                                      #{thuYn} AS THU_YN,
+                                      #{friYn} AS FRI_YN,
+                                      #{satYn} AS SAT_YN,
+                                      #{sunYn} AS SUN_YN,
+                                      #{memberTargetDs} AS MEMBER_TARGET_DS,
+                                      #{memberClassCd} AS MEMBER_CLASS_CD,
+                                      #{minSaleAmt} AS MIN_SALE_AMT,
+                                      #{prodCdYn} AS PROD_CD_YN,
+                                      #{selectProdDs} AS SELECT_PROD_DS,
+                                      #{selectProdCrossFg} AS SELECT_CROSS_FG,
+                                      #{selectProdCnt} AS SELECT_PROD_CNT,
+                                      <!-- #{storeUseYn} AS STORE_USE_YN, -->
+                                      <!-- #{sideProdFg} AS SIDE_PROD_FG, -->
+                                      #{regDt} AS REG_DT,
+                                      #{regId} AS REG_ID,
+                                      #{modDt} AS MOD_DT,
+                                      #{modId} AS MOD_ID
+                                FROM DUAL
+                            ) B
+                        ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
+                      WHEN MATCHED THEN
+                    UPDATE
+                       SET A.DATE_YN = B.DATE_YN,
+                           A.START_YMD = B.START_YMD,
+                           A.END_YMD = B.END_YMD,
+                           A.TIME_YN = B.TIME_YN,
+                           A.START_TIME = B.START_TIME,
+                           A.END_TIME = B.END_TIME,
+                           A.WEEK_YN = B.WEEK_YN,
+                           A.MON_YN = B.MON_YN,
+                           A.TUE_YN = B.TUE_YN,
+                           A.WED_YN = B.WED_YN,
+                           A.THU_YN = B.THU_YN,
+                           A.FRI_YN = B.FRI_YN,
+                           A.SAT_YN = B.SAT_YN,
+                           A.SUN_YN = B.SUN_YN,
+                           A.MEMBER_TARGET_DS = B.MEMBER_TARGET_DS,
+                           A.MEMBER_CLASS_CD = B.MEMBER_CLASS_CD,
+                           A.MIN_SALE_AMT = B.MIN_SALE_AMT,
+                           A.PROD_CD_YN = B.PROD_CD_YN,
+                           A.SELECT_PROD_DS = B.SELECT_PROD_DS,
+                           A.SELECT_CROSS_FG = B.SELECT_CROSS_FG,
+                           A.SELECT_PROD_CNT = B.SELECT_PROD_CNT,
+                           <!-- A.STORE_USE_YN = B.STORE_USE_YN -->
+                           <!-- A.SIDE_PROD_FG = B.SIDE_PROD_FG -->
+                           A.MOD_DT = B.MOD_DT,
+                           A.MOD_ID = B.MOD_ID
+                     WHEN NOT MATCHED THEN
+                   INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.PROMOTION_CD,
+                           A.DATE_YN,
+                           A.START_YMD,
+                           A.END_YMD,
+                           A.TIME_YN,
+                           A.START_TIME,
+                           A.END_TIME,
+                           A.WEEK_YN,
+                           A.MON_YN,
+                           A.TUE_YN,
+                           A.WED_YN,
+                           A.THU_YN,
+                           A.FRI_YN,
+                           A.SAT_YN,
+                           A.SUN_YN,
+                           A.MEMBER_TARGET_DS,
+                           A.MEMBER_CLASS_CD,
+                           A.MIN_SALE_AMT,
+                           A.PROD_CD_YN,
+                           A.SELECT_PROD_DS,
+                           A.SELECT_CROSS_FG,
+                           A.SELECT_PROD_CNT,
+                           <!-- A.STORE_USE_YN, -->
+                           <!-- A.SIDE_PROD_FG, -->
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+                    VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.PROMOTION_CD,
+                           B.DATE_YN,
+                           B.START_YMD,
+                           B.END_YMD,
+                           B.TIME_YN,
+                           B.START_TIME,
+                           B.END_TIME,
+                           B.WEEK_YN,
+                           B.MON_YN,
+                           B.TUE_YN,
+                           B.WED_YN,
+                           B.THU_YN,
+                           B.FRI_YN,
+                           B.SAT_YN,
+                           B.SUN_YN,
+                           B.MEMBER_TARGET_DS,
+                           B.MEMBER_CLASS_CD,
+                           B.MIN_SALE_AMT,
+                           B.PROD_CD_YN,
+                           B.SELECT_PROD_DS,
+                           B.SELECT_CROSS_FG,
+                           B.SELECT_PROD_CNT,
+                           <!-- B.STORE_USE_YN, -->
+                           <!-- B.SIDE_PROD_FG, -->
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PROMO_CONDI A
+                     USING ( SELECT #{storeCd} AS STORE_CD,
+                                      #{promotionCd} AS PROMOTION_CD,
+                                      #{dateYn} AS DATE_YN,
+                                      #{startYmd} AS START_YMD,
+                                      #{endYmd} AS END_YMD,
+                                      #{timeYn} AS TIME_YN,
+                                      #{startTime} AS START_TIME,
+                                      #{endTime} AS END_TIME,
+                                      #{weekYn} AS WEEK_YN,
+                                      #{monYn} AS MON_YN,
+                                      #{tueYn} AS TUE_YN,
+                                      #{wedYn} AS WED_YN,
+                                      #{thuYn} AS THU_YN,
+                                      #{friYn} AS FRI_YN,
+                                      #{satYn} AS SAT_YN,
+                                      #{sunYn} AS SUN_YN,
+                                      #{memberTargetDs} AS MEMBER_TARGET_DS,
+                                      #{memberClassCd} AS MEMBER_CLASS_CD,
+                                      #{minSaleAmt} AS MIN_SALE_AMT,
+                                      #{prodCdYn} AS PROD_CD_YN,
+                                      #{selectProdDs} AS SELECT_PROD_DS,
+                                      #{selectProdCrossFg} AS SELECT_CROSS_FG,
+                                      #{selectProdCnt} AS SELECT_PROD_CNT,
+                                      <!-- #{storeUseYn} AS STORE_USE_YN, -->
+                                      <!-- #{sideProdFg} AS SIDE_PROD_FG, -->
+                                      #{regDt} AS REG_DT,
+                                      #{regId} AS REG_ID,
+                                      #{modDt} AS MOD_DT,
+                                      #{modId} AS MOD_ID
+                                FROM DUAL
+                            ) B
+                        ON (A.STORE_CD = B.STORE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
+                      WHEN MATCHED THEN
+                    UPDATE
+                        SET A.DATE_YN = B.DATE_YN,
+                            A.START_YMD = B.START_YMD,
+                            A.END_YMD = B.END_YMD,
+                            A.TIME_YN = B.TIME_YN,
+                            A.START_TIME = B.START_TIME,
+                            A.END_TIME = B.END_TIME,
+                            A.WEEK_YN = B.WEEK_YN,
+                            A.MON_YN = B.MON_YN,
+                            A.TUE_YN = B.TUE_YN,
+                            A.WED_YN = B.WED_YN,
+                            A.THU_YN = B.THU_YN,
+                            A.FRI_YN = B.FRI_YN,
+                            A.SAT_YN = B.SAT_YN,
+                            A.SUN_YN = B.SUN_YN,
+                            A.MEMBER_TARGET_DS = B.MEMBER_TARGET_DS,
+                            A.MEMBER_CLASS_CD = B.MEMBER_CLASS_CD,
+                            A.MIN_SALE_AMT = B.MIN_SALE_AMT,
+                            A.PROD_CD_YN = B.PROD_CD_YN,
+                            A.SELECT_PROD_DS = B.SELECT_PROD_DS,
+                            A.SELECT_CROSS_FG = B.SELECT_CROSS_FG,
+                            A.SELECT_PROD_CNT = B.SELECT_PROD_CNT,
+                            <!-- A.STORE_USE_YN = B.STORE_USE_YN -->
+                            <!-- A.SIDE_PROD_FG = B.SIDE_PROD_FG -->
+                            A.MOD_DT = B.MOD_DT,
+                            A.MOD_ID = B.MOD_ID
+                      WHEN NOT MATCHED THEN
+                    INSERT
+                        (   A.STORE_CD,
+                            A.PROMOTION_CD,
+                            A.DATE_YN,
+                            A.START_YMD,
+                            A.END_YMD,
+                            A.TIME_YN,
+                            A.START_TIME,
+                            A.END_TIME,
+                            A.WEEK_YN,
+                            A.MON_YN,
+                            A.TUE_YN,
+                            A.WED_YN,
+                            A.THU_YN,
+                            A.FRI_YN,
+                            A.SAT_YN,
+                            A.SUN_YN,
+                            A.MEMBER_TARGET_DS,
+                            A.MEMBER_CLASS_CD,
+                            A.MIN_SALE_AMT,
+                            A.PROD_CD_YN,
+                            A.SELECT_PROD_DS,
+                            A.SELECT_CROSS_FG,
+                            A.SELECT_PROD_CNT,
+                            <!-- A.STORE_USE_YN, -->
+                            <!-- A.SIDE_PROD_FG, -->
+                            A.REG_DT,
+                            A.REG_ID,
+                            A.MOD_DT,
+                            A.MOD_ID
+                    )
+                    VALUES
+                    (       B.STORE_CD,
+                            B.PROMOTION_CD,
+                            B.DATE_YN,
+                            B.START_YMD,
+                            B.END_YMD,
+                            B.TIME_YN,
+                            B.START_TIME,
+                            B.END_TIME,
+                            B.WEEK_YN,
+                            B.MON_YN,
+                            B.TUE_YN,
+                            B.WED_YN,
+                            B.THU_YN,
+                            B.FRI_YN,
+                            B.SAT_YN,
+                            B.SUN_YN,
+                            B.MEMBER_TARGET_DS,
+                            B.MEMBER_CLASS_CD,
+                            B.MIN_SALE_AMT,
+                            B.PROD_CD_YN,
+                            B.SELECT_PROD_DS,
+                            B.SELECT_CROSS_FG,
+                            B.SELECT_PROD_CNT,
+                            <!-- B.STORE_USE_YN, -->
+                            <!-- B.SIDE_PROD_FG, -->
+                            B.REG_DT,
+                            B.REG_ID,
+                            B.MOD_DT,
+                            B.MOD_ID
+                    )
+            </when>
+        </choose>
+    </update>
+
+    <!-- 프로모션 적용혜택 정보 저장 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_BENE, TB_MS_PROMO_BENE
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 적용혜택 정보가 있으면 update, 없으면 insert
+    -->
+    <update id="savePromotionBene" parameterType="promotionVO">
+        /* USE : PromotionMapper.savePromotionBene */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PROMO_BENE A
+                     USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                                      #{promotionCd} AS PROMOTION_CD,
+                                      #{beneSeq} AS BENE_SEQ,
+                                      #{typeCd} AS TYPE_CD,
+                                      #{applyDcDs} AS APPLY_DC_DS,
+                                      #{dcSet} AS DC_SET,
+                                      #{presentDs} AS PRESENT_DS,
+                                      #{selectGiftCnt} AS SELECT_GIFT_CNT,
+                                      #{selectCrossFg} AS SELECT_CROSS_FG,
+                                      #{printMessage} AS PRINT_MESSAGE,
+                                      #{regDt} AS REG_DT,
+                                      #{regId} AS REG_ID,
+                                      #{modDt} AS MOD_DT,
+                                      #{modId} AS MOD_ID
+                                FROM DUAL
+                            ) B
+                        ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD AND A.BENE_SEQ = B.BENE_SEQ)
+                      WHEN MATCHED THEN
+                    UPDATE
+                       SET A.TYPE_CD = B.TYPE_CD,
+                           A.APPLY_DC_DS = B.APPLY_DC_DS,
+                           A.DC_SET = B.DC_SET,
+                           A.PRESENT_DS = B.PRESENT_DS,
+                           A.SELECT_GIFT_CNT = B.SELECT_GIFT_CNT,
+                           A.SELECT_CROSS_FG = B.SELECT_CROSS_FG,
+                           A.PRINT_MESSAGE = B.PRINT_MESSAGE,
+                           A.MOD_ID = B.MOD_ID,
+                           A.MOD_DT = B.MOD_DT
+                     WHEN NOT MATCHED THEN
+                   INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.PROMOTION_CD,
+                           A.BENE_SEQ,
+                           A.TYPE_CD,
+                           A.APPLY_DC_DS,
+                           A.DC_SET,
+                           A.PRESENT_DS,
+                           A.SELECT_GIFT_CNT,
+                           A.SELECT_CROSS_FG,
+                           A.PRINT_MESSAGE,
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+                    VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.PROMOTION_CD,
+                           B.BENE_SEQ,
+                           B.TYPE_CD,
+                           B.APPLY_DC_DS,
+                           B.DC_SET,
+                           B.PRESENT_DS,
+                           B.SELECT_GIFT_CNT,
+                           B.SELECT_CROSS_FG,
+                           B.PRINT_MESSAGE,
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PROMO_BENE A
+                     USING (    SELECT #{storeCd} AS STORE_CD,
+                                         #{promotionCd} AS PROMOTION_CD,
+                                         #{beneSeq} AS BENE_SEQ,
+                                         #{typeCd} AS TYPE_CD,
+                                         #{applyDcDs} AS APPLY_DC_DS,
+                                         #{dcSet} AS DC_SET,
+                                         #{presentDs} AS PRESENT_DS,
+                                         #{selectGiftCnt} AS SELECT_GIFT_CNT,
+                                         #{selectCrossFg} AS SELECT_CROSS_FG,
+                                         #{printMessage} AS PRINT_MESSAGE,
+                                         #{regDt} AS REG_DT,
+                                         #{regId} AS REG_ID,
+                                         #{modDt} AS MOD_DT,
+                                         #{modId} AS MOD_ID
+                                   FROM DUAL
+                            ) B
+                        ON (A.STORE_CD = B.STORE_CD AND A.PROMOTION_CD = B.PROMOTION_CD AND A.BENE_SEQ = B.BENE_SEQ)
+                      WHEN MATCHED THEN
+                      UPDATE
+                         SET A.TYPE_CD = B.TYPE_CD,
+                              A.APPLY_DC_DS = B.APPLY_DC_DS,
+                              A.DC_SET = B.DC_SET,
+                              A.PRESENT_DS = B.PRESENT_DS,
+                              A.SELECT_GIFT_CNT = B.SELECT_GIFT_CNT,
+                              A.SELECT_CROSS_FG = B.SELECT_CROSS_FG,
+                              A.PRINT_MESSAGE = B.PRINT_MESSAGE,
+                              A.MOD_ID = B.MOD_ID,
+                              A.MOD_DT = B.MOD_DT
+                    WHEN NOT MATCHED THEN
+                      INSERT
+                      (       A.STORE_CD,
+                              A.PROMOTION_CD,
+                              A.BENE_SEQ,
+                              A.TYPE_CD,
+                              A.APPLY_DC_DS,
+                              A.DC_SET,
+                              A.PRESENT_DS,
+                              A.SELECT_GIFT_CNT,
+                              A.SELECT_CROSS_FG,
+                              A.PRINT_MESSAGE,
+                              A.REG_DT,
+                              A.REG_ID,
+                              A.MOD_DT,
+                              A.MOD_ID
+                    )
+                    VALUES
+                    (         B.STORE_CD,
+                              B.PROMOTION_CD,
+                              B.BENE_SEQ,
+                              B.TYPE_CD,
+                              B.APPLY_DC_DS,
+                              B.DC_SET,
+                              B.PRESENT_DS,
+                              B.SELECT_GIFT_CNT,
+                              B.SELECT_CROSS_FG,
+                              B.PRINT_MESSAGE,
+                              B.REG_DT,
+                              B.REG_ID,
+                              B.MOD_DT,
+                              B.MOD_ID
+                    )
+            </when>
+        </choose>
+    </update>
+
+    <!-- 프로모션 적용상품 전체 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_CONDI_PROD, TB_MS_PROMO_CONDI_PROD
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 적용상품 체크 해제 시, 등록되어 있던 적용상품을 모두 삭제한다.
+    -->
+    <delete id="deletePromotionProdAll" parameterType="promotionVO">
+        /* USE : PromotionMapper.deletePromotionProdAll */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                  FROM TB_HQ_PROMO_CONDI_PROD
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                  FROM TB_MS_PROMO_CONDI_PROD
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 프로모션 혜택상품 전체 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_BENE_PROD, TB_MS_PROMO_BENE_PROD
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 혜택유형에 따라, 등록되어 있던 혜택상품을 모두 삭제한다.
+    -->
+    <delete id="deletePromotionPresentAll" parameterType="promotionVO">
+        /* USE : PromotionMapper.deletePromotionPresentAll */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM TB_HQ_PROMO_BENE_PROD
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM TB_MS_PROMO_BENE_PROD
+                WHERE STORE_CD = #{storeCd}
+                AND PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 프로모션 상세 조회 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_H, TB_HQ_PROMO_CONDI, TB_HQ_PROMO_BENE, TB_MS_PROMO_H, TB_MS_PROMO_CONDI, TB_MS_PROMO_BENE
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 상세 정보를 조회한다.
+    -->
+    <select id="getPromotionDetail" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getPromotionDetail */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thph.HQ_OFFICE_CD,
+                        thph.PROMOTION_CD,
+                        thph.PROMOTION_NM,
+                        thph.MEMO,
+                        thph.USE_YN,
+                        thpc.DATE_YN,
+                        thpc.START_YMD,
+                        thpc.END_YMD,
+                        thpc.TIME_YN,
+                        thpc.START_TIME,
+                        thpc.END_TIME,
+                        thpc.WEEK_YN,
+                        thpc.MON_YN,
+                        thpc.TUE_YN,
+                        thpc.WED_YN,
+                        thpc.THU_YN,
+                        thpc.FRI_YN,
+                        thpc.SAT_YN,
+                        thpc.SUN_YN,
+                        thpc.MEMBER_TARGET_DS,
+                        thpc.MEMBER_CLASS_CD,
+                        thpc.MIN_SALE_AMT,
+                        thpc.PROD_CD_YN,
+                        thpc.SELECT_PROD_DS,
+                        thpc.SELECT_CROSS_FG AS SELECT_PROD_CROSS_FG,
+                        thpc.SELECT_PROD_CNT,
+                        thpb.TYPE_CD,
+                        thpb.APPLY_DC_DS,
+                        thpb.DC_SET,
+                        thpb.PRINT_MESSAGE,
+                        thpb.PRESENT_DS,
+                        thpb.SELECT_CROSS_FG,
+                        thpb.SELECT_GIFT_CNT
+                  FROM TB_HQ_PROMO_H thph,
+                        TB_HQ_PROMO_CONDI thpc,
+                        TB_HQ_PROMO_BENE thpb
+                 WHERE 1=1
+                   AND thph.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thph.PROMOTION_CD = #{promotionCd}
+                   AND thpc.HQ_OFFICE_CD (+)= thph.HQ_OFFICE_CD
+                   AND thpc.PROMOTION_CD (+)= thph.PROMOTION_CD
+                   AND thpb.HQ_OFFICE_CD (+)= thph.HQ_OFFICE_CD
+                   AND thpb.PROMOTION_CD (+)= thph.PROMOTION_CD
+                   AND thpb.BENE_SEQ = #{beneSeq}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmph.STORE_CD,
+                        tmph.PROMOTION_CD,
+                        tmph.PROMOTION_NM,
+                        tmph.MEMO,
+                        tmph.USE_YN,
+                        tmph.REG_FG,
+                        tmpc.DATE_YN,
+                        tmpc.START_YMD,
+                        tmpc.END_YMD,
+                        tmpc.TIME_YN,
+                        tmpc.START_TIME,
+                        tmpc.END_TIME,
+                        tmpc.WEEK_YN,
+                        tmpc.MON_YN,
+                        tmpc.TUE_YN,
+                        tmpc.WED_YN,
+                        tmpc.THU_YN,
+                        tmpc.FRI_YN,
+                        tmpc.SAT_YN,
+                        tmpc.SUN_YN,
+                        tmpc.MEMBER_TARGET_DS,
+                        tmpc.MEMBER_CLASS_CD,
+                        tmpc.MIN_SALE_AMT,
+                        tmpc.PROD_CD_YN,
+                        tmpc.SELECT_PROD_DS,
+                        tmpc.SELECT_CROSS_FG AS SELECT_PROD_CROSS_FG,
+                        tmpc.SELECT_PROD_CNT,
+                        tmpb.TYPE_CD,
+                        tmpb.APPLY_DC_DS,
+                        tmpb.DC_SET,
+                        tmpb.PRINT_MESSAGE,
+                        tmpb.PRESENT_DS,
+                        tmpb.SELECT_CROSS_FG,
+                        tmpb.SELECT_GIFT_CNT
+                  FROM TB_MS_PROMO_H tmph,
+                        TB_MS_PROMO_CONDI tmpc,
+                        TB_MS_PROMO_BENE tmpb
+                 WHERE 1=1
+                   AND tmph.STORE_CD = #{storeCd}
+                   AND tmph.PROMOTION_CD = #{promotionCd}
+                   AND tmpc.STORE_CD (+)= tmph.STORE_CD
+                   AND tmpc.PROMOTION_CD (+)= tmph.PROMOTION_CD
+                   AND tmpb.STORE_CD (+)= tmph.STORE_CD
+                   AND tmpb.PROMOTION_CD (+)= tmph.PROMOTION_CD
+                   AND tmpb.BENE_SEQ = #{beneSeq}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 적용상품 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_CONDI_PROD, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_MS_PROMO_CONDI_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 적용상품 리스트를 조회한다.
+    -->
+    <select id="getPromotionProdList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getPromotionProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thpcp.HQ_OFFICE_CD,
+                        thpcp.PROMOTION_CD,
+                        thpcp.CONDI_PROD_SEQ,
+                        thpcp.GUBUN_DS,
+                        CASE WHEN thpcp.GUBUN_DS = '1' THEN thpcp.PROD_CD ELSE thpcp.PROD_CLASS_CD END AS PROD_CD,
+                        CASE WHEN thpcp.GUBUN_DS = '1' THEN thp.PROD_NM ELSE
+                        (
+                            CASE WHEN FN_GET_PROD_CLASS_CD_NM_STR(thpcp.HQ_OFFICE_CD, thpcp.PROD_CLASS_CD, 'NM_STR') != 'NO_DATA_FOUND' THEN
+                                        FN_GET_PROD_CLASS_CD_NM_STR(thpcp.HQ_OFFICE_CD, thpcp.PROD_CLASS_CD, 'NM_STR') ELSE
+                                        thpc.PROD_CLASS_NM
+                                   END
+                        )
+                        END AS PROD_NM,
+                        thpcp.PROD_QTY
+                  FROM TB_HQ_PROMO_CONDI_PROD thpcp,
+                        TB_HQ_PRODUCT thp,
+                        TB_HQ_PRODUCT_CLASS thpc
+                 WHERE thpcp.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thpcp.PROMOTION_CD = #{promotionCd}
+                   AND thp.HQ_OFFICE_CD (+)= thpcp.HQ_OFFICE_CD
+                   AND thp.PROD_CD (+)= thpcp.PROD_CD
+                   AND thpc.HQ_OFFICE_CD (+)= thpcp.HQ_OFFICE_CD
+                   AND thpc.PROD_CLASS_CD (+)= thpcp.PROD_CLASS_CD
+                 ORDER
+                    BY thpcp.GUBUN_DS ASC, thpcp.PROD_CD ASC, thpcp.PROD_CLASS_CD ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmpcp.STORE_CD,
+                        tmpcp.PROMOTION_CD,
+                        tmpcp.CONDI_PROD_SEQ,
+                        tmpcp.GUBUN_DS,
+                        CASE WHEN tmpcp.GUBUN_DS = '1' THEN tmpcp.PROD_CD ELSE tmpcp.PROD_CLASS_CD END AS PROD_CD,
+                        CASE WHEN tmpcp.GUBUN_DS = '1' THEN tmp.PROD_NM ELSE
+                        (
+                            CASE WHEN FN_GET_PROD_CLASS_CD_NM_STR(tmpcp.STORE_CD, tmpcp.PROD_CLASS_CD, 'NM_STR') != 'NO_DATA_FOUND' THEN
+                                        FN_GET_PROD_CLASS_CD_NM_STR(tmpcp.STORE_CD, tmpcp.PROD_CLASS_CD, 'NM_STR') ELSE
+                                        tmpc.PROD_CLASS_NM
+                                   END
+                        )
+                        END AS PROD_NM,
+                        tmpcp.PROD_QTY
+                  FROM TB_MS_PROMO_CONDI_PROD tmpcp,
+                        TB_MS_PRODUCT tmp,
+                        TB_MS_PRODUCT_CLASS tmpc
+                 WHERE tmpcp.STORE_CD = #{storeCd}
+                   AND tmpcp.PROMOTION_CD = #{promotionCd}
+                   AND tmp.STORE_CD (+)= tmpcp.STORE_CD
+                   AND tmp.PROD_CD (+)= tmpcp.PROD_CD
+                   AND tmpc.STORE_CD (+)= tmpcp.STORE_CD
+                   AND tmpc.PROD_CLASS_CD (+)= tmpcp.PROD_CLASS_CD
+                ORDER
+                   BY tmpcp.GUBUN_DS ASC, tmpcp.PROD_CD ASC, tmpcp.PROD_CLASS_CD ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 적용상품 선택팝업 상품리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 상품선택팝업에서 상품리스트를 조회한다.
+    -->
+    <select id="getProdList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thp.HQ_OFFICE_CD,
+                        thp.PROD_CD,
+                        thp.PROD_NM,
+                        '1' AS PROD_QTY,
+                        thp.USE_YN
+                  FROM TB_HQ_PRODUCT thp
+                 WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodCd != null and prodCd != ''">
+                   AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                   AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="useYn != null and useYn != ''">
+                   AND thp.USE_YN  = #{useYn} --사용여부
+                </if>
+                   AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PROMO_CONDI_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '1')
+                 ORDER
+                    BY thp.PROD_CD ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmp.STORE_CD,
+                        tmp.PROD_CD,
+                        tmp.PROD_NM,
+                        '1' AS PROD_QTY,
+                        tmp.USE_YN
+                  FROM TB_MS_PRODUCT tmp
+                 WHERE tmp.STORE_CD = #{storeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN  = #{useYn} --사용여부
+                </if>
+                    AND tmp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_MS_PROMO_CONDI_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '1')
+                  ORDER
+                     BY tmp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 적용상품 선택팝업 분류리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 분류선택팝업에서 분류리스트를 조회한다.
+    -->
+    <select id="getClassList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thpc.HQ_OFFICE_CD,
+                        thpc.PROD_CLASS_CD,
+                        CASE WHEN FN_GET_PROD_CLASS_CD_NM_STR(thpc.HQ_OFFICE_CD, thpc.PROD_CLASS_CD, 'NM_STR') != 'NO_DATA_FOUND'
+                              THEN FN_GET_PROD_CLASS_CD_NM_STR(thpc.HQ_OFFICE_CD, thpc.PROD_CLASS_CD, 'NM_STR')
+                              ELSE thpc.PROD_CLASS_NM
+                               END AS PROD_CLASS_NM,
+                        '1' AS PROD_QTY
+                   FROM TB_HQ_PRODUCT_CLASS thpc
+                  WHERE thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thpc.PROD_CLASS_CD LIKE '%'||#{prodClassCd}||'%' --분류코드
+                </if>
+                <if test="prodClassNm != null and prodClassNm != ''">
+                    AND thpc.PROD_CLASS_NM LIKE '%'||#{prodClassNm}||'%' --분류명
+                </if>
+                    AND thpc.PROD_CLASS_CD NOT IN (SELECT PROD_CLASS_CD FROM TB_HQ_PROMO_CONDI_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '2')
+                  ORDER
+                     BY thpc.PROD_CLASS_CD ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmpc.STORE_CD,
+                        tmpc.PROD_CLASS_CD,
+                        CASE WHEN FN_GET_PROD_CLASS_CD_NM_STR(tmpc.STORE_CD, tmpc.PROD_CLASS_CD, 'NM_STR') != 'NO_DATA_FOUND'
+                              THEN FN_GET_PROD_CLASS_CD_NM_STR(tmpc.STORE_CD, tmpc.PROD_CLASS_CD, 'NM_STR')
+                              ELSE tmpc.PROD_CLASS_NM
+                              END AS PROD_CLASS_NM,
+                        '1' AS PROD_QTY
+                  FROM TB_MS_PRODUCT_CLASS tmpc
+                  WHERE tmpc.STORE_CD = #{hqOfficeCd}
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmpc.PROD_CLASS_CD LIKE '%'||#{prodClassCd}||'%' --분류코드
+                </if>
+                <if test="prodClassNm != null and prodClassNm != ''">
+                    AND tmpc.PROD_CLASS_NM LIKE '%'||#{prodClassNm}||'%' --분류명
+                </if>
+                    AND tmpc.PROD_CLASS_CD NOT IN (SELECT PROD_CLASS_CD FROM TB_MS_PROMO_CONDI_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '2')
+                  ORDER
+                      BY tmpc.PROD_CLASS_CD ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 적용상품 선택팝업 상품추가 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_CONDI_PROD, TB_MS_PROMO_CONDI_PROD
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 상품선택팝업에서 상품을 추가한다.
+    -->
+    <insert id="insertPromotionProd" parameterType="promotionVO">
+        /* PromotionMapper.insertPromotionProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PROMO_CONDI_PROD
+                (
+                    HQ_OFFICE_CD,
+                    PROMOTION_CD,
+                    CONDI_PROD_SEQ,
+                    GUBUN_DS,
+                    PROD_CD,
+                    PROD_CLASS_CD,
+                    PROD_QTY,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{promotionCd},
+                    (SELECT NVL(MAX(CONDI_PROD_SEQ),0)+1 FROM TB_HQ_PROMO_CONDI_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd}),
+                    #{gubunDs},
+                    #{prodCd},
+                    #{prodClassCd},
+                    #{prodQty},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PROMO_CONDI_PROD
+                (
+                    STORE_CD,
+                    PROMOTION_CD,
+                    CONDI_PROD_SEQ,
+                    GUBUN_DS,
+                    PROD_CD,
+                    PROD_CLASS_CD,
+                    PROD_QTY,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{promotionCd},
+                    (SELECT NVL(MAX(CONDI_PROD_SEQ),0)+1 FROM TB_MS_PROMO_CONDI_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd}),
+                    #{gubunDs},
+                    #{prodCd},
+                    #{prodClassCd},
+                    #{prodQty},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 프로모션 적용상품 조건수량 수정 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_CONDI_PROD, TB_MS_PROMO_CONDI_PROD
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 적용상품의 조건수량 수정한다.
+    -->
+    <update id="updatePromotionProd" parameterType="promotionVO">
+        /* USE : PromotionMapper.updatePromotionProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PROMO_CONDI_PROD
+                   SET PROD_QTY = #{prodQty},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND CONDI_PROD_SEQ = #{condiProdSeq}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PROMO_CONDI_PROD
+                    SET PROD_QTY = #{prodQty},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND CONDI_PROD_SEQ = #{condiProdSeq}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 프로모션 적용상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_CONDI_PROD, TB_MS_PROMO_CONDI_PROD
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 적용상품을 삭제한다.
+    -->
+    <delete id="deletePromotionProd" parameterType="promotionVO">
+        /* USE : PromotionMapper.deletePromotionProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                  FROM TB_HQ_PROMO_CONDI_PROD
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND CONDI_PROD_SEQ = #{condiProdSeq}
+           </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                  FROM TB_MS_PROMO_CONDI_PROD
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND CONDI_PROD_SEQ = #{condiProdSeq}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 프로모션 적용매장 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_STORE, TB_MS_STORE
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 적용매장 리스트를 조회한다.
+    -->
+    <select id="getPromotionStoreList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getPromotionStoreList */
+        SELECT thps.HQ_OFFICE_CD,
+                thps.PROMOTION_CD,
+                thps.STORE_CD,
+                tms.STORE_NM
+          FROM TB_HQ_PROMO_STORE thps,
+                TB_MS_STORE tms
+         WHERE thps.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thps.PROMOTION_CD = #{promotionCd}
+           AND tms.HQ_OFFICE_CD = thps.HQ_OFFICE_CD
+           AND tms.STORE_CD = thps.STORE_CD
+         ORDER
+            BY thps.STORE_CD ASC
+    </select>
+
+    <!-- 프로모션 적용매장 선택팝업 매장리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 매장선택팝업에서 매장리스트를 조회한다.
+    -->
+    <select id="getStoreList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getStoreList */
+        SELECT tms.HQ_OFFICE_CD,
+                tms.STORE_CD,
+                tms.STORE_NM,
+                tms.SYS_STAT_FG
+          FROM TB_MS_STORE tms
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+           AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+           AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+          AND tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+        ORDER
+           BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 프로모션 적용매장 선택팝업 전매장적용 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_STORE
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 매장선택팝업에서 전매장을 적용한다.
+    -->
+    <insert id="insertPromotionStoreAll" parameterType="promotionVO">
+        /* PromotionMapper.insertPromotionStoreAll */
+        MERGE INTO TB_HQ_PROMO_STORE A
+             USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+						      #{promotionCd} AS PROMOTION_CD,
+						      STORE_CD,
+						      #{regId} AS REG_ID,
+						      #{regDt} AS REG_DT,
+						      #{modId} AS MOD_ID,
+						      #{modDt} AS MOD_DT
+					    FROM TB_MS_STORE
+					   WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    ) B
+                ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD AND A.STORE_CD = B.STORE_CD)
+              WHEN MATCHED THEN
+            UPDATE
+               SET A.MOD_ID = B.MOD_ID,
+                   A.MOD_DT = B.MOD_DT
+             WHEN NOT MATCHED THEN
+            INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.PROMOTION_CD,
+                           A.STORE_CD,
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+            VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.PROMOTION_CD,
+                           B.STORE_CD,
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
+    </insert>
+
+    <!-- 프로모션 적용매장 선택팝업 매장추가 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_STORE
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 매장선택팝업에서 매장을 추가한다.
+    -->
+    <insert id="insertPromotionStore" parameterType="promotionVO">
+        /* PromotionMapper.insertPromotionStore */
+        INSERT INTO TB_HQ_PROMO_STORE
+        (
+            HQ_OFFICE_CD,
+            PROMOTION_CD,
+            STORE_CD,
+            REG_ID,
+            REG_DT,
+            MOD_ID,
+            MOD_DT
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{promotionCd},
+            #{storeCd},
+            #{regId},
+            #{regDt},
+            #{modId},
+            #{modDt}
+        )
+    </insert>
+
+    <!-- 프로모션 적용매장 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_STORE
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 적용매장을 삭제한다.
+    -->
+    <delete id="deletePromotionStore" parameterType="promotionVO">
+        /* USE : PromotionMapper.deletePromotionStore */
+        DELETE
+          FROM TB_HQ_PROMO_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROMOTION_CD = #{promotionCd}
+           AND STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 프로모션 혜택상품 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_BENE_PROD, TB_HQ_PRODUCT, TB_MS_PROMO_BENE_PROD, TB_MS_PRODUCT
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 혜택상품 리스트를 조회한다.
+    -->
+    <select id="getPromotionPresentList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getPromotionPresentList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thpbp.HQ_OFFICE_CD,
+                        thpbp.PROMOTION_CD,
+                        thpbp.PROD_CD,
+                        thp.PROD_NM,
+                        thpbp.GIFT_QTY
+                  FROM TB_HQ_PROMO_BENE_PROD thpbp,
+                        TB_HQ_PRODUCT thp
+                 WHERE thpbp.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thpbp.PROMOTION_CD = #{promotionCd}
+                   AND thp.HQ_OFFICE_CD (+)= thpbp.HQ_OFFICE_CD
+                   AND thp.PROD_CD (+)= thpbp.PROD_CD
+                 ORDER
+                    BY thpbp.PROD_CD ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmpbp.STORE_CD,
+                        tmpbp.PROMOTION_CD,
+                        tmpbp.PROD_CD,
+                        tmp.PROD_NM,
+                        tmpbp.GIFT_QTY
+                  FROM TB_MS_PROMO_BENE_PROD tmpbp,
+                        TB_MS_PRODUCT tmp
+                 WHERE tmpbp.STORE_CD = #{storeCd}
+                   AND tmpbp.PROMOTION_CD = #{promotionCd}
+                   AND tmp.STORE_CD (+)= tmpbp.STORE_CD
+                   AND tmp.PROD_CD (+)= tmpbp.PROD_CD
+                 ORDER
+                    BY tmpbp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 혜택상품 선택팝업 상품리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 혜택상품 선택팝업에서 상품리스트를 조회한다.
+    -->
+    <select id="getPresentProdList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getPresentProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thp.HQ_OFFICE_CD,
+                        thp.PROD_CD,
+                        thp.PROD_NM,
+                        '1' AS PROD_QTY,
+                        thp.USE_YN
+                  FROM TB_HQ_PRODUCT thp
+                  WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN  = #{useYn} --사용여부
+                </if>
+                    AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PROMO_BENE_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+                  ORDER
+                     BY thp.PROD_CD ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmp.STORE_CD,
+                        tmp.PROD_CD,
+                        tmp.PROD_NM,
+                        '1' AS PROD_QTY,
+                        tmp.USE_YN
+                  FROM TB_MS_PRODUCT tmp
+                 WHERE tmp.STORE_CD = #{storeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN  = #{useYn} --사용여부
+                </if>
+                    AND tmp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_MS_PROMO_BENE_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd})
+                ORDER
+                   BY tmp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 혜택상품 선택팝업 상품추가 -->
+    <!--
+          TABLE    : TB_HQ_PROMO_BENE_PROD, TB_MS_PROMO_BENE_PROD
+          PARAM    : promotionVO
+          COMMENTS : 프로모션 혜택상품 선택팝업에서 상품을 추가한다.
+    -->
+    <insert id="insertPromotionPresent" parameterType="promotionVO">
+        /* PromotionMapper.insertPromotionPresent */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PROMO_BENE_PROD
+                (
+                    HQ_OFFICE_CD,
+                    PROMOTION_CD,
+                    PROD_CD,
+                    GIFT_QTY,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{promotionCd},
+                    #{prodCd},
+                    #{giftQty},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+               INSERT INTO TB_MS_PROMO_BENE_PROD
+                (
+                    STORE_CD,
+                    PROMOTION_CD,
+                    PROD_CD,
+                    GIFT_QTY,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{promotionCd},
+                    #{prodCd},
+                    #{giftQty},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 프로모션 혜택상품 조건수량 수정 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_BENE_PROD, TB_MS_PROMO_BENE_PROD
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 혜택상품의 조건수량을 수정한다.
+    -->
+    <update id="updatePromotionPresent" parameterType="promotionVO">
+        /* USE : PromotionMapper.updatePromotionPresent */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PROMO_BENE_PROD
+                   SET GIFT_QTY = #{giftQty},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PROMO_BENE_PROD
+                   SET GIFT_QTY = #{giftQty},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 프로모션 혜택상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_BENE_PROD, TB_MS_PROMO_BENE_PROD
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 혜택상품을 삭제한다.
+    -->
+    <delete id="deletePromotionPresent" parameterType="promotionVO">
+        /* USE : PromotionMapper.deletePromotionPresent */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                  FROM TB_HQ_PROMO_BENE_PROD
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                  FROM TB_MS_PROMO_BENE_PROD
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </delete>
+
+</mapper>
