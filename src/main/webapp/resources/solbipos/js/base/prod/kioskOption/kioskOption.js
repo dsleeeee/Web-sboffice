@@ -36,7 +36,7 @@ var addSelected = "N";
 app.controller('kioskOptionCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('kioskOptionCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('kioskOptionCtrl', $scope, $http, false));
 
     $scope.isChecked = true;
 
@@ -145,7 +145,7 @@ app.controller('kioskOptionCtrl', ['$scope', '$http', function ($scope, $http) {
 app.controller('kioskOptionDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('kioskOptionDetailCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('kioskOptionDetailCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

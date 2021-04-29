@@ -19,7 +19,7 @@ var app = agrid.getApp();
 app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodExcelUploadAddCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('prodExcelUploadAddCtrl', $scope, $http, false));
 
     // 상품코드 채번방식
     $scope.prodNoEnvFg = prodNoEnvFg;

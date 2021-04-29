@@ -34,7 +34,7 @@ var gubunReadComboData = [
 app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('boardListCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('boardListCtrl', $scope, $http, false));
 
     // comboBox 초기화
     $scope._setComboData("listScaleBox", gvListScaleBoxData);

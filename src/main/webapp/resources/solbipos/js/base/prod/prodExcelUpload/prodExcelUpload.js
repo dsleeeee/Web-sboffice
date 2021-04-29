@@ -19,7 +19,7 @@ var app = agrid.getApp();
 app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodExcelUploadCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('prodExcelUploadCtrl', $scope, $http, false));
 
     // 상품 본사통제구분 (H : 본사, S: 매장)
     $scope.prodEnvstVal = prodEnvstVal;
@@ -154,7 +154,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
 app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodExcelUploadProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('prodExcelUploadProdCtrl', $scope, $http, false));
 
     // 상품명 중복체크
     $scope.isChecked = true;

@@ -19,7 +19,7 @@ var app = agrid.getApp();
 app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('simpleProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('simpleProdCtrl', $scope, $http, false));
 
     // 상품 본사통제구분 (H : 본사, S: 매장)
     $scope.prodEnvstVal = prodEnvstVal;
