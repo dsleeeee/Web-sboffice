@@ -63,8 +63,7 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)"
-                            selected-index-changed="setSelectedSaleAmtOption(s)">
+                            initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
                 <%-- 판매가 변경 비율 --%>
@@ -146,22 +145,17 @@
                 <wj-flex-grid-column header="<s:message code="salePriceManage.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.poUnitQty"/>" binding="poUnitQty" visible="false" ></wj-flex-grid-column>
                 <c:if test="${hqOfficeCd != '00000'}">
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.storeSplyUprc"/>" binding="storeSplyUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="salePriceManage.storeSplyUprc"/>" binding="storeSplyUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
                 <c:if test="${hqOfficeCd != '00000'}">
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.storeSaleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="*" align="right" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.saleUprc"/>" binding="saleUprc" width="*" align="right" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="salePriceManage.storeSaleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="salePriceManage.saleUprc"/>" binding="saleUprc" width="*" align="right"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="salePriceManage.hqMarginAmt"/>" binding="hqMarginAmt" is-read-only="true" width="*" align="right" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.hqMarginRate"/>" binding="hqMarginRate" is-read-only="true" width="*" align="right" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.storeMarginAmt"/>" binding="storeMarginAmt" is-read-only="true" width="*" align="right" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.storeMarginRate"/>" binding="storeMarginRate" is-read-only="true" width="*" align="right" align="right" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.prcCtrlFg"/>" binding="prcCtrlFg" visible="false" ></wj-flex-grid-column>
-
             </wj-flex-grid>
         </div>
     </div>
@@ -181,7 +175,7 @@
     var priceEnvstVal = "${priceEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceManage/salePriceManage.js?ver=20200215.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceManage/salePriceManage.js?ver=20210429.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

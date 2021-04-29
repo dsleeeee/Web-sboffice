@@ -59,16 +59,6 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
   $scope._setComboData("changeUnit", unitFg);
   $scope._setComboData("changeMode", modeFg);
 
-  // 판매가 콤보박스 선택 이벤트
-  $scope.inputSaleAmtReadOnly = false;
-  $scope.setSelectedSaleAmtOption = function(s){
-    if(s.selectedValue === 'S') {
-      $scope.inputSaleAmtReadOnly = false;
-    } else {
-      $scope.inputSaleAmtReadOnly = true;
-    }
-  };
-
   // <-- 검색 호출 -->
   // 상품정보관리 그리드 조회
   $scope.$on("storeSalePriceCtrl", function(event, data) {
@@ -85,7 +75,7 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
     var params = {};
     params.storeCd = $("#searchStoreCd").val();
-    params.prodClassCd = $("#searchProdClassCd").val();
+    params.prodClassCd = $scope.prodClassCd;
     params.listScale = $scope.listScaleCombo.text;
 
     console.log('params', params);
@@ -115,8 +105,6 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
             function(response){
               $scope.prodClassCd = prodClassCd;
               $scope.prodClassNm = response.data.data;
-              $("#searchProdClassCd").val(prodClassCd);
-              $("#searchProdClassNm").val(response.data.data);
             }
         );
       }
@@ -127,8 +115,6 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
   $scope.delProdClass = function(){
     $scope.prodClassCd = "";
     $scope.prodClassNm = "";
-    $("#searchProdClassCd").val("");
-    $("#searchProdClassNm").val("");
   };
 
   // 상품정보

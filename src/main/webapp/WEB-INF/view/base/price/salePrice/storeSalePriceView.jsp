@@ -73,8 +73,7 @@
                   display-member-path="name"
                   selected-value-path="value"
                   is-editable="false"
-                  initialized="_initComboBox(s)"
-                  selected-index-changed="setSelectedSaleAmtOption(s)">
+                  initialized="_initComboBox(s)">
           </wj-combo-box>
         </div>
         <%-- 판매가 변경 비율 --%>
@@ -227,7 +226,7 @@
   var priceEnvstVal = "${priceEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20210414.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20210429.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

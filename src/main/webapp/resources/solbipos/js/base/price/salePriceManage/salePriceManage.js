@@ -41,17 +41,6 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        s.cellEditEnded.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-                // 판매가 변경시 다른 컬럼값도 변경
-                if (col.binding === "saleUprc") {
-                    var item = s.rows[e.row].dataItem;
-                    $scope.calcAmt(item);
-                }
-            }
-            s.collectionView.commitEdit();
-        });
     };
 
     // 콤보박스 데이터 Set
@@ -59,16 +48,6 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("saleAmtOption", saleAmtOptionFg);
     $scope._setComboData("changeUnit", unitFg);
     $scope._setComboData("changeMode", modeFg);
-
-    // 판매가 콤보박스 선택 이벤트
-    $scope.inputSaleAmtReadOnly = false;
-    $scope.setSelectedSaleAmtOption = function(s){
-        if(s.selectedValue === 'S') {
-            $scope.inputSaleAmtReadOnly = false;
-        } else {
-            $scope.inputSaleAmtReadOnly = true;
-        }
-    };
 
     // <-- 검색 호출 -->
     $scope.$on("salePriceManageCtrl", function(event, data) {
@@ -78,17 +57,10 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
 
     $scope.searchSalePriceManage = function(){
         var params = {};
-        params.prodClassCd = $("#searchProdClassCd").val();
+        params.prodClassCd = $scope.prodClassCd;
         params.listScale = $scope.listScaleCombo.text;
 
-        $scope._inquirySub('/base/price/salePriceManage/salePriceManage/getSalePriceManageList.sb', params, function() {
-
-            // 조회한 값으로 마진금액, 마진율 계산
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                $scope.calcAmt($scope.flex.collectionView.items[i]);
-                $scope.flex.collectionView.commitEdit();
-            }
-        }, false);
+        $scope._inquirySub('/base/price/salePriceManage/salePriceManage/getSalePriceManageList.sb', params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -107,8 +79,6 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
                     function(response){
                         $scope.prodClassCd = prodClassCd;
                         $scope.prodClassCdNm = response.data.data;
-                        $("#searchProdClassCd").val(prodClassCd);
-                        $("#searchProdClassNm").val(response.data.data);
                     }
                 );
             }
@@ -119,8 +89,6 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
         $scope.prodClassCdNm = "";
-        $("#searchProdClassCd").val("");
-        $("#searchProdClassNm").val("");
     };
 
     // 상품정보
@@ -173,7 +141,6 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
                 }
 
                 $scope.flex.collectionView.items[i].saleUprc = $scope.calChangeAmt(newSaleAmt);
-                $scope.calcAmt($scope.flex.collectionView.items[i]);
             }
         }
 
@@ -198,20 +165,6 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
         return ChangeAmt;
     };
 
-    // 가격 변경
-    $scope.calcAmt = function(item){
-        var hqCostUprc = item.hqCostUprc;
-        var hqSplyUprc = item.hqSplyUprc;
-        var storeSplyUprc = item.storeSplyUprc;
-        var saleUprc = item.saleUprc;
-        var poUnitQty =  item.poUnitQty;
-
-        item.hqMarginAmt = (hqSplyUprc - hqCostUprc); // 본사마진금액
-        item.hqMarginRate = (hqSplyUprc - hqCostUprc) / hqCostUprc * 100; // 본사마진율
-        item.storeMarginAmt = ((saleUprc - poUnitQty) - storeSplyUprc); // 매장마진금액
-        item.storeMarginRate = ((saleUprc - poUnitQty) - storeSplyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
-    };
-
     // 저장
     $scope.saveProdPrice = function(){
         if(priceEnvstVal === 'HQ'){
@@ -221,7 +174,6 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
 
         // 파라미터 설정
         var params = new Array();
-        var saleAmtOption = $scope.prodInfo.saleAmtOption;
 
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
             if($scope.flex.collectionView.items[i].gChk) {
