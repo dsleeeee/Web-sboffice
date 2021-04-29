@@ -259,10 +259,11 @@
     <typeAlias alias="prodExcelUploadVO" type="kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO"/>
     <!-- 기초관리 > 상품관리 > 식품 알레르기 정보관리 -->
     <typeAlias alias="foodAllergyVO" type="kr.co.solbipos.base.prod.foodAllergy.service.FoodAllergyVO"/>
+    <!-- 기초관리 > 상품관리 > 상품정보 일괄변경 -->
+    <!--<typeAlias alias="prodBatchChangeVO" type="kr.co.solbipos.base.prod.prodBatchChange.service.ProdBatchChangeVO"/>-->
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
-    <typeAlias alias="excelUploadVO" type="kr.co.solbipos.base.prod.excelupload.service.ExcelUploadVO"/>
     <typeAlias alias="kitchenPrtProdVO" type="kr.co.solbipos.base.prod.kitchenprtprod.service.KitchenPrtProdVO"/>
     <typeAlias alias="kitchenPrtTimeVO" type="kr.co.solbipos.base.prod.kitchenprttime.service.KitchenPrtTimeVO"/>
     -->
@@ -734,7 +735,7 @@
     <!--모바일 매출현황 > 상품별매출현황 -->
     <typeAlias alias="mobileProdSaleVO" type="kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO"/>
 
-    <!-- 당일매출현황 -->
+    <!-- 매출현황 > 당일매출현황 -->
     <typeAlias alias="todaySaleVO" type="kr.co.solbipos.mobile.sale.today.todaySale.service.TodaySaleVO"/>
 
     <!-- ====================================== 모바일 끝 ====================================== -->
