@@ -3,6 +3,7 @@ package kr.co.solbipos.store.hq.brand.service;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 
 /**
  * @Class Name : HqBrandVO.java
@@ -31,10 +32,26 @@ public class HqBrandVO extends PageVO {
     private String hqBrandCd;
     /** 브랜드명 */
     private String hqBrandNm;
+    /** 브랜드코드 */
+    private String msBrandCd;
+    /** 브랜드명 */
+    private String msBrandNm;
+    /** 매장코드 */
+    private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
     /** 사용여부 */
     private UseYn UseYn;
-    
-    
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private OrgnFg OrgnFg;
+
+
     /**
      * @return the hqOfficeCd
      */
@@ -83,6 +100,39 @@ public class HqBrandVO extends PageVO {
     public void setHqBrandNm(String hqBrandNm) {
         this.hqBrandNm = hqBrandNm;
     }
+
+    public String getMsBrandCd() {
+        return msBrandCd;
+    }
+
+    public void setMsBrandCd(String msBrandCd) {
+        this.msBrandCd = msBrandCd;
+    }
+
+    public String getMsBrandNm() {
+        return msBrandNm;
+    }
+
+    public void setMsBrandNm(String msBrandNm) {
+        this.msBrandNm = msBrandNm;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
+    }
+
     /**
      * @return the useYn
      */
@@ -95,5 +145,12 @@ public class HqBrandVO extends PageVO {
     public void setUseYn(UseYn useYn) {
         UseYn = useYn;
     }
-    
+
+    public OrgnFg getOrgnFg() {
+        return OrgnFg;
+    }
+
+    public void setOrgnFg(OrgnFg orgnFg) {
+        OrgnFg = orgnFg;
+    }
 }

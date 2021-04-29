@@ -1,24 +1,21 @@
 package kr.co.solbipos.store.hq.brand.service.impl;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.store.hq.brand.enums.TargtFg;
 import kr.co.solbipos.store.hq.brand.service.HqBrandService;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
-import kr.co.solbipos.store.hq.brand.service.HqClsVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 
 /**
  * @Class Name : HqBrandServiceImpl.java
@@ -51,8 +48,17 @@ public class HqBrandServiceImpl implements HqBrandService{
 
     /**  브랜드 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrand) {
-        return mapper.getBrandlist(hqBrand);
+    public List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrandVO, SessionInfoVO sessionInfoVO) {
+        List<DefaultMap<String>> list = null;
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            list = mapper.getHqBrandlist(hqBrandVO);
+        }
+        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            list = mapper.getMsBrandlist(hqBrandVO);
+        }
+
+        return list;
+
     }
 
     /** 브랜드 저장 */
@@ -63,24 +69,41 @@ public class HqBrandServiceImpl implements HqBrandService{
         String dt = currentDateTimeString();
 
         for(HqBrandVO hqBrandVO: hqBrandVOs) {
-
             hqBrandVO.setRegDt(dt);
             hqBrandVO.setRegId(sessionInfoVO.getUserId());
             hqBrandVO.setModDt(dt);
             hqBrandVO.setModId(sessionInfoVO.getUserId());
+            hqBrandVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-            String hqBrandCd = mapper.getHqBrandCd(hqBrandVO);
 
-            hqBrandVO.setHqBrandCd(hqBrandCd);
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                List<DefaultMap<String>> storeList = mapper.getStoreList(hqBrandVO);
+                String[] arrStoreCd = storeList.toString().replace(" ", "").replace("[", "").replace("]", "").split(",");
+                hqBrandVO.setArrStoreCd(arrStoreCd);
+            }
 
             if(hqBrandVO.getStatus() == GridDataFg.INSERT) {
-                procCnt += mapper.insertBrand(hqBrandVO);
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    hqBrandVO.setHqBrandCd(mapper.getHqBrandCd(hqBrandVO));
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    hqBrandVO.setMsBrandCd(mapper.getHqBrandCd(hqBrandVO));
+                }
+
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procCnt += mapper.insertHqBrand(hqBrandVO);
+                    mapper.insertHqMsBrand(hqBrandVO);
+
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    procCnt += mapper.insertMsBrand(hqBrandVO);
+                }
             }
             else if(hqBrandVO.getStatus() == GridDataFg.UPDATE) {
-                procCnt += mapper.updateBrand(hqBrandVO);
-            }
-            else if(hqBrandVO.getStatus() == GridDataFg.DELETE) {
-                procCnt += mapper.deleteBrand(hqBrandVO);
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procCnt += mapper.updateHqBrand(hqBrandVO);
+                    mapper.updateHqMsBrand(hqBrandVO);
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    procCnt += mapper.updateMsBrand(hqBrandVO);
+                }
             }
         }
         return procCnt;
@@ -106,7 +129,6 @@ public class HqBrandServiceImpl implements HqBrandService{
             hqEnvst.setModId(sessionInfoVO.getUserId());
 
             if(hqEnvst.getStatus() == GridDataFg.INSERT) {
-                hqEnvst.setUseYn(UseYn.Y);
                 procCnt += mapper.insertConfig(hqEnvst);
             }
             else if(hqEnvst.getStatus() == GridDataFg.UPDATE) {
