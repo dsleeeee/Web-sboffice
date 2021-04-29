@@ -139,6 +139,9 @@
     <typeAlias alias="storeEmpMenuVO" type="kr.co.solbipos.base.store.emp.store.service.StoreEmpMenuVO"/>
     <!-- 기초관리 -> 창고관리 -->
     <typeAlias alias="storageVO" type="kr.co.solbipos.base.store.storage.service.StorageVO"/>
+
+    <!-- 기초관리 > 프로모션관리 > 프로모션관리 -->
+    <typeAlias alias="promotionVO" type="kr.co.solbipos.base.promotion.promotion.service.PromotionVO"/>
 <!--
     <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
     <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>
