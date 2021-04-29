@@ -22,7 +22,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 public interface HqBrandService {
 
     /**  브랜드 목록 조회 */
-    List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrand);
+    List<DefaultMap<String>> getBrandlist(HqBrandVO hqBrand, SessionInfoVO sessionInfoVO);
 
     /** 브랜드 저장 */
     int save(HqBrandVO[] hqBrandVOs, SessionInfoVO sessionInfoVO);

@@ -111,11 +111,11 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
             if(item.cnt == 0){
               $scope.flex.collectionView.removeAt(i);
             } else {
-              $scope._popMsg("속성이 등록된 분류는 삭제할 수 없습니다. ");
+              $scope._popMsg(messages["sideMenu.attr.class.notNull"]);
               return false;
             }
           } else  {
-            $scope._popMsg("본사에서 등록한 속성은 변경 할 수 없습니다");
+            $scope._popMsg(messages["sideMenu.selectMenu.edited"]);
             $scope._broadcast('sideMenuAttrClassCtrl');
             return false;
           }
@@ -194,7 +194,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
       }
 
       if (orgChk) {
-        $scope._popMsg("본사에서 등록한 속성은 변경 할 수 없습니다");
+        $scope._popMsg(messages["sideMenu.selectMenu.edited"]);
         orgChk = 0;
         return false;
       }
@@ -291,7 +291,7 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
   // 속성 그리드 행 추가
   $scope.addRow = function() {
     if ($("#sideMenuAttrTitle").html() == ""){
-      $scope._popMsg("속성분류를 선택해주세요.");
+      $scope._popMsg(messages["sideMenu.attr.class.null"]);
       return false;
     }
     // 파라미터 설정

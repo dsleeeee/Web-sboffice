@@ -48,8 +48,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         params.prodTypeFg = "1"; // 상품유형
         params.prodCd = ""; // 상품코드
         params.prodNm = ""; // 상품명
-        params.prodClassCdNm = ""; // 상품분류명
-        params.prodClassCd = ""; // 상품분류코드
+        var prodInfo = $scope.getProdModifyInfo();
+        params.prodClassCdNm = prodInfo.prodClassCdNm; // 상품분류명
+        params.prodClassCd = prodInfo.prodClassCd; // 상품분류코드
         params.vendrCd = ""; // 거래처코드
         params.vendrNm = ""; // 거래처명
         params.saleProdYn = "Y"; // 판매상품여부

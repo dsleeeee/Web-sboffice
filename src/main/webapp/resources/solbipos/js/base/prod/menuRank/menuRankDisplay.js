@@ -122,14 +122,14 @@ app.controller('menuRankDisplayCtrl', ['$scope', '$http', function ($scope, $htt
         }
 
         $.postJSONArray("/base/prod/menuRank/display/saveRankUse.sb", paramArr, function(result) {
-            s_alert.pop(messages["cmm.saveSucc"]);
+                $scope._popMsg(messages["cmm.saveSucc"]);
 
             // 재조회
             $scope.searchUseRank();
 
         },
         function(result) {
-                s_alert.pop(result.message);
+            $scope._popMsg(result.message);
         });
 
     }

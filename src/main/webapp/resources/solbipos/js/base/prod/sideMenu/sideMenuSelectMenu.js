@@ -141,11 +141,11 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
             if (item.cnt == 0) {
               $scope.flex.collectionView.removeAt(i);
             } else {
-              $scope._popMsg("선택분류가 등록된 선택그룹은 삭제할 수 없습니다. ");
+              $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
               return false;
             }
           } else  {
-            $scope._popMsg("본사에서 등록한 속성은 변경 할 수 없습니다");
+            $scope._popMsg(messages["sideMenu.selectMenu.edited"]);
             $scope._broadcast('sideMenuAttrClassCtrl');
             return false;
           }
@@ -226,7 +226,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       }
 
       if (orgChk) {
-        $scope._popMsg("본사에서 등록한 속성은 변경 할 수 없습니다");
+        $scope._popMsg(messages["sideMenu.selectMenu.edited"]);
         orgChk = 0;
         return false;
       }
@@ -355,7 +355,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   // 선택분류 그리드 행 추가
   $scope.addRow = function() {
     if($("#sideSelectGroupTitle").html() == ""){
-      $scope._popMsg("선택그룹을 선택해주세요.");
+      $scope._popMsg(messages["sideMenu.selectMenu.sdselGrp.null"]);
       return false;
     }
     // 파라미터 설정
@@ -380,7 +380,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           if (item.cnt == 0) {
             $scope.flex.collectionView.removeAt(i);
           } else {
-            $scope._popMsg("선택분류가 등록된 선택그룹은 삭제할 수 없습니다. ");
+            $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
             return false;
           }
         }
@@ -626,7 +626,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   // 선택상품 그리드 행 추가
   $scope.addRow = function() {
     if($("#sideClassTitle").html() == ""){
-      $scope._popMsg("선택분류를 선택해주세요.");
+      $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.null"]);
       return false;
     }
     $scope.selectProdView(true);

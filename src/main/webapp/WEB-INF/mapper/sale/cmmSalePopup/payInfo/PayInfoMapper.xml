@@ -623,7 +623,7 @@
         <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspt.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspt.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        AND     tcn.NMCODE_GRP_CD         =   '024'
+        AND     tcn.NMCODE_GRP_CD         =   '111'
         AND     tcn.NMCODE_CD             =   tsspt.TEMPORARY_PAY_CD
         ]]>
     </select>
