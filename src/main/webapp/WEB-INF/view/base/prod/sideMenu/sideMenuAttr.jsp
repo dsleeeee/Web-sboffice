@@ -40,7 +40,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrClassCd"/>" binding="sdattrClassCd" width="100" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrClassNm"/>" binding="sdattrClassNm" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="100" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
