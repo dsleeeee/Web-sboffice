@@ -6,6 +6,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="promotionEnvstVal" value="${promotionEnvstVal}" />
+<c:set var="modPromotionEnvstVal" value="${modPromotionEnvstVal}" />
 
 <%-- 리스트 영역 --%>
 <div class="subCon" ng-controller="promotionCtrl" style="padding-bottom: 0;">
@@ -384,7 +385,7 @@
                     <%-- 적용상품의 수량 --%>
                     <th><label id="lblSelectProdCnt"></label></th>
                     <td>
-                        <input type="text" class="sb-input w100" id="selectProdCnt" ng-model="selectProdCnt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                        <input type="text" class="sb-input w100" id="selectProdCnt" ng-model="selectProdCnt" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                     </td>
                 </tr>
                 <tr id="trSelectProdGrid" style="display: none;">
@@ -586,7 +587,7 @@
                         <%-- 혜택상품 수량 --%>
                         <th><label id="lblSelectGiftCnt"></label></th>
                         <td>
-                            <input type="text" class="sb-input w100" id="selectGiftCnt" ng-model="selectGiftCnt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                            <input type="text" class="sb-input w100" id="selectGiftCnt" ng-model="selectGiftCnt" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
                     </tr>
                     <tr id="trSelectPresentGrid">
@@ -638,9 +639,10 @@
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}"
     var promotionEnvstVal = "${promotionEnvstVal}";
+    var modPromotionEnvstVal = "${modPromotionEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210413.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210413.15" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

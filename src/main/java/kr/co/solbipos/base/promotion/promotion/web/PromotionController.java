@@ -7,6 +7,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionService;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
@@ -72,9 +73,19 @@ public class PromotionController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 프로모션 특이사항 환경변수 값
+        // 프로모션 특이사항 환경변수 값(본사의 환경변수 1095 사용)
         String promotionEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1095"));
         model.addAttribute("promotionEnvstVal", promotionEnvstVal);
+
+        // 진행중인 프로모션 수정여부 환경변수 값(본사 또는 매장의 환경변수 1097 사용)
+        String modPromotionEnvstVal = "";
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            modPromotionEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1097"));
+        }else{
+            modPromotionEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1097"));
+        }
+
+        model.addAttribute("modPromotionEnvstVal", modPromotionEnvstVal);
 
         return "base/promotion/promotion/promotion";
     }
