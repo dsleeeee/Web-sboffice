@@ -682,7 +682,7 @@
                 </choose>
                 AND thprp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
                 AND thprp.PROD_CD (+)= thp.PROD_CD
-                ORDER BY thp.PROD_CD DESC
+                ORDER BY thp.PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
