@@ -18,7 +18,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : TodaySaleServiceImpl.java
- * @Description : (모바일) 당일매출현황
+ * @Description : (모바일) 매출현황 > 당일매출현황
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

@@ -4,7 +4,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @Class Name : TodaySaleVO.java
- * @Description : (모바일) 당일매출현황
+ * @Description : (모바일) 매출현황 > 당일매출현황
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
