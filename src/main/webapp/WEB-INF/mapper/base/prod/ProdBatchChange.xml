@@ -58,6 +58,15 @@
                 <if test="barCd != null and barCd != ''">
                     AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                 </if>
+                <if test="saleProdYn != null and saleProdYn != ''">
+                    AND thp.SALE_PROD_YN = #{saleProdYn}
+                </if>
+                <if test="pointSaveYn != null and pointSaveYn != ''">
+                    AND thp.POINT_SAVE_YN = #{pointSaveYn}
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND thp.PRC_CTRL_FG = #{prcCtrlFg}
+                </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
@@ -102,6 +111,15 @@
                 </if>
                 <if test="barCd != null and barCd != ''">
                     AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                <if test="saleProdYn != null and saleProdYn != ''">
+                    AND tmp.SALE_PROD_YN = #{saleProdYn}
+                </if>
+                <if test="pointSaveYn != null and pointSaveYn != ''">
+                    AND tmp.POINT_SAVE_YN = #{pointSaveYn}
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND tmp.PRC_CTRL_FG = #{prcCtrlFg}
                 </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD

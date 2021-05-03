@@ -18,6 +18,24 @@ var regFgData = [
     {"name":"본사","value":"H"},
     {"name":"매장","value":"S"}
 ];
+// 판매상품여부
+var saleProdYnTotData = [
+    {"name":"전체","value":""},
+    {"name":"미사용","value":"N"},
+    {"name":"사용","value":"Y"}
+];
+// 포인트적립여부
+var pointSaveYnTotData = [
+    {"name":"전체","value":""},
+    {"name":"미사용","value":"N"},
+    {"name":"사용","value":"Y"}
+];
+// 가격관리구분
+var prcCtrlFgTotData = [
+    {"name":"전체","value":""},
+    {"name":"본사","value":"H"},
+    {"name":"매장","value":"S"}
+];
 
 /**
  *  상품정보일괄변경 그리드 생성
@@ -31,9 +49,13 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData('listScaleBox', gvListScaleBoxData);
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("saleProdYnCombo", saleProdYnData); // 판매상품여부
-    $scope._setComboData("pointSaveYnCombo", pointSaveYnData); // 포인트적립여부
-    $scope._setComboData("prcCtrlFgCombo", prcCtrlFgData); // 가격관리구분
+    $scope._setComboData("saleProdYnCombo", saleProdYnTotData); // 판매상품여부
+    $scope._setComboData("pointSaveYnCombo", pointSaveYnTotData); // 포인트적립여부
+    $scope._setComboData("prcCtrlFgCombo", prcCtrlFgTotData); // 가격관리구분
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("saleProdYnChgCombo", saleProdYnData); // 판매상품여부
+    $scope._setComboData("pointSaveYnChgCombo", pointSaveYnData); // 포인트적립여부
+    $scope._setComboData("prcCtrlFgChgCombo", prcCtrlFgData); // 가격관리구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -110,7 +132,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
     };
 
     // 일괄적용
-    $scope.batchChange = function() {
+    $scope.batchChange = function(chgGubun) {
         if($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["cmm.empty.data"]);
             return false;
@@ -129,9 +151,18 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].saleProdYn = $scope.saleProdYn;
-                $scope.flex.collectionView.items[i].pointSaveYn = $scope.pointSaveYn;
-                $scope.flex.collectionView.items[i].prcCtrlFg = $scope.prcCtrlFg;
+                // 판매상품여부
+                if(chgGubun == "saleProdYnChg") {
+                    $scope.flex.collectionView.items[i].saleProdYn = $scope.saleProdYnChg;
+                }
+                // 포인트적립여부
+                else if(chgGubun == "pointSaveYnChg") {
+                    $scope.flex.collectionView.items[i].pointSaveYn = $scope.pointSaveYnChg;
+                }
+                // 가격관리구분
+                else if(chgGubun == "prcCtrlFgChg") {
+                    $scope.flex.collectionView.items[i].prcCtrlFg = $scope.prcCtrlFgChg;
+                }
             }
         }
         $scope.flex.refresh();

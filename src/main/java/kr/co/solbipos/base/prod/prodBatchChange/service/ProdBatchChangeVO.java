@@ -57,6 +57,15 @@ public class ProdBatchChangeVO extends PageVO {
     /** 가격관리구분 */
     private String prcCtrlFg;
 
+    /** 판매상품여부 */
+    private String saleProdYnChg;
+
+    /** 포인트적립여부 */
+    private String pointSaveYnChg;
+
+    /** 가격관리구분 */
+    private String prcCtrlFgChg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -96,4 +105,16 @@ public class ProdBatchChangeVO extends PageVO {
     public String getPrcCtrlFg() { return prcCtrlFg; }
 
     public void setPrcCtrlFg(String prcCtrlFg) { this.prcCtrlFg = prcCtrlFg; }
+
+    public String getSaleProdYnChg() { return saleProdYnChg; }
+
+    public void setSaleProdYnChg(String saleProdYnChg) { this.saleProdYnChg = saleProdYnChg; }
+
+    public String getPointSaveYnChg() { return pointSaveYnChg; }
+
+    public void setPointSaveYnChg(String pointSaveYnChg) { this.pointSaveYnChg = pointSaveYnChg; }
+
+    public String getPrcCtrlFgChg() { return prcCtrlFgChg; }
+
+    public void setPrcCtrlFgChg(String prcCtrlFgChg) { this.prcCtrlFgChg = prcCtrlFgChg; }
 }

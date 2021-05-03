@@ -64,46 +64,7 @@
                 <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
             </td>
         </tr>
-        </tbody>
-    </table>
-
-    <div class="mt10 oh sb-select dkbr">
-        <%-- 페이지 스케일 --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                control="listScaleCombo"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-        </wj-combo-box>
-        <%-- 저장 --%>
-        <button class="btn_skyblue ml5 fr" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
-        <%-- 프랜 매장일때만 --%>
-        <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
-            <div class="s14 bk lh25 ml5 mr15 fr">
-                <%-- 상품등록구분이 '본사'인 상품은 수정할 수 없습니다. --%>
-                <s:message code="prodBatchChange.regFgHqBlank" />
-            </div>
-        </c:if>
-    </div>
-
-    <%-- 일괄적용 --%>
-    <table class="searchTbl mt10">
-        <colgroup>
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w10" />
-        </colgroup>
-        <tbody>
-        <tr class="brt">
+        <tr>
             <%-- 판매상품여부 --%>
             <th>
                 <s:message code="prodBatchChange.saleProdYn" />
@@ -138,16 +99,80 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <%-- 가격관리구분 --%>
+        </tr>
+        <%-- 본사일때만 --%>
+        <c:if test="${orgnFg eq 'HQ'}">
+            <tr>
+                <%-- 가격관리구분 --%>
+                <th>
+                    <s:message code="prodBatchChange.prcCtrlFg" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchPrcCtrlFg"
+                                ng-model="prcCtrlFg"
+                                items-source="_getComboData('prcCtrlFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <th></th>
+                <td></td>
+            </tr>
+        </c:if>
+        </tbody>
+    </table>
+
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 페이지 스케일 --%>
+        <wj-combo-box
+                class="w100px fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                control="listScaleCombo"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+        </wj-combo-box>
+        <%-- 저장 --%>
+        <button class="btn_skyblue ml5 fr" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
+        <%-- 프랜 매장일때만 --%>
+        <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
+            <div class="s14 bk lh25 ml5 mr15 fr">
+                <%-- 상품등록구분이 '본사'인 상품은 수정할 수 없습니다. --%>
+                <s:message code="prodBatchChange.regFgHqBlank" />
+            </div>
+        </c:if>
+    </div>
+
+    <%-- 일괄적용 --%>
+    <table class="searchTbl mt10">
+        <colgroup>
+            <col class="w15" />
+            <col class="w15" />
+            <col class="w20" />
+            <col class="w15" />
+            <col class="w15" />
+            <col class="w20" />
+        </colgroup>
+        <tbody>
+        <tr class="brt">
+            <%-- 판매상품여부 --%>
             <th>
-                <s:message code="prodBatchChange.prcCtrlFg" />
+                <s:message code="prodBatchChange.saleProdYn" />
             </th>
             <td>
                 <div class="sb-select">
                     <wj-combo-box
-                            id="srchPrcCtrlFg"
-                            ng-model="prcCtrlFg"
-                            items-source="_getComboData('prcCtrlFgCombo')"
+                            id="srchSaleProdYnChg"
+                            ng-model="saleProdYnChg"
+                            items-source="_getComboData('saleProdYnChgCombo')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -157,9 +182,59 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="prodBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('saleProdYnChg')"><s:message code="prodBatchChange.batchChange" /></a>
+            </td>
+            <%-- 포인트적립여부 --%>
+            <th>
+                <s:message code="prodBatchChange.pointSaveYn" />
+            </th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchPointSaveYnChg"
+                            ng-model="pointSaveYnChg"
+                            items-source="_getComboData('pointSaveYnChgCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <%-- 일괄적용 --%>
+            <td>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('pointSaveYnChg')"><s:message code="prodBatchChange.batchChange" /></a>
             </td>
         </tr>
+        <%-- 본사일때만 --%>
+        <c:if test="${orgnFg eq 'HQ'}">
+            <tr>
+                <%-- 가격관리구분 --%>
+                <th>
+                    <s:message code="prodBatchChange.prcCtrlFg" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchPrcCtrlFgChg"
+                                ng-model="prcCtrlFgChg"
+                                items-source="_getComboData('prcCtrlFgChgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 일괄적용 --%>
+                <td>
+                    <a href="#" class="btn_grayS ml10" ng-click="batchChange('prcCtrlFgChg')"><s:message code="prodBatchChange.batchChange" /></a>
+                </td>
+                <th></th>
+                <td></td>
+                <td></td>
+            </tr>
+        </c:if>
         </tbody>
     </table>
 
@@ -177,6 +252,7 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <%-- 프랜 매장일때만 --%>
                 <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.regFg"/>" binding="regFg" data-map="regFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
@@ -186,7 +262,10 @@
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.barCd"/>" binding="barCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="90" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.pointSaveYn"/>" binding="pointSaveYn" data-map="pointSaveYnDataMap" width="100" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                <%-- 본사일때만 --%>
+                <c:if test="${orgnFg eq 'HQ'}">
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                </c:if>
             </wj-flex-grid>
         </div>
     </div>
@@ -212,7 +291,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20210429.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20210503.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
