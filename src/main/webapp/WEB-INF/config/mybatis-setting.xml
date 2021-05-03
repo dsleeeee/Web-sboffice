@@ -260,7 +260,7 @@
     <!-- 기초관리 > 상품관리 > 식품 알레르기 정보관리 -->
     <typeAlias alias="foodAllergyVO" type="kr.co.solbipos.base.prod.foodAllergy.service.FoodAllergyVO"/>
     <!-- 기초관리 > 상품관리 > 상품정보일괄변경 -->
-    <!--<typeAlias alias="prodBatchChangeVO" type="kr.co.solbipos.base.prod.prodBatchChange.service.ProdBatchChangeVO"/>-->
+    <typeAlias alias="prodBatchChangeVO" type="kr.co.solbipos.base.prod.prodBatchChange.service.ProdBatchChangeVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
@@ -268,7 +268,7 @@
     <typeAlias alias="kitchenPrtTimeVO" type="kr.co.solbipos.base.prod.kitchenprttime.service.KitchenPrtTimeVO"/>
     -->
 
-    <!-- 가격관리 -->
+    <!-- 기초관리 > 가격관리 > 매장판매가관리(본사용) -->
     <typeAlias alias="salePriceVO" type="kr.co.solbipos.base.price.salePrice.service.SalePriceVO"/>
     <!-- 기초관리 > 가격관리 > 판매가관리(매장용) -->
     <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salePriceManage.service.SalePriceManageVO"/>

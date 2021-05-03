@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdBatchChange.xml
+    상품정보일괄변경
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.04.28     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.prodBatchChange.service.impl.ProdBatchChangeMapper">
+
+    <!-- 상품정보일괄변경 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_BARCD,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD
+        COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드,
+                   [매장]상품, [매장]상품_분류, [매장]상품_바코드
+    -->
+    <select id="getProdBatchChangeList"  parameterType="ProdBatchChangeVO" resultType="DefaultMap">
+        /* ProdBatchChangeMapper.getProdBatchChangeList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                thp.PROD_CD,
+                thp.PROD_NM,
+                FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                thpb.BARCD_CD,
+                thp.SALE_PROD_YN,
+                thp.POINT_SAVE_YN,
+                thp.PRC_CTRL_FG
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_HQ_PRODUCT thp,
+                TB_HQ_PRODUCT_CLASS thpc,
+                TB_HQ_PRODUCT_BARCD thpb
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+                AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD (+)= thp.PROD_CD
+                ORDER BY thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                tmpb.BARCD_CD,
+                tmp.SALE_PROD_YN,
+                tmp.POINT_SAVE_YN,
+                tmp.PRC_CTRL_FG,
+                tmp.REG_FG
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_CLASS tmpc,
+                TB_MS_PRODUCT_BARCD tmpb
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                AND tmpc.STORE_CD = tmp.STORE_CD
+                AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+                AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                ORDER BY tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품정보일괄변경 저장 update -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        COMMENTS : [본사]상품, [매장]상품
+    -->
+    <update id="getProdBatchChangeSaveUpdate" parameterType="ProdBatchChangeVO">
+        /* ProdBatchChangeMapper.getProdBatchChangeSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                TB_HQ_PRODUCT
+                SET
+                SALE_PROD_YN = #{saleProdYn},
+                POINT_SAVE_YN = #{pointSaveYn},
+                PRC_CTRL_FG = #{prcCtrlFg},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                TB_MS_PRODUCT
+                SET
+                SALE_PROD_YN = #{saleProdYn},
+                POINT_SAVE_YN = #{pointSaveYn},
+                PRC_CTRL_FG = #{prcCtrlFg},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </update>
+
+</mapper>
