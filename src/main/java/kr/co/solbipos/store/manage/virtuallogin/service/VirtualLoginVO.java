@@ -63,6 +63,10 @@ public class VirtualLoginVO extends PageVO {
     private String orgnFg;
     /** 총판의 부모 총판 코드 */
     private String pAgencyCd;
+    /** 권한확인 유저 아이디 버추얼로그인 대상*/
+    private String userIdCkeck;
+    /** 권한확인 유저 아이디 버추얼로그인 실행자*/
+    private String vUserIdCkeck;
 
 
     /**
@@ -313,4 +317,12 @@ public class VirtualLoginVO extends PageVO {
     public void setpAgencyCd(String pAgencyCd) {
         this.pAgencyCd = pAgencyCd;
     }
+
+    public String getUserIdCkeck() { return userIdCkeck; }
+
+    public void setUserIdCkeck(String userIdCkeck) { this.userIdCkeck = userIdCkeck; }
+
+    public String getvUserIdCkeck() { return vUserIdCkeck; }
+
+    public void setvUserIdCkeck(String vUserIdCkeck) { this.vUserIdCkeck = vUserIdCkeck; }
 }

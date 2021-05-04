@@ -154,4 +154,59 @@
                 )
     </select>
 
+    <!-- 가상로그인 권한 체크 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        PARAM    : virtualLoginVO
+        COMMENTS : 가상로그인 수행시 해당 권한을 체크한다.
+    -->
+    <select id="checkVirtualLoginAuthCheck" parameterType="virtualLoginVO" resultType="java.lang.Integer">
+        /* USE : VirtualLoginMapper.checkVirtualLoginAuthCheck */
+        SELECT  COUNT(*) AS authResult
+        FROM
+            (
+                SELECT  A.HQ_OFFICE_CD
+                ,       A.HQ_OFFICE_NM
+                ,       B.STORE_CD
+                ,       B.STORE_NM
+                ,       B.CLS_FG
+                ,       B.SYS_STAT_FG
+                ,       B.OWNER_NM
+                ,       B.TEL_NO
+                ,       B.AGENCY_CD
+                ,       B.SYS_OPEN_DATE
+                ,       B.SYS_CLOSURE_DATE
+                FROM    TB_HQ_OFFICE A
+                ,       TB_MS_STORE B
+                WHERE  B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+            ) tms
+        LEFT OUTER JOIN TB_MS_EMPLOYEE tme ON
+            tms.STORE_CD = tme.STORE_CD
+            AND tme.EMP_NO = '0000'
+        LEFT OUTER JOIN TB_HQ_EMPLOYEE the ON
+            tms.HQ_OFFICE_CD = the.HQ_OFFICE_CD
+            AND the.EMP_NO = '0000'
+        LEFT OUTER JOIN TB_CM_AGENCY tca ON
+            tms.AGENCY_CD = tca.AGENCY_CD
+        LEFT OUTER JOIN TB_CM_EMPLOYEE tce ON
+            tca.AGENCY_CD = tce.AGENCY_CD
+            AND tce.EMP_NO = '0000'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_fg ON
+            tms.CLS_FG = tcm_cls_fg.NMCODE_CD
+            AND tcm_cls_fg.NMCODE_GRP_CD = '001'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
+            tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
+      WHERE 1=1
+        <if test='orgnFg != null and orgnFg == "H"'> -- 본사권한 접근시
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tme.USER_ID      = #{userIdCkeck}
+        </if>
+        <if test='orgnFg != null and orgnFg == "A"'> -- 총판권한 접근시
+            AND tca.AGENCY_CD = #{agencyCd}
+            AND (   tme.USER_ID      = #{userIdCkeck}
+                OR  the.USER_ID      = #{userIdCkeck}
+                )
+        </if>
+    </select>
 </mapper>

@@ -129,6 +129,23 @@ public class VirtualLoginController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         // 기존세션 이용하여 권한조회
         int authResult = virtualLoginService.checkVirtualLoginAuth(sessionInfoVO.getUserId());
+
+        virtualLoginVO.setUserIdCkeck(virtualLoginVO.getvUserId());
+        virtualLoginVO.setvUserIdCkeck(sessionInfoVO.getUserId());
+        int authResultCheck = virtualLoginService.checkVirtualLoginAuthCheck(virtualLoginVO, sessionInfoVO);
+
+        if(authResultCheck <= 0)
+        {
+            try {
+                response.setContentType("text/html; charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                out.println("<script>alert('가상로그인 권한이 없습니다..'); window.close();</script>");
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         // 권한 있는 경우 가상로그인 진행, 가상로그인 시 신규세션ID 생성하여 redis 에 저장한다 : 20180918 노현수
         if ( authResult > 0 ) {
             String vGetUserId = sessionInfoVO.getUserId();
@@ -136,7 +153,7 @@ public class VirtualLoginController {
 
             StopWatch sw = new StopWatch();
             sw.start();
-            LOGGER.info("가상로그인 시작 : {} ", sessionInfoVO.getUserId());
+            LOGGER.info("가상로그인 시작 : {} sessionInfoVO.getUserId(): ", sessionInfoVO.getUserId()+", BaseEnv.VIRTUAL_LOGIN_ID:"+BaseEnv.VIRTUAL_LOGIN_ID);
             // 신규 세션 생성을 위해 VO 재사용
             sessionInfoVO = new SessionInfoVO();
             sessionInfoVO.setLoginIp(getClientIp(request));

@@ -32,8 +32,11 @@ public interface VirtualLoginMapper {
 
     /** 가상로그인 권한 조회 */
     Integer checkVirtualLoginAuth(String userId);
-    
+
+    /** 가상로그인 권한 조회 */
+    Integer checkVirtualLoginAuthCheck(VirtualLoginVO virtualLoginVO);
+
     /** 가상로그인ID 조회*/
     String getVirtualLoginId(VirtualLoginVO virtualLoginVO);
-    
+
 }

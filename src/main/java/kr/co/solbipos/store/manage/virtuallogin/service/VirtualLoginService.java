@@ -28,6 +28,9 @@ public interface VirtualLoginService {
     /** 가상로그인 권한 조회 */
     int checkVirtualLoginAuth(String userId);
 
+    /** 가상로그인 권한 조회 */
+    int checkVirtualLoginAuthCheck(VirtualLoginVO virtualLoginVO, SessionInfoVO sessionInfoVO);
+
     /** 가상로그인 이력 생성 */
     int insertLoginHistory(SessionInfoVO sessionInfoVO);
 

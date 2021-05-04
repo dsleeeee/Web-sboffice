@@ -66,6 +66,24 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
         return virtualLoginMapper.checkVirtualLoginAuth(userId);
     }
 
+    /** 가상로그인 권한 조회 실제권한체크 */
+    @Override
+    public int checkVirtualLoginAuthCheck(VirtualLoginVO virtualLoginVO, SessionInfoVO sessionInfoVO) {
+
+        virtualLoginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        if("H".equals(virtualLoginVO.getOrgnFg())) { // 본사권한으로 해당 본사코드로만 조회
+            virtualLoginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+
+        if("A".equals(virtualLoginVO.getOrgnFg())) { //총판권한으로 해당 총판코드로만 조회
+            virtualLoginVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+            virtualLoginVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+        }
+
+        return virtualLoginMapper.checkVirtualLoginAuthCheck(virtualLoginVO);
+    }
+
     /** 가상로그인 이력 생성 */
     @Override
     public int insertLoginHistory(SessionInfoVO sessionInfoVO) {
