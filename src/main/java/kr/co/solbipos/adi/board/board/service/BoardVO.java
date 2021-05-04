@@ -111,6 +111,9 @@ public class BoardVO extends PageVO {
     /** 비고 */
     private String remark;
 
+    /** 긴급공지여부 */
+    private String emergencyYn;
+
     /** 열람구분 */
     private String gubunReadCombo;
 
@@ -244,5 +247,13 @@ public class BoardVO extends PageVO {
 
     public void setGubunReadCombo(String gubunReadCombo) {
         this.gubunReadCombo = gubunReadCombo;
+    }
+
+    public String getEmergencyYn() {
+        return emergencyYn;
+    }
+
+    public void setEmergencyYn(String emergencyYn) {
+        this.emergencyYn = emergencyYn;
     }
 }

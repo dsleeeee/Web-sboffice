@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -213,5 +214,26 @@ public class InstlManageController {
         List<DefaultMap<String>> list = instlManageService.getInstlRequestDtl(instlManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, instlManageVO);
+    }
+
+    /**
+     * 설치관리 - 설치요청 삭제
+     *
+     * @param instlManageVO[]
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/delRequestDtl.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delRequestDtl(@RequestBody InstlManageVO[] instlManageVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = instlManageService.delRequestDtl(instlManageVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
     }
 }

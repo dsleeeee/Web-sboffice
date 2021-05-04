@@ -108,9 +108,13 @@
                         <td colspan="3">
                             <div class="sb-select">
                                 <span class="chk ml10">
-                                    <input type="checkbox" id="noticeYn" name="noticeYnChk" ng-model="noticeYn" >
+                                    <input type="checkbox" id="noticeYn" name="noticeYnChk" ng-model="noticeYn" ng-change="noticeYnChk()">
                                     <label for="noticeYn"><s:message code='boardInfo.noticeYn' /></label>
                                </span>
+                                <span class="chk ml10" id="emergency" style="display: none">
+                                    <input type="checkbox" id="emergencyYn" name="emergencyYnChk" ng-model="emergencyYn">
+                                    <label for="emergencyYn"><s:message code='boardInfo.emergencyYn' /></label>
+                                </span>
                                 <span class="chk ml10" style="display: none;">
                                     <input type="checkbox" id="smsYn" name="smsYnChk" ng-model="smsYn" >
                                     <label for="smsYn"><s:message code='boardInfo.smsYn' /></label>
@@ -246,4 +250,4 @@
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210401.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210401.07" charset="utf-8"></script>

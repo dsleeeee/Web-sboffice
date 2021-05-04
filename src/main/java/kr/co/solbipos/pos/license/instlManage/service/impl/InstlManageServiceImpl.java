@@ -106,4 +106,14 @@ public class InstlManageServiceImpl implements InstlManageService {
     public List<DefaultMap<String>> getInstlRequestDtl(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
         return instlManageMapper.getInstlRequestDtl(instlManageVO);
     }
+
+    /** 설치요청 목록 삭제 */
+    @Override
+    public int delRequestDtl(InstlManageVO[] instlManageVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        for(InstlManageVO instlManageVO : instlManageVOs){
+            result += instlManageMapper.delRequestDtl(instlManageVO);
+        }
+        return result;
+    }
 }

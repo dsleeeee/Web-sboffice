@@ -69,6 +69,10 @@
                                     <input type="checkbox" id="noticeYnBoardDetail" name="noticeYnChk" ng-model="boardDetail.noticeYn" disabled="true" >
                                     <label for="noticeYnBoardDetail"><s:message code='boardDetail.noticeYn' /></label>
                                 </span>
+                                <span class="chk ml10" ng-if="boardDetail.noticeYn">
+                                    <input type="checkbox" id="emergencyYnBoardDetail" name="emergencyYnChk" ng-model="boardDetail.emergencyYn" disabled="true" >
+                                    <label for="emergencyYnBoardDetail"><s:message code='boardDetail.emergencyYn' /></label>
+                                </span>
                                 <span class="chk ml10" style="display: none;">
                                     <input type="checkbox" id="smsYnBoardDetail" name="smsYnChk" ng-model="boardDetail.smsYn" disabled="true" >
                                     <label for="smsYnBoardDetail"><s:message code='boardDetail.smsYn' /></label>
@@ -150,7 +154,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.07" charset="utf-8"></script>
 
 <%-- 열람자목록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardReadingHist.jsp">

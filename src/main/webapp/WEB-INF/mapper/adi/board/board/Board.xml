@@ -180,7 +180,8 @@
         twbi.CONTENT,
         TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
         twbm.ANSWER_FG,
-        twbi.REMARK
+        twbi.REMARK,
+        twbi.EMERGENCY_YN
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_BOARD_MASTER twbm,
         (
@@ -317,7 +318,8 @@
             USE_YN,
             USER_ID,
             USER_NM,
-            REMARK
+            REMARK,
+            EMERGENCY_YN
         ) VALUES (
             #{boardCd},
             #{startDate},
@@ -337,7 +339,8 @@
             'Y',
             #{regId},
             #{userNm},
-            #{remark}
+            #{remark},
+            #{emergencyYn}
         )
     </insert>
 
@@ -361,7 +364,8 @@
         USER_NM = #{userNm},
         MOD_DT = #{modDt},
         MOD_ID = #{modId},
-        REMARK = #{remark}
+        REMARK = #{remark},
+        EMERGENCY_YN = #{emergencyYn}
         WHERE 1=1
         AND BOARD_CD = #{boardCd}
         AND BOARD_SEQ_NO = #{boardSeqNo}

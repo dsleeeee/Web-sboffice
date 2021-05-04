@@ -46,4 +46,7 @@ public interface InstlManageService {
 
     /** 설치요청 목록 상세 */
     List<DefaultMap<String>> getInstlRequestDtl(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 설치요청 삭제 */
+    int delRequestDtl(InstlManageVO[] instlManageVOs, SessionInfoVO sessionInfoVO);
 }

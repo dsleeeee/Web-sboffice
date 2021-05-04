@@ -9,7 +9,10 @@
             <span id="spanInstlRequestDtlTitle"></span>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
-        <div class="wj-dialog-body sc2"">
+        <div class="wj-dialog-body sc2">
+            <div class="updownSet oh mb10">
+                <button class="btn_skyblue" id="btnGiftDel" ng-click="del()"><s:message code='cmm.del' /></button>
+            </div>
             <div class="w100 mt10">
                 <%--위즈모 테이블--%>
                 <div class="wj-gridWrap" style="height: 300px;">
@@ -19,11 +22,13 @@
                             items-source="data"
                             control="flex"
                             initialized="initGrid(s,e)"
-                            is-read-only="true"
-                            item-formatter="_itemFormatter"
+<%--                            item-formatter="_itemFormatter"--%>
                             id="wjApprGridList">
 
                         <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" is-read-only="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="instl.storeCd"/>" binding="storeCd" width="60" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="instl.posNo"/>" binding="posNo" width="60" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.seqNo"/>" binding="seqNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.agencyNm"/>" binding="agencyNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.instReqId"/>" binding="instReqId" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -50,4 +55,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestDtl.js?ver=20191016" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestDtl.js?ver=20191017" charset="utf-8"></script>

@@ -34,4 +34,7 @@ public interface InstlManageMapper {
 
     /** 설치요청 목록 상세 */
     List<DefaultMap<String>> getInstlRequestDtl(InstlManageVO instlManageVO);
+
+    /** 설치요청 목록 삭제 */
+    int delRequestDtl(InstlManageVO instlManageVO);
 }
