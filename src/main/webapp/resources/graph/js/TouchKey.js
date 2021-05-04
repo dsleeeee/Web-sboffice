@@ -22,6 +22,7 @@ var touchKeyFilterData = [
 ];
 
 var touchKeyStyleCd, touchKeyStyleCdList, touchKeyStyles;
+var viewStyleCd;
 
 // angular 그리드 생성
 app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
@@ -208,6 +209,13 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   });
+
+  // 스타일미리보기
+  $scope.viewStyle = function() {
+    $scope.touchKeyStyleLayer.show();
+    $scope._broadcast('touchKeyStyleCtrl', viewStyleCd);
+    event.preventDefault();
+  };
 
   // 터치키 복사 팝업
   $scope.$on("showPopUpCopy", function(event, data) {
@@ -1862,6 +1870,7 @@ Format.prototype.initElements = function () {
       var classArea = format.touchkey.classArea;
       var prodArea = format.touchkey.prodArea;
       var styleCd = s.selectedValue;
+      viewStyleCd = s.selectedValue;
 
       for (var i = 0; i < touchKeyStyles.length; i++) {
         for (var key in touchKeyStyles[i]) {
