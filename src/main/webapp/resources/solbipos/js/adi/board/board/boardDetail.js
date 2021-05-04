@@ -93,6 +93,11 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             } else if ($scope.boardDetail.noticeYn === "N") {
                 $scope.boardDetail.noticeYn = false;
             }
+            if($scope.boardDetail.emergencyYn === "Y") {
+                $scope.boardDetail.emergencyYn = true;
+            } else if($scope.boardDetail.emergencyYn === "N")  {
+                $scope.boardDetail.emergencyYn = false;
+            }
             // if($scope.boardDetail.smsYn === "Y") {
             //     $scope.boardDetail.smsYn = true;
             // } else if ($scope.boardDetail.smsYn === "N") {

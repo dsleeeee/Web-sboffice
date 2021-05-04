@@ -114,6 +114,12 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             } else if ($scope.boardInfo.noticeYn === "N") {
                 $scope.noticeYn = false;
             }
+            $scope.noticeYnChk();
+            if($scope.boardInfo.emergencyYn === "Y") {
+                $scope.emergencyYn = true;
+            } else {
+                $scope.emergencyYn = false;
+            }
             // if($scope.boardInfo.smsYn === "Y") {
             //     $scope.smsYn = true;
             // } else if ($scope.boardInfo.smsYn === "N") {
@@ -149,11 +155,13 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.apprFg = "1";
         $scope.targetFg = "1";
         $scope.noticeYn = false;
+        $scope.emergencyYn = false;
         $scope.smsYn = false;
         $scope.startDate = new Date();
         $scope.endDate = new Date();
         $scope.remark = "";
 
+        $scope.noticeYnChk();
         $scope.setSelectedBoardInfo(null);
 
         var storeScope = agrid.getScope('boardInfoCtrl');
@@ -216,6 +224,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             params.noticeYn = "Y";
         } else if ($scope.noticeYn === false) {
             params.noticeYn = "N";
+        }
+        if($scope.emergencyYn === true) {
+            params.emergencyYn = "Y";
+        } else {
+            params.emergencyYn = "N";
         }
         // if($scope.smsYn === true) {
         //     params.smsYn = "Y";
@@ -374,6 +387,17 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 저장기능 수행후 재조회
         $scope._broadcast('boardListCtrl');
+    };
+
+    // 공지사항등록 체크
+    $scope.noticeYnChk = function (){
+        if($scope.noticeYn == false){
+            $("#emergency").css("display", "none");
+            $scope.emergencyYn = false;
+        } else {
+            $("#emergency").css("display", "");
+            $scope.emergency = true;
+        }
     };
 
     // 글쓰기 에디터

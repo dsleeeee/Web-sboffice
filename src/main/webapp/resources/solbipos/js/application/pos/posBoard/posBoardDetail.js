@@ -86,6 +86,11 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
             } else if ($scope.posBoardDetail.noticeYn === "N") {
                 $scope.posBoardDetail.noticeYn = false;
             }
+            if($scope.posBoardDetail.emergencyYn === "Y") {
+                $scope.posBoardDetail.emergencyYn = true;
+            } else if ($scope.posBoardDetail.emergencyYn === "N") {
+                $scope.posBoardDetail.emergencyYn = false;
+            }
             // if($scope.posBoardDetail.smsYn === "Y") {
             //     $scope.posBoardDetail.smsYn = true;
             // } else if ($scope.posBoardDetail.smsYn === "N") {
