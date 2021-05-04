@@ -1,11 +1,11 @@
-package kr.co.solbipos.mobile.sale.today.todaySale.service.impl;
+package kr.co.solbipos.mobile.sale.status.todaySale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.mobile.sale.today.todaySale.service.TodaySaleService;
-import kr.co.solbipos.mobile.sale.today.todaySale.service.TodaySaleVO;
+import kr.co.solbipos.mobile.sale.status.todaySale.service. MobileTodaySaleService;
+import kr.co.solbipos.mobile.sale.status.todaySale.service. MobileTodaySaleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
- * @Class Name : TodaySaleServiceImpl.java
+ * @Class Name : MobileTodaySaleServiceImpl.java
  * @Description : (모바일) 매출현황 > 당일매출현황
  * @Modification Information
  * @
@@ -31,37 +31,37 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service("todaySaleService")
+@Service(" mobiletodaySaleService")
 @Transactional
-public class TodaySaleServiceImpl implements TodaySaleService {
-    private final TodaySaleMapper todaySaleMapper;
+public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
+    private final  MobileTodaySaleMapper  mobileTodaySaleMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public TodaySaleServiceImpl(TodaySaleMapper todaySaleMapper) {
-        this.todaySaleMapper = todaySaleMapper;
+    public MobileTodaySaleServiceImpl(MobileTodaySaleMapper mobileTodaySaleMapper) {
+        this.mobileTodaySaleMapper = mobileTodaySaleMapper;
     }
 
     /** 당일매출종합 - 조회 */
     @Override
-    public DefaultMap<String> getTodaySaleList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
+    public DefaultMap<String> getMobileTodaySaleList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 
-        todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+        mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
+            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
         DefaultMap<String> resultMap = new DefaultMap<String>();
 
-        resultMap = todaySaleMapper.getTodaySaleList(todaySaleVO);
+        resultMap = mobileTodaySaleMapper.getMobileTodaySaleList(mobileTodaySaleVO);
 
         // 데이터가 없으면 0 셋팅
         if(ObjectUtils.isEmpty(resultMap)) {
-            resultMap = todaySaleMapper.getTodaySaleNullList(todaySaleVO);
+            resultMap = mobileTodaySaleMapper.getMobileTodaySaleNullList(mobileTodaySaleVO);
         }
 
         return resultMap;
@@ -69,57 +69,57 @@ public class TodaySaleServiceImpl implements TodaySaleService {
 
     /** 결제수단 조회 */
     @Override
-    public List<DefaultMap<Object>> getTodaySalePayList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getMobileTodaySalePayList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 
-        todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+        mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
+            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
-        return todaySaleMapper.getTodaySalePayList(todaySaleVO);
+        return mobileTodaySaleMapper.getMobileTodaySalePayList(mobileTodaySaleVO);
     }
 
     /** 할인내역 조회 */
     @Override
-    public List<DefaultMap<Object>> getTodaySaleDcList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getMobileTodaySaleDcList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 
-        todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+        mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
+            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
-        return todaySaleMapper.getTodaySaleDcList(todaySaleVO);
+        return mobileTodaySaleMapper.getMobileTodaySaleDcList(mobileTodaySaleVO);
     }
 
     /** 매장/배달/포장 조회 */
     @Override
-    public List<DefaultMap<Object>> getTodaySaleDlvrList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getMobileTodaySaleDlvrList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 
-        todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+        mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
+            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
-        return todaySaleMapper.getTodaySaleDlvrList(todaySaleVO);
+        return mobileTodaySaleMapper.getMobileTodaySaleDlvrList(mobileTodaySaleVO);
     }
 
     /** 시간대별 조회 */
     @Override
-    public List<DefaultMap<Object>> getTodaySaleTimeList(TodaySaleVO todaySaleVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getMobileTodaySaleTimeList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 
-        todaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(todaySaleVO.getSrchStoreCd()).equals("")) {
+        mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            todaySaleVO.setArrStoreCd(todaySaleVO.getSrchStoreCd().split(","));
+            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
-        return todaySaleMapper.getTodaySaleTimeList(todaySaleVO);
+        return mobileTodaySaleMapper.getMobileTodaySaleTimeList(mobileTodaySaleVO);
     }
 }

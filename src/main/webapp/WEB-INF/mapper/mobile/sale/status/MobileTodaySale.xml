@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    TodaySale.xml
+    MobileTodaySale.xml
     (모바일) 매출현황 > 당일매출현황
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       김설아     2021.04.02     최초작성
 -->
-<mapper namespace="kr.co.solbipos.mobile.sale.today.todaySale.service.impl.TodaySaleMapper">
+<mapper namespace="kr.co.solbipos.mobile.sale.status.todaySale.service.impl.MobileTodaySaleMapper">
 
     <!-- 당일매출종합 - 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
         COMMENTS : [매출]헤더, [매출]헤더_결제
     -->
-    <select id="getTodaySaleList" parameterType="TodaySaleVO" resultType="DefaultMap">
-        /* TodaySaleMapper.getTodaySaleList */
+    <select id="getMobileTodaySaleList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+        /* MobileTodaySaleMapper.getMobileTodaySaleList */
         SELECT
         NVL(tssh.SALE_CNT, 0) AS SALE_CNT,
         NVL(tssh.RETURN_SALE_CNT, 0) AS RETURN_SALE_CNT,
@@ -105,8 +105,8 @@
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
         COMMENTS : [매출]헤더, [매출]헤더_결제
     -->
-    <select id="getTodaySaleNullList" parameterType="TodaySaleVO" resultType="DefaultMap">
-        /* TodaySaleMapper.getTodaySaleNullList */
+    <select id="getMobileTodaySaleNullList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+        /* MobileTodaySaleMapper.getMobileTodaySaleNullList */
         SELECT
         0 AS SALE_CNT,
         0 AS RETURN_SALE_CNT,
@@ -133,8 +133,8 @@
         TABLE    : TB_SL_SALE_HDR_PAY
         COMMENTS : [매출]헤더_결제
     -->
-    <select id="getTodaySalePayList"  parameterType="TodaySaleVO" resultType="DefaultMap">
-        /* TodaySaleMapper.getTodaySalePayList */
+    <select id="getMobileTodaySalePayList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+        /* MobileTodaySaleMapper.getMobileTodaySalePayList */
         SELECT
         A.PAY_CD,
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) AS NM,
@@ -177,8 +177,8 @@
         TABLE    : TB_SL_SALE_HDR_DC
         COMMENTS : [매출]헤더_할인
     -->
-    <select id="getTodaySaleDcList"  parameterType="TodaySaleVO" resultType="DefaultMap">
-        /* TodaySaleMapper.getTodaySaleDcList */
+    <select id="getMobileTodaySaleDcList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+        /* MobileTodaySaleMapper.getMobileTodaySaleDcList */
         SELECT
         A.DC_CD,
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041' AND NMCODE_CD = A.DC_CD) AS NM,
@@ -221,8 +221,8 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getTodaySaleDlvrList"  parameterType="TodaySaleVO" resultType="DefaultMap">
-        /* TodaySaleMapper.getTodaySaleDlvrList */
+    <select id="getMobileTodaySaleDlvrList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+        /* MobileTodaySaleMapper.getMobileTodaySaleDlvrList */
         SELECT
         A.DLVR_PACK_FG,
         (CASE WHEN A.DLVR_PACK_FG = '1' THEN '내점'
@@ -293,8 +293,8 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getTodaySaleTimeList"  parameterType="TodaySaleVO" resultType="DefaultMap">
-        /* TodaySaleMapper.getTodaySaleTimeList */
+    <select id="getMobileTodaySaleTimeList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+        /* MobileTodaySaleMapper.getMobileTodaySaleTimeList */
         SELECT
         A.SALE_TIME,
         A.AMT_CNT,

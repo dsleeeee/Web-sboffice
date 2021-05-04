@@ -1,11 +1,22 @@
+/****************************************************************
+ *
+ * 파일명 : mobileProdSale.js
+ * 설  명 : (모바일) 매출현황 > 상품별매출 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2021.03.31     이다솜      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
 var app = agrid.getApp();
 
 app.controller('todayBest3Ctrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('todayBest3Ctrl', $scope, $http, true));
+    angular.extend(this, new RootController('todayBest3Ctrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -14,7 +25,7 @@ app.controller('todayBest3Ctrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("todayBest3Ctrl", function (event, data) {
-        
+
         // 당일매출 (Best3) 조회
         $scope.getTodayBest3();
 
@@ -44,8 +55,9 @@ app.controller('todayBest3Ctrl', ['$scope', '$http', '$timeout', function ($scop
 }]);
 
 app.controller('mobileProdSaleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('mobileProdSaleCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('mobileProdSaleCtrl', $scope, $http, false));
 
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
@@ -55,7 +67,7 @@ app.controller('mobileProdSaleCtrl', ['$scope', '$http', '$timeout', function ($
         // grid 합계
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         s.bottomLeftCells.setCellData(0, 0, '합계');
-    }
+    };
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("mobileProdSaleCtrl", function (event, data) {
@@ -110,8 +122,8 @@ app.controller('mobileProdSaleCtrl', ['$scope', '$http', '$timeout', function ($
             }
 
         }, false);
-    }
-    
+    };
+
     // 다중매장 선택팝업
     $scope.mobileProdSaleStoreShow = function () {
         $scope._broadcast('mobileProdSaleStoreCtrl');

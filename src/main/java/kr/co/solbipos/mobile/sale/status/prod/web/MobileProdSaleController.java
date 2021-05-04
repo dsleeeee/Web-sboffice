@@ -69,7 +69,7 @@ public class MobileProdSaleController {
         List<DefaultMap<String>> list = mobileProdSaleService.getMultiStoreList(mobileProdSaleVO, sessionInfoVO);
 
         model.addAttribute("multiStoreFg", list.size());
-        return "mobile/sale/status/prod/prodSale";
+        return "mobile/sale/status/prod/mobileProdSale";
     }
 
     /**

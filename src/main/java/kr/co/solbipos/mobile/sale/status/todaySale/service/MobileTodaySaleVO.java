@@ -1,9 +1,9 @@
-package kr.co.solbipos.mobile.sale.today.todaySale.service;
+package kr.co.solbipos.mobile.sale.status.todaySale.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : TodaySaleVO.java
+ * @Class Name : MobileTodaySaleVO.java
  * @Description : (모바일) 매출현황 > 당일매출현황
  * @Modification Information
  * @
@@ -17,7 +17,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class TodaySaleVO extends PageVO {
+public class MobileTodaySaleVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 

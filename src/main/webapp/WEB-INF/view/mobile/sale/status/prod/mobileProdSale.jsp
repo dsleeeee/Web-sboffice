@@ -18,33 +18,33 @@
                 <col class="w80"/>
             </colgroup>
             <tbody>
+            <tr>
+                <%-- 조회일자 --%>
+                <th><s:message code="cmm.search.date"/></th>
+                <td>
+                    <div class="sb-select">
+                        <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
+                    </div>
+                </td>
+            </tr>
+            <c:if test="${multiStoreFg ne 0}">
                 <tr>
-                    <%-- 조회일자 --%>
-                    <th><s:message code="cmm.search.date"/></th>
+                        <%-- (다중)매장코드 --%>
+                    <th><s:message code="mobile.ProdSale.store"/></th>
                     <td>
-                        <div class="sb-select">
-                            <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
-                            <span class="rg">~</span>
-                            <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
-                        </div>
+                            <%-- 다중매장선택 모듈 멀티 선택 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/mobile/sale/com/popup/selectMultiStore.jsp" flush="true">
+                            <jsp:param name="targetId" value="mobileProdSaleStore"/>
+                        </jsp:include>
+                            <%--// 다중매장선택 모듈 멀티 선택 사용시 include --%>
                     </td>
                 </tr>
-                <c:if test="${multiStoreFg ne 0}">
-                    <tr>
-                        <%-- (다중)매장코드 --%>
-                        <th><s:message code="mobile.ProdSale.store"/></th>
-                        <td>
-                            <%-- 다중매장선택 모듈 멀티 선택 사용시 include --%>
-                            <jsp:include page="/WEB-INF/view/mobile/sale/com/popup/selectMultiStore.jsp" flush="true">
-                                <jsp:param name="targetId" value="mobileProdSaleStore"/>
-                            </jsp:include>
-                                <%--// 다중매장선택 모듈 멀티 선택 사용시 include --%>
-                        </td>
-                    </tr>
-                </c:if>
-                <c:if test="${multiStoreFg eq 0}">
-                    <input type="hidden" id="mobileProdSaleStoreCd" value="${sessionInfo.storeCd}"/>
-                </c:if>
+            </c:if>
+            <c:if test="${multiStoreFg eq 0}">
+                <input type="hidden" id="mobileProdSaleStoreCd" value="${sessionInfo.storeCd}"/>
+            </c:if>
             </tbody>
         </table>
 
@@ -96,7 +96,7 @@
                     <!-- 조회 결과가 없을 때, msg 띄우기 -->
                     <div class="gridMsg" id="prodSaleMsg" style="line-height: 300px; display: none;"><s:message code="cmm.search.result.empty"/></div>
                 </wj-flex-grid>
-             </div>
+            </div>
         </div>
     </div>
 </div>
@@ -105,4 +105,4 @@
     var multiStoreFg 	= '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/prod/prodSale.js?ver=20210331.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/prod/mobileProdSale.js?ver=20210504.01" charset="utf-8"></script>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileTodaySale.xml
+    (모바일) 매출현황 > 상품별매출현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.03.31     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.prod.service.impl.MobileProdSaleMapper">
+
+    <!-- 모바일 매출현황 - 당일매출 Best3, 상품별매출현황 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD, TB_SL_DAILY_PROD
+        PARAM    : mobileProdSaleVO
+        COMMENTS : 모바일 매출현황 - 상품별매출현황을 조회한다.
+    -->
+    <select id="getProdSaleList" parameterType="mobileProdSaleVO" resultType="DefaultMap">
+        /* USE : MobileProdSaleMapper.getProdSaleList */
+        SELECT B.*
+        FROM (
+        SELECT A.PROD_CD,
+        A.PROD_NM,
+        A.TOT_SALE_QTY,
+        A.REAL_SALE_AMT,
+        ROUND(A.REAL_SALE_PER, 4) * 100 AS REAL_SALE_PER,
+        ROW_NUMBER() OVER (ORDER BY A.REAL_SALE_AMT DESC) AS RNUM
+        FROM (
+        SELECT tsdp.PROD_CD,
+        tmp.PROD_NM,
+        SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+        RATIO_TO_REPORT(SUM(tsdp.REAL_SALE_AMT)) OVER () AS REAL_SALE_PER
+        FROM TB_SL_DAILY_PROD tsdp,
+        TB_MS_PRODUCT tmp
+        WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdp.STORE_CD IN
+        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+            #{item}
+        </foreach>
+        <choose>
+            <when test='todayBest3Fg != null and todayBest3Fg != "" and todayBest3Fg == "Y"'>
+                AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+            </when>
+            <otherwise>
+                AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            </otherwise>
+        </choose>
+        AND tmp.STORE_CD = tsdp.STORE_CD
+        AND tmp.PROD_CD = tsdp.PROD_CD
+        GROUP
+        BY tsdp.PROD_CD, tmp.PROD_NM
+        ) A
+        ORDER
+        BY A.REAL_SALE_AMT DESC
+        ) B
+        WHERE  1=1
+        <if test='todayBest3Fg != null and todayBest3Fg != "" and todayBest3Fg == "Y"'>
+            AND 4 > B.RNUM
+        </if>
+    </select>
+
+    <!-- 모바일 매출현황 - 다중매장조회 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_DTL
+        PARAM    : mobileProdSaleVO
+        COMMENTS : 모바일 매출현황 - 다중매장을 조회한다.
+    -->
+    <select id="getMultiStoreList" parameterType="mobileProdSaleVO" resultType="DefaultMap">
+      /* USE : MobileProdSaleMapper.getMultiStoreList */
+      SELECT C.STORE_CD,
+              D.STORE_NM
+        FROM (
+                   SELECT DISTINCT B.STORE_CD
+                     FROM TB_MS_MULTISTORE_DTL A,
+                           TB_MS_MULTISTORE_DTL B
+                    WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                      AND A.STORE_CD = #{storeCd}
+                      AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                      AND B.MULTISTORE_CD = A.MULTISTORE_CD
+              ) C,
+              TB_MS_STORE D
+       WHERE D.STORE_CD = C.STORE_CD
+       ORDER
+          BY C.STORE_CD
+    </select>
+
+</mapper>

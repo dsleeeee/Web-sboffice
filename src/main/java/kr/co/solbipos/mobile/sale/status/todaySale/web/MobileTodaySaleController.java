@@ -1,4 +1,4 @@
-package kr.co.solbipos.mobile.sale.today.todaySale.web;
+package kr.co.solbipos.mobile.sale.status.todaySale.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,8 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.mobile.sale.today.todaySale.service.TodaySaleService;
-import kr.co.solbipos.mobile.sale.today.todaySale.service.TodaySaleVO;
+import kr.co.solbipos.mobile.sale.status.todaySale.service.MobileTodaySaleService;
+import kr.co.solbipos.mobile.sale.status.todaySale.service.MobileTodaySaleVO;
 import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleService;
 import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.List;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
- * @Class Name : TodaySaleController.java
+ * @Class Name : MobileTodaySaleController.java
  * @Description : (모바일) 매출현황 > 당일매출현황
  * @Modification Information
  * @
@@ -40,20 +40,20 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping("/mobile/sale/today/todaySale")
-public class TodaySaleController {
+@RequestMapping("/mobile/sale/status/todaySale")
+public class MobileTodaySaleController {
 
     private final SessionService sessionService;
-    private final TodaySaleService todaySaleService;
+    private final MobileTodaySaleService mobileTodaySaleService;
     private final MobileProdSaleService mobileProdSaleService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public TodaySaleController(SessionService sessionService, TodaySaleService todaySaleService, MobileProdSaleService mobileProdSaleService) {
+    public MobileTodaySaleController(SessionService sessionService, MobileTodaySaleService mobileTodaySaleService, MobileProdSaleService mobileProdSaleService) {
         this.sessionService = sessionService;
-        this.todaySaleService = todaySaleService;
+        this.mobileTodaySaleService = mobileTodaySaleService;
         this.mobileProdSaleService = mobileProdSaleService;
     }
 
@@ -64,8 +64,8 @@ public class TodaySaleController {
      * @param response
      * @param model
      */
-    @RequestMapping(value = "/todaySale/list.sb", method = RequestMethod.GET)
-    public String todaySaleView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "/mobileTodaySale/list.sb", method = RequestMethod.GET)
+    public String mobileTodaySaleView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         MobileProdSaleVO mobileProdSaleVO = new MobileProdSaleVO();
@@ -75,13 +75,13 @@ public class TodaySaleController {
 
         model.addAttribute("multiStoreFg", list.size());
 
-        return "mobile/sale/today/todaySale/todaySale";
+        return "mobile/sale/status/todaySale/mobileTodaySale";
     }
 
     /**
      * 당일매출종합 - 조회
      *
-     * @param todaySaleVO
+     * @param mobileTodaySaleVO
      * @param request
      * @param response
      * @param model
@@ -89,14 +89,14 @@ public class TodaySaleController {
      * @author  김설아
      * @since   2021. 04. 02.
      */
-    @RequestMapping(value = "/todaySale/getTodaySaleList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/todaySale/getMobileTodaySaleList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getTodaySaleList(TodaySaleVO todaySaleVO, HttpServletRequest request,
-                                     HttpServletResponse response, Model model) {
+    public Result getMobileTodaySaleList(MobileTodaySaleVO mobileTodaySaleVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        DefaultMap<String> result = todaySaleService.getTodaySaleList(todaySaleVO, sessionInfoVO);
+        DefaultMap<String> result = mobileTodaySaleService.getMobileTodaySaleList(mobileTodaySaleVO, sessionInfoVO);
 
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
         resultMap.put("result", result);
@@ -107,7 +107,7 @@ public class TodaySaleController {
     /**
      * 결제수단 - 조회
      *
-     * @param todaySaleVO
+     * @param mobileTodaySaleVO
      * @param request
      * @param response
      * @param model
@@ -115,22 +115,22 @@ public class TodaySaleController {
      * @author  김설아
      * @since   2021. 04. 02.
      */
-    @RequestMapping(value = "/todaySale/getTodaySalePayList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/todaySale/getMobileTodaySalePayList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getTodaySalePayList(TodaySaleVO todaySaleVO, HttpServletRequest request,
-                                     HttpServletResponse response, Model model) {
+    public Result getMobileTodaySalePayList(MobileTodaySaleVO mobileTodaySaleVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = todaySaleService.getTodaySalePayList(todaySaleVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = mobileTodaySaleService.getMobileTodaySalePayList(mobileTodaySaleVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, result, todaySaleVO);
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTodaySaleVO);
     }
 
     /**
      * 할인내역 - 조회
      *
-     * @param todaySaleVO
+     * @param mobileTodaySaleVO
      * @param request
      * @param response
      * @param model
@@ -138,22 +138,22 @@ public class TodaySaleController {
      * @author  김설아
      * @since   2021. 04. 02.
      */
-    @RequestMapping(value = "/todaySale/getTodaySaleDcList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/todaySale/getMobileTodaySaleDcList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getTodaySaleDcList(TodaySaleVO todaySaleVO, HttpServletRequest request,
-                                      HttpServletResponse response, Model model) {
+    public Result getMobileTodaySaleDcList(MobileTodaySaleVO mobileTodaySaleVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = todaySaleService.getTodaySaleDcList(todaySaleVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = mobileTodaySaleService.getMobileTodaySaleDcList(mobileTodaySaleVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, result, todaySaleVO);
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTodaySaleVO);
     }
 
     /**
      * 매장/배달/포장 - 조회
      *
-     * @param todaySaleVO
+     * @param mobileTodaySaleVO
      * @param request
      * @param response
      * @param model
@@ -161,22 +161,22 @@ public class TodaySaleController {
      * @author  김설아
      * @since   2021. 04. 02.
      */
-    @RequestMapping(value = "/todaySale/getTodaySaleDlvrList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/todaySale/getMobileTodaySaleDlvrList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getTodaySaleDlvrList(TodaySaleVO todaySaleVO, HttpServletRequest request,
-                                     HttpServletResponse response, Model model) {
+    public Result getMobileTodaySaleDlvrList(MobileTodaySaleVO mobileTodaySaleVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = todaySaleService.getTodaySaleDlvrList(todaySaleVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = mobileTodaySaleService.getMobileTodaySaleDlvrList(mobileTodaySaleVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, result, todaySaleVO);
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTodaySaleVO);
     }
 
     /**
      * 시간대별 - 조회
      *
-     * @param todaySaleVO
+     * @param mobileTodaySaleVO
      * @param request
      * @param response
      * @param model
@@ -184,15 +184,15 @@ public class TodaySaleController {
      * @author  김설아
      * @since   2021. 04. 02.
      */
-    @RequestMapping(value = "/todaySale/getTodaySaleTimeList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/todaySale/getMobileTodaySaleTimeList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getTodaySaleTimeList(TodaySaleVO todaySaleVO, HttpServletRequest request,
+    public Result getMobileTodaySaleTimeList(MobileTodaySaleVO mobileTodaySaleVO, HttpServletRequest request,
                                        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = todaySaleService.getTodaySaleTimeList(todaySaleVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = mobileTodaySaleService.getMobileTodaySaleTimeList(mobileTodaySaleVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, result, todaySaleVO);
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTodaySaleVO);
     }
 }
