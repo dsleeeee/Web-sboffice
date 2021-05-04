@@ -48,8 +48,10 @@ public class StoreEnvVO extends CmmVO {
     private String dirctInYn;
     /** 사용여부  (Y:사용, N:미사용) */
     private UseYn useYn;
-    
-    
+    /** 기능키 관련 프로시져 실행 결과 */
+    private String result;
+
+
     /**
      * @return the storeCd
      */
@@ -206,5 +208,13 @@ public class StoreEnvVO extends CmmVO {
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
-    
+    /**
+     * @return the result
+     */
+    public String getResult() { return result; }
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) { this.result = result; }
+
 }

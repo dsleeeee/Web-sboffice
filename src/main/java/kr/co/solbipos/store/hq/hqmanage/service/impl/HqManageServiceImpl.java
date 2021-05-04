@@ -407,6 +407,8 @@ public class HqManageServiceImpl implements HqManageService{
 
         int procCnt = 0;
         String dt = currentDateTimeString();
+        String chkEnvstCd   = "";
+        String procResult   = "";
 
         for(HqEnvstVO hqEnvst: hqEnvsts) {
 
@@ -421,6 +423,11 @@ public class HqManageServiceImpl implements HqManageService{
             }
             else if(hqEnvst.getStatus() == GridDataFg.UPDATE) {
                 procCnt += mapper.updateConfig(hqEnvst);
+                chkEnvstCd = hqEnvst.getEnvstCd();
+                if(chkEnvstCd.equals("0041"))
+                {
+                    procResult = mapper.updateTouchKeyMng(hqEnvst);
+                }
             }
 
             // 적용 타겟이 본사기준 매장까지인 경우, 매장까지 적용

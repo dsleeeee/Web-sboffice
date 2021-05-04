@@ -119,6 +119,9 @@ public interface HqManageMapper {
     /** 환경설정 수정 */
     int updateConfig(HqEnvstVO hqEnvst);
 
+    /** 터치키 재설정 */
+    String updateTouchKeyMng(HqEnvstVO hqEnvst);
+
     /** 환경설정 수정 - 매장 */
     int updateConfigStore(HqEnvstVO hqEnvst);
 

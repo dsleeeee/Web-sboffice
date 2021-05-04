@@ -21,7 +21,7 @@ import kr.co.solbipos.store.hq.brand.enums.TargtFg;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class HqEnvstVO extends CmmVO{
-    
+
     private static final long serialVersionUID = 713050528057597639L;
     /** 본사코드 */
     private String hqOfficeCd;
@@ -43,8 +43,9 @@ public class HqEnvstVO extends CmmVO{
     private String dirctInYn;
     /** 사용여부 */
     private UseYn useYn;
-    
-    
+    /** 기능키 관련 프로시져 실행 결과 */
+    private String result;
+
     /**
      * @return the hqOfficeCd
      */
@@ -165,5 +166,13 @@ public class HqEnvstVO extends CmmVO{
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
     }
-    
+    /**
+     * @return the result
+     */
+    public String getResult() { return result; }
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) { this.result = result; }
+
 }

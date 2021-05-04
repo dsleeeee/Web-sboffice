@@ -174,6 +174,9 @@ public interface StoreManageMapper {
     /** 매장환경 정보 수정 */
     int updateStoreConfig(StoreEnvVO storeEnvVO);
 
+    /** 터치키 재설정 */
+    String updateTouchKeyMng(StoreEnvVO storeEnvVO);
+
     /** 매장 포스 환경 정보 조회 */
     List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVOs);
 

@@ -546,6 +546,8 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         int procCnt = 0;
         String dt = currentDateTimeString();
+        String chkEnvstCd   = "";
+        String procResult   = "";
 
         for(StoreEnvVO storeEnvVO : storeEnvVOs) {
 
@@ -560,6 +562,11 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
             else if(storeEnvVO.getStatus() == GridDataFg.UPDATE) {
                 procCnt += mapper.updateStoreConfig(storeEnvVO);
+                chkEnvstCd = storeEnvVO.getEnvstCd();
+                if(chkEnvstCd.equals("1041"))
+                {
+                    procResult = mapper.updateTouchKeyMng(storeEnvVO);
+                }
             }
         }
         return procCnt;

@@ -2153,6 +2153,29 @@
            AND ENVST_CD = #{envstCd}
     </update>
 
+
+    <!-- 터치키 재설정 프로시저 호출 -->
+    <!--
+        TABLE    : TB_WB_STORE_CONFG_XML, TB_MS_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY
+        PARAM    : storeEnvVO
+        COMMENTS : 터치키 재설정 프로시저 호출
+    -->
+    <select id="updateTouchKeyMng" statementType="CALLABLE"  parameterType="storeEnvVO" resultType="DefaultMap">
+        /* StoreManageMapper.updateTouchKeyMng */
+        {
+            CALL PKG_TOUCH_KEY_MNG.SP_TOUCH_KEY_MNG_U
+            (
+                #{storeCd},
+                #{envstCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
     <!-- 매장 포스환경 정보 조회 -->
     <!--
         TABLE    : TB_CM_ENVST, TB_CM_ENVST_DTL, TB_MS_STORE_ENVST, TB_CM_NMCODE
