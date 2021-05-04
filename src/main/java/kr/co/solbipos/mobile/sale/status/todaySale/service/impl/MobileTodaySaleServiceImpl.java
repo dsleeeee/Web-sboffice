@@ -55,16 +55,7 @@ public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
             mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
-        DefaultMap<String> resultMap = new DefaultMap<String>();
-
-        resultMap = mobileTodaySaleMapper.getMobileTodaySaleList(mobileTodaySaleVO);
-
-        // 데이터가 없으면 0 셋팅
-        if(ObjectUtils.isEmpty(resultMap)) {
-            resultMap = mobileTodaySaleMapper.getMobileTodaySaleNullList(mobileTodaySaleVO);
-        }
-
-        return resultMap;
+        return mobileTodaySaleMapper.getMobileTodaySaleList(mobileTodaySaleVO);
     }
 
     /** 결제수단 조회 */

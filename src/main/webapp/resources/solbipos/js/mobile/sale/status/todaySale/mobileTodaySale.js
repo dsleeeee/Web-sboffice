@@ -23,7 +23,6 @@ app.controller('mobileTodaySaleTotalCtrl', ['$scope', '$http', function ($scope,
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
     };
 
     // <-- 검색 호출 -->
@@ -35,7 +34,6 @@ app.controller('mobileTodaySaleTotalCtrl', ['$scope', '$http', function ($scope,
     $scope.searchMobileTodaySale = function(data){
         var params = {};
         params.startDate = data.startDate;
-        params.endDate = data.endDate;
         params.srchStoreCd = data.srchStoreCd;
 
         $scope._postJSONQuery.withOutPopUp( "/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleList.sb", params, function(response){
@@ -96,7 +94,7 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', function ($scope, $htt
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
         // 조회
-        $scope.searchTodaySalePay();
+        $scope.searchMobileTodaySalePay();
     };
 
     // <-- 검색 호출 -->
@@ -172,7 +170,6 @@ app.controller('mobileTodaySaleDcCtrl', ['$scope', '$http', function ($scope, $h
     $scope.searchMobileTodaySaleDc = function(data){
         var params = {};
         params.startDate = data.startDate;
-        params.endDate = data.endDate;
         params.srchStoreCd = data.srchStoreCd;
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleDcList.sb", params, function() {}, false);
@@ -207,7 +204,6 @@ app.controller('mobileTodaySaleDlvrCtrl', ['$scope', '$http', function ($scope, 
     $scope.searchMobileTodaySaleDlvr = function(data){
         var params = {};
         params.startDate = data.startDate;
-        params.endDate = data.endDate;
         params.srchStoreCd = data.srchStoreCd;
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleDlvrList.sb", params, function() {}, false);
@@ -242,7 +238,6 @@ app.controller('mobileTodaySaleTimeCtrl', ['$scope', '$http', function ($scope, 
     $scope.searchMobileTodaySaleTime = function(data){
         var params = {};
         params.startDate = data.startDate;
-        params.endDate = data.endDate;
         params.srchStoreCd = data.srchStoreCd;
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleTimeList.sb", params, function() {}, false);
