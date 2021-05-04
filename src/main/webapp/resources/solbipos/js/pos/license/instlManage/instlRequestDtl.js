@@ -20,6 +20,20 @@ app.controller('instlRequestDtlCtrl', ['$scope', '$http', '$timeout', function (
         $scope.instFgDataMap = new wijmo.grid.DataMap(instFgData, 'value', 'name');
         $scope.reasonDatMap = new wijmo.grid.DataMap(reasonData, 'value', 'name');
 
+        // 그리드 클릭 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col         = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+                if (col.binding === "gChk") { // 전표번호 클릭
+                    if(selectedRow.instFg != "0"){
+                        $scope._popMsg(messages["instl.req.del.instFg"]);
+                        selectedRow.gChk = false;
+                    }
+                }
+            }
+        });
     };
 
     // 다른 컨트롤러의 broadcast 받기
@@ -53,6 +67,33 @@ app.controller('instlRequestDtlCtrl', ['$scope', '$http', '$timeout', function (
     // 닫기버튼 클릭
     $scope.close = function(){
         $scope.instlRequestDtlLayer.hide();
+    };
+
+    // 그리드 행 삭제
+    $scope.del = function(){
+        $scope._popConfirm(messages["cmm.choo.delete"], function() {
+            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                var item = $scope.flex.collectionView.items[i];
+                if(item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
+            }
+
+            var params = new Array();
+
+            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+                $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            }
+
+            // (삭제)저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/pos/license/instlManage/delRequestDtl.sb", params, function(){});
+
+            // angular 그리드 hide 시 깨지므로 refresh()
+            var scope = agrid.getScope("instlRequestListCtrl");
+            scope.flex.refresh();
+            scope.getInstallList();
+        });
     };
 
 }]);

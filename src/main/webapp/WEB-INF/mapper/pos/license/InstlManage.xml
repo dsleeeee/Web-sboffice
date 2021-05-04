@@ -450,7 +450,9 @@
         COMMENTS : 설치요청 목록 상세
     -->
     <select id="getInstlRequestDtl"  parameterType="instlManageVO" resultType="DefaultMap">
-        SELECT  tci.SEQ_NO
+        SELECT   tci.STORE_CD
+               , tci.SEQ_NO
+               , tci.POS_NO
                , tci.INST_FG
                , tci.AGENCY_CD
                , tca.AGENCY_NM
@@ -467,5 +469,19 @@
             AND STORE_CD = #{storeCd}
             AND POS_NO = #{posNo}
     </select>
+
+    <!-- 설치요청 삭제 -->
+    <!--
+        TABLE    : TB_CM_INSTLL
+        COMMENTS : 설치요청 삭제
+    -->
+    <delete id="delRequestDtl" parameterType="instlManageVO">
+        /* USE : InstlManageMapper.delRequestDtl */
+        DELETE TB_CM_INSTLL
+         WHERE STORE_CD = #{storeCd}
+           AND POS_NO = #{posNo}
+           AND SEQ_NO = #{seqNo}
+           AND INST_FG = '0'
+    </delete>
 
 </mapper>
