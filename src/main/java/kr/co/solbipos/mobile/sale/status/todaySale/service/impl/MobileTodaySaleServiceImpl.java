@@ -31,7 +31,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service(" mobiletodaySaleService")
+@Service("mobileTodaySaleService")
 @Transactional
 public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
     private final  MobileTodaySaleMapper  mobileTodaySaleMapper;
