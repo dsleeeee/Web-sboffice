@@ -77,6 +77,28 @@ public class PwdManageServiceImpl implements PwdManageService {
         return pwdManageMapper.getPwdManageList(pwdManageVO);
     }
 
+    /** 비밀번호 임의변경 권한  조회 */
+    @Override
+    public int checkModifyPwd(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속한 사용자의 소속구분
+        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
+        pwdManageVO.setOrgnFg(orgnFg);
+        pwdManageVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 소속 코드
+        if(orgnFg == OrgnFg.AGENCY) {
+            pwdManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        } else if(orgnFg == OrgnFg.HQ) {
+            pwdManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        } else if(orgnFg == OrgnFg.STORE){
+            pwdManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            pwdManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return pwdManageMapper.checkModifyPwd(pwdManageVO);
+    }
+
     /** 비밀번호 변경 */
     @Override
     public PwChgResult modifyPwd(PwdManageVO pwdManageVO) {

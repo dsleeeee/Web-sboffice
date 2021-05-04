@@ -26,6 +26,9 @@ public interface PwdManageService {
     /** 비밀번호 임의변경 대상 조회 */
     List<DefaultMap<String>> getPwdManageList(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 비밀번호 변경 권한 조회 */
+    int checkModifyPwd(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO);
+
     /** 비밀번호 변경 */
     PwChgResult modifyPwd(PwdManageVO pwdManageVO);
 

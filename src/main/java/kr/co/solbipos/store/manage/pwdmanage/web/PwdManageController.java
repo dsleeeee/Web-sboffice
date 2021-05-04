@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -112,6 +114,14 @@ public class PwdManageController {
     @ResponseBody
     public Result updatePassword(@RequestBody PwdManageVO pwdManageVO, HttpServletRequest request,
             HttpServletResponse response,  Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int authResultCheck = pwdManageService.checkModifyPwd(pwdManageVO, sessionInfoVO);
+        if(authResultCheck <= 0)
+        {
+            return returnJson(Status.OK, PwChgResult.ID_NOT_MATCH);
+        }
 
         pwdManageVO.setRegId(sessionService.getSessionInfo().getUserId());
         pwdManageVO.setModId(sessionService.getSessionInfo().getUserId());

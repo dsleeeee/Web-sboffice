@@ -26,20 +26,23 @@ import java.util.List;
 @Mapper
 @Repository
 public interface PwdManageMapper {
-    
+
     /** 비밀번호 임의변경 대상 조회 */
     List<DefaultMap<String>> getPwdManageList(PwdManageVO pwdManageVO);
-    
+
     /** 기존 비밀번호 조회 */
     String getOldPassword(PwdManageVO pwdManageVO);
-    
+
+    /** 비밀번호 변경 권한 확인 */
+    int checkModifyPwd(PwdManageVO pwdManageVO);
+
     /** 비밀번호 변경 */
     int updatePassword(PwdManageVO pwdManageVO);
-    
+
     /** 비밀번호 변경이력 저장 */
     int insertPasswordHistory(PwdManageVO pwdManageVO);
 
     /** 로그인 잠금해제 */
     int updatePasswordUnLock(PwdManageVO pwdManageVO);
-    
+
 }

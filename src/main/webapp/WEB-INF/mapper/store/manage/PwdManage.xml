@@ -148,6 +148,139 @@
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 비밀번호 임의변경 권한 확인 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE, TB_MS_STORE, TB_HQ_OFFICE, TB_CM_NMCODE
+        PARAM    : pwdManageVO
+        COMMENTS : 비밀번호 임의변경 권한 확인
+    -->
+    <select id="checkModifyPwd" parameterType="pwdManageVO" resultType="java.lang.Integer">
+        /* USE : PwdManageMapper.checkModifyPwd */
+        SELECT COUNT(*)
+          FROM (
+            <if test='(orgnFg != null and orgnFg.toString() != "HQ") and (orgnFg != null and orgnFg.toString() != "STORE")'>
+                SELECT
+                    'A' AS EMP_ORGN_FG,
+                    '' AS HQ_OFFICE_CD,
+                    '' AS HQ_OFFICE_NM,
+                    '' AS STORE_CD,
+                    '' AS STORE_NM,
+                    tce.EMP_NO,
+                    tce.EMP_NM AS USER_NM,
+                    tce.USER_ID,
+                    tce.SERVICE_FG,
+                    tce.WEB_USE_YN,
+                    tce.MP_NO,
+                    '' AS EMAIL_ADDR,
+                    '' AS ADDR,
+                    tca.AGENCY_CD,
+                    tca.AGENCY_NM
+                FROM
+                    TB_CM_EMPLOYEE tce
+                INNER JOIN TB_CM_AGENCY tca ON
+                    tce.AGENCY_CD = tca.AGENCY_CD
+                LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+                    tce.SERVICE_FG = tcn.NMCODE_CD
+                AND tcn.NMCODE_GRP_CD = '007'
+                UNION ALL
+            </if>
+            <if test='orgnFg != null and orgnFg.toString() != "STORE"'>
+                SELECT
+                    'H' AS EMP_ORGN_FG,
+                    tho.HQ_OFFICE_CD,
+                    tho.HQ_OFFICE_NM,
+                    '' AS STORE_CD,
+                    '' AS STORE_NM,
+                    the.EMP_NO,
+                    the.EMP_NM AS USER_NM,
+                    the.USER_ID,
+                    the.SERVICE_FG,
+                    the.WEB_USE_YN,
+                    the.MP_NO,
+                    '' AS EMAIL_ADDR,
+                    '' AS ADDR,
+                    tho.AGENCY_CD,
+                    tca.AGENCY_NM
+                FROM
+                    TB_HQ_EMPLOYEE the
+                INNER JOIN TB_HQ_OFFICE tho ON
+                    the.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+                    the.SERVICE_FG = tcn.NMCODE_CD
+                AND tcn.NMCODE_GRP_CD = '007'
+                LEFT OUTER JOIN TB_CM_AGENCY tca ON
+                    tho.AGENCY_CD = tca.AGENCY_CD
+                WHERE 1=1
+                UNION ALL
+            </if>
+                SELECT
+                    'S' AS EMP_ORGN_FG,
+                    tho.HQ_OFFICE_CD,
+                    tho.HQ_OFFICE_NM,
+                    tms.STORE_CD,
+                    tms.STORE_NM,
+                    tme.EMP_NO,
+                    tme.EMP_NM AS USER_NM,
+                    tme.USER_ID,
+                    tme.SERVICE_FG,
+                    tme.WEB_USE_YN,
+                    tme.MP_NO,
+                    tme.EMAIL_ADDR,
+                    tme.ADDR || tme.ADDR_DTL AS ADDR,
+                    tms.AGENCY_CD,
+                    tca.AGENCY_NM
+                FROM
+                  TB_MS_EMPLOYEE tme
+                INNER JOIN TB_MS_STORE tms ON
+                  tme.STORE_CD = tms.STORE_CD
+                LEFT OUTER JOIN TB_HQ_OFFICE tho ON
+                  tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+                LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+                    tme.SERVICE_FG = tcn.NMCODE_CD
+                    AND tcn.NMCODE_GRP_CD = '007'
+                LEFT OUTER JOIN TB_CM_AGENCY tca ON
+                    tms.AGENCY_CD = tca.AGENCY_CD
+                WHERE 1=1
+          ) emp
+        WHERE 1=1
+        <if test='orgnFg != null and orgnFg.toString() == "AGENCY"'>
+            AND emp.AGENCY_CD = #{agencyCd}
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND emp.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND emp.STORE_CD = #{storeCd}
+        </if>
+        <if test='empOrgnFg != null and empOrgnFg.toString() != ""'>
+            AND emp.EMP_ORGN_FG = #{empOrgnFg}
+        </if>
+        <if test='srchAgencyCd != null and srchAgencyCd != ""'>
+            AND emp.AGENCY_CD  LIKE '%'|| #{srchAgencyCd} || '%'
+        </if>
+        <if test='agencyNm != null and agencyNm != ""'>
+            AND emp.AGENCY_NM LIKE '%'|| #{agencyNm} || '%'
+        </if>
+        <if test='srchHqOfficeCd != null and srchHqOfficeCd != ""'>
+            AND emp.HQ_OFFICE_CD  LIKE '%'|| #{srchHqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND emp.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} || '%'
+        </if>
+        <if test='srchStoreCd != null and srchStoreCd != ""'>
+            AND emp.STORE_CD LIKE '%'|| #{srchStoreCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND emp.STORE_NM LIKE '%'||#{storeNm} || '%'
+        </if>
+        <if test='userId != null and userId != ""'>
+            AND emp.USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test='userNm != null and userNm != ""'>
+            AND emp.USER_NM LIKE '%'||#{userNm}||'%'
+        </if>
+    </select>
+
     <!-- 기존 비밀번호 조회 -->
     <!--
         TABLE    : TB_WB_USER_INFO, TB_MS_EMPLOYEE
