@@ -88,9 +88,9 @@
                     SELECT
                     tsshp.HQ_OFFICE_CD,
                     tsshp.STORE_CD,
-                    SUM((CASE WHEN tsshp.PAY_CD = '01' THEN tsshp.PAY_AMT ELSE 0 END)) AS CARD_AMT,
-                    SUM((CASE WHEN tsshp.PAY_CD = '02' THEN tsshp.PAY_AMT ELSE 0 END)) AS CASH_AMT,
-                    SUM((CASE WHEN tsshp.PAY_CD NOT IN('01' , '02') THEN tsshp.PAY_AMT ELSE 0 END)) AS ETC_AMT
+                    SUM(CASE WHEN tsshp.PAY_CD = '01' THEN tsshp.PAY_AMT ELSE 0 END) AS CARD_AMT,
+                    SUM(CASE WHEN tsshp.PAY_CD = '02' THEN tsshp.PAY_AMT ELSE 0 END) AS CASH_AMT,
+                    SUM(CASE WHEN tsshp.PAY_CD NOT IN('01' , '02') THEN tsshp.PAY_AMT ELSE 0 END) AS ETC_AMT
                     FROM TB_SL_SALE_HDR_PAY tsshp
                     WHERE 1=1
                     AND tsshp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -105,9 +105,9 @@
                     SELECT
                     tsshd.HQ_OFFICE_CD,
                     tsshd.STORE_CD,
-                    SUM((CASE WHEN tsshd.DC_CD = '01' THEN tsshd.DC_AMT ELSE 0 END)) AS DC_AMT,
-                    SUM((CASE WHEN tsshd.DC_CD = '02' THEN tsshd.DC_AMT ELSE 0 END)) AS COUPN_DC_AMT,
-                    SUM((CASE WHEN tsshd.DC_CD NOT IN('01','02') THEN tsshd.DC_AMT ELSE 0 END)) AS TOTAL_DC_AMT
+                    SUM(CASE WHEN tsshd.DC_CD = '01' THEN tsshd.DC_AMT ELSE 0 END) AS DC_AMT,
+                    SUM(CASE WHEN tsshd.DC_CD = '02' THEN tsshd.DC_AMT ELSE 0 END) AS COUPN_DC_AMT,
+                    SUM(CASE WHEN tsshd.DC_CD NOT IN('01','02') THEN tsshd.DC_AMT ELSE 0 END) AS TOTAL_DC_AMT
                     FROM TB_SL_SALE_HDR_DC tsshd
                     WHERE 1=1
                     AND tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
