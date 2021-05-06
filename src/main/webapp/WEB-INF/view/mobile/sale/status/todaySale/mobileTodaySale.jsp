@@ -266,7 +266,7 @@
     </div>
     <%-- //할인내역 --%>
 
-    <%-- 매장/배달/포장 --%>
+    <%-- 내점/배달/포장 --%>
     <div class="gridBar mt10" id="mobileTodaySaleDlvr" onclick="girdFldUnfld('mobileTodaySaleDlvr')">
         <a href="#" class="open"><s:message code="mobile.todaySale.todaySaleDlvr"/></a>
     </div>
@@ -289,7 +289,7 @@
             </wj-flex-grid>
         </div>
     </div>
-    <%-- //매장/배달/포장 --%>
+    <%-- //내점/배달/포장 --%>
 
     <%-- 시간대별 --%>
     <div class="gridBar mt10" id="mobileTodaySaleTime" onclick="girdFldUnfld('mobileTodaySaleTime')">

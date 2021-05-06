@@ -123,7 +123,7 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', function ($scope, $htt
             var mobileTodaySaleDcScope = agrid.getScope('mobileTodaySaleDcCtrl');
             mobileTodaySaleDcScope._broadcast('mobileTodaySaleDcCtrl', params);
 
-            // 매장/배달/포장
+            // 내점/배달/포장
             var mobileTodaySaleDlvrScope = agrid.getScope('mobileTodaySaleDlvrCtrl');
             mobileTodaySaleDlvrScope._broadcast('mobileTodaySaleDlvrCtrl', params);
 
@@ -179,7 +179,7 @@ app.controller('mobileTodaySaleDcCtrl', ['$scope', '$http', function ($scope, $h
 
 
 /**
- *  매장/배달/포장 그리드 생성
+ *  내점/배달/포장 그리드 생성
  */
 app.controller('mobileTodaySaleDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
 

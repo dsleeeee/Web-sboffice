@@ -86,7 +86,7 @@ public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
         return mobileTodaySaleMapper.getMobileTodaySaleDcList(mobileTodaySaleVO);
     }
 
-    /** 매장/배달/포장 조회 */
+    /** 내점/배달/포장 조회 */
     @Override
     public List<DefaultMap<Object>> getMobileTodaySaleDlvrList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 
