@@ -295,4 +295,116 @@ public class CmmUtil {
         return result;
     }
 
+    /** 변환 */
+    public static String convertInputValue(String inputStr)
+    {
+        if(inputStr.indexOf("&"  ) !=-1){ inputStr = inputStr.replaceAll("&"     , "&amp;"   ); }
+        if(inputStr.indexOf("<"  ) !=-1){ inputStr = inputStr.replaceAll("<"     , "&lt;"    ); }
+        if(inputStr.indexOf(">"  ) !=-1){ inputStr = inputStr.replaceAll(">"     , "&gt;"    ); }
+        if(inputStr.indexOf("\"" ) !=-1){ inputStr = inputStr.replaceAll("\""    , "&quot;"  ); }
+        if(inputStr.indexOf("'"  ) !=-1){ inputStr = inputStr.replaceAll("'"     , "&apos;"  ); }
+        if(inputStr.indexOf(" "  ) !=-1){ inputStr = inputStr.replaceAll(" "     , "&nbsp;"  ); }
+        if(inputStr.indexOf("\n" ) !=-1){ inputStr = inputStr.replaceAll("\n"    , "<br />"  ); }
+
+        return inputStr;
+    }
+
+    /** 변환 */
+    public static String removeInputValue(String inputStr)
+    {
+        if(inputStr.indexOf("<script>")       !=-1){ inputStr = inputStr.replaceAll("<script>"        , ""); }
+        if(inputStr.indexOf("</script>")      !=-1){ inputStr = inputStr.replaceAll("</script>"       , ""); }
+        if(inputStr.indexOf("<javascript>")   !=-1){ inputStr = inputStr.replaceAll("<javascript>"    , ""); }
+        if(inputStr.indexOf("</javascript>")  !=-1){ inputStr = inputStr.replaceAll("</javascript>"   , ""); }
+        if(inputStr.indexOf("<vbscript>")     !=-1){ inputStr = inputStr.replaceAll("<vbscript>"      , ""); }
+        if(inputStr.indexOf("</vbscript>")    !=-1){ inputStr = inputStr.replaceAll("</vbscript>"     , ""); }
+
+        return inputStr;
+    }
+
+    /** 변환 */
+    public static String removeInputValueHtml(String inputStr)
+    {
+        if(inputStr.toLowerCase().indexOf("script"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("script"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onabort"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onabort"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onactivate"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onactivate"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onafterprint"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onafterprint"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onafterupdate"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onafterupdate"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforeactivate"          )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforeactivate"        , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforecopy"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforecopy"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforecut"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforecut"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforedeactivate"        )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforedeactivate"      , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforeeditfocus"         )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforeeditfocus"       , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforepaste"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforepaste"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforeprint"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforeprint"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforeunload"            )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforeunload"          , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbeforeupdate"            )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbeforeupdate"          , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onblur"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onblur"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbounce"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbounce"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncellchange"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncellchange"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onchange"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onchange"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onclick"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onclick"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncontextmenu"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncontextmenu"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncontrolselect"           )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncontrolselect"         , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncopy"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncopy"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncut"                     )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncut"                   , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondataavailable"           )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondataavailable"         , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondatasetchanged"          )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondatasetchanged"        , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondatasetcomplete"         )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondatasetcomplete"       , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondblclick"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondblclick"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondeactivate"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondeactivate"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondrag"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondrag"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondragend"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondragend"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondragenter"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondragenter"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondragleave"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondragleave"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondragover"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondragover"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondragstart"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondragstart"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondrop"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondrop"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onerror"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onerror"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onerrorupdate"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onerrorupdate"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onfilterchange"            )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onfilterchange"          , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onfinish"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onfinish"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onfocus"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onfocus"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onfocusin"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onfocusin"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onfocusout"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onfocusout"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onhelp"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onhelp"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onkeydown"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onkeydown"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onkeypress"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onkeypress"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onkeyup"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onkeyup"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onlayoutcomplete"          )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onlayoutcomplete"        , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onload"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onload"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onlosecapture"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onlosecapture"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmousedown"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmousedown"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmouseenter"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmouseenter"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmouseleave"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmouseleave"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmousemove"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmousemove"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmouseout"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmouseout"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmouseover"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmouseover"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmouseup"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmouseup"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmousewheel"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmousewheel"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmove"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmove"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmoveend"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmoveend"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onmovestart"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onmovestart"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onpaste"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onpaste"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onpropertychange"          )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onpropertychange"        , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onreadystatechange"        )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onreadystatechange"      , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onreset"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onreset"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onresize"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onresize"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onresizeend"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onresizeend"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onresizestart"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onresizestart"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onrowenter"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onrowenter"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onrowexit"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onrowexit"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onrowsdelete"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onrowsdelete"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onrowsinserted"            )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onrowsinserted"          , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onscroll"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onscroll"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onselect"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onselect"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onselectionchange"         )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onselectionchange"       , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onselectstart"             )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onselectstart"           , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onstart"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onstart"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onstop"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onstop"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onsubmit"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onsubmit"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onunload"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onunload"                , "사용할 수 없는 문자열"); }
+
+        return inputStr;
+    }
 }
