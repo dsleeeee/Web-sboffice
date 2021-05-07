@@ -151,7 +151,7 @@ public class MobileTodaySaleController {
     }
 
     /**
-     * 매장/배달/포장 - 조회
+     * 내점/배달/포장 - 조회
      *
      * @param mobileTodaySaleVO
      * @param request

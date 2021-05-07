@@ -4,8 +4,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.mobile.sale.status.todaySale.service. MobileTodaySaleService;
-import kr.co.solbipos.mobile.sale.status.todaySale.service. MobileTodaySaleVO;
+import kr.co.solbipos.mobile.sale.status.todaySale.service.MobileTodaySaleService;
+import kr.co.solbipos.mobile.sale.status.todaySale.service.MobileTodaySaleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service(" mobiletodaySaleService")
+@Service("mobileTodaySaleService")
 @Transactional
 public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
     private final  MobileTodaySaleMapper  mobileTodaySaleMapper;
@@ -55,16 +55,7 @@ public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
             mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
-        DefaultMap<String> resultMap = new DefaultMap<String>();
-
-        resultMap = mobileTodaySaleMapper.getMobileTodaySaleList(mobileTodaySaleVO);
-
-        // 데이터가 없으면 0 셋팅
-        if(ObjectUtils.isEmpty(resultMap)) {
-            resultMap = mobileTodaySaleMapper.getMobileTodaySaleNullList(mobileTodaySaleVO);
-        }
-
-        return resultMap;
+        return mobileTodaySaleMapper.getMobileTodaySaleList(mobileTodaySaleVO);
     }
 
     /** 결제수단 조회 */
@@ -95,7 +86,7 @@ public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
         return mobileTodaySaleMapper.getMobileTodaySaleDcList(mobileTodaySaleVO);
     }
 
-    /** 매장/배달/포장 조회 */
+    /** 내점/배달/포장 조회 */
     @Override
     public List<DefaultMap<Object>> getMobileTodaySaleDlvrList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 

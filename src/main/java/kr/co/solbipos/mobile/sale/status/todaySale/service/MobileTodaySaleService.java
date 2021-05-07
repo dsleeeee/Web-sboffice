@@ -31,7 +31,7 @@ public interface MobileTodaySaleService {
     /** 할인내역 조회 */
     List<DefaultMap<Object>> getMobileTodaySaleDcList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO);
 
-    /** 매장/배달/포장 조회 */
+    /** 내점/배달/포장 조회 */
     List<DefaultMap<Object>> getMobileTodaySaleDlvrList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO);
 
     /** 시간대별 조회 */

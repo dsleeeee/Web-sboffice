@@ -19,113 +19,136 @@
     <select id="getMobileTodaySaleList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
         /* MobileTodaySaleMapper.getMobileTodaySaleList */
         SELECT
-        NVL(tssh.SALE_CNT, 0) AS SALE_CNT,
-        NVL(tssh.RETURN_SALE_CNT, 0) AS RETURN_SALE_CNT,
-        NVL(tssh.BILL_CNT, 0) AS BILL_CNT,
-        NVL(tssh.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
-        NVL(tssh.TOT_DC_AMT, 0) AS TOT_DC_AMT,
-        NVL(tssh.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
-        NVL(tssh.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
-        ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT) AS GUEST_UPRC,
-        ROUND(tssh.REAL_SALE_AMT / tssh.BILL_CNT) AS BILL_UPRC,
-        NVL(tssh.TBL_CNT, 0) AS TBL_CNT,
-        ROUND(tssh.REAL_SALE_AMT / tssh.TBL_CNT) TBL_UPRC,
-        NVL(tsshp.CARD_AMT, 0) AS CARD_AMT,
-        NVL(tsshp.CASH_AMT, 0) AS CASH_AMT,
-        NVL(tsshp.ETC_AMT, 0) AS ETC_AMT,
-        NVL(tsshd.DC_AMT, 0) AS DC_AMT,
-        NVL(tsshd.COUPN_DC_AMT, 0) AS COUPN_DC_AMT,
-        NVL(tsshd.TOTAL_DC_AMT, 0) AS TOTAL_DC_AMT
+        HQ_OFFICE_CD,
+        SUM(SALE_CNT) AS SALE_CNT,
+        SUM(RETURN_SALE_CNT) AS RETURN_SALE_CNT,
+        SUM(BILL_CNT) AS BILL_CNT,
+        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+        SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT,
+        SUM(GUEST_UPRC) AS GUEST_UPRC,
+        SUM(BILL_UPRC) AS BILL_UPRC,
+        SUM(TBL_CNT) AS TBL_CNT,
+        SUM(TBL_UPRC) AS TBL_UPRC,
+        SUM(CARD_AMT) AS CARD_AMT,
+        SUM(CASH_AMT) AS CASH_AMT,
+        SUM(ETC_AMT) AS ETC_AMT,
+        SUM(DC_AMT) AS DC_AMT,
+        SUM(COUPN_DC_AMT) AS COUPN_DC_AMT,
+        SUM(TOTAL_DC_AMT) AS TOTAL_DC_AMT
         FROM
         (
-            SELECT
-            tssh.HQ_OFFICE_CD,
-            tssh.STORE_CD,
-            SUM(CASE WHEN tssh.SALE_FG = '1' THEN 1 ELSE 0 END) AS SALE_CNT,
-            SUM(CASE WHEN tssh.SALE_FG = '-1' THEN -1 ELSE 0 END) AS RETURN_SALE_CNT,
-            COUNT(tssh.BILL_NO) AS BILL_CNT,
-            SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-            SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT,
-            COUNT(tssh.TBL_CD) AS TBL_CNT
-            FROM TB_SL_SALE_HDR tssh
-            WHERE 1=1
-            AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tssh.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-            AND tssh.SALE_DATE = #{startDate}
-            GROUP BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
-        ) tssh,
-        (
-            SELECT
-            tsshp.HQ_OFFICE_CD,
-            tsshp.STORE_CD,
-            SUM((CASE WHEN tsshp.PAY_CD = '01' THEN tsshp.PAY_AMT ELSE 0 END)) AS CARD_AMT,
-            SUM((CASE WHEN tsshp.PAY_CD = '02' THEN tsshp.PAY_AMT ELSE 0 END)) AS CASH_AMT,
-            SUM((CASE WHEN tsshp.PAY_CD NOT IN('01' , '02') THEN tsshp.PAY_AMT ELSE 0 END)) AS ETC_AMT
-            FROM TB_SL_SALE_HDR_PAY tsshp
-            WHERE 1=1
-            AND tsshp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsshp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-            AND tsshp.SALE_DATE = #{startDate}
-            GROUP BY tsshp.HQ_OFFICE_CD, tsshp.STORE_CD
-        ) tsshp,
-        (
-            SELECT
-            tsshd.HQ_OFFICE_CD,
-            tsshd.STORE_CD,
-            SUM((CASE WHEN tsshd.DC_CD = '01' THEN tsshd.DC_AMT ELSE 0 END)) AS DC_AMT,
-            SUM((CASE WHEN tsshd.DC_CD = '02' THEN tsshd.DC_AMT ELSE 0 END)) AS COUPN_DC_AMT,
-            SUM((CASE WHEN tsshd.DC_CD NOT IN('01','02') THEN tsshd.DC_AMT ELSE 0 END)) AS TOTAL_DC_AMT
-            FROM TB_SL_SALE_HDR_DC tsshd
-            WHERE 1=1
-            AND tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsshd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-            AND tsshd.SALE_DATE = #{startDate}
-            GROUP BY tsshd.HQ_OFFICE_CD, tsshd.STORE_CD
-        ) tsshd
-        WHERE 1=1
-        AND tsshp.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-        AND tsshp.STORE_CD = tssh.STORE_CD
-        AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-        AND tsshd.STORE_CD = tssh.STORE_CD
-    </select>
-
-    <!-- 당일매출종합 - 조회 -->
-    <!--
-        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
-        COMMENTS : [매출]헤더, [매출]헤더_결제
-    -->
-    <select id="getMobileTodaySaleNullList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
-        /* MobileTodaySaleMapper.getMobileTodaySaleNullList */
-        SELECT
-        0 AS SALE_CNT,
-        0 AS RETURN_SALE_CNT,
-        0 AS BILL_CNT,
-        0 AS TOT_SALE_AMT,
-        0 AS TOT_DC_AMT,
-        0 AS REAL_SALE_AMT,
-        0 AS TOT_GUEST_CNT,
-        0 AS GUEST_UPRC,
-        0 AS BILL_UPRC,
-        0 AS TBL_CNT,
-        0 AS TBL_UPRC,
-        0 AS CARD_AMT,
-        0 AS CASH_AMT,
-        0 AS ETC_AMT,
-        0 AS DC_AMT,
-        0 AS COUPN_DC_AMT,
-        0 AS TOTAL_DC_AMT
-        FROM dual
+            SELECT *
+            FROM
+            (
+                SELECT
+                tssh.HQ_OFFICE_CD,
+                NVL(tssh.SALE_CNT, 0) AS SALE_CNT,
+                NVL(tssh.RETURN_SALE_CNT, 0) AS RETURN_SALE_CNT,
+                NVL(tssh.BILL_CNT, 0) AS BILL_CNT,
+                NVL(tssh.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
+                NVL(tssh.TOT_DC_AMT, 0) AS TOT_DC_AMT,
+                NVL(tssh.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
+                NVL(tssh.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
+                ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT) AS GUEST_UPRC,
+                ROUND(tssh.REAL_SALE_AMT / tssh.BILL_CNT) AS BILL_UPRC,
+                NVL(tssh.TBL_CNT, 0) AS TBL_CNT,
+                ROUND(tssh.REAL_SALE_AMT / tssh.TBL_CNT) TBL_UPRC,
+                NVL(tsshp.CARD_AMT, 0) AS CARD_AMT,
+                NVL(tsshp.CASH_AMT, 0) AS CASH_AMT,
+                NVL(tsshp.ETC_AMT, 0) AS ETC_AMT,
+                NVL(tsshd.DC_AMT, 0) AS DC_AMT,
+                NVL(tsshd.COUPN_DC_AMT, 0) AS COUPN_DC_AMT,
+                NVL(tsshd.TOTAL_DC_AMT, 0) AS TOTAL_DC_AMT
+                FROM
+                (
+                    SELECT
+                    tssh.HQ_OFFICE_CD,
+                    tssh.STORE_CD,
+                    SUM(CASE WHEN tssh.SALE_FG = '1' THEN 1 ELSE 0 END) AS SALE_CNT,
+                    SUM(CASE WHEN tssh.SALE_FG = '-1' THEN -1 ELSE 0 END) AS RETURN_SALE_CNT,
+                    COUNT(tssh.BILL_NO) AS BILL_CNT,
+                    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                    SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
+                    SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                    SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT,
+                    COUNT(tssh.TBL_CD) AS TBL_CNT
+                    FROM TB_SL_SALE_HDR tssh
+                    WHERE 1=1
+                    AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tssh.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                    AND tssh.SALE_DATE = #{startDate}
+                    GROUP BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
+                ) tssh,
+                (
+                    SELECT
+                    tsshp.HQ_OFFICE_CD,
+                    tsshp.STORE_CD,
+                    SUM(CASE WHEN tsshp.PAY_CD = '01' THEN tsshp.PAY_AMT ELSE 0 END) AS CARD_AMT,
+                    SUM(CASE WHEN tsshp.PAY_CD = '02' THEN tsshp.PAY_AMT ELSE 0 END) AS CASH_AMT,
+                    SUM(CASE WHEN tsshp.PAY_CD NOT IN('01' , '02') THEN tsshp.PAY_AMT ELSE 0 END) AS ETC_AMT
+                    FROM TB_SL_SALE_HDR_PAY tsshp
+                    WHERE 1=1
+                    AND tsshp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsshp.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                    AND tsshp.SALE_DATE = #{startDate}
+                    GROUP BY tsshp.HQ_OFFICE_CD, tsshp.STORE_CD
+                ) tsshp,
+                (
+                    SELECT
+                    tsshd.HQ_OFFICE_CD,
+                    tsshd.STORE_CD,
+                    SUM(CASE WHEN tsshd.DC_CD = '01' THEN tsshd.DC_AMT ELSE 0 END) AS DC_AMT,
+                    SUM(CASE WHEN tsshd.DC_CD = '02' THEN tsshd.DC_AMT ELSE 0 END) AS COUPN_DC_AMT,
+                    SUM(CASE WHEN tsshd.DC_CD NOT IN('01','02') THEN tsshd.DC_AMT ELSE 0 END) AS TOTAL_DC_AMT
+                    FROM TB_SL_SALE_HDR_DC tsshd
+                    WHERE 1=1
+                    AND tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsshd.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                    AND tsshd.SALE_DATE = #{startDate}
+                    GROUP BY tsshd.HQ_OFFICE_CD, tsshd.STORE_CD
+                ) tsshd
+                WHERE 1=1
+                AND tsshp.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+                AND tsshp.STORE_CD = tssh.STORE_CD
+                AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+                AND tsshd.STORE_CD = tssh.STORE_CD
+            )
+            UNION ALL
+            (
+                SELECT
+                #{hqOfficeCd} AS HQ_OFFICE_CD,
+                0 AS SALE_CNT,
+                0 AS RETURN_SALE_CNT,
+                0 AS BILL_CNT,
+                0 AS TOT_SALE_AMT,
+                0 AS TOT_DC_AMT,
+                0 AS REAL_SALE_AMT,
+                0 AS TOT_GUEST_CNT,
+                0 AS GUEST_UPRC,
+                0 AS BILL_UPRC,
+                0 AS TBL_CNT,
+                0 AS TBL_UPRC,
+                0 AS CARD_AMT,
+                0 AS CASH_AMT,
+                0 AS ETC_AMT,
+                0 AS DC_AMT,
+                0 AS COUPN_DC_AMT,
+                0 AS TOTAL_DC_AMT
+                FROM dual
+            )
+        )
+        GROUP BY HQ_OFFICE_CD
     </select>
 
     <!-- 결제수단 - 조회 -->
@@ -216,7 +239,7 @@
         ) B
     </select>
 
-    <!-- 매장/배달/포장 - 조회 -->
+    <!-- 내점/배달/포장 - 조회 -->
     <!--
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세

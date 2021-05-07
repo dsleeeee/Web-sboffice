@@ -29,16 +29,13 @@ public interface MobileTodaySaleMapper {
     /** 당일매출종합 - 조회 */
     DefaultMap<String> getMobileTodaySaleList(MobileTodaySaleVO mobileTodaySaleVO);
 
-    /** 당일매출종합 - 조회 */
-    DefaultMap<String> getMobileTodaySaleNullList(MobileTodaySaleVO mobileTodaySaleVO);
-
     /** 결제수단 조회 */
     List<DefaultMap<Object>> getMobileTodaySalePayList(MobileTodaySaleVO mobileTodaySaleVO);
 
     /** 할인내역 조회 */
     List<DefaultMap<Object>> getMobileTodaySaleDcList(MobileTodaySaleVO mobileTodaySaleVO);
 
-    /** 매장/배달/포장 조회 */
+    /** 내점/배달/포장 조회 */
     List<DefaultMap<Object>> getMobileTodaySaleDlvrList(MobileTodaySaleVO mobileTodaySaleVO);
 
     /** 시간대별 조회 */
