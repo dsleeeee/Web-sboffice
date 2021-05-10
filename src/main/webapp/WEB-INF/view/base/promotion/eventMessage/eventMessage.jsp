@@ -222,10 +222,15 @@
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
-                                    control="printCondiFgCombo">
+                                    control="printCondiFgCombo"
+                                    selected-index-changed="setProd(s)">
                             </wj-combo-box>
                         </div>
                     </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
                     <%-- 사용여부 --%>
                     <th><s:message code="eventMessage.useYn" /></th>
                     <td>
@@ -241,6 +246,8 @@
                             </wj-combo-box>
                         </div>
                     </td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
@@ -269,7 +276,7 @@
                             <%-- 삭제 --%>
                             <button class="btn_skyblue" id="btnProdDel" ng-click="prodDel()"><s:message code='cmm.del' /></button>
                         </div>
-                        <div class="wj-gridWrap" style="height:257px; overflow-x: hidden; overflow-y: hidden;">
+                        <div class="wj-gridWrap" style="height:225px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns="false"
                                     control="flexSelectProdGrid"
@@ -379,7 +386,7 @@
     var hqOfficeCd = "${hqOfficeCd}"
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessage.js?ver=20210503.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessage.js?ver=20210503.04" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/eventMessage/eventMessageProdReg.jsp">

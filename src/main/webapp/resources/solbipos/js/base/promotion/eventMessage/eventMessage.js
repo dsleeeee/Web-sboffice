@@ -203,8 +203,12 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
             $scope.setEventMessageDetail(data);
 
             // 적용상품 목록 조회
-            $scope._pageView('selectProdGridCtrl', 1);
-            $("#tblEventMessageProd").css("display", "");
+            if($scope.printCondiFgCombo.selectedValue === "0") {
+                $("#tblEventMessageProd").css("display", "none");
+            }else{
+                $scope._pageView('selectProdGridCtrl', 1);
+                $("#tblEventMessageProd").css("display", "");
+            }
 
             // 매장권한인 경우, 적용매장 등록 불가
             if(orgnFg === "STORE") {
@@ -253,7 +257,7 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
                 }
 
                 // 적용기간
-                if(info.startYmd != '00000101' && info.endYmd != '99991231'){
+                if(info.startYmd != '00010101' && info.endYmd != '99991231'){
                     $("input:checkbox[id='chkPeriod']").prop("checked", true);
                     eventMessageStartDate.value = new Date(getFormatDate(info.startYmd, "-"));
                     eventMessageEndDate.value = new Date(getFormatDate(info.endYmd, "-"));
@@ -293,7 +297,7 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
         var params = {};
 
         params.msgCd = $("#hdMsgCd").val();
-        params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(eventMessageStartDate.value, 'yyyyMMdd') : '00000101'; // 적용기간 시작일
+        params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(eventMessageStartDate.value, 'yyyyMMdd') : '00010101'; // 적용기간 시작일
         params.endYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(eventMessageEndDate.value, 'yyyyMMdd') : '99991231'; // 적용기간 종료일
         params.ticketPrintYn = $scope.ticketPrintYnCombo.selectedValue; // 응모권출력여부
         params.rePrintYn = $scope.rePrintYnCombo.selectedValue; // 재출력여부
@@ -361,6 +365,18 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
             $("#divChkPeriod").css("display", "");
         }else{
             $("#divChkPeriod").css("display", "none");
+        }
+    };
+
+    // 적용조건 - 출력조건 선택에 따른 적용상품 disabled 여부
+    $scope.setProd = function (s) {
+        if($("#hdMsgCd").val() !== ""){
+            if(s.selectedValue === "0") {
+                $("#tblEventMessageProd").css("display", "none");
+            }else{
+                $scope._pageView('selectProdGridCtrl', 1);
+                $("#tblEventMessageProd").css("display", "");
+            }
         }
     };
 }]);
