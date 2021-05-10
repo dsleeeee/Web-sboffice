@@ -79,8 +79,8 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', function ($scope, $http)
     angular.extend(this, new RootController('mobileDaySaleCtrl', $scope, $http, false));
 
     // 검색조건에 조회기간
-    var startDate = wcombo.genDateVal("#startDate", getToday());
-    var endDate = wcombo.genDateVal("#endDate", getToday());
+    var startDate = wcombo.genDateVal("#startDate", gvStartDate);
+    var endDate = wcombo.genDateVal("#endDate", gvEndDate);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -100,8 +100,8 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', function ($scope, $http)
     // 차트 초기값 셋팅
     $scope.searchMobileDaySaleChartSet = function(){
         var params = {};
-        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
-        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.startDate = getToday(); // 조회기간
+        params.endDate = getToday(); // 조회기간
         params.srchStoreCd = $("#mobileDaySaleStoreCd").val();
 
         // 바 차트
@@ -129,12 +129,12 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', function ($scope, $http)
         var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
         var diffDay = (endDt.getTime() - startDt.getTime()) / (1000 * 60 * 60 * 24);
 
-        //  시작일자가 종료일자보다 빠른지 확인
+        // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){
             $scope._popMsg(messages['mobile.cmm.dateChk.error']);
             return false;
         }
-        //  조회일자 최대 한달(31일) 제한
+        // 조회일자 최대 한달(31일) 제한
         if (diffDay > 31) {
             $scope._popMsg(messages['mobile.cmm.dateOver.1month.error']);
             return false;
