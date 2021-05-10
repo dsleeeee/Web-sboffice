@@ -28,7 +28,7 @@
                 thp.PROD_CD,
                 thp.PROD_NM,
                 FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
-                thpb.BARCD_CD,
+                thpb.BARCD_CD AS BAR_CD,
                 thp.SALE_PROD_YN,
                 thp.POINT_SAVE_YN,
                 thp.PRC_CTRL_FG
@@ -81,7 +81,7 @@
                 tmp.PROD_CD,
                 tmp.PROD_NM,
                 FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
-                tmpb.BARCD_CD,
+                tmpb.BARCD_CD AS BAR_CD,
                 tmp.SALE_PROD_YN,
                 tmp.POINT_SAVE_YN,
                 tmp.PRC_CTRL_FG,
