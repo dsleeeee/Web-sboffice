@@ -35,6 +35,9 @@ public interface EventMessageMapper {
     /** 이벤트문구출력물 저장 */
     int saveEventMessage(EventMessageVO eventMessageVO);
 
+    /** 이벤트문구출력물 적용상품 전체 삭제 */
+    int deleteEventMessageProdAll(EventMessageVO eventMessageVO);
+
     /** 이벤트문구출력물 상세 조회 */
     DefaultMap<String> getEventMessageDetail(EventMessageVO eventMessageVO);
 

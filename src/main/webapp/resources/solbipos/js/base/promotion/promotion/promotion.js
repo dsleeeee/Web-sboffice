@@ -554,7 +554,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
             // ------------ 적용조건 ------------
             params.dateYn = $("#chkPeriod").is(":checked") === true ? 'Y' : 'N'; // 적용기간 사용여부
-            params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionStartDate.value, 'yyyyMMdd') : '00000101'; // 적용기간 시작일
+            params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionStartDate.value, 'yyyyMMdd') : '00010101'; // 적용기간 시작일
             params.endYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionEndDate.value, 'yyyyMMdd') : '99991231'; // 적용기간 종료일
             params.timeYn = $("#chkTime").is(":checked") === true ? 'Y' : 'N'; // 적용시간 사용여부
             params.startTime = $("#chkTime").is(":checked") === true ? ($scope.promotionStartHh + $scope.promotionStartMm) : ''; //적용시간 시작시간

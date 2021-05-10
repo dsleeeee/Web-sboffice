@@ -89,7 +89,7 @@ public class PromotionServiceImpl implements PromotionService {
 
             // 수정모드 시, 적용상품 체크 여부에 따른 적용상품 리스트 데이터 삭제
             if("N".equals(promotionVO.getProdCdYn())){
-                result = promotionMapper.deletePromotionProdAll(promotionVO);
+                promotionMapper.deletePromotionProdAll(promotionVO);
             }
 
             // 수정모드 시, 혜택유형 선택에 따른 혜택상품 리스트 데이터 삭제

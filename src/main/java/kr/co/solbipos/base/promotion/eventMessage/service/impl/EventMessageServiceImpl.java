@@ -87,6 +87,11 @@ public class EventMessageServiceImpl implements EventMessageService {
         if(!"".equals(eventMessageVO.getMsgCd()) && eventMessageVO.getMsgCd() != null){
             msgCd = eventMessageVO.getMsgCd();
 
+            // 수정모드 시, 적용상품 체크 여부에 따른 적용상품 리스트 데이터 삭제
+            if("0".equals(eventMessageVO.getPrintCondiFg())){
+                eventMessageMapper.deleteEventMessageProdAll(eventMessageVO);
+            }
+
         }else{
             msgCd = eventMessageMapper.getCode(eventMessageVO);
             eventMessageVO.setMsgCd(msgCd);
