@@ -28,8 +28,8 @@
                     thph.PROMOTION_NM,
                     thph.MEMO,
                     thph.USE_YN,
-                    CASE WHEN thpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS START_YMD,
-                    CASE WHEN thpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS END_YMD
+                    TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD,
+                    TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
               FROM TB_HQ_PROMO_H thph,
                     TB_HQ_PROMO_CONDI thpc
              WHERE thph.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
@@ -46,7 +46,7 @@
                   AND #{promotionDate} BETWEEN thpc.START_YMD  AND thpc.END_YMD
                </if>
              ORDER
-                BY thph.REG_DT DESC
+                BY thph.PROMOTION_CD DESC
           </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -55,8 +55,8 @@
                       tmph.PROMOTION_NM,
                       tmph.MEMO,
                       tmph.USE_YN,
-                      CASE WHEN tmpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(tmpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS START_YMD,
-                      CASE WHEN tmpc.DATE_YN = 'Y' THEN TO_CHAR(TO_DATE(tmpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS END_YMD
+                      TO_CHAR(TO_DATE(tmpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD,
+                      TO_CHAR(TO_DATE(tmpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
                 FROM TB_MS_PROMO_H tmph,
                       TB_MS_PROMO_CONDI tmpc
                WHERE tmph.STORE_CD = tmpc.STORE_CD
@@ -73,7 +73,7 @@
                   AND #{promotionDate} BETWEEN tmpc.START_YMD  AND tmpc.END_YMD
               </if>
               ORDER
-                 BY tmph.REG_DT DESC
+                 BY tmph.PROMOTION_CD DESC
           </when>
         </choose>
     </select>

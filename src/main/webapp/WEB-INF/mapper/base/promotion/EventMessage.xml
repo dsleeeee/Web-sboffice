@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EventMessage.xml
+    이벤트문구출력관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.05.03     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.promotion.eventMessage.service.impl.EventMessageMapper">
+
+    <!-- 이벤트문구출력관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_EVENT_MSG_MAIN, TB_MS_EVENT_MSG_MAIN
+        PARAM    : eventMessageVO
+        COMMENTS : 이벤트문구출력관리 리스트를 조회한다.
+    -->
+    <select id="getEventMessageList" parameterType="eventMessageVO" resultType="DefaultMap">
+        /* USE : EventMessageMapper.getEventMessageList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT themm.HQ_OFFICE_CD,
+                        themm.MSG_CD,
+                        TO_CHAR(TO_DATE(themm.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD,
+                        TO_CHAR(TO_DATE(themm.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD,
+                        themm.TICKET_PRINT_YN,
+                        themm.RE_PRINT_YN,
+                        themm.PRINT_CONDI_FG,
+                        themm.PRINT_MESSAGE1,
+                        themm.PROMOTION_CD,
+                        themm.USE_YN
+                  FROM TB_HQ_EVENT_MSG_MAIN themm
+                 WHERE themm.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='printMessage1 != null and printMessage1 != ""'>
+                   AND themm.PRINT_MESSAGE1 LIKE '%' || #{printMessage1} || '%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                   AND themm.USE_YN = #{useYn}
+                </if>
+                <if test='eventMessageDate != null and eventMessageDate != ""'>
+                    AND themm.START_YMD != '00010101'
+                    AND themm.END_YMD != '99991231'
+                   AND #{eventMessageDate} BETWEEN themm.START_YMD AND themm.END_YMD
+                </if>
+                <if test='ticketPrintYn != null and ticketPrintYn != ""'>
+                   AND themm.TICKET_PRINT_YN = #{ticketPrintYn}
+                </if>
+                <if test='rePrintYn != null and rePrintYn != ""'>
+                   AND themm.RE_PRINT_YN = #{rePrintYn}
+                </if>
+                <if test='printCondiFg != null and printCondiFg != ""'>
+                   AND themm.PRINT_CONDI_FG = #{printCondiFg}
+                </if>
+                 ORDER
+                    BY themm.MSG_CD DESC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmemm.STORE_CD,
+                        tmemm.MSG_CD,
+                        TO_CHAR(TO_DATE(tmemm.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD,
+                        TO_CHAR(TO_DATE(tmemm.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD,
+                        tmemm.TICKET_PRINT_YN,
+                        tmemm.RE_PRINT_YN,
+                        tmemm.PRINT_CONDI_FG,
+                        tmemm.PRINT_MESSAGE1,
+                        tmemm.PROMOTION_CD,
+                        tmemm.USE_YN,
+                        tmemm.REG_FG
+                  FROM TB_MS_EVENT_MSG_MAIN tmemm
+                 WHERE tmemm.STORE_CD = #{storeCd}
+                <if test='printMessage1 != null and printMessage1 != ""'>
+                    AND tmemm.PRINT_MESSAGE1 LIKE '%' || #{printMessage1} || '%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND tmemm.USE_YN = #{useYn}
+                </if>
+                <if test='eventMessageDate != null and eventMessageDate != ""'>
+                    AND tmemm.START_YMD != '00010101'
+                    AND tmemm.END_YMD != '99991231'
+                    AND #{eventMessageDate} BETWEEN tmemm.START_YMD AND tmemm.END_YMD
+                </if>
+                <if test='ticketPrintYn != null and ticketPrintYn != ""'>
+                    AND tmemm.TICKET_PRINT_YN = #{ticketPrintYn}
+                </if>
+                <if test='rePrintYn != null and rePrintYn != ""'>
+                    AND tmemm.RE_PRINT_YN = #{rePrintYn}
+                </if>
+                <if test='printCondiFg != null and printCondiFg != ""'>
+                    AND tmemm.PRINT_CONDI_FG = #{printCondiFg}
+                </if>
+                ORDER
+                   BY tmemm.MSG_CD DESC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 이벤트문구출력물 코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_EVENT_MSG_MAIN, TB_MS_EVENT_MSG_MAIN
+        PARAM    : eventMessageVO
+        COMMENTS : 이벤트문구 생성 시, 이벤트문구출력물 코드를 생성한다.
+    -->
+    <select id="getCode" parameterType="eventMessageVO" resultType="String">
+        /* USE : EventMessageMapper.getCode */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(MSG_CD), '0') + 1, 5, '0')
+                FROM TB_HQ_EVENT_MSG_MAIN
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(MSG_CD), '80000') + 1, 5, '0')
+                FROM TB_MS_EVENT_MSG_MAIN
+                WHERE STORE_CD = #{storeCd}
+                AND MSG_CD > 80000
+            </when>
+        </choose>
+    </select>
+
+    <!-- 이벤트문구출력물 저장 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_MAIN, TB_MS_EVENT_MSG_MAIN
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력물 정보가 있으면 update, 없으면 insert
+    -->
+    <update id="saveEventMessage" parameterType="eventMessageVO">
+        /* USE : EventMessageMapper.saveEventMessage */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_EVENT_MSG_MAIN A
+                USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                                 #{msgCd} AS MSG_CD,
+                                 #{startYmd} AS START_YMD,
+                                 #{endYmd} AS END_YMD,
+                                 #{ticketPrintYn} AS TICKET_PRINT_YN,
+                                 #{rePrintYn} AS RE_PRINT_YN,
+                                 #{printCondiFg} AS PRINT_CONDI_FG,
+                                 #{printMessage1} AS PRINT_MESSAGE1,
+                                 <!-- #{promotionCd} AS PROMOTION_CD, -->
+                                 #{useYn} AS USE_YN,
+                                 #{regDt} AS REG_DT,
+                                 #{regId} AS REG_ID,
+                                 #{modDt} AS MOD_DT,
+                                 #{modId} AS MOD_ID
+                           FROM DUAL
+                ) B
+                ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.MSG_CD = B.MSG_CD)
+                WHEN MATCHED THEN
+                UPDATE
+                   SET A.START_YMD = B.START_YMD,
+                        A.END_YMD = B.END_YMD,
+                        A.TICKET_PRINT_YN = B.TICKET_PRINT_YN,
+                        A.RE_PRINT_YN = B.RE_PRINT_YN,
+                        A.PRINT_CONDI_FG = B.PRINT_CONDI_FG,
+                        A.PRINT_MESSAGE1 = B.PRINT_MESSAGE1,
+                        <!-- A.PROMOTION_CD = B.PROMOTION_CD, -->
+                        A.USE_YN = B.USE_YN,
+                        A.MOD_ID = B.MOD_ID,
+                        A.MOD_DT = B.MOD_DT
+                WHEN NOT MATCHED THEN
+                INSERT
+                (       A.HQ_OFFICE_CD,
+                        A.MSG_CD,
+                        A.START_YMD,
+                        A.END_YMD,
+                        A.TICKET_PRINT_YN,
+                        A.RE_PRINT_YN,
+                        A.PRINT_CONDI_FG,
+                        A.PRINT_MESSAGE1,
+                        <!-- A.PROMOTION_CD, -->
+                        A.USE_YN,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID
+                )
+                VALUES
+                (       B.HQ_OFFICE_CD,
+                        B.MSG_CD,
+                        B.START_YMD,
+                        B.END_YMD,
+                        B.TICKET_PRINT_YN,
+                        B.RE_PRINT_YN,
+                        B.PRINT_CONDI_FG,
+                        B.PRINT_MESSAGE1,
+                        <!-- B.PROMOTION_CD, -->
+                        B.USE_YN,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_EVENT_MSG_MAIN A
+                USING ( SELECT #{storeCd} AS STORE_CD,
+                                 #{msgCd} AS MSG_CD,
+                                 #{startYmd} AS START_YMD,
+                                 #{endYmd} AS END_YMD,
+                                 #{ticketPrintYn} AS TICKET_PRINT_YN,
+                                 #{rePrintYn} AS RE_PRINT_YN,
+                                 #{printCondiFg} AS PRINT_CONDI_FG,
+                                 #{printMessage1} AS PRINT_MESSAGE1,
+                                 <!-- #{promotionCd} AS PROMOTION_CD, -->
+                                 #{useYn} AS USE_YN,
+                                 #{regFg} AS REG_FG,
+                                 #{regDt} AS REG_DT,
+                                 #{regId} AS REG_ID,
+                                 #{modDt} AS MOD_DT,
+                                 #{modId} AS MOD_ID
+                           FROM DUAL
+                ) B
+                ON (A.STORE_CD = B.STORE_CD AND A.MSG_CD = B.MSG_CD)
+                WHEN MATCHED THEN
+                UPDATE
+                   SET A.START_YMD = B.START_YMD,
+                        A.END_YMD = B.END_YMD,
+                        A.TICKET_PRINT_YN = B.TICKET_PRINT_YN,
+                        A.RE_PRINT_YN = B.RE_PRINT_YN,
+                        A.PRINT_CONDI_FG = B.PRINT_CONDI_FG,
+                        A.PRINT_MESSAGE1 = B.PRINT_MESSAGE1,
+                        <!-- A.PROMOTION_CD = B.PROMOTION_CD, -->
+                        A.USE_YN = B.USE_YN,
+                        A.REG_FG = B.REG_FG,
+                        A.MOD_ID = B.MOD_ID,
+                        A.MOD_DT = B.MOD_DT
+                WHEN NOT MATCHED THEN
+                INSERT
+                (       A.STORE_CD,
+                        A.MSG_CD,
+                        A.START_YMD,
+                        A.END_YMD,
+                        A.TICKET_PRINT_YN,
+                        A.RE_PRINT_YN,
+                        A.PRINT_CONDI_FG,
+                        A.PRINT_MESSAGE1,
+                        <!-- A.PROMOTION_CD, -->
+                        A.USE_YN,
+                        A.REG_FG,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID
+                )
+                VALUES
+                (       B.STORE_CD,
+                        B.MSG_CD,
+                        B.START_YMD,
+                        B.END_YMD,
+                        B.TICKET_PRINT_YN,
+                        B.RE_PRINT_YN,
+                        B.PRINT_CONDI_FG,
+                        B.PRINT_MESSAGE1,
+                        <!-- B.PROMOTION_CD, -->
+                        B.USE_YN,
+                        B.REG_FG,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID
+                )
+            </when>
+        </choose>
+    </update>
+
+    <!-- 이벤트문구출력물 적용상품 전체 삭제 -->
+    <!--
+        TABLE    : TB_HQ_EVENT_MSG_PROD, TB_MS_EVENT_MSG_PROD
+        PARAM    : eventMessageVO
+        COMMENTS : 이벤트문구출력물 출력조건에서 '무조건출력' 선택 시, 등록되어 있던 적용상품을 모두 삭제한다.
+    -->
+    <delete id="deleteEventMessageProdAll" parameterType="eventMessageVO">
+        /* USE : EventMessageMapper.deleteEventMessageProdAll */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                  FROM TB_HQ_EVENT_MSG_PROD
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND MSG_CD = #{msgCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                  FROM TB_MS_EVENT_MSG_PROD
+                 WHERE STORE_CD = #{storeCd}
+                   AND MSG_CD = #{msgCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 이벤트문구출력물 상세 조회 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_MAIN, TB_MS_EVENT_MSG_MAIN
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력물 상세 정보를 조회한다.
+    -->
+    <select id="getEventMessageDetail" parameterType="eventMessageVO" resultType="DefaultMap">
+        /* EventMessageMapper.getEventMessageDetail */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT themm.HQ_OFFICE_CD,
+                        themm.MSG_CD,
+                        themm.START_YMD,
+                        themm.END_YMD,
+                        themm.TICKET_PRINT_YN,
+                        themm.RE_PRINT_YN,
+                        themm.PRINT_CONDI_FG,
+                        themm.PRINT_MESSAGE1,
+                        themm.PROMOTION_CD,
+                        themm.USE_YN
+                  FROM TB_HQ_EVENT_MSG_MAIN themm
+                 WHERE 1=1
+                   AND themm.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND themm.MSG_CD = #{msgCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmemm.STORE_CD,
+                        tmemm.MSG_CD,
+                        tmemm.START_YMD,
+                        tmemm.END_YMD,
+                        tmemm.TICKET_PRINT_YN,
+                        tmemm.RE_PRINT_YN,
+                        tmemm.PRINT_CONDI_FG,
+                        tmemm.PRINT_MESSAGE1,
+                        tmemm.PROMOTION_CD,
+                        tmemm.USE_YN,
+                        tmemm.REG_FG
+                  FROM TB_MS_EVENT_MSG_MAIN tmemm
+                 WHERE 1=1
+                   AND tmemm.STORE_CD = #{storeCd}
+                   AND tmemm.MSG_CD = #{msgCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 이벤트문구출력관리 적용상품 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_PROD, TB_HQ_PRODUCT, TB_MS_EVENT_MSG_PROD, TB_MS_PRODUCT
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력관리 적용상품 리스트를 조회한다.
+    -->
+    <select id="getEventMessageProdList" parameterType="eventMessageVO" resultType="DefaultMap">
+        /* EventMessageMapper.getEventMessageProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT themp.HQ_OFFICE_CD,
+                        themp.MSG_CD,
+                        themp.PROD_CD,
+                        thp.PROD_NM,
+                        themp.SALE_QTY
+                  FROM TB_HQ_EVENT_MSG_PROD themp,
+                        TB_HQ_PRODUCT thp
+                 WHERE themp.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND themp.MSG_CD = #{msgCd}
+                   AND thp.HQ_OFFICE_CD (+)= themp.HQ_OFFICE_CD
+                   AND thp.PROD_CD (+)= themp.PROD_CD
+                ORDER
+                    BY themp.PROD_CD ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmemp.STORE_CD,
+                        tmemp.MSG_CD,
+                        tmemp.PROD_CD,
+                        tmp.PROD_NM,
+                        tmemp.SALE_QTY
+                  FROM TB_MS_EVENT_MSG_PROD tmemp,
+                        TB_MS_PRODUCT tmp
+                 WHERE tmemp.STORE_CD = #{storeCd}
+                   AND tmemp.MSG_CD = #{msgCd}
+                   AND tmp.STORE_CD (+)= tmemp.STORE_CD
+                   AND tmp.PROD_CD (+)= tmemp.PROD_CD
+                ORDER
+                   BY tmemp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 이벤트문구출력관리 적용상품 선택팝업 상품리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_PROD, TB_HQ_PRODUCT, TB_MS_EVENT_MSG_PROD, TB_MS_PRODUCT
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력관리 상품선택팝업에서 상품리스트를 조회한다.
+    -->
+    <select id="getProdList" parameterType="eventMessageVO" resultType="DefaultMap">
+        /* EventMessageMapper.getProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                 SELECT thp.HQ_OFFICE_CD,
+                         thp.PROD_CD,
+                         thp.PROD_NM,
+                         '1' AS SALE_QTY,
+                         thp.USE_YN
+                   FROM TB_HQ_PRODUCT thp
+                  WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN  = #{useYn} --사용여부
+                </if>
+                    AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_EVENT_MSG_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MSG_CD = #{msgCd})
+                  ORDER
+                     BY thp.PROD_CD ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                 SELECT tmp.STORE_CD,
+                         tmp.PROD_CD,
+                         tmp.PROD_NM,
+                         '1' AS SALE_QTY,
+                         tmp.USE_YN
+                   FROM TB_MS_PRODUCT tmp
+                  WHERE tmp.STORE_CD = #{storeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN  = #{useYn} --사용여부
+                </if>
+                    AND tmp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_MS_EVENT_MSG_PROD WHERE STORE_CD = #{storeCd} AND MSG_CD = #{msgCd})
+                  ORDER
+                     BY tmp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 이벤트문구출력관리 적용상품 선택팝업 상품추가 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_PROD, TB_MS_EVENT_MSG_PROD
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력관리 상품선택팝업에서 상품을 추가한다.
+    -->
+    <insert id="insertEventMessageProd" parameterType="eventMessageVO">
+        /* EventMessageMapper.insertEventMessageProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_EVENT_MSG_PROD
+                (
+                    HQ_OFFICE_CD,
+                    MSG_CD,
+                    PROD_CD,
+                    SALE_QTY,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{msgCd},
+                    #{prodCd},
+                    #{saleQty},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_EVENT_MSG_PROD
+                (
+                    STORE_CD,
+                    MSG_CD,
+                    PROD_CD,
+                    SALE_QTY,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{msgCd},
+                    #{prodCd},
+                    #{saleQty},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 이벤트문구출력관리 적용상품 조건수량 수정 -->
+    <!--
+        TABLE    : TB_HQ_EVENT_MSG_PROD, TB_MS_EVENT_MSG_PROD
+        PARAM    : eventMessageVO
+        COMMENTS : 이벤트문구출력관리 적용상품의 조건수량 수정한다.
+    -->
+    <update id="updateEventMessageProd" parameterType="eventMessageVO">
+        /* USE : EventMessageMapper.updateEventMessageProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_EVENT_MSG_PROD
+                   SET SALE_QTY = #{saleQty},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND MSG_CD = #{msgCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_EVENT_MSG_PROD
+                   SET SALE_QTY = #{saleQty},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE STORE_CD = #{storeCd}
+                   AND MSG_CD = #{msgCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 이벤트문구출력관리 적용상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_EVENT_MSG_PROD, TB_MS_EVENT_MSG_PROD
+        PARAM    : eventMessageVO
+        COMMENTS : 이벤트문구출력관리 적용상품을 삭제한다.
+    -->
+    <delete id="deleteEventMessageProd" parameterType="eventMessageVO">
+        /* USE : EventMessageMapper.deleteEventMessageProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                  FROM TB_HQ_EVENT_MSG_PROD
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND MSG_CD = #{msgCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                  FROM TB_MS_EVENT_MSG_PROD
+                 WHERE STORE_CD = #{storeCd}
+                   AND MSG_CD = #{msgCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 이벤트문구출력관리 적용매장 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_STORE, TB_MS_STORE
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력관리 적용매장 리스트를 조회한다.
+    -->
+    <select id="getEventMessageStoreList" parameterType="eventMessageVO" resultType="DefaultMap">
+        /* EventMessageMapper.getEventMessageStoreList */
+        SELECT thems.HQ_OFFICE_CD,
+                thems.MSG_CD,
+                thems.STORE_CD,
+                tms.STORE_NM
+          FROM TB_HQ_EVENT_MSG_STORE thems,
+                TB_MS_STORE tms
+         WHERE thems.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thems.MSG_CD = #{msgCd}
+           AND tms.HQ_OFFICE_CD = thems.HQ_OFFICE_CD
+           AND tms.STORE_CD = thems.STORE_CD
+         ORDER
+            BY thems.STORE_CD ASC
+    </select>
+
+    <!-- 이벤트문구출력관리 적용매장 선택팝업 매장리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_STORE, TB_MS_STORE
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력관리 매장선택팝업에서 매장리스트를 조회한다.
+    -->
+    <select id="getStoreList" parameterType="eventMessageVO" resultType="DefaultMap">
+        /* EventMessageMapper.getStoreList */
+         SELECT tms.HQ_OFFICE_CD,
+                 tms.STORE_CD,
+                 tms.STORE_NM,
+                 tms.SYS_STAT_FG
+           FROM TB_MS_STORE tms
+          WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+            AND tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_EVENT_MSG_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MSG_CD = #{msgCd})
+          ORDER
+             BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 이벤트문구출력관리 적용매장 선택팝업 전매장적용 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_STORE, TB_MS_STORE
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력관리 매장선택팝업에서 전매장을 적용한다.
+    -->
+    <insert id="insertEventMessageStoreAll" parameterType="eventMessageVO">
+        /* EventMessageMapper.insertEventMessageStoreAll */
+        MERGE INTO TB_HQ_EVENT_MSG_STORE A
+             USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+						      #{msgCd} AS MSG_CD,
+						      STORE_CD,
+						      #{regId} AS REG_ID,
+						      #{regDt} AS REG_DT,
+						      #{modId} AS MOD_ID,
+						      #{modDt} AS MOD_DT
+					    FROM TB_MS_STORE
+					   WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    ) B
+                ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.MSG_CD = B.MSG_CD AND A.STORE_CD = B.STORE_CD)
+              WHEN MATCHED THEN
+            UPDATE
+               SET A.MOD_ID = B.MOD_ID,
+                  A.MOD_DT = B.MOD_DT
+             WHEN NOT MATCHED THEN
+            INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.MSG_CD,
+                           A.STORE_CD,
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+            VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.MSG_CD,
+                           B.STORE_CD,
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
+    </insert>
+
+    <!-- 이벤트문구출력관리 적용매장 선택팝업 매장추가 -->
+    <!--
+          TABLE    : TB_HQ_EVENT_MSG_STORE
+          PARAM    : eventMessageVO
+          COMMENTS : 이벤트문구출력관리 매장선택팝업에서 매장을 추가한다.
+    -->
+    <insert id="insertEventMessageStore" parameterType="eventMessageVO">
+        /* EventMessageMapper.insertEventMessageStore */
+        INSERT INTO TB_HQ_EVENT_MSG_STORE
+        (
+            HQ_OFFICE_CD,
+            MSG_CD,
+            STORE_CD,
+            REG_ID,
+            REG_DT,
+            MOD_ID,
+            MOD_DT
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{msgCd},
+            #{storeCd},
+            #{regId},
+            #{regDt},
+            #{modId},
+            #{modDt}
+        )
+    </insert>
+
+    <!-- 이벤트문구출력관리 적용매장 삭제 -->
+    <!--
+        TABLE    : TB_HQ_EVENT_MSG_STORE
+        PARAM    : eventMessageVO
+        COMMENTS : 이벤트문구출력관리 적용매장을 삭제한다.
+    -->
+    <delete id="deleteEventMessageStore" parameterType="eventMessageVO">
+        /* USE : EventMessageMapper.deleteEventMessageStore */
+        DELETE
+          FROM TB_HQ_EVENT_MSG_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND MSG_CD = #{msgCd}
+           AND STORE_CD = #{storeCd}
+    </delete>
+
+</mapper>

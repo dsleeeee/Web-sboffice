@@ -251,6 +251,93 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
         }
 
+        //보안때문에 게시판에서 스크립트 및 액션이벤트 사용하지 못하도록 막음.
+        //내용에 script 또는 on이벤트가 들어있는 경우 저장하지 못함.
+        if(params.content.toLowerCase().indexOf('script') >= 0
+        || params.content.toLowerCase().indexOf('onabort') >= 0
+        || params.content.toLowerCase().indexOf('onactivate') >= 0
+        || params.content.toLowerCase().indexOf('onafterprint') >= 0
+        || params.content.toLowerCase().indexOf('onafterupdate') >= 0
+        || params.content.toLowerCase().indexOf('onbeforeactivate') >= 0
+        || params.content.toLowerCase().indexOf('onbeforecopy') >= 0
+        || params.content.toLowerCase().indexOf('onbeforecut') >= 0
+        || params.content.toLowerCase().indexOf('onbeforedeactivate') >= 0
+        || params.content.toLowerCase().indexOf('onbeforeeditfocus') >= 0
+        || params.content.toLowerCase().indexOf('onbeforepaste') >= 0
+        || params.content.toLowerCase().indexOf('onbeforeprint') >= 0
+        || params.content.toLowerCase().indexOf('onbeforeunload') >= 0
+        || params.content.toLowerCase().indexOf('onbeforeupdate') >= 0
+        || params.content.toLowerCase().indexOf('onblur') >= 0
+        || params.content.toLowerCase().indexOf('onbounce') >= 0
+        || params.content.toLowerCase().indexOf('oncellchange') >= 0
+        || params.content.toLowerCase().indexOf('onchange') >= 0
+        || params.content.toLowerCase().indexOf('onclick') >= 0
+        || params.content.toLowerCase().indexOf('oncontextmenu') >= 0
+        || params.content.toLowerCase().indexOf('oncontrolselect') >= 0
+        || params.content.toLowerCase().indexOf('oncopy') >= 0
+        || params.content.toLowerCase().indexOf('oncut') >= 0
+        || params.content.toLowerCase().indexOf('ondataavailable') >= 0
+        || params.content.toLowerCase().indexOf('ondatasetchanged') >= 0
+        || params.content.toLowerCase().indexOf('ondatasetcomplete') >= 0
+        || params.content.toLowerCase().indexOf('ondblclick') >= 0
+        || params.content.toLowerCase().indexOf('ondeactivate') >= 0
+        || params.content.toLowerCase().indexOf('ondrag') >= 0
+        || params.content.toLowerCase().indexOf('ondragend') >= 0
+        || params.content.toLowerCase().indexOf('ondragenter') >= 0
+        || params.content.toLowerCase().indexOf('ondragleave') >= 0
+        || params.content.toLowerCase().indexOf('ondragover') >= 0
+        || params.content.toLowerCase().indexOf('ondragstart') >= 0
+        || params.content.toLowerCase().indexOf('ondrop') >= 0
+        || params.content.toLowerCase().indexOf('onerror') >= 0
+        || params.content.toLowerCase().indexOf('onerrorupdate') >= 0
+        || params.content.toLowerCase().indexOf('onfilterchange') >= 0
+        || params.content.toLowerCase().indexOf('onfinish') >= 0
+        || params.content.toLowerCase().indexOf('onfocus') >= 0
+        || params.content.toLowerCase().indexOf('onfocusin') >= 0
+        || params.content.toLowerCase().indexOf('onfocusout') >= 0
+        || params.content.toLowerCase().indexOf('onhelp') >= 0
+        || params.content.toLowerCase().indexOf('onkeydown') >= 0
+        || params.content.toLowerCase().indexOf('onkeypress') >= 0
+        || params.content.toLowerCase().indexOf('onkeyup') >= 0
+        || params.content.toLowerCase().indexOf('onlayoutcomplete') >= 0
+        || params.content.toLowerCase().indexOf('onload') >= 0
+        || params.content.toLowerCase().indexOf('onlosecapture') >= 0
+        || params.content.toLowerCase().indexOf('onmousedown') >= 0
+        || params.content.toLowerCase().indexOf('onmouseenter') >= 0
+        || params.content.toLowerCase().indexOf('onmouseleave') >= 0
+        || params.content.toLowerCase().indexOf('onmousemove') >= 0
+        || params.content.toLowerCase().indexOf('onmouseout') >= 0
+        || params.content.toLowerCase().indexOf('onmouseover') >= 0
+        || params.content.toLowerCase().indexOf('onmouseup') >= 0
+        || params.content.toLowerCase().indexOf('onmousewheel') >= 0
+        || params.content.toLowerCase().indexOf('onmove') >= 0
+        || params.content.toLowerCase().indexOf('onmoveend') >= 0
+        || params.content.toLowerCase().indexOf('onmovestart') >= 0
+        || params.content.toLowerCase().indexOf('onpaste') >= 0
+        || params.content.toLowerCase().indexOf('onpropertychange') >= 0
+        || params.content.toLowerCase().indexOf('onreadystatechange') >= 0
+        || params.content.toLowerCase().indexOf('onreset') >= 0
+        || params.content.toLowerCase().indexOf('onresize') >= 0
+        || params.content.toLowerCase().indexOf('onresizeend') >= 0
+        || params.content.toLowerCase().indexOf('onresizestart') >= 0
+        || params.content.toLowerCase().indexOf('onrowenter') >= 0
+        || params.content.toLowerCase().indexOf('onrowexit') >= 0
+        || params.content.toLowerCase().indexOf('onrowsdelete') >= 0
+        || params.content.toLowerCase().indexOf('onrowsinserted') >= 0
+        || params.content.toLowerCase().indexOf('onscroll') >= 0
+        || params.content.toLowerCase().indexOf('onselect') >= 0
+        || params.content.toLowerCase().indexOf('onselectionchange') >= 0
+        || params.content.toLowerCase().indexOf('onselectstart') >= 0
+        || params.content.toLowerCase().indexOf('onstart') >= 0
+        || params.content.toLowerCase().indexOf('onstop') >= 0
+        || params.content.toLowerCase().indexOf('onsubmit') >= 0
+        || params.content.toLowerCase().indexOf('onunload') >= 0
+        )
+        {
+            $scope._popMsg(messages["boardInfo.scriptChk.msg"]);
+            return false;
+        }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         // $scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
         $.ajax({

@@ -19,6 +19,7 @@ import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static kr.co.common.utils.DateUtil.currentDateString;
+import kr.co.common.utils.CmmUtil;
 
 /**
  * @Class Name : BoardServiceImpl.java
@@ -116,6 +117,10 @@ public class BoardServiceImpl implements BoardService {
         boardVO.setModId(boardVO.getUserId());
         boardVO.setRegDt(currentDt);
         boardVO.setRegId(boardVO.getUserId());
+        if (boardVO.getStatus() == GridDataFg.INSERT || boardVO.getStatus() == GridDataFg.UPDATE)
+        {
+            boardVO.setContent(CmmUtil.removeInputValueHtml(boardVO.getContent()));
+        }
 
         if (boardVO.getStatus() == GridDataFg.INSERT) {
             // 게시판 게시일련번호 조회(자동채번)
@@ -281,7 +286,7 @@ public class BoardServiceImpl implements BoardService {
                     }
                 }
             }
-            
+
         }catch(Exception e){
 
             isSuccess = false;

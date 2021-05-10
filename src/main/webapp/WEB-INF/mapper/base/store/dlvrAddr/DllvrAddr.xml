@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DllvrAddr.xml
+    배달권역관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.05.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.dlvrAddr.service.impl.DlvrAddrMapper">
+
+    <!-- 등록 배달권역 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE
+    -->
+    <select id="dlvrAddrList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
+        /* DlvrAddrMapper.dlvrAddrList */
+        SELECT NMCODE_CD, NMCODE_NM
+          FROM TB_MS_STORE_NMCODE
+         WHERE NMCODE_GRP_CD = '203'
+           AND STORE_CD = #{storeCd}
+           AND USE_YN = 'Y'
+         ORDER BY NMCODE_CD
+    </select>
+
+    <!-- 미등록 배달권역 -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_MS_STORE_NMCODE
+    -->
+    <select id="dlvrAddrCodeList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
+        /* DlvrAddrMapper.dlvrAddrCodeList */
+        SELECT NMCODE_CD, NMCODE_NM
+          FROM TB_CM_NMCODE
+         WHERE NMCODE_GRP_CD = '203'
+           AND NMCODE_CD NOT IN (SELECT NMCODE_CD
+                                   FROM TB_MS_STORE_NMCODE
+                                  WHERE NMCODE_GRP_CD = '203'
+                                    AND STORE_CD = #{storeCd}
+                                    AND USE_YN = 'Y'
+                                )
+        ORDER BY NMCODE_CD
+    </select>
+
+    <!-- 배달권역 등록 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE
+    -->
+    <insert id="addDlvrAddr" parameterType="dlvrAddrVO">
+        MERGE INTO TB_MS_STORE_NMCODE tmsn
+        USING DUAL
+        ON (
+                tmsn.STORE_CD = #{storeCd}
+                AND tmsn.NMCODE_GRP_CD = '203'
+                AND tmsn.NMCODE_CD = #{nmcodeCd}
+            )
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+            STORE_CD,
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            PARENT_CD,
+            NMCODE_NM,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+            )
+            VALUES
+            (
+            #{storeCd},
+            '203',
+            #{nmcodeCd},
+            '203',
+            #{nmcodeNm},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET USE_YN = 'Y',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+    </insert>
+
+    <!-- 배달권역 등록삭제 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE
+    -->
+    <update id="delDlvrAddr" parameterType="dlvrAddrVO">
+        UPDATE TB_MS_STORE_NMCODE
+           SET USE_YN = 'N',
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND NMCODE_GRP_CD = '203'
+           AND NMCODE_CD = #{nmcodeCd}
+    </update>
+
+</mapper>
