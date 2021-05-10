@@ -89,14 +89,14 @@ public class MobileTodaySaleController {
      * @author  김설아
      * @since   2021. 04. 02.
      */
-    @RequestMapping(value = "/todaySale/getMobileTodaySaleList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/todaySale/getMobileTodaySaleTotalList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getMobileTodaySaleList(MobileTodaySaleVO mobileTodaySaleVO, HttpServletRequest request,
+    public Result getMobileTodaySaleTotalList(MobileTodaySaleVO mobileTodaySaleVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        DefaultMap<String> result = mobileTodaySaleService.getMobileTodaySaleList(mobileTodaySaleVO, sessionInfoVO);
+        DefaultMap<String> result = mobileTodaySaleService.getMobileTodaySaleTotalList(mobileTodaySaleVO, sessionInfoVO);
 
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
         resultMap.put("result", result);

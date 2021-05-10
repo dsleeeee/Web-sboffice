@@ -76,15 +76,15 @@ app.controller('mobileProdSaleCtrl', ['$scope', '$http', '$timeout', function ($
         var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
         var diffDay = (endDt.getTime() - startDt.getTime()) / (1000 * 60 * 60 * 24);
 
-        //  시작일자가 종료일자보다 빠른지 확인
+        // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){
-            $scope._popMsg(messages['mobile.ProdSale.dateChk.error']);
+            $scope._popMsg(messages['mobile.cmm.dateChk.error']);
             return false;
         }
 
-        //  조회일자 최대 한달(31일) 제한
+        // 조회일자 최대 한달(31일) 제한
         if (diffDay > 31) {
-            $scope._popMsg(messages['mobile.ProdSale.dateOver.error']);
+            $scope._popMsg(messages['mobile.cmm.dateOver.1month.error']);
             return false;
         }
 

@@ -23,7 +23,7 @@ import java.util.List;
 public interface MobileTodaySaleService {
 
     /** 당일매출종합 - 조회 */
-    DefaultMap<String> getMobileTodaySaleList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO);
+    DefaultMap<String> getMobileTodaySaleTotalList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO);
 
     /** 결제수단 조회 */
     List<DefaultMap<Object>> getMobileTodaySalePayList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO);

@@ -510,4 +510,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=20210510.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=202105.01" charset="utf-8"></script>

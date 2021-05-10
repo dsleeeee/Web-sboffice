@@ -27,7 +27,7 @@ import java.util.List;
 public interface MobileTodaySaleMapper {
 
     /** 당일매출종합 - 조회 */
-    DefaultMap<String> getMobileTodaySaleList(MobileTodaySaleVO mobileTodaySaleVO);
+    DefaultMap<String> getMobileTodaySaleTotalList(MobileTodaySaleVO mobileTodaySaleVO);
 
     /** 결제수단 조회 */
     List<DefaultMap<Object>> getMobileTodaySalePayList(MobileTodaySaleVO mobileTodaySaleVO);

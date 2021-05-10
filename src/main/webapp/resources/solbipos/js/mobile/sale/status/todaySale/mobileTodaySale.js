@@ -27,16 +27,16 @@ app.controller('mobileTodaySaleTotalCtrl', ['$scope', '$http', function ($scope,
 
     // <-- 검색 호출 -->
     $scope.$on("mobileTodaySaleTotalCtrl", function(event, data) {
-        $scope.searchMobileTodaySale(data);
+        $scope.searchMobileTodaySaleTotal(data);
         event.preventDefault();
     });
 
-    $scope.searchMobileTodaySale = function(data){
+    $scope.searchMobileTodaySaleTotal = function(data){
         var params = {};
         params.startDate = data.startDate;
         params.srchStoreCd = data.srchStoreCd;
 
-        $scope._postJSONQuery.withOutPopUp( "/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleList.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp( "/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleTotalList.sb", params, function(response){
             var mobileTodaySale = response.data.data.result;
             $scope.mobileTodaySale = mobileTodaySale;
 
@@ -116,21 +116,13 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', function ($scope, $htt
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySalePayList.sb", params, function() {
             // 매출종합현황
-            var mobileTodaySaleTotalScope = agrid.getScope('mobileTodaySaleTotalCtrl');
-            mobileTodaySaleTotalScope._broadcast('mobileTodaySaleTotalCtrl', params);
-
+            $scope._broadcast("mobileTodaySaleTotalCtrl", params);
             // 할인내역
-            var mobileTodaySaleDcScope = agrid.getScope('mobileTodaySaleDcCtrl');
-            mobileTodaySaleDcScope._broadcast('mobileTodaySaleDcCtrl', params);
-
+            $scope._broadcast("mobileTodaySaleDcCtrl", params);
             // 내점/배달/포장
-            var mobileTodaySaleDlvrScope = agrid.getScope('mobileTodaySaleDlvrCtrl');
-            mobileTodaySaleDlvrScope._broadcast('mobileTodaySaleDlvrCtrl', params);
-
+            $scope._broadcast("mobileTodaySaleDlvrCtrl", params);
             // 시간대별
-            var mobileTodaySaleTimeScope = agrid.getScope('mobileTodaySaleTimeCtrl');
-            mobileTodaySaleTimeScope._broadcast('mobileTodaySaleTimeCtrl', params);
-
+            $scope._broadcast("mobileTodaySaleTimeCtrl", params);
         }, false);
     };
     // <-- //검색 호출 -->
@@ -218,7 +210,7 @@ app.controller('mobileTodaySaleDlvrCtrl', ['$scope', '$http', function ($scope, 
 app.controller('mobileTodaySaleTimeCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('mobileTodaySaleTimeCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('mobileTodaySaleTimeCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

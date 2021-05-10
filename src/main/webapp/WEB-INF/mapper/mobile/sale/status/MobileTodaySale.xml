@@ -16,8 +16,8 @@
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
         COMMENTS : [매출]헤더, [매출]헤더_결제
     -->
-    <select id="getMobileTodaySaleList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
-        /* MobileTodaySaleMapper.getMobileTodaySaleList */
+    <select id="getMobileTodaySaleTotalList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+        /* MobileTodaySaleMapper.getMobileTodaySaleTotalList */
         SELECT
         HQ_OFFICE_CD,
         SUM(SALE_CNT) AS SALE_CNT,

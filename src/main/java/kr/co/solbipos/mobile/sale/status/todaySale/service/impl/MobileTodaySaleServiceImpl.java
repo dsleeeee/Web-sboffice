@@ -46,7 +46,7 @@ public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
 
     /** 당일매출종합 - 조회 */
     @Override
-    public DefaultMap<String> getMobileTodaySaleList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
+    public DefaultMap<String> getMobileTodaySaleTotalList(MobileTodaySaleVO mobileTodaySaleVO, SessionInfoVO sessionInfoVO) {
 
         mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
@@ -55,7 +55,7 @@ public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
             mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
         }
 
-        return mobileTodaySaleMapper.getMobileTodaySaleList(mobileTodaySaleVO);
+        return mobileTodaySaleMapper.getMobileTodaySaleTotalList(mobileTodaySaleVO);
     }
 
     /** 결제수단 조회 */
