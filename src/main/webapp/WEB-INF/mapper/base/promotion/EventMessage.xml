@@ -145,6 +145,7 @@
                                  #{printCondiFg} AS PRINT_CONDI_FG,
                                  #{printMessage1} AS PRINT_MESSAGE1,
                                  <!-- #{promotionCd} AS PROMOTION_CD, -->
+                                 #{storeSelectExceptFg} AS STORE_SELECT_EXCEPT_FG,
                                  #{useYn} AS USE_YN,
                                  #{regDt} AS REG_DT,
                                  #{regId} AS REG_ID,
@@ -162,6 +163,7 @@
                         A.PRINT_CONDI_FG = B.PRINT_CONDI_FG,
                         A.PRINT_MESSAGE1 = B.PRINT_MESSAGE1,
                         <!-- A.PROMOTION_CD = B.PROMOTION_CD, -->
+                        A.STORE_SELECT_EXCEPT_FG = B.STORE_SELECT_EXCEPT_FG,
                         A.USE_YN = B.USE_YN,
                         A.MOD_ID = B.MOD_ID,
                         A.MOD_DT = B.MOD_DT
@@ -176,6 +178,7 @@
                         A.PRINT_CONDI_FG,
                         A.PRINT_MESSAGE1,
                         <!-- A.PROMOTION_CD, -->
+                        A.STORE_SELECT_EXCEPT_FG,
                         A.USE_YN,
                         A.REG_DT,
                         A.REG_ID,
@@ -192,6 +195,7 @@
                         B.PRINT_CONDI_FG,
                         B.PRINT_MESSAGE1,
                         <!-- B.PROMOTION_CD, -->
+                        B.STORE_SELECT_EXCEPT_FG,
                         B.USE_YN,
                         B.REG_DT,
                         B.REG_ID,
@@ -318,6 +322,7 @@
                         themm.PRINT_CONDI_FG,
                         themm.PRINT_MESSAGE1,
                         themm.PROMOTION_CD,
+                        themm.STORE_SELECT_EXCEPT_FG,
                         themm.USE_YN
                   FROM TB_HQ_EVENT_MSG_MAIN themm
                  WHERE 1=1

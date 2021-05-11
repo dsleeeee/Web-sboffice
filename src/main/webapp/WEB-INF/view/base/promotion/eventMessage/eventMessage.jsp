@@ -276,7 +276,7 @@
                             <%-- 삭제 --%>
                             <button class="btn_skyblue" id="btnProdDel" ng-click="prodDel()"><s:message code='cmm.del' /></button>
                         </div>
-                        <div class="wj-gridWrap" style="height:225px; overflow-x: hidden; overflow-y: hidden;">
+                        <div class="wj-gridWrap" style="height:257px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns="false"
                                     control="flexSelectProdGrid"
@@ -340,6 +340,26 @@
                         </th>
                     </tr>
                     <tr>
+                        <%-- 적용매장의 매장등록구분 --%>
+                        <th><s:message code="eventMessage.storeRegFg" /></th>
+                        <td>
+                            <div class="sb-select w100">
+                                <wj-combo-box
+                                        id="storeSelectExceptFg"
+                                        ng-model="storeSelectExceptFg"
+                                        items-source="_getComboData('storeSelectExceptFg')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="storeSelectExceptFgCombo"
+                                        selected-index-changed="setStoreRegBtn(s)">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td colspan="4" style="border-left: 1px solid #CCCCCC;" ng-controller="selectStoreGridCtrl">
                             <div class="updownSet mt5 mb5" style="font-size: 15px;">
                                 <%-- 매장추가 --%>
@@ -386,7 +406,7 @@
     var hqOfficeCd = "${hqOfficeCd}"
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessage.js?ver=20210503.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessage.js?ver=20210511.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/eventMessage/eventMessageProdReg.jsp">

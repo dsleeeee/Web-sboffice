@@ -65,6 +65,12 @@ var printCondiFgData = [
     {"name":"특정상품 판매시 출력","value":"1"}
 ];
 
+// 매장등록구분
+var storeSelectExceptFgData=[
+    {"name":"선택매장","value":"0"},
+    {"name":"제외매장","value":"1"}
+];
+
 /**
  * 이벤트문구출력관리 그리드 생성
  */
@@ -178,6 +184,7 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
     $scope._setComboData("ticketPrintYn", ticketPrintYnFgData); // 응모권 출력여부
     $scope._setComboData("rePrintYn", rePrintYnFgData); // 재출력여부
     $scope._setComboData("printCondiFg", printCondiFgData); // 출력조건
+    $scope._setComboData("storeSelectExceptFg", storeSelectExceptFgData); // 매장등록구분
 
     // 적용조건 - 적용기간 셋팅
     $scope.isCheckedPeriod = false;
@@ -277,6 +284,14 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
                 $scope.useYnCombo.selectedValue = info.useYn; // 사용여부
                 $("#printMessage1").val(info.printMessage1); // 출력문구
 
+                if(orgnFg === "HQ"){
+                    if(info.storeSelectExceptFg != '' && info.storeSelectExceptFg != null) {
+                        $scope.storeSelectExceptFgCombo.selectedValue = info.storeSelectExceptFg; // 매장등록구분
+                    }else{
+                        $scope.storeSelectExceptFgCombo.selectedIndex = 0;
+                    }
+                }
+
             },
             function (result) {
                 s_alert.pop(result.message);
@@ -304,6 +319,10 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
         params.printCondiFg = $scope.printCondiFgCombo.selectedValue; // 출력조건
         params.useYn = $scope.useYnCombo.selectedValue; // 사용여부
         params.printMessage1 = $("#printMessage1").val(); // 출력문구
+
+        if(orgnFg === "HQ") {
+            params.storeSelectExceptFg = $scope.storeSelectExceptFgCombo.selectedValue; // 매장등록구분
+        }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $.postJSONArray("/base/promotion/eventMessage/save.sb", params, function (result) {
@@ -357,6 +376,8 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
         $scope.printCondiFgCombo.selectedIndex = 0; // 출력조건
         $scope.useYnCombo.selectedIndex = 0; // 사용여부
         $("#printMessage1").val(""); // 출력문구
+
+        $scope.storeSelectExceptFgCombo.selectedIndex = 0; // 매장등록구분
     };
 
     // 적용조건 - 적용기간 입력 사용/미사용 체크박스
@@ -377,6 +398,15 @@ app.controller('eventMessageRegCtrl', ['$scope', '$http','$timeout', function ($
                 $scope._pageView('selectProdGridCtrl', 1);
                 $("#tblEventMessageProd").css("display", "");
             }
+        }
+    };
+
+    // 적용매장 - 매장등록구분 선택에 따른 버튼명 변경
+    $scope.setStoreRegBtn = function(s){
+        if(s.selectedValue === "0"){
+            $("#btnStoreAdd").text(messages["promotion.storeAdd"]);
+        }else{
+            $("#btnStoreAdd").text(messages["promotion.exceptStoreAdd"]);
         }
     };
 }]);

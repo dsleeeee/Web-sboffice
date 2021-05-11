@@ -66,6 +66,9 @@ public class EventMessageVO extends PageVO {
     private String sysStatFg;
     /** 이벤트문구 등록구분 - H:본사 S;매장 */
     private String regFg;
+    /** 매장등록구분 */
+    private String storeSelectExceptFg;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -217,5 +220,13 @@ public class EventMessageVO extends PageVO {
 
     public void setRegFg(String regFg) {
         this.regFg = regFg;
+    }
+
+    public String getStoreSelectExceptFg() {
+        return storeSelectExceptFg;
+    }
+
+    public void setStoreSelectExceptFg(String storeSelectExceptFg) {
+        this.storeSelectExceptFg = storeSelectExceptFg;
     }
 }
