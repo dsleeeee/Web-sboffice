@@ -88,8 +88,7 @@ public class DclzManageServiceImpl implements DclzManageService {
         // 기본값 세팅
         dclzManageVO.setStoreCd(sessionInfoVO.getStoreCd());
         dclzManageVO.setPosNo("01"); // 기본 포스 번호 01 세팅 서효원 과장
-        dclzManageVO.setWorkTime(calShift(dclzManageVO.getEmpInDt(), dclzManageVO.getEmpOutDt())); // 출근일시 퇴근일시로 근무시간을 계산
-        dclzManageVO.setInFg(DclzInFg.WEB);
+        dclzManageVO.setInFg("WEB");
         dclzManageVO.setRegDt(dt);
         dclzManageVO.setModDt(dt);
         dclzManageVO.setRegId(sessionInfoVO.getUserId());
@@ -99,7 +98,7 @@ public class DclzManageServiceImpl implements DclzManageService {
         int check = dclzManageMapper.selectWorkCheck(dclzManageVO);
 
         if (check > 0) {
-            String arg[] = {dclzManageVO.getEmpInDate()};
+            String arg[] = {dclzManageVO.getSaleDate()};
             // 해당 사원의 {0}일의 근태가 존재합니다.
             String msg = messageService.get("dclzManage.empty.emp", arg);
             throw new JsonException(Status.SERVER_ERROR, msg);
@@ -119,7 +118,6 @@ public class DclzManageServiceImpl implements DclzManageService {
         String dt = currentDateTimeString();
 
         // 기본값 세팅
-        dclzManageVO.setWorkTime(calShift(dclzManageVO.getEmpInDt(), dclzManageVO.getEmpOutDt())); // 출근일시 퇴근일시로 근무시간을 계산
         dclzManageVO.setModDt(dt);
         dclzManageVO.setModId(sessionInfoVO.getUserId());
 
@@ -127,7 +125,7 @@ public class DclzManageServiceImpl implements DclzManageService {
         int check = dclzManageMapper.selectWorkCheck(dclzManageVO);
 
         if (check == 0) {
-            String arg[] = {dclzManageVO.getEmpInDate()};
+            String arg[] = {dclzManageVO.getSaleDate()};
             // 해당 사원의 {0}일의 근태가 존재하지 않습니다.
             String msg = messageService.get("dclzManage.empty.dclz", arg);
             throw new JsonException(Status.SERVER_ERROR, msg);

@@ -38,14 +38,14 @@
                     <tr>
                         <th><s:message code="dclzManage.empin" /></th>
                         <td>
-                            <label id="lblEmpInDt"></label>
+                            <label id="lblCommuteInDt"></label>
                         </td>
                     </tr>
                     <%-- 퇴근일시 --%>
                     <tr>
                         <th><s:message code="dclzManage.empout" /></th>
                         <td>
-                            <label id="lblEmpOutDt"></label>
+                            <label id="lblCommuteOutDt"></label>
                         </td>
                     </tr>
                     <%-- 비고 --%>
@@ -68,7 +68,7 @@
             <%-- hidden value 영역 --%>
             <input type="hidden" id="hdStoreCd" />
             <input type="hidden" id="hdEmpNo" />
-            <input type="hidden" id="hdEmpInDate" />
+            <input type="hidden" id="hdSaleDate" />
             <input type="hidden" id="hdInFg" />
         </div>
     </div>
@@ -77,4 +77,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzDetail.js?ver=20210216.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzDetail.js?ver=20210216.05" charset="utf-8"></script>

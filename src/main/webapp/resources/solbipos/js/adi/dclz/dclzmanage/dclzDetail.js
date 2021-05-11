@@ -34,7 +34,7 @@ app.controller('dclzDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.storeCd = data.storeCd;
         params.empNo = data.empNo;
-        params.empInDate = data.empInDate;
+        params.saleDate = data.saleDate;
         params.inFg = data.inFg;
 
         $scope._postJSONQuery.withOutPopUp( "/adi/dclz/dclzmanage/dclzmanage/detail.sb", params, function(response){
@@ -45,25 +45,25 @@ app.controller('dclzDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#lblEmpNm").text(result.empNm); // 사원명
 
             // 출근일시
-            var vEmpInDt = getFormatDate((result.empInDt).substr(0, 8)) + " " +
-                            (result.empInDt).substr(8, 2) + ":" +
-                            (result.empInDt).substr(10, 2) + ":" +
-                            (result.empInDt).substr(12, 2);
-            $("#lblEmpInDt").text(vEmpInDt);
+            var vCommuteInDt = getFormatDate((result.commuteInDt).substr(0, 8)) + " " +
+                            (result.commuteInDt).substr(8, 2) + ":" +
+                            (result.commuteInDt).substr(10, 2) + ":" +
+                            (result.commuteInDt).substr(12, 2);
+            $("#lblCommuteInDt").text(vCommuteInDt);
 
             // 퇴근일시
-            var vEmpOutDt = getFormatDate((result.empOutDt).substr(0, 8)) + " " +
-                (result.empOutDt).substr(8, 2) + ":" +
-                (result.empOutDt).substr(10, 2) + ":" +
-                (result.empOutDt).substr(12, 2);
-            $("#lblEmpOutDt").text(vEmpOutDt);
+            var vCommuteOutDt = getFormatDate((result.commuteOutDt).substr(0, 8)) + " " +
+                (result.commuteOutDt).substr(8, 2) + ":" +
+                (result.commuteOutDt).substr(10, 2) + ":" +
+                (result.commuteOutDt).substr(12, 2);
+            $("#lblCommuteOutDt").text(vCommuteOutDt);
 
             $("#lblRemark").text(result.remark); // 비고
 
             // 필요한 키값 hidden에 가지고 있기(수정, 삭제시 사용)
             $("#hdStoreCd").val(result.storeCd);
             $("#hdEmpNo").val(result.empNo);
-            $("#hdEmpInDate").val(result.empInDate);
+            $("#hdSaleDate").val(result.saleDate);
             $("#hdInFg").val(result.inFg);
 
         });
@@ -74,7 +74,7 @@ app.controller('dclzDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         var params    = {};
         params.storeCd = $("#hdStoreCd").val();
         params.empNo = $("#hdEmpNo").val();
-        params.empInDate = $("#hdEmpInDate").val();
+        params.saleDate = $("#hdSaleDate").val();
         params.inFg = $("#hdInFg").val();
         $scope.wjDclzRegistLayer.show(true);
         $scope._broadcast('dclzRegistCtrl', params);
