@@ -16,8 +16,8 @@ var app = agrid.getApp();
 // 입력구분 VALUE
 var inFg = [
     {"name":"전체","value":""},
-    {"name":"POS","value":"010"},
-    {"name":"WEB","value":"020"}
+    {"name":"POS","value":"POS"},
+    {"name":"WEB","value":"WEB"}
 ];
 
 /**
@@ -62,7 +62,7 @@ app.controller('dclzManageCtrl', ['$scope', '$http', '$timeout', function ($scop
                     var params    = {};
                     params.storeCd = selectedRow.storeCd;
                     params.empNo = selectedRow.empNo;
-                    params.empInDate = selectedRow.empInDate;
+                    params.saleDate = selectedRow.saleDate;
                     params.inFg = selectedRow.inFg;
                     $scope.wjDclzDetailLayer.show(true);
                     $scope._broadcast('dclzDetailCtrl', params);

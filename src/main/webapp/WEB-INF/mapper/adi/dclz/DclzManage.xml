@@ -14,7 +14,7 @@
 
   <!-- 근태관리 리스트 조회 -->
   <!--
-      TABLE    : TB_PS_EMPLOYEE_COMMTE, TB_MS_EMPLOYEE, TB_MS_STORE
+      TABLE    : TB_PS_EMPLOYEE_COMMUTE, TB_MS_EMPLOYEE, TB_MS_STORE
       PARAM    : dclzManageVO
       COMMENTS : 근태내역을 조회한다.
   -->
@@ -25,14 +25,21 @@
               TO_CHAR(TO_DATE(tpec.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
               tpec.EMP_NO,
               tme.EMP_NM,
-              tpec.EMP_IN_DATE,
-              TO_CHAR(TO_DATE(tpec.EMP_IN_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') AS EMP_IN_DT,
-              TO_CHAR(TO_DATE(tpec.EMP_OUT_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') AS EMP_OUT_DT,
-              <!-- tpec.WORK_TIME, -->
-              LPAD((TRUNC(tpec.WORK_TIME / 60)), 2,'0') || ':' || LPAD((MOD(tpec.WORK_TIME, 60)), 2, '0') AS WORK_TIME,
+              tpec.SALE_DATE,
+              <![CDATA[
+                  CASE WHEN LENGTH(tpec.COMMUTE_IN_DT) = 14 THEN TO_CHAR(TO_DATE(tpec.COMMUTE_IN_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') ELSE tpec.COMMUTE_IN_DT END AS COMMUTE_IN_DT,
+                  CASE WHEN LENGTH(tpec.COMMUTE_OUT_DT) = 14 THEN TO_CHAR(TO_DATE(tpec.COMMUTE_OUT_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') ELSE tpec.COMMUTE_OUT_DT END AS COMMUTE_OUT_DT,
+                  CASE WHEN LENGTH(tpec.COMMUTE_OUT_DT) = '14' AND LENGTH(tpec.COMMUTE_IN_DT) = '14'
+                       THEN CASE WHEN LENGTH(TRUNC(TRUNC((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')) * 1440) / 60)) < '2'
+                                 THEN LPAD((TRUNC(TRUNC((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')) * 1440) / 60)), 2,'0') || ':' || LPAD((MOD(TRUNC(REPLACE((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')),'-','') * 1440), 60)), 2, '0')
+                                 ELSE TRUNC(TRUNC((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')) * 1440) / 60) || ':' || LPAD((MOD(TRUNC(REPLACE((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')),'-','') * 1440), 60)), 2, '0')
+                            END
+                       ELSE '-'
+                  END AS WORK_TIME,
+              ]]>
               tpec.IN_FG,
               tpec.REMARK
-        FROM TB_PS_EMPLOYEE_COMMTE tpec,
+        FROM TB_PS_EMPLOYEE_COMMUTE tpec,
               TB_MS_EMPLOYEE tme,
               TB_MS_STORE tms
         WHERE 1=1
@@ -62,7 +69,7 @@
           </when>
       </choose>
        ORDER
-          BY tpec.SALE_DATE DESC, tpec.EMP_IN_DT ASC
+          BY tpec.SALE_DATE DESC, tpec.COMMUTE_IN_DT ASC
   </select>
 
   <!-- 매장 사원 조회 -->
@@ -81,22 +88,20 @@
 
   <!-- 근태 등록 -->
   <!--
-      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      TABLE    : TB_PS_EMPLOYEE_COMMUTE
       PARAM    : dclzManageVO
       COMMENTS : 근태정보를 등록한다.
   -->
   <insert id="insertDclzManage" parameterType="dclzManageVO">
     /* DclzManageMapper.insertDclzManage */
-    INSERT INTO TB_PS_EMPLOYEE_COMMTE
+    INSERT INTO TB_PS_EMPLOYEE_COMMUTE
     (
       STORE_CD,
       EMP_NO,
-      EMP_IN_DATE,
       POS_NO,
       SALE_DATE,
-      EMP_IN_DT,
-      EMP_OUT_DT,
-      WORK_TIME,
+      COMMUTE_IN_DT,
+      COMMUTE_OUT_DT,
       IN_FG,
       REMARK,
       REG_DT,
@@ -108,12 +113,10 @@
     (
       #{storeCd},
       #{empNo},
-      #{empInDate},
       #{posNo},
       #{saleDate},
-      #{empInDt},
-      #{empOutDt},
-      #{workTime},
+      #{commuteInDt},
+      #{commuteOutDt},
       #{inFg},
       #{remark},
       #{regDt},
@@ -125,58 +128,57 @@
 
   <!-- 근태 수정 -->
   <!--
-      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      TABLE    : TB_PS_EMPLOYEE_COMMUTE
       PARAM    : dclzManageVO
       COMMENTS : 근태정보를 수정한다.
   -->
   <update id="updateDclzManage" parameterType="dclzManageVO">
     /* DclzManageMapper.updateDclzManage */
-    UPDATE TB_PS_EMPLOYEE_COMMTE
-       SET EMP_IN_DT = #{empInDt},
-            EMP_OUT_DT = #{empOutDt},
-            WORK_TIME = #{workTime},
-            IN_FG = '020', <!-- POS에서 등록해도 WEB에서 수정하면 입력구분 값이 '020'으로 수정된다. -->
-            REMARK = #{remark},
-            MOD_DT = #{modDt},
-            MOD_ID = #{modId}
+    UPDATE TB_PS_EMPLOYEE_COMMUTE
+       SET COMMUTE_IN_DT = #{commuteInDt},
+           COMMUTE_OUT_DT = #{commuteOutDt},
+           IN_FG = 'WEB', <!-- POS에서 등록해도 WEB에서 수정하면 입력구분 값이 '020'으로 수정된다. -->
+           REMARK = #{remark},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
      WHERE STORE_CD = #{storeCd}
        AND EMP_NO = #{empNo}
-       AND EMP_IN_DATE = #{empInDate}
+       AND SALE_DATE = #{saleDate}
   </update>
 
   <!-- 근태 삭제 -->
   <!--
-      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      TABLE    : TB_PS_EMPLOYEE_COMMUTE
       PARAM    : dclzManageVO
       COMMENTS : 근태정보를 삭제한다.
   -->
   <delete id="deleteDclzManage" parameterType="dclzManageVO">
   /* DclzManageMapper.deleteDclzManage */
     DELETE
-      FROM TB_PS_EMPLOYEE_COMMTE
+      FROM TB_PS_EMPLOYEE_COMMUTE
      WHERE STORE_CD = #{storeCd}
        AND EMP_NO = #{empNo}
-       AND EMP_IN_DATE = #{empInDate}
+       AND SALE_DATE = #{saleDate}
   </delete>
 
   <!-- 근태 등록여부 확인 -->
   <!--
-      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      TABLE    : TB_PS_EMPLOYEE_COMMUTE
       PARAM    : dclzManageVO
       COMMENTS : 해당날짜에 등록한 근태내역이 있는지 확인한다.
   -->
   <select id="selectWorkCheck" parameterType="dclzManageVO" resultType="integer">
     /* DclzManageMapper.selectWorkCheck */
     SELECT COUNT(*)
-      FROM TB_PS_EMPLOYEE_COMMTE
+      FROM TB_PS_EMPLOYEE_COMMUTE
      WHERE STORE_CD = #{storeCd}
        AND EMP_NO = #{empNo}
-       AND EMP_IN_DATE = #{empInDate}
+       AND SALE_DATE = #{saleDate}
   </select>
 
   <!-- 근태상세정보 조회 -->
   <!--
-      TABLE    : TB_PS_EMPLOYEE_COMMTE
+      TABLE    : TB_PS_EMPLOYEE_COMMUTE
       PARAM    : dclzManageVO
       COMMENTS : 근태상세정보를 조회한다.
   -->
@@ -186,18 +188,17 @@
             tpec.SALE_DATE,
             tpec.EMP_NO,
             tme.EMP_NM,
-            tpec.EMP_IN_DATE,
-            tpec.EMP_IN_DT,
-            tpec.EMP_OUT_DT,
+            tpec.COMMUTE_IN_DT,
+            tpec.COMMUTE_OUT_DT,
             tpec.IN_FG,
             tpec.REMARK
-      FROM TB_PS_EMPLOYEE_COMMTE tpec,
+      FROM TB_PS_EMPLOYEE_COMMUTE tpec,
             TB_MS_EMPLOYEE tme
      WHERE tpec.STORE_CD = tme.STORE_CD
        AND tpec.EMP_NO = tme.EMP_NO
        AND tpec.STORE_CD = #{storeCd}
        AND tpec.EMP_NO = #{empNo}
-       AND tpec.EMP_IN_DATE = #{empInDate}
+       AND tpec.SALE_DATE = replace(#{saleDate},'-','')
   </select>
 
 </mapper>
