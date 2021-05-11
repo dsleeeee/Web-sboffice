@@ -256,6 +256,8 @@
                                       #{selectProdCnt} AS SELECT_PROD_CNT,
                                       <!-- #{storeUseYn} AS STORE_USE_YN, -->
                                       <!-- #{sideProdFg} AS SIDE_PROD_FG, -->
+                                      #{prodSelectExceptFg} AS PROD_SELECT_EXCEPT_FG,
+                                      #{storeSelectExceptFg} AS STORE_SELECT_EXCEPT_FG,
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
@@ -288,6 +290,8 @@
                            A.SELECT_PROD_CNT = B.SELECT_PROD_CNT,
                            <!-- A.STORE_USE_YN = B.STORE_USE_YN -->
                            <!-- A.SIDE_PROD_FG = B.SIDE_PROD_FG -->
+                           A.PROD_SELECT_EXCEPT_FG = B.PROD_SELECT_EXCEPT_FG,
+                           A.STORE_SELECT_EXCEPT_FG = B.STORE_SELECT_EXCEPT_FG,
                            A.MOD_DT = B.MOD_DT,
                            A.MOD_ID = B.MOD_ID
                      WHEN NOT MATCHED THEN
@@ -317,6 +321,8 @@
                            A.SELECT_PROD_CNT,
                            <!-- A.STORE_USE_YN, -->
                            <!-- A.SIDE_PROD_FG, -->
+                           A.PROD_SELECT_EXCEPT_FG,
+                           A.STORE_SELECT_EXCEPT_FG,
                            A.REG_DT,
                            A.REG_ID,
                            A.MOD_DT,
@@ -348,6 +354,8 @@
                            B.SELECT_PROD_CNT,
                            <!-- B.STORE_USE_YN, -->
                            <!-- B.SIDE_PROD_FG, -->
+                           B.PROD_SELECT_EXCEPT_FG,
+                           B.STORE_SELECT_EXCEPT_FG,
                            B.REG_DT,
                            B.REG_ID,
                            B.MOD_DT,
@@ -382,6 +390,7 @@
                                       #{selectProdCnt} AS SELECT_PROD_CNT,
                                       <!-- #{storeUseYn} AS STORE_USE_YN, -->
                                       <!-- #{sideProdFg} AS SIDE_PROD_FG, -->
+                                      #{prodSelectExceptFg} AS PROD_SELECT_EXCEPT_FG,
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
@@ -414,6 +423,7 @@
                             A.SELECT_PROD_CNT = B.SELECT_PROD_CNT,
                             <!-- A.STORE_USE_YN = B.STORE_USE_YN -->
                             <!-- A.SIDE_PROD_FG = B.SIDE_PROD_FG -->
+                            A.PROD_SELECT_EXCEPT_FG = B.PROD_SELECT_EXCEPT_FG,
                             A.MOD_DT = B.MOD_DT,
                             A.MOD_ID = B.MOD_ID
                       WHEN NOT MATCHED THEN
@@ -443,6 +453,7 @@
                             A.SELECT_PROD_CNT,
                             <!-- A.STORE_USE_YN, -->
                             <!-- A.SIDE_PROD_FG, -->
+                            A.PROD_SELECT_EXCEPT_FG,
                             A.REG_DT,
                             A.REG_ID,
                             A.MOD_DT,
@@ -474,6 +485,7 @@
                             B.SELECT_PROD_CNT,
                             <!-- B.STORE_USE_YN, -->
                             <!-- B.SIDE_PROD_FG, -->
+                            B.PROD_SELECT_EXCEPT_FG,
                             B.REG_DT,
                             B.REG_ID,
                             B.MOD_DT,
@@ -715,6 +727,8 @@
                         thpc.SELECT_PROD_DS,
                         thpc.SELECT_CROSS_FG AS SELECT_PROD_CROSS_FG,
                         thpc.SELECT_PROD_CNT,
+                        thpc.PROD_SELECT_EXCEPT_FG,
+                        thpc.STORE_SELECT_EXCEPT_FG,
                         thpb.TYPE_CD,
                         thpb.APPLY_DC_DS,
                         thpb.DC_SET,
@@ -764,6 +778,7 @@
                         tmpc.SELECT_PROD_DS,
                         tmpc.SELECT_CROSS_FG AS SELECT_PROD_CROSS_FG,
                         tmpc.SELECT_PROD_CNT,
+                        tmpc.PROD_SELECT_EXCEPT_FG,
                         tmpb.TYPE_CD,
                         tmpb.APPLY_DC_DS,
                         tmpb.DC_SET,

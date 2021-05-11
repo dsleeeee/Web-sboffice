@@ -103,6 +103,18 @@ var gubunDsFgData=[
     {"name":"분류","value":"2"}
 ];
 
+// 상품등록구분
+var prodSelectExceptFgData=[
+    {"name":"선택상품","value":"0"},
+    {"name":"제외상품","value":"1"}
+];
+
+// 매장등록구분
+var storeSelectExceptFgData=[
+    {"name":"선택매장","value":"0"},
+    {"name":"제외매장","value":"1"}
+];
+
 /**
  * 프로모션관리 그리드 생성
  */
@@ -209,7 +221,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope._setComboData("memberTargetDs", memberTargetDsFgData); // 적용조건 - 적용대상
     $scope._setComboData("memberClassCd", memberClassCdFgData); // 적용조건 - 적용등급
     $scope._setComboData("selectProdDs", selectProdDsFgData); // 적용상품 - 구매대상
+    $scope._setComboData("prodSelectExceptFg", prodSelectExceptFgData); // 적용상품 - 상품등록구분
     $scope._setComboData("selectProdCrossFg", selectProdCrossFgData); // 적용상품 - 교차선택구분
+    $scope._setComboData("storeSelectExceptFg", storeSelectExceptFgData); // 적용매장 - 매장등록구분
     $scope._setComboData("typeCd", typeCdFgData); // 혜택유형
     $scope._setComboData("applyDcDs", applyDcDsData); // 할인구분
     $scope._setComboData("presentDs", presentDsFgData); // 혜택상품 - 증정구분
@@ -457,6 +471,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 if(info.prodCdYn === "Y"){
                     $("input:checkbox[id='chkProd']").prop("checked", true); // 적용상품
                     $scope.selectProdDsCombo.selectedValue = info.selectProdDs; // 구매대상
+                    $scope.prodSelectExceptFgCombo.selectedValue = info.prodSelectExceptFg; // 상품등록구분
                     $scope.isCheckedProd = true;
                     $("#trProdTop").css("border-bottom", "1px solid #EEEEEE");
                     $("#trSelectProdDs").css("display", "");
@@ -480,6 +495,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 }else{
                     $("input:checkbox[id='chkProd']").prop("checked", false); // 적용상품
                     $scope.selectProdDsCombo.selectedIndex = 0; // 구매대상
+                    $scope.prodSelectExceptFgCombo.selectedIndex = 0; // 상품등록구분
                     $scope.selectProdCrossFgCombo.selectedIndex = 0; // 교차선택구분
                     $("#selectProdCnt").val(""); // 수량
                     $scope.isCheckedProd = false;
@@ -487,6 +503,15 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("#trSelectProdDs").css("display", "none");
                     $("#trSelectProdCrossFg").css("display", "none");
                     $("#trSelectProdGrid").css("display", "none");
+                }
+
+                // ------------ 적용매장 ------------
+                if(orgnFg === "HQ"){
+                    if(info.storeSelectExceptFg != '' && info.storeSelectExceptFg != null) {
+                        $scope.storeSelectExceptFgCombo.selectedValue = info.storeSelectExceptFg; // 매장등록구분
+                    }else{
+                        $scope.storeSelectExceptFgCombo.selectedIndex = 0;
+                    }
                 }
 
                 // ------------ 적용혜택 ------------
@@ -625,6 +650,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             params.prodCdYn = $("#chkProd").is(":checked") === true ? 'Y' : 'N'; // 적용상품
             if ($("#chkProd").is(":checked")) {
                 params.selectProdDs = $scope.selectProdDsCombo.selectedValue; // 적용상품 - 구매대상
+                params.prodSelectExceptFg = $scope.prodSelectExceptFgCombo.selectedValue; // 적용상품 - 상품등록구분
                 if ($scope.selectProdDsCombo.selectedValue === "2") {
                     params.selectProdCrossFg = $scope.selectProdCrossFgCombo.selectedValue; // 적용상품 - 교차선택구분
                     params.selectProdCnt = $("#selectProdCnt").val(); // 적용상품 - 수량
@@ -634,8 +660,14 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 }
             }else{
                 params.selectProdDs = "";
+                params.prodSelectExceptFg = "";
                 params.selectProdCrossFg = "";
                 params.selectProdCnt = "";
+            }
+
+            // ------------ 적용매장 ------------
+            if(orgnFg === "HQ") {
+                params.storeSelectExceptFg = $scope.storeSelectExceptFgCombo.selectedValue; // 매장등록구분
             }
 
             // ------------ 적용혜택 ------------
@@ -803,7 +835,6 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#memo").val(""); // 메모
         $scope.useYnCombo.selectedIndex = 0; // 사용여부
 
-
         // ------------ 적용조건 ------------
         $("input:checkbox[id='chkPeriod']").prop("checked", false); // 적용기간
         promotionStartDate.value = getCurDate('-');
@@ -842,6 +873,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         // ------------ 적용상품 ------------
         $("input:checkbox[id='chkProd']").prop("checked", false); // 적용상품
         $scope.selectProdDsCombo.selectedIndex = 0; // 구매대상
+        $scope.prodSelectExceptFgCombo.selectedIndex = 0; // 상품등록구분
         $scope.selectProdCrossFgCombo.selectedValue = 0; // 교차선택구분
         $("#selectProdCnt").val(""); // 수량
         $scope.isCheckedProd = false;
@@ -849,8 +881,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#trSelectProdDs").css("display", "none");
         $("#trSelectProdCrossFg").css("display", "none");
         $("#trSelectProdGrid").css("display", "none");
-
-
+        
+        // ------------ 적용매장 ------------
+        $scope.storeSelectExceptFgCombo.selectedIndex = 0; // 매장등록구분
+        
         // ------------ 적용혜택 ------------
         $scope.typeCdCombo.selectedIndex = 0; // 혜택유형
         $scope.applyDcDsCombo.selectedIndex = 0; // 할인구분
@@ -944,6 +978,17 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         }
     };
 
+    // 적용상품 - 상품등록구분 선택에 따른 버튼명 변경
+    $scope.setProdRegBtn = function (s){
+        if(s.selectedValue === "0"){
+            $("#btnProdAdd").text(messages["promotion.prodAdd"]);
+            $("#btnClassAdd").text(messages["promotion.classAdd"]);
+        }else{
+            $("#btnProdAdd").text(messages["promotion.exceptProdAdd"]);
+            $("#btnClassAdd").text(messages["promotion.exceptClassAdd"]);
+        }
+    }
+
     // 적용상품 - 교차선택구분 선택에 따른 selectProdCnt 명칭(상품수, 수량) 변경
     $scope.setSelectProdCnt = function (s){
         if(s.selectedValue === "1"){
@@ -951,6 +996,15 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         }else{
             $("#lblSelectProdCnt").text(messages["promotion.selectProdCrossYCnt"]);
         }
+    };
+
+    // 적용매장 - 매장등록구분 선택에 따른 버튼명 변경
+    $scope.setStoreRegBtn = function(s){
+        if(s.selectedValue === "0"){
+            $("#btnStoreAdd").text(messages["promotion.storeAdd"]);
+        }else{
+            $("#btnStoreAdd").text(messages["promotion.exceptStoreAdd"]);
+        }  
     };
     
     // 적용혜택 - 혜택유형 선택에 따른 할인구분, 할인율 disabled 여부
