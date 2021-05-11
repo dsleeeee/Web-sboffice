@@ -85,6 +85,8 @@
     <typeAlias alias="funcStoreVO" type="kr.co.solbipos.pos.confg.func.service.FuncStoreVO"/>
     <typeAlias alias="verInfoVO" type="kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO"/>
     <typeAlias alias="applcStoreVO" type="kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO"/>
+    <typeAlias alias="addrVerInfoVO" type="kr.co.solbipos.pos.confg.verAddr.service.AddrVerInfoVO"/>
+    <typeAlias alias="addrApplcStoreVO" type="kr.co.solbipos.pos.confg.verAddr.service.AddrApplcStoreVO"/>
     <typeAlias alias="verRecvVO" type="kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO"/>
     <typeAlias alias="loginStatusVO" type="kr.co.solbipos.pos.loginstatus.service.LoginStatusVO"/>
     <typeAlias alias="installVO" type="kr.co.solbipos.pos.install.service.InstallVO"/>
