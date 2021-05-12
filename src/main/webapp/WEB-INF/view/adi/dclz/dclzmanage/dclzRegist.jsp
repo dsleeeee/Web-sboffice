@@ -55,17 +55,17 @@
                         <th><s:message code="dclzManage.empin" /></th>
                         <td>
                             <div class="sb-select fl" style="padding-right: 10px;">
-                                <span class="txtIn"><input id="empInDt" class="w120px"></span>
+                                <span class="txtIn"><input id="commuteInDt" class="w120px"></span>
                             </div>
                             <div class="sb-select fl" style="width:65px;">
                                 <wj-combo-box
-                                        id="empInDtHh"
-                                        ng-model="empInDtHh"
-                                        items-source="_getComboData('empInDtHhCombo')"
+                                        id="commuteInDtHh"
+                                        ng-model="commuteInDtHh"
+                                        items-source="_getComboData('commuteInDtHhCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        control="empInDtHhCombo"
+                                        control="commuteInDtHhCombo"
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
@@ -74,13 +74,13 @@
                             </div>
                             <div class="sb-select fl" style="width:65px;">
                                 <wj-combo-box
-                                        id="empInDtMm"
-                                        ng-model="empInDtMm"
-                                        items-source="_getComboData('empInDtMmCombo')"
+                                        id="commuteInDtMm"
+                                        ng-model="commuteInDtMm"
+                                        items-source="_getComboData('commuteInDtMmCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        control="empInDtMmCombo"
+                                        control="commuteInDtMmCombo"
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
@@ -89,13 +89,13 @@
                             </div>
                             <div class="sb-select fl" style="width:65px;">
                                 <wj-combo-box
-                                        id="empInDtSs"
-                                        ng-model="empInDtSs"
-                                        items-source="_getComboData('empInDtSsCombo')"
+                                        id="commuteInDtSs"
+                                        ng-model="commuteInDtSs"
+                                        items-source="_getComboData('commuteInDtSsCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        control="empInDtSsCombo"
+                                        control="commuteInDtSsCombo"
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
@@ -109,17 +109,17 @@
                         <th><s:message code="dclzManage.empout" /></th>
                         <td>
                             <div class="sb-select fl" style="padding-right: 10px;">
-                                <span class="txtIn"><input id="empOutDt" class="w120px"></span>
+                                <span class="txtIn"><input id="commuteOutDt" class="w120px"></span>
                             </div>
                             <div class="sb-select fl" style="width:65px;">
                                 <wj-combo-box
-                                        id="empOutDtHh"
-                                        ng-model="empOutDtHh"
-                                        items-source="_getComboData('empOutDtHhCombo')"
+                                        id="commuteOutDtHh"
+                                        ng-model="commuteOutDtHh"
+                                        items-source="_getComboData('commuteOutDtHhCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        control="empOutDtHhCombo"
+                                        control="commuteOutDtHhCombo"
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
@@ -128,13 +128,13 @@
                             </div>
                             <div class="sb-select fl" style="width:65px;">
                                 <wj-combo-box
-                                        id="empOutDtMm"
-                                        ng-model="empOutDtMm"
-                                        items-source="_getComboData('empOutDtMmCombo')"
+                                        id="commuteOutDtMm"
+                                        ng-model="commuteOutDtMm"
+                                        items-source="_getComboData('commuteOutDtMmCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        control="empOutDtMmCombo"
+                                        control="commuteOutDtMmCombo"
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
@@ -143,13 +143,13 @@
                             </div>
                             <div class="sb-select fl" style="width:65px;">
                                 <wj-combo-box
-                                        id="empOutDtSs"
-                                        ng-model="empOutDtSs"
-                                        items-source="_getComboData('empOutDtSsCombo')"
+                                        id="commuteOutDtSs"
+                                        ng-model="commuteOutDtSs"
+                                        items-source="_getComboData('commuteOutDtSsCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        control="empOutDtSsCombo"
+                                        control="commuteOutDtSsCombo"
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
@@ -176,7 +176,7 @@
             </div>
             <%-- hidden value 영역 --%>
             <input type="hidden" id="hdStoreCd" />
-            <input type="hidden" id="hdEmpInDate" />
+            <input type="hidden" id="hdSaleDate" />
             <input type="hidden" id="hdInFg" />
             <input type="hidden" id="saveType" />
         </div>
@@ -188,4 +188,4 @@
     var empList = ${empList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzRegist.js?ver=20210210.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzRegist.js?ver=20210210.11" charset="utf-8"></script>

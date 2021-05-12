@@ -46,13 +46,13 @@ public class DclzManageVO extends PageVO {
     /** 영업일자 */
     private String saleDate;
     /** 출근일시 */
-    private String empInDt;
+    private String commuteInDt;
     /** 퇴근일시 */
-    private String empOutDt;
+    private String commuteOutDt;
     /** 근무시간 분단위 */
     private Long workTime;
-    /** 입력구분 010:POS, 020:WEB */
-    private DclzInFg inFg;
+    /** 입력구분 POS, WEB */
+    private String inFg;
     /** 입력 구분 이름 */
     private String inFgNm;
     /** 비고 */
@@ -147,29 +147,21 @@ public class DclzManageVO extends PageVO {
     public void setSaleDate(String saleDate) {
         this.saleDate = saleDate;
     }
-    /**
-     * @return the empInDt
-     */
-    public String getEmpInDt() {
-        return empInDt;
+
+    public String getCommuteInDt() {
+        return commuteInDt;
     }
-    /**
-     * @param empInDt the empInDt to set
-     */
-    public void setEmpInDt(String empInDt) {
-        this.empInDt = empInDt;
+
+    public void setCommuteInDt(String commuteInDt) {
+        this.commuteInDt = commuteInDt;
     }
-    /**
-     * @return the empOutDt
-     */
-    public String getEmpOutDt() {
-        return empOutDt;
+
+    public String getCommuteOutDt() {
+        return commuteOutDt;
     }
-    /**
-     * @param empOutDt the empOutDt to set
-     */
-    public void setEmpOutDt(String empOutDt) {
-        this.empOutDt = empOutDt;
+
+    public void setCommuteOutDt(String commuteOutDt) {
+        this.commuteOutDt = commuteOutDt;
     }
     /**
      * @return the workTime
@@ -183,16 +175,12 @@ public class DclzManageVO extends PageVO {
     public void setWorkTime(Long workTime) {
         this.workTime = workTime;
     }
-    /**
-     * @return the inFg
-     */
-    public DclzInFg getInFg() {
+
+    public String getInFg() {
         return inFg;
     }
-    /**
-     * @param inFg the inFg to set
-     */
-    public void setInFg(DclzInFg inFg) {
+
+    public void setInFg(String inFg) {
         this.inFg = inFg;
     }
     /**

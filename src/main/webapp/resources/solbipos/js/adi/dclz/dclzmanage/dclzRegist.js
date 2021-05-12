@@ -54,16 +54,16 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("empNoCombo", empList);
 
     // 출근일시
-    var empInDt = wcombo.genDateVal("#empInDt", gvStartDate);
-    $scope._setComboData("empInDtHhCombo", Hh);
-    $scope._setComboData("empInDtMmCombo", MmSs);
-    $scope._setComboData("empInDtSsCombo", MmSs);
+    var commuteInDt = wcombo.genDateVal("#commuteInDt", gvStartDate);
+    $scope._setComboData("commuteInDtHhCombo", Hh);
+    $scope._setComboData("commuteInDtMmCombo", MmSs);
+    $scope._setComboData("commuteInDtSsCombo", MmSs);
 
     // 퇴근일시
-    var empOutDt = wcombo.genDateVal("#empOutDt", gvStartDate);
-    $scope._setComboData("empOutDtHhCombo", Hh);
-    $scope._setComboData("empOutDtMmCombo", MmSs);
-    $scope._setComboData("empOutDtSsCombo", MmSs);
+    var commuteOutDt = wcombo.genDateVal("#commuteOutDt", gvStartDate);
+    $scope._setComboData("commuteOutDtHhCombo", Hh);
+    $scope._setComboData("commuteOutDtMmCombo", MmSs);
+    $scope._setComboData("commuteOutDtSsCombo", MmSs);
 
     $scope.$on("dclzRegistCtrl", function (event, data) {
 
@@ -72,7 +72,7 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 수정모드 시, 기존 정보 조회
         if(!isEmptyObject(data)){
-            
+
             // 수정모드
             $("#saveType").val("mod");
 
@@ -84,12 +84,12 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             
             // 수정모드에서는 삭제 가능
             $("#btnDel").css("display", "");
-            
+
             // 기존 정보 불러오기
             $scope.getInfo(data);   
 
         }else{
-            
+
             // 등록모드
             $("#saveType").val("reg");
             
@@ -112,7 +112,7 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.storeCd = data.storeCd;
         params.empNo = data.empNo;
-        params.empInDate = data.empInDate;
+        params.saleDate = data.saleDate;
         params.inFg = data.inFg;
 
         $scope._postJSONQuery.withOutPopUp( "/adi/dclz/dclzmanage/dclzmanage/detail.sb", params, function(response){
@@ -122,21 +122,21 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             saleDate.value =  stringToDate(result.saleDate); // 영업일자
             $scope.empNoCombo.selectedValue = result.empNo; // 사원명
 
-            empInDt.value = stringToDate((result.empInDt).substr(0, 8));  // 출근일시
-            $scope.empInDtHhCombo.selectedValue = (result.empInDt).substr(8, 2);
-            $scope.empInDtMmCombo.selectedValue = (result.empInDt).substr(10, 2);
-            $scope.empInDtSsCombo.selectedValue = (result.empInDt).substr(12, 2);
+            commuteInDt.value = stringToDate((result.commuteInDt).substr(0, 8));  // 출근일시
+            $scope.commuteInDtHhCombo.selectedValue = (result.commuteInDt).substr(8, 2);
+            $scope.commuteInDtMmCombo.selectedValue = (result.commuteInDt).substr(10, 2);
+            $scope.commuteInDtSsCombo.selectedValue = (result.commuteInDt).substr(12, 2);
 
-            empOutDt.value = stringToDate((result.empOutDt).substr(0, 8)); // 퇴근일시
-            $scope.empOutDtHhCombo.selectedValue = (result.empOutDt).substr(8, 2);
-            $scope.empOutDtMmCombo.selectedValue = (result.empOutDt).substr(10, 2);
-            $scope.empOutDtSsCombo.selectedValue = (result.empOutDt).substr(12, 2);
+            commuteOutDt.value = stringToDate((result.commuteOutDt).substr(0, 8)); // 퇴근일시
+            $scope.commuteOutDtHhCombo.selectedValue = (result.commuteOutDt).substr(8, 2);
+            $scope.commuteOutDtMmCombo.selectedValue = (result.commuteOutDt).substr(10, 2);
+            $scope.commuteOutDtSsCombo.selectedValue = (result.commuteOutDt).substr(12, 2);
 
             $scope.remark = result.remark; // 비고
 
             // 필요한 키값 hidden에 가지고 있기(수정, 삭제시 사용)
             $("#hdStoreCd").val(result.storeCd);
-            $("#hdEmpInDate").val(result.empInDate);
+            $("#hdSaleDate").val(result.saleDate);
             $("#hdInFg").val(result.inFg);
 
         });
@@ -152,9 +152,9 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
             params.saleDate = wijmo.Globalize.format(saleDate.value, 'yyyyMMdd');
             params.empNo = $scope.empNo;
-            params.empInDate = wijmo.Globalize.format(saleDate.value, 'yyyyMMdd'); // 출근일자 - 현재는 영업일자와 동일하게 사용(추후 변경 가능성 유)
-            params.empInDt = wijmo.Globalize.format(empInDt.value, 'yyyyMMdd') + $scope.empInDtHh + $scope.empInDtMm + $scope.empInDtSs;
-            params.empOutDt = wijmo.Globalize.format(empOutDt.value, 'yyyyMMdd') + $scope.empOutDtHh + $scope.empOutDtMm + $scope.empOutDtSs;
+            params.saleDate = wijmo.Globalize.format(saleDate.value, 'yyyyMMdd'); // 출근일자 - 현재는 영업일자와 동일하게 사용(추후 변경 가능성 유)
+            params.commuteInDt = wijmo.Globalize.format(commuteInDt.value, 'yyyyMMdd') + $scope.commuteInDtHh + $scope.commuteInDtMm + $scope.commuteInDtSs;
+            params.commuteOutDt = wijmo.Globalize.format(commuteOutDt.value, 'yyyyMMdd') + $scope.commuteOutDtHh + $scope.commuteOutDtMm + $scope.commuteOutDtSs;
             params.remark = $scope.remark;
 
             url = "/adi/dclz/dclzmanage/dclzmanage/regist.sb";
@@ -163,10 +163,10 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
             params.storeCd = $("#hdStoreCd").val();
             params.empNo = $scope.empNo;
-            params.empInDate = $("#hdEmpInDate").val();
+            params.saleDate = $("#hdSaleDate").val();
             params.inFg = $("#hdInFg").val();
-            params.empInDt = wijmo.Globalize.format(empInDt.value, 'yyyyMMdd') + $scope.empInDtHh + $scope.empInDtMm + $scope.empInDtSs;
-            params.empOutDt = wijmo.Globalize.format(empOutDt.value, 'yyyyMMdd') + $scope.empOutDtHh + $scope.empOutDtMm + $scope.empOutDtSs;
+            params.commuteInDt = wijmo.Globalize.format(commuteInDt.value, 'yyyyMMdd') + $scope.commuteInDtHh + $scope.commuteInDtMm + $scope.commuteInDtSs;
+            params.commuteOutDt = wijmo.Globalize.format(commuteOutDt.value, 'yyyyMMdd') + $scope.commuteOutDtHh + $scope.commuteOutDtMm + $scope.commuteOutDtSs;
             params.remark = $scope.remark;
 
             url = "/adi/dclz/dclzmanage/dclzmanage/modify.sb";
@@ -175,7 +175,7 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
         /** 퇴근시간이 출근시간보다 빠르거나 같습니다. */
         var msg = messages["dclzManage.dtChkMsg"];
-        if(Number(params.empInDt) >= Number(params.empOutDt)){
+        if(Number(params.commuteInDt) >= Number(params.commuteOutDt)){
             $scope._popMsg(msg);
             return;
         }
@@ -208,7 +208,7 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 var params = {};
                 params.storeCd = $("#hdStoreCd").val();
                 params.empNo = $scope.empNo;
-                params.empInDate = $("#hdEmpInDate").val();
+                params.saleDate = $("#hdSaleDate").val();
                 params.inFg = $("#hdInFg").val();
 
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -249,16 +249,16 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.empNoCombo.selectedIndex = 0;
 
         // 출근일시
-        empInDt.value = getCurDate('-');
-        $scope.empInDtHhCombo.selectedIndex = 9;
-        $scope.empInDtMmCombo.selectedIndex = 0;
-        $scope.empInDtSsCombo.selectedIndex = 0;
+        commuteInDt.value = getCurDate('-');
+        $scope.commuteInDtHhCombo.selectedIndex = 9;
+        $scope.commuteInDtMmCombo.selectedIndex = 0;
+        $scope.commuteInDtSsCombo.selectedIndex = 0;
 
         // 퇴근일시
-        empOutDt.value = getCurDate('-');
-        $scope.empOutDtHhCombo.selectedIndex = 18;
-        $scope.empOutDtMmCombo.selectedIndex = 0;
-        $scope.empOutDtSsCombo.selectedIndex = 0;
+        commuteOutDt.value = getCurDate('-');
+        $scope.commuteOutDtHhCombo.selectedIndex = 18;
+        $scope.commuteOutDtMmCombo.selectedIndex = 0;
+        $scope.commuteOutDtSsCombo.selectedIndex = 0;
 
         // 비고
         $scope.remark = "";
@@ -268,7 +268,7 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // hidden에 갖고 있던 키값
         $("#hdStoreCd").val("");
-        $("#hdEmpInDate").val("");
+        $("#hdSaleDate").val("");
         $("#hdInFg").val("");
     }
 

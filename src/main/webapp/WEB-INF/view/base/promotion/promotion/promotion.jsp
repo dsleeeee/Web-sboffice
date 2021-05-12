@@ -362,8 +362,22 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <%-- 적용상품의 상품등록구분 --%>
+                    <th><s:message code="promotion.prodRegFg" /></th>
+                    <td>
+                        <div class="sb-select w100">
+                            <wj-combo-box
+                                    id="prodSelectExceptFg"
+                                    ng-model="prodSelectExceptFg"
+                                    items-source="_getComboData('prodSelectExceptFg')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="prodSelectExceptFgCombo"
+                                    selected-index-changed="setProdRegBtn(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
                 <tr id="trSelectProdCrossFg" style="display: none;">
                     <%-- 적용상품의 교차선택구분 --%>
@@ -436,6 +450,26 @@
                     <th colspan="4">
                         <span style="font-size: 13px;"><s:message code="promotion.promotionStore" /></span>
                     </th>
+                </tr>
+                <tr>
+                    <%-- 적용매장의 매장등록구분 --%>
+                    <th><s:message code="promotion.storeRegFg" /></th>
+                    <td>
+                        <div class="sb-select w100">
+                            <wj-combo-box
+                                    id="storeSelectExceptFg"
+                                    ng-model="storeSelectExceptFg"
+                                    items-source="_getComboData('storeSelectExceptFg')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="storeSelectExceptFgCombo"
+                                    selected-index-changed="setStoreRegBtn(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td colspan="4" style="border-left: 1px solid #CCCCCC;" ng-controller="promotionSelectStoreGridCtrl">
@@ -642,7 +676,7 @@
     var modPromotionEnvstVal = "${modPromotionEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210413.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210511.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

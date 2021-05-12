@@ -123,6 +123,10 @@ public class PromotionVO extends PageVO {
     private String giftQty;
     /** 프로모션 등록구분 - H:본사 S;매장 */
     private String regFg;
+    /** 상품등록구분 */
+    private String prodSelectExceptFg;
+    /** 매장등록구분 */
+    private String storeSelectExceptFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -506,5 +510,21 @@ public class PromotionVO extends PageVO {
 
     public void setRegFg(String regFg) {
         this.regFg = regFg;
+    }
+
+    public String getProdSelectExceptFg() {
+        return prodSelectExceptFg;
+    }
+
+    public void setProdSelectExceptFg(String prodSelectExceptFg) {
+        this.prodSelectExceptFg = prodSelectExceptFg;
+    }
+
+    public String getStoreSelectExceptFg() {
+        return storeSelectExceptFg;
+    }
+
+    public void setStoreSelectExceptFg(String storeSelectExceptFg) {
+        this.storeSelectExceptFg = storeSelectExceptFg;
     }
 }
