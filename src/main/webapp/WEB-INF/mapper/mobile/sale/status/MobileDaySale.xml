@@ -38,19 +38,19 @@
             FROM
             (
                 SELECT
-                tsdt.HQ_OFFICE_CD,
-                NVL(tsdt.REAL_SALE_CNT, 0) AS REAL_SALE_CNT,
-                NVL(tsdt.RTN_SALE_CNT, 0) AS RTN_SALE_CNT,
-                NVL(tsdt.BILL_CNT, 0) AS BILL_CNT,
-                NVL(tsdt.SALE_CNT, 0) AS SALE_CNT,
-                NVL(tsdt.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
-                NVL(tsdt.TOT_DC_AMT, 0) AS TOT_DC_AMT,
-                NVL(tsdt.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
-                ROUND(tsdt.TOT_SALE_AMT / tsdt.SALE_CNT) AS DAY_AVR_SALE,
-                NVL(tsdp.CARD_AMT, 0) AS CARD_AMT,
-                NVL(tsdp.CASH_AMT, 0) AS CASH_AMT,
-                NVL(tsdp.ETC_AMT, 0) AS ETC_AMT,
-                ROUND(tsdt.TOT_SALE_AMT / tsdt.BILL_CNT) AS BILL_UPRC
+                A.HQ_OFFICE_CD,
+                NVL(A.REAL_SALE_CNT, 0) AS REAL_SALE_CNT,
+                NVL(A.RTN_SALE_CNT, 0) AS RTN_SALE_CNT,
+                NVL(A.BILL_CNT, 0) AS BILL_CNT,
+                NVL(A.SALE_CNT, 0) AS SALE_CNT,
+                NVL(A.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
+                NVL(A.TOT_DC_AMT, 0) AS TOT_DC_AMT,
+                NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
+                ROUND(A.TOT_SALE_AMT / A.SALE_CNT) AS DAY_AVR_SALE,
+                NVL(B.CARD_AMT, 0) AS CARD_AMT,
+                NVL(B.CASH_AMT, 0) AS CASH_AMT,
+                NVL(B.ETC_AMT, 0) AS ETC_AMT,
+                ROUND(A.TOT_SALE_AMT / A.BILL_CNT) AS BILL_UPRC
                 FROM
                 (
                     SELECT
@@ -71,7 +71,7 @@
                     </foreach>
                     AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsdt.HQ_OFFICE_CD
-                ) tsdt,
+                ) A,
                 (
                     SELECT
                     tsdp.HQ_OFFICE_CD,
@@ -87,9 +87,9 @@
                     </foreach>
                     AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsdp.HQ_OFFICE_CD
-                ) tsdp
+                ) B
                 WHERE 1=1
-                AND tsdp.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
+                AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
             )
             UNION ALL
             (
@@ -130,8 +130,8 @@
         (
             SELECT
             tsdp.PAY_CD,
-            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
-            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+            NVL(SUM(tsdp.TOT_SALE_QTY), 0) AS TOT_SALE_QTY,
+            NVL(SUM(tsdp.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
             FROM TB_SL_DAILY_PAY tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -174,8 +174,8 @@
         (
             SELECT
             tsdd.DC_CD,
-            SUM(tsdd.TOT_SALE_QTY) AS TOT_SALE_QTY,
-            SUM(tsdd.REAL_SALE_AMT) AS REAL_SALE_AMT
+            NVL(SUM(tsdd.TOT_SALE_QTY), 0) AS TOT_SALE_QTY,
+            NVL(SUM(tsdd.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
             FROM TB_SL_DAILY_DC tsdd
             WHERE 1=1
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -203,8 +203,8 @@
 
     <!-- 내점현황 - 조회 -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY
-        COMMENTS : [매출]일별_종합, [매출]일별_결제
+        TABLE    : TB_SL_DAILY_PROD
+        COMMENTS : [매출]일별_상품
     -->
     <select id="getMobileDaySaleShopList" parameterType="MobileDaySaleVO" resultType="DefaultMap">
         /* MobileDaySaleMapper.getMobileDaySaleShopList */
@@ -368,9 +368,9 @@
             (
                 SELECT
                 tsdp.SALE_DATE,
-                NVL(SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.REAL_SALE_AMT ELSE 0 END), 0) AS SHOP_REAL_SALE_AMT,
-                NVL(SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.REAL_SALE_AMT ELSE 0 END), 0) AS DLVR_REAL_SALE_AMT,
-                NVL(SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.REAL_SALE_AMT ELSE 0 END), 0) AS PACK_REAL_SALE_AMT
+                SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
+                SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                 FROM TB_SL_DAILY_PROD tsdp
                 WHERE 1=1
                 AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -458,26 +458,26 @@
         /* MobileDaySaleMapper.getMobileDaySaleDtlList */
         SELECT
         A.SALE_DATE,
-        SUM(A.TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(A.TOT_DC_AMT) AS TOT_DC_AMT,
-        SUM(A.TOT_REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
-        SUM(B.DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
+        NVL(SUM(A.TOT_SALE_AMT), 0) AS TOT_SALE_AMT,
+        NVL(SUM(A.TOT_DC_AMT), 0) AS TOT_DC_AMT,
+        NVL(SUM(A.TOT_REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT,
+        NVL(SUM(B.DLVR_REAL_SALE_AMT), 0) AS DLVR_REAL_SALE_AMT,
         '집계필요' AS DLVR_BILL_CNT,
         '집계필요' AS DLVR_BILL_UPRC,
-        SUM(B.PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT,
+        NVL(SUM(B.PACK_REAL_SALE_AMT), 0) AS PACK_REAL_SALE_AMT,
         '집계필요' AS PACK_BILL_CNT,
         '집계필요' AS PACK_BILL_UPRC,
-        SUM(B.SHOP_REAL_SALE_AMT) AS SHOP_REAL_SALE_AMT,
+        NVL(SUM(B.SHOP_REAL_SALE_AMT), 0) AS SHOP_REAL_SALE_AMT,
         '집계필요' AS SHOP_BILL_CNT,
         '집계필요' AS SHOP_BILL_UPRC,
         '집계필요' AS TOT_GUEST_CNT,
         '집계필요' AS GUEST_UPRC,
-        SUM(C.CARD_AMT) AS CARD_AMT,
-        SUM(C.CASH_AMT) AS CASH_AMT,
-        SUM(C.ETC_AMT) AS ETC_AMT,
-        SUM(D.DC_AMT) AS DC_AMT,
-        SUM(D.COUPN_DC_AMT) AS COUPN_DC_AMT,
-        SUM(D.ETC_DC_AMT) AS ETC_DC_AMT
+        NVL(SUM(C.CARD_AMT), 0) AS CARD_AMT,
+        NVL(SUM(C.CASH_AMT), 0) AS CASH_AMT,
+        NVL(SUM(C.ETC_AMT), 0) AS ETC_AMT,
+        NVL(SUM(D.DC_AMT), 0) AS DC_AMT,
+        NVL(SUM(D.COUPN_DC_AMT), 0) AS COUPN_DC_AMT,
+        NVL(SUM(D.ETC_DC_AMT), 0) AS ETC_DC_AMT
         FROM
         (
             SELECT
@@ -544,9 +544,9 @@
             GROUP BY tsdd.SALE_DATE
         ) D
         WHERE 1=1
-        AND B.SALE_DATE = A.SALE_DATE
-        AND C.SALE_DATE = A.SALE_DATE
-        AND D.SALE_DATE = A.SALE_DATE
+        AND B.SALE_DATE (+)= A.SALE_DATE
+        AND C.SALE_DATE (+)= A.SALE_DATE
+        AND D.SALE_DATE (+)= A.SALE_DATE
         GROUP BY A.SALE_DATE
         ORDER BY A.SALE_DATE
     </select>

@@ -5,7 +5,7 @@
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.04.02     김설아      1.0
+ * 2021.05.04     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -42,7 +42,7 @@ app.controller('mobileDaySaleTotalCtrl', ['$scope', '$http', function ($scope, $
             $scope.mobileDaySale = mobileDaySale;
 
             if(response.data.data.result != null) {
-                $("#lblRealSaleCnt").text($scope.mobileDaySale.saleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblRealSaleCnt").text($scope.mobileDaySale.realSaleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblRtnSaleCnt").text($scope.mobileDaySale.rtnSaleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblBillCnt").text($scope.mobileDaySale.billCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblSaleCnt").text($scope.mobileDaySale.saleCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -127,7 +127,7 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', function ($scope, $http)
     $scope.searchMobileDaySalePay = function(){
         var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
         var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
-        var diffDay = (endDt.getTime() - startDt.getTime()) / (1000 * 60 * 60 * 24);
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
 
         // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){

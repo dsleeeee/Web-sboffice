@@ -56,7 +56,7 @@
 
     <%-- 매출종합 --%>
     <div class="gridBar mt10" id="mobileDaySaleTotal" onclick="girdFldUnfld('mobileDaySaleTotal')">
-        <a href="#" class="open"><s:message code="mobile.daySale.daySaleTotal"/></a>
+        <a href="#" class="open"><s:message code="mobile.daySale.saleTotal"/></a>
     </div>
     <div class="wj-dialog-body sc2" id="mobileDaySaleTotalGrid" ng-controller="mobileDaySaleTotalCtrl">
         <table class="tblType01">
@@ -170,7 +170,7 @@
 
     <%-- 결제수단 --%>
     <div class="gridBar mt10" id="mobileDaySalePay" onclick="girdFldUnfld('mobileDaySalePay')">
-        <a href="#" class="open"><s:message code="mobile.daySale.daySalePay"/></a>
+        <a href="#" class="open"><s:message code="mobile.daySale.salePay"/></a>
     </div>
     <div class="w100" id="mobileDaySalePayGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
@@ -195,7 +195,7 @@
 
     <%-- 할인내역 --%>
     <div class="gridBar mt10" id="mobileDaySaleDc" onclick="girdFldUnfld('mobileDaySaleDc')">
-        <a href="#" class="open"><s:message code="mobile.daySale.daySaleDc"/></a>
+        <a href="#" class="open"><s:message code="mobile.daySale.saleDc"/></a>
     </div>
     <div class="w100" id="mobileDaySaleDcGrid" ng-controller="mobileDaySaleDcCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
@@ -220,7 +220,7 @@
 
     <%-- 내점현황 --%>
     <div class="gridBar mt10" id="mobileDaySaleShop" onclick="girdFldUnfld('mobileDaySaleShop')">
-        <a href="#" class="open"><s:message code="mobile.daySale.daySaleShop"/></a>
+        <a href="#" class="open"><s:message code="mobile.daySale.saleShop"/></a>
     </div>
     <div class="w100" id="mobileDaySaleShopGrid" ng-controller="mobileDaySaleShopCtrl">
         <table class="tblType01">
@@ -299,7 +299,7 @@
 
     <%-- 내점/배달/포장 --%>
     <div class="gridBar mt10" id="mobileDaySaleDlvr" onclick="girdFldUnfld('mobileDaySaleDlvr')">
-        <a href="#" class="open"><s:message code="mobile.daySale.daySaleDlvr"/></a>
+        <a href="#" class="open"><s:message code="mobile.daySale.saleDlvr"/></a>
     </div>
     <div class="w100" id="mobileDaySaleDlvrGrid">
         <div ng-controller="mobileDaySaleDlvrCtrl">
@@ -459,7 +459,7 @@
 
     <%-- 일자별 매출현황 --%>
     <div class="gridBar mt10" id="mobileDaySaleDtl" onclick="girdFldUnfld('mobileDaySaleDtl')">
-        <a href="#" class="open"><s:message code="mobile.daySale.daySaleDtl"/></a>
+        <a href="#" class="open"><s:message code="mobile.daySale.saleDtl"/></a>
     </div>
     <div class="w100" id="mobileDaySaleDtlGrid" ng-controller="mobileDaySaleDtlCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
@@ -510,4 +510,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=202105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=20210510.01" charset="utf-8"></script>
