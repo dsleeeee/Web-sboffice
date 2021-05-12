@@ -13,8 +13,8 @@
 
     <!-- 매출종합 - 조회 -->
     <!--
-        TABLE    :
-        COMMENTS :
+        TABLE    : TB_SL_MONTHLY_TOTAL
+        COMMENTS : [매출]월별_종합
     -->
     <select id="getMobileMonthSaleTotalList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleTotalList */
@@ -47,9 +47,9 @@
                 NVL(A.TOT_DC_AMT, 0) AS TOT_DC_AMT,
                 NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
                 ROUND(A.TOT_SALE_AMT / A.SALE_CNT) AS MONTH_AVR_SALE,
-                NVL(B.CARD_AMT, 0) AS CARD_AMT,
-                NVL(B.CASH_AMT, 0) AS CASH_AMT,
-                NVL(B.ETC_AMT, 0) AS ETC_AMT,
+                NVL(A.CARD_AMT, 0) AS CARD_AMT,
+                NVL(A.CASH_AMT, 0) AS CASH_AMT,
+                NVL(A.ETC_AMT, 0) AS ETC_AMT,
                 ROUND(A.TOT_SALE_AMT / A.BILL_CNT) AS BILL_UPRC
                 FROM
                 (
@@ -61,7 +61,13 @@
                     COUNT(tsmt.SALE_YM) AS SALE_CNT,
                     SUM(tsmt.TOT_SALE_AMT) AS TOT_SALE_AMT,
                     SUM(tsmt.TOT_DC_AMT) AS TOT_DC_AMT,
-                    SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                    SUM(tsmt.PAY_AMT_01) AS CARD_AMT,
+                    SUM(tsmt.PAY_AMT_02) AS CASH_AMT,
+                    SUM(tsmt.PAY_AMT_03) + SUM(tsmt.PAY_AMT_04) + SUM(tsmt.PAY_AMT_05)
+                    + SUM(tsmt.PAY_AMT_06) + SUM(tsmt.PAY_AMT_07) + SUM(tsmt.PAY_AMT_08) + SUM(tsmt.PAY_AMT_09) + SUM(tsmt.PAY_AMT_10)
+                    + SUM(tsmt.PAY_AMT_11) + SUM(tsmt.PAY_AMT_12) + SUM(tsmt.PAY_AMT_13) + SUM(tsmt.PAY_AMT_14) + SUM(tsmt.PAY_AMT_15)
+                    + SUM(tsmt.PAY_AMT_16) + SUM(tsmt.PAY_AMT_17) + SUM(tsmt.PAY_AMT_18) + SUM(tsmt.PAY_AMT_19) AS ETC_AMT
                     FROM TB_SL_MONTHLY_TOTAL tsmt
                     WHERE 1=1
                     AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -71,25 +77,7 @@
                     </foreach>
                     AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                     GROUP BY tsmt.HQ_OFFICE_CD
-                ) A,
-                (
-                    SELECT
-                    tsdp.HQ_OFFICE_CD,
-                    SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CARD_AMT,
-                    SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CASH_AMT,
-                    SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS ETC_AMT
-                    FROM TB_SL_DAILY_PAY tsdp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
-                    AND tsdp.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-                    GROUP BY tsdp.HQ_OFFICE_CD
-                ) B
-                WHERE 1=1
-                AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                ) A
             )
             UNION ALL
             (
@@ -115,90 +103,136 @@
 
     <!-- 결제수단 - 조회 -->
     <!--
-        TABLE    :
-        COMMENTS :
+        TABLE    : TB_SL_MONTHLY_TOTAL
+        COMMENTS : [매출]월별_종합
     -->
     <select id="getMobileMonthSalePayList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSalePayList */
         SELECT
-        A.PAY_CD,
-        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) AS NM,
-        A.TOT_SALE_QTY,
-        A.REAL_SALE_AMT,
-        NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = PAY_CD) AS NM,
+        REAL_SALE_AMT,
+        AMT_RATE
         FROM
         (
             SELECT
-            tsdp.PAY_CD,
-            NVL(SUM(tsdp.TOT_SALE_QTY), 0) AS TOT_SALE_QTY,
-            NVL(SUM(tsdp.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
-            FROM TB_SL_DAILY_PAY tsdp
-            WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-            AND tsdp.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-            GROUP BY tsdp.PAY_CD
-        ) A,
-        (
-            SELECT
-            NVL(SUM(tsdp.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
-            FROM TB_SL_DAILY_PAY tsdp
-            WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-            AND tsdp.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-        ) B
-        ORDER BY A.PAY_CD
+            SUBSTR(A.COL_NM, -2) AS PAY_CD,
+            A.COL_VAL AS REAL_SALE_AMT,
+            NVL(ROUND(A.COL_VAL / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+            FROM
+            (
+                SELECT
+                COL_NM,
+                COL_VAL
+                FROM
+                (
+                    SELECT
+                    SUM(tsmt.PAY_AMT_01) AS PAY_AMT_01, SUM(tsmt.PAY_AMT_02) AS PAY_AMT_02, SUM(tsmt.PAY_AMT_03) AS PAY_AMT_03, SUM(tsmt.PAY_AMT_04) AS PAY_AMT_04, SUM(tsmt.PAY_AMT_05) AS PAY_AMT_05,
+                    SUM(tsmt.PAY_AMT_06) AS PAY_AMT_06, SUM(tsmt.PAY_AMT_07) AS PAY_AMT_07, SUM(tsmt.PAY_AMT_08) AS PAY_AMT_08, SUM(tsmt.PAY_AMT_09) AS PAY_AMT_09, SUM(tsmt.PAY_AMT_10) AS PAY_AMT_10,
+                    SUM(tsmt.PAY_AMT_11) AS PAY_AMT_11, SUM(tsmt.PAY_AMT_12) AS PAY_AMT_12, SUM(tsmt.PAY_AMT_13) AS PAY_AMT_13, SUM(tsmt.PAY_AMT_14) AS PAY_AMT_14, SUM(tsmt.PAY_AMT_15) AS PAY_AMT_15,
+                    SUM(tsmt.PAY_AMT_16) AS PAY_AMT_16, SUM(tsmt.PAY_AMT_17) AS PAY_AMT_17, SUM(tsmt.PAY_AMT_18) AS PAY_AMT_18, SUM(tsmt.PAY_AMT_19) AS PAY_AMT_19
+                    FROM TB_SL_MONTHLY_TOTAL tsmt
+                    WHERE 1=1
+                    AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsmt.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                    AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                )
+                UNPIVOT
+                (
+                    COL_VAL
+                    FOR COL_NM
+                    IN
+                    (
+                        PAY_AMT_01, PAY_AMT_02, PAY_AMT_03, PAY_AMT_04, PAY_AMT_05,
+                        PAY_AMT_06, PAY_AMT_07, PAY_AMT_08, PAY_AMT_09, PAY_AMT_10,
+                        PAY_AMT_11, PAY_AMT_12, PAY_AMT_13, PAY_AMT_14, PAY_AMT_15,
+                        PAY_AMT_16, PAY_AMT_17, PAY_AMT_18, PAY_AMT_19
+                    )
+                )
+            ) A,
+            (
+                SELECT
+                SUM(tsmt.PAY_AMT_01) + SUM(tsmt.PAY_AMT_02) + SUM(tsmt.PAY_AMT_03) + SUM(tsmt.PAY_AMT_04) + SUM(tsmt.PAY_AMT_05)
+                + SUM(tsmt.PAY_AMT_06) + SUM(tsmt.PAY_AMT_07) + SUM(tsmt.PAY_AMT_08) + SUM(tsmt.PAY_AMT_09) + SUM(tsmt.PAY_AMT_10)
+                + SUM(tsmt.PAY_AMT_11) + SUM(tsmt.PAY_AMT_12) + SUM(tsmt.PAY_AMT_13) + SUM(tsmt.PAY_AMT_14) + SUM(tsmt.PAY_AMT_15)
+                + SUM(tsmt.PAY_AMT_16) + SUM(tsmt.PAY_AMT_17) + SUM(tsmt.PAY_AMT_18) + SUM(tsmt.PAY_AMT_19) AS TOT_REAL_SALE_AMT
+                FROM TB_SL_MONTHLY_TOTAL tsmt
+                WHERE 1=1
+                AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+                AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+            ) B
+        )
+        ORDER BY PAY_CD
     </select>
 
     <!-- 할인내역 - 조회 -->
     <!--
-        TABLE    :
-        COMMENTS :
+        TABLE    : TB_SL_MONTHLY_TOTAL
+        COMMENTS : [매출]월별_종합
     -->
     <select id="getMobileMonthSaleDcList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleDcList */
         SELECT
-        A.DC_CD,
-        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.DC_CD) AS NM,
-        A.TOT_SALE_QTY,
-        A.REAL_SALE_AMT,
-        NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041' AND NMCODE_CD = DC_CD) AS NM,
+        REAL_SALE_AMT,
+        AMT_RATE
         FROM
         (
             SELECT
-            tsdd.DC_CD,
-            NVL(SUM(tsdd.TOT_SALE_QTY), 0) AS TOT_SALE_QTY,
-            NVL(SUM(tsdd.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
-            FROM TB_SL_DAILY_DC tsdd
-            WHERE 1=1
-            AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-            AND tsdd.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-            GROUP BY tsdd.DC_CD
-        ) A,
-        (
-            SELECT
-            NVL(SUM(tsdd.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
-            FROM TB_SL_DAILY_DC tsdd
-            WHERE 1=1
-            AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-            AND tsdd.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-        ) B
-        ORDER BY A.DC_CD
+            SUBSTR(A.COL_NM, -2) AS DC_CD,
+            A.COL_VAL AS REAL_SALE_AMT,
+            NVL(ROUND(A.COL_VAL / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+            FROM
+            (
+                SELECT
+                COL_NM,
+                COL_VAL
+                FROM
+                (
+                    SELECT
+                    SUM(tsmt.DC_AMT_01) AS DC_AMT_01, SUM(tsmt.DC_AMT_02) AS DC_AMT_02, SUM(tsmt.DC_AMT_03) AS DC_AMT_03, SUM(tsmt.DC_AMT_04) AS DC_AMT_04, SUM(tsmt.DC_AMT_05) AS DC_AMT_05,
+                    SUM(tsmt.DC_AMT_06) AS DC_AMT_06, SUM(tsmt.DC_AMT_07) AS DC_AMT_07, SUM(tsmt.DC_AMT_08) AS DC_AMT_08, SUM(tsmt.DC_AMT_09) AS DC_AMT_09, SUM(tsmt.DC_AMT_10) AS DC_AMT_10
+                    FROM TB_SL_MONTHLY_TOTAL tsmt
+                    WHERE 1=1
+                    AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsmt.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                    AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                )
+                UNPIVOT
+                (
+                    COL_VAL
+                    FOR COL_NM
+                    IN
+                    (
+                        DC_AMT_01, DC_AMT_02, DC_AMT_03, DC_AMT_04, DC_AMT_05,
+                        DC_AMT_06, DC_AMT_07, DC_AMT_08, DC_AMT_09, DC_AMT_10
+                    )
+                )
+            ) A,
+            (
+                SELECT
+                SUM(tsmt.DC_AMT_01) + SUM(tsmt.DC_AMT_02) + SUM(tsmt.DC_AMT_03) + SUM(tsmt.DC_AMT_04) + SUM(tsmt.DC_AMT_05)
+                + SUM(tsmt.DC_AMT_06) + SUM(tsmt.DC_AMT_07) + SUM(tsmt.DC_AMT_08) + SUM(tsmt.DC_AMT_09) + SUM(tsmt.DC_AMT_10) AS TOT_REAL_SALE_AMT
+                FROM TB_SL_MONTHLY_TOTAL tsmt
+                WHERE 1=1
+                AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+                AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+            ) B
+        )
+        ORDER BY DC_CD
     </select>
 
     <!-- 내점현황 - 조회 -->
@@ -213,10 +247,7 @@
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
         SUM(MONTH_AVR_SALE) AS MONTH_AVR_SALE,
         '집계필요' AS TOT_GUEST_CNT,
-        '집계필요' AS GUEST_UPRC,
-        '집계필요' AS TBL_AVR,
-        '집계필요' AS TBL_CNT,
-        '집계필요' AS TBL_UPRC
+        '집계필요' AS GUEST_UPRC
         FROM
         (
             SELECT *
@@ -451,8 +482,8 @@
 
     <!-- 월자별 매출현황 - 조회 -->
     <!--
-        TABLE    :
-        COMMENTS :
+        TABLE    : TB_SL_MONTHLY_TOTAL, TB_SL_MONTHLY_PROD
+        COMMENTS : [매출]월별_종합, [매출]월별_상품
     -->
     <select id="getMobileMonthSaleDtlList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleDtlList */
@@ -472,19 +503,29 @@
         '집계필요' AS SHOP_BILL_UPRC,
         '집계필요' AS TOT_GUEST_CNT,
         '집계필요' AS GUEST_UPRC,
-        NVL(SUM(C.CARD_AMT), 0) AS CARD_AMT,
-        NVL(SUM(C.CASH_AMT), 0) AS CASH_AMT,
-        NVL(SUM(C.ETC_AMT), 0) AS ETC_AMT,
-        NVL(SUM(D.DC_AMT), 0) AS DC_AMT,
-        NVL(SUM(D.COUPN_DC_AMT), 0) AS COUPN_DC_AMT,
-        NVL(SUM(D.ETC_DC_AMT), 0) AS ETC_DC_AMT
+        NVL(SUM(A.CARD_AMT), 0) AS CARD_AMT,
+        NVL(SUM(A.CASH_AMT), 0) AS CASH_AMT,
+        NVL(SUM(A.ETC_AMT), 0) AS ETC_AMT,
+        NVL(SUM(A.DC_AMT), 0) AS DC_AMT,
+        NVL(SUM(A.COUPN_DC_AMT), 0) AS COUPN_DC_AMT,
+        NVL(SUM(A.ETC_DC_AMT), 0) AS ETC_DC_AMT
         FROM
         (
             SELECT
             tsmt.SALE_YM,
             SUM(tsmt.TOT_SALE_AMT) AS TOT_SALE_AMT,
             SUM(tsmt.TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(tsmt.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+            SUM(tsmt.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+            SUM(tsmt.PAY_AMT_01) AS CARD_AMT,
+            SUM(tsmt.PAY_AMT_02) AS CASH_AMT,
+            SUM(tsmt.PAY_AMT_03) + SUM(tsmt.PAY_AMT_04) + SUM(tsmt.PAY_AMT_05)
+            + SUM(tsmt.PAY_AMT_06) + SUM(tsmt.PAY_AMT_07) + SUM(tsmt.PAY_AMT_08) + SUM(tsmt.PAY_AMT_09) + SUM(tsmt.PAY_AMT_10)
+            + SUM(tsmt.PAY_AMT_11) + SUM(tsmt.PAY_AMT_12) + SUM(tsmt.PAY_AMT_13) + SUM(tsmt.PAY_AMT_14) + SUM(tsmt.PAY_AMT_15)
+            + SUM(tsmt.PAY_AMT_16) + SUM(tsmt.PAY_AMT_17) + SUM(tsmt.PAY_AMT_18) + SUM(tsmt.PAY_AMT_19) AS ETC_AMT,
+            SUM(tsmt.DC_AMT_01) AS DC_AMT,
+            SUM(tsmt.DC_AMT_02) AS COUPN_DC_AMT,
+            SUM(tsmt.DC_AMT_03) + SUM(tsmt.DC_AMT_04) + SUM(tsmt.DC_AMT_05)
+            + SUM(tsmt.DC_AMT_06) + SUM(tsmt.DC_AMT_07) + SUM(tsmt.DC_AMT_08) + SUM(tsmt.DC_AMT_09) + SUM(tsmt.DC_AMT_10) AS ETC_DC_AMT
             FROM TB_SL_MONTHLY_TOTAL tsmt
             WHERE 1=1
             AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -510,61 +551,9 @@
             </foreach>
             AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
             GROUP BY tsmp.SALE_YM
-        ) B,
-        (
-            SELECT
-            SALE_YM,
-            SUM(CARD_AMT) AS CARD_AMT,
-            SUM(CASH_AMT) AS CASH_AMT,
-            SUM(ETC_AMT) AS ETC_AMT
-            FROM
-            (
-                SELECT
-                TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'YYYYMMDD'), 'YYYYMM') SALE_YM,
-                SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CARD_AMT,
-                SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CASH_AMT,
-                SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS ETC_AMT
-                FROM TB_SL_DAILY_PAY tsdp
-                WHERE 1=1
-                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
-                AND tsdp.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-                GROUP BY tsdp.SALE_DATE
-            )
-            GROUP BY SALE_YM
-        ) C,
-        (
-            SELECT
-            SALE_YM,
-            SUM(DC_AMT) AS DC_AMT,
-            SUM(COUPN_DC_AMT) AS COUPN_DC_AMT,
-            SUM(ETC_DC_AMT) AS ETC_DC_AMT
-            FROM
-            (
-                SELECT
-                TO_CHAR(TO_DATE(tsdd.SALE_DATE, 'YYYYMMDD'), 'YYYYMM') SALE_YM,
-                SUM(CASE WHEN tsdd.DC_CD = '01' THEN tsdd.REAL_SALE_AMT ELSE 0 END) AS DC_AMT,
-                SUM(CASE WHEN tsdd.DC_CD = '02' THEN tsdd.REAL_SALE_AMT ELSE 0 END) AS COUPN_DC_AMT,
-                SUM(CASE WHEN tsdd.DC_CD NOT IN('01','02') THEN tsdd.REAL_SALE_AMT ELSE 0 END) AS ETC_DC_AMT
-                FROM TB_SL_DAILY_DC tsdd
-                WHERE 1=1
-                AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-                  #{item}
-                </foreach>
-                AND tsdd.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-                GROUP BY tsdd.SALE_DATE
-            )
-            GROUP BY SALE_YM
-        ) D
+        ) B
         WHERE 1=1
         AND B.SALE_YM (+)= A.SALE_YM
-        AND C.SALE_YM (+)= A.SALE_YM
-        AND D.SALE_YM (+)= A.SALE_YM
         GROUP BY A.SALE_YM
         ORDER BY A.SALE_YM
     </select>

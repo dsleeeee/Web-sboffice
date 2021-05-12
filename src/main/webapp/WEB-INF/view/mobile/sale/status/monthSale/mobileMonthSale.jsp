@@ -185,7 +185,6 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.totSaleQty"/>" binding="totSaleQty" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
@@ -210,7 +209,6 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.totSaleQty"/>" binding="totSaleQty" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
@@ -261,35 +259,6 @@
                 </td>
                 <td class="tr br">
                     <label id="lblShopGuestUprc"></label>
-                </td>
-            </tr>
-            <tr>
-                <%-- 테이블평균 --%>
-                <th class="tc br bl">
-                    <s:message code="mobile.monthSale.tblAvr"/>
-                </th>
-                <%-- 주문테이블수 --%>
-                <th class="tc br">
-                    <s:message code="mobile.monthSale.tblCnt"/>
-                </th>
-                <%-- 테이블단가 --%>
-                <th class="tc br">
-                    <s:message code="mobile.monthSale.tblUprc"/>
-                </th>
-                <th class="tc br">
-                </th>
-            </tr>
-            <tr>
-                <td class="tr br bl">
-                    <label id="lblShopTblAvr"></label>
-                </td>
-                <td class="tr br">
-                    <label id="lblShopTblCnt"></label>
-                </td>
-                <td class="tr br">
-                    <label id="lblShopTblUprc"></label>
-                </td>
-                <td class="tr br">
                 </td>
             </tr>
             </tbody>
@@ -510,4 +479,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20210511.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20210512.01" charset="utf-8"></script>
