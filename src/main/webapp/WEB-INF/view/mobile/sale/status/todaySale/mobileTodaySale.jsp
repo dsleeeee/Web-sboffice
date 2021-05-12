@@ -141,26 +141,6 @@
                 </td>
             </tr>
             <tr>
-                <%-- 주문테이블수 --%>
-                <th class="tc br bl">
-                    <s:message code="mobile.todaySale.tblCnt"/>
-                </th>
-                <%-- 테이블단가 --%>
-                <th class="tc br">
-                    <s:message code="mobile.todaySale.tblUprc"/>
-                </th>
-                <th class="tc br"></th>
-            </tr>
-            <tr>
-                <td class="tr br bl">
-                    <label id="lblTblCnt"></label>
-                </td>
-                <td class="tr br">
-                    <label id="lblTblUprcc"></label>
-                </td>
-                <td class="tr br"></td>
-            </tr>
-            <tr>
                 <%-- 카드매출 --%>
                 <th class="tc br bl">
                     <s:message code="mobile.todaySale.cardAmt"/>
@@ -234,7 +214,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtCnt"/>" binding="amtCnt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.todaySale.amt"/>" binding="amt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.todaySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
@@ -259,7 +239,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtCnt"/>" binding="amtCnt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.todaySale.amt"/>" binding="amt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.todaySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
@@ -284,7 +264,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtCnt"/>" binding="amtCnt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.todaySale.amt"/>" binding="amt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.todaySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
@@ -309,7 +289,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.saleTime"/>" binding="saleTime" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtCnt"/>" binding="amtCnt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.todaySale.amt"/>" binding="amt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.todaySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>

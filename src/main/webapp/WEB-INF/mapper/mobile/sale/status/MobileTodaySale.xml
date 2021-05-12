@@ -29,8 +29,6 @@
         SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT,
         SUM(GUEST_UPRC) AS GUEST_UPRC,
         SUM(BILL_UPRC) AS BILL_UPRC,
-        SUM(TBL_CNT) AS TBL_CNT,
-        SUM(TBL_UPRC) AS TBL_UPRC,
         SUM(CARD_AMT) AS CARD_AMT,
         SUM(CASH_AMT) AS CASH_AMT,
         SUM(ETC_AMT) AS ETC_AMT,
@@ -53,8 +51,6 @@
                 NVL(tssh.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
                 ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT) AS GUEST_UPRC,
                 ROUND(tssh.REAL_SALE_AMT / tssh.BILL_CNT) AS BILL_UPRC,
-                NVL(tssh.TBL_CNT, 0) AS TBL_CNT,
-                ROUND(tssh.REAL_SALE_AMT / tssh.TBL_CNT) TBL_UPRC,
                 NVL(tsshp.CARD_AMT, 0) AS CARD_AMT,
                 NVL(tsshp.CASH_AMT, 0) AS CASH_AMT,
                 NVL(tsshp.ETC_AMT, 0) AS ETC_AMT,
@@ -72,8 +68,7 @@
                     SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
                     SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
                     SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                    SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT,
-                    COUNT(tssh.TBL_CD) AS TBL_CNT
+                    SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
                     FROM TB_SL_SALE_HDR tssh
                     WHERE 1=1
                     AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -137,8 +132,6 @@
                 0 AS TOT_GUEST_CNT,
                 0 AS GUEST_UPRC,
                 0 AS BILL_UPRC,
-                0 AS TBL_CNT,
-                0 AS TBL_UPRC,
                 0 AS CARD_AMT,
                 0 AS CASH_AMT,
                 0 AS ETC_AMT,
@@ -162,7 +155,7 @@
         A.PAY_CD,
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) AS NM,
         A.AMT_CNT,
-        A.PAY_AMT AS AMT,
+        A.PAY_AMT AS REAL_SALE_AMT,
         NVL(ROUND(A.PAY_AMT / DECODE(B.TOT_PAY_AMT, 0, null, B.TOT_PAY_AMT) * 100, 2), 0) AS AMT_RATE
         FROM
         (
@@ -206,7 +199,7 @@
         A.DC_CD,
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041' AND NMCODE_CD = A.DC_CD) AS NM,
         A.AMT_CNT,
-        A.DC_AMT AS AMT,
+        A.DC_AMT AS REAL_SALE_AMT,
         NVL(ROUND(A.DC_AMT / DECODE(B.TOT_DC_AMT, 0, null, B.TOT_DC_AMT) * 100, 2), 0) AS AMT_RATE
         FROM
         (
@@ -254,7 +247,7 @@
                ELSE null END
         ) AS NM,
         A.AMT_CNT,
-        A.REAL_SALE_AMT AS AMT,
+        A.REAL_SALE_AMT,
         NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
         FROM
         (
@@ -321,7 +314,7 @@
         SELECT
         A.SALE_TIME,
         A.AMT_CNT,
-        A.REAL_SALE_AMT AS AMT,
+        A.REAL_SALE_AMT,
         NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
         FROM
         (

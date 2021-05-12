@@ -50,8 +50,6 @@ app.controller('mobileTodaySaleTotalCtrl', ['$scope', '$http', function ($scope,
                 $("#lblTotGuestCnt").text($scope.mobileTodaySale.totGuestCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblGuestUprc").text($scope.mobileTodaySale.guestUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblBillUprc").text($scope.mobileTodaySale.billUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $("#lblTblCnt").text($scope.mobileTodaySale.tblCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $("#lblTblUprcc").text($scope.mobileTodaySale.tblUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblCardAmt").text($scope.mobileTodaySale.cardAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblCashAmt").text($scope.mobileTodaySale.cashAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblEtcAmt").text($scope.mobileTodaySale.etcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
