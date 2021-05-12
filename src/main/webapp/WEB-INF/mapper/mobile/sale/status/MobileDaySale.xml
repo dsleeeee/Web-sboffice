@@ -75,9 +75,9 @@
                 (
                     SELECT
                     tsdp.HQ_OFFICE_CD,
-                    SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CARD_AMT,
-                    SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CASH_AMT,
-                    SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS ETC_AMT
+                    SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CARD_AMT,
+                    SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CASH_AMT,
+                    SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS ETC_AMT
                     FROM TB_SL_DAILY_PAY tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -123,15 +123,13 @@
         SELECT
         A.PAY_CD,
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) AS NM,
-        A.TOT_SALE_QTY,
         A.REAL_SALE_AMT,
         NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
         FROM
         (
             SELECT
             tsdp.PAY_CD,
-            NVL(SUM(tsdp.TOT_SALE_QTY), 0) AS TOT_SALE_QTY,
-            NVL(SUM(tsdp.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+            NVL(SUM(tsdp.TOT_PAY_AMT), 0) AS REAL_SALE_AMT
             FROM TB_SL_DAILY_PAY tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -144,7 +142,7 @@
         ) A,
         (
             SELECT
-            NVL(SUM(tsdp.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+            NVL(SUM(tsdp.TOT_PAY_AMT), 0) AS TOT_REAL_SALE_AMT
             FROM TB_SL_DAILY_PAY tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -166,16 +164,14 @@
         /* MobileDaySaleMapper.getMobileDaySaleDcList */
         SELECT
         A.DC_CD,
-        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.DC_CD) AS NM,
-        A.TOT_SALE_QTY,
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041' AND NMCODE_CD = A.DC_CD) AS NM,
         A.REAL_SALE_AMT,
         NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
         FROM
         (
             SELECT
             tsdd.DC_CD,
-            NVL(SUM(tsdd.TOT_SALE_QTY), 0) AS TOT_SALE_QTY,
-            NVL(SUM(tsdd.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+            NVL(SUM(tsdd.TOT_DC_AMT), 0) AS REAL_SALE_AMT
             FROM TB_SL_DAILY_DC tsdd
             WHERE 1=1
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -188,7 +184,7 @@
         ) A,
         (
             SELECT
-            NVL(SUM(tsdd.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+            NVL(SUM(tsdd.TOT_DC_AMT), 0) AS TOT_REAL_SALE_AMT
             FROM TB_SL_DAILY_DC tsdd
             WHERE 1=1
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -213,10 +209,7 @@
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
         SUM(DAY_AVR_SALE) AS DAY_AVR_SALE,
         '집계필요' AS TOT_GUEST_CNT,
-        '집계필요' AS GUEST_UPRC,
-        '집계필요' AS TBL_AVR,
-        '집계필요' AS TBL_CNT,
-        '집계필요' AS TBL_UPRC
+        '집계필요' AS GUEST_UPRC
         FROM
         (
             SELECT *
@@ -514,9 +507,9 @@
         (
             SELECT
             tsdp.SALE_DATE,
-            SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CARD_AMT,
-            SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS CASH_AMT,
-            SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS ETC_AMT
+            SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CARD_AMT,
+            SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CASH_AMT,
+            SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS ETC_AMT
             FROM TB_SL_DAILY_PAY tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -530,9 +523,9 @@
         (
             SELECT
             tsdd.SALE_DATE,
-            SUM(CASE WHEN tsdd.DC_CD = '01' THEN tsdd.REAL_SALE_AMT ELSE 0 END) AS DC_AMT,
-            SUM(CASE WHEN tsdd.DC_CD = '02' THEN tsdd.REAL_SALE_AMT ELSE 0 END) AS COUPN_DC_AMT,
-            SUM(CASE WHEN tsdd.DC_CD NOT IN('01','02') THEN tsdd.REAL_SALE_AMT ELSE 0 END) AS ETC_DC_AMT
+            SUM(CASE WHEN tsdd.DC_CD = '01' THEN tsdd.TOT_DC_AMT ELSE 0 END) AS DC_AMT,
+            SUM(CASE WHEN tsdd.DC_CD = '02' THEN tsdd.TOT_DC_AMT ELSE 0 END) AS COUPN_DC_AMT,
+            SUM(CASE WHEN tsdd.DC_CD NOT IN('01','02') THEN tsdd.TOT_DC_AMT ELSE 0 END) AS ETC_DC_AMT
             FROM TB_SL_DAILY_DC tsdd
             WHERE 1=1
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}

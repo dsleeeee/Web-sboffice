@@ -242,9 +242,6 @@ app.controller('mobileDaySaleShopCtrl', ['$scope', '$http', function ($scope, $h
                 $("#lblShopDayAvrSale").text($scope.mobileDaySaleShop.dayAvrSale.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblShopTotGuestCnt").text($scope.mobileDaySaleShop.totGuestCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblShopGuestUprc").text($scope.mobileDaySaleShop.guestUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $("#lblShopTblAvr").text($scope.mobileDaySaleShop.tblAvr.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $("#lblShopTblCnt").text($scope.mobileDaySaleShop.tblCnt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $("#lblShopTblUprc").text($scope.mobileDaySaleShop.tblUprc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             }
         });
     };
