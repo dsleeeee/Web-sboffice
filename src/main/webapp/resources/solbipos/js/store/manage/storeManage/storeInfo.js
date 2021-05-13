@@ -125,10 +125,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.getStoreInfo();
     }
 
-    // 팝업오픈 시, 메뉴권한Tab > 웹 사이트메뉴 > 메뉴권한복사 매장콤보박스 셋팅 
-    var menuScope = agrid.getScope('webMenuCtrl');
-    menuScope.setStoreCdCombo(menuScope.hqOfficeCd, storeScope.getSelectedStore().storeCd);
-
     event.preventDefault();
   });
 
@@ -156,7 +152,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.clsFgCombo.isReadOnly        = false;
     $scope.clsFgCombo.selectedIndex     = 0;
     $scope.areaCdCombo.selectedIndex    = 0;
-    $scope.store.installPosCnt.isReadOnly = false;
+    //$scope.store.installPosCnt.isReadOnly = false;
+    $("#installPosCnt").attr("disabled", false);
+    $("#installPosCnt").css('background-color', '#FFFFFF');
     $scope.store.installPosCnt          = '';
     $("#hdSysStatFg").val("");
 
@@ -189,6 +187,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#agencyCd").val(orgnCd);
       $("#agencyNm").val(orgnNm);
     }
+
+    $scope.store.mapStoreCd = "";
+
   };
 
   /*********************************************************
@@ -228,7 +229,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.readOnlyStatus                  = true;
       $scope.sysOpenDateCombo.isReadOnly     = true;
-      $scope.store.installPosCnt.isReadOnly = true;
+      //$scope.store.installPosCnt.isReadOnly = true;
+      $("#installPosCnt").attr("disabled", true);
       $("#installPosCnt").css('background-color', '#F0F0F0');
       $("#hdSysStatFg").val(storeDetailInfo.sysStatFg);
 
@@ -244,6 +246,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#storeCd").css("width", "100%");
       $("#btnChkStoreCd").css("display", "none");
       $("#additionalArea").css("display", "none");
+
+      $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
     });
   };
 

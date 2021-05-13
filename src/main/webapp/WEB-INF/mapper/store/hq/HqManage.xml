@@ -946,42 +946,48 @@
     <select id="getConfigList" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.getConfigList */
         SELECT tcd.ENVST_GRP_CD,
-               tcn.NMCODE_NM,
-               tcd.ENVST_CD,
-               tcd.ENVST_NM,
-               tcd.DIRCT_IN_YN,
-               tcd.REMARK,
-               tcd.ENVST_VAL_CD,
-               tcd.ENVST_VAL_NM,
-               tcd.DEFLT_YN,
-               tcd.TARGT_FG,
-               DECODE(the.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG,
-               the.ENVST_VAL AS SEL_ENVST_VAL,
-               tce.ENVST_CD_CNT
+                tcn.NMCODE_NM,
+                tcd.ENVST_CD,
+                tcd.ENVST_NM,
+                tcd.DIRCT_IN_YN,
+                tcd.REMARK,
+                tcd.ENVST_VAL_CD,
+                tcd.ENVST_VAL_NM,
+                tcd.DEFLT_YN,
+                tcd.TARGT_FG,
+                DECODE(the.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG,
+                the.ENVST_VAL AS SEL_ENVST_VAL,
+                tce.ENVST_CD_CNT
           FROM (
-          SELECT tce.ENVST_GRP_CD,
-                 tce.ENVST_CD,
-                 tce.ENVST_NM,
-                 tce.ENVST_FG,
-                 tce.TARGT_FG,
-                 tce.DIRCT_IN_YN,
-                 tce.REMARK,
-                 tcd.ENVST_VAL_CD,
-                 tcd.ENVST_VAL_NM,
-                 tcd.DEFLT_YN
-            FROM TB_CM_ENVST tce,
-                 TB_CM_ENVST_DTL tcd
-           WHERE tce.TARGT_FG IN ('H','X','C')
-             AND tce.USE_YN = 'Y'
-             AND tcd.ENVST_CD (+)= tce.ENVST_CD
+          	  		SELECT *
+                      FROM (
+                              SELECT tce.ENVST_GRP_CD,
+                                      tce.ENVST_CD,
+                                      tce.ENVST_NM,
+                                      tce.ENVST_FG,
+                                      tce.TARGT_FG,
+                                      tce.DIRCT_IN_YN,
+                                      tce.REMARK,
+                                      tcd.ENVST_VAL_CD,
+                                      tcd.ENVST_VAL_NM,
+                                      tcd.DEFLT_YN,
+                                      DECODE(tce.DIRCT_IN_YN, 'Y', 'Y', tcd.USE_YN) DTL_USE_YN
+                                FROM TB_CM_ENVST tce,
+                                      TB_CM_ENVST_DTL tcd
+                               WHERE tce.TARGT_FG IN ('H','X','C')
+                                 AND tce.USE_YN = 'Y'
+                                 AND tcd.ENVST_CD (+)= tce.ENVST_CD
+                            ) tcd
+           			 WHERE tcd.DTL_USE_YN = 'Y'
                 ) tcd,
                 (
-           SELECT tce.ENVST_GRP_CD,
-                  COUNT(*) AS ENVST_CD_CNT
-             FROM TB_CM_ENVST tce
-            WHERE tce.TARGT_FG IN ('H','X','C')
-              AND tce.USE_YN = 'Y'
-            GROUP BY tce.ENVST_GRP_CD
+                   SELECT tce.ENVST_GRP_CD,
+                           COUNT(*) AS ENVST_CD_CNT
+                     FROM TB_CM_ENVST tce
+                    WHERE tce.TARGT_FG IN ('H','X','C')
+                      AND tce.USE_YN = 'Y'
+                    GROUP
+                       BY tce.ENVST_GRP_CD
                 ) tce,
                TB_HQ_ENVST the,
                TB_CM_NMCODE tcn
