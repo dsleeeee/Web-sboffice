@@ -286,7 +286,7 @@ public class ProdServiceImpl implements ProdService {
             }
 
             // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
-            if("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd().length() > 0){
+            if("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0){
 
                 //그룹(sdselGrp)
                 prodMapper.insertSdselGrpToStore(prodVO);

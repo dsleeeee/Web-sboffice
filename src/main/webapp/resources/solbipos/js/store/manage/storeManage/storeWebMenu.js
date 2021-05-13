@@ -49,6 +49,10 @@ app.controller('webMenuCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $("#storeAuthTitle").text("[" + storeCd + "] " + storeNm);
 
+        // 메뉴권한복사 > 본사와 매장 기본 셋팅
+        $scope.hqOfficeCdCombo.selectedIndex = 0;
+        $scope.setStoreCdCombo($scope.hqOfficeCdCombo.selectedValue, vStoreCd);
+
         // 메뉴 리스트 조회
         $scope.menuList();
         event.preventDefault();
