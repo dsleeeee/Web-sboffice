@@ -747,6 +747,8 @@
     <typeAlias alias="mobileTodaySaleVO" type="kr.co.solbipos.mobile.sale.status.todaySale.service.MobileTodaySaleVO"/>
     <!-- (모바일) 매출현황 > 일별매출현황 -->
     <typeAlias alias="mobileDaySaleVO" type="kr.co.solbipos.mobile.sale.status.daySale.service.MobileDaySaleVO"/>
+    <!-- (모바일) 매출현황 > 월별매출현황 -->
+    <typeAlias alias="mobileMonthSaleVO" type="kr.co.solbipos.mobile.sale.status.monthSale.service.MobileMonthSaleVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>

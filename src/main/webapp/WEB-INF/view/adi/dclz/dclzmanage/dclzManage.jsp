@@ -102,8 +102,8 @@
           <wj-flex-grid-column header="<s:message code="dclzManage.empNo"/>" binding="empNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dclzManage.empNm"/>" binding="empNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dclzManage.empInDt"/>" binding="empInDate" width="150" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.empInDt"/>" binding="empInDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.empOutDt"/>" binding="empOutDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.empInDt"/>" binding="commuteInDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.empOutDt"/>" binding="commuteOutDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dclzManage.workTime"/>" binding="workTime" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dclzManage.inFg"/>" binding="inFg" data-map="inFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dclzManage.remark"/>" binding="remark" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
@@ -119,7 +119,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzManage.js?ver=20210209.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzManage.js?ver=20210209.07" charset="utf-8"></script>
 
 <%-- 근태 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/dclz/dclzmanage/dclzDetail.jsp">
