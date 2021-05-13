@@ -171,7 +171,8 @@
                tms.REMARK,
                tms.SYS_REMARK,
                tms.HD_REMARK,
-               tms.DIRECT_MANAGE_YN
+               tms.DIRECT_MANAGE_YN,
+               tms.MAP_STORE_CD
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
@@ -341,6 +342,7 @@
             SYS_REMARK,
             HD_REMARK,
             DIRECT_MANAGE_YN,
+            MAP_STORE_CD,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -372,6 +374,7 @@
             #{sysRemark},
             #{hdRemark},
             #{directManageYn},
+            #{mapStoreCd},
             #{regDt},
             #{regId},
             #{modDt},
@@ -410,6 +413,7 @@
                SYS_REMARK = #{sysRemark},
                HD_REMARK = #{hdRemark},
                DIRECT_MANAGE_YN = #{directManageYn},
+               MAP_STORE_CD = #{mapStoreCd},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2186,54 +2190,73 @@
         /* USE : StoreManageMapper.getPosEnvGroupList */
         <![CDATA[
         SELECT tce2.ENVST_GRP_CD,
-               tcn.NMCODE_NM AS ENVST_GRP_NM,
-               tce2.ENVST_CD,
-               tce2.ENVST_NM,
-               tce2.ENVST_FG,
-               tce2.DIRCT_IN_YN,
-               tce2.REMARK,
-               tce2.ENVST_VAL_CD,
-               tce2.ENVST_VAL_NM,
-               tce2.DEFLT_YN,
-               tce2.TARGT_FG,
-               DECODE(tms.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG,
-               tms.ENVST_VAL AS SEL_ENVST_VAL,
-               tce3.ENVST_CD_CNT
+                tcn.NMCODE_NM AS ENVST_GRP_NM,
+                tce2.ENVST_CD,
+                tce2.ENVST_NM,
+                tce2.ENVST_FG,
+                tce2.DIRCT_IN_YN,
+                tce2.REMARK,
+                tce2.ENVST_VAL_CD,
+                tce2.ENVST_VAL_NM,
+                tce2.DEFLT_YN,
+                tce2.TARGT_FG,
+                DECODE(tms.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG,
+                tms.ENVST_VAL AS SEL_ENVST_VAL,
+                tce3.ENVST_CD_CNT,
+                HDENV.HQ_ENVST_VAL_CD,
+                HDENV.HQ_ENVST_VAL_NM
           FROM (
-          SELECT tce.ENVST_GRP_CD,
-                 tce.ENVST_CD,
-                 tce.ENVST_NM,
-                 tce.ENVST_FG,
-                 tce.TARGT_FG,
-                 tce.DIRCT_IN_YN,
-                 tce.REMARK,
-                 tcd.ENVST_VAL_CD,
-                 tcd.ENVST_VAL_NM,
-                 tcd.DEFLT_YN
-            FROM TB_CM_ENVST tce,
-                 TB_CM_ENVST_DTL tcd
-           WHERE tce.TARGT_FG IN ('S','C','X')
-             AND tce.ENVST_FG = #{envstFg}
-             AND tce.USE_YN = 'Y'
-             AND tcd.ENVST_CD (+)= tce.ENVST_CD
+          	      SELECT *
+                    FROM (
+                              SELECT tce.ENVST_GRP_CD,
+                                      tce.ENVST_CD,
+                                      tce.ENVST_NM,
+                                      tce.ENVST_FG,
+                                      tce.TARGT_FG,
+                                      tce.DIRCT_IN_YN,
+                                      tce.REMARK,
+                                      tcd.ENVST_VAL_CD,
+                                      tcd.ENVST_VAL_NM,
+                                      tcd.DEFLT_YN,
+                                      DECODE(tce.DIRCT_IN_YN, 'Y', 'Y', tcd.USE_YN) DTL_USE_YN
+                                FROM TB_CM_ENVST tce,
+                                      TB_CM_ENVST_DTL tcd
+                               WHERE tce.TARGT_FG IN ('S','C','X')
+                                 AND tce.ENVST_FG = #{envstFg}
+                                 AND tce.USE_YN = 'Y'
+                                 AND tcd.ENVST_CD (+)= tce.ENVST_CD
+                          ) tce2
+                  WHERE tce2.DTL_USE_YN = 'Y'
                ) tce2,
               (
-           SELECT tce.ENVST_GRP_CD,
-                 COUNT(*) AS ENVST_CD_CNT
-            FROM TB_CM_ENVST tce
-           WHERE tce.TARGT_FG IN ('S','C','X')
-             AND tce.ENVST_FG = #{envstFg}
-             AND tce.USE_YN = 'Y'
-           GROUP BY tce.ENVST_GRP_CD
+                     SELECT tce.ENVST_GRP_CD,
+                             COUNT(*) AS ENVST_CD_CNT
+                        FROM TB_CM_ENVST tce
+                       WHERE tce.TARGT_FG IN ('S','C','X')
+                         AND tce.ENVST_FG = #{envstFg}
+                         AND tce.USE_YN = 'Y'
+                       GROUP
+                          BY tce.ENVST_GRP_CD
                ) tce3,
                TB_MS_POS_ENVST tms,
-               TB_CM_NMCODE tcn
+               TB_CM_NMCODE tcn,
+               (
+                    SELECT  A.ENVST_CD
+                    ,       NVL(A.ENVST_VAL, 'NO_DATA_FOUND')       HQ_ENVST_VAL_CD
+                    ,       DECODE(A.DIRCT_IN_YN, 'Y', NVL(A.ENVST_VAL, 'NO_DATA_FOUND'), NVL(B.ENVST_VAL_NM, 'NO_DATA_FOUND')) HQ_ENVST_VAL_NM
+                    FROM    TB_HQ_ENVST A
+                    ,       TB_CM_ENVST_DTL B
+                    WHERE   HQ_OFFICE_CD        =   (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
+                    AND     B.ENVST_CD      (+) =   A.ENVST_CD
+                    AND     B.ENVST_VAL_CD  (+) =   A.ENVST_VAL
+               ) HDENV
          WHERE tms.STORE_CD (+)= #{storeCd}
            AND tms.POS_NO (+)= #{posNo}
            AND tms.ENVST_CD (+)= tce2.ENVST_CD
            AND tcn.NMCODE_GRP_CD = '004'
            AND tcn.NMCODE_CD = tce2.ENVST_GRP_CD
            AND tce3.ENVST_GRP_CD = tce2.ENVST_GRP_CD
+           AND HDENV.ENVST_CD (+)= tce2.ENVST_CD
          ORDER BY tce2.ENVST_GRP_CD, tce2.ENVST_CD, tce2.ENVST_VAL_CD
         ]]>
     </select>

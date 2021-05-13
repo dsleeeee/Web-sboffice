@@ -284,6 +284,9 @@ $("#envLayer #btnSave").click(function(){
     $.postJSONArray("/store/hq/hqManage/config/save.sb", params, function(result) {
               //console.log(result);
         s_alert.pop("<s:message code='cmm.saveSucc' />");
+
+        // 재조회
+        getConfigList();
       },
       function(result) {
         s_alert.pop(result.message);

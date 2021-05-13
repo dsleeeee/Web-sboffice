@@ -179,8 +179,8 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_targtFg\"     value=\"' + list[j].targtFg + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValCd\"  value=\"' + list[j].hqEnvstValCd + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValNm\"  value=\"' + list[j].hqEnvstValNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValCd\"  value=\"' + list[j].hqEnvstValCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValNm\"  value=\"' + list[j].hqEnvstValNm + '\">';
               storeEnvHtml += '  </td>';
             }
             //--------------------------------------------------------
