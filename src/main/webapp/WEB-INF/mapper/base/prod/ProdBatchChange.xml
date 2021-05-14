@@ -121,6 +121,9 @@
                 <if test="prcCtrlFg != null and prcCtrlFg != ''">
                     AND tmp.PRC_CTRL_FG = #{prcCtrlFg}
                 </if>
+                <if test="regFg != null and regFg != ''">
+                    AND tmp.REG_FG = #{regFg}
+                </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
