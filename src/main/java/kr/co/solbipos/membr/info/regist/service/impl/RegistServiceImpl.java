@@ -853,9 +853,10 @@ public class RegistServiceImpl implements RegistService {
             registVO.setRegStoreCd(null);
             registVO.setPointChgFg("3");
 
-            registVO.setMembrNo(registVO.getMembrNo());
             registVO.setChgPoint(Integer.parseInt(registVO.getAvablPoint()));
-            registVO.setRemark(registVO.getRemark());
+            if(registVO.getRemark() == null || "".equals(registVO.getRemark())){
+              registVO.setRemark("포인트조정[" + sessionInfoVO.getOrgnCd() + "-" + sessionInfoVO.getUserId() + "]");
+            }
 
             mapper.insertMembrPointHist(registVO);
         }
