@@ -269,6 +269,29 @@
             </tr>
             </tbody>
           </table>
+
+          <%-- 기타정보 --%>
+          <h3 class="h3_tbl"><s:message code="storeManage.etcInfo" /></h3>
+          <table class="searchTbl">
+            <colgroup>
+              <col class="w15" />
+              <col class="w35" />
+              <col class="w15" />
+              <col class="w35" />
+            </colgroup>
+            <tbody>
+            <tr>
+                <%-- 매핑매장코드 --%>
+              <th><s:message code="storeManage.mapStoreCd" /></th>
+              <td>
+                <input id="mapStoreCd" ng-model="store.mapStoreCd" type="text" class="sb-input w100" maxlength="20" onkeyup="this.value=this.value.replace(/[^A-Za-z0-9]/g,'');"/>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+
           <%-- 추가설정 (매장등록시에만 보여줌) --%>
           <div id="additionalArea"> <!--todo 왜 조회했다가 신규등록하려면 안보이냐 이자식아 -->
             <h3 class="h3_tbl"><s:message code="storeManage.additionalSetting" /></h3>

@@ -162,6 +162,9 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.save = function(){
 
+    var storeScope  = agrid.getScope('storeManageCtrl');
+    var objhqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
+
     var objStatus       = document.getElementsByName("pos_status");
     var objEnvstCd      = document.getElementsByName("pos_envstCd");
     var objEnvstNm      = document.getElementsByName("pos_envstNm");
@@ -170,6 +173,9 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var objEnvstValCd   = document.getElementsByName("pos_envstValCd");
     var objDirctInYn    = document.getElementsByName("pos_dirctInYn");
     var objOldEnvstVal  = document.getElementsByName("pos_oldEnvstVal");
+    var objHqEnvstValCd = document.getElementsByName("pos_hqEnvstValCd");
+    var objHqEnvstValNm = document.getElementsByName("pos_hqEnvstValNm");
+    var objTargtFg      = document.getElementsByName("pos_targtFg");
 
     // 포스형태[204]가 외식업-후불제인 경우에만 후불제를 선택할 수 있습니다.
     var env1015 = $("#env1015").val();
@@ -191,6 +197,17 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         var msgStr = messages["hqManage.envSetting"] + " [" + objEnvstCd[i].value + "] "+ objEnvstNm[i].value
             + messages["storeManage.require.regist.inputEnv"]
         ;
+
+        $scope._popMsg(msgStr);
+        return false;
+      }
+
+      if(objhqOfficeCd !== "00000" && objTargtFg[i].value === "X" && objHqEnvstValCd[i].value !== objEnvstValCd[i].value){
+        var msgStr = "["
+            + objEnvstCd[i].value + "] "
+            + objEnvstNm[i].value
+            + messages["storeManage.require.regist.hqEnvstVal"]
+            + "( '"+objHqEnvstValNm[i].value+"' )";
 
         $scope._popMsg(msgStr);
         return false;

@@ -130,6 +130,9 @@ public class StoreManageVO extends PageVO {
     /** 조회용 매장코드 */
     private String srchStoreCd;
 
+    /** 매핑매장코드*/
+    private String mapStoreCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -705,5 +708,13 @@ public class StoreManageVO extends PageVO {
 
     public void setSrchStoreCd(String srchStoreCd) {
         this.srchStoreCd = srchStoreCd;
+    }
+
+    public String getMapStoreCd() {
+        return mapStoreCd;
+    }
+
+    public void setMapStoreCd(String mapStoreCd) {
+        this.mapStoreCd = mapStoreCd;
     }
 }

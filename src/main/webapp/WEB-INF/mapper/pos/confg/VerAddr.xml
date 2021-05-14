@@ -20,7 +20,7 @@
         COMMENTS : 포스버전 리스트를 조회한다.
     -->
     <select id="getList" parameterType="addrVerInfoVO" resultType="DefaultMap">
-        /* USE : VerManageMapper.getList */
+        /* USE : VerAddrMapper.getList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tcpv.VER_SER_NO,
                tcpv.VER_SER_NM,
@@ -77,7 +77,7 @@
         COMMENTS : 포스버전에 대한 상세 정보를 조회한다.
     -->
     <select id="dtlInfo" parameterType="addrVerInfoVO" resultType="DefaultMap">
-        /* USE : VerManageMapper.dtlInfo */
+        /* USE : VerAddrMapper.dtlInfo */
         SELECT tcpv.VER_SER_NO,
                tcpv.VER_SER_NM,
                tcpv.FILE_DIR,
@@ -107,7 +107,7 @@
         COMMENTS : 포스버전을 등록한다.
     -->
     <insert id="verRegist" parameterType="addrVerInfoVO">
-        /* USE : VerManageMapper.verRegist */
+        /* USE : VerAddrMapper.verRegist */
         <![CDATA[
         INSERT INTO TB_CM_POS_ADDR_VERSN
         (
@@ -162,7 +162,7 @@
         COMMENTS : 포스버전을 수정한다.
     -->
     <update id="verModify" parameterType="addrVerInfoVO">
-        /* USE : VerManageMapper.verModify */
+        /* USE : VerAddrMapper.verModify */
         <![CDATA[
         UPDATE TB_CM_POS_ADDR_VERSN
            SET VER_SER_NM     = #{verSerNm},
@@ -194,7 +194,7 @@
         COMMENTS : 포스버전을 삭제한다.
     -->
     <update id="verDelete" parameterType="addrVerInfoVO" >
-        /* USE : VerManageMapper.deleteVersion */
+        /* USE : VerAddrMapper.deleteVersion */
         UPDATE TB_CM_POS_ADDR_VERSN
            SET DEL_YN = 'Y',
                USE_YN = 'N'
@@ -207,7 +207,7 @@
         COMMENTS : 등록 매장 목록을 조회한다.
     -->
     <select id="storeList" parameterType="addrVerInfoVO" resultType="DefaultMap">
-        /* USE : VerManageMapper.storeList */
+        /* USE : VerAddrMapper.storeList */
         SELECT  tcpvs.VER_SER_NO,
                 tcpvs.STORE_CD,
                 tms.STORE_NM,
@@ -233,7 +233,7 @@
         COMMENTS : 추가가능한 매장 목록을 조회한다.
     -->
     <select id="srchStoreList" parameterType="addrApplcStoreVO" resultType="DefaultMap">
-        /* USE : VerManageMapper.srchStoreList */
+        /* USE : VerAddrMapper.srchStoreList */
         SELECT tms.STORE_CD,
                tms.SYS_STAT_FG,
                tms.VAN_CD,
@@ -300,7 +300,7 @@
         COMMENTS : 버전 적용 매장 등록한다.
     -->
     <select id="registStore" statementType="CALLABLE"  parameterType="addrApplcStoreVO" resultType="String">
-        /* USE : VerManageMapper.registStore */
+        /* USE : VerAddrMapper.registStore */
         {
             CALL PKG_CM_ADDR_VERSN_STORE.SP_CM_ADDR_VERSN_STORE_I
             (
@@ -321,7 +321,7 @@
         COMMENTS : 버전 일련번호 중복 체크한다.
     -->
     <select id="chkVerSerNo" parameterType="addrVerInfoVO" resultType="Integer">
-        /* USE : VerManageMapper.chkVerSerNo */
+        /* USE : VerAddrMapper.chkVerSerNo */
         SELECT COUNT(1) AS CNT
           FROM TB_CM_POS_ADDR_VERSN
          WHERE VER_SER_NO = #{verSerNo}
@@ -333,7 +333,7 @@
         COMMENTS : 버전 적용 매장 삭제한다.
     -->
     <delete id="removeStore" parameterType="addrApplcStoreVO" >
-        /* USE : VerManageMapper.removeStore */
+        /* USE : VerAddrMapper.removeStore */
         <![CDATA[
         DELETE TB_CM_POS_ADDR_VERSN_STORE
          WHERE VER_SER_NO = #{verSerNo}
