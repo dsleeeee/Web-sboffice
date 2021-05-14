@@ -29,7 +29,7 @@
             <th><s:message code="cmm.search.date"/></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="startDate" name="startDate" class="w110px" /></span>
+                    <span class="txtIn"><input id="startDate" name="startDate" class="w110px" /></span>
                 </div>
             </td>
         </tr>

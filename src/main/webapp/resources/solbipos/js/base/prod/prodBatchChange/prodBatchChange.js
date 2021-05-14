@@ -18,6 +18,12 @@ var regFgData = [
     {"name":"본사","value":"H"},
     {"name":"매장","value":"S"}
 ];
+// 상품등록구분
+var regFgTotData = [
+    {"name":"전체","value":""},
+    {"name":"본사","value":"H"},
+    {"name":"매장","value":"S"}
+];
 // 판매상품여부
 var saleProdYnTotData = [
     {"name":"전체","value":""},
@@ -52,6 +58,8 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("saleProdYnCombo", saleProdYnTotData); // 판매상품여부
     $scope._setComboData("pointSaveYnCombo", pointSaveYnTotData); // 포인트적립여부
     $scope._setComboData("prcCtrlFgCombo", prcCtrlFgTotData); // 가격관리구분
+    $scope._setComboData("regFgCombo", regFgTotData); // 상품등록구분
+
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("saleProdYnChgCombo", saleProdYnData); // 판매상품여부
     $scope._setComboData("pointSaveYnChgCombo", pointSaveYnData); // 포인트적립여부

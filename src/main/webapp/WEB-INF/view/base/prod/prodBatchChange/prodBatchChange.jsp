@@ -124,6 +124,30 @@
                 <td></td>
             </tr>
         </c:if>
+        <%-- 프랜 매장일때만 --%>
+        <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
+            <tr>
+                <%-- 상품등록구분 --%>
+                <th>
+                    <s:message code="prodBatchChange.regFg" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchRegFg"
+                                ng-model="regFg"
+                                items-source="_getComboData('regFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <th></th>
+                <td></td>
+            </tr>
+        </c:if>
         </tbody>
     </table>
 
@@ -291,7 +315,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20210503.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20210514.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
