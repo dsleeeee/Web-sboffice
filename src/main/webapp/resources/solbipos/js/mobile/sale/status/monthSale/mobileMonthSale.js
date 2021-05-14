@@ -114,6 +114,7 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', function ($scope, $htt
         params.startMonth = year + month; // 조회기간
         params.endMonth = year + month; // 조회기간
         params.srchStoreCd = $("#mobileMonthSaleStoreCd").val();
+        params.diffMonth = 1; // 조회기간 차이(차트 높이 때문에)
 
         // 바 차트
         $scope._broadcast("mobileMonthSaleDlvrChartCtrl", params);
@@ -138,7 +139,6 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.searchMobileMonthSalePay = function(){
         var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
         var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
-        // var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
         var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
 
         // 시작일자가 종료일자보다 빠른지 확인
@@ -156,6 +156,14 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', function ($scope, $htt
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.srchStoreCd = $("#mobileMonthSaleStoreCd").val();
+
+        // 소수점 입력안됨
+        var numchkexp1 = /^\d*[.]\d*$/;
+        if(numchkexp1.test(diffMonth) == true) {
+            params.diffMonth = parseInt( diffMonth.toString().substring(0, diffMonth.toString().indexOf(".")) ); // 조회기간 차이(차트 높이 때문에)
+        } else {
+            params.diffMonth = diffMonth; // 조회기간 차이(차트 높이 때문에)
+        }
 
         $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSalePayList.sb", params, function() {
             // 매출종합
@@ -261,10 +269,10 @@ app.controller('mobileMonthSaleShopCtrl', ['$scope', '$http', function ($scope, 
 
     // 선택 매장
     $scope.mobileMonthSaleShop;
-    $scope.setMobileMonthSaleShop  = function(store) {
+    $scope.setMobileMonthSaleShop = function(store) {
         $scope.mobileMonthSaleShop = store;
     };
-    $scope.setMobileMonthSaleShop  = function(){
+    $scope.setMobileMonthSaleShop = function(){
         return $scope.mobileMonthSaleShop;
     };
 }]);
@@ -313,10 +321,12 @@ app.controller('mobileMonthSaleDlvrChartCtrl', ['$scope', '$http', function ($sc
 
     // 차트
     $scope.initChart = function(s, args){
-        s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
-        s.axisX.labelAngle = 0;
+        // s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
+        s.plotMargin = 'auto auto auto auto'; // top, right, bottom, left
+        s.axisX.labelAngle = 0; // x축 명칭 기울기
         // s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
         // s.header = "내점/배달/포장";
+        s.legend.position = wijmo.chart.Position.Top; // 범례 위치
 
         var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
             animationMode: wijmo.chart.animation.AnimationMode.All,
@@ -325,8 +335,19 @@ app.controller('mobileMonthSaleDlvrChartCtrl', ['$scope', '$http', function ($sc
         });
     };
 
+    // 조회기간 차이(차트 높이 때문에)
+    var diffMonthCol = 1;
+
     // <-- 검색 호출 -->
     $scope.$on("mobileMonthSaleDlvrChartCtrl", function(event, data) {
+        diffMonthCol = data.diffMonth; // 조회기간 차이(차트 높이 때문에)
+
+        // 차트 높이 선택한 날짜에 따라
+        var col = diffMonthCol;
+        // 최소값 + (15 * 날짜수) + px
+        var chartHeight = 115 + (15 * col) + "px";
+        $("#mobileMonthSaleDlvrBarChart").css("height", chartHeight);
+
         $scope.searchMobileMonthSaleDlvrChart(data);
     });
 
@@ -343,7 +364,7 @@ app.controller('mobileMonthSaleDlvrChartCtrl', ['$scope', '$http', function ($sc
 
     $scope.rendered = function(s, e) {
 
-        var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+        var pArea = s.hostElement.querySelector('.wj-plot-area > rect');
         var pAreaWidth = pArea.width.baseVal.value;
         var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
 
@@ -393,7 +414,7 @@ app.controller('mobileMonthSaleDlvrChartCtrl', ['$scope', '$http', function ($sc
             var title = ht.name;
             var nameArr = ht._xfmt.split(" - ");
             var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            return "<b>" + title + "</b><br><br>" + nameArr[0]  + "<br><br>" + value;
+            return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br><br>" + value;
         }
     }
 }]);
@@ -404,10 +425,12 @@ app.controller('mobileMonthSaleDlvrChart2Ctrl', ['$scope', '$http', function ($s
 
     //메인그리드 조회후 상세그리드 조회.
     $scope.initChart = function(s, args){
-        s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
-        s.axisX.labelAngle = 0;
+        // s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
+        s.plotMargin = 'auto auto auto auto'; // top, right, bottom, left
+        s.axisX.labelAngle = 0; // x축 명칭 기울기
         //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
         // s.header = "내점";
+        s.legend.position = wijmo.chart.Position.Top; // 범례 위치
 
         var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
             animationMode: wijmo.chart.animation.AnimationMode.All,
@@ -416,8 +439,19 @@ app.controller('mobileMonthSaleDlvrChart2Ctrl', ['$scope', '$http', function ($s
         });
     };
 
+    // 조회기간 차이(차트 높이 때문에)
+    var diffMonthCol = 1;
+
     // <-- 검색 호출 -->
     $scope.$on("mobileMonthSaleDlvrChart2Ctrl", function(event, data) {
+        diffMonthCol = data.diffMonth; // 조회기간 차이(차트 높이 때문에)
+
+        // 차트 높이 선택한 날짜에 따라
+        var col = diffMonthCol;
+        // 최소값 + (15 * 날짜수) + px
+        var chartHeight = 115 + (15 * col) + "px";
+        $("#mobileMonthSaleDlvrBarChart2").css("height", chartHeight);
+
         $scope.searchMobileMonthSaleDlvrChart2(data);
     });
 
@@ -434,7 +468,7 @@ app.controller('mobileMonthSaleDlvrChart2Ctrl', ['$scope', '$http', function ($s
 
     $scope.rendered = function(s, e) {
 
-        var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+        var pArea = s.hostElement.querySelector('.wj-plot-area > rect');
         var pAreaWidth = pArea.width.baseVal.value;
         var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
 
@@ -484,7 +518,7 @@ app.controller('mobileMonthSaleDlvrChart2Ctrl', ['$scope', '$http', function ($s
             var title = ht.name;
             var nameArr = ht._xfmt.split(" - ");
             var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            return "<b>" + title + "</b><br><br>" + nameArr[0]  + "<br><br>" + value;
+            return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br><br>" + value;
         }
     }
 }]);
@@ -495,11 +529,13 @@ app.controller('mobileMonthSaleDlvrChart3Ctrl', ['$scope', '$http', function ($s
 
     //메인그리드 조회후 상세그리드 조회.
     $scope.initChart = function(s, args){
-        s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
-        s.axisX.labelAngle = 0;
+        // s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
+        s.plotMargin = 'auto auto auto auto'; // top, right, bottom, left
+        s.axisX.labelAngle = 0; // x축 명칭 기울기
         //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
         // s.header = "배달";
         s.palette = ['#ff9d39']; // 그래프 색상
+        s.legend.position = wijmo.chart.Position.Top; // 범례 위치
 
         var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
             animationMode: wijmo.chart.animation.AnimationMode.All,
@@ -508,8 +544,19 @@ app.controller('mobileMonthSaleDlvrChart3Ctrl', ['$scope', '$http', function ($s
         });
     };
 
+    // 조회기간 차이(차트 높이 때문에)
+    var diffMonthCol = 1;
+
     // <-- 검색 호출 -->
     $scope.$on("mobileMonthSaleDlvrChart3Ctrl", function(event, data) {
+        diffMonthCol = data.diffMonth; // 조회기간 차이(차트 높이 때문에)
+
+        // 차트 높이 선택한 날짜에 따라
+        var col = diffMonthCol;
+        // 최소값 + (15 * 날짜수) + px
+        var chartHeight = 115 + (15 * col) + "px";
+        $("#mobileMonthSaleDlvrBarChart3").css("height", chartHeight);
+
         $scope.searchMobileMonthSaleDlvrChart3(data);
     });
 
@@ -526,7 +573,7 @@ app.controller('mobileMonthSaleDlvrChart3Ctrl', ['$scope', '$http', function ($s
 
     $scope.rendered = function(s, e) {
 
-        var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+        var pArea = s.hostElement.querySelector('.wj-plot-area > rect');
         var pAreaWidth = pArea.width.baseVal.value;
         var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
 
@@ -576,7 +623,7 @@ app.controller('mobileMonthSaleDlvrChart3Ctrl', ['$scope', '$http', function ($s
             var title = ht.name;
             var nameArr = ht._xfmt.split(" - ");
             var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            return "<b>" + title + "</b><br><br>" + nameArr[0]  + "<br><br>" + value;
+            return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br><br>" + value;
         }
     }
 }]);
@@ -587,11 +634,13 @@ app.controller('mobileMonthSaleDlvrChart4Ctrl', ['$scope', '$http', function ($s
 
     //메인그리드 조회후 상세그리드 조회.
     $scope.initChart = function(s, args){
-        s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
-        s.axisX.labelAngle = 0;
+        // s.plotMargin = 'auto auto 50 auto'; // top, right, bottom, left
+        s.plotMargin = 'auto auto auto auto'; // top, right, bottom, left
+        s.axisX.labelAngle = 0; // x축 명칭 기울기
         //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
         // s.header = "포장";
         s.palette = ['#71d195']; // 그래프 색상
+        s.legend.position = wijmo.chart.Position.Top; // 범례 위치
 
         var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
             animationMode: wijmo.chart.animation.AnimationMode.All,
@@ -600,8 +649,19 @@ app.controller('mobileMonthSaleDlvrChart4Ctrl', ['$scope', '$http', function ($s
         });
     };
 
+    // 조회기간 차이(차트 높이 때문에)
+    var diffMonthCol = 1;
+
     // <-- 검색 호출 -->
     $scope.$on("mobileMonthSaleDlvrChart4Ctrl", function(event, data) {
+        diffMonthCol = data.diffMonth; // 조회기간 차이(차트 높이 때문에)
+
+        // 차트 높이 선택한 날짜에 따라
+        var col = diffMonthCol;
+        // 최소값 + (15 * 날짜수) + px
+        var chartHeight = 115 + (15 * col) + "px";
+        $("#mobileMonthSaleDlvrBarChart4").css("height", chartHeight);
+
         $scope.searchMobileMonthSaleDlvrChart4(data);
     });
 
@@ -618,7 +678,7 @@ app.controller('mobileMonthSaleDlvrChart4Ctrl', ['$scope', '$http', function ($s
 
     $scope.rendered = function(s, e) {
 
-        var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+        var pArea = s.hostElement.querySelector('.wj-plot-area > rect');
         var pAreaWidth = pArea.width.baseVal.value;
         var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
 
@@ -668,7 +728,7 @@ app.controller('mobileMonthSaleDlvrChart4Ctrl', ['$scope', '$http', function ($s
             var title = ht.name;
             var nameArr = ht._xfmt.split(" - ");
             var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            return "<b>" + title + "</b><br><br>" + nameArr[0]  + "<br><br>" + value;
+            return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br><br>" + value;
         }
     }
 }]);
@@ -696,7 +756,7 @@ app.controller('mobileMonthSaleDtlCtrl', ['$scope', '$http', function ($scope, $
         s.columnHeaders.rows.push(new wijmo.grid.Row());
 
         // 첫째줄 헤더 생성
-        var dataItem         = {};
+        var dataItem = {};
         dataItem.saleYm = messages["mobile.monthSale.saleYm"];
         dataItem.totSaleAmt = messages["mobile.monthSale.totSaleAmt"];
         dataItem.totDcAmt = messages["mobile.monthSale.totDcAmt"];

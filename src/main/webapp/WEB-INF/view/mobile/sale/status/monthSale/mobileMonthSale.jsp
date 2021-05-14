@@ -283,11 +283,11 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.monthAvrSale"/>" binding="monthAvrSale" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="billCnt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="billUprc" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.nm"/>" binding="nm" width="1.2*" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.7*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.monthAvrSale"/>" binding="monthAvrSale" width="1.7*" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="billCnt" width="1.2*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="billUprc" width="1.2*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -316,9 +316,10 @@
                         id="mobileMonthSaleDlvrBarChart"
                         name="barChart1"
                         <%--class="custom-flex-chart"--%>
-                        style="width:100%; height:230px; font-size:14px;"
+                        style="width:100%; height:auto; font-size:10px;"
                         initialized="initChart(s,e)"
                         items-source="data"
+                        chart-type="1" <%-- 세로차트형(Bar) --%>
                         binding-x="saleYm">
 
                     <wj-flex-chart-series name="<s:message code="mobile.monthSale.shop"/>" binding="shopRealSaleAmt"></wj-flex-chart-series>
@@ -350,9 +351,10 @@
                         id="mobileMonthSaleDlvrBarChart2"
                         name="barChart2"
                         <%--class="custom-flex-chart"--%>
-                        style="width:100%; height:230px; font-size:14px;"
+                        style="width:100%; height:auto; font-size:10px;"
                         initialized="initChart(s,e)"
                         items-source="data"
+                        chart-type="1" <%-- 세로차트형(Bar) --%>
                         binding-x="saleYm">
 
                     <wj-flex-chart-series name="<s:message code="mobile.monthSale.shop"/>" binding="realSaleAmt"></wj-flex-chart-series>
@@ -382,9 +384,10 @@
                         id="mobileMonthSaleDlvrBarChart3"
                         name="barChart3"
                         <%--class="custom-flex-chart"--%>
-                        style="width:100%; height:230px; font-size:14px;"
+                        style="width:100%; height:auto; font-size:10px;"
                         initialized="initChart(s,e)"
                         items-source="data"
+                        chart-type="1" <%-- 세로차트형(Bar) --%>
                         binding-x="saleYm">
 
                     <wj-flex-chart-series name="<s:message code="mobile.monthSale.dlvr"/>" binding="realSaleAmt"></wj-flex-chart-series>
@@ -414,9 +417,10 @@
                         id="mobileMonthSaleDlvrBarChart4"
                         name="barChart4"
                         <%--class="custom-flex-chart"--%>
-                        style="width:100%; height:230px; font-size:14px;"
+                        style="width:100%; height:auto; font-size:10px;"
                         initialized="initChart(s,e)"
                         items-source="data"
+                        chart-type="1" <%-- 세로차트형(Bar) --%>
                         binding-x="saleYm">
 
                     <wj-flex-chart-series name="<s:message code="mobile.monthSale.pack"/>" binding="realSaleAmt"></wj-flex-chart-series>
@@ -479,4 +483,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20210512.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20210514.01" charset="utf-8"></script>
