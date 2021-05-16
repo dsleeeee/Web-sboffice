@@ -6,6 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrNewService;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
@@ -66,6 +68,8 @@ public class TableLayoutNewController {
 
     @Autowired
     TableAttrNewService tableAttrNewService;
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
 
     /**
      * 테이블 구성 화면 오픈
@@ -78,10 +82,16 @@ public class TableLayoutNewController {
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpSession session, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
     	//테이블속성 항목값 - 공통코드
         model.addAttribute("tableAttrs", convertToJson(tableAttrNewService.selectTblAttrCommCode()));
         //Default 테이블속성 조회 - 각 항목의 좌표 사용을 위해
         model.addAttribute("defaults", convertToJson(tableAttrNewService.selectTableAttrDefault()));
+
+        // 1098 테이블속성사이즈보정사용여부 200*200
+        String envstCd      = "1098";
+        String attrSizeCd   = StringUtil.getOrDefault(cmmEnvUtil.getStoreEnvst(sessionInfoVO, envstCd), "0");
+        model.addAttribute("attrSizeCd", attrSizeCd);
 
         return RESULT_URI + "/tableNewLayout";
     }
@@ -175,9 +185,9 @@ public class TableLayoutNewController {
 //        return result;
     	String xml = "";
         Result result = new Result(Status.FAIL);
-        
+
 	try {
-		   
+
         LOGGER.debug(tableVO.getXml());
 
     	xml = URLDecoder.decode(tableVO.getXml(), "UTF-8").replace("\n", "&#xa;");
@@ -287,8 +297,8 @@ public class TableLayoutNewController {
 //    	String uploadPath = request.getSession().getServletContext().getRealPath("/resources/graph/upload");
         // 파일서버 대응 경로 지정 (운영)
         String uploadPath = BaseEnv.FILE_UPLOAD_DIR + "table_img/";
-    	
-    	
+
+
     	LOGGER.debug("path : " + uploadPath);
     	LOGGER.debug("originalName : "+file.getOriginalFilename());
     	LOGGER.debug("size : "+file.getSize());

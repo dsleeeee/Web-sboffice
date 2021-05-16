@@ -245,7 +245,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
                 tableAttrVO.setHeight((long)geo.getHeight());
 
                 //스타일
-                String styleStr = cell.getStyle();                
+                String styleStr = cell.getStyle();
                 if(styleStr != null) {
                     String[] styles = styleStr.split(";");
                     for(String style : styles) {
@@ -255,7 +255,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
                             continue;
                         }
                         //LOGGER.debug(styleKeyValue[0]);
-                        
+
                         if (TouchKeyStyle.getEnum(styleKeyValue[0]) != null) {
                         	switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
 	                            case FONT_COLOR:
@@ -286,7 +286,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
 	                                break;
 	                        }
                         }
-                        
+
                     }
                 }
 //                tableAttrVO.setUseYn("Y");
@@ -336,7 +336,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
                 styleStr += tableAttrVO.getTextalignFg() != null ? (SM + TouchKeyStyle.ALIGN.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
                 styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + TouchKeyStyle.VERTICAL_ALIGN.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
                 styleStr += tableAttrVO.getUseYn() != null ? (SM + TouchKeyStyle.USE_YN.getCode() +EQ+ tableAttrVO.getUseYn()):"";
-                
+
                 cell.setStyle(styleStr);
             }
             mxCodec codec = new mxCodec();

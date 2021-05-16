@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="attrSizeCd" value="${attrSizeCd}" />
 
 <style>
     #contentLayout div {
@@ -82,11 +83,15 @@
     window.TABLE_ATTR_DEFAULTS = ${defaults};
 </script>
 
+<script>
+  var attrSizeCd = ${attrSizeCd};
+</script>
+
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20210219.001" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20201221.013" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20210516.001" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
 <div class="subCon2" ng-controller="tbLayoutCtrl">
@@ -413,9 +418,9 @@
                         <div class="btn_int tc" id="format">
                             <button class="btn_blue" style="display: none;" id="btnChangeAttr"><s:message code="cmm.init" /></button>
                             <button class="btn_gray" id="btnInitAttr"><s:message code="cmm.init" /></button>
-                            <button class="btn_blue"  style="display: none;" id="btnSaveAttr" ><s:message code="cmm.save" /></button>
+                            <button class="btn_blue" style="display: none;" id="btnSaveAttr" ><s:message code="cmm.save" /></button>
                             <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.save" /></button> <%--typeSave-> save --%>
-                            <button class="btn_blue" id="btnPreviewTblAttr"><s:message code="tableAttr.preview" /></button>
+                            <button class="btn_blue" style="display: none;"id="btnPreviewTblAttr"><s:message code="tableAttr.preview" /></button>
                         </div>
                     </div>
                     <%--//설정--%>

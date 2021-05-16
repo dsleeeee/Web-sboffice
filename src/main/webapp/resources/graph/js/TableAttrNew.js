@@ -1173,6 +1173,12 @@ FormatAttr.prototype.open = function(isLoad) {
     	if (currentCell.geometry != null && currentCell.geometry != undefined) {
         	currentWidth = currentCell.geometry.width;
         	currentHeight = currentCell.geometry.height;
+
+            if(attrSizeCd == "1")                   //17
+            {
+                currentWidth    = 184;
+                currentHeight   = 184;
+            }
         }
 
 		var styleObjArr = getCellStyle(currentCell.style);
