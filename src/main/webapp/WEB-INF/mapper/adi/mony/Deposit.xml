@@ -56,13 +56,14 @@
         <choose>
             <when test="orgnFg != null and orgnFg.toString() == 'HQ'">
                 SELECT LPAD( NVL(MAX(ACCNT_CD), 0) + 1, 3, '0') AS ACCNT_CD
-                FROM TB_HQ_ACCOUNT
-                WHERE HQ_OFFICE_CD  = #{hqOfficeCd}
+                  FROM TB_HQ_ACCOUNT
+                 WHERE HQ_OFFICE_CD  = #{hqOfficeCd}
             </when>
             <when test="orgnFg != null and orgnFg.toString() == 'STORE'">
-                SELECT LPAD( NVL(MAX(ACCNT_CD), 0) + 1, 3, '0') AS ACCNT_CD
-                FROM TB_MS_ACCOUNT
-                WHERE STORE_CD  = #{storeCd}
+                SELECT LPAD( NVL(MAX(ACCNT_CD), 800) + 1, 3, '0') AS ACCNT_CD
+                  FROM TB_MS_ACCOUNT
+                 WHERE STORE_CD  = #{storeCd}
+                   AND ACCNT_CD > 800
             </when>
         </choose>
     </select>
