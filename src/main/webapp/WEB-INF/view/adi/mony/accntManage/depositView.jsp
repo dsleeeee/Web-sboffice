@@ -16,17 +16,17 @@
   </div>
 
   <%-- 입금계정 --%>
-  <div id="depositGrid" class="w50 fl mt40" style="width: 50%" ng-controller="depositCtrl">
+  <div id="depositGrid" class="w50 fl mt40" style="width: 50%" ng-controller="depositViewCtrl">
     <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10" id="depositBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.deposit' /></span>
-        <button class="btn_skyblue"  ng-click="addRow()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
+        <button class="btn_skyblue"  ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" ng-click="delete()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
+        <button class="btn_skyblue" ng-click="delete()">
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" ng-click="save()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
+        <button class="btn_skyblue" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
         <button class="btn_skyblue" ng-click="batch()" <c:if test="${orgnFg ne 'HQ'}">style="display: none"</c:if>>
@@ -49,7 +49,7 @@
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" width="*" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.accntNm"/>" binding="accntNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.accntFg"/>" binding="accntFg" visible="false" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="accntManage.useYn"/>" binding="useYn" data-map="useYnDataMap" width="*"></wj-flex-grid-column>
@@ -64,13 +64,13 @@
     <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10" id="withdrawBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.withdraw' /></span>
-        <button class="btn_skyblue" ng-click="addRow()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
+        <button class="btn_skyblue" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" ng-click="delete()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
+        <button class="btn_skyblue" ng-click="delete()">
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" ng-click="save()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
+        <button class="btn_skyblue" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
         <button class="btn_skyblue" ng-click="batch()" <c:if test="${orgnFg ne 'HQ'}">style="display: none"</c:if>>
@@ -93,7 +93,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="accntManage.accntCd"/>" binding="accntCd" width="*" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.accntNm"/>" binding="accntNm" width="*"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.accntFg"/>" binding="accntFg" visible="false" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="accntManage.useYn"/>" binding="useYn" data-map="useYnDataMap" width="*"></wj-flex-grid-column>
@@ -105,7 +105,8 @@
 
 <script type="text/javascript">
 var orgnFg = "${orgnFg}";
+var hqOfficeCd = "${hqOfficeCd}";
 var baseUrl = "${baseUrl}";
 var useYnFg = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/adi/mony/accntManage/deposit.js?ver=2018101202" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/mony/accntManage/deposit.js?ver=2018101204" charset="utf-8"></script>
