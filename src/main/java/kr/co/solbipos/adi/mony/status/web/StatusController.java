@@ -69,7 +69,7 @@ public class StatusController {
     }
 
     /**
-     * 부가서비스 > 금전처리 > 금전현황 조회
+     * 금전현황 리스트 조회
      *
      * @param request
      * @param response
@@ -84,13 +84,13 @@ public class StatusController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         LOGGER.debug(statusVO.toString());
-        List<StatusVO> result = statusService.selectStatus(statusVO, sessionInfoVO);
+        List<DefaultMap<String>> result = statusService.selectStatus(statusVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, statusVO);
     }
 
     /**
-     * 금전현황 입금/출금 SELECT에 따른 계정 조회
+     * 계정구분에 따른 계정 코드 조회(입금/출금 계정, 매장권한에서만 사용)
      *
      * @param statusVO
      * @param request
@@ -103,8 +103,31 @@ public class StatusController {
     public Result employee(StatusVO statusVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> result = statusService.selectAccntList(statusVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = statusService.selectAccntList(statusVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, statusVO);
+    }
+
+    /**
+     * 금전현황 리스트 조회 Excel 다운로드
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.05.18
+     * @return
+     */
+    @RequestMapping(value = "/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result monyStatusExcelList(StatusVO statusVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = statusService.monyStatusExcelList(statusVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, statusVO);
     }
 }

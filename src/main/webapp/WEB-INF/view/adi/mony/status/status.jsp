@@ -8,341 +8,196 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="subCon">
-  <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
-    <%-- 조회 --%>
-    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="searchBtn">
-        <s:message code="cmm.search" />
-      </button>
+<div class="subCon" ng-controller="monyStatusCtrl" style="padding-bottom: 0;">
+
+    <%--searchTbl--%>
+    <div class="searchBar">
+      <a href="#" class="fl"><s:message code="status.monyStatus"/></a>
+      <%-- 조회 --%>
+      <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+        <button class="btn_blue mr3" id="btnSearch" ng-click="_pageView('monyStatusCtrl',1)">
+          <s:message code="cmm.search" />
+        </button>
+      </div>
     </div>
-  </div>
 
-  <%-- TABLE1 (프렌차이즈 권한 노출내용) --%>
-  <table class="searchTbl">
-    <colgroup>
-      <col class="w10" />
-      <col class="w45" />
-      <col class="w10" />
-      <col class="w45" />
-    </colgroup>
-    <tbody>
-      <%-- 공통조회조건 --%>
-      <tr>
-        <th><s:message code="cmm.search.date" /></th>
-        <td colspan="3">
-          <div class="sb-select">
-            <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
-            <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
-          </div>
-        </td>
-      </tr>
+    <table class="searchTbl">
+        <colgroup>
+          <col class="w10" />
+          <col class="w20" />
+          <col class="w10" />
+          <col class="w20" />
+          <col class="w10" />
+          <col class="w20" />
+        </colgroup>
+        <tbody>
+        <tr>
+          <%-- 조회일자 --%>
+          <th><s:message code="cmm.search.date" /></th>
+            <td colspan="3">
+              <div class="sb-select">
+                <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+                <span class="rg">~</span>
+                <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+              </div>
+            </td>
+        </tr>
+        <c:if test="${orgnFg == 'HQ'}">
+            <tr>
+              <%-- 매장 --%>
+              <th><s:message code="status.store.nm" /></th>
+              <td>
+                  <%-- 매장선택 모듈 싱글 선택 사용시 include
+                         param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                      displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                      modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                      closeFunc - 팝업 닫기시 호출할 함수
+                  --%>
+                  <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                       <jsp:param name="targetId" value="monyStatusStore"/>
+                   </jsp:include>
+                   <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+              </td>
+              <%-- 입출구분 --%>
+              <th><s:message code="status.accnt.fg" /></th>
+              <td>
+                <div class="sb-select w60">
+                  <wj-combo-box
+                          ng-model="accntFg"
+                          items-source="_getComboData('accntFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="accntFgCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </tr>
+        </c:if>
+        <c:if test="${orgnFg == 'STORE'}">
+            <tr>
+              <%-- 입출구분선택 --%>
+              <th>
+                <div class="sb-select w100">
+                  <wj-combo-box
+                          items-source="_getComboData('accntFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="accntFgStoreCombo"
+                          selected-index-changed="setAccntFg(s)">
+                  </wj-combo-box>
+                </div>
+              </th>
+              <%-- 계정코드 --%>
+              <td>
+                  <div class="sb-select w70">
+                      <wj-combo-box
+                              ng-model="accntCd"
+                              items-source="_getComboData('accntCd')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              control="accntCdCombo"
+                              is-editable="false">
+                      </wj-combo-box>
+                  </div>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+        </c:if>
+        </tbody>
+      </table>
+    <%--//searchTbl--%>
 
-      <%-- 프렌차이즈 본사 조회조건 --%>
-      <c:if test="${orgnFg == 'HQ'}">
-      <tr>
-        <div id="storeCd" style="display: none;"></div>
-        <%-- 매장 --%>
-        <th><s:message code="cmm.store" /></th>
-        <td>
-          <div class="sb-select fl w60" class='wj-content'>
-            <div id="storeCdText"></div>
-          </div>
-          <a href="#" id="store" class="btn_grayS ml5"><s:message code="cmm.store.select" /></a>
-        </td>
+    <div class="mt20 tr">
+        <div class="oh sb-select">
+            <%-- 페이지 스케일 --%>
+            <wj-combo-box
+                    class="w100px fl"
+                    id="listScaleBox"
+                    ng-model="listScale"
+                    items-source="_getComboData('listScaleBox')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+            <%--// 페이지 스케일  --%>
 
-        <%-- 입출구분 --%>
-        <th><s:message code="cmm.inoutStock.gubn" /></th>
-        <td>
-            <div class="sb-select">
-                <div id="sysStatFg"></div>
-            </div>
-        </td>
-      </tr>
-      </c:if>
-
-      <%-- 가맹점 조회조건 --%>
-      <c:if test="${orgnFg == 'STORE'}">
-      <tr>
-        <%-- 입금/출금계정 --%>
-        <th>
-            <div class="sb-select" class='wj-content' style="width:150px;">
-                <div id="sysStatFg"></div>
-            </div>
-        </th>
-        <td colspan="3">
-            <div class="sb-select">
-                <select id='stAccnt' class='wj-content' style="width:150px; font-size: 0.80em;">
-                    <option value="">선택</option>
-                </select>
-            </div>
-        </td>
-      </tr>
-      </c:if>
-    </tbody>
-  </table>
-
-  <div class="mt40 oh sb-select dkbr">
-    <%-- 페이지 스케일  --%>
-    <div id="listScaleBox" class="w100px fl"></div>
-    <div id="listScaleBox" class="fr">
-        <%-- 엑셀다운로드 //TODO --%>
-        <%--<button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>--%>
+            <%-- 엑셀 다운로드 --%>
+            <button type="button" class="btn_skyblue ml5" ng-click="excelDownload()">
+                <s:message code="cmm.excel.down"/>
+            </button>
+        </div>
     </div>
-  </div>
 
-  <%--위즈모 테이블--%>
-  <div class="wj-TblWrapBr mt10" style="height: 400px;">
-    <div id="theGrid" style="height:393px;"></div>
-  </div>
-  <%--//위즈모 테이블--%>
+    <%--위즈모 테이블--%>
+    <div class="wj-TblWrapBr mt10">
+      <div class="wj-gridWrap" style="height: 370px;">
+        <wj-flex-grid
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter">
 
-  <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <ul id="page1" data-size="10">
-    </ul>
-  </div>
-  <%--//페이지 리스트--%>
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="status.store.cd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.store.nm"/>" binding="storeNm" width="250" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.sale.date"/>" binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.pos.no"/>" binding="posNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.accnt.fg"/>" binding="accntFg" data-map="accntFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.accnt.nm"/>" binding="accntNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.accnt.amt"/>" binding="accntAmt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.remark"/>" binding="remark" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+    </div>
+    <%--//위즈모 테이블--%>
+
+    <%-- 페이지 리스트 --%>
+    <div class="pageNum2 mt20">
+      <%-- id --%>
+      <ul id="monyStatusCtrlPager" data-size="10">
+      </ul>
+    </div>
+    <%--//페이지 리스트--%>
+
+    <%-- 엑셀 다운로드 그리드 --%>
+    <div class="wj-TblWrapBr mt10" style="display:none;" ng-controller="monyStatusExcelCtrl">
+        <div class="wj-gridWrap" style="height: 370px;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="excelFlex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="status.store.cd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="status.store.nm"/>" binding="storeNm" width="250" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="status.sale.date"/>" binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="status.pos.no"/>" binding="posNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="status.accnt.fg"/>" binding="accntFg" data-map="accntFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="status.accnt.nm"/>" binding="accntNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="status.accnt.amt"/>" binding="accntAmt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="status.remark"/>" binding="remark" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%-- 엑셀 다운로드 그리드 --%>
+
 </div>
 
-<%-- 매장 선택 --%>
-<c:import url="/WEB-INF/view/application/layer/store.jsp">
-</c:import>
+<script type="text/javascript">
 
-<script>
-$(document).ready(function(){
+    var orgnFg = "${orgnFg}";
 
-  var accntFgData = new wijmo.grid.DataMap([
-    {id:"1", name:"<s:message code='status.inmoney'/>"},
-    {id:"2", name:"<s:message code='status.outmoney'/>"},
-    {id:"3", name:"<s:message code='status.readymoney'/>"}], 'id', 'name');
-
-  var rdata =
-    [
-      {"binding": "storeNm", "header": "<s:message code='status.store.nm' />", width: "*"},                      // 매장명
-      {"binding": "saleDate", "header": "<s:message code='status.sale.date' />", width: "*"},                    // 영업일자
-      {"binding": "posNo", "header": "<s:message code='status.pos.no' />", width:"*"},                          // 포스번호
-      {"binding": "accntFg", "header": "<s:message code='status.accnt.fg' />", dataMap: accntFgData, width: "*"},                      // 입출구분
-      {"binding": "accntNm", "header": "<s:message code='status.accnt.nm' />", width: "*"},                      // 계정
-      {"binding": "accntAmt", "header": "<s:message code='status.accnt.amt' />", width: "*"},                    // 금액
-      {"binding": "remark", "header": "<s:message code='status.remark' />", width: "*"}                          // 비고
-   ];
-
-  var grid         = wgrid.genGrid("#theGrid", rdata);
-  var startDate    = wcombo.genDateVal("#startDate", "${sessionScope.sessionInfo.startDate}");
-  var endDate      = wcombo.genDateVal("#endDate", "${sessionScope.sessionInfo.endDate}");
-  var ldata        = ${ccu.getListScale()};
-  var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
-  var cdata        = ${ccu.getCommCode("040")};
-  var sysStatFg    = wcombo.genCommonBox("#sysStatFg", cdata);
-
-  <c:if test="${orgnFg != 'STORE'}">
-      var storeCd      = wcombo.genInput("#storeCd");
-
-      <c:if test="${orgnFg == 'HQ'}">
-          var storeCdText  = wcombo.genInput("#storeCdText");
-          storeCdText.isReadOnly = true;
-  </c:if>
-
-      <c:if test="${orgnFg != 'HQ'}">
-          storeCd.text = "${sessionScope.sessionInfo.orgnCd}";
-          var storeCdText  = "";
-      </c:if>
-
-      storeCdText.isDisabled = true;
-  </c:if>
-
-  // 본사(HQ) 조회
-  function search(index) {
-      if(storeCd.text == "") {
-        <%-- 조회 매장을 선택해주세요. --%>
-        var msg = "<s:message code='dclzManage.select.store'/>";
-        s_alert.pop(msg);
-        return;
-      }
-    var param = {};
-
-    var stCd = storeCd.text;
-
-    param.startDate = getDate(startDate);
-    param.endDate = getDate(endDate);
-    param.storeCd = stCd.replace("ALL,","");
-    param.chkDt = $('#chkDt').is(":checked");
-    param.listScale = listScaleBox.selectedValue;
-    param.curr = index;
-    param.arrStoreCd = stCd;
-
-
-    if(sysStatFg.text == "입금"){
-        param.accntFg = "1";
-    }else if(sysStatFg.text == "출금"){
-        param.accntFg = "2";
-    }
-
-    $.postJSON("/adi/mony/status/status/list.sb", param, function(result) {
-      var list = result.data.list;
-
-      if(list.length == 0) {
-        s_alert.pop(result.message);
-      }
-
-      grid.itemsSource = list;
-      page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-      },
-      function(result){
-        s_alert.pop(result.data.msg);
-      })
-      .fail(function(){
-        s_alert.pop("Ajax Fail");
-    });
-  }
-
-  // 가맹점(STORE) 조회
-  function searchStore(index) {
-    var param = {};
-
-    param.startDate = getDate(startDate);
-    param.endDate = getDate(endDate);
-    param.accntCd = $("#stAccnt").val();
-    param.chkDt = $('#chkDt').is(":checked");
-    param.listScale = listScaleBox.selectedValue;
-    param.curr = index;
-
-
-    if(sysStatFg.text == "입금"){
-        param.accntFg = "1";
-    }else if(sysStatFg.text == "출금"){
-        param.accntFg = "2";
-    }
-
-    $.postJSON("/adi/mony/status/status/list.sb", param, function(result) {
-      var list = result.data.list;
-
-      if(list.length == 0) {
-        s_alert.pop(result.message);
-      }
-
-      grid.itemsSource = list;
-      page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-      },
-      function(result){
-        s_alert.pop(result.data.msg);
-      })
-      .fail(function(){
-        s_alert.pop("Ajax Fail");
-    });
-  }
-
-
-    <%-- 매장선택 --%>
-    $("#store").click(function(e){
-
-      var chked = "";
-
-      c_store.init(chked, function(arr){
-
-        storeCdText.text = "";
-        storeCd.text = "";
-
-        if(arr[0].cd === "") {
-          storeCdText.text = "전체";
-          arr.splice(0, 1);
-        }
-
-        if(arr.length > 1) {
-          var a = arr.length -1;
-          // if(arr[0].nm == "ALL") {
-          //   storeCdText.text = arr[0].nm ;
-          // } else {
-            storeCdText.text = arr[0].nm + "외 " + a.toString() + " 선택";
-          // }
-
-        }
-        else if(arr.length == 1){
-          storeCdText.text = arr[0].nm;
-        }
-
-        for(var i=0; i<arr.length; i++) {
-          if(i == arr.length - 1) {
-            storeCd.text += arr[i].cd.toString();
-          }
-          else {
-            storeCd.text += arr[i].cd.toString() + ",";
-          }
-        }
-      });
-  });
-
-  <%-- 리스트 조회 --%>
-  $("#searchBtn").click(function( e ){
-    <c:if test="${orgnFg != 'STORE'}">
-        search(1);
-    </c:if>
-
-    <c:if test="${orgnFg == 'STORE'}">
-        searchStore(1);
-    </c:if>
-  });
-
-  <c:if test="${orgnFg == 'STORE'}">
-  $("#sysStatFg input").change(function( e ){
-        var param = {};
-
-        param.storeCd = "${orgnCd}";
-        param.chkDt = $('#chkDt').is(":checked");
-
-        if(sysStatFg.text == "전체"){
-            $("#stAccnt").empty();
-            $("#stAccnt").append("<option value='' selected>선택</option>");
-        }else{
-            if(sysStatFg.text == "입금"){
-                param.accntFg = "1";
-            }else if(sysStatFg.text == "출금"){
-                param.accntFg = "2";
-            }
-
-            // 계정조회
-            // TODO 계정 등록 후 테스트 필요
-            $.postJSON("/adi/mony/status/status/accnt.sb", param, function(result) {
-                  var list = result.data.list;
-                  var strHtml = "";
-
-                  if(list.length == 0) {
-                    s_alert.pop("<s:message code='status.no.account'/>");
-                    return false;
-                  }
-
-                  $("#stAccnt").empty();
-
-                  for(var i=0; i<list.length; i++) {
-                    if(i==0){
-                      $("#stAccnt").append("<option value='"+ list[i].accntCd +"' selected> " + list[i].accntNm +  "</option>");
-                    } else {
-                      $("#stAccnt").append("<option value='"+ list[i].accntCd +"' > " + list[i].accntNm +  "</option>");
-                    }
-                  }
-              },
-              function(result){
-                s_alert.pop(result.data.msg);
-              })
-              .fail(function(){
-                s_alert.pop("Ajax Fail");
-            });
-        }
-  });
-  </c:if>
-
-  <%-- 페이징 --%>
-  $(document).on("click", ".page1", function() {
-    search($(this).data("value"));
-  });
-
-  <%-- 엑셀 다운로드 버튼 클릭 --%>
-  $("#btnExcel").click(function(){
-    var name = "${menuNm}";
-    wexcel.down(grid, name, name + ".xlsx");
-  });
-});
 </script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/mony/status/status.js?ver=20210517.03" charset="utf-8"></script>

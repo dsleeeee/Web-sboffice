@@ -1,7 +1,6 @@
 package kr.co.solbipos.adi.mony.status.service;
 
-import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.application.common.service.PageVO;
 
 /**
 * @Class Name : DrawHistVO.java
@@ -18,11 +17,11 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-public class StatusVO extends CmmVO{
+public class StatusVO extends PageVO {
 
     private static final long serialVersionUID = -7484938662440568127L;
 
-    private OrgnFg orgnFg;
+    private String orgnFg;
     private String hqOfficeCd;
     private String startDate;
     private String endDate;
@@ -31,12 +30,11 @@ public class StatusVO extends CmmVO{
     private String accntFg;
     private String accntCd;
 
-
-    public OrgnFg getOrgnFg() {
+    public String getOrgnFg() {
         return orgnFg;
     }
 
-    public void setOrgnFg(OrgnFg orgnFg) {
+    public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
     }
 
@@ -56,7 +54,7 @@ public class StatusVO extends CmmVO{
         this.startDate = startDate;
     }
 
-    public String getEndDae() {
+    public String getEndDate() {
         return endDate;
     }
 
