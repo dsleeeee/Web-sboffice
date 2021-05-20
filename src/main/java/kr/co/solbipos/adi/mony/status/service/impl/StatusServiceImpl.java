@@ -1,6 +1,7 @@
 package kr.co.solbipos.adi.mony.status.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.adi.mony.status.service.StatusService;
 import kr.co.solbipos.adi.mony.status.service.StatusVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -8,6 +9,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -38,28 +40,49 @@ public class StatusServiceImpl implements StatusService {
         this.statusMapper = statusMapper;
     }
 
+    /** 금전현황 리스트 조회 */
     @Override
-    public List<StatusVO> selectStatus(StatusVO statusVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> selectStatus(StatusVO statusVO, SessionInfoVO sessionInfoVO) {
 
-        statusVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        statusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        statusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        // 본사
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            statusVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-            return statusMapper.selectStatus(statusVO);
+            if(!StringUtil.getOrBlank(statusVO.getStoreCd()).equals("")) {
+                statusVO.setArrStoreCd(statusVO.getStoreCd().split(","));
+            }
+        }else{
+            statusVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        // 가맹점
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            statusVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            return statusMapper.selectStoreStatus(statusVO);
-        }
-        return null;
+
+        return statusMapper.selectStatus(statusVO);
     }
 
+    /** 계정구분에 따른 계정 코드 조회(입금/출금 계정, 매장권한에서만 사용) */
     @Override
-    public List<DefaultMap<String>> selectAccntList(StatusVO StatusVO) {
+    public List<DefaultMap<String>> selectAccntList(StatusVO statusVO, SessionInfoVO sessionInfoVO) {
 
-        return statusMapper.selectAccntList(StatusVO);
+        statusVO.setStoreCd(sessionInfoVO.getOrgnCd());
+
+        return statusMapper.selectAccntList(statusVO);
+    }
+
+    /** 금전현황 리스트 조회 Excel 다운로드 */
+    @Override
+    public List<DefaultMap<String>> monyStatusExcelList(@RequestBody StatusVO statusVO, SessionInfoVO sessionInfoVO) {
+
+        statusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        statusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if(!StringUtil.getOrBlank(statusVO.getStoreCd()).equals("")) {
+                statusVO.setArrStoreCd(statusVO.getStoreCd().split(","));
+            }
+        }else{
+            statusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return statusMapper.monyStatusExcelList(statusVO);
     }
 }
 

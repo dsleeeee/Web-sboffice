@@ -1,5 +1,6 @@
 package kr.co.solbipos.adi.mony.status.service.impl;
 
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.mony.status.service.StatusVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -24,9 +25,13 @@ import java.util.List;
 @Mapper
 @Repository
 public interface StatusMapper {
-	public <E> List<E> selectStatus(StatusVO statusVO);
 
-	public <E> List<E> selectStoreStatus(StatusVO statusVO);
+	/** 금전현황 리스트 조회 */
+	List<DefaultMap<String>> selectStatus(StatusVO statusVO);
 
-	public <E> List<E> selectAccntList(StatusVO statusVO);
+	/** 계정구분에 따른 계정 코드 조회(입금/출금 계정, 매장권한에서만 사용) */
+	List<DefaultMap<String>> selectAccntList(StatusVO statusVO);
+
+	/** 금전현황 리스트 조회 Excel 다운로드 */
+	List<DefaultMap<String>> monyStatusExcelList(StatusVO statusVO);
 }
