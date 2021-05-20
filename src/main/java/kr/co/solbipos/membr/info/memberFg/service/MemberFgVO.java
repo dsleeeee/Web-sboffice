@@ -30,6 +30,8 @@ public class MemberFgVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
     private String arrStoreCd[];
+    /** 기본매장  */
+    private String defaultStoreCd;
     /** 회원소속코드 */
     private String membrOrgnCd;
     /** 회원등급코드 */
@@ -82,6 +84,14 @@ public class MemberFgVO extends PageVO {
 
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
+    }
+
+    public String getDefaultStoreCd() {
+        return defaultStoreCd;
+    }
+
+    public void setDefaultStoreCd(String defaultStoreCd) {
+        this.defaultStoreCd = defaultStoreCd;
     }
 
     public String getMembrOrgnCd() {
