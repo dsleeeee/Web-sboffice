@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MemberFg.xml
+    선불/후불 회원관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.05.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.info.memberFg.service.impl.MemberFgMapper">
+
+    <!-- 회원등급 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
+        COMMENTS : 회원정보 조회시 회원등급 콤보박스 내용 조회
+    -->
+    <select id="getMemberClassList" parameterType="membrClassVO" resultType="DefaultMap">
+        /* MemberFgMapper.getMemberClassList */
+        SELECT MEMBR_CLASS_CD AS VALUE,
+               MEMBR_CLASS_NM AS NAME
+        FROM TB_MB_MEMBER_CLASS
+        WHERE USE_YN = 'Y'
+          AND MEMBR_ORGN_CD = #{membrOrgnCd}
+        ORDER BY DEFLT_YN DESC
+    </select>
+
+    <!-- 선불 회원 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID_STORE, TB_MB_MEMBER, TB_MS_STORE, TB_MB_MEMBER_CLASS
+        COMMENTS : 후불회원조회
+    -->
+    <select id="getMemberPrepaid" parameterType="memberFgVO" resultType="DefaultMap">
+        /* MemberFgMapper.getMemberPrepaid */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmmps.MEMBR_NO,
+                       tmm.MEMBR_NM,
+                       tmmps.STORE_CD,
+                       tms.STORE_NM,
+                       tmmc.MEMBR_CLASS_NM,
+                       tmm.TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MB_MEMBER_PREPAID_STORE tmmps,
+                       TB_MB_MEMBER tmm,
+                       TB_MS_STORE tms,
+                       TB_MB_MEMBER_CLASS tmmc
+                 WHERE tmmps.MEMBR_ORGN_CD = #{membrOrgnCd}
+                   AND tmmps.USE_YN = 'Y'
+                   AND tms.STORE_CD = tmmps.STORE_CD
+                   AND tmm.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+                   AND tmm.MEMBR_NO = tmmps.MEMBR_NO
+                   AND tmmc.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+                   AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+                <if test='membrNo != null and membrNo != ""'>
+                   AND tmmps.MEMBR_NO = #{membrNo}
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                   AND tmm.MEMBR_NM = #{membrNm}
+                </if>
+                <if test='membrClassCd != null and membrClassCd != ""'>
+                   AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+                </if>
+                <if test='telNo != null and telNo != ""'>
+                   AND tmm.TEL_NO = #{telNo}
+                </if>
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                   AND tms.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                 ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmmps.MEMBR_NO,
+                       tmm.MEMBR_NM,
+                       tmmps.STORE_CD,
+                       tms.STORE_NM,
+                       tmmc.MEMBR_CLASS_NM,
+                       tmm.TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MB_MEMBER_PREPAID_STORE tmmps,
+                       TB_MB_MEMBER tmm,
+                       TB_MS_STORE tms,
+                       TB_MB_MEMBER_CLASS tmmc
+                 WHERE tmmps.MEMBR_ORGN_CD = #{membrOrgnCd}
+                   AND tmmps.USE_YN = 'Y'
+                   AND tmmps.STORE_CD = #{storeCd}
+                   AND tms.STORE_CD = tmmps.STORE_CD
+                   AND tmm.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+                   AND tmmc.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+                   AND tmm.MEMBR_NO = tmmps.MEMBR_NO
+                   AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+                <if test='membrNo != null and membrNo != ""'>
+                   AND tmmps.MEMBR_NO = #{membrNo}
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                   AND tmm.MEMBR_NM = #{membrNm}
+                </if>
+                <if test='membrClassCd != null and membrClassCd != ""'>
+                   AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+                </if>
+                <if test='telNo != null and telNo != ""'>
+                   AND tmm.TEL_NO = #{telNo}
+                </if>
+                 ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선불미등록 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID_STORE, TB_MB_MEMBER, TB_MS_STORE, TB_MB_MEMBER_CLASS
+        COMMENTS : 선불 미등록 조회
+    -->
+    <select id="getMemberNoPrepaid" parameterType="memberFgVO" resultType="DefaultMap">
+        /* MemberFgMapper.getMemberNoPrepaid */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmm.MEMBR_NO,
+                       tmm.MEMBR_NM,
+                       tms.STORE_CD,
+                       tms.STORE_NM,
+                       tmmc.MEMBR_CLASS_NM,
+                       tmm.TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MS_STORE tms,
+                       TB_MB_MEMBER tmm,
+                       TB_MB_MEMBER_CLASS tmmc
+                 WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND tmm.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                   AND tmmc.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                   AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+                   AND tms.STORE_CD||tmm.MEMBR_NO NOT IN (SELECT STORE_CD||MEMBR_NO
+                                                            FROM TB_MB_MEMBER_PREPAID_STORE
+                                                           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+                                                             AND USE_YN = 'Y')
+                <if test='membrNo != null and membrNo != ""'>
+                   AND tmm.MEMBR_NO = #{membrNo}
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                   AND tmm.MEMBR_NM = #{membrNm}
+                </if>
+                <if test='membrClassCd != null and membrClassCd != ""'>
+                   AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+                </if>
+                <if test='telNo != null and telNo != ""'>
+                   AND tmm.TEL_NO = #{telNo}
+                </if>
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                   AND tms.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                 ORDER BY tmm.MEMBR_NO, tms.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmm.MEMBR_NO,
+                       tmm.MEMBR_NM,
+                       tms.STORE_CD,
+                       tms.STORE_NM,
+                       tmmc.MEMBR_CLASS_NM,
+                       tmm.TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MS_STORE tms,
+                       TB_MB_MEMBER tmm,
+                       TB_MB_MEMBER_CLASS tmmc
+                 WHERE tms.STORE_CD = #{storeCd}
+                <!-- 단독매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                    AND tmm.MEMBR_ORGN_CD = tms.STORE_CD
+                    AND tmmc.MEMBR_ORGN_CD = tms.STORE_CD
+                </if>
+                <!-- 단독매장이 아닐경우 -->
+                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                    AND tmm.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                    AND tmmc.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                </if>
+                   AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+                   AND tms.STORE_CD||tmm.MEMBR_NO NOT IN (SELECT STORE_CD||MEMBR_NO
+                                                            FROM TB_MB_MEMBER_PREPAID_STORE
+                                                           WHERE STORE_CD = #{storeCd}
+                                                             AND USE_YN = 'Y')
+                <if test='membrNo != null and membrNo != ""'>
+                   AND tmm.MEMBR_NO = #{membrNo}
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                   AND tmm.MEMBR_NM = #{membrNm}
+                </if>
+                <if test='membrClassCd != null and membrClassCd != ""'>
+                   AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+                </if>
+                <if test='telNo != null and telNo != ""'>
+                   AND tmm.TEL_NO = #{telNo}
+                </if>
+                 ORDER BY tmm.MEMBR_NO, tms.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 후불 회원 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE, TB_MB_MEMBER, TB_MS_STORE, TB_MB_MEMBER_CLASS
+        COMMENTS : 후불회원조회
+    -->
+    <select id="getMemberPostpaid" parameterType="memberFgVO" resultType="DefaultMap">
+        /* MemberFgMapper.getMemberPostpaid */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            <include refid="CmmSQL.PagingTemplateHeader"/>
+            SELECT tmmps.MEMBR_NO,
+                   tmm.MEMBR_NM,
+                   tmmps.STORE_CD,
+                   tms.STORE_NM,
+                   tmmc.MEMBR_CLASS_NM,
+                   tmm.TEL_NO
+            <include refid="CmmSQL.PagingTemplateCount"/>
+              FROM TB_MB_MEMBER_POSTPAID_STORE tmmps,
+                   TB_MB_MEMBER tmm,
+                   TB_MS_STORE tms,
+                   TB_MB_MEMBER_CLASS tmmc
+             WHERE tmmps.MEMBR_ORGN_CD = #{membrOrgnCd}
+               AND tmmps.USE_YN = 'Y'
+               AND tms.STORE_CD = tmmps.STORE_CD
+               AND tmm.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+               AND tmm.MEMBR_NO = tmmps.MEMBR_NO
+               AND tmmc.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+               AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+            <if test='membrNo != null and membrNo != ""'>
+               AND tmmps.MEMBR_NO = #{membrNo}
+            </if>
+            <if test='membrNm != null and membrNm != ""'>
+               AND tmm.MEMBR_NM = #{membrNm}
+            </if>
+            <if test='membrClassCd != null and membrClassCd != ""'>
+               AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+            </if>
+            <if test='telNo != null and telNo != ""'>
+               AND tmm.TEL_NO = #{telNo}
+            </if>
+            <if test='arrStoreCd != null and arrStoreCd != ""'>
+               AND tms.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+             ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
+            <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmmps.MEMBR_NO,
+                       tmm.MEMBR_NM,
+                       tmmps.STORE_CD,
+                       tms.STORE_NM,
+                       tmmc.MEMBR_CLASS_NM,
+                       tmm.TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MB_MEMBER_POSTPAID_STORE tmmps,
+                       TB_MB_MEMBER tmm,
+                       TB_MS_STORE tms,
+                       TB_MB_MEMBER_CLASS tmmc
+                 WHERE tmmps.MEMBR_ORGN_CD = #{membrOrgnCd}
+                   AND tmmps.USE_YN = 'Y'
+                   AND tmmps.STORE_CD = #{storeCd}
+                   AND tms.STORE_CD = tmmps.STORE_CD
+                   AND tmm.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+                   AND tmm.MEMBR_NO = tmmps.MEMBR_NO
+                   AND tmmc.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
+                   AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+                <if test='membrNo != null and membrNo != ""'>
+                   AND tmmps.MEMBR_NO = #{membrNo}
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                   AND tmm.MEMBR_NM = #{membrNm}
+                </if>
+                <if test='membrClassCd != null and membrClassCd != ""'>
+                   AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+                </if>
+                <if test='telNo != null and telNo != ""'>
+                   AND tmm.TEL_NO = #{telNo}
+                </if>
+                 ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 후불미등록 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE, TB_MB_MEMBER, TB_MS_STORE, TB_MB_MEMBER_CLASS
+        COMMENTS : 후불 미등록 조회
+    -->
+    <select id="getMemberNoPostpaid" parameterType="memberFgVO" resultType="DefaultMap">
+        /* MemberFgMapper.getMemberNoPostpaid */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmm.MEMBR_NO,
+                       tmm.MEMBR_NM,
+                       tms.STORE_CD,
+                       tms.STORE_NM,
+                       tmmc.MEMBR_CLASS_NM,
+                       tmm.TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MS_STORE tms,
+                       TB_MB_MEMBER tmm,
+                       TB_MB_MEMBER_CLASS tmmc
+                 WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND tmm.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                   AND tmmc.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                   AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+                   AND tms.STORE_CD||tmm.MEMBR_NO NOT IN (SELECT STORE_CD||MEMBR_NO
+                                                            FROM TB_MB_MEMBER_POSTPAID_STORE
+                                                           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+                                                             AND USE_YN = 'Y')
+                <if test='membrNo != null and membrNo != ""'>
+                   AND tmm.MEMBR_NO = #{membrNo}
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                   AND tmm.MEMBR_NM = #{membrNm}
+                </if>
+                <if test='membrClassCd != null and membrClassCd != ""'>
+                   AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+                </if>
+                <if test='telNo != null and telNo != ""'>
+                   AND tmm.TEL_NO = #{telNo}
+                </if>
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                   AND tms.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                 ORDER BY tmm.MEMBR_NO, tms.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmm.MEMBR_NO,
+                       tmm.MEMBR_NM,
+                       tms.STORE_CD,
+                       tms.STORE_NM,
+                       tmmc.MEMBR_CLASS_NM,
+                       tmm.TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MS_STORE tms,
+                       TB_MB_MEMBER tmm,
+                       TB_MB_MEMBER_CLASS tmmc
+                 WHERE tms.STORE_CD = #{storeCd}
+                <!-- 단독매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                    AND tmm.MEMBR_ORGN_CD = tms.STORE_CD
+                    AND tmmc.MEMBR_ORGN_CD = tms.STORE_CD
+                </if>
+                <!-- 단독매장이 아닐때 -->
+                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                    AND tmm.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                    AND tmmc.MEMBR_ORGN_CD = tms.HQ_OFFICE_CD
+                </if>
+                   AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
+                   AND tms.STORE_CD||tmm.MEMBR_NO NOT IN (SELECT STORE_CD||MEMBR_NO
+                                                            FROM TB_MB_MEMBER_POSTPAID_STORE
+                                                           WHERE STORE_CD = #{storeCd}
+                                                             AND USE_YN = 'Y')
+                <if test='membrNo != null and membrNo != ""'>
+                   AND tmm.MEMBR_NO = #{membrNo}
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                   AND tmm.MEMBR_NM = #{membrNm}
+                </if>
+                <if test='membrClassCd != null and membrClassCd != ""'>
+                   AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+                </if>
+                <if test='telNo != null and telNo != ""'>
+                   AND tmm.TEL_NO = #{telNo}
+                </if>
+                 ORDER BY tmm.MEMBR_NO, tms.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선불회원 등록 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID_STORE
+        COMMENTS : 선불회원 등록
+    -->
+    <update id="regPrepaid" parameterType="memberFgVO">
+        /* MemberFgMapper.regPrepaid */
+        MERGE INTO TB_MB_MEMBER_PREPAID_STORE tmmps
+            USING DUAL
+            ON (
+                    tmmps.MEMBR_ORGN_CD = #{membrOrgnCd}
+                    AND tmmps.STORE_CD = #{storeCd}
+                    AND tmmps.MEMBR_NO = #{membrNo}
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET tmmps.USE_YN = #{useYn},
+                        tmmps.MOD_DT = #{modDt},
+                        tmmps.MOD_ID = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                     tmmps.MEMBR_ORGN_CD,
+                     tmmps.MEMBR_NO,
+                     tmmps.STORE_CD,
+                     tmmps.USE_YN,
+                     tmmps.REG_DT,
+                     tmmps.REG_ID,
+                     tmmps.MOD_DT,
+                     tmmps.MOD_ID
+                        )
+                    VALUES
+                    (
+                        #{membrOrgnCd},
+                        #{membrNo},
+                        #{storeCd},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </update>
+
+
+    <!-- 후불회원 등록 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE
+        COMMENTS : 후불회원 등록
+    -->
+    <update id="regPostpaid" parameterType="memberFgVO">
+        /* MemberFgMapper.regPostpaid */
+        MERGE INTO TB_MB_MEMBER_POSTPAID_STORE tmmps
+            USING DUAL
+            ON (
+                tmmps.MEMBR_ORGN_CD = #{membrOrgnCd}
+                AND tmmps.STORE_CD = #{storeCd}
+                AND tmmps.MEMBR_NO = #{membrNo}
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET tmmps.USE_YN = #{useYn},
+                        tmmps.MOD_DT = #{modDt},
+                        tmmps.MOD_ID = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                     tmmps.MEMBR_ORGN_CD,
+                     tmmps.MEMBR_NO,
+                     tmmps.STORE_CD,
+                     tmmps.USE_YN,
+                     tmmps.REG_DT,
+                     tmmps.REG_ID,
+                     tmmps.MOD_DT,
+                     tmmps.MOD_ID
+                        )
+                    VALUES
+                    (
+                        #{membrOrgnCd},
+                        #{membrNo},
+                        #{storeCd},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </update>
+
+</mapper>
