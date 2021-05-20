@@ -67,22 +67,5 @@ public class StatusServiceImpl implements StatusService {
         return statusMapper.selectAccntList(statusVO);
     }
 
-    /** 금전현황 리스트 조회 Excel 다운로드 */
-    @Override
-    public List<DefaultMap<String>> monyStatusExcelList(@RequestBody StatusVO statusVO, SessionInfoVO sessionInfoVO) {
-
-        statusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        statusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(statusVO.getStoreCd()).equals("")) {
-                statusVO.setArrStoreCd(statusVO.getStoreCd().split(","));
-            }
-        }else{
-            statusVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-
-        return statusMapper.monyStatusExcelList(statusVO);
-    }
 }
 
