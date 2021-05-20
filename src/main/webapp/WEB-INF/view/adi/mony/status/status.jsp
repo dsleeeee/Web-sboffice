@@ -76,9 +76,11 @@
         </c:if>
         <c:if test="${orgnFg == 'STORE'}">
             <tr>
-              <%-- 입출구분선택 --%>
-              <th>
-                <div class="sb-select w100">
+              <%-- 입출구분 --%>
+              <th><s:message code="status.accnt.fg" /></th>
+              <td colspan="3">
+                <%-- 입출구분선택 --%>
+                <div class="sb-select fl mr5 w150px">
                   <wj-combo-box
                           items-source="_getComboData('accntFg')"
                           display-member-path="name"
@@ -88,22 +90,18 @@
                           selected-index-changed="setAccntFg(s)">
                   </wj-combo-box>
                 </div>
-              </th>
-              <%-- 계정코드 --%>
-              <td>
-                  <div class="sb-select w70">
-                      <wj-combo-box
-                              ng-model="accntCd"
-                              items-source="_getComboData('accntCd')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              control="accntCdCombo"
-                              is-editable="false">
-                      </wj-combo-box>
+                <%-- 계정코드 --%>
+                <div class="sb-select fl w250px">
+                  <wj-combo-box
+                          ng-model="accntCd"
+                          items-source="_getComboData('accntCd')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          control="accntCdCombo"
+                          is-editable="false">
+                  </wj-combo-box>
                   </div>
               </td>
-              <td></td>
-              <td></td>
             </tr>
         </c:if>
         </tbody>
@@ -111,25 +109,10 @@
     <%--//searchTbl--%>
 
     <div class="mt20 tr">
-        <div class="oh sb-select">
-            <%-- 페이지 스케일 --%>
-            <wj-combo-box
-                    class="w100px fl"
-                    id="listScaleBox"
-                    ng-model="listScale"
-                    items-source="_getComboData('listScaleBox')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-            <%--// 페이지 스케일  --%>
-
-            <%-- 엑셀 다운로드 --%>
-            <button type="button" class="btn_skyblue ml5" ng-click="excelDownload()">
-                <s:message code="cmm.excel.down"/>
-            </button>
-        </div>
+        <%-- 엑셀 다운로드 --%>
+        <button type="button" class="btn_skyblue ml5" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down"/>
+        </button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -151,46 +134,12 @@
           <wj-flex-grid-column header="<s:message code="status.pos.no"/>" binding="posNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="status.accnt.fg"/>" binding="accntFg" data-map="accntFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="status.accnt.nm"/>" binding="accntNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="status.accnt.amt"/>" binding="accntAmt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="status.accnt.amt"/>" binding="accntAmt" width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="status.remark"/>" binding="remark" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>
     <%--//위즈모 테이블--%>
-
-    <%-- 페이지 리스트 --%>
-    <div class="pageNum2 mt20">
-      <%-- id --%>
-      <ul id="monyStatusCtrlPager" data-size="10">
-      </ul>
-    </div>
-    <%--//페이지 리스트--%>
-
-    <%-- 엑셀 다운로드 그리드 --%>
-    <div class="wj-TblWrapBr mt10" style="display:none;" ng-controller="monyStatusExcelCtrl">
-        <div class="wj-gridWrap" style="height: 370px;">
-            <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="excelFlex"
-                    initialized="initGrid(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter">
-
-                <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="status.store.cd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="status.store.nm"/>" binding="storeNm" width="250" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="status.sale.date"/>" binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="status.pos.no"/>" binding="posNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="status.accnt.fg"/>" binding="accntFg" data-map="accntFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="status.accnt.nm"/>" binding="accntNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="status.accnt.amt"/>" binding="accntAmt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="status.remark"/>" binding="remark" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
-            </wj-flex-grid>
-        </div>
-    </div>
-    <%-- 엑셀 다운로드 그리드 --%>
 
 </div>
 
@@ -200,4 +149,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/mony/status/status.js?ver=20210517.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/mony/status/status.js?ver=20210517.05" charset="utf-8"></script>
