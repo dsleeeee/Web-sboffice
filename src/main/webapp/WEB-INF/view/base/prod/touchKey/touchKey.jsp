@@ -46,10 +46,14 @@
         </wj-combo-box>
         </div>
         <%-- 추가터치키생성 --%>
-        <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">sty  le="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
+        <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
         <%-- 터치키복사 --%>
         <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
           <s:message code="touchKey.copy" />
+        </button>
+        <%-- 터치키미적용상품 --%>
+        <button class="btn_skyblue fl ml20" id="btnNoTouchKey" style="margin-left : 4px;" ng-click="$broadcast('showPopUpNoTouchKey')">
+          <s:message code="touchKey.noTouchKey" />
         </button>
         <%-- 신규생성 취소 --%>
         <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
@@ -247,6 +251,12 @@
     <c:param name="menuNm" value="${menuNm}"/>
   </c:import>
 
+  <%-- 터치키미적용상품 팝업 --%>
+  <c:import url="/WEB-INF/view/base/prod/touchKey/popUpNoTouchKey.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+  </c:import>
+
 </div>
 <%--//서브컨텐츠--%>
 
@@ -331,7 +341,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.002"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.003"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

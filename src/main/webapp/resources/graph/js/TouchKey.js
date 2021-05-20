@@ -40,6 +40,16 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getProdClassInfo = function(){
     return $scope.prodClassInfo;
   };
+
+  // 선택된 터치키그룹
+  $scope.tukeyGrpCd = "";
+  $scope.setTukeyGrpCd = function(data){
+    $scope.tukeyGrpCd = data;
+  };
+  $scope.getTukeyGrpCd = function(){
+    return $scope.touchKeyGrp;
+  };
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.areAllRowsSelected = function(flex) {
@@ -147,6 +157,20 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.filteredData = $scope.data.items;
 
     }, false);
+
+    if($scope.touchKeyGrp != null && $scope.touchKeyGrp != ""){
+      var params = {};
+      params.tukeyGrpCd = $scope.touchKeyGrp;
+      $.postJSON("/base/prod/touchKey/touchKey/noTouchKey.sb", params, function(result) {
+        if(result.data.list.length != 0){ // 터치키미적용상품이 없으면 팝업창을 안띄움
+          $scope._broadcast('showPopUpNoTouchKey', $scope.touchKeyGrp);
+        }
+      },
+      function(result){
+        s_alert.pop(result.message);
+      });
+    }
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -307,6 +331,15 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
         });
       }
     });
+  });
+
+  // 터치키미적용상품 팝업
+  $scope.$on("showPopUpNoTouchKey", function(event, data) {
+    var scope = agrid.getScope('touchKeyCtrl');
+    var tukeyGrpCd = scope.getTukeyGrpCd();
+    $scope.popUpNoTouchKeyLayer.show();
+    $scope._broadcast('popUpNoTouchKeyCtrl', tukeyGrpCd);
+    event.preventDefault();
   });
 
 }]);

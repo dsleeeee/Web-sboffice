@@ -399,6 +399,18 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         return new Result(Status.OK, tukeyGrpCd);
     }
 
+    /** 터치키미적용상품 */
+    @Override
+    public List<DefaultMap<String>> getNoTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return keyMapper.getNoTouchKey(touchKeyVO);
+    }
+
     /** 매장목록 조회 */
     @Override
     public List<DefaultMap<String>> getStoreList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
