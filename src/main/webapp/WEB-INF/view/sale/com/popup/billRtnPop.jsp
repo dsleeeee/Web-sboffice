@@ -219,6 +219,7 @@
 			
 				            <!-- define columns -->
 				            <wj-flex-grid-column header="<s:message code="saleComPopup.bill.prodCd"/>" 		binding="prodCd"		width="*" align="center" ></wj-flex-grid-column>
+							<wj-flex-grid-column header="<s:message code="saleComPopup.bill.prodNm"/>" 		binding="prodNm"		width="*" align="center" ></wj-flex-grid-column>
 				            <wj-flex-grid-column header="<s:message code="saleComPopup.bill.saleQty"/>" 	binding="saleQty"		width="*" align="right" aggregate="Sum"></wj-flex-grid-column>
 				            <wj-flex-grid-column header="<s:message code="saleComPopup.bill.saleUprc"/>"	binding="saleUprc"		width="*" align="right" aggregate="Sum"></wj-flex-grid-column>
 				            <wj-flex-grid-column header="<s:message code="saleComPopup.bill.totSaleAmt"/>" 	binding="saleAmt"		width="*" align="right" aggregate="Sum"></wj-flex-grid-column>
