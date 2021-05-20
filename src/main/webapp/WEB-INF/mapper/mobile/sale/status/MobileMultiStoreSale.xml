@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileMultiStoreSale.xml
+    (모바일) 매출현황 > 다중매장매출현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.05.20     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.multiStoreSale.service.impl.MobileMultiStoreSaleMapper">
+
+    <!-- 다중매장매출현황 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PROD
+        COMMENTS : [매출]일별_종합, [매출]일별_상품
+    -->
+    <select id="getMobileMultiStoreSaleList" parameterType="MobileMultiStoreSaleVO" resultType="DefaultMap">
+        /* MobileMultiStoreSaleMapper.getMobileMultiStoreSaleList */
+        SELECT
+        A.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = A.STORE_CD) AS STORE_NM,
+        A.SALE_CNT,
+        A.REAL_SALE_AMT,
+        B.SHOP_REAL_SALE_AMT,
+        B.DLVR_REAL_SALE_AMT,
+        B.PACK_REAL_SALE_AMT,
+        NVL(ROUND(A.REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE,
+        NVL(ROUND(B.SHOP_REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS SHOP_AMT_RATE,
+        NVL(ROUND(B.DLVR_REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS DLVR_AMT_RATE,
+        NVL(ROUND(B.PACK_REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS PACK_AMT_RATE
+        FROM
+        (
+            SELECT
+            tsdt.STORE_CD,
+            COUNT(tsdt.SALE_DATE) AS SALE_CNT,
+            SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdt.STORE_CD
+        ) A,
+        (
+            SELECT
+            tsdp.STORE_CD,
+            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
+            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+            FROM TB_SL_DAILY_PROD tsdp
+            WHERE 1=1
+            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdp.STORE_CD
+        ) B,
+        (
+            SELECT
+            tsdp.STORE_CD,
+            SUM(tsdp.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+            FROM TB_SL_DAILY_PROD tsdp
+            WHERE 1=1
+            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdp.STORE_CD
+        ) C
+        WHERE 1=1
+        AND B.STORE_CD (+)= A.STORE_CD
+        AND C.STORE_CD (+)= A.STORE_CD
+        ORDER BY A.STORE_CD
+    </select>
+
+    <!-- 다중매장매출현황 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_DTL_DLVR, TB_SL_DAILY_PAY, TB_SL_DAILY_DC, TB_SL_SALE_HDR
+        COMMENTS : [매출]일별_종합, [매출] 일별_배달, [매출]일별_결제, [매출]일별_할인, [매출]헤더
+    -->
+    <select id="getMobileMultiStoreSale2List" parameterType="MobileMultiStoreSaleVO" resultType="DefaultMap">
+        /* MobileMultiStoreSaleMapper.getMobileMultiStoreSale2List */
+        SELECT
+        A.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = A.STORE_CD) AS STORE_NM,
+        NVL(A.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
+        NVL(A.TOT_DC_AMT, 0) AS TOT_DC_AMT,
+        NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
+        NVL(A.SALE_CNT, 0) AS SALE_CNT,
+        NVL(ROUND(A.TOT_SALE_AMT / A.SALE_CNT), 0) AS DAY_AVR_SALE,
+        NVL(A.BILL_CNT, 0) AS BILL_CNT,
+        NVL(ROUND(A.TOT_SALE_AMT / A.BILL_CNT), 0) AS BILL_UPRC,
+        NVL(E.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
+        NVL(ROUND(A.REAL_SALE_AMT / E.TOT_GUEST_CNT), 0) AS GUEST_UPRC,
+        NVL(B.SHOP_REAL_SALE_AMT, 0) AS SHOP_REAL_SALE_AMT,
+        NVL(ROUND(B.SHOP_REAL_SALE_AMT / B.SHOP_SALE_CNT), 0) AS SHOP_AVR_SALE,
+        NVL(B.SHOP_BILL_CNT, 0) AS SHOP_BILL_CNT,
+        NVL(ROUND(B.SHOP_REAL_SALE_AMT / B.SHOP_BILL_CNT), 0) AS SHOP_BILL_UPRC,
+        NVL(B.DLVR_REAL_SALE_AMT, 0) AS DLVR_REAL_SALE_AMT,
+        NVL(ROUND(B.DLVR_REAL_SALE_AMT / B.DLVR_SALE_CNT), 0) AS DLVR_AVR_SALE,
+        NVL(B.DLVR_BILL_CNT, 0) AS DLVR_BILL_CNT,
+        NVL(ROUND(B.DLVR_REAL_SALE_AMT / B.DLVR_BILL_CNT), 0) AS DLVR_BILL_UPRC,
+        NVL(B.PACK_REAL_SALE_AMT, 0) AS PACK_REAL_SALE_AMT,
+        NVL(ROUND(B.PACK_REAL_SALE_AMT / B.PACK_SALE_CNT), 0) AS PACK_AVR_SALE,
+        NVL(B.PACK_BILL_CNT, 0) AS PACK_BILL_CNT,
+        NVL(ROUND(B.PACK_REAL_SALE_AMT / B.PACK_BILL_CNT), 0) AS PACK_BILL_UPRC,
+        NVL(C.CARD_AMT, 0) AS CARD_AMT,
+        NVL(C.CASH_AMT, 0) AS CASH_AMT,
+        NVL(C.ETC_AMT, 0) AS ETC_AMT,
+        NVL(D.DC_AMT, 0) AS DC_AMT,
+        NVL(D.COUPN_DC_AMT, 0) AS COUPN_DC_AMT,
+        NVL(D.ETC_DC_AMT, 0) AS ETC_DC_AMT
+        FROM
+        (
+            SELECT
+            tsdt.STORE_CD,
+            SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT,
+            SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
+            SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT,
+            COUNT(tsdt.SALE_DATE) AS SALE_CNT,
+            SUM(tsdt.REAL_SALE_CNT) - SUM(tsdt.RTN_SALE_CNT) AS BILL_CNT
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdt.STORE_CD
+        ) A,
+        (
+            SELECT
+            tsddd.STORE_CD,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN 1 ELSE 0 END) AS SHOP_SALE_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN 1 ELSE 0 END) AS DLVR_SALE_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN 1 ELSE 0 END) AS PACK_SALE_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN tsddd.BILL_CNT ELSE 0 END) AS SHOP_BILL_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN tsddd.BILL_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN tsddd.BILL_CNT ELSE 0 END) AS PACK_BILL_CNT
+            FROM TB_SL_DAILY_DTL_DLVR tsddd
+            WHERE 1=1
+            AND tsddd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsddd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsddd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsddd.STORE_CD
+        ) B,
+        (
+            SELECT
+            tsdp.STORE_CD,
+            SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CARD_AMT,
+            SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CASH_AMT,
+            SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS ETC_AMT
+            FROM TB_SL_DAILY_PAY tsdp
+            WHERE 1=1
+            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdp.STORE_CD
+        ) C,
+        (
+            SELECT
+            tsdd.STORE_CD,
+            SUM(CASE WHEN tsdd.DC_CD = '01' THEN tsdd.TOT_DC_AMT ELSE 0 END) AS DC_AMT,
+            SUM(CASE WHEN tsdd.DC_CD = '02' THEN tsdd.TOT_DC_AMT ELSE 0 END) AS COUPN_DC_AMT,
+            SUM(CASE WHEN tsdd.DC_CD NOT IN('01','02') THEN tsdd.TOT_DC_AMT ELSE 0 END) AS ETC_DC_AMT
+            FROM TB_SL_DAILY_DC tsdd
+            WHERE 1=1
+            AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdd.STORE_CD
+        ) D,
+        (
+            SELECT
+            tssh.STORE_CD,
+            SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+            FROM TB_SL_SALE_HDR tssh
+            WHERE 1=1
+            AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tssh.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tssh.STORE_CD
+        ) E
+        WHERE 1=1
+        AND B.STORE_CD (+)= A.STORE_CD
+        AND C.STORE_CD (+)= A.STORE_CD
+        AND D.STORE_CD (+)= A.STORE_CD
+        AND E.STORE_CD (+)= A.STORE_CD
+        ORDER BY A.STORE_CD
+    </select>
+
+    <!-- 다중매장매출현황 - 차트조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD
+        COMMENTS : [매출]일별_상품
+    -->
+    <select id="getMobileMultiStoreSaleChartList" parameterType="MobileMultiStoreSaleVO" resultType="DefaultMap">
+        /* MobileMultiStoreSaleMapper.getMobileMultiStoreSaleChartList */
+        SELECT
+        tsdp.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsdp.STORE_CD) AS STORE_NM,
+        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_DAILY_PROD tsdp
+        WHERE 1=1
+        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdp.STORE_CD IN
+        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+            #{item}
+        </foreach>
+        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP BY tsdp.STORE_CD
+    </select>
+
+    <!-- 일자-매장별 매출현황 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_DTL_DLVR, TB_SL_DAILY_PAY, TB_SL_DAILY_DC, TB_SL_SALE_HDR
+        COMMENTS : [매출]일별_종합, [매출] 일별_배달, [매출]일별_결제, [매출]일별_할인, [매출]헤더
+    -->
+    <select id="getMobileMultiStoreSaleDayStoreList" parameterType="MobileMultiStoreSaleVO" resultType="DefaultMap">
+        /* MobileMultiStoreSaleMapper.getMobileMultiStoreSaleDayStoreList */
+        SELECT
+        A.SALE_DATE,
+        A.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = A.STORE_CD) AS STORE_NM,
+        NVL(A.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
+        NVL(A.TOT_DC_AMT, 0) AS TOT_DC_AMT,
+        NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
+        NVL(A.BILL_CNT, 0) AS BILL_CNT,
+        NVL(ROUND(A.TOT_SALE_AMT / A.BILL_CNT), 0) AS BILL_UPRC,
+        NVL(E.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
+        NVL(ROUND(A.REAL_SALE_AMT / E.TOT_GUEST_CNT), 0) AS GUEST_UPRC,
+        NVL(B.SHOP_REAL_SALE_AMT, 0) AS SHOP_REAL_SALE_AMT,
+        NVL(B.SHOP_BILL_CNT, 0) AS SHOP_BILL_CNT,
+        NVL(ROUND(B.SHOP_REAL_SALE_AMT / B.SHOP_BILL_CNT), 0) AS SHOP_BILL_UPRC,
+        NVL(B.DLVR_REAL_SALE_AMT, 0) AS DLVR_REAL_SALE_AMT,
+        NVL(B.DLVR_BILL_CNT, 0) AS DLVR_BILL_CNT,
+        NVL(ROUND(B.DLVR_REAL_SALE_AMT / B.DLVR_BILL_CNT), 0) AS DLVR_BILL_UPRC,
+        NVL(B.PACK_REAL_SALE_AMT, 0) AS PACK_REAL_SALE_AMT,
+        NVL(B.PACK_BILL_CNT, 0) AS PACK_BILL_CNT,
+        NVL(ROUND(B.PACK_REAL_SALE_AMT / B.PACK_BILL_CNT), 0) AS PACK_BILL_UPRC,
+        NVL(C.CARD_AMT, 0) AS CARD_AMT,
+        NVL(C.CASH_AMT, 0) AS CASH_AMT,
+        NVL(C.ETC_AMT, 0) AS ETC_AMT,
+        NVL(D.DC_AMT, 0) AS DC_AMT,
+        NVL(D.COUPN_DC_AMT, 0) AS COUPN_DC_AMT,
+        NVL(D.ETC_DC_AMT, 0) AS ETC_DC_AMT
+        FROM
+        (
+            SELECT
+            tsdt.SALE_DATE,
+            tsdt.STORE_CD,
+            SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT,
+            SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
+            SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT,
+            SUM(tsdt.REAL_SALE_CNT) - SUM(tsdt.RTN_SALE_CNT) AS BILL_CNT
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdt.SALE_DATE, tsdt.STORE_CD
+        ) A,
+        (
+            SELECT
+            tsddd.SALE_DATE,
+            tsddd.STORE_CD,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN 1 ELSE 0 END) AS SHOP_SALE_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN 1 ELSE 0 END) AS DLVR_SALE_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN 1 ELSE 0 END) AS PACK_SALE_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN tsddd.BILL_CNT ELSE 0 END) AS SHOP_BILL_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN tsddd.BILL_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+            SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN tsddd.BILL_CNT ELSE 0 END) AS PACK_BILL_CNT
+            FROM TB_SL_DAILY_DTL_DLVR tsddd
+            WHERE 1=1
+            AND tsddd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsddd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsddd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsddd.SALE_DATE, tsddd.STORE_CD
+        ) B,
+        (
+            SELECT
+            tsdp.SALE_DATE,
+            tsdp.STORE_CD,
+            SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CARD_AMT,
+            SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS CASH_AMT,
+            SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS ETC_AMT
+            FROM TB_SL_DAILY_PAY tsdp
+            WHERE 1=1
+            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD
+        ) C,
+        (
+            SELECT
+            tsdd.SALE_DATE,
+            tsdd.STORE_CD,
+            SUM(CASE WHEN tsdd.DC_CD = '01' THEN tsdd.TOT_DC_AMT ELSE 0 END) AS DC_AMT,
+            SUM(CASE WHEN tsdd.DC_CD = '02' THEN tsdd.TOT_DC_AMT ELSE 0 END) AS COUPN_DC_AMT,
+            SUM(CASE WHEN tsdd.DC_CD NOT IN('01','02') THEN tsdd.TOT_DC_AMT ELSE 0 END) AS ETC_DC_AMT
+            FROM TB_SL_DAILY_DC tsdd
+            WHERE 1=1
+            AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdd.SALE_DATE, tsdd.STORE_CD
+        ) D,
+        (
+            SELECT
+            tssh.SALE_DATE,
+            tssh.STORE_CD,
+            SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+            FROM TB_SL_SALE_HDR tssh
+            WHERE 1=1
+            AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tssh.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tssh.SALE_DATE, tssh.STORE_CD
+        ) E
+        WHERE 1=1
+        AND B.SALE_DATE (+)= A.SALE_DATE
+        AND B.STORE_CD (+)= A.STORE_CD
+        AND C.SALE_DATE (+)= A.SALE_DATE
+        AND C.STORE_CD (+)= A.STORE_CD
+        AND D.SALE_DATE (+)= A.SALE_DATE
+        AND D.STORE_CD (+)= A.STORE_CD
+        AND E.SALE_DATE (+)= A.SALE_DATE
+        AND E.STORE_CD (+)= A.STORE_CD
+        ORDER BY A.SALE_DATE, A.STORE_CD
+    </select>
+
+</mapper>
