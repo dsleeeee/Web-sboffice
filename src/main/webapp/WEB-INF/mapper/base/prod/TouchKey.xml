@@ -999,6 +999,114 @@
 
     </delete>
 
+    <!-- 터치키미적용상품 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키미적용상품을 조회한다.
+    -->
+    <select id="getNoTouchKey" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* USE : TouchkeyMapper.getNoTouchKey */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thtk.TUKEY_CLASS_CD,
+                       thtkc.TUKEY_CLASS_NM,
+                       thtk.PAGE_NO,
+                       thp.PROD_CD,
+                       thp.PROD_NM,
+                       NVL2(thp.PROD_CD, 'Y', 'N') AS PROD_INFO,
+                       thp.SALE_PROD_YN,
+                       thp.USE_YN,
+                       thtk.TUKEY_GRP_CD
+                  FROM TB_HQ_TOUCH_KEY thtk,
+                	   TB_HQ_TOUCH_KEY_CLASS thtkc,
+                       TB_HQ_PRODUCT thp
+                 WHERE thtk.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                   AND thtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
+                   AND thtkc.HQ_OFFICE_CD   = thtk.HQ_OFFICE_CD
+                   AND thtkc.TUKEY_GRP_CD   = thtk.TUKEY_GRP_CD
+                   AND thtkc.TUKEY_CLASS_CD = thtk.TUKEY_CLASS_CD
+                   AND thp.HQ_OFFICE_CD (+) = thtk.HQ_OFFICE_CD
+                   AND thp.PROD_CD      (+) = thtk.PROD_CD
+                   AND thp.PROD_CD IS NULL --  상품마스터에 없는 경우(매장)
+                 UNION
+                SELECT thtk.TUKEY_CLASS_CD,
+                       thtkc.TUKEY_CLASS_NM,
+                       thtk.PAGE_NO,
+                       thp.PROD_CD,
+                       thp.PROD_NM,
+                       NVL2(thp.PROD_CD, 'Y', 'N') AS PROD_INFO,
+                       thp.SALE_PROD_YN,
+                       thp.USE_YN,
+                       thtk.TUKEY_GRP_CD
+                  FROM TB_HQ_TOUCH_KEY thtk,
+                	   TB_HQ_TOUCH_KEY_CLASS thtkc,
+                       TB_HQ_PRODUCT thp
+                 WHERE thtk.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                   AND thtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
+                   AND thtkc.HQ_OFFICE_CD   = thtk.HQ_OFFICE_CD
+                   AND thtkc.TUKEY_GRP_CD   = thtk.TUKEY_GRP_CD
+                   AND thtkc.TUKEY_CLASS_CD = thtk.TUKEY_CLASS_CD
+                   AND thp.HQ_OFFICE_CD     = thtk.HQ_OFFICE_CD
+                   AND thp.PROD_CD          = thtk.PROD_CD
+                   AND (
+                        thp.SALE_PROD_YN = 'N'     -- 상품 '판매상품여부'  - '미판매상품' 인 경우
+                        OR  thp.USE_YN   = 'N'     -- 상품 '사용여부'      - '미사용' 인 경우
+                       )
+                 ORDER BY TUKEY_CLASS_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmtk.TUKEY_CLASS_CD,
+                       tmtkc.TUKEY_CLASS_NM,
+                       tmtk.PAGE_NO,
+                       tmp.PROD_CD,
+                       tmp.prod_nm,
+                       NVL2(tmp.PROD_CD, 'Y', 'N') AS PROD_INFO,
+                       tmp.SALE_PROD_YN,
+                       tmp.USE_YN,
+                       tmtk.TUKEY_GRP_CD
+                  FROM TB_MS_TOUCH_KEY tmtk,
+                	   TB_MS_TOUCH_KEY_CLASS tmtkc,
+                 	   TB_MS_PRODUCT tmp
+                 WHERE tmtk.STORE_CD 	    = #{storeCd}
+                   AND tmtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
+                   AND tmtkc.STORE_CD       = tmtk.STORE_CD
+                   AND tmtkc.TUKEY_GRP_CD   = tmtk.TUKEY_GRP_CD
+                   AND tmtkc.TUKEY_CLASS_CD = tmtk.TUKEY_CLASS_CD
+                   AND tmp.STORE_CD     (+) = tmtk.STORE_CD
+                   AND tmp.PROD_CD      (+) = tmtk.PROD_CD
+                   AND tmp.PROD_CD IS NULL --  상품마스터에 없는 경우(매장)
+                 UNION
+                SELECT tmtk.TUKEY_CLASS_CD,
+                       tmtkc.TUKEY_CLASS_NM,
+                       tmtk.PAGE_NO,
+                       tmp.PROD_CD,
+                       tmp.PROD_NM,
+                       NVL2(tmp.PROD_CD, 'Y', 'N') AS PROD_INFO,
+                       tmp.SALE_PROD_YN,
+                       tmp.USE_YN,
+                       tmtk.TUKEY_GRP_CD             -- 터치키분류정보, 터치키정보, 상품정보
+                  FROM TB_MS_TOUCH_KEY tmtk,
+                	   TB_MS_TOUCH_KEY_CLASS tmtkc,
+                 	   TB_MS_PRODUCT tmp
+                 WHERE tmtk.STORE_CD 	    = #{storeCd}
+                   AND tmtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
+                   AND tmtkc.STORE_CD       = tmtk.STORE_CD
+                   AND tmtkc.TUKEY_GRP_CD   = tmtk.TUKEY_GRP_CD
+                   AND tmtkc.TUKEY_CLASS_CD = tmtk.TUKEY_CLASS_CD
+                   AND tmp.STORE_CD         = tmtk.STORE_CD
+                   AND tmp.PROD_CD          = tmtk.PROD_CD
+                   AND (
+                        tmp.SALE_PROD_YN = 'N'     -- 상품 '판매상품여부'  - '미판매상품' 인 경우
+                        OR  tmp.USE_YN   = 'N'     -- 상품 '사용여부'      - '미사용' 인 경우
+                       )
+                 ORDER BY TUKEY_CLASS_CD
+            </when>
+        </choose>
+    </select>
+
     <!-- 매장목록 조회 -->
     <!--
         TABLE    : TB_MS_STORE

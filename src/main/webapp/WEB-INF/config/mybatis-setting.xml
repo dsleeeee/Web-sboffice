@@ -365,6 +365,7 @@
     <typeAlias alias="dlvrVO" type="kr.co.solbipos.membr.info.dlvr.service.DlvrVO"/>
     <typeAlias alias="memberExcelUploadVO" type="kr.co.solbipos.membr.info.excelUpload.service.MemberExcelUploadVO"/>
     <typeAlias alias="chgBatchVO" type="kr.co.solbipos.membr.info.chgBatch.service.ChgBatchVO"/>
+    <typeAlias alias="memberFgVO" type="kr.co.solbipos.membr.info.memberFg.service.MemberFgVO"/>
     <typeAlias alias="taxBillVO" type="kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO"/>
     <typeAlias alias="postpaidStoreVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO"/>
     <typeAlias alias="prepaidStoreVO" type="kr.co.solbipos.membr.anals.prepaid.service.PrepaidStoreVO"/>

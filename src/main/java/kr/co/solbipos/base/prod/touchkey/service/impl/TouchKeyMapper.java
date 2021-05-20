@@ -81,6 +81,9 @@ public interface TouchKeyMapper {
     /** 판매터치키 삭제 */
     int deleteTouchKey(TouchKeyVO touchKeyVO);
 
+    /** 터치키미적용상품 조회 */
+    List<DefaultMap<String>> getNoTouchKey(TouchKeyVO touchKeyVO);
+
     /** 매장목록 조회 */
     List<DefaultMap<String>> getStoreList(TouchKeyVO touchKeyVO);
 

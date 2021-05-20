@@ -226,6 +226,32 @@ public class TouchKeyController {
     }
 
     /**
+     * 터치키미적용상품
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 노현수
+     * @since 2018. 12. 28.
+     */
+    @RequestMapping(value = "/noTouchKey.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getNoTouchKey(HttpServletRequest request, HttpServletResponse response,
+                               TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 매장 목록 조회
+        list = touchkeyService.getNoTouchKey(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
+    }
+
+    /**
      * 판매 터치키 매장적용 - 매장조회
      *
      * @param request HttpServletRequest

@@ -1932,7 +1932,8 @@
     -->
     <select id="selectBillSalePop6" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.selectBillSalePop4 */
-		SELECT TSSD.PROD_CD
+		SELECT TMP.PROD_NM
+		    , TSSD.PROD_CD
     		, TSSD.SALE_QTY
 		    , TSSD.SALE_UPRC
 		    , TSSD.SALE_AMT
@@ -1940,12 +1941,14 @@
 		    , TSSD.REAL_SALE_AMT
 		    , (TSSD.SALE_AMT - TSSD.VAT_AMT) AS TAX_SALE_AMT
 		    , TSSD.VAT_AMT
-  		FROM TB_SL_SALE_DTL TSSD
+  		FROM TB_SL_SALE_DTL TSSD, TB_MS_PRODUCT TMP
  		WHERE 1 = 1
 		  AND TSSD.STORE_CD  = #{storeCd}
 		  AND TSSD.SALE_DATE = REPLACE(#{saleDate}, '-', '')
 		  AND TSSD.POS_NO 	 = #{posNo}
 		  AND TSSD.BILL_NO   = #{billNo}
+		  AND TMP.STORE_CD   = TSSD.STORE_CD
+		  AND TMP.PROD_CD    = TSSD.PROD_CD
     </select>
 
     <!-- 영수증 팝업(신용카드결제취소내역) 조회 -->
