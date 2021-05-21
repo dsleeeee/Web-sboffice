@@ -110,24 +110,4 @@ public class StatusController {
         return returnListJson(Status.OK, result, statusVO);
     }
 
-    /**
-     * 금전현황 리스트 조회 Excel 다운로드
-     *
-     * @param request
-     * @param response
-     * @param model
-     * @author 이다솜
-     * @since 2021.05.18
-     * @return
-     */
-    @RequestMapping(value = "/excelList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result monyStatusExcelList(StatusVO statusVO, HttpServletRequest request, HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = statusService.monyStatusExcelList(statusVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, list, statusVO);
-    }
 }

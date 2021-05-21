@@ -82,6 +82,13 @@ public class MemberFgServiceImpl implements MemberFgService {
     /** 선불 회원 조회 */
     @Override
     public List<DefaultMap<String>> getMemberPrepaid(MemberFgVO memberFgVO, SessionInfoVO sessionInfoVO) {
+        // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
+        String defaultStoreCd = "";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
+        }
+        memberFgVO.setDefaultStoreCd(defaultStoreCd);
 
         memberFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
@@ -105,6 +112,13 @@ public class MemberFgServiceImpl implements MemberFgService {
     /** 미선불 회원 조회 */
     @Override
     public List<DefaultMap<String>> getMemberNoPrepaid(MemberFgVO memberFgVO, SessionInfoVO sessionInfoVO) {
+        // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
+        String defaultStoreCd = "";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
+        }
+        memberFgVO.setDefaultStoreCd(defaultStoreCd);
 
         memberFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
@@ -128,6 +142,13 @@ public class MemberFgServiceImpl implements MemberFgService {
     /** 후불 회원 조회 */
     @Override
     public List<DefaultMap<String>> getMemberPostpaid(MemberFgVO memberFgVO, SessionInfoVO sessionInfoVO) {
+        // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
+        String defaultStoreCd = "";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
+        }
+        memberFgVO.setDefaultStoreCd(defaultStoreCd);
 
         memberFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
@@ -151,6 +172,13 @@ public class MemberFgServiceImpl implements MemberFgService {
     /** 미후불 회원 조회 */
     @Override
     public List<DefaultMap<String>> getMemberNoPostpaid(MemberFgVO memberFgVO, SessionInfoVO sessionInfoVO) {
+        // 기본매장이 있는 경우, 매장 조회시 기본매장은 제외하고 검색한다.
+        String defaultStoreCd = "";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
+        }
+        memberFgVO.setDefaultStoreCd(defaultStoreCd);
 
         memberFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());

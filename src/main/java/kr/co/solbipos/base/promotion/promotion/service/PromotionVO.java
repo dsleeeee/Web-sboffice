@@ -127,6 +127,12 @@ public class PromotionVO extends PageVO {
     private String prodSelectExceptFg;
     /** 매장등록구분 */
     private String storeSelectExceptFg;
+    /** 프로모션 적용 구분(내점) */
+    private String dlv1Yn;
+    /** 프로모션 적용 구분(배달) */
+    private String dlv2Yn;
+    /** 프로모션 적용 구분(포장) */
+    private String dlv3Yn;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -526,5 +532,29 @@ public class PromotionVO extends PageVO {
 
     public void setStoreSelectExceptFg(String storeSelectExceptFg) {
         this.storeSelectExceptFg = storeSelectExceptFg;
+    }
+
+    public String getDlv1Yn() {
+        return dlv1Yn;
+    }
+
+    public void setDlv1Yn(String dlv1Yn) {
+        this.dlv1Yn = dlv1Yn;
+    }
+
+    public String getDlv2Yn() {
+        return dlv2Yn;
+    }
+
+    public void setDlv2Yn(String dlv2Yn) {
+        this.dlv2Yn = dlv2Yn;
+    }
+
+    public String getDlv3Yn() {
+        return dlv3Yn;
+    }
+
+    public void setDlv3Yn(String dlv3Yn) {
+        this.dlv3Yn = dlv3Yn;
     }
 }

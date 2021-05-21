@@ -65,13 +65,16 @@
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = #{telNo}
+                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         #{item}
                     </foreach>
+                </if>
+                <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
+                   AND tms.STORE_CD != #{defaultStoreCd}
                 </if>
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -107,7 +110,7 @@
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = #{telNo}
+                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
                 </if>
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -154,13 +157,16 @@
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = #{telNo}
+                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         #{item}
                     </foreach>
+                </if>
+                <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
+                   AND tms.STORE_CD != #{defaultStoreCd}
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -192,7 +198,8 @@
                    AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
                    AND tms.STORE_CD||tmm.MEMBR_NO NOT IN (SELECT STORE_CD||MEMBR_NO
                                                             FROM TB_MB_MEMBER_PREPAID_STORE
-                                                           WHERE STORE_CD = #{storeCd}
+                                                           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+                                                             AND STORE_CD = #{storeCd}
                                                              AND USE_YN = 'Y')
                 <if test='membrNo != null and membrNo != ""'>
                    AND tmm.MEMBR_NO = #{membrNo}
@@ -204,7 +211,7 @@
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = #{telNo}
+                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -251,13 +258,16 @@
                AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
             </if>
             <if test='telNo != null and telNo != ""'>
-               AND tmm.TEL_NO = #{telNo}
+               AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
             </if>
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                AND tms.STORE_CD IN
                 <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
+            </if>
+            <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
+               AND tms.STORE_CD != #{defaultStoreCd}
             </if>
              ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
             <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -294,7 +304,7 @@
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = #{telNo}
+                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
                 </if>
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -341,13 +351,16 @@
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = #{telNo}
+                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         #{item}
                     </foreach>
+                </if>
+                <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
+                   AND tms.STORE_CD != #{defaultStoreCd}
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -379,7 +392,8 @@
                    AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
                    AND tms.STORE_CD||tmm.MEMBR_NO NOT IN (SELECT STORE_CD||MEMBR_NO
                                                             FROM TB_MB_MEMBER_POSTPAID_STORE
-                                                           WHERE STORE_CD = #{storeCd}
+                                                           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+                                                             AND STORE_CD = #{storeCd}
                                                              AND USE_YN = 'Y')
                 <if test='membrNo != null and membrNo != ""'>
                    AND tmm.MEMBR_NO = #{membrNo}
@@ -391,7 +405,7 @@
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = #{telNo}
+                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>

@@ -82,7 +82,8 @@ var typeCdFgData = [
 // 할인구분
 var applyDcDsData = [
     {"name":"정률할인","value":"1"},
-    {"name":"정액할인","value":"2"}
+    {"name":"정액할인","value":"2"},
+    {"name":"프로모션가격","value":"3"}
 ];
 
 // 혜택상품 - 증정구분
@@ -228,6 +229,11 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope._setComboData("applyDcDs", applyDcDsData); // 할인구분
     $scope._setComboData("presentDs", presentDsFgData); // 혜택상품 - 증정구분
     $scope._setComboData("selectCrossFg", selectCrossFgData); // 혜택상품 - 교차선택구분
+
+    // 적용조건 - 적용구분 셋팅
+    $scope.dlvFgInStore = true;
+    $scope.dlvFgDelivery = false;
+    $scope.dlvFgPacking = false;
 
     // 적용조건 - 적용기간 셋팅
     $scope.isCheckedPeriod = false;
@@ -391,6 +397,22 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 $scope.useYnCombo.selectedValue = info.useYn; // 사용여부
 
                 // ------------ 적용조건 ------------
+                if(info.dlv1Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgInStore']").prop("checked", true); // 적용구분(내점)
+                }else{
+                    $("input:checkbox[id='chkDlvFgInStore']").prop("checked", false); // 적용구분(내점)
+                }
+                if(info.dlv2Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgDelivery']").prop("checked", true); // 적용구분(배달)
+                }else{
+                    $("input:checkbox[id='chkDlvFgDelivery']").prop("checked", false); // 적용구분(배달)
+                }
+                if(info.dlv3Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgPacking']").prop("checked", true); // 적용구분(포장)
+                }else{
+                    $("input:checkbox[id='chkDlvFgPacking']").prop("checked", false); // 적용구분(포장)
+                }
+
                 if(info.dateYn === "Y"){
                     $("input:checkbox[id='chkPeriod']").prop("checked", true); // 적용기간
                     promotionStartDate.value = new Date(getFormatDate(info.startYmd, "-"));
@@ -578,6 +600,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
 
             // ------------ 적용조건 ------------
+            params.dlv1Yn = $("#chkDlvFgInStore").is(":checked") === true ? 'Y' : 'N'; // 적용구분(내점)
+            params.dlv2Yn = $("#chkDlvFgDelivery").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달)
+            params.dlv3Yn = $("#chkDlvFgPacking").is(":checked") === true ? 'Y' : 'N'; // 적용구분(포장)
             params.dateYn = $("#chkPeriod").is(":checked") === true ? 'Y' : 'N'; // 적용기간 사용여부
             params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionStartDate.value, 'yyyyMMdd') : '00010101'; // 적용기간 시작일
             params.endYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionEndDate.value, 'yyyyMMdd') : '99991231'; // 적용기간 종료일
@@ -741,6 +766,18 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             return false;
         }
 
+        // 적용구분은 한 개 이상 선택하세요.
+        var chkDlvFg = 0;
+
+        if($("#chkDlvFgInStore").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgDelivery").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgPacking").is(":checked")) chkDlvFg++;
+
+        if(chkDlvFg === 0){
+            $scope._popMsg(messages["promotion.chk.DlvFg"]);
+            return false;
+        }
+
         // 적용요일을(를) 선택하세요.
         if($("#chkDayOfWeek").is(":checked")){
 
@@ -796,10 +833,17 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     return false;
                 }
             }
-            // 정액할인은 1원단위를 입력할 수 없습니다.
+            // 정액할인의 할인금액은 1원단위를 입력할 수 없습니다.
             if($scope.applyDcDsCombo.selectedValue === "2") {
                 if(Number($("#dcSet").val()) % 10 > 0){
                     $scope._popMsg(messages["promotion.chk.dcSetAmt"]);
+                    return false;
+                }
+            }
+            // 프로모션가격의 판매금액은 1원단위를 입력할 수 없습니다.
+            if($scope.applyDcDsCombo.selectedValue === "3") {
+                if(Number($("#dcSet").val()) % 10 > 0){
+                    $scope._popMsg(messages["promotion.chk.saleAmt"]);
                     return false;
                 }
             }
@@ -827,6 +871,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
         $("#hdPromotionCd").val("");
 
+
         // ------------ 권한, 프로모션기간, 환경설정값 에 따른 hidden 처리 ------------
         $("#btnSave").css("display", "");
 
@@ -836,6 +881,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $scope.useYnCombo.selectedIndex = 0; // 사용여부
 
         // ------------ 적용조건 ------------
+        $("input:checkbox[id='chkDlvFgInStore']").prop("checked", true); // 적용구분(내점)
+        $("input:checkbox[id='chkDlvFgDelivery']").prop("checked", false); // 적용구분(배달)
+        $("input:checkbox[id='chkDlvFgPacking']").prop("checked", false); // 적용구분(포장)
+
         $("input:checkbox[id='chkPeriod']").prop("checked", false); // 적용기간
         promotionStartDate.value = getCurDate('-');
         promotionEndDate.value = getCurDate('-');
@@ -1058,6 +1107,17 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             }else{
                 $("#trSelectPresentGrid").css("display", "none");
             }
+        }
+    };
+
+    // 적용혜택 - 할인구분 선택에 따른 dcSet 명칭(할인율, 할인금액, 판매금액) 변경
+    $scope.setDcSet = function (s) {
+        if(s.selectedValue === "1"){
+            $("#lblDcSet").text(messages["promotion.dcSet"]);
+        }else if(s.selectedValue === "2"){
+            $("#lblDcSet").text(messages["promotion.dcSetAmt"]);
+        }else{
+            $("#lblDcSet").text(messages["promotion.saleAmt"]);
         }
     };
     

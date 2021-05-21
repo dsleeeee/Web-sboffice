@@ -20,7 +20,6 @@
   -->
   <select id="selectStatus" parameterType="statusVO" resultType="DefaultMap">
      /* StatusMapper.selectStatus */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
       <choose>
           <!-- 본사 -->
           <when test='orgnFg != null and orgnFg == "H"'>
@@ -33,7 +32,6 @@
                       tha.ACCNT_NM,
                       tpei.ACCNT_AMT * DECODE(tpei.ACCNT_FG, 1, 1, -1) AS ACCNT_AMT,
                       tpei.REAMRK
-                      <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_PS_EXACTCALC_IOMONEY tpei,
                       TB_MS_STORE tms,
                       TB_HQ_ACCOUNT tha
@@ -68,7 +66,6 @@
                       tma.ACCNT_NM,
                       tpei.ACCNT_AMT * DECODE(tpei.ACCNT_FG, 1, 1, -1) AS ACCNT_AMT,
                       tpei.REAMRK
-                      <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_PS_EXACTCALC_IOMONEY tpei,
                       TB_MS_STORE tms,
                       TB_MS_ACCOUNT tma
@@ -91,7 +88,6 @@
                    BY tpei.SALE_DATE DESC, tpei.ACCNT_DT ASC
           </when>
       </choose>
-      <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
   <!-- 계정구분에 따른 계정 코드 조회(입금/출금 계정, 매장권한에서만 사용) -->
@@ -103,7 +99,7 @@
   <select id="selectAccntList" parameterType="statusVO" resultType="DefaultMap">
      /* StatusMapper.selectAccntList */
       SELECT '' AS VALUE,
-              '선택' AS NAME
+              '전체' AS NAME
         FROM DUAL
        UNION
       SELECT ACCNT_CD AS VALUE,
@@ -117,83 +113,5 @@
       ORDER
          BY VALUE NULLS FIRST
   </select>
-
-  <!-- 금전현황 리스트 조회 Excel 다운로드 -->
-  <!--
-      TABLE    : TB_PS_EXACTCALC_IOMONEY, TB_MS_STORE, TB_HQ_ACCOUNT, TB_MS_ACCOUNT
-      PARAM    : statusVO
-      COMMENTS : 금전현황 리스트를 조회하여 Excel 다운로드 한다.
-  -->
-  <select id="monyStatusExcelList" parameterType="statusVO" resultType="DefaultMap">
-        /* StatusMapper.monyStatusExcelList */
-        <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT tpei.STORE_CD,
-                        tms.STORE_NM,
-                        TO_CHAR(TO_DATE(tpei.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-                        tpei.POS_NO,
-                        tpei.ACCNT_FG,
-                        tpei.ACCNT_CD,
-                        tha.ACCNT_NM,
-                        tpei.ACCNT_AMT * DECODE(tpei.ACCNT_FG, 1, 1, -1) AS ACCNT_AMT,
-                        tpei.REAMRK
-                  FROM TB_PS_EXACTCALC_IOMONEY tpei,
-                        TB_MS_STORE tms,
-                        TB_HQ_ACCOUNT tha
-                  WHERE tpei.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tpei.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    <if test='storeCd != null and storeCd != ""'>
-                        AND tpei.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                            #{item}
-                        </foreach>
-                    </if>
-                    <if test="accntFg != null and accntFg != ''">
-                        AND tpei.ACCNT_FG = #{accntFg}
-                    </if>
-                        AND tms.HQ_OFFICE_CD = tpei.HQ_OFFICE_CD
-                        AND tms.STORE_CD = tpei.STORE_CD
-                        AND tha.HQ_OFFICE_CD (+)= tpei.HQ_OFFICE_CD
-                        AND tha.ACCNT_FG (+)= tpei.ACCNT_FG
-                        AND tha.ACCNT_CD (+)= tpei.ACCNT_CD
-                        AND tha.USE_YN (+)= 'Y'
-                      ORDER
-                         BY tpei.SALE_DATE DESC, tpei.ACCNT_DT ASC
-            </when>
-            <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT tpei.STORE_CD,
-                        tms.STORE_NM,
-                        TO_CHAR(TO_DATE(tpei.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-                        tpei.POS_NO,
-                        tpei.ACCNT_FG,
-                        tpei.ACCNT_CD,
-                        tma.ACCNT_NM,
-                        tpei.ACCNT_AMT * DECODE(tpei.ACCNT_FG, 1, 1, -1) AS ACCNT_AMT,
-                        tpei.REAMRK
-                  FROM TB_PS_EXACTCALC_IOMONEY tpei,
-                        TB_MS_STORE tms,
-                        TB_MS_ACCOUNT tma
-                  WHERE tpei.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tpei.STORE_CD = #{storeCd}
-                    AND tpei.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    <if test="accntFg != null and accntFg != ''">
-                        AND tpei.ACCNT_FG = #{accntFg}
-                    </if>
-                    <if test="accntCd != null and accntCd != ''">
-                        AND tpei.ACCNT_CD = #{accntCd}
-                    </if>
-                    AND tms.HQ_OFFICE_CD = tpei.HQ_OFFICE_CD
-                    AND tms.STORE_CD = tpei.STORE_CD
-                    AND tma.STORE_CD (+)= tpei.STORE_CD
-                    AND tma.ACCNT_FG (+)= tpei.ACCNT_FG
-                    AND tma.ACCNT_CD (+)= tpei.ACCNT_CD
-                    AND tma.USE_YN (+)= 'Y'
-                  ORDER
-                     BY tpei.SALE_DATE DESC, tpei.ACCNT_DT ASC
-            </when>
-        </choose>
-    </select>
 
 </mapper>
