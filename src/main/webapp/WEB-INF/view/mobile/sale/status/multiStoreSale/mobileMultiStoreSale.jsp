@@ -15,7 +15,7 @@
         <a href="#" class="fl"><s:message code="mobile.multiStoreSale"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileMultiStoreSaleCtrl', 1)">
-            <s:message code="cmm.search"/>
+            <s:message code="mobile.cmm.search"/>
         </button>
     </div>
     <table class="searchTbl">
@@ -70,16 +70,16 @@
                     is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleCnt"/>" binding="saleCnt" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.shopRealSaleAmt"/>" binding="shopRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.packRealSaleAmt"/>" binding="packRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.amtRate"/>" binding="amtRate" width="110" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.shopAmtRate"/>" binding="shopAmtRate" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.dlvrAmtRate"/>" binding="dlvrAmtRate" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.packAmtRate"/>" binding="packAmtRate" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleCnt"/>" binding="saleCnt" width="55" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="realSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.amtRate"/>" binding="amtRate" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.shop"/>" binding="shopRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.dlvr"/>" binding="dlvrRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.pack"/>" binding="packRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.shop"/>" binding="shopAmtRate" width="40" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.dlvr"/>" binding="dlvrAmtRate" width="40" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.pack"/>" binding="packAmtRate" width="40" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
         <div ng-controller="mobileMultiStoreSale2Ctrl">
@@ -94,31 +94,32 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totSaleAmt"/>" binding="totSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totDcAmt"/>" binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleCnt"/>" binding="saleCnt" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.dayAvrSale"/>" binding="dayAvrSale" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="billCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="billUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totGuestCnt"/>" binding="totGuestCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.guestUprc"/>" binding="guestUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="realSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleCnt"/>" binding="saleCnt" width="55" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.dayAvrSale"/>" binding="dayAvrSale" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="billCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="billUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 내점 --%>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="shopRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.avrSale"/>" binding="shopAvrSale" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.avrSale"/>" binding="shopAvrSale" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="shopBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="shopBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 배달 --%>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="dlvrRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.avrSale"/>" binding="dlvrAvrSale" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.avrSale"/>" binding="dlvrAvrSale" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="dlvrBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="dlvrBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 포장 --%>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="packRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.avrSale"/>" binding="packAvrSale" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.avrSale"/>" binding="packAvrSale" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="packBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="packBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totGuestCnt"/>" binding="totGuestCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.guestUprc"/>" binding="guestUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 결제수단 --%>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.pay.cardAmt"/>" binding="cardAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.pay.cashAmt"/>" binding="cashAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -183,26 +184,27 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totSaleAmt"/>" binding="totSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totDcAmt"/>" binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="billCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="billUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totGuestCnt"/>" binding="totGuestCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.guestUprc"/>" binding="guestUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="realSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="billCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="billUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <%-- 내점 --%>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="shopRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="shopBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="shopBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="shopBillCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="shopBillUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <%-- 배달 --%>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="dlvrRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="dlvrBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="dlvrBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="dlvrBillCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="dlvrBillUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <%-- 포장 --%>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.realSaleAmt"/>" binding="packRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="packBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="packBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billCnt"/>" binding="packBillCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.billUprc"/>" binding="packBillUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totGuestCnt"/>" binding="totGuestCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.guestUprc"/>" binding="guestUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <%-- 결제수단 --%>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.pay.cardAmt"/>" binding="cardAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.pay.cashAmt"/>" binding="cashAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -222,4 +224,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/multiStoreSale/mobileMultiStoreSale.js?ver=20210520.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/multiStoreSale/mobileMultiStoreSale.js?ver=20210521.01" charset="utf-8"></script>

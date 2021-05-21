@@ -15,7 +15,7 @@
         <a href="#" class="fl"><s:message code="mobile.monthSale"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileMonthSaleCtrl', 1)">
-            <s:message code="cmm.search"/>
+            <s:message code="mobile.cmm.search"/>
         </button>
     </div>
     <table class="searchTbl">
@@ -26,7 +26,7 @@
         <tbody>
         <tr>
             <%-- 조회월 --%>
-            <th><s:message code="cmm.search.month"/></th>
+            <th><s:message code="mobile.cmm.search.month"/></th>
             <td>
                 <div class="sb-select">
                     <span class="txtIn"><input id="startMonth" name="startDate" class="w110px" /></span>
@@ -38,7 +38,7 @@
         <c:if test="${multiStoreFg ne 0}">
             <tr>
                 <%-- (다중)매장코드 --%>
-                <th><s:message code="mobile.monthSale.store"/></th>
+                <th><s:message code="mobile.cmm.search.store"/></th>
                 <td>
                     <%-- 다중매장선택 모듈 멀티 선택 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/mobile/sale/com/popup/selectMultiStore.jsp" flush="true">
@@ -283,11 +283,11 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.nm"/>" binding="nm" width="1.2*" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.7*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.nm"/>" binding="nm" width="1.1*" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.6*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.monthSale.monthAvrSale"/>" binding="monthAvrSale" width="1.7*" align="right" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="billCnt" width="1.2*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="billUprc" width="1.2*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="billUprc" width="1.4*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -446,24 +446,25 @@
                     is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.saleYm"/>" binding="saleYm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.saleYm"/>" binding="saleYm" width="55" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.totRealSaleAmt"/>" binding="totRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <%-- 배달 --%>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="dlvrRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="dlvrBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="dlvrBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <%-- 포장 --%>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="packRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="packBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="packBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <%-- 내점 --%>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="shopRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="shopBillCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="shopBillUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.totGuestCnt"/>" binding="totGuestCnt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.guestUprc"/>" binding="guestUprc" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="shopBillCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="shopBillUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <%-- 배달 --%>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="dlvrRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="dlvrBillCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="dlvrBillUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <%-- 포장 --%>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="packRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="packBillCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="packBillUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.totGuestCnt"/>" binding="totGuestCnt" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.guestUprc"/>" binding="guestUprc" width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <%-- 결제수단 --%>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.pay.cardAmt"/>" binding="cardAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.pay.cashAmt"/>" binding="cashAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -483,4 +484,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20210514.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20210520.01" charset="utf-8"></script>

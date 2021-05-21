@@ -11,7 +11,6 @@
                 <s:message code="cmm.search"/>
             </button>
         </div>
-
         <table class="searchTbl">
             <colgroup>
                 <col class="w20"/>
@@ -20,7 +19,7 @@
             <tbody>
             <tr>
                 <%-- 조회일자 --%>
-                <th><s:message code="cmm.search.date"/></th>
+                <th><s:message code="mobile.cmm.search.date"/></th>
                 <td>
                     <div class="sb-select">
                         <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
@@ -32,7 +31,7 @@
             <c:if test="${multiStoreFg ne 0}">
                 <tr>
                     <%-- (다중)매장코드 --%>
-                    <th><s:message code="mobile.prodSale.store"/></th>
+                    <th><s:message code="mobile.cmm.search.store"/></th>
                     <td>
                         <%-- 다중매장선택 모듈 멀티 선택 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/mobile/sale/com/popup/selectMultiStore.jsp" flush="true">

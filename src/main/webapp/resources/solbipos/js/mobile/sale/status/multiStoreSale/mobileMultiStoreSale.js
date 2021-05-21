@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : mobileDaySale.js
- * 설  명 : (모바일) 매출현황 > 일별매출현황 JavaScript
+ * 파일명 : mobileMultiStoreSale.js
+ * 설  명 : (모바일) 매출현황 > 다중매장매출현황 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.05.04     김설아      1.0
+ * 2021.05.20     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -31,6 +31,65 @@ app.controller('mobileMultiStoreSaleCtrl', ['$scope', '$http', function ($scope,
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.storeNm = messages["mobile.multiStoreSale.storeNm"];
+        dataItem.saleCnt = messages["mobile.multiStoreSale.saleCnt"];
+        dataItem.realSaleAmt = messages["mobile.multiStoreSale.realSaleAmt"];
+        dataItem.amtRate = messages["mobile.multiStoreSale.storeTotal"];
+        dataItem.shopRealSaleAmt = messages["mobile.multiStoreSale.realSaleAmt"];
+        dataItem.dlvrRealSaleAmt = messages["mobile.multiStoreSale.realSaleAmt"];
+        dataItem.packRealSaleAmt = messages["mobile.multiStoreSale.realSaleAmt"];
+        dataItem.shopAmtRate = messages["mobile.multiStoreSale.amtRate"];
+        dataItem.dlvrAmtRate = messages["mobile.multiStoreSale.amtRate"];
+        dataItem.packAmtRate = messages["mobile.multiStoreSale.amtRate"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
 
         // 차트 초기값 셋팅
         $scope.searchMobileMultiStoreSaleChartSet();
@@ -127,8 +186,6 @@ app.controller('mobileMultiStoreSale2Ctrl', ['$scope', '$http', function ($scope
         dataItem.dayAvrSale = messages["mobile.multiStoreSale.dayAvrSale"];
         dataItem.billCnt = messages["mobile.multiStoreSale.billCnt"];
         dataItem.billUprc = messages["mobile.multiStoreSale.billUprc"];
-        dataItem.totGuestCnt = messages["mobile.multiStoreSale.totGuestCnt"];
-        dataItem.guestUprc = messages["mobile.multiStoreSale.guestUprc"];
         dataItem.shopRealSaleAmt = messages["mobile.multiStoreSale.shop"];
         dataItem.shopAvrSale = messages["mobile.multiStoreSale.shop"];
         dataItem.shopBillCnt = messages["mobile.multiStoreSale.shop"];
@@ -141,6 +198,8 @@ app.controller('mobileMultiStoreSale2Ctrl', ['$scope', '$http', function ($scope
         dataItem.packAvrSale = messages["mobile.multiStoreSale.pack"];
         dataItem.packBillCnt = messages["mobile.multiStoreSale.pack"];
         dataItem.packBillUprc = messages["mobile.multiStoreSale.pack"];
+        dataItem.totGuestCnt = messages["mobile.multiStoreSale.totGuestCnt"];
+        dataItem.guestUprc = messages["mobile.multiStoreSale.guestUprc"];
         dataItem.cardAmt = messages["mobile.multiStoreSale.pay"];
         dataItem.cashAmt = messages["mobile.multiStoreSale.pay"];
         dataItem.etcAmt = messages["mobile.multiStoreSale.pay"];
@@ -349,8 +408,6 @@ app.controller('mobileMultiStoreSaleDayStoreCtrl', ['$scope', '$http', function 
         dataItem.realSaleAmt = messages["mobile.multiStoreSale.realSaleAmt"];
         dataItem.billCnt = messages["mobile.multiStoreSale.billCnt"];
         dataItem.billUprc = messages["mobile.multiStoreSale.billUprc"];
-        dataItem.totGuestCnt = messages["mobile.multiStoreSale.totGuestCnt"];
-        dataItem.guestUprc = messages["mobile.multiStoreSale.guestUprc"];
         dataItem.shopRealSaleAmt = messages["mobile.multiStoreSale.shop"];
         dataItem.shopBillCnt = messages["mobile.multiStoreSale.shop"];
         dataItem.shopBillUprc = messages["mobile.multiStoreSale.shop"];
@@ -360,6 +417,8 @@ app.controller('mobileMultiStoreSaleDayStoreCtrl', ['$scope', '$http', function 
         dataItem.packRealSaleAmt = messages["mobile.multiStoreSale.pack"];
         dataItem.packBillCnt = messages["mobile.multiStoreSale.pack"];
         dataItem.packBillUprc = messages["mobile.multiStoreSale.pack"];
+        dataItem.totGuestCnt = messages["mobile.multiStoreSale.totGuestCnt"];
+        dataItem.guestUprc = messages["mobile.multiStoreSale.guestUprc"];
         dataItem.cardAmt = messages["mobile.multiStoreSale.pay"];
         dataItem.cashAmt = messages["mobile.multiStoreSale.pay"];
         dataItem.etcAmt = messages["mobile.multiStoreSale.pay"];

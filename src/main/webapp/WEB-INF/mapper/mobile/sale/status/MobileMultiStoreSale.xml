@@ -23,10 +23,10 @@
         (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = A.STORE_CD) AS STORE_NM,
         A.SALE_CNT,
         A.REAL_SALE_AMT,
+        NVL(ROUND(A.REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, D.TOTAL_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE,
         B.SHOP_REAL_SALE_AMT,
         B.DLVR_REAL_SALE_AMT,
         B.PACK_REAL_SALE_AMT,
-        NVL(ROUND(A.REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE,
         NVL(ROUND(B.SHOP_REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS SHOP_AMT_RATE,
         NVL(ROUND(B.DLVR_REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS DLVR_AMT_RATE,
         NVL(ROUND(B.PACK_REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, C.TOT_REAL_SALE_AMT) * 100, 2), 0) AS PACK_AMT_RATE
@@ -75,17 +75,28 @@
             </foreach>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tsdp.STORE_CD
-        ) C
+        ) C,
+        (
+            SELECT
+            tsdp.STORE_CD,
+            SUM(tsdp.REAL_SALE_AMT) AS TOTAL_REAL_SALE_AMT
+            FROM TB_SL_DAILY_PROD tsdp
+            WHERE 1=1
+            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdp.STORE_CD
+        ) D
         WHERE 1=1
         AND B.STORE_CD (+)= A.STORE_CD
         AND C.STORE_CD (+)= A.STORE_CD
+        AND D.STORE_CD (+)= A.STORE_CD
         ORDER BY A.STORE_CD
     </select>
 
     <!-- 다중매장매출현황 - 조회 -->
     <!--
         TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_DTL_DLVR, TB_SL_DAILY_PAY, TB_SL_DAILY_DC, TB_SL_SALE_HDR
-        COMMENTS : [매출]일별_종합, [매출] 일별_배달, [매출]일별_결제, [매출]일별_할인, [매출]헤더
+        COMMENTS : [매출]일별_종합, [매출]일별_배달, [매출]일별_결제, [매출]일별_할인, [매출]헤더
     -->
     <select id="getMobileMultiStoreSale2List" parameterType="MobileMultiStoreSaleVO" resultType="DefaultMap">
         /* MobileMultiStoreSaleMapper.getMobileMultiStoreSale2List */
@@ -99,8 +110,6 @@
         NVL(ROUND(A.TOT_SALE_AMT / A.SALE_CNT), 0) AS DAY_AVR_SALE,
         NVL(A.BILL_CNT, 0) AS BILL_CNT,
         NVL(ROUND(A.TOT_SALE_AMT / A.BILL_CNT), 0) AS BILL_UPRC,
-        NVL(E.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
-        NVL(ROUND(A.REAL_SALE_AMT / E.TOT_GUEST_CNT), 0) AS GUEST_UPRC,
         NVL(B.SHOP_REAL_SALE_AMT, 0) AS SHOP_REAL_SALE_AMT,
         NVL(ROUND(B.SHOP_REAL_SALE_AMT / B.SHOP_SALE_CNT), 0) AS SHOP_AVR_SALE,
         NVL(B.SHOP_BILL_CNT, 0) AS SHOP_BILL_CNT,
@@ -113,6 +122,8 @@
         NVL(ROUND(B.PACK_REAL_SALE_AMT / B.PACK_SALE_CNT), 0) AS PACK_AVR_SALE,
         NVL(B.PACK_BILL_CNT, 0) AS PACK_BILL_CNT,
         NVL(ROUND(B.PACK_REAL_SALE_AMT / B.PACK_BILL_CNT), 0) AS PACK_BILL_UPRC,
+        NVL(E.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
+        NVL(ROUND(A.REAL_SALE_AMT / E.TOT_GUEST_CNT), 0) AS GUEST_UPRC,
         NVL(C.CARD_AMT, 0) AS CARD_AMT,
         NVL(C.CASH_AMT, 0) AS CASH_AMT,
         NVL(C.ETC_AMT, 0) AS ETC_AMT,
@@ -239,7 +250,7 @@
     <!-- 일자-매장별 매출현황 - 조회 -->
     <!--
         TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_DTL_DLVR, TB_SL_DAILY_PAY, TB_SL_DAILY_DC, TB_SL_SALE_HDR
-        COMMENTS : [매출]일별_종합, [매출] 일별_배달, [매출]일별_결제, [매출]일별_할인, [매출]헤더
+        COMMENTS : [매출]일별_종합, [매출]일별_배달, [매출]일별_결제, [매출]일별_할인, [매출]헤더
     -->
     <select id="getMobileMultiStoreSaleDayStoreList" parameterType="MobileMultiStoreSaleVO" resultType="DefaultMap">
         /* MobileMultiStoreSaleMapper.getMobileMultiStoreSaleDayStoreList */
@@ -252,8 +263,6 @@
         NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
         NVL(A.BILL_CNT, 0) AS BILL_CNT,
         NVL(ROUND(A.TOT_SALE_AMT / A.BILL_CNT), 0) AS BILL_UPRC,
-        NVL(E.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
-        NVL(ROUND(A.REAL_SALE_AMT / E.TOT_GUEST_CNT), 0) AS GUEST_UPRC,
         NVL(B.SHOP_REAL_SALE_AMT, 0) AS SHOP_REAL_SALE_AMT,
         NVL(B.SHOP_BILL_CNT, 0) AS SHOP_BILL_CNT,
         NVL(ROUND(B.SHOP_REAL_SALE_AMT / B.SHOP_BILL_CNT), 0) AS SHOP_BILL_UPRC,
@@ -263,6 +272,8 @@
         NVL(B.PACK_REAL_SALE_AMT, 0) AS PACK_REAL_SALE_AMT,
         NVL(B.PACK_BILL_CNT, 0) AS PACK_BILL_CNT,
         NVL(ROUND(B.PACK_REAL_SALE_AMT / B.PACK_BILL_CNT), 0) AS PACK_BILL_UPRC,
+        NVL(E.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
+        NVL(ROUND(A.REAL_SALE_AMT / E.TOT_GUEST_CNT), 0) AS GUEST_UPRC,
         NVL(C.CARD_AMT, 0) AS CARD_AMT,
         NVL(C.CASH_AMT, 0) AS CASH_AMT,
         NVL(C.ETC_AMT, 0) AS ETC_AMT,
