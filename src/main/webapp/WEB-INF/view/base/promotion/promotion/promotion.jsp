@@ -175,6 +175,19 @@
                         </th>
                     </tr>
                     <tr>
+                        <th><s:message code="promotion.dlvFg" /></th>
+                        <td colspan="3" style="height: 35px;">
+                            <div class="fl pd5" style="padding-right: 15px;" id="divChkDlvFg">
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgInStore" ng-model="dlvFgInStore"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.inStore" /></label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgDelivery" ng-model="dlvFgDelivery"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.delivery" /> </label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgPacking" ng-model="dlvFgPacking"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.packing" /> </label></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <%-- 적용기간 --%>
                         <th>
                             <div style="float: left;"><input type="checkbox" id="chkPeriod" ng-model="isCheckedPeriod" ng-change="isChkPeriod()"/></div>
@@ -548,12 +561,13 @@
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        control="applyDcDsCombo">
+                                        control="applyDcDsCombo"
+                                        selected-index-changed="setDcSet(s)">
                                 </wj-combo-box>
                             </div>
                         </td>
                         <%-- 할인율 --%>
-                        <th><s:message code="promotion.dcSet" /></th>
+                        <th><label id="lblDcSet"></label></th>
                         <td>
                             <input type="text" class="sb-input w100" id="dcSet" ng-model="dcSet" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
@@ -676,7 +690,7 @@
     var modPromotionEnvstVal = "${modPromotionEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210511.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210512.02" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">
