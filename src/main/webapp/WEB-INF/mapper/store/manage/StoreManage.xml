@@ -3156,6 +3156,9 @@
         <if test='orgnFg != null and orgnFg == "A"'>
            AND (AGENCY_CD = #{agencyCd} OR HQ_OFFICE_CD = '00000')
         </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
      ORDER BY HQ_OFFICE_CD
     </select>
 

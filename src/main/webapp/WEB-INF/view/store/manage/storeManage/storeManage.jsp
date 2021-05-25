@@ -181,7 +181,7 @@
   </div>
 
 </div>
-<c:if test="${orgnFg != 'HQ'}"> <%-- 본사권한으로 조회시 authHqList가 없음 --%>
+
 <script>
 var clsFg = ${ccu.getCommCodeSelect("001")};
 var sysStatFg = ${ccu.getCommCodeSelect("005")};
@@ -193,19 +193,8 @@ var pAgencyCd = "${pAgencyCd}";
 var authHqList = ${authHqList};
 
 </script>
-</c:if>
-<c:if test="${orgnFg == 'HQ'}">
-  <script>
-    var clsFg = ${ccu.getCommCodeSelect("001")};
-    var sysStatFg = ${ccu.getCommCodeSelect("005")};
-    var areaCd = ${ccu.getCommCodeSelect("061")};
-    var orgnFg = "${orgnFg}";
-    var orgnCd = "${orgnCd}";
-    var orgnNm = "${orgnNm}";
-    var pAgencyCd = "${pAgencyCd}";
-  </script>
-</c:if>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20200423.10" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20200423.11" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">

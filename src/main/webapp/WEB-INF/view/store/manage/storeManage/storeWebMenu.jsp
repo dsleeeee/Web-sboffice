@@ -31,21 +31,19 @@
                 <%-- 메뉴권한복사 --%>
                 <th><s:message code="storeManage.copy.authorExcept" /></th>
                 <td colspan="3">
-                    <c:if test="${orgnFg != 'HQ'}">
-                        <div class="sb-select fl w60 mr10">
-                            <wj-combo-box
-                                    id="hqOfficeCdCombo"
-                                    ng-model="hqOfficeCd"
-                                    control="hqOfficeCdCombo"
-                                    items-source="_getComboData('hqOfficeCdCombo')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    initialized="_initComboBox(s)"
-                                    selected-index-changed="setStoreCd(s)">
-                            </wj-combo-box>
-                        </div>
-                    </c:if>
+                    <div class="sb-select fl w60 mr10">
+                        <wj-combo-box
+                                id="hqOfficeCdCombo"
+                                ng-model="hqOfficeCd"
+                                control="hqOfficeCdCombo"
+                                items-source="_getComboData('hqOfficeCdCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                selected-index-changed="setStoreCd(s)">
+                        </wj-combo-box>
+                    </div>
                     <div class="sb-select fl w60 mr10">
                         <wj-combo-box
                                 id="storeCdCombo"
@@ -138,4 +136,4 @@
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20200514.27" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20200514.29" charset="utf-8"></script>
