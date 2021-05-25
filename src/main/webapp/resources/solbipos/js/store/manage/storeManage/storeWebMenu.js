@@ -29,10 +29,9 @@ app.controller('webMenuCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('webMenuCtrl', $scope, $http, false));
-    if(orgnFg != 'HQ'){
-        // 본사 콤보박스 셋팅
-        $scope._setComboData("hqOfficeCdCombo", authHqList);
-    }
+
+    // 본사 콤보박스 셋팅
+    $scope._setComboData("hqOfficeCdCombo", authHqList);
 
     $scope.initGrid = function (s, e) {
 
@@ -94,11 +93,7 @@ app.controller('webMenuCtrl', ['$scope', '$http', function ($scope, $http) {
     // 매장 콤보박스 셋팅
     $scope.setStoreCdCombo = function(valHqCd, valStoreCd){
     var params = [];
-        if(orgnFg != 'HQ'){
-            params.hqOfficeCd = valHqCd;
-        }else if(orgnFg == 'HQ') {
-            params.hqOfficeCd = hqOfficeCd;
-        }
+        params.hqOfficeCd = valHqCd;
         params.storeCd = valStoreCd;
 
         $scope._postJSONQuery.withOutPopUp('/store/manage/storeManage/storeManage/getAuthStoreList.sb', params, function (response) {

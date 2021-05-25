@@ -66,25 +66,6 @@ public class TerminalManageController {
         this.service = service;
         this.sessionService = sessionService;
     }
-    /**
-     * 매장터미널관리 - 본사에서 접속
-     * @param request
-     * @param response
-     * @param model
-     * @return String
-     * @author 권지현
-     * @since 2021.04.08
-     */
-    @RequestMapping(value = "terminalManage/hqTerminalView.sb", method = RequestMethod.GET)
-    public String hqList(HttpServletRequest request, HttpServletResponse response,
-                       Model model) {
-
-        List<DefaultMap<String>> vendorList = service.getVendorList();
-
-        model.addAttribute("vendorList", convertToJson(vendorList) );
-
-        return "store/manage/terminalManage/terminalView";
-    }
 
     /**
      * 매장터미널관리 - 화면 이동

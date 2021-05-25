@@ -103,7 +103,7 @@
                 <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
                 <c:if test="${orgnFg != 'HQ'}">
                   <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeCd"/>" binding="hqOfficeCd" ></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeCd"/>" binding="hqOfficeNm" ></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeNm"/>" binding="hqOfficeNm" ></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="terminalManage.storeNm"/>" binding="storeNm" ></wj-flex-grid-column>

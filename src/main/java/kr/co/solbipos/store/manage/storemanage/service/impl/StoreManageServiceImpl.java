@@ -1039,6 +1039,12 @@ public class StoreManageServiceImpl implements StoreManageService{
             storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
         }
 
+        // 본사인 경우, 본사목록에 본인만 나오도록
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+
         return mapper.authHqList(storeManageVO);
     }
 

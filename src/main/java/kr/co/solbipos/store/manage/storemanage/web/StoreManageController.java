@@ -62,28 +62,6 @@ public class StoreManageController {
         this.service = service;
         this.sessionService = sessionService;
     }
-    
-    /**
-     * 매장정보관리 - 본사에서 접속
-     * @param request
-     * @param response
-     * @param model
-     * @return String
-     * @author 권지현
-     * @since 2021.04.08
-     */
-    @RequestMapping(value = "storeManage/hqView.sb", method = RequestMethod.GET)
-    public String hqList(StoreManageVO storeManageVO, HttpServletRequest request, HttpServletResponse response,
-                       Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        // 메뉴권한 복사할 본사목록 조회
-        List<DefaultMap<String>> authHqList = service.authHqList(storeManageVO, sessionInfoVO);
-        model.addAttribute("authHqList", convertToJson(authHqList));
-
-        return "store/manage/storeManage/storeManage";
-    }
-
 
     /**
      * 매장정보관리 - 화면 이동
