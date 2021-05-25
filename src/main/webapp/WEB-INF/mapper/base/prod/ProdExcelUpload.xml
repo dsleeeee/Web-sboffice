@@ -136,7 +136,8 @@
         MOD_DT,
         MOD_ID,
         VENDR_CD,
-        START_STOCK_QTY
+        START_STOCK_QTY,
+        PRC_CTRL_FG
         FROM TB_TMP_EXCEL_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
@@ -201,7 +202,8 @@
             MOD_DT,
             MOD_ID,
             VENDR_CD,
-            START_STOCK_QTY
+            START_STOCK_QTY,
+            PRC_CTRL_FG
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -247,7 +249,8 @@
             #{modDt},
             #{modId},
             #{vendrCd},
-            #{startStockQty}
+            #{startStockQty},
+            #{prcCtrlFg}
         )
     </insert>
 
@@ -412,24 +415,18 @@
         </choose>
     </select>
 
-    <!-- 상품코드 자동채번 -->
+    <!-- 가격관리구분 검증 조회 -->
     <!--
-        TABLE    : TB_TMP_EXCEL_PRODUCT
-        COMMENTS : [임시]상품엑셀업로드
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
     -->
-    <select id="getProdCd"  parameterType="ProdExcelUploadVO" resultType="String">
-        /* ProdExcelUploadMapper.getProdCd */
-        SELECT
-        LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
-        FROM TB_TMP_EXCEL_PRODUCT
-        WHERE 1=1
-        AND SESSION_ID = #{sessionId}
-        AND HQ_OFFICE_CD = #{membrOrgnCd}
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-                AND STORE_CD = #{storeCd}
-            ]]>
-        </if>
+    <select id="getPrcCtrlFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getPrcCtrlFgCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '045'
+        AND NMCODE_NM = #{prcCtrlFg}
+        GROUP BY NMCODE_CD
     </select>
 
 </mapper>

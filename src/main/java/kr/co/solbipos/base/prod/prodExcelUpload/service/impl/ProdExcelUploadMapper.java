@@ -66,6 +66,6 @@ public interface ProdExcelUploadMapper {
     /** 상품분류 검증 조회 */
     String getProdClassCdCheck(ProdExcelUploadVO prodExcelUploadVO);
 
-    /** 상품코드 자동채번 */
-    String getProdCd(ProdExcelUploadVO prodExcelUploadVO);
+    /** 가격관리구분 검증 조회 */
+    String getPrcCtrlFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 }

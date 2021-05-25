@@ -7,14 +7,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
-<%--<c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />--%>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="contents" id ="divSimpleProdAuth" style="display: none">
     <div class="elseCon">
         <p class="lgTxt">죄송합니다.<br />요청하신 페이지에 권한이 없습니다.</p>
         <p class="smTxt mt20">
-            본사 환경설정 (20 : 본사통제구분-상품등록) 이 <label id="lblSimpleProdAuth"></label> 입니다.<br />
+            본사 환경설정 (0042 : 상품생성설정) 이 <label id="lblSimpleProdAuth"></label> 입니다.<br />
             해당 페이지에 접근할 수 없습니다.<br />
             ${sessionScope.sessionInfo.currentMenu.resrceCd}
         </p>
@@ -22,7 +21,6 @@
 </div>
 
 <div class="subCon" id ="divSimpleProd" style="display: none">
-
     <div ng-controller="simpleProdCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
@@ -97,6 +95,9 @@
                     <wj-flex-grid-column header="<s:message code="simpleProd.costUprc"/>" binding="costUprc" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.barCd"/>" binding="barCd" width="100" align="center"></wj-flex-grid-column>
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <wj-flex-grid-column header="<s:message code="simpleProd.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" align="center"></wj-flex-grid-column>
+                    </c:if>
 
                     <%--상품 저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="simpleProd.chkProdNm"/>" binding="chkProdNm" width="100" align="center" visible="false"></wj-flex-grid-column>
@@ -119,13 +120,14 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
     // String 형식
-    var prodEnvstVal = "${prodEnvstVal}";
     var prodNoEnvFg = "${prodNoEnvFg}";
+    var prodAuthEnvstVal = "${prodAuthEnvstVal}";
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
 
     // List 형식("" 안붙임)
     var vendrComboList = ${vendrComboList};
@@ -138,7 +140,7 @@
     var vatFgData = ${ccu.getCommCodeExcpAll("039")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20201105.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20210421.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

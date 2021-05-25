@@ -28,7 +28,6 @@
                     <input type="hidden" id="hdHqOfficeCd"/>
                     <input type="hidden" id="hdStoreCd"/>
                     <input type="hidden" id="hdStoreNm"/>
-
                 </tr>
                 <tr>
                     <th><s:message code="prod.prodCd"/></th>
@@ -42,7 +41,6 @@
             <div class="mt10 tr">
                 <button class="btn_skyblue" id="btnBatchSearch" ng-click="_pageView('regProdCtrl', 1)" ><s:message code="cmm.search" /></button>
             </div>
-
             <%--- 적용상품 그리드 --%>
             <div class="oh mt20">
                 <div class="w50 fl" ng-controller="regProdCtrl">
@@ -50,9 +48,9 @@
                         <div class="oh">
                             <span class="fl bk lh20 s14"><s:message code="prod.regProd"/></span>
                             <span class="fr">
-                <a href="#" class="btn_grayS2" ng-click="changeSaleUprc()"><s:message code="prod.change.saleUprc" /></a>
-                <a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a>
-              </span>
+                                <a href="#" class="btn_grayS2" ng-click="changeSaleUprc()"><s:message code="prod.change.saleUprc" /></a>
+                                <a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a>
+                            </span>
                         </div>
                         <div id="regProdGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
                             <wj-flex-grid
@@ -69,21 +67,20 @@
                                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true"  align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="*" is-read-only="true" ></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="80" align="right" ></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
+
                                 <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
                 </div>
-
                 <%--- 미적용상품 그리드 --%>
                 <div class="w50 fr" ng-controller="noRegProdCtrl">
-
                     <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" >
                         <div class="oh">
                             <span class="fl bk lh20 s14"><s:message code="prod.noRegProd"/></span>
                             <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="prod.regist"/></a></span>
                         </div>
-
                         <div id="noRegProdGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns="false"
@@ -104,9 +101,11 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
         </div>
+        <%-- //body --%>
+
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20200213.32" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210421.02" charset="utf-8"></script>

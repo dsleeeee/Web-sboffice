@@ -56,7 +56,7 @@
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                        AND SALE_PRC_FG = #{salePrcFg}
+                        AND SALE_PRC_FG = '1'
                     GROUP BY
                         HQ_OFFICE_CD, PROD_CD ) thpsp ON
                     thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
@@ -112,7 +112,7 @@
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                        AND SALE_PRC_FG = #{salePrcFg}
+                        AND SALE_PRC_FG = '1'
                     GROUP BY
                         STORE_CD, PROD_CD ) tmpsp ON
                     tmp.STORE_CD = tmpsp.STORE_CD
@@ -657,7 +657,7 @@
                     #{hqOfficeCd},
                     #{tukeyGrpCd},
                     #{tukeyClassCd},
-                    SUBSTRB(#{tukeyClassNm}, 1, 50),
+                    NVL(SUBSTRB(#{tukeyClassNm}, 1, 50), ' '),
                     #{pageNo},
                     #{pageRows},
                     #{x},
@@ -702,7 +702,7 @@
                     #{storeCd},
                     #{tukeyGrpCd},
                     #{tukeyClassCd},
-                    SUBSTRB(#{tukeyClassNm}, 1, 50),
+                    NVL(SUBSTRB(#{tukeyClassNm}, 1, 50), ' '),
                     #{pageNo},
                     #{pageRows},
                     #{x},

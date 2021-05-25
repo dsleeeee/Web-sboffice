@@ -9,21 +9,30 @@
  *
  * **************************************************************/
 
+// 가격관리구분
+var prcCtrlFgData = [
+  {"name":"본사","value":"H"},
+  {"name":"매장","value":"S"}
+];
+
 /**
  *  상품적용매장 그리드 생성
  */
 app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+    $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+
     var url             = '/base/prod/prod/prod/getBrandComboList.sb';
     var comboParams     = {};
     comboParams.hqOfficeCd = hqOfficeCd;
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchHqBrand", null, url, comboParams, "A", null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-
   };
 
   // 콤보박스 데이터 Set
@@ -76,6 +85,16 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 그리드 변경된 건 커밋
     $scope.flex.collectionView.commitEdit();
+
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
+        if($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
+          $scope._popMsg(messages["prod.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
+          return false;
+        }
+      }
+    }
 
     var prodScope = agrid.getScope("prodCtrl");
     var params = new Array();

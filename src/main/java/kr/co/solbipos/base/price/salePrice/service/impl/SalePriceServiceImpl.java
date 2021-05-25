@@ -83,16 +83,16 @@ public class SalePriceServiceImpl implements SalePriceService {
         String currentDt = currentDateTimeString();
 
         // 판매가 본사 통제여부 체크 - 본사통제 여부가 '매장'일 경우 저장로직 수행하지 않음.
-        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+//        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
 
-        if(priceEnvstVal == PriceEnvFg.STORE){
-            return result;
-        }
+//        if(priceEnvstVal == PriceEnvFg.STORE){
+//            return result;
+//        }
 
         for(SalePriceVO salePriceVO : salePriceVOs) {
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            salePriceVO.setPrcCtrlFg("1"); // 본사에서 등록
+//            salePriceVO.setPrcCtrlFg("1"); // 본사에서 등록
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
             salePriceVO.setRegDt(currentDt);

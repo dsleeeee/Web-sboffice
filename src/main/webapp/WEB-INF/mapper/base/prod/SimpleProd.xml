@@ -81,26 +81,6 @@
         AND PROD_CD = #{prodCd}
     </delete>
 
-    <!-- 상품코드 자동채번 -->
-    <!--
-      TABLE    : TB_TMP_PRODUCT
-        COMMENTS : [임시]간편상품등록
-    -->
-    <select id="getProdCd"  parameterType="SimpleProdVO" resultType="String">
-        /* SimpleProdMapper.getProdCd */
-        SELECT
-        LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
-        FROM TB_TMP_PRODUCT
-        WHERE 1=1
-        AND SESSION_ID = #{sessionId}
-        AND HQ_OFFICE_CD = #{membrOrgnCd}
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-                AND STORE_CD = #{storeCd}
-            ]]>
-        </if>
-    </select>
-
     <!-- 상품명 중복체크 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_MS_STORE
@@ -253,7 +233,8 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            VENDR_CD
+            VENDR_CD,
+            PRC_CTRL_FG
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -298,7 +279,8 @@
             #{regId},
             #{modDt},
             #{modId},
-            #{vendrCd}
+            #{vendrCd},
+            #{prcCtrlFg}
         )
     </insert>
 
@@ -353,7 +335,8 @@
         REG_ID,
         MOD_DT,
         MOD_ID,
-        VENDR_CD
+        VENDR_CD,
+        PRC_CTRL_FG
         FROM TB_TMP_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}

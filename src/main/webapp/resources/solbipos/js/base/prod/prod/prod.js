@@ -39,20 +39,30 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   angular.extend(this, new RootController('prodCtrl', $scope, $http, false));
 
   // 상품 본사통제구분 (H : 본사, S: 매장)
-  $scope.prodEnvstVal = prodEnvstVal;
-  $scope.userOrgnFg = gvOrgnFg;
-  
+  // $scope.prodEnvstVal = prodEnvstVal;
+  // $scope.userOrgnFg = gvOrgnFg;
+
   // 상품코드 채번방식
   $scope.prodNoEnvFg = prodNoEnvFg;
 
   // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-  $scope.userStoreCd = gvStoreCd;
-  $scope.btnShowFg = false;
+  // $scope.userStoreCd = gvStoreCd;
 
-  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-    || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-        $scope.btnShowFg = true;
+  $scope.btnShowFg = false;
+  // 단독매장
+  if(hqOfficeCd == "00000") {
+    $scope.btnShowFg = true;
+    // 프랜 본사,매장
+  } else {
+    if((prodAuthEnvstVal== "ALL") || (orgnFg === 'HQ' && prodAuthEnvstVal== "HQ") || (orgnFg === 'STORE' && prodAuthEnvstVal== "STORE")) {
+      $scope.btnShowFg = true;
+    }
   }
+  // $scope.btnShowFg = false; // 본사, 매장 모두 신규상품등록 가능하게 주석
+  // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+  //   || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+  //       $scope.btnShowFg = true;
+  // }
 
   // 상품 상세 정보
   $scope.prodInfo = {};
@@ -93,6 +103,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._getComboDataQuery('095', 'setProdFgComboData');
   // 봉사료포함여부 콤보박스
   $scope._getComboDataQuery('058', 'prodTipYnComboData');
+  // 가격관리구분 콤보박스
+  $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -124,15 +136,28 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
           // $scope.searchProdDetail(selectedRow.prodCd);
           $scope.setProdInfo(selectedRow);
           // 수정권한이 있을때
-          if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-            || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+          // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+          //   || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+          //     // 상품정보 수정 팝업
+          //     $scope.prodModifyLayer.show();
+          // } else {
+          //     // 상품정보 상세 팝업
+          //     $scope.prodDetailLayer.show();
+          // }
+          // 매장일땐 상품등록구분이 S인 것만 수정가능
+          if(orgnFg == "HQ") {
+            // 상품정보 수정 팝업
+            $scope.prodModifyLayer.show();
+          } else if(orgnFg == "STORE") {
+            if(selectedRow["regFg"] === 'S') {
               // 상품정보 수정 팝업
               $scope.prodModifyLayer.show();
-          } else {
+            } else {
               // 상품정보 상세 팝업
               $scope.prodDetailLayer.show();
+            }
           }
-        // 등록매장수
+          // 등록매장수
         } else if(col.binding === "storeCnt"){
           $scope.registProdStore(selectedRow);
         }
@@ -224,12 +249,12 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       });
     }, 50);*/
   };
-  
+
   // 매장 리스트 팝업(매장 상품 일괄적용을 위한)
   $scope.storeProdBatchList = function() {
     $scope.storeProdBatchListLayer.show(true);
   };
-  
+
   // 상품분류정보 팝업
   $scope.popUpProdClass = function() {
     var popUp = $scope.prodClassPopUpLayer;
@@ -242,10 +267,10 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         params.prodClassCd = prodClassCd;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-          function(response){
-            $scope.prodClassCd = prodClassCd;
-            $scope.prodClassCdNm = response.data.data;
-          }
+            function(response){
+              $scope.prodClassCd = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
         );
       }
     });

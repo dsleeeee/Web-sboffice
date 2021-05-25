@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 가격관리구분
+var prcCtrlFgData = [
+    {"name":"본사","value":"H"},
+    {"name":"매장","value":"S"}
+];
+
 /**
  *  상품목록 조회 그리드 생성
  */
@@ -21,31 +27,28 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('simpleProdCtrl', $scope, $http, false));
 
-    // 상품 본사통제구분 (H : 본사, S: 매장)
-    $scope.prodEnvstVal = prodEnvstVal;
-    $scope.userOrgnFg = gvOrgnFg;
-
     // 상품코드 채번방식
     $scope.prodNoEnvFg = prodNoEnvFg;
 
-    // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-    $scope.userStoreCd = gvStoreCd;
     $("#divSimpleProd").css("display", "none");
-    $("#divSimpleProdAuth").css("display", "none");
-
-    if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-        || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    $("#divSimpleProdAuth").css("display", "block");
+    // 단독매장
+    if(hqOfficeCd == "00000") {
         $("#divSimpleProd").css("display", "block");
         $("#divSimpleProdAuth").css("display", "none");
+        // 프랜 본사,매장
     } else {
-        $("#divSimpleProd").css("display", "none");
-        $("#divSimpleProdAuth").css("display", "block");
+        if((prodAuthEnvstVal== "ALL") || (orgnFg === 'HQ' && prodAuthEnvstVal== "HQ") || (orgnFg === 'STORE' && prodAuthEnvstVal== "STORE")) {
+            $("#divSimpleProd").css("display", "block");
+            $("#divSimpleProdAuth").css("display", "none");
+        }
     }
-
-    if($scope.prodEnvstVal === 'HQ') {
-        $("#lblSimpleProdAuth").text("'본사통제'");
-    } else if($scope.prodEnvstVal === 'STORE') {
-        $("#lblSimpleProdAuth").text("'매장통제'");
+    if(prodAuthEnvstVal === 'ALL') {
+        $("#lblSimpleProdAuth").text("'본사/매장생성'");
+    } else if(prodAuthEnvstVal === 'HQ') {
+        $("#lblSimpleProdAuth").text("'본사생성'");
+    } else if(prodAuthEnvstVal === 'STORE') {
+        $("#lblSimpleProdAuth").text("'매장생성'");
     }
 
     // 상품명 중복체크
@@ -57,6 +60,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -65,7 +69,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // 검증결과
                 if (col.binding === "result") {
-                     var item = s.rows[e.row].dataItem;
+                    var item = s.rows[e.row].dataItem;
 
                     // 값이 있으면 링크 효과
                     if (item[("result")] !== '검증전' && item[("result")] !== '검증성공') {
@@ -106,6 +110,12 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.costUprc = "0";
         params.vatFg = "1";
         params.barCd = "";
+        // 가격관리구분
+        if(orgnFg == "HQ") {
+            params.prcCtrlFg = "H";
+        } else {
+            params.prcCtrlFg = "S";
+        }
 
         for(var i = 0; i < rowsCount; i++) {
             // 추가기능 수행 : 파라미터
@@ -164,6 +174,11 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.flex.collectionView.items[i].costUprc = "0";
             $scope.flex.collectionView.items[i].vatFg = "1";
             $scope.flex.collectionView.items[i].barCd = "";
+            if(orgnFg == "HQ") {
+                $scope.flex.collectionView.items[i].prcCtrlFg = "H";
+            } else {
+                $scope.flex.collectionView.items[i].prcCtrlFg = "S";
+            }
         }
         $scope.flex.refresh();
     };
@@ -347,6 +362,10 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            // 상품코드 채번방식
+            var prodNoEnv = "";
+            if($scope.prodNoEnvFg === "MANUAL") { prodNoEnv = "1"; } else { prodNoEnv = "0"; } // 0 : 자동채번, 1 : 수동채번
+            $scope.flex.collectionView.items[i].prodNoEnv = prodNoEnv;
             $scope.flex.collectionView.items[i].gubun = "simpleProd";
             params.push($scope.flex.collectionView.items[i]);
         }

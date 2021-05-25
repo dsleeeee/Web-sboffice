@@ -8,6 +8,7 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.info.service.InfoService;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,10 +74,10 @@ public class InfoController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 상품등록 본사 통제여부
-        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+        // 상품생성설정
+        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
 
-        model.addAttribute("prodEnvstVal", prodEnvstVal);
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
 
         return "base/prod/info/prodClassView";
     }

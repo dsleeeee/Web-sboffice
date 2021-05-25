@@ -187,6 +187,17 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 String prodClassCd = prodExcelUploadMapper.getProdClassCdCheck(prodExcelUploadVO);
                 prodExcelUploadVO.setProdClassCd(prodClassCd);
             }
+
+            // 가격관리구분
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+                // 가격관리구분
+                if (prodExcelUploadVO.getPrcCtrlFg() != null && !"".equals(prodExcelUploadVO.getPrcCtrlFg())) {
+                    String prcCtrlFg = prodExcelUploadMapper.getPrcCtrlFgCheck(prodExcelUploadVO);
+                    prodExcelUploadVO.setPrcCtrlFg(prcCtrlFg);
+                }
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                prodExcelUploadVO.setPrcCtrlFg("S");
+            }
             // <-- //업로할때는 전부 명칭으로 들어간다 -->
 
             // 상품코드
@@ -288,6 +299,12 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 if(barCdCnt > 0) {
                     prodExcelUploadVO.setResult("저장된 동일한 바코드가 존재합니다.");
                 }
+            }
+
+            // 가격관리구분
+            if (prodExcelUploadVO.getPrcCtrlFg() != null && !"".equals(prodExcelUploadVO.getPrcCtrlFg())) {
+            } else {
+                prodExcelUploadVO.setResult("가격관리구분을 선택해주세요.");
             }
 
             // 과세여부
@@ -401,16 +418,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 자동채번인 경우 상품코드 조회
             if(prodExcelUploadVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
-                // 순차적으로
-                if(prodExcelUploadVO.getSeq() == 1) {
-                    // 자동채번 Start
-                    String prodCd = prodMapper.getProdCd(prodVO);
-                    prodExcelUploadVO.setProdCd(prodCd);
-                } else {
-                    // 상품코드 자동채번
-                    String prodCd = prodExcelUploadMapper.getProdCd(prodExcelUploadVO);
-                    prodExcelUploadVO.setProdCd(prodCd);
-                }
+                prodExcelUploadVO.setProdCd("자동채번");
             // 수동채번인 경우 중복체크
             } else if(prodExcelUploadVO.getProdNoEnv() == ProdNoEnvFg.MANUAL) {
                 // 값이 있을때만

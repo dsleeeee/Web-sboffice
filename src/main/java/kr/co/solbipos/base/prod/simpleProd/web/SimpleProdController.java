@@ -10,6 +10,7 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
@@ -64,8 +65,8 @@ public class SimpleProdController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 상품등록 본사 통제여부
-        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+        // 상품생성설정
+        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
 
         // 상품코드 채번방식
         ProdNoEnvFg prodNoEnvFg;
@@ -75,7 +76,7 @@ public class SimpleProdController {
             prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
         }
 
-        model.addAttribute("prodEnvstVal", prodEnvstVal);
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
 

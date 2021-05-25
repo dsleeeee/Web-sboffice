@@ -13,6 +13,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,9 +77,12 @@ public class ProdController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 상품등록 본사 통제여부
-        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+//        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
         // 판매가 본사 통제여부
-        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+//        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+        // 상품생성설정
+        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
 
         // 상품코드 채번방식
         ProdNoEnvFg prodNoEnvFg;
@@ -88,8 +92,9 @@ public class ProdController {
             prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
         }
 
-        model.addAttribute("prodEnvstVal", prodEnvstVal);
-        model.addAttribute("priceEnvstVal", priceEnvstVal);
+//        model.addAttribute("prodEnvstVal", prodEnvstVal);
+//        model.addAttribute("priceEnvstVal", priceEnvstVal);
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
         return "base/prod/prod/prod";

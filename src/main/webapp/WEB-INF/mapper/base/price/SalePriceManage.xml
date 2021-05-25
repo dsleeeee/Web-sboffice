@@ -37,49 +37,63 @@
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 (
-                SELECT STORE_CD, PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE 1 = 1
-                <![CDATA[
+                    SELECT STORE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                     ]]>
-                AND SALE_PRC_FG = '2'
-                GROUP BY STORE_CD, PROD_CD
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY STORE_CD, PROD_CD
                 ) tmpsp,
                 (
-                SELECT
-                thp.PROD_CD,
-                thp.COST_UPRC,
-                thp.SPLY_UPRC,
-                thpsp.SALE_UPRC
-                FROM TB_HQ_PRODUCT thp,
-                (
-                SELECT HQ_OFFICE_CD, PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE 1 = 1
-                <![CDATA[
+                    SELECT
+                    thp.PROD_CD,
+                    thp.COST_UPRC,
+                    thp.SPLY_UPRC,
+                    thpsp.SALE_UPRC
+                    FROM TB_HQ_PRODUCT thp,
+                    (
+                        SELECT HQ_OFFICE_CD, PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                        FROM TB_HQ_PRODUCT_SALE_PRICE
+                        WHERE 1 = 1
+                        <![CDATA[
                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                         ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-                WHERE 1=1
-                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpsp.PROD_CD = thp.PROD_CD
+                        ]]>
+                        AND SALE_PRC_FG = '1'
+                        GROUP BY HQ_OFFICE_CD, PROD_CD
+                    ) thpsp
+                    WHERE 1=1
+                    AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsp.PROD_CD = thp.PROD_CD
                 ) thp
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test='prodClassCd != null and prodClassCd != ""'>
-                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 AND tmpsp.STORE_CD = tmp.STORE_CD
                 AND tmpsp.PROD_CD = tmp.PROD_CD
                 AND thp.PROD_CD (+)= tmp.PROD_CD
+                ORDER BY tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!--  단독매장 -->
@@ -97,24 +111,38 @@
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 (
-                SELECT STORE_CD, PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE 1 = 1
-                <![CDATA[
+                    SELECT STORE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                     ]]>
-                AND SALE_PRC_FG = '2'
-                GROUP BY STORE_CD, PROD_CD
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY STORE_CD, PROD_CD
                 ) tmpsp
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test='prodClassCd != null and prodClassCd != ""'>
-                    AND tmp.PROD_CLASS_CD = #{prodClassCd}
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 AND tmpsp.STORE_CD = tmp.STORE_CD
                 AND tmpsp.PROD_CD = tmp.PROD_CD
+                ORDER BY tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>

@@ -13,39 +13,42 @@
  */
 var app = agrid.getApp();
 
+// 가격관리구분
+var prcCtrlFgData = [
+    {"name":"본사","value":"H"},
+    {"name":"매장","value":"S"}
+];
+
 /**
  *  상품목록 샘플양식 조회 그리드 생성
  */
 app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodExcelUploadCtrl', $scope, $http, false));
-
-    // 상품 본사통제구분 (H : 본사, S: 매장)
-    $scope.prodEnvstVal = prodEnvstVal;
-    $scope.userOrgnFg = gvOrgnFg;
+    angular.extend(this, new RootController('prodExcelUploadCtrl', $scope, $http, true));
 
     // 상품코드 채번방식
     $scope.prodNoEnvFg = prodNoEnvFg;
 
-    // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-    $scope.userStoreCd = gvStoreCd;
     $("#divProdExcelUpload").css("display", "none");
-    $("#divProdExcelUploadAuth").css("display", "none");
-
-    if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-        || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    $("#divProdExcelUploadAuth").css("display", "block");
+    // 단독매장
+    if(hqOfficeCd == "00000") {
         $("#divProdExcelUpload").css("display", "block");
-        $("#divSimpleProdAuth").css("display", "none");
+        $("#divProdExcelUploadAuth").css("display", "none");
+        // 프랜 본사,매장
     } else {
-        $("#divProdExcelUpload").css("display", "none");
-        $("#divProdExcelUploadAuth").css("display", "block");
+        if((prodAuthEnvstVal== "ALL") || (orgnFg === 'HQ' && prodAuthEnvstVal== "HQ") || (orgnFg === 'STORE' && prodAuthEnvstVal== "STORE")) {
+            $("#divProdExcelUpload").css("display", "block");
+            $("#divProdExcelUploadAuth").css("display", "none");
+        }
     }
-
-    if($scope.prodEnvstVal === 'HQ') {
-        $("#lblProdExcelUploadAuth").text("'본사통제'");
-    } else if($scope.prodEnvstVal === 'STORE') {
-        $("#lblProdExcelUploadAuth").text("'매장통제'");
+    if(prodAuthEnvstVal === 'ALL') {
+        $("#lblProdExcelUploadAuth").text("'본사/매장생성'");
+    } else if(prodAuthEnvstVal === 'HQ') {
+        $("#lblProdExcelUploadAuth").text("'본사생성'");
+    } else if(prodAuthEnvstVal === 'STORE') {
+        $("#lblProdExcelUploadAuth").text("'매장생성'");
     }
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -58,6 +61,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
         $scope.prodClassCdDataMap = new wijmo.grid.DataMap(prodClassComboList, 'value', 'name'); // 상품분류
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
 
         // 전체삭제
         $scope.delAll();
@@ -90,12 +94,18 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.poUnitFg = "1";
         params.poUnitQty = "1";
         params.poMinQty = "1";
-        params.barCd = "123456";
+        params.barCd = "";
         params.vatFg = "1";
         params.stockProdYn = "Y";
         params.costUprc = "0";
         params.safeStockQty = "0";
         params.startStockQty = "0";
+        // 가격관리구분
+        if(orgnFg == "HQ") {
+            params.prcCtrlFg = "H";
+        } else {
+            params.prcCtrlFg = "S";
+        }
         params.remark = "";
 
         // 추가기능 수행 : 파라미터
@@ -154,7 +164,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
 app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodExcelUploadProdCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('prodExcelUploadProdCtrl', $scope, $http, true));
 
     // 상품명 중복체크
     $scope.isChecked = true;
@@ -169,6 +179,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
         $scope.prodClassCdDataMap = new wijmo.grid.DataMap(prodClassComboList, 'value', 'name'); // 상품분류
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -390,7 +401,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                 $scope.ProdExcelUploadSave();
             });
         });
-   };
+    };
 
     // 상품등록 저장
     $scope.ProdExcelUploadSave = function() {
@@ -398,6 +409,10 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            // 상품코드 채번방식
+            var prodNoEnv = "";
+            if(prodNoEnvFg === "MANUAL") { prodNoEnv = "1"; } else { prodNoEnv = "0"; } // 0 : 자동채번, 1 : 수동채번
+            $scope.flex.collectionView.items[i].prodNoEnv = prodNoEnv;
             $scope.flex.collectionView.items[i].gubun = "prodExcelUpload";
             params.push($scope.flex.collectionView.items[i]);
         }
@@ -411,7 +426,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
 
     // <-- 엑셀다운로드 -->
     $scope.prodExcelDownload = function(){
-       var column_binding;
+        var column_binding;
 
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.

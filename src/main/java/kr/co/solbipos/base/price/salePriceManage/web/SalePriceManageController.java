@@ -54,11 +54,6 @@ public class SalePriceManageController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 판매가 본사 통제여부
-        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-        model.addAttribute("priceEnvstVal", priceEnvstVal);
-
         return "base/price/salePriceManage/salePriceManage";
     }
 

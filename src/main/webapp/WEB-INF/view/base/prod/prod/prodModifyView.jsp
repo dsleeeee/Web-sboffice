@@ -222,15 +222,34 @@
                 </td>
             </tr>
             <tr>
-              <%--바코드--%>
-              <th>
-                <s:message code="prod.barCd"/>
-              </th>
-              <td>
-                <input type="text" id="_barCd" name="barCd" class="sb-input w100" ng-model="prodModifyInfo.barCd" />
-              </td>
-              <td></td>
-              <td></td>
+                <%-- 바코드 --%>
+                <th>
+                    <s:message code="prod.barCd"/>
+                </th>
+                <td>
+                    <input type="text" id="_barCd" name="barCd" class="sb-input w100" ng-model="prodModifyInfo.barCd" />
+                </td>
+                <%-- 가격관리구분 --%>
+                <th>
+                    <s:message code="prod.prcCtrlFg"/>
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box id="_prcCtrlFg" name="prcCtrlFg"
+                                      ng-model="prodModifyInfo.prcCtrlFg"
+                                      items-source="_getComboData('prcCtrlFgComboData')"
+                                      display-member-path="name"
+                                      selected-value-path="value"
+                                      is-editable="false"
+                                      initialized="_initComboBox(s)"
+                                      required
+                                      popover-enable="myForm.prcCtrlFg.$invalid"
+                                      popover-placement="bottom-left"
+                                      popover-trigger="'mouseenter'"
+                                      uib-popover="<s:message code="prod.prcCtrlFg" />은(는) 필수 입력항목 입니다.">
+                        </wj-combo-box>
+                    </div>
+                </td>
             </tr>
           </table>
         </div>
@@ -636,7 +655,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210405.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210421.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

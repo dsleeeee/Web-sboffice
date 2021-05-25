@@ -6,8 +6,9 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
-<c:set var="priceEnvstVal" value="${priceEnvstVal}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
+<%--<c:set var="priceEnvstVal" value="${priceEnvstVal}" />--%>
 <c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />
 
 <div class="subCon" ng-controller="prodCtrl">
@@ -126,7 +127,7 @@
     </table>
     <%--//searchTbl--%>
 
-    <div class="mt40 oh sb-select dkbr">
+    <div class="mt20 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
                 class="w100px fl"
@@ -139,29 +140,24 @@
                 is-editable="false"
                 initialized="_initComboBox(s)">
         </wj-combo-box>
-
         <%-- 엑셀 다운로드 //TODO --%>
         <%--
         <button class="btn_skyblue fr" id="excelBtn">
           <s:message code="cmm.excel.down" />
         </button>
         --%>
-
-        <div class="mt20 updownSet oh">
-            <div class="txtIn">
-                <button class="btn_skyblue" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
-                    <s:message code="prod.title.storeProdBatch" />
-                </button>
-                <button class="btn_skyblue" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
-                    <s:message code="prod.title.addProd" />
-                </button>
-                <%-- 상품엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
-                <%-- 전체상품엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
-
-            </div>
-        </div>
+        <%-- 상품엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
+        <%-- 전체상품엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
+        <%-- 신규상품등록 --%>
+        <button class="btn_skyblue ml5 fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
+            <s:message code="prod.title.addProd" />
+        </button>
+        <%-- 매장상품일괄등록 --%>
+        <button class="btn_skyblue ml5 fr" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
+            <s:message code="prod.title.storeProdBatch" />
+        </button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -199,6 +195,7 @@
                 <wj-flex-grid-column header="<s:message code="prod.sideProdYn"/>" binding="sideProdYn" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
@@ -260,12 +257,15 @@
 </div>
 
 <script>
-    var prodEnvstVal = "${prodEnvstVal}";
-    var priceEnvstVal = "${priceEnvstVal}";
+    <%--var prodEnvstVal = "${prodEnvstVal}";--%>
+    <%--var priceEnvstVal = "${priceEnvstVal}";--%>
     var prodNoEnvFg = "${prodNoEnvFg}";
+    var prodAuthEnvstVal = "${prodAuthEnvstVal}";
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20210421.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

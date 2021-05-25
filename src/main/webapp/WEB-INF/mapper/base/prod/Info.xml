@@ -62,14 +62,19 @@
   -->
   <select id="getClsCd" parameterType="DefaultMap" resultType="String">
     /* USE : InfoMapper.getClsCd */
-    SELECT LPAD( NVL(MAX(PROD_CLASS_CD), 0) + 1, 5, '0') AS PROD_CLASS_CD
     <if test='orgnFg != null and orgnFg.toString == "HQ"'>
-      FROM TB_HQ_PRODUCT_CLASS
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT LPAD( NVL(MAX(PROD_CLASS_CD), 0) + 1, 5, '0') AS PROD_CLASS_CD
+        FROM TB_HQ_PRODUCT_CLASS
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CLASS_CD BETWEEN '00001' AND '80000'
     </if>
     <if test='orgnFg != null and orgnFg.toString == "STORE"'>
-      FROM TB_MS_PRODUCT_CLASS
-     WHERE STORE_CD = #{storeCd}
+        SELECT
+--         LPAD( NVL(MAX(PROD_CLASS_CD), 0) + 1, 5, '0') AS PROD_CLASS_CD
+        NVL(MAX(TO_NUMBER(PROD_CLASS_CD)), 80000) + 1 AS PROD_CD
+        FROM TB_MS_PRODUCT_CLASS
+        WHERE STORE_CD = #{storeCd}
+        AND PROD_CLASS_CD BETWEEN '80001' AND '99999'
     </if>
   </select>
 
@@ -124,7 +129,6 @@
     <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
       #{storeCd},
     </if>
-
       #{prodClassCd},
       #{prodClassNm},
       #{pProdClassCd},
@@ -353,6 +357,3 @@
     </select>
 
 </mapper>
-
-
-

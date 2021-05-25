@@ -90,36 +90,14 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     @Override
     public List<DefaultMap<String>> getProductListForTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
 
-
         String orgnFg = sessionInfoVO.getOrgnFg().getCode();
         String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
         String storeCd = sessionInfoVO.getStoreCd();
-
 
         // 소속구분 설정
         touchKeyVO.setOrgnFg(orgnFg);
         touchKeyVO.setHqOfficeCd(hqOfficeCd);
         touchKeyVO.setStoreCd(storeCd);
-
-        /*
-          단독매장의 경우 SALE_PRC_FG = '2'
-          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
-          본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
-          본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
-        */
-        if("00000".equals(hqOfficeCd)) { // 단독매장
-            touchKeyVO.setSalePrcFg("2");
-        } else {
-
-            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-            if( StringUtil.isEmpties(storeCd)) { // 본사일때
-                touchKeyVO.setSalePrcFg("1");
-            } else {                             // 매장일때
-                if("1".equals(envstVal)) touchKeyVO.setSalePrcFg("1");
-                else                     touchKeyVO.setSalePrcFg("2");
-            }
-        }
 
         return keyMapper.getProductListForTouchKey(touchKeyVO);
     }

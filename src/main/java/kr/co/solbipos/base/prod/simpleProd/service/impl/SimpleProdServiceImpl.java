@@ -11,6 +11,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.HqProdEnvFg;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
@@ -138,15 +139,10 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 }
             }
 
-            // 상품명 중복체크
-            if(String.valueOf(true).equals(simpleProdVO.getChkProdNm())) {
-                // 값이 있을때만
-                if (simpleProdVO.getProdNm() != null && !"".equals(simpleProdVO.getProdNm())) {
-                    int prodNmCnt = simpleProdMapper.getProdNmCnt(simpleProdVO);
-                    if (prodNmCnt > 0) {
-                        simpleProdVO.setResult("저장된 동일한 상품명이 존재합니다.");
-                    }
-                }
+            // 가격관리구분
+            if (simpleProdVO.getPrcCtrlFg() != null && !"".equals(simpleProdVO.getPrcCtrlFg())) {
+            } else {
+                simpleProdVO.setResult("가격관리구분을 선택해주세요.");
             }
 
             // 원가단가 길이체크
@@ -188,6 +184,17 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 }
             }
 
+            // 상품명 중복체크
+            if(String.valueOf(true).equals(simpleProdVO.getChkProdNm())) {
+                // 값이 있을때만
+                if (simpleProdVO.getProdNm() != null && !"".equals(simpleProdVO.getProdNm())) {
+                    int prodNmCnt = simpleProdMapper.getProdNmCnt(simpleProdVO);
+                    if (prodNmCnt > 0) {
+                        simpleProdVO.setResult("저장된 동일한 상품명이 존재합니다.");
+                    }
+                }
+            }
+
 
             // ProdVO
             ProdVO prodVO = new ProdVO();
@@ -199,17 +206,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
 
             // 자동채번인 경우 상품코드 조회
             if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
-                // 자동채번 Start
-                String prodCd = prodMapper.getProdCd(prodVO);
-
-                // 순차적으로
-                if(simpleProdVO.getSeq() == 1) {
-                    simpleProdVO.setProdCd(prodCd);
-                } else {
-                    // 상품코드 자동채번
-                    prodCd = simpleProdMapper.getProdCd(simpleProdVO);
-                    simpleProdVO.setProdCd(prodCd);
-                }
+                simpleProdVO.setProdCd("자동채번");
             // 수동채번인 경우 중복체크
             } else if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.MANUAL) {
                 // 값이 있을때만
@@ -289,18 +286,15 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
                 prodVO.setWorkMode(WorkModeFg.REG_PROD);
 
-                // 상품등록 본사 통제여부
-                ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
-
-                // 판매가 본사 통제여부
-                PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+                // 본사신규상품매장생성
+//                HqProdEnvFg hqProdEnvstVal = HqProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043"));
 
                 prodVO.setRegDt(currentDt);
                 prodVO.setRegId(sessionInfoVO.getUserId());
                 prodVO.setModDt(currentDt);
                 prodVO.setModId(sessionInfoVO.getUserId());
 
-                prodVO.setProdCd(simpleProdVO.getProdCd());
+//                prodVO.setProdCd(simpleProdVO.getProdCd());
                 prodVO.setProdNm(simpleProdVO.getProdNm());
                 prodVO.setSplyUprc(simpleProdVO.getSplyUprc());
                 prodVO.setProdTypeFg(simpleProdVO.getProdTypeFg());
@@ -327,12 +321,24 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setStartDate(currentDateString());
                 prodVO.setEndDate("99991231");
                 prodVO.setSaleUprc(simpleProdVO.getSaleUprc());
+                prodVO.setPrcCtrlFg(simpleProdVO.getPrcCtrlFg());
 
                 prodVO.setCornrCd("00");
 
-                // 매장에서 매장상품 등록시에 가격관리 구분 등록
-                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
-                else                                        prodVO.setPrcCtrlFg("S"); //매장
+                // 자동채번인 경우 상품코드 조회
+                if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
+                    // 자동채번 Start
+                    String prodCd = prodMapper.getProdCd(prodVO);
+                    prodVO.setProdCd(prodCd);
+                // 수동채번인 경우 중복체크
+                } else if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.MANUAL) {
+                    // 값이 있을때만
+                    if (simpleProdVO.getProdCd() != null && !"".equals(simpleProdVO.getProdCd())) {
+                        prodVO.setProdCd(simpleProdVO.getProdCd());
+                        int prodCdCnt = prodMapper.getProdCdCnt(prodVO);
+                        if (prodCdCnt > 0) throw new JsonException(Status.FAIL, "저장된 동일한 상품코드가 존재합니다.");
+                    }
+                }
 
                 // 상품정보 저장
                 long result = prodMapper.saveProductInfo(prodVO);
@@ -344,9 +350,10 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     if (barCdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
 
-                // [상품등록 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
-                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
-
+                // 본사신규상품매장생성 [0 전매장]일 경우 매장에 수정정보 내려줌
+//                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && hqProdEnvstVal == HqProdEnvFg.ALL) {
+                // 본사인 경우 매장에 수정정보 내려줌
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                     String procResult = prodMapper.insertHqProdToStoreProd(prodVO);
 
                     // 상품분류 매장에 INSERT
@@ -358,10 +365,6 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     }
                 }
 
-                // 상품 판매가 저장
-                if(priceEnvstVal == PriceEnvFg.HQ)  prodVO.setSalePrcFg("1");
-                else                                prodVO.setSalePrcFg("2");
-
                 int salePriceReeulst = prodMapper.saveSalePrice(prodVO);
                 if(salePriceReeulst <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
@@ -369,8 +372,8 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 int hqSalePriceHistResult = prodMapper.saveSalePriceHistory(prodVO);
                 if(hqSalePriceHistResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
-                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
+                // 판매가 - 가격관리구분 PRC_CTRL_FG 상관없이 매장에 수정정보 내려줌
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                     String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
                 }
 

@@ -56,26 +56,6 @@ public class KioskOptionServiceImpl implements KioskOptionService {
             kioskOptionVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-         /*
-          단독매장의 경우 SALE_PRC_FG = '2'
-          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
-          본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
-          본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
-        */
-        if("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            kioskOptionVO.setSalePrcFg("2");
-        } else {
-
-            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-            if( StringUtil.isEmpties(sessionInfoVO.getStoreCd())) { // 본사일때
-                kioskOptionVO.setSalePrcFg("1");
-            } else {                             // 매장일때
-                if("1".equals(envstVal)) kioskOptionVO.setSalePrcFg("1");
-                else                     kioskOptionVO.setSalePrcFg("2");
-            }
-        }
-
         return kioskOptionMapper.getKioskOptionList(kioskOptionVO);
     }
 
@@ -87,26 +67,6 @@ public class KioskOptionServiceImpl implements KioskOptionService {
         kioskOptionVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             kioskOptionVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-
-         /*
-          단독매장의 경우 SALE_PRC_FG = '2'
-          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
-          본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
-          본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
-        */
-        if("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            kioskOptionVO.setSalePrcFg("2");
-        } else {
-
-            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-            if( StringUtil.isEmpties(sessionInfoVO.getStoreCd())) { // 본사일때
-                kioskOptionVO.setSalePrcFg("1");
-            } else {                             // 매장일때
-                if("1".equals(envstVal)) kioskOptionVO.setSalePrcFg("1");
-                else                     kioskOptionVO.setSalePrcFg("2");
-            }
         }
 
         return kioskOptionMapper.getKioskOptionDetailList(kioskOptionVO);
@@ -165,26 +125,6 @@ public class KioskOptionServiceImpl implements KioskOptionService {
         kioskOptionVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             kioskOptionVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-
-         /*
-          단독매장의 경우 SALE_PRC_FG = '2'
-          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
-          본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
-          본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
-        */
-        if("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
-            kioskOptionVO.setSalePrcFg("2");
-        } else {
-
-            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-            if( StringUtil.isEmpties(sessionInfoVO.getStoreCd())) { // 본사일때
-                kioskOptionVO.setSalePrcFg("1");
-            } else {                             // 매장일때
-                if("1".equals(envstVal)) kioskOptionVO.setSalePrcFg("1");
-                else                     kioskOptionVO.setSalePrcFg("2");
-            }
         }
 
         return kioskOptionMapper.getKioskOptionProdList(kioskOptionVO);

@@ -277,7 +277,7 @@
                                              AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                              AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                           ]]>
-                                             AND SALE_PRC_FG = #{salePrcFg}
+                                             AND SALE_PRC_FG = '1'
                                        GROUP BY STORE_CD, PROD_CD
                                     ) thpsp ON tmp.STORE_CD = thpsp.STORE_CD
                                            AND tmp.PROD_CD = thpsp.PROD_CD

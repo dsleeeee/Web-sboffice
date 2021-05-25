@@ -7,10 +7,9 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/base/prod/info/" />
-<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
-
 
 <div class="subCon">
 
@@ -30,7 +29,7 @@
             <%-- 전체접기 --%>
             <button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>
           </div>
-          <div class="fr" <c:if test="${orgnFg == 'STORE' and prodEnvstVal == 'HQ'}">style="display: none;"</c:if>>
+          <div class="fr" id ="divProd" style="display: none">
             <%-- 추가버튼 --%>
             <button class="btn_skyblue" id="btnAdd"><s:message code="cmm.add" /></button>
             <%-- 삭제버튼 --%>
@@ -60,6 +59,27 @@
     </div>
   </div>
 </div>
+
+<script>
+  // String 형식
+  var prodAuthEnvstVal = "${prodAuthEnvstVal}";
+  var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}";
+
+  $(document).ready(function() {
+    // 상품생성설정
+    $("#divProd").css("display", "none");
+    // 단독매장
+    if(hqOfficeCd == "00000") {
+      $("#divProd").css("display", "block");
+      // 프랜 본사,매장
+    } else {
+      if((prodAuthEnvstVal== "ALL") || (orgnFg === 'HQ' && prodAuthEnvstVal== "HQ") || (orgnFg === 'STORE' && prodAuthEnvstVal== "STORE")) {
+        $("#divProd").css("display", "block");
+      }
+    }
+  });
+</script>
 
 <script>
 
@@ -265,6 +285,16 @@
         var params = {};
         params.prodClassCd = delItem.prodClassCd;
 
+        // 매장일때 코드값이 80001 이하면 본사이므로 삭제불가
+        if("${orgnFg}" == "STORE") {
+          if("${hqOfficeCd}" != "00000") {
+            if (params.prodClassCd < 80001) {
+              s_alert.pop("<s:message code='info.prodClassCdHqDel' />"); // 본사에서 등록한 상품분류는 삭제 불가능합니다.
+              return;
+            }
+          }
+        }
+
         $.postJSON("/base/prod/info/class/chkProdCnt.sb", params, function(result) {
 
             // 해당 분류에 속한 상품이 없을 때
@@ -323,6 +353,15 @@
         if(view.itemsEdited[i].prodClassNm == "" || view.itemsEdited[i].prodClassNm == msg) {
           s_alert.pop("<s:message code='info.require.clsNm'/>");
           return;
+        }
+        // 매장일때 코드값이 80001 이하면 본사이므로 수정불가
+        if("${orgnFg}" == "STORE") {
+          if("${hqOfficeCd}" != "00000") {
+            if (view.itemsEdited[i].prodClassCd < 80001) {
+              s_alert.pop("<s:message code='info.prodClassCdHqSave' />"); // 본사에서 등록한 상품분류는 수정 불가능합니다.
+              return;
+            }
+          }
         }
         if(view.itemsEdited[i].prodClassNm.length > 15 ) {
           s_alert.pop("<s:message code='info.prodClassNm'/><s:message code='cmm.regexp' arguments='15'/>");

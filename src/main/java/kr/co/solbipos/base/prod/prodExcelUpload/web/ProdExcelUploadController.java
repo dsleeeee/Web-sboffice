@@ -10,6 +10,7 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadService;
 import kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
@@ -67,8 +68,8 @@ public class ProdExcelUploadController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 상품등록 본사 통제여부
-        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+        // 상품생성설정
+        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
 
         // 상품코드 채번방식
         ProdNoEnvFg prodNoEnvFg;
@@ -78,7 +79,7 @@ public class ProdExcelUploadController {
             prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
         }
 
-        model.addAttribute("prodEnvstVal", prodEnvstVal);
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
 

@@ -31,6 +31,12 @@ var modeFg = [
   {"name":"절하","value":"2"}
 ];
 
+// 가격관리구분
+var prcCtrlFgData = [
+  {"name":"본사","value":"H"},
+  {"name":"매장","value":"S"}
+];
+
 /**
  * 상품별 판매가관리 그리드 생성
  */
@@ -41,6 +47,8 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+
     s.cellEditEnded.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
@@ -51,6 +59,28 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
         }
       }
       s.collectionView.commitEdit();
+    });
+
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+
+        // 체크박스
+        if (col.binding === "gChk" || col.binding === "saleUprc") {
+            var item = s.rows[e.row].dataItem;
+
+            // 값이 있으면 링크 효과
+            if (item[("prcCtrlFg")] === 'S') {
+                wijmo.addClass(e.cell, 'wj-custom-readonly');
+                wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                item[("gChk")] = false; // 전체 체크시 오류
+
+                // Attribute 의 변경사항을 적용.
+                e.cell.outerHTML = e.cell.outerHTML;
+            }
+        }
+      }
     });
   };
 
@@ -75,8 +105,10 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
     var params = {};
     params.storeCd = $("#searchStoreCd").val();
-    params.prodClassCd = $scope.prodClassCd;
+	params.prodClassCd = $scope.prodClassCd;
     params.listScale = $scope.listScaleCombo.text;
+    params.prodCd = $scope.prodCd;
+    params.prodNm = $scope.prodNm;
 
     console.log('params', params);
 
@@ -229,21 +261,19 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
   // 저장
   $scope.saveProdPrice = function(){
-    if(priceEnvstVal === 'STORE'){
-      $scope._popMsg("판매가 본사통제여부가 '매장'로 설정되었습니다.");
-      return false;
-    }
-
-    // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
-    Number.isInteger = Number.isInteger || function(value) {
-      return typeof value === "number" &&
-          isFinite(value) &&
-          Math.floor(value) === value;
-    };
-
     // 파라미터 설정
     var params = new Array();
     var saleAmtOption = $scope.prodInfo.saleAmtOption;
+
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
+      if ($scope.flex.collectionView.items[i].gChk) {
+        // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
+        if ($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
+          $scope._popMsg(messages["salePrice.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
+          return false;
+        }
+      }
+    }
 
     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
       if($scope.flex.collectionView.items[i].gChk) {
@@ -283,7 +313,7 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save('/base/price/salePrice/prodSalePrice/saveProdSalePrice.sb', params, function(){
-        $scope.searchSalePriceList();
+      $scope.searchSalePriceList();
     });
   };
 

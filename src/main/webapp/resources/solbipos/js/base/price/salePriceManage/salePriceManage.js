@@ -18,6 +18,9 @@ var saleAmtOptionFg = [
     {"name":"매장판매가","value":"S"},
     {"name":"본사판매가","value":"H"}
 ];
+var saleAmtOptionFgStore = [
+    {"name":"매장판매가","value":"S"}
+];
 // 단위 DropBoxDataMap
 var unitFg = [
     {"name":"1원 단위","value":"1"},
@@ -31,6 +34,12 @@ var modeFg = [
     {"name":"절하","value":"2"}
 ];
 
+// 가격관리구분
+var prcCtrlFgData = [
+    {"name":"본사","value":"H"},
+    {"name":"매장","value":"S"}
+];
+
 /**
  *  판매가관리(매장용) 그리드 생성
  */
@@ -41,11 +50,41 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+
+        // 매장일때만
+        if(hqOfficeCd != "00000") {
+            // 그리드 링크 효과
+            s.formatItem.addHandler(function (s, e) {
+                if (e.panel === s.cells) {
+                    var col = s.columns[e.col];
+
+                    // 체크박스
+                    if (col.binding === "gChk" || col.binding === "saleUprc") {
+                        var item = s.rows[e.row].dataItem;
+
+                        // 값이 있으면 링크 효과
+                        if (item[("prcCtrlFg")] === 'H') {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                            item[("gChk")] = false; // 전체 체크시 오류
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
+                    }
+                }
+            });
+        }
     };
 
     // 콤보박스 데이터 Set
     $scope._setComboData('listScaleBox', gvListScaleBoxData);
-    $scope._setComboData("saleAmtOption", saleAmtOptionFg);
+    if(hqOfficeCd == "00000") {
+        $scope._setComboData("saleAmtOption", saleAmtOptionFgStore);
+    } else {
+        $scope._setComboData("saleAmtOption", saleAmtOptionFg);
+    }
     $scope._setComboData("changeUnit", unitFg);
     $scope._setComboData("changeMode", modeFg);
 
@@ -59,6 +98,8 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
         var params = {};
         params.prodClassCd = $scope.prodClassCd;
         params.listScale = $scope.listScaleCombo.text;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
 
         $scope._inquirySub('/base/price/salePriceManage/salePriceManage/getSalePriceManageList.sb', params, function() {}, false);
     };
@@ -167,13 +208,19 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
 
     // 저장
     $scope.saveProdPrice = function(){
-        if(priceEnvstVal === 'HQ'){
-            $scope._popMsg("판매가 본사통제여부가 '본사'로 설정되었습니다.");
-            return false;
-        }
-
         // 파라미터 설정
         var params = new Array();
+        var saleAmtOption = $scope.prodInfo.saleAmtOption;
+
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+            if($scope.flex.collectionView.items[i].gChk) {
+                // PRC_CTRL_FG 가격관리구분 S인 상품만 수정가능
+                if ($scope.flex.collectionView.items[i].prcCtrlFg === "H") {
+                    $scope._popMsg(messages["salePriceManage.prcCtrlFgHqBlank"]); // 가격관리구분이 '본사'인 상품은 수정할 수 없습니다.
+                    return false;
+                }
+            }
+        }
 
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
             if($scope.flex.collectionView.items[i].gChk) {

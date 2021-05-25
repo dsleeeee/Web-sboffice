@@ -89,7 +89,7 @@
                 <a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a>
               </span>
             </div>
-            <div id="regStoreGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
+            <div id="regStoreGrid" class="mt10" style="height: 360px; overflow-y: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"
@@ -107,8 +107,9 @@
                 <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
                   <wj-flex-grid-column header="<s:message code="prod.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="70" is-read-only="true" ></wj-flex-grid-column>
                 </c:if>
+                <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -123,7 +124,7 @@
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="prod.regist"/></a></span>
             </div>
 
-            <div id="noRegStoreGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
+            <div id="noRegStoreGrid" class="mt10" style="height: 360px; overflow-y: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"
@@ -149,6 +150,8 @@
         </div>
       </div>
     </div>
+    <%-- //body --%>
+
   </div>
 </wj-popup>
 
@@ -156,4 +159,4 @@
   var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=2019012101.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210421.02" charset="utf-8"></script>

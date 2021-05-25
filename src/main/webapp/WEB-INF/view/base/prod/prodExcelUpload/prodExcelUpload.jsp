@@ -7,14 +7,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
-<c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="contents" id ="divProdExcelUploadAuth" style="display: none">
     <div class="elseCon">
         <p class="lgTxt">죄송합니다.<br />요청하신 페이지에 권한이 없습니다.</p>
         <p class="smTxt mt20">
-            본사 환경설정 (20 : 본사통제구분-상품등록) 이 <label id="lblProdExcelUploadAuth"></label> 입니다.<br />
+            본사 환경설정 (0042 : 상품생성설정) 이 <label id="lblProdExcelUploadAuth"></label> 입니다.<br />
             해당 페이지에 접근할 수 없습니다.<br />
             ${sessionScope.sessionInfo.currentMenu.resrceCd}
         </p>
@@ -22,7 +21,6 @@
 </div>
 
 <div class="subCon" id ="divProdExcelUpload" style="display: none">
-
     <div ng-controller="prodExcelUploadCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
@@ -90,6 +88,9 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.safeStockQty"/>" binding="safeStockQty" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.startStockQty"/>" binding="startStockQty" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 </wj-flex-grid>
@@ -158,6 +159,9 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" width="70" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.safeStockQty"/>" binding="safeStockQty" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.startStockQty"/>" binding="startStockQty" width="85" align="center"></wj-flex-grid-column>
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60"  align="center"></wj-flex-grid-column>
 
                     <%--상품 저장시 필요--%>
@@ -174,13 +178,14 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
     // String 형식
-    var prodEnvstVal = "${prodEnvstVal}";
     var prodNoEnvFg = "${prodNoEnvFg}";
+    var prodAuthEnvstVal = "${prodAuthEnvstVal}";
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
 
     // List 형식("" 안붙임)
     var vendrComboList = ${vendrComboList};
@@ -200,7 +205,7 @@
     var stockProdYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20201214.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20210421.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -36,9 +36,6 @@ public interface SimpleProdMapper {
     /** 검증결과 삭제 */
     int getSimpleProdCheckDelete(SimpleProdVO simpleProdVO);
 
-    /** 상품코드 자동채번 */
-    String getProdCd(SimpleProdVO simpleProdVO);
-
     /** 상품명 중복체크 */
     int getProdNmCnt(SimpleProdVO simpleProdVO);
 

@@ -15,6 +15,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.HqProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
@@ -91,19 +92,20 @@ public class ProdServiceImpl implements ProdService {
           본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
           본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
         */
-        if("00000".equals(hqOfficeCd)) { // 단독매장
-            prodVO.setSalePrcFg("2");
-        } else {
+//        if("00000".equals(hqOfficeCd)) { // 단독매장
+//            prodVO.setSalePrcFg("2");
+//        } else {
+//
+//            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+//
+//            if( StringUtil.isEmpties(storeCd)) { // 본사일때
+//                prodVO.setSalePrcFg("1");
+//            } else {                             // 매장일때
+//                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
+//                else                     prodVO.setSalePrcFg("2");
+//            }
+//        }
 
-            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-            if( StringUtil.isEmpties(storeCd)) { // 본사일때
-                prodVO.setSalePrcFg("1");
-            } else {                             // 매장일때
-                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
-                else                     prodVO.setSalePrcFg("2");
-            }
-        }
         return prodMapper.getProdList(prodVO);
     }
 
@@ -126,19 +128,20 @@ public class ProdServiceImpl implements ProdService {
           본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
           본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
         */
-        if("00000".equals(hqOfficeCd)) { // 단독매장
-            prodVO.setSalePrcFg("2");
-        } else {
+//        if("00000".equals(hqOfficeCd)) { // 단독매장
+//            prodVO.setSalePrcFg("2");
+//        } else {
+//
+//            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+//
+//            if( StringUtil.isEmpties(storeCd)) { // 본사일때
+//                prodVO.setSalePrcFg("1");
+//            } else {                             // 매장일때
+//                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
+//                else                     prodVO.setSalePrcFg("2");
+//            }
+//        }
 
-            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-            if( StringUtil.isEmpties(storeCd)) { // 본사일때
-                prodVO.setSalePrcFg("1");
-            } else {                             // 매장일때
-                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
-                else                     prodVO.setSalePrcFg("2");
-            }
-        }
         return prodMapper.getProdExcelList(prodVO);
     }
 
@@ -164,19 +167,19 @@ public class ProdServiceImpl implements ProdService {
           본사통제구분이 '본사'일때, SALE_PRC_FG = '1'
           본사통제구분이 '매장'일때, SALE_PRC_FG = '2'
         */
-        if("00000".equals(hqOfficeCd)) { // 단독매장
-            prodVO.setSalePrcFg("2");
-        } else {
-
-            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
-
-            if( StringUtil.isEmpties(storeCd)) { // 본사일때
-                prodVO.setSalePrcFg("1");
-            } else {                             // 매장일때
-                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
-                else                     prodVO.setSalePrcFg("2");
-            }
-        }
+//        if("00000".equals(hqOfficeCd)) { // 단독매장
+//            prodVO.setSalePrcFg("2");
+//        } else {
+//
+//            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+//
+//            if( StringUtil.isEmpties(storeCd)) { // 본사일때
+//                prodVO.setSalePrcFg("1");
+//            } else {                             // 매장일때
+//                if("1".equals(envstVal)) prodVO.setSalePrcFg("1");
+//                else                     prodVO.setSalePrcFg("2");
+//            }
+//        }
 
         // 상품상세정보 조회
         result = prodMapper.getProdDetail(prodVO);
@@ -208,13 +211,12 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setRegId(sessionInfoVO.getUserId());
         prodVO.setModId(sessionInfoVO.getUserId());
 
-        // WorkMode Flag 상품정보수정으로 기본 셋팅_2019.06.06
-        prodVO.setWorkMode(WorkModeFg.MOD_PROD);
-
         // 상품등록 본사 통제여부
-        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+//        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
         // 판매가 본사 통제여부
-        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+//        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+        // 본사신규상품매장생성
+//        HqProdEnvFg hqProdEnvstVal = HqProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043"));
 
         // 상품 신규등록일때 상품코드 조회
         /*if( StringUtil.isEmpties( prodVO.getProdCd())) {
@@ -229,6 +231,10 @@ public class ProdServiceImpl implements ProdService {
             String prodCd = prodMapper.getProdCd(prodVO);
             prodVO.setProdCd(prodCd);
         }
+
+        // WorkMode Flag 상품정보수정으로 기본 셋팅_2019.06.06
+        prodVO.setWorkMode(WorkModeFg.MOD_PROD);
+
         // 신규상품등록 인 경우 WorkMode Flag 변경
         if(prodVO.getSaveMode().equals("REG")){
             // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
@@ -246,10 +252,9 @@ public class ProdServiceImpl implements ProdService {
             prodExist = prodMapper.getProdExistInfo(prodVO);
         }
 
-        // 매장에서 매장상품 등록시에 가격관리 구분 등록
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
-        else                                        prodVO.setPrcCtrlFg("S"); //매장
-
+        // 매장에서 매장상품 등록시에 가격관리 구분 등록 -> 콤보박스 처리
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
+//        else                                        prodVO.setPrcCtrlFg("S"); //매장
 
         // 상품정보 저장
 //        int result = prodMapper.saveProductInfo(prodVO);
@@ -263,8 +268,11 @@ public class ProdServiceImpl implements ProdService {
         }
 
         // [상품등록 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
-
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
+        // 본사신규상품매장생성 [0 전매장]일 경우 매장에 수정정보 내려줌
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && hqProdEnvstVal == HqProdEnvFg.ALL) {
+        // 본사인 경우 매장에 수정정보 내려줌
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             String procResult;
 
             if(prodExist == 0) {
@@ -298,8 +306,8 @@ public class ProdServiceImpl implements ProdService {
         }
 
         // 상품 판매가 저장
-        if(priceEnvstVal == PriceEnvFg.HQ)  prodVO.setSalePrcFg("1");
-        else                                prodVO.setSalePrcFg("2");
+//        if(priceEnvstVal == PriceEnvFg.HQ)  prodVO.setSalePrcFg("1");
+//        else                                prodVO.setSalePrcFg("2");
 
         prodVO.setStartDate(currentDate);
         prodVO.setEndDate("99991231");
@@ -312,8 +320,26 @@ public class ProdServiceImpl implements ProdService {
         if(hqSalePriceHistResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
-            String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
+        // 판매가 - 본사이면서 가격관리구분 PRC_CTRL_FG이 본사인경우 매장에 수정정보 내려줌
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodVO.getPrcCtrlFg().equals("H")) {
+//            String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+//        }
+
+        // 본사일때
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 신규
+            if(prodVO.getSaveMode().equals("REG")) {
+                // 판매가 - 가격관리구분 PRC_CTRL_FG 상관없이 매장에 수정정보 내려줌
+                String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+            // 수정
+            } else {
+                // 본사
+                if(prodVO.getPrcCtrlFg().equals("H")) {
+                    // 판매가 - 가격관리구분 PRC_CTRL_FG이 본사인경우 매장에 수정정보 내려줌
+                    String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+                }
+            }
         }
 
         // 초기재고
@@ -477,7 +503,7 @@ public class ProdServiceImpl implements ProdService {
             // 판매가가 기존 판매가와 다른 경우
             if(!prodVO.getSaleUprc().equals(prodVO.getSaleUprcB())) {
 
-                prodVO.setSalePrcFg("1"); // 본사에서 변경
+//                prodVO.setSalePrcFg("1"); // 본사에서 변경
                 prodVO.setStartDate(currentDateString());
                 prodVO.setEndDate("99991231");
 
@@ -560,7 +586,7 @@ public class ProdServiceImpl implements ProdService {
 
         for(ProdVO prodVO : prodVOs) {
             prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            prodVO.setSalePrcFg("1"); // 본사에서 변경
+//            prodVO.setSalePrcFg("1"); // 본사에서 변경
             prodVO.setStartDate(currentDateString());
             prodVO.setEndDate("99991231");
             prodVO.setRegDt(currentDate);
@@ -659,7 +685,7 @@ public class ProdServiceImpl implements ProdService {
             // 판매가가 기존 판매가와 다른 경우
             if(!prodVO.getSaleUprc().equals(prodVO.getSaleUprcB())) {
 
-                prodVO.setSalePrcFg("1"); // 본사에서 변경
+//                prodVO.setSalePrcFg("1"); // 본사에서 변경
                 prodVO.setStartDate(currentDateString());
                 prodVO.setEndDate("99991231");
 
@@ -692,7 +718,6 @@ public class ProdServiceImpl implements ProdService {
         }
 
         return procCnt;
-
     }
 
     /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 */

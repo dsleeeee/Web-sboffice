@@ -41,7 +41,7 @@
                                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                     ]]>
-                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    AND SALE_PRC_FG = '1'
                                     GROUP BY HQ_OFFICE_CD, PROD_CD
                                     ) thpsp ON
                                     thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
@@ -69,14 +69,13 @@
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                                                SELECT
-                                                PROD_CLASS_CD
+                                                SELECT PROD_CLASS_CD
                                                 FROM TB_HQ_PRODUCT_CLASS
                                                 WHERE 1=1
                                                 AND HQ_OFFICE_CD = #{membrOrgnCd}
                                                 START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{membrOrgnCd}
                                                 CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{membrOrgnCd}
-                                                )
+                                            )
                 </if>
                 ORDER BY thp.PROD_CD
             </when>
@@ -100,7 +99,7 @@
                                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                     ]]>
-                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    AND SALE_PRC_FG = '1'
                                     GROUP BY STORE_CD, PROD_CD
                                     ) tmpsp ON
                                     tmp.STORE_CD = tmpsp.STORE_CD
@@ -128,14 +127,13 @@
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
-                                                SELECT
-                                                PROD_CLASS_CD
+                                                SELECT PROD_CLASS_CD
                                                 FROM TB_MS_PRODUCT_CLASS
                                                 WHERE 1=1
                                                 AND STORE_CD = #{storeCd}
                                                 START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
                                                 CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
-                                                )
+                                            )
                 </if>
                 ORDER BY tmp.PROD_CD
             </when>
@@ -173,7 +171,7 @@
                                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                     ]]>
-                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    AND SALE_PRC_FG = '1'
                                     GROUP BY HQ_OFFICE_CD, PROD_CD
                                     ) thpsp ON
                                     thpo.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
@@ -204,7 +202,7 @@
                                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                     ]]>
-                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    AND SALE_PRC_FG = '1'
                                     GROUP BY STORE_CD, PROD_CD
                                     ) tmpsp ON
                                     tmpo.STORE_CD = tmpsp.STORE_CD
