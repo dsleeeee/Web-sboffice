@@ -33,7 +33,6 @@ function girdFldUnfld(Id){
 
 // Grid 조회 시, 닫혀있는 Grid Open
 function gridOpen(Id){
-  
   // 기존 Class 제거
   $("#" + Id).children("a").removeClass("open");
   $("#" + Id).children("a").removeClass("close");
@@ -52,5 +51,17 @@ function gridShowMsg(Id, type){
   }
 }
 
+// Grid 조회 후, 데이터 유무에 따른 Msg 띄우기
+function gridShowMsgNoData(Id, gird, rowVisible){
+    if(gird.rows.length <= 0) {
+        $("#" + Id + "Msg").css("display", "block");
+    } else {
+        $("#" + Id + "Msg").css("display", "none");
+    }
 
+    // N 이면 합계 행 제거
+    if(rowVisible === "N") {
+        gird.columnFooters.rows.removeAt();
+    }
+}
 

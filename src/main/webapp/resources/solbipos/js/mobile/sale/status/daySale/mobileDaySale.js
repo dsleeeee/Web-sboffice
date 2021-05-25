@@ -148,6 +148,9 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', function ($scope, $http)
         params.diffDay = diffDay; // 조회기간 차이(차트 높이 때문에)
 
         $scope._inquirySub("/mobile/sale/status/daySale/daySale/getMobileDaySalePayList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileDaySalePay", $scope.flexMobileDaySalePay, "N");
+
             // 매출종합
             $scope._broadcast("mobileDaySaleTotalCtrl", params);
             // 할인내역
@@ -205,7 +208,10 @@ app.controller('mobileDaySaleDcCtrl', ['$scope', '$http', function ($scope, $htt
         params.endDate = data.endDate;
         params.srchStoreCd = data.srchStoreCd;
 
-        $scope._inquirySub("/mobile/sale/status/daySale/daySale/getMobileDaySaleDcList.sb", params, function() {}, false);
+        $scope._inquirySub("/mobile/sale/status/daySale/daySale/getMobileDaySaleDcList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileDaySaleDc", $scope.flexMobileDaySaleDc, "N");
+        }, false);
     };
     // <-- //검색 호출 -->
 }]);
@@ -830,7 +836,10 @@ app.controller('mobileDaySaleDtlCtrl', ['$scope', '$http', function ($scope, $ht
         params.endDate = data.endDate;
         params.srchStoreCd = data.srchStoreCd;
 
-        $scope._inquirySub("/mobile/sale/status/daySale/daySale/getMobileDaySaleDtlList.sb", params, function() {}, false);
+        $scope._inquirySub("/mobile/sale/status/daySale/daySale/getMobileDaySaleDtlList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileDaySaleDtl", $scope.flexMobileDaySaleDtl, "N");
+        }, false);
     };
     // <-- //검색 호출 -->
 }]);

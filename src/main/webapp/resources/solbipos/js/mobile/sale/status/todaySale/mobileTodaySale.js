@@ -113,6 +113,9 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', function ($scope, $htt
         params.srchStoreCd = $("#mobileTodaySaleStoreCd").val();
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySalePayList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileTodaySalePay", $scope.flexMobileTodaySalePay, "N");
+
             // 매출종합현황
             $scope._broadcast("mobileTodaySaleTotalCtrl", params);
             // 할인내역
@@ -162,7 +165,10 @@ app.controller('mobileTodaySaleDcCtrl', ['$scope', '$http', function ($scope, $h
         params.startDate = data.startDate;
         params.srchStoreCd = data.srchStoreCd;
 
-        $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleDcList.sb", params, function() {}, false);
+        $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleDcList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileTodaySaleDc", $scope.flexMobileTodaySaleDc, "N");
+        }, false);
     };
     // <-- //검색 호출 -->
 }]);

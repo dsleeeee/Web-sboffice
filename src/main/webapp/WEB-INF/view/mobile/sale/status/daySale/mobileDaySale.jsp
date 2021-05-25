@@ -173,10 +173,10 @@
         <a href="#" class="open"><s:message code="mobile.daySale.salePay"/></a>
     </div>
     <div class="w100" id="mobileDaySalePayGrid">
-        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
             <wj-flex-grid
                     autoGenerateColumns="false"
-                    control="flex"
+                    control="flexMobileDaySalePay"
                     initialized="initGrid(s,e)"
                     selection-mode="Row"
                     items-source="data"
@@ -187,6 +187,8 @@
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
+                <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                <div class="gridMsg" id="mobileDaySalePayMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
             </wj-flex-grid>
         </div>
     </div>
@@ -197,10 +199,10 @@
         <a href="#" class="open"><s:message code="mobile.daySale.saleDc"/></a>
     </div>
     <div class="w100" id="mobileDaySaleDcGrid" ng-controller="mobileDaySaleDcCtrl">
-        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
             <wj-flex-grid
                     autoGenerateColumns="false"
-                    control="flex"
+                    control="flexMobileDaySaleDc"
                     initialized="initGrid(s,e)"
                     selection-mode="Row"
                     items-source="data"
@@ -211,6 +213,8 @@
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
+                <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                <div class="gridMsg" id="mobileDaySaleDcMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
             </wj-flex-grid>
         </div>
     </div>
@@ -435,10 +439,10 @@
         <a href="#" class="open"><s:message code="mobile.daySale.saleDtl"/></a>
     </div>
     <div class="w100" id="mobileDaySaleDtlGrid" ng-controller="mobileDaySaleDtlCtrl">
-        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;min-height:100px;">
             <wj-flex-grid
                     autoGenerateColumns="false"
-                    control="flex"
+                    control="flexMobileDaySaleDtl"
                     initialized="initGrid(s,e)"
                     selection-mode="Row"
                     items-source="data"
@@ -473,6 +477,8 @@
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.dc.dcAmt"/>" binding="dcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.dc.coupnDcAmt"/>" binding="coupnDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.dc.etcDcAmt"/>" binding="etcDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                <div class="gridMsg" id="mobileDaySaleDtlMsg" style="line-height: 150px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
             </wj-flex-grid>
         </div>
     </div>
@@ -484,4 +490,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=20210520.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=20210524.01" charset="utf-8"></script>

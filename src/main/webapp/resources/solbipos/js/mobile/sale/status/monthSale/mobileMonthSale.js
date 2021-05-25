@@ -166,6 +166,9 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', function ($scope, $htt
         }
 
         $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSalePayList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileMonthSalePay", $scope.flexMobileMonthSalePay, "N");
+
             // 매출종합
             $scope._broadcast("mobileMonthSaleTotalCtrl", params);
             // 할인내역
@@ -223,7 +226,10 @@ app.controller('mobileMonthSaleDcCtrl', ['$scope', '$http', function ($scope, $h
         params.endMonth = data.endMonth;
         params.srchStoreCd = data.srchStoreCd;
 
-        $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSaleDcList.sb", params, function() {}, false);
+        $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSaleDcList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileMonthSaleDc", $scope.flexMobileMonthSaleDc, "N");
+        }, false);
     };
     // <-- //검색 호출 -->
 }]);
@@ -833,7 +839,10 @@ app.controller('mobileMonthSaleDtlCtrl', ['$scope', '$http', function ($scope, $
         params.endMonth = data.endMonth;
         params.srchStoreCd = data.srchStoreCd;
 
-        $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSaleDtlList.sb", params, function() {}, false);
+        $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSaleDtlList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileMonthSaleDtl", $scope.flexMobileMonthSaleDtl, "N");
+        }, false);
     };
     // <-- //검색 호출 -->
 }]);
