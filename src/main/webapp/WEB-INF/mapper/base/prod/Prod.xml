@@ -270,8 +270,55 @@
                 ) thpsp ON
                 thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
                 AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
                 WHERE
                 thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                    SELECT 1
+                    FROM
+                    TB_HQ_PRODUCT_BARCD
+                    WHERE
+                    HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND PROD_CD = thp.PROD_CD
+                    AND BARCD_CD = #{barCd}
+                    ) --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM
+                    TB_HQ_PRODUCT_CLASS
+                    WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH
+                    PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY
+                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="hqBrandNm != null and hqBrandNm != ''">
+                    AND thb.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
+                </if>
                 ORDER BY thp.PROD_CD ASC
             </when>
             <!-- 가맹점 -->
@@ -310,8 +357,54 @@
                 ) thpsp ON
                 tmp.STORE_CD = thpsp.STORE_CD
                 AND tmp.PROD_CD = thpsp.PROD_CD
+                INNER JOIN TB_MS_STORE tms ON
+                tms.STORE_CD  = tmp.STORE_CD
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
                 WHERE
                 tmp.STORE_CD = #{storeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                    SELECT 1
+                    FROM
+                    TB_MS_PRODUCT_BARCD
+                    WHERE
+                    STORE_CD = tmp.STORE_CD
+                    AND PROD_CD = tmp.PROD_CD
+                    AND BARCD_CD = #{barCd}
+                    ) --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM
+                    TB_MS_PRODUCT_CLASS
+                    WHERE
+                    STORE_CD = #{storeCd}
+                    START WITH
+                    PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY
+                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN = #{useYn} --사용여부
+                </if>
                 ORDER BY tmp.PROD_CD ASC
             </when>
         </choose>

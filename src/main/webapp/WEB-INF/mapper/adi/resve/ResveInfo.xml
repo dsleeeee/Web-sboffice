@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.adi.resve.resveInfo.service.impl.ResveInfoMapper">
+
+    <select id="getResveList" parameterType="resveInfoVO" resultType="DefaultMap">
+        /* ResveInfoMapper.getResveList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tpri.HQ_OFFICE_CD,
+                       tpri.STORE_CD,
+                       tms.STORE_NM,
+                       TO_CHAR(TO_DATE(tpri.SYS_DATE||tpri.SYS_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+                       tpri.RESVE_IN_FG,
+                       tpri.POS_NO,
+                       tpri.RESVE_NO,
+                       TO_CHAR(TO_DATE(tpri.RESVE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS RESVE_DATE,
+                       TO_CHAR(TO_DATE(tpri.RESVE_TIME,'HH24:MI'),'HH24:MI') AS RESVE_TIME,
+                       tpri.RESVE_GUEST_NM,
+                       tpri.RESVE_GUEST_TEL_NO,
+                       tpri.RESVE_GUEST_CNT,
+                       tpri.RESVE_MEMO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_PS_RESVE_INFO tpri,
+                       TB_MS_STORE tms
+                 WHERE tpri.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND tms.HQ_OFFICE_CD = tpri.HQ_OFFICE_CD
+                   AND tms.STORE_CD = tpri.STORE_CD
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND tms.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+                   AND tpri.SYS_DATE BETWEEN #{startDate} AND #{endDate}
+                </if>
+                <if test="resveStartDate != '' and resveStartDate != null and resveEndDate != '' and resveEndDate != null">
+                   AND tpri.RESVE_DATE BETWEEN #{resveStartDate} AND #{resveEndDate}
+                </if>
+                <if test='resveNo != null and resveNo != ""'>
+                   AND tpri.RESVE_NO = #{resveNo}
+                </if>
+                <if test='resveGuestNm != null and resveGuestNm != ""'>
+                   AND tpri.RESVE_GUEST_NM = #{resveGuestNm}
+                </if>
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tpri.STORE_CD,
+                       tms.STORE_NM,
+                       TO_CHAR(TO_DATE(tpri.SYS_DATE||tpri.SYS_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+                       tpri.RESVE_IN_FG,
+                       tpri.POS_NO,
+                       tpri.RESVE_NO,
+                       TO_CHAR(TO_DATE(tpri.RESVE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS RESVE_DATE,
+                       TO_CHAR(TO_DATE(tpri.RESVE_TIME,'HH24:MI'),'HH24:MI') AS RESVE_TIME,
+                       tpri.RESVE_GUEST_NM,
+                       tpri.RESVE_GUEST_TEL_NO,
+                       tpri.RESVE_GUEST_CNT,
+                       tpri.RESVE_MEMO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_PS_RESVE_INFO tpri,
+                       TB_MS_STORE tms
+                 WHERE tpri.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND tpri.STORE_CD = #{storeCd}
+                   AND tms.HQ_OFFICE_CD = tpri.HQ_OFFICE_CD
+                   AND tms.STORE_CD = tpri.STORE_CD
+                <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+                   AND tpri.SYS_DATE BETWEEN #{startDate} AND #{endDate}
+                </if>
+                <if test="resveStartDate != '' and resveStartDate != null and resveEndDate != '' and resveEndDate != null">
+                   AND tpri.RESVE_DATE BETWEEN #{resveStartDate} AND #{resveEndDate}
+                </if>
+                <if test='resveNo != null and resveNo != ""'>
+                    AND tpri.RESVE_NO = #{resveNo}
+                </if>
+                <if test='resveGuestNm != null and resveGuestNm != ""'>
+                    AND tpri.RESVE_GUEST_NM = #{resveGuestNm}
+                </if>
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+</mapper>

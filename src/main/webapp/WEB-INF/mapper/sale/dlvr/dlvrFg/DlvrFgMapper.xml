@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.dlvr.dlvrFg.service.impl.DlvrFgMapper">
+
+    <!-- 배달경로(HQ/MS 113) 데이터가 있는지 조회 : 안씀 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : dlvrFgVO
+        COMMENTS : 매출관리 > 배달현황 >
+    -->
+    <select id="getDlvrFg"  parameterType="dlvrFgVO" resultType="String">
+        /* DlvrFgMapper.getDlvrFg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT COUNT(*)
+                  FROM TB_HQ_NMCODE
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND NMCODE_GRP_CD ='113'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT COUNT(*)
+                  FROM TB_MS_STORE_NMCODE
+                 WHERE STORE_CD = #{storeCd}
+                   AND NMCODE_GRP_CD ='113'
+            </when>
+        </choose>
+    </select>
+
+    <!-- 배달경로 콤보박스 데이터 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : dlvrFgVO
+        COMMENTS : 매출관리 > 배달현황 > 배달경로 콤보박스에 들어갈 데이터
+    -->
+    <select id="getDlvrFgData"  parameterType="dlvrFgVO" resultType="DefaultMap">
+        /* DlvrFgMapper.getDlvrFgData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT NMCODE_CD AS VALUE, NMCODE_NM AS NAME
+                  FROM TB_HQ_NMCODE
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND NMCODE_GRP_CD ='113'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT NMCODE_CD AS VALUE, NMCODE_NM AS NAME
+                  FROM TB_MS_STORE_NMCODE
+                 WHERE STORE_CD = #{storeCd}
+                  AND NMCODE_GRP_CD ='113'
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품별 탭 - 유형별 그리드 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD_DLVR,
+                   TB_SL_DAILY_PROD_DLVR, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        PARAM    : dlvrFgVO
+        COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
+    -->
+    <select id="getOrderFg"  parameterType="dlvrFgVO" resultType="DefaultMap">
+        /* DlvrFgMapper.getOrderFg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT tsdpd.DLVR_PACK_FG,
+                       SUM(tsdpd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                       SUM(tsdpd.TOT_DC_AMT) AS TOT_DC_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) - SUM(tsdpd.TOT_VAT_AMT) AS TOT_GA_AMT,
+                       SUM(tsdpd.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                       SUM(tsdpd.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                       SUM(tsdpd.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                    <foreach collection="arrPayCol" item="item" separator="+">
+                       SUM(tsdpd.PAY_AMT_${item})
+                    </foreach> AS TOT_PAY_AMT,
+                    <foreach collection="arrPayCol" item="item" separator=",">
+                       SUM(tsdpd.PAY_AMT_${item}) AS PAY${item}
+                    </foreach>
+                  FROM TB_SL_DAILY_PROD_DLVR tsdpd,
+                       TB_MS_PRODUCT tmp
+                 WHERE tsdpd.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND tsdpd.STORE_CD     = tmp.STORE_CD
+                   AND tsdpd.PROD_CD      = tmp.PROD_CD
+                   AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCd != null and storeCd != ""'>
+                   AND tsdpd.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="dlvrPackFg != null and dlvrPackFg != ''">
+                   AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
+                </if>
+                <if test="dlvrInFg != null and dlvrInFg != ''">
+                    AND tsdpd.DLVR_IN_FG = #{dlvrInFg}
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                   AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                   AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (SELECT PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS tmpc
+                                               WHERE tmpc.STORE_CD = tsdpd.STORE_CD
+                                          START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                 AND tmpc.STORE_CD = tsdpd.STORE_CD
+                                          CONNECT BY
+                                               PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                 AND tmpc.STORE_CD = tsdpd.STORE_CD
+                                                )
+                </if>
+                GROUP BY tsdpd.DLVR_PACK_FG
+                ORDER BY tsdpd.DLVR_PACK_FG
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tsdpd.DLVR_PACK_FG,
+                       SUM(tsdpd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                       SUM(tsdpd.TOT_DC_AMT) AS TOT_DC_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) - SUM(tsdpd.TOT_VAT_AMT) AS TOT_GA_AMT,
+                       SUM(tsdpd.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                       SUM(tsdpd.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                       SUM(tsdpd.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                       SUM(tsdpd.PAY_AMT_${item})
+                </foreach> AS TOT_PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                       SUM(tsdpd.PAY_AMT_${item}) AS PAY${item}
+                </foreach>
+                  FROM TB_SL_DAILY_PROD_DLVR tsdpd,
+                       TB_MS_PRODUCT tmp
+                 WHERE tsdpd.STORE_CD = #{storeCd}
+                   AND tsdpd.STORE_CD = tmp.STORE_CD
+                   AND tsdpd.PROD_CD      = tmp.PROD_CD
+                   AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test="dlvrPackFg != null and dlvrPackFg != ''">
+                   AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
+                </if>
+                <if test="dlvrInFg != null and dlvrInFg != ''">
+                   AND tsdpd.DLVR_IN_FG = #{dlvrInFg}
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                   AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                   AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                   AND tmp.PROD_CLASS_CD IN (SELECT PROD_CLASS_CD
+                                               FROM TB_MS_PRODUCT_CLASS
+                                              WHERE STORE_CD = #{storeCd}
+                                         START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                AND STORE_CD = #{storeCd}
+                                         CONNECT BY
+                                              PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                AND STORE_CD = #{storeCd}
+                                                )
+                </if>
+                GROUP BY tsdpd.DLVR_PACK_FG
+                ORDER BY tsdpd.DLVR_PACK_FG
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품별 탭 - 상품별 그리드 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD_DLVR, TB_HQ_PRODUCT
+                   TB_SL_DAILY_PROD_DLVR, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD
+        PARAM    : dlvrFgVO
+        COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
+    -->
+    <select id="getProd"  parameterType="dlvrFgVO" resultType="DefaultMap">
+        /* DlvrFgMapper.getProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT tsdpd.DLVR_PACK_FG,
+                       tsdpd.PROD_CD,
+                           tmp.PROD_NM,
+                       NVL(tmpb.BARCD_CD, '') AS BAR_CD,
+                       SUM(tsdpd.TOT_SALE_QTY) AS SALE_QTY,
+                       SUM(tsdpd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                       SUM(tsdpd.TOT_DC_AMT) AS TOT_DC_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) - SUM(tsdpd.TOT_VAT_AMT) AS TOT_GA_AMT,
+                       SUM(tsdpd.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                       SUM(tsdpd.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                       SUM(tsdpd.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                   <foreach collection="arrPayCol" item="item" separator="+">
+                       SUM(tsdpd.PAY_AMT_${item})
+                   </foreach> AS TOT_PAY_AMT,
+                   <foreach collection="arrPayCol" item="item" separator=",">
+                       SUM(tsdpd.PAY_AMT_${item}) AS PAY${item}
+                   </foreach>
+                  FROM TB_SL_DAILY_PROD_DLVR tsdpd,
+                       TB_MS_PRODUCT tmp,
+                       TB_MS_PRODUCT_BARCD tmpb
+                 WHERE tsdpd.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND tsdpd.STORE_CD     = tmp.STORE_CD
+                   AND tsdpd.PROD_CD      = tmp.PROD_CD
+                   AND tsdpd.STORE_CD     = tmpb.STORE_CD(+)
+                   AND tsdpd.PROD_CD      = tmpb.PROD_CD(+)
+                   AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCd != null and storeCd != ""'>
+                   AND tsdpd.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="dlvrPackFg != null and dlvrPackFg != ''">
+                   AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
+                </if>
+                <if test="dlvrInFg != null and dlvrInFg != ''">
+                   AND tsdpd.DLVR_IN_FG = #{dlvrInFg}
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                   AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                   AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                   AND tmp.PROD_CLASS_CD IN (SELECT PROD_CLASS_CD
+                                               FROM TB_MS_PRODUCT_CLASS tmpc
+                                              WHERE tmpc.STORE_CD = tsdpd.STORE_CD
+                                         START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                AND tmpc.STORE_CD = tsdpd.STORE_CD
+                                         CONNECT BY
+                                              PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                AND tmpc.STORE_CD = tsdpd.STORE_CD
+                                                )
+                </if>
+                GROUP BY tsdpd.DLVR_PACK_FG, tsdpd.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD
+                ORDER BY tsdpd.DLVR_PACK_FG, tsdpd.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tsdpd.DLVR_PACK_FG,
+                       tsdpd.PROD_CD,
+                       tmp.PROD_NM,
+                       NVL(tmpb.BARCD_CD, '') AS BAR_CD,
+                       SUM(tsdpd.TOT_SALE_QTY) AS SALE_QTY,
+                       SUM(tsdpd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                       SUM(tsdpd.TOT_DC_AMT) AS TOT_DC_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) - SUM(tsdpd.TOT_VAT_AMT) AS TOT_GA_AMT,
+                       SUM(tsdpd.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                       SUM(tsdpd.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                       SUM(tsdpd.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                    SUM(tsdpd.PAY_AMT_${item})
+                </foreach> AS TOT_PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                       SUM(tsdpd.PAY_AMT_${item}) AS PAY${item}
+                </foreach>
+                  FROM TB_SL_DAILY_PROD_DLVR tsdpd,
+                       TB_MS_PRODUCT tmp,
+                       TB_MS_PRODUCT_BARCD tmpb
+                 WHERE tsdpd.STORE_CD = #{storeCd}
+                   AND tsdpd.STORE_CD = tmp.STORE_CD
+                   AND tsdpd.PROD_CD  = tmp.PROD_CD
+                   AND tsdpd.STORE_CD = tmpb.STORE_CD(+)
+                   AND tsdpd.PROD_CD  = tmpb.PROD_CD(+)
+                   AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test="dlvrPackFg != null and dlvrPackFg != ''">
+                   AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
+                </if>
+                <if test="dlvrInFg != null and dlvrInFg != ''">
+                   AND tsdpd.DLVR_IN_FG = #{dlvrInFg}
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                   AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                   AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                   AND tmp.PROD_CLASS_CD IN (SELECT PROD_CLASS_CD
+                                               FROM TB_MS_PRODUCT_CLASS
+                                              WHERE STORE_CD = #{storeCd}
+                                         START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                AND STORE_CD = #{storeCd}
+                                         CONNECT BY
+                                              PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                AND STORE_CD = #{storeCd}
+                                                )
+                </if>
+                GROUP BY tsdpd.DLVR_PACK_FG, tsdpd.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD
+                ORDER BY tsdpd.DLVR_PACK_FG, tsdpd.PROD_CD
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 상품별 탭 - 상품별(상세) 그리드 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD_DLVR, TB_HQ_PRODUCT
+                   TB_SL_DAILY_PROD_DLVR, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD
+        PARAM    : dlvrFgVO
+        COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
+    -->
+    <select id="getProdDtl"  parameterType="dlvrFgVO" resultType="DefaultMap">
+        /* DlvrFgMapper.getProdDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT tsdpd.DLVR_PACK_FG,
+                       tsdpd.DLVR_IN_FG,
+                       tsdpd.PROD_CD,
+                       tmp.PROD_NM,
+                       NVL(tmpb.BARCD_CD, '') AS BAR_CD,
+                       SUM(tsdpd.TOT_SALE_QTY) AS SALE_QTY,
+                       SUM(tsdpd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                       SUM(tsdpd.TOT_DC_AMT) AS TOT_DC_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) - SUM(tsdpd.TOT_VAT_AMT) AS TOT_GA_AMT,
+                       SUM(tsdpd.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                       SUM(tsdpd.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                       SUM(tsdpd.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                    <foreach collection="arrPayCol" item="item" separator="+">
+                        SUM(tsdpd.PAY_AMT_${item})
+                    </foreach> AS TOT_PAY_AMT,
+                    <foreach collection="arrPayCol" item="item" separator=",">
+                       SUM(tsdpd.PAY_AMT_${item}) AS PAY${item}
+                    </foreach>
+                  FROM TB_SL_DAILY_PROD_DLVR tsdpd,
+                       TB_MS_PRODUCT tmp,
+                       TB_MS_PRODUCT_BARCD tmpb
+                 WHERE tsdpd.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND tsdpd.STORE_CD     = tmp.STORE_CD
+                   AND tsdpd.PROD_CD      = tmp.PROD_CD
+                   AND tsdpd.STORE_CD     = tmpb.STORE_CD(+)
+                   AND tsdpd.PROD_CD      = tmpb.PROD_CD(+)
+                   AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCd != null and storeCd != ""'>
+                   AND tsdpd.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="dlvrPackFg != null and dlvrPackFg != ''">
+                   AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
+                </if>
+                <if test="dlvrInFg != null and dlvrInFg != ''">
+                   AND tsdpd.DLVR_IN_FG = #{dlvrInFg}
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                   AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                   AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                   AND tmp.PROD_CLASS_CD IN (SELECT PROD_CLASS_CD
+                                               FROM TB_MS_PRODUCT_CLASS tmpc
+                                              WHERE tmpc.STORE_CD = tsdpd.STORE_CD
+                                              START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                AND tmpc.STORE_CD = tsdpd.STORE_CD
+                                         CONNECT BY
+                                              PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                AND tmpc.STORE_CD = tsdpd.STORE_CD
+                                                )
+                </if>
+                GROUP BY tsdpd.DLVR_PACK_FG, tsdpd.DLVR_IN_FG, tsdpd.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD
+                ORDER BY tsdpd.DLVR_PACK_FG, tsdpd.DLVR_IN_FG, tsdpd.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tsdpd.DLVR_PACK_FG,
+                       tsdpd.DLVR_IN_FG,
+                       tsdpd.PROD_CD,
+                       tmp.PROD_NM,
+                       NVL(tmpb.BARCD_CD, '') AS BAR_CD,
+                       SUM(tsdpd.TOT_SALE_QTY) AS SALE_QTY,
+                       SUM(tsdpd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                       SUM(tsdpd.TOT_DC_AMT) AS TOT_DC_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                       SUM(tsdpd.REAL_SALE_AMT) - SUM(tsdpd.TOT_VAT_AMT) AS TOT_GA_AMT,
+                       SUM(tsdpd.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                       SUM(tsdpd.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                       SUM(tsdpd.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                    <foreach collection="arrPayCol" item="item" separator="+">
+                       SUM(tsdpd.PAY_AMT_${item})
+                    </foreach> AS TOT_PAY_AMT,
+                    <foreach collection="arrPayCol" item="item" separator=",">
+                       SUM(tsdpd.PAY_AMT_${item}) AS PAY${item}
+                    </foreach>
+                  FROM TB_SL_DAILY_PROD_DLVR tsdpd,
+                       TB_MS_PRODUCT tmp,
+                       TB_MS_PRODUCT_BARCD tmpb
+                 WHERE tsdpd.STORE_CD = #{storeCd}
+                   AND tsdpd.STORE_CD = tmp.STORE_CD
+                   AND tsdpd.PROD_CD      = tmp.PROD_CD
+                   AND tsdpd.STORE_CD = tmpb.STORE_CD(+)
+                   AND tsdpd.PROD_CD      = tmpb.PROD_CD(+)
+                   AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test="dlvrPackFg != null and dlvrPackFg != ''">
+                   AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
+                </if>
+                <if test="dlvrInFg != null and dlvrInFg != ''">
+                   AND tsdpd.DLVR_IN_FG = #{dlvrInFg}
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                   AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                   AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                   AND tmp.PROD_CLASS_CD IN (SELECT PROD_CLASS_CD
+                                               FROM TB_MS_PRODUCT_CLASS
+                                              WHERE STORE_CD = #{storeCd}
+                                         START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                AND STORE_CD = #{storeCd}
+                                         CONNECT BY
+                                              PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+                GROUP BY tsdpd.DLVR_PACK_FG, tsdpd.DLVR_IN_FG, tsdpd.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD
+                ORDER BY tsdpd.DLVR_PACK_FG, tsdpd.DLVR_IN_FG, tsdpd.PROD_CD
+            </when>
+        </choose>
+    </select>
+</mapper>

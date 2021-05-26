@@ -340,6 +340,28 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     }, 10);
   };
 
+  // 조회조건내역 엑셀 다운로드
+  $scope.excelDownloadCondition = function () {
+    // 파라미터
+    var params = {};
+    // 등록일자 '전체기간' 선택에 따른 params
+    if(!$scope.isChecked){
+      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    }
+    params.excelGubun = 'C';
+    params.prodCd = $scope.prodCd;
+    params.prodNm = $scope.prodNm;
+    params.prodClassCd = $scope.prodClassCd;
+    params.barCd = $scope.barCd;
+    params.useYn = $scope.useYn;
+    params.hqBrandNm = $scope.hqBrandNm;
+
+    $scope._popConfirm(messages["prod.totalExceDownload"], function() {
+      $scope._broadcast('totalExcelCtrl', params);
+    });
+  };
+
   // 전체 엑셀 다운로드
   $scope.excelDownloadTotal = function () {
     // 파라미터
@@ -349,6 +371,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
+    params.excelGubun = 'T';
 
     $scope._popConfirm(messages["prod.totalExceDownload"], function() {
       $scope._broadcast('totalExcelCtrl', params);
@@ -377,6 +400,7 @@ app.controller('totalExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
     var params       = {};
     params.startDate = data.startDate;
     params.endDate = data.endDate;
+    params.excelGubun = data.excelGubun;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/base/prod/prod/prod/getProdExcelList.sb", params, function() {
@@ -384,7 +408,12 @@ app.controller('totalExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
         return false;
       }
-
+      var excelGubun;
+      if(data.excelGubun == 'C'){
+        excelGubun = '(조회조건)_';
+      } else if(data.excelGubun == 'T'){
+        excelGubun = '(전체)_';
+      }
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
       $timeout(function () {
         wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
@@ -393,7 +422,7 @@ app.controller('totalExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
           includeColumns      : function (column) {
             return column.visible;
           }
-        }, messages["prod.prodInfo"] + '(전체)_' + getCurDateTime() +'.xlsx', function () {
+        }, messages["prod.prodInfo"] + excelGubun + getCurDateTime() +'.xlsx', function () {
           $timeout(function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
           }, 10);
