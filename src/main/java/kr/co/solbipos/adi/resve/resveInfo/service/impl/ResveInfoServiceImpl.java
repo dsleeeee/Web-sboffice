@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @Class Name : ResveInfoServiceImpl.java
- * @Description : 부가서비스 > 게시판 > 일반게시판
+ * @Description : 부가서비스 > 예약관리 > 예약현황
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
