@@ -140,30 +140,20 @@
                 is-editable="false"
                 initialized="_initComboBox(s)">
         </wj-combo-box>
-        <%-- 엑셀 다운로드 //TODO --%>
-        <%--
-        <button class="btn_skyblue fr" id="excelBtn">
-          <s:message code="cmm.excel.down" />
+        <%-- 전체상품엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
+        <%-- 조회조건내역엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadCondition()" ><s:message code="cmm.excel.downCondition"/></button>
+        <%-- 상품엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
+        <%-- 신규상품등록 --%>
+        <button class="btn_skyblue ml5 fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
+            <s:message code="prod.title.addProd" />
         </button>
-        --%>
-
-        <div class="mt20 updownSet oh">
-            <div class="txtIn">
-                <button class="btn_skyblue" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
-                    <s:message code="prod.title.storeProdBatch" />
-                </button>
-                <button class="btn_skyblue" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
-                    <s:message code="prod.title.addProd" />
-                </button>
-                <%-- 상품엑셀다운로드 --%>
-                <button class="btn_skyblue" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
-                <%-- 조회조건내역엑셀다운로드 --%>
-                <button class="btn_skyblue" ng-click="excelDownloadCondition()" ><s:message code="cmm.excel.downCondition"/></button>
-                <%-- 전체상품엑셀다운로드 --%>
-                <button class="btn_skyblue" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
-
-            </div>
-        </div>
+        <%-- 매장상품일괄등록 --%>
+        <button class="btn_skyblue ml5 fr" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
+            <s:message code="prod.title.storeProdBatch" />
+        </button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -186,6 +176,7 @@
                 <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true"></wj-flex-grid-column>
                 <c:if test="${orgnFg == 'HQ'}">
                     <wj-flex-grid-column header="<s:message code="prod.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
@@ -202,7 +193,6 @@
                 <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" visible="false"></wj-flex-grid-column>
-
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -241,6 +231,7 @@
                 <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true"></wj-flex-grid-column>
                 <c:if test="${orgnFg == 'HQ'}">
                     <wj-flex-grid-column header="<s:message code="prod.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>

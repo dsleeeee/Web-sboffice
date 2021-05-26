@@ -43,7 +43,8 @@
                 thp.PO_UNIT_FG,
                 thp.REG_DT,
                 thp.USE_YN,
-                (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD ) AS STORE_CNT
+                (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD ) AS STORE_CNT,
+                thpb.BARCD_CD AS BAR_CD
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                 TB_HQ_PRODUCT thp
@@ -51,17 +52,13 @@
                 SELECT
                 HQ_OFFICE_CD,
                 PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_HQ_PRODUCT_SALE_PRICE
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_HQ_PRODUCT_SALE_PRICE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
                 AND SALE_PRC_FG = '1'
                 GROUP BY
                 HQ_OFFICE_CD, PROD_CD
@@ -71,12 +68,15 @@
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
                 thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
-                WHERE
-                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
+                thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD = thp.PROD_CD
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                         ]]>
                     </if>
                 </if>
@@ -87,29 +87,17 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND EXISTS (
-                    SELECT 1
-                    FROM
-                    TB_HQ_PRODUCT_BARCD
-                    WHERE
-                    HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                    AND PROD_CD = thp.PROD_CD
-                    AND BARCD_CD = #{barCd}
-                    ) --바코드
+                    AND thp.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM
-                    TB_HQ_PRODUCT_CLASS
-                    WHERE
-                    HQ_OFFICE_CD = #{hqOfficeCd}
-                    START WITH
-                    PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    CONNECT BY
-                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    )
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -142,7 +130,8 @@
                 tmp.PO_UNIT_FG,
                 tmp.REG_DT,
                 tmp.USE_YN,
-                tmp.REG_FG
+                tmp.REG_FG,
+                tmpb.BARCD_CD AS BAR_CD
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                 TB_MS_PRODUCT tmp
@@ -150,17 +139,13 @@
                 SELECT
                 STORE_CD,
                 PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_MS_PRODUCT_SALE_PRICE
-                WHERE
-                STORE_CD = #{storeCd}
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
                 <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
                 AND SALE_PRC_FG = '1'
                 GROUP BY
                 STORE_CD, PROD_CD
@@ -172,12 +157,15 @@
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
                 thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                 AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
-                WHERE
-                tmp.STORE_CD = #{storeCd}
+                LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
+                tmpb.STORE_CD = tmp.STORE_CD
+                AND tmpb.PROD_CD = tmp.PROD_CD
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                            AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                         ]]>
                     </if>
                 </if>
@@ -188,29 +176,17 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND EXISTS (
-                    SELECT 1
-                    FROM
-                    TB_MS_PRODUCT_BARCD
-                    WHERE
-                    STORE_CD = tmp.STORE_CD
-                    AND PROD_CD = tmp.PROD_CD
-                    AND BARCD_CD = #{barCd}
-                    ) --바코드
+                    AND tmp.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM
-                    TB_MS_PRODUCT_CLASS
-                    WHERE
-                    STORE_CD = #{storeCd}
-                    START WITH
-                    PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY
-                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
-                    )
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
@@ -220,7 +196,6 @@
             </when>
         </choose>
     </select>
-
 
     <!-- 상품 조회(엑셀다운로드용) -->
     <!--
@@ -245,25 +220,21 @@
                 thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
                 thp.PO_UNIT_FG,
                 thp.USE_YN,
-                (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD )
-                AS STORE_CNT
+                (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD) AS STORE_CNT,
+                thpb.BARCD_CD AS BAR_CD
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
                 SELECT
                 HQ_OFFICE_CD,
                 PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_HQ_PRODUCT_SALE_PRICE
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_HQ_PRODUCT_SALE_PRICE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
                 AND SALE_PRC_FG = '1'
                 GROUP BY
                 HQ_OFFICE_CD, PROD_CD
@@ -273,12 +244,15 @@
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
                 thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
-                WHERE
-                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
+                thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD = thp.PROD_CD
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                         ]]>
                     </if>
                 </if>
@@ -289,29 +263,17 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND EXISTS (
-                    SELECT 1
-                    FROM
-                    TB_HQ_PRODUCT_BARCD
-                    WHERE
-                    HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                    AND PROD_CD = thp.PROD_CD
-                    AND BARCD_CD = #{barCd}
-                    ) --바코드
+                    AND thp.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM
-                    TB_HQ_PRODUCT_CLASS
-                    WHERE
-                    HQ_OFFICE_CD = #{hqOfficeCd}
-                    START WITH
-                    PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    CONNECT BY
-                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    )
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -333,24 +295,21 @@
                 NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                 tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
                 tmp.PO_UNIT_FG,
-                tmp.USE_YN
+                tmp.USE_YN,
+                tmpb.BARCD_CD AS BAR_CD
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
                 SELECT
                 STORE_CD,
                 PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                ORDER BY
-                START_DATE DESC ) AS SALE_UPRC
-                FROM
-                TB_MS_PRODUCT_SALE_PRICE
-                WHERE
-                STORE_CD = #{storeCd}
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
                 <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
                 AND SALE_PRC_FG = '1'
                 GROUP BY
                 STORE_CD, PROD_CD
@@ -362,12 +321,15 @@
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
                 thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                 AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
-                WHERE
-                tmp.STORE_CD = #{storeCd}
+                LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
+                tmpb.STORE_CD = tmp.STORE_CD
+                AND tmpb.PROD_CD = tmp.PROD_CD
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                            AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                         ]]>
                     </if>
                 </if>
@@ -378,29 +340,17 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND EXISTS (
-                    SELECT 1
-                    FROM
-                    TB_MS_PRODUCT_BARCD
-                    WHERE
-                    STORE_CD = tmp.STORE_CD
-                    AND PROD_CD = tmp.PROD_CD
-                    AND BARCD_CD = #{barCd}
-                    ) --바코드
+                    AND tmp.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM
-                    TB_MS_PRODUCT_CLASS
-                    WHERE
-                    STORE_CD = #{storeCd}
-                    START WITH
-                    PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY
-                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
-                    )
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
@@ -474,9 +424,9 @@
                 FROM TB_HQ_PRODUCT_SALE_PRICE
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
                 AND SALE_PRC_FG = '1'
                 GROUP BY HQ_OFFICE_CD, PROD_CD
                 ) thpsp ON
@@ -568,9 +518,9 @@
                 FROM TB_MS_PRODUCT_SALE_PRICE
                 WHERE STORE_CD = #{storeCd}
                 <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
                 AND SALE_PRC_FG = '1'
                 GROUP BY STORE_CD, PROD_CD
                 ) tmpsp ON
