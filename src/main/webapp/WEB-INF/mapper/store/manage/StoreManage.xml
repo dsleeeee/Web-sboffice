@@ -1499,7 +1499,9 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            REG_FG,
+            MAP_PROD_CD
         )
         SELECT #{storeCd},
                PROD_CD,
@@ -1538,7 +1540,9 @@
                #{regDt},
                #{regId},
                #{modDt},
-               #{modId}
+               #{modId},
+               REG_FG,
+               MAP_PROD_CD
           FROM TB_MS_PRODUCT
          WHERE STORE_CD = #{copyStoreCd}
     </insert>
