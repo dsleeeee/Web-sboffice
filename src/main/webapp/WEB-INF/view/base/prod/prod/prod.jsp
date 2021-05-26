@@ -156,9 +156,11 @@
                     <s:message code="prod.title.addProd" />
                 </button>
                 <%-- 상품엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
+                <button class="btn_skyblue" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
+                <%-- 조회조건내역엑셀다운로드 --%>
+                <button class="btn_skyblue" ng-click="excelDownloadCondition()" ><s:message code="cmm.excel.downCondition"/></button>
                 <%-- 전체상품엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
+                <button class="btn_skyblue" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
 
             </div>
         </div>
@@ -265,7 +267,7 @@
     var prodNoEnvFg = "${prodNoEnvFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.03" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

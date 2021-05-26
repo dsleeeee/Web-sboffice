@@ -187,6 +187,9 @@ public class ProdVO extends PageVO {
     /** 상품등록구분 */
     private String regFg;
 
+    /** 엑셀 다운로드 구분 */
+    private String excelGubun;
+
     /**
      * @return the hqOfficeCd
      */
@@ -931,5 +934,13 @@ public class ProdVO extends PageVO {
 
     public void setRegFg(String regFg) {
         this.regFg = regFg;
+    }
+
+    public String getExcelGubun() {
+        return excelGubun;
+    }
+
+    public void setExcelGubun(String excelGubun) {
+        this.excelGubun = excelGubun;
     }
 }
