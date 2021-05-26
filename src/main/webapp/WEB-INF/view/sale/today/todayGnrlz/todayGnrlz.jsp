@@ -162,7 +162,7 @@
     <%-- 상품별 매출현황 --%>
     <div class="w100 mt10" ng-controller="todayGnrlzProdCtrl">
       <div class="oh sb-select mb10">
-       ` <span class="fl bk lh30"><s:message code='todayGnrlz.subTitleProd'/></span>
+          <span class="fl bk lh30"><s:message code='todayGnrlz.subTitleProd'/></span>
         <%-- 상품별 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadProd()"><s:message code="cmm.excel.down"/></button>
       </div>
