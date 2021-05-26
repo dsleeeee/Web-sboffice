@@ -193,7 +193,7 @@
 
     <%-- 상품유형 구분 --%>
     var prodTypeFgData = ${ccu.getCommCodeExcpAll("008")};
-    <%-- 판매상품여부 구분 --%>
+    <%-- 판매상품여부 --%>
     var saleProdYnData = ${ccu.getCommCodeExcpAll("067")};
     <%-- 발주상품 구분 --%>
     var poProdFgData = ${ccu.getCommCodeExcpAll("092")};
