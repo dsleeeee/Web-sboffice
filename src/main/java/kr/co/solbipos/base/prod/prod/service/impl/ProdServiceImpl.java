@@ -122,6 +122,15 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setHqOfficeCd(hqOfficeCd);
         prodVO.setStoreCd(storeCd);
 
+        if (prodVO.getExcelGubun().equals("T")) { // 전체 엑셀다운로드시(T) 조회조건 날림
+            prodVO.setProdCd(null);
+            prodVO.setProdNm(null);
+            prodVO.setProdClassCd(null);
+            prodVO.setBarCd(null);
+            prodVO.setUseYn(null);
+            prodVO.setHqBrandNm(null);
+        }
+
         /*
           단독매장의 경우 SALE_PRC_FG = '2'
           프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
