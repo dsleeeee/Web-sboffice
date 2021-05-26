@@ -185,6 +185,7 @@
   <%--//페이지 리스트--%>
 
 </div>
+
 <script>
   var priceEnvstVal = "${priceEnvstVal}";
   // console.log('priceEnvstVal >> ', priceEnvstVal);
@@ -194,4 +195,10 @@
     });
   });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20210426.01" charset="utf-8"></script>
+
+<script>
+  <%-- 가격관리구분 --%>
+  var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20210526.01" charset="utf-8"></script>

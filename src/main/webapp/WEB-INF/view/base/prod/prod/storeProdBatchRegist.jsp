@@ -108,4 +108,9 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210421.02" charset="utf-8"></script>
+<script>
+    <%-- 가격관리구분 --%>
+    var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.01" charset="utf-8"></script>

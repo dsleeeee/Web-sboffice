@@ -157,6 +157,8 @@
 
 <script type="text/javascript">
   var sysStatFg = ${ccu.getCommCode("005")};
+  <%-- 가격관리구분 --%>
+  var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210421.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.01" charset="utf-8"></script>

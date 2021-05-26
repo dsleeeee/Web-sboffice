@@ -31,12 +31,6 @@ var modeFg = [
   {"name":"절하","value":"2"}
 ];
 
-// 가격관리구분
-var prcCtrlFgData = [
-  {"name":"본사","value":"H"},
-  {"name":"매장","value":"S"}
-];
-
 /**
  * 상품별 판매가관리 그리드 생성
  */

@@ -13,12 +13,6 @@
  */
 var app = agrid.getApp();
 
-// 가격관리구분
-var prcCtrlFgData = [
-    {"name":"본사","value":"H"},
-    {"name":"매장","value":"S"}
-];
-
 app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
