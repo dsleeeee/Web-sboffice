@@ -573,6 +573,25 @@
             </tbody>
           </table>
         </div>
+      <%-- 기타정보 --%>
+      <h3 class="h3_tbl"><s:message code="prod.title.etcInfo"/></h3>
+      <div class="tblBr">
+        <table class="tblType01">
+          <colgroup>
+            <col width="15%"/>
+            <col width="85%"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <%-- 매핑상품코드 --%>
+            <th><s:message code="prod.mapProdCd"/></th>
+            <td>
+              <input type="text" id="_mapProdCd" name="mapProdCd" class="sb-input w100" ng-model="prodModifyInfo.mapProdCd"/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <%-- 비고 --%>
       <h3 class="h3_tbl"><s:message code="prod.title.remark"/></h3>
       <div class="tblBr">

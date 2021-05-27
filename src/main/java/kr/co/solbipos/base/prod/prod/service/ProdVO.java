@@ -190,6 +190,9 @@ public class ProdVO extends PageVO {
     /** 엑셀 다운로드 구분 */
     private String excelGubun;
 
+    /** 맵핑상품코드 */
+    private String mapProdCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -942,5 +945,13 @@ public class ProdVO extends PageVO {
 
     public void setExcelGubun(String excelGubun) {
         this.excelGubun = excelGubun;
+    }
+
+    public String getMapProdCd() {
+        return mapProdCd;
+    }
+
+    public void setMapProdCd(String mapProdCd) {
+        this.mapProdCd = mapProdCd;
     }
 }

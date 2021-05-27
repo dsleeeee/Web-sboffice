@@ -413,7 +413,8 @@
                 thpi.IMG_URL,
                 thvp.VENDR_CD,
                 thvp.VENDR_NM,
-                thp.PRC_CTRL_FG
+                thp.PRC_CTRL_FG,
+                thp.MAP_PROD_CD
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
@@ -507,7 +508,8 @@
                 tmpi.IMG_URL,
                 tmvp.VENDR_CD,
                 tmvp.VENDR_NM,
-                tmp.PRC_CTRL_FG
+                tmp.PRC_CTRL_FG,
+                tmp.MAP_PROD_CD
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
@@ -701,7 +703,8 @@
                 REMARK = #{remark},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId},
-                PRC_CTRL_FG = #{prcCtrlFg}
+                PRC_CTRL_FG = #{prcCtrlFg},
+                MAP_PROD_CD = #{mapProdCd}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -741,7 +744,8 @@
                 REG_ID,
                 MOD_DT,
                 MOD_ID,
-                PRC_CTRL_FG
+                PRC_CTRL_FG,
+                MAP_PROD_CD
                 ) VALUES (
                 #{hqOfficeCd},
                 #{prodCd},
@@ -779,7 +783,8 @@
                 #{regId},
                 #{modDt},
                 #{modId},
-                #{prcCtrlFg}
+                #{prcCtrlFg},
+                #{mapProdCd}
                 )
             </when>
             <!-- 매장 -->
@@ -826,7 +831,8 @@
                 USE_YN = #{useYn},
                 REMARK = #{remark},
                 MOD_DT = #{modDt},
-                MOD_ID = #{modId}
+                MOD_ID = #{modId},
+                MAP_PROD_CD = #{mapProdCd}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -867,7 +873,8 @@
                 REG_ID,
                 MOD_DT,
                 MOD_ID,
-                REG_FG
+                REG_FG,
+                MAP_PROD_CD
                 ) VALUES (
                 #{storeCd},
                 #{prodCd},
@@ -906,7 +913,8 @@
                 #{regId},
                 #{modDt},
                 #{modId},
-                'S'
+                'S',
+                #{mapProdCd}
                 )
             </when>
         </choose>
@@ -1352,7 +1360,8 @@
                     thp.REG_ID,
                     thp.MOD_DT,
                     thp.MOD_ID,
-                    thp.PRC_CTRL_FG
+                    thp.PRC_CTRL_FG,
+                    thp.MAP_PROD_CD
                FROM
                    TB_HQ_PRODUCT thp
                WHERE
@@ -1396,7 +1405,8 @@
                tmp.USE_YN              = thp.USE_YN,
                tmp.REMARK              = thp.REMARK,
                tmp.MOD_DT              = #{modDt},
-               tmp.MOD_ID              = #{modId}
+               tmp.MOD_ID              = #{modId},
+               tmp.MAP_PROD_CD         = thp.MAP_PROD_CD
         WHEN NOT MATCHED THEN
             INSERT
             (
@@ -1438,7 +1448,8 @@
                 tmp.REG_ID,
                 tmp.MOD_DT,
                 tmp.MOD_ID,
-                tmp.REG_FG
+                tmp.REG_FG,
+                tmp.MAP_PROD_CD
             )
             VALUES
             (
@@ -1481,7 +1492,8 @@
                 #{regId},
                 #{modDt},
                 #{modId},
-                'H' --상품등록구분 REG_FG(현재 등록매장수, 매장상품일괄등록 기능은 본사에만 기능있음)
+                'H', --상품등록구분 REG_FG(현재 등록매장수, 매장상품일괄등록 기능은 본사에만 기능있음)
+                thp.MAP_PROD_CD
             )
     </insert>
 
