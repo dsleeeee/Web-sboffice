@@ -354,6 +354,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
 //                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && hqProdEnvstVal == HqProdEnvFg.ALL) {
                 // 본사인 경우 매장에 수정정보 내려줌
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    // 상품정보 매장에 INSERT
                     String procResult = prodMapper.insertHqProdToStoreProd(prodVO);
 
                     // 상품분류 매장에 INSERT

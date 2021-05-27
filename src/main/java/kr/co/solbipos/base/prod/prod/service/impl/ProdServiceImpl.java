@@ -285,12 +285,14 @@ public class ProdServiceImpl implements ProdService {
             String procResult;
 
             if(prodExist == 0) {
+                // 상품정보 매장에 INSERT
                 procResult = prodMapper.insertHqProdToStoreProd(prodVO);
 
                 // 상품분류 매장에 INSERT
                 prodMapper.insertClsHqToStore(prodVO);
 
             } else {
+                // 상품정보 매장에 UPDATE
                 procResult = prodMapper.updateHqProdToStoreProd(prodVO);
 
                 // 상품분류 매장에 UPDATE
