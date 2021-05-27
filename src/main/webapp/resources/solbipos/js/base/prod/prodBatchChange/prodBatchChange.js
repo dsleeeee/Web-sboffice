@@ -171,6 +171,10 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
                 else if(chgGubun == "prcCtrlFgChg") {
                     $scope.flex.collectionView.items[i].prcCtrlFg = $scope.prcCtrlFgChg;
                 }
+                // 매핑상품코드
+                else if(chgGubun == "mapProdCdChg") {
+                    $scope.flex.collectionView.items[i].mapProdCd = $scope.mapProdCdChg;
+                }
             }
         }
         $scope.flex.refresh();

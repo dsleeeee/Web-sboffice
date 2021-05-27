@@ -31,7 +31,8 @@
                 thpb.BARCD_CD AS BAR_CD,
                 thp.SALE_PROD_YN,
                 thp.POINT_SAVE_YN,
-                thp.PRC_CTRL_FG
+                thp.PRC_CTRL_FG,
+                thp.MAP_PROD_CD
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
                 TB_HQ_PRODUCT_CLASS thpc,
@@ -67,6 +68,9 @@
                 <if test="prcCtrlFg != null and prcCtrlFg != ''">
                     AND thp.PRC_CTRL_FG = #{prcCtrlFg}
                 </if>
+                <if test="mapProdCd != null and mapProdCd != ''">
+                    AND thp.MAP_PROD_CD LIKE '%'|| #{mapProdCd} ||'%'
+                </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
@@ -85,7 +89,8 @@
                 tmp.SALE_PROD_YN,
                 tmp.POINT_SAVE_YN,
                 tmp.PRC_CTRL_FG,
-                tmp.REG_FG
+                tmp.REG_FG,
+                tmp.MAP_PROD_CD
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_PRODUCT_CLASS tmpc,
@@ -124,6 +129,9 @@
                 <if test="regFg != null and regFg != ''">
                     AND tmp.REG_FG = #{regFg}
                 </if>
+                <if test="mapProdCd != null and mapProdCd != ''">
+                    AND tmp.MAP_PROD_CD LIKE '%'|| #{mapProdCd} ||'%'
+                </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
@@ -150,6 +158,7 @@
                 SALE_PROD_YN = #{saleProdYn},
                 POINT_SAVE_YN = #{pointSaveYn},
                 PRC_CTRL_FG = #{prcCtrlFg},
+                MAP_PROD_CD = #{mapProdCd},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -164,6 +173,7 @@
                 SALE_PROD_YN = #{saleProdYn},
                 POINT_SAVE_YN = #{pointSaveYn},
                 PRC_CTRL_FG = #{prcCtrlFg},
+                MAP_PROD_CD = #{mapProdCd},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1

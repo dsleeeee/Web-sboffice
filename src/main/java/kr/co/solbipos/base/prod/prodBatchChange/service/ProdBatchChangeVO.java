@@ -51,23 +51,29 @@ public class ProdBatchChangeVO extends PageVO {
     /** 판매상품여부 */
     private String saleProdYn;
 
-    /** 포인트적립여부 */
-    private String pointSaveYn;
-
-    /** 가격관리구분 */
-    private String prcCtrlFg;
-
     /** 판매상품여부 */
     private String saleProdYnChg;
 
     /** 포인트적립여부 */
+    private String pointSaveYn;
+
+    /** 포인트적립여부 */
     private String pointSaveYnChg;
+
+    /** 가격관리구분 */
+    private String prcCtrlFg;
 
     /** 가격관리구분 */
     private String prcCtrlFgChg;
 
     /** 상품등록구분 */
     private String regFg;
+
+    /** 매핑상품코드 */
+    private String mapProdCd;
+
+    /** 매핑상품코드 */
+    private String mapProdCdChg;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -101,21 +107,21 @@ public class ProdBatchChangeVO extends PageVO {
 
     public void setSaleProdYn(String saleProdYn) { this.saleProdYn = saleProdYn; }
 
-    public String getPointSaveYn() { return pointSaveYn; }
-
-    public void setPointSaveYn(String pointSaveYn) { this.pointSaveYn = pointSaveYn; }
-
-    public String getPrcCtrlFg() { return prcCtrlFg; }
-
-    public void setPrcCtrlFg(String prcCtrlFg) { this.prcCtrlFg = prcCtrlFg; }
-
     public String getSaleProdYnChg() { return saleProdYnChg; }
 
     public void setSaleProdYnChg(String saleProdYnChg) { this.saleProdYnChg = saleProdYnChg; }
 
+    public String getPointSaveYn() { return pointSaveYn; }
+
+    public void setPointSaveYn(String pointSaveYn) { this.pointSaveYn = pointSaveYn; }
+
     public String getPointSaveYnChg() { return pointSaveYnChg; }
 
     public void setPointSaveYnChg(String pointSaveYnChg) { this.pointSaveYnChg = pointSaveYnChg; }
+
+    public String getPrcCtrlFg() { return prcCtrlFg; }
+
+    public void setPrcCtrlFg(String prcCtrlFg) { this.prcCtrlFg = prcCtrlFg; }
 
     public String getPrcCtrlFgChg() { return prcCtrlFgChg; }
 
@@ -127,5 +133,21 @@ public class ProdBatchChangeVO extends PageVO {
 
     public void setRegFg(String regFg) {
         this.regFg = regFg;
+    }
+
+    public String getMapProdCd() {
+        return mapProdCd;
+    }
+
+    public void setMapProdCd(String mapProdCd) {
+        this.mapProdCd = mapProdCd;
+    }
+
+    public String getMapProdCdChg() {
+        return mapProdCdChg;
+    }
+
+    public void setMapProdCdChg(String mapProdCdChg) {
+        this.mapProdCdChg = mapProdCdChg;
     }
 }
