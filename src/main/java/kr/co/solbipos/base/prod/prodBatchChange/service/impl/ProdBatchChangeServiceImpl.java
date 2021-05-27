@@ -90,6 +90,7 @@ public class ProdBatchChangeServiceImpl implements ProdBatchChangeService {
 
                  // 본사인 경우 매장에 수정정보 내려줌
                  if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                     // 상품정보 매장에 UPDATE
                      String procResult = prodMapper.updateHqProdToStoreProd(prodVO);
                  }
             }
