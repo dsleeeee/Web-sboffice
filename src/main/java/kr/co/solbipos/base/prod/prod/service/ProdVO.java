@@ -190,7 +190,7 @@ public class ProdVO extends PageVO {
     /** 엑셀 다운로드 구분 */
     private String excelGubun;
 
-    /** 맵핑상품코드 */
+    /** 매핑상품코드 */
     private String mapProdCd;
 
     /**
