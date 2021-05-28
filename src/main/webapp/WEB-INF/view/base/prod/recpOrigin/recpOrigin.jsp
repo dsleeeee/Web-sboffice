@@ -12,16 +12,40 @@
 <div id="recpOriginView" class="subCon" style="display: none;">
 
     <div ng-controller="recpOriginCtrl">
-        <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
-            <a href="#" class="open fl">${menuNm}</a>
+        <%--searchTbl--%>
+        <div class="searchBar">
+            <a href="#" class="open fl"><s:message code="recpOriginTab.recpOrigin"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('recpOriginCtrl',1)">
+                <button class="btn_blue mr3" id="btnSearch" ng-click="_pageView('recpOriginCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
         </div>
+
+        <table class="searchTbl">
+            <colgroup>
+                <col class="w10" />
+                <col class="w40" />
+                <col class="w10" />
+                <col class="w40" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <%-- 재료명 --%>
+                    <th><s:message code="recpOrigin.recipesNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" ng-model="recipesNm" />
+                    </td>
+                    <%-- 원산지명 --%>
+                    <th><s:message code="recpOrigin.orgplceNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" ng-model="orgplceNm" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <%--//searchTbl--%>
 
         <%-- left --%>
         <div class="wj-TblWrap mt20 mb20 w40 fl">
@@ -102,7 +126,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20210327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20210327.04" charset="utf-8"></script>
 
 <%-- 재료-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpProd.jsp">

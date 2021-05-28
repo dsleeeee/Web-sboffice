@@ -16,17 +16,17 @@ var app = agrid.getApp();
 app.controller('recpOriginTabCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
-        $("#recpOriginView").show();
-        $("#prodRecpOriginView").hide();
+        $("#prodRecpOriginView").show();
+        $("#recpOriginView").hide();
     };
 
     // 원산지 탭 보이기
     $scope.recpOriginShow = function () {
-        $("#recpOriginTab").addClass("on");
         $("#prodRecpOriginTab").removeClass("on");
+        $("#recpOriginTab").addClass("on");
 
-        $("#recpOriginView").show();
         $("#prodRecpOriginView").hide();
+        $("#recpOriginView").show();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("recpOriginCtrl");
@@ -35,11 +35,11 @@ app.controller('recpOriginTabCtrl', ['$scope', function ($scope) {
 
     // 상품-원산지관리 탭 보이기
     $scope.prodRecpOriginShow = function () {
-        $("#recpOriginTab").removeClass("on");
         $("#prodRecpOriginTab").addClass("on");
+        $("#recpOriginTab").removeClass("on");
 
-        $("#recpOriginView").hide();
         $("#prodRecpOriginView").show();
+        $("#recpOriginView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodRecpOriginCtrl");

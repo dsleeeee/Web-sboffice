@@ -13,11 +13,14 @@
 
     <div ng-controller="prodRecpOriginCtrl">
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="recpOriginTab.prodRecpOrigin" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('prodRecpOriginCtrl',1)">
+                <button class="btn_blue" id="btnRegist" ng-click="openOriginReg()">
+                    <s:message code="prodRecpOrigin.originReg" />
+                </button>
+                <button class="btn_blue mr3" id="btnSearch" ng-click="_pageView('prodRecpOriginCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -132,8 +135,7 @@
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
-                                initialized="_initComboBox(s)"
-                                selected-index="1">
+                                initialized="_initComboBox(s)">
                         </wj-combo-box>
                     </div>
                 </td>
@@ -142,7 +144,7 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w50 fl">
+        <div class="wj-TblWrap mt20 mb20 w30 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
                     <div class="updownSet oh mb10">
@@ -154,7 +156,7 @@
                     <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row">
                             <wj-flex-grid
-                                    autoGenerateColumns.="false"
+                                    autoGenerateColumns="false"
                                     control="flex"
                                     initialized="initGrid(s,e)"
                                     sticky-headers="true"
@@ -163,10 +165,10 @@
                                     item-formatter="_itemFormatter">
 
                                 <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.pathNm"/>" binding="pathNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpOriginCnt"/>" binding="recpOriginCnt" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.pathNm"/>" binding="pathNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.prodNm"/>" binding="prodNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpOriginCnt"/>" binding="recpOriginCnt" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
                                     <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandCdCombo" data-map="hqBrandFgMap" width="80" align="center"></wj-flex-grid-column>
                                 </c:if>
@@ -183,18 +185,17 @@
         <%--left--%>
     </div>
 
-    <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="prodRecpOriginDetailCtrl">
+    <%-- mid --%>
+    <div class="wj-TblWrap mt20 mb20 w35 fl" ng-controller="prodRecpOriginDetailCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
-            <s:message code="prodRecpOrigin.recpProd"/>
-            <label id="lblProd"></label>
-            <div class="updownSet oh mb10">
+            <div class="mb10" style="height: 15px;">
+                <label id="lblProd" style="font-size: 15px;"></label>
+            </div>
+            <div class="updownSet">
                 <%-- UP --%>
                 <button class="btn_up" id="btnProdUp" ng-click="rowMoveUp()"><s:message code="cmm.up" /></button>
                 <%-- DOWN --%>
                 <button class="btn_down" id="btnProdDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
-                <%-- 추가 --%>
-                <button class="btn_skyblue" id="btnProdRecpOriginDetailAdd" ng-click="add()"><s:message code='cmm.add' /></button>
                 <%-- 저장 --%>
                 <button class="btn_skyblue" id="btnProdRecpOriginDetailSave" ng-click="save()"><s:message code='cmm.save' /></button>
                 <%-- 삭제 --%>
@@ -216,8 +217,8 @@
                             <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesCd"/>" binding="recipesCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="200" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recpSeq"/>" binding="recpSeq" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -225,7 +226,67 @@
             </div>
         </div>
     </div>
-    <%--right--%>
+    <%-- mid --%>
+
+    <%-- right --%>
+    <div class="wj-TblWrap mt20 mb20 w35 fr" ng-controller="prodRecpOriginRegCtrl">
+        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+
+            <table class="tblType01">
+                <colgroup>
+                    <col class="w13" />
+                    <col class="w35" />
+                    <col class="w13" />
+                    <col class="w35" />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <%--재료명--%>
+                    <th><s:message code="prodRecpOrigin.recipesNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" ng-model="recipesNm" />
+                    </td>
+                    <%--원산지명--%>
+                    <th><s:message code="prodRecpOrigin.orgplceNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" ng-model="orgplceNm" />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="updownSet oh mb10">
+                <%-- 조회 --%>
+                <button class="btn_skyblue" ng-click="btnSearch()"><s:message code='cmm.search' /></button>
+                <%-- 추가 --%>
+                <button class="btn_skyblue" id="btnProdRecpOriginDetailAdd" ng-click="add()"><s:message code='cmm.add' /></button>
+            </div>
+            <div class="w100 mt10 mb20">
+                <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                    <wj-flex-grid
+                            autoGenerateColumns="false"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="data"
+                            item-formatter="_itemFormatter">
+
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                        <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
+                            <wj-flex-grid-column header="<s:message code="prodRecpOrigin.hqBrandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        </c:if>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesCd"/>" binding="recipesCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.recipesNm"/>" binding="recipesNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodRecpOrigin.orgplceNm"/>" binding="orgplceNm" width="200" is-read-only="true"></wj-flex-grid-column>
+
+                    </wj-flex-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%-- right --%>
 
 </div>
 
@@ -234,10 +295,10 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/prodRecpOrigin.js?ver=20210327.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/prodRecpOrigin.js?ver=20210327.04" charset="utf-8"></script>
 
-<%-- 재료 및 원산지 등록 팝업 --%>
-<c:import url="/WEB-INF/view/base/prod/recpOrigin/prodRecpOriginAdd.jsp">
+<%-- 원산지신규등록 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/recpOrigin/recpOriginReg.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

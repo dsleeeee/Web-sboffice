@@ -163,7 +163,23 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/recpOrigin/recpOrigin/getRecpOriginSave.sb", params, function(){ $scope.allSearch() });
+        $scope._save("/base/prod/recpOrigin/recpOrigin/getRecpOriginSave.sb", params, function(){
+
+            $scope.allSearch();
+
+            // 상품-원산지 관리 tab > 등록'/미등록 재료 리스트 초기화
+            var scopeMid = agrid.getScope('prodRecpOriginDetailCtrl');
+            scopeMid._gridDataInit();
+            scopeMid._broadcast('prodRecpOriginDetailCtrl', null);
+
+            var scopeRight = agrid.getScope('prodRecpOriginRegCtrl');
+            scopeRight._gridDataInit();
+            scopeRight._broadcast('prodRecpOriginRegCtrl', null);
+
+            // 재료명, 원사지명 조회조건 textbox 초기화
+            scopeRight.reset();
+
+        });
     };
 
     // 재조회
