@@ -9,19 +9,19 @@
 <div class="con">
     <div class="tabType1" ng-controller="recpOriginTabCtrl" ng-init="init()">
         <ul>
-            <%-- 원산지 --%>
-            <li>
-                <a id="recpOriginTab" href="#" class="on" ng-click="recpOriginShow()"><s:message code="recpOriginTab.recpOrigin"/></a>
-            </li>
             <%-- 상품-원산지관리 탭 --%>
             <li>
-                <a id="prodRecpOriginTab" href="#" ng-click="prodRecpOriginShow()"><s:message code="recpOriginTab.prodRecpOrigin"/></a>
+                <a id="prodRecpOriginTab" href="#" class="on" ng-click="prodRecpOriginShow()"><s:message code="recpOriginTab.prodRecpOrigin"/></a>
+            </li>
+            <%-- 원산지 --%>
+            <li>
+                 <a id="recpOriginTab" href="#" ng-click="recpOriginShow()"><s:message code="recpOriginTab.recpOrigin"/></a>
             </li>
         </ul>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginTab.js?ver=20210326.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginTab.js?ver=20210326.04" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 원산지 레이어 --%>

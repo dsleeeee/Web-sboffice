@@ -32,6 +32,12 @@
                 AND thpro.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thb.HQ_OFFICE_CD (+)= THPRO.HQ_OFFICE_CD
                 AND thb.HQ_BRAND_CD (+)= thpro.HQ_BRAND_CD
+                <if test="recipesNm != null and recipesNm != ''">
+                  AND thpro.RECIPES_NM LIKE '%' || #{recipesNm} || '%'
+                </if>
+                <if test="orgplceNm != null and orgplceNm != ''">
+                  AND thpro.ORGPLCE_NM LIKE '%' || #{orgplceNm} || '%'
+                </if>
                 ORDER BY thpro.RECIPES_CD
             </when>
             <!-- 매장 -->
@@ -43,6 +49,12 @@
                 FROM TB_MS_PRODUCT_RECP_ORIGIN tmpro
                 WHERE 1=1
                 AND tmpro.STORE_CD = #{storeCd}
+                <if test="recipesNm != null and recipesNm != ''">
+                  AND tmpro.RECIPES_NM LIKE '%' || #{recipesNm} || '%'
+                </if>
+                <if test="orgplceNm != null and orgplceNm != ''">
+                  AND tmpro.ORGPLCE_NM LIKE '%' || #{orgplceNm} || '%'
+                </if>
                 ORDER BY tmpro.RECIPES_CD
             </when>
         </choose>

@@ -151,6 +151,10 @@ public class RecpOriginServiceImpl implements RecpOriginService {
                 recpOriginVO.setRegId(sessionInfoVO.getUserId());
                 recpOriginVO.setRecpSeq("");
 
+                // 원산지출력순서 조회(자동채번)
+                String recpSeq = recpOriginMapper.getRecpSeq(recpOriginVO);
+                recpOriginVO.setRecpSeq(recpSeq);
+
                 procCnt = recpOriginMapper.getRecpProdSaveInsert(recpOriginVO);
 
             } else if (recpOriginVO.getStatus() == GridDataFg.DELETE) {
