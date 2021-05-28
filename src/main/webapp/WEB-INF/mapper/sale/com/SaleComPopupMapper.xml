@@ -1960,7 +1960,7 @@
     <select id="selectBillRtnPopCard" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.selectBillRtnPopCard */
 		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
-		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스취소', 2, '단말기취소') AS APPR_PROC_FG
+			, DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 		    , TSSPC.CARD_NO
 		    , TSSPC.INST_CNT
 		    , TSSPC.SALE_AMT
@@ -1987,7 +1987,7 @@
     <select id="selectBillRtnPopCash" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.selectBillRtnPopCash */
 		SELECT (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = #{storeCd} AND CORNR_CD = TSSPC.CORNR_CD) AS CORNR_NM
-		    , DECODE(TSSPC.APPR_PROC_FG, 1, '포스취소', 2, '단말기취소') AS APPR_PROC_FG
+			, DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 		    , TSSPC.CASH_BILL_CARD_NO
 		    , TSSPC.APPR_NO
 		    , TSSPC.SALE_AMT

@@ -66,7 +66,8 @@
         /* USE : PayInfoMapper.getCashList */
         <![CDATA[
         SELECT  tsspc.CORNR_CD, tmc.CORNR_NM
-        ,       tsspc.APPR_PROC_FG, tcn.NMCODE_NM AS APPR_PROC_NM
+        ,       tsspc.APPR_PROC_FG --, tcn.NMCODE_NM AS APPR_PROC_NM
+        ,       DECODE(tsspc.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_NM
         ,       tsspc.CASH_BILL_CARD_NO
         ,       tsspc.APPR_NO
         ,       tsspc.SALE_AMT AS APPR_AMT
@@ -94,8 +95,8 @@
         AND     tmc.CORNR_CD          (+) =   tsspc.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcvc.VAN_FG           (+) =   '01' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcvc.VAN_CD           (+) =   tsspc.VAN_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        AND     tcn.NMCODE_GRP_CD         =   '018'
-        AND     tcn.NMCODE_CD             =   tsspc.APPR_PROC_FG
+        AND     tcn.NMCODE_GRP_CD     (+)    =   '018'
+        AND     tcn.NMCODE_CD         (+)    =   tsspc.APPR_PROC_FG
         ]]>
     </select>
 
