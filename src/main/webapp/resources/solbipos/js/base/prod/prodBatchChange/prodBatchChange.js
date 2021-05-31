@@ -80,7 +80,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
                     var col = s.columns[e.col];
 
                     // 체크박스
-                    if (col.binding === "gChk" || col.binding === "saleProdYn" || col.binding === "pointSaveYn" || col.binding === "prcCtrlFg") {
+                    if (col.binding === "gChk" || col.binding === "saleProdYn" || col.binding === "pointSaveYn" || col.binding === "prcCtrlFg" || col.binding === "mapProdCd") {
                         var item = s.rows[e.row].dataItem;
 
                         // 값이 있으면 링크 효과
