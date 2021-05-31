@@ -2,7 +2,6 @@ package kr.co.solbipos.mobile.application.main.content.web;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.application.main.content.service.MobileContentService;
@@ -17,27 +16,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @Class Name : MobileContentController.java
- * @Description : 어플리케이션 > 메인 > 내용
+ * @Description : (모바일) 어플리케이션 > 메인 > 내용
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2021.03.10  이다솜      최초생성
+ * @ 2021.05.27  김설아      최초생성
  *
- * @author 솔비포스 WEB개발팀 이다솜
- * @since 2021.03.10
+ * @author 솔비포스 WEB개발팀 김설아
+ * @since 2021.05.27
  * @version 1.0
  * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Controller
 @RequestMapping(value = "/mobile/application/main/content")
 public class MobileContentController {
@@ -67,56 +64,34 @@ public class MobileContentController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        /** 공지사항 more 페이지이동 권한체크 */
-        String board_auth = "N";
-        // 세션 권한이 사용할 수 있는 메뉴 목록
-        List<ResrceInfoBaseVO> menuList = sessionInfoVO.getMenuData();
-        // url 값 비교
-        for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
-            String authUrl = resrceInfoBaseVO.getUrl();
-            if ( !isEmpty(authUrl) ) {
-                // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-                if ( authUrl.contains("?") ) {
-                    authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-                }
-                if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
-                    board_auth = "Y";
-                }
-            }
-        }
-        model.addAttribute("board_auth", board_auth);
-
         /** 총 매장수(전체, 오픈, 폐점, 중지, 데모) */
-        List<DefaultMap<String>> storeCntList = mobileContentService.getStoreCntList(sessionInfoVO);
+        List<DefaultMap<String>> storeCntList = mobileContentService.getMobileStoreCntList(sessionInfoVO);
         model.addAttribute("storeCntList", storeCntList);
 //        System.out.println("storeCntList : "+storeCntList);
 
         /** 총 포스수(전체, 오픈, 폐점, 중지, 데모) */
-        List<DefaultMap<String>> posCntList = mobileContentService.getPosCntList(sessionInfoVO);
+        List<DefaultMap<String>> posCntList = mobileContentService.getMobilePosCntList(sessionInfoVO);
         model.addAttribute("posCntList", posCntList);
 
         /** 주간매출(매장수/포스수) */
-        List<DefaultMap<String>> weekSaleList = mobileContentService.getWeekSaleList(sessionInfoVO);
+        List<DefaultMap<String>> weekSaleList = mobileContentService.getMobileWeekSaleList(sessionInfoVO);
         model.addAttribute("weekSaleList", weekSaleList);
 
         /** 공지사항 */
-        List<DefaultMap<String>> noticeList = mobileContentService.getNoticeList(sessionInfoVO);
+        List<DefaultMap<String>> noticeList = mobileContentService.getMobileNoticeList(sessionInfoVO);
         model.addAttribute("noticeList", noticeList);
 
         /** 주간 POS 설치현황(신규설치/재설치) */
-        List<DefaultMap<String>> weekPosInstList = mobileContentService.getWeekPosInstList(sessionInfoVO);
+        List<DefaultMap<String>> weekPosInstList = mobileContentService.getMobileWeekPosInstList(sessionInfoVO);
         model.addAttribute("weekPosInstList", weekPosInstList);
 
         /** 날씨 */
 
         /** 주간 POS 설치 상위 대리점 */
-        List<DefaultMap<String>> weekPosInstTopList = mobileContentService.getWeekPosInstTopList(sessionInfoVO);
+        List<DefaultMap<String>> weekPosInstTopList = mobileContentService.getMobileWeekPosInstTopList(sessionInfoVO);
         model.addAttribute("weekPosInstTopList", weekPosInstTopList);
 
-
-//        String pUserPwd = EncUtil.setEncSHA256("ckp" + "0000");  // 포스 패스워드
-
-        return "mobile/application/main/systemMain";
+        return "mobile/application/main/mobileSystemMain";
     }
 
     /**
@@ -132,49 +107,30 @@ public class MobileContentController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        /** 공지사항 more 페이지이동 권한체크 */
-        String board_auth = "N";
-        // 세션 권한이 사용할 수 있는 메뉴 목록
-        List<ResrceInfoBaseVO> menuList = sessionInfoVO.getMenuData();
-        // url 값 비교
-        for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
-            String authUrl = resrceInfoBaseVO.getUrl();
-            if ( !isEmpty(authUrl) ) {
-                // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-                if ( authUrl.contains("?") ) {
-                    authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-                }
-                if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
-                    board_auth = "Y";
-                }
-            }
-        }
-        model.addAttribute("board_auth", board_auth);
-
         /** 총 매장수(전체, 오픈, 폐점, 중지, 데모) */
-        List<DefaultMap<String>> storeCntList = mobileContentService.getStoreCntList(sessionInfoVO);
+        List<DefaultMap<String>> storeCntList = mobileContentService.getMobileStoreCntList(sessionInfoVO);
         model.addAttribute("storeCntList", storeCntList);
 
         /** 총 포스수(전체, 오픈, 폐점, 중지, 데모) */
-        List<DefaultMap<String>> posCntList = mobileContentService.getPosCntList(sessionInfoVO);
+        List<DefaultMap<String>> posCntList = mobileContentService.getMobilePosCntList(sessionInfoVO);
         model.addAttribute("posCntList", posCntList);
 
         /** 주간매출(매장수/포스수) */
-        List<DefaultMap<String>> weekSaleList = mobileContentService.getWeekSaleList(sessionInfoVO);
+        List<DefaultMap<String>> weekSaleList = mobileContentService.getMobileWeekSaleList(sessionInfoVO);
         model.addAttribute("weekSaleList", weekSaleList);
 
         /** 공지사항 */
-        List<DefaultMap<String>> noticeList = mobileContentService.getNoticeList(sessionInfoVO);
+        List<DefaultMap<String>> noticeList = mobileContentService.getMobileNoticeList(sessionInfoVO);
         model.addAttribute("noticeList", noticeList);
 
         /** 주간 POS 설치현황(신규설치/재설치) */
-        List<DefaultMap<String>> weekPosInstList = mobileContentService.getWeekPosInstList(sessionInfoVO);
+        List<DefaultMap<String>> weekPosInstList = mobileContentService.getMobileWeekPosInstList(sessionInfoVO);
         model.addAttribute("weekPosInstList", weekPosInstList);
 
         /** 날씨 */
 
         /** 주간 매출 상위 가맹점 */
-        List<DefaultMap<String>> weekSaleAgencyTopList = mobileContentService.getWeekSaleAgencyTopList(sessionInfoVO);
+        List<DefaultMap<String>> weekSaleAgencyTopList = mobileContentService.getMobileWeekSaleAgencyTopList(sessionInfoVO);
         model.addAttribute("weekSaleAgencyTopList", weekSaleAgencyTopList);
 
 
@@ -183,7 +139,7 @@ public class MobileContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        return "mobile/application/main/agencyMain";
+        return "mobile/application/main/mobileAgencyMain";
     }
 
 
@@ -200,78 +156,29 @@ public class MobileContentController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        /** 공지사항 more 페이지이동 권한체크 */
-        String board_auth = "N";
-        // 세션 권한이 사용할 수 있는 메뉴 목록
-        List<ResrceInfoBaseVO> menuList = sessionInfoVO.getMenuData();
-        // url 값 비교
-        for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
-            String authUrl = resrceInfoBaseVO.getUrl();
-            if ( !isEmpty(authUrl) ) {
-                // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-                if ( authUrl.contains("?") ) {
-                    authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-                }
-                if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
-                    board_auth = "Y";
-                }
-            }
-        }
-        model.addAttribute("board_auth", board_auth);
-
-        /** 매출현황 날짜 select box */
-        List<Map<String,String>> dateSelList1 = mobileContentService.getDateSelList(MainSrchFg.TYPE1);
-        model.addAttribute("dateSelList1", dateSelList1);
-        List<Map<String,String>> dateSelList2 = mobileContentService.getDateSelList(MainSrchFg.TYPE2);
-        model.addAttribute("dateSelList2", dateSelList2);
-
         /** 총 매장수(전체, 오픈, 폐점, 중지, 데모) */
-        List<DefaultMap<String>> storeCntList = mobileContentService.getStoreCntList(sessionInfoVO);
+        List<DefaultMap<String>> storeCntList = mobileContentService.getMobileStoreCntList(sessionInfoVO);
         model.addAttribute("storeCntList", storeCntList);
 
         /** 총 포스수(전체, 오픈, 폐점, 중지, 데모) */
-        List<DefaultMap<String>> posCntList = mobileContentService.getPosCntList(sessionInfoVO);
+        List<DefaultMap<String>> posCntList = mobileContentService.getMobilePosCntList(sessionInfoVO);
         model.addAttribute("posCntList", posCntList);
 
         /** 공지사항 */
-        List<DefaultMap<String>> noticeList = mobileContentService.getNoticeList(sessionInfoVO);
+        List<DefaultMap<String>> noticeList = mobileContentService.getMobileNoticeList(sessionInfoVO);
         model.addAttribute("noticeList", noticeList);
 
-        /** 매출현황 일별(1주) */
-//        List<DefaultMap<String>> saleWeekList = contentService.getSaleWeekList(sessionInfoVO);
-//        model.addAttribute("saleWeekList", saleWeekList);
+        /** 매출현황 */
+        List<DefaultMap<String>> saleWeekList = mobileContentService.getMobileSaleWeekList(sessionInfoVO);
+        model.addAttribute("saleWeekList", saleWeekList);
 
-        /** 매출현황 요일별(1개월) */
-//        List<DefaultMap<String>> saleMonthList = contentService.getSaleMonthList(sessionInfoVO);
-//        model.addAttribute("saleMonthList", saleMonthList);
-
-        /** 매출현황 월별(1년) */
-//        List<DefaultMap<String>> saleYearList = contentService.getSaleYearList(sessionInfoVO);
-//        model.addAttribute("saleYearList", saleYearList);
-
-        /** 매출 상위 상품 오늘 */
-//        List<DefaultMap<String>> saleProdDayList = contentService.getSaleProdDayList(sessionInfoVO);
-//        model.addAttribute("saleProdDayList", saleProdDayList);
-
-        /** 매출 상위 상품 1주일 */
-//        List<DefaultMap<String>> saleProdWeekList = contentService.getSaleProdWeekList(sessionInfoVO);
-//        model.addAttribute("saleProdWeekList", saleProdWeekList);
-
-        /** 매출 상위 상품 1개월 */
-//        List<DefaultMap<String>> saleProdMonthList = contentService.getSaleProdMonthList(sessionInfoVO);
-//        model.addAttribute("saleProdMonthList", saleProdMonthList);
-
-        /** 매출 상위 가맹점 오늘 */
-        List<DefaultMap<String>> saleStoreDayList = mobileContentService.getSaleStoreDayList(sessionInfoVO);
-        model.addAttribute("saleStoreDayList", saleStoreDayList);
+        /** 매출 상위 상품 */
+        List<DefaultMap<String>> saleProdWeekList = mobileContentService.getMobileSaleProdWeekList(sessionInfoVO);
+        model.addAttribute("saleProdWeekList", saleProdWeekList);
 
         /** 매출 상위 가맹점 1주일 */
-        List<DefaultMap<String>> saleStoreWeekList = mobileContentService.getSaleStoreWeekList(sessionInfoVO);
+        List<DefaultMap<String>> saleStoreWeekList = mobileContentService.getMobileSaleStoreWeekList(sessionInfoVO);
         model.addAttribute("saleStoreWeekList", saleStoreWeekList);
-
-        /** 매출 상위 가맹점 1개월 */
-        List<DefaultMap<String>> saleStoreMonthList = mobileContentService.getSaleStoreMonthList(sessionInfoVO);
-        model.addAttribute("saleStoreMonthList", saleStoreMonthList);
 
         /** 날씨 */
 
@@ -281,8 +188,7 @@ public class MobileContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        return "mobile/application/main/hedofcMain"; // 그래프
-//        return "application/main/hedofcMain_test"; // 이미지
+        return "mobile/application/main/mobileHedofcMain"; // 그래프
     }
 
 
@@ -299,66 +205,25 @@ public class MobileContentController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        /** 공지사항 more 페이지이동 권한체크 */
-        String board_auth = "N";
-        // 세션 권한이 사용할 수 있는 메뉴 목록
-        List<ResrceInfoBaseVO> menuList = sessionInfoVO.getMenuData();
-        // url 값 비교
-        for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {
-            String authUrl = resrceInfoBaseVO.getUrl();
-            if ( !isEmpty(authUrl) ) {
-                // 등록된 URL 에 파라미터가 있는 경우 파라미터 제거
-                if ( authUrl.contains("?") ) {
-                    authUrl = authUrl.substring(0, authUrl.indexOf("?"));
-                }
-                if ( authUrl.equals("/adi/board/board/01/list.sb") ) {
-                    board_auth = "Y";
-                }
-            }
-        }
-        model.addAttribute("board_auth", board_auth);
-
-        /** 매출현황 날짜 select box */
-        List<Map<String,String>> dateSelList1 = mobileContentService.getDateSelList(MainSrchFg.TYPE1);
-        model.addAttribute("dateSelList1", dateSelList1);
-        List<Map<String,String>> dateSelList2 = mobileContentService.getDateSelList(MainSrchFg.TYPE2);
-        model.addAttribute("dateSelList2", dateSelList2);
-
         /** 오늘의 매출건수 */
-        List<DefaultMap<String>> daySaleCntList = mobileContentService.getDaySaleCntList(sessionInfoVO);
+        List<DefaultMap<String>> daySaleCntList = mobileContentService.getMobileDaySaleCntList(sessionInfoVO);
         model.addAttribute("daySaleCntList", daySaleCntList);
 
         /** 오늘의 매출금액 */
-        List<DefaultMap<String>> daySaleAmtList = mobileContentService.getDaySaleAmtList(sessionInfoVO);
+        List<DefaultMap<String>> daySaleAmtList = mobileContentService.getMobileDaySaleAmtList(sessionInfoVO);
         model.addAttribute("daySaleAmtList", daySaleAmtList);
 
         /** 공지사항 */
-        List<DefaultMap<String>> noticeList = mobileContentService.getNoticeList(sessionInfoVO);
+        List<DefaultMap<String>> noticeList = mobileContentService.getMobileNoticeList(sessionInfoVO);
         model.addAttribute("noticeList", noticeList);
 
-        /** 매출현황 일별(1주) */
-//        List<DefaultMap<String>> saleWeekList = contentService.getSaleWeekList(sessionInfoVO);
-//        model.addAttribute("saleWeekList", saleWeekList);
+        /** 매출현황 */
+        List<DefaultMap<String>> saleWeekList = mobileContentService.getMobileSaleWeekList(sessionInfoVO);
+        model.addAttribute("saleWeekList", saleWeekList);
 
-        /** 매출현황 요일별(1개월) */
-//        List<DefaultMap<String>> saleMonthList = contentService.getSaleMonthList(sessionInfoVO);
-//        model.addAttribute("saleMonthList", saleMonthList);
-
-        /** 매출현황 월별(1년) */
-//        List<DefaultMap<String>> saleYearList = contentService.getSaleYearList(sessionInfoVO);
-//        model.addAttribute("saleYearList", saleYearList);
-
-        /** 매출 상위 상품 오늘 */
-//        List<DefaultMap<String>> saleProdDayList = contentService.getSaleProdDayList(sessionInfoVO);
-//        model.addAttribute("saleProdDayList", saleProdDayList);
-
-        /** 매출 상위 상품 1주일 */
-//        List<DefaultMap<String>> saleProdWeekList = contentService.getSaleProdWeekList(sessionInfoVO);
-//        model.addAttribute("saleProdWeekList", saleProdWeekList);
-
-        /** 매출 상위 상품 1개월 */
-//        List<DefaultMap<String>> saleProdMonthList = contentService.getSaleProdMonthList(sessionInfoVO);
-//        model.addAttribute("saleProdMonthList", saleProdMonthList);
+        /** 매출 상위 상품 */
+        List<DefaultMap<String>> saleProdWeekList = mobileContentService.getMobileSaleProdWeekList(sessionInfoVO);
+        model.addAttribute("saleProdWeekList", saleProdWeekList);
 
         /** 날씨 */
 
@@ -368,8 +233,7 @@ public class MobileContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        return "mobile/application/main/mrhstMain"; // 그래프
-//        return "application/main/mrhstMain_test"; // 이미지
+        return "mobile/application/main/mobileMrhstMain"; // 그래프
     }
 
 }

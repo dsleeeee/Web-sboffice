@@ -129,6 +129,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 .pdt5 {padding-top:5px;} .pdt10 {padding-top:10px;} .pdt20 {padding-top:20px;} .pdt30 {padding-top:30px;} .pdt40 {padding-top:40px;}
 .pdb5 {padding-bottom:5px;} .pdb10 {padding-bottom:10px;} .pdb15 {padding-bottom:15px;} .pdb20 {padding-bottom:20px;} .pdb30 {padding-bottom:30px;} .pdb40 {padding-bottom:40px;}
 
+/*button.btn_blue {background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:25px; padding:0 25px; font-size:1em; transition:all 0.2s;}*/
 button.btn_blue {background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:20px; padding:0 20px; font-size:0.8em; transition:all 0.2s;}
 button.btn_blue:hover {background:#174291; transition:all 0.2s;}
 
@@ -138,7 +139,8 @@ button.btn_skyblue:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
 button.btn_blk {background:#fff; border:1px solid #2e333f; color:#2e333f; border-radius:4px; line-height:30px; padding:0 20px; font-size:1em; transition:all 0.2s;}
 button.btn_blk:hover {background:#e8e8e8; color:#2e333f; transition:all 0.2s;}
 
-button.btn_gray {background:#aeaeae; color:#fff; border-radius:4px; line-height:30px; padding:0 30px; font-size:1em; transition:all 0.2s;}
+/*button.btn_gray {background:#aeaeae; color:#fff; border-radius:4px; line-height:30px; padding:0 30px; font-size:1em; transition:all 0.2s;}*/
+button.btn_gray {background:#aeaeae; color:#fff; border-radius:4px; line-height:20px; padding:0 20px; font-size:0.8em; transition:all 0.2s;}
 button.btn_gray:hover {background:#777; transition:all 0.2s;}
 
 a.btn_grayS {background:#888; color:#fff; display:inline-block; line-height:26px; padding:0 15px; font-size:1em; transition:all 0.2s;}
@@ -604,8 +606,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .stat_purple1 div p span:first-child {color:#222; background:#f3f3f3; padding:5px 20px 6px; border-radius:13px; display:inline-block; margin-top:20px;}
 .stat_purple1 div p span:last-child {color:#7460ee; display:block; padding-top:15px;}
 
-.stat_purple1_1 {padding:10px 20px 10px 20px;}
-.stat_purple1_1 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_purple1_1 {padding:15px 20px 10px 20px;}
+.stat_purple1_1 h2 {font-size:1.15em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
 .stat_purple1_1 h2 span {font-size:1em; color:#7460ee; font-weight:bold; float:right;}
 .stat_purple1_1 div {overflow:hidden;}
 .stat_purple1_1 div p span:first-child {color:#222; background:#f3f3f3; padding:5px 20px 6px; border-radius:13px; display:inline-block; margin-top:10px;}
@@ -620,8 +622,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .stat_purple2 div p span:first-child {color:#222; background:#f3f3f3; height:26px; line-height:26px; padding:0 20px 0; border-radius:13px; display:inline-block;}
 .stat_purple2 div p span:last-child {color:#7460ee; line-height:26px; float:right;}
 
-.stat_purple2_1 {padding:10px 20px 10px 20px;}
-.stat_purple2_1 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_purple2_1 {padding:15px 20px 10px 20px;}
+.stat_purple2_1 h2 {font-size:1.15em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
 .stat_purple2_1 h2 span {font-size:1em; color:#7460ee; font-weight:bold; float:right;}
 .stat_purple2_1 div {overflow:hidden; margin-top:20px;}
 .stat_purple2_1 div p {margin-bottom:10px;}
@@ -630,7 +632,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .stat_purple2_1 div p span:last-child {color:#7460ee; line-height:26px; float:right;}
 
 .stat_purple3 {padding:20px;}
-.stat_purple3 h2 {font-size:1.25em; color:#222; overflow:hidden; text-align:center;}
+.stat_purple3 h2 {font-size:1.15em; color:#222; overflow:hidden; text-align:center;}
 .stat_purple3 h2 span {font-size:1em; color:#7460ee; font-weight:bold; margin-top:20px; display:block; text-align:center;}
 
 /*통계_하늘색 : 포스수*/
@@ -641,8 +643,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .stat_sky1 div p span:first-child {color:#222; background:#f3f3f3; padding:5px 20px 6px; border-radius:13px; display:inline-block; margin-top:20px;}
 .stat_sky1 div p span:last-child {color:#26c6da; display:block; padding-top:15px;}
 
-.stat_sky1_1 {padding:10px 20px 10px 20px;}
-.stat_sky1_1 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_sky1_1 {padding:15px 20px 10px 20px;}
+.stat_sky1_1 h2 {font-size:1.15em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
 .stat_sky1_1 h2 span {font-size:1em; color:#26c6da; font-weight:bold; float:right;}
 .stat_sky1_1 div {overflow:hidden;}
 .stat_sky1_1 div p span:first-child {color:#222; background:#f3f3f3; padding:5px 20px 6px; border-radius:13px; display:inline-block; margin-top:10px;}
@@ -657,8 +659,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .stat_sky2 div p span:first-child {color:#222; background:#f3f3f3; height:26px; line-height:26px; padding:0 20px 0; border-radius:13px; display:inline-block;}
 .stat_sky2 div p span:last-child {color:#26c6da; line-height:26px; float:right;}
 
-.stat_sky2_1 {padding:10px 20px 10px 20px;}
-.stat_sky2_1 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
+.stat_sky2_1 {padding:15px 20px 10px 20px;}
+.stat_sky2_1 h2 {font-size:1.15em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px; overflow:hidden;}
 .stat_sky2_1 h2 span {font-size:1em; color:#26c6da; font-weight:bold; float:right;}
 .stat_sky2_1 div {overflow:hidden; margin-top:20px;}
 .stat_sky2_1 div p {margin-bottom:10px;}
@@ -666,8 +668,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .stat_sky2_1 div p span:first-child {color:#222; background:#f3f3f3; height:26px; line-height:26px; padding:0 20px 0; border-radius:13px; display:inline-block;}
 .stat_sky2_1 div p span:last-child {color:#26c6da; line-height:26px; float:right;}
 
-.stat_sky2_2 {padding:10px 20px 10px 20px;}
-.stat_sky2_2 h2 {font-size:1.25em; color:#222; padding-bottom:10px; overflow:hidden;}
+.stat_sky2_2 {padding:20px 20px 10px 20px;}
+.stat_sky2_2 h2 {font-size:1.15em; color:#222; padding-bottom:15px; overflow:hidden;}
 .stat_sky2_2 h2 span {font-size:1em; color:#26c6da; font-weight:bold; float:right;}
 .stat_sky2_2 div {overflow:hidden; margin-top:5px;}
 .stat_sky2_2 div p {margin-bottom:10px;}
@@ -690,8 +692,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .graph h2 {font-size:1.25em; color:#222; padding-bottom:10px; position:relative;}
 .graph div {position:relative;}
 
-.graph1 {height:310px; padding:5px 20px 5px 20px;}
-.graph1 h2 {font-size:1.25em; color:#222; padding-bottom:10px; position:relative;}
+.graph1 {height:290px; padding:15px 20px 5px 20px;}
+.graph1 h2 {font-size:1.15em; color:#222; padding-bottom:10px; position:relative;}
 .graph1 div {position:relative;}
 
 /*날씨*/
@@ -756,23 +758,14 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .notice ul li a:hover {color:#444; transition:all 0.3s;}
 .notice ul li span {font-size:0.75em; color:#bbb; display:block; text-align:right; margin-top:5px;}
 
-.notice1 {padding:5px 20px 5px 20px; height:310px;}
-.notice1 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px;}
+.notice1 {padding:10px 20px 5px 20px; height:230px;}
+.notice1 h2 {font-size:1.15em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px;}
 .notice1 ul {}
-.notice1 ul li {border-bottom:1px solid #f2f2f2; padding:10px 0 13px;}
+.notice1 ul li {border-bottom:1px solid #f2f2f2; padding:4px 0 13px;}
 .notice1 ul li:last-child {border-bottom:0px; padding:14px 0 0;}
-.notice1 ul li a {font-size:0.875em; line-height:1.4em;}
+.notice1 ul li a {font-size:0.8em; line-height:1.4em;}
 .notice1 ul li a:hover {color:#444; transition:all 0.3s;}
-.notice1 ul li span {font-size:0.75em; color:#bbb; display:block; text-align:right; margin-top:5px;}
-
-.notice2 {padding:10px 20px 10px 20px; height:230px;}
-.notice2 h2 {font-size:1.25em; color:#222; border-bottom:1px solid #e3e3e3; padding-bottom:10px;}
-.notice2 ul {}
-.notice2 ul li {border-bottom:1px solid #f2f2f2; padding:5px 0 13px;}
-.notice2 ul li:last-child {border-bottom:0px; padding:5px 0 0;}
-.notice2 ul li a {font-size:0.875em; line-height:1.4em;}
-.notice2 ul li a:hover {color:#444; transition:all 0.3s;}
-.notice2 ul li span {font-size:0.75em; color:#bbb; display:block; text-align:right; margin-top:5px;}
+.notice1 ul li span {font-size:0.7em; color:#bbb; display:block; text-align:right; margin-top:5px;}
 
 /*메인테이블*/
 .mainTbl {padding:20px;}
@@ -785,8 +778,8 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .mainTbl table tbody th {background:#f6f6f6; color:#222; border-bottom:1px solid #e8e8e8;}
 .mainTbl table tbody td {text-align:center; border-bottom:1px solid #e8e8e8;}
 
-.mainTbl1 {padding:5px 20px 5px 20px;}
-.mainTbl1 h2 {font-size:1.25em; color:#222; padding-bottom:10px;}
+.mainTbl1 {padding:15px 20px 5px 20px;}
+.mainTbl1 h2 {font-size:1.15em; color:#222; padding-bottom:10px;}
 .mainTbl1 table {width:100%;}
 .mainTbl1 table th, .mainTbl table td {height:45px; font-size:0.875em;}
 .mainTbl1 table thead th {background:#ebf5ff; color:#337dde; position:relative;}

@@ -9,51 +9,37 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="sessionId" value="${param.sid}" />
 
-<div ng-controller="systemMainCtrl">
+<div ng-controller="mobileAgencyMainCtrl">
 
     <!--메인컨텐츠-->
     <div class="mainCon">
         <!--총 매장수-->
-        <div class="w50 fl br bb stat_purple1_1">
+        <div class="w100 fl bb stat_purple2_1">
             <h2>총 매장수<span id="totalStoreCnt"></span></h2>
             <div>
-                <p class="w25 fl tc"><span>오픈</span><span id="openStoreCnt"></span></p>
-                <p class="w25 fl tc"><span>폐점</span><span id="closeStoreCnt"></span></p>
-                <p class="w25 fl tc"><span>중지</span><span id="stopStoreCnt"></span></p>
-                <p class="w25 fl tc"><span>데모</span><span id="demoStoreCnt"></span></p>
+                <p><span>오픈</span><span id="openStoreCnt"></span></p>
+                <p><span>폐점</span><span id="closeStoreCnt"></span></p>
+                <p><span>중지</span><span id="stopStoreCnt"></span></p>
+                <p><span>데모</span><span id="demoStoreCnt"></span></p>
             </div>
         </div>
         <!--//총 매장수-->
 
         <!--총 포스수-->
-        <div class="w50 fl bb stat_sky1_1">
+        <div class="w100 fl bb stat_sky2_1">
             <h2>총 포스수<span id="totalPosCnt"></span></h2>
             <div>
-                <p class="w25 fl tc"><span>오픈</span><span id="openPosCnt"></span></p>
-                <p class="w25 fl tc"><span>폐점</span><span id="closePosCnt"></span></p>
-                <p class="w25 fl tc"><span>중지</span><span id="stopPosCnt"></span></p>
-                <p class="w25 fl tc"><span>데모</span><span id="demoPosCnt"></span></p>
+                <p><span>오픈</span><span id="openPosCnt"></span></p>
+                <p><span>폐점</span><span id="closePosCnt"></span></p>
+                <p><span>중지</span><span id="stopPosCnt"></span></p>
+                <p><span>데모</span><span id="demoPosCnt"></span></p>
             </div>
         </div>
         <!--//총 포스수-->
 
-        <!--주간매출-->
-        <div class="w70 fl br bb graph1">
-            <h2>주간매출 (매장수/포스수)<div class="circle"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
-            <div class="wizWrap" id="chart1" style="width:100%; height:230px;"></div>
-        </div>
-        <!--//주간매출-->
-
         <!--공지사항-->
-        <div class="w30 fl bb notice1" style="overflow-y: auto;">
-            <h2>공지사항
-                <div class="circle">
-                    <%--가상로그인 후 로고 클릭시 세션없어짐 2021.02.16 김설아--%>
-                    <%--<span><a href="/adi/board/board/01/list.sb?sid=${sessionId}">more</a></span>--%>
-                    <%--페이지 이동시 권한체크 2021.02.18 김설아--%>
-                    <span><a href="#" onclick="boardMove()">more</a></span>
-                </div>
-            </h2>
+        <div class="w100 fl bb notice1" style="overflow-y: auto;">
+            <h2>공지사항</h2>
             <ul>
                 <c:forEach var="item" items="${noticeList}">
                     <li><a href="#" onclick="noticeDetail('${item.boardSeqNo}')">${item.title}</a><span>${item.noticeDate}</span></li>
@@ -62,108 +48,69 @@
         </div>
         <!--//공지사항-->
 
+        <!--주간매출-->
+        <div class="w100 fl bb graph1">
+            <h2>주간매출 (매장수/포스수)<div class="circle"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
+            <div class="wizWrap" id="chart1" style="width:100%; height:230px; font-size:10px;"></div>
+        </div>
+        <!--//주간매출-->
+
         <!--주간 POS 설치현황-->
-        <div class="w70 fl br bb graph1">
+        <div class="w100 fl br bb graph1">
             <h2>주간 POS 설치현황<div class="square"><span class="blue">신규</span><span class="sky">재설치</span></div></h2>
-            <div class="wizWrap" id="chart2" style="width:100%; height:230px;"></div>
+            <div class="wizWrap" id="chart2" style="width:100%; height:230px; font-size:10px;"></div>
         </div>
         <!--//주간 POS 설치현황-->
 
-        <!--날씨-->
-        <div class="w30 fl bb weather">
-        </div>
-        <%--<div class="w30 fl bb weather">--%>
-            <%--<div class="today">--%>
-                <%--<h2 class="hidden">날씨</h2>--%>
-                <%--<p class="date">--%>
-                    <%--<span>서울시</span>--%>
-                    <%--<span><em>11월 26일</em> <em>일요일</em></span>--%>
-                <%--</p>--%>
-                <%--<a href="#">날씨더보기</a>--%>
-                <%--<div class="temperatures">--%>
-                    <%--<p>--%>
-                        <%--<!--파란색 날씨아이콘 : weIc01~14까지-->--%>
-                        <%--<em class="weIc02"></em>--%>
-                        <%--<span>--%>
-                            <%--최고 <em>13°C</em><br />--%>
-                            <%--최저 <em>5°C</em>--%>
-                        <%--</span>--%>
-                    <%--</p>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-            <%--<ul>--%>
-                <%--<li>--%>
-                    <%--<!--검은색 날씨아이콘 : weIc01~14까지-->--%>
-                    <%--<span class="weIc11"></span>--%>
-                    <%--<span class="day">월</span>--%>
-                    <%--<span><em>5°C</em> / <em>13°C</em></span>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                    <%--<!--검은색 날씨아이콘 : weIc01~14까지-->--%>
-                    <%--<span class="weIc08"></span>--%>
-                    <%--<span class="day">화</span>--%>
-                    <%--<span><em>-3°C</em> / <em>10°C</em></span>--%>
-                <%--</li>--%>
-            <%--</ul>--%>
-        <%--</div>--%>
-        <!--//날씨-->
-
         <!--순위테이블-->
         <div class="w100 fl mainTbl1">
-            <h2>주간 POS 설치 상위 대리점</h2>
+            <h2>주간 매출 상위 가맹점</h2>
             <table>
                 <colgroup>
                     <col class="w10" />
-                    <col class="w20" />
                     <col class="w30" />
-                    <col class="w20" />
-                    <col class="w20" />
+                    <col class="w35" />
+                    <col class="w25" />
                 </colgroup>
                 <thead>
-                    <tr>
-                        <th class="tc">순위</th>
-                        <th class="tc">구분</th>
-                        <th class="tc">총판 / 대리점명</th>
-                        <th class="tc">신규설치 매장수</th>
-                        <th class="tc">폐점수</th>
-                    </tr>
+                <tr>
+                    <th class="tc">순위</th>
+                    <th class="tc">업종</th>
+                    <th class="tc">가맹점명</th>
+                    <th class="tc">매출건수</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th class="tc">1</th>
-                        <td><label id="lblOrgnFg1"></label></td>
-                        <td><label id="lblAgencyNm1"></label></td>
-                        <td><label id="lblInstStoreCntNew1"></label></td>
-                        <td><label id="lblStoreCntClose1"></label></td>
-                    </tr>
-                    <tr>
-                        <th class="tc">2</th>
-                        <td><label id="lblOrgnFg2"></label></td>
-                        <td><label id="lblAgencyNm2"></label></td>
-                        <td><label id="lblInstStoreCntNew2"></label></td>
-                        <td><label id="lblStoreCntClose2"></label></td>
-                    </tr>
-                    <tr>
-                        <th class="tc">3</th>
-                        <td><label id="lblOrgnFg3"></label></td>
-                        <td><label id="lblAgencyNm3"></label></td>
-                        <td><label id="lblInstStoreCntNew3"></label></td>
-                        <td><label id="lblStoreCntClose3"></label></td>
-                    </tr>
-                    <tr>
-                        <th class="tc">4</th>
-                        <td><label id="lblOrgnFg4"></label></td>
-                        <td><label id="lblAgencyNm4"></label></td>
-                        <td><label id="lblInstStoreCntNew4"></label></td>
-                        <td><label id="lblStoreCntClose4"></label></td>
-                    </tr>
-                    <tr>
-                        <th class="tc">5</th>
-                        <td><label id="lblOrgnFg5"></label></td>
-                        <td><label id="lblAgencyNm5"></label></td>
-                        <td><label id="lblInstStoreCntNew5"></label></td>
-                        <td><label id="lblStoreCntClose5"></label></td>
-                    </tr>
+                <tr>
+                    <th class="tc">1</th>
+                    <td><label id="lblClsFg1"></label></td>
+                    <td><label id="lblStoreNm1"></label></td>
+                    <td><label id="lblSaleCnt1"></label></td>
+                </tr>
+                <tr>
+                    <th class="tc">2</th>
+                    <td><label id="lblClsFg2"></label></td>
+                    <td><label id="lblStoreNm2"></label></td>
+                    <td><label id="lblSaleCnt2"></label></td>
+                </tr>
+                <tr>
+                    <th class="tc">3</th>
+                    <td><label id="lblClsFg3"></label></td>
+                    <td><label id="lblStoreNm3"></label></td>
+                    <td><label id="lblSaleCnt3"></label></td>
+                </tr>
+                <tr>
+                    <th class="tc">4</th>
+                    <td><label id="lblClsFg4"></label></td>
+                    <td><label id="lblStoreNm4"></label></td>
+                    <td><label id="lblSaleCnt4"></label></td>
+                </tr>
+                <tr>
+                    <th class="tc">5</th>
+                    <td><label id="lblClsFg5"></label></td>
+                    <td><label id="lblStoreNm5"></label></td>
+                    <td><label id="lblSaleCnt5"></label></td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -174,9 +121,6 @@
 </div>
 
 <script type="text/javascript">
-    // 공지사항 more 페이지 이동시 권한체크
-    var board_auth = "${board_auth}";
-
     // 총 매장수
     var storeCntList = [];
     <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
@@ -228,16 +172,15 @@
         weekPosInstList.push(weekPosInstParam);
     </c:forEach>
 
-    // 주간 POS 설치 상위 대리점
-    var weekPosInstTopList = [];
+    // 주간 매출 상위 가맹점
+    var weekSaleAgencyTopList = [];
     <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
-    <c:forEach var="weekPosInstTop" items="${weekPosInstTopList}">
-        var weekPosInstTopParam = {};
-        weekPosInstTopParam.orgnFg = "${weekPosInstTop.orgnFg}";
-        weekPosInstTopParam.agencyNm = "${weekPosInstTop.agencyNm}";
-        weekPosInstTopParam.instStoreCntNew = "${weekPosInstTop.instStoreCntNew}";
-        weekPosInstTopParam.storeCntClose = "${weekPosInstTop.storeCntClose}";
-        weekPosInstTopList.push(weekPosInstTopParam);
+    <c:forEach var="weekSaleAgencyTop" items="${weekSaleAgencyTopList}">
+        var weekSaleAgencyTopParam = {};
+        weekSaleAgencyTopParam.clsFg = "${weekSaleAgencyTop.clsFg}";
+        weekSaleAgencyTopParam.storeNm = "${weekSaleAgencyTop.storeNm}";
+        weekSaleAgencyTopParam.saleCnt = "${weekSaleAgencyTop.saleCnt}";
+        weekSaleAgencyTopList.push(weekSaleAgencyTopParam);
     </c:forEach>
 </script>
 
@@ -295,9 +238,12 @@
         <%-- 주간매출(매장수/포스수) --%>
         var chart1 = new wijmo.chart.FlexChart('#chart1');
         chart1.beginUpdate();
-        chart1.chartType = wijmo.chart.ChartType.Line;
+        chart1.chartType = wijmo.chart.ChartType.Column;
         chart1.itemsSource = getData(weekSaleList, 'chart1'); // 여기에 받아온 데이터 넣기
         chart1.bindingX = 'x';
+        chart1.chartType = parseInt(1); // 세로차트형(Bar)
+        // chart1.stacking = parseInt(1); // 겹쳐보이게
+        chart1.rotated = false;
         chart1.palette = ['#93cbfc', '#90f0fc'];
 
         for (var i = 0; i < 2; i++) {
@@ -313,8 +259,8 @@
         chart2.chartType = wijmo.chart.ChartType.Column;
         chart2.itemsSource = getData(weekPosInstList, 'chart2'); // 여기에 받아온 데이터 넣기
         chart2.bindingX = 'x';
-        chart2.chartType = parseInt(0);
-        chart2.stacking = parseInt(1);
+        chart2.chartType = parseInt(1); // 세로차트형(Bar)
+        // chart2.stacking = parseInt(1); // 겹쳐보이게
         chart2.rotated = false;
         chart2.palette = ['#93cbfc', '#90f0fc'];
 
@@ -328,16 +274,10 @@
     <%-- // wijmo flexChart --%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/systemMain.js?ver=20210218.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileAgencyMain.js?ver=20210531.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
-<c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- 게시판 신규등록,수정 팝업 --%>
-<c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">
+<c:import url="/WEB-INF/view/mobile/adi/board/board/mobileBoardDetail.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

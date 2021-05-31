@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    ContentMapper.xml
-    어플리케이션 > 메인 > 내용
+    MobileContent.xml
+    (모바일) 어플리케이션 > 메인 > 내용
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
-    1       이다솜     2021.03.11     최초작성
+    1       김설아     2021.05.27     최초작성
 -->
 <mapper namespace="kr.co.solbipos.mobile.application.main.content.service.impl.MobileContentMapper">
 
@@ -16,8 +16,8 @@
         TABLE    : TB_MS_STORE
         COMMENTS : [매장]매장 정보
     -->
-    <select id="getStoreCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getStoreCntList */
+    <select id="getMobileStoreCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileStoreCntList */
         SELECT
         NVL(TO_CHAR(STORE_CNT_TOTAL,'999,999,999,999'), 0) AS STORE_CNT_TOTAL,
         NVL(TO_CHAR(STORE_CNT_1,'999,999,999,999'), 0) AS STORE_CNT_1,
@@ -41,8 +41,8 @@
         TABLE    : TB_MS_STORE
         COMMENTS : [매장]매장 정보
     -->
-    <select id="getStoreCntAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getStoreCntAgencyList */
+    <select id="getMobileStoreCntAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileStoreCntAgencyList */
         SELECT
         NVL(TO_CHAR(STORE_CNT_TOTAL,'999,999,999,999'), 0) AS STORE_CNT_TOTAL,
         NVL(TO_CHAR(STORE_CNT_1,'999,999,999,999'), 0) AS STORE_CNT_1,
@@ -68,8 +68,8 @@
         TABLE    : TB_MS_STORE
         COMMENTS : [매장]매장 정보
     -->
-    <select id="getStoreCntHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getStoreCntHqList */
+    <select id="getMobileStoreCntHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileStoreCntHqList */
         SELECT
         NVL(COUNT(tms.STORE_CD), 0) AS STORE_CNT_TOTAL
         FROM TB_MS_STORE tms
@@ -83,8 +83,8 @@
         TABLE    : TB_MS_STORE, TB_MS_POS
         COMMENTS : [매장]매장 정보, [매장]포스 정보
     -->
-    <select id="getPosCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getPosCntList */
+    <select id="getMobilePosCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobilePosCntList */
         SELECT
         NVL(TO_CHAR(POS_CNT_TOTAL,'999,999,999,999'), 0) AS POS_CNT_TOTAL,
         NVL(TO_CHAR(POS_CNT_1,'999,999,999,999'), 0) AS POS_CNT_1,
@@ -117,8 +117,8 @@
         TABLE    : TB_MS_STORE, TB_MS_POS
         COMMENTS : [매장]매장 정보, [매장]포스 정보
     -->
-    <select id="getPosCntAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getPosCntAgencyList */
+    <select id="getMobilePosCntAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobilePosCntAgencyList */
         SELECT
         NVL(TO_CHAR(POS_CNT_TOTAL,'999,999,999,999'), 0) AS POS_CNT_TOTAL,
         NVL(TO_CHAR(POS_CNT_1,'999,999,999,999'), 0) AS POS_CNT_1,
@@ -152,8 +152,8 @@
         TABLE    : TB_MS_STORE, TB_MS_POS
         COMMENTS : [매장]매장 정보, [매장]포스 정보
     -->
-    <select id="getPosCntHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getPosCntHqList */
+    <select id="getMobilePosCntHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobilePosCntHqList */
         SELECT
         NVL(COUNT(tms.STORE_CD), 0) AS POS_CNT_TOTAL
         FROM TB_MS_POS tmp,
@@ -170,8 +170,8 @@
         TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_POS
         COMMENTS : [매출]일별_종합, [매출] 일별_POS별
     -->
-    <select id="getWeekSaleList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getWeekSaleList */
+    <select id="getMobileWeekSaleList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileWeekSaleList */
         SELECT
         TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
         SUM(STORE_CNT) AS STORE_CNT,
@@ -201,7 +201,7 @@
                     GROUP BY SALE_DATE
                 ) tmp
                 WHERE 1=1
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tmp.SALE_DATE = tsdt.SALE_DATE
             )
             UNION ALL
@@ -225,8 +225,8 @@
         TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_POS, TB_MS_STORE
         COMMENTS : [매출]일별_종합, [매출] 일별_POS별, [매장]매장 정보
     -->
-    <select id="getWeekSaleAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getWeekSaleAgencyList */
+    <select id="getMobileWeekSaleAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileWeekSaleAgencyList */
         SELECT
         TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
         SUM(STORE_CNT) AS STORE_CNT,
@@ -266,7 +266,7 @@
                     GROUP BY SALE_DATE
                 ) tmp
                 WHERE 1=1
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tmp.SALE_DATE = tsdt.SALE_DATE
             )
             UNION ALL
@@ -290,8 +290,8 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
         COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
-    <select id="getNoticeList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getNoticeList */
+    <select id="getMobileNoticeList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileNoticeList */
         SELECT
         twbi.BOARD_CD,
         twbi.BOARD_SEQ_NO,
@@ -309,6 +309,15 @@
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
         AND twuidv01.ORGN_FG IN ('M','A')
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -318,8 +327,8 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
         COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
-    <select id="getNoticeAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getNoticeAgencyList */
+    <select id="getMobileNoticeAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileNoticeAgencyList */
         SELECT
         twbi.BOARD_CD,
         twbi.BOARD_SEQ_NO,
@@ -337,6 +346,15 @@
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
         AND twuidv01.ORGN_FG IN ('M','A')
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -346,8 +364,8 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
         COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
-    <select id="getNoticeHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getNoticeHqList */
+    <select id="getMobileNoticeHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileNoticeHqList */
         SELECT
         twbi.BOARD_CD,
         twbi.BOARD_SEQ_NO,
@@ -366,6 +384,15 @@
         ]]>
         AND twuidv01.ORGN_FG IN ('H')
         AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -375,8 +402,8 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
         COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
-    <select id="getNoticeStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getNoticeStoreList */
+    <select id="getMobileNoticeStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileNoticeStoreList */
         SELECT
         twbi.BOARD_CD,
         twbi.BOARD_SEQ_NO,
@@ -406,6 +433,15 @@
             AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
+        AND twbi.BOARD_SEQ_NO NOT IN (
+                                        SELECT
+                                        BOARD_SEQ_NO
+                                        FROM TB_WB_BOARD_READNG_HIST
+                                        WHERE 1=1
+                                        AND BOARD_CD = '01'
+                                        AND USER_ID = #{userId}
+                                        GROUP BY BOARD_SEQ_NO
+                                    )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -415,8 +451,8 @@
         TABLE    : TB_CM_INSTLL
         COMMENTS : 설치의뢰
     -->
-    <select id="getWeekPosInstList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getWeekPosInstList */
+    <select id="getMobileWeekPosInstList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileWeekPosInstList */
         SELECT
         TO_CHAR(TO_DATE(INST_INS_DT, 'YYYYMMDD'), 'mm-dd') AS INST_INS_DT,
         SUM(INST_STORE_CNT_NEW) AS INST_STORE_CNT_NEW,
@@ -439,7 +475,7 @@
                     FROM TB_CM_INSTLL tci
                 )
                 WHERE 1=1
-                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd')AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY INST_INS_DT
             )
             UNION ALL
@@ -463,8 +499,8 @@
         TABLE    : TB_CM_INSTLL
         COMMENTS : 설치의뢰
     -->
-    <select id="getWeekPosInstAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getWeekPosInstAgencyList */
+    <select id="getMobileWeekPosInstAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileWeekPosInstAgencyList */
         SELECT
         TO_CHAR(TO_DATE(INST_INS_DT, 'YYYYMMDD'), 'mm-dd') AS INST_INS_DT,
         SUM(INST_STORE_CNT_NEW) AS INST_STORE_CNT_NEW,
@@ -489,7 +525,7 @@
                     AND tci.AGENCY_CD = #{orgnCd}
                 )
                 WHERE 1=1
-                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY INST_INS_DT
             )
             UNION ALL
@@ -513,8 +549,8 @@
         TABLE    : TB_CM_INSTLL, TB_CM_AGENCY, TB_MS_STORE
         COMMENTS : 설치의뢰, [공통]대리점 정보, [매장]매장 정보
     -->
-    <select id="getWeekPosInstTopList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getWeekPosInstTopList */
+    <select id="getMobileWeekPosInstTopList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileWeekPosInstTopList */
         SELECT
         ORGN_FG,
         AGENCY_NM,
@@ -545,7 +581,7 @@
                 GROUP BY tci.MOD_DT, tca.P_AGENCY_CD, tca.AGENCY_NM
             )
             WHERE 1=1
-            AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
             GROUP BY ORGN_FG, AGENCY_NM
             ORDER BY INST_STORE_CNT_NEW DESC, STORE_CNT_CLOSE ASC
         )
@@ -560,8 +596,8 @@
         TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE
         COMMENTS : [매출]일별_종합, [매장]매장 정보
     -->
-    <select id="getWeekSaleAgencyTopList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getWeekSaleAgencyTopList */
+    <select id="getMobileWeekSaleAgencyTopList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileWeekSaleAgencyTopList */
         SELECT
         CLS_FG,
         STORE_NM,
@@ -580,7 +616,7 @@
                 TB_MS_STORE tms
                 WHERE 1=1
                 AND tms.AGENCY_CD = #{orgnCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
                 AND tms.STORE_CD = tsdt.STORE_CD
                 GROUP BY tms.CLS_FG, tsdt.STORE_CD, tms.STORE_NM
@@ -593,13 +629,13 @@
         ]]>
     </select>
 
-    <!-- 본사 - 매출현황 일별(1주) -->
+    <!-- 본사 - 매출현황 -->
     <!--
         TABLE    : TB_SL_DAILY_TOTAL
         COMMENTS : [매출]일별_종합
     -->
-    <select id="getSaleWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleWeekList */
+    <select id="getMobileSaleWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileSaleWeekList */
         SELECT
         TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
@@ -615,7 +651,7 @@
                 WHERE 1=1
                 AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY tsdt.SALE_DATE
             )
             UNION ALL
@@ -633,13 +669,13 @@
         ORDER BY SALE_DATE
     </select>
 
-    <!-- 매장 - 매출현황 일별(1주) -->
+    <!-- 매장 - 매출현황 -->
     <!--
         TABLE    : TB_SL_DAILY_TOTAL
         COMMENTS : [매출]일별_종합
     -->
-    <select id="getSaleWeekStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleWeekStoreList */
+    <select id="getMobileSaleWeekStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileSaleWeekStoreList */
         SELECT
         TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
@@ -655,7 +691,7 @@
                 WHERE 1=1
                 AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdt.STORE_CD = #{storeCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY tsdt.SALE_DATE
             )
             UNION ALL
@@ -673,16 +709,15 @@
         ORDER BY SALE_DATE
     </select>
 
-    <!-- 본사 - 매출현황 요일별(1개월) -->
+    <!-- 본사 - 매출 상위 상품 -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL
-        COMMENTS : [매출]일별_종합
+        TABLE    : TB_SL_DAILY_PROD
+        COMMENTS : [매출]일별_상품
     -->
-    <select id="getSaleMonthList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleMonthList */
+    <select id="getMobileSaleProdWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileSaleProdWeekList */
         SELECT
-        YOIL_NUM,
-        YOIL AS SALE_DATE,
+        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
         FROM
         (
@@ -690,28 +725,19 @@
             FROM
             (
                 SELECT
-                YOIL_NUM,
-                YOIL,
-                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM
-                (
-                    SELECT
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') -1, 'D') AS YOIL_NUM,
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-                    tsdt.REAL_SALE_AMT
-                    FROM TB_SL_DAILY_TOTAL tsdt
-                    WHERE 1=1
-                    AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND tsdt.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                )
-                GROUP BY YOIL_NUM, YOIL
+                tsdp.SALE_DATE,
+                SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM TB_SL_DAILY_PROD tsdp
+                WHERE 1=1
+                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdp.STORE_CD = #{storeCd}
+                AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                GROUP BY tsdp.SALE_DATE
             )
             UNION ALL
             (
                 SELECT
-                TO_CHAR(SYSDATE-level-1, 'D') AS YOIL_NUM,
-                TO_CHAR(SYSDATE-level, 'DY') AS YOIL,
+                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
                 0 AS REAL_SALE_AMT
                 FROM dual
                 <![CDATA[
@@ -719,20 +745,19 @@
                 ]]>
             )
         )
-        GROUP BY YOIL_NUM, YOIL
-        ORDER BY YOIL_NUM, YOIL
+        GROUP BY SALE_DATE
+        ORDER BY SALE_DATE
     </select>
 
-    <!-- 매장 - 매출현황 요일별(1개월) -->
+    <!-- 매장 - 매출 상위 상품 -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL
-        COMMENTS : [매출]일별_종합
+        TABLE    : TB_SL_DAILY_PROD
+        COMMENTS : [매출]일별_상품
     -->
-    <select id="getSaleMonthStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleMonthStoreList */
+    <select id="getMobileSaleProdWeekStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileSaleProdWeekStoreList */
         SELECT
-        YOIL_NUM,
-        YOIL AS SALE_DATE,
+        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
         FROM
         (
@@ -740,28 +765,19 @@
             FROM
             (
                 SELECT
-                YOIL_NUM,
-                YOIL,
-                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM
-                (
-                    SELECT
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') -1, 'D') AS YOIL_NUM,
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-                    tsdt.REAL_SALE_AMT
-                    FROM TB_SL_DAILY_TOTAL tsdt
-                    WHERE 1=1
-                    AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdt.STORE_CD = #{storeCd}
-                    AND tsdt.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                )
-                GROUP BY YOIL_NUM, YOIL
+                tsdp.SALE_DATE,
+                SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM TB_SL_DAILY_PROD tsdp
+                WHERE 1=1
+                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdp.STORE_CD = #{storeCd}
+                AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                GROUP BY tsdp.SALE_DATE
             )
             UNION ALL
             (
                 SELECT
-                TO_CHAR(SYSDATE-level-1, 'D') AS YOIL_NUM,
-                TO_CHAR(SYSDATE-level, 'DY') AS YOIL,
+                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
                 0 AS REAL_SALE_AMT
                 FROM dual
                 <![CDATA[
@@ -769,434 +785,17 @@
                 ]]>
             )
         )
-        GROUP BY YOIL_NUM, YOIL
-        ORDER BY YOIL_NUM, YOIL
+        GROUP BY SALE_DATE
+        ORDER BY SALE_DATE
     </select>
 
-    <!-- 본사 - 매출현황 월별(1년) -->
-    <!--
-        TABLE    : TB_SL_MONTHLY_TOTAL
-        COMMENTS : [매출]월별_종합
-    -->
-    <select id="getSaleYearList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleYearList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'yy-MM') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsmt.SALE_YM,
-                SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_MONTHLY_TOTAL tsmt
-                WHERE 1=1
-                AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsmt.SALE_YM BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -12), 'yyyyMM') AND TO_CHAR(SYSDATE, 'yyyyMM')
-                GROUP BY tsmt.SALE_YM
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(ADD_MONTHS(SYSDATE, -level+1), 'yyyyMM') AS SALE_YM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-               <![CDATA[
-                    CONNECT BY LEVEL <= 12
-                ]]>
-            )
-        )
-        GROUP BY SALE_YM
-        ORDER BY SALE_YM
-    </select>
-
-    <!-- 매장 - 매출현황 월별(1년) -->
-    <!--
-        TABLE    : TB_SL_MONTHLY_TOTAL
-        COMMENTS : [매출]월별_종합
-    -->
-    <select id="getSaleYearStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleYearStoreList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'yy-MM') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsmt.SALE_YM,
-                SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_MONTHLY_TOTAL tsmt
-                WHERE 1=1
-                AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsmt.STORE_CD = #{storeCd}
-                AND tsmt.SALE_YM BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -12), 'yyyyMM') AND TO_CHAR(SYSDATE, 'yyyyMM')
-                GROUP BY tsmt.SALE_YM
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(ADD_MONTHS(SYSDATE, -level+1), 'yyyyMM') AS SALE_YM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-               <![CDATA[
-                    CONNECT BY LEVEL <= 12
-                ]]>
-            )
-        )
-        GROUP BY SALE_YM
-        ORDER BY SALE_YM
-    </select>
-
-    <!-- 본사 - 매출 상위 상품 오늘 -->
-    <!--
-        TABLE    : TB_SL_DAILY_PROD
-        COMMENTS : [매출]일별_상품
-    -->
-    <select id="getSaleProdDayList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleProdDayList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
-    </select>
-
-    <!-- 매장 - 매출 상위 상품 오늘 -->
-    <!--
-        TABLE    : TB_SL_DAILY_PROD
-        COMMENTS : [매출]일별_상품
-    -->
-    <select id="getSaleProdDayStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleProdDayStoreList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD = #{storeCd}
-                    AND tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
-    </select>
-
-    <!-- 본사 - 매출 상위 상품 1주일 -->
-    <!--
-        TABLE    : TB_SL_DAILY_PROD
-        COMMENTS : [매출]일별_상품
-    -->
-    <select id="getSaleProdWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleProdWeekList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
-    </select>
-
-    <!-- 매장 - 매출 상위 상품 1주일 -->
-    <!--
-        TABLE    : TB_SL_DAILY_PROD
-        COMMENTS : [매출]일별_상품
-    -->
-    <select id="getSaleProdWeekStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleProdWeekStoreList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD = #{storeCd}
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
-    </select>
-
-    <!-- 본사 - 매출 상위 상품 1개월 -->
-    <!--
-        TABLE    : TB_SL_DAILY_PROD
-        COMMENTS : [매출]일별_상품
-    -->
-    <select id="getSaleProdMonthList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleProdMonthList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
-    </select>
-
-    <!-- 매장 - 매출 상위 상품 1개월 -->
-    <!--
-        TABLE    : TB_SL_DAILY_PROD
-        COMMENTS : [매출]일별_상품
-    -->
-    <select id="getSaleProdMonthStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleProdMonthStoreList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD = #{storeCd}
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
-    </select>
-
-    <!-- 본사 - 매출 상위 가맹점 오늘 -->
+    <!-- 본사 - 매출 상위 가맹점 -->
     <!--
         TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE
         COMMENTS : [매출]일별_종합, [매장]매장 정보
     -->
-    <select id="getSaleStoreDayList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleStoreDayList */
+    <select id="getMobileSaleStoreWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileSaleStoreWeekList */
         SELECT *
         FROM
         (
@@ -1212,77 +811,7 @@
                 TB_MS_STORE tms
                 WHERE 1=1
                 AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
-                AND tms.STORE_CD = tsdt.STORE_CD
-                GROUP BY tms.STORE_NM
-            )
-            ORDER BY REAL_SALE_AMT DESC
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 10
-        ]]>
-    </select>
-
-    <!-- 본사 - 매출 상위 가맹점 1주일 -->
-    <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE
-        COMMENTS : [매출]일별_종합, [매장]매장 정보
-    -->
-    <select id="getSaleStoreWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleStoreWeekList */
-        SELECT *
-        FROM
-        (
-            SELECT
-            STORE_NM,
-            TO_CHAR(REAL_SALE_AMT,'999,999,999,999') AS REAL_SALE_AMT
-            FROM
-            (
-                SELECT
-                tms.STORE_NM,
-                SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_DAILY_TOTAL tsdt,
-                TB_MS_STORE tms
-                WHERE 1=1
-                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd')-7 AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
-                AND tms.STORE_CD = tsdt.STORE_CD
-                GROUP BY tms.STORE_NM
-            )
-            ORDER BY REAL_SALE_AMT DESC
-        )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 10
-        ]]>
-    </select>
-
-    <!-- 본사 - 매출 상위 가맹점 1개월 -->
-    <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE
-        COMMENTS : [매출]일별_종합, [매장]매장 정보
-    -->
-    <select id="getSaleStoreMonthList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getSaleStoreMonthList */
-        SELECT *
-        FROM
-        (
-            SELECT
-            STORE_NM,
-            TO_CHAR(REAL_SALE_AMT,'999,999,999,999') AS REAL_SALE_AMT
-            FROM
-            (
-                SELECT
-                tms.STORE_NM,
-                SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_DAILY_TOTAL tsdt,
-                TB_MS_STORE tms
-                WHERE 1=1
-                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
                 AND tms.STORE_CD = tsdt.STORE_CD
                 GROUP BY tms.STORE_NM
@@ -1300,8 +829,8 @@
         TABLE    : TB_SL_DAILY_TOTAL
         COMMENTS : [매출]일별_종합
     -->
-    <select id="getDaySaleCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getDaySaleCntList */
+    <select id="getMobileDaySaleCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileDaySaleCntList */
         SELECT
         TO_CHAR(REAL_SALE_CNT_TOTAL,'999,999,999,999') AS REAL_SALE_CNT_TOTAL
         FROM
@@ -1333,8 +862,8 @@
         TABLE    : TB_SL_DAILY_PAY
         COMMENTS :
     -->
-    <select id="getDaySaleAmtList" parameterType="sessionInfoVO" resultType="DefaultMap">
-        /* MobileContentMapper.getDaySaleAmtList */
+    <select id="getMobileDaySaleAmtList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MobileContentMapper.getMobileDaySaleAmtList */
         SELECT
         TO_CHAR(REAL_SALE_AMT_TOTAL,'999,999,999,999') AS REAL_SALE_AMT_TOTAL,
         TO_CHAR(CARD_AMT,'999,999,999,999') AS CARD_AMT,

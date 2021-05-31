@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : agencyMain.js
- * 설  명 : 어플리케이션 > 메인 > 내용(총판/대리점) JavaScript
+ * 파일명 : mobileAgencyMain.js
+ * 설  명 : (모바일) 어플리케이션 > 메인 > 내용(총판/대리점) JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.01.25     김설아      1.0
+ * 2021.05.27     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -15,35 +15,17 @@ var app = agrid.getApp();
 
 // 공지사항 상세
 function noticeDetail(boardSeqNo){
-    var scope = agrid.getScope('agencyMainCtrl');
+    var scope = agrid.getScope('mobileAgencyMainCtrl');
     scope.noticeDetailPopup(boardSeqNo);
-}
-
-// 공지사항 more
-function boardMove(){
-    if(board_auth == "Y") {
-        // 가상로그인
-        if(document.getElementsByName('sessionId')[0]) {
-            var vSessionId = document.getElementsByName('sessionId')[0].value;
-            location.href = '/adi/board/board/01/list.sb?sid='+ vSessionId;
-            // 로그인
-        } else {
-            location.href = '/adi/board/board/01/list.sb';
-        }
-    } else {
-        var msg = "메뉴 권한이 없습니다.";
-        s_alert.pop(msg);
-        return;
-    }
 }
 
 /**
  *  메인(총판/대리점) 그리드 생성
  */
-app.controller('agencyMainCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mobileAgencyMainCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('agencyMainCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('mobileAgencyMainCtrl', $scope, $http, false));
 
     // 총 매장수
     $("#totalStoreCnt").text(storeCntList[0].storeCntTotal);
@@ -115,7 +97,7 @@ app.controller('agencyMainCtrl', ['$scope', '$http', function ($scope, $http) {
         param.boardSeqNo = boardSeqNo;
         param.userId = "PASS"; // 읽기만가능(PASS 명칭 의미없음)
         $scope.setSelectedNotice(param);
-        $scope.wjBoardDetailLayer.show(true);
+        $scope.wjMobileBoardDetailLayer.show(true);
         event.preventDefault();
     };
 
@@ -123,9 +105,9 @@ app.controller('agencyMainCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.element(document).ready(function () {
 
         // 게시판 상세 팝업 핸들러 추가
-        $scope.wjBoardDetailLayer.shown.addHandler(function (s) {
+        $scope.wjMobileBoardDetailLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('boardDetailCtrl', $scope.getSelectedNotice());
+                $scope._broadcast('mobileBoardDetailCtrl', $scope.getSelectedNotice());
             }, 50)
         });
     });
