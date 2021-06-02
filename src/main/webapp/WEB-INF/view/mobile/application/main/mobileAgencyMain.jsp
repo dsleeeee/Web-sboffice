@@ -14,25 +14,25 @@
     <!--메인컨텐츠-->
     <div class="mainCon">
         <!--총 매장수-->
-        <div class="w100 fl bb stat_purple2_1">
+        <div class="w100 fl br bb stat_purple1_1">
             <h2>총 매장수<span id="totalStoreCnt"></span></h2>
             <div>
-                <p><span>오픈</span><span id="openStoreCnt"></span></p>
-                <p><span>폐점</span><span id="closeStoreCnt"></span></p>
-                <p><span>중지</span><span id="stopStoreCnt"></span></p>
-                <p><span>데모</span><span id="demoStoreCnt"></span></p>
+                <p class="w25 fl tc"><span>오픈</span><span id="openStoreCnt"></span></p>
+                <p class="w25 fl tc"><span>폐점</span><span id="closeStoreCnt"></span></p>
+                <p class="w25 fl tc"><span>중지</span><span id="stopStoreCnt"></span></p>
+                <p class="w25 fl tc"><span>데모</span><span id="demoStoreCnt"></span></p>
             </div>
         </div>
         <!--//총 매장수-->
 
         <!--총 포스수-->
-        <div class="w100 fl bb stat_sky2_1">
+        <div class="w100 fl bb stat_sky1_1">
             <h2>총 포스수<span id="totalPosCnt"></span></h2>
             <div>
-                <p><span>오픈</span><span id="openPosCnt"></span></p>
-                <p><span>폐점</span><span id="closePosCnt"></span></p>
-                <p><span>중지</span><span id="stopPosCnt"></span></p>
-                <p><span>데모</span><span id="demoPosCnt"></span></p>
+                <p class="w25 fl tc"><span>오픈</span><span id="openPosCnt"></span></p>
+                <p class="w25 fl tc"><span>폐점</span><span id="closePosCnt"></span></p>
+                <p class="w25 fl tc"><span>중지</span><span id="stopPosCnt"></span></p>
+                <p class="w25 fl tc"><span>데모</span><span id="demoPosCnt"></span></p>
             </div>
         </div>
         <!--//총 포스수-->
@@ -50,7 +50,7 @@
 
         <!--주간매출-->
         <div class="w100 fl bb graph1">
-            <h2>주간매출 (매장수/포스수)<div class="circle"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
+            <h2>주간매출<div class="square"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
             <div class="wizWrap" id="chart1" style="width:100%; height:230px; font-size:10px;"></div>
         </div>
         <!--//주간매출-->

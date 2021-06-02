@@ -14,7 +14,7 @@
     <!--메인컨텐츠-->
     <div class="mainCon">
         <!--총 매장수-->
-        <div class="w50 fl br bb stat_purple3" style="height: 90px;">
+        <div class="w50 fl br bb stat_purple3_1" style="height: 70px;">
             <div>
                 <h2>총 매장수 (오픈)<span id="totalStoreCnt"></span></h2>
             </div>
@@ -22,7 +22,7 @@
         <!--//총 매장수-->
 
         <!--총 포스수-->
-        <div class="w50 fl bb stat_purple3" style="height: 90px;">
+        <div class="w50 fl bb stat_purple3_1" style="height: 70px;">
             <div>
                 <h2>총 포스수 (오픈)<span id="totalPosCnt"></span></h2>
             </div>

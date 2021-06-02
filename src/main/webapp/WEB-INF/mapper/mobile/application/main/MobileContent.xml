@@ -201,7 +201,7 @@
                     GROUP BY SALE_DATE
                 ) tmp
                 WHERE 1=1
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tmp.SALE_DATE = tsdt.SALE_DATE
             )
             UNION ALL
@@ -266,7 +266,7 @@
                     GROUP BY SALE_DATE
                 ) tmp
                 WHERE 1=1
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tmp.SALE_DATE = tsdt.SALE_DATE
             )
             UNION ALL
@@ -475,7 +475,7 @@
                     FROM TB_CM_INSTLL tci
                 )
                 WHERE 1=1
-                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd')AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd')AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY INST_INS_DT
             )
             UNION ALL
@@ -525,7 +525,7 @@
                     AND tci.AGENCY_CD = #{orgnCd}
                 )
                 WHERE 1=1
-                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY INST_INS_DT
             )
             UNION ALL
@@ -552,8 +552,7 @@
     <select id="getMobileWeekPosInstTopList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* MobileContentMapper.getMobileWeekPosInstTopList */
         SELECT
-        ORGN_FG,
-        AGENCY_NM,
+        '[' || ORGN_FG || '] ' || AGENCY_NM AS AGENCY_NM,
         TO_CHAR(INST_STORE_CNT_NEW,'999,999,999,999') AS INST_STORE_CNT_NEW,
         TO_CHAR(STORE_CNT_CLOSE,'999,999,999,999') AS STORE_CNT_CLOSE
         FROM
@@ -569,7 +568,7 @@
                 TO_CHAR(TO_DATE(tci.MOD_DT, 'YYYYMMDDHH24MISS'), 'yyyyMMdd') AS INST_INS_DT,
                 DECODE(tca.P_AGENCY_CD, null, '마스터', '00000' , '총판', '대리점') AS ORGN_FG,
                 tca.AGENCY_NM,
-                SUM((CASE WHEN tci.INST_FG = '1' THEN 1 ELSE 0 END)) AS INST_STORE_CNT_NEW,
+                SUM(CASE WHEN tci.INST_FG = '1' THEN 1 ELSE 0 END) AS INST_STORE_CNT_NEW,
                 SUM(CASE WHEN tms.SYS_STAT_FG = '2' THEN 1 ELSE 0 END) AS STORE_CNT_CLOSE
                 FROM TB_CM_INSTLL tci,
                 TB_CM_AGENCY tca,
@@ -581,7 +580,7 @@
                 GROUP BY tci.MOD_DT, tca.P_AGENCY_CD, tca.AGENCY_NM
             )
             WHERE 1=1
-            AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
             GROUP BY ORGN_FG, AGENCY_NM
             ORDER BY INST_STORE_CNT_NEW DESC, STORE_CNT_CLOSE ASC
         )
@@ -616,7 +615,7 @@
                 TB_MS_STORE tms
                 WHERE 1=1
                 AND tms.AGENCY_CD = #{orgnCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
                 AND tms.STORE_CD = tsdt.STORE_CD
                 GROUP BY tms.CLS_FG, tsdt.STORE_CD, tms.STORE_NM
@@ -651,7 +650,7 @@
                 WHERE 1=1
                 AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY tsdt.SALE_DATE
             )
             UNION ALL
@@ -691,7 +690,7 @@
                 WHERE 1=1
                 AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdt.STORE_CD = #{storeCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY tsdt.SALE_DATE
             )
             UNION ALL
@@ -731,7 +730,7 @@
                 WHERE 1=1
                 AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdp.STORE_CD = #{storeCd}
-                AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY tsdp.SALE_DATE
             )
             UNION ALL
@@ -771,7 +770,7 @@
                 WHERE 1=1
                 AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdp.STORE_CD = #{storeCd}
-                AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 GROUP BY tsdp.SALE_DATE
             )
             UNION ALL
@@ -811,7 +810,7 @@
                 TB_MS_STORE tms
                 WHERE 1=1
                 AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-7, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
                 AND tms.STORE_CD = tsdt.STORE_CD
                 GROUP BY tms.STORE_NM

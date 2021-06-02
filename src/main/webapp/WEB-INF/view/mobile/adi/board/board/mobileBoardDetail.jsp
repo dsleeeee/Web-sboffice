@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<wj-popup control="wjMobileBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:360px;height:600px;" fade-in="false" fade-out="false">
+<wj-popup control="wjMobileBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:100%;height:600px;" fade-in="false" fade-out="false">
     <div ng-controller="mobileBoardDetailCtrl">
 
         <%-- header --%>
@@ -14,7 +14,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="overflow:auto; height:550px;">
+        <div class="wj-dialog-body sc2" style="overflow:auto; height:560px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w25"/>
@@ -133,9 +133,9 @@
                     </table>
                 </div>
             </div>
-            <div class="btnSet tc mt20 mb10">
+            <div class="btnSet tc mt5 mb5">
                 <%-- 닫기 --%>
-                <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="mobile.cmm.close" /></a></span>
+                <span><a href="#" class="btn_blue" ng-click="close()"><s:message code="mobile.cmm.close" /></a></span>
             </div>
         </div>
         <%-- //body --%>

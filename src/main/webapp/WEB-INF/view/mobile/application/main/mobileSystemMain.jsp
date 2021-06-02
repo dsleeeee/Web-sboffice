@@ -50,7 +50,7 @@
 
         <!--주간매출-->
         <div class="w100 fl br bb graph1">
-            <h2>주간매출<div class="circle"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
+            <h2>주간매출<div class="square"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
             <div class="wizWrap" id="chart1" style="width:100%; height:230px; font-size:10px;"></div>
         </div>
         <!--//주간매출-->
@@ -68,52 +68,45 @@
             <table>
                 <colgroup>
                     <col class="w10" />
-                    <col class="w20" />
-                    <col class="w30" />
+                    <col class="w50" />
                     <col class="w20" />
                     <col class="w20" />
                 </colgroup>
                 <thead>
                 <tr>
                     <th class="tc">순위</th>
-                    <th class="tc">구분</th>
-                    <th class="tc">총판/대리점명</th>
-                    <th class="tc">신규설치 매장수</th>
-                    <th class="tc">폐점수</th>
+                    <th class="tc">명칭</th>
+                    <th class="tc">신규</th>
+                    <th class="tc">폐점</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <th class="tc">1</th>
-                    <td><label id="lblOrgnFg1"></label></td>
                     <td><label id="lblAgencyNm1"></label></td>
                     <td><label id="lblInstStoreCntNew1"></label></td>
                     <td><label id="lblStoreCntClose1"></label></td>
                 </tr>
                 <tr>
                     <th class="tc">2</th>
-                    <td><label id="lblOrgnFg2"></label></td>
                     <td><label id="lblAgencyNm2"></label></td>
                     <td><label id="lblInstStoreCntNew2"></label></td>
                     <td><label id="lblStoreCntClose2"></label></td>
                 </tr>
                 <tr>
                     <th class="tc">3</th>
-                    <td><label id="lblOrgnFg3"></label></td>
                     <td><label id="lblAgencyNm3"></label></td>
                     <td><label id="lblInstStoreCntNew3"></label></td>
                     <td><label id="lblStoreCntClose3"></label></td>
                 </tr>
                 <tr>
                     <th class="tc">4</th>
-                    <td><label id="lblOrgnFg4"></label></td>
                     <td><label id="lblAgencyNm4"></label></td>
                     <td><label id="lblInstStoreCntNew4"></label></td>
                     <td><label id="lblStoreCntClose4"></label></td>
                 </tr>
                 <tr>
                     <th class="tc">5</th>
-                    <td><label id="lblOrgnFg5"></label></td>
                     <td><label id="lblAgencyNm5"></label></td>
                     <td><label id="lblInstStoreCntNew5"></label></td>
                     <td><label id="lblStoreCntClose5"></label></td>
@@ -184,7 +177,6 @@
     <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
     <c:forEach var="weekPosInstTop" items="${weekPosInstTopList}">
         var weekPosInstTopParam = {};
-        weekPosInstTopParam.orgnFg = "${weekPosInstTop.orgnFg}";
         weekPosInstTopParam.agencyNm = "${weekPosInstTop.agencyNm}";
         weekPosInstTopParam.instStoreCntNew = "${weekPosInstTop.instStoreCntNew}";
         weekPosInstTopParam.storeCntClose = "${weekPosInstTop.storeCntClose}";
@@ -282,7 +274,7 @@
     <%-- // wijmo flexChart --%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileSystemMain.js?ver=20210531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileSystemMain.js?ver=20210531.02" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/adi/board/board/mobileBoardDetail.jsp">

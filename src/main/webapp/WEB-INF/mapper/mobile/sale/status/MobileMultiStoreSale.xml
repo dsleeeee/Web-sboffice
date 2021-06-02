@@ -23,7 +23,7 @@
         (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = A.STORE_CD) AS STORE_NM,
         A.SALE_CNT,
         A.REAL_SALE_AMT,
-        NVL(ROUND(A.REAL_SALE_AMT / DECODE(C.TOT_REAL_SALE_AMT, 0, null, D.TOTAL_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE,
+        NVL(ROUND(A.REAL_SALE_AMT / DECODE(D.TOTAL_REAL_SALE_AMT, 0, null, D.TOTAL_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE,
         B.SHOP_REAL_SALE_AMT,
         B.DLVR_REAL_SALE_AMT,
         B.PACK_REAL_SALE_AMT,
@@ -78,18 +78,15 @@
         ) C,
         (
             SELECT
-            tsdp.STORE_CD,
             SUM(tsdp.REAL_SALE_AMT) AS TOTAL_REAL_SALE_AMT
             FROM TB_SL_DAILY_PROD tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            GROUP BY tsdp.STORE_CD
         ) D
         WHERE 1=1
         AND B.STORE_CD (+)= A.STORE_CD
         AND C.STORE_CD (+)= A.STORE_CD
-        AND D.STORE_CD (+)= A.STORE_CD
         ORDER BY A.STORE_CD
     </select>
 

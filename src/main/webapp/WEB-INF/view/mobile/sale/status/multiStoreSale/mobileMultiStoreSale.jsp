@@ -67,7 +67,8 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    is-read-only="true">
+                    is-read-only="true"
+                    frozen-columns="1">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -93,7 +94,8 @@
                         selection-mode="Row"
                         items-source="data"
                         item-formatter="_itemFormatter"
-                        is-read-only="true">
+                        is-read-only="true"
+                        frozen-columns="1">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -184,7 +186,8 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    is-read-only="true">
+                    is-read-only="true"
+                    frozen-columns="1">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>

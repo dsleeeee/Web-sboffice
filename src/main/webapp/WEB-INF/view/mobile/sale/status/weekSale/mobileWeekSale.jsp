@@ -446,7 +446,8 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    is-read-only="true">
+                    is-read-only="true"
+                    frozen-columns="1">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.weekSale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -489,4 +490,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/weekSale/mobileWeekSale.js?ver=20210524.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/weekSale/mobileWeekSale.js?ver=20210601.01" charset="utf-8"></script>

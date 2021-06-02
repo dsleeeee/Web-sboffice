@@ -447,7 +447,8 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    is-read-only="true">
+                    is-read-only="true"
+                    frozen-columns="1">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>

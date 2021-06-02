@@ -42,49 +42,39 @@ app.controller('mobileSystemMainCtrl', ['$scope', '$http', function ($scope, $ht
     $("#demoPosCnt").text(posCntList[0].posCnt9);
 
     // 주간 POS 설치 상위 대리점
-    $("#lblOrgnFg1").text("-");
     $("#lblAgencyNm1").text("-");
     $("#lblInstStoreCntNew1").text("-");
     $("#lblStoreCntClose1").text("-");
-    $("#lblOrgnFg2").text("-");
     $("#lblAgencyNm2").text("-");
     $("#lblInstStoreCntNew2").text("-");
     $("#lblStoreCntClose2").text("-");
-    $("#lblOrgnFg3").text("-");
     $("#lblAgencyNm3").text("-");
     $("#lblInstStoreCntNew3").text("-");
     $("#lblStoreCntClose3").text("-");
-    $("#lblOrgnFg4").text("-");
     $("#lblAgencyNm4").text("-");
     $("#lblInstStoreCntNew4").text("-");
     $("#lblStoreCntClose4").text("-");
-    $("#lblOrgnFg5").text("-");
     $("#lblAgencyNm5").text("-");
     $("#lblInstStoreCntNew5").text("-");
     $("#lblStoreCntClose5").text("-");
     for(var i=0; i<weekPosInstTopList.length; i++) {
         if(i === 0) {
-            $("#lblOrgnFg1").text(weekPosInstTopList[i].orgnFg);
             $("#lblAgencyNm1").text(weekPosInstTopList[i].agencyNm);
             $("#lblInstStoreCntNew1").text(weekPosInstTopList[i].instStoreCntNew);
             $("#lblStoreCntClose1").text(weekPosInstTopList[i].storeCntClose);
         } else if(i == 1) {
-            $("#lblOrgnFg2").text(weekPosInstTopList[i].orgnFg);
             $("#lblAgencyNm2").text(weekPosInstTopList[i].agencyNm);
             $("#lblInstStoreCntNew2").text(weekPosInstTopList[i].instStoreCntNew);
             $("#lblStoreCntClose2").text(weekPosInstTopList[i].storeCntClose);
         } else if(i == 2) {
-            $("#lblOrgnFg3").text(weekPosInstTopList[i].orgnFg);
             $("#lblAgencyNm3").text(weekPosInstTopList[i].agencyNm);
             $("#lblInstStoreCntNew3").text(weekPosInstTopList[i].instStoreCntNew);
             $("#lblStoreCntClose3").text(weekPosInstTopList[i].storeCntClose);
         } else if(i == 3) {
-            $("#lblOrgnFg4").text(weekPosInstTopList[i].orgnFg);
             $("#lblAgencyNm4").text(weekPosInstTopList[i].agencyNm);
             $("#lblInstStoreCntNew4").text(weekPosInstTopList[i].instStoreCntNew);
             $("#lblStoreCntClose4").text(weekPosInstTopList[i].storeCntClose);
         } else if(i == 4) {
-            $("#lblOrgnFg5").text(weekPosInstTopList[i].orgnFg);
             $("#lblAgencyNm5").text(weekPosInstTopList[i].agencyNm);
             $("#lblInstStoreCntNew5").text(weekPosInstTopList[i].instStoreCntNew);
             $("#lblStoreCntClose5").text(weekPosInstTopList[i].storeCntClose);

@@ -14,13 +14,13 @@
     <!--메인컨텐츠-->
     <div class="mainCon">
         <!--오늘의 매출건수-->
-        <div class="w100 fl bb stat_sky2_2" style="height: 60px;">
+        <div class="w100 fl bb stat_sky2_2" style="height: 40px;">
             <h2>오늘의 매출건수<span id="totalSaleCnt"></span></h2>
         </div>
         <!--//오늘의 매출건수-->
 
         <!--오늘의 매출금액-->
-        <div class="w100 fl bb stat_sky2_2" style="height: 180px;">
+        <div class="w100 fl bb stat_sky2_2" style="height: 150px;">
             <h2>오늘의 매출금액<span id="totalSaleAmt"></span></h2>
             <div>
                 <p><span>신용카드</span><span id="cardSaleAmt"></span></p>
