@@ -27,9 +27,6 @@ var recpOriginUseYnComboData = [
     {"name":"미등록","value":"N"}
 ];
 
-// 재료 및 원산지 등록에 추가버튼, '재료코드' 미선택시 막을려고 ("V":선택, "N":미선택)
-var addSelectedProd = "N";
-
 /**
  *  상품-원산지관리 그리드 생성
  */
@@ -129,30 +126,25 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
         params.recpOriginUseYn = $scope.recpOriginUseYn;
 
         $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginList.sb", params, function() {
-            addSelectedProd = "N";
+            
+            // 등록 재료 리스트 초기화
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('prodRecpOriginDetailCtrl');
                 storeScope._gridDataInit();
                 storeScope._broadcast('prodRecpOriginDetailCtrl', null);
             });
+
+            // 미등록 재료 리스트 초기화
+            $scope.$apply(function() {
+                var regSope = agrid.getScope('prodRecpOriginRegCtrl');
+                regSope._gridDataInit();
+                regSope._broadcast('prodRecpOriginRegCtrl', null);
+
+                // 재료명, 원사지명 조회조건 textbox 초기화
+                regSope.reset();
+            });
+
         }, false);
-    };
-
-    // 재료 및 원산지 등록 팝업 - 닫을때 때문에
-    $scope.$on("prodRecpOriginPopupCtrl", function(event, data) {
-        $scope.searchProdRecpOriginPopup();
-        event.preventDefault();
-    });
-
-    $scope.searchProdRecpOriginPopup = function(){
-        var params = {};
-        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
-        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
-        params.chkDt = $scope.isChecked;
-        params.useYn = $scope.useYn;
-        params.recpOriginUseYn = $scope.recpOriginUseYn;
-
-        $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -282,6 +274,12 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
             }
         });
     };
+    
+    // 원산지신규등록 팝업
+    $scope.openOriginReg = function () {
+        $scope.wjRecpOriginRegLayer.show(true);
+        $scope._broadcast('recpOriginRegCtrl');
+    }
 
 }]);
 
@@ -304,13 +302,14 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
         $scope.setSelectedProd(data);
 
         if(!$.isEmptyObject($scope.selectedProd) ) {
-            addSelectedProd = "Y";
-        }
-        if(addSelectedProd === "Y") {
-            $("#lblProd").text(" ( [ " + $scope.selectedProd.prodCd + " ] " + $scope.selectedProd.prodNm + " )");
+            $("#lblProd").text("[" + $scope.selectedProd.prodCd + "] " + $scope.selectedProd.prodNm);
             $scope.searchProdRecpOriginDetail();
 
-        } else if(addSelectedProd === "N") {
+            // 미등록 재료 조회
+            var scope = agrid.getScope("prodRecpOriginRegCtrl");
+            scope._broadcast('prodRecpOriginRegCtrl', data);
+
+        }else{
             $("#lblProd").text("");
         }
         event.preventDefault();
@@ -321,7 +320,7 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
         params.prodCd = $scope.selectedProd.prodCd;
         params.hqBrandCd = $scope.selectedProd.hqBrandCd;
 
-        $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginDetailList.sb", params, function() {}, false);
+        $scope._inquirySub("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginDetailList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -334,40 +333,10 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
         return $scope.selectedProd;
     };
 
-    // <-- 추가 -->
-    $scope.add = function() {
-        if(!$.isEmptyObject($scope.selectedProd) ) {
-            addSelectedProd = "Y";
-        }
-
-        if(addSelectedProd === "Y") {
-            $scope.wjProdRecpOriginAddLayer.show(true);
-            event.preventDefault();
-        } else if(addSelectedProd === "N" ) {
-            $scope._popMsg(messages["prodRecpOrigin.prodCdBlank"]); // 상품코드를 선택해주세요.
-            return false;
-        }
-    };
-
-    // 화면 ready 된 후 설정
-    angular.element(document).ready(function () {
-
-        // 재료 및 원산지 등록 팝업 핸들러 추가
-        $scope.wjProdRecpOriginAddLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('prodRecpOriginAddCtrl', $scope.getSelectedProd());
-            }, 50)
-        });
-    });
-    // <-- //추가 -->
-
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        if(!$.isEmptyObject($scope.selectedProd) ) {
-            addSelectedProd = "Y";
-        }
 
-        if(addSelectedProd === "Y") {
+        if(!$.isEmptyObject($scope.selectedProd) ) {
             $scope._popConfirm(messages["cmm.choo.delete"], function() {
                 for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                     var item = $scope.flex.collectionView.items[i];
@@ -380,7 +349,7 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
                 $scope.delSave();
             });
 
-        } else if(addSelectedProd === "N" ) {
+        }else{
             $scope._popMsg(messages["prodRecpOrigin.prodCdBlank"]); // 상품코드를 선택해주세요.
             return false;
         }
@@ -397,19 +366,15 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){
-            // 순번 저장
+            // 다시 순번 저장
             $scope.saveSave();
 
-            $scope.$apply(function() {
-                var params1 = {};
-                params1.prodCd = $scope.selectedProd.prodCd;
-                params1.prodNm = $scope.selectedProd.prodNm;
-                params1.hqBrandCd = $scope.selectedProd.hqBrandCd;
+            // 등록 재료 조회
+            $scope.searchProdRecpOriginDetail();
 
-                var storeScope = agrid.getScope('prodRecpOriginCtrl');
-                storeScope._gridDataInit();
-                storeScope._broadcast('prodRecpOriginPopupCtrl', params1);
-            });
+            // 미등록 재료 조회
+            var scope = agrid.getScope("prodRecpOriginRegCtrl");
+            scope._broadcast('prodRecpOriginRegCtrl', $scope.selectedProd);
         });
     };
     // <-- //그리드 행 삭제 -->
@@ -454,17 +419,14 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
 
     // <-- 저장 -->
     $scope.save = function() {
-        if(!$.isEmptyObject($scope.selectedProd) ) {
-            addSelectedProd = "Y";
-        }
 
-        if(addSelectedProd === "Y") {
+        if(!$.isEmptyObject($scope.selectedProd) ) {
             $scope._popConfirm(messages["cmm.choo.save"], function() {
                 // 순번 저장
                 $scope.saveSave();
             });
 
-        } else if(addSelectedProd === "N" ) {
+        }else{
             $scope._popMsg(messages["prodRecpOrigin.prodCdBlank"]); // 상품코드를 선택해주세요.
             return false;
         }
@@ -484,13 +446,109 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){ $scope.allSearch() });
+        $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){
+
+            // 등록 재료 조회
+            $scope.searchProdRecpOriginDetail();
+
+            // 미등록 재료 조회
+            var scope = agrid.getScope("prodRecpOriginRegCtrl");
+            scope._broadcast('prodRecpOriginRegCtrl', $scope.selectedProd);
+        });
     };
     // <-- //저장 -->
 
-    // 재조회
-    $scope.allSearch = function () {
-        $scope.searchProdRecpOriginDetail();
+}]);
+
+
+/**
+ * 재료 및 원산지 미등록 그리드 생성
+ */
+app.controller('prodRecpOriginRegCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prodRecpOriginRegCtrl', $scope, $http, true));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
     };
+
+    $scope.$on("prodRecpOriginRegCtrl", function(event, data) {
+        if(data !== null) {
+            // 상품 데이터 셋팅
+            $scope.setSelectedProd(data);
+
+            // 미등록 재료 리스트 조회
+            $scope.searchProdRecpOriginReg();
+            event.preventDefault();
+        }
+    });
+
+    // 선택 매장
+    $scope.selectedProd;
+    $scope.setSelectedProd = function(store) {
+        $scope.selectedProd = store;
+    };
+    $scope.getSelectedProd = function(){
+        return $scope.selectedProd;
+    };
+
+    // 미등록 재료 리스트 조회
+    $scope.searchProdRecpOriginReg = function(){
+        var params = {};
+        params.prodCd = $scope.selectedProd.prodCd;
+        params.hqBrandCd = $scope.selectedProd.hqBrandCd;
+        params.recipesNm = $scope.recipesNm;
+        params.orgplceNm = $scope.orgplceNm;
+
+        $scope._inquirySub("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddList.sb", params, function() {}, false);
+    };
+
+    // 미등록 재료 조회
+    $scope.btnSearch = function () {
+
+        if(!$.isEmptyObject($scope.selectedProd) ) {
+
+            $scope.searchProdRecpOriginReg();
+
+        }else{
+            $scope._popMsg(messages["prodRecpOrigin.prodCdBlank"]); // 상품코드를 선택해주세요.
+            return false;
+        }
+
+    };
+
+    // 미등록 재료 추가
+    $scope.add = function () {
+
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                $scope.flex.collectionView.items[i].status = "I";
+                $scope.flex.collectionView.items[i].prodCd = $scope.selectedProd.prodCd;
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/base/prod/recpOrigin/prodRecpOriginAdd/getProdRecpOriginAddSave.sb", params, function(){
+
+            // 등록 재료 조회
+            var scope = agrid.getScope("prodRecpOriginDetailCtrl");
+            scope._broadcast('prodRecpOriginDetailCtrl', $scope.selectedProd);
+            
+            // 미등록 재료 조회
+            $scope.searchProdRecpOriginReg();
+
+        });
+    };
+
+    // 재료명, 원사지명 조회조건 textbox 초기화
+    $scope.reset = function () {
+        $scope.recipesNm = "";
+        $scope.orgplceNm = "";
+    }
 
 }]);
