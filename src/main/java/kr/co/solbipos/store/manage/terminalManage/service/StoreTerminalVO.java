@@ -38,11 +38,24 @@ public class StoreTerminalVO extends CmmVO {
     /** [벤더시리얼번호] */
     private String vendorSerNo;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
+    /** 본사명 */
+    private String hqOfficeNm;
+
+    /** 매장명 */
+    private String storeNm;
+
+    /** 용도 */
+    private String clsFg;
+
+    /** 상태 */
+    private String sysStatFg;
 
     /**
      * @return the storeCd
      */
-
     public String getStoreCd() {
         return storeCd;
     }
@@ -173,5 +186,33 @@ public class StoreTerminalVO extends CmmVO {
      */
     public void setVendorSerNo(String vendorSerNo) {
         this.vendorSerNo = vendorSerNo;
+    }
+
+    public String getHqOfficeCd() { return hqOfficeCd; }
+
+    public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
+
+    public String getHqOfficeNm() { return hqOfficeNm; }
+
+    public void setHqOfficeNm(String hqOfficeNm) { this.hqOfficeNm = hqOfficeNm; }
+
+    public String getStoreNm() { return storeNm; }
+
+    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+
+    public String getClsFg() {
+        return clsFg;
+    }
+
+    public void setClsFg(String clsFg) {
+        this.clsFg = clsFg;
+    }
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
     }
 }

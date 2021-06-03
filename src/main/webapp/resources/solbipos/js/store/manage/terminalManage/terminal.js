@@ -31,14 +31,89 @@ for(var i in vandorList) {
     mcoupnList.push(vandorList[i].name);
   }
 }
-
 /**********************************************************************
  *  터미널 Ctrl
  **********************************************************************/
 app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('terminalCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('terminalCtrl', $scope, $http, false));
+
+  // 콤보박스 데이터 Set
+  $scope._setComboData("srchClsFg", clsFg);
+  $scope._setComboData("srchStatFg", sysStatFg);
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name'); // 용도
+    $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name'); // 상태
+
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+
+        // 재료코드
+        if (col.binding === "storeCd") {
+          // var item = s.rows[e.row].dataItem;
+          wijmo.addClass(e.cell, 'wijLink');
+        }
+      }
+    });
+
+    // 그리드 선택 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function(e) {
+      var ht = s.hitTest(e);
+      if( ht.cellType === wijmo.grid.CellType.Cell) {
+        var col = ht.panel.columns[ht.col];
+
+        // 재료코드 클릭시 상세정보 조회
+        if ( col.binding === "storeCd") {
+          var selectedRow = s.rows[ht.row].dataItem;
+          var params      = {};
+          params.storeCd = selectedRow.storeCd;
+          params.storeNm = selectedRow.storeNm;
+
+          $("#lblStoreInfo").text("[" + params.storeCd + "] " + params.storeNm);
+          $("#lblStoreCd").text(params.storeCd);
+          $("#lblStoreNm").text(params.storeNm);
+
+          $scope.search();
+        }
+      }
+    });
+  };
+
+  // <-- 검색 호출 -->
+  $scope.searchTerminalManage = function(){
+    var params = {};
+
+    $scope._inquiryMain("/store/manage/terminalManage/terminalManage/getTerminalManageList.sb", params, function() {
+      $("#lblStoreInfo").text("");
+      $("#lblStoreCd").text("");
+      $("#lblStoreNm").text("");
+
+      $scope.$apply(function() {
+        // 그리드 초기화
+        var posScope = agrid.getScope('posCtrl');
+        posScope._gridDataInit();
+
+        var cornerScope = agrid.getScope('cornerCtrl');
+        cornerScope._gridDataInit();
+      });
+
+      $("#lblToolTip").text("");
+      $("#posListArea").hide();
+      // $("#posArea").hide();
+      $("#posBtnArea").hide();
+      $("#cornerListArea").hide();
+      $("#cornerArea").hide();
+      $("#cornerBtnArea").hide();
+      // 다시 초기화해주고
+      $scope.resetCombobox();
+    }, false);
+  };
+  // <-- //검색 호출 -->
 
   // 터미널 환경변수 [2028]
   $scope.terminalEnvVal;
@@ -89,7 +164,6 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.cornerFgArr = [];
 
   $scope.resetCombobox = function(){
-
     $scope.posFgArr = [];
     $scope.cornerFgArr = [];
 
@@ -99,25 +173,10 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope._setComboData("terminalFg", terminalFg);
 
-  // 매장찾기 팝업 오픈
-  $scope.searchStore = function(){
-    var popup = $scope.storeLayer;
-    popup.show(true, function (s) {
-      var storeData = agrid.getScope('storeCtrl');
-      storeData.$apply(function(){
-        storeData._gridDataInit();
-      });
-      var data = storeData.getSelectedStore();
-
-      $("#storeInfo").val("["+data.storeCd+"] "+data.storeNm);
-      $("#storeCd").val(data.storeCd);
-      $("#storeNm").val(data.storeNm);
-    });
-  };
-
   // 매장 선택 후, 조회 (환경변수, 포스목록, 코너목록)
   $scope.$on("terminalCtrl", function(event, data) {
-    $scope.search();
+    $scope.searchTerminalManage();
+    // $scope.search();
     event.preventDefault();
   });
 
@@ -125,13 +184,13 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   // 해당 매장의 코너목록과 포스목록도 함께 조회
   $scope.search = function (){
 
-    if(isNull($("#storeCd").val())) {
-      $scope._popMsg(messages["terminalManage.request.select.store"]);
-      return false;
-    }
+    // if(isNull($("#lblStoreCd").text())) {
+    //   $scope._popMsg(messages["terminalManage.request.select.store"]);
+    //   return false;
+    // }
 
     var params = {};
-    params.storeCd = $("#storeCd").val();
+    params.storeCd = $("#lblStoreCd").text();
 
     $scope._postJSONQuery.withOutPopUp( baseUrl + "terminalManage/getTerminalEnv.sb", params, function(result){
 
@@ -180,7 +239,6 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 코너 보여주기
   $scope.showCorner = function(){
-
     $("#lblToolTip").text("* 코너를 선택하세요.");
 
     $("#cornerListArea").show();
@@ -194,7 +252,6 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 포스 보여주기
   $scope.showPos = function(){
-
     $("#lblToolTip").text("* POS를 선택하세요.");
 
     $("#cornerListArea").hide();
@@ -204,7 +261,6 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#posListArea").show();
     $("#posArea").show();
     $("#posBtnArea").show();
-
   };
 
   // 콤보박스 값 변경 이벤트
@@ -235,10 +291,10 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   // 포스 환경변수 복사 //TODO
-  $scope.copyEnv = function(){
-    $scope._popMsg(messages["terminalManage.no.open"]);
-    return false;
-  };
+  // $scope.copyEnv = function(){
+  //   $scope._popMsg(messages["terminalManage.no.open"]);
+  //   return false;
+  // };
 
   // 포스 터미널 그리드 행 추가
   $scope.posAddRow = function(){
@@ -282,8 +338,8 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.cornerAddLayer.show(true);
 
     var params      = {};
-    params.storeCd = $("#storeCd").val();
-    params.storeNm = $("#storeNm").val();
+    params.storeCd = $("#lblStoreCd").text();
+    params.storeNm = $("#lblStoreNm").text();
 
     $scope._broadcast('cornerAddCtrl', params);
 
@@ -298,8 +354,8 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 조회
     var params = {};
-    params.storeCd = $("#storeCd").val();
-    
+    params.storeCd = $("#lblStoreCd").text();
+
     $scope._postJSONQuery.withOutPopUp( baseUrl + "terminalManage/getTerminalEnv.sb", params, function(result){
 
       var cornerList = result.data.data.cornerList;
@@ -308,29 +364,26 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.cornerFgArr.push(cornerList[j]);
       }
       $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView( $scope.cornerFgArr);
-      
+
       // 코너 그리드 초기화
       var cornerScope = agrid.getScope('cornerCtrl');
       cornerScope._gridDataInit();
-      
+
     });
   }
 
 }]);
 
-// 매장 클릭 (매장찾기)
-$("#storeInfo").click(function(){
-  var terminalScope = agrid.getScope('terminalCtrl');
-  terminalScope.searchStore();
-});
+
+
 
 /**********************************************************************
  *  POS 설정 그리드
  **********************************************************************/
 app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('posCtrl', $scope, $http, true));
 
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('posCtrl', $scope, $http, false));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -415,7 +468,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
   // 포스설정 터미널 데이터 조회
   $scope.getPosSetting = function(){
 
-    if(isNull($("#storeCd").val())) {
+    if(isNull($("#lblStoreCd").text())) {
       $scope._popMsg(messages["terminalManage.request.select.store"]);
       return false;
     }
@@ -423,7 +476,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     var terminalScope = agrid.getScope('terminalCtrl');
 
     var params = {};
-    params.storeCd = $("#storeCd").val();
+    params.storeCd = $("#lblStoreCd").text();
     params.posNo = terminalScope.getPosFgVal();
 
     $scope._inquirySub(baseUrl + "pos/getPosTerminalList.sb", params, function() {
@@ -466,13 +519,13 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
-      $scope.flex.collectionView.itemsEdited[i].storeCd = $("#storeCd").val();
+      $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
       $scope.flex.collectionView.itemsEdited[i].posNo = terminalScope.getPosFgVal();
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
-      $scope.flex.collectionView.itemsAdded[i].storeCd = $("#storeCd").val();
+      $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
       $scope.flex.collectionView.itemsAdded[i].posNo = terminalScope.getPosFgVal();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
@@ -490,24 +543,24 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorTermnlNo == "") {
+      if(params[i].vendorTermnlNo == "" || params[i].vendorTermnlNo == undefined) {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
         return false;
+      } else {
+        if(params[i].vendorTermnlNo.length > 50) {
+          $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
+          return false;
+        }
       }
 
-      if(params[i].vendorTermnlNo.length > 50) {
-        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
-        return false;
-      }
-
-      if(params[i].vendorSerNo == "") {
+      if(params[i].vendorSerNo == "" || params[i].vendorSerNo == undefined) {
         $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
         return false;
-      }
-
-      if(params[i].vendorSerNo.length > 20) {
-        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
-        return false;
+      } else {
+        if(params[i].vendorSerNo.length > 20) {
+          $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+          return false;
+        }
       }
     }
 
@@ -551,8 +604,9 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
  * 코너 설정 그리드
  ***************************************************************************/
 app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('cornerCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('cornerCtrl', $scope, $http, false));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -560,7 +614,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     // $scope.vanCdDataMap = new wijmo.grid.DataMap(vandorList, 'value', 'name');
     $scope.vanCdDataMap = allVanList;
     $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
-
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -638,7 +691,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
   // 코너설정 데이터 조회
   $scope.getCornerSetting = function(){
 
-    if(isNull($("#storeCd").val())){
+    if(isNull($("#lblStoreCd").text())){
       $scope._popMsg(messages["terminalManage.request.select.store"]);
       return false;
     }
@@ -646,7 +699,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     var terminalScope = agrid.getScope('terminalCtrl');
 
     var params = {};
-    params.storeCd = $("#storeCd").val();
+    params.storeCd = $("#lblStoreCd").text();
     params.cornrCd = terminalScope.getCornerFgVal();
 
     $scope._inquirySub(baseUrl + "corner/getCornerTerminalList.sb", params, function() {}, false);
@@ -673,13 +726,13 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
-      $scope.flex.collectionView.itemsEdited[i].storeCd = $("#storeCd").val();
+      $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
       $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
-      $scope.flex.collectionView.itemsAdded[i].storeCd = $("#storeCd").val();
+      $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
       $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
@@ -697,24 +750,24 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorTermnlNo == "") {
+      if(params[i].vendorTermnlNo == "" || params[i].vendorTermnlNo == undefined) {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
         return false;
+      } else {
+        if(params[i].vendorTermnlNo.length > 50) {
+          $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
+          return false;
+        }
       }
 
-      if(params[i].vendorTermnlNo.length > 50) {
-        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
-        return false;
-      }
-
-      if(params[i].vendorSerNo == "") {
+      if(params[i].vendorSerNo == "" || params[i].vendorSerNo == undefined) {
         $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
         return false;
-      }
-
-      if(params[i].vendorSerNo.length > 20) {
-        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
-        return false;
+      } else {
+        if(params[i].vendorSerNo.length > 20) {
+          $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+          return false;
+        }
       }
     }
 
@@ -731,7 +784,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     } else {
       params = JSON.stringify(params);
     }
-
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save(baseUrl + "corner/saveCornerTerminalInfo.sb", params, function(){

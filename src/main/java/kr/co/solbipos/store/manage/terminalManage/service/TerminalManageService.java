@@ -58,5 +58,6 @@ public interface TerminalManageService {
     /** 코너 저장 */
     int insertCorner(StoreCornerVO storeCornerVO, SessionInfoVO sessionInfoVO);
 
-
+    /** 매장터미널관리 조회 */
+    List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO);
 }

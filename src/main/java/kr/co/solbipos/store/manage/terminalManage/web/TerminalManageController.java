@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
@@ -279,5 +280,28 @@ public class TerminalManageController {
             ex.printStackTrace();
         }
         return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 매장터미널관리 조회
+     *
+     * @param storeTerminalVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 06. 02.
+     */
+    @RequestMapping(value = "/terminalManage/getTerminalManageList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTerminalManageList(StoreTerminalVO storeTerminalVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getTerminalManageList(storeTerminalVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeTerminalVO);
     }
 }

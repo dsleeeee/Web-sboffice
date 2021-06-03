@@ -69,5 +69,7 @@ public interface TerminalManageMapper {
     /** 코너 저장 */
     int insertCorner(StoreCornerVO storeCornerVO);
 
+    /** 매장터미널관리 조회 */
+    List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO);
 }
 

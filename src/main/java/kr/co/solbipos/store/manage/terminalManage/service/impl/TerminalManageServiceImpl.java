@@ -193,4 +193,10 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         return result;
     }
 
+    /** 매장터미널관리 조회 */
+    @Override
+    public List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO) {
+
+        return mapper.getTerminalManageList(storeTerminalVO);
+    }
 }
