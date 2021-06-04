@@ -15,7 +15,7 @@
         <![CDATA[
         SELECT  tsspc.CORNR_CD, tmc.CORNR_NM
         ,       tsspc.APPR_PROC_FG, tsspc.CARD_TYPE_FG, tsspc.CARD_NO
-        ,       tsspc.INST_CNT, tsspc.APPR_AMT
+        ,       tsspc.INST_CNT, tsspc.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
         ,       SUBSTR(tsspc.APPR_DT, 8, 14) AS APPR_TIME
         ,       tsspc.APPR_NO
@@ -111,7 +111,7 @@
         <![CDATA[
         SELECT  tsspp.CORNR_CD, tmc.CORNR_NM
         ,       tsspp.APPR_PROC_FG, tsspp.PAYCO_BARCD_TYPE_FG, tsspp.PAYCO_BARCD_NO
-        ,       tsspp.INST_CNT, tsspp.APPR_AMT
+        ,       tsspp.INST_CNT, tsspp.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspp.APPR_DT, 0, 8) AS APPR_DATE
         ,       SUBSTR(tsspp.APPR_DT, 8, 14) AS APPR_TIME
         ,       tsspp.APPR_NO
@@ -229,7 +229,7 @@
         ,       tsspm.MPAY_BARCD_TYPE_FG
         ,       tsspm.MPAY_BARCD_NO
         ,       tsspm.APPR_NO
-        ,       tsspm.APPR_AMT
+        ,       tsspm.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
         ,       SUBSTR(tsspm.APPR_DT, 8, 14) AS APPR_TIME
         FROM    TB_SL_SALE_PAY_MPAY tsspm

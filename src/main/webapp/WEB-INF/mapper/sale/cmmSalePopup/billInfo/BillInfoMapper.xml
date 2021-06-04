@@ -97,11 +97,11 @@
                     tssdd.DC${item} AS DC${item}
                 </foreach>
         FROM    TB_SL_SALE_DTL tssd
-        ,       (   SELECT  PROD_CD
+        ,       (   SELECT  PROD_CD, BILL_DTL_NO
                     ,       <foreach collection="arrDcCol" item="item" separator=",">
                                 DC${item} AS DC${item}
                             </foreach>
-                    FROM    (   SELECT  tssdd.PROD_CD, tssdd.DC_CD, tssdd.DC_AMT
+                    FROM    (   SELECT  tssdd.PROD_CD, tssdd.DC_CD, tssdd.DC_AMT, tssdd.BILL_DTL_NO
                                 FROM    TB_SL_SALE_DTL_DC tssdd
                                 WHERE   tssdd.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     tssdd.STORE_CD      = #{storeCd}
@@ -122,6 +122,7 @@
         AND     tssd.POS_NO       = #{posNo}
         AND     tssd.BILL_NO      = #{billNo}
         AND     tssdd.PROD_CD (+) = tssd.PROD_CD
+        AND 	tssdd.BILL_DTL_NO  (+) = tssd.BILL_DTL_NO
         AND     tmp.STORE_CD  (+) = tssd.STORE_CD
         AND     tmp.PROD_CD   (+) = tssd.PROD_CD
     </select>
