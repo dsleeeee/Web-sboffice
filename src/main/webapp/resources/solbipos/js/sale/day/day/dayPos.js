@@ -37,7 +37,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
-        // <-- 그리드 헤더2줄 -->
+        // <-- 그리드 헤더3줄 -->
         // 헤더머지
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -53,13 +53,34 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
         // 포스구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrPosCol.length; i++) {
-            dataItem['pos' + arrPosCol[i] + 'SaleAmt'] = posColList[i].posNm;
-            dataItem['pos' + arrPosCol[i] + 'DcAmt'] = posColList[i].posNm;
-            dataItem['pos' + arrPosCol[i] + 'RealSaleAmt'] = posColList[i].posNm;
-            dataItem['pos' + arrPosCol[i] + 'SaleQty'] = posColList[i].posNm;
+            dataItem['pos' + arrPosCol[i] + 'SaleAmt'] = posColList[i].storeNm;
+            dataItem['pos' + arrPosCol[i] + 'DcAmt'] = posColList[i].storeNm;
+            dataItem['pos' + arrPosCol[i] + 'RealSaleAmt'] = posColList[i].storeNm;
+            dataItem['pos' + arrPosCol[i] + 'SaleQty'] = posColList[i].storeNm;
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
+
+        // 둘째줄 헤더 생성
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        var dataItem1         = {};
+        dataItem1.saleDate    = messages["day.dayPos.saleDate"];
+        dataItem1.yoil    = messages["day.dayPos.yoil"];
+        dataItem1.totSaleAmt    = messages["day.dayPos.totSaleAmt"];
+        dataItem1.totDcAmt    = messages["day.dayPos.totDcAmt"];
+        dataItem1.totRealSaleAmt    = messages["day.dayPos.totRealSaleAmt"];
+        dataItem1.totSaleQty    = messages["day.dayPos.totSaleQty"];
+
+        // 포스구분 헤더머지 컬럼 생성
+        for (var i = 0; i < arrPosCol.length; i++) {
+            dataItem1['pos' + arrPosCol[i] + 'SaleAmt'] = posColList[i].posNm;
+            dataItem1['pos' + arrPosCol[i] + 'DcAmt'] = posColList[i].posNm;
+            dataItem1['pos' + arrPosCol[i] + 'RealSaleAmt'] = posColList[i].posNm;
+            dataItem1['pos' + arrPosCol[i] + 'SaleQty'] = posColList[i].posNm;
+        }
+
+        s.columnHeaders.rows[1].dataItem = dataItem1;
 
         s.itemFormatter = function (panel, r, c, cell) {
             if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
@@ -98,7 +119,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 }
             }
         }
-        // <-- //그리드 헤더2줄 -->
+        // <-- //그리드 헤더3줄 -->
 
         //그리드 링크설정
         // ReadOnly 효과설정
@@ -112,11 +133,11 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
                 // 수량
                 for (var i = 0; i < posColList.length; i++) {
-                    if (col.binding === ("pos" + posColList[i].posNo + "SaleQty")) {
+                    if (col.binding === ("pos" + posColList[i].storePosNo + "SaleQty")) {
                         var item = s.rows[e.row].dataItem;
 
                         // 값이 있으면 링크 효과
-                        if (nvl(item[("pos" + posColList[i].posNo + "SaleQty")], '') !== '') {
+                        if (nvl(item[("pos" + posColList[i].storePosNo + "SaleQty")], '') !== '') {
                             wijmo.addClass(e.cell, 'wijLink');
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                         }
@@ -149,17 +170,17 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
                 // 수량 클릭시 상세정보 조회
                 for (var i = 0; i < posColList.length; i++) {
-                    if (col.binding === ("pos" + posColList[i].posNo + "SaleQty")) {
+                    if (col.binding === ("pos" + posColList[i].storePosNo + "SaleQty")) {
 
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params      = {};
                         params.saleDate = selectedRow.saleDate;
-                        params.storeCd = $("#dayPosStoreCd").val();
+                        params.storeCd = posColList[i].storeCd;
                         params.posNo = posColList[i].posNo;
                         params.gubun = "dayPos";
 
                         // 값이 있으면 링크
-                        if (nvl(selectedRow[("pos" + posColList[i].posNo + "SaleQty")], '') !== '') {
+                        if (nvl(selectedRow[("pos" + posColList[i].storePosNo + "SaleQty")], '') !== '') {
                             $scope._broadcast('prodSaleDtlCtrl', params);
                         }
                     }
@@ -179,9 +200,69 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.storeCd = $("#dayPosStoreCd").val();
-        params.posCol    = posCol;
+        params.posCol = posCol;
 
         $scope._inquiryMain("/sale/day/day/day/getDayPosList.sb", params, function() {}, false);
+
+        // <-- 그리드 visible -->
+        // 선택한 테이블에 따른 리스트 항목 visible
+        var grid = wijmo.Control.getControl("#wjGridDayPosList");
+        var columns = grid.columns;
+
+        // posColList 에 storeCd 배열로 담기
+        var posColArray = [];
+        for (var i = 0; i < posColList.length; i++) {
+            comboData = {};
+            comboData.value = posColList[i].storeCd;
+            posColArray.push(comboData);
+        }
+
+        // 컬럼 총갯수
+        var columnsCnt = 6 + (posColArray.length * 4);
+
+        // 전체선택시 전부 visible
+        if($("#dayPosStoreCd").val() === "")
+        {
+            for (var i = 6; i < columnsCnt; i++) {
+                if(columns[i].visible === false) {
+                    columns[i].visible = true;
+                }
+            }
+        }
+        // 선택한 테이블만 visible
+        else
+        {
+            // 선택한 storeCd
+            var storeColList = $("#dayPosStoreCd").val().split(',');
+
+            // storeColList 에 storeCd 배열로 담기
+            var storeColArray = [];
+            for (var i = 0; i < storeColList.length; i++) {
+                comboData = {};
+                comboData.value = storeColList[i];
+                storeColArray.push(comboData);
+            }
+
+            for (var i = 0; i < posColArray.length; i++) {
+                for (var j = 0; j < storeColArray.length; j++) {
+                    if (posColArray[i].value === storeColArray[j].value) {
+                        for (var k = 0; k < 4; k++) {
+                            if(columns[(i * 4) + 6 + k].visible === false) {
+                                columns[(i * 4) + 6 + k].visible = true;
+                            }
+                        }
+                        break;
+                    } else {
+                        for (var k = 0; k < 4; k++) {
+                            if(columns[(i * 4) + 6 + k].visible === true) {
+                                columns[(i * 4) + 6 + k].visible = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // <-- //그리드 visible -->
     };
     // <-- //검색 호출 -->
 

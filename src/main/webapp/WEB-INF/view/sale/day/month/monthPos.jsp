@@ -30,7 +30,7 @@
             <tr>
                 <%-- 조회월 --%>
                 <th>
-                    <s:message code="month.month" />
+                    <s:message code="cmm.search.month" />
                 </th>
                 <td colspan="3">
                     <div class="sb-select">
@@ -76,30 +76,28 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    is-read-only="true">
+                    is-read-only="true"
+                    id="wjGridMonthPosList">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="month.yearMonth"/>" binding="yearMonth" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.pos.totSaleAmt"/>" binding="totSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.pos.totDcAmt"/>" binding="totDcAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.pos.totRealSaleAmt"/>" binding="totRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.pos.totSaleQty"/>" binding="totSaleQty" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.yearMonth"/>" binding="yearMonth" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.pos.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.pos.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.pos.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.pos.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 포스 컬럼 생성--%>
                     <c:forEach var="posCol" items="${posColList}">
-                        <wj-flex-grid-column header="<s:message code="month.saleAmt"/>" binding="pos${posCol.posNo}SaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.dcAmt"/>" binding="pos${posCol.posNo}DcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="pos${posCol.posNo}RealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.saleQty"/>" binding="pos${posCol.posNo}SaleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="month.saleAmt"/>" binding="pos${posCol.storePosNo}SaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="month.dcAmt"/>" binding="pos${posCol.storePosNo}DcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="pos${posCol.storePosNo}RealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="month.saleQty"/>" binding="pos${posCol.storePosNo}SaleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
-
                 </wj-flex-grid>
-
                 <%-- ColumnPicker 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
                     <jsp:param name="pickerTarget" value="monthPosCtrl"/>
                 </jsp:include>
                 <%--// ColumnPicker 사용시 include --%>
-
             </div>
         </div>
     </div>
@@ -110,4 +108,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthPos.js?ver=20200120.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthPos.js?ver=20210604.02" charset="utf-8"></script>

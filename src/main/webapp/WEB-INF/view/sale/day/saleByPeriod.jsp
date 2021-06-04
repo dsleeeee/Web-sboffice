@@ -94,6 +94,9 @@
         var posParam      = {};
         posParam.posNo     = "${posCol.posNo}";
         posParam.posNm     = "${posCol.posNm}";
+        posParam.storeCd     = "${posCol.storeCd}";
+        posParam.storeNm     = "${posCol.storeNm}";
+        posParam.storePosNo     = "${posCol.storePosNo}";
         posColList.push(posParam);
     </c:forEach>
 

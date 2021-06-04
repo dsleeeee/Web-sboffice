@@ -365,7 +365,7 @@ public class DayServiceImpl implements DayService {
         String pivotPosCol = "";
         String arrPosCol[] = dayVO.getPosCol().split(",");
         for(int i=0; i < arrPosCol.length; i++) {
-            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS"+arrPosCol[i];
+            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS_"+arrPosCol[i];
         }
         dayVO.setPivotPosCol(pivotPosCol);
 

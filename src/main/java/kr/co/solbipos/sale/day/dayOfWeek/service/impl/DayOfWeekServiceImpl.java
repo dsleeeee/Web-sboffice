@@ -250,7 +250,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
     @Override
     public List<DefaultMap<Object>> getDayOfWeekPosList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 
-        dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
@@ -265,7 +265,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         String pivotPosCol = "";
         String arrPosCol[] = dayOfWeekVO.getPosCol().split(",");
         for(int i=0; i < arrPosCol.length; i++) {
-            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS"+arrPosCol[i];
+            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS_"+arrPosCol[i];
         }
         dayOfWeekVO.setPivotPosCol(pivotPosCol);
 

@@ -129,6 +129,9 @@ public class MonthVO extends PageVO {
     private String pivotProdClassCol2;
     private String pivotProdClassCol3;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -364,4 +367,12 @@ public class MonthVO extends PageVO {
     }
 
     public void setPivotProdClassCol3(String pivotProdClassCol3) { this.pivotProdClassCol3 = pivotProdClassCol3; }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 }

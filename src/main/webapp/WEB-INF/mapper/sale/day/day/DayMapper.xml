@@ -96,19 +96,22 @@
     <select id="getPosColList"  parameterType="dayVO" resultType="DefaultMap">
         /* DayMapper.getPosColList */
         SELECT
+        tmp.STORE_CD,
+        ('[' || tmp.STORE_CD || '] ' || (CASE WHEN tms.STORE_CD = '0000000' THEN '단독매장' ELSE tms.STORE_NM END)) AS STORE_NM,
         tmp.POS_NO,
-        tmp.POS_NM
-        FROM TB_MS_POS tmp
+        ('[' || tmp.POS_NO || '] ' || tmp.POS_NM) AS POS_NM,
+        (tmp.STORE_CD || tmp.POS_NO) AS STORE_POS_NO
+        FROM TB_MS_POS tmp,
+        TB_MS_STORE tms
         WHERE 1=1
-          AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD  = #{hqOfficeCd})
-          AND tmp.USE_YN = 'Y'
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
                 AND tmp.STORE_CD = #{storeCd}
             ]]>
         </if>
-        GROUP BY tmp.POS_NO, tmp.POS_NM
-        ORDER BY tmp.POS_NO
+        AND tms.STORE_CD (+)= tmp.STORE_CD
+        ORDER BY tmp.STORE_CD, tmp.POS_NO
     </select>
 
     <!-- 일자별(일별종합 탭) - 일별종합 리스트 조회 -->
@@ -1292,7 +1295,6 @@
         ORDER BY SALE_DATE, POS_NO, BILL_NO
     </select>
 
-
     <!-- 포스별 - 포스별매출조회-->
     <!--
         TABLE    : TB_SL_SALE_DTL
@@ -1304,58 +1306,58 @@
         SALE_DATE,
         TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
         <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS${item}_SALE_AMT, 0)
+            NVL(POS_${item}_SALE_AMT, 0)
         </foreach> AS TOT_SALE_AMT,
         <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS${item}_DC_AMT, 0)
+            NVL(POS_${item}_DC_AMT, 0)
         </foreach> AS TOT_DC_AMT,
         <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS${item}_REAL_SALE_AMT, 0)
+            NVL(POS_${item}_REAL_SALE_AMT, 0)
         </foreach> AS TOT_REAL_SALE_AMT,
         <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS${item}_SALE_QTY, 0)
+            NVL(POS_${item}_SALE_QTY, 0)
         </foreach> AS TOT_SALE_QTY,
         <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS${item}_SALE_AMT,0) AS POS${item}_SALE_AMT
+            NVL(POS_${item}_SALE_AMT,0) AS POS_${item}_SALE_AMT
         </foreach> ,
         <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS${item}_DC_AMT,0) AS POS${item}_DC_AMT
+            NVL(POS_${item}_DC_AMT,0) AS POS_${item}_DC_AMT
         </foreach> ,
         <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS${item}_REAL_SALE_AMT,0) AS POS${item}_REAL_SALE_AMT
+            NVL(POS_${item}_REAL_SALE_AMT,0) AS POS_${item}_REAL_SALE_AMT
         </foreach> ,
         <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS${item}_SALE_QTY,0) AS POS${item}_SALE_QTY
+            NVL(POS_${item}_SALE_QTY,0) AS POS_${item}_SALE_QTY
         </foreach>
-        --         SUM(POS01_SALE_AMT) AS POS01_SALE_AMT,
-        --         SUM(POS01_DC_AMT) AS POS01_DC_AMT,
-        --         SUM(POS01_REAL_SALE_AMT) AS POS01_REAL_SALE_AMT,
-        --         SUM(POS01_SALE_QTY) AS POS01_SALE_QTY
+--         SUM(POS_A00000101_SALE_AMT) AS POS_A00000101_SALE_AMT,
+--         SUM(POS_A00000101_DC_AMT) AS POS_A00000101_DC_AMT,
+--         SUM(POS_A00000101_REAL_SALE_AMT) AS POS_A00000101_REAL_SALE_AMT,
+--         SUM(POS_A00000101_SALE_QTY) AS POS_A00000101_SALE_QTY
         FROM
         (
             SELECT
             SALE_DATE,
             <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS${item}_SALE_AMT) AS POS${item}_SALE_AMT
+                SUM(POS_${item}_SALE_AMT) AS POS_${item}_SALE_AMT
             </foreach> ,
             <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS${item}_DC_AMT) AS POS${item}_DC_AMT
+                SUM(POS_${item}_DC_AMT) AS POS_${item}_DC_AMT
             </foreach> ,
             <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS${item}_REAL_SALE_AMT) AS POS${item}_REAL_SALE_AMT
+                SUM(POS_${item}_REAL_SALE_AMT) AS POS_${item}_REAL_SALE_AMT
             </foreach> ,
             <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS${item}_SALE_QTY) AS POS${item}_SALE_QTY
+                SUM(POS_${item}_SALE_QTY) AS POS_${item}_SALE_QTY
             </foreach>
             FROM
             (
                 SELECT
                 tssd.SALE_DATE,
-                tssd.SALE_AMT,
-                tssd.DC_AMT,
-                tssd.REAL_SALE_AMT,
-                tssd.SALE_QTY,
-                tssd.POS_NO
+                SUM(tssd.SALE_AMT) AS SALE_AMT,
+                SUM(tssd.DC_AMT) AS DC_AMT,
+                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tssd.SALE_QTY) AS SALE_QTY,
+                (tssd.STORE_CD || tssd.POS_NO) AS STORE_POS_NO
                 FROM TB_SL_SALE_DTL tssd
                 WHERE 1=1
                 AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1366,6 +1368,7 @@
                         #{item}
                     </foreach>
                 </if>
+                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.POS_NO
             )
             PIVOT
             (
@@ -1373,11 +1376,11 @@
                 SUM(DC_AMT) AS DC_AMT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
                 SUM(SALE_QTY) AS SALE_QTY
-                FOR POS_NO
+                FOR STORE_POS_NO
                 IN (${pivotPosCol})
-                /*   IN ('01' AS POS01,
-                '02' AS POS02,
-                '03' AS POS03)*/
+                /*IN ('A00000101' AS POS_A00000101,
+                'DS0000201' AS POS_DS0000201,
+                'DS0000601' AS POS_DS0000601)*/
             )
             GROUP BY SALE_DATE
         )

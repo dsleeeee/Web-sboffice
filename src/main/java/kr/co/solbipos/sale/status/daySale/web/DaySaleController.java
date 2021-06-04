@@ -92,7 +92,7 @@ public class DaySaleController {
         // 포스구분 코드를 , 로 연결하는 문자열 생성
         String posCol = "";
         for(int i=0; i < posColList.size(); i++) {
-            posCol += (posCol.equals("") ? "" : ",") + posColList.get(i).getStr("posNo");
+            posCol += (posCol.equals("") ? "" : ",") + posColList.get(i).getStr("storePosNo");
         }
         model.addAttribute("posColList", posColList);
         model.addAttribute("posCol", posCol);
