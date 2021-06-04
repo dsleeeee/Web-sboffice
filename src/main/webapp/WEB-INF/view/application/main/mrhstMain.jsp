@@ -122,7 +122,7 @@
                     <wj-flex-chart
                             id="saleStoreChart"
                             name="barChart1"
-                            style="width:100%; height:230px;"
+                            style="width:100%; height:250px;"
                             initialized="initChart(s,e)"
                             items-source="data"
                             binding-x="saleDate">
@@ -193,7 +193,7 @@
                     <wj-flex-chart
                             id="saleProdStoreChart"
                             name="barChart2"
-                            style="width:100%; height:230px;"
+                            style="width:100%; height:250px;"
                             initialized="initChart(s,e)"
                             items-source="data"
                             binding-x="prodNm">

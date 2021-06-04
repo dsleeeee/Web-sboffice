@@ -40,7 +40,7 @@
         <!--주간매출-->
         <div class="w70 fl br bb graph1">
             <h2>주간매출 (매장수/포스수)<div class="circle"><span class="blue">매장수</span><span class="sky">포스수</span></div></h2>
-            <div class="wizWrap" id="chart1" style="width:100%; height:240px;"></div>
+            <div class="wizWrap" id="chart1" style="width:100%; height:250px;"></div>
         </div>
         <!--//주간매출-->
 
@@ -65,7 +65,7 @@
         <!--주간 POS 설치현황-->
         <div class="w70 fl br bb graph1">
             <h2>주간 POS 설치현황<div class="square"><span class="blue">신규</span><span class="sky">재설치</span></div></h2>
-            <div class="wizWrap" id="chart2" style="width:100%; height:240px;"></div>
+            <div class="wizWrap" id="chart2" style="width:100%; height:250px;"></div>
         </div>
         <!--//주간 POS 설치현황-->
 
