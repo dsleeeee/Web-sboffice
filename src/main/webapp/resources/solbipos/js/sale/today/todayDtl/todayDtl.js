@@ -382,13 +382,14 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var scope = agrid.getScope('todayDtlCtrl');
       var ht = s.hitTest(e);
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
         params.storeCd  = $scope.storeCd;
-        params.saleDate = $scope.searchedStartDate;
+        params.saleDate = scope.searchedStartDate;
         params.posNo    = selectedRow.posNo;
         params.billNo   = selectedRow.billNo;
         params.saleYn   = selectedRow.saleYn;
