@@ -83,15 +83,17 @@ public class ProdBatchChangeServiceImpl implements ProdBatchChangeService {
                 procCnt = prodBatchChangeMapper.getProdBatchChangeSaveUpdate(prodBatchChangeVO);
 
                  // ProdVO
-                 ProdVO prodVO = new ProdVO();
-                 prodVO.setHqOfficeCd(prodBatchChangeVO.getHqOfficeCd());
-                 prodVO.setProdCd(prodBatchChangeVO.getProdCd());
-                 prodVO.setRegId(sessionInfoVO.getUserId());
+//                 ProdVO prodVO = new ProdVO();
+//                 prodVO.setHqOfficeCd(prodBatchChangeVO.getHqOfficeCd());
+//                 prodVO.setProdCd(prodBatchChangeVO.getProdCd());
+//                 prodVO.setRegId(sessionInfoVO.getUserId());
 
                  // 본사인 경우 매장에 수정정보 내려줌
                  if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                      // 상품정보 매장에 UPDATE
-                     String procResult = prodMapper.updateHqProdToStoreProd(prodVO);
+//                     String procResult = prodMapper.updateHqProdToStoreProd(prodVO);
+                     // 상품정보 매장에 UPDATE
+                     procCnt = prodBatchChangeMapper.getProdBatchChangeSaveStoreUpdate(prodBatchChangeVO);
                  }
             }
         }

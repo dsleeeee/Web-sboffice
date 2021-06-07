@@ -183,4 +183,29 @@
         </choose>
     </update>
 
+    <!-- 상품정보일괄변경 저장 매장에 update -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        COMMENTS : [매장]상품
+    -->
+    <update id="getProdBatchChangeSaveStoreUpdate" parameterType="ProdBatchChangeVO">
+        /* ProdBatchChangeMapper.getProdBatchChangeSaveStoreUpdate */
+            UPDATE
+            TB_MS_PRODUCT
+            SET
+            SALE_PROD_YN = #{saleProdYn},
+            POINT_SAVE_YN = #{pointSaveYn},
+            PRC_CTRL_FG = #{prcCtrlFg},
+            MAP_PROD_CD = #{mapProdCd},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+            WHERE 1=1
+            AND STORE_CD IN (
+                                SELECT STORE_CD
+                                FROM TB_MS_STORE tms
+                                WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                            )
+            AND PROD_CD = #{prodCd}
+    </update>
+
 </mapper>

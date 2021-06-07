@@ -31,4 +31,7 @@ public interface ProdBatchChangeMapper {
 
     /** 상품정보일괄변경 저장 update */
     int getProdBatchChangeSaveUpdate(ProdBatchChangeVO prodBatchChangeVO);
+
+    /** 상품정보일괄변경 저장 매장에 update */
+    int getProdBatchChangeSaveStoreUpdate(ProdBatchChangeVO prodBatchChangeVO);
 }
