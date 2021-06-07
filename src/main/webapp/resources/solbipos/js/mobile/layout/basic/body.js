@@ -67,6 +67,8 @@ function gridShowMsgNoData(Id, gird, rowSumVisible){
 
         // 합계 Row 존재하면
         if(rowSumVisible === "Y") {
+            gird.columnFooters.rows.removeAt();
+
             // 합계
             gird.columnFooters.rows.push(new wijmo.grid.GroupRow());
             gird.bottomLeftCells.setCellData(0, 0, '합계');
