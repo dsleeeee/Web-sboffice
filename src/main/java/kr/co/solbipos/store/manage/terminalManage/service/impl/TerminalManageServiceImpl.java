@@ -197,6 +197,13 @@ public class TerminalManageServiceImpl implements TerminalManageService{
     @Override
     public List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO) {
 
+        // 소속구분, 총판의 부모총판 코드
+        storeTerminalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+            storeTerminalVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return mapper.getTerminalManageList(storeTerminalVO);
     }
 }
