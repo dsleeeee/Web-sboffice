@@ -167,7 +167,7 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', function ($scope, $htt
 
         $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSalePayList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
-            gridShowMsgNoData("mobileMonthSalePay", $scope.flexMobileMonthSalePay, "N");
+            gridShowMsgNoData("mobileMonthSalePay", $scope.flexMobileMonthSalePay, "Y");
 
             // 매출종합
             $scope._broadcast("mobileMonthSaleTotalCtrl", params);
@@ -228,7 +228,7 @@ app.controller('mobileMonthSaleDcCtrl', ['$scope', '$http', function ($scope, $h
 
         $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSaleDcList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
-            gridShowMsgNoData("mobileMonthSaleDc", $scope.flexMobileMonthSaleDc, "N");
+            gridShowMsgNoData("mobileMonthSaleDc", $scope.flexMobileMonthSaleDc, "Y");
         }, false);
     };
     // <-- //검색 호출 -->
@@ -841,7 +841,7 @@ app.controller('mobileMonthSaleDtlCtrl', ['$scope', '$http', function ($scope, $
 
         $scope._inquirySub("/mobile/sale/status/monthSale/monthSale/getMobileMonthSaleDtlList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
-            gridShowMsgNoData("mobileMonthSaleDtl", $scope.flexMobileMonthSaleDtl, "N");
+            gridShowMsgNoData("mobileMonthSaleDtl", $scope.flexMobileMonthSaleDtl, "Y");
         }, false);
     };
     // <-- //검색 호출 -->

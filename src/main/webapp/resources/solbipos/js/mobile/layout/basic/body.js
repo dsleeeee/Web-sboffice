@@ -52,16 +52,25 @@ function gridShowMsg(Id, type){
 }
 
 // Grid 조회 후, 데이터 유무에 따른 Msg 띄우기
-function gridShowMsgNoData(Id, gird, rowVisible){
+function gridShowMsgNoData(Id, gird, rowSumVisible){
+    // rowSumVisible 합계 Row 존재하면 Y
+
     if(gird.rows.length <= 0) {
         $("#" + Id + "Msg").css("display", "block");
+
+        // 합계 Row 존재하면
+        if(rowSumVisible === "Y") {
+            gird.columnFooters.rows.removeAt();
+        }
     } else {
         $("#" + Id + "Msg").css("display", "none");
-    }
 
-    // N 이면 합계 행 제거
-    if(rowVisible === "N") {
-        gird.columnFooters.rows.removeAt();
+        // 합계 Row 존재하면
+        if(rowSumVisible === "Y") {
+            // 합계
+            gird.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            gird.bottomLeftCells.setCellData(0, 0, '합계');
+        }
     }
 }
 

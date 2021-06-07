@@ -42,7 +42,7 @@ app.controller('todayBest3Ctrl', ['$scope', '$http', '$timeout', function ($scop
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/mobile/sale/status/prod/prodSale/prodSaleList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
-            gridShowMsgNoData("todayBest3", $scope.flexTodayBest3, "N");
+            gridShowMsgNoData("todayBest3", $scope.flexTodayBest3, "Y");
             // if ($scope.flexTodayBest3.rows.length <= 0) {
             //     gridShowMsg("todayBest3", "Y");
             // }else{
@@ -113,7 +113,7 @@ app.controller('mobileProdSaleCtrl', ['$scope', '$http', '$timeout', function ($
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/mobile/sale/status/prod/prodSale/prodSaleList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
-            gridShowMsgNoData("prodSale", $scope.flexProdSale, "N");
+            gridShowMsgNoData("prodSale", $scope.flexProdSale, "Y");
             // if ($scope.flexProdSale.rows.length <= 0) {
             //     gridShowMsg("prodSale", "Y");
             // }else{

@@ -68,6 +68,6 @@
   <%--<c:import url="/WEB-INF/view/application/layer/bkmk.jsp">
   </c:import>--%>
 
-  <script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/body.js?ver=20210524.01" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/body.js?ver=20210607.01" charset="utf-8"></script>
 
 </body>

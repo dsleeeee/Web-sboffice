@@ -114,7 +114,7 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', function ($scope, $htt
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySalePayList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
-            gridShowMsgNoData("mobileTodaySalePay", $scope.flexMobileTodaySalePay, "N");
+            gridShowMsgNoData("mobileTodaySalePay", $scope.flexMobileTodaySalePay, "Y");
 
             // 매출종합현황
             $scope._broadcast("mobileTodaySaleTotalCtrl", params);
@@ -167,7 +167,7 @@ app.controller('mobileTodaySaleDcCtrl', ['$scope', '$http', function ($scope, $h
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleDcList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
-            gridShowMsgNoData("mobileTodaySaleDc", $scope.flexMobileTodaySaleDc, "N");
+            gridShowMsgNoData("mobileTodaySaleDc", $scope.flexMobileTodaySaleDc, "Y");
         }, false);
     };
     // <-- //검색 호출 -->
