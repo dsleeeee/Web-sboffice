@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileTimeDaySale.xml
+    (모바일) 매출현황 > 시간대별(일자별)매출현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.06.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.timeDaySale.service.impl.MobileTimeDaySaleMapper">
+
+    <!-- 시간대별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        COMMENTS : [매출]헤더
+    -->
+    <select id="getMobileTimeDaySaleTimeList" parameterType="MobileTimeDaySaleVO" resultType="DefaultMap">
+        /* MobileTimeDaySaleMapper.getMobileTimeDaySaleTimeList */
+        SELECT
+        A.SALE_TIME,
+        A.AMT_CNT,
+        A.REAL_SALE_AMT,
+        NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+        FROM
+        (
+            SELECT
+            SALE_TIME,
+            COUNT(DISTINCT BILL_NO) AS AMT_CNT,
+            NVL(SUM(REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+            FROM
+            (
+                SELECT
+                tssh.BILL_NO,
+                SUBSTR(tssh.REG_DT, 9, 2) AS SALE_TIME,
+                tssh.REAL_SALE_AMT
+                FROM TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tssh.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            )
+            WHERE 1=1
+            AND SALE_TIME BETWEEN #{startTime} AND #{endTime}
+            GROUP BY SALE_TIME
+        ) A,
+        (
+            SELECT
+            NVL(SUM(tssh.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+            FROM TB_SL_SALE_HDR tssh
+            WHERE 1=1
+            AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tssh.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        ) B
+        ORDER BY A.SALE_TIME
+    </select>
+
+</mapper>
