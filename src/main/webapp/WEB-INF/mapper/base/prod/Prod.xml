@@ -936,7 +936,7 @@
                 #{prodTypeFg},
                 #{saleProdYn},
                 #{stockProdYn},
-                'N',
+                #{sideProdYn},
                 #{setProdFg},
                 #{prcCtrlFg},
                 #{costUprc},

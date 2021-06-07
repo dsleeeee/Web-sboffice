@@ -48,6 +48,10 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         return mapper.getEnvstVal(storeEnvVO);
     }
 
+    /** 본사코드 조회 */
+    @Override
+    public String getHqOfficeCd(StoreEnvVO storeEnvVO) { return mapper.getHqOfficeCd(storeEnvVO); }
+
     /** 회원 저장(회원등록) */
     @Override
     public int save(MemberVO memberVO, SessionInfoVO sessionInfoVO) {
