@@ -4,6 +4,8 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -36,12 +38,14 @@ public class SideMenuServiceImpl implements SideMenuService {
 
     private final SideMenuMapper sideMenuMapper;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuServiceImpl(SideMenuMapper sideMenuMapper, MessageService messageService) {
+    public SideMenuServiceImpl(SideMenuMapper sideMenuMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.sideMenuMapper = sideMenuMapper;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 사이드메뉴-속성탭-속성분류 목록 조회 */
@@ -347,6 +351,16 @@ public class SideMenuServiceImpl implements SideMenuService {
         sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        if(sideMenuSelProdVO.getSideEnvstVal() != ""){
+            // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
+            String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1100"));
+            if(sideEnvstVal.equals("1")){
+                sideMenuSelProdVO.setSideEnvstVal(sideEnvstVal);
+            } else {
+                sideMenuSelProdVO.setSideEnvstVal("");
+            }
+        }
 
         return sideMenuMapper.getProdList(sideMenuSelProdVO);
 

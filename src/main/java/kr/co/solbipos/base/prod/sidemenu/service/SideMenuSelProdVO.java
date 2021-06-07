@@ -52,6 +52,9 @@ public class SideMenuSelProdVO extends PageVO {
     /** 상품명 */
     private String prodNm;
 
+    /** 사이드메뉴생성구분 */
+    private String sideEnvstVal;
+
     /** 프로시져 결과 */
     private String result;
 
@@ -208,6 +211,14 @@ public class SideMenuSelProdVO extends PageVO {
      */
     public void setProdNm(String prodNm) {
         this.prodNm = prodNm;
+    }
+
+    public String getSideEnvstVal() {
+        return sideEnvstVal;
+    }
+
+    public void setSideEnvstVal(String sideEnvstVal) {
+        this.sideEnvstVal = sideEnvstVal;
     }
 
     /**

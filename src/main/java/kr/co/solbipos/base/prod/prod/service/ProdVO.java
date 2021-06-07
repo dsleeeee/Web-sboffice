@@ -193,6 +193,9 @@ public class ProdVO extends PageVO {
     /** 매핑상품코드 */
     private String mapProdCd;
 
+    /** 사이드메뉴생성구분 */
+    private String sideEnvstVal;
+
     /**
      * @return the hqOfficeCd
      */
@@ -953,5 +956,13 @@ public class ProdVO extends PageVO {
 
     public void setMapProdCd(String mapProdCd) {
         this.mapProdCd = mapProdCd;
+    }
+
+    public String getSideEnvstVal() {
+        return sideEnvstVal;
+    }
+
+    public void setSideEnvstVal(String sideEnvstVal) {
+        this.sideEnvstVal = sideEnvstVal;
     }
 }

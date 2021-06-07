@@ -41,15 +41,6 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.prodClassInfo;
   };
 
-  // 선택된 터치키그룹
-  $scope.tukeyGrpCd = "";
-  $scope.setTukeyGrpCd = function(data){
-    $scope.tukeyGrpCd = data;
-  };
-  $scope.getTukeyGrpCd = function(){
-    return $scope.touchKeyGrp;
-  };
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.areAllRowsSelected = function(flex) {
@@ -158,7 +149,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     }, false);
 
-    if($scope.touchKeyGrp != null && $scope.touchKeyGrp != ""){
+    if($scope.touchKeyGrp != null && $scope.touchKeyGrp != "" && $("#touchKeyView").is(":visible")){
       var params = {};
       params.tukeyGrpCd = $scope.touchKeyGrp;
       $.postJSON("/base/prod/touchKey/touchKey/noTouchKey.sb", params, function(result) {
@@ -336,7 +327,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 터치키미적용상품 팝업
   $scope.$on("showPopUpNoTouchKey", function(event, data) {
     var scope = agrid.getScope('touchKeyCtrl');
-    var tukeyGrpCd = scope.getTukeyGrpCd();
+    var tukeyGrpCd = scope.touchKeyGrp;
     $scope.popUpNoTouchKeyLayer.show();
     $scope._broadcast('popUpNoTouchKeyCtrl', tukeyGrpCd);
     event.preventDefault();
@@ -1554,11 +1545,11 @@ Format.prototype.initElements = function () {
   var format = this;
 
   // 상품목록 조회 버튼
-  addClickHandler(document.getElementById('btnSearch'), function () {
-    //format.open(false);
-    var scope = agrid.getScope("touchKeyCtrl");
-    scope._broadcast('touchKeyCtrl');
-  });
+  // addClickHandler(document.getElementById('btnSearch'), function () {
+  //   //format.open(false);
+  //   var scope = agrid.getScope("touchKeyCtrl");
+  //   scope._broadcast('touchKeyCtrl');
+  // });
 
   // 추가터치키생성 버튼
   addClickHandler(document.getElementById('btnNewGrp'), function () {

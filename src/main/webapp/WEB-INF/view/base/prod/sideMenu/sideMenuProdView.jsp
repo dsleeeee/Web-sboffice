@@ -86,4 +86,8 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=2018112102" charset="utf-8"></script>
+<script type="text/javascript">
+  var gvListScaleBoxData = ${ccu.getListScale()};
+  var gubun = "${param.gubun}";
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=2018112104" charset="utf-8"></script>

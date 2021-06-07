@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
@@ -161,6 +162,18 @@ public class ProdController {
     public Result saveProductInfo(@RequestBody ProdVO prodVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if(prodVO.getSideEnvstVal() != ""){
+            // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
+            String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1100"));
+           if(sideEnvstVal.equals("1")){
+                if(!prodVO.getSideProdYn().equals("Y")){
+                    return returnJson(Status.FAIL);
+                } else if(StringUtil.getOrBlank(prodVO.getSdselGrpCd()).equals("")){
+                    return returnJson(Status.FAIL);
+                }
+            }
+        }
 
 //        int result = prodService.saveProductInfo(prodVO, sessionInfoVO);
 //        long result = prodService.saveProductInfo(prodVO, sessionInfoVO);

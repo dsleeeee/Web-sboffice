@@ -666,6 +666,7 @@
   var orgnFg = "${orgnFg}";
   var hqOfficeCd = "${hqOfficeCd}";
   var storeCd = "${storeCd}";
+  var gubun = "${param.gubun}";
 
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
@@ -674,7 +675,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210421.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210421.05" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

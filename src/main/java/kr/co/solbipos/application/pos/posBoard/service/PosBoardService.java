@@ -26,5 +26,5 @@ public interface PosBoardService {
     List<DefaultMap<Object>> getPosBoardList(PosBoardVO posBoardVO, SessionInfoVO sessionInfoVO);
 
     /** 게시판 메뉴 권한 조회 */
-    String getBoardAuth(SessionInfoVO sessionInfoVO);
+    String getBoardAuth(SessionInfoVO sessionInfoVO, String menuCd);
 }

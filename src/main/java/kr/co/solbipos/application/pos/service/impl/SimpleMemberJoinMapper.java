@@ -49,5 +49,8 @@ public interface SimpleMemberJoinMapper {
     /** 환경변수 값 체크 */
     String getEnvstVal(StoreEnvVO storeEnvVO);
 
+    /** 본사코드 조회 */
+    String getHqOfficeCd(StoreEnvVO storeEnvVO);
+
 
 }

@@ -72,9 +72,9 @@ public class SideMenuController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 상품등록 본사 통제여부
-        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+//        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
 
-        model.addAttribute("prodEnvstVal", prodEnvstVal);
+//        model.addAttribute("prodEnvstVal", prodEnvstVal);
 
         return "base/prod/sideMenu/sideMenu";
     }

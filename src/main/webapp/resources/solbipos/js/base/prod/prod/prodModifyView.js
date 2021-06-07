@@ -169,6 +169,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
             params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
 
+            if(typeof gubun !== "undefined"){
+                params.sideEnvstVal = gubun;
+            }
+
             params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
 
             // 저장수행
@@ -188,6 +192,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
                     // 저장기능 수행후 재조회
                     $scope._broadcast('prodCtrl');
+                }
+            },function (result) {
+                if(typeof gubun !== "undefined"){
+                    if(params.sideProdYn != "Y"){
+                        $scope._popMsg(messages["prod.sideYnChk.msg"]);
+                    } else if(params.sdselGrpCd == "" || params.sdselGrpCd == null){
+                        $scope._popMsg(messages["prod.sideMenuChk.msg"]);
+                    }
                 }
             });
         }

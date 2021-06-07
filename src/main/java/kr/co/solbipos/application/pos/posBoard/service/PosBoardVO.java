@@ -118,6 +118,12 @@ public class PosBoardVO extends PageVO {
     /** 공지팝업 여부(미열람 공지사항 띄움) */
     private String noticePopupYn;
 
+    /** 접속자 ID */
+    private String posUserId;
+
+    /** 메뉴코드 */
+    private String menuCd;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -260,5 +266,21 @@ public class PosBoardVO extends PageVO {
 
     public void setNoticePopupYn(String noticePopupYn) {
         this.noticePopupYn = noticePopupYn;
+    }
+
+    public String getPosUserId() {
+        return posUserId;
+    }
+
+    public void setPosUserId(String posUserId) {
+        this.posUserId = posUserId;
+    }
+
+    public String getMenuCd() {
+        return menuCd;
+    }
+
+    public void setMenuCd(String menuCd) {
+        this.menuCd = menuCd;
     }
 }

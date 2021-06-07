@@ -10,10 +10,9 @@
 <c:set var="touchKeyGrp" value="${touchKeyGrp}" />
 
 <%--서브컨텐츠--%>
-<div class="subCon" ng-controller="touchKeyCtrl">
-
+<div class="subCon" ng-controller="touchKeyCtrl" id="touchKeyView">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="storeSideMenu.touchKey" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSrchTouchKey">
@@ -105,7 +104,7 @@
         <div class="updownSet mt5">
             <%--<span class="fl bk lh30 s14 ml5">&nbsp;&nbsp;&nbsp;<s:message code="touchKey.grid.prodNm"/> :</span>--%>
             <input type="text" id="_prodNm" name="prodNm" class="sb-input fl w70 ml5" style="font-size: 13px;" ng-model="prodClassInfo.prodNm" placeholder="상품명">
-            <button class="btn_skyblue fl ml5" id="btnSearch">
+            <button class="btn_skyblue fl ml5" id="btnSearch" ng-click="_broadcast('touchKeyCtrl')">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -236,9 +235,10 @@
   </div>
 
   <%-- 상품분류 팝업 --%>
-  <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-  </c:import>
-
+  <c:if test="${param.gubun ne 'sideMenu'}">
+    <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+    </c:import>
+  </c:if>
   <%-- 터치키 매장적용 팝업 --%>
   <c:import url="/WEB-INF/view/base/prod/touchKey/popUpTouchKeyApplyStore.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
@@ -341,7 +341,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.003"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.006"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

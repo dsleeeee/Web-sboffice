@@ -23,6 +23,9 @@ public interface SimpleMemberJoinService {
     /** 환경변수 값 체크 */
     String getEnvstVal(StoreEnvVO storeEnvVO);
 
+    /** 본사코드 조회 */
+    String getHqOfficeCd(StoreEnvVO storeEnvVO);
+
     /** 회원 저장 */
     int save(MemberVO memberVO, SessionInfoVO sessionInfoVO);
 
