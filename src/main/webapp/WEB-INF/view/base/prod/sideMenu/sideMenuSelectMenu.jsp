@@ -152,7 +152,7 @@
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-  <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20181227.04" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20181227.05" charset="utf-8"></script>
 
   <%-- 레이어 팝업 : 상품선택 --%>
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">

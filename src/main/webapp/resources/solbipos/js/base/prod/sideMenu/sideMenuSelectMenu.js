@@ -17,16 +17,16 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
   angular.extend(this, new RootController('sideMenuSelectGroupCtrl', $scope, $http, false));
 
   // 상품 본사통제구분 (H : 본사, S: 매장)
-  $scope.prodEnvstVal = prodEnvstVal;
+  // $scope.prodEnvstVal = prodEnvstVal;
 
   // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-  $scope.userStoreCd = gvStoreCd;
-  $scope.btnShowFg = false;
+  // $scope.userStoreCd = gvStoreCd;
+  // $scope.btnShowFg = false;
 
-  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-      || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-    $scope.btnShowFg = true;
-  }
+  // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+  //     || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+  //   $scope.btnShowFg = true;
+  // }
 
 
   // 그리드 Refresh
@@ -137,7 +137,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
         var item = $scope.flex.collectionView.items[i];
         if (item.gChk) {
-          if((orgnFg != null && orgnFg == "HQ") || hqOfficeCd == '00000' || ((orgnFg != null && orgnFg == "STORE") && item.sdselGrpCd > 799999)) {
+          if((orgnFg == "HQ") || (orgnFg == "STORE" && hqOfficeCd == '00000') || (orgnFg == "STORE" && hqOfficeCd !="00000" && item.sdselGrpCd > 799999)) {
             if (item.cnt == 0) {
               $scope.flex.collectionView.removeAt(i);
             } else {
@@ -194,7 +194,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       }
 
       for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-        if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[u].sdselGrpCd > 799999)) {
+        if ((orgnFg == "HQ") || (orgnFg == "STORE" && hqOfficeCd =="00000") || (orgnFg == "STORE" && hqOfficeCd !="00000" && $scope.flex.collectionView.itemsEdited[u].sdselGrpCd > 799999)) {
           if($scope.flex.collectionView.itemsEdited[u].sdselGrpNm == ""){
             $scope._popMsg(messages["sideMenu.selectMenu.sdselGrpNm"] + messages["sideMenu.selectMenu.inputEnv"]);
             return false;
@@ -279,16 +279,16 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   angular.extend(this, new RootController('sideMenuSelectClassCtrl', $scope, $http, false));
 
   // 상품 본사통제구분 (H : 본사, S: 매장)
-  $scope.prodEnvstVal = prodEnvstVal;
+  // $scope.prodEnvstVal = prodEnvstVal;
 
   // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-  $scope.userStoreCd = gvStoreCd;
-  $scope.btnShowFg = false;
+  // $scope.userStoreCd = gvStoreCd;
+  // $scope.btnShowFg = false;
 
-  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-      || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-    $scope.btnShowFg = true;
-  }
+  // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+  //     || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+  //   $scope.btnShowFg = true;
+  // }
 
   // 그리드 Refresh
   $scope.$on('selectMenuRefresh', function (event, data) {
@@ -554,16 +554,16 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   angular.extend(this, new RootController('sideMenuSelectProdCtrl', $scope, $http, false));
 
   // 상품 본사통제구분 (H : 본사, S: 매장)
-  $scope.prodEnvstVal = prodEnvstVal;
+  // $scope.prodEnvstVal = prodEnvstVal;
 
   // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-  $scope.userStoreCd = gvStoreCd;
-  $scope.btnShowFg = false;
+  // $scope.userStoreCd = gvStoreCd;
+  // $scope.btnShowFg = false;
 
-  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-      || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-    $scope.btnShowFg = true;
-  }
+  // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+  //     || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+  //   $scope.btnShowFg = true;
+  // }
 
   // 그리드 Refresh
   $scope.$on('selectMenuRefresh', function (event, data) {

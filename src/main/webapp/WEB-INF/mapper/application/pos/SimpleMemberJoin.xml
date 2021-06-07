@@ -250,4 +250,16 @@
            AND USE_YN = 'Y'
     </select>
 
+    <!-- 본사코드 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_ENVST
+        COMMENTS : 매장의 환경변수별 사용여부를 조회한다.
+    -->
+    <select id="getHqOfficeCd" parameterType="storeEnvVO" resultType="String">
+        /* SimpleMemberJoinMapper.getHqOfficeCd */
+        SELECT HQ_OFFICE_CD
+          FROM TB_MS_STORE
+         WHERE STORE_CD = #{storeCd}
+    </select>
+
 </mapper>

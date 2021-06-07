@@ -17,16 +17,16 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
   angular.extend(this, new RootController('sideMenuAttrClassCtrl', $scope, $http, false));
 
     // 상품 본사통제구분 (H : 본사, S: 매장)
-    $scope.prodEnvstVal = prodEnvstVal;
+    // $scope.prodEnvstVal = prodEnvstVal;
 
     // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-    $scope.userStoreCd = gvStoreCd;
-    $scope.btnShowFg = false;
+    // $scope.userStoreCd = gvStoreCd;
+    // $scope.btnShowFg = false;
 
-    if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-        || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-        $scope.btnShowFg = true;
-    }
+    // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+    //     || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    //     $scope.btnShowFg = true;
+    // }
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -107,7 +107,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
       for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i--){
         var item = $scope.flex.collectionView.items[i];
         if(item.gChk) {
-          if ((orgnFg != null && orgnFg == "HQ") || hqOfficeCd == '00000' || ((orgnFg != null && orgnFg == "STORE") && item.sdattrClassCd > 79999)){
+          if ((orgnFg == "HQ") || (orgnFg == "STORE" && hqOfficeCd == "00000") || (orgnFg == "STORE" && hqOfficeCd !="00000" && item.sdattrClassCd > 79999)){
             if(item.cnt == 0){
               $scope.flex.collectionView.removeAt(i);
             } else {
@@ -163,7 +163,7 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
       }
 
       for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-        if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[u].sdattrClassCd > 79999)){
+        if ((orgnFg == "HQ") || (orgnFg == "STORE" && hqOfficeCd =="00000") || (orgnFg == "STORE" && hqOfficeCd !="00000" && $scope.flex.collectionView.itemsEdited[u].sdattrClassCd > 79999)){
           if($scope.flex.collectionView.itemsEdited[u].sdattrClassNm == ""){
             $scope._popMsg(messages["sideMenu.attr.sdattrClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
             return false;
@@ -244,16 +244,16 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
   angular.extend(this, new RootController('sideMenuAttrAttrCtrl', $scope, $http, false));
 
     // 상품 본사통제구분 (H : 본사, S: 매장)
-    $scope.prodEnvstVal = prodEnvstVal;
+    // $scope.prodEnvstVal = prodEnvstVal;
 
     // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-    $scope.userStoreCd = gvStoreCd;
-    $scope.btnShowFg = false;
+    // $scope.userStoreCd = gvStoreCd;
+    // $scope.btnShowFg = false;
 
-    if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-        || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-        $scope.btnShowFg = true;
-    }
+    // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+    //     || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    //     $scope.btnShowFg = true;
+    // }
 
   // sdattrClassCd Data Setter
   $scope.setSdattrClassCd = function (value) {

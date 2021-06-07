@@ -42,6 +42,9 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
     $("#lblsdselClassCd").text(data);
     var params = {};
     params.sdselClassCd = $("#lblsdselClassCd").text();
+    if(typeof gubun !== "undefined"){
+      params.sideEnvstVal = gubun;
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/sideMenu/menuProd/getProdList.sb', params);
     // 기능수행 종료 : 반드시 추가
