@@ -12,10 +12,11 @@
     -->
     <select id="getTodayGnrlzList" parameterType="todayGnrlzVO" resultType="DefaultMap">
         /* USE : TodayGnrlzMapper.getTodayGnrlzList */
-        SELECT TOT_SALE_AMT,
-               TOT_DC_AMT,
-               REAL_SALE_AMT,
-               RTN_SALE_AMT AS CANCEL_AMT
+        SELECT SALE_DATE,
+               SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+               SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+               SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+               SUM(RTN_SALE_AMT) AS CANCEL_AMT
           FROM TB_SL_DAILY_TOTAL
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND SALE_DATE = #{startDate}
@@ -25,6 +26,7 @@
                 #{item}
             </foreach>
         </if>
+         GROUP BY SALE_DATE
     </select>
 
 
@@ -36,34 +38,38 @@
     -->
     <select id="getTodayGnrlzPayList" parameterType="todayGnrlzVO" resultType="DefaultMap">
         /* USE : TodayGnrlzMapper.getTodayGnrlzPayList */
-        SELECT tsdp.PAY_CD,
-               tcn.NMCODE_NM AS PAY_NM,
-               tsdp.TOT_PAY_AMT AS PAY_AMT,
-               DECODE(tsdptot.TOT_PAY_AMT, 0, 0, ((SUM(tsdp.TOT_PAY_AMT)/tsdptot.TOT_PAY_AMT)*100)) AS PAY_RATE
-          FROM TB_SL_DAILY_PAY tsdp,
-               TB_CM_NMCODE tcn,
-               (SELECT SUM(TOT_PAY_AMT) AS TOT_PAY_AMT
-                  FROM TB_SL_DAILY_PAY
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND SALE_DATE = #{startDate}
-                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                   AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-                </if>) tsdptot
-          WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.SALE_DATE = #{startDate}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-            AND tcn.NMCODE_GRP_CD = '024'
-            AND tcn.NMCODE_CD = tsdp.PAY_CD
-          GROUP BY tsdp.PAY_CD, tcn.NMCODE_NM, tsdp.TOT_PAY_AMT, tsdptot.TOT_PAY_AMT
-          ORDER BY tsdp.PAY_CD
+        SELECT PAY_CD, PAY_NM, SUM(PAY_AMT) AS PAY_AMT, SUM(PAY_RATE) AS PAY_RATE
+          FROM (
+            SELECT tsdp.PAY_CD,
+                   tcn.NMCODE_NM AS PAY_NM,
+                   SUM(tsdp.TOT_PAY_AMT) AS PAY_AMT,
+                   DECODE(tsdptot.TOT_PAY_AMT, 0, 0, ((SUM(tsdp.TOT_PAY_AMT)/tsdptot.TOT_PAY_AMT)*100)) AS PAY_RATE
+              FROM TB_SL_DAILY_PAY tsdp,
+                   TB_CM_NMCODE tcn,
+                   (SELECT SUM(TOT_PAY_AMT) AS TOT_PAY_AMT
+                      FROM TB_SL_DAILY_PAY
+                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND SALE_DATE = #{startDate}
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                       AND STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>) tsdptot
+              WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdp.SALE_DATE = #{startDate}
+            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                AND tsdp.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+                AND tcn.NMCODE_GRP_CD = '024'
+                AND tcn.NMCODE_CD = tsdp.PAY_CD
+              GROUP BY tsdp.PAY_CD, tcn.NMCODE_NM, tsdp.TOT_PAY_AMT, tsdptot.TOT_PAY_AMT
+            )
+        GROUP BY PAY_CD, PAY_NM
+        ORDER BY PAY_CD
     </select>
 
 
