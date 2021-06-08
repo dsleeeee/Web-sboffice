@@ -11,6 +11,37 @@
 -->
 <mapper namespace="kr.co.solbipos.mobile.sale.status.timeMonthSale.service.impl.MobileTimeMonthSaleMapper">
 
+    <!-- 일자-시간대별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TIME
+        COMMENTS : [매출]일별_시간대별
+    -->
+    <select id="getMobileTimeMonthSaleDateTimeList" parameterType="MobileTimeMonthSaleVO" resultType="DefaultMap">
+        /* MobileTimeMonthSaleMapper.getMobileTimeMonthSaleDateTimeList */
+        SELECT
+        TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
+        ${sQuery2}
+        FROM
+        (
+            SELECT
+            tsmt.SALE_YM
+            ${sQuery1}
+            FROM TB_SL_MONTHLY_TIME tsmt
+            WHERE 1=1
+            AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsmt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+            AND tsmt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            GROUP BY tsmt.SALE_YM, tsmt.SALE_HOUR
+            ORDER BY tsmt.SALE_YM, tsmt.SALE_HOUR
+        )
+        GROUP BY SALE_YM
+        ORDER BY SALE_YM
+    </select>
+
     <!-- 시간대별 - 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
@@ -53,6 +84,29 @@
             AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         ) B
         ORDER BY A.SALE_TIME
+    </select>
+
+    <!-- 시간대별 - 차트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TIME
+        COMMENTS : [매출]일별_시간대별
+    -->
+    <select id="getMobileTimeMonthSaleTimeChartList" parameterType="MobileTimeMonthSaleVO" resultType="DefaultMap">
+        /* MobileTimeMonthSaleMapper.getMobileTimeMonthSaleTimeChartList */
+        SELECT
+        (tsmt.SALE_HOUR || '시') AS SALE_TIME,
+        NVL(SUM(tsmt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+        FROM TB_SL_MONTHLY_TIME tsmt
+        WHERE 1=1
+        AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsmt.STORE_CD IN
+        <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        AND tsmt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+        GROUP BY tsmt.SALE_HOUR
+        ORDER BY tsmt.SALE_HOUR
     </select>
 
 </mapper>

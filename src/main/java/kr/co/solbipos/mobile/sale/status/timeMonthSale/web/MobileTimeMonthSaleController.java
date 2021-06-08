@@ -78,6 +78,29 @@ public class MobileTimeMonthSaleController {
     }
 
     /**
+     * 일자-시간대별 - 조회
+     *
+     * @param mobileTimeMonthSaleVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 06. 07.
+     */
+    @RequestMapping(value = "/timeMonthSale/getMobileTimeMonthSaleDateTimeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileTimeMonthSaleDateTimeList(MobileTimeMonthSaleVO mobileTimeMonthSaleVO, HttpServletRequest request,
+                                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobileTimeMonthSaleService.getMobileTimeMonthSaleDateTimeList(mobileTimeMonthSaleVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTimeMonthSaleVO);
+    }
+
+    /**
      * 시간대별 - 조회
      *
      * @param mobileTimeMonthSaleVO
@@ -96,6 +119,29 @@ public class MobileTimeMonthSaleController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = mobileTimeMonthSaleService.getMobileTimeMonthSaleTimeList(mobileTimeMonthSaleVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTimeMonthSaleVO);
+    }
+
+    /**
+     * 시간대별 - 차트 조회
+     *
+     * @param mobileTimeMonthSaleVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 06. 07.
+     */
+    @RequestMapping(value = "/timeMonthSale/getMobileTimeMonthSaleTimeChartList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileTimeMonthSaleTimeChartList(MobileTimeMonthSaleVO mobileTimeMonthSaleVO, HttpServletRequest request,
+                                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobileTimeMonthSaleService.getMobileTimeMonthSaleTimeChartList(mobileTimeMonthSaleVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, mobileTimeMonthSaleVO);
     }

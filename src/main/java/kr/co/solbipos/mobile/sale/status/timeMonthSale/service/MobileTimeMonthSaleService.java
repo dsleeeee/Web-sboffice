@@ -22,6 +22,12 @@ import java.util.List;
  */
 public interface MobileTimeMonthSaleService {
 
-    /** 시간대별 조회 */
+    /** 일자-시간대별 - 조회 */
+    List<DefaultMap<Object>> getMobileTimeMonthSaleDateTimeList(MobileTimeMonthSaleVO mobileTimeMonthSaleVO, SessionInfoVO sessionInfoVO);
+
+    /** 시간대별 - 조회 */
     List<DefaultMap<Object>> getMobileTimeMonthSaleTimeList(MobileTimeMonthSaleVO mobileTimeMonthSaleVO, SessionInfoVO sessionInfoVO);
+
+    /** 시간대별 - 차트 조회 */
+    List<DefaultMap<Object>> getMobileTimeMonthSaleTimeChartList(MobileTimeMonthSaleVO mobileTimeMonthSaleVO, SessionInfoVO sessionInfoVO);
 }

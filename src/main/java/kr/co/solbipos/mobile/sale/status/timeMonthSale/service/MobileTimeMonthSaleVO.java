@@ -45,6 +45,10 @@ public class MobileTimeMonthSaleVO extends PageVO {
     /** 검색 종료 시간 */
     private String endTime;
 
+    /** 동적 컬럼 생성을 위한 쿼리 문자열*/
+    private String sQuery1;
+    private String sQuery2;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -96,4 +100,12 @@ public class MobileTimeMonthSaleVO extends PageVO {
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
+    public String getsQuery1() { return sQuery1; }
+
+    public void setsQuery1(String sQuery1) { this.sQuery1 = sQuery1; }
+
+    public String getsQuery2() { return sQuery2; }
+
+    public void setsQuery2(String sQuery2) { this.sQuery2 = sQuery2; }
 }
