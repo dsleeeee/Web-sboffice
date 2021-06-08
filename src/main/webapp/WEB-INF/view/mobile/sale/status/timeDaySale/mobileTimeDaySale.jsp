@@ -122,4 +122,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20210606.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20210608.01" charset="utf-8"></script>

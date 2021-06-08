@@ -13,8 +13,8 @@
 
     <!-- 시간대별 - 조회 -->
     <!--
-        TABLE    : TB_SL_SALE_HDR
-        COMMENTS : [매출]헤더
+        TABLE    : TB_SL_DAILY_TIME
+        COMMENTS : [매출]일별_시간대별
     -->
     <select id="getMobileTimeDaySaleTimeList" parameterType="MobileTimeDaySaleVO" resultType="DefaultMap">
         /* MobileTimeDaySaleMapper.getMobileTimeDaySaleTimeList */
@@ -26,39 +26,31 @@
         FROM
         (
             SELECT
-            SALE_TIME,
-            COUNT(DISTINCT BILL_NO) AS AMT_CNT,
-            NVL(SUM(REAL_SALE_AMT), 0) AS REAL_SALE_AMT
-            FROM
-            (
-                SELECT
-                tssh.BILL_NO,
-                SUBSTR(tssh.REG_DT, 9, 2) AS SALE_TIME,
-                tssh.REAL_SALE_AMT
-                FROM TB_SL_SALE_HDR tssh
-                WHERE 1=1
-                AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tssh.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-                AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            )
+            tsdt.SALE_HOUR AS SALE_TIME,
+            NVL(SUM(tsdt.SALE_CNT), 0) AS AMT_CNT,
+            NVL(SUM(tsdt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+            FROM TB_SL_DAILY_TIME tsdt
             WHERE 1=1
-            AND SALE_TIME BETWEEN #{startTime} AND #{endTime}
-            GROUP BY SALE_TIME
-        ) A,
-        (
-            SELECT
-            NVL(SUM(tssh.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
-            FROM TB_SL_SALE_HDR tssh
-            WHERE 1=1
-            AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tssh.STORE_CD IN
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
-            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tsdt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            GROUP BY tsdt.SALE_HOUR
+        ) A,
+        (
+            SELECT
+            NVL(SUM(tsdt.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+            FROM TB_SL_DAILY_TIME tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ) B
         ORDER BY A.SALE_TIME
     </select>
