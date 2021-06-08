@@ -11,6 +11,37 @@
 -->
 <mapper namespace="kr.co.solbipos.mobile.sale.status.timeDaySale.service.impl.MobileTimeDaySaleMapper">
 
+    <!-- 일자-시간대별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TIME
+        COMMENTS : [매출]일별_시간대별
+    -->
+    <select id="getMobileTimeDaySaleDateTimeList" parameterType="MobileTimeDaySaleVO" resultType="DefaultMap">
+        /* MobileTimeDaySaleMapper.getMobileTimeDaySaleDateTimeList */
+        SELECT
+        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
+        ${sQuery2}
+        FROM
+        (
+            SELECT
+            tsdt.SALE_DATE
+            ${sQuery1}
+            FROM TB_SL_DAILY_TIME tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tsdt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            GROUP BY tsdt.SALE_DATE, tsdt.SALE_HOUR
+            ORDER BY tsdt.SALE_DATE, tsdt.SALE_HOUR
+        )
+        GROUP BY SALE_DATE
+        ORDER BY SALE_DATE
+    </select>
+
     <!-- 시간대별 - 조회 -->
     <!--
         TABLE    : TB_SL_DAILY_TIME
@@ -53,6 +84,29 @@
             AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ) B
         ORDER BY A.SALE_TIME
+    </select>
+
+    <!-- 시간대별 - 차트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TIME
+        COMMENTS : [매출]일별_시간대별
+    -->
+    <select id="getMobileTimeDaySaleTimeChartList" parameterType="MobileTimeDaySaleVO" resultType="DefaultMap">
+        /* MobileTimeDaySaleMapper.getMobileTimeDaySaleTimeChartList */
+        SELECT
+        (tsdt.SALE_HOUR || '시') AS SALE_TIME,
+        NVL(SUM(tsdt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+        FROM TB_SL_DAILY_TIME tsdt
+        WHERE 1=1
+        AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdt.STORE_CD IN
+        <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+        GROUP BY tsdt.SALE_HOUR
+        ORDER BY tsdt.SALE_HOUR
     </select>
 
 </mapper>

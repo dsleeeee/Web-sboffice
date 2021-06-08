@@ -26,6 +26,12 @@ import java.util.List;
 @Repository
 public interface MobileTimeDaySaleMapper {
 
-    /** 시간대별 조회 */
+    /** 일자-시간대별 - 조회 */
+    List<DefaultMap<Object>> getMobileTimeDaySaleDateTimeList(MobileTimeDaySaleVO mobileTimeDaySaleVO);
+
+    /** 시간대별 - 조회 */
     List<DefaultMap<Object>> getMobileTimeDaySaleTimeList(MobileTimeDaySaleVO mobileTimeDaySaleVO);
+
+    /** 시간대별 - 차트 조회 */
+    List<DefaultMap<Object>> getMobileTimeDaySaleTimeChartList(MobileTimeDaySaleVO mobileTimeDaySaleVO);
 }

@@ -78,6 +78,29 @@ public class MobileTimeDaySaleController {
     }
 
     /**
+     * 일자-시간대별 - 조회
+     *
+     * @param mobileTimeDaySaleVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 06. 07.
+     */
+    @RequestMapping(value = "/timeDaySale/getMobileTimeDaySaleDateTimeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileTimeDaySaleDateTimeList(MobileTimeDaySaleVO mobileTimeDaySaleVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobileTimeDaySaleService.getMobileTimeDaySaleDateTimeList(mobileTimeDaySaleVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTimeDaySaleVO);
+    }
+
+    /**
      * 시간대별 - 조회
      *
      * @param mobileTimeDaySaleVO
@@ -91,11 +114,34 @@ public class MobileTimeDaySaleController {
     @RequestMapping(value = "/timeDaySale/getMobileTimeDaySaleTimeList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMobileTimeDaySaleTimeList(MobileTimeDaySaleVO mobileTimeDaySaleVO, HttpServletRequest request,
-                                             HttpServletResponse response, Model model) {
+                                               HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = mobileTimeDaySaleService.getMobileTimeDaySaleTimeList(mobileTimeDaySaleVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobileTimeDaySaleVO);
+    }
+
+    /**
+     * 시간대별 - 차트 조회
+     *
+     * @param mobileTimeDaySaleVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 06. 07.
+     */
+    @RequestMapping(value = "/timeDaySale/getMobileTimeDaySaleTimeChartList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileTimeDaySaleTimeChartList(MobileTimeDaySaleVO mobileTimeDaySaleVO, HttpServletRequest request,
+                                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobileTimeDaySaleService.getMobileTimeDaySaleTimeChartList(mobileTimeDaySaleVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, mobileTimeDaySaleVO);
     }

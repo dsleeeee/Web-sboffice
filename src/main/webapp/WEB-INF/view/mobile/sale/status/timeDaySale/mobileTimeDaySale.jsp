@@ -89,6 +89,37 @@
         </tbody>
     </table>
 
+    <%-- 일자-시간대별 --%>
+    <div class="gridBar mt10" id="mobileTimeDaySaleDateTime" onclick="girdFldUnfld('mobileTimeDaySaleDateTime')">
+        <a href="#" class="open"><s:message code="mobile.timeDaySale.dateTime"/></a>
+    </div>
+    <div class="w100" id="mobileTimeDaySaleDateTimeGrid" ng-controller="mobileTimeDaySaleDateTimeCtrl">
+        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="flexMobileTimeDaySaleDateTime"
+                    initialized="initGrid(s,e)"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    is-read-only="true"
+                    id="wjGridMobileTimeDaySaleDateTimeList"
+                    frozen-columns="1">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="mobile.timeDaySale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <%-- 시간대 컬럼 생성--%>
+                <c:forEach var="i" begin="0" end="23">
+                    <wj-flex-grid-column header="${i}<s:message code="mobile.timeDaySale.T"/>" binding="realSaleAmtT${i}" width="70" align="right" is-read-only="true" aggregate="Sum" visible="true"></wj-flex-grid-column>
+                </c:forEach>
+
+                <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                <div class="gridMsg" id="mobileTimeDaySaleDateTimeMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%-- //일자-시간대별 --%>
+
     <%-- 시간대별 --%>
     <div class="gridBar mt10" id="mobileTimeDaySaleTime" onclick="girdFldUnfld('mobileTimeDaySaleTime')">
         <a href="#" class="open"><s:message code="mobile.timeDaySale.time"/></a>
@@ -113,6 +144,40 @@
                 <div class="gridMsg" id="mobileTimeDaySaleTimeMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
             </wj-flex-grid>
         </div>
+        <%-- 시간대별 차트 --%>
+        <div ng-controller="mobileTimeDaySaleTimeChartCtrl">
+            <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; display:none;">
+                <wj-flex-grid
+                        id="mobileTimeDaySaleTimeChartGrid"
+                        autoGenerateColumns="false"
+                        selection-mode="Row"
+                        items-source="data"
+                        control="flex"
+                        is-read-only="true"
+                        item-formatter="_itemFormatter">
+
+                    <%--<!-- define columns -->--%>
+                    <wj-flex-grid-column header="<s:message code="mobile.timeDaySale.saleTime"/>" binding="saleTime" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.timeDaySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
+                </wj-flex-grid>
+            </div>
+            <!-- 막대 차트 샘플 -->
+            <div>
+                <wj-flex-chart
+                        id="mobileTimeDaySaleTimeBarChart"
+                        name="barChart1"
+                        <%--class="custom-flex-chart"--%>
+                        style="width:100%; height:auto; font-size:10px;"
+                        initialized="initChart(s,e)"
+                        items-source="data"
+                        chart-type="1" <%-- 세로차트형(Bar) --%>
+                        binding-x="saleTime">
+
+                    <wj-flex-chart-series name="<s:message code="mobile.timeDaySale.realSaleAmt"/>" binding="realSaleAmt"></wj-flex-chart-series>
+                </wj-flex-chart>
+            </div>
+        </div>
+        <%-- //시간대별 차트 --%>
     </div>
     <%-- //시간대별 --%>
 
@@ -122,4 +187,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20210608.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20210609.01" charset="utf-8"></script>
