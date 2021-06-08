@@ -156,7 +156,6 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', function ($scope, $htt
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.srchStoreCd = $("#mobileMonthSaleStoreCd").val();
-
         // 소수점 입력안됨
         var numchkexp1 = /^\d*[.]\d*$/;
         if(numchkexp1.test(diffMonth) == true) {
