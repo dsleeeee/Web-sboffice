@@ -20,38 +20,14 @@
     -->
 	<select id="getPayColList" parameterType="prodPayFgVO" resultType="DefaultMap">
 		/* USE : ProdPayFgMapper.getPayColList */
-		SELECT	SUBSTR(A.SHOW_HD_CD,3,2) AS PAY_CD
-		, B.NMCODE_NM AS PAY_NM
-		, B.NMCODE_ITEM_1 AS PAY_METHOD
-		<choose>
-			<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
-				FROM	TB_HQ_SHOW_HD A
-			</when>
-			<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
-				FROM	TB_MS_SHOW_HD A
-			</when>
-		</choose>
-		,(
-		SELECT	NMCODE_CD
-		, NMCODE_NM
-		, NMCODE_ITEM_1
-		, NMCODE_ITEM_2
-		FROM    TB_CM_NMCODE
-		WHERE   NMCODE_GRP_CD = '201'
-		) B
-		WHERE   A.BUSI_FG = B.NMCODE_ITEM_1
-		AND A.SHOW_HD_CD = B.NMCODE_CD
-		<choose>
-			<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
-				AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-			</when>
-			<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
-				AND A.STORE_CD = #{storeCd}
-			</when>
-		</choose>
-		AND B.NMCODE_ITEM_1 = 'SL'
-		AND NVL(A.SHOW_YN,'N') = 'Y'
-		ORDER BY A.SHOW_HD_CD
+        <![CDATA[
+        SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '024'
+        AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+        ORDER
+        BY      tcn.NMCODE_CD
+        ]]>
 	</select>
 
 	<!-- 결제수단별탭 - 조회 -->
