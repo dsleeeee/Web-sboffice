@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileTimeMonthSale.xml
+    (모바일) 매출현황 > 시간대별(월별)매출현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.06.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.timeMonthSale.service.impl.MobileTimeMonthSaleMapper">
+
+    <!-- 시간대별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        COMMENTS : [매출]헤더
+    -->
+    <select id="getMobileTimeMonthSaleTimeList" parameterType="MobileTimeMonthSaleVO" resultType="DefaultMap">
+        /* MobileTimeMonthSaleMapper.getMobileTimeMonthSaleTimeList */
+        SELECT
+        A.SALE_TIME,
+        A.AMT_CNT,
+        A.REAL_SALE_AMT,
+        NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+        FROM
+        (
+            SELECT
+            tsmt.SALE_HOUR AS SALE_TIME,
+            NVL(SUM(tsmt.SALE_CNT), 0) AS AMT_CNT,
+            NVL(SUM(tsmt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+            FROM TB_SL_MONTHLY_TIME tsmt
+            WHERE 1=1
+            AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsmt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+            AND tsmt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            GROUP BY tsmt.SALE_HOUR
+        ) A,
+        (
+            SELECT
+            NVL(SUM(tsmt.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+            FROM TB_SL_MONTHLY_TIME tsmt
+            WHERE 1=1
+            AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsmt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        ) B
+        ORDER BY A.SALE_TIME
+    </select>
+
+</mapper>

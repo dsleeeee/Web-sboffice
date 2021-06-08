@@ -760,6 +760,8 @@
     <typeAlias alias="mobileMultiStoreSaleVO" type="kr.co.solbipos.mobile.sale.status.multiStoreSale.service.MobileMultiStoreSaleVO"/>
     <!-- (모바일) 매출현황 > 시간대별(일자별)매출현황 -->
     <typeAlias alias="mobileTimeDaySaleVO" type="kr.co.solbipos.mobile.sale.status.timeDaySale.service.MobileTimeDaySaleVO"/>
+    <!-- (모바일) 매출현황 > 시간대별(월별)매출현황 -->
+    <typeAlias alias="mobileTimeMonthSaleVO" type="kr.co.solbipos.mobile.sale.status.timeMonthSale.service.MobileTimeMonthSaleVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>
