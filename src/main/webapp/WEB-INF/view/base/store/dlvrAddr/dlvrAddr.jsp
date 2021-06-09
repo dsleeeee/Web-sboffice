@@ -23,6 +23,22 @@
             </div>
         </div>
 
+        <table class="searchTbl">
+            <colgroup>
+                <col width="15%" />
+                <col width="70%" />
+            </colgroup>
+            <tbody>
+            <tr>
+                <%-- 배달권역명 --%>
+                <th><s:message code="dlvrAddr.dlvrAddrNm"/></th>
+                <td>
+                    <input type="text" id="srchAddrNm" ng-model="addrNm" class="sb-input w60"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
         <%-- left --%>
         <div class="wj-TblWrap mt20 mb20 w50 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
@@ -44,8 +60,11 @@
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="dlvrAddr.dlvrAddrCd"/>" binding="nmcodeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="dlvrAddr.dlvrAddrNm"/>" binding="nmcodeNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="dlvrAddr.sidoNm"/>" binding="sidoNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="dlvrAddr.sigunguNm"/>" binding="sigunguNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="dlvrAddr.dongNm"/>" binding="lawDongNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="dlvrAddr.lawDongCd"/>" binding="lawDongCd" width="*" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="dlvrAddr.myAreaCd"/>" binding="myAreaCd" width="*" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -59,7 +78,7 @@
     <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="dlvrAddrCodeCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
-                <span class="fl bk lh30"><s:message code="dlvrAddr.dlvrAddr"/></span>
+                <span class="fl bk lh30"><s:message code="dlvrAddr.noDlvrAddr"/></span>
                 <button class="btn_skyblue" id="btnFoodAllergyProdAdd" ng-click="add()"><s:message code='cmm.add' /></button>
             </div>
             <div class="w100 mt10 mb20">
@@ -75,8 +94,10 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrAddr.dlvrAddrCd"/>" binding="nmcodeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrAddr.dlvrAddrNm"/>" binding="nmcodeNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAddr.sidoNm"/>" binding="sidoNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAddr.sigunguNm"/>" binding="sigunguNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAddr.dongNm"/>" binding="lawDongNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAddr.lawDongCd"/>" binding="lawDongCd" width="*" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -90,4 +111,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/dlvrAddr/dlvrAddr.js?ver=20210327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/dlvrAddr/dlvrAddr.js?ver=20210327.02" charset="utf-8"></script>

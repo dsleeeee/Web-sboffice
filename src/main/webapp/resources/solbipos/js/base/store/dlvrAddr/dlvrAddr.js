@@ -45,12 +45,10 @@ app.controller('dlvrAddrCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.del = function(){
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
             var item = $scope.flex.collectionView.items[i];
-
             if(item.gChk) {
                 $scope.flex.collectionView.removeAt(i);
             }
         }
-
         // 저장
         $scope.save();
     };
@@ -64,7 +62,6 @@ app.controller('dlvrAddrCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
-
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/store/dlvrAddr/delDlvrAddr.sb", params, function(){
             $scope.searchDlvrAddr();
@@ -90,26 +87,29 @@ app.controller('dlvrAddrCodeCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // <-- 검색 호출 -->
     $scope.$on("dlvrAddrCodeCtrl", function(event, data) {
+        if(nvl($("#srchAddrNm").val(), '') === ''){
+            $scope._popMsg(messages['dlvrAddr.dlvrAddrNm.msg']);
+            return;
+        }
         $scope.searchdlvrAddrCode();
         event.preventDefault();
     });
 
     $scope.searchdlvrAddrCode = function(){
         var params = {};
+        params.addrNm = $("#srchAddrNm").val();
         $scope._inquirySub("/base/store/dlvrAddr/codeList.sb", params);
     };
     // <-- //검색 호출 -->
 
     // <-- 그리드 행 삭제 -->
     $scope.add = function(){
-
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
                 $scope.flex.collectionView.removeAt(i);
             }
         }
-
         // 저장
         $scope.save();
     };

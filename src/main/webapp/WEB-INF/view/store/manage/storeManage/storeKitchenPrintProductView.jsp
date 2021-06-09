@@ -8,7 +8,10 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="storeManage.storeKitchenPrintProduct"/></a>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeKitchenPrintProductCtrl')">
+      <s:message code="cmm.search"/>
+    </button>
   </div>
 
   <table class="searchTbl">
@@ -21,10 +24,7 @@
       <%-- 상품명 --%>
       <th><s:message code="storeManage.prodNm"/></th>
       <td>
-        <input type="text" id="srchProdNm" name="srchProdNm" class="sb-input w60" maxlength="13"/><br/>
-        <p class="s12 bk mt10 lh10">
-            * 상품명 검색 사용시, <u><b>상품명 입력 후 프린터 코드를 선택</b></u> 하세요.
-        </p>
+        <input type="text" id="srchProdNm" name="srchProdNm" class="sb-input w60" maxlength="13"/>
       </td>
     </tr>
     </tbody>
@@ -32,7 +32,7 @@
 
   <div class="wj-TblWrap mt20 mb40" ng-controller="storeKitchenPrintProductCtrl" ng-init="_broadcast('storeKitchenPrintProductCtrl')">
     <%-- 주방프린터 --%>
-    <div class="w25 fl">
+    <div class="w30 fl">
       <div class="wj-TblWrapBr pd20" style="height:480px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.kitchenPrint" /></span>
@@ -52,7 +52,7 @@
             <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="no" width="40" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeManage.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeManage.prterNo"/>" binding="prterNo" width="*" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm" width="*" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeManage.product.cnt"/>" binding="cnt" width="*"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
@@ -64,7 +64,7 @@
     <div class="w35 fl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:480px; overflow-y: auto;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code="storeManage.print.product" /></span>
+          <span class="fl bk lh30"><s:message code="storeManage.print.product" /><span id="kitchenPrintTitle"></span></span>
           <!-- <button class="btn_skyblue">펼침</button> -->
           <%-- 삭제 --%>
           <button type="button" id="btnProdDel" class="btn_skyblue" ng-click="delete()">
@@ -109,4 +109,4 @@
 <script>
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeKitchenPrintProduct.js?ver=20181115.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeKitchenPrintProduct.js?ver=20181115.03" charset="utf-8"></script>

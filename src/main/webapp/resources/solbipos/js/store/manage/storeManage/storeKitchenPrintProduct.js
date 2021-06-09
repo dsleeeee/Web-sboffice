@@ -60,6 +60,7 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "prterNo" ) {
+          $("#kitchenPrintTitle").html(" [" + selectedRow.prterNo+ "]" + selectedRow.prterNm );
           $scope.setSelectedPrter(selectedRow);
           $scope.getProductList();
         }
@@ -70,6 +71,9 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
   // 주방프린터 영역 보여줌
   $scope.$on("storeKitchenPrintProductCtrl", function(event, data) {
     $scope.getKitchenPrintList();
+    if($("#kitchenPrintTitle").text() != ''){
+      $scope.getProductList();
+    }
     event.preventDefault();
   });
 
