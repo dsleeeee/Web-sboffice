@@ -67,22 +67,19 @@ public class DlvrAddrServiceImpl implements DlvrAddrService {
      * @return*/
     @Override
     public int addDlvrAddr(DlvrAddrVO[] dlvrAddrVOs, SessionInfoVO sessionInfoVO) {
-
          int result = 0;
         String currentDt = currentDateTimeString();
 
         for(DlvrAddrVO dlvrAddrVO : dlvrAddrVOs) {
-
+            dlvrAddrVO.setStoreCd(sessionInfoVO.getStoreCd());
+            dlvrAddrVO.setMyAreaCd(dlvrAddrMapper.getMyAreaCd(dlvrAddrVO));
             dlvrAddrVO.setRegDt(currentDt);
             dlvrAddrVO.setRegId(sessionInfoVO.getUserId());
             dlvrAddrVO.setModDt(currentDt);
             dlvrAddrVO.setModId(sessionInfoVO.getUserId());
-            dlvrAddrVO.setStoreCd(sessionInfoVO.getStoreCd());
 
             result = dlvrAddrMapper.addDlvrAddr(dlvrAddrVO);
         }
-
-
         return result;
     }
 

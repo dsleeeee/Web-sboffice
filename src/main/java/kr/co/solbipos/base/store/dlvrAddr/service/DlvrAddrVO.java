@@ -34,9 +34,17 @@ public class DlvrAddrVO extends PageVO {
     /** 조회매장 */
     private String storeCd;
 
-    private String nmcodeCd;
+    private String addrNm;
 
-    private String nmcodeNm;
+    private String myAreaCd;
+
+    private String sidoNm;
+
+    private String sigunguNm;
+
+    private String lawDongNm;
+
+    private String lawDongCd;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -54,19 +62,51 @@ public class DlvrAddrVO extends PageVO {
         this.storeCd = storeCd;
     }
 
-    public String getNmcodeCd() {
-        return nmcodeCd;
+    public String getAddrNm() {
+        return addrNm;
     }
 
-    public void setNmcodeCd(String nmcodeCd) {
-        this.nmcodeCd = nmcodeCd;
+    public void setAddrNm(String addrNm) {
+        this.addrNm = addrNm;
     }
 
-    public String getNmcodeNm() {
-        return nmcodeNm;
+    public String getMyAreaCd() {
+        return myAreaCd;
     }
 
-    public void setNmcodeNm(String nmcodeNm) {
-        this.nmcodeNm = nmcodeNm;
+    public void setMyAreaCd(String myAreaCd) {
+        this.myAreaCd = myAreaCd;
+    }
+
+    public String getSidoNm() {
+        return sidoNm;
+    }
+
+    public void setSidoNm(String sidoNm) {
+        this.sidoNm = sidoNm;
+    }
+
+    public String getSigunguNm() {
+        return sigunguNm;
+    }
+
+    public void setSigunguNm(String sigunguNm) {
+        this.sigunguNm = sigunguNm;
+    }
+
+    public String getLawDongNm() {
+        return lawDongNm;
+    }
+
+    public void setLawDongNm(String lawDongNm) {
+        this.lawDongNm = lawDongNm;
+    }
+
+    public String getLawDongCd() {
+        return lawDongCd;
+    }
+
+    public void setLawDongCd(String lawDongCd) {
+        this.lawDongCd = lawDongCd;
     }
 }

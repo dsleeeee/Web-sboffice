@@ -363,6 +363,36 @@ public class SimpleMemberJoinController {
                     throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posTouchKey/posTouchKey.sb");
                 }
             }
+            // POS 화면에서 주방프린터상품연결(포스용)
+            else if(request.getParameter("url").equals("posKitchenPrint/posKitchenPrint")){
+                LOGGER.info("posLogin userId : {} , posKitchenPrint", request.getParameter("userId"));
+
+                model.addAttribute("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+                model.addAttribute("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+                model.addAttribute("storeCd", sessionInfoVO.getStoreCd());
+
+                if ( sessionInfoVO != null && sessionInfoVO.getUserId() != null ) {
+                    // jsp > sessionscope 로 쓸수 있게 httpsession 에 세팅
+                    HttpSession session = request.getSession();
+                    session.setAttribute("sessionInfo", sessionInfoVO);
+                }
+
+                /** userId 체크 */
+                if(isEmpty(request.getParameter("userId"))) {
+                    throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posKitchenPrint/posKitchenPrint.sb");
+                } else {
+                    // 사용자ID(포스에서 받는 사용자ID)
+                    String userId = request.getParameter("userId");
+                    model.addAttribute("userId", userId);
+                }
+
+                String touchKeyAuth = posBoardService.getBoardAuth(sessionInfoVO, "000135"); // 메뉴코드 추가 판매터치키등록(000135)
+                LOGGER.info("posLogin touchKeyAuth : {}", touchKeyAuth);
+
+                if(touchKeyAuth.equals("0")) {
+                    throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posKitchenPrint/posKitchenPrint.sb");
+                }
+            }
         }
         else {
             throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");

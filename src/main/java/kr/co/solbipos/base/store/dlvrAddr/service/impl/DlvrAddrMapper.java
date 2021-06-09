@@ -33,9 +33,12 @@ public interface DlvrAddrMapper {
     /** 미등록 배달권역 */
     List<DefaultMap<Object>> dlvrAddrCodeList(DlvrAddrVO dlvrAddrVO);
 
-    /** 배달권역 등록*/
+    /** 배달권역 등록 */
     int addDlvrAddr(DlvrAddrVO dlvrAddrVO);
 
-    /** 배달권역 등록삭제제*/
+    /** 배달권역 등록삭제제 */
    int delDlvrAddr(DlvrAddrVO dlvrAddrVO);
+   
+   /** getMyAreaCd 코드 채번 */
+   String getMyAreaCd(DlvrAddrVO dlvrAddrVO);
 }

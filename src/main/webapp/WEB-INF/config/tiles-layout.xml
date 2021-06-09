@@ -115,6 +115,12 @@
         <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     </definition>
 
+    <!-- POS 화면에서 주방프린터 상품연결(포스용) -->
+    <definition name="application/pos/posKitchenPrint/*" extends="posEmptyLayout">
+        <put-attribute name="body" value="/WEB-INF/view/application/pos/posKitchenPrint/{1}.jsp"/>
+        <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
+    </definition>
+
     <!-- POS 화면용 웹 설정 끝 -->
 
     <!-- 에러화면 -->
