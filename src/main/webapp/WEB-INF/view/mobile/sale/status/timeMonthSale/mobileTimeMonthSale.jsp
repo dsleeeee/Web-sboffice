@@ -187,4 +187,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeMonthSale/mobileTimeMonthSale.js?ver=20210609.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeMonthSale/mobileTimeMonthSale.js?ver=20210609.02" charset="utf-8"></script>

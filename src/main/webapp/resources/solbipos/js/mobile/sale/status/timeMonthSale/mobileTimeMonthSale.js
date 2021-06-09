@@ -134,7 +134,7 @@ app.controller('mobileTimeMonthSaleCtrl', ['$scope', '$http', function ($scope, 
         params.srchStoreCd = $("#mobileTimeMonthSaleStoreCd").val();
         params.startTime = 0;
         params.endTime = 23;
-        params.diffDay = 1; // 조회기간 차이(차트 높이 때문에)
+        params.diffTime = 1; // 조회시간 차이(차트 높이 때문에)
 
         // 바 차트
         $scope._broadcast("mobileTimeMonthSaleTimeChartCtrl", params);
@@ -171,13 +171,8 @@ app.controller('mobileTimeMonthSaleCtrl', ['$scope', '$http', function ($scope, 
         params.srchStoreCd = $("#mobileTimeMonthSaleStoreCd").val();
         params.startTime = $scope.startTime;
         params.endTime = $scope.endTime;
-        // 소수점 입력안됨
-        var numchkexp1 = /^\d*[.]\d*$/;
-        if(numchkexp1.test(diffMonth) == true) {
-            params.diffMonth = parseInt( diffMonth.toString().substring(0, diffMonth.toString().indexOf(".")) ); // 조회기간 차이(차트 높이 때문에)
-        } else {
-            params.diffMonth = diffMonth; // 조회기간 차이(차트 높이 때문에)
-        }
+        var diffTime = parseInt($scope.endTime) - parseInt($scope.startTime) + 1;
+        params.diffTime = diffTime; // 조회시간 차이(차트 높이 때문에)
 
         $scope._inquirySub("/mobile/sale/status/timeMonthSale/timeMonthSale/getMobileTimeMonthSaleTimeList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
@@ -222,15 +217,15 @@ app.controller('mobileTimeMonthSaleTimeChartCtrl', ['$scope', '$http', function 
         });
     };
 
-    // 조회기간 차이(차트 높이 때문에)
-    var diffMonthCol = 1;
+    // 조회시간 차이(차트 높이 때문에)
+    var diffTimeCol = 1;
 
     // <-- 검색 호출 -->
     $scope.$on("mobileTimeMonthSaleTimeChartCtrl", function(event, data) {
-        diffMonthCol = data.diffMonth; // 조회기간 차이(차트 높이 때문에)
+        diffTimeCol = data.diffTime + 1; // 조회시간 차이(차트 높이 때문에)
 
         // 차트 높이 선택한 날짜에 따라
-        var col = diffMonthCol;
+        var col = diffTimeCol;
         // 최소값 + (15 * 날짜수) + px
         var chartHeight = 115 + (15 * col) + "px";
         $("#mobileTimeMonthSaleTimeBarChart").css("height", chartHeight);
