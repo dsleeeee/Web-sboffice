@@ -123,7 +123,7 @@ app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $h
         params.srchStoreCd = $("#mobileTimeDaySaleStoreCd").val();
         params.startTime = 0;
         params.endTime = 23;
-        params.diffDay = 1; // 조회기간 차이(차트 높이 때문에)
+        params.diffTime = 1; // 조회시간 차이(차트 높이 때문에)
 
         // 바 차트
         $scope._broadcast("mobileTimeDaySaleTimeChartCtrl", params);
@@ -160,7 +160,8 @@ app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $h
         params.srchStoreCd = $("#mobileTimeDaySaleStoreCd").val();
         params.startTime = $scope.startTime;
         params.endTime = $scope.endTime;
-        params.diffDay = diffDay; // 조회기간 차이(차트 높이 때문에)
+        var diffTime = parseInt($scope.endTime) - parseInt($scope.startTime) + 1;
+        params.diffTime = diffTime; // 조회시간 차이(차트 높이 때문에)
 
         $scope._inquirySub("/mobile/sale/status/timeDaySale/timeDaySale/getMobileTimeDaySaleTimeList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
@@ -205,15 +206,15 @@ app.controller('mobileTimeDaySaleTimeChartCtrl', ['$scope', '$http', function ($
         });
     };
 
-    // 조회기간 차이(차트 높이 때문에)
-    var diffDayCol = 1;
+    // 조회시간 차이(차트 높이 때문에)
+    var diffTimeCol = 1;
 
     // <-- 검색 호출 -->
     $scope.$on("mobileTimeDaySaleTimeChartCtrl", function(event, data) {
-        diffDayCol = data.diffDay + 1; // 조회기간 차이(차트 높이 때문에)
+        diffTimeCol = data.diffTime + 1; // 조회시간 차이(차트 높이 때문에)
 
         // 차트 높이 선택한 날짜에 따라
-        var col = diffDayCol;
+        var col = diffTimeCol;
         // 최소값 + (15 * 날짜수) + px
         var chartHeight = 115 + (15 * col) + "px"; // 최소값 : 31일땐 580 / 30일땐 550 / 1일떈 130(더 작게도 가능함)
         $("#mobileTimeDaySaleTimeBarChart").css("height", chartHeight);
