@@ -13,94 +13,97 @@
 
     <!-- 등록 배달권역 -->
     <!--
-        TABLE    : TB_MS_STORE_NMCODE
+        TABLE    : TB_MS_MY_DLVR_ADDR
     -->
     <select id="dlvrAddrList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
         /* DlvrAddrMapper.dlvrAddrList */
-        SELECT NMCODE_CD, NMCODE_NM
-          FROM TB_MS_STORE_NMCODE
-         WHERE NMCODE_GRP_CD = '203'
-           AND STORE_CD = #{storeCd}
-           AND USE_YN = 'Y'
-         ORDER BY NMCODE_CD
+        SELECT SIDO_NM, SIGUNGU_NM, LAW_DONG_NM, LAW_DONG_NM, MY_AREA_CD
+          FROM TB_MS_MY_DLVR_ADDR
+         WHERE STORE_CD = #{storeCd}
     </select>
 
     <!-- 미등록 배달권역 -->
     <!--
-        TABLE    : TB_CM_NMCODE, TB_MS_STORE_NMCODE
+        TABLE    : TB_CM_POST
     -->
     <select id="dlvrAddrCodeList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
         /* DlvrAddrMapper.dlvrAddrCodeList */
-        SELECT NMCODE_CD, NMCODE_NM
-          FROM TB_CM_NMCODE
-         WHERE NMCODE_GRP_CD = '203'
-           AND NMCODE_CD NOT IN (SELECT NMCODE_CD
-                                   FROM TB_MS_STORE_NMCODE
-                                  WHERE NMCODE_GRP_CD = '203'
-                                    AND STORE_CD = #{storeCd}
-                                    AND USE_YN = 'Y'
-                                )
-        ORDER BY NMCODE_CD
+        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
+          FROM (SELECT *
+                 FROM TB_CM_POST
+                WHERE SIDO_NM LIKE '%' || #{addrNm} || '%')
+        UNION
+        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
+        FROM ( SELECT *
+               FROM TB_CM_POST
+               WHERE SIGUNGU_NM LIKE '%' || #{addrNm} || '%')
+        UNION
+        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
+        FROM ( SELECT *
+               FROM TB_CM_POST
+               WHERE LAW_DONG_NM LIKE '%' || #{addrNm} || '%')
+        GROUP BY SIDO_NM,SIGUNGU_NM,LAW_DONG_NM, LI_NM, LAW_DONG_CD
+        UNION
+        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
+        FROM ( SELECT *
+               FROM TB_CM_POST
+               WHERE LI_NM LIKE '%' || #{addrNm} || '%')
+        GROUP BY SIDO_NM,SIGUNGU_NM,LAW_DONG_NM, LI_NM, LAW_DONG_CD
     </select>
 
     <!-- 배달권역 등록 -->
     <!--
-        TABLE    : TB_MS_STORE_NMCODE
+        TABLE    : TB_MS_MY_DLVR_ADDR
     -->
     <insert id="addDlvrAddr" parameterType="dlvrAddrVO">
-        MERGE INTO TB_MS_STORE_NMCODE tmsn
-        USING DUAL
-        ON (
-                tmsn.STORE_CD = #{storeCd}
-                AND tmsn.NMCODE_GRP_CD = '203'
-                AND tmsn.NMCODE_CD = #{nmcodeCd}
-            )
-        WHEN NOT MATCHED THEN
-            INSERT
+        /* DlvrAddrMapper.addDlvrAddr */
+            INSERT INTO TB_MS_MY_DLVR_ADDR
             (
-            STORE_CD,
-            NMCODE_GRP_CD,
-            NMCODE_CD,
-            PARENT_CD,
-            NMCODE_NM,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
+                STORE_CD,
+                MY_AREA_CD,
+                SIDO_NM,
+                SIGUNGU_NM,
+                LAW_DONG_CD,
+                LAW_DONG_NM,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
             )
             VALUES
             (
-            #{storeCd},
-            '203',
-            #{nmcodeCd},
-            '203',
-            #{nmcodeNm},
-            'Y',
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
+                #{storeCd},
+                #{myAreaCd},
+                #{sidoNm},
+                #{sigunguNm},
+                #{lawDongCd},
+                #{lawDongNm},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
             )
-        WHEN MATCHED THEN
-            UPDATE
-            SET USE_YN = 'Y',
-                MOD_DT = #{modDt},
-                MOD_ID = #{modId}
     </insert>
 
     <!-- 배달권역 등록삭제 -->
     <!--
-        TABLE    : TB_MS_STORE_NMCODE
+        TABLE    : TB_MS_MY_DLVR_ADDR
     -->
-    <update id="delDlvrAddr" parameterType="dlvrAddrVO">
-        UPDATE TB_MS_STORE_NMCODE
-           SET USE_YN = 'N',
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
+    <delete id="delDlvrAddr" parameterType="dlvrAddrVO">
+        /* DlvrAddrMapper.delDlvrAddr */
+        DELETE FROM TB_MS_MY_DLVR_ADDR
          WHERE STORE_CD = #{storeCd}
-           AND NMCODE_GRP_CD = '203'
-           AND NMCODE_CD = #{nmcodeCd}
-    </update>
+           AND MY_AREA_CD = #{myAreaCd}
+    </delete>
 
+    <!-- MyAreaCd 코드 채번 -->
+    <!--
+        TABLE    : TB_MS_MY_DLVR_ADDR
+    -->
+    <select id="getMyAreaCd" parameterType="dlvrAddrVO" resultType="String">
+        /* DlvrAddrMapper.getMyAreaCd */
+        SELECT LPAD( NVL(MAX(MY_AREA_CD), 0) + 1, 4, '0') AS MY_AREA_CD
+          FROM TB_MS_MY_DLVR_ADDR
+         WHERE STORE_CD = #{storeCd}
+    </select>
 </mapper>
