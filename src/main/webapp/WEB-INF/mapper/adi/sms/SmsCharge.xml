@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsCharge.xml
+    SMS충전
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.06.09     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.smsC.smsCharge.service.impl.SmsChargeMapper">
+
+</mapper>

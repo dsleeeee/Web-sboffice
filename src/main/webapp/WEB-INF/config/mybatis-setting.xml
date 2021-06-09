@@ -510,12 +510,14 @@
     <typeAlias alias="libraryVO" type="kr.co.solbipos.adi.board.library.service.LibraryVO"/>
     <!-- 부가서비스 > 예약관리 > 예약현황 -->
     <typeAlias alias="resveInfoVO" type="kr.co.solbipos.adi.resve.resveInfo.service.ResveInfoVO"/>
+
+    <!-- 부가서비스 > SMS관리 > SMS충전 -->
+    <typeAlias alias="smsChargeVO" type="kr.co.solbipos.adi.sms.smsCharge.service.SmsChargeVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>
     <typeAlias alias="sendStatusVO" type="kr.co.solbipos.adi.sms.sendstatus.service.SendStatusVO"/>
     <typeAlias alias="sendStatVO" type="kr.co.solbipos.adi.sms.sendstat.service.SendStatVO"/>
-    <typeAlias alias="chargeVO" type="kr.co.solbipos.adi.sms.charge.service.ChargeVO"/>
     <typeAlias alias="chargeHistVO" type="kr.co.solbipos.adi.sms.chargehist.service.ChargeHistVO"/>
     <typeAlias alias="useSmVO" type="kr.co.solbipos.adi.sms.usesm.service.UseSmVO"/>
     <typeAlias alias="autoManageSysVO" type="kr.co.solbipos.adi.sms.automanagesys.service.AutoManageSysVO"/>
