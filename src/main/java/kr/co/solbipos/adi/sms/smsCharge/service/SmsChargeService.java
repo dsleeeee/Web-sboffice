@@ -21,4 +21,5 @@ import java.util.List;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface SmsChargeService {
+
 }

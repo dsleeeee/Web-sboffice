@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html;charset=euc-kr"%>
+<%--<%@ page language="java" contentType="text/html;charset=euc-kr"%>--%>
+<%@ page pageEncoding="UTF-8"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -20,8 +21,8 @@
     <%--<body onload="init_orderid();">--%>
     <body>
         <div id="sample_wrap">
-            <h1>SMS ÃæÀü</h1>
-            <!-- »ó´Ü ¹®±¸ -->
+            <h1>SMS ì¶©ì „</h1>
+            <!-- ìƒë‹¨ ë¬¸êµ¬ -->
             <div class="sample">
                 <table class="tbl" cellpadding="0" cellspacing="0" align="center">
                     <tr>
@@ -33,64 +34,64 @@
                                     <col width="35%"/>
                                 </colgroup>
                                 <tr height='34'>
-                                    <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> ÃæÀü±Ý¾×À» ¼±ÅÃÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.</b></td>
+                                    <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> ì¶©ì „ê¸ˆì•¡ì„ ì„ íƒí•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.</b></td>
                                 </tr>
                                 <tr bgcolor='#79a9d2' height='3'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td style='color:#585858;'><b>¼±ÅÃ</b></td>
-                                    <td style='color:#585858;'><b>±Ý¾×</b></td>
-                                    <td style='color:#585858;'><b>ÃæÀü¼ö·®</b></td>
+                                    <td style='color:#585858;'><b>ì„ íƒ</b></td>
+                                    <td style='color:#585858;'><b>ê¸ˆì•¡</b></td>
+                                    <td style='color:#585858;'><b>ì¶©ì „ìˆ˜ëŸ‰</b></td>
                                 </tr>
                                 <tr bgcolor='#79a9d2' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td><input type='radio' name='amt' value='8250'/><input type='hidden' name='qty' value='500'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>7,500¿ø</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>500Åë</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>7,500ì›</font></td>
+                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>500í†µ</font></td>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td><input type='radio' name='amt' value='16500'/><input type='hidden' name='qty' value='1000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>15,000¿ø</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>1,000Åë</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>15,000ì›</font></td>
+                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>1,000í†µ</font></td>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td><input type='radio' name='amt' value='33000'/><input type='hidden' name='qty' value='2000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>30,000¿ø</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>2,000Åë</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>30,000ì›</font></td>
+                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>2,000í†µ</font></td>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td><input type='radio' name='amt' value='49500'/><input type='hidden' name='qty' value='3000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>45,000¿ø</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>3,000Åë</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>45,000ì›</font></td>
+                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>3,000í†µ</font></td>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td><input type='radio' name='amt' value='82500'/><input type='hidden' name='qty' value='5000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000¿ø</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>5,000Åë</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000ì›</font></td>
+                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>5,000í†µ</font></td>
                                 </tr>
                                 <tr bgcolor='#bfccd8' height='1'><td colspan='3'></td></tr>
                                 <tr height='30'>
-                                    <td colspan='3' style='color:#585858;' align='right'>* ºÎ°¡¼¼ º°µµ±Ý¾× ÀÔ´Ï´Ù.</td>
+                                    <td colspan='3' style='color:#585858;' align='right'>* ë¶€ê°€ì„¸ ë³„ë„ê¸ˆì•¡ ìž…ë‹ˆë‹¤.</td>
                                 </tr>
                                 <tr height='34'>
-                                    <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> °áÁ¦¼ö´ÜÀ» ¼±ÅÃÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.</b></td>
+                                    <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> ê²°ì œìˆ˜ë‹¨ì„ ì„ íƒí•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.</b></td>
                                 </tr>
                                 <tr bgcolor='#79a9d2' height='3'><td colspan='3'></td></tr>
                                 <tr height='10'><td colspan='3'></td></tr>
                                 <tr>
                                     <td colspan='3' align='center'>
-                                        <%-- ½Å¿ëÄ«µå --%>
+                                        <%-- ì‹ ìš©ì¹´ë“œ --%>
                                         <%--<img src='/resource/solbipos/css/img/sms/btn_pay_card.jpg'    onclick="fnSubmit('100000000000');"/>--%>
                                         <img src='/resource/solbipos/css/img/sms/btn_pay_card.jpg'/>
                                         &nbsp;
-                                        <%-- °èÁÂÀÌÃ¼ --%>
+                                        <%-- ê³„ì¢Œì´ì²´ --%>
                                         <%--<img src='/resource/solbipos/css/img/sms/btn_pay_account.jpg' onclick="fnSubmit('010000000000');"/>--%>
                                         <img src='/resource/solbipos/css/img/sms/btn_pay_account.jpg'/>
                                         &nbsp;
-                                        <%-- °¡»ó°èÁÂ --%>
+                                        <%-- ê°€ìƒê³„ì¢Œ --%>
                                         <%--<img src='/resource/solbipos/css/img/sms/btn_pay_hp.jpg' onclick="fnSubmit('001000000000');"/>--%>
                                         <img src='/resource/solbipos/css/img/sms/btn_pay_hp.jpg'/>
                                     </td>
@@ -100,13 +101,13 @@
                         </td>
                     </tr>
                 </table>
-                <!-- Payplus Plug-in ¼³Ä¡ ¾È³» -->
+                <!-- Payplus Plug-in ì„¤ì¹˜ ì•ˆë‚´ -->
                 <%--<div id="display_setup_message" style="display:none">--%>
                 <div id="display_setup_message">
                     <p class="txt">
-            °áÁ¦¸¦ °è¼Ó ÇÏ½Ã·Á¸é »ó´ÜÀÇ ³ë¶õ»ö Ç¥½ÃÁÙÀ» Å¬¸¯ ÇÏ½Ã°Å³ª <a href="http://pay.kcp.co.kr/plugin_new/file/KCPUXWizard.exe"><span>[¼öµ¿¼³Ä¡]</span></a>¸¦ ´­·¯
-            Payplus Plug-inÀ» ¼³Ä¡ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
-            [¼öµ¿¼³Ä¡]¸¦ ´­·¯ ¼³Ä¡ÇÏ½Å °æ¿ì »õ·Î°íÄ§(F5)Å°¸¦ ´­·¯ ÁøÇàÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+            ê²°ì œë¥¼ ê³„ì† í•˜ì‹œë ¤ë©´ ìƒë‹¨ì˜ ë…¸ëž€ìƒ‰ í‘œì‹œì¤„ì„ í´ë¦­ í•˜ì‹œê±°ë‚˜ <a href="http://pay.kcp.co.kr/plugin_new/file/KCPUXWizard.exe"><span>[ìˆ˜ë™ì„¤ì¹˜]</span></a>ë¥¼ ëˆŒëŸ¬
+            Payplus Plug-inì„ ì„¤ì¹˜í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.
+            [ìˆ˜ë™ì„¤ì¹˜]ë¥¼ ëˆŒëŸ¬ ì„¤ì¹˜í•˜ì‹  ê²½ìš° ìƒˆë¡œê³ ì¹¨(F5)í‚¤ë¥¼ ëˆŒëŸ¬ ì§„í–‰í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.
                     </p>
                 </div>
             </div>
