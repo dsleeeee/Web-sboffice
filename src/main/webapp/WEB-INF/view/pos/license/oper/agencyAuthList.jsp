@@ -132,4 +132,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=20201116.01 charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=20201116.01" charset="utf-8"></script>

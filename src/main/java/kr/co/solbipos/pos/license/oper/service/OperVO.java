@@ -66,6 +66,12 @@ public class OperVO extends PageVO {
     /** 관리밴사명 */
     private String manageVanNm;
 
+    /** 사업자번호 */
+    private String bizNo;
+
+    /** 신규/전환 */
+    private String srchShopMigFg;
+
     public boolean getChkDt() { return chkDt; }
 
     public void setChkDt(boolean chkDt) { this.chkDt = chkDt; }
@@ -179,4 +185,12 @@ public class OperVO extends PageVO {
     public void setManageVanNm(String manageVanNm) {
         this.manageVanNm = manageVanNm;
     }
+
+    public String getBizNo() { return bizNo; }
+
+    public void setBizNo(String bizNo) { this.bizNo = bizNo;  }
+
+    public String getSrchShopMigFg() { return srchShopMigFg; }
+
+    public void setSrchShopMigFg(String srchShopMigFg) { this.srchShopMigFg = srchShopMigFg; }
 }

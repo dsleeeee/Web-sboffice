@@ -125,6 +125,31 @@
                     <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
                 </td>
             </tr>
+            <tr>
+                <%-- 사업자번호 --%>
+                <th>
+                    <s:message code="oper.bizNo" />
+                </th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchBizNo" ng-model="bizNo" />
+                </td>
+                <%-- 신규/전환 --%>
+                <th><s:message code="oper.shopMigFg" /></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchShopMigFg"
+                      ng-model="shopMigFg"
+                      control="shopMigFgCombo"
+                      items-source="_getComboData('srchShopMigFg')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                  </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -158,7 +183,9 @@
                     <wj-flex-grid-column header="<s:message code="oper.bizNo"/>         " binding="bizNo"           width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.vendorTermnlNo"/>" binding="vendorTermnlNo"  width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysStatNm"/>     " binding="sysStatNm"       width=" 50" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.vanNm"/>         " binding="vanNm"           width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.vanNm"/>         " binding="vanNm"           width=" 80" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.shopMigFg"/>     " binding="shopMigFg"       width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.regDate"/>       " binding="regDate"         width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>   " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.agency"/>        " binding="agencyNm"        width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posCnt"/>        " binding="posCnt"          width=" 60" is-read-only="true" align="center"> </wj-flex-grid-column>

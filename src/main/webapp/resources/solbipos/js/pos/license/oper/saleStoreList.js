@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+// 사용여부
+var shopMigFgComboMap = [
+    {"name": "전체", "value": ""},
+    {"name": "신규", "value": "0"},
+    {"name": "전환", "value": "1"}
+];
+
 /**
  *  매출매장현황 그리드 생성
  */
@@ -23,6 +30,9 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // comboBox 초기화
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
+    // 신규/전환
+    $scope._setComboData("srchShopMigFg", shopMigFgComboMap);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -44,6 +54,8 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
         dataItem.vendorTermnlNo = messages["oper.storeInfo"];
         dataItem.sysStatNm      = messages["oper.storeInfo"];
         dataItem.vanNm          = messages["oper.storeInfo"];
+        dataItem.shopMigFg      = messages["oper.storeInfo"];
+        dataItem.regDate        = messages["oper.storeInfo"];
         dataItem.sysOpenDate    = messages["oper.storeInfo"];
         dataItem.agencyNm       = messages["oper.storeInfo"];
         dataItem.posCnt         = messages["oper.storeInfo"];
@@ -128,6 +140,8 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
         params.hqOfficeNm = $("#hqOfficeNm").val();
         params.storeCd = $("#storeCd").val();
         params.storeNm = $("#storeNm").val();
+        params.bizNo = $("#bizNo").val();
+        params.srchShopMigFg = $scope.shopMigFg;
         params.chkDt = $scope.isChecked;
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
