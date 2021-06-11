@@ -28,27 +28,26 @@
     -->
     <select id="dlvrAddrCodeList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
         /* DlvrAddrMapper.dlvrAddrCodeList */
-        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
-          FROM (SELECT *
-                 FROM TB_CM_POST
-                WHERE SIDO_NM LIKE '%' || #{addrNm} || '%')
-        UNION
-        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
-        FROM ( SELECT *
-               FROM TB_CM_POST
-               WHERE SIGUNGU_NM LIKE '%' || #{addrNm} || '%')
-        UNION
-        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
-        FROM ( SELECT *
-               FROM TB_CM_POST
-               WHERE LAW_DONG_NM LIKE '%' || #{addrNm} || '%')
-        GROUP BY SIDO_NM,SIGUNGU_NM,LAW_DONG_NM, LI_NM, LAW_DONG_CD
-        UNION
-        SELECT SIDO_NM, SIGUNGU_NM, NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM, LAW_DONG_CD
-        FROM ( SELECT *
-               FROM TB_CM_POST
-               WHERE LI_NM LIKE '%' || #{addrNm} || '%')
-        GROUP BY SIDO_NM,SIGUNGU_NM,LAW_DONG_NM, LI_NM, LAW_DONG_CD
+        SELECT SIDO_NM,
+               SIGUNGU_NM,
+               NVL(LAW_DONG_NM, LI_NM) AS LAW_DONG_NM,
+               LAW_DONG_CD
+          FROM (SELECT DISTINCT LAW_DONG_CD,
+                                SIDO_NM,
+                                SIGUNGU_NM,
+                                LAW_DONG_NM,
+                                LI_NM
+                  FROM TB_CM_POST
+                 WHERE SIDO_NM LIKE '%' || #{addrNm} || '%'
+                    OR SIGUNGU_NM LIKE '%' || #{addrNm} || '%'
+                    OR LAW_DONG_NM LIKE '%' || #{addrNm} || '%'
+                    OR LI_NM LIKE '%' || #{addrNm} || '%'
+                   AND USE_YN = 'Y')
+         WHERE LAW_DONG_CD NOT IN (SELECT LAW_DONG_CD
+                                     FROM TB_MS_MY_DLVR_ADDR
+                                    WHERE STORE_CD = #{storeCd})
+        GROUP BY SIDO_NM, SIGUNGU_NM, LAW_DONG_NM, LI_NM, LAW_DONG_CD
+        ORDER BY LAW_DONG_NM
     </select>
 
     <!-- 배달권역 등록 -->

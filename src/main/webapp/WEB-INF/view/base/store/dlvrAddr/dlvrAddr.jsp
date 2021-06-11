@@ -33,7 +33,8 @@
                 <%-- 배달권역명 --%>
                 <th><s:message code="dlvrAddr.dlvrAddrNm"/></th>
                 <td>
-                    <input type="text" id="srchAddrNm" ng-model="addrNm" class="sb-input w60"/>
+                    <input type="text" id="srchAddrNm" ng-model="addrNm" class="sb-input w60"/><br/>
+                    <span>CID , 전화 주문 시 POS에서 조회할 주소 정보의 법정동 권역을 설정 합니다.<br/>입력되지 않은 법정동은 주소 조회가 되지 않습니다.</span>
                 </td>
             </tr>
             </tbody>
