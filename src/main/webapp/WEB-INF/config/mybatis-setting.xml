@@ -513,6 +513,8 @@
 
     <!-- 부가서비스 > SMS관리 > SMS충전 -->
     <typeAlias alias="smsChargeVO" type="kr.co.solbipos.adi.sms.smsCharge.service.SmsChargeVO"/>
+    <!-- 부가서비스 > SMS관리 > SMS전송 -->
+    <!--<typeAlias alias="smsSendVO" type="kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO"/>-->
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>
