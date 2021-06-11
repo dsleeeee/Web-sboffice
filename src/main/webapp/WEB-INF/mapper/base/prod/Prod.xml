@@ -87,7 +87,7 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND thp.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+                    AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
@@ -176,7 +176,7 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND tmp.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+                    AND tmpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
