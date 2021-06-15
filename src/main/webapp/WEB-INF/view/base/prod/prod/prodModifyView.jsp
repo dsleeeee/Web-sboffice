@@ -271,7 +271,7 @@
               <td>
                 <input type="text" maxlength="10" numberOnly id="stinSaleUprc" name="stinSaleUprc" ng-model="prodModifyInfo.stinSaleUprc" class="sb-input w100">
               </td>
-                <%--포장가--%>ㄴ
+                <%--포장가--%>
               <th><s:message code="prod.packSaleUprc"/></th>
               <td>
                 <input type="text" maxlength="10" numberOnly id="packSaleUprc" name="packSaleUprc" ng-model="prodModifyInfo.packSaleUprc" class="sb-input w100">
