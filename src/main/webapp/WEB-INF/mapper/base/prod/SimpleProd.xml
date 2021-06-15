@@ -234,7 +234,10 @@
             MOD_DT,
             MOD_ID,
             VENDR_CD,
-            PRC_CTRL_FG
+            PRC_CTRL_FG,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -280,7 +283,10 @@
             #{modDt},
             #{modId},
             #{vendrCd},
-            #{prcCtrlFg}
+            #{prcCtrlFg},
+            #{stinSaleUprc},
+            #{dlvrSaleUprc},
+            #{packSaleUprc}
         )
     </insert>
 
@@ -336,7 +342,10 @@
         MOD_DT,
         MOD_ID,
         VENDR_CD,
-        PRC_CTRL_FG
+        PRC_CTRL_FG,
+        NVL(STIN_SALE_UPRC, '') AS STIN_SALE_UPRC,
+        NVL(DLVR_SALE_UPRC, '') AS DLVR_SALE_UPRC,
+        NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC
         FROM TB_TMP_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}

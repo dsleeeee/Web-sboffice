@@ -136,6 +136,16 @@ public class SimpleProdVO extends PageVO {
     /** 상품등록구분 */
     private String regFg;
 
+    /** 내점가 */
+    private String stinSaleUprc;
+
+    /** 배달가 */
+    private String dlvrSaleUprc;
+
+    /** 포장가 */
+    private String packSaleUprc;
+
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -316,5 +326,29 @@ public class SimpleProdVO extends PageVO {
 
     public void setRegFg(String regFg) {
         this.regFg = regFg;
+    }
+
+    public String getStinSaleUprc() {
+        return stinSaleUprc;
+    }
+
+    public void setStinSaleUprc(String stinSaleUprc) {
+        this.stinSaleUprc = stinSaleUprc;
+    }
+
+    public String getDlvrSaleUprc() {
+        return dlvrSaleUprc;
+    }
+
+    public void setDlvrSaleUprc(String dlvrSaleUprc) {
+        this.dlvrSaleUprc = dlvrSaleUprc;
+    }
+
+    public String getPackSaleUprc() {
+        return packSaleUprc;
+    }
+
+    public void setPackSaleUprc(String packSaleUprc) {
+        this.packSaleUprc = packSaleUprc;
     }
 }

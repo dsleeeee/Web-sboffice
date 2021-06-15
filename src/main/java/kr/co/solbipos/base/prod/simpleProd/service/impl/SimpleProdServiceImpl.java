@@ -322,7 +322,9 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setEndDate("99991231");
                 prodVO.setSaleUprc(simpleProdVO.getSaleUprc());
                 prodVO.setPrcCtrlFg(simpleProdVO.getPrcCtrlFg());
-
+                prodVO.setStinSaleUprc(simpleProdVO.getStinSaleUprc());
+                prodVO.setDlvrSaleUprc(simpleProdVO.getDlvrSaleUprc());
+                prodVO.setPackSaleUprc(simpleProdVO.getPackSaleUprc());
                 prodVO.setCornrCd("00");
 
                 // 자동채번인 경우 상품코드 조회

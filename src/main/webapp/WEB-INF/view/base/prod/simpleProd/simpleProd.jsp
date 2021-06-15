@@ -88,6 +88,11 @@
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="simpleProd.prodNm"/>" binding="prodNm" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.saleUprc"/>" binding="saleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
+                    <c:if test="${subPriceFg == '1'}">
+                        <wj-flex-grid-column header="<s:message code="simpleProd.stinSaleUprc"/>" binding="stinSaleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="simpleProd.dlvrSaleUprc"/>" binding="dlvrSaleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="simpleProd.packSaleUprc"/>" binding="packSaleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="simpleProd.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
@@ -140,9 +145,13 @@
     var vatFgData = ${ccu.getCommCodeExcpAll("039")};
     <%-- 가격관리구분 --%>
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
+
+    <%-- 내점/배달/포장 가격관리 사용여부 --%>
+    var subPriceFg = "${subPriceFg}";
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20210426.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20210615.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
