@@ -30,219 +30,494 @@
          AND tmpe.ENVST_VAL = '6'    <!-- 6: KIOSK -->
     </select>
 
+    <!-- 키오스크 키맵그룹 조회 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 키맵그룹을 가져온다.
+    -->
+    <select id="getKioskTuClsTypeList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getKioskTuClsTypeList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thkc.NAME, thkc.VALUE
+                  FROM (
+                            SELECT TU_CLS_TYPE AS NAME,
+                                    TU_CLS_TYPE AS VALUE
+                              FROM TB_HQ_KIOSK_CLS
+                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                             GROUP
+                                BY TU_CLS_TYPE
+                        ) thkc
+                 ORDER
+                    BY thkc.NAME ASC
+
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmkc.NAME, tmkc.VALUE
+                FROM (
+                            SELECT TU_CLS_TYPE AS NAME,
+                                    TU_CLS_TYPE AS VALUE
+                              FROM TB_MS_KIOSK_CLS
+                             WHERE STORE_CD = #{storeCd}
+                               AND POS_NO = #{posNo}
+                             GROUP
+                                BY TU_CLS_TYPE
+                      ) tmkc
+                ORDER
+                   BY tmkc.NAME ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크 키맵그룹코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 새로운 키오스크 키맵그룹 생성 시 키맵그룹코드를 생성한다.
+    -->
+    <select id="getKiosTuClsTypeCode" parameterType="kioskKeyMapVO" resultType="String">
+        /* USE : KioskKeyMapMapper.getKiosTuClsTypeCode */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(TU_CLS_TYPE), '0') + 1, 2, '0')
+                  FROM TB_HQ_KIOSK_CLS
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(TU_CLS_TYPE), '0') + 1, 2, '0')
+                  FROM TB_MS_KIOSK_CLS
+                 WHERE STORE_CD = #{storeCd}
+                   AND  POS_NO = #{posNo}
+            </when>
+        </choose>
+    </select>
+
     <!-- 키오스크 카테고리(분류) 조회 -->
     <!--
-        TABLE    : TB_MS_KIOSK_CLS
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 카테고리(분류)를 가져온다.
     -->
     <select id="getKioskCategory" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* USE : KioskKeyMapMapper.getKioskCategory */
-        SELECT STORE_CD,
-                POS_NO,
-                TU_CLS_CD,
-                TU_CLS_NM,
-                TU_PAGE,
-                X,
-                Y,
-                WIDTH,
-                HEIGHT,
-                INDEX_NO,
-                CLS_FG,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-        FROM TB_MS_KIOSK_CLS tmkc
-       WHERE STORE_CD = #{storeCd}
-         AND POS_NO = #{posNo}
-   ORDER BY INDEX_NO
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    SELECT HQ_OFFICE_CD,
+                            TU_CLS_TYPE,
+                            TU_CLS_CD,
+                            TU_CLS_NM,
+                            TU_PAGE,
+                            X,
+                            Y,
+                            WIDTH,
+                            HEIGHT,
+                            INDEX_NO,
+                            CLS_FG,
+                            REG_DT,
+                            REG_ID,
+                            MOD_DT,
+                            MOD_ID
+                     FROM TB_HQ_KIOSK_CLS tmkc
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                      AND TU_CLS_TYPE = #{tuClsType}
+                ORDER BY INDEX_NO
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                    SELECT STORE_CD,
+                            POS_NO,
+                            TU_CLS_TYPE,
+                            TU_CLS_CD,
+                            TU_CLS_NM,
+                            TU_PAGE,
+                            X,
+                            Y,
+                            WIDTH,
+                            HEIGHT,
+                            INDEX_NO,
+                            CLS_FG,
+                            REG_DT,
+                            REG_ID,
+                            MOD_DT,
+                            MOD_ID
+                    FROM TB_MS_KIOSK_CLS tmkc
+                   WHERE STORE_CD = #{storeCd}
+                     AND POS_NO = #{posNo}
+                     AND TU_CLS_TYPE = #{tuClsType}
+               ORDER BY INDEX_NO
+            </when>
+        </choose>
     </select>
 
     <!-- 키오스크 카테고리(분류) 저장 - 생성 시 카테고리 코드 생성 -->
     <!--
-        TABLE    : TB_MS_KIOSK_CLS
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
         PARAM    : kioskKeyMapVO
         COMMENTS : 새로운 키오스크 카테고리(분류) 생성 시 카테고리 코드를 생성한다.
     -->
     <select id="getKioskCategoryCode" parameterType="kioskKeyMapVO" resultType="String">
-      /* USE : KioskKeyMapMapper.getKioskCategoryCode */
-      SELECT LPAD(NVL(MAX(TU_CLS_CD), '0') + 1, 2, '0')
-        FROM TB_MS_KIOSK_CLS
-       WHERE STORE_CD = #{storeCd}
-         AND  POS_NO = #{posNo}
+        /* USE : KioskKeyMapMapper.getKioskCategoryCode */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+              SELECT LPAD(NVL(MAX(TU_CLS_CD), '0') + 1, 2, '0')
+                FROM TB_HQ_KIOSK_CLS
+               WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND TU_CLS_TYPE = #{tuClsType}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+              SELECT LPAD(NVL(MAX(TU_CLS_CD), '0') + 1, 2, '0')
+                FROM TB_MS_KIOSK_CLS
+               WHERE STORE_CD = #{storeCd}
+                 AND POS_NO = #{posNo}
+                 AND TU_CLS_TYPE = #{tuClsType}
+            </when>
+        </choose>
     </select>
 
     <!-- 키오스크 카테고리(분류) 저장 - 생성 -->
     <!--
-        TABLE    : TB_MS_KIOSK_CLS
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
         PARAM    : kioskKeyMapVO
         COMMENTS : 새로운 키오스크 카테고리(분류) 생성한다.
     -->
     <insert id="insertKioskCategory" parameterType="kioskKeyMapVO">
       /* USE : KioskKeyMapMapper.insertKioskCategory */
-      INSERT INTO TB_MS_KIOSK_CLS
-      (
-            STORE_CD,
-            POS_NO,
-            TU_CLS_CD,
-            TU_CLS_NM,
-            TU_PAGE,
-            X,
-            Y,
-            WIDTH,
-            HEIGHT,
-            INDEX_NO,
-            CLS_FG,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-      )
-      VALUES
-      (
-            #{storeCd},
-            #{posNo},
-            #{tuClsCd},
-            #{tuClsNm},
-            #{tuPage},
-            #{x},
-            #{y},
-            #{width},
-            #{height},
-            #{indexNo},
-            #{clsFg},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-      )
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    INSERT INTO TB_HQ_KIOSK_CLS
+                    (
+                        HQ_OFFICE_CD,
+                        TU_CLS_TYPE,
+                        TU_CLS_CD,
+                        TU_CLS_NM,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{tuClsType},
+                        #{tuClsCd},
+                        #{tuClsNm},
+                        #{tuPage},
+                        #{x},
+                        #{y},
+                        #{width},
+                        #{height},
+                        #{indexNo},
+                        #{clsFg},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                  INSERT INTO TB_MS_KIOSK_CLS
+                  (
+                        STORE_CD,
+                        POS_NO,
+                        TU_CLS_TYPE,
+                        TU_CLS_CD,
+                        TU_CLS_NM,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                  )
+                  VALUES
+                  (
+                        #{storeCd},
+                        #{posNo},
+                        #{tuClsType},
+                        #{tuClsCd},
+                        #{tuClsNm},
+                        #{tuPage},
+                        #{x},
+                        #{y},
+                        #{width},
+                        #{height},
+                        #{indexNo},
+                        #{clsFg},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  )
+            </when>
+        </choose>
     </insert>
 
     <!-- 키오스크 카테고리(분류) 저장 - 수정 -->
     <!--
-        TABLE    : TB_MS_KIOSK_CLS
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 카테고리(분류) 수정한다.
     -->
     <update id="updateKioskCategory" parameterType="kioskKeyMapVO">
       /* USE : KioskKeyMapMapper.updateKioskCategory */
-      UPDATE TB_MS_KIOSK_CLS
-         SET TU_CLS_NM = #{tuClsNm},
-              TU_PAGE = #{tuPage},
-              X = #{x},
-              Y = #{y},
-              WIDTH = #{width},
-              HEIGHT = #{height},
-              INDEX_NO = #{indexNo},
-              CLS_FG = #{clsFg},
-              MOD_DT = #{modDt},
-              MOD_ID = #{modId}
-       WHERE STORE_CD = #{storeCd}
-         AND POS_NO = #{posNo}
-         AND TU_CLS_CD = #{tuClsCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                 UPDATE TB_HQ_KIOSK_CLS
+                    SET TU_CLS_NM = #{tuClsNm},
+                         TU_PAGE = #{tuPage},
+                         X = #{x},
+                         Y = #{y},
+                         WIDTH = #{width},
+                         HEIGHT = #{height},
+                         INDEX_NO = #{indexNo},
+                         CLS_FG = #{clsFg},
+                         MOD_DT = #{modDt},
+                         MOD_ID = #{modId}
+                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND TU_CLS_TYPE = #{tuClsType}
+                    AND TU_CLS_CD = #{tuClsCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                  UPDATE TB_MS_KIOSK_CLS
+                     SET TU_CLS_NM = #{tuClsNm},
+                          TU_PAGE = #{tuPage},
+                          X = #{x},
+                          Y = #{y},
+                          WIDTH = #{width},
+                          HEIGHT = #{height},
+                          INDEX_NO = #{indexNo},
+                          CLS_FG = #{clsFg},
+                          MOD_DT = #{modDt},
+                          MOD_ID = #{modId}
+                   WHERE STORE_CD = #{storeCd}
+                     AND POS_NO = #{posNo}
+                     AND TU_CLS_TYPE = #{tuClsType}
+                     AND TU_CLS_CD = #{tuClsCd}
+            </when>
+        </choose>
     </update>
 
     <!-- 키오스크 카테고리(분류) 저장 - 삭제 -->
     <!--
-        TABLE    : TB_MS_KIOSK_CLS
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 카테고리(분류) 삭제한다.
     -->
     <delete id="deleteKioskCategory" parameterType="kioskKeyMapVO">
         /* USE : KioskKeyMapMapper.deleteKioskCategory */
-        DELETE TB_MS_KIOSK_CLS
-         WHERE STORE_CD = #{storeCd}
-           AND POS_NO = #{posNo}
-           AND TU_CLS_CD = #{tuClsCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_KIOSK_CLS
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TU_CLS_TYPE = #{tuClsType}
+                   AND TU_CLS_CD = #{tuClsCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_KIOSK_CLS
+                 WHERE STORE_CD = #{storeCd}
+                   AND POS_NO = #{posNo}
+                   AND TU_CLS_TYPE = #{tuClsType}
+                   AND TU_CLS_CD = #{tuClsCd}
+            </when>
+        </choose>
     </delete>
 
     <!-- 키오스크 카테고리(분류) 저장 - 카테고리 삭제 시, 카테고리에 속한 키맵도 삭제 -->
     <!--
-        TABLE    : TB_MS_KIOSK_KEY
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 카테고리(분류) 삭제 시, 카테고리에 속한 키맵도 삭제한다.
     -->
     <delete id="deleteAllKioskKeyMap" parameterType="kioskKeyMapVO">
         /* USE : KioskKeyMapMapper.deleteAllKioskKeyMap */
-        DELETE TB_MS_KIOSK_KEY
-         WHERE STORE_CD = #{storeCd}
-           AND POS_NO = #{posNo}
-           AND TU_CLS_CD = #{tuClsCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_KIOSK_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TU_CLS_TYPE = #{tuClsType}
+                   AND TU_CLS_CD = #{tuClsCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_KIOSK_KEY
+                 WHERE STORE_CD = #{storeCd}
+                   AND POS_NO = #{posNo}
+                   AND TU_CLS_TYPE = #{tuClsType}
+                   AND TU_CLS_CD = #{tuClsCd}
+            </when>
+        </choose>
     </delete>
 
     <!-- 키오스크 키맵 조회 -->
     <!--
-        TABLE    : TB_MS_KIOSK_KEY
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 키를 가져온다.
     -->
     <select id="getKioskKeyMap" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* USE : KioskKeyMapMapper.getKioskKeyMap */
-        SELECT tmkk.STORE_CD,
-                tmkk.POS_NO,
-                tmkk.TU_CLS_CD,
-                tmkk.TU_KEY_CD,
-                tmkk.PROD_CD,
-                tmp.PROD_NM,
-                tmkk.TU_PAGE,
-                tmkk.X,
-                tmkk.Y,
-                tmkk.WIDTH,
-                tmkk.HEIGHT,
-                tmkk.INDEX_NO,
-                tmkk.CLS_FG,
-                tmkk.REG_DT,
-                tmkk.REG_ID,
-                tmkk.MOD_DT,
-                tmkk.MOD_ID
-          FROM TB_MS_KIOSK_KEY tmkk,
-                TB_MS_PRODUCT tmp
-         WHERE tmp.STORE_CD (+)= tmkk.STORE_CD
-           AND tmp.PROD_CD (+)= tmkk.PROD_CD
-           AND tmkk.STORE_CD = #{storeCd}
-           AND tmkk.POS_NO = #{posNo}
-           AND tmkk.TU_CLS_CD = #{tuClsCd}
-      ORDER BY tmkk.INDEX_NO
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    SELECT thkk.HQ_OFFICE_CD,
+                            thkk.TU_CLS_TYPE,
+                            thkk.TU_CLS_CD,
+                            thkk.TU_KEY_CD,
+                            thkk.PROD_CD,
+                            thp.PROD_NM,
+                            thkk.TU_PAGE,
+                            thkk.X,
+                            thkk.Y,
+                            thkk.WIDTH,
+                            thkk.HEIGHT,
+                            thkk.INDEX_NO,
+                            thkk.CLS_FG,
+                            thkk.REG_DT,
+                            thkk.REG_ID,
+                            thkk.MOD_DT,
+                            thkk.MOD_ID
+                      FROM TB_HQ_KIOSK_KEY thkk,
+                            TB_HQ_PRODUCT thp
+                     WHERE thp.HQ_OFFICE_CD (+)= thkk.HQ_OFFICE_CD
+                       AND thp.PROD_CD (+)= thkk.PROD_CD
+                       AND thkk.HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND thkk.TU_CLS_TYPE = #{tuClsType}
+                       AND thkk.TU_CLS_CD = #{tuClsCd}
+                 ORDER BY thkk.INDEX_NO
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                    SELECT tmkk.STORE_CD,
+                            tmkk.POS_NO,
+                            tmkk.TU_CLS_CD,
+                            tmkk.TU_KEY_CD,
+                            tmkk.PROD_CD,
+                            tmp.PROD_NM,
+                            tmkk.TU_PAGE,
+                            tmkk.X,
+                            tmkk.Y,
+                            tmkk.WIDTH,
+                            tmkk.HEIGHT,
+                            tmkk.INDEX_NO,
+                            tmkk.CLS_FG,
+                            tmkk.REG_DT,
+                            tmkk.REG_ID,
+                            tmkk.MOD_DT,
+                            tmkk.MOD_ID
+                      FROM TB_MS_KIOSK_KEY tmkk,
+                            TB_MS_PRODUCT tmp
+                     WHERE tmp.STORE_CD (+)= tmkk.STORE_CD
+                       AND tmp.PROD_CD (+)= tmkk.PROD_CD
+                       AND tmkk.STORE_CD = #{storeCd}
+                       AND tmkk.POS_NO = #{posNo}
+                       AND tmkk.TU_CLS_TYPE = #{tuClsType}
+                       AND tmkk.TU_CLS_CD = #{tuClsCd}
+                  ORDER BY tmkk.INDEX_NO
+            </when>
+        </choose>
     </select>
 
     <!-- 키오스크 키맵 수정 -->
     <!--
-        TABLE    : TB_MS_KIOSK_KEY
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 키맵을 수정한다.
     -->
     <update id="updateKioskKeyMap" parameterType="kioskKeyMapVO">
       /* USE : KioskKeyMapMapper.updateKioskKeyMap */
-      UPDATE TB_MS_KIOSK_KEY
-         SET TU_PAGE = #{tuPage},
-              X = #{x},
-              Y = #{y},
-              WIDTH = #{width},
-              HEIGHT = #{height},
-              INDEX_NO = #{indexNo},
-              CLS_FG = #{clsFg},
-              MOD_DT = #{modDt},
-              MOD_ID = #{modId}
-       WHERE STORE_CD = #{storeCd}
-         AND POS_NO = #{posNo}
-         AND TU_CLS_CD = #{tuClsCd}
-         AND TU_KEY_CD = #{tuKeyCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    UPDATE TB_HQ_KIOSK_KEY
+                       SET TU_PAGE = #{tuPage},
+                            X = #{x},
+                            Y = #{y},
+                            WIDTH = #{width},
+                            HEIGHT = #{height},
+                            INDEX_NO = #{indexNo},
+                            CLS_FG = #{clsFg},
+                            MOD_DT = #{modDt},
+                            MOD_ID = #{modId}
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                      AND TU_CLS_TYPE = #{tuClsType}
+                      AND TU_CLS_CD = #{tuClsCd}
+                      AND TU_KEY_CD = #{tuKeyCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                  UPDATE TB_MS_KIOSK_KEY
+                     SET TU_PAGE = #{tuPage},
+                          X = #{x},
+                          Y = #{y},
+                          WIDTH = #{width},
+                          HEIGHT = #{height},
+                          INDEX_NO = #{indexNo},
+                          CLS_FG = #{clsFg},
+                          MOD_DT = #{modDt},
+                          MOD_ID = #{modId}
+                   WHERE STORE_CD = #{storeCd}
+                     AND POS_NO = #{posNo}
+                     AND TU_CLS_TYPE = #{tuClsType}
+                     AND TU_CLS_CD = #{tuClsCd}
+                     AND TU_KEY_CD = #{tuKeyCd}
+            </when>
+        </choose>
     </update>
 
     <!-- 키오스크 키맵 삭제 -->
     <!--
-        TABLE    : TB_MS_KIOSK_KEY
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 키맵을 삭제한다.
     -->
     <delete id="deleteKioskKeyMap" parameterType="kioskKeyMapVO">
         /* USE : KioskKeyMapMapper.deleteKioskKeyMap */
-        DELETE TB_MS_KIOSK_KEY
-         WHERE STORE_CD = #{storeCd}
-           AND POS_NO = #{posNo}
-           AND TU_CLS_CD = #{tuClsCd}
-           AND TU_KEY_CD = #{tuKeyCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_KIOSK_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TU_CLS_TYPE = #{tuClsType}
+                   AND TU_CLS_CD = #{tuClsCd}
+                   AND TU_KEY_CD = #{tuKeyCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_KIOSK_KEY
+                 WHERE STORE_CD = #{storeCd}
+                   AND POS_NO = #{posNo}
+                   AND TU_CLS_TYPE = #{tuClsType}
+                   AND TU_CLS_CD = #{tuClsCd}
+                   AND TU_KEY_CD = #{tuKeyCd}
+            </when>
+        </choose>
     </delete>
 
     <!-- 키오스크 상품 조회 -->
@@ -257,13 +532,94 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT thp.PROD_CD,
+                        thp.PROD_NM,
+                        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                        (CASE WHEN thkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_HQ_PRODUCT thp
+                  LEFT OUTER JOIN (
+                                        SELECT HQ_OFFICE_CD,
+                                                PROD_CD,
+                                                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                          FROM TB_HQ_PRODUCT_SALE_PRICE
+                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                        <![CDATA[
+                                           AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                           AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                        ]]>
+                                           AND SALE_PRC_FG = '1'
+                                     GROUP BY HQ_OFFICE_CD, PROD_CD
+                                    ) thpsp ON thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                                           AND thp.PROD_CD = thpsp.PROD_CD
+                INNER JOIN TB_HQ_OFFICE tho ON tho.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                LEFT OUTER JOIN (
+                                        SELECT HQ_OFFICE_CD,
+                                                PROD_CD
+                                          FROM TB_HQ_KIOSK_KEY
+                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                           AND TU_CLS_TYPE = #{tuClsType}
+                                           AND TU_CLS_CD = #{tuClsCd}
+                                     GROUP BY HQ_OFFICE_CD, PROD_CD
+                ) thkk ON thp.HQ_OFFICE_CD = thkk.HQ_OFFICE_CD
+                AND thp.PROD_CD = thkk.PROD_CD
+                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT PROD_CLASS_CD
+                                                  FROM TB_HQ_PRODUCT_CLASS
+                                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    ) --상품분류
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                        SELECT 1
+                          FROM TB_HQ_PRODUCT_BARCD
+                         WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                           AND PROD_CD = thp.PROD_CD
+                           AND BARCD_CD = #{barCd}
+                    ) --바코드
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="prodTypeFg != null and prodTypeFg != ''">
+                    AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                <choose>
+                    <when test='regYn != null and regYn == "Y"'>
+                        AND thkk.PROD_CD IS NOT NULL
+                    </when>
+                    <when test='regYn != null and regYn == "N"'>
+                        AND thkk.PROD_CD IS NULL
+                    </when>
+                    <otherwise></otherwise>
+                </choose>
+                ORDER BY thp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmp.PROD_CD,
                         tmp.PROD_NM,
-                        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                        NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                         (CASE WHEN tmkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_PRODUCT tmp
@@ -279,8 +635,8 @@
                                           ]]>
                                              AND SALE_PRC_FG = '1'
                                        GROUP BY STORE_CD, PROD_CD
-                                    ) thpsp ON tmp.STORE_CD = thpsp.STORE_CD
-                                           AND tmp.PROD_CD = thpsp.PROD_CD
+                                    ) tmpsp ON tmp.STORE_CD = tmpsp.STORE_CD
+                                           AND tmp.PROD_CD = tmpsp.PROD_CD
                   INNER JOIN TB_MS_STORE tms ON tms.STORE_CD  = tmp.STORE_CD
                   LEFT OUTER JOIN (
                                             SELECT STORE_CD,
@@ -288,6 +644,7 @@
                                               FROM TB_MS_KIOSK_KEY
                                              WHERE STORE_CD = #{storeCd}
                                                AND POS_NO = #{posNo}
+                                               AND TU_CLS_TYPE = #{tuClsType}
                                                AND TU_CLS_CD = #{tuClsCd}
                                          GROUP BY STORE_CD, PROD_CD
                                     ) tmkk ON tmp.STORE_CD = tmkk.STORE_CD
@@ -347,66 +704,637 @@
 
     <!-- 키오스크 키맵 관련 코드 조회 -->
     <!--
-        TABLE    : TB_MS_KIOSK_KEY
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
         PARAM    : kioskKeyMapVO
         COMMENTS : 키를 등록하기 위한 코드값 조회한다. ( 본사/매장 )
     -->
     <select id="getKioskKeyMapCode" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* USE : KioskKeyMapMapper.getKioskKeyMapCode */
-         SELECT LPAD(NVL(MAX(TU_KEY_CD),0)+1, 3, 0) AS TU_KEY_CD,
-                 NVL(MAX(INDEX_NO),0)+1 AS INDEX_NO
-           FROM TB_MS_KIOSK_KEY
-          WHERE STORE_CD = #{storeCd}
-            AND POS_NO = #{posNo}
-            AND TU_CLS_CD = #{tuClsCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(TU_KEY_CD),0)+1, 3, 0) AS TU_KEY_CD,
+                        NVL(MAX(INDEX_NO),0)+1 AS INDEX_NO
+                  FROM TB_HQ_KIOSK_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TU_CLS_TYPE = #{tuClsType}
+                   AND TU_CLS_CD = #{tuClsCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                 SELECT LPAD(NVL(MAX(TU_KEY_CD),0)+1, 3, 0) AS TU_KEY_CD,
+                         NVL(MAX(INDEX_NO),0)+1 AS INDEX_NO
+                   FROM TB_MS_KIOSK_KEY
+                  WHERE STORE_CD = #{storeCd}
+                    AND POS_NO = #{posNo}
+                    AND TU_CLS_TYPE = #{tuClsType}
+                    AND TU_CLS_CD = #{tuClsCd}
+            </when>
+        </choose>
     </select>
 
     <!-- 키오스크 키맵 등록 -->
     <!--
-        TABLE    : TB_MS_KIOSK_KEY
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
         PARAM    : kioskKeyMapVO
         COMMENTS : 상품을 키맵에 등록한다. ( 본사/매장 )
     -->
-    <insert id="saveKioskKeyMap" parameterType="kioskKeyMapVO" useGeneratedKeys="false">
+    <insert id="saveKioskKeyMap" parameterType="kioskKeyMapVO">
       /* USE : KioskKeyMapMapper.saveKioskKeyMap */
-      INSERT INTO TB_MS_KIOSK_KEY
-      (
-            STORE_CD,
-            POS_NO,
-            TU_CLS_CD,
-            TU_KEY_CD,
-            PROD_CD,
-            TU_PAGE,
-            X,
-            Y,
-            WIDTH,
-            HEIGHT,
-            INDEX_NO,
-            CLS_FG,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-      )
-      VALUES
-      (
-            #{storeCd},
-            #{posNo},
-            #{tuClsCd},
-            #{tuKeyCd},
-            #{prodCd},
-            #{tuPage},
-            #{x},
-            #{y},
-            #{width},
-            #{height},
-            #{indexNo},
-            #{clsFg},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-      )
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    INSERT INTO TB_HQ_KIOSK_KEY
+                    (
+                        HQ_OFFICE_CD,
+                        TU_CLS_TYPE,
+                        TU_CLS_CD,
+                        TU_KEY_CD,
+                        PROD_CD,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{tuClsType},
+                        #{tuClsCd},
+                        #{tuKeyCd},
+                        #{prodCd},
+                        #{tuPage},
+                        #{x},
+                        #{y},
+                        #{width},
+                        #{height},
+                        #{indexNo},
+                        #{clsFg},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                  INSERT INTO TB_MS_KIOSK_KEY
+                  (
+                        STORE_CD,
+                        POS_NO,
+                        TU_CLS_TYPE,
+                        TU_CLS_CD,
+                        TU_KEY_CD,
+                        PROD_CD,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                  )
+                  VALUES
+                  (
+                        #{storeCd},
+                        #{posNo},
+                        #{tuClsType},
+                        #{tuClsCd},
+                        #{tuKeyCd},
+                        #{prodCd},
+                        #{tuPage},
+                        #{x},
+                        #{y},
+                        #{width},
+                        #{height},
+                        #{indexNo},
+                        #{clsFg},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  )
+            </when>
+        </choose>
     </insert>
 
+    <!-- 키오스크 키맵 그룹복제 - 기존 카테고리(분류) 복사 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 기존 기존 카테고리(분류)를 복사한다. ( 본사/매장 )
+    -->
+    <insert id="copyKioskCategory" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.copyKioskCategory */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_KIOSK_CLS
+                (
+                    HQ_OFFICE_CD,
+                    TU_CLS_TYPE,
+                    TU_CLS_CD,
+                    TU_CLS_NM,
+                    TU_PAGE,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    INDEX_NO,
+                    CLS_FG,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                SELECT HQ_OFFICE_CD,
+                        #{tuClsType},
+                        TU_CLS_CD,
+                        TU_CLS_NM,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_HQ_KIOSK_CLS
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TU_CLS_TYPE = #{orgTuClsType}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_KIOSK_CLS
+                (
+                    STORE_CD,
+                    POS_NO,
+                    TU_CLS_TYPE,
+                    TU_CLS_CD,
+                    TU_CLS_NM,
+                    TU_PAGE,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    INDEX_NO,
+                    CLS_FG,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                SELECT STORE_CD,
+                        POS_NO,
+                        #{tuClsType},
+                        TU_CLS_CD,
+                        TU_CLS_NM,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_MS_KIOSK_CLS
+                 WHERE STORE_CD = #{storeCd}
+                   AND POS_NO = #{posNo}
+                   AND TU_CLS_TYPE = #{orgTuClsType}
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 키오스크 키맵 그룹복제 - 기존 키맵그룹에 엮여있는 상품 복사 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키맵그룹 복제 시, 기존 키맵그룹에 엮여있는 상품들도 복사한다. ( 본사/매장 )
+    -->
+    <insert id="copyKioskKeyMap" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.copyKioskKeyMap */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_KIOSK_KEY
+                (
+                        HQ_OFFICE_CD,
+                        TU_CLS_TYPE,
+                        TU_CLS_CD,
+                        TU_KEY_CD,
+                        PROD_CD,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                )
+                SELECT HQ_OFFICE_CD,
+                        #{tuClsType},
+                        TU_CLS_CD,
+                        TU_KEY_CD,
+                        PROD_CD,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_HQ_KIOSK_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TU_CLS_TYPE = #{orgTuClsType}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_KIOSK_KEY
+                (
+                    STORE_CD,
+                    POS_NO,
+                    TU_CLS_TYPE,
+                    TU_CLS_CD,
+                    TU_KEY_CD,
+                    PROD_CD,
+                    TU_PAGE,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    INDEX_NO,
+                    CLS_FG,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                SELECT STORE_CD,
+                        POS_NO,
+                        #{tuClsType},
+                        TU_CLS_CD,
+                        TU_KEY_CD,
+                        PROD_CD,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                FROM TB_MS_KIOSK_KEY
+                WHERE STORE_CD = #{storeCd}
+                  AND POS_NO = #{posNo}
+                  AND TU_CLS_TYPE = #{orgTuClsType}
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 매장리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : kioskKeyMapVO
+          COMMENTS : 키오스크 키맵 매장선택팝업에서 매장리스트를 조회한다.
+    -->
+    <select id="getStoreList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* KioskKeyMapMapper.getStoreList */
+        SELECT tms.HQ_OFFICE_CD,
+                tms.STORE_CD,
+                tms.STORE_NM,
+                tms.SYS_STAT_FG,
+                (SELECT COUNT(*) FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND ENVST_CD = '4019' AND ENVST_VAL = '6') AS KIOSK_POS_CNT
+          FROM TB_MS_STORE tms
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+        ORDER
+           BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장별 키맵그룹을 삭제한다.
+    -->
+    <delete id="deleteStoreTuClsType" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteStoreTuClsType */
+        DELETE TB_MS_KIOSK_CLS
+        WHERE STORE_CD = #{storeCd}
+        <if test="posNo != null and posNo != ''">
+            AND POS_NO = #{posNo}
+        </if>
+        AND TU_CLS_TYPE = #{tuClsType}
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 키맵 매장적용 전 기존 키맵그룹에 엮어있는 상품 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키맵 매장적용 전 기존 키맵그룹에 엮어있는 상품을 삭제한다.(카테고리(분류)기준)
+    -->
+    <delete id="deleteKioskKeyMapByTuClsCd" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteKioskKeyMapByTuClsCd */
+        DELETE TB_MS_KIOSK_KEY
+         WHERE STORE_CD = #{storeCd}
+        <if test="posNo != null and posNo != ''">
+            AND POS_NO = #{posNo}
+        </if>
+           AND TU_CLS_TYPE = #{tuClsType}
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장한다.
+    -->
+    <insert id="insertKioskCategoryStoreReg" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.insertKioskCategoryStoreReg */
+                INSERT INTO TB_MS_KIOSK_CLS
+                  (
+                        STORE_CD,
+                        POS_NO,
+                        TU_CLS_TYPE,
+                        TU_CLS_CD,
+                        TU_CLS_NM,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                  )
+                    SELECT #{storeCd},
+                            #{posNo},
+                            TU_CLS_TYPE,
+                            TU_CLS_CD,
+                            TU_CLS_NM,
+                            TU_PAGE,
+                            X,
+                            Y,
+                            WIDTH,
+                            HEIGHT,
+                            INDEX_NO,
+                            CLS_FG,
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                     FROM TB_HQ_KIOSK_CLS tmkc
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                      AND TU_CLS_TYPE = #{tuClsType}
+
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품 매장에도 복사 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품을 매장 키맵에도 복사한다.
+    -->
+    <insert id="copyKioskKeyMapStoreReg" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.copyKioskKeyMapStoreReg */
+            INSERT INTO TB_MS_KIOSK_KEY
+             (
+                STORE_CD,
+                POS_NO,
+                TU_CLS_TYPE,
+                TU_CLS_CD,
+                TU_KEY_CD,
+                PROD_CD,
+                TU_PAGE,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                INDEX_NO,
+                CLS_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+             )
+                SELECT #{storeCd},
+                        #{posNo},
+                        TU_CLS_TYPE,
+                        TU_CLS_CD,
+                        TU_KEY_CD,
+                        PROD_CD,
+                        TU_PAGE,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        INDEX_NO,
+                        CLS_FG,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_HQ_KIOSK_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TU_CLS_TYPE = #{tuClsType}
+    </insert>
+
+    <!-- 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : kioskKeyMapVO
+          COMMENTS : 키오스크 매장적용(매장/포장) 시 매장 키오스크 포스 리스트를 조회한다.
+    -->
+    <select id="getStoreKioskPosList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* KioskKeyMapMapper.getStoreKioskPosList */
+        SELECT tms.STORE_NM,
+                tms.STORE_CD,
+                tmp.POS_NO,
+                tms.SYS_STAT_FG,
+                (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4068') AS ENV_4068,
+                (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4069') AS ENV_4069
+          FROM TB_MS_STORE tms,
+                (
+                    SELECT tmp.STORE_CD,
+                            tmp.POS_NO
+                      FROM TB_MS_POS_ENVST tmpe,
+                            TB_MS_POS tmp
+                     WHERE tmpe.STORE_CD = tmp.STORE_CD
+                       AND tmpe.POS_NO = tmp.POS_NO
+                       AND tmpe.ENVST_CD = '4019'
+                       AND tmpe.ENVST_VAL = '6'
+                ) tmp
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tmp.STORE_CD (+)= tms.STORE_CD
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+        ORDER
+           BY tms.STORE_CD, tmp.POS_NO ASC
+    </select>
+
+    <!-- 키오스크 매장적용(매장/포장) - 본사 환경설정값 저장 -->
+    <!--
+        TABLE    : TB_HQ_ENVST
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 매장적용(매장/포장) 시 본사 환경설정값(매장:4068/포장:4069)을 일괄 저장한다.
+    -->
+    <insert id="insertHqKioskEnv" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.insertHqKioskEnv */
+        MERGE INTO TB_HQ_ENVST
+        USING DUAL ON
+        (
+            HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = #{envstCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+           SET ENVST_VAL = #{envstVal},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+         (
+                HQ_OFFICE_CD,
+                ENVST_CD,
+                ENVST_VAL,
+                DIRCT_IN_YN,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+          )
+          VALUES
+          (
+                #{hqOfficeCd},
+                #{envstCd},
+                #{envstVal},
+                #{dirctInYn},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+           )
+    </insert>
+
+    <!-- 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 환경설정값 일괄 저장 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 매장적용(매장/포장) 시 매장 포스 환경설정값(매장:4068/포장:4069)을 일괄 저장한다.
+    -->
+    <insert id="insertStoreKioskPosEnv" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.insertStoreKioskPosEnv */
+        MERGE INTO TB_MS_POS_ENVST
+        USING DUAL ON
+        (
+            STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = #{envstCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+           SET ENVST_VAL = #{envstVal},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+         (
+                STORE_CD,
+                POS_NO,
+                ENVST_CD,
+                ENVST_VAL,
+                DIRCT_IN_YN,
+                POS_FG,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+          )
+        VALUES
+         (
+                #{storeCd},
+                #{posNo},
+                #{envstCd},
+                #{envstVal},
+                #{dirctInYn},
+                #{posFg},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+         )
+    </insert>
+
+    <!-- 키오스크 매장적용(매장/포장) - 키오스크 환경설정 값 가져오기 -->
+    <!--
+        TABLE    : TB_HQ_ENVST, TB_MS_POS_ENVST
+        COMMENTS : 키오스크 매장적용(매장/포장) 시 키오스크 환경설정 값을 가져온다.
+    -->
+    <select id="getKioskEnv" parameterType="kioskKeyMapVO" resultType="String">
+      /* USE : KioskKeyMapMapper.getKioskEnv */
+        <choose>
+        <!-- 본사 -->
+        <when test='orgnFg != null and orgnFg == "H"'>
+            SELECT ENVST_VAL
+              FROM TB_HQ_ENVST
+             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+               AND ENVST_CD = #{envstCd}
+        </when>
+        <!-- 매장 -->
+        <when test='orgnFg != null and orgnFg == "S"'>
+            SELECT ENVST_VAL
+              FROM TB_MS_POS_ENVST
+             WHERE STORE_CD = #{storeCd}
+               AND POS_NO = #{posNo}
+               AND ENVST_CD = #{envstCd}
+        </when>
+        </choose>
+    </select>
 </mapper>

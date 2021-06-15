@@ -5,14 +5,14 @@
 <div class="con" id="kioskKeyMapView" name="kioskKeyMapView">
     <div class="tabType1" ng-controller="kioskKeyMapManageCtrl" ng-init="init()">
         <ul>
-            <%-- 일별종합 탭 --%>
+            <%-- 키오스크키맵등록 탭 --%>
             <li>
                 <a id="kioskKeyMapRegistTab" href="#" class="on" ng-click="kioskKeyMapRegistShow()"><s:message code="kioskKeyMap.kioskKeyMapRegist"/></a>
             </li>
-            <%-- 할인구분별 탭 --%>
-            <li>
+            <%-- 키오스크키맵복사 탭 --%>
+            <%--<li>
                 <a id="kioskKeyMapCopyTab" href="#" ng-click="kioskKeyMapCopyShow()"><s:message code="kioskKeyMap.kioskKeyMapCopy"/></a>
-            </li>
+            </li>--%>
         </ul>
     </div>
 </div>

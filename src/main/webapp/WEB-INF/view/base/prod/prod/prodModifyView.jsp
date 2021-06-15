@@ -253,6 +253,43 @@
             </tr>
           </table>
         </div>
+      <%-- 내점/배달/포장 가격 --%>
+      <c:if test="${subPriceFg == '1'}">
+        <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/></h3>
+        <div class="tblBr">
+          <table class="tblType01">
+            <colgroup>
+              <col class="w15"/>
+              <col class="w35"/>
+              <col class="w15"/>
+              <col class="w35"/>
+            </colgroup>
+            <tbody>
+            <tr>
+                <%--내점가--%>
+              <th><s:message code="prod.stinSaleUprc"/></th>
+              <td>
+                <input type="text" maxlength="10" numberOnly id="stinSaleUprc" name="stinSaleUprc" ng-model="prodModifyInfo.stinSaleUprc" class="sb-input w100">
+              </td>
+                <%--포장가--%>ㄴ
+              <th><s:message code="prod.packSaleUprc"/></th>
+              <td>
+                <input type="text" maxlength="10" numberOnly id="packSaleUprc" name="packSaleUprc" ng-model="prodModifyInfo.packSaleUprc" class="sb-input w100">
+              </td>
+            </tr>
+            <tr>
+                <%--배달가--%>
+              <th><s:message code="prod.dlvrSaleUprc"/></th>
+              <td>
+                <input type="text" maxlength="10" numberOnly id="dlvrSaleUprc" name="dlvrSaleUprc" ng-model="prodModifyInfo.dlvrSaleUprc" class="sb-input w100">
+              </td>
+              <th></th>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </c:if>
       <%-- 상품부가정보 --%>
       <h3 class="h3_tbl"><s:message code="prod.title.addInfo"/></h3>
       <div class="tblBr">

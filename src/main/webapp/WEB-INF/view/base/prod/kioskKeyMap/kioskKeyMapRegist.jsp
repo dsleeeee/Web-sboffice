@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;">
     <div ng-controller="kioskKeyMapRegistCtrl">
@@ -19,30 +20,68 @@
                 <col class="w90" />
             </colgroup>
             <tbody>
+            <c:if test="${orgnFg == 'STORE'}">
+                <tr>
+                    <%-- 포스번호 --%>
+                    <th><s:message code="kioskKeyMap.posNo" /></th>
+                    <td colspan="3">
+                        <div class="sb-select" style="width:200px; float:left;">
+                            <wj-combo-box
+                                    id="posNo"
+                                    ng-model="posNo"
+                                    items-source="_getComboData('posNo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="posNoCombo"
+                                    selected-index-changed="setTuClsType(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+            </c:if>
             <tr>
-                <%-- 포스번호 조회 --%>
-                <th><s:message code="kioskKeyMap.posNo" /></th>
+                <%-- 키맵그룹 --%>
+                <th><s:message code="kioskKeyMap.tuClsType" /></th>
                 <td colspan="3">
-                    <div class="sb-select" style="width:200px; float:left;">
+                    <div class="sb-select mr5" style="width:200px; float:left;">
                         <wj-combo-box
-                                id="posNoCombo"
-                                ng-model="posNo"
-                                control="posNoCombo"
-                                items-source="_getComboData('posNoCombo')"
+                                id="tuClsType"
+                                ng-model="tuClsType"
+                                items-source="_getComboData('tuClsType')"
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
-                                initialized="_initComboBox(s)">
+                                control="tuClsTypeCombo">
                         </wj-combo-box>
                     </div>
+                    <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
+                        <s:message code="kioskKeyMap.tuClsTypeAdd" />
+                    </button>
+                    <c:if test="${kioskKeyMapGrpFg == '1'}">
+                        <button class="btn_skyblue" id="btnTuClsTypeCopy" ng-click="tuClsTypeCopy()">
+                            <s:message code="kioskKeyMap.tuClsTypeCopy" />
+                        </button>
+                    </c:if>
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
+                            <s:message code="kioskKeyMap.tuClsTypeStore" />
+                        </button>
+                    </c:if>
+                    <button class="btn_skyblue fr mt5 mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
+                    <button class="btn_skyblue fr mt5 mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
+
                 </td>
             </tr>
             </tbody>
         </table>
 
         <div class="wj-TblWrap mt20 mb20 w25 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:540px;">
-                <div class="updownSet oh mb10" id="divBtnCls" style="visibility: hidden;">
+            <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
+                <div class="mb5">
+                    <label id="lbTuClsType"></label>
+                </div>
+                <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden;">
                     <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
                         <s:message code="cmm.up" />
                     </button>
@@ -71,7 +110,8 @@
                                 sticky-headers="true"
                                 selection-mode="Row"
                                 items-source="data"
-                                item-formatter="_itemFormatter">
+                                item-formatter="_itemFormatter"
+                                id="wjGridCategoryCls">
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
@@ -81,14 +121,15 @@
                     </div>
                 </div>
                 <input type="hidden" id="hdPosNo" />
+                <input type="hidden" id="hdTuClsType" />
             </div>
         </div>
     </div>
 
     <div class="wj-TblWrap mt20 mb20 w35 fl" ng-controller="kioskKeyMapCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:540px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
             <span class="fl bk lh30" id="spanTuKeyCls"></span>
-            <div class="updownSet oh mb10" id="divBtnKeyMap" style="visibility: hidden;">
+            <div class="updownSet oh mb10 pd5" id="divBtnKeyMap" style="visibility: hidden;">
                 <button class="btn_up" id="btnUpKeyMap" ng-click="rowMoveUpKeyMap()" >
                     <s:message code="cmm.up" />
                 </button>
@@ -127,7 +168,7 @@
     </div>
 
     <div class="wj-TblWrap mt20 mb20 w40 fl" ng-controller="kioskProdCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:540px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
 
             <table class="tblType01">
                 <colgroup>
@@ -290,14 +331,38 @@
 </div>
 
 <script type="text/javascript">
+
+    var orgnFg = "${orgnFg}";
+
     // 키오스크용 포스 목록
     var kioskPosList = ${kioskPosList};
+
+    // 키오스크 키맵그룹 목록
+    var kioskTuClsTypeList = ${kioskTuClsTypeList};
+
     // 상품유형구분
     var prodTypeFg = ${ccu.getCommCode("008")};
+
+    // 키오스크 키맵그룹 사용여부 0: 미사용 1: 사용
+    var kioskKeyMapGrpFg = "${kioskKeyMapGrpFg}";
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.14" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
+
+<%-- 키맵매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapStoreRegist.jsp">
+</c:import>
+
+<%-- 키맵적용(매장/포장) 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapEnv.jsp">
+</c:import>
+
+<%-- 키맵적용(매장/포장) 팝업(매장용) --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapEnvStore.jsp">
+</c:import>
+

@@ -395,6 +395,9 @@
                 thp.SIDE_PROD_YN,
                 thp.SET_PROD_FG,                                -- 세트상품구분
                 NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
+                thpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,         -- 내점가(NULL 허용가능)
+                thpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,         -- 배달가(NULL 허용가능)
+                thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,         -- 포장가(NULL 허용가능)
                 NVL(thp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
                 NVL(thp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                 NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
@@ -421,7 +424,10 @@
                 SELECT
                 HQ_OFFICE_CD,
                 PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
                 FROM TB_HQ_PRODUCT_SALE_PRICE
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 <![CDATA[
@@ -490,6 +496,9 @@
                 tmp.SIDE_PROD_YN,
                 tmp.SET_PROD_FG,                                -- 세트상품구분
                 NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
+                tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,         -- 내점가(NULL 허용가능)
+                tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,         -- 배달가(NULL 허용가능)
+                tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,         -- 포장가(NULL 허용가능)
                 NVL(tmp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
                 NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
                 NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
@@ -516,7 +525,10 @@
                 SELECT
                 STORE_CD,
                 PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
                 FROM TB_MS_PRODUCT_SALE_PRICE
                 WHERE STORE_CD = #{storeCd}
                 <![CDATA[
@@ -944,6 +956,9 @@
                 WHEN MATCHED THEN
                 UPDATE
                    SET SALE_UPRC = #{saleUprc},
+                       STIN_SALE_UPRC = #{stinSaleUprc},
+                       DLVR_SALE_UPRC = #{dlvrSaleUprc},
+                       PACK_SALE_UPRC = #{packSaleUprc},
                        MOD_DT = #{modDt},
                        MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
@@ -955,6 +970,9 @@
                     START_DATE,
                     END_DATE,
                     SALE_UPRC,
+                    STIN_SALE_UPRC,
+                    DLVR_SALE_UPRC,
+                    PACK_SALE_UPRC,
                     REG_DT,
                     REG_ID,
                     MOD_DT,
@@ -966,6 +984,9 @@
                     #{startDate},
                     #{endDate},
                     #{saleUprc},
+                    #{stinSaleUprc},
+                    #{dlvrSaleUprc},
+                    #{packSaleUprc},
                     #{regDt},
                     #{regId},
                     #{modDt},
@@ -988,8 +1009,11 @@
                 WHEN MATCHED THEN
                 UPDATE
                    SET SALE_UPRC = #{saleUprc},
-                       MOD_DT = #{modDt},
-                       MOD_ID = #{modId}
+                        STIN_SALE_UPRC = #{stinSaleUprc},
+                        DLVR_SALE_UPRC = #{dlvrSaleUprc},
+                        PACK_SALE_UPRC = #{packSaleUprc},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -999,6 +1023,9 @@
                     START_DATE,
                     END_DATE,
                     SALE_UPRC,
+                    STIN_SALE_UPRC,
+                    DLVR_SALE_UPRC,
+                    PACK_SALE_UPRC,
                     REG_DT,
                     REG_ID,
                     MOD_DT,
@@ -1010,6 +1037,9 @@
                     #{startDate},
                     #{endDate},
                     #{saleUprc},
+                    #{stinSaleUprc},
+                    #{dlvrSaleUprc},
+                    #{packSaleUprc},
                     #{regDt},
                     #{regId},
                     #{modDt},
@@ -1041,6 +1071,9 @@
                     START_DATE,
                     END_DATE,
                     SALE_UPRC,
+                    STIN_SALE_UPRC,
+                    DLVR_SALE_UPRC,
+                    PACK_SALE_UPRC,
                     REG_DT,
                     REG_ID
                 ) VALUES (
@@ -1051,6 +1084,9 @@
                     #{startDate},
                     #{endDate},
                     #{lastCostUprc},
+                    #{stinSaleUprc},
+                    #{dlvrSaleUprc},
+                    #{packSaleUprc},
                     #{regDt},
                     #{regId}
                 )
@@ -1068,6 +1104,9 @@
                     START_DATE,
                     END_DATE,
                     SALE_UPRC,
+                    STIN_SALE_UPRC,
+                    DLVR_SALE_UPRC,
+                    PACK_SALE_UPRC,
                     REG_DT,
                     REG_ID
                 ) VALUES (
@@ -1078,6 +1117,9 @@
                     #{startDate},
                     #{endDate},
                     #{lastCostUprc},
+                    #{stinSaleUprc},
+                    #{dlvrSaleUprc},
+                    #{packSaleUprc},
                     #{regDt},
                     #{regId}
                 )
@@ -1588,7 +1630,10 @@
                END_DATE,
                SALE_UPRC,
                #{regDt},
-               #{regId}
+               #{regId},
+               STIN_SALE_UPRC,
+               DLVR_SALE_UPRC,
+               PACK_SALE_UPRC
           FROM TB_MS_PRODUCT_SALE_PRICE
          WHERE STORE_CD = #{storeCd}
            AND PROD_CD = #{prodCd}

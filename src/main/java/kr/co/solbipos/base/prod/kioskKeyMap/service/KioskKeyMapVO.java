@@ -58,6 +58,25 @@ public class KioskKeyMapVO extends PageVO {
     private String regYn;
     /** 키맵코드 */
     private String tuKeyCd;
+    /** 카테고리그룹 */
+    private String tuClsType;
+    /** 복사원본의 카테고리그룹 */
+    private String orgTuClsType;
+    /** 매장명 */
+    private String storeNm;
+    /**  상태 */
+    private String sysStatFg;
+    /** 직접입력여부 */
+    private String dirctInYn;
+    /** 포스구분 */
+    private String posFg;
+    /** 환경설정코드 */
+    private String envstCd;
+    /** 환경설정값 */
+    private String envstVal;
+    /** 키맵매장적용여부 */
+    private String chkTuClsTypeStore;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -241,5 +260,77 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setTuKeyCd(String tuKeyCd) {
         this.tuKeyCd = tuKeyCd;
+    }
+
+    public String getTuClsType() {
+        return tuClsType;
+    }
+
+    public void setTuClsType(String tuClsType) {
+        this.tuClsType = tuClsType;
+    }
+
+    public String getOrgTuClsType() {
+        return orgTuClsType;
+    }
+
+    public void setOrgTuClsType(String orgTuClsType) {
+        this.orgTuClsType = orgTuClsType;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
+    public String getDirctInYn() {
+        return dirctInYn;
+    }
+
+    public void setDirctInYn(String dirctInYn) {
+        this.dirctInYn = dirctInYn;
+    }
+
+    public String getPosFg() {
+        return posFg;
+    }
+
+    public void setPosFg(String posFg) {
+        this.posFg = posFg;
+    }
+
+    public String getEnvstCd() {
+        return envstCd;
+    }
+
+    public void setEnvstCd(String envstCd) {
+        this.envstCd = envstCd;
+    }
+
+    public String getEnvstVal() {
+        return envstVal;
+    }
+
+    public void setEnvstVal(String envstVal) {
+        this.envstVal = envstVal;
+    }
+
+    public String getChkTuClsTypeStore() {
+        return chkTuClsTypeStore;
+    }
+
+    public void setChkTuClsTypeStore(String chkTuClsTypeStore) {
+        this.chkTuClsTypeStore = chkTuClsTypeStore;
     }
 }

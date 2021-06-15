@@ -76,6 +76,15 @@ public class SalePriceVO extends PageVO {
     /** 상품분류코드 */
     private String prodClassCd;
 
+    /** 내점가 */
+    private String stinSaleUprc;
+
+    /** 배달가 */
+    private String dlvrSaleUprc;
+
+    /** 포장가 */
+    private String packSaleUprc;
+
     /**
      * @return the hqOfficeCd
      */
@@ -345,5 +354,29 @@ public class SalePriceVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getStinSaleUprc() {
+        return stinSaleUprc;
+    }
+
+    public void setStinSaleUprc(String stinSaleUprc) {
+        this.stinSaleUprc = stinSaleUprc;
+    }
+
+    public String getDlvrSaleUprc() {
+        return dlvrSaleUprc;
+    }
+
+    public void setDlvrSaleUprc(String dlvrSaleUprc) {
+        this.dlvrSaleUprc = dlvrSaleUprc;
+    }
+
+    public String getPackSaleUprc() {
+        return packSaleUprc;
+    }
+
+    public void setPackSaleUprc(String packSaleUprc) {
+        this.packSaleUprc = packSaleUprc;
     }
 }

@@ -196,6 +196,15 @@ public class ProdVO extends PageVO {
     /** 사이드메뉴생성구분 */
     private String sideEnvstVal;
 
+    /** 내점가 */
+    private String stinSaleUprc;
+
+    /** 배달가 */
+    private String dlvrSaleUprc;
+
+    /** 포장가 */
+    private String packSaleUprc;
+
     /**
      * @return the hqOfficeCd
      */
@@ -964,5 +973,29 @@ public class ProdVO extends PageVO {
 
     public void setSideEnvstVal(String sideEnvstVal) {
         this.sideEnvstVal = sideEnvstVal;
+    }
+
+    public String getStinSaleUprc() {
+        return stinSaleUprc;
+    }
+
+    public void setStinSaleUprc(String stinSaleUprc) {
+        this.stinSaleUprc = stinSaleUprc;
+    }
+
+    public String getDlvrSaleUprc() {
+        return dlvrSaleUprc;
+    }
+
+    public void setDlvrSaleUprc(String dlvrSaleUprc) {
+        this.dlvrSaleUprc = dlvrSaleUprc;
+    }
+
+    public String getPackSaleUprc() {
+        return packSaleUprc;
+    }
+
+    public void setPackSaleUprc(String packSaleUprc) {
+        this.packSaleUprc = packSaleUprc;
     }
 }

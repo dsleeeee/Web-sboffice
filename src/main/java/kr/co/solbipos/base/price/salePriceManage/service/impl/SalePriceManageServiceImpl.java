@@ -83,18 +83,18 @@ public class SalePriceManageServiceImpl implements SalePriceManageService {
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setStoreCd(sessionInfoVO.getStoreCd());
-
 //            salePriceVO.setPrcCtrlFg("2"); // 매장에서 등록
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
-
             salePriceVO.setRegDt(currentDt);
             salePriceVO.setRegId(sessionInfoVO.getUserId());
             salePriceVO.setModDt(currentDt);
             salePriceVO.setModId(sessionInfoVO.getUserId());
-
             salePriceVO.setProdCd(salePriceManageVO.getProdCd());
             salePriceVO.setSaleUprc(salePriceManageVO.getSaleUprc());
+            salePriceVO.setStinSaleUprc(salePriceManageVO.getStinSaleUprc());
+            salePriceVO.setDlvrSaleUprc(salePriceManageVO.getDlvrSaleUprc());
+            salePriceVO.setPackSaleUprc(salePriceManageVO.getPackSaleUprc());
 
             // 판매가 변경 히스토리 등록
             int prodCnt = salePriceMapper.getRegistProdCount(salePriceVO);
