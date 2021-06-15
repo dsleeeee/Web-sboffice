@@ -192,6 +192,43 @@
                     </tbody>
                 </table>
             </div>
+            <%-- 내점/배달/포장 가격 --%>
+            <c:if test="${subPriceFg == '1'}">
+                <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/></h3>
+                <div class="tblBr">
+                <table class="tblType01">
+                    <colgroup>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%--내점가--%>
+                        <th><s:message code="prod.stinSaleUprc"/></th>
+                        <td>
+                            {{prodDetail.stinSaleUprc}}
+                        </td>
+                        <%--포장가--%>
+                        <th><s:message code="prod.packSaleUprc"/></th>
+                        <td>
+                            {{prodDetail.packSaleUprc}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <%--배달가--%>
+                        <th><s:message code="prod.dlvrSaleUprc"/></th>
+                        <td>
+                            {{prodDetail.dlvrSaleUprc}}
+                        </td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </c:if>
             <%-- 상품부가정보 --%>
             <h3 class="h3_tbl"><s:message code="prod.title.addInfo"/></h3>
             <div class="tblBr">
@@ -517,4 +554,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20210421.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20210421.02" charset="utf-8"></script>

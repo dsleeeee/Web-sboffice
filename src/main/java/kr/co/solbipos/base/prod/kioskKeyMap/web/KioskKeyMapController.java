@@ -4,15 +4,13 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
-import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
-import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
-import kr.co.solbipos.sale.day.day.service.DayVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,15 +48,17 @@ public class KioskKeyMapController {
 
     private final SessionService sessionService;
     private final KioskKeyMapService kioskKeyMapService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public KioskKeyMapController(SessionService sessionService, KioskKeyMapService kioskKeyMapService) {
+    public KioskKeyMapController(SessionService sessionService, KioskKeyMapService kioskKeyMapService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.kioskKeyMapService = kioskKeyMapService;
-}
+        this.cmmEnvUtil = cmmEnvUtil;
+    }
 
     /**
      * 페이지 이동
@@ -77,7 +77,18 @@ public class KioskKeyMapController {
 
         // 키오스크용 포스 조회
         List<DefaultMap<String>> kioskPosList = kioskKeyMapService.getKioskPosList(kioskKeyMapVO, sessionInfoVO);
-        model.addAttribute("kioskPosList", convertToJson(kioskPosList)  );
+        model.addAttribute("kioskPosList", convertToJson(kioskPosList));
+
+        // 키오스크 키맵그룹 조회
+        List<DefaultMap<String>> kioskTuClsTypeList = kioskKeyMapService.getKioskTuClsTypeList(kioskKeyMapVO, sessionInfoVO);
+        model.addAttribute("kioskTuClsTypeList", convertToJson(kioskTuClsTypeList)  );
+
+        // 키오스크 키맵그룹 사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("kioskKeyMapGrpFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1104"), "0"));
+        }else{
+            model.addAttribute("kioskKeyMapGrpFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1104") , "0"));
+        }
 
         return "base/prod/kioskKeyMap/kioskKeyMap";
     }
@@ -209,5 +220,179 @@ public class KioskKeyMapController {
         int result = kioskKeyMapService.saveKioskKeyMap(kioskKeyMapVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 키맵그룹 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2021. 06. 04.
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskTuClsTypeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskTuClsTypeList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = kioskKeyMapService.getKioskTuClsTypeList(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
+
+
+    /**
+     * 키오스크 키맵 신규그룹추가
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2021. 06. 04.
+     */
+    @RequestMapping(value = "/kioskKeyMap/createKioskTuClsType.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result createKioskTuClsType(@RequestBody KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.createKioskTuClsType(kioskKeyMapVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 키맵 그룹복제
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2021. 06. 07.
+     */
+    @RequestMapping(value = "/kioskKeyMap/copyKioskTuClsType.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyKioskTuClsType(@RequestBody KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.copyKioskTuClsType(kioskKeyMapVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 키맵매장적용 - 매장리스트 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.06.08
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskKeyMapService.getStoreList(kioskKeyMapVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskKeyMapVO);
+    }
+
+    /**
+     * 키오스크 키맵매장적용
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2021. 06. 08.
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveKioskKeyMapStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskKeyMapStore(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveKioskKeyMapStore(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 리스트 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.06.09
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getStoreKioskPosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreKioskPosList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskKeyMapService.getStoreKioskPosList(kioskKeyMapVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskKeyMapVO);
+    }
+
+    /**
+     * 키오스크 매장적용(매장/포장) - 본사/매장 환경설정값 저장
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2021. 06. 09.
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveHqStoreKioskPosEnv.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveHqStoreKioskPosEnv(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveHqStoreKioskPosEnv(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 매장적용(매장/포장) - 키오스크 환경설정 값 가져오기
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.06.09
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskEnv.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskEnv(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String sEnvstVal = kioskKeyMapService.getKioskEnv(kioskKeyMapVO, sessionInfoVO);
+
+        return returnJson(Status.OK, sEnvstVal);
     }
 }

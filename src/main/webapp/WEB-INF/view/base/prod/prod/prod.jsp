@@ -260,9 +260,12 @@
     var prodAuthEnvstVal = "${prodAuthEnvstVal}";
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
+
+    // 내점/배달/포장 가격관리 사용여부 (0: 미사용 1: 사용)
+    var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.04" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

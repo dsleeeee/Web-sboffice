@@ -2,11 +2,6 @@ package kr.co.solbipos.base.prod.kioskKeyMap.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
-import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
-import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelClassVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +28,12 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크용 포스 조회 */
     List<DefaultMap<String>> getKioskPosList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵그룹 조회 */
+    List<DefaultMap<String>> getKioskTuClsTypeList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵그룹코드 생성 */
+    String getKiosTuClsTypeCode(KioskKeyMapVO kioskKeyMapVO);
 
     /** 키오스크 카테고리(분류) 조회 */
     List<DefaultMap<Object>> getKioskCategory(KioskKeyMapVO kioskKeyMapVO);
@@ -69,5 +70,38 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 키맵 등록 */
     int saveKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제 - 기존 카테고리(분류) 복사 */
+    int copyKioskCategory(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제 - 기존 키맵그룹에 엮여있는 상품 복사 */
+    int copyKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵매장적용 - 매장리스트 조회 */
+    List<DefaultMap<String>> getStoreList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제 */
+    int deleteStoreTuClsType(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵매장적용 - 키맵 매장적용 전 기존 키맵그룹에 엮어있는 상품 삭제 */
+    int deleteKioskKeyMapByTuClsCd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장 */
+    int insertKioskCategoryStoreReg(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품 매장에도 복사 */
+    int copyKioskKeyMapStoreReg(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 리스트 조회 */
+    List<DefaultMap<String>> getStoreKioskPosList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 매장적용(매장/포장) - 본사 환경설정값 저장 */
+    int insertHqKioskEnv(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 환경설정값 일괄 저장 */
+    int insertStoreKioskPosEnv(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 매장적용(매장/포장) - 키오스크 환경설정 값 가져오기 */
+    String getKioskEnv(KioskKeyMapVO kioskKeyMapVO);
 
 }

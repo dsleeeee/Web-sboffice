@@ -74,10 +74,15 @@
 
   <table class="searchTbl mt10">
     <colgroup>
-      <col class="w100" />
+      <col class="w10" />
+      <col class="w90" />
     </colgroup>
     <tbody>
+    <%--판매가--%>
     <tr class="brt">
+      <th>
+        <s:message code="salePrice.salePrice" />
+      </th>
       <th class="oh gr">
         <%-- 매장판매가/본사판매가 선택 --%>
         <div class="sb-select fl w130 mr5">
@@ -119,7 +124,7 @@
           <wj-combo-box
                   id="changeMode"
                   ng-model="prodInfo.changeMode"
-                  control="changeModCombo"
+                  control="changeModeCombo"
                   items-source="_getComboData('changeMode')"
                   display-member-path="name"
                   selected-value-path="value"
@@ -129,6 +134,183 @@
         </div>
         <a href="#" class="btn_grayS ml10" ng-click="changeAmt()">일괄적용</a>
         <a href="#" class="btn_grayS" style="display:none;" ng-click="changeExcelAmt()">엑셀판매가 일괄적용</a> <!-- // todo -->
+      </th>
+    </tr>
+    <c:if test="${subPriceFg == '1'}">
+        <%--내점-판매가--%>
+        <tr class="brt">
+          <th>
+            <s:message code="salePrice.stinSaleUprc" />
+          </th>
+          <th class="oh gr">
+            <%-- 매장판매가/본사판매가 선택 --%>
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="storeStinSaleUprcOption"
+                      ng-model="prodInfo.storeStinSaleUprcOption"
+                      control="storeStinSaleUprcOptionCombo"
+                      items-source="_getComboData('storeStinSaleUprcOption')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <%-- 변경 비율 --%>
+            <div class="sb-select fl">
+              <span>
+                <input type="text" class="inSty2 w80px" id="inputStinSaleUprcRate" ng-model="prodInfo.inputStinSaleUprcRate" ng-readonly="inputStinSaleUprcRateReadOnly" />
+              </span>
+            </div>
+            <div class="sb-select fl w5px mr5 mt10">
+              <span>%</span>
+            </div>
+            <%-- 변경 단위 --%>
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="stinSaleUprcChangeUnit"
+                      ng-model="prodInfo.stinSaleUprcChangeUnit"
+                      control="stinSaleUprcChangeUnitCombo"
+                      items-source="_getComboData('stinSaleUprcChangeUnit')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <%-- 반올림 여부 --%>
+            <div class="sb-select fl w100px mr5">
+              <wj-combo-box
+                      id="stinSaleUprcChangeMode"
+                      ng-model="prodInfo.stinSaleUprcChangeMode"
+                      control="stinSaleUprcChangeModeCombo"
+                      items-source="_getComboData('stinSaleUprcChangeMode')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <a href="#" class="btn_grayS ml10" ng-click="changeStinSaleUprc()">일괄적용</a>
+          </th>
+        </tr>
+        <%--배달-판매가--%>
+        <tr class="brt">
+          <th>
+            <s:message code="salePrice.dlvrSaleUprc" />
+          </th>
+          <th class="oh gr">
+            <%-- 매장판매가/본사판매가 선택 --%>
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="storeDlvrSaleUprcOption"
+                      ng-model="prodInfo.storeDlvrSaleUprcOption"
+                      control="storeDlvrSaleUprcOptionCombo"
+                      items-source="_getComboData('storeDlvrSaleUprcOption')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <%-- 변경 비율 --%>
+            <div class="sb-select fl">
+              <span>
+                <input type="text" class="inSty2 w80px" id="inputDlvrSaleUprcRate" ng-model="prodInfo.inputDlvrSaleUprcRate" ng-readonly="inputDlvrSaleUprcRateReadOnly" />
+              </span>
+            </div>
+            <div class="sb-select fl w5px mr5 mt10">
+              <span>%</span>
+            </div>
+            <%-- 변경 단위 --%>
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="dlvrSaleUprcChangeUnit"
+                      ng-model="prodInfo.dlvrSaleUprcChangeUnit"
+                      control="dlvrSaleUprcChangeUnitCombo"
+                      items-source="_getComboData('dlvrSaleUprcChangeUnit')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <%-- 반올림 여부 --%>
+            <div class="sb-select fl w100px mr5">
+              <wj-combo-box
+                      id="dlvrSaleUprcChangeMode"
+                      ng-model="prodInfo.dlvrSaleUprcChangeMode"
+                      control="dlvrSaleUprcChangeModeCombo"
+                      items-source="_getComboData('dlvrSaleUprcChangeMode')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <a href="#" class="btn_grayS ml10" ng-click="changeDlvrSaleUprc()">일괄적용</a>
+          </th>
+        </tr>
+        <%--포장-판매가--%>
+        <tr class="brt">
+          <th>
+            <s:message code="salePrice.packSaleUprc" />
+          </th>
+          <th class="oh gr">
+            <%-- 매장판매가/본사판매가 선택 --%>
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="storePackSaleUprcOption"
+                      ng-model="prodInfo.storePackSaleUprcOption"
+                      control="storePackSaleUprcOptionCombo"
+                      items-source="_getComboData('storePackSaleUprcOption')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <%-- 변경 비율 --%>
+            <div class="sb-select fl">
+              <span>
+                <input type="text" class="inSty2 w80px" id="inputPackSaleUprcRate" ng-model="prodInfo.inputPackSaleUprcRate" ng-readonly="inputPackSaleUprcRateReadOnly" />
+              </span>
+            </div>
+            <div class="sb-select fl w5px mr5 mt10">
+              <span>%</span>
+            </div>
+            <%-- 변경 단위 --%>
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="packSaleUprcChangeUnit"
+                      ng-model="prodInfo.packSaleUprcChangeUnit"
+                      control="packSaleUprcChangeUnitCombo"
+                      items-source="_getComboData('packSaleUprcChangeUnit')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <%-- 반올림 여부 --%>
+            <div class="sb-select fl w100px mr5">
+              <wj-combo-box
+                      id="packSaleUprcChangeMode"
+                      ng-model="prodInfo.packSaleUprcChangeMode"
+                      control="packSaleUprcChangeModeCombo"
+                      items-source="_getComboData('packSaleUprcChangeMode')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <a href="#" class="btn_grayS ml10" ng-click="changePackSaleUprc()">일괄적용</a>
+          </th>
+        </tr>
+    </c:if>
+    <tr>
+      <th colspan="2">
         <p class="s12 bk mt10 lh20">
           체크박스에서 선택된 항목만 일괄적용 됩니다.
         </p>
@@ -203,20 +385,32 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-
         <wj-flex-grid-column header="<s:message code="salePrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.poUnitQty"/>" binding="poUnitQty" visible="false" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeSplyUprc"/>" binding="storeSplyUprc" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.storeSaleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.saleUprc"/>" binding="saleUprc" width="*" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="120" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.storeSaleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="120" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.saleUprc"/>" binding="saleUprc" width="120" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginAmt"/>" binding="hqMarginAmt" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginRate"/>" binding="hqMarginRate" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeMarginAmt"/>" binding="storeMarginAmt" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeMarginRate"/>" binding="storeMarginRate" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
+
+        <c:if test="${subPriceFg == '1'}">
+          <wj-flex-grid-column header="<s:message code="salePrice.hqStinSaleUprc"/>" binding="hqStinSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.stinSaleUprcP"/>" binding="storeStinSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.chgStinSaleUprc"/>" binding="stinSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.hqDlvrSaleUprc"/>" binding="hqDlvrSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.dlvrSaleUprcP"/>" binding="storeDlvrSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.chgDlvrSaleUprc"/>" binding="dlvrSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.hqPackSaleUprc"/>" binding="hqPackSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.packSaleUprcP"/>" binding="storePackSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.chgPackSaleUprc"/>" binding="packSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+        </c:if>
+
         <wj-flex-grid-column header="<s:message code="salePriceManage.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
 
       </wj-flex-grid>
@@ -240,11 +434,12 @@
 
 <script>
   var priceEnvstVal = "${priceEnvstVal}";
+  var subPriceFg = "${subPriceFg}";
   <%-- 가격관리구분 --%>
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20210526.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20210526.05" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

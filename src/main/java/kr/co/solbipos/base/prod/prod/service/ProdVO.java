@@ -193,6 +193,15 @@ public class ProdVO extends PageVO {
     /** 매핑상품코드 */
     private String mapProdCd;
 
+    /** 내점가 */
+    private String stinSaleUprc;
+
+    /** 배달가 */
+    private String dlvrSaleUprc;
+
+    /** 포장가 */
+    private String packSaleUprc;
+
     /**
      * @return the hqOfficeCd
      */
@@ -953,5 +962,29 @@ public class ProdVO extends PageVO {
 
     public void setMapProdCd(String mapProdCd) {
         this.mapProdCd = mapProdCd;
+    }
+
+    public String getStinSaleUprc() {
+        return stinSaleUprc;
+    }
+
+    public void setStinSaleUprc(String stinSaleUprc) {
+        this.stinSaleUprc = stinSaleUprc;
+    }
+
+    public String getDlvrSaleUprc() {
+        return dlvrSaleUprc;
+    }
+
+    public void setDlvrSaleUprc(String dlvrSaleUprc) {
+        this.dlvrSaleUprc = dlvrSaleUprc;
+    }
+
+    public String getPackSaleUprc() {
+        return packSaleUprc;
+    }
+
+    public void setPackSaleUprc(String packSaleUprc) {
+        this.packSaleUprc = packSaleUprc;
     }
 }

@@ -53,10 +53,15 @@
 
   <table class="searchTbl mt10">
     <colgroup>
-      <col class="w100" />
+      <col class="w10" />
+      <col class="w90" />
     </colgroup>
     <tbody>
+    <%--판매가--%>
     <tr class="brt">
+      <th>
+        <s:message code="salePrice.salePrice" />
+      </th>
       <th class="oh gr">
         <div class="sb-select fl w130 mr5">
           <wj-combo-box
@@ -76,6 +81,87 @@
         </span> 원
         <a href="#" class="btn_grayS ml10" ng-click="changeAmt()">일괄적용</a>
         <a href="#" class="btn_grayS" style="display:none;" ng-click="changeExcelAmt()">엑셀판매가 일괄적용</a> <!-- // todo -->
+      </th>
+    </tr>
+    <c:if test="${subPriceFg == '1'}">
+        <%--내점-판매가--%>
+        <tr class="brt">
+          <th>
+            <s:message code="salePrice.stinSaleUprc" />
+          </th>
+          <th class="oh gr">
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="stinSaleUprcOption"
+                      ng-model="prodInfo.stinSaleUprcOption"
+                      control="stinSaleUprcOptionCombo"
+                      items-source="_getComboData('stinSaleUprcOption')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      selected-index-changed="setSelectedStinSaleUprcOption(s)">
+              </wj-combo-box>
+            </div>
+            <span>
+              <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputStinSaleUprc" ng-model="prodInfo.inputStinSaleUprc" ng-readonly="inputStinSaleUprcReadOnly" />
+            </span> 원
+            <a href="#" class="btn_grayS ml10" ng-click="changeStinSaleUprc()">일괄적용</a>
+          </th>
+        </tr>
+        <%--배달-판매가--%>
+        <tr class="brt">
+          <th>
+            <s:message code="salePrice.dlvrSaleUprc" />
+          </th>
+          <th class="oh gr">
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="dlvrSaleUprcOption"
+                      ng-model="prodInfo.dlvrSaleUprcOption"
+                      control="dlvrSaleUprcOptionCombo"
+                      items-source="_getComboData('dlvrSaleUprcOption')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      selected-index-changed="setSelectedDlvrSaleUprcOption(s)">
+              </wj-combo-box>
+            </div>
+            <span>
+              <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputDlvrSaleUprc" ng-model="prodInfo.inputDlvrSaleUprc" ng-readonly="inputDlvrSaleUprcReadOnly" />
+            </span> 원
+            <a href="#" class="btn_grayS ml10" ng-click="changeDlvrSaleUprc()">일괄적용</a>
+          </th>
+        </tr>
+        <%--포장-판매가--%>
+        <tr class="brt">
+          <th>
+            <s:message code="salePrice.packSaleUprc" />
+          </th>
+          <th class="oh gr">
+            <div class="sb-select fl w130 mr5">
+              <wj-combo-box
+                      id="packSaleUprcOption"
+                      ng-model="prodInfo.packSaleUprcOption"
+                      control="packSaleUprcOptionCombo"
+                      items-source="_getComboData('packSaleUprcOption')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      selected-index-changed="setSelectedPackSaleUprcOption(s)">
+              </wj-combo-box>
+            </div>
+            <span>
+              <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputPackSaleUprc" ng-model="prodInfo.inputPackSaleUprc" ng-readonly="inputPackSaleUprcReadOnly" />
+            </span> 원
+            <a href="#" class="btn_grayS ml10" ng-click="changePackSaleUprc()">일괄적용</a>
+          </th>
+        </tr>
+    </c:if>
+    <tr>
+      <th colspan="2">
         <p class="s12 bk mt10 lh20">
           체크박스에서 선택된 항목만 일괄적용 됩니다.
         </p>
@@ -154,10 +240,10 @@
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="*" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="120" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.costUprc"/>" binding="costUprc" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.saleUprcP"/>" binding="saleUprcP" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.saleUprc"/>" binding="saleUprc" width="*" align="right" max-length="10" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.saleUprcP"/>" binding="saleUprcP" width="120" is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.saleUprc"/>" binding="saleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeSplyUprc"/>" binding="storeSplyUprc" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginAmt"/>" binding="hqMarginAmt" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginRate"/>" binding="hqMarginRate" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
@@ -165,6 +251,19 @@
         <wj-flex-grid-column header="<s:message code="salePrice.storeMarginAmt"/>" binding="storeMarginAmt" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeMarginRate"/>" binding="storeMarginRate" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.poUnitQty"/>" binding="poUnitQty" width="*" visible="false" ></wj-flex-grid-column>
+
+        <c:if test="${subPriceFg == '1'}">
+          <wj-flex-grid-column header="<s:message code="salePrice.hqStinSaleUprc"/>" binding="hqStinSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.stinSaleUprcP"/>" binding="stinSaleUprcP" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.chgStinSaleUprc"/>" binding="stinSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.hqDlvrSaleUprc"/>" binding="hqDlvrSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.dlvrSaleUprcP"/>" binding="dlvrSaleUprcP" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.chgDlvrSaleUprc"/>" binding="dlvrSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.hqPackSaleUprc"/>" binding="hqPackSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.packSaleUprcP"/>" binding="packSaleUprcP" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePrice.chgPackSaleUprc"/>" binding="packSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+        </c:if>
+
         <wj-flex-grid-column header="<s:message code="salePrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
 
       </wj-flex-grid>
@@ -188,6 +287,7 @@
 
 <script>
   var priceEnvstVal = "${priceEnvstVal}";
+  var subPriceFg = "${subPriceFg}";
   // console.log('priceEnvstVal >> ', priceEnvstVal);
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
@@ -201,4 +301,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20210526.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20210526.06" charset="utf-8"></script>

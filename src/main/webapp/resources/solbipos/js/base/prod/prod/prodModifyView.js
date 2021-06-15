@@ -64,6 +64,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             } else {
                 params.prcCtrlFg = "S";
             }
+            // 내점/배달/포장 판매가 사용 시
+            if(subPriceFg === "1") {
+                params.stinSaleUprc = $("#stinSaleUprc").val(); // 판매단가-내점
+                params.dlvrSaleUprc = $("#dlvrSaleUprc").val(); // 판매단가-배달
+                params.packSaleUprc = $("#packSaleUprc").val(); // 판매단가-포장
+            }
             // 상품부가정보
             params.stockProdYn = "Y"; // 재고관리여부
             params.soldOutYn = "N"; // 품절여부
@@ -195,7 +201,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 값 체크
     $scope.valueCheck = function () {
-        // 매장코드 수동입력 시
+        // 상품코드 수동입력 시
         if($("#saveMode").val() === "REG") {
             if ($("#prodCdInputType").val() === "1") { // 'MANUAL'
                 //  상품코드
@@ -257,6 +263,34 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._popMsg(messages["prod.saleUprcFilter.msg"]);
             $("#prodModifySaleUprc").focus();
             return false;
+        }
+        
+        // 내점/배달/포장 판매가 사용 시
+        if(subPriceFg === "1") {
+            // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
+            if ($("#stinSaleUprc").val() !== null && $("#stinSaleUprc").val() !== "") {
+                if ($("#stinSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#stinSaleUprc").val().substring(1))) {
+                    $scope._popMsg(messages["prod.stinSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#stinSaleUprc").focus();
+                    return false;
+                }
+            }
+            // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
+            if ($("#dlvrSaleUprc").val() !== null && $("#dlvrSaleUprc").val() !== "") {
+                if ($("#dlvrSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#dlvrSaleUprc").val().substring(1))) {
+                    $scope._popMsg(messages["prod.dlvrSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#dlvrSaleUprc").focus();
+                    return false;
+                }
+            }
+            // 포장가를 입력한 경우, 최대값/특수문자(-) 체크
+            if ($("#packSaleUprc").val() !== null && $("#packSaleUprc").val() !== "") {
+                if ($("#packSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#packSaleUprc").val().substring(1))) {
+                    $scope._popMsg(messages["prod.packSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#packSaleUprc").focus();
+                    return false;
+                }
+            }
         }
         // 공급단가
         if (isNull($("#prodModifySplyUprc").val())) {
@@ -417,6 +451,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // 초기값 셋팅
             $("#prodModifySaleUprc").val(""); // 판매단가
+            $("#stinSaleUprc").val(""); // 내점가
+            $("#dlvrSaleUprc").val(""); // 배달가
+            $("#packSaleUprc").val(""); // 포장가
             $("#prodModifySplyUprc").val("0"); // 공급단가
             $("#prodModifyCostUprc").val("0"); // 원가단가
             $("#prodModifyLastCostUprc").val("0"); // 최종원가단가

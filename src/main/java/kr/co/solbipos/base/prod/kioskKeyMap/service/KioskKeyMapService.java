@@ -2,10 +2,6 @@ package kr.co.solbipos.base.prod.kioskKeyMap.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
-import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
-import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 
 import java.util.List;
 
@@ -29,6 +25,9 @@ public interface KioskKeyMapService {
     /** 키오스크용 포스 조회 */
     List<DefaultMap<String>> getKioskPosList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
+    /** 키오스크 키맵그룹 조회 */
+    List<DefaultMap<String>> getKioskTuClsTypeList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
     /** 키오스크 카테고리(분류) 조회 */
     List<DefaultMap<Object>> getKioskCategory(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
@@ -46,5 +45,26 @@ public interface KioskKeyMapService {
 
     /** 키오스크 키맵 등록 */
     int saveKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 키맵 신규그룹추가 */
+    int createKioskTuClsType(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 키맵 그룹복제 */
+    int copyKioskTuClsType(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 키맵매장적용 - 매장리스트 조회 */
+    List<DefaultMap<String>> getStoreList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 키맵매장적용 */
+    int saveKioskKeyMapStore(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 리스트 조회 */
+    List<DefaultMap<String>> getStoreKioskPosList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 매장적용(매장/포장) - 본사/매장 환경설정값 저장 */
+    int saveHqStoreKioskPosEnv(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 매장적용(매장/포장) - 키오스크 환경설정 값 가져오기 */
+    String getKioskEnv(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
 }

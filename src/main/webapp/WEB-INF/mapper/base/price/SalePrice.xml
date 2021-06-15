@@ -23,6 +23,9 @@
                thp.PROD_CD,
                thp.PROD_NM,
                thpsp.SALE_UPRC,     -- 본사 판매가
+               thpsp.STIN_SALE_UPRC,     -- 본사내점-판매가
+               thpsp.DLVR_SALE_UPRC,     -- 본사배달-판매가
+               thpsp.PACK_SALE_UPRC,     -- 본사포장-판매가
                thp.PO_UNIT_QTY,		-- 입수
                thp.COST_UPRC, 		-- 본사 원가
                thp.SPLY_UPRC   		-- 본사 공급가
@@ -56,15 +59,27 @@
         tmp.SPLY_UPRC AS STORE_SPLY_UPRC,  -- 매장공급가
         tmpsp.SALE_UPRC AS SALE_UPRC_P,    -- 변경전 판매금액
         tmpsp.SALE_UPRC,                   -- 판매금액(변경가능)
+        tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC_P,    -- 변경전 내점판매금액
+        tmpsp.STIN_SALE_UPRC,                        -- 내점판매금액(변경가능)
+        tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC_P,    -- 변경전 배달판매금액
+        tmpsp.DLVR_SALE_UPRC,                        -- 배달판매금액(변경가능)
+        tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC_P,    -- 변경전 포장판매금액
+        tmpsp.PACK_SALE_UPRC,                        -- 포장판매금액(변경가능)
         tmp.PO_UNIT_QTY,                   -- 주문(발주)단위수량
         tmp.PRC_CTRL_FG,
-        thpsp.SALE_UPRC AS HQ_SALE_UPRC -- 본사판매가
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,   -- 본사판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,   -- 본사내점-판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,   -- 본사배달-판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC    -- 본사포장-판매가
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT tmp,
         TB_MS_STORE tms,
         (
             SELECT STORE_CD, PROD_CD,
-            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
             FROM TB_MS_PRODUCT_SALE_PRICE
             WHERE 1 = 1
             <![CDATA[
@@ -77,7 +92,10 @@
         TB_HQ_PRODUCT thp,
         (
             SELECT HQ_OFFICE_CD, PROD_CD,
-            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
             FROM TB_HQ_PRODUCT_SALE_PRICE
             WHERE 1 = 1
             <![CDATA[
@@ -139,7 +157,10 @@
                END_DATE,
                SALE_UPRC,
                #{regDt},
-               #{regId}
+               #{regId},
+               STIN_SALE_UPRC,
+               DLVR_SALE_UPRC,
+               PACK_SALE_UPRC
           FROM TB_MS_PRODUCT_SALE_PRICE
          WHERE STORE_CD = #{storeCd}
            AND PROD_CD = #{prodCd}
@@ -199,7 +220,10 @@
         WHEN MATCHED THEN
         UPDATE
         SET
-            tmpsp.SALE_UPRC = ${saleUprc}, -- 판매가
+            tmpsp.SALE_UPRC = #{saleUprc}, -- 판매가
+            tmpsp.STIN_SALE_UPRC = #{stinSaleUprc}, -- 내점가
+            tmpsp.DLVR_SALE_UPRC = #{dlvrSaleUprc}, -- 배달가
+            tmpsp.PACK_SALE_UPRC = #{packSaleUprc}, -- 포장가
             tmpsp.MOD_DT = #{modDt},
             tmpsp.MOD_ID = #{modId}
         WHEN NOT MATCHED THEN
@@ -211,6 +235,9 @@
             START_DATE,
             END_DATE,
             SALE_UPRC,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -222,6 +249,9 @@
             #{startDate},
             #{endDate},
             #{saleUprc},
+            #{stinSaleUprc},
+            #{dlvrSaleUprc},
+            #{packSaleUprc},
             #{regDt},
             #{regId},
             #{modDt},
@@ -250,13 +280,25 @@
         thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
         tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
         tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,    -- 본사내점-판매가
+        tmpsp.STIN_SALE_UPRC AS STORE_STIN_SALE_UPRC, -- 매장내점-판매가
+        tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,       -- 변경내점-판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,    -- 본사배달-판매가
+        tmpsp.DLVR_SALE_UPRC AS STORE_DLVR_SALE_UPRC, -- 매장배달-판매가
+        tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,       -- 변경배달-판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,    -- 본사포장-판매가
+        tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
+        tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
         tmp.PRC_CTRL_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
         (
             SELECT HQ_OFFICE_CD, PROD_CD,
-            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
             FROM TB_HQ_PRODUCT_SALE_PRICE
             WHERE 1 = 1
             <![CDATA[
@@ -268,7 +310,10 @@
         ) thpsp,
         (
             SELECT STORE_CD, PROD_CD,
-            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
             FROM TB_MS_PRODUCT_SALE_PRICE
             WHERE 1 = 1
             <![CDATA[
