@@ -375,6 +375,33 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 }
             }
 
+            // 내점가 길이체크
+            // 값이 있을때만
+            if (prodExcelUploadVO.getStinSaleUprc() != null && !"".equals(prodExcelUploadVO.getStinSaleUprc())) {
+                if (prodExcelUploadVO.getStinSaleUprc().length() > 16) {
+                    prodExcelUploadVO.setStinSaleUprc("");
+                    prodExcelUploadVO.setResult("내점가 길이가 너무 깁니다.");
+                }
+            }
+
+            // 배달가 길이체크
+            // 값이 있을때만
+            if (prodExcelUploadVO.getDlvrSaleUprc() != null && !"".equals(prodExcelUploadVO.getDlvrSaleUprc())) {
+                if (prodExcelUploadVO.getDlvrSaleUprc().length() > 16) {
+                    prodExcelUploadVO.setDlvrSaleUprc("");
+                    prodExcelUploadVO.setResult("배달가 길이가 너무 깁니다.");
+                }
+            }
+
+            // 포장가 길이체크
+            // 값이 있을때만
+            if (prodExcelUploadVO.getPackSaleUprc() != null && !"".equals(prodExcelUploadVO.getPackSaleUprc())) {
+                if (prodExcelUploadVO.getPackSaleUprc().length() > 16) {
+                    prodExcelUploadVO.setPackSaleUprc("");
+                    prodExcelUploadVO.setResult("포장가 길이가 너무 깁니다.");
+                }
+            }
+
             // 판매상품여부
             if (prodExcelUploadVO.getSaleProdYn() != null && !"".equals(prodExcelUploadVO.getSaleProdYn())) {
             } else {
@@ -435,6 +462,9 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             if(prodExcelUploadVO.getProdCd() == null) { prodExcelUploadVO.setProdCd(""); }
             if(prodExcelUploadVO.getProdNm() == null) { prodExcelUploadVO.setProdNm(""); }
             if(prodExcelUploadVO.getSaleUprc() == null) { prodExcelUploadVO.setSaleUprc(""); }
+            if(prodExcelUploadVO.getStinSaleUprc() == null) { prodExcelUploadVO.setStinSaleUprc(""); }
+            if(prodExcelUploadVO.getDlvrSaleUprc() == null) { prodExcelUploadVO.setDlvrSaleUprc(""); }
+            if(prodExcelUploadVO.getPackSaleUprc() == null) { prodExcelUploadVO.setPackSaleUprc(""); }
             if(prodExcelUploadVO.getSplyUprc() == null) { prodExcelUploadVO.setSplyUprc(0.0); }
             if(prodExcelUploadVO.getCostUprc() == null) { prodExcelUploadVO.setCostUprc(0.0); }
             if(prodExcelUploadVO.getBarCd() == null) { prodExcelUploadVO.setBarCd(""); }

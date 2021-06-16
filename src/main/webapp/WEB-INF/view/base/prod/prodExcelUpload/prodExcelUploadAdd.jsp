@@ -36,6 +36,11 @@
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodTypeFg"/>" binding="prodTypeFg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleProdYn"/>" binding="saleProdYn" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleUprc"/>" binding="saleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${subPriceFg == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.stinSaleUprc"/>" binding="stinSaleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.packSaleUprc"/>" binding="packSaleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprc"/>" binding="splyUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.poProdFg"/>" binding="poProdFg" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -61,6 +66,9 @@
 
 <script>
     var prodNoEnvFg = "${prodNoEnvFg}";
+
+    <%-- 내점/배달/포장 가격관리 사용여부 --%>
+    var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20210421.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20210421.02" charset="utf-8"></script>

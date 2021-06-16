@@ -131,6 +131,18 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             if (numChkexp.test(jsonData[i].splyUprc)) {
                 jsonData[i].splyUprc = "";
             }
+            // 내점가
+            if (numChkexp.test(jsonData[i].stinSaleUprc)) {
+                jsonData[i].stinSaleUprc = "";
+            }
+            // 배달가
+            if (numChkexp.test(jsonData[i].dlvrSaleUprc)) {
+                jsonData[i].dlvrSaleUprc = "";
+            }
+            // 포장가
+            if (numChkexp.test(jsonData[i].packSaleUprc)) {
+                jsonData[i].packSaleUprc = "";
+            }
             // 원가단가
             if (numChkexp.test(jsonData[i].costUprc)) {
                 jsonData[i].costUprc = "";

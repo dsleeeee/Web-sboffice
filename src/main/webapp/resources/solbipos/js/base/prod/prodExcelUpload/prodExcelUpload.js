@@ -82,6 +82,9 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.prodTypeFg = "1";
         params.saleProdYn = "Y";
         params.saleUprc = "1000";
+        params.stinSaleUprc = "1000";
+        params.dlvrSaleUprc = "900";
+        params.packSaleUprc = "900";
         params.vendrCd = vendrComboList[0].name;
         params.splyUprc = "1000";
         params.poProdFg = "1";
@@ -318,7 +321,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
             } else {
                 if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){ // 소수점있으면 거름
                     $scope.flex.collectionView.items[i].saleUprc = "";
-                    result = messages["simpleProd.saleUprcInChk"];
+                    result = messages["prodExcelUpload.saleUprcInChk"];
                 } else {
                     // 숫자만 입력
                     var numchkexp = /[^0-9]/g;
@@ -332,6 +335,72 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                     } else if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){ // 양수 max값
                         $scope.flex.collectionView.items[i].saleUprc = "";
                         result = messages["prodExcelUpload.saleUprcInChk"];
+                    }
+                }
+            }
+
+            // 내점가
+            if($scope.flex.collectionView.items[i].stinSaleUprc !== "" && $scope.flex.collectionView.items[i].stinSaleUprc !== null) {
+                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].stinSaleUprc)) == false){ // 소수점있으면 거름
+                    //$scope.flex.collectionView.items[i].stinSaleUprc = "";
+                    result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                } else {
+                    // 숫자만 입력
+                    var numchkexp = /[^0-9]/g;
+                    if (numchkexp.test($scope.flex.collectionView.items[i].stinSaleUprc)) { // 음수
+                        var numchkexp2 = /^-[0-9]/g;
+                        if (numchkexp2.test($scope.flex.collectionView.items[i].stinSaleUprc)) {
+                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].stinSaleUprc) == false)){
+                            //$scope.flex.collectionView.items[i].stinSaleUprc = "";
+                            result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                        }
+                    } else if($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000){ // 양수 max값
+                        //$scope.flex.collectionView.items[i].stinSaleUprc = "";
+                        result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                    }
+                }
+            }
+
+            // 배달가
+            if($scope.flex.collectionView.items[i].dlvrSaleUprc !== "" && $scope.flex.collectionView.items[i].dlvrSaleUprc !== null) {
+                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].dlvrSaleUprc)) == false){ // 소수점있으면 거름
+                    //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                    result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                } else {
+                    // 숫자만 입력
+                    var numchkexp = /[^0-9]/g;
+                    if (numchkexp.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) { // 음수
+                        var numchkexp2 = /^-[0-9]/g;
+                        if (numchkexp2.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) {
+                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].dlvrSaleUprc) == false)){
+                            //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                            result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                        }
+                    } else if($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000){ // 양수 max값
+                        //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                        result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                    }
+                }
+            }
+
+            // 포장가
+            if($scope.flex.collectionView.items[i].packSaleUprc !== "" && $scope.flex.collectionView.items[i].packSaleUprc !== null) {
+                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].packSaleUprc)) == false){ // 소수점있으면 거름
+                    //$scope.flex.collectionView.items[i].packSaleUprc = "";
+                    result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                } else {
+                    // 숫자만 입력
+                    var numchkexp = /[^0-9]/g;
+                    if (numchkexp.test($scope.flex.collectionView.items[i].packSaleUprc)) { // 음수
+                        var numchkexp2 = /^-[0-9]/g;
+                        if (numchkexp2.test($scope.flex.collectionView.items[i].packSaleUprc)) {
+                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].packSaleUprc) == false)){
+                            //$scope.flex.collectionView.items[i].packSaleUprc = "";
+                            result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                        }
+                    } else if($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000){ // 양수 max값
+                        //$scope.flex.collectionView.items[i].packSaleUprc = "";
+                        result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
                     }
                 }
             }

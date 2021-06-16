@@ -137,7 +137,10 @@
         MOD_ID,
         VENDR_CD,
         START_STOCK_QTY,
-        PRC_CTRL_FG
+        PRC_CTRL_FG,
+        NVL(STIN_SALE_UPRC, '') AS STIN_SALE_UPRC,
+        NVL(DLVR_SALE_UPRC, '') AS DLVR_SALE_UPRC,
+        NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC
         FROM TB_TMP_EXCEL_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
@@ -203,7 +206,10 @@
             MOD_ID,
             VENDR_CD,
             START_STOCK_QTY,
-            PRC_CTRL_FG
+            PRC_CTRL_FG,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -250,7 +256,10 @@
             #{modId},
             #{vendrCd},
             #{startStockQty},
-            #{prcCtrlFg}
+            #{prcCtrlFg},
+            #{stinSaleUprc},
+            #{dlvrSaleUprc},
+            #{packSaleUprc}
         )
     </insert>
 

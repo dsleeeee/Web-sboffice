@@ -5,6 +5,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.grid.ReturnUtil;
@@ -117,6 +118,13 @@ public class ProdExcelUploadController {
         }
         model.addAttribute("prodClassComboList", prodClassComboListAll);
 //        System.out.println("prodClassComboList : "+prodClassComboListAll);
+
+        // 내점/배달/포장 가격관리 사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+        }else{
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+        }
 
         return "base/prod/prodExcelUpload/prodExcelUpload";
     }

@@ -76,6 +76,11 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleUprc"/>" binding="saleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <c:if test="${subPriceFg == '1'}">
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.stinSaleUprc"/>" binding="stinSaleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.packSaleUprc"/>" binding="packSaleUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprc"/>" binding="splyUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
@@ -147,6 +152,11 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.saleUprc"/>" binding="saleUprc" max-length="10" width="70" align="center"></wj-flex-grid-column>
+                    <c:if test="${subPriceFg == '1'}">
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.stinSaleUprc"/>" binding="stinSaleUprc" max-length="10" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.dlvrSaleUprc"/>" binding="dlvrSaleUprc" max-length="10" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.packSaleUprc"/>" binding="packSaleUprc" max-length="10" width="70" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.splyUprc"/>" binding="splyUprc" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
@@ -205,9 +215,13 @@
     var stockProdYnData = ${ccu.getCommCodeExcpAll("067")};
     <%-- 가격관리구분 --%>
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
+
+    <%-- 내점/배달/포장 가격관리 사용여부 --%>
+    var subPriceFg = "${subPriceFg}";
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20210426.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20210426.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
