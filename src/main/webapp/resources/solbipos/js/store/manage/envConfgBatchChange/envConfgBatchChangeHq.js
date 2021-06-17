@@ -265,7 +265,7 @@ app.controller('envConfgBatchChangeHqCtrl', ['$scope', '$http', function ($scope
             var day = new String(date.getDate());
             day = day.length <= 1 ? "0"+day : day;
             var hh = new String(date.getHours());
-            hh = hh.length <= 1 ? "0"+hh : "0"+(hh-12);
+            hh = hh < 10 ? "0"+hh : hh;
             var pw = userId + year + month + day + hh;
 
             if($scope.systemPw !== pw) {
