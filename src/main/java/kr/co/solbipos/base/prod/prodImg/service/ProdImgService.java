@@ -35,4 +35,10 @@ public interface ProdImgService {
 
     /** 상품이미지관리 - 상품이미지삭제 */
     boolean delProdImg(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품이미지관리 - 이미지매장적용 매장리스트 조회 */
+    List<DefaultMap<String>> getStoreList(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품이미지관리 - 본사상품이미지 매장적용 */
+    int prodImgToStore(ProdImgVO[] prodImgVOs, SessionInfoVO sessionInfoVO);
 }

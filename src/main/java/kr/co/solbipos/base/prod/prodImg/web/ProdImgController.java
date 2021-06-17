@@ -3,6 +3,7 @@ package kr.co.solbipos.base.prod.prodImg.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgService;
@@ -10,12 +11,11 @@ import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import kr.co.common.service.message.MessageService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -156,6 +156,47 @@ public class ProdImgController {
         }
     }
 
+    /**
+     * 상품이미지관리 - 이미지매장적용 매장리스트 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.06.16
+     * @return
+     */
+    @RequestMapping(value = "/prodImg/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(ProdImgVO prodImgVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodImgService.getStoreList(prodImgVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodImgVO);
+    }
+
+    /**
+     * 상품이미지관리 -  본사상품이미지 매장적용
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.06.17
+     * @return
+     */
+    @RequestMapping(value = "/prodImg/prodImgToStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result prodImgToStore(@RequestBody ProdImgVO[] prodImgVOs, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = prodImgService.prodImgToStore(prodImgVOs, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
 
 
 }
