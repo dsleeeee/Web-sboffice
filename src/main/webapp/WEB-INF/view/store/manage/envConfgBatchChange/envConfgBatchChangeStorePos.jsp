@@ -168,4 +168,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeStorePos.js?ver=20210322.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeStorePos.js?ver=20210617.01" charset="utf-8"></script>
