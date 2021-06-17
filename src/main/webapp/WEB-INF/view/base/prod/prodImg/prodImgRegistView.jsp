@@ -42,6 +42,9 @@
                         <label for="chkDt">
                             <s:message code="cmm.all.day" />
                         </label>
+                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <button class="btn_skyblue ml10" id="btnImgToStoreReg" ng-click="imgToStoreReg()"><s:message code="prodImg.storeReg"/></button>
+                        </c:if>
 		            </span>
                 </div>
             </td>
@@ -231,4 +234,8 @@
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 본사상품 이미지 매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prodImg/prodImgStoreRegist.jsp">
 </c:import>

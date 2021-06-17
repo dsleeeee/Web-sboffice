@@ -1,6 +1,8 @@
 package kr.co.solbipos.base.prod.prodImg.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -16,9 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import kr.co.common.exception.JsonException;
-import kr.co.common.data.enums.Status;
 
 import java.io.File;
 import java.util.List;
@@ -239,5 +238,47 @@ public class ProdImgServiceImpl implements ProdImgService {
         return isSuccess;
     }
 
+    /** 상품이미지관리 - 이미지매장적용 매장리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreList(@RequestBody ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO) {
+
+        prodImgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return prodImgMapper.getStoreList(prodImgVO);
+    }
+
+    /** 상품이미지관리 - 본사상품이미지 매장적용 */
+    @Override
+    public int prodImgToStore(ProdImgVO[] prodImgVOs, SessionInfoVO sessionInfoVO){
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        // 매장 키오스크 포스 환경설정값 일괄 저장
+        for (ProdImgVO prodImgVO : prodImgVOs) {
+
+            prodImgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prodImgVO.setImgChgDt(dt);
+            prodImgVO.setRegDt(dt);
+            prodImgVO.setRegId(sessionInfoVO.getUserId());
+            prodImgVO.setModDt(dt);
+            prodImgVO.setModId(sessionInfoVO.getUserId());
+
+            // 이미지타입
+            if(!StringUtil.getOrBlank(prodImgVO.getImgFg()).equals("")) {
+                prodImgVO.setArrImgFg(prodImgVO.getImgFg().split(","));
+            }
+
+            // 기존 매장이미지 삭제
+            prodImgMapper.delStoreProdImg(prodImgVO);
+
+            // 본사상품이미지 매장적용
+            result = prodImgMapper.prodImgToStore(prodImgVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }
+
+        return result;
+    }
 
 }
