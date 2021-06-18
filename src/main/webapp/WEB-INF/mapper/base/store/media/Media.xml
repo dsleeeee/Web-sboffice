@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Media.xml
+    미디어관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.06.09     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.store.media.service.impl.MediaMapper">
+
+    <!-- 포스버전 목록 조회  -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE
+        COMMENTS : 포스버전 리스트를 조회한다.
+    -->
+    <select id="getList" parameterType="MediaVO" resultType="DefaultMap">
+        /* USE : Media.getList */
+        <choose>
+        <!-- 본사 -->
+        <when test='orgnFg != null and orgnFg == "H"'>
+            <include refid="CmmSQL.PagingTemplateHeader"/>
+            SELECT ADVER_FILE_NO AS VER_SER_NO,
+                   TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                   FILE_DESC AS VER_SER_NM,
+                   FILE_USE_TYPE,
+                   FILE_SIZE,
+                   USE_YN,
+                   FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM
+            <include refid="CmmSQL.PagingTemplateCount"/>
+                 FROM TB_HQ_POS_ADVER_FILE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='verSerNo != null and verSerNo != ""'>
+                AND ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
+            </if>
+            <if test='verSerNm != null and verSerNm != ""'>
+                AND FILE_DESC LIKE '%' || #{verSerNm} || '%'
+            </if>
+            <if test='fileOrgNm != null and fileOrgNm != ""'>
+                AND FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
+            </if>
+            <if test='useYn != null and useYn.toString() != ""'>
+                AND USE_YN = #{useYn}
+            </if>
+            <if test='fileType != null and fileType.toString() != ""'>
+                AND FILE_USE_TYPE = #{fileType}
+            </if>
+            <if test='startDate != null and startDate != ""'>
+                AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
+            </if>
+            <include refid="CmmSQL.PagingTemplateBottom"/>
+        </when>
+        <!-- 매장 -->
+        <when test='orgnFg != null and orgnFg == "S"'>
+            <include refid="CmmSQL.PagingTemplateHeader"/>
+            SELECT ADVER_FILE_NO AS VER_SER_NO,
+                   TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                   FILE_DESC AS VER_SER_NM,
+                   FILE_USE_TYPE,
+                   FILE_SIZE,
+                   USE_YN,
+                   FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM
+            <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_POS_ADVER_FILE
+                WHERE STORE_CD = #{storeCd}
+            <if test='verSerNo != null and verSerNo != ""'>
+                AND ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
+            </if>
+            <if test='verSerNm != null and verSerNm != ""'>
+                AND FILE_DESC LIKE '%' || #{verSerNm} || '%'
+            </if>
+            <if test='fileOrgNm != null and fileOrgNm != ""'>
+                AND FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
+            </if>
+            <if test='useYn != null and useYn.toString() != ""'>
+                AND USE_YN = #{useYn}
+            </if>
+            <if test='fileType != null and fileType.toString() != ""'>
+                AND FILE_USE_TYPE = #{fileType}
+            </if>
+            <if test='startDate != null and startDate != ""'>
+                AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
+            </if>
+            <include refid="CmmSQL.PagingTemplateBottom"/>
+        </when>
+        </choose>
+    </select>
+
+    <!-- 포스버전정보 상세 조회  -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 포스버전에 대한 상세 정보를 조회한다.
+    -->
+    <select id="dtlInfo" parameterType="MediaVO" resultType="DefaultMap">
+        /* USE : Media.dtlInfo */
+        <choose>
+        <!-- 본사 -->
+        <when test='orgnFg != null and orgnFg == "H"'>
+        SELECT ADVER_FILE_NO AS VER_SER_NO,
+               FILE_USE_TYPE AS FILE_TYPE,
+               TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+               ADVER_S_DATE AS START_DATE,
+               ADVER_E_DATE AS END_DATE,
+               FILE_DIR,
+               FILE_NM,
+               FILE_EXT,
+               FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+               FILE_SIZE,
+               FILE_MIME_TYPE,
+               FILE_ORG_NM,
+               FILE_DESC AS VER_SER_NM,
+               USE_YN,
+               REG_DT
+          FROM TB_HQ_POS_ADVER_FILE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND ADVER_FILE_NO = #{verSerNo}
+        </when>
+        <!-- 본사 -->
+        <when test='orgnFg != null and orgnFg == "S"'>
+            SELECT ADVER_FILE_NO AS VER_SER_NO,
+                   FILE_USE_TYPE AS FILE_TYPE,
+                   TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                   ADVER_S_DATE AS START_DATE,
+                   ADVER_E_DATE AS END_DATE,
+                   FILE_DIR,
+                   FILE_NM,
+                   FILE_EXT,
+                   FILE_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                   FILE_SIZE,
+                   FILE_MIME_TYPE,
+                   FILE_ORG_NM,
+                   FILE_DESC AS VER_SER_NM,
+                   USE_YN,
+                   REG_DT
+              FROM TB_MS_POS_ADVER_FILE
+             WHERE STORE_CD = #{storeCd}
+               AND ADVER_FILE_NO = #{verSerNo}
+        </when>
+        </choose>
+    </select>
+
+
+    <!-- 파일코드 채번  -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 파일코드 채번
+    --> 
+    <select id="getFileCd" parameterType="MediaVO" resultType="String">
+        /* USE : Media.getFileCd */
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+                SELECT LPAD(NVL(MAX(ADVER_FILE_NO), 0) +1, 4, '0')
+                FROM TB_HQ_POS_ADVER_FILE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='hqOfficeCd == null or hqOfficeCd == ""'>
+                SELECT LPAD(NVL(MAX(ADVER_FILE_NO), 7999) +1, 4, '0')
+                FROM TB_MS_POS_ADVER_FILE
+                WHERE STORE_CD = #{storeCd}
+                AND ADVER_FILE_NO > 7999
+        </if>
+    </select>
+
+    <!-- 버전 등록   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 포스버전을 등록한다.
+    -->
+    <insert id="verRegist" parameterType="MediaVO">
+        /* USE : Media.verRegist */
+        <if test='hqOfficeCd != null and hqOfficeCd != "" and hqOfficeCd != "00000"'>
+            <![CDATA[
+            INSERT INTO TB_HQ_POS_ADVER_FILE
+            (
+               HQ_OFFICE_CD,
+               ADVER_FILE_NO,
+               FILE_USE_TYPE,
+               ADVER_S_DATE,
+               ADVER_E_DATE,
+               FILE_DIR,
+               FILE_NM,
+               FILE_EXT,
+               FILE_SIZE,
+               FILE_MIME_TYPE,
+               FILE_ORG_NM,
+               FILE_DESC,
+               FILE_CHG_DT,
+               USE_YN,
+               REG_DT,
+               REG_ID,
+               MOD_DT,
+               MOD_ID
+            )
+            VALUES
+            (
+                #{hqOfficeCd},
+                #{verSerNo},
+                #{fileType},
+                #{startDate},
+                #{endDate},
+                #{fileDir},
+                #{fileNm},
+                #{fileExt},
+                #{fileSize},
+                #{fileMimeType},
+                #{fileOrgNm},
+                #{verSerNm},
+                #{regDt},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+            ]]>
+        </if>
+        <if test='hqOfficeCd != null and (hqOfficeCd == "" or hqOfficeCd == "00000")'>
+            <![CDATA[
+            INSERT INTO TB_MS_POS_ADVER_FILE
+            (
+               STORE_CD,
+               ADVER_FILE_NO,
+               FILE_USE_TYPE,
+               ADVER_S_DATE,
+               ADVER_E_DATE,
+               FILE_DIR,
+               FILE_NM,
+               FILE_EXT,
+               FILE_SIZE,
+               FILE_MIME_TYPE,
+               FILE_ORG_NM,
+               FILE_DESC,
+               FILE_CHG_DT,
+               USE_YN,
+               REG_FG,
+               REG_DT,
+               REG_ID,
+               MOD_DT,
+               MOD_ID
+            )
+            VALUES
+            (
+                #{storeCd},
+                #{verSerNo},
+                #{fileType},
+                #{startDate},
+                #{endDate},
+                #{fileDir},
+                #{fileNm},
+                #{fileExt},
+                #{fileSize},
+                #{fileMimeType},
+                #{fileOrgNm},
+                #{verSerNm},
+                #{regDt},
+                #{useYn},
+                'S',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+            ]]>
+        </if>
+
+    </insert>
+
+    <!-- 버전 수정   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 포스버전을 수정한다.
+    -->
+    <update id="verModify" parameterType="MediaVO">
+        /* USE : Media.verModify */
+        <if test='hqOfficeCd != null and hqOfficeCd != "" and hqOfficeCd != "00000"'>
+        <![CDATA[
+        UPDATE TB_HQ_POS_ADVER_FILE
+           SET FILE_USE_TYPE    = #{fileType},
+               ADVER_S_DATE     = #{startDate},
+               ADVER_E_DATE     = #{endDate},
+            ]]>
+           <if test='fileDir != null and fileDir.toString() != ""'>
+             FILE_DIR           = #{fileDir},
+             FILE_NM            = #{fileNm},
+             FILE_EXT           = #{fileExt},
+             FILE_SIZE          = #{fileSize},
+             FILE_MIME_TYPE     = #{fileMimeType},
+             FILE_ORG_NM        = #{fileOrgNm},
+             FILE_CHG_DT        = #{modDt},
+           </if>
+           <![CDATA[
+               FILE_DESC        = #{verSerNm},
+               USE_YN           = #{useYn},
+               MOD_DT           = #{modDt},
+               MOD_ID           = #{modId}
+         WHERE HQ_OFFICE_CD     = #{hqOfficeCd}
+           AND ADVER_FILE_NO    = #{verSerNo}
+         ]]>
+        </if>
+        <if test='hqOfficeCd == null or hqOfficeCd == ""'>
+            <![CDATA[
+        UPDATE TB_MS_POS_ADVER_FILE
+           SET FILE_USE_TYPE    = #{fileType},
+               ADVER_S_DATE     = #{startDate},
+               ADVER_E_DATE     = #{endDate},
+            ]]>
+            <if test='fileDir != null and fileDir.toString() != ""'>
+                FILE_DIR        = #{fileDir},
+                FILE_NM         = #{fileNm},
+                FILE_EXT        = #{fileExt},
+                FILE_SIZE       = #{fileSize},
+                FILE_MIME_TYPE  = #{fileMimeType},
+                FILE_ORG_NM     = #{fileOrgNm},
+                FILE_CHG_DT        = #{modDt},
+            </if>
+            <![CDATA[
+               FILE_DESC        = #{verSerNm},
+               USE_YN           = #{useYn},
+               MOD_DT           = #{modDt},
+               MOD_ID           = #{modId}
+         WHERE STORE_CD         = #{storeCd}
+           AND ADVER_FILE_NO    = #{verSerNo}
+         ]]>
+        </if>
+    </update>
+
+    <!-- 파일타입조회   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 파일타입을 조회한다.
+    -->
+    <select id="chkFileType" parameterType="MediaVO" resultType="String">
+        /* USE : Media.chkFileType */
+        SELECT COUNT(*)
+          FROM TB_CM_NMCODE
+         WHERE NMCODE_GRP_CD = '303'
+           AND NMCODE_ITEM_1 ='날짜중복불가'
+           AND NMCODE_CD = #{fileType}
+    </select>
+
+    <!-- 날짜 중복 조회   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 날짜 중복여부를 조회한다.
+    -->
+    <select id="chkDate" parameterType="MediaVO" resultType="String">
+        /* USE : Media.chkDate */
+        <if test='hqOfficeCd != null and hqOfficeCd != "" and hqOfficeCd != "00000"'>
+            <![CDATA[
+            SELECT COUNT(*)
+              FROM TB_HQ_POS_ADVER_FILE
+             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+               AND ADVER_S_DATE <= #{endDate}
+               AND ADVER_E_DATE >= #{startDate}
+               AND FILE_USE_TYPE = #{fileType}
+               AND USE_YN = #{useYn}
+            ]]>
+            <if test='verSerNo != null and verSerNo != ""'>
+               AND ADVER_FILE_NO != #{verSerNo}
+            </if>
+        </if>
+        <if test='hqOfficeCd == null or hqOfficeCd == ""'>
+            <![CDATA[
+            SELECT COUNT(*)
+              FROM TB_MS_POS_ADVER_FILE
+             WHERE STORE_CD = #{storeCd}
+               AND ADVER_S_DATE <= #{endDate}
+               AND ADVER_E_DATE >= #{startDate}
+               AND FILE_USE_TYPE = #{fileType}
+               AND USE_YN = #{useYn}
+            ]]>
+            <if test='verSerNo != null and verSerNo != ""'>
+               AND ADVER_FILE_NO != #{verSerNo}
+            </if>
+        </if>
+    </select>
+
+    <!-- 버전 삭제   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 포스버전을 삭제한다.
+    -->
+    <update id="verDelete" parameterType="MediaVO" >
+        /* USE : Media.deleteVersion */
+        UPDATE TB_CM_POS_ADDR_VERSN
+           SET DEL_YN = 'Y',
+               USE_YN = 'N'
+         WHERE VER_SER_NO = #{verSerNo}
+    </update>
+
+    <!-- 추가가능한 매장 목록 조회   -->
+    <!--
+        TABLE    : TB_MS_POS, TB_MS_STORE, TB_HQ_OFFICE
+        COMMENTS : 추가가능한 매장 목록을 조회한다.
+    -->
+    <select id="srchStoreList" parameterType="MediaApplcStoreVO" resultType="DefaultMap">
+        /* USE : Media.srchStoreList */
+        SELECT tms.HQ_OFFICE_CD,
+               tho.HQ_OFFICE_NM,
+               tms.STORE_CD,
+               tms.STORE_NM,
+               tms.SYS_STAT_FG,
+               tmp.POS_CNT
+          FROM TB_MS_STORE tms,
+               TB_HQ_OFFICE tho,
+               (
+               SELECT STORE_CD, COUNT(POS_NO) AS POS_CNT
+                 FROM TB_MS_POS
+                WHERE USE_YN ='Y'
+                GROUP by STORE_CD
+               ) tmp
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+           AND tmp.STORE_CD = tms.STORE_CD
+      <if test='searchSatus != null and searchSatus == "Y"'>
+           AND tms.STORE_CD IN (SELECT STORE_CD
+                                  FROM TB_HQ_POS_ADVER_STORE
+                                 WHERE ADVER_FILE_NO = #{verSerNo} )
+      </if>
+      <if test='searchSatus != null and searchSatus == "N"'>
+           AND tms.STORE_CD NOT IN (SELECT STORE_CD
+                                      FROM TB_HQ_POS_ADVER_STORE
+                                     WHERE ADVER_FILE_NO = #{verSerNo} )
+      </if>
+        <if test='storeCd != null and storeCd != ""'>
+           AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
+        </if>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+           AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY HQ_OFFICE_CD, STORE_CD
+    </select>
+
+    <!-- 버전 적용 매장 등록   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN_STORE
+        COMMENTS : 버전 적용 매장 등록한다.
+    -->
+    <insert id="registStore" parameterType="MediaApplcStoreVO">
+        /* USE : Media.registStore */
+        INSERT INTO TB_HQ_POS_ADVER_STORE
+        (HQ_OFFICE_CD,
+         ADVER_FILE_NO,
+         STORE_CD,
+         REG_DT,
+         REG_ID,
+         MOD_DT,
+         MOD_ID)
+        VALUES (#{hqOfficeCd},
+                #{verSerNo},
+                #{storeCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId})
+    </insert>
+
+    <!-- 버전 적용 매장 삭제   -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_STORE
+        COMMENTS : 버전 적용 매장 삭제한다.
+    -->
+    <delete id="removeStore" parameterType="MediaApplcStoreVO" >
+        /* USE : Media.removeStore */
+        <![CDATA[
+        DELETE TB_HQ_POS_ADVER_STORE
+         WHERE ADVER_FILE_NO = #{verSerNo}
+           AND STORE_CD = #{storeCd}
+        ]]>
+    </delete>
+
+</mapper>
+
