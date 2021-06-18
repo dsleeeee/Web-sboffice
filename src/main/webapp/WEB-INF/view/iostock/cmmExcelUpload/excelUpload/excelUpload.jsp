@@ -957,7 +957,7 @@
                 }
 
                 // 가용포인트는 누적포인트보다 클 수 없습니다.
-                if (item.avablPoint > item.totSavePoint)
+                if (parseInt(item.avablPoint) > parseInt(item.totSavePoint))
                 {
                     msg = messages["member.excel.upload.check.avablPoint"]; // 가용포인트는 누적포인트보다 클 수 없습니다.
                     item.result = msg;
