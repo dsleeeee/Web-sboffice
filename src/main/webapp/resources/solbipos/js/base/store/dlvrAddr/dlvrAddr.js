@@ -23,6 +23,8 @@ app.controller('dlvrAddrCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        var params = {};
+        $scope._inquirySub("/base/store/dlvrAddr/list.sb", params);
     };
 
     // <-- 검색 호출 -->
@@ -34,9 +36,7 @@ app.controller('dlvrAddrCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchDlvrAddr = function(){
         var params = {};
         $scope._inquirySub("/base/store/dlvrAddr/list.sb", params, function() {
-
             var scope = agrid.getScope('dlvrAddrCodeCtrl');
-            scope._gridDataInit();
             scope._broadcast('dlvrAddrCodeCtrl');
         }, false);
     };
@@ -125,10 +125,8 @@ app.controller('dlvrAddrCodeCtrl', ['$scope', '$http', function ($scope, $http) 
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/store/dlvrAddr/addDlvrAddr.sb", params, function(){
-            $scope.searchdlvrAddrCode();
             var scope = agrid.getScope('dlvrAddrCtrl');
-            scope._gridDataInit();
-            scope._broadcast('dlvrAddrCtrl');
+            scope.searchDlvrAddr();
         });
     };
 }]);
