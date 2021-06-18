@@ -9,6 +9,6 @@
     ======================================================
     1       김설아     2021.06.09     최초작성
 -->
-<mapper namespace="kr.co.solbipos.adi.smsC.smsCharge.service.impl.SmsChargeMapper">
+<mapper namespace="kr.co.solbipos.adi.sms.smsCharge.service.impl.SmsChargeMapper">
 
 </mapper>
