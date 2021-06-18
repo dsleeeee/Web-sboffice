@@ -5,6 +5,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
@@ -192,11 +193,11 @@ public class MediaServiceImpl implements MediaService {
         MediaVO mediaVO = new MediaVO();
 
         // 저장 경로 설정 (개발시 로컬)
-        String root = multi.getSession().getServletContext().getRealPath("/");
-        String path = root+"resources/upload/";
+//        String root = multi.getSession().getServletContext().getRealPath("/");
+//        String path = root+"resources/upload/";
 
         // 파일서버 대응 경로 지정 (운영)
-//        String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
+        String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
         // 업로드 되는 파일명
         String newFileName = "";
 
