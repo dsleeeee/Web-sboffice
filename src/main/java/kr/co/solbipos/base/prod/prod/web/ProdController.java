@@ -152,6 +152,31 @@ public class ProdController {
     }
 
     /**
+     * 사이드메뉴 체크(매장구성세트상품화면에서 신규상품을 등록할 때 1100옵션이 BBQ전용이면 사이드상품만 입력가능)
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/chkSide.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkSide(ProdVO prodVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
+        String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1100"));
+
+        if(sideEnvstVal.equals("1")){
+            if(!prodVO.getSideProdYn().equals("Y")){
+                return returnJson(Status.FAIL);
+            } else if(StringUtil.getOrBlank(prodVO.getSdselGrpCd()).equals("")){
+                return returnJson(Status.FAIL);
+            }
+        }
+        return returnJson(Status.OK);
+    }
+
+    /**
      * 상품정보 저장
      * @param prodVO ProdVO
      * @param request HttpServletRequest
@@ -162,18 +187,6 @@ public class ProdController {
     public Result saveProductInfo(@RequestBody ProdVO prodVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        if(prodVO.getSideEnvstVal() != ""){
-            // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
-            String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1100"));
-           if(sideEnvstVal.equals("1")){
-                if(!prodVO.getSideProdYn().equals("Y")){
-                    return returnJson(Status.FAIL);
-                } else if(StringUtil.getOrBlank(prodVO.getSdselGrpCd()).equals("")){
-                    return returnJson(Status.FAIL);
-                }
-            }
-        }
 
 //        int result = prodService.saveProductInfo(prodVO, sessionInfoVO);
 //        long result = prodService.saveProductInfo(prodVO, sessionInfoVO);
