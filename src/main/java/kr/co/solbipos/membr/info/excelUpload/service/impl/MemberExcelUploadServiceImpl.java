@@ -131,7 +131,7 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                     if (usedPoint != 0) {
                         registVO.setPointChgFg("6");
                         registVO.setRemark("사용포인트");
-                        registVO.setChgPoint(usedPoint); // 사용포인트
+                        registVO.setChgPoint(usedPoint * (-1)); // 사용포인트
                         String nowDt = DateFormatUtils.format(new Date(System.currentTimeMillis() + 1000L), "yyyyMMddHHmmss");
                         registVO.setRegDt(nowDt);
                         registVO.setModDt(nowDt);
