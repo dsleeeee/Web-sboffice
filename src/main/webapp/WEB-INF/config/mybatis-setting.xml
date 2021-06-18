@@ -220,6 +220,10 @@
 
     <!-- 기초관리 매장관리 배달권역관리 -->
     <typeAlias alias="dlvrAddrVO" type="kr.co.solbipos.base.store.dlvrAddr.service.DlvrAddrVO"/>
+    <!-- 기초관리 매장관리 미디어관리 -->
+    <typeAlias alias="MediaVO" type="kr.co.solbipos.base.store.media.service.MediaVO"/>
+    <typeAlias alias="MediaApplcStoreVO" type="kr.co.solbipos.base.store.media.service.MediaApplcStoreVO"/>
+
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="empBrandVO" type="kr.co.solbipos.base.store.empbrand.service.EmpBrandVO"/>

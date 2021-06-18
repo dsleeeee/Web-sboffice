@@ -1070,7 +1070,7 @@
 		         SUM(CANC.AP_NCARD  ) AS APPR_AP_NCARD,  SUM(CANC.DC_NCARD  ) AS APPR_DC_NCARD,  SUM(CANC.CNT_NCARD  ) AS APPR_CNT_NCARD,
 		         SUM(CANC.AP_NCASH  ) AS APPR_AP_NCASH,  SUM(CANC.DC_NCASH  ) AS APPR_DC_NCASH,  SUM(CANC.CNT_NCASH  ) AS APPR_CNT_NCASH
 		 FROM    (
-		             SELECT  SUM(APPR_AMT)   AS AP_CARD,     SUM(DC_AMT) AS DC_CARD,     COUNT(*)    AS CNT_CARD,
+		             SELECT  SUM(SALE_AMT)   AS AP_CARD,     SUM(DC_AMT) AS DC_CARD,     COUNT(*)    AS CNT_CARD,
 		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
 		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
 		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
@@ -1096,7 +1096,7 @@
 		             UNION ALL
 		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
 		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
-		                     SUM(APPR_AMT)   AS AP_PAYCO,    0           AS DC_PAYCO,    COUNT(*)    AS CNT_PAYCO,
+		                     SUM(SALE_AMT)   AS AP_PAYCO,    0           AS DC_PAYCO,    COUNT(*)    AS CNT_PAYCO,
 		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
 		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
 		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
@@ -1109,7 +1109,7 @@
 		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
 		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
 		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
-		                     SUM(APPR_AMT)   AS AP_MPAY,     0           AS DC_MPAY,     COUNT(*)    AS CNT_MPAY,
+		                     SUM(SALE_AMT)   AS AP_MPAY,     0           AS DC_MPAY,     COUNT(*)    AS CNT_MPAY,
 		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
 		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
 		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
@@ -1148,7 +1148,7 @@
 		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
 		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
 		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
-		                     SUM(APPR_AMT)   AS AP_NCARD,    SUM(DC_AMT) AS DC_NCARD,    COUNT(*)    AS CNT_NCARD,
+		                     SUM(SALE_AMT)   AS AP_NCARD,    SUM(DC_AMT) AS DC_NCARD,    COUNT(*)    AS CNT_NCARD,
 		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
 		             FROM    TB_NS_NONSALE_PAY_CARD
 		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_YN='N'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate}

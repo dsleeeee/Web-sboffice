@@ -34,6 +34,9 @@
                 <th><s:message code="dlvrAddr.dlvrAddrNm"/></th>
                 <td>
                     <input type="text" id="srchAddrNm" ng-model="addrNm" class="sb-input w60"/><br/>
+                    <span>법정 시/구/동 명을 입력 후 조회 버튼을 눌러주세요</span>
+                    <br/>
+                    <br/>
                     <span>CID , 전화 주문 시 POS에서 조회할 주소 정보의 법정동 권역을 설정 합니다.<br/>입력되지 않은 법정동은 주소 조회가 되지 않습니다.</span>
                 </td>
             </tr>
@@ -112,4 +115,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/dlvrAddr/dlvrAddr.js?ver=20210327.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/dlvrAddr/dlvrAddr.js?ver=20210327.03" charset="utf-8"></script>
