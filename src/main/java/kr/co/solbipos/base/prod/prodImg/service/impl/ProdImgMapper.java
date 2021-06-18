@@ -43,4 +43,14 @@ public interface ProdImgMapper {
 
     /** 상품이미지관리 - 상품이미지삭제 */
     int delProdImg(ProdImgVO prodImgVO);
+
+    /** 상품이미지관리 - 이미지매장적용 매장리스트 조회 */
+    List<DefaultMap<String>> getStoreList(ProdImgVO prodImgVO);
+
+    /** 상품이미지관리 - 이미지매장적용 전 기존 매장상품이미지 정보 삭제 */
+    int delStoreProdImg(ProdImgVO prodImgVO);
+
+    /** 상품이미지관리 - 본사상품이미지 매장적용 */
+    int prodImgToStore(ProdImgVO prodImgVO);
+
 }

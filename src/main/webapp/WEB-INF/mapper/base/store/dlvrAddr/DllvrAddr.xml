@@ -17,14 +17,15 @@
     -->
     <select id="dlvrAddrList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
         /* DlvrAddrMapper.dlvrAddrList */
-        SELECT SIDO_NM, SIGUNGU_NM, LAW_DONG_NM, LAW_DONG_NM, MY_AREA_CD
+        SELECT SIDO_NM, SIGUNGU_NM, LAW_DONG_NM, MY_AREA_CD
           FROM TB_MS_MY_DLVR_ADDR
          WHERE STORE_CD = #{storeCd}
+         ORDER BY SIDO_NM, SIGUNGU_NM, LAW_DONG_NM
     </select>
 
     <!-- 미등록 배달권역 -->
     <!--
-        TABLE    : TB_CM_POST
+        TABLE    : TB_CM_POST_DONG
     -->
     <select id="dlvrAddrCodeList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
         /* DlvrAddrMapper.dlvrAddrCodeList */
@@ -37,17 +38,16 @@
                                 SIGUNGU_NM,
                                 LAW_DONG_NM,
                                 LI_NM
-                  FROM TB_CM_POST
+                  FROM TB_CM_POST_DONG
                  WHERE SIDO_NM LIKE '%' || #{addrNm} || '%'
                     OR SIGUNGU_NM LIKE '%' || #{addrNm} || '%'
                     OR LAW_DONG_NM LIKE '%' || #{addrNm} || '%'
-                    OR LI_NM LIKE '%' || #{addrNm} || '%'
-                   AND USE_YN = 'Y')
+                    OR LI_NM LIKE '%' || #{addrNm} || '%')
          WHERE LAW_DONG_CD NOT IN (SELECT LAW_DONG_CD
                                      FROM TB_MS_MY_DLVR_ADDR
                                     WHERE STORE_CD = #{storeCd})
         GROUP BY SIDO_NM, SIGUNGU_NM, LAW_DONG_NM, LI_NM, LAW_DONG_CD
-        ORDER BY LAW_DONG_NM
+        ORDER BY SIDO_NM, SIGUNGU_NM, LAW_DONG_NM, LI_NM
     </select>
 
     <!-- 배달권역 등록 -->

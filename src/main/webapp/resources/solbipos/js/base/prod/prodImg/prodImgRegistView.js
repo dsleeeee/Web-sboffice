@@ -483,5 +483,11 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.prodClassCd = "";
         $scope.prodClassCdNm = "";
     }
+    
+    // 본사상품 이미지 매장적용
+    $scope.imgToStoreReg = function () {
+        $scope.prodImgStoreRegLayer.show(true);
+        $scope._broadcast('prodImgStoreRegCtrl');
+    }
 
 }]);

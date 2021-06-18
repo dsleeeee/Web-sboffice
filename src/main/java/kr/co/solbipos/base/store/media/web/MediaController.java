@@ -1,0 +1,239 @@
+package kr.co.solbipos.base.store.media.web;
+
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
+import kr.co.solbipos.base.store.media.service.MediaService;
+import kr.co.solbipos.base.store.media.service.MediaVO;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+
+/**
+ * @Class Name : mediaController.java
+ * @Description : 기초관리 > 매장관리 > 미디어관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2021.06.09  권지현      최초생성
+ *
+ *
+ * @author 솔비포스 web개발팀 권지현
+ * @since 2021.06.09
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+
+@Controller
+@RequestMapping(value = "/base/store/media")
+public class MediaController {
+
+    private final SessionService sessionService;
+    private final MediaService mediaService;
+    private final MessageService messageService;
+
+    public MediaController(SessionService sessionService, MediaService mediaService, MessageService messageService) {
+        this.sessionService = sessionService;
+        this.mediaService = mediaService;
+        this.messageService = messageService;
+    }
+
+    /**
+     * 배달권역관리 조회 화면 이동
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/media/list.sb", method = RequestMethod.GET)
+    public String list(HttpServletRequest request, HttpServletResponse response,
+                       Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        return "base/store/media/media";
+    }
+
+    /**
+     * 미디어 목록 조회
+     *
+     * @param mediaVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/media/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result list(MediaVO mediaVO, HttpServletRequest request,
+                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = mediaService.list(sessionInfoVO, mediaVO);
+
+        return returnListJson(Status.OK, list, mediaVO);
+    }
+
+    /**
+     * 버전정보 상세 조회
+     *
+     * @param
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/verInfo/dtlInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result dtlInfo(MediaVO mediaVO, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = mediaService.dtlInfo(sessionInfoVO, mediaVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 버전 등록
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/verInfo/regist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result regist(MultipartHttpServletRequest request) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        if(mediaService.regist(request, sessionInfo)) {
+            return returnJson(Status.OK);
+        } else {
+            return returnJson(Status.FAIL);
+        }
+    }
+
+    /**
+     * 날짜 체크
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/chkDate.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkDate(MediaVO mediaVO, HttpServletRequest request) {
+
+        if(!mediaVO.getUseYn().getCode().equals("N")) {
+            SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+            if (!mediaService.chkFileType(sessionInfoVO, mediaVO).equals("0")) {  // 공통코드 303의 NMCODE_ITEM_1이 날짜중복불가이면 날짜체크
+                String response = mediaService.chkDate(sessionInfoVO, mediaVO);
+                if (!response.equals("0")) {
+                    return returnJson(Status.FAIL);
+                }
+            }
+        }
+        return returnJson(Status.OK);
+    }
+
+
+    /**
+     * 버전 수정
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/verInfo/modify.sb", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Result modify(MultipartHttpServletRequest request){
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        if(mediaService.modify(request, sessionInfo)) {
+            return returnJson(Status.OK);
+        } else {
+            return returnJson(Status.FAIL);
+        }
+    }
+    /**
+     * 매장추가 매장검색
+     *
+     * @param applcStore
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/applcStore/srchStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result srchStoreList(MediaApplcStoreVO applcStore, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        // 포스가 설치된 매장만 조회
+        List<DefaultMap<String>> list = mediaService.srchStoreList(applcStore, sessionInfo);
+
+        return returnListJson(Status.OK, list, applcStore);
+    }
+
+    /**
+     * 버전 적용 매장 등록
+     *
+     * @param applcStore
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/applcStore/regist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registStore(@RequestBody MediaApplcStoreVO[] applcStore, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = mediaService.registStore(applcStore, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 버전 적용 매장 삭제
+     *
+     * @param applcStore
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/applcStore/removeStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeStore(@RequestBody MediaApplcStoreVO[] applcStore, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = mediaService.removeStore(applcStore, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
+}

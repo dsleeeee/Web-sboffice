@@ -46,6 +46,13 @@ public class ProdImgVO extends PageVO {
     private String imgFgType;
     /** 사용자 아이디 */
     private String userId;
+    /** 매장명 */
+    private String storeNm;
+    /** 매장 상태 */
+    private String sysStatFg;
+    /** 이미지구분 array */
+    private String arrImgFg[];
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -181,5 +188,29 @@ public class ProdImgVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
+    public String[] getArrImgFg() {
+        return arrImgFg;
+    }
+
+    public void setArrImgFg(String[] arrImgFg) {
+        this.arrImgFg = arrImgFg;
     }
 }
