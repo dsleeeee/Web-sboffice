@@ -221,7 +221,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20210426.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20210621.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -214,9 +214,21 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
     // 저장
     $scope.save = function() {
         // 전체삭제
-        var storeScope = agrid.getScope('prodExcelUploadCtrl', null);
-        storeScope.delAll();
+        // var storeScope = agrid.getScope('prodExcelUploadCtrl', null);
+        // storeScope.delAll();
 
+        // 전체삭제
+        var params = {};
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckDeleteAll.sb", params, function(){
+            // 저장
+            $scope.saveSave();
+        });
+    };
+
+    // 저장
+    $scope.saveSave = function() {
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["prodExcelUpload.saveBlank"]);
             return false;
@@ -461,13 +473,13 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
 
             $scope._popConfirm(messages["prodExcelUpload.saveConfirm"], function() {
                 // 상품등록 저장
-                $scope.ProdExcelUploadSave();
+                $scope.prodExcelUploadSave();
             });
         });
     };
 
     // 상품등록 저장
-    $scope.ProdExcelUploadSave = function() {
+    $scope.prodExcelUploadSave = function() {
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         // 파라미터 설정
         var params = new Array();
