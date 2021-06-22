@@ -116,6 +116,7 @@
       PROD_CLASS_CD,
       PROD_CLASS_NM,
       P_PROD_CLASS_CD,
+      CLS_LEVEL_CD,
       REG_DT,
       REG_ID,
       MOD_DT,
@@ -132,6 +133,7 @@
       #{prodClassCd},
       #{prodClassNm},
       #{pProdClassCd},
+      #{clsLevelCd},
       #{regDt},
       #{regId},
       #{modDt},
@@ -176,6 +178,7 @@
             thp.PROD_CLASS_CD,
             thp.PROD_CLASS_NM,
             thp.P_PROD_CLASS_CD,
+            thp.CLS_LEVEL_CD,
             thp.REG_DT,
             thp.REG_ID,
             thp.MOD_DT,
@@ -187,6 +190,14 @@
             thpc.PROD_CLASS_CD,
             thpc.PROD_CLASS_NM,
             thpc.P_PROD_CLASS_CD,
+            <choose>
+              <when test='pProdClassCd != null and pProdClassCd == "00000"'>
+                  '1',
+              </when>
+              <otherwise>
+                  (SELECT (FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, #{pProdClassCd}, 'LEVEL') + 1) FROM DUAL),
+              </otherwise>
+            </choose>
             thpc.REG_DT,
             thpc.REG_ID,
             thpc.MOD_DT,
@@ -231,6 +242,7 @@
             thp.PROD_CLASS_CD,
             thp.PROD_CLASS_NM,
             thp.P_PROD_CLASS_CD,
+            thp.CLS_LEVEL_CD,
             thp.REG_DT,
             thp.REG_ID,
             thp.MOD_DT,
@@ -242,6 +254,14 @@
             thpc.PROD_CLASS_CD,
             thpc.PROD_CLASS_NM,
             thpc.P_PROD_CLASS_CD,
+            <choose>
+                <when test='pProdClassCd != null and pProdClassCd == "00000"'>
+                    '1',
+                </when>
+                <otherwise>
+                    (SELECT (FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, #{pProdClassCd}, 'LEVEL') + 1) FROM DUAL),
+                </otherwise>
+            </choose>
             thpc.REG_DT,
             thpc.REG_ID,
             thpc.MOD_DT,
@@ -354,6 +374,27 @@
           FROM TB_MS_PRODUCT
          WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
            AND PROD_CLASS_CD = #{prodClassCd}
+    </select>
+
+    <!-- 저장하려는 분류의 Level값 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+        COMMENTS : 저장하려는 분류의 Level값 조회한다.
+    -->
+    <select id="getProdClsLevel" parameterType="productClassVO" resultType="String">
+      /* USE : InfoMapper.getProdClsLevel */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT (FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, #{pProdClassCd}, 'LEVEL') + 1)
+                  FROM DUAL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                SELECT (FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, #{pProdClassCd}, 'LEVEL') + 1)
+                  FROM DUAL
+            </when>
+        </choose>
     </select>
 
 </mapper>

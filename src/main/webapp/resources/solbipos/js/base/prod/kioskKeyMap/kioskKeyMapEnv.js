@@ -54,9 +54,9 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
 
         // 제목셋팅
         if(key === "4068") {
-            $("#popTitle").text(messages["kioskKeymap.envConfgStore"] + "_[4068]");
+            $("#popTitle").text(messages["kioskKeymap.envConfgStore"]);
         }else{
-            $("#popTitle").text(messages["kioskKeymap.envConfgPack"]+ "_[4069]");
+            $("#popTitle").text(messages["kioskKeymap.envConfgPack"]);
         }
         
         // 키맵매장적용 체크박스 기본 체크로 설정
