@@ -224,6 +224,12 @@
         return;
       }
 
+      <%-- 3단계 이상 상품불류를 생성할수 없습니다. --%>
+      if(tree.selectedNode.level > 2){
+        s_alert.pop("<s:message code='info.prodClassAddChk.msg' />");
+        return;
+      }
+
       var addStr        = "<s:message code='info.require.input.clsNm'/>";
       var pProdClassCd  = tree.selectedNode.dataItem.prodClassCd;
       var level         = tree.selectedNode.level + 1;

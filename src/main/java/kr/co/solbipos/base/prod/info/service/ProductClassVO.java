@@ -44,6 +44,9 @@ public class ProductClassVO extends CmmVO {
     /** 프로시져 결과 */
     private String result;
 
+    /** 분류레벨코드 */
+    private String clsLevelCd;
+
     /**
      * @return the orgnFg
      */
@@ -135,5 +138,13 @@ public class ProductClassVO extends CmmVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getClsLevelCd() {
+        return clsLevelCd;
+    }
+
+    public void setClsLevelCd(String clsLevelCd) {
+        this.clsLevelCd = clsLevelCd;
     }
 }

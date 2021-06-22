@@ -65,4 +65,7 @@ public interface InfoMapper {
 
     /** 해당 분류로 등록된 상품 조회(매장전체조회) */
     int chkProdCntinStore(ProductClassVO productClassVO);
+
+    /** 저장하려는 분류의 Level값 조회 */
+    String getProdClsLevel(ProductClassVO productClassVO);
 }
