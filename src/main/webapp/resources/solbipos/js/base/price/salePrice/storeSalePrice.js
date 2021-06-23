@@ -18,6 +18,25 @@ var saleAmtOptionFg = [
   {"name":"매장판매가","value":"S"},
   {"name":"본사판매가","value":"H"}
 ];
+var stinSaleAmtOptionFg = [
+    {"name":"매장판매가","value":"S"},
+    {"name":"본사판매가","value":"H"},
+    {"name":"매장내점-판매가","value":"SS"},
+    {"name":"본사내점-판매가","value":"HS"}
+];
+var dlvrSaleAmtOptionFg = [
+    {"name":"매장판매가","value":"S"},
+    {"name":"본사판매가","value":"H"},
+    {"name":"매장배달-판매가","value":"SD"},
+    {"name":"본사배달-판매가","value":"HD"}
+];
+var packSaleAmtOptionFg = [
+    {"name":"매장판매가","value":"S"},
+    {"name":"본사판매가","value":"H"},
+    {"name":"매장포장-판매가","value":"SP"},
+    {"name":"본사포장-판매가","value":"HP"}
+];
+
 // 단위 DropBoxDataMap
 var unitFg = [
   {"name":"1원 단위","value":"1"},
@@ -82,13 +101,16 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
   $scope._setComboData("saleAmtOption", saleAmtOptionFg);
   $scope._setComboData("changeUnit", unitFg);
   $scope._setComboData("changeMode", modeFg);
-  $scope._setComboData("storeStinSaleUprcOption", saleAmtOptionFg);
+
+  $scope._setComboData("storeStinSaleUprcOption", stinSaleAmtOptionFg);
   $scope._setComboData("stinSaleUprcChangeUnit", unitFg);
   $scope._setComboData("stinSaleUprcChangeMode", modeFg);
-  $scope._setComboData("storeDlvrSaleUprcOption", saleAmtOptionFg);
+
+  $scope._setComboData("storeDlvrSaleUprcOption", dlvrSaleAmtOptionFg);
   $scope._setComboData("dlvrSaleUprcChangeUnit", unitFg);
   $scope._setComboData("dlvrSaleUprcChangeMode", modeFg);
-  $scope._setComboData("storePackSaleUprcOption", saleAmtOptionFg);
+
+  $scope._setComboData("storePackSaleUprcOption", packSaleAmtOptionFg);
   $scope._setComboData("packSaleUprcChangeUnit", unitFg);
   $scope._setComboData("packSaleUprcChangeMode", modeFg);
 
@@ -216,7 +238,7 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
         newSaleAmt = 0;
         if(saleAmtOption === "S"){ // 매장
           newSaleAmt = Number($scope.flex.collectionView.items[i].storeSaleUprc) * (Number($("#inputSaleRate").val())/100);
-        }else{ // 본사
+        }else if(saleAmtOption === "H"){ // 본사
           newSaleAmt = Number($scope.flex.collectionView.items[i].hqSaleUprc) * (Number($("#inputSaleRate").val())/100);
         }
 
@@ -268,8 +290,12 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
               newStinSaleUprc = 0;
               if(storeStinSaleUprcOption === "S"){ // 매장
+                  newStinSaleUprc = Number($scope.flex.collectionView.items[i].storeSaleUprc) * (Number($("#inputStinSaleUprcRate").val())/100);
+              }else if(storeStinSaleUprcOption === "H"){ // 본사
+                  newStinSaleUprc = Number($scope.flex.collectionView.items[i].hqSaleUprc) * (Number($("#inputStinSaleUprcRate").val())/100);
+              }else if(storeStinSaleUprcOption === "SS") { // 매장내점
                   newStinSaleUprc = Number($scope.flex.collectionView.items[i].storeStinSaleUprc) * (Number($("#inputStinSaleUprcRate").val())/100);
-              }else{ // 본사
+              }else if(storeStinSaleUprcOption === "HS") { // 본사내점
                   newStinSaleUprc = Number($scope.flex.collectionView.items[i].hqStinSaleUprc) * (Number($("#inputStinSaleUprcRate").val())/100);
               }
 
@@ -320,8 +346,12 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
               newDlvrSaleUprc = 0;
               if(storeDlvrSaleUprcOption === "S"){ // 매장
+                  newDlvrSaleUprc = Number($scope.flex.collectionView.items[i].storeSaleUprc) * (Number($("#inputDlvrSaleUprcRate").val())/100);
+              }else if(storeDlvrSaleUprcOption === "H"){ // 본사
+                  newDlvrSaleUprc = Number($scope.flex.collectionView.items[i].hqSaleUprc) * (Number($("#inputDlvrSaleUprcRate").val())/100);
+              }else if(storeDlvrSaleUprcOption === "SD") { // 매장배달
                   newDlvrSaleUprc = Number($scope.flex.collectionView.items[i].storeDlvrSaleUprc) * (Number($("#inputDlvrSaleUprcRate").val())/100);
-              }else{ // 본사
+              }else if(storeDlvrSaleUprcOption === "HD") { // 본사배달
                   newDlvrSaleUprc = Number($scope.flex.collectionView.items[i].hqDlvrSaleUprc) * (Number($("#inputDlvrSaleUprcRate").val())/100);
               }
 
@@ -372,8 +402,12 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
               newPackSaleUprc = 0;
               if(storePackSaleUprcOption === "S"){ // 매장
+                  newPackSaleUprc = Number($scope.flex.collectionView.items[i].storeSaleUprc) * (Number($("#inputPackSaleUprcRate").val())/100);
+              }else if(storePackSaleUprcOption === "H"){ // 본사
+                  newPackSaleUprc = Number($scope.flex.collectionView.items[i].hqSaleUprc) * (Number($("#inputPackSaleUprcRate").val())/100);
+              }else if(storePackSaleUprcOption === "SP") { // 매장포장
                   newPackSaleUprc = Number($scope.flex.collectionView.items[i].storePackSaleUprc) * (Number($("#inputPackSaleUprcRate").val())/100);
-              }else{ // 본사
+              }else if(storePackSaleUprcOption === "HP") { // 본사포장
                   newPackSaleUprc = Number($scope.flex.collectionView.items[i].hqPackSaleUprc) * (Number($("#inputPackSaleUprcRate").val())/100);
               }
 
