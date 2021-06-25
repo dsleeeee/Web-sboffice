@@ -38,14 +38,17 @@ public interface MediaService {
     /** 버전 체크 */
     String chkFileType(SessionInfoVO sessionInfoVO, MediaVO mediaVO);
 
+    /** 파일 확장자 */
+    String getFileType(SessionInfoVO sessionInfoVO, MediaVO mediaVO);
+
     /** 날짜 체크 */
     String chkDate(SessionInfoVO sessionInfoVO, MediaVO mediaVO);
 
     /** 버전 등록 */
-    boolean regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
+    String regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
 
     /** 버전 수정 */
-    boolean modify(MultipartHttpServletRequest request, SessionInfoVO sessionInfo);
+    String modify(MultipartHttpServletRequest request, SessionInfoVO sessionInfo);
 
     /** 매장검색 (매장추가용) */
     List<DefaultMap<String>> srchStoreList(MediaApplcStoreVO applcStore, SessionInfoVO sessionInfoVO);

@@ -128,7 +128,7 @@
                    FILE_DIR,
                    FILE_NM,
                    FILE_EXT,
-                   FILE_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                   FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
                    FILE_SIZE,
                    FILE_MIME_TYPE,
                    FILE_ORG_NM,
@@ -337,6 +337,19 @@
           FROM TB_CM_NMCODE
          WHERE NMCODE_GRP_CD = '303'
            AND NMCODE_ITEM_1 ='날짜중복불가'
+           AND NMCODE_CD = #{fileType}
+    </select>
+
+    <!-- 파일 확장자 조회   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 파일 확장자를 조회한다.
+    -->
+    <select id="getFileType" parameterType="MediaVO" resultType="String">
+        /* USE : Media.getFileType */
+        SELECT TRIM(NMCODE_ITEM_2)
+          FROM TB_CM_NMCODE
+         WHERE NMCODE_GRP_CD ='303'
            AND NMCODE_CD = #{fileType}
     </select>
 

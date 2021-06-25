@@ -54,6 +54,9 @@ public interface MediaMapper {
     /** 파일타입체크 */
     String chkFileType(MediaVO mediaVO);
 
+    /** 파일 확장자 */
+    String getFileType(MediaVO mediaVO);
+
     /** 날짜 체크 */
     String chkDate(MediaVO mediaVO);
 

@@ -90,6 +90,12 @@ public class MediaServiceImpl implements MediaService {
         return mediaMapper.chkFileType(mediaVO);
     }
 
+    /** 확장자 체크 */
+    @Override
+    public String getFileType(SessionInfoVO sessionInfoVO, MediaVO mediaVO){
+        return mediaMapper.getFileType(mediaVO);
+    }
+
     /** 날짜 체크 */
     @Override
     public String chkDate(SessionInfoVO sessionInfoVO, MediaVO mediaVO) {
@@ -104,12 +110,16 @@ public class MediaServiceImpl implements MediaService {
 
     /** 버전 등록 */
     @Override
-    public boolean regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO) {
+    public String regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO) {
 
-        boolean isSuccess = false;
+        String isSuccess;
 
         try{
             MediaVO mediaVO = uploadFile(multi);
+            if (!mediaVO.getResult().equals("T")){
+                isSuccess = "2";
+                return isSuccess;
+            }
 
             String insertDt = currentDateTimeString();
             mediaVO.setHqOfficeCd((String) multi.getParameter("hqOfficeCd"));
@@ -135,25 +145,29 @@ public class MediaServiceImpl implements MediaService {
             mediaVO.setModId((String)multi.getParameter("userId"));
 
             if(mediaMapper.verRegist(mediaVO) > 0) {
-                isSuccess = true;
+                isSuccess = "0";
             } else {
-                isSuccess = false;
+                isSuccess = "1";
             }
 
         }catch(Exception e){
-            isSuccess = false;
+            isSuccess = "1";
         }
         return isSuccess;
     }
 
     /** 버전 수정 */
     @Override
-    public boolean modify(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+    public String modify(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
-        boolean isSuccess = false;
+        String isSuccess;
 
         try{
             MediaVO mediaVO = uploadFile(multi);
+            if (!mediaVO.getResult().equals("T")){
+                isSuccess = "2";
+                return isSuccess;
+            }
 
             String insertDt = currentDateTimeString();
 
@@ -178,11 +192,11 @@ public class MediaServiceImpl implements MediaService {
 
             mediaMapper.verModify(mediaVO);
 
-            isSuccess = true;
+            isSuccess = "0";
 
         }catch(Exception e){
 
-            isSuccess = false;
+            isSuccess = "1";
         }
         return isSuccess;
 
@@ -190,6 +204,9 @@ public class MediaServiceImpl implements MediaService {
 
     /** 파일 업로드 (등록, 수정 )  */
     private MediaVO uploadFile(MultipartHttpServletRequest multi) {
+
+        String isSuccess = "";
+
         MediaVO mediaVO = new MediaVO();
 
         // 저장 경로 설정 (개발시 로컬)
@@ -227,6 +244,18 @@ public class MediaServiceImpl implements MediaService {
             MultipartFile mFile = multi.getFile(uploadFile);
             String orgFileName = mFile.getOriginalFilename();
             String fileExt = FilenameUtils.getExtension(orgFileName);
+
+            mediaVO.setFileType((String)multi.getParameter("fileType"));
+
+            String type = mediaMapper.getFileType(mediaVO);     // 확장자|확장자|확장자 를
+            String[] typeList = type.split("\\|");         // |기준으로 잘라서 배열에 넣음
+
+            for(int i = 0; i < typeList.length; i++){          // 잘린 확장자 확인
+                if(fileExt.equals(typeList[i].replace(".","")))
+                {
+                    mediaVO.setResult("T");
+                }
+            }
 
             if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
 

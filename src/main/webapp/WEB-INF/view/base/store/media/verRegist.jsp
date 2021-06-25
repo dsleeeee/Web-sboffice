@@ -48,7 +48,8 @@
                   <input type="file" class="form-control" id="file"
                          name="file"
                          ng-model="version.uploadFile"
-                         onchange="angular.element(this).scope().uploadChange()"/>
+                         onchange="angular.element(this).scope().uploadChange()"
+                         accept="getFileType()"/>
                 </td>
                 <th id="fileOrgH" style="display:none;"><s:message code="media.fileNm"/></th>
                 <td id="fileOrgD" style="display:none;">
@@ -80,7 +81,8 @@
                             items-source="_getComboData('fileTypeCombo')"
                             display-member-path="name"
                             selected-value-path="value"
-                            is-editable="false">
+                            is-editable="false"
+                            selected-index-changed="fileTypeChg(s)">
                     </wj-combo-box>
                   </div>
                 </td>

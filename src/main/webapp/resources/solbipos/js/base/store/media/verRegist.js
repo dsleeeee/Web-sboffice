@@ -41,6 +41,15 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.selectVersion;
   };
 
+  // 파일타입
+  $scope.fileType;
+  $scope.setFileType = function(ver){
+    $scope.fileType = ver;
+  };
+  $scope.getFileType = function(){
+    return $scope.fileType;
+  };
+
   // 조회 버튼 클릭
   $scope.$on("verRegistCtrl", function(event, data) {
 
@@ -52,7 +61,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     } else {
       $scope.versionUseYnCombo.selectedValue = "Y";
     }
-      event.preventDefault();
+    event.preventDefault();
   });
 
   // 파일업로드시 파일사이즈 변경
@@ -77,14 +86,32 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
 
-    if( isEmptyObject($scope.getSelectVersion()) ) {
+    if( isEmptyObject($scope.getSelectVersion()) ) { // 신규등록
       // 파일 체크
       if($("#file").val() === null || $("#file").val() === undefined || $("#file").val() === "") {
         $scope._popMsg(messages["media.file"] + " " + messages["cmm.require.text"]);
         return;
+      } else {
+        var type = '(.*?)\\.(' + $scope.getFileType().replace(",","|").replace(".","") + ')$';
+        // 확장자 체크
+        var reg = new RegExp(type);
+        if(!$("#file").val().match(reg)) {
+          $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
+          return;
+        }
+      }
+    } else{ // 수정
+      if($("#file").val() === null || $("#file").val() === undefined || $("#file").val() === "") {
+      } else {
+        var type = '(.*?)\\.(' + $scope.getFileType().replace(",","|").replace(".","") + ')$';
+        // 확장자 체크
+        var reg = new RegExp(type);
+        if(!$("#file").val().match(reg)) {
+          $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
+          return;
+        }
       }
     }
-
     $scope.chkRegist();
   }
 
@@ -105,7 +132,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     param.useYn = $scope.versionUseYnCombo.selectedValue;
 
     $.postJSON("/base/store/media/chkDate.sb", param, function(result) {
-            $scope.$broadcast('loadingPopupActive');
+          $scope.$broadcast('loadingPopupActive');
           if(result.status === 'OK') {
             $scope.regist();
           }
@@ -114,6 +141,38 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope._popMsg($scope.versionFileTypeCombo.text + messages["media.chkDate.msg"]);
         });
   };
+
+  // 파일 타입 변경 시 첨부파일 확장자 변경
+  $scope.fileTypeChg = function(s){
+    if($("#file").val() === null || $("#file").val() === undefined || $("#file").val() === "") {
+    } else {
+      // 첨부파일 리셋
+      var agent = navigator.userAgent.toLowerCase();
+      if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+        // ie 일때
+        $("#file").replaceWith( $("#file").clone(true) );
+        $scope.version.uploadFile = "";
+      } else {
+        // other browser 일때
+        $("#file").val("");
+        $scope.version.uploadFile = "";
+      }
+    }
+
+    var param = {};
+    param.fileType = $scope.versionFileTypeCombo.selectedValue;
+    $.ajax({
+      url:"/base/store/media/getFileType.sb",
+      type:"POST",
+      data:param,
+      success:function(result){
+        $scope.setFileType(result);
+        $("#file").attr("accept",result);
+
+      }
+    });
+
+  }
 
   // 저장
   $scope.regist = function(){
@@ -149,12 +208,11 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $.ajax({
       url: url,
       type: "POST",
-            data: formData,
+      data: formData,
       processData: false,
       contentType: false,
       cache: false,
       success: function(result) {
-
         if (result.status === "OK") {
           if( isEmptyObject($scope.getSelectVersion()) ) {
             $scope._popMsg("등록되었습니다.");
@@ -166,8 +224,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.close();
         }
         else if (result.status === "FAIL") {
-                $scope._popMsg('Ajax Fail By HTTP Request');
-                $scope.$broadcast('loadingPopupInactive');
+          $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
+          $scope.$broadcast('loadingPopupInactive');
         }
         else if (result.status === "SERVER_ERROR") {
           $scope._popMsg(result.message);
