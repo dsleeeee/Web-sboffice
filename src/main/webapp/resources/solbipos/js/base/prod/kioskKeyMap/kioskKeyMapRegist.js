@@ -324,7 +324,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
         // 키오스크 키맵그룹 '0 :미사용' 인 경우 01번 그룹 제외하고 추가 키맵그룹 생성 불가
         if(kioskKeyMapGrpFg === "0"){
-            // 그룹을 추가할 수 없습니다.
+            // 키맵그룹 사용설정이 지정되지 않아 그룹을 추가할수 없습니다.
             if($scope.tuClsTypeCombo.selectedValue !== null){
                 s_alert.pop(messages["kioskKeyMap.grp.limit.msg"]);
                 return;

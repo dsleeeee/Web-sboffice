@@ -151,11 +151,17 @@ public class InfoServiceImpl implements InfoService {
             productClassVO.setModId(sessionInfoVO.getUserId());
             productClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-            // 새 분류코드 생성시, 분류코드 조회부터
+            // 새 분류코드 생성시, 분류코드와 Level값 조회
             if("".equals(productClassVO.getProdClassCd()) || productClassVO.getProdClassCd() == null) {
                 String prodClassCd = "";
                 prodClassCd = mapper.getClsCd(productClassVO);
                 productClassVO.setProdClassCd(prodClassCd);
+
+                if("00000".equals(productClassVO.getpProdClassCd())){
+                    productClassVO.setClsLevelCd("1");
+                }else{
+                    productClassVO.setClsLevelCd(mapper.getProdClsLevel(productClassVO));
+                }
             }
 
             // 상위 분류까지 신규로 만들 경우, 상위 분류코드 조회 (0레벨 제외)

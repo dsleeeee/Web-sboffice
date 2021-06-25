@@ -25,9 +25,9 @@ app.controller('kioskKeyMapEnvStoreCtrl', ['$scope', '$http', function ($scope, 
 
         // 제목셋팅
         if(data.envstCd === "4068") {
-            $("#popStoreTitle").text(messages["kioskKeymap.envConfgStore"] + "_[4068]");
+            $("#popStoreTitle").text(messages["kioskKeymap.envConfgStore"]);
         }else{
-            $("#popStoreTitle").text(messages["kioskKeymap.envConfgPack"]+ "_[4069]");
+            $("#popStoreTitle").text(messages["kioskKeymap.envConfgPack"]);
         }
 
         // 환경설정 값 조회
