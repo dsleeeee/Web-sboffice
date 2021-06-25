@@ -1,5 +1,6 @@
 package kr.co.solbipos.base.prod.info.service;
 
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
@@ -29,4 +30,7 @@ public interface InfoService {
 
     /** 해당 분류로 등록된 상품 조회 */
     int chkProdCnt(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품분류정보관리(3단계) - 분류 조회 */
+    List<DefaultMap<String>> getProdClass(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO);
 }

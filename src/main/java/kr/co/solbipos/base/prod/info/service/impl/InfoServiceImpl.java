@@ -245,4 +245,17 @@ public class InfoServiceImpl implements InfoService {
         }
     }
 
+    /** 상품분류정보관리(3단계) - 분류 조회 */
+    @Override
+    public  List<DefaultMap<String>> getProdClass(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO){
+
+        productClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        productClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            productClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mapper.getProdClass(productClassVO);
+    }
+
 }

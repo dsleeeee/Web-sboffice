@@ -212,8 +212,8 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 /* **************************************** *
  * Login
  * **************************************** */
-.login {width:840px; position:absolute; left:50%; top:50%; margin-left:-420px; margin-top:-320px;} /*화면 중앙정렬*/
-.login header {position:relative; height:50px; overflow:hidden; margin-bottom:30px;}
+.login {width:840px; position:absolute; left:50%; top:50%; margin-left:-420px; margin-top:-290px;} /*화면 중앙정렬*/
+.login header {position:relative; height:50px; overflow:hidden; margin-bottom:0px;}
 .login header img {float:left;}
 .login header h1 {float:right; color:#444; position:absolute; right:0px; bottom:0px;}
 
@@ -341,7 +341,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 
 /*open*/
 .menuOpen {width:220px;}
-.menuOpen h1 a {display:inline-block; width:125px; height:25px; position:absolute; left:20px; top:12px;}
+.menuOpen h1 a {display:inline-block; width:125px; height:25px; position:absolute; left:22%; top:12px;}
 .menuOpen h1 a img {max-height:100%; max-width:100%;  position:absolute; bottom:0px;}
 .menuOpen .menuTab {display:table; width:100%;}
 .menuOpen .menuTab p {display:table-cell; width:50%; height:35px; vertical-align: middle; text-align:center; position:relative;}

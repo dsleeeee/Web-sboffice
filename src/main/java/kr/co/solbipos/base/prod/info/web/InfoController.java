@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.prod.info.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
@@ -171,5 +172,51 @@ public class InfoController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 상품분류정보관리(3단계) - 페이지 이동
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 06. 24.
+     */
+    @RequestMapping(value = "/class/prodClass3LevelView.sb", method = RequestMethod.GET)
+    public String prodClass3LevelView(HttpServletRequest request, HttpServletResponse response,
+                                Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 상품생성권한
+        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
+
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
+
+        return "base/prod/info/prodClass3LevelView";
+    }
+
+    /**
+     * 상품분류정보관리(3단계) - 분류 조회
+     * @param productClassVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 06. 24.
+     */
+    @RequestMapping(value = "/class/getProdClass.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClass(ProductClassVO productClassVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = service.getProdClass(productClassVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, productClassVO);
+    }
+
 
 }
