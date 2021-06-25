@@ -1763,6 +1763,71 @@
         </choose>
     </select>
 
+
+    <!-- 바코드 중복체크 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD, TB_MS_STORE
+          PARAM    : prodVO
+          COMMENTS : 바코드 입력 시 중복되는 바코드가 있는지 체크 (중복체크)
+    -->
+    <select id="chkBarCd" parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.chkBarCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                SELECT PROD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BARCD_CD = #{barCd}
+                <if test='prodCd != null and prodCd.toString() != ""'>
+                    AND PROD_CD != #{prodCd}
+                </if>
+                UNION ALL
+                (
+                SELECT
+                tmp.PROD_CD
+                FROM TB_MS_PRODUCT_BARCD tmp,
+                TB_MS_STORE tms
+                WHERE 1=1
+                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tmp.STORE_CD = tms.STORE_CD
+                AND tmp.BARCD_CD = #{barCd}
+                <if test='prodCd != null and prodCd.toString() != ""'>
+                    AND tmp.PROD_CD != #{prodCd}
+                </if>
+                )
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                SELECT PROD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BARCD_CD = #{barCd}
+                <if test='prodCd != null and prodCd.toString() != ""'>
+                    AND PROD_CD != #{prodCd}
+                </if>
+                UNION ALL
+                SELECT PROD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND BARCD_CD = #{barCd}
+                <if test='prodCd != null and prodCd.toString() != ""'>
+                    AND PROD_CD != #{prodCd}
+                </if>
+                )
+            </when>
+            <!--  단독매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd == "00000"'>
+                SELECT COUNT(1) AS CNT
+                FROM TB_MS_PRODUCT_BARCD
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND BARCD_CD = #{barCd}
+                <if test='prodCd != null and prodCd.toString() != ""'>
+                    AND PROD_CD != #{prodCd}
+                </if>
+            </when>
+        </choose>
+    </select>
+
     <!-- 상품 바코드 존재 여부 확인 -->
     <!--
           TABLE    : TB_HQ_PRODUCT_BARCD
@@ -1915,25 +1980,136 @@
 
     </insert>
 
+    <!-- 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제-->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD
+          PARAM    : prodVO
+          COMMENTS : 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제
+    -->
+    <delete id="deleteProdBarcd" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdBarcd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_BARCD
+                USING DUAL ON (
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET MOD_DT = #{modDt}
+                , MOD_ID = #{modId}
+                DELETE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_BARCD
+                USING DUAL ON (
+                STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET MOD_DT = #{modDt}
+                , MOD_ID = #{modId}
+                DELETE
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제-->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD
+          PARAM    : prodVO
+          COMMENTS : 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제(본사의 하위 매장)
+    -->
+    <delete id="deleteProdBarcdStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdBarcdStore */
+                MERGE INTO TB_MS_PRODUCT_BARCD A
+                    USING   (
+                        SELECT  B.STORE_CD      AS  STORE_CD
+                             ,  #{prodCd}    AS  PROD_CD
+                          FROM  TB_MS_STORE B
+                        WHERE   B.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    ) B
+                    ON  (
+                            A.STORE_CD      =   B.STORE_CD
+                            AND A.PROD_CD   =   B.PROD_CD
+                        )
+                WHEN MATCHED THEN
+                UPDATE
+                SET MOD_DT = #{modDt}
+                , MOD_ID = #{modId}
+                DELETE
+                WHERE   STORE_CD    = B.STORE_CD
+                AND     PROD_CD     = B.PROD_CD
+    </delete>
+
     <!-- 매장 상품 등록시, 매장 상품의 바코드 등록 프로시저 호출-->
     <!--
           TABLE    : TB_MS_PRODUCT_BARCD
           PARAM    : prodVO
           COMMENTS : 매장 상품 등록시, 매장 상품의 바코드 등록한다.
     -->
-    <select  id="saveProdBarcdStore" statementType="CALLABLE" parameterType="prodVO" resultType="String">
+    <insert id="saveProdBarcdStore" parameterType="prodVO">
         /* USE : ProdMapper.saveProdBarcdStore */
-        {
-            CALL PKG_HQ_PRODUCT_BARCD.SP_HQ_PRODUCT_BARCD_I
-            (
-                #{hqOfficeCd},
-                #{prodCd},
-                #{storeCd},
-                #{workMode},
-                #{result, mode=OUT, jdbcType=VARCHAR}
-            )
-        }
-    </select>
+        MERGE INTO TB_MS_PRODUCT_BARCD A
+            USING   (
+                SELECT  B.STORE_CD  AS  STORE_CD
+                     ,  #{prodCd}   AS  PROD_CD
+                     ,  #{barCd}    AS  BARCD_CD
+                     ,  #{prodNm}   AS  BARCD_NM
+                     ,  '1'         AS  UNIT_QTY
+                     ,  #{regDt}    AS  REG_DT
+                     ,  #{regId}    AS  REG_ID
+                     ,  #{modDt}    AS  MOD_DT
+                     ,  #{modId}    AS  MOD_ID
+                FROM    TB_MS_STORE B
+                WHERE   B.HQ_OFFICE_CD  =   #{hqOfficeCd}
+            ) B
+            ON  (
+                    A.STORE_CD  =   B.STORE_CD
+                    AND A.PROD_CD   =   B.PROD_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET     A.BARCD_CD      =   B.BARCD_CD
+                    ,       A.BARCD_NM      =   B.BARCD_NM
+                    ,       A.UNIT_QTY      =   B.UNIT_QTY
+                    ,       A.MOD_DT        =   B.MOD_DT
+                    ,       A.MOD_ID        =   B.MOD_ID
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                             A.STORE_CD
+                     ,       A.PROD_CD
+                     ,       A.BARCD_CD
+                     ,       A.BARCD_NM
+                     ,       A.UNIT_QTY
+                     ,       A.REG_DT
+                     ,       A.REG_ID
+                     ,       A.MOD_DT
+                     ,       A.MOD_ID
+                     )
+                    VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.PROD_CD
+                    ,       B.BARCD_CD
+                    ,       B.BARCD_NM
+                    ,       B.UNIT_QTY
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    )
+    </insert>
+
 
     <!-- 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도  사이드 그룹 추가 프로시저 호출-->
     <!--

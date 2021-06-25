@@ -56,6 +56,7 @@
                 WHERE
                     thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpmc.PAY_TYPE_FG = #{payTypeFg}
+                    AND thpmc.PAY_CLASS_CD != '000'
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
@@ -84,6 +85,7 @@
                 WHERE
                     tmpmc.STORE_CD = #{storeCd}
                     AND tmpmc.PAY_TYPE_FG = #{payTypeFg}
+                    AND tmpmc.PAY_CLASS_CD != '000'
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>

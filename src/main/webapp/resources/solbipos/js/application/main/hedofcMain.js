@@ -46,7 +46,7 @@ app.controller('hedofcMainCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.extend(this, new RootController('hedofcMainCtrl', $scope, $http, true));
 
     // 총 매장수
-    $("#totalStoreCnt").text(storeCntList[0].storeCntTotal);
+    $("#totalStoreCnt").text(storeCntList[0].storeCnt1 + ' /' + storeCntList[0].storeCntTotal);
 
     // 총 포스수
     $("#totalPosCnt").text(posCntList[0].posCntTotal);

@@ -1,5 +1,6 @@
 package kr.co.solbipos.base.store.media.web;
 
+import com.sun.xml.internal.bind.v2.runtime.property.StructureLoaderBuilder;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -126,11 +127,30 @@ public class MediaController {
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        if(mediaService.regist(request, sessionInfo)) {
+        String result = mediaService.regist(request, sessionInfo);
+
+        if(result.equals("0")) {
             return returnJson(Status.OK);
+        } else if(result.equals("1")) {
+            return returnJson(Status.FAIL);
+        } else if(result.equals("2")) {
+            return returnJson(Status.FAIL, "msg", messageService.get("prodImg.fileExtensionChk.msg"));
         } else {
             return returnJson(Status.FAIL);
         }
+    }
+
+    /**
+     * 첨부파일 확장자
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getFileType.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public String getFileType(MediaVO mediaVO, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        return mediaService.getFileType(sessionInfoVO, mediaVO);
     }
 
     /**
@@ -167,8 +187,13 @@ public class MediaController {
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        if(mediaService.modify(request, sessionInfo)) {
+        String result = mediaService.modify(request, sessionInfo);
+        if(result.equals("0")) {
             return returnJson(Status.OK);
+        } else if(result.equals("1")) {
+            return returnJson(Status.FAIL);
+        } else if(result.equals("2")) {
+            return returnJson(Status.FAIL, "msg", messageService.get("prodImg.fileExtensionChk.msg"));
         } else {
             return returnJson(Status.FAIL);
         }

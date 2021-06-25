@@ -207,8 +207,12 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
             + objEnvstCd[i].value + "] "
             + objEnvstNm[i].value
             + messages["storeManage.require.regist.hqEnvstVal"]
-            + "( '"+objHqEnvstValNm[i].value+"' )";
-
+            + messages["storeManage.require.regist.hqEnvstVal2"]
+            + "( '"+objHqEnvstValNm[i].value+"' )"
+            + messages["storeManage.require.regist.hqEnvstVal3"];
+        if(objHqEnvstValNm[i].value.toString() === 'null') {  // 본사 설정값이 없으면 '본사환경값을 먼저 세팅하여 주십시오' 출력
+          msgStr = msgStr + messages["storeManage.require.regist.hqEnvstVal4"];
+        }
         $scope._popMsg(msgStr);
         return false;
       }

@@ -276,6 +276,9 @@
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
            AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
         </if>
+        <if test='orgnFg != null and orgnFg.toString == "AGENCY"'>
+            AND tms.AGENCY_CD = #{agencyCd}
+        </if>
         <if test='storeCd != null and storeCd != ""'>
            AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
         </if>
