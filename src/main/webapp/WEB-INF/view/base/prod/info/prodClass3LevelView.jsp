@@ -69,7 +69,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -114,7 +114,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -158,7 +158,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
