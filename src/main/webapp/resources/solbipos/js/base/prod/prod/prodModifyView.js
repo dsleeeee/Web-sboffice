@@ -205,7 +205,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             var params = $scope.prodModifyInfo;
             $.postJSON("/base/prod/prod/prod/chkSide.sb", params, function(result) {
                 if(result.status === 'OK') {
-                    $scope.saveProd();
+                    if ($scope.prodModifyInfo.barCd == null){
+                        $scope.saveProd();
+                    } else if($scope.prodModifyInfo.barCd.getByteLengthForOracle() > 40){
+                        $scope._popMsg(messages["prod.maxBarCd.msg"]);
+                        return false;
+                    }else {
+                        $scope.chkBarCd();
+                    }
+
                 }
             },
                 function (result) {
@@ -220,6 +228,26 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         //     $scope.saveProd();
         // }
     }
+
+    // 바코드 중복 체크
+    $scope.chkBarCd = function () {
+        if($scope.prodModifyInfo.barCd.replace(/^\s+|\s+$/g, "").length > 0){
+            var params = $scope.prodModifyInfo;
+            $.postJSON("/base/prod/prod/prod/chkBarCd.sb", params, function(result) {
+                    if(result.status === 'OK') {
+                        $scope.saveProd();
+                    }
+                },
+                function (result) {
+                    $scope._popMsg(messages["prod.barCd.msg"]);
+                    return false;
+                });
+
+        } else {
+            $scope.saveProd();
+        }
+    }
+
 
     // 값 체크
     $scope.valueCheck = function () {

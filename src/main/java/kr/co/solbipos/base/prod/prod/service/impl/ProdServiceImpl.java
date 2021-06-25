@@ -275,6 +275,9 @@ public class ProdServiceImpl implements ProdService {
             int barCdResult = prodMapper.saveProdBarcd(prodVO);
             if(barCdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+        else {
+            prodMapper.deleteProdBarcd(prodVO);
+        }
 
         // [상품등록 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
@@ -302,6 +305,8 @@ public class ProdServiceImpl implements ProdService {
             //매장 상품 바코드 저장(바코드정보가 있을 경우만)
             if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
                 prodMapper.saveProdBarcdStore(prodVO);
+            } else {
+                prodMapper.deleteProdBarcdStore(prodVO);
             }
 
             // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
@@ -632,6 +637,17 @@ public class ProdServiceImpl implements ProdService {
         }
 
         return prodMapper.getProdCdCnt(prodVO);
+    }
+
+    /** 바코드 중복체크 */
+    public String chkBarCd(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return prodMapper.chkBarCd(prodVO);
     }
 
     /** 매장 적용/미적용 상품 조회 */
