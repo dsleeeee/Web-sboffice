@@ -8,7 +8,7 @@
   <%--메인페이지 좌측 메뉴리스트 상단 SOLBIPOS 로고--%>
   <%--가상로그인 후 로고 클릭시 세션없어짐 2021.02.16 김설아--%>
   <h1><a href="/main.sb?sid=${sessionId}" class="on">
-  <span><img src="/resource/solbipos/css/img/logo_main.png" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
+  <span><img src="/resource/solbipos/css/img/TwoColor_logo.png" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
   <%--//로고영역--%>
 
   <%--전체,즐겨찾기--%>

@@ -6,7 +6,7 @@
 <%-- favicon 요청시 404 에러를 피하기 위한 설정 : TODO 추후 favicon 등록할것 --%>
 <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
 
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/mobile.style.css?ver=20210602.01" media="all"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/mobile.style.css?ver=20210625.01" media="all"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/mobile.wijmo.css?ver=20210408.01"/>
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.mobile.custom.css?ver=20210413.01"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=470" />

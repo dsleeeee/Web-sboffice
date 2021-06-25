@@ -397,4 +397,55 @@
         </choose>
     </select>
 
+    <!-- 상품분류정보관리(3단계) - 분류 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+        COMMENTS : 본사/매장의 상품 분류를 조회한다.
+    -->
+    <select id="getProdClass" parameterType="DefaultMap" resultType="DefaultMap">
+      /* USE : InfoMapper.getProdClass */
+      <choose>
+          <!-- 본사 -->
+          <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+              SELECT thpc.PROD_CLASS_CD,
+                      thpc.PROD_CLASS_NM,
+                      (SELECT COUNT(1) FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = thpc.HQ_OFFICE_CD AND P_PROD_CLASS_CD = thpc.PROD_CLASS_CD) AS HQ_CHILD_CLASS_CNT,
+                      (SELECT COUNT(1) FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = thpc.HQ_OFFICE_CD) AND P_PROD_CLASS_CD = thpc.PROD_CLASS_CD) AS MS_CHILD_CLASS_CNT,
+                      (SELECT COUNT(1) FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = thpc.HQ_OFFICE_CD AND PROD_CLASS_CD = thpc.PROD_CLASS_CD) AS HQ_PROD_CNT,
+                      (SELECT COUNT(1) FROM TB_MS_PRODUCT WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = thpc.HQ_OFFICE_CD) AND PROD_CLASS_CD = thpc.PROD_CLASS_CD) AS MS_PROD_CNT
+                FROM TB_HQ_PRODUCT_CLASS thpc
+               WHERE thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND thpc.CLS_LEVEL_CD = #{clsLevelCd}
+             <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                 AND thpc.P_PROD_CLASS_CD = '00000'
+             </if>
+             <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                 AND thpc.P_PROD_CLASS_CD = #{pProdClassCd}
+             </if>
+               ORDER
+                  BY thpc.PROD_CLASS_CD ASC
+          </when>
+          <!-- 매장 -->
+          <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+              SELECT tmpc.PROD_CLASS_CD,
+                      tmpc.PROD_CLASS_NM,
+                      '0' AS HQ_CHILD_CLASS_CNT,
+                      (SELECT COUNT(1) FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = tmpc.STORE_CD AND P_PROD_CLASS_CD = tmpc.PROD_CLASS_CD) AS MS_CHILD_CLASS_CNT,
+                      '0' AS HQ_PROD_CNT,
+                      (SELECT COUNT(1) FROM TB_MS_PRODUCT WHERE STORE_CD = tmpc.STORE_CD AND PROD_CLASS_CD = tmpc.PROD_CLASS_CD) AS MS_PROD_CNT
+                FROM TB_MS_PRODUCT_CLASS tmpc
+               WHERE tmpc.STORE_CD = #{storeCd}
+                 AND tmpc.CLS_LEVEL_CD = #{clsLevelCd}
+              <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                 AND tmpc.P_PROD_CLASS_CD = '00000'
+             </if>
+              <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                 AND tmpc.P_PROD_CLASS_CD = #{pProdClassCd}
+             </if>
+               ORDER
+                  BY tmpc.PROD_CLASS_CD ASC
+          </when>
+      </choose>
+    </select>
+
 </mapper>
