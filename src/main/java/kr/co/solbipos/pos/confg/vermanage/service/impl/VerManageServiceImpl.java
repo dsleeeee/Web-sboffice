@@ -248,7 +248,9 @@ public class VerManageServiceImpl implements VerManageService {
 
     /** 매장검색 (매장추가용) */
     @Override
-    public List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore) {
+    public List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore, SessionInfoVO sessionInfoVO) {
+
+        applcStore.setOrgnFg(sessionInfoVO.getOrgnFg());
 
         // 매장코드 복수검색 추가(미적용매장 리스트 검색시에만 사용)
         if(applcStore.getSearchSatus() != null && "N".equals(applcStore.getSearchSatus())){

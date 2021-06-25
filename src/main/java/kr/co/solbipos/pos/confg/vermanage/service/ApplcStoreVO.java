@@ -1,6 +1,7 @@
 package kr.co.solbipos.pos.confg.vermanage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 
 /**
@@ -21,6 +22,16 @@ import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 public class ApplcStoreVO extends PageVO {
 
     private static final long serialVersionUID = -8752600684230631461L;
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private OrgnFg orgnFg;
+    /** 대리점코드 */
+    private String agencyCd;
     /** 버전일련번호 */
     private String verSerNo;
     /** 본사코드 */
@@ -58,6 +69,21 @@ public class ApplcStoreVO extends PageVO {
     /** 복수검색여부 */
     private String chkMulti;
 
+    public OrgnFg getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(OrgnFg orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getAgencyCd() {
+        return agencyCd;
+    }
+
+    public void setAgencyCd(String agencyCd) {
+        this.agencyCd = agencyCd;
+    }
 
     /**
      * @return the verSerNo

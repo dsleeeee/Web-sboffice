@@ -214,9 +214,10 @@ public class VerManageController {
     @ResponseBody
     public Result srchStoreList(ApplcStoreVO applcStore, HttpServletRequest request,
             HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
         // 포스가 설치된 매장만 조회
-        List<DefaultMap<String>> list = verManageService.srchStoreList(applcStore);
+        List<DefaultMap<String>> list = verManageService.srchStoreList(applcStore, sessionInfo);
 
         return returnListJson(Status.OK, list, applcStore);
     }
