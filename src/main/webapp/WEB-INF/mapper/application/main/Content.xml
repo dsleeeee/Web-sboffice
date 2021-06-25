@@ -71,11 +71,17 @@
     <select id="getStoreCntHqList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getStoreCntHqList */
         SELECT
-        NVL(COUNT(tms.STORE_CD), 0) AS STORE_CNT_TOTAL
-        FROM TB_MS_STORE tms
-        WHERE 1=1
-        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tms.SYS_STAT_FG = '1'
+            NVL(TO_CHAR(STORE_CNT_TOTAL,'999,999,999,999'), 0) AS STORE_CNT_TOTAL,
+            NVL(TO_CHAR(STORE_CNT_1,'999,999,999,999'), 0) AS STORE_CNT_1
+        FROM
+            (
+                SELECT
+                    SUM((CASE WHEN SYS_STAT_FG IN ('1','2','3','9') THEN 1 ELSE 0 END)) AS STORE_CNT_TOTAL,
+                    SUM((CASE WHEN SYS_STAT_FG = '1' THEN 1 ELSE 0 END)) AS STORE_CNT_1
+                FROM TB_MS_STORE tms
+                WHERE 1=1
+                  AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            )
     </select>
 
     <!-- 관리자 - 총 포스수(전체, 오픈, 폐점, 중지, 데모) -->
