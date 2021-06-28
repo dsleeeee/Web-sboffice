@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SendStatus.xml
+    문자전송현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.06.18     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.sendStatus.service.impl.SendStatusMapper">
+
+    <!-- 메세지그룹 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보
+    -->
+    <select id="getMsgGrpColList" parameterType="SendStatusVO" resultType="DefaultMap">
+        /* SendStatusMapper.getMsgGrpColList */
+        SELECT
+        hmt.MSG_GRP_CD,
+        hmt.MSG_GRP_NM
+        FROM HCS_MSGGR_T hmt
+        WHERE 1=1
+        AND hmt.OGN_CD = #{orgnCd}
+        ORDER BY hmt.MSG_GRP_CD
+    </select>
+
+    <!-- 문자전송현황 - 조회 -->
+    <!--
+        TABLE    : HCS_MSGSS_T, HCS_MSGKS_T, HCS_MSGSM_T, HCS_MSGKM_T, HCS_MSGLG_T
+        COMMENTS : SMS 발송||SMTNT, SMS 발송||KT, LMS/MMS 발송||SMTNT, LMS/MMS 발송||KT, 문자전송현황
+    -->
+    <select id="getSendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
+        /* SendStatusMapper.getSendStatusList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        hmt.MSG_ID,
+        hmt.REG_DT,
+        hmt.S_OGN_CD,
+        (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.S_OGN_CD GROUP BY ORGN_NM) AS S_OGN_NM,
+        (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = hmt.S_USER_ID GROUP BY USER_NM) AS S_USER_NM,
+        hmt.CALLBACK AS S_PHONE_NUMBER,
+        hmt.R_OGN_CD,
+        (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD GROUP BY ORGN_NM) AS R_OGN_NM,
+        (CASE WHEN hmt.R_OGN_FG = 'C' THEN (SELECT MEMBR_NM FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = hmt.R_OGN_CD AND MEMBR_NO = hmt.CST_NO GROUP BY MEMBR_NM)
+               WHEN hmt.R_OGN_FG NOT IN ('C') THEN (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD AND USER_ID = hmt.R_USER_ID GROUP BY USER_NM)
+               ELSE null END
+        ) AS R_USER_NM,
+        hmt.PHONE_NUMBER AS R_PHONE_NUMBER,
+        hmt.RESERVE_YN,
+        hmt.SEND_DATE,
+        hmt.READ_DATE,
+        hmt.SEND_STATUS,
+        (SELECT DECODE(RESULT_NM, NULL, RESULT_CD, RESULT_NM) FROM HCS_MSGCM_T WHERE RESULT_CD = hmt.RESULT_CD) AS RESULT_NM,
+        DECODE(hmt.COMPANY, '1', 'MONO', '2', 'SMTNT', NULL) AS COMPANY,
+        hmt.MSG_CONTENT,
+        hmt.GUBUN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                (
+                    --SMS
+                    SELECT
+                    A.MSG_ID,
+                    A.REG_DT,
+                    A.S_OGN_CD,
+                    A.S_OGN_FG,
+                    A.S_USER_ID,
+                    A.CALLBACK,
+                    A.R_OGN_CD,
+                    A.R_OGN_FG,
+                    A.R_USER_ID,
+                    A.CST_NO,
+                    A.PHONE_NUMBER,
+                    A.RESERVE_YN,
+                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.READ_DATE,
+                    A.SEND_STATUS,
+                    '' AS RESULT_CD,
+                    '2' AS COMPANY,
+                    A.MSG_CONTENT,
+                    'HCS_MSGSS_T' AS GUBUN
+                    FROM HCS_MSGSS_T A
+                    WHERE 1=1
+                )
+                UNION ALL
+                (
+                    --SMS KT
+                    SELECT
+                    A.MSG_ID,
+                    A.REG_DT,
+                    A.S_OGN_CD,
+                    A.S_OGN_FG,
+                    A.S_USER_ID,
+                    A.CALLBACK,
+                    A.R_OGN_CD,
+                    A.R_OGN_FG,
+                    A.R_USER_ID,
+                    A.CST_NO,
+                    A.PHONE_NUMBER,
+                    A.RESERVE_YN,
+                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.READ_DATE,
+                    A.SEND_STATUS,
+                    '' AS RESULT_CD,
+                    '1' AS COMPANY,
+                    A.MSG_CONTENT,
+                    'HCS_MSGKS_T' AS GUBUN
+                    FROM HCS_MSGKS_T A
+                    WHERE 1=1
+                )
+                UNION ALL
+                (
+                    --LMS
+                    SELECT
+                    A.MSG_ID,
+                    A.REG_DT,
+                    A.S_OGN_CD,
+                    A.S_OGN_FG,
+                    A.S_USER_ID,
+                    A.CALLBACK,
+                    A.R_OGN_CD,
+                    A.R_OGN_FG,
+                    A.R_USER_ID,
+                    A.CST_NO,
+                    A.PHONE_NUMBER,
+                    A.RESERVE_YN,
+                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.READ_DATE,
+                    A.SEND_STATUS,
+                    '' AS RESULT_CD,
+                    '2' AS COMPANY,
+                    A.MSG_CONTENT,
+                    'HCS_MSGSM_T' AS GUBUN
+                    FROM HCS_MSGSM_T A
+                    WHERE 1=1
+                )
+                  UNION ALL
+                (
+                    --LMS KT
+                    SELECT
+                    A.MSG_ID,
+                    A.REG_DT,
+                    A.S_OGN_CD,
+                    A.S_OGN_FG,
+                    A.S_USER_ID,
+                    A.CALLBACK,
+                    A.R_OGN_CD,
+                    A.R_OGN_FG,
+                    A.R_USER_ID,
+                    A.CST_NO,
+                    A.PHONE_NUMBER,
+                    A.RESERVE_YN,
+                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.READ_DATE,
+                    A.SEND_STATUS,
+                    '' AS RESULT_CD,
+                    '1' AS COMPANY,
+                    A.MSG_CONTENT,
+                    'HCS_MSGKM_T' AS GUBUN
+                    FROM HCS_MSGKM_T A
+                    WHERE 1=1
+                )
+                  UNION ALL
+                (
+                    --문자 전송결과
+                    SELECT
+                    A.MSG_ID,
+                    A.REG_DT,
+                    A.S_OGN_CD,
+                    A.S_OGN_FG,
+                    A.S_USER_ID,
+                    A.CALLBACK,
+                    A.R_OGN_CD,
+                    A.R_OGN_FG,
+                    A.R_USER_ID,
+                    A.CST_NO,
+                    A.PHONE_NUMBER,
+                    A.RESERVE_YN,
+                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.READ_DATE,
+                    A.SEND_STATUS,
+                    (A.COMPANY || '_' || A.RESULT) AS RESULT_CD,
+                    A.COMPANY,
+                    A.MSG_CONTENT,
+                    'HCS_MSGLG_T' AS GUBUN
+                    FROM HCS_MSGLG_T A
+                    WHERE 1=1
+                )
+            )
+            WHERE 1=1
+            AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND S_OGN_CD = #{orgnCd}
+            ORDER BY REG_DT
+        ) hmt
+        WHERE 1=1
+        <if test="ssOrgnCd != null and ssOrgnCd != ''">
+            AND hmt.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+        </if>
+        <if test="ssOrgnNm != null and ssOrgnNm != ''">
+            AND hmt.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+        </if>
+        <if test="rrOrgnCd != null and rrOrgnCd != ''">
+            AND hmt.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+        </if>
+        <if test="rrOrgnNm != null and rrOrgnNm != ''">
+            AND hmt.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 문자전송현황 - 예약취소 delete -->
+    <!--
+        TABLE    : HCS_MSGSS_T, HCS_MSGKS_T, HCS_MSGSM_T, HCS_MSGKM_T
+        COMMENTS : SMS 발송||SMTNT, SMS 발송||KT, LMS/MMS 발송||SMTNT, LMS/MMS 발송||KT
+    -->
+    <delete id="getSendStatusReserveCancelSaveDelete" parameterType="SendStatusVO">
+        /* SendStatusMapper.getSendStatusReserveCancelSaveDelete */
+        DELETE HCS_MSGSS_T
+        WHERE 1=1
+        AND MSG_ID = #{msgId}
+    </delete>
+    <delete id="getSendStatusReserveCancelSaveDeleteKT" parameterType="SendStatusVO">
+        /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteKT */
+        DELETE HCS_MSGKS_T
+        WHERE 1=1
+        AND MSG_ID = #{msgId}
+    </delete>
+    <delete id="getSendStatusReserveCancelSaveDeleteLMS" parameterType="SendStatusVO">
+        /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS */
+        DELETE HCS_MSGSM_T
+        WHERE 1=1
+        AND MSG_ID = #{msgId}
+    </delete>
+    <delete id="getSendStatusReserveCancelSaveDeleteLMSKT" parameterType="SendStatusVO">
+        /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteLMSKT */
+        DELETE HCS_MSGKM_T
+        WHERE 1=1
+        AND MSG_ID = #{msgId}
+    </delete>
+
+</mapper>
