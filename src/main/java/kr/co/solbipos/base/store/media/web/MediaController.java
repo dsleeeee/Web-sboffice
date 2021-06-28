@@ -1,6 +1,5 @@
 package kr.co.solbipos.base.store.media.web;
 
-import com.sun.xml.internal.bind.v2.runtime.property.StructureLoaderBuilder;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
