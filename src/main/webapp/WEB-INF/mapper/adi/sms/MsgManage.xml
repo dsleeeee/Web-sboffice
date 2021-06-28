@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MsgManage.xml
+    메세지관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.06.22     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.msgManage.service.impl.MsgManageMapper">
+
+    <!-- 메세지관리 - 그룹 조회 -->
+    <!--
+        TABLE    : HCS_MSGGR_T, HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보, [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <select id="getMsgManageList"  parameterType="MsgManageVO" resultType="DefaultMap">
+        /* MsgManageMapper.getMsgManageList */
+        SELECT
+        A.MSG_GRP_CD,
+        A.MSG_GRP_NM,
+        NVL(B.MSG_GRP_CNT, 0) AS MSG_GRP_CNT
+        FROM
+        (
+            SELECT
+            hmt.MSG_GRP_CD,
+            hmt.MSG_GRP_NM
+            FROM HCS_MSGGR_T hmt
+            WHERE 1=1
+            AND hmt.OGN_CD = #{orgnCd}
+        ) A,
+        (
+            SELECT
+            hst.MSG_GRP_CD,
+            COUNT(hst.SEQ_NO) AS MSG_GRP_CNT
+            FROM HCS_SMSMS_T hst
+            WHERE 1=1
+            AND hst.OGN_CD = #{orgnCd}
+            GROUP BY hst.MSG_GRP_CD
+        ) B
+        WHERE 1=1
+        AND B.MSG_GRP_CD (+)= A.MSG_GRP_CD
+        ORDER BY A.MSG_GRP_CD
+    </select>
+
+    <!-- 그룹코드(자동채번) -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보
+    -->
+    <select id="getMsgManageMsgGrpCd" parameterType="MsgManageVO" resultType="String">
+        /* MsgManageMapper.getMsgManageMsgGrpCd */
+        SELECT
+        LPAD(NVL(MAX(MSG_GRP_CD), 0) + 1, 2, '0') AS MSG_GRP_CD
+        FROM HCS_MSGGR_T
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+    </select>
+
+    <!-- 메세지관리 - 그룹 저장 insert -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보
+    -->
+    <insert id="getMsgManageSaveInsert" parameterType="MsgManageVO">
+        /* MsgManageMapper.getMsgManageSaveInsert */
+        INSERT INTO HCS_MSGGR_T
+        (
+            OGN_CD,
+            MSG_GRP_CD,
+            MSG_GRP_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{orgnCd},
+            #{msgGrpCd},
+            #{msgGrpNm},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 메세지관리 - 그룹 저장 update -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보
+    -->
+    <update id="getMsgManageSaveUpdate" parameterType="MsgManageVO">
+        /* MsgManageMapper.getMsgManageSaveUpdate */
+        UPDATE
+        HCS_MSGGR_T
+        SET
+        MSG_GRP_NM = #{msgGrpNm},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND MSG_GRP_CD = #{msgGrpCd}
+    </update>
+
+    <!-- 메세지관리 - 그룹 저장 delete -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보
+    -->
+    <delete id="getMsgManageSaveDelete" parameterType="MsgManageVO">
+        /* MsgManageMapper.getMsgManageSaveDelete */
+        DELETE
+        HCS_MSGGR_T
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND MSG_GRP_CD = #{msgGrpCd}
+    </delete>
+
+    <!-- 메세지관리 - 메세지서식 조회 -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <select id="getMsgManageDtlList"  parameterType="MsgManageVO" resultType="DefaultMap">
+        /* MsgManageMapper.getMsgManageDtlList */
+        SELECT
+        hst.SEQ_NO,
+        hst.TITLE,
+        hst.MESSAGE
+        FROM HCS_SMSMS_T hst
+        WHERE 1=1
+        AND hst.OGN_CD = #{orgnCd}
+        AND hst.MSG_GRP_CD = #{msgGrpCd}
+        ORDER BY hst.SEQ_NO
+    </select>
+
+    <!-- SEQ_NO(자동채번) -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <select id="getMsgManageMsgSeqNo" parameterType="MsgManageVO" resultType="String">
+        /* MsgManageMapper.getMsgManageMsgSeqNo */
+        SELECT
+        (NVL(MAX(SEQ_NO), 0) + 1) AS SEQ_NO
+        FROM HCS_SMSMS_T
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+    </select>
+
+    <!-- 메세지관리 - 메세지서식 저장 insert -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <insert id="getMsgManageDtlSaveInsert" parameterType="MsgManageVO">
+        /* MsgManageMapper.getMsgManageDtlSaveInsert */
+        INSERT INTO HCS_SMSMS_T
+        (
+            OGN_CD,
+            MSG_GRP_CD,
+            SEQ_NO,
+            TITLE,
+            MESSAGE,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{orgnCd},
+            #{msgGrpCd},
+            #{seqNo},
+            #{title},
+            #{content},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 메세지관리 - 메세지서식 저장 update -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <update id="getMsgManageDtlSaveUpdate" parameterType="MsgManageVO">
+        /* MsgManageMapper.getMsgManageDtlSaveUpdate */
+        UPDATE
+        HCS_SMSMS_T
+        SET
+        TITLE = #{title},
+        MESSAGE = #{content},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND MSG_GRP_CD = #{msgGrpCd}
+        AND SEQ_NO = #{seqNo}
+    </update>
+
+    <!-- 메세지관리 - 메세지서식 저장 delete -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <delete id="getMsgManageDtlSaveDelete" parameterType="MsgManageVO">
+        /* MsgManageMapper.getMsgManageDtlSaveDelete */
+        DELETE
+        HCS_SMSMS_T
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND MSG_GRP_CD = #{msgGrpCd}
+        AND SEQ_NO = #{seqNo}
+    </delete>
+
+    <!-- 메세지관리 - 메세지서식 저장 전체 delete -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <delete id="getMsgManageDtlSaveDeleteAll" parameterType="MsgManageVO">
+        /* MsgManageMapper.getMsgManageDtlSaveDeleteAll */
+        DELETE
+        HCS_SMSMS_T
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND MSG_GRP_CD = #{msgGrpCd}
+    </delete>
+
+</mapper>
