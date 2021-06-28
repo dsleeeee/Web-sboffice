@@ -1089,6 +1089,7 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                     </if>
                     AND thp.USE_YN = 'Y'
+                    AND thp.SIDE_PROD_YN = 'N'
                     AND thp.PROD_CD NOT IN (
                                             SELECT prod_cd
                                               FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp
@@ -1127,6 +1128,7 @@
                         AND tmp.REG_FG = 'H' --사이드메뉴생성구분이 세트상품만생성(BBQ)이면 본사에서 등록한 상품만 조회
                     </if>
                     AND tmp.USE_YN = 'Y'
+                    AND tmp.SIDE_PROD_YN = 'N'
                     AND tmp.PROD_CD NOT IN (
                                             SELECT prod_cd
                                             FROM TB_MS_PRODUCT_SDSEL_PROD tmpsp
