@@ -28,7 +28,7 @@
         <div class="w35 fl br bb stat_purple3" style="height: 230px;">
             <!--총 매장수-->
             <div class="bb pdb30 pdt5">
-                <h2>총 매장수 (오픈)<span id="totalStoreCnt"></span></h2>
+                <h2>총 매장수 (오픈/전체)<span id="totalStoreCnt"></span></h2>
             </div>
             <!--//총 매장수-->
             <!--총 포스수-->
@@ -385,6 +385,7 @@
     <c:forEach var="storeCnt" items="${storeCntList}">
         var storeCntParam = {};
         storeCntParam.storeCntTotal = "${storeCnt.storeCntTotal}";
+        storeCntParam.storeCnt1 = "${storeCnt.storeCnt1}";
         storeCntList.push(storeCntParam);
     </c:forEach>
 
@@ -705,7 +706,7 @@
     <%--&lt;%&ndash; // wijmo flexChart &ndash;%&gt;--%>
 <%--</script>--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/main/hedofcMain.js?ver=20210222.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/main/hedofcMain.js?ver=20210222.06" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

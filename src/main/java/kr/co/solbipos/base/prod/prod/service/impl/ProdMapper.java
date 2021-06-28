@@ -106,6 +106,9 @@ public interface ProdMapper {
     /** 상품코드 중복체크*/
     int getProdCdCnt(ProdVO prodVO);
 
+    /** 바코드 중복체크*/
+    String chkBarCd(ProdVO prodVO);
+
     /** 상품 바코드 존재 여부 확인 */
     int getProdBarCdCnt(ProdVO prodVO);
 
@@ -115,8 +118,14 @@ public interface ProdMapper {
     /** 본사 상품 등록시, 본사 상품의 바코드 등록 */
     int saveProdBarcd(ProdVO prodVO);
 
+    /** 바코드가 공백일경우 기존 바코드 정보 삭제 */
+    int deleteProdBarcd(ProdVO prodVO);
+
+    /** 바코드가 공백일경우 기존 바코드 정보 삭제(매장것도 삭제) */
+    int deleteProdBarcdStore(ProdVO prodVO);
+
     /** 매장 상품의 바코드 등록 프로시저 */
-    String saveProdBarcdStore(ProdVO prodVO);
+    int saveProdBarcdStore(ProdVO prodVO);
 
     /** 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도  사이드 그룹 추가 */
     String insertSdselGrpToStore (ProdVO prodVO);
@@ -138,7 +147,6 @@ public interface ProdMapper {
 
     /** 본사 상품 등록시, 본사 상품의 상품분류 수정 */
     String updateClsHqToStore(ProdVO prodVO);
-
 
     /** 상품 이미지 저장시 파일여부 체크 */
     String getProdImageFileSaveCheck(ProdVO ProdVO);

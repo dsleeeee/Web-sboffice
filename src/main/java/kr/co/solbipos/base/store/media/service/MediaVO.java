@@ -68,6 +68,8 @@ public class MediaVO extends PageVO {
     private String startDate;
     /** 종료일자 */
     private String endDate;
+    /** 확장자 체크 결과 */
+    private String result;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -328,5 +330,33 @@ public class MediaVO extends PageVO {
 
     public void setSysStatFg(String sysStatFg) {
         this.sysStatFg = sysStatFg;
+    }
+
+    @Override
+    public String getStartDate() {
+        return startDate;
+    }
+
+    @Override
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    @Override
+    public String getEndDate() {
+        return endDate;
+    }
+
+    @Override
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

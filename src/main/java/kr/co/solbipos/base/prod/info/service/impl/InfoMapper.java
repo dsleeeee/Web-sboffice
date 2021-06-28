@@ -68,4 +68,7 @@ public interface InfoMapper {
 
     /** 저장하려는 분류의 Level값 조회 */
     String getProdClsLevel(ProductClassVO productClassVO);
+
+    /** 상품분류정보관리(3단계) - 분류 조회 */
+    List<DefaultMap<String>> getProdClass(ProductClassVO productClassVO);
 }

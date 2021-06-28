@@ -116,6 +116,8 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
     params.sysStatFg = $scope.sysStatFg;
+    params.orgnFg = orgnFg;
+    params.agencyCd = orgnCd;
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
@@ -197,6 +199,8 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
     params.sysStatFg = addStoreScope.sysStatFg;
+    params.orgnFg = orgnFg;
+    params.agencyCd = orgnCd;
 
     // 복수검색 기능 사용여부
     if ($("#chkMulti").prop("checked")) {

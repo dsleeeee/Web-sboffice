@@ -93,7 +93,7 @@
           </f:form>
         </div>
         <div class="btnSet2">
-          <c:if test="${orgnFg != 'HQ'}">
+          <c:if test="${orgnFg == 'MASTER'}">
             <%-- 수정 --%>
             <span><a href="#" class="btn_blue pd20" ng-click="modify()"><s:message code="regist.modify" /></a></span>
           </c:if>

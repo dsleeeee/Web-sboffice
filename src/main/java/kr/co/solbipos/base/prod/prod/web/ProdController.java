@@ -3,6 +3,7 @@ package kr.co.solbipos.base.prod.prod.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
@@ -12,8 +13,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,6 +181,26 @@ public class ProdController {
             }
         }
         return returnJson(Status.OK);
+    }
+
+    /**
+     * 바코드 중복 체크
+     * @param prodVO ProdVO
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/chkBarCd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkBarCd(ProdVO prodVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = prodService.chkBarCd(prodVO, sessionInfoVO);
+        if(result.equals("0")){
+            return returnJson(Status.OK);
+        } else {
+            return returnJson(Status.FAIL);
+        }
     }
 
     /**

@@ -59,7 +59,7 @@
             is-editable="false"
             initialized="initComboBox(s)">
     </wj-combo-box>
-    <c:if test="${orgnFg != 'HQ'}">
+    <c:if test="${orgnFg == 'MASTER'}">
       <%-- 신규버전등록 --%>
       <button class="btn_skyblue ml5 fr" id="btnRegist" ng-click="registVersion()">
         <s:message code="verManage.regist.new" />

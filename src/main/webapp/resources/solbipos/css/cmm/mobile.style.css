@@ -343,7 +343,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:350px; padding-l
 
 /*open*/
 .menuOpen {width:220px;}
-.menuOpen h1 a {display:inline-block; width:125px; height:25px; position:absolute; left:20px; top:12px;}
+.menuOpen h1 a {display:inline-block; width:125px; height:25px; position:absolute; left:29%; top:9px;}
 .menuOpen h1 a img {max-height:100%; max-width:100%;  position:absolute; bottom:0px;}
 .menuOpen .menuTab {display:table; width:100%;}
 .menuOpen .menuTab p {display:table-cell; width:50%; height:35px; vertical-align: middle; text-align:center; position:relative;}

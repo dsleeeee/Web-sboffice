@@ -45,7 +45,7 @@ public interface VerManageService {
     boolean modify(MultipartHttpServletRequest request, SessionInfoVO sessionInfo);
 
     /** 매장검색 (매장추가용) */
-    List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore);
+    List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore, SessionInfoVO sessionInfoVO);
 
     /** 버전 적용 매장 등록 */
     int registStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
