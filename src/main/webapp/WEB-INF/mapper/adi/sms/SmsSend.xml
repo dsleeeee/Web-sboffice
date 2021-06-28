@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsSend.xml
+    SMS충전
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.06.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.smsSend.service.impl.SmsSendMapper">
+
+    <!-- 발신번호 유무 체크 -->
+    <!--
+        TABLE    : HCS_SENDM_T
+        COMMENTS : [본사매장]발신번호인증||
+    -->
+    <select id="getSmsTelNoComboList"  parameterType="SmsSendVO" resultType="DefaultMap">
+        /* SmsSendMapper.getSmsTelNoComboList */
+        SELECT
+        hst.TEL_NO AS VALUE,
+        (SUBSTR(hst.TEL_NO, 1, 3) || '-' || SUBSTR(hst.TEL_NO, 4, 4) || '-' || SUBSTR(hst.TEL_NO, 8, 4)) AS NAME
+        FROM HCS_SENDM_T hst
+        WHERE 1=1
+        AND hst.OGN_CD = #{orgnCd}
+        AND hst.USE_YN = 'Y'
+        ORDER BY hst.USE_SEQ
+    </select>
+
+    <!-- 관리자/총판/본사/매장 명칭 조회 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO_DTL_V01
+        COMMENTS : 웹 사용자 정보 veiw
+    -->
+    <select id="getStoreNmList"  parameterType="SmsSendVO" resultType="DefaultMap">
+        /* SmsSendMapper.getStoreNmList */
+        SELECT
+        twuidv01.ORGN_NM AS STORE_NM
+        FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+        WHERE 1=1
+        AND twuidv01.USER_ID = #{userId}
+    </select>
+
+    <!-- 잔여수량 조회 -->
+    <!--
+        TABLE    : CET_SMSPT_T
+        COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
+    -->
+    <select id="getSmsQtyList"  parameterType="SmsSendVO" resultType="DefaultMap">
+        /* SmsSendMapper.getSmsQtyList */
+        SELECT
+        cst.SMS_QTY
+        FROM CET_SMSPT_T cst
+        WHERE 1=1
+        AND cst.OGN_CD = #{orgnCd}
+    </select>
+
+    <!-- SMS등록전 체크 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getSmsChk" parameterType="SmsSendVO" resultType="String">
+        /* SmsSendMapper.getSmsChk */
+        SELECT NMCODE_NM -- 0:전체 1:KS 2:SS
+        FROM TB_CM_NMCODE
+        WHERE 1=1
+        AND NMCODE_GRP_CD = '118'
+        AND NMCODE_CD = '01'
+    </select>
+
+    <!-- 전송,예약 저장 insert -->
+    <!--
+        TABLE    : HCS_MSGSS_T
+        COMMENTS : SMS 발송||SMTNT
+    -->
+    <insert id="getSmsSendReserveSaveInsert" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsSendReserveSaveInsert */
+        INSERT INTO HCS_MSGSS_T
+        (
+            MSG_ID,
+            MSG_TYPE,
+            SUBJECT,
+            MSG_CONTENT,
+            REG_DATE,
+            MOD_DATE,
+            SEND_DATE,
+            CALLBACK,
+            PHONE_NUMBER,
+            SEND_STATUS,
+            READ_DATE,
+            RESERVE_YN,
+            SMS_OGN_CD,
+            CST_OGN_CD,
+            CST_NO,
+            R_OGN_CD,
+            R_OGN_FG,
+            R_USER_ID,
+            S_OGN_CD,
+            S_OGN_FG,
+            S_USER_ID,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            HCS_MSGSS_S.NEXTVAL,
+            '1',
+            #{title},
+            #{content},
+            #{regDt},
+            #{regDt},
+            #{sendDate},
+            #{callback},
+            #{phoneNumber},
+            '0',
+            '',
+             #{reserveYn},
+            #{smsOgnCd},
+            #{cstOgnCd},
+            #{cstNo},
+            #{rrOrgnCd},
+            #{rrOrgnFg},
+            #{rrUserId},
+            #{ssOrgnCd},
+            #{ssOrgnFg},
+            #{ssUserId},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 전송,예약 저장 insert -->
+    <!--
+        TABLE    : HCS_MSGKS_T
+        COMMENTS : SMS 발송||KT
+    -->
+    <insert id="getSmsSendReserveSaveInsertKT" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsSendReserveSaveInsertKT */
+        INSERT INTO HCS_MSGKS_T
+         (
+            MSG_ID,
+            MSG_TYPE,
+            SUBJECT,
+            MSG_CONTENT,
+            REG_DATE,
+            MOD_DATE,
+            SEND_DATE,
+            CALLBACK,
+            PHONE_NUMBER,
+            SEND_STATUS,
+            READ_DATE,
+            RESERVE_YN,
+            SMS_OGN_CD,
+            CST_OGN_CD,
+            CST_NO,
+            R_OGN_CD,
+            R_OGN_FG,
+            R_USER_ID,
+            S_OGN_CD,
+            S_OGN_FG,
+            S_USER_ID,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            HCS_MSGSS_S.NEXTVAL,
+            '1',
+            #{title},
+            #{content},
+            #{regDt},
+            #{regDt},
+            #{sendDate},
+            #{callback},
+            #{phoneNumber},
+            '0',
+            '',
+             #{reserveYn},
+            #{smsOgnCd},
+            #{cstOgnCd},
+            #{cstNo},
+            #{rrOrgnCd},
+            #{rrOrgnFg},
+            #{rrUserId},
+            #{ssOrgnCd},
+            #{ssOrgnFg},
+            #{ssUserId},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 전송,예약 저장 insert -->
+    <!--
+        TABLE    : HCS_MSGSM_T
+        COMMENTS : LMS/MMS 발송||SMTNT
+    -->
+    <insert id="getSmsSendReserveSaveInsertLMS" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsSendReserveSaveInsertLMS */
+        INSERT INTO HCS_MSGSM_T
+        (
+            MSG_ID,
+            MSG_TYPE,
+            SUBJECT,
+            MSG_CONTENT,
+            REG_DATE,
+            MOD_DATE,
+            SEND_DATE,
+            CALLBACK,
+            PHONE_NUMBER,
+            CONTENT_COUNT,
+            CONTENT_1,
+            CONTENT_2,
+            CONTENT_3,
+            SEND_STATUS,
+            READ_DATE,
+            RESERVE_YN,
+            SMS_OGN_CD,
+            CST_OGN_CD,
+            CST_NO,
+            R_OGN_CD,
+            R_OGN_FG,
+            R_USER_ID,
+            S_OGN_CD,
+            S_OGN_FG,
+            S_USER_ID,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            HCS_MSGSS_S.NEXTVAL,
+            '2',
+            #{title},
+            #{content},
+            #{regDt},
+            #{regDt},
+            #{sendDate},
+            #{callback},
+            #{phoneNumber},
+            '0',
+            '',
+            '',
+            '',
+            '0',
+            '',
+            #{reserveYn},
+            #{smsOgnCd},
+            #{cstOgnCd},
+            #{cstNo},
+            #{rrOrgnCd},
+            #{rrOrgnFg},
+            #{rrUserId},
+            #{ssOrgnCd},
+            #{ssOrgnFg},
+            #{ssUserId},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 전송,예약 저장 insert -->
+    <!--
+        TABLE    : HCS_MSGKM_T
+        COMMENTS : LMS/MMS 발송||KT
+    -->
+    <insert id="getSmsSendReserveSaveInsertLMSKT" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsSendReserveSaveInsertLMSKT */
+        INSERT INTO HCS_MSGKM_T
+        (
+            MSG_ID,
+            MSG_TYPE,
+            SUBJECT,
+            MSG_CONTENT,
+            REG_DATE,
+            MOD_DATE,
+            SEND_DATE,
+            CALLBACK,
+            PHONE_NUMBER,
+            CONTENT_COUNT,
+            CONTENT_1,
+            CONTENT_2,
+            CONTENT_3,
+            SEND_STATUS,
+            READ_DATE,
+            RESERVE_YN,
+            SMS_OGN_CD,
+            CST_OGN_CD,
+            CST_NO,
+            R_OGN_CD,
+            R_OGN_FG,
+            R_USER_ID,
+            S_OGN_CD,
+            S_OGN_FG,
+            S_USER_ID,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            HCS_MSGSS_S.NEXTVAL,
+            '2',
+            #{title},
+            #{content},
+            #{regDt},
+            #{regDt},
+            #{sendDate},
+            #{callback},
+            #{phoneNumber},
+            '0',
+            '',
+            '',
+            '',
+            '0',
+            '',
+            #{reserveYn},
+            #{smsOgnCd},
+            #{cstOgnCd},
+            #{cstNo},
+            #{rrOrgnCd},
+            #{rrOrgnFg},
+            #{rrUserId},
+            #{ssOrgnCd},
+            #{ssOrgnFg},
+            #{ssUserId},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 잔여수량 조회 -->
+    <!--
+        TABLE    : CET_SMSPT_T
+        COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
+    -->
+    <select id="getSmsQty" parameterType="SmsSendVO" resultType="String">
+        /* SmsSendMapper.getSmsQty */
+        SELECT
+        (cst.SMS_QTY -1) AS SMS_QTY
+        FROM CET_SMSPT_T cst
+        WHERE 1=1
+        AND cst.OGN_CD = #{orgnCd}
+    </select>
+
+    <!-- 잔여수량 저장 update -->
+    <!--
+        TABLE    : CET_SMSPT_T
+        COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
+    -->
+    <update id="getSmsQtySaveUpdate" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsQtySaveUpdate */
+        UPDATE
+        CET_SMSPT_T
+        SET
+        SMS_QTY = #{smsQty},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+    </update>
+
+    <!-- 수신자추가 팝업 - 조회 -->
+    <!--
+        TABLE    : HCS_SENDM_T
+        COMMENTS : [본사매장]발신번호인증||
+    -->
+    <select id="getAddresseeAddList"  parameterType="SmsSendVO" resultType="DefaultMap">
+        /* SmsSendMapper.getAddresseeAddList */
+        SELECT
+        tce.ORGN_FG,
+        tce.ORGN_CD,
+        tce.EMP_NM,
+        tce.USER_ID,
+        tce.MP_NO,
+        tce.SMS_RECV_YN,
+        tce.SERVICE_FG
+        FROM
+        (
+            (
+                --본사
+                SELECT
+                'H' AS ORGN_FG,
+                A.HQ_OFFICE_CD AS ORGN_CD,
+                A.EMP_NO,
+                A.EMP_NM,
+                A.USER_ID,
+                A.MP_NO,
+                A.SMS_RECV_YN,
+                A.SERVICE_FG,
+                '' AS STORE_CD,
+                '' AS STORE_NM,
+                A.HQ_OFFICE_CD,
+                B.HQ_OFFICE_NM,
+                '' AS AGENCY_CD
+                FROM
+                TB_HQ_EMPLOYEE A,
+                TB_HQ_OFFICE B
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+            )
+            UNION ALL
+            (
+                --매장
+                SELECT
+                'S' AS ORGN_FG,
+                A.STORE_CD AS ORGN_CD,
+                A.EMP_NO,
+                A.EMP_NM,
+                A.USER_ID,
+                A.MP_NO,
+                A.SMS_RECV_YN,
+                A.SERVICE_FG,
+                A.STORE_CD AS STORE_CD,
+                B.STORE_NM AS STORE_NM,
+                C.HQ_OFFICE_CD,
+                C.HQ_OFFICE_NM,
+                '' AS AGENCY_CD
+                FROM
+                TB_MS_EMPLOYEE A,
+                TB_MS_STORE B,
+                TB_HQ_OFFICE C
+                WHERE 1=1
+                AND A.STORE_CD = B.STORE_CD
+                AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+            )
+            UNION ALL
+            (
+                --관리자,총판
+                SELECT
+                DECODE( A.ADMIN_FG, 'A', 'M', 'A' ) AS ORGN_FG,
+                A.AGENCY_CD AS ORGN_CD,
+                A.EMP_NO,
+                A.EMP_NM,
+                A.USER_ID,
+                A.MP_NO,
+                A.SMS_RECV_YN,
+                A.SERVICE_FG,
+                '' AS STORE_CD,
+                '' AS STORE_NM,
+                '' AS HQ_OFFICE_CD,
+                '' AS HQ_OFFICE_NM,
+                A.AGENCY_CD
+                FROM
+                TB_CM_EMPLOYEE A,
+                TB_CM_AGENCY B
+                WHERE 1=1
+                AND A.AGENCY_CD = B.AGENCY_CD
+            )
+        ) tce
+        WHERE 1=1
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND tce.ORGN_FG IN ('H')
+                        AND tce.HQ_OFFICE_CD = #{hqOfficeCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                         AND tce.ORGN_FG IN ('S')
+                         AND tce.STORE_CD = #{storeCd}
+                    ]]>
+                </if>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <!-- 전체 체크박스 제외 -->
+                    <if test='authChk != null and authChk != "" and authChk != "all"'>
+                        <![CDATA[
+                            AND tce.ORGN_FG = #{authChk}
+                        ]]>
+                    </if>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                         AND tce.ORGN_FG IN ('A')
+                         AND tce.AGENCY_CD = #{agencyCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        <if test="empNo != null and empNo != ''">
+            AND tce.EMP_NO LIKE '%' || #{empNo} || '%'
+        </if>
+        <if test="empNm != null and empNm != ''">
+            AND tce.EMP_NM LIKE '%' || #{empNm} || '%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND tce.USER_ID LIKE '%' || #{userId} || '%'
+        </if>
+        <if test="mpNo != null and mpNo != ''">
+            AND tce.MP_NO LIKE '%' || #{mpNo} || '%'
+        </if>
+        <if test="smsRecvYn != null and smsRecvYn != ''">
+            AND tce.SMS_RECV_YN = #{smsRecvYn}
+        </if>
+        <if test="serviceFg != null and serviceFg != ''">
+            AND tce.SERVICE_FG = #{serviceFg}
+        </if>
+        ORDER BY tce.EMP_NO
+    </select>
+
+</mapper>
