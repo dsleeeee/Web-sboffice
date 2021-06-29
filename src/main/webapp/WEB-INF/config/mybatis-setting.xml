@@ -142,6 +142,9 @@
     <!-- 기초관리 -> 창고관리 -->
     <typeAlias alias="storageVO" type="kr.co.solbipos.base.store.storage.service.StorageVO"/>
 
+    <!-- 기초관리 -> 매장관리 -> 테이블속성 -->
+    <typeAlias alias="tblptVO" type="kr.co.solbipos.base.store.tblpt.service.TblptVO"/>
+
     <!-- 기초관리 > 프로모션관리 > 프로모션관리 -->
     <typeAlias alias="promotionVO" type="kr.co.solbipos.base.promotion.promotion.service.PromotionVO"/>
 

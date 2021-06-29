@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="kr.co.solbipos.base.store.tblpt.service.impl.TblptMapper">
+
+   <!-- 본사 창고 정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_STORAGE
+        PARAM    : tblptVO
+        COMMENTS : 본사 창고정보를 조회한다.
+    -->
+    <select id="getHqTblptList" parameterType="tblptVO" resultType="DefaultMap">
+        /* USE : TblptMapper.getHqTblptList - 본사 창고정보 조회 */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT THS.STORAGE_CD,
+        	   THS.STORAGE_NM,
+        	   THS.USE_YN,
+        	   THE.EMP_NM,
+        	   TO_CHAR(TO_DATE(THS.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+		FROM TB_HQ_STORAGE THS,
+			 TB_HQ_EMPLOYEE THE
+		WHERE THS.HQ_OFFICE_CD = #{hqOfficeCd}
+    	  AND THE.HQ_OFFICE_CD (+) = THS.HQ_OFFICE_CD
+          AND THE.USER_ID (+) = THS.MOD_ID
+        <if test="tblptCd != null and tblptCd != ''">
+    	  AND THS.STORAGE_CD = #{tblptCd}
+        </if>
+        <if test="tblptNm != null and tblptNm != ''">
+      	  AND THS.STORAGE_NM = #{tblptNm}
+        </if>
+        <if test="useYn != null and useYn != ''">
+    	  AND THS.USE_YN = #{useYn}
+        </if>
+        ORDER BY THS.STORAGE_CD ASC
+         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+   <!-- 매장 창고 정보 조회 -->
+    <!--
+        TABLE    : TB_MS_STORAGE
+        PARAM    : tblptVO
+        COMMENTS : 매장 창고정보를 조회한다.
+    -->
+    <select id="getStoreTblptList" parameterType="tblptVO" resultType="DefaultMap">
+        /* USE : TblptMapper.getStoreTblptList - 매장 창고정보 조회 */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT TMS.STORAGE_CD,
+               TMS.STORAGE_NM,
+               TMS.USE_YN,
+               TME.EMP_NM,
+               TO_CHAR(TO_DATE(TMS.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORAGE TMS,
+             TB_MS_EMPLOYEE TME
+        WHERE TMS.STORE_CD = #{storeCd}
+          AND TME.STORE_CD (+) = TMS.STORE_CD
+          AND TME.USER_ID (+) = TMS.MOD_ID
+        <if test="tblptCd != null and tblptCd != ''">
+          AND TMS.STORAGE_CD = #{tblptCd}
+        </if>
+        <if test="tblptNm != null and tblptNm != ''">
+          AND TMS.STORAGE_NM = #{tblptNm}
+        </if>
+        <if test="useYn != null and useYn != ''">
+          AND TMS.USE_YN = #{useYn}
+        </if>
+        ORDER BY TMS.STORAGE_CD ASC
+         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!--  테이블속성 관리 임시패스워드 저장  -->
+    <!--
+        TABLE    : TB_MS_TBL_TEMPPW_T
+        COMMENTS : 임시패스워드 저장
+    -->
+    <update id="tblptOpn" parameterType="tblptVO">
+        /* USE : TblptMapper.tblptOpn */
+        MERGE INTO TB_MS_TBL_TEMPPW_T A
+        USING   (
+                        SELECT  #{storeCd}                              AS STORE_CD
+                        ,       #{tblptTempPw}                          AS TBLPT_TEMP_PW
+                        ,       #{tblptLoginFg}                         AS TBLPT_LOGIN_FG
+                        ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')     AS TBLPT_TEMP_PW_DT
+                        ,       #{tblptTempPwRegId}                     AS TBLPT_TEMP_PW_REG_ID
+                        FROM    DUAL
+                ) B
+        ON      (                B.STORE_CD      =   A.STORE_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TBLPT_TEMP_PW         =   B.TBLPT_TEMP_PW
+        ,       A.TBLPT_LOGIN_FG        =   B.TBLPT_LOGIN_FG
+        ,       A.TBLPT_TEMP_PW_DT      =   B.TBLPT_TEMP_PW_DT
+        ,       A.TBLPT_TEMP_PW_REG_ID  =   B.TBLPT_TEMP_PW_REG_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.TBLPT_TEMP_PW
+        ,       A.TBLPT_LOGIN_FG
+        ,       A.TBLPT_TEMP_PW_DT
+        ,       A.TBLPT_TEMP_PW_REG_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.TBLPT_TEMP_PW
+        ,       B.TBLPT_LOGIN_FG
+        ,       B.TBLPT_TEMP_PW_DT
+        ,       B.TBLPT_TEMP_PW_REG_ID
+        )
+    </update>
+
+</mapper>
