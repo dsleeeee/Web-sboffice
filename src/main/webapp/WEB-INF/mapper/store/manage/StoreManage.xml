@@ -1429,27 +1429,53 @@
     -->
     <insert id="insertStoreProductClass" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreProductClass */
-        INSERT INTO TB_MS_PRODUCT_CLASS
+        MERGE INTO TB_MS_PRODUCT_CLASS A
+        USING
         (
-            STORE_CD,
+            SELECT
+            #{storeCd} AS STORE_CD,
             PROD_CLASS_CD,
             PROD_CLASS_NM,
             P_PROD_CLASS_CD,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        SELECT #{storeCd},
-               PROD_CLASS_CD,
-               PROD_CLASS_NM,
-               P_PROD_CLASS_CD,
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId}
-          FROM TB_MS_PRODUCT_CLASS
-         WHERE STORE_CD = #{copyStoreCd}
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MS_PRODUCT_CLASS
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CLASS_CD = B.PROD_CLASS_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROD_CLASS_NM = B.PROD_CLASS_NM,
+            P_PROD_CLASS_CD = B.P_PROD_CLASS_CD,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CLASS_CD,
+                A.PROD_CLASS_NM,
+                A.P_PROD_CLASS_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CLASS_CD,
+                B.PROD_CLASS_NM,
+                B.P_PROD_CLASS_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
     </insert>
 
     <!-- 매장상품분류 복사 -->
@@ -1517,9 +1543,11 @@
     -->
     <insert id="insertStoreProduct" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreProduct */
-        INSERT INTO TB_MS_PRODUCT
+        MERGE INTO TB_MS_PRODUCT A
+        USING
         (
-            STORE_CD,
+            SELECT
+            #{storeCd} AS STORE_CD,
             PROD_CD,
             PROD_NM,
             HQ_BRAND_CD,
@@ -1553,55 +1581,141 @@
             STOCK_UNIT_FG,
             USE_YN,
             REMARK,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
             REG_FG,
             MAP_PROD_CD
-        )
-        SELECT #{storeCd},
-               PROD_CD,
-               PROD_NM,
-               HQ_BRAND_CD,
-               PROD_CLASS_CD,
-               CORNR_CD,
-               ORGPLCE_CD,
-               SDATTR_CLASS_CD,
-               SDSEL_GRP_CD,
-               POINT_SAVE_YN,
-               PROD_DC_FG,
-               VAT_FG,
-               PROD_TIP_YN,
-               PROD_PACK_AMT,
-               PROD_DLVR_AMT,
-               PROD_TYPE_FG,
-               SALE_PROD_YN,
-               STOCK_PROD_YN,
-               SIDE_PROD_YN,
-               SET_PROD_FG,
-               PRC_CTRL_FG,
-               COST_UPRC,
-               LAST_COST_UPRC,
-               SPLY_UPRC,
-               SPLY_UPRC_USE_YN,
-               PO_PROD_FG,
-               PO_UNIT_FG,
-               PO_UNIT_QTY,
-               PO_UNIT_ALLOW_FG,
-               PO_MIN_QTY,
-               SAFE_STOCK_QTY,
-               STOCK_UNIT_FG,
-               USE_YN,
-               REMARK,
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId},
-               REG_FG,
-               MAP_PROD_CD
-          FROM TB_MS_PRODUCT
-         WHERE STORE_CD = #{copyStoreCd}
+            FROM TB_MS_PRODUCT
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROD_NM = B.PROD_NM,
+            HQ_BRAND_CD = B.HQ_BRAND_CD,
+            PROD_CLASS_CD = B.PROD_CLASS_CD,
+            CORNR_CD = B.CORNR_CD,
+            ORGPLCE_CD = B.ORGPLCE_CD,
+            SDATTR_CLASS_CD = B.SDATTR_CLASS_CD,
+            SDSEL_GRP_CD = B.SDSEL_GRP_CD,
+            POINT_SAVE_YN = B.POINT_SAVE_YN,
+            PROD_DC_FG = B.PROD_DC_FG,
+            VAT_FG = B.VAT_FG,
+            PROD_TIP_YN = B.PROD_TIP_YN,
+            PROD_PACK_AMT = B.PROD_PACK_AMT,
+            PROD_DLVR_AMT = B.PROD_DLVR_AMT,
+            PROD_TYPE_FG = B.PROD_TYPE_FG,
+            SALE_PROD_YN = B.SALE_PROD_YN,
+            STOCK_PROD_YN = B.STOCK_PROD_YN,
+            SIDE_PROD_YN = B.SIDE_PROD_YN,
+            SET_PROD_FG = B.SET_PROD_FG,
+            PRC_CTRL_FG = B.PRC_CTRL_FG,
+            COST_UPRC = B.COST_UPRC,
+            LAST_COST_UPRC = B.LAST_COST_UPRC,
+            SPLY_UPRC = B.SPLY_UPRC,
+            SPLY_UPRC_USE_YN = B.SPLY_UPRC_USE_YN,
+            PO_PROD_FG = B.PO_PROD_FG,
+            PO_UNIT_FG = B.PO_UNIT_FG,
+            PO_UNIT_QTY = B.PO_UNIT_QTY,
+            PO_UNIT_ALLOW_FG = B.PO_UNIT_ALLOW_FG,
+            PO_MIN_QTY = B.PO_MIN_QTY,
+            SAFE_STOCK_QTY = B.SAFE_STOCK_QTY,
+            STOCK_UNIT_FG = B.STOCK_UNIT_FG,
+            USE_YN = B.USE_YN,
+            REMARK = B.REMARK,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.PROD_NM,
+                A.HQ_BRAND_CD,
+                A.PROD_CLASS_CD,
+                A.CORNR_CD,
+                A.ORGPLCE_CD,
+                A.SDATTR_CLASS_CD,
+                A.SDSEL_GRP_CD,
+                A.POINT_SAVE_YN,
+                A.PROD_DC_FG,
+                A.VAT_FG,
+                A.PROD_TIP_YN,
+                A.PROD_PACK_AMT,
+                A.PROD_DLVR_AMT,
+                A.PROD_TYPE_FG,
+                A.SALE_PROD_YN,
+                A.STOCK_PROD_YN,
+                A.SIDE_PROD_YN,
+                A.SET_PROD_FG,
+                A.PRC_CTRL_FG,
+                A.COST_UPRC,
+                A.LAST_COST_UPRC,
+                A.SPLY_UPRC,
+                A.SPLY_UPRC_USE_YN,
+                A.PO_PROD_FG,
+                A.PO_UNIT_FG,
+                A.PO_UNIT_QTY,
+                A.PO_UNIT_ALLOW_FG,
+                A.PO_MIN_QTY,
+                A.SAFE_STOCK_QTY,
+                A.STOCK_UNIT_FG,
+                A.USE_YN,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.REG_FG,
+                A.MAP_PROD_CD
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.PROD_NM,
+                B.HQ_BRAND_CD,
+                B.PROD_CLASS_CD,
+                B.CORNR_CD,
+                B.ORGPLCE_CD,
+                B.SDATTR_CLASS_CD,
+                B.SDSEL_GRP_CD,
+                B.POINT_SAVE_YN,
+                B.PROD_DC_FG,
+                B.VAT_FG,
+                B.PROD_TIP_YN,
+                B.PROD_PACK_AMT,
+                B.PROD_DLVR_AMT,
+                B.PROD_TYPE_FG,
+                B.SALE_PROD_YN,
+                B.STOCK_PROD_YN,
+                B.SIDE_PROD_YN,
+                B.SET_PROD_FG,
+                B.PRC_CTRL_FG,
+                B.COST_UPRC,
+                B.LAST_COST_UPRC,
+                B.SPLY_UPRC,
+                B.SPLY_UPRC_USE_YN,
+                B.PO_PROD_FG,
+                B.PO_UNIT_FG,
+                B.PO_UNIT_QTY,
+                B.PO_UNIT_ALLOW_FG,
+                B.PO_MIN_QTY,
+                B.SAFE_STOCK_QTY,
+                B.STOCK_UNIT_FG,
+                B.USE_YN,
+                B.REMARK,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.REG_FG,
+                B.MAP_PROD_CD
+            )
     </insert>
 
     <!-- 매장상품 복사 -->
@@ -1793,33 +1907,67 @@
         PARAM    : storeManageVO
         COMMENTS : 프랜차이즈 매장의 경우 공급가를 복사한다.
     -->
-    <insert id="copySaleUprc" parameterType="storeManageVO" >
-        /* USE : StoreManageMapper.copySaleUprc */
-        INSERT INTO TB_MS_PRODUCT_SALE_PRICE
+    <insert id="insertStoreSaleUprc" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreSaleUprc */
+        MERGE INTO TB_MS_PRODUCT_SALE_PRICE A
+        USING
         (
-            STORE_CD,
-            PROD_CD,
-            SALE_PRC_FG,
-            START_DATE,
-            END_DATE,
-            SALE_UPRC,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        SELECT #{storeCd},
-               PROD_CD,
-               SALE_PRC_FG,
-               START_DATE,
-               END_DATE,
-               SALE_UPRC,
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId}
-          FROM TB_MS_PRODUCT_SALE_PRICE
-         WHERE STORE_CD = #{copyStoreCd}
+            SELECT
+            #{storeCd} AS STORE_CD,
+            tmpsp.PROD_CD,
+            tmpsp.SALE_PRC_FG,
+            tmpsp.START_DATE,
+            tmpsp.END_DATE,
+            tmpsp.SALE_UPRC,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MS_PRODUCT_SALE_PRICE tmpsp,
+            TB_MS_PRODUCT tmp
+            WHERE 1=1
+            AND tmpsp.STORE_CD = #{copyStoreCd}
+            AND tmp.REG_FG = 'S'
+            AND tmp.STORE_CD (+)= tmpsp.STORE_CD
+            AND tmp.PROD_CD (+)= tmpsp.PROD_CD
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+                AND A.SALE_PRC_FG = B.SALE_PRC_FG
+                AND A.START_DATE = B.START_DATE
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            END_DATE = B.END_DATE,
+            SALE_UPRC = B.SALE_UPRC,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.SALE_PRC_FG,
+                A.START_DATE,
+                A.END_DATE,
+                A.SALE_UPRC,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.SALE_PRC_FG,
+                B.START_DATE,
+                B.END_DATE,
+                B.SALE_UPRC,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
     </insert>
 
     <!-- 판매가  복사 -->
@@ -1851,12 +1999,12 @@
         ON  (
                 A.STORE_CD = B.STORE_CD
                 AND A.PROD_CD = B.PROD_CD
+                AND A.SALE_PRC_FG = B.SALE_PRC_FG
+                AND A.START_DATE = B.START_DATE
             )
         WHEN MATCHED THEN
             UPDATE
             SET
-            SALE_PRC_FG = B.SALE_PRC_FG,
-            START_DATE = B.START_DATE,
             END_DATE = B.END_DATE,
             SALE_UPRC = B.SALE_UPRC,
             MOD_DT = B.MOD_DT,
@@ -1893,23 +2041,165 @@
         PARAM    : storeManageVO
         COMMENTS : 프랜차이즈 매장의 경우 공급가를 복사한다.
     -->
-    <update id="updateSplyUprc" parameterType="storeManageVO" >
-        /* USE : StoreManageMapper.updateSplyUprc */
-        <![CDATA[
-        UPDATE TB_MS_PRODUCT A
-           SET SPLY_UPRC = (SELECT SPLY_UPRC FROM TB_MS_PRODUCT WHERE STORE_CD = #{copyStoreCd} AND PROD_CD = A.PROD_CD),
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
-         WHERE STORE_CD = #{storeCd}
-           AND PROD_CD IN (SELECT A.PROD_CD
-                             FROM TB_MS_PRODUCT A,
-                                  TB_MS_PRODUCT B
-                            WHERE A.STORE_CD = #{copyStoreCd}
-                              AND B.STORE_CD = #{storeCd}
-                              AND B.PROD_CD = A.PROD_CD
-                              AND B.SPLY_UPRC <> A.SPLY_UPRC
-                            )
-        ]]>
+    <update id="insertStoreSplyUprc" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreSplyUprc */
+        MERGE INTO TB_MS_PRODUCT A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            PROD_CD,
+            PROD_NM,
+            HQ_BRAND_CD,
+            PROD_CLASS_CD,
+            CORNR_CD,
+            ORGPLCE_CD,
+            SDATTR_CLASS_CD,
+            SDSEL_GRP_CD,
+            POINT_SAVE_YN,
+            PROD_DC_FG,
+            VAT_FG,
+            PROD_TIP_YN,
+            PROD_PACK_AMT,
+            PROD_DLVR_AMT,
+            PROD_TYPE_FG,
+            SALE_PROD_YN,
+            STOCK_PROD_YN,
+            SIDE_PROD_YN,
+            SET_PROD_FG,
+            PRC_CTRL_FG,
+            COST_UPRC,
+            LAST_COST_UPRC,
+            SPLY_UPRC,
+            SPLY_UPRC_USE_YN,
+            PO_PROD_FG,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            PO_UNIT_ALLOW_FG,
+            PO_MIN_QTY,
+            SAFE_STOCK_QTY,
+            STOCK_UNIT_FG,
+            USE_YN,
+            REMARK,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
+            REG_FG,
+            MAP_PROD_CD
+            FROM TB_MS_PRODUCT
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            SPLY_UPRC = B.SPLY_UPRC,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.PROD_NM,
+                A.HQ_BRAND_CD,
+                A.PROD_CLASS_CD,
+                A.CORNR_CD,
+                A.ORGPLCE_CD,
+                A.SDATTR_CLASS_CD,
+                A.SDSEL_GRP_CD,
+                A.POINT_SAVE_YN,
+                A.PROD_DC_FG,
+                A.VAT_FG,
+                A.PROD_TIP_YN,
+                A.PROD_PACK_AMT,
+                A.PROD_DLVR_AMT,
+                A.PROD_TYPE_FG,
+                A.SALE_PROD_YN,
+                A.STOCK_PROD_YN,
+                A.SIDE_PROD_YN,
+                A.SET_PROD_FG,
+                A.PRC_CTRL_FG,
+                A.COST_UPRC,
+                A.LAST_COST_UPRC,
+                A.SPLY_UPRC,
+                A.SPLY_UPRC_USE_YN,
+                A.PO_PROD_FG,
+                A.PO_UNIT_FG,
+                A.PO_UNIT_QTY,
+                A.PO_UNIT_ALLOW_FG,
+                A.PO_MIN_QTY,
+                A.SAFE_STOCK_QTY,
+                A.STOCK_UNIT_FG,
+                A.USE_YN,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.REG_FG,
+                A.MAP_PROD_CD
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.PROD_NM,
+                B.HQ_BRAND_CD,
+                B.PROD_CLASS_CD,
+                B.CORNR_CD,
+                B.ORGPLCE_CD,
+                B.SDATTR_CLASS_CD,
+                B.SDSEL_GRP_CD,
+                B.POINT_SAVE_YN,
+                B.PROD_DC_FG,
+                B.VAT_FG,
+                B.PROD_TIP_YN,
+                B.PROD_PACK_AMT,
+                B.PROD_DLVR_AMT,
+                B.PROD_TYPE_FG,
+                B.SALE_PROD_YN,
+                B.STOCK_PROD_YN,
+                B.SIDE_PROD_YN,
+                B.SET_PROD_FG,
+                B.PRC_CTRL_FG,
+                B.COST_UPRC,
+                B.LAST_COST_UPRC,
+                B.SPLY_UPRC,
+                B.SPLY_UPRC_USE_YN,
+                B.PO_PROD_FG,
+                B.PO_UNIT_FG,
+                B.PO_UNIT_QTY,
+                B.PO_UNIT_ALLOW_FG,
+                B.PO_MIN_QTY,
+                B.SAFE_STOCK_QTY,
+                B.STOCK_UNIT_FG,
+                B.USE_YN,
+                B.REMARK,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.REG_FG,
+                B.MAP_PROD_CD
+            )
+        <!--<![CDATA[-->
+        <!--UPDATE TB_MS_PRODUCT A-->
+           <!--SET SPLY_UPRC = (SELECT SPLY_UPRC FROM TB_MS_PRODUCT WHERE STORE_CD = #{copyStoreCd} AND PROD_CD = A.PROD_CD),-->
+               <!--MOD_DT = #{modDt},-->
+               <!--MOD_ID = #{modId}-->
+         <!--WHERE STORE_CD = #{storeCd}-->
+           <!--AND PROD_CD IN (SELECT A.PROD_CD-->
+                             <!--FROM TB_MS_PRODUCT A,-->
+                                  <!--TB_MS_PRODUCT B-->
+                            <!--WHERE A.STORE_CD = #{copyStoreCd}-->
+                              <!--AND B.STORE_CD = #{storeCd}-->
+                              <!--AND B.PROD_CD = A.PROD_CD-->
+                              <!--AND B.SPLY_UPRC <> A.SPLY_UPRC-->
+                            <!--)-->
+        <!--]]>-->
     </update>
 
     <!-- 공급가 복사 -->
@@ -1918,9 +2208,212 @@
         PARAM    : storeManageVO
         COMMENTS : 프랜차이즈 매장의 경우 공급가를 복사한다.
     -->
-    <!--<insert id="insertHqSplyUprc" parameterType="storeManageVO" >-->
-        <!--/* USE : StoreManageMapper.insertHqSplyUprc */-->
+    <!--<insert id="insertStoreHqSplyUprc" parameterType="storeManageVO" >-->
+        <!--/* USE : StoreManageMapper.insertStoreHqSplyUprc */-->
+        <!--MERGE INTO TB_MS_PRODUCT A-->
+        <!--USING-->
+        <!--(-->
+            <!--SELECT-->
+            <!--#{storeCd} AS STORE_CD,-->
+            <!--PROD_CD,-->
+            <!--PROD_NM,-->
+            <!--HQ_BRAND_CD,-->
+            <!--PROD_CLASS_CD,-->
+            <!--CORNR_CD,-->
+            <!--ORGPLCE_CD,-->
+            <!--SDATTR_CLASS_CD,-->
+            <!--SDSEL_GRP_CD,-->
+            <!--POINT_SAVE_YN,-->
+            <!--PROD_DC_FG,-->
+            <!--VAT_FG,-->
+            <!--PROD_TIP_YN,-->
+            <!--PROD_PACK_AMT,-->
+            <!--PROD_DLVR_AMT,-->
+            <!--PROD_TYPE_FG,-->
+            <!--SALE_PROD_YN,-->
+            <!--STOCK_PROD_YN,-->
+            <!--SIDE_PROD_YN,-->
+            <!--SET_PROD_FG,-->
+            <!--PRC_CTRL_FG,-->
+            <!--COST_UPRC,-->
+            <!--LAST_COST_UPRC,-->
+            <!--SPLY_UPRC,-->
+            <!--SPLY_UPRC_USE_YN,-->
+            <!--PO_PROD_FG,-->
+            <!--PO_UNIT_FG,-->
+            <!--PO_UNIT_QTY,-->
+            <!--PO_UNIT_ALLOW_FG,-->
+            <!--PO_MIN_QTY,-->
+            <!--SAFE_STOCK_QTY,-->
+            <!--STOCK_UNIT_FG,-->
+            <!--USE_YN,-->
+            <!--REMARK,-->
+            <!--#{regDt} AS REG_DT,-->
+            <!--#{regId} AS REG_ID,-->
+            <!--#{modDt} AS MOD_DT,-->
+            <!--#{modId} AS MOD_ID,-->
+            <!--'H' AS REG_FG,-->
+            <!--MAP_PROD_CD-->
+            <!--FROM TB_HQ_PRODUCT-->
+            <!--WHERE 1=1-->
+            <!--AND HQ_OFFICE_CD = #{hqOfficeCd}-->
+        <!--) B-->
+        <!--ON  (-->
+                <!--A.STORE_CD = B.STORE_CD-->
+                <!--AND A.PROD_CD = B.PROD_CD-->
+            <!--)-->
+        <!--WHEN MATCHED THEN-->
+            <!--UPDATE-->
+            <!--SET-->
+            <!--SPLY_UPRC = B.SPLY_UPRC,-->
+            <!--MOD_DT = B.MOD_DT,-->
+            <!--MOD_ID = B.MOD_ID-->
+        <!--WHEN NOT MATCHED THEN-->
+            <!--INSERT (-->
+                <!--A.STORE_CD,-->
+                <!--A.PROD_CD,-->
+                <!--A.PROD_NM,-->
+                <!--A.HQ_BRAND_CD,-->
+                <!--A.PROD_CLASS_CD,-->
+                <!--A.CORNR_CD,-->
+                <!--A.ORGPLCE_CD,-->
+                <!--A.SDATTR_CLASS_CD,-->
+                <!--A.SDSEL_GRP_CD,-->
+                <!--A.POINT_SAVE_YN,-->
+                <!--A.PROD_DC_FG,-->
+                <!--A.VAT_FG,-->
+                <!--A.PROD_TIP_YN,-->
+                <!--A.PROD_PACK_AMT,-->
+                <!--A.PROD_DLVR_AMT,-->
+                <!--A.PROD_TYPE_FG,-->
+                <!--A.SALE_PROD_YN,-->
+                <!--A.STOCK_PROD_YN,-->
+                <!--A.SIDE_PROD_YN,-->
+                <!--A.SET_PROD_FG,-->
+                <!--A.PRC_CTRL_FG,-->
+                <!--A.COST_UPRC,-->
+                <!--A.LAST_COST_UPRC,-->
+                <!--A.SPLY_UPRC,-->
+                <!--A.SPLY_UPRC_USE_YN,-->
+                <!--A.PO_PROD_FG,-->
+                <!--A.PO_UNIT_FG,-->
+                <!--A.PO_UNIT_QTY,-->
+                <!--A.PO_UNIT_ALLOW_FG,-->
+                <!--A.PO_MIN_QTY,-->
+                <!--A.SAFE_STOCK_QTY,-->
+                <!--A.STOCK_UNIT_FG,-->
+                <!--A.USE_YN,-->
+                <!--A.REMARK,-->
+                <!--A.REG_DT,-->
+                <!--A.REG_ID,-->
+                <!--A.MOD_DT,-->
+                <!--A.MOD_ID,-->
+                <!--A.REG_FG,-->
+                <!--A.MAP_PROD_CD-->
+            <!--) VALUES (-->
+                <!--B.STORE_CD,-->
+                <!--B.PROD_CD,-->
+                <!--B.PROD_NM,-->
+                <!--B.HQ_BRAND_CD,-->
+                <!--B.PROD_CLASS_CD,-->
+                <!--B.CORNR_CD,-->
+                <!--B.ORGPLCE_CD,-->
+                <!--B.SDATTR_CLASS_CD,-->
+                <!--B.SDSEL_GRP_CD,-->
+                <!--B.POINT_SAVE_YN,-->
+                <!--B.PROD_DC_FG,-->
+                <!--B.VAT_FG,-->
+                <!--B.PROD_TIP_YN,-->
+                <!--B.PROD_PACK_AMT,-->
+                <!--B.PROD_DLVR_AMT,-->
+                <!--B.PROD_TYPE_FG,-->
+                <!--B.SALE_PROD_YN,-->
+                <!--B.STOCK_PROD_YN,-->
+                <!--B.SIDE_PROD_YN,-->
+                <!--B.SET_PROD_FG,-->
+                <!--B.PRC_CTRL_FG,-->
+                <!--B.COST_UPRC,-->
+                <!--B.LAST_COST_UPRC,-->
+                <!--B.SPLY_UPRC,-->
+                <!--B.SPLY_UPRC_USE_YN,-->
+                <!--B.PO_PROD_FG,-->
+                <!--B.PO_UNIT_FG,-->
+                <!--B.PO_UNIT_QTY,-->
+                <!--B.PO_UNIT_ALLOW_FG,-->
+                <!--B.PO_MIN_QTY,-->
+                <!--B.SAFE_STOCK_QTY,-->
+                <!--B.STOCK_UNIT_FG,-->
+                <!--B.USE_YN,-->
+                <!--B.REMARK,-->
+                <!--B.REG_DT,-->
+                <!--B.REG_ID,-->
+                <!--B.MOD_DT,-->
+                <!--B.MOD_ID,-->
+                <!--B.REG_FG,-->
+                <!--B.MAP_PROD_CD-->
+            <!--)-->
     <!--</insert>-->
+
+    <!-- 바코드 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_BARCD
+        PARAM    : storeManageVO
+        COMMENTS : 본사의 바코드를 복사한다
+    -->
+    <insert id="insertStoreBarcd" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreBarcd */
+        MERGE INTO TB_MS_PRODUCT_BARCD A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            PROD_CD,
+            BARCD_CD,
+            BARCD_NM,
+            UNIT_QTY,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MS_PRODUCT_BARCD
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+                AND A.BARCD_CD = B.BARCD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            BARCD_NM = B.BARCD_NM,
+            UNIT_QTY = B.UNIT_QTY,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.BARCD_CD,
+                A.BARCD_NM,
+                A.UNIT_QTY,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.BARCD_CD,
+                B.BARCD_NM,
+                B.UNIT_QTY,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
 
     <!-- 바코드 복사 -->
     <!--
@@ -2111,9 +2604,135 @@
 
     <!-- 사이드(속성) 복사 -->
     <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : storeManageVO
+        COMMENTS : 사이드(속성)를 복사한다
+    -->
+    <insert id="insertStoreSdattrClass" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreSdattrClass */
+        MERGE INTO TB_MS_PRODUCT_SDATTR_CLASS A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            MS_BRAND_CD,
+            SDATTR_CLASS_CD,
+            SDATTR_CLASS_NM,
+            USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MS_PRODUCT_SDATTR_CLASS
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.SDATTR_CLASS_CD = B.SDATTR_CLASS_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            MS_BRAND_CD = B.MS_BRAND_CD,
+            SDATTR_CLASS_NM = B.SDATTR_CLASS_NM,
+            USE_YN = B.USE_YN,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.MS_BRAND_CD,
+                A.SDATTR_CLASS_CD,
+                A.SDATTR_CLASS_NM,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.MS_BRAND_CD,
+                B.SDATTR_CLASS_CD,
+                B.SDATTR_CLASS_NM,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 사이드(속성) 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR
+        PARAM    : storeManageVO
+        COMMENTS : 사이드(속성)를 복사한다
+    -->
+    <insert id="insertStoreSdattr" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreSdattr */
+        MERGE INTO TB_MS_PRODUCT_SDATTR A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            SDATTR_CD,
+            SDATTR_NM,
+            SDATTR_CLASS_CD,
+            DISP_SEQ,
+            USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MS_PRODUCT_SDATTR
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.SDATTR_CD = B.SDATTR_CD
+                AND A.SDATTR_CLASS_CD = B.SDATTR_CLASS_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            SDATTR_NM = B.SDATTR_NM,
+            DISP_SEQ = B.DISP_SEQ,
+            USE_YN = B.USE_YN,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.SDATTR_CD,
+                A.SDATTR_NM,
+                A.SDATTR_CLASS_CD,
+                A.DISP_SEQ,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.SDATTR_CD,
+                B.SDATTR_NM,
+                B.SDATTR_CLASS_CD,
+                B.DISP_SEQ,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 사이드(선택메뉴) 복사 -->
+    <!--
         TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
         PARAM    : storeManageVO
-        COMMENTS : 본사의 사이드(속성)를 복사한다
+        COMMENTS : 본사의 사이드(선택메뉴)를 복사한다
     -->
     <insert id="insertStoreHqSdselGroup" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreHqSdselGroup */
@@ -2174,11 +2793,11 @@
             )
     </insert>
 
-    <!-- 사이드(속성) 복사 -->
+    <!-- 사이드(선택메뉴) 복사 -->
     <!--
         TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
         PARAM    : storeManageVO
-        COMMENTS : 본사의 사이드(속성)를 복사한다
+        COMMENTS : 본사의 사이드(선택메뉴)를 복사한다
     -->
     <insert id="insertStoreHqSdselClass" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreHqSdselClass */
@@ -2251,11 +2870,11 @@
             )
     </insert>
 
-    <!-- 사이드(속성) 복사 -->
+    <!-- 사이드(선택메뉴) 복사 -->
     <!--
         TABLE    : TB_MS_PRODUCT_SDSEL_PROD
         PARAM    : storeManageVO
-        COMMENTS : 본사의 사이드(속성)를 복사한다
+        COMMENTS : 본사의 사이드(선택메뉴)를 복사한다
     -->
     <insert id="insertStoreHqSdselProd" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreHqSdselProd */
@@ -2322,6 +2941,320 @@
                 B.MOD_ID,
                 B.RCVKIND
             )
+    </insert>
+
+    <!-- 사이드(선택메뉴) 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : storeManageVO
+        COMMENTS : 사이드(선택메뉴)를 복사한다
+    -->
+    <insert id="insertStoreSdselGroup" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreSdselGroup */
+        MERGE INTO TB_MS_PRODUCT_SDSEL_GROUP A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            MS_BRAND_CD,
+            SDSEL_GRP_CD,
+            SDSEL_GRP_NM,
+            USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
+            RCVKIND
+            FROM TB_MS_PRODUCT_SDSEL_GROUP
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.SDSEL_GRP_CD = B.SDSEL_GRP_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            MS_BRAND_CD = B.MS_BRAND_CD,
+            SDSEL_GRP_NM = B.SDSEL_GRP_NM,
+            USE_YN = B.USE_YN,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID,
+            RCVKIND = B.RCVKIND
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.MS_BRAND_CD,
+                A.SDSEL_GRP_CD,
+                A.SDSEL_GRP_NM,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.RCVKIND
+            ) VALUES (
+                B.STORE_CD,
+                B.MS_BRAND_CD,
+                B.SDSEL_GRP_CD,
+                B.SDSEL_GRP_NM,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.RCVKIND
+            )
+    </insert>
+
+    <!-- 사이드(선택메뉴) 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : storeManageVO
+        COMMENTS : 사이드(선택메뉴)를 복사한다
+    -->
+    <insert id="insertStoreSdselClass" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreSdselClass */
+        MERGE INTO TB_MS_PRODUCT_SDSEL_CLASS A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            SDSEL_CLASS_CD,
+            SDSEL_CLASS_NM,
+            SDSEL_GRP_CD,
+            DISP_SEQ,
+            SDSEL_QTY,
+            USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
+            MAP_CLASS_CD,
+            RCVKIND
+            FROM TB_MS_PRODUCT_SDSEL_CLASS
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
+                AND A.SDSEL_GRP_CD = B.SDSEL_GRP_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            SDSEL_CLASS_NM = B.SDSEL_CLASS_NM,
+            SDSEL_QTY = B.SDSEL_QTY,
+            DISP_SEQ = B.DISP_SEQ,
+            USE_YN = B.USE_YN,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID,
+            MAP_CLASS_CD = B.MAP_CLASS_CD,
+            RCVKIND = B.RCVKIND
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.SDSEL_CLASS_CD,
+                A.SDSEL_CLASS_NM,
+                A.SDSEL_GRP_CD,
+                A.DISP_SEQ,
+                A.SDSEL_QTY,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.MAP_CLASS_CD,
+                A.RCVKIND
+            ) VALUES (
+                B.STORE_CD,
+                B.SDSEL_CLASS_CD,
+                B.SDSEL_CLASS_NM,
+                B.SDSEL_GRP_CD,
+                B.DISP_SEQ,
+                B.SDSEL_QTY,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.MAP_CLASS_CD,
+                B.RCVKIND
+            )
+    </insert>
+
+    <!-- 사이드(선택메뉴) 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 사이드(선택메뉴)를 복사한다
+    -->
+    <insert id="insertStoreSdselProd" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreSdselProd */
+        MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            SDSEL_CLASS_CD,
+            PROD_CD,
+            ADD_PROD_UPRC,
+            ADD_PROD_QTY,
+            DISP_SEQ,
+            USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
+            RCVKIND
+            FROM TB_MS_PRODUCT_SDSEL_PROD
+            WHERE 1=1
+            AND STORE_CD = #{copyStoreCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            ADD_PROD_UPRC = B.ADD_PROD_UPRC,
+            ADD_PROD_QTY = B.ADD_PROD_QTY,
+            DISP_SEQ = B.DISP_SEQ,
+            USE_YN = B.USE_YN,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID,
+            RCVKIND = B.RCVKIND
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.SDSEL_CLASS_CD,
+                A.PROD_CD,
+                A.ADD_PROD_UPRC,
+                A.ADD_PROD_QTY,
+                A.DISP_SEQ,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.RCVKIND
+            ) VALUES (
+                B.STORE_CD,
+                B.SDSEL_CLASS_CD,
+                B.PROD_CD,
+                B.ADD_PROD_UPRC,
+                B.ADD_PROD_QTY,
+                B.DISP_SEQ,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.RCVKIND
+            )
+    </insert>
+
+    <!-- 취급상품 복사 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 취급상품을 복사한다
+    -->
+    <insert id="insertStoreHqProductStore" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductStore */
+        MERGE INTO TB_HQ_PRODUCT_STORE A
+        USING
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            #{storeCd} AS STORE_CD,
+            PROD_CD,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_HQ_PRODUCT
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON  (
+                A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.HQ_OFFICE_CD,
+                A.STORE_CD,
+                A.PROD_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.HQ_OFFICE_CD,
+                B.STORE_CD,
+                B.PROD_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 취급상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 취급상품을 삭제한다
+    -->
+    <delete id="deleteStoreProductStore" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.deleteStoreProductStore */
+        DELETE TB_HQ_PRODUCT_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 취급상품 복사 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 취급상품을 복사한다
+    -->
+    <insert id="insertStoreProductStore" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreProductStore */
+        INSERT INTO TB_HQ_PRODUCT_STORE
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+            SELECT
+            #{hqOfficeCd} AS HQ_OFFICE_CD,
+            #{storeCd} AS STORE_CD,
+            PROD_CD,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_HQ_PRODUCT_STORE
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{copyHqOfficeCd}
+            AND STORE_CD = #{copyStoreCd}
     </insert>
 
     <!-- 매장 기능키 복사 -->
