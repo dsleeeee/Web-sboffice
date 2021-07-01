@@ -558,6 +558,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.hqOfficeNm = hqScope.getHq().hqOfficeNm;
           $scope.store.storeCdInputType = hqScope.getHq().envst0027; // 매장코드 채번방식(자동/수동)
           $scope.store.storeCdChkFg ="";
+          $scope.store.envst0043 = hqScope.getHq().envst0043; // 본사신규상품매장생성
 
           // 매장코드 채번방식
           if(hqScope.getHq().envst0027 === '1') { //수동

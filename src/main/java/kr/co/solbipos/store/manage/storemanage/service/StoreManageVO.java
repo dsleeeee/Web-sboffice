@@ -133,6 +133,9 @@ public class StoreManageVO extends PageVO {
     /** 매핑매장코드*/
     private String mapStoreCd;
 
+    /** 본사신규상품매장생성 */
+    private String envst0043;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -716,5 +719,13 @@ public class StoreManageVO extends PageVO {
 
     public void setMapStoreCd(String mapStoreCd) {
         this.mapStoreCd = mapStoreCd;
+    }
+
+    public String getEnvst0043() {
+        return envst0043;
+    }
+
+    public void setEnvst0043(String envst0043) {
+        this.envst0043 = envst0043;
     }
 }

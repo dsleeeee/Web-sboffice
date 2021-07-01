@@ -294,6 +294,28 @@ public class StoreManageServiceImpl implements StoreManageService{
                 procCnt += mapper.insertTbMsGift(storeManageVO);
                 //쿠폰 생성하지 않음
                 //procCnt += mapper.insertTbMsCoupon(storeManageVO);
+
+                // 상품분류 생성
+                procCnt += mapper.insertStoreHqProductClass(storeManageVO);
+                // 사이드(속성) 생성
+                procCnt += mapper.insertStoreHqSdattrClass(storeManageVO);
+                procCnt += mapper.insertStoreHqSdattr(storeManageVO);
+                // 사이드(선택메뉴) 생성
+                procCnt += mapper.insertStoreHqSdselGroup(storeManageVO);
+                procCnt += mapper.insertStoreHqSdselClass(storeManageVO);
+                procCnt += mapper.insertStoreHqSdselProd(storeManageVO);
+
+               // 본사신규상품매장생성(0:자동생성, 1:생성안함)
+                if(storeManageVO.getEnvst0043().equals("0")) {
+                    // 상품 생성
+                    procCnt += mapper.insertStoreHqProduct(storeManageVO);
+                    // 판매가 생성
+                    procCnt += mapper.insertStoreHqSaleUprc(storeManageVO);
+                    // 공급가 생성(아직 공급가 사용안함 개발필요)
+//                    procCnt += mapper.insertHqSplyUprc(storeManageVO);
+                    // 바코드 생성
+                    procCnt += mapper.insertStoreHqBarcd(storeManageVO);
+                }
             }
 
             // 기본 테이블 그룹 생성

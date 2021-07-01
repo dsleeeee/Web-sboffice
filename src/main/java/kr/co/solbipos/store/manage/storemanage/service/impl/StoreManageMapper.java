@@ -134,15 +134,31 @@ public interface StoreManageMapper {
 
     /** 상품 분류 복사 */
     int insertStoreProductClass(StoreManageVO storeManageVO);
+    int insertStoreHqProductClass(StoreManageVO storeManageVO);
 
     /** 상품 복사 */
     int insertStoreProduct(StoreManageVO storeManageVO);
+    int insertStoreHqProduct(StoreManageVO storeManageVO);
 
     /** 판매가 복사 */
     int copySaleUprc(StoreManageVO storeManageVO);
+    int insertStoreHqSaleUprc(StoreManageVO storeManageVO);
 
     /** 공급가 복사  */
     int updateSplyUprc(StoreManageVO storeManageVO);
+//    int insertHqSplyUprc(StoreManageVO storeManageVO);
+
+    /** 바코드 복사  */
+    int insertStoreHqBarcd(StoreManageVO storeManageVO);
+
+    /** 사이드(속성) 복사  */
+    int insertStoreHqSdattrClass(StoreManageVO storeManageVO);
+    int insertStoreHqSdattr(StoreManageVO storeManageVO);
+
+    /** 사이드(선택메뉴) 복사  */
+    int insertStoreHqSdselGroup(StoreManageVO storeManageVO);
+    int insertStoreHqSdselClass(StoreManageVO storeManageVO);
+    int insertStoreHqSdselProd(StoreManageVO storeManageVO);
 
     /** 매장 기능키 복사  */
     int copyStoreFnkey(StoreFnkeyVO storeFnkeyVO);

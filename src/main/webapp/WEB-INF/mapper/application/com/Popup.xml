@@ -74,34 +74,44 @@
     -->
     <select id="getHqList" parameterType="hqOfficeVO" resultType="DefaultMap">
         /* USE : PopupMapper.getHqList */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tho.HQ_OFFICE_CD,
-                tho.HQ_OFFICE_NM,
-                tho.OWNER_NM,
-                tho.SYS_STAT_FG,
-                tho.CLS_FG,
-                NVL(thq.ENVST_VAL, '0') AS ENVST_0027
-      <include refid="CmmSQL.PagingTemplateCount"/>
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tho.HQ_OFFICE_CD,
+        tho.HQ_OFFICE_NM,
+        tho.OWNER_NM,
+        tho.SYS_STAT_FG,
+        tho.CLS_FG,
+        NVL(thq.ENVST_VAL, '0') AS ENVST_0027,
+        NVL(thq43.ENVST_VAL, '0') AS ENVST_0043
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_OFFICE tho,
-              (
-                 SELECT HQ_OFFICE_CD,
-                         ENVST_VAL
-                   FROM TB_HQ_ENVST
-                  WHERE ENVST_CD = '0027'
-                    AND USE_YN = 'Y'
-              ) thq
+        (
+            SELECT HQ_OFFICE_CD,
+            ENVST_VAL
+            FROM TB_HQ_ENVST
+            WHERE ENVST_CD = '0027'
+            AND USE_YN = 'Y'
+        ) thq,
+        (
+            SELECT HQ_OFFICE_CD,
+            ENVST_VAL
+            FROM TB_HQ_ENVST
+            WHERE ENVST_CD = '0043'
+            AND USE_YN = 'Y'
+        ) thq43
         WHERE thq.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND thq43.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-           AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
-         </if>
-         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-           AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
-         </if>
+            AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
         <if test='orgnFg != null and orgnFg == "A"'>
             AND (tho.AGENCY_CD = #{agencyCd} OR tho.HQ_OFFICE_CD = '00000')
         </if>
-         ORDER BY tho.HQ_OFFICE_CD ASC
-      <include refid="CmmSQL.PagingTemplateBottom"/>
+        ORDER BY tho.HQ_OFFICE_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 매장선택 조회 -->
