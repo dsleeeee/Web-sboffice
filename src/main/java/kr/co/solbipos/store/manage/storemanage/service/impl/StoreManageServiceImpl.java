@@ -288,12 +288,36 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             // 프랜차이즈매장: 본사에 등록된 결제수단분류/쿠폰/상품권 생성
             if(!storeManageVO.getHqOfficeCd().equals("00000")) {
-                //결제수단분류 생성
+                // 본사 결제수단분류 매장에 생성
                 procCnt += mapper.insertTbMsPayMethodClass(storeManageVO);
-                //상품권 생성
+                // 본사 상품권 매장에 생성
                 procCnt += mapper.insertTbMsGift(storeManageVO);
                 //쿠폰 생성하지 않음
                 //procCnt += mapper.insertTbMsCoupon(storeManageVO);
+
+                // 본사 상품분류 매장에 생성
+                procCnt += mapper.insertStoreHqProductClass(storeManageVO);
+                // 본사 사이드(속성) 매장에 생성
+                procCnt += mapper.insertStoreHqSdattrClass(storeManageVO);
+                procCnt += mapper.insertStoreHqSdattr(storeManageVO);
+                // 본사 사이드(선택메뉴) 매장에 생성
+                procCnt += mapper.insertStoreHqSdselGroup(storeManageVO);
+                procCnt += mapper.insertStoreHqSdselClass(storeManageVO);
+                procCnt += mapper.insertStoreHqSdselProd(storeManageVO);
+
+               // 본사신규상품매장생성(0:자동생성, 1:생성안함)
+                if(storeManageVO.getEnvst0043().equals("0")) {
+                    // 본사 상품 매장에 생성
+                    procCnt += mapper.insertStoreHqProduct(storeManageVO);
+                    // 본사 판매가 매장에 생성
+                    procCnt += mapper.insertStoreHqSaleUprc(storeManageVO);
+                    // 본사 공급가 매장에 생성(아직 공급가 사용안함 개발필요)
+//                    procCnt += mapper.insertStoreHqSplyUprc(storeManageVO);
+                    // 본사 바코드 매장에 생성
+                    procCnt += mapper.insertStoreHqBarcd(storeManageVO);
+                    // 본사 상품을 취급상품 테이블에 생성
+                    procCnt += mapper.insertStoreHqProductStore(storeManageVO);
+                }
             }
 
             // 기본 테이블 그룹 생성
@@ -337,18 +361,42 @@ public class StoreManageServiceImpl implements StoreManageService{
 
                     // 상품 복사
                     if( "product".equals(copyEnv[i]) ) {
+                        // 상품분류 생성
                         procCnt += mapper.insertStoreProductClass(storeManageVO);
+                        // 상품 생성
                         procCnt += mapper.insertStoreProduct(storeManageVO);
+                        // 판매가 생성(상품정보 REG_FG가 S인 상품만)
+                        procCnt += mapper.insertStoreSaleUprc(storeManageVO);
+                        // 공급가 생성(아직 공급가 사용안함 개발필요)
+//                        procCnt += mapper.insertStoreSplyUprc(storeManageVO);
+                        // 바코드 생성
+                        procCnt += mapper.insertStoreBarcd(storeManageVO);
+                        // 사이드(속성) 생성
+                        procCnt += mapper.insertStoreSdattrClass(storeManageVO);
+                        procCnt += mapper.insertStoreSdattr(storeManageVO);
+                        // 사이드(선택메뉴) 생성
+                        procCnt += mapper.insertStoreSdselGroup(storeManageVO);
+                        procCnt += mapper.insertStoreSdselClass(storeManageVO);
+                        procCnt += mapper.insertStoreSdselProd(storeManageVO);
+
+                        // 프랜차이즈매장
+                        if(!storeManageVO.getHqOfficeCd().equals("00000")) {
+                            // 취급상품
+                            procCnt += mapper.deleteStoreProductStore(storeManageVO);
+                            procCnt += mapper.insertStoreProductStore(storeManageVO);
+                        }
                     }
 
                     // 판매가 복사
                     if( "salePrice".equals(copyEnv[i]) ) {
-                        procCnt += mapper.copySaleUprc(storeManageVO);
+                        // 판매가 생성(상품정보 REG_FG가 S인 상품만)
+                        procCnt += mapper.insertStoreSaleUprc(storeManageVO);
                     }
 
                     // 공급가 복사
                     if( "supplyPrice".equals(copyEnv[i]) ) {
-                        procCnt += mapper.updateSplyUprc(storeManageVO);
+                        // 공급가 생성(아직 공급가 사용안함 개발필요)
+                        procCnt += mapper.insertStoreSplyUprc(storeManageVO);
                     }
 
                     // 기능키 복사
