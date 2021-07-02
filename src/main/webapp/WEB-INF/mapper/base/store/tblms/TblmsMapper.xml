@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="kr.co.solbipos.base.store.tblms.service.impl.TblmsMapper">
+
+    <!--  테이블관리 관리 임시패스워드 저장  -->
+    <!--
+        TABLE    : TB_MS_TBL_TEMPPW_T
+        COMMENTS : 임시패스워드 저장
+    -->
+    <update id="tblmsOpn" parameterType="tblmsVO">
+        /* USE : TblmsMapper.tblmsOpn */
+        MERGE INTO TB_MS_TBL_TEMPPW_T A
+        USING   (
+                        SELECT  #{storeCd}                              AS STORE_CD
+                        ,       #{tblmsTempPw}                          AS TBLMS_TEMP_PW
+                        ,       #{tblmsLoginFg}                         AS TBLMS_LOGIN_FG
+                        ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')     AS TBLMS_TEMP_PW_DT
+                        ,       #{tblmsTempPwRegId}                     AS TBLMS_TEMP_PW_REG_ID
+                        FROM    DUAL
+                ) B
+        ON      (                B.STORE_CD      =   A.STORE_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TBLMS_TEMP_PW         =   B.TBLMS_TEMP_PW
+        ,       A.TBLMS_LOGIN_FG        =   B.TBLMS_LOGIN_FG
+        ,       A.TBLMS_TEMP_PW_DT      =   B.TBLMS_TEMP_PW_DT
+        ,       A.TBLMS_TEMP_PW_REG_ID  =   B.TBLMS_TEMP_PW_REG_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.TBLMS_TEMP_PW
+        ,       A.TBLMS_LOGIN_FG
+        ,       A.TBLMS_TEMP_PW_DT
+        ,       A.TBLMS_TEMP_PW_REG_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.TBLMS_TEMP_PW
+        ,       B.TBLMS_LOGIN_FG
+        ,       B.TBLMS_TEMP_PW_DT
+        ,       B.TBLMS_TEMP_PW_REG_ID
+        )
+    </update>
+
+</mapper>

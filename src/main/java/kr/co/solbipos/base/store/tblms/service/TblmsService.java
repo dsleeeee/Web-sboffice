@@ -1,13 +1,13 @@
-package kr.co.solbipos.base.store.tblpt.service;
+package kr.co.solbipos.base.store.tblms.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.tblpt.service.TblptVO;
+import kr.co.solbipos.base.store.tblms.service.TblmsVO;
 
 import java.util.List;
 
 /**
-* @Class Name : TblptService.java
+* @Class Name : TblmsService.java
 * @Description :
 * @Modification Information
 * @
@@ -21,10 +21,10 @@ import java.util.List;
 *
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
-public interface TblptService {
+public interface TblmsService {
 
     /** 창고정보 리스트조회 */
-    List<DefaultMap<String>> getTblptList(TblptVO tblptVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getTblmsList(TblmsVO tblmsVO, SessionInfoVO sessionInfoVO);
     /** 임시패스워드 등록 */
-    String tblptOpn(TblptVO tblptVO, SessionInfoVO sessionInfoVO);
+    String tblmsOpn(TblmsVO tblmsVO, SessionInfoVO sessionInfoVO);
 }

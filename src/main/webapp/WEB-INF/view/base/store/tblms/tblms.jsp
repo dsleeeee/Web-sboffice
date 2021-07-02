@@ -9,9 +9,10 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
-<c:set var="baseUrl" value="/base/store/tblpt/"/>
+<c:set var="baseUrl" value="/base/store/tblms/"/>
 
 <style type="text/css">
+
 /* 단순버튼 01 */
 .btn01
 {
@@ -450,9 +451,10 @@ button[class*="btn02"] {border: 0;}
 .btn02-gradient.purple:active {background: #BD8EB7;}
 .btn02-gradient.yellow:active {background: #DBC05B;}
 .btn02-gradient.green:active  {background: #72B08E;}
+
 </style>
 
-<div class="subCon3" ng-controller="tblptListCtrl">
+<div class="subCon3" ng-controller="tblmsListCtrl">
 
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
@@ -462,18 +464,17 @@ button[class*="btn02"] {border: 0;}
   </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnSetting" ng-click="fnTblpt('setting');"><s:message code="tblpt.setting" /></button></span>
+        <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnSetting" ng-click="fnTblms('setting');"><s:message code="tblms.setting" /></button></span>
         &nbsp;
-        <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnChromeSetup" ng-click="fnTblpt('chromeSetup');"><s:message code="tblpt.chromeSetup" /></button></span>
+        <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnChromeSetup" ng-click="fnTblms('chromeSetup');"><s:message code="tblms.chromeSetup" /></button></span>
     </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <span><a href="#" class="btn01 first01" id="tblptOpn" ng-click="fnTblpt('tblptOpn');"><s:message code="tblpt.open" /></a></span>
-        <span><a href="#" class="btn01 first01" id="tblptClr" ng-click="fnTblpt('tblptClr');"><s:message code="tblpt.clear" /></a></span>
+        <span><a href="#" class="btn01 first01" id="tblmsOpn" ng-click="fnTblms('tblmsOpn');"><s:message code="tblms.open" /></a></span>
     </div>
 <br><br><br><br><br>
     <div style="margin-top:10px; text-align:center;">
-        <button  class="btn02-gradient purple"   type='button' onclick="window.open('http://192.168.0.72:2020/login/login_check_tbl.jsp?AutoFg=M&user_id=a000005&user_pwd=&login_auto_serial=&appfg=web&tblfg=tblpt', 'popup', '');" style='width:200px; height:50px;'>
+        <button  class="btn02-gradient purple"   type='button' onclick="window.open('http://192.168.0.72:2020/login/login_check_tbl.jsp?AutoFg=M&user_id=a000005&user_pwd=&login_auto_serial=&appfg=web&tblfg=tblms', 'popup', '');" style='width:200px; height:50px;'>
         창 오픈 샘플
         </button>
     </div>
@@ -482,8 +483,8 @@ button[class*="btn02"] {border: 0;}
 
     <div class="divMainWrap">
         <div style='margin-top:20px; text-align:center; margin-top:40px;'>
-            <button type='button' onclick="fnOpenMobileTblpt();" style='width:200px; height:50px;'>테이블속성 등록창 열기</button><br>
-            <button type='button' onclick="fnOpenMobileTblptClear();" style='width:200px; height:50px; margin-top:10px;'>테이블속성 초기화</button>
+            <button type='button' onclick="fnOpenMobileTblms();" style='width:200px; height:50px;'>테이블관리 등록창 열기</button><br>
+            <button type='button' onclick="fnOpenMobileTblmsClear();" style='width:200px; height:50px; margin-top:10px;'>테이블관리 초기화</button>
         </div>
 
         <div style="margin-top:30px; text-align:center;">
@@ -509,5 +510,5 @@ button[class*="btn02"] {border: 0;}
     var s_storeCd     = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/tblpt/tblpt.js?ver=20200929.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/tblms/tblms.js?ver=20200929.01" charset="utf-8"></script>
 
