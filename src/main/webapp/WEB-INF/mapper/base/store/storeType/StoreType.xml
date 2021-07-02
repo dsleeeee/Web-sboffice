@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreType.xml
+    매장타입관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.06.28     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.store.storeType.service.impl.StoreTypeMapper">
+
+    <!-- 매장타입관리 - 매장타입조회 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입을 조회한다.
+    -->
+    <select id="getStoreType" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* USE : StoreTypeMapper.getStoreType */
+        SELECT HQ_OFFICE_CD,
+                STORE_TYPE_CD,
+                STORE_TYPE_NM,
+                REMARK,
+                OPTION01,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+          FROM TB_HQ_STORE_TYPE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeTypeNm != null and storeTypeNm != ''">
+           AND STORE_TYPE_NM LIKE '%' || #{storeTypeNm} || '%'
+        </if>
+        <if test="useYn != null and useYn != ''">
+           AND USE_YN = #{useYn}
+        </if>
+         ORDER
+            BY STORE_TYPE_CD ASC
+    </select>
+
+    <!-- 매장타입관리 - 매장타입코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE
+        PARAM    : storeTypeVO
+        COMMENTS : 새로운 매장타입 생성시 매장타입코드를 생성한다.
+    -->
+    <select id="getStoreTypeCode" parameterType="storeTypeVO" resultType="String">
+        /* USE : StoreTypeMapper.getStoreTypeCode */
+        SELECT LPAD(NVL(MAX(STORE_TYPE_CD), '0') + 1, 3, '0')
+          FROM TB_HQ_STORE_TYPE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 매장타입관리 - 매장타입생성 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE
+        PARAM    : storeTypeVO
+        COMMENTS : 새로운 매장타입을 생성한다.
+    -->
+    <insert id="insertStoreType" parameterType="storeTypeVO">
+        /* USE : StoreTypeMapper.insertStoreType */
+        INSERT INTO TB_HQ_STORE_TYPE
+                    (
+                        HQ_OFFICE_CD,
+                        STORE_TYPE_CD,
+                        STORE_TYPE_NM,
+                        REMARK,
+                        OPTION01,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{storeTypeCd},
+                        #{storeTypeNm},
+                        #{remark},
+                        #{option01},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </insert>
+
+    <!-- 매장타입관리 - 매장타입수정 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입을 수정한다.
+    -->
+    <update id="updateStoreType" parameterType="storeTypeVO">
+        /* USE : StoreTypeMapper.updateStoreType */
+        UPDATE TB_HQ_STORE_TYPE
+           SET STORE_TYPE_NM = #{storeTypeNm},
+                REMARK = #{remark},
+                USE_YN = #{useYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_TYPE_CD = #{storeTypeCd}
+    </update>
+
+    <!-- 매장타입관리 - 매장연결조회 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_STORE
+        PARAM    : storeTypeVO
+        COMMENTS : 매장연결을 조회한다.
+    -->
+    <select id="getStoreMapping" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreMapping */
+        SELECT thsts.HQ_OFFICE_CD,
+                thsts.STORE_TYPE_CD,
+                thsts.STORE_CD,
+                thsts.REMARK,
+                thsts.OPTION01,
+                thsts.USE_YN,
+                tms.STORE_NM,
+                tms.SYS_STAT_FG
+          FROM TB_HQ_STORE_TYPE_STORE thsts,
+          	    TB_MS_STORE tms
+         WHERE thsts.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thsts.STORE_TYPE_CD = #{storeTypeCd}
+           AND thsts.USE_YN = 'Y'
+           AND tms.HQ_OFFICE_CD = thsts.HQ_OFFICE_CD
+           AND tms.STORE_CD = thsts.STORE_CD
+        ORDER
+           BY thsts.STORE_CD ASC
+    </select>
+
+    <!-- 매장타입관리 - 매장연결삭제 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_STORE
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입에 연결됨 매장을 삭제한다.
+    -->
+    <delete id="deleteStoreMapping" parameterType="storeTypeVO">
+        /* StoreTypeMapper.deleteStoreMapping */
+        DELETE TB_HQ_STORE_TYPE_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_TYPE_CD = #{storeTypeCd}
+           AND STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 매장타입관리 - 매장조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeTypeVO
+        COMMENTS : 매장을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreList */
+        SELECT HQ_OFFICE_CD,
+        STORE_CD,
+        STORE_NM,
+        SYS_STAT_FG
+        FROM TB_MS_STORE
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+        AND STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_STORE_TYPE_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        ORDER
+        BY STORE_CD ASC
+    </select>
+
+    <!-- 매장타입관리 - 매장연결등록 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_STORE
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입에 매장을 연결한다.
+    -->
+    <insert id="saveStoreMapping" parameterType="storeTypeVO">
+        /* StoreTypeMapper.saveStoreMapping */
+        INSERT INTO TB_HQ_STORE_TYPE_STORE
+                    (
+                        HQ_OFFICE_CD,
+                        STORE_TYPE_CD,
+                        STORE_CD,
+                        REMARK,
+                        OPTION01,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{storeTypeCd},
+                        #{storeCd},
+                        #{remark},
+                        #{option01},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </insert>
+
+    <!-- 매장타입관리 - 메뉴그룹연결조회 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹연결을 조회한다.
+    -->
+    <select id="getMenuGroupMapping" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getMenuGroupMapping */
+        SELECT thstpg.HQ_OFFICE_CD,
+                thstpg.STORE_TYPE_CD,
+                thstpg.STORE_GROUP_CD,
+                thstpg.REMARK,
+                thstpg.OPTION01,
+                thstpg.USE_YN,
+                thspg.STORE_GROUP_NM
+          FROM TB_HQ_STORE_TYPE_PROD_GROUP thstpg,
+          		TB_HQ_STORE_PROD_GROUP thspg
+         WHERE thstpg.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thstpg.STORE_TYPE_CD = #{storeTypeCd}
+           AND thstpg.USE_YN = 'Y'
+           AND thspg.HQ_OFFICE_CD = thstpg.HQ_OFFICE_CD
+           AND thspg.STORE_GROUP_CD = thstpg.STORE_GROUP_CD
+        ORDER
+           BY thstpg.STORE_GROUP_CD ASC
+    </select>
+
+    <!-- 매장타입관리 - 메뉴그룹연결삭제 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹연결을 삭제한다.
+    -->
+    <delete id="deleteMenuGroupMapping" parameterType="storeTypeVO">
+        /* StoreTypeMapper.deleteMenuGroupMapping */
+        DELETE TB_HQ_STORE_TYPE_PROD_GROUP
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_TYPE_CD = #{storeTypeCd}
+           AND STORE_GROUP_CD = #{storeGroupCd}
+    </delete>
+
+    <!-- 매장타입관리 - 메뉴그룹조회 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹을 조회한다.
+    -->
+    <select id="getMenuGroupList" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getMenuGroupList */
+        SELECT HQ_OFFICE_CD,
+                STORE_GROUP_CD,
+                STORE_GROUP_NM,
+                REMARK,
+                OPTION01,
+                USE_YN
+         FROM TB_HQ_STORE_PROD_GROUP
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeGroupCd != null and storeGroupCd != ''">
+           AND STORE_GROUP_CD LIKE '%'||#{storeGroupCd}||'%' --메뉴그룹코드
+        </if>
+        <if test="storeGroupNm != null and storeGroupNm != ''">
+           AND STORE_GROUP_NM LIKE '%'||#{storeGroupNm}||'%' --메뉴그룹명
+        </if>
+        <if test="useYn != null and useYn != ''">
+           AND USE_YN = #{useYn}
+        </if>
+        ORDER
+           BY STORE_GROUP_CD ASC
+    </select>
+
+    <!-- 매장타입관리 - 메뉴그룹연결등록 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹을 등록한다.
+    -->
+    <insert id="saveMenuGroupMapping" parameterType="storeTypeVO">
+        /* StoreTypeMapper.saveMenuGroupMapping */
+        INSERT INTO TB_HQ_STORE_TYPE_PROD_GROUP
+                    (
+                        HQ_OFFICE_CD,
+                        STORE_TYPE_CD,
+                        STORE_GROUP_CD,
+                        REMARK,
+                        OPTION01,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{storeTypeCd},
+                        #{storeGroupCd},
+                        #{remark},
+                        #{option01},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </insert>
+
+    <!-- 메뉴그룹관리 - 메뉴그룹조회 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹을 조회한다.
+    -->
+    <select id="getMenuGroup" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* USE : StoreTypeMapper.getMenuGroup */
+        SELECT HQ_OFFICE_CD,
+                STORE_GROUP_CD,
+                STORE_GROUP_NM,
+                REMARK,
+                OPTION01,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+        FROM TB_HQ_STORE_PROD_GROUP
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeGroupNm != null and storeGroupNm != ''">
+            AND STORE_GROUP_NM LIKE '%' || #{storeGroupNm} || '%'
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND USE_YN = #{useYn}
+        </if>
+        ORDER
+           BY STORE_GROUP_CD ASC
+    </select>
+
+    <!-- 메뉴그룹관리 - 메뉴그룹코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 새로운 메뉴그룹 생성시 메뉴그룹코드를 생성한다.
+    -->
+    <select id="getMenuGroupCode" parameterType="storeTypeVO" resultType="String">
+        /* USE : StoreTypeMapper.getMenuGroupCode */
+        SELECT LPAD(NVL(MAX(STORE_GROUP_CD), '0') + 1, 3, '0')
+          FROM TB_HQ_STORE_PROD_GROUP
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 메뉴그룹관리 - 메뉴그룹생성 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 새로운 메뉴그룹을 생성한다.
+    -->
+    <insert id="insertMenuGroup" parameterType="storeTypeVO">
+        /* USE : StoreTypeMapper.insertMenuGroup */
+        INSERT INTO TB_HQ_STORE_PROD_GROUP
+                    (
+                        HQ_OFFICE_CD,
+                        STORE_GROUP_CD,
+                        STORE_GROUP_NM,
+                        REMARK,
+                        OPTION01,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{storeGroupCd},
+                        #{storeGroupNm},
+                        #{remark},
+                        #{option01},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </insert>
+
+    <!-- 메뉴그룹관리 - 메뉴그룹수정 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹을 수정한다.
+    -->
+    <update id="updateMenuGroup" parameterType="storeTypeVO">
+        /* USE : StoreTypeMapper.updateMenuGroup */
+        UPDATE TB_HQ_STORE_PROD_GROUP
+           SET STORE_GROUP_NM = #{storeGroupNm},
+                REMARK = #{remark},
+                USE_YN = #{useYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_GROUP_CD = #{storeGroupCd}
+    </update>
+
+    <!-- 메뉴그룹관리 - 상품연결조회 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP_DTL
+        PARAM    : storeTypeVO
+        COMMENTS : 상품연결을 조회한다.
+    -->
+    <select id="getProdMapping" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getProdMapping */
+        SELECT thspgd.HQ_OFFICE_CD,
+                thspgd.STORE_GROUP_CD,
+                thspgd.PROD_CD,
+                thspgd.SALE_UPRC,
+                thspgd.REMARK,
+                thspgd.OPTION01,
+                thspgd.USE_YN,
+                thp.PROD_NM
+          FROM TB_HQ_STORE_PROD_GROUP_DTL thspgd,
+          	    TB_HQ_PRODUCT thp
+         WHERE thspgd.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thspgd.STORE_GROUP_CD = #{storeGroupCd}
+           AND thspgd.USE_YN = 'Y'
+           AND thp.HQ_OFFICE_CD = thspgd.HQ_OFFICE_CD
+           AND thp.PROD_CD = thspgd.PROD_CD
+        ORDER
+           BY thspgd.PROD_CD ASC
+    </select>
+
+    <!-- 메뉴그룹관리 - 상품연결삭제 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP_DTL
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹에 연결된 상품을 삭제한다.
+    -->
+    <delete id="deleteProdMapping" parameterType="storeTypeVO">
+        /* StoreTypeMapper.deleteProdMapping */
+        DELETE TB_HQ_STORE_PROD_GROUP_DTL
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_GROUP_CD = #{storeGroupCd}
+           AND PROD_CD = #{prodCd}
+    </delete>
+
+    <!-- 메뉴그룹관리 - 상품연결수정 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP_DTL
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹에 연결된 상품정보를 수정한다.
+    -->
+    <update id="updateProdMapping" parameterType="storeTypeVO">
+        /* USE : StoreTypeMapper.updateProdMapping */
+        UPDATE TB_HQ_STORE_PROD_GROUP_DTL
+            SET SALE_UPRC = #{saleUprc},
+                 MOD_DT = #{modDt},
+                 MOD_ID = #{modId}
+          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            AND STORE_GROUP_CD = #{storeGroupCd}
+            AND PROD_CD = #{prodCd}
+    </update>
+
+    <!-- 메뉴그룹관리 - 상품조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : storeTypeVO
+        COMMENTS : 상품을 조회한다.
+    -->
+    <select id="getProdList" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getProdList */
+        SELECT thp.PROD_CD,
+                thp.PROD_NM,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                thp.USE_YN,
+                (CASE WHEN thspgd.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN
+          FROM TB_HQ_PRODUCT thp
+          LEFT OUTER JOIN (
+                                SELECT HQ_OFFICE_CD,
+                                        PROD_CD,
+                                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                  FROM TB_HQ_PRODUCT_SALE_PRICE
+                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                  <![CDATA[
+                                   AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                   AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                  ]]>
+                                   AND SALE_PRC_FG = '1'
+                                 GROUP
+                                    BY HQ_OFFICE_CD, PROD_CD
+                            ) thpsp ON thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                                   AND thp.PROD_CD = thpsp.PROD_CD
+        INNER JOIN TB_HQ_OFFICE tho ON tho.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        LEFT OUTER JOIN (
+                                SELECT HQ_OFFICE_CD,
+                                        PROD_CD
+                                  FROM TB_HQ_STORE_PROD_GROUP_DTL
+                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                   AND STORE_GROUP_CD = #{storeGroupCd}
+                            ) thspgd ON thp.HQ_OFFICE_CD = thspgd.HQ_OFFICE_CD
+                                  AND thp.PROD_CD = thspgd.PROD_CD
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                          FROM TB_HQ_PRODUCT_CLASS
+                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS (
+                            SELECT 1
+                              FROM TB_HQ_PRODUCT_BARCD
+                             WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                               AND PROD_CD = thp.PROD_CD
+                               AND BARCD_CD = #{barCd}
+            ) --바코드
+        </if>
+        <if test="hqBrandCd != null and hqBrandCd != ''">
+            AND thp.HQ_BRAND_CD = #{hqBrandCd} --브랜드코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        <choose>
+            <when test='regYn != null and regYn == "Y"'>
+                AND thspgd.PROD_CD IS NOT NULL
+            </when>
+            <when test='regYn != null and regYn == "N"'>
+                AND thspgd.PROD_CD IS NULL
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        ORDER
+           BY thp.PROD_CD ASC
+    </select>
+
+    <!-- 메뉴그룹관리 - 상품연결등록 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP_DTL
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹에 상품을 연결한다.
+    -->
+    <insert id="saveProdMapping" parameterType="storeTypeVO">
+        /* StoreTypeMapper.saveProdMapping */
+        INSERT INTO TB_HQ_STORE_PROD_GROUP_DTL
+                    (
+                        HQ_OFFICE_CD,
+                        STORE_GROUP_CD,
+                        PROD_CD,
+                        SALE_UPRC,
+                        REMARK,
+                        OPTION01,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{storeGroupCd},
+                        #{prodCd},
+                        #{saleUprc},
+                        #{remark},
+                        #{option01},
+                        #{useYn},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </insert>
+
+    <!-- 메뉴그룹관리 - 브랜드리스트(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
+    -->
+    <select id="getBrandList" parameterType="storeTypeVO" resultType="DefaultMap">
+        SELECT HQ_BRAND_CD AS VALUE,
+                HQ_BRAND_NM AS NAME
+          FROM TB_HQ_BRAND
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+</mapper>
