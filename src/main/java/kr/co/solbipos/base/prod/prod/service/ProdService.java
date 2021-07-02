@@ -65,7 +65,7 @@ public interface ProdService {
     int getProdCdCnt(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 바코드 중복체크 */
-    String chkBarCd(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> chkBarCd(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 매장 적용/미적용 상품 조회 */
     List<DefaultMap<String>> getStoreProdBatchList(ProdVO prodVO, SessionInfoVO sessionInfoVO);

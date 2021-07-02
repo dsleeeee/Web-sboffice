@@ -239,7 +239,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
                     }
                 },
                 function (result) {
-                    $scope._popMsg(messages["prod.barCd.msg"]);
+                    $scope._popMsg(result.data[0]);
                     return false;
                 });
 
