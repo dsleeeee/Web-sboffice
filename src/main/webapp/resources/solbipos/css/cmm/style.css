@@ -95,7 +95,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 
 .fl {float:left;} .fr {float:right;} .oh {overflow:hidden;}
 
-.s12 {font-size:13px;} .s13 {font-size:13px;} .s14 {font-size:14px;} .s16 {font-size:16px;} .s18 {font-size:18px;}
+.s12 {font-size:12px;} .s13 {font-size:13px;} .s14 {font-size:14px;} .s16 {font-size:16px;} .s18 {font-size:18px;}
 
 .lh15 {line-height:15px;} .lh20 {line-height:20px;} .lh25 {line-height:25px;} .lh30 {line-height:30px;}
 

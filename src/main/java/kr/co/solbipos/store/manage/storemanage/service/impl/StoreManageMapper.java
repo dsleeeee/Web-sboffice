@@ -134,15 +134,42 @@ public interface StoreManageMapper {
 
     /** 상품 분류 복사 */
     int insertStoreProductClass(StoreManageVO storeManageVO);
+    int insertStoreHqProductClass(StoreManageVO storeManageVO);
 
     /** 상품 복사 */
     int insertStoreProduct(StoreManageVO storeManageVO);
+    int insertStoreHqProduct(StoreManageVO storeManageVO);
 
     /** 판매가 복사 */
-    int copySaleUprc(StoreManageVO storeManageVO);
+    int insertStoreSaleUprc(StoreManageVO storeManageVO);
+    int insertStoreHqSaleUprc(StoreManageVO storeManageVO);
 
     /** 공급가 복사  */
-    int updateSplyUprc(StoreManageVO storeManageVO);
+    int insertStoreSplyUprc(StoreManageVO storeManageVO);
+//    int insertStoreHqSplyUprc(StoreManageVO storeManageVO);
+
+    /** 바코드 복사  */
+    int insertStoreBarcd(StoreManageVO storeManageVO);
+    int insertStoreHqBarcd(StoreManageVO storeManageVO);
+
+    /** 취급상품 복사  */
+    int insertStoreHqProductStore(StoreManageVO storeManageVO);
+    int deleteStoreProductStore(StoreManageVO storeManageVO);
+    int insertStoreProductStore(StoreManageVO storeManageVO);
+
+    /** 사이드(속성) 복사  */
+    int insertStoreHqSdattrClass(StoreManageVO storeManageVO);
+    int insertStoreHqSdattr(StoreManageVO storeManageVO);
+    int insertStoreSdattrClass(StoreManageVO storeManageVO);
+    int insertStoreSdattr(StoreManageVO storeManageVO);
+
+    /** 사이드(선택메뉴) 복사  */
+    int insertStoreHqSdselGroup(StoreManageVO storeManageVO);
+    int insertStoreHqSdselClass(StoreManageVO storeManageVO);
+    int insertStoreHqSdselProd(StoreManageVO storeManageVO);
+    int insertStoreSdselGroup(StoreManageVO storeManageVO);
+    int insertStoreSdselClass(StoreManageVO storeManageVO);
+    int insertStoreSdselProd(StoreManageVO storeManageVO);
 
     /** 매장 기능키 복사  */
     int copyStoreFnkey(StoreFnkeyVO storeFnkeyVO);
