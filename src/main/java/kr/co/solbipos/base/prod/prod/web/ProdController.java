@@ -195,11 +195,11 @@ public class ProdController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String result = prodService.chkBarCd(prodVO, sessionInfoVO);
-        if(result.equals("0")){
+        List<DefaultMap<String>> result = prodService.chkBarCd(prodVO, sessionInfoVO);
+        if(result.size() <= 1){
             return returnJson(Status.OK);
         } else {
-            return returnJson(Status.FAIL);
+            return returnJson(Status.FAIL, result);
         }
     }
 
