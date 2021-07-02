@@ -223,6 +223,8 @@
     <!-- 기초관리 매장관리 미디어관리 -->
     <typeAlias alias="MediaVO" type="kr.co.solbipos.base.store.media.service.MediaVO"/>
     <typeAlias alias="MediaApplcStoreVO" type="kr.co.solbipos.base.store.media.service.MediaApplcStoreVO"/>
+    <!-- 기초관리 매장관리 매장타입관리 -->
+    <typeAlias alias="storeTypeVO" type="kr.co.solbipos.base.store.storeType.service.StoreTypeVO" />
 
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
