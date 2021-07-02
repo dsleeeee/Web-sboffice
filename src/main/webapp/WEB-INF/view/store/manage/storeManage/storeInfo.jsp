@@ -305,7 +305,7 @@
               </colgroup>
               <tbody>
               <tr>
-                  <%-- 매장환경복사 --%>
+                <%-- 매장환경복사 --%>
                 <th><s:message code="storeManage.copyStoreSetting" /></th>
                 <td colspan="3" class="oh">
                   <div class="mr5 w50">
@@ -393,7 +393,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20210701.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20210702.03" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

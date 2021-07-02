@@ -72,11 +72,17 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 매장선택
   $scope.envStoreCdVal;
-  $scope.setEnvStoreCdVal = function(s){
+  // $scope.setEnvStoreCdVal = function(s){
+  //   $scope.envStoreCdVal = s.selectedValue;
+  // };
+  // $scope.getEnvStoreCdVal = function(){
+  //   return $scope.envStoreCdVal;
+  // };
+  $scope.setEnvStoreCdVal = function(s,e){
     $scope.envStoreCdVal = s.selectedValue;
-  };
-  $scope.getEnvStoreCdVal = function(){
-    return $scope.envStoreCdVal;
+
+    // 매장환경복사 체크 disabled
+    $scope.copyStoreSettingChk();
   };
 
   /*********************************************************
@@ -553,39 +559,41 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       hqScope.$apply(function(){
         hqScope._gridDataInit();
 
-        if( !$.isEmptyObject(hqScope.getHq())  ){
+        if( !$.isEmptyObject(hqScope.getHq())  ) {
           $scope.store.hqOfficeCd = hqScope.getHq().hqOfficeCd;
           $scope.store.hqOfficeNm = hqScope.getHq().hqOfficeNm;
           $scope.store.storeCdInputType = hqScope.getHq().envst0027; // 매장코드 채번방식(자동/수동)
-          $scope.store.storeCdChkFg ="";
+          $scope.store.storeCdChkFg = "";
           $scope.store.envst0043 = hqScope.getHq().envst0043; // 본사신규상품매장생성
 
           // 매장코드 채번방식
-          if(hqScope.getHq().envst0027 === '1') { //수동
+          if (hqScope.getHq().envst0027 === '1') { //수동
             $scope.store.storeCd = ''
             $("#storeCd").removeAttr("readonly");
             $("#storeCd").css("width", "60%");
             $("#btnChkStoreCd").css("display", "");
 
-          }else{
-            if(hqScope.getHq().envst0027 === '0') { //자동
+          } else {
+            if (hqScope.getHq().envst0027 === '0') { //자동
               $scope.store.storeCd = '자동채번'
-            }else{
+            } else {
               $scope.store.storeCd = ''
             }
-            $("#storeCd").attr("readonly",true);
+            $("#storeCd").attr("readonly", true);
             $("#storeCd").css("width", "100%");
             $("#btnChkStoreCd").css("display", "none");
           }
 
-          if(hqScope.getHq().sysStatFg === '9') {
+          if (hqScope.getHq().sysStatFg === '9') {
             $scope.sysStatFgCombo.selectedValue = '9';
             $scope.sysStatFgCombo.isReadOnly = true;
-          }else{
+          } else {
             $scope.sysStatFgCombo.selectedValue = '1';
             $scope.sysStatFgCombo.isReadOnly = false;
           }
 
+          // 매장환경복사 체크 disabled
+          $scope.copyStoreSettingChk();
         }
       });
       
@@ -594,6 +602,94 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     event.preventDefault();
   };
+
+  /** 매장환경복사 체크 disabled **/
+  $scope.copyStoreSettingChk = function(){
+    // 신규등록할 매장이 단독매장일 경우
+    if ($scope.store.hqOfficeCd === "00000") {
+      if ($("#productChk").is(":checked") === true) {
+        $("#productChk").prop("checked", false);
+      }
+      if ($("#salePriceChk").is(":checked") === true) {
+        $("#salePriceChk").prop("checked", false);
+      }
+      if ($("#supplyPriceChk").is(":checked") === true) {
+        $("#supplyPriceChk").prop("checked", false);
+      }
+      if ($("#touchKeyChk").is(":checked") === true) {
+        $("#touchKeyChk").prop("checked", false);
+      }
+      $("#productChk").attr("disabled", true);
+      $("#salePriceChk").attr("disabled", true);
+      $("#supplyPriceChk").attr("disabled", true);
+      $("#touchKeyChk").attr("disabled", true);
+
+    // 신규등록할 매장이 프랜매장일 경우
+    } else if($scope.store.hqOfficeCd !== "00000") {
+      // 매장환경복사의 매장을 선택 안한후 신규등록할 매장을 수정하면
+      if($scope.store.copyStoreCd == null || $scope.store.copyStoreCd == "") {
+        $("#productChk").attr("disabled", false);
+        $("#salePriceChk").attr("disabled", false);
+        $("#supplyPriceChk").attr("disabled", false);
+        $("#touchKeyChk").attr("disabled", false);
+
+      // 매장환경복사의 매장을 선택 후 신규등록할 매장을 수정하면
+      } else {
+        // 매장환경복사 매장이 단독매장일 경우
+        if ($scope.store.copyHqOfficeCd === "00000") {
+            if ($("#productChk").is(":checked") === true) {
+                $("#productChk").prop("checked", false);
+            }
+            if ($("#salePriceChk").is(":checked") === true) {
+                $("#salePriceChk").prop("checked", false);
+            }
+            if ($("#supplyPriceChk").is(":checked") === true) {
+                $("#supplyPriceChk").prop("checked", false);
+            }
+            if ($("#touchKeyChk").is(":checked") === true) {
+                $("#touchKeyChk").prop("checked", false);
+            }
+            $("#productChk").attr("disabled", true);
+            $("#salePriceChk").attr("disabled", true);
+            $("#supplyPriceChk").attr("disabled", true);
+            $("#touchKeyChk").attr("disabled", true);
+
+        // 매장환경복사 매장이 프랜매장일 경우
+        } else if($scope.store.copyHqOfficeCd !== "00000") {
+          // 매장환경복사 본사와 같은 본사면
+          if($scope.store.hqOfficeCd === $scope.store.copyHqOfficeCd) {
+            if ($("#productChk").is(":checked") === true) {
+              $("#productChk").prop("checked", false);
+            }
+            $("#productChk").attr("disabled", true);
+            $("#salePriceChk").attr("disabled", false);
+            $("#supplyPriceChk").attr("disabled", false);
+            $("#touchKeyChk").attr("disabled", false);
+
+          // 매장환경복사 본사와 다른 본사면
+          } else if($scope.store.hqOfficeCd !== $scope.store.copyHqOfficeCd) {
+            if ($("#productChk").is(":checked") === true) {
+              $("#productChk").prop("checked", false);
+            }
+            if ($("#salePriceChk").is(":checked") === true) {
+              $("#salePriceChk").prop("checked", false);
+            }
+            if ($("#supplyPriceChk").is(":checked") === true) {
+              $("#supplyPriceChk").prop("checked", false);
+            }
+            if ($("#touchKeyChk").is(":checked") === true) {
+              $("#touchKeyChk").prop("checked", false);
+            }
+            $("#productChk").attr("disabled", true);
+            $("#salePriceChk").attr("disabled", true);
+            $("#supplyPriceChk").attr("disabled", true);
+            $("#touchKeyChk").attr("disabled", true);
+          }
+        }
+      }
+    }
+  };
+  /** //매장환경복사 체크 disabled **/
 
   /*********************************************************
    * 관리업체 조회
