@@ -6,6 +6,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -284,40 +285,43 @@ public class ProdServiceImpl implements ProdService {
         // 본사신규상품매장생성 [0 전매장]일 경우 매장에 수정정보 내려줌
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && hqProdEnvstVal == HqProdEnvFg.ALL) {
         // 본사인 경우 매장에 수정정보 내려줌
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            String procResult;
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            //[본사신규상품매장생성]이 [0 자동생성]일 경우 매장에 수정정보 내려줌
+            if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043") , "0").equals("0")){
+                String procResult;
 
-            if(prodExist == 0) {
-                // 상품정보 매장에 INSERT
-                procResult = prodMapper.insertHqProdToStoreProd(prodVO);
+                if (prodExist == 0) {
+                    // 상품정보 매장에 INSERT
+                    procResult = prodMapper.insertHqProdToStoreProd(prodVO);
 
-                // 상품분류 매장에 INSERT
-                prodMapper.insertClsHqToStore(prodVO);
+                    // 상품분류 매장에 INSERT
+                    prodMapper.insertClsHqToStore(prodVO);
 
-            } else {
-                // 상품정보 매장에 UPDATE
-                procResult = prodMapper.updateHqProdToStoreProd(prodVO);
+                } else {
+                    // 상품정보 매장에 UPDATE
+                    procResult = prodMapper.updateHqProdToStoreProd(prodVO);
 
-                // 상품분류 매장에 UPDATE
-                prodMapper.updateClsHqToStore(prodVO);
-            }
+                    // 상품분류 매장에 UPDATE
+                    prodMapper.updateClsHqToStore(prodVO);
+                }
 
-            //매장 상품 바코드 저장(바코드정보가 있을 경우만)
-            if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
-                prodMapper.saveProdBarcdStore(prodVO);
-            } else {
-                prodMapper.deleteProdBarcdStore(prodVO);
-            }
+                //매장 상품 바코드 저장(바코드정보가 있을 경우만)
+                if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
+                    prodMapper.saveProdBarcdStore(prodVO);
+                } else {
+                    prodMapper.deleteProdBarcdStore(prodVO);
+                }
 
-            // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
-            if("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0){
+                // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
+                if ("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
 
-                //그룹(sdselGrp)
-                prodMapper.insertSdselGrpToStore(prodVO);
-                //분류(sdselClass)
-                prodMapper.insertSdselClassToStore(prodVO);
-                //상품(sdselProd)
-                prodMapper.insertSdselProdToStore(prodVO);
+                    //그룹(sdselGrp)
+                    prodMapper.insertSdselGrpToStore(prodVO);
+                    //분류(sdselClass)
+                    prodMapper.insertSdselClassToStore(prodVO);
+                    //상품(sdselProd)
+                    prodMapper.insertSdselProdToStore(prodVO);
+                }
             }
         }
 
@@ -640,7 +644,7 @@ public class ProdServiceImpl implements ProdService {
     }
 
     /** 바코드 중복체크 */
-    public String chkBarCd(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> chkBarCd(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

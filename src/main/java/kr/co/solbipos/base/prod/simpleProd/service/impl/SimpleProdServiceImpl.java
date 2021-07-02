@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -356,15 +357,18 @@ public class SimpleProdServiceImpl implements SimpleProdService {
 //                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && hqProdEnvstVal == HqProdEnvFg.ALL) {
                 // 본사인 경우 매장에 수정정보 내려줌
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    // 상품정보 매장에 INSERT
-                    String procResult = prodMapper.insertHqProdToStoreProd(prodVO);
+                    //[본사신규상품매장생성]이 [0 자동생성]일 경우 매장에 수정정보 내려줌
+                    if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043") , "0").equals("0")) {
+                        // 상품정보 매장에 INSERT
+                        String procResult = prodMapper.insertHqProdToStoreProd(prodVO);
 
-                    // 상품분류 매장에 INSERT
-                    prodMapper.insertClsHqToStore(prodVO);
+                        // 상품분류 매장에 INSERT
+                        prodMapper.insertClsHqToStore(prodVO);
 
-                    // 매장 상품 바코드 저장(바코드정보가 있을 경우만)
-                    if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
-                        prodMapper.saveProdBarcdStore(prodVO);
+                        // 매장 상품 바코드 저장(바코드정보가 있을 경우만)
+                        if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
+                            prodMapper.saveProdBarcdStore(prodVO);
+                        }
                     }
                 }
 

@@ -20,6 +20,8 @@ import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
+import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusService;
+import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,17 +66,19 @@ public class RegistController {
     private final RegistService registService;
     private final SessionService sessionService;
     private final MessageService messageService;
+    private final SendStatusService sendStatusService; // SMS전송
 
     private final CmmCodeUtil cmmCodeUtil;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public RegistController(RegistService registService, SessionService sessionService,MessageService messageService,
+    public RegistController(RegistService registService, SessionService sessionService, MessageService messageService, SendStatusService sendStatusService,
                             CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.registService = registService;
         this.sessionService = sessionService;
         this.messageService = messageService;
+        this.sendStatusService = sendStatusService; // SMS전송
         this.cmmCodeUtil = cmmCodeUtil;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -113,6 +117,13 @@ public class RegistController {
         model.addAttribute("memberClassList", membrClassListAll);
         model.addAttribute("memberClassSelect", membrClassListSelect);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
+
+
+        SendStatusVO sendStatusVO = new SendStatusVO();
+        // SMS전송 - 메세지그룹 조회
+        List<DefaultMap<String>> msgGrpColList = sendStatusService.getMsgGrpColList(sendStatusVO, sessionInfoVO);
+        model.addAttribute("msgGrpColList", msgGrpColList);
+
 
         return "membr/info/view/memberInfo";
     }

@@ -415,6 +415,13 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 $scope._broadcast('memberPointAdjustCtrl', null);
             }, 50)
         });
+
+        // SMS전송 팝업 핸들러 추가
+        $scope.wjSmsSendViewPopLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('smsSendViewPopYCtrl', $scope.getSelectedMember());
+            }, 50)
+        });
     });
 
     // 신규회원 등록
@@ -479,6 +486,26 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         event.preventDefault();
     };
 
+    // SMS전송
+    $scope.smsSendPop = function () {
+        if($scope.flex.rows.length > 0) {
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].membrNo = $scope.flex.collectionView.items[i].membrNo;
+                    $scope.flex.collectionView.items[i].membrNm = $scope.flex.collectionView.items[i].membrNm;
+                    $scope.flex.collectionView.items[i].telNo = $scope.flex.collectionView.items[i].telNo;
+                    $scope.flex.collectionView.items[i].orgnFg = "C";
+                    $scope.flex.collectionView.items[i].orgnCd = $scope.orgnCd;
+                    $scope.flex.collectionView.items[i].userId = "";
+                    params.push($scope.flex.collectionView.items[i]);
+                }
+            }
+        }
+        $scope.setSelectedMember(params);
+        $scope.wjSmsSendViewPopLayer.show(true);
+        event.preventDefault();
+    };
 }]);
 
 

@@ -107,7 +107,7 @@ public interface ProdMapper {
     int getProdCdCnt(ProdVO prodVO);
 
     /** 바코드 중복체크*/
-    String chkBarCd(ProdVO prodVO);
+    List<DefaultMap<String>> chkBarCd(ProdVO prodVO);
 
     /** 상품 바코드 존재 여부 확인 */
     int getProdBarCdCnt(ProdVO prodVO);

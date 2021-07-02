@@ -142,6 +142,12 @@
     <!-- 기초관리 -> 창고관리 -->
     <typeAlias alias="storageVO" type="kr.co.solbipos.base.store.storage.service.StorageVO"/>
 
+    <!-- 기초관리 -> 매장관리 -> 테이블속성 -->
+    <typeAlias alias="tblptVO" type="kr.co.solbipos.base.store.tblpt.service.TblptVO"/>
+
+    <!-- 기초관리 -> 매장관리 -> 테이블관리 -->
+    <typeAlias alias="tblmsVO" type="kr.co.solbipos.base.store.tblms.service.TblmsVO"/>
+
     <!-- 기초관리 > 프로모션관리 > 프로모션관리 -->
     <typeAlias alias="promotionVO" type="kr.co.solbipos.base.promotion.promotion.service.PromotionVO"/>
 
@@ -518,9 +524,11 @@
     <!-- 부가서비스 > SMS관리 > SMS충전 -->
     <typeAlias alias="smsChargeVO" type="kr.co.solbipos.adi.sms.smsCharge.service.SmsChargeVO"/>
     <!-- 부가서비스 > SMS관리 > SMS전송 -->
-    <!--<typeAlias alias="smsSendVO" type="kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO"/>-->
+    <typeAlias alias="smsSendVO" type="kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO"/>
     <!-- 부가서비스 > SMS관리 > 문자전송현황 -->
-    <!--<typeAlias alias="sendStatusVO" type="kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO"/>-->
+    <typeAlias alias="sendStatusVO" type="kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO"/>
+    <!-- 부가서비스 > SMS관리 > 메세지관리 -->
+    <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgManage.service.MsgManageVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>

@@ -118,7 +118,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 .tl {text-align:left!important;} .tc {text-align:center!important;} .tr {text-align:right!important;}
 .txtIn {display:inline-block;}
 
-.mt5 {margin-top:5px;} .mt10 {margin-top:10px;} .mt20 {margin-top:20px;} .mt30 {margin-top:30px;} .mt35 {margin-top:35px;} .mt40 {margin-top:40px;} .mt200 {margin-top:200px;}
+.mt5 {margin-top:5px;} .mt10 {margin-top:10px;} .mt20 {margin-top:20px;} .mt30 {margin-top:30px;} .mt35 {margin-top:35px;} .mt40 {margin-top:40px;} .mt60 {margin-top:60px;} .mt200 {margin-top:200px;}
 .mb5 {margin-bottom:5px;} .mb10 {margin-bottom:10px;} .mb15 {margin-bottom:15px;} .mb20 {margin-bottom:20px;} .mb30 {margin-bottom:30px;} .mb40 {margin-bottom:40px;}
 .ml5 {margin-left:5px;} .ml10 {margin-left:10px;} .ml20 {margin-left:20px;} .ml30 {margin-left:30px;} .ml40 {margin-left:40px;}
 .mr5 {margin-right:5px;} .mr10 {margin-right:10px;} .mr15 {margin-right:15px;} .mr20 {margin-right:20px;} .mr30 {margin-right:30px;} .mr40 {margin-right:40px;}
@@ -1889,7 +1889,11 @@ select.sb-select {display:block!important; border:1px solid #e8e8e8; height:25px
  * 테이블이 아닌 div 에서도 sb-input 스타일 적용
  */
 div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:25px; line-height:25px; font-size:1em;}
-
+/**
+ * 20210624 추가
+ * 테이블이 아닌 div 에서도 sb-input 스타일 적용
+ */
+div input.sb-input-msg {border:1px solid #e8e8e8; padding:0 10px; height:25px; line-height:25px; font-size:0.8em;}
 
 /**
  * 20190108 추가

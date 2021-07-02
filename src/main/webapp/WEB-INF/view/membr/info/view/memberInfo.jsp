@@ -416,6 +416,10 @@
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointAdjust()">
             <s:message code="regist.memberPointAdjust"/>
         </button>
+        <%-- SMS전송 --%>
+        <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()" style="display: none;">
+            <s:message code="regist.smsSend"/>
+        </button>
     </div>
 
     <%-- 회원목록 그리드 --%>
@@ -580,20 +584,31 @@
     var anvrsDataMap = ${ccu.getCommCode("032")};
     <%--카드사용구분--%>
     var rMembrcardList = ${ccu.getCommCodeExcpAll("301")};
+    <%--카드발급구분--%>
+    <%--var rCstCardIssFgList = ${ccu.getCommCodeExcpAll("301")};--%>
+    <%--카드상태구분--%>
+    <%--var rCstCardStatFgList = ${ccu.getCommCodeExcpAll("300")};--%>
+
     var regstrStoreList = ${regstrStoreList};
     var memberClassList = ${memberClassList};
     var memberClassSelect = ${memberClassSelect};
 
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
+    var orgnCd = "${orgnCd}";
 
-    <%--카드발급구분--%>
-    <%--var rCstCardIssFgList = ${ccu.getCommCodeExcpAll("301")};--%>
-    <%--카드상태구분--%>
-    <%--var rCstCardStatFgList = ${ccu.getCommCodeExcpAll("300")};--%>
+    // SMS전송 - 메세지그룹
+    var msgGrpColList = [];
+    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <c:forEach var="msgGrpCol" items="${msgGrpColList}">
+        var msgGrpParam = {};
+        msgGrpParam.msgGrpCd = "${msgGrpCol.msgGrpCd}";
+        msgGrpParam.msgGrpNm = "${msgGrpCol.msgGrpNm}";
+        msgGrpColList.push(msgGrpParam);
+    </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210316.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210624.01" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
@@ -633,6 +648,12 @@
 
 <%-- 회원 등급 조회 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/searchMemberPointClass.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- SMS전송 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsSend/smsSendViewPop.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

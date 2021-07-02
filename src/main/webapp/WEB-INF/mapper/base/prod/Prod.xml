@@ -1775,54 +1775,81 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT
-                COUNT(1) AS CNT
+                SELECT  '[' || CD || ']' || NM || '에 [' || PROD_CD || ']' || PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
                 FROM (
-                SELECT PROD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BARCD_CD = #{barCd}
-                <if test='prodCd != null and prodCd.toString() != ""'>
-                    AND PROD_CD != #{prodCd}
-                </if>
-                UNION ALL
-                (
-                SELECT
-                tmp.PROD_CD
-                FROM TB_MS_PRODUCT_BARCD tmp,
-                TB_MS_STORE tms
-                WHERE 1=1
-                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tmp.STORE_CD = tms.STORE_CD
-                AND tmp.BARCD_CD = #{barCd}
-                <if test='prodCd != null and prodCd.toString() != ""'>
-                    AND tmp.PROD_CD != #{prodCd}
-                </if>
-                )
+                    SELECT  thpb.HQ_OFFICE_CD AS CD,
+                            tho.HQ_OFFICE_NM AS NM,
+                            thpb.PROD_CD,
+                            thp.PROD_NM
+                    FROM    TB_HQ_PRODUCT_BARCD thpb,   TB_HQ_PRODUCT thp,  TB_HQ_OFFICE tho
+                    WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                    AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                    AND     thp.PROD_CD = thpb.PROD_CD
+                    AND     thpb.BARCD_CD = #{barCd}
+                    <if test='prodCd != null and prodCd.toString() != ""'>
+                        AND thpb.PROD_CD != #{prodCd}
+                    </if>
+                    UNION ALL
+                    SELECT  tms.STORE_CD AS CD,
+                            tms.STORE_NM AS NM,
+                            tmpb.PROD_CD,
+                            tmp.PROD_NM
+                    FROM    TB_MS_PRODUCT_BARCD tmpb,   TB_MS_PRODUCT tmp,  TB_MS_STORE tms
+                    WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tmpb.STORE_CD = tms.STORE_CD
+                    AND     tmp.STORE_CD = tms.STORE_CD
+                    AND     tmp.PROD_CD = tmpb.PROD_CD
+                    AND     tmpb.BARCD_CD =#{barCd}
+                    <if test='prodCd != null and prodCd.toString() != ""'>
+                        AND tmpb.PROD_CD != #{prodCd}
+                    </if>
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
-                SELECT
-                COUNT(1) AS CNT
+                SELECT '[' || CD || ']' || NM || '에 [' || PROD_CD || ']' || PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
                 FROM (
-                SELECT PROD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BARCD_CD = #{barCd}
-                <if test='prodCd != null and prodCd.toString() != ""'>
-                    AND PROD_CD != #{prodCd}
-                </if>
-                UNION ALL
-                SELECT PROD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND BARCD_CD = #{barCd}
-                <if test='prodCd != null and prodCd.toString() != ""'>
-                    AND PROD_CD != #{prodCd}
-                </if>
+                    SELECT  thpb.HQ_OFFICE_CD AS CD,
+                            tho.HQ_OFFICE_NM AS NM,
+                            thpb.PROD_CD,
+                            thp.PROD_NM
+                    FROM    TB_HQ_PRODUCT_BARCD thpb, TB_HQ_PRODUCT thp, TB_HQ_OFFICE tho
+                    WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                    AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                    AND     thp.PROD_CD = thpb.PROD_CD
+                    AND     thpb.BARCD_CD = #{barCd}
+                    <if test='prodCd != null and prodCd.toString() != ""'>
+                        AND thpb.PROD_CD != #{prodCd}
+                    </if>
+                    UNION ALL
+                    SELECT  tms.STORE_CD AS CD,
+                            tms.STORE_NM AS NM,
+                            tmpb.PROD_CD,
+                            tmp.PROD_NM
+                    FROM    TB_MS_PRODUCT_BARCD tmpb, TB_MS_PRODUCT tmp, TB_MS_STORE tms
+                    WHERE   tmpb.STORE_CD = #{storeCd}
+                    AND     tmp.STORE_CD = tmpb.STORE_CD
+                    AND     tms.STORE_CD = tmpb.STORE_CD
+                    AND     tmp.PROD_CD = tmpb.PROD_CD
+                    AND     tmpb.BARCD_CD = #{barCd}
+                    <if test='prodCd != null and prodCd.toString() != ""'>
+                        AND tmpb.PROD_CD != #{prodCd}
+                    </if>
                 )
             </when>
             <!--  단독매장 -->
             <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd == "00000"'>
-                SELECT COUNT(1) AS CNT
-                FROM TB_MS_PRODUCT_BARCD
-                WHERE 1=1
-                AND STORE_CD = #{storeCd}
-                AND BARCD_CD = #{barCd}
+                SELECT '[' || tmpb.STORE_CD || ']' || tms.STORE_NM || '에 [' || tmpb.PROD_CD || ']' || tmp.PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
+                FROM    TB_MS_PRODUCT_BARCD tmpb, TB_MS_PRODUCT tmp, TB_MS_STORE tms
+                WHERE   tmpb.STORE_CD = #{storeCd}
+                AND     tmp.STORE_CD = tmpb.STORE_CD
+                AND     tms.STORE_CD = tmpb.STORE_CD
+                AND     tmp.PROD_CD = tmpb.PROD_CD
+                AND     tmpb.BARCD_CD = #{barCd}
                 <if test='prodCd != null and prodCd.toString() != ""'>
-                    AND PROD_CD != #{prodCd}
+                    AND tmpb.PROD_CD != #{prodCd}
                 </if>
             </when>
         </choose>
