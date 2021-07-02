@@ -378,9 +378,13 @@ public class StoreManageServiceImpl implements StoreManageService{
                         procCnt += mapper.insertStoreSdselGroup(storeManageVO);
                         procCnt += mapper.insertStoreSdselClass(storeManageVO);
                         procCnt += mapper.insertStoreSdselProd(storeManageVO);
-                        // 취급상품
-                        procCnt += mapper.deleteStoreProductStore(storeManageVO);
-                        procCnt += mapper.insertStoreProductStore(storeManageVO);
+
+                        // 프랜차이즈매장
+                        if(!storeManageVO.getHqOfficeCd().equals("00000")) {
+                            // 취급상품
+                            procCnt += mapper.deleteStoreProductStore(storeManageVO);
+                            procCnt += mapper.insertStoreProductStore(storeManageVO);
+                        }
                     }
 
                     // 판매가 복사
