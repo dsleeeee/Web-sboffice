@@ -19,9 +19,33 @@
     </div>
     <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
       <div class="w100">
-        <div class="oh sb-select dkbr">
-          <button class="btn_skyblue fr" ng-click="storeSelected()">
-            <s:message code="cmm.chk"/></button>
+
+        <%-- 조회조건 --%>
+        <table class="tblType01">
+          <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+          </colgroup>
+          <tbody>
+          <tr>
+            <th><s:message code="outstockReqDate.storeCd" /></th>
+            <td>
+              <input type="text" id="srchStoreCd" ng-model="srchStoreCd"/>
+            </td>
+            <th><s:message code="outstockReqDate.storeNm" /></th>
+            <td>
+              <input type="text" id="srchStoreNm" ng-model="srchStoreNm"/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <%-- 버튼영역 --%>
+        <div class="mt10 tr">
+          <button class="btn_skyblue" ng-click="searchStore()"><s:message code="cmm.search" /></button>
+          <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
         </div>
 
         <%--위즈모 테이블--%>
@@ -90,6 +114,9 @@
     $scope.searchStore = function () {
       // 파라미터
       var params = {};
+      params.storeCd = $scope.srchStoreCd;
+      params.storeNm = $scope.srchStoreNm;
+
       $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreList.sb", params, function () {
         $scope.searchFg = "Y";
       });

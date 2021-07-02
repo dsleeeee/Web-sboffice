@@ -24,8 +24,36 @@
     </div>
     <div class="wj-dialog-body">
       <div class="w100">
+
+        <%-- 조회조건 --%>
+        <table class="tblType01">
+          <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+          </colgroup>
+          <tbody>
+          <tr>
+            <th><s:message code="outstockReqDate.storeCd" /></th>
+            <td>
+              <input type="text" id="srchStoreCd" ng-model="srchStoreCd"/>
+            </td>
+            <th><s:message code="outstockReqDate.storeNm" /></th>
+            <td>
+              <input type="text" id="srchStoreNm" ng-model="srchStoreNm"/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <%-- 버튼영역 --%>
+        <div class="mt10 tr">
+          <button class="btn_skyblue" ng-click="searchStore()"><s:message code="cmm.search" /></button>
+        </div>
+
         <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden;">
+          <div class="wj-gridWrap mt10" style="height: 400px; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -37,7 +65,7 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="320" align="left" is-read-only="true"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -119,6 +147,9 @@
     $scope.searchStore = function () {
       // 파라미터
       var params = {};
+      params.storeCd = $scope.srchStoreCd;
+      params.storeNm = $scope.srchStoreNm;
+
       $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreList.sb", params, function () {
         $scope.searchFg = "Y";
       });
