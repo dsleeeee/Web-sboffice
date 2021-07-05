@@ -54,6 +54,8 @@ public class StoreTypeVO extends PageVO {
     private String saleUprc;
     /** 브랜드코드 */
     private String hqBrandCd;
+    /** 적용구분 */
+    private String applyFg;
 
 
     public String getOrgnFg() {
@@ -222,5 +224,13 @@ public class StoreTypeVO extends PageVO {
 
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
+    }
+
+    public String getApplyFg() {
+        return applyFg;
+    }
+
+    public void setApplyFg(String applyFg) {
+        this.applyFg = applyFg;
     }
 }

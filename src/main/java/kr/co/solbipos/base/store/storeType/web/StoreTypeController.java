@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
@@ -71,9 +73,18 @@ public class StoreTypeController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 브랜드명 가져오기
+        // 브랜드조회(콤보박스용)
         StoreTypeVO storeTypeVO = new StoreTypeVO();
         model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
+
+        // 매장타입조회(콤보박스용)
+        model.addAttribute("storeTypeList", convertToJson(storeTypeService.getStoreTypeCombo(storeTypeVO, sessionInfoVO)));
+
+        // 매장타입자동적용
+        model.addAttribute("storeTypeAutoFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1106"), "0"));
+
+        // 매장타입매장적용설정
+        model.addAttribute("storeTypeApplyFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1107"), "0"));
 
         return "base/store/storeType/storeTypeTab";
     }
@@ -404,6 +415,71 @@ public class StoreTypeController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = storeTypeService.saveProdMapping(storeTypeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장타입관리 - 매장타입 매장적용 매장타입조회(콤보박스용)
+     * @param storeTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 07. 05.
+     */
+    @RequestMapping(value = "/storeType/getStoreTypeCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreTypeCombo(StoreTypeVO storeTypeVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeTypeService.getStoreTypeCombo(storeTypeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeTypeVO);
+    }
+
+    /**
+     * 매장타입관리 - 매장타입 매장적용 팝업 매장리스트 조회
+     * @param storeTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 07. 01.
+     */
+    @RequestMapping(value = "/storeType/getStoreTypeApplyStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreTypeApplyStoreList(StoreTypeVO storeTypeVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = storeTypeService.getStoreTypeApplyStoreList(storeTypeVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, storeTypeVO);
+    }
+
+    /**
+     * 매장타입관리 - 매장타입 매장적용 팝업 매장적용
+     * @param storeTypeVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 07. 05.
+     */
+    @RequestMapping(value = "/storeType/saveStoreTypeApplyStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreTypeApplyStore(@RequestBody StoreTypeVO[] storeTypeVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeTypeService.saveStoreTypeApplyStore(storeTypeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

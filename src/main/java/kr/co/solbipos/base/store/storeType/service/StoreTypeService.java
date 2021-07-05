@@ -67,6 +67,16 @@ public interface StoreTypeService {
     /** 메뉴그룹관리 - 상품연결저장 */
     int saveProdMapping(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO);
 
-    /** 메뉴그룹관리 - 브랜드리스트(콤보박스용) */
+    /** 메뉴그룹관리 - 브랜드조회(콤보박스용) */
     List<DefaultMap<Object>> getBrandList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장리스트 조회 */
+    List<DefaultMap<Object>> getStoreTypeApplyStoreList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장타입관리 - 매장타입조회(콤보박스용) */
+    List<DefaultMap<Object>> getStoreTypeCombo(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 */
+    int saveStoreTypeApplyStore(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO);
+
 }

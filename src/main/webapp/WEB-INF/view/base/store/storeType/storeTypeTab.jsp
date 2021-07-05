@@ -18,8 +18,14 @@
 </div>
 
 <script type="text/javascript">
-    // 브랜드명
+    // 브랜드
     var brandList = ${brandList};
+    // 매장타입
+    var storeTypeList = ${storeTypeList};
+    // 매장타입자동적용(1106)
+    var storeTypeAutoFg = "${storeTypeAutoFg}";
+    // 매장타입매장적용설정(1107)
+    var storeTypeApplyFg = "${storeTypeApplyFg}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeTab.js?ver=20210628.02" charset="utf-8"></script>

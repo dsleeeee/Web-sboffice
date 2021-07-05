@@ -604,17 +604,149 @@
                     )
     </insert>
 
-    <!-- 메뉴그룹관리 - 브랜드리스트(콤보박스용) -->
+    <!-- 메뉴그룹관리 - 브랜드조회(콤보박스용) -->
     <!--
         TABLE    : TB_HQ_BRAND
         PARAM    : storeTypeVO
         COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
     -->
     <select id="getBrandList" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getBrandList */
         SELECT HQ_BRAND_CD AS VALUE,
                 HQ_BRAND_NM AS NAME
           FROM TB_HQ_BRAND
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
     </select>
+
+    <!-- 매장타입관리 - 매장타입 매장적용 팝업 매장리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : storeTypeVO
+          COMMENTS : 매장타입 매장적용 팝업의 매장리스트를 조회한다.
+    -->
+    <select id="getStoreTypeApplyStoreList" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreTypeApplyStoreList */
+        SELECT thsts.STORE_TYPE_CD,
+                thsts.STORE_TYPE_NM,
+                tms.STORE_NM,
+                tms.STORE_CD,
+                tms.SYS_STAT_FG,
+                TO_CHAR(TO_DATE(thsta.APPLY_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS APPLY_DT
+          FROM TB_MS_STORE tms,
+                (       SELECT thsts.HQ_OFFICE_CD,
+                                thsts.STORE_TYPE_CD,
+                                thst.STORE_TYPE_NM,
+                                thsts.STORE_CD,
+                                thsts.REMARK,
+                                thsts.OPTION01,
+                                thsts.USE_YN
+                          FROM TB_HQ_STORE_TYPE_STORE thsts,
+                                TB_HQ_STORE_TYPE thst
+                         WHERE thsts.HQ_OFFICE_CD = #{hqOfficeCd}
+                           AND thst.HQ_OFFICE_CD (+)= thsts.HQ_OFFICE_CD
+                           AND thst.STORE_TYPE_CD (+)= thsts.STORE_TYPE_CD
+                 ) thsts,
+                 TB_HQ_STORE_TYPE_APP thsta
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thsts.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+           AND thsts.STORE_CD (+)= tms.STORE_CD
+           AND thsta.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+           AND thsta.STORE_CD (+)= tms.STORE_CD
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            AND thsts.STORE_TYPE_CD = #{storeTypeCd}   --매장타입코드
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+        ORDER
+           BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 매장타입관리 - 매장타입조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 매장타입을 조회한다.
+    -->
+    <select id="getStoreTypeCombo" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreTypeCombo */
+        SELECT '' AS VALUE,
+                '선택' AS NAME
+          FROM DUAL
+         UNION
+        SELECT STORE_TYPE_CD AS VALUE,
+                STORE_TYPE_NM AS NAME
+          FROM TB_HQ_STORE_TYPE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND USE_YN = 'Y'
+         ORDER
+            BY VALUE NULLS FIRST
+    </select>
+
+    <!-- 매장타입관리 - 매장타입 매장적용 팝업 매장적용 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_APP
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입 매장적용 관련, 이벤트가 일어날때마다 기록한다.
+    -->
+    <update id="saveStoreTypeApplyStore" parameterType="vendrVO">
+    /* USE : StoreTypeMapper.saveStoreTypeApplyStore */
+    MERGE INTO TB_HQ_STORE_TYPE_APP A
+    USING (
+          SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                  #{storeCd} AS STORE_CD,
+                  #{modDt} AS APPLY_DT,
+                  #{applyFg} AS APPLY_FG,
+                  #{remark} AS REMARK,
+                  #{regDt} AS REG_DT,
+                  #{regId} AS REG_ID,
+                  #{modDt} AS MOD_DT,
+                  #{modId} AS MOD_ID
+            FROM DUAL
+          ) ORG
+       ON
+        (
+          ORG.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+          AND ORG.STORE_CD = A.STORE_CD
+        )
+     WHEN MATCHED THEN
+          UPDATE SET
+                 A.APPLY_DT = ORG.APPLY_DT,
+                 A.APPLY_FG = ORG.APPLY_FG,
+                 A.REMARK = ORG.REMARK,
+                 A.MOD_DT = ORG.MOD_DT,
+                 A.MOD_ID = ORG.MOD_ID
+     WHEN NOT MATCHED THEN
+          INSERT
+          (
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.APPLY_DT,
+            A.APPLY_FG,
+            A.REMARK,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+          )
+          VALUES
+          (
+            ORG.HQ_OFFICE_CD,
+            ORG.STORE_CD,
+            ORG.APPLY_DT,
+            ORG.APPLY_FG,
+            ORG.REMARK,
+            ORG.REG_DT,
+            ORG.REG_ID,
+            ORG.MOD_DT,
+            ORG.MOD_ID
+          )
+  </update>
 
 </mapper>

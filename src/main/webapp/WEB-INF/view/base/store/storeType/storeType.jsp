@@ -12,6 +12,7 @@
         <%-- 제목 및 조회버튼  --%>
         <div class="searchBar flddUnfld">
             <a href="#" class="open fl"><s:message code="storeType.storeTypeManage" /></a>
+            <button class="btn_blue fr mt5 mr10" id="btnApplyStore" ng-click="applyStore()"><s:message code="storeType.applyStore"/></button>
             <button class="btn_blue fr mt5 mr10" id="btnSearchStoreType" ng-click="_pageView('storeTypeCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
         <%-- 조회조건 --%>
@@ -288,3 +289,7 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.05" charset="utf-8"></script>
+
+<%-- 매장타입 매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/storeType/storeTypeApplyStore.jsp">
+</c:import>
