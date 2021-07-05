@@ -196,7 +196,7 @@ public class ProdController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> result = prodService.chkBarCd(prodVO, sessionInfoVO);
-        if(result.size() <= 1){
+        if(result.size() == 0){
             return returnJson(Status.OK);
         } else {
             return returnJson(Status.FAIL, result);
