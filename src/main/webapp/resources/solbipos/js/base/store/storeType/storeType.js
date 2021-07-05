@@ -191,8 +191,63 @@ app.controller('storeTypeCtrl', ['$scope', '$http', '$timeout', function ($scope
             // 매장타입조회
             $scope.searchStoreType();
 
+            // 매장타입 dropdown 재조회
+            $scope.setStoreTypeDropdownList();
+
         });
 
+    };
+
+    // 매장타입 dropdown 재조회
+    $scope.setStoreTypeDropdownList = function(){
+
+        // 키맵그룹 dropdown 재조회
+        var url = '/base/store/storeType/storeType/getStoreTypeCombo.sb';
+        var params = {};
+
+        //가상로그인 session 설정
+        if(document.getElementsByName('sessionId')[0]){
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : url, /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data.list)) {
+                    var list = response.data.data.list;
+                    var comboArray = [];
+                    var comboData  = {};
+
+                    for (var i = 0; i < list.length; i++) {
+                        comboData = {};
+                        comboData.name  = list[i].name;
+                        comboData.value = list[i].value;
+                        comboArray.push(comboData);
+                    }
+
+                    //
+                    $scope._setComboData("srchPopStoreType", comboArray);
+                }
+            }
+        }, function errorCallback(response) {
+            $scope._popMsg(messages["cmm.error"]);
+            return false;
+        }).then(function () {
+            $timeout(function () {
+            }, 10);
+        });
+    };
+    
+    // 매장타입 매장적용 팝업
+    $scope.applyStore = function () {
+
+        $scope.storeTypeApplyStoreLayer.show(true);
+        $scope._broadcast('storeTypeApplyStoreCtrl');
     }
 
 }]);

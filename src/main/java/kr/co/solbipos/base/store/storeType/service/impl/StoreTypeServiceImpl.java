@@ -319,13 +319,58 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         }
     }
 
-    /** 메뉴그룹관리 - 브랜드리스트(콤보박스용) */
+    /** 메뉴그룹관리 - 브랜드조회(콤보박스용) */
     @Override
     public List<DefaultMap<Object>> getBrandList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
 
         storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return storeTypeMapper.getBrandList(storeTypeVO);
+    }
+
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장리스트 조회 */
+    public List<DefaultMap<Object>> getStoreTypeApplyStoreList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
+
+        storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeTypeMapper.getStoreTypeApplyStoreList(storeTypeVO);
+    }
+
+    /** 매장타입관리 - 매장타입조회(콤보박스용) */
+    @Override
+    public List<DefaultMap<Object>> getStoreTypeCombo(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
+
+        storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeTypeMapper.getStoreTypeCombo(storeTypeVO);
+    }
+
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 */
+    @Override
+    public int saveStoreTypeApplyStore(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        int result = 0;
+
+        for(StoreTypeVO storeTypeVO : storeTypeVOs) {
+
+            storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeTypeVO.setUseYn("Y");
+            storeTypeVO.setRegDt(dt);
+            storeTypeVO.setRegId(sessionInfoVO.getUserId());
+            storeTypeVO.setModDt(dt);
+            storeTypeVO.setModId(sessionInfoVO.getUserId());
+
+            result += storeTypeMapper.saveStoreTypeApplyStore(storeTypeVO);
+
+        }
+
+        if (result == storeTypeVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
     }
 
 }
