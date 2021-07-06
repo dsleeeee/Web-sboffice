@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    GuestManage.xml
+    객층관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.07.05     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.guestManage.service.impl.GuestManageMapper">
+
+    <!-- 객층관리 - 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        COMMENTS : [공통]명칭코드, [본사]명칭코드, [매장]명칭코드
+    -->
+    <select id="getGuestManageList" parameterType="GuestManageVO" resultType="DefaultMap">
+        /* GuestManagMapper.getGuestManageList */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    SELECT
+                    A.NMCODE_CD,
+                    B.NMCODE_NM
+                    FROM TB_CM_NMCODE A,
+                    TB_HQ_NMCODE B
+                    WHERE 1=1
+                    AND A.NMCODE_GRP_CD = '119'
+                    AND B.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+                    AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                    AND B.NMCODE_CD (+)= A.NMCODE_CD
+                    ORDER BY A.NMCODE_CD
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    SELECT
+                    A.NMCODE_CD,
+                    B.NMCODE_NM
+                    FROM TB_CM_NMCODE A,
+                    TB_MS_STORE_NMCODE B
+                    WHERE 1=1
+                    AND A.NMCODE_GRP_CD = '119'
+                    AND B.STORE_CD (+)= #{storeCd}
+                    AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                    AND B.NMCODE_CD (+)= A.NMCODE_CD
+                    ORDER BY A.NMCODE_CD
+                </if>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 객층관리 - 저장 insert -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        COMMENTS : [본사]명칭코드, [매장]명칭코드
+    -->
+    <insert id="getGuestManageSaveInsert" parameterType="GuestManageVO" >
+        /* GuestManagMapper.getGuestManageSaveInsert */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    MERGE INTO TB_HQ_NMCODE
+                    USING DUAL ON
+                    (
+                        HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                    )
+                    WHEN MATCHED THEN
+                        UPDATE
+                        SET
+                        NMCODE_NM = #{nmcodeNm},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                    WHEN NOT MATCHED THEN
+                        INSERT (
+                            HQ_OFFICE_CD,
+                            NMCODE_GRP_CD,
+                            NMCODE_CD,
+                            PARENT_CD,
+                            NMCODE_NM,
+                            NMCODE_ITEM_1,
+                            NMCODE_ITEM_2,
+                            USE_YN,
+                            REG_DT,
+                            REG_ID,
+                            MOD_DT,
+                            MOD_ID
+                        ) VALUES (
+                            #{hqOfficeCd},
+                            '119',
+                            #{nmcodeCd},
+                            #{nmcodeCd},
+                            #{nmcodeNm},
+                            '',
+                            '',
+                            'Y',
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                        )
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    MERGE INTO TB_MS_STORE_NMCODE
+                    USING DUAL ON
+                    (
+                        STORE_CD = #{storeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                    )
+                    WHEN MATCHED THEN
+                        UPDATE
+                        SET
+                        NMCODE_NM = #{nmcodeNm},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                        WHERE STORE_CD = #{storeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                    WHEN NOT MATCHED THEN
+                        INSERT (
+                            STORE_CD,
+                            NMCODE_GRP_CD,
+                            NMCODE_CD,
+                            PARENT_CD,
+                            NMCODE_NM,
+                            NMCODE_ITEM_1,
+                            NMCODE_ITEM_2,
+                            USE_YN,
+                            REG_DT,
+                            REG_ID,
+                            MOD_DT,
+                            MOD_ID
+                        ) VALUES (
+                            #{storeCd},
+                            '119',
+                            #{nmcodeCd},
+                            #{nmcodeCd},
+                            #{nmcodeNm},
+                            '',
+                            '',
+                            'Y',
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                        )
+                </if>
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 객층관리 - 저장 delete -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        COMMENTS : [본사]명칭코드, [매장]명칭코드
+    -->
+    <delete id="getGuestManageSaveDelete" parameterType="GuestManageVO" >
+        /* GuestManagMapper.getGuestManageSaveDelete */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    DELETE
+                    FROM TB_HQ_NMCODE
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND NMCODE_GRP_CD = '119'
+                    AND NMCODE_CD = #{nmcodeCd}
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    DELETE
+                    FROM TB_MS_STORE_NMCODE
+                    WHERE 1=1
+                    AND STORE_CD = #{storeCd}
+                    AND NMCODE_GRP_CD = '119'
+                    AND NMCODE_CD = #{nmcodeCd}
+                </if>
+            </when>
+        </choose>
+    </delete>
+
+</mapper>
