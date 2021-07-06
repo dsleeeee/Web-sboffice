@@ -159,7 +159,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.clsFgCombo.selectedIndex     = 0;
     $scope.areaCdCombo.selectedIndex    = 0;
     //$scope.store.installPosCnt.isReadOnly = false;
-    $("#installPosCnt").attr("disabled", false);
+    //$("#installPosCnt").attr("disabled", false);
     $("#installPosCnt").css('background-color', '#FFFFFF');
     $scope.store.installPosCnt          = '';
     $("#hdSysStatFg").val("");
@@ -236,7 +236,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.readOnlyStatus                  = true;
       $scope.sysOpenDateCombo.isReadOnly     = true;
       //$scope.store.installPosCnt.isReadOnly = true;
-      $("#installPosCnt").attr("disabled", true);
+      //$("#installPosCnt").attr("disabled", true);
       $("#installPosCnt").css('background-color', '#F0F0F0');
       $("#hdSysStatFg").val(storeDetailInfo.sysStatFg);
 
