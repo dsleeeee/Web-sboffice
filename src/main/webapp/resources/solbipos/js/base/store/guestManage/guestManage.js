@@ -41,12 +41,12 @@ app.controller('guestManageCtrl', ['$scope', '$http', function ($scope, $http) {
             var list = response.data.data.list;
 
             if(list.length > 0) {
-                $("#srchNmcodeNm1").val(list[0].nmcodeNm);
-                $("#srchNmcodeNm2").val(list[1].nmcodeNm);
-                $("#srchNmcodeNm3").val(list[2].nmcodeNm);
-                $("#srchNmcodeNm4").val(list[3].nmcodeNm);
-                $("#srchNmcodeNm5").val(list[4].nmcodeNm);
-                $("#srchNmcodeNm6").val(list[5].nmcodeNm);
+                $("#srchGuestNm1").val(list[0].guestNm);
+                $("#srchGuestNm2").val(list[1].guestNm);
+                $("#srchGuestNm3").val(list[2].guestNm);
+                $("#srchGuestNm4").val(list[3].guestNm);
+                $("#srchGuestNm5").val(list[4].guestNm);
+                $("#srchGuestNm6").val(list[5].guestNm);
             }
         }, false);
     };
@@ -69,31 +69,31 @@ app.controller('guestManageCtrl', ['$scope', '$http', function ($scope, $http) {
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 
-                var nmcodeNmVal = "";
+                var guestNmVal = "";
                 if(i == 0) {
-                    nmcodeNmVal = $("#srchNmcodeNm1").val();
+                    guestNmVal = $("#srchGuestNm1").val();
                 } else if(i == 1) {
-                    nmcodeNmVal = $("#srchNmcodeNm2").val();
+                    guestNmVal = $("#srchGuestNm2").val();
                 } else if(i == 2) {
-                    nmcodeNmVal = $("#srchNmcodeNm3").val();
+                    guestNmVal = $("#srchGuestNm3").val();
                 } else if(i == 3) {
-                    nmcodeNmVal = $("#srchNmcodeNm4").val();
+                    guestNmVal = $("#srchGuestNm4").val();
                 } else if(i == 4) {
-                    nmcodeNmVal = $("#srchNmcodeNm5").val();
+                    guestNmVal = $("#srchGuestNm5").val();
                 } else if(i == 5) {
-                    nmcodeNmVal = $("#srchNmcodeNm6").val();
+                    guestNmVal = $("#srchGuestNm6").val();
                 }
 
                 var status = "";
-                if(nmcodeNmVal == "" || nmcodeNmVal == null) {
+                if(guestNmVal == "" || guestNmVal == null) {
                     status = "D"
                 } else {
                     status = "I"
                 }
 
                 $scope.flex.collectionView.items[i].status = status;
-                $scope.flex.collectionView.items[i].nmcodeCd = $scope.flex.collectionView.items[i].nmcodeCd;
-                $scope.flex.collectionView.items[i].nmcodeNm = nmcodeNmVal;
+                $scope.flex.collectionView.items[i].guestCd = $scope.flex.collectionView.items[i].guestCd;
+                $scope.flex.collectionView.items[i].guestNm = guestNmVal;
 
                 params.push($scope.flex.collectionView.items[i]);
             }
