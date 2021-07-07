@@ -80,11 +80,11 @@ public class StoreTypeController {
         // 매장타입조회(콤보박스용)
         model.addAttribute("storeTypeList", convertToJson(storeTypeService.getStoreTypeCombo(storeTypeVO, sessionInfoVO)));
 
-        // 매장타입자동적용
-        model.addAttribute("storeTypeAutoFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1106"), "0"));
+        // 매장타입자동적용(1106)
+        model.addAttribute("storeTypeAutoEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1106"), "0"));
 
-        // 매장타입매장적용설정
-        model.addAttribute("storeTypeApplyFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1107"), "0"));
+        // 매장타입판매가설정(1107)
+        model.addAttribute("storeTypeApplyEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1107"), "0"));
 
         return "base/store/storeType/storeTypeTab";
     }

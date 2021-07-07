@@ -75,7 +75,13 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
 
                         // 버튼 visible 셋팅
                         $("#btnDelProdMapping").css("display", "");
-                        $("#btnSaveProdMapping").css("display", "");
+
+                        if(storeTypeApplyEnvstVal === "1") { // 매장타입판매가설정(1107) 미사용시, 판매가 저장버튼 hidden
+                            $("#btnSaveProdMapping").css("display", "");
+                        }else{
+                            $("#btnSaveProdMapping").css("display", "none");
+                        }
+
                         $("#btnSrchProd").css("display", "");
                         $("#btnRegProd").css("display", "");
 
@@ -234,7 +240,11 @@ app.controller('prodMappingCtrl', ['$scope', '$http', '$timeout', function ($sco
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].storeGroupCd = $("#hdStoreGroupCd").val();
+                $scope.flex.collectionView.items[i].storeTypeAutoEnvstVal = storeTypeAutoEnvstVal; // 매장타입자동적용(1106)
+                $scope.flex.collectionView.items[i].applyFg = storeTypeApplyEnvstVal; // 매장타입판매가설정(1107)
+                $scope.flex.collectionView.items[i].commentRemark = "TB_HQ_STORE_PROD_GROUP_DTL 삭제 후 자동 적용";
                 $scope.flex.collectionView.items[i].status = 'D';
+
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -270,7 +280,11 @@ app.controller('prodMappingCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].storeGroupCd = $("#hdStoreGroupCd").val();
+            $scope.flex.collectionView.itemsEdited[i].storeTypeAutoEnvstVal = storeTypeAutoEnvstVal; // 매장타입자동적용(1106)
+            $scope.flex.collectionView.itemsEdited[i].applyFg = storeTypeApplyEnvstVal; // 매장타입판매가설정(1107)
+            $scope.flex.collectionView.itemsEdited[i].commentRemark = "TB_HQ_STORE_PROD_GROUP_DTL 수정 후 자동 적용";
             $scope.flex.collectionView.itemsEdited[i].status = 'U';
+
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
 
@@ -382,22 +396,16 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         $scope.flex.collectionView.commitEdit();
 
-        // 생성, 수정 Validation Check
-        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                if ($scope.flex.collectionView.items[i].saleUprc === null || $scope.flex.collectionView.items[i].saleUprc === '') {
-                    $scope._popMsg(messages['storeType.require.saleUprc.msg']); // 판매가를 입력해주세요.
-                    return;
-                }
-            }
-        }
-
         var params = new Array();
 
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].storeGroupCd = $("#hdStoreGroupCd").val();
+                $scope.flex.collectionView.items[i].storeTypeAutoEnvstVal = storeTypeAutoEnvstVal; // 매장타입자동적용(1106)
+                $scope.flex.collectionView.items[i].applyFg = storeTypeApplyEnvstVal; // 매장타입판매가설정(1107)
+                $scope.flex.collectionView.items[i].commentRemark = "TB_HQ_STORE_PROD_GROUP_DTL 등록 후 자동 적용";
                 $scope.flex.collectionView.items[i].status = 'I';
+
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -446,7 +454,7 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
         $scope.prodClassCdNm = "";
-    }
+    };
 
     // 상품 그리드 초기화
     $scope.prodSelectGridDefault = function () {

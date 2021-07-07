@@ -79,7 +79,7 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
                 obj.storeCd = item.storeCd;
                 obj.remark = "TB_HQ_STORE_TYPE_APP 에 직접 등록";
 
-                if(storeTypeApplyFg === "1") { // 매장타입매장적용설정(1107) 미사용시, 기본 applyFg = 0
+                if(storeTypeApplyEnvstVal === "1") { // 매장타입판매가설정(1107) 미사용시, 기본 applyFg = 0
 
                     if ($("#chkSaleUprcApply").is(":checked")) {
                         obj.applyFg = "1";

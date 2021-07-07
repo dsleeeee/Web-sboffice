@@ -23,12 +23,12 @@
     // 매장타입
     var storeTypeList = ${storeTypeList};
     // 매장타입자동적용(1106)
-    var storeTypeAutoFg = "${storeTypeAutoFg}";
-    // 매장타입매장적용설정(1107)
-    var storeTypeApplyFg = "${storeTypeApplyFg}";
+    var storeTypeAutoEnvstVal = "${storeTypeAutoEnvstVal}";
+    // 매장타입판매가설정(1107)
+    var storeTypeApplyEnvstVal = "${storeTypeApplyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeTab.js?ver=20210628.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeTab.js?ver=20210628.03" charset="utf-8"></script>
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 매장타입 탭 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeType.jsp">

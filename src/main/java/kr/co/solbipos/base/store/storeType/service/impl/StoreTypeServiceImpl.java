@@ -106,13 +106,27 @@ public class StoreTypeServiceImpl implements StoreTypeService {
     @Override
     public int deleteStoreMapping(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO){
 
+        String dt = currentDateTimeString();
+
         int result = 0;
+        int procResult = 0;
 
         for(StoreTypeVO storeTypeVO : storeTypeVOs) {
 
             storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeTypeVO.setRegDt(dt);
+            storeTypeVO.setRegId(sessionInfoVO.getUserId());
+            storeTypeVO.setModDt(dt);
+            storeTypeVO.setModId(sessionInfoVO.getUserId());
 
             result += storeTypeMapper.deleteStoreMapping(storeTypeVO);
+
+            // 매장타입자동적용(1106) 사용여부에 따라 매장타입적용 관리(상품/가격 매장적용) 테이블에 INSERT
+            if("1".equals(storeTypeVO.getStoreTypeAutoEnvstVal())){
+
+                procResult = storeTypeMapper.saveStoreTypeApplyStore(storeTypeVO);
+                if(procResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
         }
 
         if ( result == storeTypeVOs.length) {
@@ -138,6 +152,7 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         String dt = currentDateTimeString();
 
         int result = 0;
+        int procResult = 0;
 
         for(StoreTypeVO storeTypeVO : storeTypeVOs) {
 
@@ -148,7 +163,19 @@ public class StoreTypeServiceImpl implements StoreTypeService {
             storeTypeVO.setModDt(dt);
             storeTypeVO.setModId(sessionInfoVO.getUserId());
 
-            result += storeTypeMapper.saveStoreMapping(storeTypeVO);
+            // 이미 다른 매장타입에 등록되어 있는 매장인지 확인
+            if(storeTypeMapper.getStoreMappingYn(storeTypeVO) == 0) {
+
+                // 매장연결등록
+                result += storeTypeMapper.saveStoreMapping(storeTypeVO);
+
+                // 매장타입자동적용(1106) 사용여부에 따라 매장타입적용 관리(상품/가격 매장적용) 테이블에 INSERT
+                if ("1".equals(storeTypeVO.getStoreTypeAutoEnvstVal())) {
+
+                    procResult = storeTypeMapper.saveStoreTypeApplyStore(storeTypeVO);
+                    if (procResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+            }
         }
 
         if ( result == storeTypeVOs.length) {
@@ -171,13 +198,31 @@ public class StoreTypeServiceImpl implements StoreTypeService {
     @Override
     public int deleteMenuGroupMapping(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO){
 
+        String dt = currentDateTimeString();
+
         int result = 0;
+        int procResult = 0;
 
         for(StoreTypeVO storeTypeVO : storeTypeVOs) {
 
             storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             result += storeTypeMapper.deleteMenuGroupMapping(storeTypeVO);
+        }
+
+        // 매장타입자동적용(1106) 사용여부에 따라 매장타입적용 관리(상품/가격 매장적용) 테이블에 INSERT
+        StoreTypeVO storeTypeApplyVO = storeTypeVOs[0];
+
+        if("1".equals(storeTypeApplyVO.getStoreTypeAutoEnvstVal())){
+
+            storeTypeApplyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeTypeApplyVO.setRegDt(dt);
+            storeTypeApplyVO.setRegId(sessionInfoVO.getUserId());
+            storeTypeApplyVO.setModDt(dt);
+            storeTypeApplyVO.setModId(sessionInfoVO.getUserId());
+
+            procResult = storeTypeMapper.saveStoreTypeApplyStoreMenuGroup(storeTypeApplyVO);
+            if(procResult < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         if ( result == storeTypeVOs.length) {
@@ -203,6 +248,7 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         String dt = currentDateTimeString();
 
         int result = 0;
+        int procResult = 0;
 
         for(StoreTypeVO storeTypeVO : storeTypeVOs) {
 
@@ -214,6 +260,21 @@ public class StoreTypeServiceImpl implements StoreTypeService {
             storeTypeVO.setModId(sessionInfoVO.getUserId());
 
             result += storeTypeMapper.saveMenuGroupMapping(storeTypeVO);
+        }
+
+        // 매장타입자동적용(1106) 사용여부에 따라 매장타입적용 관리(상품/가격 매장적용) 테이블에 INSERT
+        StoreTypeVO storeTypeApplyVO = storeTypeVOs[0];
+
+        if("1".equals(storeTypeApplyVO.getStoreTypeAutoEnvstVal())){
+
+            storeTypeApplyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeTypeApplyVO.setRegDt(dt);
+            storeTypeApplyVO.setRegId(sessionInfoVO.getUserId());
+            storeTypeApplyVO.setModDt(dt);
+            storeTypeApplyVO.setModId(sessionInfoVO.getUserId());
+
+            procResult = storeTypeMapper.saveStoreTypeApplyStoreMenuGroup(storeTypeApplyVO);
+            if(procResult < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         if ( result == storeTypeVOs.length) {
@@ -291,6 +352,7 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         String dt = currentDateTimeString();
 
         int result = 0;
+        int procResult = 0;
 
         for(StoreTypeVO storeTypeVO : storeTypeVOs) {
 
@@ -310,6 +372,21 @@ public class StoreTypeServiceImpl implements StoreTypeService {
             } else if ( storeTypeVO.getStatus() == GridDataFg.DELETE ) { // 삭제
                 result += storeTypeMapper.deleteProdMapping(storeTypeVO);
             }
+        }
+
+        // 매장타입자동적용(1106) 사용여부에 따라 매장타입적용 관리(상품/가격 매장적용) 테이블에 INSERT
+        StoreTypeVO storeTypeApplyVO = storeTypeVOs[0];
+
+        if("1".equals(storeTypeApplyVO.getStoreTypeAutoEnvstVal())) {
+
+            storeTypeApplyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeTypeApplyVO.setRegDt(dt);
+            storeTypeApplyVO.setRegId(sessionInfoVO.getUserId());
+            storeTypeApplyVO.setModDt(dt);
+            storeTypeApplyVO.setModId(sessionInfoVO.getUserId());
+
+            procResult = storeTypeMapper.saveStoreTypeApplyStoreProd(storeTypeApplyVO);
+            if(procResult < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         if (result == storeTypeVOs.length) {

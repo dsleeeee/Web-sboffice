@@ -10,10 +10,12 @@
 
     <div ng-controller="storeTypeCtrl">
         <%-- 제목 및 조회버튼  --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="storeType.storeTypeManage" /></a>
-            <button class="btn_blue fr mt5 mr10" id="btnApplyStore" ng-click="applyStore()"><s:message code="storeType.applyStore"/></button>
-            <button class="btn_blue fr mt5 mr10" id="btnSearchStoreType" ng-click="_pageView('storeTypeCtrl', 1)"><s:message code="cmm.search"/></button>
+            <c:if test="${storeTypeAutoEnvstVal == '0'}">
+                <button class="btn_blue fr mt5 mr10" id="btnApplyStore" ng-click="applyStore()"><s:message code="storeType.applyStore"/></button>
+            </c:if>
+            <button class="btn_blue fr mt5 mr5" id="btnSearchStoreType" ng-click="_pageView('storeTypeCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
         <%-- 조회조건 --%>
         <table class="searchTbl">
@@ -224,11 +226,11 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th><s:message code="storeType.menuCd" /></th><%--메뉴코드--%>
+                        <th><s:message code="storeType.grpCd" /></th><%--그룹코드--%>
                         <td>
                             <input type="text" class="sb-input w100" id="searchStoreGroupCd" />
                         </td>
-                        <th><s:message code="storeType.menuNm" /></th><%--메뉴명--%>
+                        <th><s:message code="storeType.grpNm" /></th><%--그룹명--%>
                         <td>
                             <input type="text" class="sb-input w100" id="searchStoreGroupNm" />
                         </td>
@@ -288,7 +290,7 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.06" charset="utf-8"></script>
 
 <%-- 매장타입 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeTypeApplyStore.jsp">

@@ -56,6 +56,12 @@ public class StoreTypeVO extends PageVO {
     private String hqBrandCd;
     /** 적용구분 */
     private String applyFg;
+    /** 매장타입자동적용(1106) */
+    private String storeTypeAutoEnvstVal;
+    /** 매장타입판매가설정(1107) */
+    private String storeTypeApplyEnvstVal;
+    /** 매장타입적용관리 코멘트용 remark */
+    private String commentRemark;
 
 
     public String getOrgnFg() {
@@ -232,5 +238,29 @@ public class StoreTypeVO extends PageVO {
 
     public void setApplyFg(String applyFg) {
         this.applyFg = applyFg;
+    }
+
+    public String getStoreTypeAutoEnvstVal() {
+        return storeTypeAutoEnvstVal;
+    }
+
+    public void setStoreTypeAutoEnvstVal(String storeTypeAutoEnvstVal) {
+        this.storeTypeAutoEnvstVal = storeTypeAutoEnvstVal;
+    }
+
+    public String getStoreTypeApplyEnvstVal() {
+        return storeTypeApplyEnvstVal;
+    }
+
+    public void setStoreTypeApplyEnvstVal(String storeTypeApplyEnvstVal) {
+        this.storeTypeApplyEnvstVal = storeTypeApplyEnvstVal;
+    }
+
+    public String getCommentRemark() {
+        return commentRemark;
+    }
+
+    public void setCommentRemark(String commentRemark) {
+        this.commentRemark = commentRemark;
     }
 }

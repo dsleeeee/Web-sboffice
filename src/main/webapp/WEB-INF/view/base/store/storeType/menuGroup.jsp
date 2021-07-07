@@ -10,7 +10,7 @@
 
     <div ng-controller="menuGroupCtrl">
         <%-- 제목 및 조회버튼  --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="storeType.menuGroupManage" /></a>
             <button class="btn_blue fr mt5 mr10" id="btnSrchMenuGroup" ng-click="_pageView('menuGroupCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
@@ -112,7 +112,7 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="75"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="75" <c:if test="${storeTypeApplyEnvstVal == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -272,7 +272,7 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="75"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="75" <c:if test="${storeTypeApplyEnvstVal == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="65" data-map="useYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.regYn"/>" binding="regYn" width="65" data-map="regYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -290,7 +290,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20210701.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20210701.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -99,9 +99,9 @@
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
-                <!-- 판매가 길이적용 선택 -->
-                <div class="btnSet2">
-                    <c:if test="${storeTypeApplyFg == '1'}">
+                <!-- 판매가 같이적용 선택 -->
+                    <div class="btnSet">
+                    <c:if test="${storeTypeApplyEnvstVal == '1'}">
                         <div style="float: left;"><input type="checkbox" id="chkSaleUprcApply"/></div>
                         <div class="ml5" style="float: left; font-size: 15px;"><s:message code="storeType.saleUprcApply" /></div>
                     </c:if>
@@ -123,4 +123,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20210702.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20210702.02" charset="utf-8"></script>
