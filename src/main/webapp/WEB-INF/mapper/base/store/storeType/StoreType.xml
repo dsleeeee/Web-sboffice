@@ -24,12 +24,7 @@
                 STORE_TYPE_CD,
                 STORE_TYPE_NM,
                 REMARK,
-                OPTION01,
-                USE_YN,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
+                USE_YN
           FROM TB_HQ_STORE_TYPE
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="storeTypeNm != null and storeTypeNm != ''">
@@ -120,9 +115,6 @@
         SELECT thsts.HQ_OFFICE_CD,
                 thsts.STORE_TYPE_CD,
                 thsts.STORE_CD,
-                thsts.REMARK,
-                thsts.OPTION01,
-                thsts.USE_YN,
                 tms.STORE_NM,
                 tms.SYS_STAT_FG
           FROM TB_HQ_STORE_TYPE_STORE thsts,
@@ -159,11 +151,11 @@
     <select id="getStoreList" parameterType="storeTypeVO" resultType="DefaultMap">
         /* StoreTypeMapper.getStoreList */
         SELECT HQ_OFFICE_CD,
-        STORE_CD,
-        STORE_NM,
-        SYS_STAT_FG
-        FROM TB_MS_STORE
-        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                STORE_CD,
+                STORE_NM,
+                SYS_STAT_FG
+          FROM TB_MS_STORE
+          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
             AND STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
         </if>
@@ -176,6 +168,20 @@
         AND STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_STORE_TYPE_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
         ORDER
         BY STORE_CD ASC
+    </select>
+
+    <!-- 매장타입관리 - 매장중복체크 -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_STORE
+        PARAM    : storeTypeVO
+        COMMENTS : 매장연결 전에 이미 매장타입에 등록된 매장인지 중복체크한다.
+    -->
+    <select id="getStoreMappingYn" parameterType="storeTypeVO" resultType="integer">
+      /* StoreTypeMapper.getStoreMappingYn */
+      SELECT COUNT(1)
+        FROM TB_HQ_STORE_TYPE_STORE
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         AND STORE_CD = #{storeCd}
     </select>
 
     <!-- 매장타입관리 - 매장연결등록 -->
@@ -225,8 +231,6 @@
         SELECT thstpg.HQ_OFFICE_CD,
                 thstpg.STORE_TYPE_CD,
                 thstpg.STORE_GROUP_CD,
-                thstpg.REMARK,
-                thstpg.OPTION01,
                 thstpg.USE_YN,
                 thspg.STORE_GROUP_NM
           FROM TB_HQ_STORE_TYPE_PROD_GROUP thstpg,
@@ -265,8 +269,6 @@
         SELECT HQ_OFFICE_CD,
                 STORE_GROUP_CD,
                 STORE_GROUP_NM,
-                REMARK,
-                OPTION01,
                 USE_YN
          FROM TB_HQ_STORE_PROD_GROUP
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -279,6 +281,7 @@
         <if test="useYn != null and useYn != ''">
            AND USE_YN = #{useYn}
         </if>
+          AND STORE_GROUP_CD NOT IN (SELECT STORE_GROUP_CD FROM TB_HQ_STORE_TYPE_PROD_GROUP WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_TYPE_CD = #{storeTypeCd})
         ORDER
            BY STORE_GROUP_CD ASC
     </select>
@@ -331,12 +334,7 @@
                 STORE_GROUP_CD,
                 STORE_GROUP_NM,
                 REMARK,
-                OPTION01,
-                USE_YN,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
+                USE_YN
         FROM TB_HQ_STORE_PROD_GROUP
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="storeGroupNm != null and storeGroupNm != ''">
@@ -428,9 +426,6 @@
                 thspgd.STORE_GROUP_CD,
                 thspgd.PROD_CD,
                 thspgd.SALE_UPRC,
-                thspgd.REMARK,
-                thspgd.OPTION01,
-                thspgd.USE_YN,
                 thp.PROD_NM
           FROM TB_HQ_STORE_PROD_GROUP_DTL thspgd,
           	    TB_HQ_PRODUCT thp
@@ -513,6 +508,7 @@
                             ) thspgd ON thp.HQ_OFFICE_CD = thspgd.HQ_OFFICE_CD
                                   AND thp.PROD_CD = thspgd.PROD_CD
         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+          AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_STORE_PROD_GROUP_DTL WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_GROUP_CD = #{storeGroupCd})
         <if test="chkDt == false">
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                 <![CDATA[
@@ -612,10 +608,16 @@
     -->
     <select id="getBrandList" parameterType="storeTypeVO" resultType="DefaultMap">
         /* StoreTypeMapper.getBrandList */
+        SELECT '' AS VALUE,
+                '전체' AS NAME
+          FROM DUAL
+         UNION
         SELECT HQ_BRAND_CD AS VALUE,
                 HQ_BRAND_NM AS NAME
           FROM TB_HQ_BRAND
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         ORDER
+            BY VALUE NULLS FIRST
     </select>
 
     <!-- 매장타입관리 - 매장타입 매장적용 팝업 매장리스트 조회 -->
@@ -677,14 +679,13 @@
     <select id="getStoreTypeCombo" parameterType="storeTypeVO" resultType="DefaultMap">
         /* StoreTypeMapper.getStoreTypeCombo */
         SELECT '' AS VALUE,
-                '선택' AS NAME
+                '전체' AS NAME
           FROM DUAL
          UNION
         SELECT STORE_TYPE_CD AS VALUE,
                 STORE_TYPE_NM AS NAME
           FROM TB_HQ_STORE_TYPE
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-           AND USE_YN = 'Y'
          ORDER
             BY VALUE NULLS FIRST
     </select>
@@ -693,60 +694,188 @@
     <!--
         TABLE    : TB_HQ_STORE_TYPE_APP
         PARAM    : storeTypeVO
-        COMMENTS : 매장타입 매장적용 관련, 이벤트가 일어날때마다 기록한다.
+        COMMENTS : 매장타입 매장적용 시 매장타입적용 관리에 기록한다.
     -->
-    <update id="saveStoreTypeApplyStore" parameterType="vendrVO">
-    /* USE : StoreTypeMapper.saveStoreTypeApplyStore */
-    MERGE INTO TB_HQ_STORE_TYPE_APP A
-    USING (
-          SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
-                  #{storeCd} AS STORE_CD,
-                  #{modDt} AS APPLY_DT,
-                  #{applyFg} AS APPLY_FG,
-                  #{remark} AS REMARK,
-                  #{regDt} AS REG_DT,
-                  #{regId} AS REG_ID,
-                  #{modDt} AS MOD_DT,
-                  #{modId} AS MOD_ID
-            FROM DUAL
-          ) ORG
-       ON
-        (
-          ORG.HQ_OFFICE_CD = A.HQ_OFFICE_CD
-          AND ORG.STORE_CD = A.STORE_CD
-        )
-     WHEN MATCHED THEN
-          UPDATE SET
-                 A.APPLY_DT = ORG.APPLY_DT,
-                 A.APPLY_FG = ORG.APPLY_FG,
-                 A.REMARK = ORG.REMARK,
-                 A.MOD_DT = ORG.MOD_DT,
-                 A.MOD_ID = ORG.MOD_ID
-     WHEN NOT MATCHED THEN
-          INSERT
-          (
-            A.HQ_OFFICE_CD,
-            A.STORE_CD,
-            A.APPLY_DT,
-            A.APPLY_FG,
-            A.REMARK,
-            A.REG_DT,
-            A.REG_ID,
-            A.MOD_DT,
-            A.MOD_ID
-          )
-          VALUES
-          (
-            ORG.HQ_OFFICE_CD,
-            ORG.STORE_CD,
-            ORG.APPLY_DT,
-            ORG.APPLY_FG,
-            ORG.REMARK,
-            ORG.REG_DT,
-            ORG.REG_ID,
-            ORG.MOD_DT,
-            ORG.MOD_ID
-          )
+    <update id="saveStoreTypeApplyStore" parameterType="storeTypeVO">
+        /* USE : StoreTypeMapper.saveStoreTypeApplyStore */
+        MERGE INTO TB_HQ_STORE_TYPE_APP A
+        USING (
+              SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                      #{storeCd} AS STORE_CD,
+                      #{regDt} AS APPLY_DT,
+                      #{applyFg} AS APPLY_FG,
+                      #{commentRemark} AS REMARK,
+                      #{regDt} AS REG_DT,
+                      #{regId} AS REG_ID,
+                      #{modDt} AS MOD_DT,
+                      #{modId} AS MOD_ID
+                FROM DUAL
+              ) ORG
+           ON
+            (
+              ORG.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+              AND ORG.STORE_CD = A.STORE_CD
+            )
+         WHEN MATCHED THEN
+              UPDATE SET
+                     A.APPLY_DT = ORG.APPLY_DT,
+                     A.APPLY_FG = ORG.APPLY_FG,
+                     A.REMARK = ORG.REMARK,
+                     A.MOD_DT = ORG.MOD_DT,
+                     A.MOD_ID = ORG.MOD_ID
+         WHEN NOT MATCHED THEN
+              INSERT
+              (
+                A.HQ_OFFICE_CD,
+                A.STORE_CD,
+                A.APPLY_DT,
+                A.APPLY_FG,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+              )
+              VALUES
+              (
+                ORG.HQ_OFFICE_CD,
+                ORG.STORE_CD,
+                ORG.APPLY_DT,
+                ORG.APPLY_FG,
+                ORG.REMARK,
+                ORG.REG_DT,
+                ORG.REG_ID,
+                ORG.MOD_DT,
+                ORG.MOD_ID
+              )
+  </update>
+
+    <!-- 매장타입관리 - 메뉴그룹연결 IUD 발생시 매장타입적용 관리에 기록  -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_STORE, TB_HQ_STORE_TYPE_APP
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹 IUD 발생시 매장타입적용 관리에 기록한다.
+    -->
+    <update id="saveStoreTypeApplyStoreMenuGroup" parameterType="storeTypeVO">
+    /* USE : StoreTypeMapper.saveStoreTypeApplyStoreMenuGroup */
+        MERGE INTO TB_HQ_STORE_TYPE_APP A
+        USING (
+                SELECT HQ_OFFICE_CD,
+                        STORE_CD,
+                        #{regDt} AS APPLY_DT,
+                        #{applyFg} AS APPLY_FG,
+                        #{commentRemark} AS REMARK,
+                        #{regDt} AS REG_DT,
+                        #{regId} AS REG_ID,
+                        #{modDt} AS MOD_DT,
+                        #{modId} AS MOD_ID
+                  FROM TB_HQ_STORE_TYPE_STORE
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND STORE_TYPE_CD = #{storeTypeCd}
+              ) ORG
+           ON
+            (
+              ORG.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+              AND ORG.STORE_CD = A.STORE_CD
+            )
+         WHEN MATCHED THEN
+              UPDATE SET
+                     A.APPLY_DT = ORG.APPLY_DT,
+                     A.APPLY_FG = ORG.APPLY_FG,
+                     A.REMARK = ORG.REMARK,
+                     A.MOD_DT = ORG.MOD_DT,
+                     A.MOD_ID = ORG.MOD_ID
+         WHEN NOT MATCHED THEN
+              INSERT
+              (
+                A.HQ_OFFICE_CD,
+                A.STORE_CD,
+                A.APPLY_DT,
+                A.APPLY_FG,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+              )
+              VALUES
+              (
+                ORG.HQ_OFFICE_CD,
+                ORG.STORE_CD,
+                ORG.APPLY_DT,
+                ORG.APPLY_FG,
+                ORG.REMARK,
+                ORG.REG_DT,
+                ORG.REG_ID,
+                ORG.MOD_DT,
+                ORG.MOD_ID
+              )
+  </update>
+
+    <!-- 매장타입관리 - 상품연결 IUD 발생시 매장타입적용 관리에 기록  -->
+    <!--
+        TABLE    : TB_HQ_STORE_TYPE_STORE, TB_HQ_STORE_TYPE_PROD_GROUP, TB_HQ_STORE_TYPE_APP
+        PARAM    : storeTypeVO
+        COMMENTS : 상품연결 IUD 발생시 매장타입적용 관리에 기록한다.
+    -->
+    <update id="saveStoreTypeApplyStoreProd" parameterType="storeTypeVO">
+    /* USE : StoreTypeMapper.saveStoreTypeApplyStoreProd */
+        MERGE INTO TB_HQ_STORE_TYPE_APP A
+        USING (
+                SELECT HQ_OFFICE_CD,
+                        STORE_CD,
+                        #{regDt} AS APPLY_DT,
+                        #{applyFg} AS APPLY_FG,
+                        #{commentRemark} AS REMARK,
+                        #{regDt} AS REG_DT,
+                        #{regId} AS REG_ID,
+                        #{modDt} AS MOD_DT,
+                        #{modId} AS MOD_ID
+                  FROM TB_HQ_STORE_TYPE_STORE
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND STORE_TYPE_CD IN (  SELECT STORE_TYPE_CD
+                                              FROM TB_HQ_STORE_TYPE_PROD_GROUP
+                                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                               AND STORE_GROUP_CD = #{storeGroupCd}
+                                         )
+              ) ORG
+           ON
+            (
+              ORG.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+              AND ORG.STORE_CD = A.STORE_CD
+            )
+         WHEN MATCHED THEN
+              UPDATE SET
+                     A.APPLY_DT = ORG.APPLY_DT,
+                     A.APPLY_FG = ORG.APPLY_FG,
+                     A.REMARK = ORG.REMARK,
+                     A.MOD_DT = ORG.MOD_DT,
+                     A.MOD_ID = ORG.MOD_ID
+         WHEN NOT MATCHED THEN
+              INSERT
+              (
+                A.HQ_OFFICE_CD,
+                A.STORE_CD,
+                A.APPLY_DT,
+                A.APPLY_FG,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+              )
+              VALUES
+              (
+                ORG.HQ_OFFICE_CD,
+                ORG.STORE_CD,
+                ORG.APPLY_DT,
+                ORG.APPLY_FG,
+                ORG.REMARK,
+                ORG.REG_DT,
+                ORG.REG_ID,
+                ORG.MOD_DT,
+                ORG.MOD_ID
+              )
   </update>
 
 </mapper>

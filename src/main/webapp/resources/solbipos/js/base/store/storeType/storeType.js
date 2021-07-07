@@ -287,9 +287,13 @@ app.controller('storeMappingCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         var params = new Array();
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].storeTypeCd = $("#hdStoreTypeCd").val();
+                $scope.flex.collectionView.items[i].storeTypeAutoEnvstVal = storeTypeAutoEnvstVal; // 매장타입자동적용(1106)
+                $scope.flex.collectionView.items[i].applyFg = storeTypeApplyEnvstVal; // 매장타입판매가설정(1107)
+                $scope.flex.collectionView.items[i].commentRemark = "TB_HQ_STORE_TYPE_STORE 삭제 후 자동 적용";
+
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -305,7 +309,7 @@ app.controller('storeMappingCtrl', ['$scope', '$http', '$timeout', function ($sc
             storeSelectGrid._pageView('storeSelectCtrl', 1);
 
         });
-    }
+    };
 
     // 매장연결 그리드 초기화
     $scope.storeMappingGridDefault = function () {
@@ -354,9 +358,13 @@ app.controller('storeSelectCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         var params = new Array();
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].storeTypeCd = $("#hdStoreTypeCd").val();
+                $scope.flex.collectionView.items[i].storeTypeAutoEnvstVal = storeTypeAutoEnvstVal; // 매장타입자동적용(1106)
+                $scope.flex.collectionView.items[i].applyFg = storeTypeApplyEnvstVal; // 매장타입판매가설정(1107)
+                $scope.flex.collectionView.items[i].commentRemark = "TB_HQ_STORE_TYPE_STORE 등록 후 자동 적용";
+
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -420,9 +428,13 @@ app.controller('menuGroupMappingCtrl', ['$scope', '$http', '$timeout', function 
 
         var params = new Array();
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].storeTypeCd = $("#hdStoreTypeCd").val();
+                $scope.flex.collectionView.items[i].storeTypeAutoEnvstVal = storeTypeAutoEnvstVal; // 매장타입자동적용(1106)
+                $scope.flex.collectionView.items[i].applyFg = storeTypeApplyEnvstVal; // 매장타입판매가설정(1107)
+                $scope.flex.collectionView.items[i].commentRemark = "TB_HQ_STORE_TYPE_PROD_GROUP 삭제 후 자동 적용";
+
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -476,6 +488,7 @@ app.controller('menuGroupSelectCtrl', ['$scope', '$http', '$timeout', function (
     $scope.searchMenuGroup = function(){
 
         var params = {};
+        params.storeTypeCd = $("#hdStoreTypeCd").val();
         params.storeGroupCd = $("#searchStoreGroupCd").val();
         params.storeGroupNm = $("#searchStoreGroupNm").val();
         params.useYn = $scope.searchUseYnCombo.selectedValue;
@@ -488,9 +501,13 @@ app.controller('menuGroupSelectCtrl', ['$scope', '$http', '$timeout', function (
 
         var params = new Array();
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].storeTypeCd = $("#hdStoreTypeCd").val();
+                $scope.flex.collectionView.items[i].storeTypeAutoEnvstVal = storeTypeAutoEnvstVal; // 매장타입자동적용(1106)
+                $scope.flex.collectionView.items[i].applyFg = storeTypeApplyEnvstVal; // 매장타입판매가설정(1107)
+                $scope.flex.collectionView.items[i].commentRemark = "TB_HQ_STORE_TYPE_PROD_GROUP 등록 후 자동 적용";
+
                 params.push($scope.flex.collectionView.items[i]);
             }
         }

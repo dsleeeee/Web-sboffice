@@ -47,6 +47,9 @@ public interface StoreTypeMapper {
     /** 매장타입관리 - 매장조회 */
     List<DefaultMap<Object>> getStoreList(StoreTypeVO storeTypeVO);
 
+    /** 매장타입관리 - 매장중복체크 */
+    int getStoreMappingYn(StoreTypeVO storeTypeVO);
+
     /** 매장타입관리 - 매장연결등록 */
     int saveStoreMapping(StoreTypeVO storeTypeVO);
 
@@ -101,4 +104,9 @@ public interface StoreTypeMapper {
     /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 */
     int saveStoreTypeApplyStore(StoreTypeVO storeTypeVO);
 
+    /** 매장타입관리 - 메뉴그룹연결 IUD 발생시 매장타입적용 관리에 기록 */
+    int saveStoreTypeApplyStoreMenuGroup(StoreTypeVO storeTypeVO);
+
+    /** 매장타입관리 - 상품연결 IUD 발생시 매장타입적용 관리에 기록 */
+    int saveStoreTypeApplyStoreProd(StoreTypeVO storeTypeVO);
 }
