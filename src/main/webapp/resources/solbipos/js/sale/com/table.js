@@ -78,11 +78,12 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     dataItem.pay02     		= messages["saleComPopup.payChoice"];
     dataItem.pay03     		= messages["saleComPopup.payChoice"];
     dataItem.guestTot    	= messages["saleComPopup.guestTot"];
-    dataItem.guestCnt1    	= messages["saleComPopup.guestCnt"];
-    dataItem.guestCnt2    	= messages["saleComPopup.guestCnt"];
-    dataItem.guestCnt3    	= messages["saleComPopup.guestCnt"];
-    dataItem.guestCnt4    	= messages["saleComPopup.guestCnt"];
     dataItem.guestAmt   	= messages["saleComPopup.guestAmt"];
+
+    // 객수 헤더머지 컬럼 생성
+    for (var i = 0; i < arrGuestCol.length; i++) {
+      dataItem['guest' + arrGuestCol[i]] = messages["saleComPopup.guestCnt"];
+    }
 
     s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -166,7 +167,28 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     }
         
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/com/popup/table/view.sb", params);
+    $scope._inquiryMain("/sale/com/popup/table/view.sb", params, function () {
+          // <-- 그리드 visible -->
+          // 선택한 테이블에 따른 리스트 항목 visible
+          var grid = wijmo.Control.getControl("#wjGridSaleComTableList");
+          var columns = grid.columns;
+
+          // 컬럼 총갯수
+          var columnsCnt = 17 + 6;
+
+          // 합계가 0이면 해당 컬럼 숨기기
+          for (var j = 0; j < columnsCnt; j++) {
+              if(columns[j].binding == "guest01" || columns[j].binding == "guest02" || columns[j].binding == "guest03" || columns[j].binding == "guest04" || columns[j].binding == "guest05" || columns[j].binding == "guest06") {
+                  // 합계행 값 가져오기
+                  if($scope.flex.columnFooters.getCellData(0, j, true) == 0) {
+                      columns[j].visible = false;
+                  } else {
+                      columns[j].visible = true;
+                  }
+              }
+          }
+          // <-- //그리드 visible -->
+      });
   };
 
 }]);
