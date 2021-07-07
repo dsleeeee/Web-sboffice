@@ -23,8 +23,8 @@
                 <!-- 본사 -->
                 <if test='orgnFg == "H"'>
                     SELECT
-                    A.NMCODE_CD,
-                    B.NMCODE_NM
+                    A.NMCODE_CD AS GUEST_CD,
+                    B.NMCODE_NM AS GUEST_NM
                     FROM TB_CM_NMCODE A,
                     TB_HQ_NMCODE B
                     WHERE 1=1
@@ -37,8 +37,8 @@
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     SELECT
-                    A.NMCODE_CD,
-                    B.NMCODE_NM
+                    A.NMCODE_CD AS GUEST_CD,
+                    B.NMCODE_NM AS GUEST_NM
                     FROM TB_CM_NMCODE A,
                     TB_MS_STORE_NMCODE B
                     WHERE 1=1
@@ -66,15 +66,15 @@
                     MERGE INTO TB_HQ_NMCODE
                     USING DUAL ON
                     (
-                        HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                        HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{guestCd}
                     )
                     WHEN MATCHED THEN
                         UPDATE
                         SET
-                        NMCODE_NM = #{nmcodeNm},
+                        NMCODE_NM = #{guestNm},
                         MOD_DT = #{modDt},
                         MOD_ID = #{modId}
-                        WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{guestCd}
                     WHEN NOT MATCHED THEN
                         INSERT (
                             HQ_OFFICE_CD,
@@ -92,9 +92,9 @@
                         ) VALUES (
                             #{hqOfficeCd},
                             '119',
-                            #{nmcodeCd},
-                            #{nmcodeCd},
-                            #{nmcodeNm},
+                            #{guestCd},
+                            #{guestCd},
+                            #{guestNm},
                             '',
                             '',
                             'Y',
@@ -109,15 +109,15 @@
                     MERGE INTO TB_MS_STORE_NMCODE
                     USING DUAL ON
                     (
-                        STORE_CD = #{storeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                        STORE_CD = #{storeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{guestCd}
                     )
                     WHEN MATCHED THEN
                         UPDATE
                         SET
-                        NMCODE_NM = #{nmcodeNm},
+                        NMCODE_NM = #{guestNm},
                         MOD_DT = #{modDt},
                         MOD_ID = #{modId}
-                        WHERE STORE_CD = #{storeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{nmcodeCd}
+                        WHERE STORE_CD = #{storeCd} AND NMCODE_GRP_CD = '119' AND NMCODE_CD = #{guestCd}
                     WHEN NOT MATCHED THEN
                         INSERT (
                             STORE_CD,
@@ -135,9 +135,9 @@
                         ) VALUES (
                             #{storeCd},
                             '119',
-                            #{nmcodeCd},
-                            #{nmcodeCd},
-                            #{nmcodeNm},
+                            #{guestCd},
+                            #{guestCd},
+                            #{guestNm},
                             '',
                             '',
                             'Y',
@@ -167,7 +167,7 @@
                     WHERE 1=1
                     AND HQ_OFFICE_CD = #{hqOfficeCd}
                     AND NMCODE_GRP_CD = '119'
-                    AND NMCODE_CD = #{nmcodeCd}
+                    AND NMCODE_CD = #{guestCd}
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
@@ -176,7 +176,7 @@
                     WHERE 1=1
                     AND STORE_CD = #{storeCd}
                     AND NMCODE_GRP_CD = '119'
-                    AND NMCODE_CD = #{nmcodeCd}
+                    AND NMCODE_CD = #{guestCd}
                 </if>
             </when>
         </choose>

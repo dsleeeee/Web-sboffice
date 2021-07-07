@@ -28,6 +28,15 @@ public class TodayDtlVO extends PageVO {
     private String posNo;
 
     /**
+     * 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
+    /**
      * @return the hqOfficeCd
      */
     public String getHqOfficeCd() {
@@ -166,4 +175,8 @@ public class TodayDtlVO extends PageVO {
     public void setPosNo(String posNo) {
         this.posNo = posNo;
     }
+
+    public String getOrgnFg() { return orgnFg; }
+
+    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
 }

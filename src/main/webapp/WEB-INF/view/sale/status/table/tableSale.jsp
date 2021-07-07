@@ -29,6 +29,9 @@
 </div>
 
 <script type="text/javascript">
+    // 객수
+    var guestCol    = '${guestCol}';
+    var arrGuestCol = guestCol.split(',');
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableSale.js?ver=201901112.15" charset="utf-8"></script>

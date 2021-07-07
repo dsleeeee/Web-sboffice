@@ -67,10 +67,12 @@
     -->
     <select id="getBillGuestInfo" parameterType="billInfoVO" resultType="DefaultMap">
         /* USE : BillInfoMapper.getBillGuestInfo */
-        SELECT  tsshg.GUEST_CNT_1 AS GUEST01
-        ,       tsshg.GUEST_CNT_2 AS GUEST02
-        ,       tsshg.GUEST_CNT_3 AS GUEST03
-        ,       tsshg.GUEST_CNT_4 AS GUEST04
+        SELECT  NVL(tsshg.GUEST_CNT_1, 0) AS GUEST01
+        ,       NVL(tsshg.GUEST_CNT_2, 0) AS GUEST02
+        ,       NVL(tsshg.GUEST_CNT_3, 0) AS GUEST03
+        ,       NVL(tsshg.GUEST_CNT_4, 0) AS GUEST04
+        ,       NVL(tsshg.GUEST_CNT_5, 0) AS GUEST05
+        ,       NVL(tsshg.GUEST_CNT_6, 0) AS GUEST06
         FROM    TB_SL_SALE_HDR_GUEST tsshg
         WHERE   tsshg.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsshg.STORE_CD     = #{storeCd}

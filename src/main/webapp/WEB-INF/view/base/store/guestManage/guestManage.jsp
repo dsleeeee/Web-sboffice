@@ -44,53 +44,53 @@
                 <tr>
                     <%-- 객층1 --%>
                     <th class="tc">
-                        <s:message code="guestManage.nmcodeNm1"/>
+                        <s:message code="guestManage.guestNm1"/>
                     </th>
                     <%-- 객층2 --%>
                     <th class="tc">
-                        <s:message code="guestManage.nmcodeNm2"/>
+                        <s:message code="guestManage.guestNm2"/>
                     </th>
                     <%-- 객층3 --%>
                     <th class="tc">
-                        <s:message code="guestManage.nmcodeNm3"/>
+                        <s:message code="guestManage.guestNm3"/>
                     </th>
                     <%-- 객층4 --%>
                     <th class="tc">
-                        <s:message code="guestManage.nmcodeNm4"/>
+                        <s:message code="guestManage.guestNm4"/>
                     </th>
                     <%-- 객층5 --%>
                     <th class="tc">
-                        <s:message code="guestManage.nmcodeNm5"/>
+                        <s:message code="guestManage.guestNm5"/>
                     </th>
                     <%-- 객층6 --%>
                     <th class="tc">
-                        <s:message code="guestManage.nmcodeNm6"/>
+                        <s:message code="guestManage.guestNm6"/>
                     </th>
                 </tr>
                 <tr>
                     <%-- 객층1 --%>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchNmcodeNm1" ng-model="nmcodeNm1" />
+                        <input type="text" class="sb-input w100" id="srchGuestNm1" ng-model="guestNm1" />
                     </td>
                     <%-- 객층2 --%>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchNmcodeNm2" ng-model="nmcodeNm2" />
+                        <input type="text" class="sb-input w100" id="srchGuestNm2" ng-model="guestNm2" />
                     </td>
                     <%-- 객층3 --%>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchNmcodeNm3" ng-model="nmcodeNm3" />
+                        <input type="text" class="sb-input w100" id="srchGuestNm3" ng-model="guestNm3" />
                     </td>
                     <%-- 객층4 --%>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchNmcodeNm4" ng-model="nmcodeNm4" />
+                        <input type="text" class="sb-input w100" id="srchGuestNm4" ng-model="guestNm4" />
                     </td>
                     <%-- 객층5 --%>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchNmcodeNm5" ng-model="nmcodeNm5" />
+                        <input type="text" class="sb-input w100" id="srchGuestNm5" ng-model="guestNm5" />
                     </td>
                     <%-- 객층6 --%>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchNmcodeNm6" ng-model="nmcodeNm6" />
+                        <input type="text" class="sb-input w100" id="srchGuestNm6" ng-model="guestNm6" />
                     </td>
                 </tr>
             </table>
@@ -108,8 +108,8 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="guestManage.nmcodeCd"/>" binding="nmcodeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="guestManage.nmcodeNm"/>" binding="nmcodeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="guestManage.guestCd"/>" binding="guestCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="guestManage.guestNm"/>" binding="guestNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -118,4 +118,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/guestManage/guestManage.js?ver=20210706.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/guestManage/guestManage.js?ver=20210706.03" charset="utf-8"></script>

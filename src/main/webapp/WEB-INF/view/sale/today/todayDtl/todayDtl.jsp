@@ -7,6 +7,7 @@
 <c:set var="baseUrl" value="/sale/today/todayDtl/todayDtl/"/>
 
 <div class="subCon">
+
   <div id="todayDtlView" style="display: none;" ng-controller="todayDtlCtrl">
       <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="todayDtl.todaySaleDtl"/></a>
@@ -17,8 +18,10 @@
       </div>
       <table class="searchTbl">
         <colgroup>
-          <col class="w25"/>
-          <col class="w75"/>
+          <col class="w15" />
+          <col class="w35" />
+          <col class="w15" />
+          <col class="w35" />
         </colgroup>
         <tbody>
         <tr>
@@ -29,10 +32,8 @@
               <span class="txtIn"><input id="srchTodayDtlStartDate" class="w120px"></span>
             </div>
           </td>
-        </tr>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-          <tr>
-              <%-- 매장코드 --%>
+          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <%-- 매장코드 --%>
             <th><s:message code="todayDtl.store"/></th>
             <td>
                 <%-- 매장선택 모듈 싱글 선택 사용시 include
@@ -47,16 +48,16 @@
               </jsp:include>
                 <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
             </td>
-          </tr>
-        </c:if>
-        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-          <input type="hidden" id="todayDtlSelectStoreCd" value="${sessionInfo.storeCd}"/>
-        </c:if>
+          </c:if>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+            <input type="hidden" id="todayDtlSelectStoreCd" value="${sessionInfo.storeCd}"/>
+          </c:if>
+        </tr>
         <tr>
           <%-- 포스번호 --%>
           <th><s:message code="todayDtl.dtl.posNo"/></th>
           <td>
-            <span class="txtIn w150px sb-select fl mr5">
+            <span class="txtIn w120px sb-select fl mr5">
               <wj-combo-box
                 id="srchPosNo"
                 ng-model="posNo"
@@ -68,12 +69,13 @@
               </wj-combo-box>
             </span>
           </td>
+          <td></td>
+          <td></td>
         </tr>
         </tbody>
       </table>
 
-      <div class="wj-TblWrap mt10" style="height: 190px;">
-        <div class="w100 mt10">
+      <div class="wj-TblWrap mt10">
           <div class="oh sb-select mb10">
             <%-- 매출 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSale()"><s:message code="cmm.excel.down"/></button>
@@ -88,7 +90,8 @@
                 control="flex"
                 initialized="initGrid(s,e)"
                 is-read-only="true"
-                item-formatter="_itemFormatter">
+                item-formatter="_itemFormatter"
+                id="wjGridTodayDtlList">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="todayDtl.saleYn"/>" binding="saleYn" width="60" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
@@ -126,14 +129,11 @@
             </div>
             <%--//위즈모 테이블--%>
           </div>
-        </div>
-        <div style="clear: both"></div>
       </div>
   </div>
 
   <div id="todayDtlView2" style="display: none;" ng-controller="todayDtlDetailCtrl">
-    <div class="wj-TblWrap mt10" style="height: 370px;">
-      <div class="w100 mt10">
+    <div class="wj-TblWrap mt10">
         <div class="oh sb-select mb10">
           <%-- 매출 엑셀다운로드 --%>
           <button class="btn_skyblue ml5 fr" ng-click="excelDownloadPeriodSaleDtl()"><s:message code="cmm.excel.down"/></button>
@@ -148,7 +148,8 @@
                     control="flex"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    id="wjGridTodayDtlDetailList">
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="todayDtl.dtl.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -193,8 +194,8 @@
           <%--//위즈모 테이블--%>
         </div>
       </div>
-    </div>
   </div>
+
 </div>
 
 <script type="text/javascript">
@@ -224,7 +225,7 @@
   var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20190125.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20210706.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

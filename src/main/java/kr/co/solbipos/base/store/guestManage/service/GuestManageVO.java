@@ -37,10 +37,10 @@ public class GuestManageVO extends PageVO {
     private String storeCd;
 
     /** 명칭코드 */
-    private String nmcodeCd;
+    private String guestCd;
 
     /** 명칭명 */
-    private String nmcodeNm;
+    private String guestNm;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -58,11 +58,11 @@ public class GuestManageVO extends PageVO {
 
     public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
 
-    public String getNmcodeCd() { return nmcodeCd; }
+    public String getGuestCd() { return guestCd; }
 
-    public void setNmcodeCd(String nmcodeCd) { this.nmcodeCd = nmcodeCd; }
+    public void setGuestCd(String guestCd) { this.guestCd = guestCd; }
 
-    public String getNmcodeNm() { return nmcodeNm; }
+    public String getGuestNm() { return guestNm; }
 
-    public void setNmcodeNm(String nmcodeNm) { this.nmcodeNm = nmcodeNm; }
+    public void setGuestNm(String guestNm) { this.guestNm = guestNm; }
 }

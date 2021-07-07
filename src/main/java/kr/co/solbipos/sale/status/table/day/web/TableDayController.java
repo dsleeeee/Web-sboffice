@@ -21,6 +21,8 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.table.day.service.TableDayService;
 import kr.co.solbipos.sale.status.table.day.service.TableDayVO;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlService;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO;
 
 @Controller
 @RequestMapping("sale/status/table")
@@ -28,17 +30,32 @@ public class TableDayController {
 
 	private final SessionService sessionService;
 	private final TableDayService tableDayService;
+	private final TodayDtlService todayDtlService; // 당일매출현황상세
 
-	public TableDayController(SessionService sessionService, TableDayService tableDayService) {
+	public TableDayController(SessionService sessionService, TableDayService tableDayService, TodayDtlService todayDtlService) {
 		super();
 		this.sessionService = sessionService;
 		this.tableDayService = tableDayService;
+		this.todayDtlService = todayDtlService; // 당일매출현황상세
 	}
 
 	@RequestMapping(value = "/day/view.sb", method = RequestMethod.GET)
 	public String dayView(HttpServletRequest request, HttpServletResponse response, TableDayVO tableDayVO, Model model) {
 
 		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		TodayDtlVO todayDtlVO = new TodayDtlVO();
+
+		// 객수 조회
+		List<DefaultMap<String>> guestColList = todayDtlService.getGuestColList(todayDtlVO, sessionInfoVO);
+
+		// 객수 코드를 , 로 연결하는 문자열 생성
+		String guestCol = "";
+		for(int i=0; i < guestColList.size(); i++) {
+			guestCol += (guestCol.equals("") ? "" : ",") + guestColList.get(i).getStr("guestCd");
+		}
+		model.addAttribute("guestColList", guestColList);
+		model.addAttribute("guestCol", guestCol);
 
 		return "sale/status/table/tableSale";
 	}
