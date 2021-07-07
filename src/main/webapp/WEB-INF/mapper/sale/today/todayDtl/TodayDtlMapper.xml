@@ -49,14 +49,46 @@
     -->
     <select id="getGuestColList" parameterType="todayDtlVO" resultType="DefaultMap">
         /* USE : TodayDtlMapper.getGuestColList */
-        <![CDATA[
-        SELECT  thn.NMCODE_CD AS GUEST_CD, thn.NMCODE_NM AS GUEST_NM
-        FROM    TB_HQ_NMCODE thn
-        WHERE   thn.HQ_OFFICE_CD    =   #{hqOfficeCd}
-        AND     thn.NMCODE_GRP_CD   =   '102'
-        ORDER
-        BY      thn.NMCODE_CD
-        ]]>
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    SELECT
+                    A.NMCODE_CD AS GUEST_CD,
+                    NVL(B.NMCODE_NM, '미등록') AS GUEST_NM
+                    FROM TB_CM_NMCODE A,
+                    TB_HQ_NMCODE B
+                    WHERE 1=1
+                    AND A.NMCODE_GRP_CD = '119'
+                    AND B.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+                    AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                    AND B.NMCODE_CD (+)= A.NMCODE_CD
+                    ORDER BY A.NMCODE_CD
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    SELECT
+                    A.NMCODE_CD AS GUEST_CD,
+                    NVL(B.NMCODE_NM, '미등록') AS GUEST_NM
+                    FROM TB_CM_NMCODE A,
+                    TB_MS_STORE_NMCODE B
+                    WHERE 1=1
+                    AND A.NMCODE_GRP_CD = '119'
+                    AND B.STORE_CD (+)= #{storeCd}
+                    AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                    AND B.NMCODE_CD (+)= A.NMCODE_CD
+                    ORDER BY A.NMCODE_CD
+                </if>
+            </when>
+        </choose>
+        <!--<![CDATA[-->
+        <!--SELECT  thn.NMCODE_CD AS GUEST_CD, thn.NMCODE_NM AS GUEST_NM-->
+        <!--FROM    TB_HQ_NMCODE thn-->
+        <!--WHERE   thn.HQ_OFFICE_CD    =   #{hqOfficeCd}-->
+        <!--AND     thn.NMCODE_GRP_CD   =   '102'-->
+        <!--ORDER-->
+        <!--BY      thn.NMCODE_CD-->
+        <!--]]>-->
     </select>
 
 
@@ -103,6 +135,8 @@
         ,       tsshg.GUEST02
         ,       tsshg.GUEST03
         ,       tsshg.GUEST04
+        ,       tsshg.GUEST05
+        ,       tsshg.GUEST06
         ]]>
         ,       <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(tsshp.PAY${item}, 0)
@@ -187,10 +221,12 @@
                     GROUP BY SALE_YN
                 ) tsshd
         ,       (   SELECT  tsshg.SALE_YN
-                    ,       SUM(tsshg.GUEST_CNT_1 * tsshg.SALE_FG) AS GUEST01
-                    ,       SUM(tsshg.GUEST_CNT_2 * tsshg.SALE_FG) AS GUEST02
-                    ,       SUM(tsshg.GUEST_CNT_3 * tsshg.SALE_FG) AS GUEST03
-                    ,       SUM(tsshg.GUEST_CNT_4 * tsshg.SALE_FG) AS GUEST04
+                    ,       NVL(SUM(tsshg.GUEST_CNT_1 * tsshg.SALE_FG), 0) AS GUEST01
+                    ,       NVL(SUM(tsshg.GUEST_CNT_2 * tsshg.SALE_FG), 0) AS GUEST02
+                    ,       NVL(SUM(tsshg.GUEST_CNT_3 * tsshg.SALE_FG), 0) AS GUEST03
+                    ,       NVL(SUM(tsshg.GUEST_CNT_4 * tsshg.SALE_FG), 0) AS GUEST04
+                    ,       NVL(SUM(tsshg.GUEST_CNT_5 * tsshg.SALE_FG), 0) AS GUEST05
+                    ,       NVL(SUM(tsshg.GUEST_CNT_6 * tsshg.SALE_FG), 0) AS GUEST06
                     FROM    TB_SL_SALE_HDR_GUEST tsshg
                     WHERE   tsshg.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND     tsshg.STORE_CD      = #{storeCd}
@@ -241,6 +277,8 @@
         ,       tsshg.GUEST02
         ,       tsshg.GUEST03
         ,       tsshg.GUEST04
+        ,       tsshg.GUEST05
+        ,       tsshg.GUEST06
         ]]>
         ,       <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(tsshp.PAY${item}, 0)
@@ -306,10 +344,12 @@
                             )
                 ) tsshd
         ,       (   SELECT  tsshg.POS_NO, tsshg.BILL_NO
-                    ,       tsshg.GUEST_CNT_1 * tsshg.SALE_FG AS GUEST01
-                    ,       tsshg.GUEST_CNT_2 * tsshg.SALE_FG AS GUEST02
-                    ,       tsshg.GUEST_CNT_3 * tsshg.SALE_FG AS GUEST03
-                    ,       tsshg.GUEST_CNT_4 * tsshg.SALE_FG AS GUEST04
+                    ,       NVL(tsshg.GUEST_CNT_1 * tsshg.SALE_FG, 0) AS GUEST01
+                    ,       NVL(tsshg.GUEST_CNT_2 * tsshg.SALE_FG, 0) AS GUEST02
+                    ,       NVL(tsshg.GUEST_CNT_3 * tsshg.SALE_FG, 0) AS GUEST03
+                    ,       NVL(tsshg.GUEST_CNT_4 * tsshg.SALE_FG, 0) AS GUEST04
+                    ,       NVL(tsshg.GUEST_CNT_5 * tsshg.SALE_FG, 0) AS GUEST05
+                    ,       NVL(tsshg.GUEST_CNT_6 * tsshg.SALE_FG, 0) AS GUEST06
                     FROM    TB_SL_SALE_HDR_GUEST tsshg
                     WHERE   tsshg.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND     tsshg.STORE_CD      = #{storeCd}

@@ -3,6 +3,7 @@ package kr.co.solbipos.sale.today.todayDtl.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlService;
 import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,13 @@ public class TodayDtlServiceImpl implements TodayDtlService {
     /** 당일매출상세현황 - 객수 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getGuestColList(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO) {
+
+        todayDtlVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         todayDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            todayDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return todayDtlMapper.getGuestColList(todayDtlVO);
     }
 

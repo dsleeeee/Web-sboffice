@@ -1,3 +1,13 @@
+/****************************************************************
+ *
+ * 파일명 : todayDtl.js
+ * 설  명 : 당일매출현황 > 당일매출상세 탭 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2000.00.00           1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -182,6 +192,27 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
       params.storeCd   = $scope.searchedStoreCd;
       params.posNo     = $scope.searchedPosNo;
       $scope._broadcast('todayDtlDetailCtrl', params);
+
+      // <-- 그리드 visible -->
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjGridTodayDtlList");
+      var columns = grid.columns;
+
+      // 컬럼 총갯수
+      var columnsCnt = 11 + 17 + 11 + 7;
+
+      // 합계가 0이면 해당 컬럼 숨기기
+      for (var j = 0; j < columnsCnt; j++) {
+        if(columns[j].binding == "guest01" || columns[j].binding == "guest02" || columns[j].binding == "guest03" || columns[j].binding == "guest04" || columns[j].binding == "guest05" || columns[j].binding == "guest06") {
+          // 합계행 값 가져오기
+          if($scope.flex.columnFooters.getCellData(0, j, true) == 0) {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        }
+      }
+      // <-- //그리드 visible -->
     });
   };
 
@@ -539,7 +570,28 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
     params.dcCol     = dcCol;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/today/todayDtl/todayDtlDetail/list.sb", params);
+    $scope._inquirySub("/sale/today/todayDtl/todayDtlDetail/list.sb", params, function () {
+      // <-- 그리드 visible -->
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjGridTodayDtlDetailList");
+      var columns = grid.columns;
+
+      // 컬럼 총갯수
+      var columnsCnt = 15 + 17 + 11 + 7;
+
+      // 합계가 0이면 해당 컬럼 숨기기
+      for (var j = 0; j < columnsCnt; j++) {
+        if(columns[j].binding == "guest01" || columns[j].binding == "guest02" || columns[j].binding == "guest03" || columns[j].binding == "guest04" || columns[j].binding == "guest05" || columns[j].binding == "guest06") {
+          // 합계행 값 가져오기
+          if($scope.flex.columnFooters.getCellData(0, j, true) == 0) {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        }
+      }
+      // <-- //그리드 visible -->
+    });
   };
 
   // 매출상세 엑셀 다운로드

@@ -89,7 +89,7 @@ public class TodayDtlController {
         // 객수 조회
         List<DefaultMap<String>> guestColList = todayDtlService.getGuestColList(todayDtlVO, sessionInfoVO);
 
-        // 할인구분 코드를 , 로 연결하는 문자열 생성
+        // 객수 코드를 , 로 연결하는 문자열 생성
         String guestCol = "";
         for(int i=0; i < guestColList.size(); i++) {
             guestCol += (guestCol.equals("") ? "" : ",") + guestColList.get(i).getStr("guestCd");
