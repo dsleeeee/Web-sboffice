@@ -2803,4 +2803,33 @@
         </choose>
     </insert>
 
+    <!-- 사이드메뉴관리의 선택상품에 등록된 상품인지 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        COMMENTS : [본사]상품_사이드선택_상품, [매장]상품_사이드선택_상품
+    -->
+    <select id="getSideProdChk"  parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getSideProdChk */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT *
+                FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp
+                WHERE 1=1
+                AND thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thpsp.PROD_CD = #{prodCd}
+                AND thpsp.USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT *
+                FROM TB_MS_PRODUCT_SDSEL_PROD tmpsp
+                WHERE 1=1
+                AND tmpsp.STORE_CD = #{storeCd}
+                AND tmpsp.PROD_CD = #{prodCd}
+                AND tmpsp.USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
+
 </mapper>

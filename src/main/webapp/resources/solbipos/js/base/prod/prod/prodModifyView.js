@@ -159,46 +159,70 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상품저장
     $scope.saveProd = function() {
+        // 값 체크
+        if($scope.valueCheck()){
+
+            // 수정일때 사이드메뉴관리의 선택상품인 상품은 사이드사용여부 Y 안되게
+            if($("#saveMode").val() === "MOD" && $scope.prodModifyInfo.sideProdYn === "Y") {
+                var params    = {};
+                params.prodCd = $scope.prodModifyInfo.prodCd;
+
+                $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getSideProdChk.sb", params, function(response) {
+                    var list = response.data.data.list;
+
+                    if(list.length > 0) {
+                        $scope._popMsg(messages["prod.sideProdChk.msg"]); // 사이드메뉴관리에 선택상품으로 등록된 상품은 <br/> '사이드상품여부'를 '사용'으로 선택할 수 없습니다.
+                        return false;
+                    } else {
+                        // 상품저장
+                        $scope.saveProdSave();
+                    }
+                });
+            } else {
+                // 상품저장
+                $scope.saveProdSave();
+            }
+        }
+    }
+
+    // 상품저장
+    $scope.saveProdSave = function() {
         var params = $scope.prodModifyInfo;
         params.prodNoEnv = $("#prodCdInputType").val();
         params.saveMode = $("#saveMode").val();
 
-        // 값 체크
-        if($scope.valueCheck()){
+        params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
+        params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
+        params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
+        params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종원가단가
+        params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
+        params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
+        params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
+        params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
 
-            params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
-            params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
-            params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
-            params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종원가단가
-            params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
-            params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
-            params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
-            params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
+        params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
 
-            params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
+        // 저장수행
+        $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function (response) {
+            var result = response.data.data;
 
-            // 저장수행
-            $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function (response) {
-                var result = response.data.data;
+            if(result < 1){
+                $scope._popMsg(messages["cmm.registFail"]);
 
-                if(result < 1){
-                    $scope._popMsg(messages["cmm.registFail"]);
+            }else{
+                $scope._popMsg(messages["cmm.saveSucc"]);
 
-                }else{
-                    $scope._popMsg(messages["cmm.saveSucc"]);
+                // 이미지파일 저장
+                $scope.prodImageFileSave(result);
 
-                    // 이미지파일 저장
-                    $scope.prodImageFileSave(result);
+                $scope.prodModifyLayer.hide();
 
-                    $scope.prodModifyLayer.hide();
-
-                    // 저장기능 수행후 재조회
-                    $scope._broadcast('prodCtrl');
-                }
-            });
-        }        
+                // 저장기능 수행후 재조회
+                $scope._broadcast('prodCtrl');
+            }
+        });
     }
-    
+
     // 사이드 체크
     $scope.sideCheck = function () {
         // if(typeof gubun !== "undefined" && gubun == "sideMenu"){

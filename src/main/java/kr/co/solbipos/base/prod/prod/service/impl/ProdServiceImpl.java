@@ -931,4 +931,17 @@ public class ProdServiceImpl implements ProdService {
 
         return prodMapper.getBrandComboList(prodVO);
     }
+
+    /** 사이드메뉴관리의 선택상품에 등록된 상품인지 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSideProdChk(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getSideProdChk(prodVO);
+    }
 }

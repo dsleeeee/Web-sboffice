@@ -174,4 +174,7 @@ public interface ProdMapper {
 
     /** 거래처 저장 */
     int getVendorProdSaveInsert(ProdVO prodVO);
+
+    /** 사이드메뉴관리의 선택상품에 등록된 상품인지 조회 */
+    List<DefaultMap<Object>> getSideProdChk(ProdVO prodVO);
 }

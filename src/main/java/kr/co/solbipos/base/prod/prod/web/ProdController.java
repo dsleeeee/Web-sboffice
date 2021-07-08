@@ -420,4 +420,27 @@ public class ProdController {
 
         return ReturnUtil.returnListJson(Status.OK, result, prodVO);
     }
+
+    /**
+     * 사이드메뉴관리의 선택상품에 등록된 상품인지 조회
+     *
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 07. 08.
+     */
+    @RequestMapping(value = "/getSideProdChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideProdChk(ProdVO prodVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodService.getSideProdChk(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
 }

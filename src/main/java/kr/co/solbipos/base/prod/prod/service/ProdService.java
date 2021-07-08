@@ -81,4 +81,7 @@ public interface ProdService {
 
     /** 브랜드 콤보박스 리스트 조회 */
     List<DefaultMap<String>> getBrandComboList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 사이드메뉴관리의 선택상품에 등록된 상품인지 조회 */
+    List<DefaultMap<Object>> getSideProdChk(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }
