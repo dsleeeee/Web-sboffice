@@ -685,12 +685,19 @@
 
 <script language="JavaScript">
     var orgnFg = "${orgnFg}";
-    var hqOfficeCd = "${hqOfficeCd}"
+    var hqOfficeCd = "${hqOfficeCd}";
     var promotionEnvstVal = "${promotionEnvstVal}";
     var modPromotionEnvstVal = "${modPromotionEnvstVal}";
+
+    // 브랜드
+    var brandList = ${brandList};
+    // 매장타입
+    var storeTypeList = ${storeTypeList};
+    // 메뉴그룹
+    var storeGroupList = ${storeGroupList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210512.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210512.03" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

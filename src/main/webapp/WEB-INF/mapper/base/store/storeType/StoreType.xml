@@ -608,16 +608,34 @@
     -->
     <select id="getBrandList" parameterType="storeTypeVO" resultType="DefaultMap">
         /* StoreTypeMapper.getBrandList */
-        SELECT '' AS VALUE,
-                '전체' AS NAME
-          FROM DUAL
-         UNION
-        SELECT HQ_BRAND_CD AS VALUE,
-                HQ_BRAND_NM AS NAME
-          FROM TB_HQ_BRAND
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-         ORDER
-            BY VALUE NULLS FIRST
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT '' AS VALUE,
+                        '전체' AS NAME
+                  FROM DUAL
+                 UNION
+                SELECT HQ_BRAND_CD AS VALUE,
+                        HQ_BRAND_NM AS NAME
+                  FROM TB_HQ_BRAND
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                 ORDER
+                    BY VALUE NULLS FIRST
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT '' AS VALUE,
+                        '전체' AS NAME
+                  FROM DUAL
+                 UNION
+                SELECT MS_BRAND_CD AS VALUE,
+                        MS_BRAND_NM AS NAME
+                FROM TB_MS_BRAND
+                WHERE STORE_CD = #{storeCd}
+                ORDER
+                BY VALUE NULLS FIRST
+            </when>
+        </choose>
     </select>
 
     <!-- 매장타입관리 - 매장타입 매장적용 팝업 매장리스트 조회 -->
@@ -628,46 +646,82 @@
     -->
     <select id="getStoreTypeApplyStoreList" parameterType="storeTypeVO" resultType="DefaultMap">
         /* StoreTypeMapper.getStoreTypeApplyStoreList */
-        SELECT thsts.STORE_TYPE_CD,
-                thsts.STORE_TYPE_NM,
-                tms.STORE_NM,
-                tms.STORE_CD,
-                tms.SYS_STAT_FG,
-                TO_CHAR(TO_DATE(thsta.APPLY_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS APPLY_DT
-          FROM TB_MS_STORE tms,
-                (       SELECT thsts.HQ_OFFICE_CD,
-                                thsts.STORE_TYPE_CD,
-                                thst.STORE_TYPE_NM,
-                                thsts.STORE_CD,
-                                thsts.REMARK,
-                                thsts.OPTION01,
-                                thsts.USE_YN
-                          FROM TB_HQ_STORE_TYPE_STORE thsts,
-                                TB_HQ_STORE_TYPE thst
-                         WHERE thsts.HQ_OFFICE_CD = #{hqOfficeCd}
-                           AND thst.HQ_OFFICE_CD (+)= thsts.HQ_OFFICE_CD
-                           AND thst.STORE_TYPE_CD (+)= thsts.STORE_TYPE_CD
-                 ) thsts,
-                 TB_HQ_STORE_TYPE_APP thsta
-         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND thsts.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
-           AND thsts.STORE_CD (+)= tms.STORE_CD
-           AND thsta.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
-           AND thsta.STORE_CD (+)= tms.STORE_CD
-        <if test="storeTypeCd != null and storeTypeCd != ''">
-            AND thsts.STORE_TYPE_CD = #{storeTypeCd}   --매장타입코드
-        </if>
-        <if test="storeCd != null and storeCd != ''">
-            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
-        </if>
-        <if test="storeNm != null and storeNm != ''">
-            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
-        </if>
-        <if test="sysStatFg != null and sysStatFg != ''">
-            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
-        </if>
-        ORDER
-           BY tms.STORE_CD ASC
+        SELECT C.STORE_TYPE_CD,
+                C.STORE_TYPE_NM,
+                C.STORE_NM,
+                C.STORE_CD,
+                C.SYS_STAT_FG,
+                C.APPLY_DT,
+                C.STORE_GROUP_NMS,
+                C.STORE_GROUP_CDS
+                FROM (
+                            SELECT thsts.STORE_TYPE_CD,
+                                    thsts.STORE_TYPE_NM,
+                                    tms.STORE_NM,
+                                    tms.STORE_CD,
+                                    tms.SYS_STAT_FG,
+                                    TO_CHAR(TO_DATE(thsta.APPLY_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS APPLY_DT,
+                                    LISTAGG(thstpg.STORE_GROUP_NM || '(' || thstpg.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thstpg.STORE_GROUP_CD) AS STORE_GROUP_NMS,
+                                    LISTAGG(thstpg.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thstpg.STORE_GROUP_CD) AS STORE_GROUP_CDS
+                              FROM TB_MS_STORE tms,
+                                    (       SELECT thsts.HQ_OFFICE_CD,
+                                                    thsts.STORE_TYPE_CD,
+                                                    thst.STORE_TYPE_NM,
+                                                    thsts.STORE_CD,
+                                                    thsts.REMARK,
+                                                    thsts.OPTION01,
+                                                    thsts.USE_YN
+                                              FROM TB_HQ_STORE_TYPE_STORE thsts,
+                                                    TB_HQ_STORE_TYPE thst
+                                             WHERE thsts.HQ_OFFICE_CD = #{hqOfficeCd}
+                                               AND thst.HQ_OFFICE_CD (+)= thsts.HQ_OFFICE_CD
+                                               AND thst.STORE_TYPE_CD (+)= thsts.STORE_TYPE_CD
+                                     ) thsts,
+                                    (
+                                            SELECT A.HQ_OFFICE_CD,
+                                                    A.STORE_TYPE_CD,
+                                                    A.STORE_GROUP_CD,
+                                                    B.STORE_GROUP_NM
+                                              FROM TB_HQ_STORE_TYPE_PROD_GROUP A,
+                                                    TB_HQ_STORE_PROD_GROUP B
+                                             WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                               AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                                               AND B.STORE_GROUP_CD (+)= A.STORE_GROUP_CD
+                                    ) thstpg,
+                                     TB_HQ_STORE_TYPE_APP thsta
+                             WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                               AND thsts.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+                               AND thsts.STORE_CD (+)= tms.STORE_CD
+                               AND thsta.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+                               AND thsta.STORE_CD (+)= tms.STORE_CD
+                               AND thstpg.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+                               AND thstpg.STORE_TYPE_CD (+)= thsts.STORE_TYPE_CD
+                            GROUP
+                               BY thsts.STORE_TYPE_CD,
+                                  thsts.STORE_TYPE_NM,
+                                  tms.STORE_NM,
+                                  tms.STORE_CD,
+                                  tms.SYS_STAT_FG,
+                                  thsta.APPLY_DT
+                    ) C
+                 WHERE 1=1
+                <if test="storeTypeCd != null and storeTypeCd != ''">
+                    AND C.STORE_TYPE_CD = #{storeTypeCd}   --매장타입코드
+                </if>
+                <if test="storeGroupCd != null and storeGroupCd != ''">
+                   AND C.STORE_GROUP_CDS LIKE '%' || #{storeGroupCd} || '%' --메뉴그룹
+                </if>
+                <if test="storeCd != null and storeCd != ''">
+                    AND C.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+                </if>
+                <if test="storeNm != null and storeNm != ''">
+                    AND C.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+                </if>
+                <if test="sysStatFg != null and sysStatFg != ''">
+                    AND C.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+                </if>
+                ORDER
+                   BY C.STORE_CD ASC
     </select>
 
     <!-- 매장타입관리 - 매장타입조회(콤보박스용) -->
@@ -877,5 +931,25 @@
                 ORG.MOD_ID
               )
   </update>
+
+    <!-- 매장타입관리 - 메뉴그룹조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 메뉴그룹을 조회한다.
+    -->
+    <select id="getStoreGroupCombo" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreGroupCombo */
+        SELECT '' AS VALUE,
+                '전체' AS NAME
+          FROM DUAL
+         UNION
+        SELECT STORE_GROUP_CD AS VALUE,
+                STORE_GROUP_NM AS NAME
+          FROM TB_HQ_STORE_PROD_GROUP
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         ORDER
+            BY VALUE NULLS FIRST
+    </select>
 
 </mapper>

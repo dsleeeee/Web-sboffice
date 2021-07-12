@@ -133,6 +133,12 @@ public class PromotionVO extends PageVO {
     private String dlv2Yn;
     /** 프로모션 적용 구분(포장) */
     private String dlv3Yn;
+    /** 매장타입코드 */
+    private String storeTypeCd;
+    /** 메뉴그룹코드 */
+    private String storeGroupCd;
+    /** 브랜드코드 */
+    private String hqBrandCd;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -556,5 +562,29 @@ public class PromotionVO extends PageVO {
 
     public void setDlv3Yn(String dlv3Yn) {
         this.dlv3Yn = dlv3Yn;
+    }
+
+    public String getStoreTypeCd() {
+        return storeTypeCd;
+    }
+
+    public void setStoreTypeCd(String storeTypeCd) {
+        this.storeTypeCd = storeTypeCd;
+    }
+
+    public String getStoreGroupCd() {
+        return storeGroupCd;
+    }
+
+    public void setStoreGroupCd(String storeGroupCd) {
+        this.storeGroupCd = storeGroupCd;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
     }
 }

@@ -16,6 +16,8 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
     angular.extend(this, new RootController('promotionProdRegCtrl', $scope, $http, false));
 
     // 사용여부 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("srchProdBrand", brandList);
+    $scope._setComboData("srchProdStoreGroup", storeGroupList);
     $scope._setComboData("prodUseYnAll", useYnAllFgData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -23,6 +25,18 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
 
         $scope.prodUseYnFgDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); //사용여부
 
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "storeGroupNms") {
+
+                    var item = s.rows[e.row].dataItem;
+                    if (item.storeGroupNms === "()") {
+                        e.cell.innerHTML = "";
+                    }
+                }
+            }
+        });
     };
 
     // 팝업 오픈 시, 상품리스트 조회
@@ -39,6 +53,8 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
 
         var params = {};
         params.promotionCd = $("#hdPromotionCd").val();
+        params.hqBrandCd = $scope.srchProdBrandCombo.selectedValue;
+        params.storeGroupCd = $scope.srchProdStoreGroupCombo.selectedValue;
         params.prodCd = $("#srchProdCd").val();
         params.prodNm = $("#srchProdNm").val();
         params.useYn = $scope.srchProdUseYnCombo.selectedValue;

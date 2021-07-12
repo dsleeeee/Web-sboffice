@@ -20,12 +20,25 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchPopStoreType", storeTypeList);
+    $scope._setComboData("srchPopStoreGroup", storeGroupList);
     $scope._setComboData("srchPopSysStatFg", sysStatFg);
 
     $scope.initGrid = function (s, e) {
 
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "storeGroupNms") {
+
+                    var item = s.rows[e.row].dataItem;
+                    if (item.storeGroupNms === "()") {
+                        e.cell.innerHTML = "";
+                    }
+                }
+            }
+        });
     };
 
     $scope.$on("storeTypeApplyStoreCtrl", function(event, data) {
@@ -41,6 +54,7 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
 
         var params = {};
         params.storeTypeCd = $scope.srchPopStoreTypeCombo.selectedValue;
+        params.storeGroupCd = $scope.srchPopStoreGroupCombo.selectedValue;
         params.storeCd = $("#srchPopStoreCd").val();
         params.storeNm = $("#srchPopStoreNm").val();
         params.sysStatFg = $scope.srchPopSysStatFgCombo.selectedValue;
@@ -112,6 +126,7 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
     $scope.close = function () {
 
         $scope.srchPopStoreTypeCombo.selectedIndex = 0;
+        $scope.srchPopStoreGroupCombo.selectedIndex = 0;
         $("#srchPopStoreCd").val("");
         $("#srchPopStoreNm").val("");
         $scope.srchPopSysStatFgCombo.selectedIndex = 0;
@@ -119,6 +134,5 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
         $("input:checkbox[id='chkSaleUprcApply']").prop("checked", false);
 
     };
-
 
 }]);
