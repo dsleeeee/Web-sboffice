@@ -898,47 +898,134 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT thp.HQ_OFFICE_CD,
-                        thp.PROD_CD,
-                        thp.PROD_NM,
-                        '1' AS PROD_QTY,
-                        thp.USE_YN
-                  FROM TB_HQ_PRODUCT thp
-                 WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                SELECT C.HQ_OFFICE_CD,
+                        C.HQ_BRAND_CD,
+                        C.HQ_BRAND_NM AS BRAND_NM,
+                        C.PROD_CD,
+                        C.PROD_NM,
+                        C.PROD_QTY,
+                        C.USE_YN,
+                        C.STORE_GROUP_NMS,
+                        C.STORE_GROUP_CDS
+                  FROM (
+                              SELECT thp.HQ_OFFICE_CD,
+                                      thp.HQ_BRAND_CD,
+                                      thb.HQ_BRAND_NM,
+                                      thp.PROD_CD,
+                                      thp.PROD_NM,
+                                      '1' AS PROD_QTY,
+                                      thp.USE_YN,
+                                      LISTAGG(thspgd.STORE_GROUP_NM || '(' || thspgd.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_NMS,
+                                      LISTAGG(thspgd.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_CDS
+                                FROM TB_HQ_PRODUCT thp,
+                                      TB_HQ_BRAND thb,
+                                      (	SELECT A.HQ_OFFICE_CD,
+                                                A.STORE_GROUP_CD,
+                                                B.STORE_GROUP_NM,
+                                                A.PROD_CD
+                                          FROM TB_HQ_STORE_PROD_GROUP_DTL A,
+                                                TB_HQ_STORE_PROD_GROUP B
+                                         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                           AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                                           AND B.STORE_GROUP_CD (+)= A.STORE_GROUP_CD
+                                      )thspgd
+                               WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                 AND thb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                                 AND thb.HQ_BRAND_CD (+)= thp.HQ_BRAND_CD
+                                 AND thspgd.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                                 AND thspgd.PROD_CD (+)= thp.PROD_CD
+                               GROUP
+                                  BY thp.HQ_OFFICE_CD,
+                                     thp.HQ_BRAND_CD,
+                                     thb.HQ_BRAND_NM,
+                                     thp.PROD_CD,
+                                     thp.PROD_NM,
+                                     thp.USE_YN
+                ) C
+                WHERE 1=1
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND C.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
+                </if>
+                <if test="storeGroupCd != null and storeGroupCd != ''">
+                    AND C.STORE_GROUP_CDS LIKE '%' || #{storeGroupCd} || '%' --메뉴그룹
+                </if>
                 <if test="prodCd != null and prodCd != ''">
-                   AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                   AND C.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
-                   AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                   AND C.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="useYn != null and useYn != ''">
-                   AND thp.USE_YN  = #{useYn} --사용여부
+                   AND C.USE_YN  = #{useYn} --사용여부
                 </if>
-                   AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PROMO_CONDI_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '1')
+                   AND C.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PROMO_CONDI_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '1')
                  ORDER
-                    BY thp.PROD_CD ASC
+                    BY C.PROD_CD ASC
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT tmp.STORE_CD,
-                        tmp.PROD_CD,
-                        tmp.PROD_NM,
-                        '1' AS PROD_QTY,
-                        tmp.USE_YN
-                  FROM TB_MS_PRODUCT tmp
-                 WHERE tmp.STORE_CD = #{storeCd}
+                SELECT C.STORE_CD,
+                        C.HQ_BRAND_CD,
+                        C.MS_BRAND_NM AS BRAND_NM,
+                        C.PROD_CD,
+                        C.PROD_NM,
+                        C.PROD_QTY,
+                        C.USE_YN,
+                        C.STORE_GROUP_NMS,
+                        C.STORE_GROUP_CDS
+                 FROM (
+                            SELECT tmp.STORE_CD,
+                                    tmp.HQ_BRAND_CD,
+                                    tmb.MS_BRAND_NM,
+                                    tmp.PROD_CD,
+                                    tmp.PROD_NM,
+                                    '1' AS PROD_QTY,
+                                    tmp.USE_YN,
+                                    LISTAGG(thspgd.STORE_GROUP_NM || '(' || thspgd.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_NMS,
+                                    LISTAGG(thspgd.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_CDS
+                              FROM TB_MS_PRODUCT tmp,
+                                    TB_MS_BRAND tmb,
+                                    (	SELECT A.HQ_OFFICE_CD,
+                                                A.STORE_GROUP_CD,
+                                                B.STORE_GROUP_NM,
+                                                A.PROD_CD
+                                          FROM TB_HQ_STORE_PROD_GROUP_DTL A,
+                                                TB_HQ_STORE_PROD_GROUP B
+                                         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                           AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                                           AND B.STORE_GROUP_CD (+)= A.STORE_GROUP_CD
+                                    )thspgd
+                             WHERE tmp.STORE_CD = #{storeCd}
+                               AND tmb.STORE_CD (+)= tmp.STORE_CD
+                               AND tmb.MS_BRAND_CD (+)= tmp.HQ_BRAND_CD
+                               AND thspgd.PROD_CD (+)= tmp.PROD_CD
+                             GROUP
+                                BY tmp.STORE_CD,
+                                   tmp.HQ_BRAND_CD,
+                                   tmb.MS_BRAND_NM,
+                                   tmp.PROD_CD,
+                                   tmp.PROD_NM,
+                                   tmp.USE_YN
+                        ) C
+                     WHERE 1=1
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND C.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
+                </if>
+                <if test="storeGroupCd != null and storeGroupCd != ''">
+                    AND C.STORE_GROUP_CDS LIKE '%' || #{storeGroupCd} || '%' --메뉴그룹
+                </if>
                 <if test="prodCd != null and prodCd != ''">
-                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                    AND C.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
-                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                    AND C.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="useYn != null and useYn != ''">
-                    AND tmp.USE_YN  = #{useYn} --사용여부
+                    AND C.USE_YN  = #{useYn} --사용여부
                 </if>
-                    AND tmp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_MS_PROMO_CONDI_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '1')
+                    AND C.PROD_CD NOT IN (SELECT PROD_CD FROM TB_MS_PROMO_CONDI_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd} AND GUBUN_DS = '1')
                   ORDER
-                     BY tmp.PROD_CD ASC
+                     BY C.PROD_CD ASC
             </when>
         </choose>
     </select>
@@ -1161,24 +1248,80 @@
     -->
     <select id="getStoreList" parameterType="promotionVO" resultType="DefaultMap">
         /* PromotionMapper.getStoreList */
-        SELECT tms.HQ_OFFICE_CD,
-                tms.STORE_CD,
-                tms.STORE_NM,
-                tms.SYS_STAT_FG
-          FROM TB_MS_STORE tms
-         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test="storeCd != null and storeCd != ''">
-           AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
-        </if>
-        <if test="storeNm != null and storeNm != ''">
-           AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
-        </if>
-        <if test="sysStatFg != null and sysStatFg != ''">
-            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
-        </if>
-          AND tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
-        ORDER
-           BY tms.STORE_CD ASC
+        SELECT C.STORE_TYPE_CD,
+                C.STORE_TYPE_NM,
+                C.HQ_OFFICE_CD,
+                C.STORE_CD,
+                C.STORE_NM,
+                C.SYS_STAT_FG,
+                C.STORE_GROUP_NMS,
+                C.STORE_GROUP_CDS
+          FROM (
+                        SELECT thsts.STORE_TYPE_CD,
+                                thsts.STORE_TYPE_NM,
+                                tms.HQ_OFFICE_CD,
+                                tms.STORE_CD,
+                                tms.STORE_NM,
+                                tms.SYS_STAT_FG,
+                                LISTAGG(thstpg.STORE_GROUP_NM || '(' || thstpg.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thstpg.STORE_GROUP_CD) AS STORE_GROUP_NMS,
+                                LISTAGG(thstpg.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thstpg.STORE_GROUP_CD) AS STORE_GROUP_CDS
+                          FROM TB_MS_STORE tms,
+                                (       SELECT thsts.HQ_OFFICE_CD,
+                                                thsts.STORE_TYPE_CD,
+                                                thst.STORE_TYPE_NM,
+                                                thsts.STORE_CD,
+                                                thsts.REMARK,
+                                                thsts.OPTION01,
+                                                thsts.USE_YN
+                                          FROM TB_HQ_STORE_TYPE_STORE thsts,
+                                                TB_HQ_STORE_TYPE thst
+                                         WHERE thsts.HQ_OFFICE_CD = #{hqOfficeCd}
+                                           AND thst.HQ_OFFICE_CD (+)= thsts.HQ_OFFICE_CD
+                                           AND thst.STORE_TYPE_CD (+)= thsts.STORE_TYPE_CD
+                                ) thsts,
+                                (
+                                        SELECT A.HQ_OFFICE_CD,
+                                                A.STORE_TYPE_CD,
+                                                A.STORE_GROUP_CD,
+                                                B.STORE_GROUP_NM
+                                          FROM TB_HQ_STORE_TYPE_PROD_GROUP A,
+                                                TB_HQ_STORE_PROD_GROUP B
+                                         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                           AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                                           AND B.STORE_GROUP_CD (+)= A.STORE_GROUP_CD
+                                ) thstpg
+                         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                           AND thsts.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+                           AND thsts.STORE_CD (+)= tms.STORE_CD
+                           AND thstpg.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+                           AND thstpg.STORE_TYPE_CD (+)= thsts.STORE_TYPE_CD
+                         GROUP
+                            BY thsts.STORE_TYPE_CD,
+                               thsts.STORE_TYPE_NM,
+                               tms.HQ_OFFICE_CD,
+                               tms.STORE_CD,
+                               tms.STORE_NM,
+                               tms.SYS_STAT_FG
+               ) C
+             WHERE 1=1
+            <if test="storeTypeCd != null and storeTypeCd != ''">
+                AND C.STORE_TYPE_CD = #{storeTypeCd} --매장타입코드
+            </if>
+            <if test="storeGroupCd != null and storeGroupCd != ''">
+                AND C.STORE_GROUP_CDS LIKE '%' || #{storeGroupCd} || '%' --메뉴그룹
+            </if>
+            <if test="storeCd != null and storeCd != ''">
+                AND C.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+            </if>
+            <if test="storeNm != null and storeNm != ''">
+                AND C.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+            </if>
+            <if test="sysStatFg != null and sysStatFg != ''">
+                AND C.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+            </if>
+                AND C.STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+              ORDER
+                 BY C.STORE_CD ASC
     </select>
 
     <!-- 프로모션 적용매장 선택팝업 전매장적용 -->
@@ -1326,47 +1469,134 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT thp.HQ_OFFICE_CD,
-                        thp.PROD_CD,
-                        thp.PROD_NM,
-                        '1' AS PROD_QTY,
-                        thp.USE_YN
-                  FROM TB_HQ_PRODUCT thp
-                  WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                SELECT C.HQ_OFFICE_CD,
+                        C.HQ_BRAND_CD,
+                        C.HQ_BRAND_NM AS BRAND_NM,
+                        C.PROD_CD,
+                        C.PROD_NM,
+                        C.PROD_QTY,
+                        C.USE_YN,
+                        C.STORE_GROUP_NMS,
+                        C.STORE_GROUP_CDS
+                  FROM (
+                                SELECT thp.HQ_OFFICE_CD,
+                                        thp.HQ_BRAND_CD,
+                                        thb.HQ_BRAND_NM,
+                                        thp.PROD_CD,
+                                        thp.PROD_NM,
+                                        '1' AS PROD_QTY,
+                                        thp.USE_YN,
+                                        LISTAGG(thspgd.STORE_GROUP_NM || '(' || thspgd.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_NMS,
+                                        LISTAGG(thspgd.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_CDS
+                                  FROM TB_HQ_PRODUCT thp,
+                                        TB_HQ_BRAND thb,
+                                        (	SELECT A.HQ_OFFICE_CD,
+                                                    A.STORE_GROUP_CD,
+                                                    B.STORE_GROUP_NM,
+                                                    A.PROD_CD
+                                              FROM TB_HQ_STORE_PROD_GROUP_DTL A,
+                                                    TB_HQ_STORE_PROD_GROUP B
+                                              WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                                                AND B.STORE_GROUP_CD (+)= A.STORE_GROUP_CD
+                                         )thspgd
+                                  WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND thb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                                    AND thb.HQ_BRAND_CD (+)= thp.HQ_BRAND_CD
+                                    AND thspgd.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                                    AND thspgd.PROD_CD (+)= thp.PROD_CD
+                                  GROUP
+                                    BY thp.HQ_OFFICE_CD,
+                                        thp.HQ_BRAND_CD,
+                                        thb.HQ_BRAND_NM,
+                                        thp.PROD_CD,
+                                        thp.PROD_NM,
+                                        thp.USE_YN
+                        ) C
+                   WHERE 1=1
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND C.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
+                </if>
+                <if test="storeGroupCd != null and storeGroupCd != ''">
+                    AND C.STORE_GROUP_CDS LIKE '%' || #{storeGroupCd} || '%' --메뉴그룹
+                </if>
                 <if test="prodCd != null and prodCd != ''">
-                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                    AND C.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
-                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                    AND C.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="useYn != null and useYn != ''">
-                    AND thp.USE_YN  = #{useYn} --사용여부
+                    AND C.USE_YN  = #{useYn} --사용여부
                 </if>
-                    AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PROMO_BENE_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+                    AND C.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PROMO_BENE_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
                   ORDER
-                     BY thp.PROD_CD ASC
+                     BY C.PROD_CD ASC
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT tmp.STORE_CD,
-                        tmp.PROD_CD,
-                        tmp.PROD_NM,
-                        '1' AS PROD_QTY,
-                        tmp.USE_YN
-                  FROM TB_MS_PRODUCT tmp
-                 WHERE tmp.STORE_CD = #{storeCd}
+                SELECT C.STORE_CD,
+                        C.HQ_BRAND_CD,
+                        C.MS_BRAND_NM AS BRAND_NM,
+                        C.PROD_CD,
+                        C.PROD_NM,
+                        C.PROD_QTY,
+                        C.USE_YN,
+                        C.STORE_GROUP_NMS,
+                        C.STORE_GROUP_CDS
+                  FROM (
+                                SELECT tmp.STORE_CD,
+                                        tmp.HQ_BRAND_CD,
+                                        tmb.MS_BRAND_NM,
+                                        tmp.PROD_CD,
+                                        tmp.PROD_NM,
+                                        '1' AS PROD_QTY,
+                                        tmp.USE_YN,
+                                        LISTAGG(thspgd.STORE_GROUP_NM || '(' || thspgd.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_NMS,
+                                        LISTAGG(thspgd.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_CDS
+                                  FROM TB_MS_PRODUCT tmp,
+                                        TB_MS_BRAND tmb,
+                                        (	SELECT A.HQ_OFFICE_CD,
+                                                    A.STORE_GROUP_CD,
+                                                    B.STORE_GROUP_NM,
+                                                    A.PROD_CD
+                                              FROM TB_HQ_STORE_PROD_GROUP_DTL A,
+                                                    TB_HQ_STORE_PROD_GROUP B
+                                             WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                               AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                                               AND B.STORE_GROUP_CD (+)= A.STORE_GROUP_CD
+                                        )thspgd
+                                 WHERE tmp.STORE_CD = #{storeCd}
+                                    AND tmb.STORE_CD (+)= tmp.STORE_CD
+                                    AND tmb.MS_BRAND_CD (+)= tmp.HQ_BRAND_CD
+                                    AND thspgd.PROD_CD (+)= tmp.PROD_CD
+                                  GROUP
+                                     BY tmp.STORE_CD,
+                                         tmp.HQ_BRAND_CD,
+                                         tmb.MS_BRAND_NM,
+                                         tmp.PROD_CD,
+                                         tmp.PROD_NM,
+                                         tmp.USE_YN
+                        ) C
+                      WHERE 1=1
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND C.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
+                </if>
+                <if test="storeGroupCd != null and storeGroupCd != ''">
+                    AND C.STORE_GROUP_CDS LIKE '%' || #{storeGroupCd} || '%' --메뉴그룹
+                </if>
                 <if test="prodCd != null and prodCd != ''">
-                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                      AND C.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
-                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                      AND C.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="useYn != null and useYn != ''">
-                    AND tmp.USE_YN  = #{useYn} --사용여부
+                      AND C.USE_YN  = #{useYn} --사용여부
                 </if>
-                    AND tmp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_MS_PROMO_BENE_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd})
-                ORDER
-                   BY tmp.PROD_CD ASC
+                      AND C.PROD_CD NOT IN (SELECT PROD_CD FROM TB_MS_PROMO_BENE_PROD WHERE STORE_CD = #{storeCd} AND PROMOTION_CD = #{promotionCd})
+                    ORDER
+                       BY C.PROD_CD ASC
             </when>
         </choose>
     </select>

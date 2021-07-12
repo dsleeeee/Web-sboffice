@@ -24,6 +24,35 @@
                     </colgroup>
                     <tbody>
                     <tr>
+                        <th><s:message code="promotion.storeType" /></th><%--매장타입--%>
+                        <td>
+                            <div class="sb-select w100">
+                                <wj-combo-box
+                                        id="srchStoreType"
+                                        items-source="_getComboData('srchStoreType')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchStoreTypeCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 메뉴그룹 --%>
+                        <th><s:message code="promotion.menuGroup" /></th>
+                        <td>
+                            <div class="sb-select w100">
+                                <wj-combo-box
+                                        id="srchStoreGroup"
+                                        items-source="_getComboData('srchStoreGroup')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchStoreGroupCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <th><s:message code="promotion.storeCd" /></th>
                         <td>
                             <input type="text" id="srchStoreCd"/>
@@ -74,6 +103,9 @@
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="promotion.storeType"/>" binding="storeTypeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="promotion.menuGroup"/>" binding="storeGroupNms" width="250" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="promotion.menuGroup"/>" binding="storeGroupCds" width="250" is-read-only="true" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="promotion.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="promotion.storeNm"/>" binding="storeNm" width="210" align="left" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="promotion.sysStatFg"/>" binding="sysStatFg" width="90"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -88,4 +120,4 @@
 <script>
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionStoreReg.js?ver=20210423.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionStoreReg.js?ver=20210423.03" charset="utf-8"></script>

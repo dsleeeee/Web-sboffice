@@ -15,11 +15,27 @@ app.controller('promotionStoreRegCtrl', ['$scope', '$http', function ($scope, $h
 
     angular.extend(this, new RootController('promotionStoreRegCtrl', $scope, $http, false));
 
+    $scope._setComboData("srchStoreType", storeTypeList);
+    $scope._setComboData("srchStoreGroup", storeGroupList);
     $scope._setComboData("srchSysStatFg", sysStatFg);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "storeGroupNms") {
+
+                    var item = s.rows[e.row].dataItem;
+                    if (item.storeGroupNms === "()") {
+                        e.cell.innerHTML = "";
+                    }
+                }
+            }
+        });
     };
 
     // 팝업 오픈 시, 매장리스트 조회
@@ -36,6 +52,8 @@ app.controller('promotionStoreRegCtrl', ['$scope', '$http', function ($scope, $h
 
         var params = {};
         params.promotionCd = $("#hdPromotionCd").val();
+        params.storeTypeCd = $scope.srchStoreTypeCombo.selectedValue;
+        params.storeGroupCd = $scope.srchStoreGroupCombo.selectedValue;
         params.storeCd = $("#srchStoreCd").val();
         params.storeNm = $("#srchStoreNm").val();
         params.sysStatFg = $scope.srchSysStatFgCombo.selectedValue;
@@ -90,7 +108,7 @@ app.controller('promotionStoreRegCtrl', ['$scope', '$http', function ($scope, $h
             $scope._pageView('promotionSelectStoreGridCtrl', 1);
 
         });
-    }
+    };
     
     // 전매장적용
     $scope.btnInsertStoreAll = function () {

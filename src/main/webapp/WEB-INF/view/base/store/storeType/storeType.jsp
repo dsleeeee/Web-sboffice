@@ -290,7 +290,7 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.08" charset="utf-8"></script>
 
 <%-- 매장타입 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeTypeApplyStore.jsp">
