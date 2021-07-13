@@ -43,53 +43,53 @@
                 <tbody>
                 <tr>
                     <%-- 객층1 --%>
-                    <th class="tc">
+                    <th class="tc br bl">
                         <s:message code="guestManage.guestNm1"/>
                     </th>
                     <%-- 객층2 --%>
-                    <th class="tc">
+                    <th class="tc br">
                         <s:message code="guestManage.guestNm2"/>
                     </th>
                     <%-- 객층3 --%>
-                    <th class="tc">
+                    <th class="tc br">
                         <s:message code="guestManage.guestNm3"/>
                     </th>
                     <%-- 객층4 --%>
-                    <th class="tc">
+                    <th class="tc br">
                         <s:message code="guestManage.guestNm4"/>
                     </th>
                     <%-- 객층5 --%>
-                    <th class="tc">
+                    <th class="tc br">
                         <s:message code="guestManage.guestNm5"/>
                     </th>
                     <%-- 객층6 --%>
-                    <th class="tc">
+                    <th class="tc br">
                         <s:message code="guestManage.guestNm6"/>
                     </th>
                 </tr>
                 <tr>
                     <%-- 객층1 --%>
-                    <td>
+                    <td class="br bl">
                         <input type="text" class="sb-input w100" id="srchGuestNm1" ng-model="guestNm1" />
                     </td>
                     <%-- 객층2 --%>
-                    <td>
+                    <td class="br">
                         <input type="text" class="sb-input w100" id="srchGuestNm2" ng-model="guestNm2" />
                     </td>
                     <%-- 객층3 --%>
-                    <td>
+                    <td class="br">
                         <input type="text" class="sb-input w100" id="srchGuestNm3" ng-model="guestNm3" />
                     </td>
                     <%-- 객층4 --%>
-                    <td>
+                    <td class="br">
                         <input type="text" class="sb-input w100" id="srchGuestNm4" ng-model="guestNm4" />
                     </td>
                     <%-- 객층5 --%>
-                    <td>
+                    <td class="br">
                         <input type="text" class="sb-input w100" id="srchGuestNm5" ng-model="guestNm5" />
                     </td>
                     <%-- 객층6 --%>
-                    <td>
+                    <td class="br">
                         <input type="text" class="sb-input w100" id="srchGuestNm6" ng-model="guestNm6" />
                     </td>
                 </tr>
