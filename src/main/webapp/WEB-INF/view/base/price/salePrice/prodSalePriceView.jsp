@@ -72,44 +72,13 @@
                   display-member-path="name"
                   selected-value-path="value"
                   is-editable="false"
-                  initialized="_initComboBox(s)">
+                  initialized="_initComboBox(s)"
+                  selected-index-changed="setSelectedSaleAmtOption(s)">
           </wj-combo-box>
         </div>
-          <%-- 판매가 변경 비율 --%>
-          <div class="sb-select fl">
-          <span>
-            <input type="text" class="inSty2 w80px" id="inputSaleRateProd" ng-model="prodInfo.inputSaleRate" ng-readonly="inputSaleRateReadOnly" />
-          </span>
-          </div>
-          <div class="sb-select fl w5px mr5 mt10">
-              <span>%</span>
-          </div>
-          <%-- 변경 단위 --%>
-          <div class="sb-select fl w130 mr5">
-              <wj-combo-box
-                      id="changeUnit"
-                      ng-model="prodInfo.changeUnit"
-                      control="changeUnitCombo"
-                      items-source="_getComboData('changeUnit')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      initialized="_initComboBox(s)">
-              </wj-combo-box>
-          </div>
-          <%-- 반올림 여부 --%>
-          <div class="sb-select fl w100px mr5">
-              <wj-combo-box
-                      id="changeMode"
-                      ng-model="prodInfo.changeMode"
-                      control="changeModeCombo"
-                      items-source="_getComboData('changeMode')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      initialized="_initComboBox(s)">
-              </wj-combo-box>
-          </div>
+        <span>
+          <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputSaleAmt"ng-model="prodInfo.inputSaleAmt" ng-readonly="inputSaleAmtReadOnly" />
+        </span> 원
         <a href="#" class="btn_grayS ml10" ng-click="changeAmt()">일괄적용</a>
         <a href="#" class="btn_grayS" style="display:none;" ng-click="changeExcelAmt()">엑셀판매가 일괄적용</a> <!-- // todo -->
       </th>
@@ -130,44 +99,13 @@
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"
-                      initialized="_initComboBox(s)">
+                      initialized="_initComboBox(s)"
+                      selected-index-changed="setSelectedStinSaleUprcOption(s)">
               </wj-combo-box>
             </div>
-            <%-- 변경 비율 --%>
-            <div class="sb-select fl">
             <span>
-              <input type="text" class="inSty2 w80px" id="inputStinSaleUprcRateProd" ng-model="prodInfo.inputStinSaleUprcRate" ng-readonly="inputStinSaleUprcRateReadOnly" />
-            </span>
-            </div>
-            <div class="sb-select fl w5px mr5 mt10">
-                <span>%</span>
-            </div>
-            <%-- 변경 단위 --%>
-            <div class="sb-select fl w130 mr5">
-                <wj-combo-box
-                        id="stinSaleUprcChangeUnit"
-                        ng-model="prodInfo.stinSaleUprcChangeUnit"
-                        control="stinSaleUprcChangeUnitCombo"
-                        items-source="_getComboData('stinSaleUprcChangeUnit')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                </wj-combo-box>
-            </div>
-            <%-- 반올림 여부 --%>
-            <div class="sb-select fl w100px mr5">
-                <wj-combo-box
-                        id="stinSaleUprcChangeMode"
-                        ng-model="prodInfo.stinSaleUprcChangeMode"
-                        control="stinSaleUprcChangeModeCombo"
-                        items-source="_getComboData('stinSaleUprcChangeMode')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                </wj-combo-box>
-            </div>
+              <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputStinSaleUprc" ng-model="prodInfo.inputStinSaleUprc" ng-readonly="inputStinSaleUprcReadOnly" />
+            </span> 원
             <a href="#" class="btn_grayS ml10" ng-click="changeStinSaleUprc()">일괄적용</a>
           </th>
         </tr>
@@ -186,44 +124,13 @@
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"
-                      initialized="_initComboBox(s)">
+                      initialized="_initComboBox(s)"
+                      selected-index-changed="setSelectedDlvrSaleUprcOption(s)">
               </wj-combo-box>
             </div>
-            <%-- 변경 비율 --%>
-            <div class="sb-select fl">
             <span>
-              <input type="text" class="inSty2 w80px" id="inputDlvrSaleUprcRateProd" ng-model="prodInfo.inputDlvrSaleUprcRate" ng-readonly="inputDlvrSaleUprcRateReadOnly" />
-            </span>
-            </div>
-            <div class="sb-select fl w5px mr5 mt10">
-                <span>%</span>
-            </div>
-            <%-- 변경 단위 --%>
-            <div class="sb-select fl w130 mr5">
-                <wj-combo-box
-                        id="dlvrSaleUprcChangeUnit"
-                        ng-model="prodInfo.dlvrSaleUprcChangeUnit"
-                        control="dlvrSaleUprcChangeUnitCombo"
-                        items-source="_getComboData('dlvrSaleUprcChangeUnit')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                </wj-combo-box>
-            </div>
-            <%-- 반올림 여부 --%>
-            <div class="sb-select fl w100px mr5">
-                <wj-combo-box
-                        id="dlvrSaleUprcChangeMode"
-                        ng-model="prodInfo.dlvrSaleUprcChangeMode"
-                        control="dlvrSaleUprcChangeModeCombo"
-                        items-source="_getComboData('dlvrSaleUprcChangeMode')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                </wj-combo-box>
-            </div>
+              <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputDlvrSaleUprc" ng-model="prodInfo.inputDlvrSaleUprc" ng-readonly="inputDlvrSaleUprcReadOnly" />
+            </span> 원
             <a href="#" class="btn_grayS ml10" ng-click="changeDlvrSaleUprc()">일괄적용</a>
           </th>
         </tr>
@@ -242,44 +149,13 @@
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"
-                      initialized="_initComboBox(s)">
+                      initialized="_initComboBox(s)"
+                      selected-index-changed="setSelectedPackSaleUprcOption(s)">
               </wj-combo-box>
             </div>
-            <%-- 변경 비율 --%>
-            <div class="sb-select fl">
             <span>
-              <input type="text" class="inSty2 w80px" id="inputPackSaleUprcRateProd" ng-model="prodInfo.inputPackSaleUprcRate" ng-readonly="inputPackSaleUprcRateReadOnly" />
-            </span>
-            </div>
-            <div class="sb-select fl w5px mr5 mt10">
-                <span>%</span>
-            </div>
-            <%-- 변경 단위 --%>
-            <div class="sb-select fl w130 mr5">
-                <wj-combo-box
-                        id="packSaleUprcChangeUnit"
-                        ng-model="prodInfo.packSaleUprcChangeUnit"
-                        control="packSaleUprcChangeUnitCombo"
-                        items-source="_getComboData('packSaleUprcChangeUnit')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                </wj-combo-box>
-            </div>
-                <%-- 반올림 여부 --%>
-            <div class="sb-select fl w100px mr5">
-                <wj-combo-box
-                        id="packSaleUprcChangeMode"
-                        ng-model="prodInfo.packSaleUprcChangeMode"
-                        control="packSaleUprcChangeModeCombo"
-                        items-source="_getComboData('packSaleUprcChangeMode')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                </wj-combo-box>
-            </div>
+              <input type="text" maxlength="10" numberOnly class="inSty2 w130" id="inputPackSaleUprc" ng-model="prodInfo.inputPackSaleUprc" ng-readonly="inputPackSaleUprcReadOnly" />
+            </span> 원
             <a href="#" class="btn_grayS ml10" ng-click="changePackSaleUprc()">일괄적용</a>
           </th>
         </tr>
@@ -425,4 +301,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20210526.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20210526.10" charset="utf-8"></script>

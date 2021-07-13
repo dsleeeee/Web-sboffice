@@ -91,7 +91,7 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
 
                 var obj = {};
                 obj.storeCd = item.storeCd;
-                obj.remark = "TB_HQ_STORE_TYPE_APP 에 직접 등록";
+                obj.commentRemark = "TB_HQ_STORE_TYPE_APP 에 직접 등록";
 
                 if(storeTypeApplyEnvstVal === "1") { // 매장타입판매가설정(1107) 미사용시, 기본 applyFg = 0
 
