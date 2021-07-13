@@ -177,4 +177,25 @@ public interface ProdMapper {
 
     /** 사이드메뉴관리의 선택상품에 등록된 상품인지 조회 */
     List<DefaultMap<Object>> getSideProdChk(ProdVO prodVO);
+
+
+    /** 본사환경설정 [1111 사이드상품자동생성] 조회 */
+    String getHqEnvCodeSide(ProdVO prodVO);
+
+    /** 사이드메뉴관리의 선택상품에 등록된 상품 리스트 */
+    String getHqSdselProd(ProdVO prodVO);
+
+    /** 매장 상품저장시 등록매장 테이블에도 저장 */
+    int insertHqProdStoreTotal(ProdVO prodVO);
+    int insertHqProdStore(ProdVO prodVO);
+
+    /** 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장 */
+    int insertHqSdselProdStoreTotal(ProdVO prodVO);
+
+    /** 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 바코드 매장에 저장 */
+    int insertHqSdselProdStoreBarcdTotal(ProdVO prodVO);
+
+    /** 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 분류 매장에 저장 */
+    int insertHqSdselProdStoreClassTotal(ProdVO prodVO);
+    int insertHqSdselProdStoreClass(ProdVO prodVO);
 }

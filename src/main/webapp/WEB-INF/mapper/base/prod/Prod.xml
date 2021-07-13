@@ -1330,7 +1330,6 @@
         COMMENTS : 본사 상품을 적용할 매장을 등록한다.
     -->
     <insert id="insertProdStore" parameterType="prodVO">
-
         /* USE : ProdMapper.insertProdStore */
         INSERT INTO TB_HQ_PRODUCT_STORE
         (
@@ -2831,5 +2830,542 @@
             </when>
         </choose>
     </select>
+
+
+    <!-- 본사환경설정 [1111 사이드상품자동생성] 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getHqEnvCodeSide"  parameterType="prodVO" resultType="String">
+        /* ProdMapper.getHqEnvCodeSide */
+        SELECT
+        NVL(the.ENVST_VAL, 0) AS ENVST_VAL
+        FROM TB_HQ_OFFICE tho,
+        TB_HQ_ENVST the,
+        TB_CM_ENVST tce
+        WHERE 1=1
+        AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tce.ENVST_CD = '1111'
+        AND the.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND the.ENVST_CD (+)= tce.ENVST_CD
+    </select>
+
+    <!-- 사이드메뉴관리의 선택상품에 등록된 상품 리스트 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getHqSdselProd"  parameterType="prodVO" resultType="String">
+        /* ProdMapper.getHqSdselProd */
+        SELECT
+        LISTAGG(PROD_CD, ',') WITHIN GROUP (ORDER BY PROD_CD) AS PROD_CD
+        FROM
+        (
+            SELECT
+            DISTINCT thpsp.PROD_CD
+            FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp,
+            TB_HQ_PRODUCT_SDSEL_CLASS thpsc
+            WHERE 1=1
+            AND thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thpsp.USE_YN = 'Y'
+            AND thpsc.SDSEL_GRP_CD = #{sdselGrpCd}
+            AND thpsc.USE_YN = 'Y'
+            AND thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+            AND thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD
+        )
+        ORDER BY PROD_CD
+    </select>
+
+    <!-- 매장 상품저장시 등록매장 테이블에도 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        COMMENTS :
+    -->
+    <insert id="insertHqProdStoreTotal" parameterType="prodVO" >
+        /* USE : ProdMapper.insertHqProdStoreTotal */
+        MERGE INTO TB_HQ_PRODUCT_STORE A
+        USING
+        (
+            SELECT
+            thp.HQ_OFFICE_CD,
+            tms.STORE_CD,
+            thp.PROD_CD,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM
+            (
+                  SELECT *
+                  FROM TB_HQ_PRODUCT thp
+                  WHERE 1=1
+                  AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND thp.PROD_CD = #{prodCd}
+            ) thp,
+            TB_MS_STORE tms
+            WHERE 1=1
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tms.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        ) B
+        ON  (
+                A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.HQ_OFFICE_CD,
+                A.PROD_CD,
+                A.STORE_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.HQ_OFFICE_CD,
+                B.PROD_CD,
+                B.STORE_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 매장 상품저장시 등록매장 테이블에도 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        COMMENTS :
+    -->
+    <insert id="insertHqProdStore" parameterType="prodVO" >
+        /* USE : ProdMapper.insertHqProdStore */
+        MERGE INTO TB_HQ_PRODUCT_STORE A
+        USING
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            #{storeCd} AS STORE_CD,
+            PROD_CD,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_HQ_PRODUCT
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND PROD_CD = #{prodCd}
+        ) B
+        ON  (
+                A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.HQ_OFFICE_CD,
+                A.PROD_CD,
+                A.STORE_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.HQ_OFFICE_CD,
+                B.PROD_CD,
+                B.STORE_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        COMMENTS :
+    -->
+    <insert id="insertHqSdselProdStoreTotal" parameterType="prodVO" >
+        /* USE : ProdMapper.insertHqSdselProdStoreTotal */
+        MERGE INTO TB_MS_PRODUCT A
+        USING
+        (
+            SELECT
+            tms.STORE_CD,
+            thp.PROD_CD,
+            thp.PROD_NM,
+            thp.HQ_BRAND_CD,
+            thp.PROD_CLASS_CD,
+            thp.CORNR_CD,
+            thp.ORGPLCE_CD,
+            thp.SDATTR_CLASS_CD,
+            thp.SDSEL_GRP_CD,
+            thp.POINT_SAVE_YN,
+            thp.PROD_DC_FG,
+            thp.VAT_FG,
+            thp.PROD_TIP_YN,
+            thp.PROD_PACK_AMT,
+            thp.PROD_DLVR_AMT,
+            thp.PROD_TYPE_FG,
+            thp.SALE_PROD_YN,
+            thp.STOCK_PROD_YN,
+            thp.SIDE_PROD_YN,
+            thp.SET_PROD_FG,
+            thp.PRC_CTRL_FG,
+            thp.COST_UPRC,
+            thp.LAST_COST_UPRC,
+            thp.SPLY_UPRC,
+            thp.SPLY_UPRC_USE_YN,
+            thp.PO_PROD_FG,
+            thp.PO_UNIT_FG,
+            thp.PO_UNIT_QTY,
+            thp.PO_UNIT_ALLOW_FG,
+            thp.PO_MIN_QTY,
+            thp.SAFE_STOCK_QTY,
+            thp.STOCK_UNIT_FG,
+            thp.USE_YN,
+            thp.REMARK,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
+            'H' AS REG_FG,
+            MAP_PROD_CD
+            FROM
+            (
+                  SELECT *
+                  FROM TB_HQ_PRODUCT thp
+                  WHERE 1=1
+                  AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND thp.PROD_CD = #{prodCd}
+            ) thp,
+            TB_MS_STORE tms
+            WHERE 1=1
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tms.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROD_NM = B.PROD_NM,
+            HQ_BRAND_CD = B.HQ_BRAND_CD,
+            PROD_CLASS_CD = B.PROD_CLASS_CD,
+            CORNR_CD = B.CORNR_CD,
+            ORGPLCE_CD = B.ORGPLCE_CD,
+            SDATTR_CLASS_CD = B.SDATTR_CLASS_CD,
+            SDSEL_GRP_CD = B.SDSEL_GRP_CD,
+            POINT_SAVE_YN = B.POINT_SAVE_YN,
+            PROD_DC_FG = B.PROD_DC_FG,
+            VAT_FG = B.VAT_FG,
+            PROD_TIP_YN = B.PROD_TIP_YN,
+            PROD_PACK_AMT = B.PROD_PACK_AMT,
+            PROD_DLVR_AMT = B.PROD_DLVR_AMT,
+            PROD_TYPE_FG = B.PROD_TYPE_FG,
+            SALE_PROD_YN = B.SALE_PROD_YN,
+            STOCK_PROD_YN = B.STOCK_PROD_YN,
+            SIDE_PROD_YN = B.SIDE_PROD_YN,
+            SET_PROD_FG = B.SET_PROD_FG,
+            PRC_CTRL_FG = B.PRC_CTRL_FG,
+            COST_UPRC = B.COST_UPRC,
+            LAST_COST_UPRC = B.LAST_COST_UPRC,
+            SPLY_UPRC = B.SPLY_UPRC,
+            SPLY_UPRC_USE_YN = B.SPLY_UPRC_USE_YN,
+            PO_PROD_FG = B.PO_PROD_FG,
+            PO_UNIT_FG = B.PO_UNIT_FG,
+            PO_UNIT_QTY = B.PO_UNIT_QTY,
+            PO_UNIT_ALLOW_FG = B.PO_UNIT_ALLOW_FG,
+            PO_MIN_QTY = B.PO_MIN_QTY,
+            SAFE_STOCK_QTY = B.SAFE_STOCK_QTY,
+            STOCK_UNIT_FG = B.STOCK_UNIT_FG,
+            USE_YN = B.USE_YN,
+            REMARK = B.REMARK,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.PROD_NM,
+                A.HQ_BRAND_CD,
+                A.PROD_CLASS_CD,
+                A.CORNR_CD,
+                A.ORGPLCE_CD,
+                A.SDATTR_CLASS_CD,
+                A.SDSEL_GRP_CD,
+                A.POINT_SAVE_YN,
+                A.PROD_DC_FG,
+                A.VAT_FG,
+                A.PROD_TIP_YN,
+                A.PROD_PACK_AMT,
+                A.PROD_DLVR_AMT,
+                A.PROD_TYPE_FG,
+                A.SALE_PROD_YN,
+                A.STOCK_PROD_YN,
+                A.SIDE_PROD_YN,
+                A.SET_PROD_FG,
+                A.PRC_CTRL_FG,
+                A.COST_UPRC,
+                A.LAST_COST_UPRC,
+                A.SPLY_UPRC,
+                A.SPLY_UPRC_USE_YN,
+                A.PO_PROD_FG,
+                A.PO_UNIT_FG,
+                A.PO_UNIT_QTY,
+                A.PO_UNIT_ALLOW_FG,
+                A.PO_MIN_QTY,
+                A.SAFE_STOCK_QTY,
+                A.STOCK_UNIT_FG,
+                A.USE_YN,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.REG_FG,
+                A.MAP_PROD_CD
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.PROD_NM,
+                B.HQ_BRAND_CD,
+                B.PROD_CLASS_CD,
+                B.CORNR_CD,
+                B.ORGPLCE_CD,
+                B.SDATTR_CLASS_CD,
+                B.SDSEL_GRP_CD,
+                B.POINT_SAVE_YN,
+                B.PROD_DC_FG,
+                B.VAT_FG,
+                B.PROD_TIP_YN,
+                B.PROD_PACK_AMT,
+                B.PROD_DLVR_AMT,
+                B.PROD_TYPE_FG,
+                B.SALE_PROD_YN,
+                B.STOCK_PROD_YN,
+                B.SIDE_PROD_YN,
+                B.SET_PROD_FG,
+                B.PRC_CTRL_FG,
+                B.COST_UPRC,
+                B.LAST_COST_UPRC,
+                B.SPLY_UPRC,
+                B.SPLY_UPRC_USE_YN,
+                B.PO_PROD_FG,
+                B.PO_UNIT_FG,
+                B.PO_UNIT_QTY,
+                B.PO_UNIT_ALLOW_FG,
+                B.PO_MIN_QTY,
+                B.SAFE_STOCK_QTY,
+                B.STOCK_UNIT_FG,
+                B.USE_YN,
+                B.REMARK,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.REG_FG,
+                B.MAP_PROD_CD
+            )
+    </insert>
+
+    <!-- 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 바코드 매장에 저장 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_BARCD
+        COMMENTS :
+    -->
+    <insert id="insertHqSdselProdStoreBarcdTotal" parameterType="prodVO" >
+        /* USE : ProdMapper.insertHqSdselProdStoreBarcdTotal */
+        MERGE INTO TB_MS_PRODUCT_BARCD A
+        USING
+        (
+            SELECT
+            tms.STORE_CD,
+            thpb.PROD_CD,
+            thpb.BARCD_CD,
+            thpb.BARCD_NM,
+            thpb.UNIT_QTY,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM
+            (
+                  SELECT *
+                  FROM TB_HQ_PRODUCT_BARCD thpb
+                  WHERE 1=1
+                  AND thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND thpb.PROD_CD = #{prodCd}
+                  AND thpb.BARCD_CD = #{barCd}
+            ) thpb,
+            TB_MS_STORE tms
+            WHERE 1=1
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tms.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+                AND A.BARCD_CD = B.BARCD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            BARCD_NM = B.BARCD_NM,
+            UNIT_QTY = B.UNIT_QTY,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.BARCD_CD,
+                A.BARCD_NM,
+                A.UNIT_QTY,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.BARCD_CD,
+                B.BARCD_NM,
+                B.UNIT_QTY,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 분류 매장에 저장 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_CLASS
+        COMMENTS :
+    -->
+    <insert id="insertHqSdselProdStoreClassTotal" parameterType="prodVO" >
+        /* USE : ProdMapper.insertHqSdselProdStoreClassTotal */
+        MERGE INTO TB_MS_PRODUCT_CLASS A
+        USING
+        (
+            SELECT
+            tms.STORE_CD,
+            thpc.PROD_CLASS_CD,
+            thpc.PROD_CLASS_NM,
+            thpc.P_PROD_CLASS_CD,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
+            thpc.CLS_LEVEL_CD
+            FROM
+            (
+                  SELECT *
+                  FROM TB_HQ_PRODUCT_CLASS thpc
+                  WHERE 1=1
+                  AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND thpc.PROD_CLASS_CD = #{prodClassCd}
+            ) thpc,
+            TB_MS_STORE tms
+            WHERE 1=1
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tms.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CLASS_CD = B.PROD_CLASS_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROD_CLASS_NM = B.PROD_CLASS_NM,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CLASS_CD,
+                A.PROD_CLASS_NM,
+                A.P_PROD_CLASS_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.CLS_LEVEL_CD
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CLASS_CD,
+                B.PROD_CLASS_NM,
+                B.P_PROD_CLASS_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.CLS_LEVEL_CD
+            )
+    </insert>
+
+    <!-- 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 분류 매장에 저장 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_CLASS
+        COMMENTS :
+    -->
+    <insert id="insertHqSdselProdStoreClass" parameterType="prodVO" >
+        /* USE : ProdMapper.insertHqSdselProdStoreClass */
+        MERGE INTO TB_MS_PRODUCT_CLASS A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            PROD_CLASS_CD,
+            PROD_CLASS_NM,
+            P_PROD_CLASS_CD,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID,
+            CLS_LEVEL_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND PROD_CLASS_CD = #{prodClassCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CLASS_CD = B.PROD_CLASS_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROD_CLASS_NM = B.PROD_CLASS_NM,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CLASS_CD,
+                A.PROD_CLASS_NM,
+                A.P_PROD_CLASS_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.CLS_LEVEL_CD
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CLASS_CD,
+                B.PROD_CLASS_NM,
+                B.P_PROD_CLASS_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.CLS_LEVEL_CD
+            )
+    </insert>
 
 </mapper>

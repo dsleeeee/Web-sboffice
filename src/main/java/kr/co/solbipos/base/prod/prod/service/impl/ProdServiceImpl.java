@@ -314,7 +314,6 @@ public class ProdServiceImpl implements ProdService {
 
                 // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
                 if ("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
-
                     //그룹(sdselGrp)
                     prodMapper.insertSdselGrpToStore(prodVO);
                     //분류(sdselClass)
@@ -439,7 +438,6 @@ public class ProdServiceImpl implements ProdService {
 
         // 거래처 삭제
         prodMapper.getVendorProdSaveUpdate(prodVO);
-
         // 거래처코드
         if (prodVO.getChkVendrCd() != null && !"".equals(prodVO.getChkVendrCd())) {
             // 거래처코드 array 값 세팅
@@ -455,6 +453,65 @@ public class ProdServiceImpl implements ProdService {
         // 신규상품 이미지 등록시
 //        result = Long.parseLong(prodVO.getProdCd());
         String resultProdCd = prodVO.getProdCd();
+
+
+        // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // [1111 사이드상품자동생성]이 [1 사용]일 경우
+            String hqEnvCodeSide = prodMapper.getHqEnvCodeSide(prodVO);
+            if(hqEnvCodeSide.equals("1")) {
+
+                // 사이드사용여부가 Y인 경우에는 선택한 사이드메뉴관리의 선택상품도 매장에 저장
+                if ("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
+
+                    // 상품코드 조회
+                    String sideProd = prodMapper.getHqSdselProd(prodVO);
+
+                    String arrProdCol[] = sideProd.split(",");
+                    for(int i=0; i < arrProdCol.length; i++) {
+
+                        prodVO.setProdCd(arrProdCol[i]);
+
+                        // 상품상세정보 조회
+                        DefaultMap prodDtl = prodMapper.getProdDetail(prodVO);
+                        prodVO.setBarCd(prodDtl.getStr("barCd"));
+                        prodVO.setProdClassCd(prodDtl.getStr("prodClassCd"));
+                        prodVO.setSdselGrpCd(prodDtl.getStr("sdselGrpCd"));
+
+                        // 적용 매장 등록
+                        // 매장 상품저장시 등록매장 테이블에도 저장 TB_HQ_PRODUCT_STORE
+                        prodMapper.insertHqProdStoreTotal(prodVO);
+
+                        // 해당 매장에 본사상품 상품분류 등록
+                        // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 분류 매장에 저장
+                        prodMapper.insertHqSdselProdStoreClassTotal(prodVO);
+
+                        // 해당 매장에 본사 상품 등록
+                        // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+                        prodMapper.insertHqSdselProdStoreTotal(prodVO);
+
+                        // 본사 상품이 바코드를 사용하는 경우, 매장에도 바코드를 넣어준다.
+                        if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
+                            prodMapper.insertHqSdselProdStoreBarcdTotal(prodVO);
+                        }
+
+                        // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
+                        String storeSalePriceReulst = prodMapper.saveStoreSalePrice(prodVO);
+
+                        // 본사상품이 사이드 선택메뉴를 사용하는 경우, 매장에도 사이드 선택메뉴를 넣어준다.
+                        if(prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0){
+                            // 매장 사이드 선택메뉴 그룹/분류/상품 저장
+                            //그룹(sdselGrp)
+                            prodMapper.insertSdselGrpToStore(prodVO);
+                            //분류(sdselClass)
+                            prodMapper.insertSdselClassToStore(prodVO);
+                            //상품(sdselProd)
+                            prodMapper.insertSdselProdToStore(prodVO);
+                        }
+                    }
+                }
+            }
+        }
 
 //        return result;
         return resultProdCd;
@@ -482,11 +539,14 @@ public class ProdServiceImpl implements ProdService {
 
         // 해당 상품이 사이드 선택메뉴를 사용하는지 파악
         String sideSelYn = "N";
+        String SideGrpCd = "";
         if("Y".equals(prodVOs[0].getSideProdYn()) && prodVOs[0].getSdselGrpCd() != null && prodVOs[0].getSdselGrpCd().length() > 0){
             sideSelYn = "Y";
+            SideGrpCd = prodVOs[0].getSdselGrpCd();
         }
 
         for(ProdVO prodVO : prodVOs) {
+            prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             prodVO.setRegDt(currentDate);
             prodVO.setRegId(sessionInfoVO.getUserId());
@@ -494,6 +554,7 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setModId(sessionInfoVO.getUserId());
             // WorkMode Flag 매장등록으로 셋팅_2019.06.06
             prodVO.setWorkMode(WorkModeFg.REG_STORE);
+
 
             // 적용 매장 등록
             int result = prodMapper.insertProdStore(prodVO);
@@ -541,7 +602,62 @@ public class ProdServiceImpl implements ProdService {
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
 
+
+            // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+            // [1111 사이드상품자동생성]이 [1 사용]일 경우
+            String hqEnvCodeSide = prodMapper.getHqEnvCodeSide(prodVO);
+            if(hqEnvCodeSide.equals("1")) {
+
+                // 사이드사용여부가 Y인 경우에는 선택한 사이드메뉴관리의 선택상품도 매장에 저장
+                if ("Y".equals(sideSelYn) && SideGrpCd != null) {
+                    // 상품코드 조회
+                    String sideProd = prodMapper.getHqSdselProd(prodVO);
+                    String arrProdCol[] = sideProd.split(",");
+                    for (int i = 0; i < arrProdCol.length; i++) {
+
+                        prodVO.setProdCd(arrProdCol[i]);
+
+                        // 상품상세정보 조회
+                        DefaultMap prodDtl = prodMapper.getProdDetail(prodVO);
+                        prodVO.setBarCd(prodDtl.getStr("barCd"));
+                        prodVO.setProdClassCd(prodDtl.getStr("prodClassCd"));
+                        prodVO.setSdselGrpCd(prodDtl.getStr("sdselGrpCd"));
+
+                        // 적용 매장 등록
+                        // 매장 상품저장시 등록매장 테이블에도 저장 TB_HQ_PRODUCT_STORE
+                        prodMapper.insertHqProdStore(prodVO);
+
+                        // 해당 매장에 본사상품 상품분류 등록
+                        // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+                        prodMapper.insertHqSdselProdStoreClass(prodVO);
+
+                        // 해당 매장에 본사 상품 등록
+                        // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+                        prodMapper.insertProdStoreDetail(prodVO);
+
+                        // 본사 상품이 바코드를 사용하는 경우, 매장에도 바코드를 넣어준다.
+                        if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
+                            prodMapper.insertProdBarcdStoreDetail(prodVO);
+                        }
+
+                        // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
+                        storeSalePriceReulst = prodMapper.saveStoreSalePrice(prodVO);
+
+                        // 본사상품이 사이드 선택메뉴를 사용하는 경우, 매장에도 사이드 선택메뉴를 넣어준다.
+                        if (prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
+                            // 매장 사이드 선택메뉴 그룹/분류/상품 저장
+                            //그룹(sdselGrp)
+                            prodMapper.insertSdselGrpToStore(prodVO);
+                            //분류(sdselClass)
+                            prodMapper.insertSdselClassToStore(prodVO);
+                            //상품(sdselProd)
+                            prodMapper.insertSdselProdToStore(prodVO);
+                        }
+                    }
+                }
+            }
         }
+
 
         // 선택한 매장에 본사 사이드 선택메뉴 등록
         // 본사상품이 사이드 선택메뉴를 사용하는 경우, 매장에도 사이드 선택메뉴를 넣어준다.
@@ -691,6 +807,7 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setBarCd(prodDtl.getStr("barCd"));
             prodVO.setProdClassCd(prodDtl.getStr("prodClassCd"));
             prodVO.setSdselGrpCd(prodDtl.getStr("sdselGrpCd"));
+            prodVO.setSideProdYn(prodDtl.getStr("sideProdYn"));
 
             // 적용 매장 등록(혹시 남아있을지 모르기 때문에(중복키 입력 방지) DELETE - INSERT 실행)
             prodMapper.deleteProdStore(prodVO);
@@ -745,6 +862,64 @@ public class ProdServiceImpl implements ProdService {
                 //상품(sdselProd)
                 prodMapper.insertSdselProdToStore(prodVO);
             }
+
+
+            // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+            // [1111 사이드상품자동생성]이 [1 사용]일 경우
+            String hqEnvCodeSide = prodMapper.getHqEnvCodeSide(prodVO);
+            if(hqEnvCodeSide.equals("1")) {
+
+                // 사이드사용여부가 Y인 경우에는 선택한 사이드메뉴관리의 선택상품도 매장에 저장
+                if ("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
+
+                    // 상품코드 조회
+                    String sideProd = prodMapper.getHqSdselProd(prodVO);
+
+                    String arrProdCol[] = sideProd.split(",");
+                    for (int i = 0; i < arrProdCol.length; i++) {
+
+                        prodVO.setProdCd(arrProdCol[i]);
+
+                        // 상품상세정보 조회
+                        DefaultMap prodDtl2 = prodMapper.getProdDetail(prodVO);
+                        prodVO.setBarCd(prodDtl2.getStr("barCd"));
+                        prodVO.setProdClassCd(prodDtl2.getStr("prodClassCd"));
+                        prodVO.setSdselGrpCd(prodDtl2.getStr("sdselGrpCd"));
+
+                        // 적용 매장 등록
+                        // 매장 상품저장시 등록매장 테이블에도 저장 TB_HQ_PRODUCT_STORE
+                        prodMapper.insertHqProdStore(prodVO);
+
+                        // 해당 매장에 본사상품 상품분류 등록
+                        // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+                        prodMapper.insertHqSdselProdStoreClass(prodVO);
+
+                        // 해당 매장에 본사 상품 등록
+                        // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
+                        prodMapper.insertHqSdselProdStoreTotal(prodVO);
+
+                        // 본사 상품이 바코드를 사용하는 경우, 매장에도 바코드를 넣어준다.
+                        if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
+                            prodMapper.insertProdBarcdStoreDetail(prodVO);
+                        }
+
+                        // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
+                        storeSalePriceReulst = prodMapper.saveStoreSalePrice(prodVO);
+
+                        // 본사상품이 사이드 선택메뉴를 사용하는 경우, 매장에도 사이드 선택메뉴를 넣어준다.
+                        if (prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
+                            // 매장 사이드 선택메뉴 그룹/분류/상품 저장
+                            //그룹(sdselGrp)
+                            prodMapper.insertSdselGrpToStore(prodVO);
+                            //분류(sdselClass)
+                            prodMapper.insertSdselClassToStore(prodVO);
+                            //상품(sdselProd)
+                            prodMapper.insertSdselProdToStore(prodVO);
+                        }
+                    }
+                }
+            }
+
 
         }
 
