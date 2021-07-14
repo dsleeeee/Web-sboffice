@@ -169,7 +169,7 @@
 
 <c:if test="${orgnFg == 'STORE'}">
     <%-- 외식테이블 레이어 --%>
-    <c:import url="/WEB-INF/view/sale/day/dayOfWeek/dayOfWeekTable.jsp">
+    <c:import url="/WEB-INF/view/sale/day/day/dayTable.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
