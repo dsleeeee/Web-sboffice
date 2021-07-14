@@ -12,45 +12,91 @@
      		 , NMCODE.NMCODE_CD AS DC_CD
      		 , NMCODE.NMCODE_NM AS DC_NM
      		 , TSDD.TOT_SALE_QTY
-     		 , TSDT.TOT_SALE_AMT
+     		 , TSDD.TOT_SALE_AMT
      		 , TSDD.TOT_DC_AMT AS DC_AMT
      		 , TSDT.TOT_DC_AMT
      		 , TSDD.REAL_SALE_AMT
      	<include refid="CmmSQL.PagingTemplateCount"/>
-  		FROM TB_SL_DAILY_TOTAL TSDT
+  		FROM (
+  		        SELECT *
+  		          FROM (
+                            SELECT HQ_OFFICE_CD,
+                                    STORE_CD,
+                                    SALE_DATE,
+                                    DC_AMT_01,
+                                    DC_AMT_02,
+                                    DC_AMT_03,
+                                    DC_AMT_04,
+                                    DC_AMT_05,
+                                    DC_AMT_06,
+                                    DC_AMT_07,
+                                    DC_AMT_08,
+                                    DC_AMT_09,
+                                    DC_AMT_10,
+                                    DC_AMT_11,
+                                    DC_AMT_12,
+                                    DC_AMT_13,
+                                    DC_AMT_14,
+                                    DC_AMT_15,
+                                    DC_AMT_16,
+                                    DC_AMT_17,
+                                    DC_AMT_18,
+                                    DC_AMT_19,
+                                    DC_AMT_20
+                              FROM TB_SL_DAILY_TOTAL
+                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                                AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            </if>
+                            <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+                                AND STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                        )
+                  UNPIVOT
+                        ( TOT_DC_AMT
+                                  FOR DC_CD IN( DC_AMT_01 AS '01',
+                                                 DC_AMT_02 AS '02',
+                                                 DC_AMT_03 AS '03',
+                                                 DC_AMT_04 AS '04',
+                                                 DC_AMT_05 AS '05',
+                                                 DC_AMT_06 AS '06',
+                                                 DC_AMT_07 AS '07',
+                                                 DC_AMT_08 AS '08',
+                                                 DC_AMT_09 AS '09',
+                                                 DC_AMT_10 AS '10',
+                                                 DC_AMT_11 AS '11',
+                                                 DC_AMT_12 AS '12',
+                                                 DC_AMT_13 AS '13',
+                                                 DC_AMT_14 AS '14',
+                                                 DC_AMT_15 AS '15',
+                                                 DC_AMT_16 AS '16',
+                                                 DC_AMT_17 AS '17',
+                                                 DC_AMT_18 AS '18',
+                                                 DC_AMT_19 AS '19',
+                                                 DC_AMT_20 AS '20')
+                        )
+             ) TSDT
   		   , TB_SL_DAILY_DC TSDD
      	   , TB_MS_STORE STORE
      	   ,(SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE
        		 WHERE PARENT_CD = '041') NMCODE
- 		WHERE STORE.HQ_OFFICE_CD = #{hqOfficeCd} 
+ 		WHERE STORE.HQ_OFFICE_CD = #{hqOfficeCd}
+ 		  AND TSDT.HQ_OFFICE_CD = STORE.HQ_OFFICE_CD
+ 		  AND TSDD.HQ_OFFICE_CD = STORE.HQ_OFFICE_CD
+          AND TSDT.STORE_CD = STORE.STORE_CD
  		  AND TSDT.STORE_CD = TSDD.STORE_CD
    		  AND TSDT.SALE_DATE = TSDD.SALE_DATE
-   	 	  AND TSDT.STORE_CD = STORE.STORE_CD
+          AND TSDT.DC_CD = TSDD.DC_CD
    		  AND TSDD.DC_CD = NMCODE.NMCODE_CD
-   		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-   		  	AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-   		  </if>
-   		  <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-           	AND TSDT.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-               	#{item}
-            </foreach>
-      	  </if>
       	  <if test='arrDcCd != null and arrDcCd.length >= 0'>
            	AND TSDD.DC_CD IN
             <foreach collection="arrDcCd" item="item" open="(" close=")" separator=",">
                	#{item}
             </foreach>
       	  </if>
-		  <!-- <if test='arrStoreCd != null and arrStoreCd != ""'>
-		  	AND TSDT.STORE_CD IN
-		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-		  		#{item}
-		  	</foreach>
-		  </if>
-		  <if test='dcCd != null and dcCd != ""'>
-          	AND TSDD.DC_CD = #{dcCd}
-      	  </if> -->
       	  ORDER BY TSDT.SALE_DATE DESC, TSDT.STORE_CD, NMCODE.NMCODE_CD, TSDD.TOT_SALE_AMT DESC
     	<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
