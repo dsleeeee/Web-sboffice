@@ -150,6 +150,9 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
                 var params      = {};
                 params.yearMonth = selectedRow.yearMonth.replace("-", "");
                 params.storeCd = $("#monthTotalStoreCd").val();
+                if(orgnFg == "STORE") {
+                    params.storeCd = storeCd;
+                }
                 params.gubun = "month";
 
                 // 년월 클릭시 상세정보 조회

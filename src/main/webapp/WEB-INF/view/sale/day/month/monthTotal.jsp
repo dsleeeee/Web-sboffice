@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/sale/day/month/monthTotal/"/>
 
 <div id="monthTotalView" name="monthView" class="subCon" style="display: none;" ng-controller="monthTotalCtrl">
@@ -119,6 +120,7 @@
 
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";
+    var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTotal.js?ver=20191219.22" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTotal.js?ver=20210714.01" charset="utf-8"></script>
