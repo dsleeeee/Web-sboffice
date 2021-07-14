@@ -85,4 +85,35 @@ public class GuestManageServiceImpl implements GuestManageService {
 
         return procCnt;
     }
+
+    /** 객층관리 매장적용 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getGuestManageStoreRegistList(GuestManageVO guestManageVO, SessionInfoVO sessionInfoVO) {
+
+        guestManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return guestManageMapper.getGuestManageStoreRegistList(guestManageVO);
+    }
+
+    /** 객층관리 매장적용 - 저장 */
+    @Override
+    public int getGuestManageStoreRegistSave(GuestManageVO[] guestManageVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(GuestManageVO guestManageVO : guestManageVOs) {
+
+            guestManageVO.setRegDt(currentDt);
+            guestManageVO.setRegId(sessionInfoVO.getUserId());
+            guestManageVO.setModDt(currentDt);
+            guestManageVO.setModId(sessionInfoVO.getUserId());
+
+            guestManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = guestManageMapper.getGuestManageStoreRegistSaveInsert(guestManageVO);
+        }
+
+        return procCnt;
+    }
 }

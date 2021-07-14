@@ -118,4 +118,50 @@ public class GuestManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 객층관리 매장적용 - 조회
+     *
+     * @param guestManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 07. 13.
+     */
+    @RequestMapping(value = "/guestManage/getGuestManageStoreRegistList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getGuestManageStoreRegistList(GuestManageVO guestManageVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = guestManageService.getGuestManageStoreRegistList(guestManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, guestManageVO);
+    }
+
+    /**
+     * 객층관리 매장적용 - 저장
+     *
+     * @param guestManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 07. 13.
+     */
+    @RequestMapping(value = "/guestManage/getGuestManageStoreRegistSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getGuestManageStoreRegistSave(@RequestBody GuestManageVO[] guestManageVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = guestManageService.getGuestManageStoreRegistSave(guestManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

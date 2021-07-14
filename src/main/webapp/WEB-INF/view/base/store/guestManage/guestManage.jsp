@@ -26,6 +26,13 @@
         <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
             <s:message code="cmm.save" />
         </button>
+        <%-- 본사일때만 --%>
+        <c:if test="${orgnFg == 'HQ'}">
+            <%-- 매장적용 --%>
+            <button class="btn_skyblue ml5 fr" id="btnStoreApply" ng-click="storeApply()">
+                <s:message code="guestManage.storeApply" />
+            </button>
+        </c:if>
     </div>
 
     <%-- body --%>
@@ -118,4 +125,10 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/guestManage/guestManage.js?ver=20210706.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/guestManage/guestManage.js?ver=20210713.01" charset="utf-8"></script>
+
+<%-- 객층관리 매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/guestManage/guestManageStoreRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

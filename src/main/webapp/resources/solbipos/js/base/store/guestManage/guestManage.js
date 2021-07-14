@@ -106,4 +106,20 @@ app.controller('guestManageCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     };
 
+    // 매장적용
+    $scope.storeApply = function () {
+        $scope.wjGuestManageStoreRegistLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 객층관리 매장적용 팝업 핸들러 추가
+        $scope.wjGuestManageStoreRegistLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('guestManageStoreRegistCtrl', null);
+            }, 50)
+        });
+    });
 }]);

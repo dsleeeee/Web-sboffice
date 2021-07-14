@@ -182,4 +182,103 @@
         </choose>
     </delete>
 
+    <!-- 객층관리 매장적용 - 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getGuestManageStoreRegistList" parameterType="GuestManageVO" resultType="DefaultMap">
+        /* GuestManagMapper.getGuestManageStoreRegistList */
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG
+        FROM TB_MS_STORE tms
+        WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 객층관리 매장적용 - 저장 insert -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        COMMENTS : [본사]명칭코드, [매장]명칭코드
+    -->
+    <insert id="getGuestManageStoreRegistSaveInsert" parameterType="GuestManageVO" >
+        /* GuestManagMapper.getGuestManageStoreRegistSaveInsert */
+        MERGE INTO TB_MS_STORE_NMCODE A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            PARENT_CD,
+            NMCODE_NM,
+            NMCODE_ITEM_1,
+            NMCODE_ITEM_2,
+            USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_HQ_NMCODE
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND NMCODE_GRP_CD = '119'
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.NMCODE_GRP_CD = B.NMCODE_GRP_CD
+                AND A.NMCODE_CD = B.NMCODE_CD
+                AND A.PARENT_CD = B.PARENT_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            NMCODE_NM = B.NMCODE_NM,
+            NMCODE_ITEM_1 = B.NMCODE_ITEM_1,
+            NMCODE_ITEM_2 = B.NMCODE_ITEM_2,
+            USE_YN = B.USE_YN,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.NMCODE_GRP_CD,
+                A.NMCODE_CD,
+                A.PARENT_CD,
+                A.NMCODE_NM,
+                A.NMCODE_ITEM_1,
+                A.NMCODE_ITEM_2,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.NMCODE_GRP_CD,
+                B.NMCODE_CD,
+                B.PARENT_CD,
+                B.NMCODE_NM,
+                B.NMCODE_ITEM_1,
+                B.NMCODE_ITEM_2,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
 </mapper>

@@ -36,11 +36,17 @@ public class GuestManageVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
 
+    /** 매장명 */
+    private String storeNm;
+
     /** 명칭코드 */
     private String guestCd;
 
     /** 명칭명 */
     private String guestNm;
+
+    /** 매장상태 */
+    private String sysStatFg;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -58,6 +64,10 @@ public class GuestManageVO extends PageVO {
 
     public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
 
+    public String getStoreNm() { return storeNm; }
+
+    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+
     public String getGuestCd() { return guestCd; }
 
     public void setGuestCd(String guestCd) { this.guestCd = guestCd; }
@@ -65,4 +75,8 @@ public class GuestManageVO extends PageVO {
     public String getGuestNm() { return guestNm; }
 
     public void setGuestNm(String guestNm) { this.guestNm = guestNm; }
+
+    public String getSysStatFg() { return sysStatFg; }
+
+    public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
 }
