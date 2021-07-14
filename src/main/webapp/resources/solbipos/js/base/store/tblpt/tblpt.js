@@ -156,7 +156,7 @@ window.location.protocol - 사용하는 웹 프로토콜 반환 (http:// 혹은 
 window.location.assign - 새 document 로드
 */
     if(hrefChk.indexOf("neo.solbipos.com") != -1)   open_url = 'http://mob.solbipos.com/login/login_check_tbl.jsp?';
-    else if(hrefChk.indexOf("192.168.0.85") != -1)  open_url = 'http://192.168.0.85:10001/login/login_check_tbl.jsp?';
+    else if(hrefChk.indexOf("192.168.0.85") != -1)  open_url = 'http://192.168.0.85:22001/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.72") != -1)  open_url = 'http://192.168.0.72:2020/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("localhost") != -1)     open_url = 'http://localhost:2020/login/login_check_tbl.jsp?';
     else

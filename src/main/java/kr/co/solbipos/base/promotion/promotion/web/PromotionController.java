@@ -8,9 +8,10 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionService;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : PromotionController.java
@@ -51,13 +53,15 @@ public class PromotionController {
 
     private final SessionService sessionService;
     private final PromotionService promotionService;
+    private final StoreTypeService storeTypeService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public PromotionController(SessionService sessionService, PromotionService promotionService, CmmEnvUtil cmmEnvUtil) {
+    public PromotionController(SessionService sessionService, PromotionService promotionService, StoreTypeService storeTypeService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.promotionService = promotionService;
+        this.storeTypeService = storeTypeService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -86,6 +90,19 @@ public class PromotionController {
         }
 
         model.addAttribute("modPromotionEnvstVal", modPromotionEnvstVal);
+
+
+        StoreTypeVO storeTypeVO = new StoreTypeVO();
+
+        // 브랜드조회(콤보박스용)
+        model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
+
+        // 매장타입조회(콤보박스용)
+        model.addAttribute("storeTypeList", convertToJson(storeTypeService.getStoreTypeCombo(storeTypeVO, sessionInfoVO)));
+
+        // 메뉴그룹조회(콤보박스용)
+        model.addAttribute("storeGroupList", convertToJson(storeTypeService.getStoreGroupCombo(storeTypeVO, sessionInfoVO)));
+
 
         return "base/promotion/promotion/promotion";
     }

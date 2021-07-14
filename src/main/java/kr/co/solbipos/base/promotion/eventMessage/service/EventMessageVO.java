@@ -68,7 +68,14 @@ public class EventMessageVO extends PageVO {
     private String regFg;
     /** 매장등록구분 */
     private String storeSelectExceptFg;
-
+    /** 매장타입코드 */
+    private String storeTypeCd;
+    /** 메뉴그룹코드 */
+    private String storeGroupCd;
+    /** 브랜드코드 */
+    private String hqBrandCd;
+    /** 조건수량 */
+    private String prodQty;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -228,5 +235,37 @@ public class EventMessageVO extends PageVO {
 
     public void setStoreSelectExceptFg(String storeSelectExceptFg) {
         this.storeSelectExceptFg = storeSelectExceptFg;
+    }
+
+    public String getStoreTypeCd() {
+        return storeTypeCd;
+    }
+
+    public void setStoreTypeCd(String storeTypeCd) {
+        this.storeTypeCd = storeTypeCd;
+    }
+
+    public String getStoreGroupCd() {
+        return storeGroupCd;
+    }
+
+    public void setStoreGroupCd(String storeGroupCd) {
+        this.storeGroupCd = storeGroupCd;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
+
+    public String getProdQty() {
+        return prodQty;
+    }
+
+    public void setProdQty(String prodQty) {
+        this.prodQty = prodQty;
     }
 }

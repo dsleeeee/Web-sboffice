@@ -109,4 +109,7 @@ public interface StoreTypeMapper {
 
     /** 매장타입관리 - 상품연결 IUD 발생시 매장타입적용 관리에 기록 */
     int saveStoreTypeApplyStoreProd(StoreTypeVO storeTypeVO);
+
+    /** 매장타입관리 - 메뉴그룹조회(콤보박스용) */
+    List<DefaultMap<Object>> getStoreGroupCombo(StoreTypeVO storeTypeVO);
 }

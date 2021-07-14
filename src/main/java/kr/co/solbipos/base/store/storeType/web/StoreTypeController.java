@@ -80,6 +80,9 @@ public class StoreTypeController {
         // 매장타입조회(콤보박스용)
         model.addAttribute("storeTypeList", convertToJson(storeTypeService.getStoreTypeCombo(storeTypeVO, sessionInfoVO)));
 
+        // 메뉴그룹조회(콤보박스용)
+        model.addAttribute("storeGroupList", convertToJson(storeTypeService.getStoreGroupCombo(storeTypeVO, sessionInfoVO)));
+
         // 매장타입자동적용(1106)
         model.addAttribute("storeTypeAutoEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1106"), "0"));
 
@@ -482,6 +485,28 @@ public class StoreTypeController {
         int result = storeTypeService.saveStoreTypeApplyStore(storeTypeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장타입관리 - 매장타입 매장적용 메뉴그룹조회(콤보박스용)
+     * @param storeTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 07. 08.
+     */
+    @RequestMapping(value = "/storeType/getStoreGroupCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreGroupCombo(StoreTypeVO storeTypeVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeTypeService.getStoreGroupCombo(storeTypeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeTypeVO);
     }
 
 }

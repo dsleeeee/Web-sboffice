@@ -8,6 +8,8 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.promotion.eventMessage.service.EventMessageService;
 import kr.co.solbipos.base.promotion.eventMessage.service.EventMessageVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : EventMessageController.java
@@ -48,13 +51,15 @@ public class EventMessageController {
 
     private final SessionService sessionService;
     private final EventMessageService eventMessageService;
+    private final StoreTypeService storeTypeService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public EventMessageController(SessionService sessionService, EventMessageService eventMessageService, CmmEnvUtil cmmEnvUtil) {
+    public EventMessageController(SessionService sessionService, EventMessageService eventMessageService, StoreTypeService storeTypeService,CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.eventMessageService = eventMessageService;
+        this.storeTypeService = storeTypeService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -70,6 +75,17 @@ public class EventMessageController {
     public String view(HttpServletRequest request, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        StoreTypeVO storeTypeVO = new StoreTypeVO();
+
+        // 브랜드조회(콤보박스용)
+        model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
+
+        // 매장타입조회(콤보박스용)
+        model.addAttribute("storeTypeList", convertToJson(storeTypeService.getStoreTypeCombo(storeTypeVO, sessionInfoVO)));
+
+        // 메뉴그룹조회(콤보박스용)
+        model.addAttribute("storeGroupList", convertToJson(storeTypeService.getStoreGroupCombo(storeTypeVO, sessionInfoVO)));
 
         return "base/promotion/eventMessage/eventMessage";
     }

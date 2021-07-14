@@ -37,8 +37,20 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <%-- 메뉴그룹 --%>
+                    <th><s:message code="storeType.menuGroup" /></th>
+                    <td>
+                        <div class="sb-select w100">
+                            <wj-combo-box
+                                    id="srchPopStoreGroup"
+                                    items-source="_getComboData('srchPopStoreGroup')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchPopStoreGroupCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <th><s:message code="storeType.storeCd" /></th>
@@ -90,12 +102,13 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.code"/>" binding="storeTypeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.storeType"/>" binding="storeTypeNm" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.storeCd"/>" binding="storeCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.storeType"/>" binding="storeTypeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.menuGroup"/>" binding="storeGroupNms" width="250" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.menuGroup"/>" binding="storeGroupCds" width="250" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.storeNm"/>" binding="storeNm" width="190" align="left" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.sysStatFg"/>" binding="sysStatFg" width="85"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.applyDt"/>" binding="applyDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.sysStatFg"/>" binding="sysStatFg" width="80"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.applyDt"/>" binding="applyDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -123,4 +136,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20210702.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20210702.07" charset="utf-8"></script>

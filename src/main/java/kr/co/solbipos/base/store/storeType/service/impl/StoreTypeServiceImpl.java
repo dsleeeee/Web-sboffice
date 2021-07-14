@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.slf4j.Logger;
@@ -400,7 +401,11 @@ public class StoreTypeServiceImpl implements StoreTypeService {
     @Override
     public List<DefaultMap<Object>> getBrandList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
 
+        storeTypeVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            storeTypeVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return storeTypeMapper.getBrandList(storeTypeVO);
     }
@@ -448,6 +453,15 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+    }
+
+    /** 매장타입관리 - 메뉴그룹조회(콤보박스용) */
+    @Override
+    public List<DefaultMap<Object>> getStoreGroupCombo(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
+
+        storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeTypeMapper.getStoreGroupCombo(storeTypeVO);
     }
 
 }

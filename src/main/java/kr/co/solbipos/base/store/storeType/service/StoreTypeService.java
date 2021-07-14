@@ -79,4 +79,7 @@ public interface StoreTypeService {
     /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 */
     int saveStoreTypeApplyStore(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO);
 
+    /** 매장타입관리 - 메뉴그룹조회(콤보박스용) */
+    List<DefaultMap<Object>> getStoreGroupCombo(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
+
 }

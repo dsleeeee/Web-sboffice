@@ -22,6 +22,8 @@
     var brandList = ${brandList};
     // 매장타입
     var storeTypeList = ${storeTypeList};
+    // 메뉴그룹
+    var storeGroupList = ${storeGroupList};
     // 매장타입자동적용(1106)
     var storeTypeAutoEnvstVal = "${storeTypeAutoEnvstVal}";
     // 매장타입판매가설정(1107)

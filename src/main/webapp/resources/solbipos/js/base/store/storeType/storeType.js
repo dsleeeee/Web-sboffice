@@ -201,7 +201,6 @@ app.controller('storeTypeCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 매장타입 dropdown 재조회
     $scope.setStoreTypeDropdownList = function(){
 
-        // 키맵그룹 dropdown 재조회
         var url = '/base/store/storeType/storeType/getStoreTypeCombo.sb';
         var params = {};
 

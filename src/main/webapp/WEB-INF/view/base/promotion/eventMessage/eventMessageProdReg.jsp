@@ -23,6 +23,34 @@
                 </colgroup>
                 <tbody>
                 <tr>
+                    <th><s:message code="eventMessage.brand" /></th>
+                    <td>
+                        <div class="sb-select w100">
+                            <wj-combo-box
+                                    id="srchProdBrand"
+                                    items-source="_getComboData('srchProdBrand')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchProdBrandCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <th><s:message code="eventMessage.menuGroup" /></th>
+                    <td>
+                        <div class="sb-select w100">
+                            <wj-combo-box
+                                    id="srchProdStoreGroup"
+                                    items-source="_getComboData('srchProdStoreGroup')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchProdStoreGroupCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <th><s:message code="eventMessage.prodCd" /></th>
                     <td>
                         <input type="text" id="srchProdCd"/>
@@ -72,9 +100,12 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="eventMessage.brand"/>" binding="brandNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="eventMessage.menuGroup"/>" binding="storeGroupNms" width="250" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="eventMessage.menuGroup"/>" binding="storeGroupCds" width="250" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="eventMessage.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="eventMessage.prodNm"/>" binding="prodNm" width="210" align="left" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="eventMessage.saleQty"/>" binding="saleQty" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="eventMessage.saleQty"/>" binding="prodQty" width="70" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="eventMessage.useYn"/>" binding="useYn" data-map="prodUseYnFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -84,4 +115,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessageProdReg.js?ver=20210506.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessageProdReg.js?ver=20210506.04" charset="utf-8"></script>

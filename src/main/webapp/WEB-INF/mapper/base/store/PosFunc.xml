@@ -373,40 +373,61 @@
     -->
     <insert id="insertPosFuncKey" parameterType="posFuncVO">
         /* USE : PosFuncMapper.insertPosFuncKey */
-        INSERT INTO TB_MS_POS_FNKEY (
-            STORE_CD,
-            POS_NO,
-            FNKEY_NO,
-            FNKEY_FG,
-            DISP_SEQ,
-            X,
-            Y,
-            WIDTH,
-            HEIGHT,
-            STYLE_CD,
-            IMG_NM,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES(
-            #{storeCd},
-            #{posNo},
-            #{fnkeyNo},
-            #{fnkeyFg},
-            #{dispSeq},
-            #{x},
-            #{y},
-            #{width},
-            #{height},
-            '01',
-            #{imgNm, jdbcType=VARCHAR},
-            'Y',
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
+        MERGE INTO TB_MS_POS_FNKEY A
+        USING DUAL
+          ON(
+                A.STORE_CD = #{storeCd}
+                AND A.POS_NO = #{posNo}
+                AND A.FNKEY_NO = #{fnkeyNo}
+            )
+     WHEN MATCHED THEN
+          UPDATE
+             SET A.FNKEY_FG = #{fnkeyFg},
+                 A.DISP_SEQ = #{dispSeq},
+                 A.X = #{x},
+                 A.Y = #{y},
+                 A.WIDTH = #{width},
+                 A.HEIGHT = #{height},
+                 A.STYLE_CD = '01',
+                 A.IMG_NM = #{imgNm, jdbcType=VARCHAR},
+                 A.USE_YN = 'Y',
+                 A.MOD_DT = #{modDt},
+                 A.MOD_ID = #{modId}
+     WHEN NOT MATCHED THEN
+        INSERT (
+                    A.STORE_CD,
+                    A.POS_NO,
+                    A.FNKEY_NO,
+                    A.FNKEY_FG,
+                    A.DISP_SEQ,
+                    A.X,
+                    A.Y,
+                    A.WIDTH,
+                    A.HEIGHT,
+                    A.STYLE_CD,
+                    A.IMG_NM,
+                    A.USE_YN,
+                    A.REG_DT,
+                    A.REG_ID,
+                    A.MOD_DT,
+                    A.MOD_ID
+        ) VALUES (
+                    #{storeCd},
+                    #{posNo},
+                    #{fnkeyNo},
+                    #{fnkeyFg},
+                    #{dispSeq},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    '01',
+                    #{imgNm, jdbcType=VARCHAR},
+                    'Y',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
         )
     </insert>
 
