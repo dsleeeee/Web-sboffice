@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.adi.resve.resveInfo.service.impl.ResveInfoMapper">
+<mapper namespace="kr.co.solbipos.mobile.adi.resve.resveInfo.service.impl.MobileResveInfoMapper">
 
-    <select id="getResveList" parameterType="resveInfoVO" resultType="DefaultMap">
-        /* ResveInfoMapper.getResveList */
+    <select id="getResveList" parameterType="mobileResveInfoVO" resultType="DefaultMap">
+        /* MobileResveInfoMapper.getResveList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -67,7 +67,10 @@
                   FROM TB_PS_RESVE_INFO tpri,
                        TB_MS_STORE tms
                  WHERE tpri.HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND tpri.STORE_CD = #{storeCd}
+                   AND tpri.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
                    AND tms.HQ_OFFICE_CD = tpri.HQ_OFFICE_CD
                    AND tms.STORE_CD = tpri.STORE_CD
                 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">

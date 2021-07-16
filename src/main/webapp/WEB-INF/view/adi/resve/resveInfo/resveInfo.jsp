@@ -32,29 +32,9 @@
                 <th><s:message code="resveInfo.regDate" /></th>
                 <td colspan="3">
                     <div class="sb-select">
-                        <span class="txtIn w110px">
-                            <wj-input-date
-                                id="srchStartDate"
-                                value="startDate"
-                                ng-model="startDate"
-                                control="startDateCombo"
-                                min="2000-01-01"
-                                max="2099-12-31"
-                                initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </span>
+                        <span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn w110px">
-                            <wj-input-date
-                                id="srchEndDate"
-                                value="endDate"
-                                ng-model="endDate"
-                                control="endDateCombo"
-                                min="2000-01-01"
-                                max="2099-12-31"
-                                initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </span>
+                        <span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w110px" /></span>
                         <%--전체기간--%>
                         <span class="chk ml10">
                             <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
@@ -68,29 +48,9 @@
                 <th><s:message code="resveInfo.resveDate" /></th>
                 <td colspan="3">
                     <div class="sb-select">
-                        <span class="txtIn w110px">
-                            <wj-input-date
-                                    id="resveStartDate"
-                                    value="resveStartDate"
-                                    ng-model="resveStartDate"
-                                    control="resveStartDateCombo"
-                                    min="2000-01-01"
-                                    max="2099-12-31"
-                                    initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </span>
+                        <span class="txtIn"><input id="resveStartDate" ng-model="resveStartDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn w110px">
-                            <wj-input-date
-                                    id="resveEndDate"
-                                    value="resveEndDate"
-                                    ng-model="resveEndDate"
-                                    control="resveEndDateCombo"
-                                    min="2000-01-01"
-                                    max="2099-12-31"
-                                    initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </span>
+                        <span class="txtIn"><input id="resveEndDate" ng-model="resveEndDate" class="w110px" /></span>
                         <%--전체기간--%>
                         <span class="chk ml10">
                             <input type="checkbox" id="chkResveDt" ng-model="isResveChecked" ng-change="isResveChkDt()" />
@@ -156,16 +116,16 @@
                     <wj-flex-grid-column header="<s:message code="resveInfo.storeCd"/>" binding="storeCd" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="resveInfo.storeNm"/>" binding="storeNm" width="100" align="left"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="resveInfo.regDate"/>" binding="regDt" width="130" align="center" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="resveInfo.resveInFg"/>" binding="resveInFg" width="70" align="center" data-map="inFgDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="resveInfo.posNo"/>" binding="posNo" width="70" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="resveInfo.resveNo"/>" binding="resveNo" width="80" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="resveInfo.resveDate"/>" binding="resveDate" width="80" align="center" format="date"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="resveInfo.resveTime"/>" binding="resveTime" width="70" align="center" format="time"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="resveInfo.resveGuestNm"/>" binding="resveGuestNm" width="70" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="resveInfo.resveGuestTelNo"/>" binding="resveGuestTelNo" width="100" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="resveInfo.resveGuestCnt"/>" binding="resveGuestCnt" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="resveInfo.resveGuestTelNo"/>" binding="resveGuestTelNo" width="100" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="resveInfo.resveMemo"/>" binding="resveMemo" width="100"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="resveInfo.resveNo"/>" binding="resveNo" width="80" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="resveInfo.regDate"/>" binding="regDt" width="130" align="center" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="resveInfo.resveInFg"/>" binding="resveInFg" width="70" align="center" data-map="inFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="resveInfo.posNo"/>" binding="posNo" width="70" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
