@@ -144,6 +144,7 @@
                   <wj-flex-grid-column header="<s:message code="prod.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="70" is-read-only="true" ></wj-flex-grid-column>
                 </c:if>
+                <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -161,4 +162,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.02" charset="utf-8"></script>

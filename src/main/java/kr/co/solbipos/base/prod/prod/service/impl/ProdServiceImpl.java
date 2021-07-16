@@ -1103,7 +1103,7 @@ public class ProdServiceImpl implements ProdService {
     /** 브랜드 콤보박스 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getBrandComboList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return prodMapper.getBrandComboList(prodVO);
     }
 
@@ -1118,5 +1118,31 @@ public class ProdServiceImpl implements ProdService {
         }
 
         return prodMapper.getSideProdChk(prodVO);
+    }
+
+    @Override
+    public List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return prodMapper.getKitchenprintList(prodVO);
+    }
+
+    @Override
+    public int kitchenprintLink(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String dt = currentDateTimeString();
+        for(ProdVO prodVO : prodVOs){
+            prodVO.setRegDt(dt);
+            prodVO.setRegId(sessionInfoVO.getUserId());
+            prodVO.setModDt(dt);
+            prodVO.setModId(sessionInfoVO.getUserId());
+
+            result += prodMapper.kitchenprintLink(prodVO);
+        }
+        return result;
     }
 }

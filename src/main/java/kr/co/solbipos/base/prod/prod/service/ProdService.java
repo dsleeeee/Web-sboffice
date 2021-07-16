@@ -84,4 +84,11 @@ public interface ProdService {
 
     /** 사이드메뉴관리의 선택상품에 등록된 상품인지 조회 */
     List<DefaultMap<Object>> getSideProdChk(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 프린트 조회 */
+    List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 프린트 연결 */
+    int kitchenprintLink(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
 }

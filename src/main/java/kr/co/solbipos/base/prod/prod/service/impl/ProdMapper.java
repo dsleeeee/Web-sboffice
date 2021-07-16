@@ -198,4 +198,9 @@ public interface ProdMapper {
     /** 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 분류 매장에 저장 */
     int insertHqSdselProdStoreClassTotal(ProdVO prodVO);
     int insertHqSdselProdStoreClass(ProdVO prodVO);
+
+    /** 프린터 리스트 조회 */
+    List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO);
+
+    int kitchenprintLink(ProdVO prodVO);
 }
