@@ -189,7 +189,7 @@ window.location.assign - 새 document 로드
                             ;
 
             //window.open( tblms_url, 'popup', '');
-            var win = window.open(tblms_url, 'win', '');
+            var win = window.open(tblms_url, tblmsTempPwDate, '');
             //window.open( tblms_url);
 
             $scope._popMsg(messages["tblms.connectSuccess"]);
