@@ -174,4 +174,9 @@ public interface ProdMapper {
 
     /** 거래처 저장 */
     int getVendorProdSaveInsert(ProdVO prodVO);
+
+    /** 프린터 리스트 조회 */
+    List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO);
+
+    int kitchenprintLink(ProdVO prodVO);
 }

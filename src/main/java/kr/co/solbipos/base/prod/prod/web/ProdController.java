@@ -100,6 +100,15 @@ public class ProdController {
             model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
         }
 
+        // 본사
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043"),"0").equals("0")){ // 0043 본사신규상품 매장생성기준
+                model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
+            }
+        } else {
+            model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
+        }
+
 //        model.addAttribute("prodEnvstVal", prodEnvstVal);
 //        model.addAttribute("priceEnvstVal", priceEnvstVal);
         model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
@@ -414,10 +423,55 @@ public class ProdController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        prodVO.setHqOfficeCd(request.getParameter("hqOfficeCd"));
-
         List<DefaultMap<String>> result = prodService.getBrandComboList(prodVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
+     * 프린터 조회
+     *
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.07.15
+     */
+    @RequestMapping(value = "/getKitchenprintList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKitchenprintList(ProdVO prodVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getKitchenprintList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+
+    /**
+     * 프린터 조회
+     *
+     * @param prodVO[]
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.07.16
+     */
+    @RequestMapping(value = "/kitchenprintLink.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result kitchenprintLink(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.kitchenprintLink(prodVOs, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
     }
 }

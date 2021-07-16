@@ -81,4 +81,11 @@ public interface ProdService {
 
     /** 브랜드 콤보박스 리스트 조회 */
     List<DefaultMap<String>> getBrandComboList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 프린트 조회 */
+    List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 프린트 연결 */
+    int kitchenprintLink(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
 }

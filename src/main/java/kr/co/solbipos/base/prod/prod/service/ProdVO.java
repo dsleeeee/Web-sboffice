@@ -205,6 +205,9 @@ public class ProdVO extends PageVO {
     /** 포장가 */
     private String packSaleUprc;
 
+    /** 프린터코드 */
+    private String prterNo;
+
     /**
      * @return the hqOfficeCd
      */
@@ -997,5 +1000,13 @@ public class ProdVO extends PageVO {
 
     public void setPackSaleUprc(String packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getPrterNo() {
+        return prterNo;
+    }
+
+    public void setPrterNo(String prterNo) {
+        this.prterNo = prterNo;
     }
 }

@@ -2803,4 +2803,53 @@
         </choose>
     </insert>
 
+    <!-- 프린터 리스트 - 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR_PROD, TB_HQ_VENDOR, TB_MS_VENDOR_PROD, TB_MS_VENDOR
+        COMMENTS : [본사]거래처별_취급상품, [본사]상품_거래처, [매장]거래처별_취급상품, [매장]상품_거래처
+    -->
+    <select id="getKitchenprintList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getKitchenprintList */
+        SELECT  tms.STORE_CD,
+                tms.STORE_NM,
+                tmp.PRTER_NO,
+                tmp.PRTER_NM
+          FROM  TB_MS_STORE tms,
+                TB_MS_PRINTER tmp
+         WHERE  tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+           </if>
+            AND tmp.STORE_CD = tms.STORE_CD
+            AND tmp.STORE_CD = tms.STORE_CD
+       ORDER BY tms.STORE_CD, tmp.PRTER_NO
+    </select>
+
+    <!-- 안연결된 프린터 연결 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 상품의 연결된 프린터를 저장한다.
+    -->
+    <insert id="kitchenprintLink" parameterType="prodVO">
+        INSERT INTO TB_MS_PRINTER_PROD
+        (
+            STORE_CD,
+            PRTER_NO,
+            PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES (
+               #{storeCd},
+               #{prterNo},
+               #{prodCd},
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+           )
+    </insert>
 </mapper>
