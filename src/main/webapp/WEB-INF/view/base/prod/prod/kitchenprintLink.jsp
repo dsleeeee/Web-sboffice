@@ -28,10 +28,8 @@
                             is-read-only="false">
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                        <!-- define columns -->
-                        <c:if test="${orgnFg == 'HQ'}">
-                            <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="80"is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                        </c:if>
+                        <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="80"is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prod.prterNo"/>" binding="prterNo" width="80"is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prod.prterNm"/>" binding="prterNm" width="100" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
