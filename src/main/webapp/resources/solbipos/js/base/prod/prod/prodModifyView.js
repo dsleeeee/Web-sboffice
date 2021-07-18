@@ -233,7 +233,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
                 // 이미지파일 저장
                 $scope.prodImageFileSave(result);
 
-                $scope.prodModifyLayer.hide();
                     if($scope.getMode() == "I"){
                         if(kitchenprintLink == "1"){
                             $scope.setKitchenprrint(result);
@@ -243,6 +242,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
                         } else {
                             $scope.prodModifyLayer.hide();
                         }
+                    } else {
+                        $scope.prodModifyLayer.hide();
                     }
 
                 // 저장기능 수행후 재조회
