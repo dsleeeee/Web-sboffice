@@ -10,6 +10,7 @@
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/base/store/tblpt/"/>
+<c:set var="vUserIdChk" value="${sessionScope.sessionInfo.vUserId}"/>
 
 <style type="text/css">
 /* 단순버튼 01 */
@@ -507,6 +508,7 @@ button[class*="btn02"] {border: 0;}
 <script type="text/javascript">
     var s_userId      = "${userId}";
     var s_storeCd     = "${storeCd}";
+    var s_vUserIdChk  = "${vUserIdChk}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/tblpt/tblpt.js?ver=20210715.01" charset="utf-8"></script>
