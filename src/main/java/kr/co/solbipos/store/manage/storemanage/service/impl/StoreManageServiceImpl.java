@@ -446,23 +446,29 @@ public class StoreManageServiceImpl implements StoreManageService{
                         confgXmlVO.setModDt(dt);
                         confgXmlVO.setModId(sessionInfoVO.getUserId());
 
-                        LOGGER.info(">>>>>>>>>>>>>>>>>> RIGIT >>>>>>>>>>>>>>>");
-                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT); // 포스 기능키 (우)
-                        confgXmlVO.setArrPosNo(posNoStr.split(","));
-                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+                        // 복사할 매장의 포스 MAX
+                        String copyStorePosMax = mapper.getCopyStorePosMax(confgXmlVO);
+                        confgXmlVO.setCopyStorePosMax(copyStorePosMax);
 
+                        // 복사할 매장에 포스가 있는 경우만
+                        if(!"-".equals(confgXmlVO.getCopyStorePosMax())) {
+                            LOGGER.info(">>>>>>>>>>>>>>>>>> RIGIT >>>>>>>>>>>>>>>");
+                            confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT); // 포스 기능키 (우)
+//                            confgXmlVO.setArrPosNo(posNoStr.split(","));
+                            procCnt += mapper.copyPosConfXml(confgXmlVO);
 
-                        LOGGER.info(">>>>>>>>>>>>>>>>>> LEFT >>>>>>>>>>>>>>>");
-                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT); // 포스 기능키 (좌)
-                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+                            LOGGER.info(">>>>>>>>>>>>>>>>>> LEFT >>>>>>>>>>>>>>>");
+                            confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT); // 포스 기능키 (좌)
+                            procCnt += mapper.copyPosConfXml(confgXmlVO);
 
-                        LOGGER.info(">>>>>>>>>>>>>>>>>> DELIVERY >>>>>>>>>>>>>>>");
-                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_DELIVERY); // 포스 기능키 (배달메뉴)
-                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+                            LOGGER.info(">>>>>>>>>>>>>>>>>> DELIVERY >>>>>>>>>>>>>>>");
+                            confgXmlVO.setConfgFg(ConfgFg.POS_FN_DELIVERY); // 포스 기능키 (배달메뉴)
+                            procCnt += mapper.copyPosConfXml(confgXmlVO);
 
-                        LOGGER.info(">>>>>>>>>>>>>>>>>> SELF >>>>>>>>>>>>>>>");
-                        confgXmlVO.setConfgFg(ConfgFg.FUNC_KEY_SELF); // 포스 기능키 (셀프키)
-                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+                            LOGGER.info(">>>>>>>>>>>>>>>>>> SELF >>>>>>>>>>>>>>>");
+                            confgXmlVO.setConfgFg(ConfgFg.FUNC_KEY_SELF); // 포스 기능키 (셀프키)
+                            procCnt += mapper.copyPosConfXml(confgXmlVO);
+                        }
 
                         // 포스기능키별 적용매장 등록(TB_CM_POS_FNKEY_STORE)
                         procCnt += mapper.registPosFnkeyStore(storeFnkeyVO);

@@ -180,6 +180,9 @@ public interface StoreManageMapper {
     /** 매장설정 XML정보 복사 */
     int copyStoreConfXml(ConfgXmlVO confgXmlVO);
 
+    /** 복사할 매장의 포스 MAX */
+    String getCopyStorePosMax(ConfgXmlVO confgXmlVO);
+
     /** 포스설정 XML정보 복사 */
     int copyPosConfXml(ConfgXmlVO confgXmlVO);
 
