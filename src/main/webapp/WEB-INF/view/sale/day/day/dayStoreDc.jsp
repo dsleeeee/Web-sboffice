@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/day/day/dayStoreDc/"/>
 
-<wj-popup control="wjDayStoreDcLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:480px;" fade-in="false" fade-out="false">
+<wj-popup control="wjDayStoreDcLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;height:480px;" fade-in="false" fade-out="false">
     <div ng-controller="dayStoreDcCtrl">
 
         <%-- header --%>
@@ -17,9 +17,15 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
+            <div class="oh sb-select dkbr">
+                <%-- 엑셀다운로드 --%>
+                <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+                    <s:message code="cmm.excel.down" />
+                </button>
+            </div>
             <%-- 그리드 --%>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:350px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -31,8 +37,8 @@
                         is-read-only="true">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="day.dayStoreDc.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="day.dayStoreDc.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDc.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDc.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="day.dayStoreDc.totDcAmt"/>" binding="totDcAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <%-- 할인 컬럼 생성--%>
                         <c:forEach var="dcCol" items="${dcColList}">
@@ -47,4 +53,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayStoreDc.js?ver=20191219" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayStoreDc.js?ver=20210719.01" charset="utf-8"></script>

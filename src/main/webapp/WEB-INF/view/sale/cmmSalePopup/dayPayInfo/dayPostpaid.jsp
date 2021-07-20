@@ -6,18 +6,25 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/cmmSalePopup/dayPayInfo/dayPostpaid/"/>
 
-<wj-popup id="wjDayPostpaidLayer" control="wjDayPostpaidLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
+<wj-popup id="wjDayPostpaidLayer" control="wjDayPostpaidLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:620px; height:480px;">
   <div id="dayPostpaidLayer" class="wj-dialog wj-dialog-columns" ng-controller="dayPostpaidCtrl">
+
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="dayPostpaid.dayPostpaidPay"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 400px;">
 
+    <div class="wj-dialog-body sc2">
+      <div class="oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+          <s:message code="cmm.excel.down" />
+        </button>
+      </div>
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 340px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -30,17 +37,18 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="dayPostpaid.membrNo"/>" binding="membrNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayPostpaid.membrNm"/>" binding="membrNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayPostpaid.membrClassNm"/>" binding="membrClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayPostpaid.membrClassNm"/>" binding="membrClassNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayPostpaid.pointSaveFgNm"/>" binding="pointSaveFgNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayPostpaid.dcRate"/>" binding="dcRate" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayPostpaid.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayPostpaid.dcRate"/>" binding="dcRate" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayPostpaid.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
       </div>
     </div>
+
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayPostpaid.js?ver=20191219" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayPostpaid.js?ver=20210719.01" charset="utf-8"></script>
