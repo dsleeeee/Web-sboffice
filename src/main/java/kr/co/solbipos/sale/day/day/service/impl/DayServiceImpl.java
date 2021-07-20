@@ -29,6 +29,11 @@ public class DayServiceImpl implements DayService {
     public List<DefaultMap<String>> getPayColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
         return dayMapper.getPayColList(dayVO);
     }
+    /** 일자별 - 결제수단 컬럼 리스트 조회(현금영수증 포함) */
+    @Override
+    public List<DefaultMap<String>> getPayColAddList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        return dayMapper.getPayColAddList(dayVO);
+    }
 
 
     /** 일자별 - 할인 컬럼 리스트 조회 */
@@ -82,15 +87,33 @@ public class DayServiceImpl implements DayService {
             dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
         }
 
+//        // 결제수단 array 값 세팅
+//        dayVO.setArrPayCol(dayVO.getPayCol().split(","));
+//        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+//        String pivotPayCol = "";
+//        String arrPayCol[] = dayVO.getPayCol().split(",");
+//        for(int i=0; i < arrPayCol.length; i++) {
+//            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+//        }
+//        dayVO.setPivotPayCol(pivotPayCol);
+
+
+        /** PAY_CD = 02 현금,현금영수증 분리 */
         // 결제수단 array 값 세팅
-        dayVO.setArrPayCol(dayVO.getPayCol().split(","));
+//        dayVO.setArrPayCol(dayVO.getPayCol().split(","));
+        String payCol= "";
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
         String pivotPayCol = "";
         String arrPayCol[] = dayVO.getPayCol().split(",");
         for(int i=0; i < arrPayCol.length; i++) {
-            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+            // 현금,현금영수증 제외
+            if(! (("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i])) ) {
+                pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+                payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+            }
         }
         dayVO.setPivotPayCol(pivotPayCol);
+        dayVO.setArrPayCol(payCol.split(","));
 
         return dayMapper.getDayTotalList(dayVO);
     }

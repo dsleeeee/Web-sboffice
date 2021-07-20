@@ -35,7 +35,9 @@ public class DaySaleController {
 
 
         // 결제수단 조회
-        List<DefaultMap<String>> payColList = dayService.getPayColList(dayVO, sessionInfoVO);
+//        List<DefaultMap<String>> payColList = dayService.getPayColList(dayVO, sessionInfoVO);
+        // 결제수단 조회(현금영수증 포함)
+        List<DefaultMap<String>> payColList = dayService.getPayColAddList(dayVO, sessionInfoVO);
 
         // 결제수단 코드를 , 로 연결하는 문자열 생성
         String payCol = "";
