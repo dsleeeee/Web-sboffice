@@ -132,6 +132,7 @@ app.controller('tblptListCtrl', ['$scope', '$http', '$timeout', function ($scope
     var open_url        = 'http://192.168.0.72:2020/login/login_check_tbl.jsp?';
     var userStoreCd     = s_storeCd;
     var userIdChk       = s_userId;
+    var vUserIdChk      = s_vUserIdChk;
     var userpwChk       = 'DFSFLEJ234OJDOOA98D092OECUN092R01U73C02103U09C82B093102V321';  //DFSFLEJ234OJDOOA98D092OECUN092R01U73C02103U09C82B093102V321
     var tblFg           = 'tblpt';  //DFSFLEJ234OJDOOA98D092OECUN092R01U73C02103U09C82B093102V321
     var tblFgOption     = tblFgOp;
@@ -177,8 +178,10 @@ window.location.assign - 새 document 로드
                             + 'AutoFg=M'
                             + '&nx_user_store_cd='+userStoreCd
                             + '&user_id='+userIdChk
+                            + '&v_user_id='+vUserIdChk
                             + '&user_pwd='+userpwChk
                             + '&nx_user_id='+userIdChk
+                            + '&nx_v_user_id='+vUserIdChk
                             + '&nx_user_pwd='+userpwChk
                             + '&login_auto_serial='
                             + '&appfg=web'
@@ -189,7 +192,7 @@ window.location.assign - 새 document 로드
                             ;
 
             //window.open( tblpt_url, 'popup', '');
-            var win = window.open(tblpt_url, 'win', '');
+            var win = window.open(tblpt_url, tblptTempPwDate, '');
             //window.open( tblpt_url);
 
             $scope._popMsg(messages["tblpt.connectSuccess"]);

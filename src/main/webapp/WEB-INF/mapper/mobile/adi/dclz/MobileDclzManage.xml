@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileDclzManage.xml
+
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.07.09     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.mobile.adi.dclz.dclz.service.impl.MobileDclzManageMapper">
+
+  <!-- 근태관리 리스트 조회 -->
+  <!--
+      TABLE    : TB_PS_EMPLOYEE_COMMUTE, TB_MS_EMPLOYEE, TB_MS_STORE
+      PARAM    : dclzManageVO
+      COMMENTS : 근태내역을 조회한다.
+  -->
+  <select id="getDclzManage" parameterType="mobileDclzManageVO" resultType="DefaultMap">
+    /* MobileDclzManage.getDclzManage */
+      SELECT tpec.STORE_CD,
+              tms.STORE_NM,
+              TO_CHAR(TO_DATE(tpec.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+              tpec.EMP_NO,
+              tme.EMP_NM,
+              tpec.SALE_DATE,
+              <![CDATA[
+                  CASE WHEN LENGTH(tpec.COMMUTE_IN_DT) = 14 THEN TO_CHAR(TO_DATE(tpec.COMMUTE_IN_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') ELSE tpec.COMMUTE_IN_DT END AS COMMUTE_IN_DT,
+                  CASE WHEN LENGTH(tpec.COMMUTE_OUT_DT) = 14 THEN TO_CHAR(TO_DATE(tpec.COMMUTE_OUT_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') ELSE tpec.COMMUTE_OUT_DT END AS COMMUTE_OUT_DT,
+                  CASE WHEN LENGTH(tpec.COMMUTE_OUT_DT) = '14' AND LENGTH(tpec.COMMUTE_IN_DT) = '14'
+                       THEN CASE WHEN LENGTH(TRUNC(TRUNC((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')) * 1440) / 60)) < '2'
+                                 THEN LPAD((TRUNC(TRUNC((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')) * 1440) / 60)), 2,'0') || ':' || LPAD((MOD(TRUNC(REPLACE((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')),'-','') * 1440), 60)), 2, '0')
+                                 ELSE TRUNC(TRUNC((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')) * 1440) / 60) || ':' || LPAD((MOD(TRUNC(REPLACE((to_date(tpec.COMMUTE_OUT_DT,'YYYYMMDDHH24MISS') - to_date(tpec.COMMUTE_IN_DT,'YYYYMMDDHH24MISS')),'-','') * 1440), 60)), 2, '0')
+                            END
+                       ELSE '-'
+                  END AS WORK_TIME,
+              ]]>
+              tpec.IN_FG,
+              tpec.REMARK
+        FROM TB_PS_EMPLOYEE_COMMUTE tpec,
+              TB_MS_EMPLOYEE tme,
+              TB_MS_STORE tms
+        WHERE 1=1
+          AND tpec.STORE_CD = tme.STORE_CD
+          AND tpec.EMP_NO = tme.EMP_NO
+          AND tpec.STORE_CD = tms.STORE_CD
+          AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+       <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+          AND tpec.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+       </if>
+      <if test='inFg != null and inFg.toString() != ""'>
+          AND tpec.IN_FG = #{inFg}
+      </if>
+      AND tpec.STORE_CD IN
+      <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+          #{item}
+      </foreach>
+       ORDER
+          BY tpec.SALE_DATE DESC, tpec.COMMUTE_IN_DT ASC
+  </select>
+
+</mapper>
+
+
+

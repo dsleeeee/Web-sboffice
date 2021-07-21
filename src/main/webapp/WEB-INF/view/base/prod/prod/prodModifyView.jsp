@@ -704,6 +704,7 @@
   var hqOfficeCd = "${hqOfficeCd}";
   var storeCd = "${storeCd}";
   var gubun = "${param.gubun}";
+  var kitchenprintLink = "${param.kitchenprintLink}";
 
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
@@ -722,4 +723,8 @@
 <c:import url="/WEB-INF/view/base/prod/prod/searchProdVendr.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 프린터연결 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/kitchenprintLink.jsp">
 </c:import>

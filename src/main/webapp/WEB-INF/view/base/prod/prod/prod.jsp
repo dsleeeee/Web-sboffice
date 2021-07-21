@@ -10,6 +10,7 @@
 <%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
 <%--<c:set var="priceEnvstVal" value="${priceEnvstVal}" />--%>
 <c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />
+<c:set var="kitchenprintLink" value="${kitchenprintLink}" />
 
 <div class="subCon" ng-controller="prodCtrl" id="prodView">
     <%--searchTbl--%>
@@ -263,6 +264,8 @@
 
     // 내점/배달/포장 가격관리 사용여부 (0: 미사용 1: 사용)
     var subPriceFg = "${subPriceFg}";
+    // 프린터연결팝업창 여부(0:안띄움 1:띄움)
+    var kitchenprintLink = "${kitchenprintLink}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.04" charset="utf-8"></script>
@@ -278,6 +281,7 @@
 <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="kitchenprintLink" value="${kitchenprintLink}"/>
 </c:import>
 
 <%-- 레이어 팝업 : 상품별 적용매장 선택 팝업 --%>

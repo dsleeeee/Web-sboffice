@@ -20,6 +20,24 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상품 이미지 삭제여부 (DEL:삭제)
     var prodImageDelFg;
 
+    // 수정 신규 모드 구분 I:신규/U:수정
+    $scope.mode = "";
+    $scope.setMode = function(data){
+        $scope.mode = data;
+    };
+    $scope.getMode = function(){
+        return $scope.mode;
+    };
+
+    // 프린터 연결시 상품코드
+    $scope.kitchenprrint = "";
+    $scope.setKitchenprrint = function(data){
+        $scope.kitchenprrint = data;
+    };
+    $scope.getKitchenprrint = function(){
+        return $scope.kitchenprrint;
+    };
+
     // 상품정보
     $scope.prodModifyInfo = {};
     $scope.setProdModifyInfo = function(data){
@@ -215,7 +233,18 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
                 // 이미지파일 저장
                 $scope.prodImageFileSave(result);
 
-                $scope.prodModifyLayer.hide();
+                    if($scope.getMode() == "I"){
+                        if(kitchenprintLink == "1"){
+                            $scope.setKitchenprrint(result);
+                            $scope.kitchenprintLinkLayer.show(true);
+                            var scope = agrid.getScope('kitchenprintLinkCtrl');
+                            scope._broadcast('kitchenprintLinkCtrl');
+                        } else {
+                            $scope.prodModifyLayer.hide();
+                        }
+                    } else {
+                        $scope.prodModifyLayer.hide();
+                    }
 
                 // 저장기능 수행후 재조회
                 $scope._broadcast('prodCtrl');
@@ -453,6 +482,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 수정 모드 시
         if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== ""){
+            $scope.setMode("U");
             // 상품상세정보 조회
             var params = data;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -495,6 +525,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // 신규 모드 시
         }else{
+            $scope.setMode("I");
             if(prodNoEnvFg === "MANUAL"){
                 $("#prodCd").removeAttr("readonly");
                 $("#prodCd").css("width", "63%");

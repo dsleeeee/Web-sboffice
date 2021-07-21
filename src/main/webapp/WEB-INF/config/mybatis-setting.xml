@@ -128,6 +128,8 @@
     <typeAlias alias="migDataMappingVO" type="kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO"/>
     <!-- 기초관리 > 매장정보관리 > 환경변수일괄변경 -->
     <typeAlias alias="envConfgBatchChangeVO" type="kr.co.solbipos.store.manage.envConfgBatchChange.service.EnvConfgBatchChangeVO"/>
+<!-- 기초관리 > 매장정보관리 > 포스H/W정보현황 -->
+    <typeAlias alias="posHwInfoVO" type="kr.co.solbipos.store.manage.posHwInfo.service.PosHwInfoVO"/>
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
@@ -787,7 +789,9 @@
     <!-- (모바일) 매출현황 > 시간대별(월별)매출현황 -->
     <typeAlias alias="mobileTimeMonthSaleVO" type="kr.co.solbipos.mobile.sale.status.timeMonthSale.service.MobileTimeMonthSaleVO"/>
     <!-- (모바일) 부가서비스 > 근태현황 -->
-<!--    <typeAlias alias="mobileDclzManageVO" type="kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageVO"/>-->
+    <typeAlias alias="mobileDclzManageVO" type="kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageVO"/>
+    <!-- (모바일) 부가서비스 > 예약현황 -->
+    <typeAlias alias="mobileResveInfoVO" type="kr.co.solbipos.mobile.adi.resve.resveInfo.service.MobileResveInfoVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>

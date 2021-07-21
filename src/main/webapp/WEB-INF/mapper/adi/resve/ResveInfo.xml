@@ -46,6 +46,7 @@
                 <if test='resveGuestNm != null and resveGuestNm != ""'>
                    AND tpri.RESVE_GUEST_NM = #{resveGuestNm}
                 </if>
+                ORDER BY RESVE_DATE DESC, RESVE_SEQ ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -81,6 +82,7 @@
                 <if test='resveGuestNm != null and resveGuestNm != ""'>
                     AND tpri.RESVE_GUEST_NM = #{resveGuestNm}
                 </if>
+                ORDER BY RESVE_DATE DESC, RESVE_SEQ ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
