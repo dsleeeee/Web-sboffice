@@ -125,4 +125,5 @@
   var payCol    = '${payCol}';
   var arrPayCol = payCol.split(',');
 </script>--%>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20191219.06" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20210720.01" charset="utf-8"></script>

@@ -61,4 +61,27 @@ app.controller('dayTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope._inquiryMain("/sale/cmmSalePopup/dayPayInfo/dayTemporary/list.sb", params);
   };
 
+  // 엑셀 다운로드
+  $scope.excelDownload = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      }, '가승인결제내역_' + getToday() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+  };
+
 }]);

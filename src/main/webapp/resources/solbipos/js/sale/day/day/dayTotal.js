@@ -88,6 +88,10 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
             // 값이 있으면 링크
             if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
               callCtrl = 'day'+ (payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+              // 현금영수증 클릭시 -> 현금 팝업
+              if(callCtrl == 'dayCashbillCtrl') {
+                callCtrl = 'dayCashCtrl';
+              }
               $scope._broadcast(callCtrl, params);
             }
           }

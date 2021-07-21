@@ -6,18 +6,25 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/cmmSalePopup/dayPayInfo/dayCash/"/>
 
-<wj-popup id="wjDayCashLayer" control="wjDayCashLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjDayCashLayer" control="wjDayCashLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:830px; height:480px;">
   <div id="dayCashLayer" class="wj-dialog wj-dialog-columns" ng-controller="dayCashCtrl">
+
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="dayCash.dayCashPay"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 400px;">
 
+    <div class="wj-dialog-body sc2">
+      <div class="oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
+          <s:message code="cmm.excel.down" />
+        </button>
+      </div>
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 340px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -42,8 +49,8 @@
         <%--//위즈모 테이블--%>
       </div>
     </div>
-  </div>
 
+  </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayCash.js?ver=20191219" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayCash.js?ver=20210719.01" charset="utf-8"></script>

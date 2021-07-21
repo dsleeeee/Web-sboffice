@@ -39,6 +39,8 @@ public class ConfgXmlVO extends PageVO {
     /** 여러 포스값 */
     private String[] arrPosNo;
 
+    /** 복사할 매장의 포스 MAX */
+    private String copyStorePosMax;
 
     /**
      * @return the hqOfficeCd
@@ -158,5 +160,13 @@ public class ConfgXmlVO extends PageVO {
      */
     public void setArrPosNo(String[] arrPosNo) {
         this.arrPosNo = arrPosNo;
+    }
+
+    public String getCopyStorePosMax() {
+        return copyStorePosMax;
+    }
+
+    public void setCopyStorePosMax(String copyStorePosMax) {
+        this.copyStorePosMax = copyStorePosMax;
     }
 }

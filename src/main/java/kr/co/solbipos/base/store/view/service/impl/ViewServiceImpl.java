@@ -148,7 +148,7 @@ public class ViewServiceImpl implements ViewService {
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.POS_ENV) { // 포스환경
                 procResult = viewMapper.copyPosEnv(copyStoreEnvVO);
             }
-            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.PROD) { // 상품
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.PROD) { // 상품(현재 사용안함)
                 // 상품분류, 상품, 판매가격 함께 복사
                 procResult = viewMapper.copyProduct(copyStoreEnvVO);
             }
@@ -184,7 +184,6 @@ public class ViewServiceImpl implements ViewService {
                 // 터치키 XML 복사
                 copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
                 procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO);
-
             }
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.COUPON_CLASS) { // 쿠폰분류
                 procResult = viewMapper.copyCouponClass(copyStoreEnvVO);
@@ -198,5 +197,12 @@ public class ViewServiceImpl implements ViewService {
         }
 
         return result;
+    }
+
+    /** 매장환경 복사를 위한 정보 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreEnvInfoList(CopyStoreEnvVO copyStoreEnvVO, SessionInfoVO sessionInfoVO) {
+
+        return viewMapper.getStoreEnvInfoList(copyStoreEnvVO);
     }
 }

@@ -1922,7 +1922,10 @@
             #{regDt} AS REG_DT,
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
+            #{modId} AS MOD_ID,
+            tmpsp.STIN_SALE_UPRC,
+            tmpsp.DLVR_SALE_UPRC,
+            tmpsp.PACK_SALE_UPRC
             FROM TB_MS_PRODUCT_SALE_PRICE tmpsp,
             TB_MS_PRODUCT tmp
             WHERE 1=1
@@ -1955,7 +1958,10 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.STIN_SALE_UPRC,
+                A.DLVR_SALE_UPRC,
+                A.PACK_SALE_UPRC
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -1966,7 +1972,10 @@
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,
-                B.MOD_ID
+                B.MOD_ID,
+                B.STIN_SALE_UPRC,
+                B.DLVR_SALE_UPRC,
+                B.PACK_SALE_UPRC
             )
     </insert>
 
@@ -1991,7 +2000,10 @@
             #{regDt} AS REG_DT,
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
+            #{modId} AS MOD_ID,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
             FROM TB_HQ_PRODUCT_SALE_PRICE
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2020,7 +2032,10 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.STIN_SALE_UPRC,
+                A.DLVR_SALE_UPRC,
+                A.PACK_SALE_UPRC
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2031,7 +2046,10 @@
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,
-                B.MOD_ID
+                B.MOD_ID,
+                B.STIN_SALE_UPRC,
+                B.DLVR_SALE_UPRC,
+                B.PACK_SALE_UPRC
             )
     </insert>
 
@@ -3465,6 +3483,19 @@
         ]]>
     </insert>
 
+    <!-- 복사할 매장의 포스 MAX -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCopyStorePosMax" parameterType="confgXmlVO" resultType="String">
+        /* StoreManageMapper.getCopyStorePosMax */
+        SELECT NVL(MAX(POS_NO), '-')
+        FROM TB_MS_POS
+        WHERE 1=1
+        AND STORE_CD = #{copyStoreCd}
+    </select>
+
     <!-- 포스기능 XML 복사 -->
     <!--
         TABLE    : TB_WB_POS_CONFG_XML
@@ -3473,34 +3504,66 @@
     -->
     <insert id="copyPosConfXml" parameterType="confgXmlVO" >
         /* USE : StoreManageMapper.copyPosConfXml */
-        INSERT INTO TB_WB_POS_CONFG_XML
+        MERGE INTO TB_WB_POS_CONFG_XML A
+        USING
         (
-            STORE_CD,
-            POS_NO,
-            CONFG_FG,
-            XML,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        SELECT #{storeCd} AS STORE_CD,
-        twpcx.POS_NO,
-        twpcx.CONFG_FG,
-        twpcx.XML,
-        twpcx.USE_YN,
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId}
-        FROM TB_WB_POS_CONFG_XML twpcx
-        WHERE twpcx.STORE_CD = #{copyStoreCd}
-        AND twpcx.POS_NO IN
-        <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
-            LPAD(#{item}, 2, '0')
-        </foreach>
-        AND twpcx.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
+            SELECT
+            #{storeCd} AS STORE_CD,
+            A.T_POS_NO AS POS_NO,
+            B.CONFG_FG,
+            B.XML,
+            B.USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM
+            (
+                SELECT
+                C.POS_NO AS T_POS_NO,
+                (CASE WHEN C.POS_NO > #{copyStorePosMax} THEN #{copyStorePosMax} ELSE C.POS_NO END) AS O_POS_NO
+                FROM TB_MS_POS C
+                WHERE C.STORE_CD = #{storeCd}
+            ) A,
+            TB_WB_POS_CONFG_XML B
+            WHERE 1=1
+            AND B.STORE_CD = #{copyStoreCd}
+            AND B.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.POS_NO = B.POS_NO
+                AND A.CONFG_FG = B.CONFG_FG
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            XML = B.XML,
+            USE_YN = B.USE_YN,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.POS_NO,
+                A.CONFG_FG,
+                A.XML,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.POS_NO,
+                B.CONFG_FG,
+                B.XML,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
     </insert>
 
     <!-- 포스기능키별 적용매장 등록  -->

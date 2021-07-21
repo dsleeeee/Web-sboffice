@@ -103,16 +103,14 @@
             is-editable="false"
             initialized="initComboBox(s)">
     </wj-combo-box>
-
+    <%-- 엑셀다운로드 --%>
+    <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
     <%-- 매장환경 복사 --%>
-    <c:if test="${((vUserIdChk eq 'solbi7') or (userIdChk eq 'solbi7'))}">
+    <%--<c:if test="${((vUserIdChk eq 'solbi7') or (userIdChk eq 'solbi7'))}">--%>
         <button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyStoreEnv()">
           <s:message code="storeView.copy.store" />
         </button>
-    </c:if>
-
-    <%-- 엑셀다운로드 --%>
-    <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+    <%--</c:if>--%>
   </div>
 
   <%-- 회원목록 그리드 --%>
@@ -182,11 +180,13 @@
   </div>
 
 </div>
+
 <script>
 var clsFg = ${ccu.getCommCodeSelect("001")};
 var sysStatFg = ${ccu.getCommCodeSelect("005")};
 var areaCd = ${ccu.getCommCodeSelect("061")};
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20190114.04" charset="utf-8"></script>
 
 <%-- 매장 상세정보 --%>

@@ -43,25 +43,21 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
 
   // 복사할 환경목록 조회
   $scope.searchEnvList = function(){
-
     var params             = {};
     params.originalStoreCd = $("#originalStoreCd").val();
     params.targetStoreCd   = $("#targetStoreCd").val();
 
-    $scope._postJSONQuery.withOutPopUp( "/base/store/view/copyStoreEnv/getStoreEnvInfo.sb", params,
-      function(response){
+    // $scope._postJSONQuery.withOutPopUp( "/base/store/view/copyStoreEnv/getStoreEnvInfo.sb", params, function(response){
+    //     var data            = response.data.data;
+    //     var envList         = data.envList;
+    //     $scope.data = new wijmo.collections.CollectionView(envList);
+    // });
 
-        var data            = response.data.data;
-        var envList         = data.envList;
-
-        $scope.data = new wijmo.collections.CollectionView(envList);
-      });
+    $scope._inquirySub("/base/store/view/copyStoreEnv/getStoreEnvInfoList.sb", params, function() {}, false);
   };
 
   // 복사
   $scope.copy = function(){
-
-
     if( isEmptyObject($("#originalStoreCd").val()) ) {
       $scope._popMsg("기준매장을 선택해주세요.");
       return false;
@@ -146,4 +142,5 @@ console.log('storeParams',storeParams);
 
     $scope.copyStoreEnvLayer.hide();
   };
+
 }]);
