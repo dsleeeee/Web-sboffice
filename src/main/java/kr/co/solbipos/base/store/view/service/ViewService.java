@@ -48,4 +48,7 @@ public interface ViewService {
 
     /** 매장환경 복사 */
     int copyStoreEnv(CopyStoreEnvVO[] copyStoreEnvVOs, Map<String, Object> posParam, SessionInfoVO sessionInfoVO);
+
+    /** 매장환경 복사를 위한 정보 조회 */
+    List<DefaultMap<String>> getStoreEnvInfoList(CopyStoreEnvVO copyStoreEnvVO, SessionInfoVO sessionInfoVO);
 }

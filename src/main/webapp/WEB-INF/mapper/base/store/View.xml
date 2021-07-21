@@ -529,4 +529,20 @@
         }
     </select>
 
+    <!-- 매장환경 복사를 위한 정보 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreEnvInfoList" parameterType="copyStoreEnvVO" resultType="DefaultMap">
+        /* ViewMapper.getStoreEnvInfoList */
+        SELECT
+        tcn.NMCODE_CD,
+        tcn.NMCODE_NM
+        FROM TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tcn.NMCODE_GRP_CD = '101'
+        AND tcn.NMCODE_ITEM_1 = 'Y'
+    </select>
+
 </mapper>

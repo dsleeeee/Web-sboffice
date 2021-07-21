@@ -5,6 +5,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
@@ -189,23 +190,44 @@ public class ViewController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/copyStoreEnv/getStoreEnvInfo.sb", method = RequestMethod.POST)
+//    @RequestMapping(value = "/copyStoreEnv/getStoreEnvInfo.sb", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Result getStoreEnvInfo(CopyStoreEnvVO copyStoreEnvVO, HttpServletRequest request,
+//        HttpServletResponse response, Model model) {
+//
+//        LOGGER.info(copyStoreEnvVO.getProperties());
+//
+//        // 복사할 매장환경 목록 조회
+//        CommonCodeVO envVO = cmmCodeUtil.getCommCodeData("101");
+//
+//        Map<String, Object> resultMap = new HashMap<String, Object>();
+//
+//        resultMap.put("envList", envVO.getCodeList());
+//
+//        return returnJson(Status.OK, resultMap);
+//    }
+    /**
+     * 매장환경 복사를 위한 정보 조회
+     *
+     * @param copyStoreEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 07. 14.
+     */
+    @RequestMapping(value = "/copyStoreEnv/getStoreEnvInfoList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreEnvInfo( CopyStoreEnvVO copyStoreEnvVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+    public Result getStoreEnvInfoList(CopyStoreEnvVO copyStoreEnvVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
 
-        LOGGER.info(copyStoreEnvVO.getProperties());
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 복사할 매장환경 목록 조회
-        CommonCodeVO envVO = cmmCodeUtil.getCommCodeData("101");
+        List<DefaultMap<String>> result = viewService.getStoreEnvInfoList(copyStoreEnvVO, sessionInfoVO);
 
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-
-        resultMap.put("envList", envVO.getCodeList());
-
-        return returnJson(Status.OK, resultMap);
+        return ReturnUtil.returnListJson(Status.OK, result, copyStoreEnvVO);
     }
-
 
     /**
      * 매장환경 복사
