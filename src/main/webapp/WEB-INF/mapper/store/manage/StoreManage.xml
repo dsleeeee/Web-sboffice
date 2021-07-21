@@ -1922,7 +1922,10 @@
             #{regDt} AS REG_DT,
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
+            #{modId} AS MOD_ID,
+            tmpsp.STIN_SALE_UPRC,
+            tmpsp.DLVR_SALE_UPRC,
+            tmpsp.PACK_SALE_UPRC
             FROM TB_MS_PRODUCT_SALE_PRICE tmpsp,
             TB_MS_PRODUCT tmp
             WHERE 1=1
@@ -1955,7 +1958,10 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.STIN_SALE_UPRC,
+                A.DLVR_SALE_UPRC,
+                A.PACK_SALE_UPRC
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -1966,7 +1972,10 @@
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,
-                B.MOD_ID
+                B.MOD_ID,
+                B.STIN_SALE_UPRC,
+                B.DLVR_SALE_UPRC,
+                B.PACK_SALE_UPRC
             )
     </insert>
 
@@ -1991,7 +2000,10 @@
             #{regDt} AS REG_DT,
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
+            #{modId} AS MOD_ID,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
             FROM TB_HQ_PRODUCT_SALE_PRICE
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2020,7 +2032,10 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.STIN_SALE_UPRC,
+                A.DLVR_SALE_UPRC,
+                A.PACK_SALE_UPRC
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2031,7 +2046,10 @@
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,
-                B.MOD_ID
+                B.MOD_ID,
+                B.STIN_SALE_UPRC,
+                B.DLVR_SALE_UPRC,
+                B.PACK_SALE_UPRC
             )
     </insert>
 
