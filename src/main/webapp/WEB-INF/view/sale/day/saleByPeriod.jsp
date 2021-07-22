@@ -166,12 +166,6 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 매출 상세내역 (매출) 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/saleInfo/saleDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
