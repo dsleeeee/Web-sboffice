@@ -14,8 +14,8 @@
 var app = agrid.getApp();
 
 var regYn = [
-    {"name": "전체", "value": ""},
-    {"name": "등록", "value": "Y"},
+    /*{"name": "전체", "value": ""},
+    {"name": "등록", "value": "Y"},*/
     {"name": "미등록", "value": "N"}
 ];
 
@@ -70,6 +70,9 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
                         // 선택한 메뉴그룹코드 갖고있기
                         $("#hdStoreGroupCd").val(selectedRow.storeGroupCd);
 
+                        // 선택한 메뉴그룹 명시
+                        $("#lblMenuGroup").text("[" + selectedRow.storeGroupCd + "] " + selectedRow.storeGroupNm);
+
                         // 상품연결 grid 조회
                         $scope._broadcast('prodMappingCtrl');
 
@@ -114,6 +117,7 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
 
             // 선택한 매장타입 초기화
             $("#hdStoreTypeCd").val("");
+            $("#lblMenuGroup").text("");
 
             // 버튼 visible 셋팅 - 매장타입관리 grid 버튼은 보이고 나머지 grid 버튼은 숨길것.
             $("#btnAddMenuGroup").css("display", "");
@@ -394,7 +398,7 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
                 var col = s.columns[e.col];
 
                 // 체크박스
-                if (col.binding === "gChk" || col.binding === "saleUprc") {
+                if (col.binding === "gChk" || col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
                     var item = s.rows[e.row].dataItem;
 
                     // 이미 등록된 상품이면 체크박스와 가격입력 막기

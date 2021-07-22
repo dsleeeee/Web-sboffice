@@ -66,6 +66,10 @@ app.controller('storeTypeCtrl', ['$scope', '$http', '$timeout', function ($scope
 
                         // 선택한 매장타입코드 갖고있기
                         $("#hdStoreTypeCd").val(selectedRow.storeTypeCd);
+
+                        // 선택한 매장타입 명시
+                        $("#lblStoreType1").text("[" + selectedRow.storeTypeCd + "] " + selectedRow.storeTypeNm);
+                        $("#lblStoreType2").text("[" + selectedRow.storeTypeCd + "] " + selectedRow.storeTypeNm);
                         
                         // 매장연결, 메뉴그룹연결 grid 조회
                         $scope._broadcast('storeMappingCtrl');
@@ -108,6 +112,8 @@ app.controller('storeTypeCtrl', ['$scope', '$http', '$timeout', function ($scope
 
             // 선택한 매장타입 초기화
             $("#hdStoreTypeCd").val("");
+            $("#lblStoreType1").text("");
+            $("#lblStoreType2").text("");
 
             // 버튼 visible 셋팅 - 매장타입관리 grid 버튼은 보이고 나머지 grid 버튼은 숨길것.
             $("#btnAddStoreType").css("display", "");

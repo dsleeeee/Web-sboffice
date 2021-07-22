@@ -89,6 +89,9 @@ public class StoreTypeController {
         // 매장타입판매가설정(1107)
         model.addAttribute("storeTypeApplyEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1107"), "0"));
 
+        // 내점/배달/포장가격관리(0044)
+        model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+
         return "base/store/storeType/storeTypeTab";
     }
 
