@@ -426,7 +426,10 @@
                 thspgd.STORE_GROUP_CD,
                 thspgd.PROD_CD,
                 thspgd.SALE_UPRC,
-                thp.PROD_NM
+                thp.PROD_NM,
+                thspgd.STIN_SALE_UPRC,
+                thspgd.DLVR_SALE_UPRC,
+                thspgd.PACK_SALE_UPRC
           FROM TB_HQ_STORE_PROD_GROUP_DTL thspgd,
           	    TB_HQ_PRODUCT thp
          WHERE thspgd.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -462,6 +465,9 @@
         /* USE : StoreTypeMapper.updateProdMapping */
         UPDATE TB_HQ_STORE_PROD_GROUP_DTL
             SET SALE_UPRC = #{saleUprc},
+                 STIN_SALE_UPRC = #{stinSaleUprc},
+                 DLVR_SALE_UPRC = #{dlvrSaleUprc},
+                 PACK_SALE_UPRC = #{packSaleUprc},
                  MOD_DT = #{modDt},
                  MOD_ID = #{modId}
           WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -481,12 +487,18 @@
                 thp.PROD_NM,
                 NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                 thp.USE_YN,
-                (CASE WHEN thspgd.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN
+                (CASE WHEN thspgd.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN,
+                NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC, -- 내점가
+                NVL(thpsp.DLVR_SALE_UPRC, 0) AS DLVR_SALE_UPRC, -- 배달가
+                NVL(thpsp.PACK_SALE_UPRC, 0) AS PACK_SALE_UPRC  -- 포장가
           FROM TB_HQ_PRODUCT thp
           LEFT OUTER JOIN (
                                 SELECT HQ_OFFICE_CD,
                                         PROD_CD,
-                                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                                        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                                        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                                        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
                                   FROM TB_HQ_PRODUCT_SALE_PRICE
                                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                                   <![CDATA[
@@ -582,7 +594,10 @@
                         REG_DT,
                         REG_ID,
                         MOD_DT,
-                        MOD_ID
+                        MOD_ID,
+                        STIN_SALE_UPRC,
+                        DLVR_SALE_UPRC,
+                        PACK_SALE_UPRC
                     )
                     VALUES
                     (
@@ -596,7 +611,10 @@
                         #{regDt},
                         #{regId},
                         #{modDt},
-                        #{modId}
+                        #{modId},
+                        #{stinSaleUprc},
+                        #{dlvrSaleUprc},
+                        #{packSaleUprc}
                     )
     </insert>
 

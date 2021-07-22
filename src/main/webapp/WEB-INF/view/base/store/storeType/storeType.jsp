@@ -51,7 +51,7 @@
 
         <%-- left (매장타입관리-매장타입등록 grid) --%>
         <div class="wj-TblWrap mt20 mb20 w30 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:710px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh30"><s:message code='storeType.storeTypeManage' /></span>
                     <button class="btn_skyblue" id="btnAddStoreType" ng-click="addStoreType()">
@@ -91,13 +91,16 @@
         <%-- 매장타입관리-매장연결 grid --%>
         <div class="wj-TblWrap mt20 mb5 w50 fl" ng-controller="storeMappingCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:350px;">
+                <div class="ml5">
+                    <span class="bk"><s:message code='storeType.storeMapping' /></span>
+                </div>
                 <div class="updownSet oh mb10 pd5">
-                    <span class="fl bk lh30"><s:message code='storeType.storeMapping' /></span>
+                    <span class="fl bk lh30" id="lblStoreType1"></span>
                     <button class="btn_skyblue" id="btnDelStoreMapping" ng-click="delStoreMapping()">
                         <s:message code="cmm.del" />
                     </button>
                 </div>
-                <div class="wj-gridWrap" style="height:285px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:268px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -188,13 +191,16 @@
         <%-- 매장타입관리-메뉴그룹연결 grid --%>
         <div class="wj-TblWrap mt5 mb20 w50 fl" ng-controller="menuGroupMappingCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:350px;">
-                <div class="updownSet oh mb10 pd5">
-                <span class="fl bk lh30"><s:message code='storeType.menuGroupMapping' /></span>
-                <button class="btn_skyblue" id="btnDelMenuGroupMapping" ng-click="delMenuGroupMapping()">
-                    <s:message code="cmm.del" />
-                </button>
+                <div class="ml5">
+                    <span class="bk"><s:message code='storeType.menuGroupMapping' /></span>
                 </div>
-                <div class="wj-gridWrap" style="height:285px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="updownSet oh mb10 pd5">
+                    <span class="fl bk lh30" id="lblStoreType2"></span>
+                    <button class="btn_skyblue" id="btnDelMenuGroupMapping" ng-click="delMenuGroupMapping()">
+                        <s:message code="cmm.del" />
+                    </button>
+                </div>
+                <div class="wj-gridWrap" style="height:268px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -290,7 +296,7 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.09" charset="utf-8"></script>
 
 <%-- 매장타입 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeTypeApplyStore.jsp">

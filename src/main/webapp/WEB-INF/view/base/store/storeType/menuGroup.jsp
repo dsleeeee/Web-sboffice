@@ -48,7 +48,7 @@
 
         <%-- left (메뉴그룹관리-메뉴그룹등록 grid) --%>
         <div class="wj-TblWrap mt20 mb20 w30 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:530px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh30"><s:message code='storeType.menuGroupManage' /></span>
                     <button class="btn_skyblue" id="btnAddMenuGroup" ng-click="addMenuGroup()">
@@ -59,7 +59,7 @@
                     </button>
                 </div>
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
+                    <div class="wj-gridWrap" style="height:635px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -70,10 +70,10 @@
                                 item-formatter="_itemFormatter">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="storeType.code"/>" binding="storeGroupCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="storeType.menuGroupNm"/>" binding="storeGroupNm" width="150"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="65"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="remark" width="150"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storeType.code"/>" binding="storeGroupCd" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storeType.menuGroupNm"/>" binding="storeGroupNm" width="100"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="62"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="remark" width="100"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
@@ -88,9 +88,12 @@
 
         <%-- 메뉴그룹관리-상품연결 grid --%>
         <div class="wj-TblWrap mt20 mb5 w50 fl" ng-controller="prodMappingCtrl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:530px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
+                <div class="ml5">
+                    <span class="bk"><s:message code='storeType.prodMapping' /></span>
+                </div>
                 <div class="updownSet oh mb10 pd5">
-                    <span class="fl bk lh30"><s:message code='storeType.prodMapping' /></span>
+                    <span class="fl bk lh30" id="lblMenuGroup"></span>
                     <button class="btn_skyblue" id="btnDelProdMapping" ng-click="delProdMapping()">
                         <s:message code="cmm.del" />
                     </button>
@@ -98,7 +101,7 @@
                         <s:message code="cmm.save" />
                     </button>
                 </div>
-                <div class="wj-gridWrap" style="height:460px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:620px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -109,10 +112,13 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="75" <c:if test="${storeTypeApplyEnvstVal == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.stinSaleUprc"/>" binding="stinSaleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0' or subPriceFg == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0' or subPriceFg == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.packSaleUprc"/>" binding="packSaleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0' or subPriceFg == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -120,7 +126,7 @@
 
         <%-- 메뉴그룹관리-상품선택 grid --%>
         <div class="wj-TblWrap mt20 mb5 w50 fr" ng-controller="prodSelectCtrl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:530px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <table class="tblType01">
                     <colgroup>
                         <col class="w13" />
@@ -233,9 +239,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <th><s:message code="storeType.regYn" /></th><%--등록여부--%>
+                        <%--<th><s:message code="storeType.regYn" /></th>--%><%--등록여부--%>
+                        <td></td>
                         <td>
-                            <div class="sb-select">
+                            <div class="sb-select" style="display: none;">
                                 <wj-combo-box
                                         id="srchRegYn"
                                         items-source="_getComboData('srchRegYn')"
@@ -258,7 +265,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <div class="wj-gridWrap" style="height:310px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:430px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -269,12 +276,15 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="75" <c:if test="${storeTypeApplyEnvstVal == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="65" data-map="useYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.regYn"/>" binding="regYn" width="65" data-map="regYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.saleUprc"/>" binding="saleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.stinSaleUprc"/>" binding="stinSaleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0' or subPriceFg == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0' or subPriceFg == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.packSaleUprc"/>" binding="packSaleUprc" width="52" <c:if test="${storeTypeApplyEnvstVal == '0' or subPriceFg == '0'}">visible="false"</c:if> align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="60" data-map="useYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.regYn"/>" binding="regYn" width="60" data-map="regYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -290,7 +300,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20210701.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20210701.09" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
