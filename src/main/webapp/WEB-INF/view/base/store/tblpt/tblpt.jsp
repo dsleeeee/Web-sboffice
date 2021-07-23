@@ -473,7 +473,7 @@ button[class*="btn02"] {border: 0;}
         <span><a href="#" class="btn01 first01" id="tblptClr" ng-click="fnTblpt('tblptClr');"><s:message code="tblpt.clear" /></a></span>
     </div>
 <br><br><br><br><br>
-    <div style="margin-top:10px; text-align:center;display: ;">
+    <div style="margin-top:10px; text-align:center;display:none;">
         <button  class="btn02-gradient purple"   type='button' onclick="window.open('http://192.168.0.72:2020/login/login_check_tbl.jsp?AutoFg=M&user_id=a000005&user_pwd=&login_auto_serial=&appfg=web&tblfg=tblpt', 'popup', '');" style='width:200px; height:50px;'>
         창 오픈 샘플
         </button>
