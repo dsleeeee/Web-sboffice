@@ -162,8 +162,8 @@
 </div>
 
 <script type="text/javascript">
-  var clsFg = ${ccu.getCommCodeSelect("001")};
-  var sysStatFg = ${ccu.getCommCodeSelect("005")};
+  var clsFg = ${ccu.getCommCode("001")};
+  var sysStatFg = ${ccu.getCommCode("005")};
   var pAgencyCd = "${pAgencyCd}";
   var orgnFg = "${orgnFg}";
 </script>
