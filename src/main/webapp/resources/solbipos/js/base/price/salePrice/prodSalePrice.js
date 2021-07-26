@@ -84,19 +84,82 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
         // 체크박스
         if (col.binding === "gChk" || col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
           var item = s.rows[e.row].dataItem;
+            if(coercionFg === "0") {
+                // 값이 있으면 링크 효과
+                if (item[("prcCtrlFg")] === 'S') {
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                    item[("gChk")] = false; // 전체 체크시 오류
 
-          // 값이 있으면 링크 효과
-          if (item[("prcCtrlFg")] === 'S') {
-            wijmo.addClass(e.cell, 'wj-custom-readonly');
-            wijmo.setAttribute(e.cell, 'aria-readonly', true);
-            item[("gChk")] = false; // 전체 체크시 오류
-
-            // Attribute 의 변경사항을 적용.
-            e.cell.outerHTML = e.cell.outerHTML;
-          }
+                    // Attribute 의 변경사항을 적용.
+                    e.cell.outerHTML = e.cell.outerHTML;
+                }
+            }
         }
       }
     });
+
+      // 헤더머지
+      s.allowMerging = 2;
+      s.columnHeaders.rows.push(new wijmo.grid.Row());
+      // 첫째줄 헤더 생성
+      var dataItem                  = {};
+      dataItem.gChk                 = messages["cmm.chk"];
+      dataItem.storeCd              = messages["salePrice.storeCd"];
+      dataItem.storeNm              = messages["salePrice.storeNm"];
+      dataItem.hqSaleUprc           = messages["salePrice.salePrice"];
+      dataItem.saleUprcP            = messages["salePrice.salePrice"];
+      dataItem.saleUprc             = messages["salePrice.salePrice"];
+      dataItem.hqStinSaleUprc       = messages["salePrice.stinSaleUprc"];
+      dataItem.stinSaleUprcP        = messages["salePrice.stinSaleUprc"];
+      dataItem.stinSaleUprc         = messages["salePrice.stinSaleUprc"];
+      dataItem.hqDlvrSaleUprc       = messages["salePrice.dlvrSaleUprc"];
+      dataItem.dlvrSaleUprcP        = messages["salePrice.dlvrSaleUprc"];
+      dataItem.dlvrSaleUprc         = messages["salePrice.dlvrSaleUprc"];
+      dataItem.hqPackSaleUprc       = messages["salePrice.packSaleUprc"];
+      dataItem.packSaleUprcP        = messages["salePrice.packSaleUprc"];
+      dataItem.packSaleUprc         = messages["salePrice.packSaleUprc"];
+      dataItem.prcCtrlFg            = messages["salePrice.prcCtrlFg"];
+
+      s.columnHeaders.rows[0].dataItem = dataItem;
+
+      s.itemFormatter = function (panel, r, c, cell) {
+          if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+              //align in center horizontally and vertically
+              panel.rows[r].allowMerging    = true;
+              panel.columns[c].allowMerging = true;
+              wijmo.setCss(cell, {
+                  display    : 'table',
+                  tableLayout: 'fixed'
+              });
+              cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+              wijmo.setCss(cell.children[0], {
+                  display      : 'table-cell',
+                  verticalAlign: 'middle',
+                  textAlign    : 'center'
+              });
+          }
+          // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+          else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+              // GroupRow 인 경우에는 표시하지 않는다.
+              if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                  cell.textContent = '';
+              } else {
+                  if (!isEmpty(panel._rows[r]._data.rnum)) {
+                      cell.textContent = (panel._rows[r]._data.rnum).toString();
+                  } else {
+                      cell.textContent = (r + 1).toString();
+                  }
+              }
+          }
+          // readOnly 배경색 표시
+          else if (panel.cellType === wijmo.grid.CellType.Cell) {
+              var col = panel.columns[c];
+              if (col.isReadOnly) {
+                  wijmo.addClass(cell, 'wj-custom-readonly');
+              }
+          }
+      }
   };
 
   // 상품정보관리 그리드 조회
@@ -105,6 +168,15 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     $scope.searchSalePriceInfo();
     event.preventDefault();
   });
+
+    // 일괄변경 테이블 숨김/보임
+    $scope.changeShow = function(){
+        if( $("#tblProdChange").css("display") === 'none'){
+            $("#tblProdChange").show();
+        } else {
+            $("#tblProdChange").hide();
+        }
+    };
 
   // 상품별 판매가관리 목록 조회
   $scope.searchSalePriceInfo = function(){
@@ -443,11 +515,13 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
 
     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
       if ($scope.flex.collectionView.items[i].gChk) {
-        // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
-        if ($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
-          $scope._popMsg(messages["salePrice.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
-          return false;
-        }
+          if(coercionFg === "0") {
+              // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
+              if ($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
+                  $scope._popMsg(messages["salePrice.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
+                  return false;
+              }
+          }
       }
     }
 

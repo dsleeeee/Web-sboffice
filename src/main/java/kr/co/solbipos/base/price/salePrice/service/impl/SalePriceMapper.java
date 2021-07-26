@@ -46,4 +46,19 @@ public interface SalePriceMapper {
 
     /** 상품별 매장 판매가 조회 */
     List<DefaultMap<String>> getStoreSalePriceList(SalePriceVO salePriceVO);
+
+    /** 본사 판매가 조회 */
+    List<DefaultMap<String>> getHqSalePriceList(SalePriceVO salePriceVO);
+
+    /** 등록 판매가 조회(본사) */
+    int getRegistHqProdCount(SalePriceVO salePriceVO);
+
+    /** 본사 판매가 저장 */
+    int updateHqProdSalePriceHistory(SalePriceVO salePriceVO);
+
+    /** 본사 판매가 저장 */
+    int modifyHqProdSalePrice(SalePriceVO salePriceVO);
+
+    /** 매장 판매가 등록 */
+    String saveStoreSalePrice(SalePriceVO salePriceVO);
 }

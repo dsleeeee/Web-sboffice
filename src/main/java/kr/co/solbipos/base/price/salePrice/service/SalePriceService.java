@@ -34,5 +34,9 @@ public interface SalePriceService {
     /** 매장별 가격정보 조회 */
     List<DefaultMap<String>> getStoreSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
 
+    /** 본사 가격정보 조회 */
+    List<DefaultMap<String>> getHqSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
 
+    /** 본사 판매가 저장 */
+    int saveHqProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
 }

@@ -171,9 +171,10 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
           data.totTipAmt    = addComma(data.totTipAmt);
           // 반품영수증인 경우 원거래 영수증값 세팅
           if ($scope.saleYn === 'N') {
-            $scope.orgStoreCd  = data.orgBillNo.substr(0, 7);
-            $scope.orgSaleDate = data.orgBillNo.substr(7, 8);
-            $scope.orgPosNo    = data.orgBillNo.substr(15, 2);
+            storeCdSize = data.orgBillNo.length - 14; // 매장코드 자리수 7자리 고정 >> 7~20 가변으로 수정됨에 따라 변경
+            $scope.orgStoreCd  = data.orgBillNo.substr(0, storeCdSize);
+            $scope.orgSaleDate = data.orgBillNo.substr(-14, 8);
+            $scope.orgPosNo    = data.orgBillNo.substr(-6, 2);
             $scope.orgBillNo   = data.orgBillNo.substr(-4);
           }
 

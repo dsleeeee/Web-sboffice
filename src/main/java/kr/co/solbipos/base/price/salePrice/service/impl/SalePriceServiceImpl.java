@@ -9,7 +9,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.price.salePrice.service.SalePriceService;
 import kr.co.solbipos.base.price.salePrice.service.SalePriceVO;
-import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,5 +128,51 @@ public class SalePriceServiceImpl implements SalePriceService {
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return salePriceMapper.getStoreSalePriceList(salePriceVO);
+    }
+
+    @Override
+    public List<DefaultMap<String>> getHqSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
+
+        salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return salePriceMapper.getHqSalePriceList(salePriceVO);
+    }
+
+    @Override
+    public int saveHqProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDate = currentDateString();
+        String currentDt = currentDateTimeString();
+
+        for(SalePriceVO salePriceVO : salePriceVOs) {
+
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceVO.setStartDate(currentDate);
+            salePriceVO.setEndDate("99991231");
+            salePriceVO.setRegDt(currentDt);
+            salePriceVO.setRegId(sessionInfoVO.getUserId());
+            salePriceVO.setModDt(currentDt);
+            salePriceVO.setModId(sessionInfoVO.getUserId());
+
+            // 판매가 변경 히스토리 등록
+            int prodCnt = salePriceMapper.getRegistHqProdCount(salePriceVO);
+
+            if(prodCnt > 0){
+                result = salePriceMapper.updateHqProdSalePriceHistory(salePriceVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+            // todo 추후 최초 판매가도 히스토리 등록할 경우에 이 주석 해제하여 사용
+
+            // 매장 판매가 변경
+            result = salePriceMapper.modifyHqProdSalePrice(salePriceVO);
+
+            if(salePriceVO.getApplyFg().equals("true")){
+                salePriceVO.setWorkMode(WorkModeFg.MOD_PROD);
+                // 매장에 수정정보 내려줌
+                String storeSalePriceReulst = salePriceMapper.saveStoreSalePrice(salePriceVO);
+            }
+        }
+        return result;
     }
 }

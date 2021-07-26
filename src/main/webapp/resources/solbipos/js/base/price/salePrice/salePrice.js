@@ -23,16 +23,21 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.isProdTab = false;
   // 매장 탭
   $scope.isStoreTab = true;
+  // 본사 탭
+  $scope.isHqTab = true;
   // 탭변경
   $scope.changeTab = function(type){
 
     if ( type === 'P' ) {  // 상품별 판매가관리 탭
       $("#prodSalePrice").addClass("on");
       $("#storeSalePrice").removeClass("on");
+      $("#hqSalePrice").removeClass("on");
       $("#prodSalePriceArea").show();
       $("#storeSalePriceArea").hide();
+      $("#hqSalePriceArea").hide();
       $scope.isProdTab = false;
       $scope.isStoreTab = true;
+      $scope.isHqTab = true;
       // 속성 조회
       // $scope._broadcast("prodSalePriceCtrl");
 
@@ -43,10 +48,13 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $("#prodSalePrice").removeClass("on");
       $("#storeSalePrice").addClass("on");
+      $("#hqSalePrice").removeClass("on");
       $("#prodSalePriceArea").hide();
       $("#storeSalePriceArea").show();
+      $("#hqSalePriceArea").hide();
       $scope.isProdTab = true;
       $scope.isStoreTab = false;
+      $scope.isHqTab = true;
       // 선택그룹 조회
       // $scope._broadcast("storeSalePriceCtrl");
       // // 그리드 refresh

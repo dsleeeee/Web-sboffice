@@ -103,7 +103,7 @@
             ]]>
         </if>
         <if test='clsFg != null and clsFg != ""'>
-            AND tho.CLS_FG = #{clsFg}
+            AND tms.CLS_FG = #{clsFg}
         </if>
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}

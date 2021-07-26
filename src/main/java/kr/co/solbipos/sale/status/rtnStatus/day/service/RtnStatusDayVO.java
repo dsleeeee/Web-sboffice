@@ -46,6 +46,23 @@ public class RtnStatusDayVO extends PageVO {
 
 	/** 전체기간체크 */
 	private boolean chkDt;
+
+	/** 검색옵션 */
+	private String option1;
+	private String option2;
+
+	/** 결제수단컬럼 */
+	private String payCol;
+	/** 결제수단 array */
+	private String arrPayCol[];
+	/** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+	private String pivotPayCol;
+	/** 할인컬럼 */
+	private String dcCol;
+	/** 할인구분 array */
+	private String arrDcCol[];
+	/** 쿼리문의 PIVOT IN에 사용할 할인구분 컬럼 문자열 */
+	private String pivotDcCol;
     
     public String getStoreCd() {
 		return storeCd;
@@ -168,4 +185,68 @@ public class RtnStatusDayVO extends PageVO {
 	public boolean getChkDt() { return chkDt; }
 
 	public void setChkDt(boolean chkDt) { this.chkDt = chkDt; }
+
+	public String getOption1() {
+		return option1;
+	}
+
+	public void setOption1(String option1) {
+		this.option1 = option1;
+	}
+
+	public String getOption2() {
+		return option2;
+	}
+
+	public void setOption2(String option2) {
+		this.option2 = option2;
+	}
+
+	public String getPayCol() {
+		return payCol;
+	}
+
+	public void setPayCol(String payCol) {
+		this.payCol = payCol;
+	}
+
+	public String[] getArrPayCol() {
+		return arrPayCol;
+	}
+
+	public void setArrPayCol(String[] arrPayCol) {
+		this.arrPayCol = arrPayCol;
+	}
+
+	public String getPivotPayCol() {
+		return pivotPayCol;
+	}
+
+	public void setPivotPayCol(String pivotPayCol) {
+		this.pivotPayCol = pivotPayCol;
+	}
+
+	public String getDcCol() {
+		return dcCol;
+	}
+
+	public void setDcCol(String dcCol) {
+		this.dcCol = dcCol;
+	}
+
+	public String[] getArrDcCol() {
+		return arrDcCol;
+	}
+
+	public void setArrDcCol(String[] arrDcCol) {
+		this.arrDcCol = arrDcCol;
+	}
+
+	public String getPivotDcCol() {
+		return pivotDcCol;
+	}
+
+	public void setPivotDcCol(String pivotDcCol) {
+		this.pivotDcCol = pivotDcCol;
+	}
 }

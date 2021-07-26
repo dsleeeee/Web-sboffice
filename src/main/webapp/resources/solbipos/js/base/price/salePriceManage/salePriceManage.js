@@ -103,6 +103,80 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
                 }
             });
         }
+
+
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+        // 첫째줄 헤더 생성
+        var dataItem                  = {};
+        dataItem.gChk                 = messages["cmm.chk"];
+        dataItem.prodCd               = messages["salePrice.prodCd"];
+        dataItem.prodNm               = messages["salePrice.prodNm"];
+        dataItem.hqCostUprc           = messages["salePriceManage.hqCostUprc"];
+        dataItem.hqSplyUprc           = messages["salePriceManage.hqSplyUprc"];
+        dataItem.hqSaleUprc           = messages["salePrice.salePrice"];
+        dataItem.storeSaleUprc        = messages["salePrice.salePrice"];
+        dataItem.saleUprc             = messages["salePrice.salePrice"];
+        dataItem.hqStinSaleUprc       = messages["salePrice.stinSaleUprc"];
+        dataItem.storeStinSaleUprc    = messages["salePrice.stinSaleUprc"];
+        dataItem.stinSaleUprc         = messages["salePrice.stinSaleUprc"];
+        dataItem.hqDlvrSaleUprc       = messages["salePrice.dlvrSaleUprc"];
+        dataItem.storeDlvrSaleUprc    = messages["salePrice.dlvrSaleUprc"];
+        dataItem.dlvrSaleUprc         = messages["salePrice.dlvrSaleUprc"];
+        dataItem.hqPackSaleUprc       = messages["salePrice.packSaleUprc"];
+        dataItem.storePackSaleUprc    = messages["salePrice.packSaleUprc"];
+        dataItem.packSaleUprc         = messages["salePrice.packSaleUprc"];
+        dataItem.prcCtrlFg            = messages["salePriceManage.prcCtrlFg"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+    };
+
+    // 일괄변경 테이블 숨김/보임
+    $scope.changeShow = function(){
+        if( $("#tblChange").css("display") === 'none'){
+            $("#tblChange").show();
+        } else {
+            $("#tblChange").hide();
+        }
     };
 
     // 콤보박스 데이터 Set
