@@ -46,21 +46,16 @@ app.controller('memberVendorMappingCtrl', ['$scope', '$http', function ($scope, 
 
                 // 회원명,회원번호 클릭시 상세정보 조회
                 if ( col.binding === "membrNo" || col.binding === "membrNm") {
-                    $scope.setSelectedMember(s.rows[ht.row].dataItem);
-                    $scope._broadcast('memberBasicCtrl', s.rows[ht.row].dataItem);
+                    var selectedData = s.rows[ht.row].dataItem;
+
+                    var storeScope = agrid.getScope('memberCtrl');
+                    storeScope.setSelectedMember(selectedData);
+                    
                     $scope.memberRegistLayer.show(true);
                     event.preventDefault();
                 }
             }
         });
-    };
-
-    $scope.selectedMember;
-    $scope.setSelectedMember = function(data) {
-        $scope.selectedMember = data;
-    };
-    $scope.getSelectedMember = function(){
-        return $scope.selectedMember;
     };
 
     // 팝업 호출시 상세정보 조회
@@ -78,15 +73,5 @@ app.controller('memberVendorMappingCtrl', ['$scope', '$http', function ($scope, 
 
         $scope._inquirySub("/membr/info/view/view/getMemberVendorMappingList.sb", params, function() {}, false);
     };
-
-    // 화면 ready 된 후 설정
-    angular.element(document).ready(function () {
-        // 회원 등록 및 수정 팝업 핸들러 추가
-        // $scope.memberRegistLayer.shown.addHandler(function (s) {
-        //     setTimeout(function() {
-        //         $scope._broadcast('memberRegistCtrl', $scope.getSelectedMember());
-        //     }, 50)
-        // });
-    });
 
 }]);

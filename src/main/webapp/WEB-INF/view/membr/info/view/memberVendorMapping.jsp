@@ -103,10 +103,4 @@
     var useDataMap = ${ccu.getCommCodeExcpAll("067")}; <%--사용, 미사용--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberVendorMapping.js?ver=20200909.01" charset="utf-8"></script>
-
-<%-- 매장 등록/수정 --%>
-<%--<c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">--%>
-<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
-<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberVendorMapping.js?ver=20210726.02" charset="utf-8"></script>
