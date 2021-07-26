@@ -3528,6 +3528,7 @@
             TB_WB_POS_CONFG_XML B
             WHERE 1=1
             AND B.STORE_CD = #{copyStoreCd}
+            AND B.POS_NO = A.O_POS_NO
             AND B.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
         ) B
         ON  (
