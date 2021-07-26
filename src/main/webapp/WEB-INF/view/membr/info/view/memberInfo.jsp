@@ -404,10 +404,13 @@
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="deleteMember()">
             <s:message code="cmm.delete"/>
         </button>
-        <%-- 회원 거래처 매핑 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
-            <s:message code="regist.memberVendorMapping"/>
-        </button>
+        <%-- 본사(A0001, A0007)만 보이게 --%>
+        <c:if test="${ (orgnFg eq 'HQ' and hqOfficeCd eq 'A0001') or (orgnFg eq 'HQ' and hqOfficeCd eq 'A0007') }">
+            <%-- 회원 거래처 매핑 --%>
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
+                <s:message code="regist.memberVendorMapping"/>
+            </button>
+        </c:if>
         <%-- 회원 포인트 이관 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointMove()">
             <s:message code="regist.memberPointMove"/>
