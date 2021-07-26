@@ -19,6 +19,9 @@
             <button class="btn_blue fr" ng-click="_pageView('salePriceManageCtrl',1)">
                 <s:message code="cmm.search" />
             </button>
+            <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
+                <s:message code="salePrice.select.changeAll" />
+            </button>
         </div>
     </div>
     <table class="searchTbl">
@@ -62,10 +65,10 @@
         </tbody>
     </table>
 
-    <table class="searchTbl mt10">
+    <table class="searchTbl mt10" id="tblChange" style="display: none;">
         <colgroup>
-            <col class="w10" />
-            <col class="w90" />
+            <col class="w13" />
+            <col class="w87" />
         </colgroup>
         <tbody>
         <%--판매가--%>
@@ -75,7 +78,7 @@
             </th>
             <th class="oh gr">
                 <%-- 매장판매가/본사판매가 선택 --%>
-                <div class="sb-select fl w130 mr5">
+                <div class="sb-select fl w120px mr5">
                     <wj-combo-box
                             id="saleAmtOption"
                             ng-model="prodInfo.saleAmtOption"
@@ -97,7 +100,7 @@
                     <span>%</span>
                 </div>
                 <%-- 변경 단위 --%>
-                <div class="sb-select fl w130 mr5">
+                <div class="sb-select fl w120px mr5">
                     <wj-combo-box
                             id="changeUnit"
                             ng-model="prodInfo.changeUnit"
@@ -133,7 +136,7 @@
                     </th>
                     <th class="oh gr">
                         <%-- 매장판매가/본사판매가 선택 --%>
-                        <div class="sb-select fl w130 mr5">
+                        <div class="sb-select fl w120px mr5">
                             <wj-combo-box
                                     id="storeStinSaleUprcOption"
                                     ng-model="prodInfo.storeStinSaleUprcOption"
@@ -155,7 +158,7 @@
                             <span>%</span>
                         </div>
                         <%-- 변경 단위 --%>
-                        <div class="sb-select fl w130 mr5">
+                        <div class="sb-select fl w120px mr5">
                             <wj-combo-box
                                     id="stinSaleUprcChangeUnit"
                                     ng-model="prodInfo.stinSaleUprcChangeUnit"
@@ -190,7 +193,7 @@
                     </th>
                     <th class="oh gr">
                         <%-- 매장판매가/본사판매가 선택 --%>
-                        <div class="sb-select fl w130 mr5">
+                        <div class="sb-select fl w120px mr5">
                             <wj-combo-box
                                     id="storeDlvrSaleUprcOption"
                                     ng-model="prodInfo.storeDlvrSaleUprcOption"
@@ -212,7 +215,7 @@
                             <span>%</span>
                         </div>
                         <%-- 변경 단위 --%>
-                        <div class="sb-select fl w130 mr5">
+                        <div class="sb-select fl w120px mr5">
                             <wj-combo-box
                                     id="dlvrSaleUprcChangeUnit"
                                     ng-model="prodInfo.dlvrSaleUprcChangeUnit"
@@ -247,7 +250,7 @@
                     </th>
                     <th class="oh gr">
                         <%-- 매장판매가/본사판매가 선택 --%>
-                        <div class="sb-select fl w130 mr5">
+                        <div class="sb-select fl w120px mr5">
                             <wj-combo-box
                                     id="storePackSaleUprcOption"
                                     ng-model="prodInfo.storePackSaleUprcOption"
@@ -269,7 +272,7 @@
                             <span>%</span>
                         </div>
                         <%-- 변경 단위 --%>
-                        <div class="sb-select fl w130 mr5">
+                        <div class="sb-select fl w120px mr5">
                             <wj-combo-box
                                     id="packSaleUprcChangeUnit"
                                     ng-model="prodInfo.packSaleUprcChangeUnit"
@@ -300,7 +303,7 @@
         </c:if>
         <tr>
             <th colspan="2">
-                <p class="s12 bk mt10 lh20">
+                <p class="s12 bk lh20">
                     체크박스에서 선택된 항목만 일괄적용 됩니다.
                 </p>
             </th>
@@ -343,32 +346,32 @@
                 <wj-flex-grid-column header="<s:message code="salePriceManage.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.poUnitQty"/>" binding="poUnitQty" visible="false" ></wj-flex-grid-column>
                 <c:if test="${hqOfficeCd != '00000'}">
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="120" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="120" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="70" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="70" align="right"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="salePriceManage.storeSplyUprc"/>" binding="storeSplyUprc" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
                 <c:if test="${hqOfficeCd != '00000'}">
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.hqSaleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="120" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.hq"/>" binding="hqSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.storeSaleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="120" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="salePriceManage.saleUprc"/>" binding="saleUprc" width="120" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="salePriceManage.store"/>" binding="storeSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="salePriceManage.update"/>" binding="saleUprc" width="60" align="right"></wj-flex-grid-column>
 
                 <c:if test="${subPriceFg == '1'}">
                     <c:if test="${hqOfficeCd != '00000'}">
-                        <wj-flex-grid-column header="<s:message code="salePriceManage.hqStinSaleUprc"/>" binding="hqStinSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="salePriceManage.hq"/>" binding="hqStinSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.stinSaleUprcP"/>" binding="storeStinSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.chgStinSaleUprc"/>" binding="stinSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.store"/>" binding="storeStinSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.update"/>" binding="stinSaleUprc" width="60" align="right" max-length="10" ></wj-flex-grid-column>
                     <c:if test="${hqOfficeCd != '00000'}">
-                        <wj-flex-grid-column header="<s:message code="salePriceManage.hqDlvrSaleUprc"/>" binding="hqDlvrSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="salePriceManage.hq"/>" binding="hqDlvrSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.dlvrSaleUprcP"/>" binding="storeDlvrSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.chgDlvrSaleUprc"/>" binding="dlvrSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.store"/>" binding="storeDlvrSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.update"/>" binding="dlvrSaleUprc" width="60" align="right" max-length="10" ></wj-flex-grid-column>
                     <c:if test="${hqOfficeCd != '00000'}">
-                        <wj-flex-grid-column header="<s:message code="salePriceManage.hqPackSaleUprc"/>" binding="hqPackSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="salePriceManage.hq"/>" binding="hqPackSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.packSaleUprcP"/>" binding="storePackSaleUprc" width="120" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="salePriceManage.chgPackSaleUprc"/>" binding="packSaleUprc" width="120" align="right" max-length="10" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.store"/>" binding="storePackSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceManage.update"/>" binding="packSaleUprc" width="60" align="right" max-length="10" ></wj-flex-grid-column>
                 </c:if>
 
                 <c:if test="${hqOfficeCd != '00000'}">
@@ -397,7 +400,7 @@
     var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceManage/salePriceManage.js?ver=20210526.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceManage/salePriceManage.js?ver=20210526.09" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

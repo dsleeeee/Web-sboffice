@@ -5,16 +5,15 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
-<%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
 <c:set var="priceEnvstVal" value="${priceEnvstVal}" />
 
-<div class="subCon" id="storeSalePriceArea" ng-controller="storeSalePriceCtrl" style="display:none;">
+<div class="subCon" id="hqSalePriceArea" ng-controller="hqSalePriceCtrl">
   <%--searchTbl--%>
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl"><s:message code="salePrice.storeSalePrice" /></a>
+    <a href="#" class="open fl"><s:message code="salePrice.hqSalePrice" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('storeSalePriceCtrl', 1)">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('hqSalePriceCtrl', 1)">
         <s:message code="cmm.search" />
       </button>
       <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
@@ -32,16 +31,8 @@
     <tbody>
     <%-- 매장선택 --%>
     <tr>
-      <th><s:message code="salePrice.select.store" /></th>
-      <td>
-        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-          <jsp:param name="targetId" value="searchStore"/>
-        </jsp:include>
-        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-      </td>
       <th><s:message code="salePrice.select.prodClass" /></th>
-      <td>
+      <td colspan="3">
         <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w70" ng-click="popUpProdClass()" style="float: left;"
                placeholder="선택" readonly />
         <input type="hidden" id="searchProdClassCd" ng-model="prodClassCd" disabled/>
@@ -75,7 +66,7 @@
   <%--//searchTbl--%>
 
 
-  <table class="searchTbl mt10" id="tblStoreChange" style="display: none;">
+  <table class="searchTbl mt10" id="tblHqChange" style="display: none;">
     <colgroup>
       <col class="w13" />
       <col class="w87" />
@@ -322,34 +313,6 @@
     </tbody>
   </table>
 
-  <%--추후에 수불 화면 개발 시 재 오픈 : 2019-08-07 이다솜 --%>
-  <%--<table class="searchTbl mt10">
-    <colgroup>
-      <col class="w100" />
-    </colgroup>
-    <tbody>
-    <tr class="brt">
-      <th class="oh gr">
-        본사판매가
-        <span><input type="text" class="inSty2 w100px" ng-model="prodInfo.saleUprc" readonly/></span> 원
-        <span class="ml20 s12 lh30">입수</span>
-        <span><input type="text" class="inSty2 w100px" ng-model="prodInfo.poUnitQty" readonly/></span> 원
-        <span class="ml20 s12 lh30">대표공급가</span>
-        <span><input type="text" class="inSty2 w100px" ng-model="prodInfo.splyUprc" readonly/></span> 원
-        <span class="ml20 s12 lh30">본사원가</span>
-        <span><input type="text" class="inSty2 w100px" ng-model="prodInfo.costUprc" readonly/></span> 원
-        <p class="s12 bk mt10 lh20">
-          본사마진금액 = 매장공급가 – 본사원가<br />
-          본사마진율 = 본사마진금액 / 본사원가 * 100<br />
-          매장마진금액 = (매장판매가 * 입수) – 매장공급가<br />
-          매장마진율 = (매장마진금액 - 매장공급가) / (매장판매가 * 입수) * 100<br />
-          <b>가격통제가 본사인 상품만 수정 가능합니다.</b> <br />
-        </p>
-      </th>
-    </tr>
-    </tbody>
-  </table>--%>
-
   <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
@@ -364,14 +327,9 @@
             initialized="_initComboBox(s)">
     </wj-combo-box>
 
-    <%-- 엑셀 다운로드 //TODO --%>
-    <%--
-    <button class="btn_skyblue fr" id="excelBtn">
-      <s:message code="cmm.excel.down" />
-    </button>
-    --%>
     <%-- 저장 --%>
     <button class="btn_skyblue fr" ng-click="saveProdPrice()"><s:message code="cmm.save" /></button>
+    <span class="sb-radio fr mr10"><input type="checkbox" id="applyFg" ng-model="applyFg" checked /> 전매장적용</span>
   </div>
 
   <%--위즈모 테이블--%>
@@ -393,34 +351,23 @@
         <wj-flex-grid-column header="<s:message code="salePrice.poUnitQty"/>" binding="poUnitQty" visible="false" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.storeSplyUprc"/>" binding="storeSplyUprc" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hq"/>" binding="hqSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.store"/>" binding="storeSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.update"/>" binding="saleUprc" width="60" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginAmt"/>" binding="hqMarginAmt" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.hqMarginRate"/>" binding="hqMarginRate" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.storeMarginAmt"/>" binding="storeMarginAmt" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.storeMarginRate"/>" binding="storeMarginRate" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
 
         <c:if test="${subPriceFg == '1'}">
           <wj-flex-grid-column header="<s:message code="salePrice.hq"/>" binding="hqStinSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="salePrice.store"/>" binding="storeStinSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="salePrice.update"/>" binding="stinSaleUprc" width="60" align="right" max-length="10" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="salePrice.hq"/>" binding="hqDlvrSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="salePrice.store"/>" binding="storeDlvrSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="salePrice.update"/>" binding="dlvrSaleUprc" width="60" align="right" max-length="10" ></wj-flex-grid-column>
+         <wj-flex-grid-column header="<s:message code="salePrice.update"/>" binding="dlvrSaleUprc" width="60" align="right" max-length="10" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="salePrice.hq"/>" binding="hqPackSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="salePrice.store"/>" binding="storePackSaleUprc" width="60" is-read-only="true" align="right" max-length="10" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="salePrice.update"/>" binding="packSaleUprc" width="60" align="right" max-length="10" ></wj-flex-grid-column>
         </c:if>
 
         <wj-flex-grid-column header="<s:message code="salePriceManage.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
 
       </wj-flex-grid>
-      <%-- ColumnPicker 사용시 include --%>
-      <%--<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">--%>
-        <%--<jsp:param name="pickerTarget" value="storeSalePriceCtrl"/>--%>
-      <%--</jsp:include>--%>
     </div>
   </div>
   <%--//위즈모 테이블--%>
@@ -428,7 +375,7 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="storeSalePriceCtrlPager" data-size="10">
+    <ul id="hqSalePriceCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -443,7 +390,7 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20210526.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePrice.js?ver=20210526.08" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
