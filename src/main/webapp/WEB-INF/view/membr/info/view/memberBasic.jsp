@@ -217,17 +217,20 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <%-- 거래처 매핑코드 --%>
-                    <th><s:message code="regist.membr.mappingCd" /></th>
-                    <td>
-                        <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
-                        <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />
-                        <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />
-                    </td>
-                    <th></th>
-                    <td></td>
-                </tr>
+                <%-- 본사(A0001, A0007)만 보이게 --%>
+                <c:if test="${ (orgnFg eq 'HQ' and hqOfficeCd eq 'A0001') or (orgnFg eq 'HQ' and hqOfficeCd eq 'A0007') }">
+                    <tr>
+                        <%-- 거래처 매핑코드 --%>
+                        <th><s:message code="regist.membr.mappingCd" /></th>
+                        <td>
+                            <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
+                            <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />
+                            <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />
+                        </td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                </c:if>
                 <tr>
                     <%-- E-mail --%>
                     <th><s:message code="regist.email"/></th>
