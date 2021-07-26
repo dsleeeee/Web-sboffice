@@ -29,4 +29,17 @@ public interface RtnStatusDayService {
     
     /** 반품현황 - 포스별 엑셀 전체 상세 리스트 조회 */
 	List<DefaultMap<String>>getRtnStatusPosDtlExcelList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO);
+
+	/** 영수증별 상세 - 결제수단 컬럼 리스트 조회 */
+	List<DefaultMap<String>> getPayColAddList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO);
+
+	/** 영수증별 상세 - 할인 컬럼 리스트 조회 */
+	List<DefaultMap<String>> getDcColList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO);
+
+	/** 반품현황 - 객수 컬럼 리스트 조회 */
+	List<DefaultMap<String>> getGuestColList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO);
+
+	/** 반품현황 - 영수증별 리스트 조회 */
+	List<DefaultMap<String>> getRtnstatusBillList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO);
+
 }

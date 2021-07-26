@@ -52,7 +52,7 @@ public class RtnStatusDayController {
 
 
     /**
-     * 코너별매출 일자별 - 페이지 이동
+     * 반품현황 일자별 - 페이지 이동
      * @param   request
      * @param   response
      * @param   model
@@ -62,16 +62,52 @@ public class RtnStatusDayController {
      */
     @RequestMapping(value = "/rtnStatus/view.sb", method = RequestMethod.GET)
     public String rtnstatusView(HttpServletRequest request, HttpServletResponse response, Model model) {
+        RtnStatusDayVO rtnStatusDayVO = new RtnStatusDayVO();
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 결제수단 조회
+        List<DefaultMap<String>> payColList = rtnStatusDayService.getPayColAddList(rtnStatusDayVO, sessionInfoVO);
+
+        // 결제수단 코드를 , 로 연결하는 문자열 생성
+        String payCol = "";
+        for(int i=0; i < payColList.size(); i++) {
+            payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
+        }
+        model.addAttribute("payColList", payColList);
+        model.addAttribute("payCol", payCol);
+
+        // 할인구분 조회
+        List<DefaultMap<String>> dcColList = rtnStatusDayService.getDcColList(rtnStatusDayVO, sessionInfoVO);
+
+        // 할인구분 코드를 , 로 연결하는 문자열 생성
+        String dcCol = "";
+        for(int i=0; i < dcColList.size(); i++) {
+            dcCol += (dcCol.equals("") ? "" : ",") + dcColList.get(i).getStr("dcCd");
+        }
+        model.addAttribute("dcColList", dcColList);
+        model.addAttribute("dcCol", dcCol);
+
+        // 객수 조회
+        List<DefaultMap<String>> guestColList = rtnStatusDayService.getGuestColList(rtnStatusDayVO, sessionInfoVO);
+
+        // 객수 코드를 , 로 연결하는 문자열 생성
+        String guestCol = "";
+        for(int i=0; i < guestColList.size(); i++) {
+            guestCol += (guestCol.equals("") ? "" : ",") + guestColList.get(i).getStr("guestCd");
+        }
+        model.addAttribute("guestColList", guestColList);
+        model.addAttribute("guestCol", guestCol);
+
         return "sale/status/rtnStatus/rtnStatusSale";
     }
 
 
     /**
-     * 코너별매출 일자별 - 리스트 조회
+     * 반품현황 일자별 - 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   rtnStatusDayVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -88,11 +124,11 @@ public class RtnStatusDayController {
     }
 
     /**
-     * 코너별매출 일자별 - 리스트 조회
+     * 반품현황 일자별 - 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   rtnStatusDayVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -109,11 +145,11 @@ public class RtnStatusDayController {
     }
     
     /**
-     * 코너별매출 일자별 - 리스트 조회
+     * 반품현황 일자별 - 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   rtnStatusDayVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -174,11 +210,11 @@ public class RtnStatusDayController {
     }
 
     /**
-     * 코너별매출 일자별 - 엑셀 전체 리스트 조회
+     * 반품현황 일자별 - 엑셀 전체 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   rtnStatusDayVO
      * @return  String
      * @author  박정은
      * @since   2020. 04. 22.
@@ -195,11 +231,11 @@ public class RtnStatusDayController {
     }
     
     /**
-     * 코너별매출 일자별 - 엑셀 전체 리스트 조회
+     * 반품현황 일자별 - 엑셀 전체 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   rtnStatusDayVO
      * @return  String
      * @author  박정은
      * @since   2020. 04. 22.
@@ -216,11 +252,11 @@ public class RtnStatusDayController {
     }
     
     /**
-     * 코너별매출 일자별 - 엑셀 전체 리스트 조회
+     * 반품현황 일자별 - 엑셀 전체 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   rtnStatusDayVO
      * @return  String
      * @author  박정은
      * @since   2020. 04. 22.
@@ -233,6 +269,27 @@ public class RtnStatusDayController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = rtnStatusDayService.getRtnStatusPosDtlExcelList(rtnStatusDayVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
+    }
+
+    /**
+     * 반품현황 영수증별 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   rtnStatusDayVO
+     * @return  String
+     * @author  권지현
+     * @since   2021.07.22
+     */
+    @RequestMapping(value = "/bill/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRtnstatusBillList(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, RtnStatusDayVO rtnStatusDayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = rtnStatusDayService.getRtnstatusBillList(rtnStatusDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
     }
 

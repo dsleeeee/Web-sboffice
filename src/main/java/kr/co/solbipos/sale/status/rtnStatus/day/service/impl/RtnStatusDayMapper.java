@@ -34,4 +34,16 @@ public interface RtnStatusDayMapper {
 
 	/** 반품현황 - 포스별 전체 엑셀 상세 리스트 조회 */
 	List<DefaultMap<String>> getRtnStatusPosDtlExcelList(RtnStatusDayVO rtnStatusDayVO);
+
+	/** 반품현황 - 결제수단 컬럼 리스트 조회 */
+	List<DefaultMap<String>> getPayColAddList(RtnStatusDayVO rtnStatusDayVO);
+
+	/** 반품현황 - 할인 컬럼 리스트 조회 */
+	List<DefaultMap<String>> getDcColList(RtnStatusDayVO rtnStatusDayVO);
+
+	/** 반품현황 - 객수 컬럼 리스트 조회 */
+	List<DefaultMap<String>> getGuestColList(RtnStatusDayVO rtnStatusDayVO);
+
+	/** 반품현황 - 영수증별 리스트 조회 */
+	List<DefaultMap<String>> getRtnstatusBillList(RtnStatusDayVO rtnStatusDayVO);
 }
