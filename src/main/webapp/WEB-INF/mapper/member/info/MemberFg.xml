@@ -56,16 +56,16 @@
                    AND tmmc.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
                    AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
                 <if test='membrNo != null and membrNo != ""'>
-                   AND tmmps.MEMBR_NO = #{membrNo}
+                    AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM = #{membrNm}
+                    AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
@@ -101,16 +101,16 @@
                    AND tmm.MEMBR_NO = tmmps.MEMBR_NO
                    AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
                 <if test='membrNo != null and membrNo != ""'>
-                   AND tmmps.MEMBR_NO = #{membrNo}
+                   AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM = #{membrNm}
+                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -148,16 +148,16 @@
                                                            WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
                                                              AND USE_YN = 'Y')
                 <if test='membrNo != null and membrNo != ""'>
-                   AND tmm.MEMBR_NO = #{membrNo}
+                   AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM = #{membrNm}
+                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
@@ -202,16 +202,16 @@
                                                              AND STORE_CD = #{storeCd}
                                                              AND USE_YN = 'Y')
                 <if test='membrNo != null and membrNo != ""'>
-                   AND tmm.MEMBR_NO = #{membrNo}
+                   AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM = #{membrNm}
+                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -249,16 +249,16 @@
                AND tmmc.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
                AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
             <if test='membrNo != null and membrNo != ""'>
-               AND tmmps.MEMBR_NO = #{membrNo}
+               AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
             </if>
             <if test='membrNm != null and membrNm != ""'>
-               AND tmm.MEMBR_NM = #{membrNm}
+               AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
             </if>
             <if test='membrClassCd != null and membrClassCd != ""'>
                AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
             </if>
             <if test='telNo != null and telNo != ""'>
-               AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+               AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
             </if>
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                AND tms.STORE_CD IN
@@ -295,16 +295,16 @@
                    AND tmmc.MEMBR_ORGN_CD = tmmps.MEMBR_ORGN_CD
                    AND tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
                 <if test='membrNo != null and membrNo != ""'>
-                   AND tmmps.MEMBR_NO = #{membrNo}
+                   AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM = #{membrNm}
+                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -342,16 +342,16 @@
                                                            WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
                                                              AND USE_YN = 'Y')
                 <if test='membrNo != null and membrNo != ""'>
-                   AND tmm.MEMBR_NO = #{membrNo}
+                   AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM = #{membrNm}
+                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
@@ -396,16 +396,16 @@
                                                              AND STORE_CD = #{storeCd}
                                                              AND USE_YN = 'Y')
                 <if test='membrNo != null and membrNo != ""'>
-                   AND tmm.MEMBR_NO = #{membrNo}
+                   AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM = #{membrNm}
+                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO = REPLACE(#{telNo}, '-','')
+                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
