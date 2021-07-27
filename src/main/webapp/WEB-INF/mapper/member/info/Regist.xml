@@ -693,11 +693,10 @@
         /* RegistMapper.registMemberPrepaid */
         MERGE INTO TB_MB_MEMBER_PREPAID_STORE tmmps
         USING DUAL
-           ON (tmmps.MEMBR_ORGN_CD = #{membrOrgnCd} AND tmmps.MEMBR_NO = #{membrNo})
+           ON (tmmps.MEMBR_ORGN_CD = #{membrOrgnCd} AND tmmps.MEMBR_NO = #{membrNo} AND tmmps.STORE_CD = #{regStoreCd})
          WHEN MATCHED THEN
        UPDATE
-          SET tmmps.STORE_CD = #{regStoreCd},
-              tmmps.USE_YN = #{useYn},
+          SET tmmps.USE_YN = #{useYn},
               tmmps.MOD_DT = #{modDt},
               tmmps.MOD_ID = #{modId}
          WHEN NOT MATCHED THEN
