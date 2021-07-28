@@ -28,6 +28,7 @@
                 item-formatter="_itemFormatter">
 
                 <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="prodExcelUpload.brandNm"/>" binding="hqBrandCd" width="85" align="center" <c:if test="${brandUseFg == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
                 <c:if test="${prodNoEnvFg == 'MANUAL'}">
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodCd"/>" binding="prodCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
@@ -69,6 +70,8 @@
 
     <%-- 내점/배달/포장 가격관리 사용여부 --%>
     var subPriceFg = "${subPriceFg}";
+    <%-- (상품관리)브랜드사용여부 --%>
+    var brandUseFg = "${brandUseFg}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20210421.02" charset="utf-8"></script>

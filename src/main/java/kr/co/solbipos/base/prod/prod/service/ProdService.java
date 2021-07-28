@@ -91,4 +91,6 @@ public interface ProdService {
     /** 프린트 연결 */
     int kitchenprintLink(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
 
+    /** 브랜드 리스트 조회(선택 콤보박스용) */
+    List<DefaultMap<Object>> getBrandList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

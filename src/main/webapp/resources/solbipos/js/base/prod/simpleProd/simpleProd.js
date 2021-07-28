@@ -50,6 +50,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.brandDataMap = new wijmo.grid.DataMap(brandList, 'value', 'name'); // 브랜드
         $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFgData, 'value', 'name'); // 상품유형구분
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
@@ -92,6 +93,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         // 파라미터 설정
         var params = {};
         params.result = "검증전";
+        params.hqBrandCd = brandList[0].value;
         if($scope.prodNoEnvFg === "MANUAL") {
             params.prodCd = "";
         }
@@ -159,6 +161,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.clear = function() {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             $scope.flex.collectionView.items[i].result = "검증전";
+            $scope.flex.collectionView.items[i].hqBrandCd = brandList[0].value;
             if($scope.prodNoEnvFg === "MANUAL") {
                 $scope.flex.collectionView.items[i].prodCd = "";
             }

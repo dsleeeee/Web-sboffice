@@ -13,7 +13,6 @@
 
 <div class="subCon" ng-controller="hqBrandManageCtrl">
 
-
   <div>
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
@@ -86,7 +85,7 @@
 
   <%-- 위즈모 테이블 --%>
   <div class="wj-TblWrap mt10">
-    <div id="thegrid" class="wj-gridWrap"  style="height:300px;">
+    <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"
@@ -101,24 +100,24 @@
         <wj-flex-grid-column header="<s:message code="hqBrand.storeCd"/>" binding="storeCd" width="0" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqBrand.hqOfficeNm"/>" binding="hqOfficeNm" width="0"visible="false"></wj-flex-grid-column>
         <c:if test="${orgnFg == 'HQ'}">
-          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandCd"/>" binding="hqBrandCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandNm"/>" binding="hqBrandNm" width="*" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandCd"/>" binding="hqBrandCd" width="200" align="center" max-length="7"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandNm"/>" binding="hqBrandNm" width="500" align="center" max-length="10"></wj-flex-grid-column>
         </c:if>
         <c:if test="${orgnFg == 'STORE'}">
-          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandCd"/>" binding="msBrandCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandNm"/>" binding="msBrandNm" width="*" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandCd"/>" binding="msBrandCd" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="hqBrand.hqBrandNm"/>" binding="msBrandNm" width="500" align="center" max-length="10"></wj-flex-grid-column>
         </c:if>
-        <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="*" data-map="useYnDataMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="200" data-map="useYnDataMap" align="center"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
 
   <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <%-- id --%>
+  <%--<div class="pageNum mt20">
+    &lt;%&ndash; id &ndash;%&gt;
     <ul id="hqBrandManageCtrlPager" data-size="10">
     </ul>
-  </div>
+  </div>--%>
 </div>
 
 <script>
@@ -128,4 +127,4 @@
   var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/hq/hqBrand/hqBrandManage.js?ver=20180815" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/hq/hqBrand/hqBrandManage.js?ver=20210727.01" charset="utf-8"></script>

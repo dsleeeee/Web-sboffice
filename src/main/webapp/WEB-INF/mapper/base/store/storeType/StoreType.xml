@@ -637,6 +637,7 @@
                         HQ_BRAND_NM AS NAME
                   FROM TB_HQ_BRAND
                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND USE_YN = 'Y'
                  ORDER
                     BY VALUE NULLS FIRST
             </when>
@@ -650,6 +651,7 @@
                         MS_BRAND_NM AS NAME
                 FROM TB_MS_BRAND
                 WHERE STORE_CD = #{storeCd}
+                  AND USE_YN = 'Y'
                 ORDER
                 BY VALUE NULLS FIRST
             </when>

@@ -23,16 +23,23 @@
                     <tbody>
                     <tr>
                         <%-- 상품이미지 //TODO --%>
-                        <th rowspan="3"><s:message code="prod"/><br/><s:message code="image"/>
+                        <th rowspan="4"><s:message code="prod"/><br/><s:message code="image"/>
                         </th>
-                        <td rowspan="3">
+                        <td rowspan="4">
                             <%--등록한 상품이 없는 경우--%>
                             <span class="goodsNo" id="goodsNoProdDetail"><s:message code="image"/> 등록 준비중 입니다</span>
                             <%--등록한 상품이 있는 경우--%>
                             <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
                             <span class="goodsYes" id="goodsYesProdDetail"><img id="imgProdImageProdDetail" /></span>
                         </td>
-                        <%--단가구분 //TODO --%>
+                        <%-- 브랜드명 --%>
+                        <th <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if> ><s:message code="prod.brandNm"/></th>
+                        <td id="_hqBrandNm" <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if> >
+                            {{prodDetail.hqBrandNm}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <%--상품유형 //TODO --%>
                         <th>
                             <s:message code="prod.prodTypeFg"/>
                         </th>

@@ -27,10 +27,10 @@
             <tbody>
             <tr>
               <%-- 상품이미지 //TODO --%>
-              <th rowspan="3"><s:message code="prod"/><br/><s:message code="image"/>
+              <th rowspan="4"><s:message code="prod"/><br/><s:message code="image"/>
                 <br/>
               </th>
-              <td rowspan="3">
+              <td rowspan="4">
                 <%--등록한 상품이 없는 경우--%>
                 <span class="goodsNo" id="goodsNo"><s:message code="image"/> 등록 준비중 입니다</span>
                 <%--등록한 상품이 있는 경우--%>
@@ -40,23 +40,40 @@
                 <input type="file" id="file" name="file" accept="image/x-png, .jpg" onchange="angular.element(this).scope().changeProdImage(this)"/>
                 <%--삭제--%>
                 <a id="btnDelProdImage" href="#" class="btn_grayS mt5 fr" ng-click="delProdImage()"><s:message code="cmm.delete" /></a>
-              </td>
+               </td>
+               <%-- 브랜드명 --%>
+               <th <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if> ><s:message code="prod.brandNm"/></th>
+               <td <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if>>
+                  <div class="sb-select">
+                    <wj-combo-box
+                          id="hqBrandCd"
+                          ng-model="prodModifyInfo.hqBrandCd"
+                          items-source="_getComboData('hqBrandCd')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="hqBrandCdCombo">
+                    </wj-combo-box>
+                  </div>
+               </td>
+            </tr>
+            <tr>
               <%--상품유형 //TODO --%>
               <th><s:message code="prod.prodTypeFg"/></th>
               <td>
                 <div class="sb-select">
                   <wj-combo-box id="_prodTypeFg" name="prodTypeFg"
-                    ng-model="prodModifyInfo.prodTypeFg"
-                    items-source="_getComboData('prodTypeFgComboData')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)"
-                    required
-                    popover-enable="myForm.prodTypeFg.$invalid"
-                    popover-placement="bottom-left"
-                    popover-trigger="'mouseenter'"
-                    uib-popover="<s:message code="prod.prodTypeFg" />은(는) 필수 입력항목 입니다.">
+                                ng-model="prodModifyInfo.prodTypeFg"
+                                items-source="_getComboData('prodTypeFgComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                required
+                                popover-enable="myForm.prodTypeFg.$invalid"
+                                popover-placement="bottom-left"
+                                popover-trigger="'mouseenter'"
+                                uib-popover="<s:message code="prod.prodTypeFg" />은(는) 필수 입력항목 입니다.">
                   </wj-combo-box>
                 </div>
               </td>
@@ -713,7 +730,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210707.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210707.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -30,7 +30,7 @@
                 thp.PROD_CD,
                 thp.PROD_NM,
                 thp.HQ_BRAND_CD,
-                thb.HQ_BRAND_NM,
+                thb.HQ_BRAND_NM AS HQ_BRAND_NM,
                 thp.PROD_CLASS_CD,
                 ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                 NVL(thp.COST_UPRC, 0) COST_UPRC,
@@ -117,7 +117,7 @@
                 tmp.PROD_NM,
                 tms.HQ_OFFICE_CD,
                 tmp.HQ_BRAND_CD,
-                thb.HQ_BRAND_NM,
+                tmb.MS_BRAND_NM AS HQ_BRAND_NM,
                 tmp.PROD_CLASS_CD,
                 ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                 NVL(tmp.COST_UPRC, 0) COST_UPRC,
@@ -154,9 +154,9 @@
                 AND tmp.PROD_CD = thpsp.PROD_CD
                 INNER JOIN TB_MS_STORE tms ON
                 tms.STORE_CD  = tmp.STORE_CD
-                LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-                AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
+                LEFT OUTER JOIN TB_MS_BRAND tmb ON
+                tmb.STORE_CD = tmp.STORE_CD
+                AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
                 tmpb.STORE_CD = tmp.STORE_CD
                 AND tmpb.PROD_CD = tmp.PROD_CD
@@ -191,6 +191,9 @@
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
                 </if>
+                <if test="hqBrandNm != null and hqBrandNm != ''">
+                    AND tmb.MS_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
+                </if>
                 ORDER BY tmp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -212,6 +215,8 @@
                 SELECT
                 thp.PROD_CD,
                 thp.PROD_NM,
+                thp.HQ_BRAND_CD,
+                thb.HQ_BRAND_NM AS HQ_BRAND_NM,
                 thp.PROD_CLASS_CD,
                 ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                 NVL(thp.COST_UPRC, 0) COST_UPRC,
@@ -288,6 +293,8 @@
                 SELECT
                 tmp.PROD_CD,
                 tmp.PROD_NM,
+                tmp.HQ_BRAND_CD,
+                tmb.MS_BRAND_NM AS HQ_BRAND_NM,
                 tmp.PROD_CLASS_CD,
                 ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                 NVL(tmp.COST_UPRC, 0) COST_UPRC,
@@ -318,9 +325,9 @@
                 AND tmp.PROD_CD = thpsp.PROD_CD
                 INNER JOIN TB_MS_STORE tms ON
                 tms.STORE_CD  = tmp.STORE_CD
-                LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-                AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
+                LEFT OUTER JOIN TB_MS_BRAND tmb ON
+                tmb.STORE_CD = tmp.STORE_CD
+                AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
                 tmpb.STORE_CD = tmp.STORE_CD
                 AND tmpb.PROD_CD = tmp.PROD_CD
@@ -376,6 +383,8 @@
                 thp.HQ_OFFICE_CD,       -- 본사코드
                 thp.PROD_CD,            -- 상품코드
                 thp.PROD_NM,            -- 상품명
+                thp.HQ_BRAND_CD,        -- 브랜드명
+                thb.HQ_BRAND_NM AS HQ_BRAND_NM,
                 thp.PROD_CLASS_CD,      -- 상품분류코드
                 ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
                 ( SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS BAR_CD,
@@ -420,6 +429,9 @@
                 thp.MAP_PROD_CD
                 FROM
                 TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
                 LEFT OUTER JOIN (
                 SELECT
                 HQ_OFFICE_CD,
@@ -477,6 +489,8 @@
                 tmp.STORE_CD,           -- 매장코드
                 tmp.PROD_CD,            -- 상품코드
                 tmp.PROD_NM,            -- 상품명
+                tmp.HQ_BRAND_CD,        -- 브랜드명
+                tmb.MS_BRAND_NM AS HQ_BRAND_NM,
                 tmp.PROD_CLASS_CD,      -- 상품분류코드
                 ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
                 ( SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS BAR_CD,
@@ -521,6 +535,9 @@
                 tmp.MAP_PROD_CD
                 FROM
                 TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN TB_MS_BRAND tmb ON
+                tmb.STORE_CD = tmp.STORE_CD
+                AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
                 LEFT OUTER JOIN (
                 SELECT
                 STORE_CD,
@@ -684,6 +701,7 @@
                 UPDATE
                 SET
                 PROD_NM = #{prodNm},
+                HQ_BRAND_CD = #{hqBrandCd},
                 PROD_CLASS_CD  = #{prodClassCd},
                 CORNR_CD = #{cornrCd},
                 ORGPLCE_CD = #{orgplceCd},
@@ -723,6 +741,7 @@
                 HQ_OFFICE_CD,
                 PROD_CD,
                 PROD_NM,
+                HQ_BRAND_CD,
                 PROD_CLASS_CD,
                 CORNR_CD,
                 ORGPLCE_CD,
@@ -762,6 +781,7 @@
                 #{hqOfficeCd},
                 #{prodCd},
                 #{prodNm},
+                #{hqBrandCd},
                 #{prodClassCd},
                 '00',
                 #{orgplceCd},
@@ -812,6 +832,7 @@
                 UPDATE
                 SET
                 PROD_NM = #{prodNm},
+                HQ_BRAND_CD = #{hqBrandCd},
                 PROD_CLASS_CD  = #{prodClassCd},
                 CORNR_CD = #{cornrCd},
                 ORGPLCE_CD = #{orgplceCd},
@@ -851,6 +872,7 @@
                 STORE_CD,
                 PROD_CD,
                 PROD_NM,
+                HQ_BRAND_CD,
                 PROD_CLASS_CD,
                 CORNR_CD,
                 ORGPLCE_CD,
@@ -891,6 +913,7 @@
                 #{storeCd},
                 #{prodCd},
                 #{prodNm},
+                #{hqBrandCd},
                 #{prodClassCd},
                 '00',
                 #{orgplceCd},
@@ -3417,4 +3440,36 @@
                #{modId}
            )
     </insert>
+
+    <!-- 브랜드 리스트 조회(선택 콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        PARAM    : prodVO
+        COMMENTS : 상품등록시 선택할 브랜드 목록을 가져온다.
+    -->
+    <select id="getBrandList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getBrandList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT HQ_BRAND_CD AS VALUE,
+                        HQ_BRAND_NM AS NAME
+                  FROM TB_HQ_BRAND
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND USE_YN = 'Y'
+                 ORDER
+                    BY HQ_BRAND_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT MS_BRAND_CD AS VALUE,
+                        MS_BRAND_NM AS NAME
+                  FROM TB_MS_BRAND
+                 WHERE STORE_CD = #{storeCd}
+                   AND USE_YN = 'Y'
+                 ORDER
+                    BY MS_BRAND_CD
+            </when>
+        </choose>
+    </select>
 </mapper>

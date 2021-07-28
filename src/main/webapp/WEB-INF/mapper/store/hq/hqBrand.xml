@@ -19,7 +19,6 @@
   -->
   <select id="getHqBrandlist" parameterType="DefaultMap" resultType="DefaultMap">
     /* USE : HqBrandMapper.getHqBrandlist */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
     <![CDATA[
     SELECT HQ_OFFICE_CD,
            HQ_BRAND_CD,
@@ -30,7 +29,6 @@
            MOD_DT,
            MOD_ID
      ]]>
-     <include refid="CmmSQL.PagingTemplateCount"/>
      <![CDATA[
       FROM TB_HQ_BRAND
     ]]>
@@ -45,7 +43,6 @@
        AND USE_YN = #{useYn}
     </if>
      ORDER BY REG_DT, HQ_OFFICE_CD, HQ_BRAND_CD ASC
-     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
     <!-- 매장 브랜드목록 조회 -->
@@ -55,21 +52,19 @@
     -->
     <select id="getMsBrandlist" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : HqBrandMapper.getMsBrandlist */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-    SELECT STORE_CD,
-           MS_BRAND_CD,
-           MS_BRAND_NM,
-           USE_YN,
-           REG_DT,
-           REG_ID,
-           MOD_DT,
-           MOD_ID
-     ]]>
-        <include refid="CmmSQL.PagingTemplateCount"/>
+        SELECT STORE_CD,
+               MS_BRAND_CD,
+               MS_BRAND_NM,
+               USE_YN,
+               REG_DT,
+               REG_ID,
+               MOD_DT,
+               MOD_ID
+         ]]>
         <![CDATA[
-      FROM TB_MS_BRAND
-    ]]>
+          FROM TB_MS_BRAND
+        ]]>
         WHERE STORE_CD = #{storeCd}
         <if test='hqBrandCd != null and hqBrandCd != ""'>
             AND MS_BRAND_CD LIKE '%'||#{hqBrandCd}||'%'
@@ -81,7 +76,6 @@
             AND USE_YN = #{useYn}
         </if>
         ORDER BY REG_DT, STORE_CD, MS_BRAND_CD ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
   <!-- 브랜드 코드 조회  -->
@@ -97,10 +91,10 @@
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
     </if>
     <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
-        SELECT LPAD(NVL(MAX(MS_BRAND_CD), 7999999) +1, 7, '0') AS HQ_BRAND_CD
+        SELECT LPAD(NVL(MAX(MS_BRAND_CD), 799999999) +1, 9, '0') AS HQ_BRAND_CD
           FROM TB_MS_BRAND
          WHERE STORE_CD = #{storeCd}
-           AND MS_BRAND_CD > 7999999
+           AND MS_BRAND_CD > 799999999
     </if>
   </select>
 
@@ -140,19 +134,19 @@
         TABLE    : TB_MS_STORE
         COMMENTS : 본사 하위 매장을 조회한다.
     -->
-    <select id="getStoreList" parameterType="hqBrandVO" resultType="String">
+    <!-- <select id="getStoreList" parameterType="hqBrandVO" resultType="String">
         /* USE : HqBrandMapper.getStoreList */
         SELECT STORE_CD
           FROM TB_MS_STORE
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-    </select>
+    </select> -->
 
     <!-- 브랜드 추가 -->
     <!--
         TABLE    : TB_HQ_BRAND
         COMMENTS : 본사-매장 브랜드를 등록한다.
     -->
-    <insert id="insertHqMsBrand" parameterType="DefaultMap">
+    <!-- <insert id="insertHqMsBrand" parameterType="DefaultMap">
         /* USE : HqBrandMapper.insertHqMsBrand */
         <foreach collection="arrStoreCd" item="item" open="INSERT ALL " close="SELECT * FROM DUAL" separator=" ">
             INTO TB_MS_BRAND
@@ -178,7 +172,7 @@
                 #{modId}
             )
         </foreach>
-    </insert>
+    </insert> -->
 
     <!-- 브랜드 추가 -->
     <!--
@@ -230,14 +224,14 @@
         TABLE    : TB_MS_BRAND
         COMMENTS : 등록된 브랜드 정보를 수정한다.
     -->
-    <update id="updateHqMsBrand" parameterType="hqBrandVO">
+    <!-- <update id="updateHqMsBrand" parameterType="hqBrandVO">
         /* USE : HqBrandMapper.updateHqMsBrand */
         UPDATE TB_MS_BRAND
           SET USE_YN = #{useYn},
               MS_BRAND_NM = #{hqBrandNm}
         WHERE MS_BRAND_CD = #{hqBrandCd}
           AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-    </update>
+    </update> -->
 
     <!-- 매장 브랜드 수정 -->
     <!--
@@ -264,6 +258,22 @@
      WHERE HQ_BRAND_CD = #{hqBrandCd}
        AND HQ_OFFICE_CD = #{hqOfficeCd}
   </delete>
+
+  <!-- 본사 브랜드코드 중복체크 -->
+  <!--
+      TABLE    : TB_HQ_BRAND
+      COMMENTS : 본사 브랜드코드 중복여부를 조회한다.
+  -->
+  <select id="chkHqBrandCd" parameterType="hqBrandVO" resultType="String">
+    /* USE : HqBrandMapper.chkHqBrandCd */
+    SELECT LISTAGG(HQ_BRAND_CD, ', ')  WITHIN GROUP (ORDER BY HQ_BRAND_CD) AS HQ_BRAND_CD
+      FROM TB_HQ_BRAND
+     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       AND HQ_BRAND_CD IN
+      <foreach collection="arrHqBrandCd" item="item" open="("  separator="," close=")">
+          #{item}
+      </foreach>
+  </select>
 
   <!-- 브랜드 환경정보 조회 -->
   <!--

@@ -145,6 +145,9 @@ public class SimpleProdVO extends PageVO {
     /** 포장가 */
     private String packSaleUprc;
 
+    /** 브랜드코드 */
+    private String hqBrandCd;
+
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -350,5 +353,13 @@ public class SimpleProdVO extends PageVO {
 
     public void setPackSaleUprc(String packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
     }
 }

@@ -11,6 +11,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdService;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO;
@@ -40,6 +42,7 @@ public class SimpleProdController {
 
     private final SessionService sessionService;
     private final SimpleProdService simpleProdService;
+    private final ProdService prodService;
     private final CmmEnvUtil cmmEnvUtil;
     private final CmmCodeUtil cmmCodeUtil;
 
@@ -47,9 +50,10 @@ public class SimpleProdController {
      * Constructor Injection
      */
     @Autowired
-    public SimpleProdController(SessionService sessionService, SimpleProdService simpleProdService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
+    public SimpleProdController(SessionService sessionService, SimpleProdService simpleProdService, ProdService prodService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.simpleProdService = simpleProdService;
+        this.prodService = prodService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.cmmCodeUtil = cmmCodeUtil;
     }
@@ -104,6 +108,17 @@ public class SimpleProdController {
         }else{
             model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
         }
+
+        // (상품관리)브랜드사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        }else{
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+        }
+
+        // 브랜드 리스트 조회(선택 콤보박스용)
+        ProdVO prodVO = new ProdVO();
+        model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
         return "base/prod/simpleProd/simpleProd";
     }

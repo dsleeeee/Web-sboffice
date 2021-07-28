@@ -1,31 +1,27 @@
 package kr.co.solbipos.base.prod.prod.service.impl;
 
-import kr.co.common.system.BaseEnv;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
-import kr.co.solbipos.base.prod.prod.service.enums.HqProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -1144,5 +1140,18 @@ public class ProdServiceImpl implements ProdService {
             result += prodMapper.kitchenprintLink(prodVO);
         }
         return result;
+    }
+
+    /** 브랜드 리스트 조회(선택 콤보박스용) */
+    @Override
+    public List<DefaultMap<Object>> getBrandList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getBrandList(prodVO);
     }
 }
