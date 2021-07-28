@@ -327,6 +327,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setDlvrSaleUprc(simpleProdVO.getDlvrSaleUprc());
                 prodVO.setPackSaleUprc(simpleProdVO.getPackSaleUprc());
                 prodVO.setCornrCd("00");
+                prodVO.setHqBrandCd(simpleProdVO.getHqBrandCd());
 
                 // 자동채번인 경우 상품코드 조회
                 if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {

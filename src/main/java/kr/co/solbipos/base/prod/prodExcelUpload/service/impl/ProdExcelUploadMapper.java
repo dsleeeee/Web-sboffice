@@ -42,6 +42,9 @@ public interface ProdExcelUploadMapper {
     /** 업로드시 임시테이블 저장 */
     int getProdExcelUploadCheckSave(ProdExcelUploadVO prodExcelUploadVO);
 
+    /** 브랜드코드 검증 조회 */
+    String getHqBrandCdCheck(ProdExcelUploadVO prodExcelUploadVO);
+
     /** 상품유형 검증 조회 */
     String getProdTypeFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 

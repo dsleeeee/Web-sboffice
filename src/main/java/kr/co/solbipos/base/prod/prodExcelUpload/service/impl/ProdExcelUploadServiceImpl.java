@@ -125,6 +125,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             prodExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+            prodExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
@@ -140,6 +141,12 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             prodExcelUploadVO.setResult("검증전");
 
             // <-- 업로할때는 전부 명칭으로 들어간다 -->
+            // 브랜드명
+            if (prodExcelUploadVO.getHqBrandCd() != null && !"".equals(prodExcelUploadVO.getHqBrandCd())) {
+                String hqBrandCd = prodExcelUploadMapper.getHqBrandCdCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setHqBrandCd(hqBrandCd);
+            }
+
             // 상품유형
             if (prodExcelUploadVO.getProdTypeFg() != null && !"".equals(prodExcelUploadVO.getProdTypeFg())) {
                 String prodTypeFg = prodExcelUploadMapper.getProdTypeFgCheck(prodExcelUploadVO);

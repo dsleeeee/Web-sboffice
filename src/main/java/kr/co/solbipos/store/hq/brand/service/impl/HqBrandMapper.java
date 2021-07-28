@@ -37,24 +37,27 @@ public interface HqBrandMapper {
     String getHqBrandCd(HqBrandVO hqBrandVO);
 
     /** 본사 하위 매장 조회 */
-    List<DefaultMap<String>> getStoreList(HqBrandVO hqBrand);
+    //List<DefaultMap<String>> getStoreList(HqBrandVO hqBrand);
 
     /** 본사 브랜드 추가 */
     int insertHqBrand(HqBrandVO hqBrandVO);
     /** 본사-매장 브랜드 추가 */
-    int insertHqMsBrand(HqBrandVO hqBrandVO);
+    //int insertHqMsBrand(HqBrandVO hqBrandVO);
     /** 매장 브랜드 추가 */
     int insertMsBrand(HqBrandVO hqBrandVO);
 
     /** 본사 브랜드 수정 */
     int updateHqBrand(HqBrandVO hqBrandVO);
     /** 본사-매장 브랜드 수정 */
-    int updateHqMsBrand(HqBrandVO hqBrandVO);
+    //int updateHqMsBrand(HqBrandVO hqBrandVO);
     /** 매장 브랜드 수정 */
     int updateMsBrand(HqBrandVO hqBrandVO);
 
     /** 브랜드 삭제 */
     int deleteBrand(HqBrandVO hqBrandVO);
+
+    /** 본사 브랜드코드 중복체크 */
+    String chkHqBrandCd(HqBrandVO hqBrandVO);
 
     /** 환경설정 조회 */
     List<DefaultMap<String>> getConfigList(HqBrandVO hqBrand);

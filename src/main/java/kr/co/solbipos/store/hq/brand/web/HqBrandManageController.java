@@ -130,6 +130,24 @@ public class HqBrandManageController {
     }
 
     /**
+     * 본사 브랜드코드 중복체크
+     * @param hqBrand
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "hqBrandManage/chkHqBrandCd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkHqBrandCd(HqBrandVO hqBrand, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        return returnJson(Status.OK, service.chkHqBrandCd(hqBrand, sessionInfoVO));
+    }
+
+    /**
      * 환경설정 조회
      * @param   hqBrand
      * @param   request

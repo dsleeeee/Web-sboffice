@@ -3,7 +3,6 @@ package kr.co.solbipos.base.prod.prod.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
@@ -13,8 +12,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +29,7 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : ProdController.java
@@ -108,6 +108,17 @@ public class ProdController {
         } else {
             model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
         }
+
+        // (상품관리)브랜드사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        }else{
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+        }
+
+        // 브랜드 리스트 조회(선택 콤보박스용)
+        ProdVO prodVO = new ProdVO();
+        model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
 //        model.addAttribute("prodEnvstVal", prodEnvstVal);
 //        model.addAttribute("priceEnvstVal", priceEnvstVal);
@@ -478,7 +489,7 @@ public class ProdController {
     /**
      * 프린터 조회
      *
-     * @param prodVO[]
+     * @param prodVOs
      * @param request
      * @param response
      * @param model

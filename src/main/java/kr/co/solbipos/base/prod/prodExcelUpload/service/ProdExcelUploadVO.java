@@ -34,6 +34,9 @@ public class ProdExcelUploadVO extends PageVO {
     /** 회원소속코드 */
     private String membrOrgnCd;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     /** 조회매장 */
     private String storeCd;
 
@@ -148,6 +151,9 @@ public class ProdExcelUploadVO extends PageVO {
     /** 포장가 */
     private String packSaleUprc;
 
+    /** 브랜드코드 */
+    private String hqBrandCd;
+
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -156,6 +162,14 @@ public class ProdExcelUploadVO extends PageVO {
     public String getMembrOrgnCd() { return membrOrgnCd; }
 
     public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     public String getStoreCd() { return storeCd; }
 
@@ -355,5 +369,13 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setPackSaleUprc(String packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
     }
 }
