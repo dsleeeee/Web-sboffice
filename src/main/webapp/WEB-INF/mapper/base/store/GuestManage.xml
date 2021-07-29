@@ -182,7 +182,7 @@
         </choose>
     </delete>
 
-    <!-- 객층관리 매장적용 - 조회 -->
+    <!-- 객층관리 매장적용 팝업 - 조회 -->
     <!--
         TABLE    : TB_MS_STORE
         COMMENTS : [매장]매장 정보
@@ -208,7 +208,7 @@
         ORDER BY tms.STORE_CD ASC
     </select>
 
-    <!-- 객층관리 매장적용 - 저장 insert -->
+    <!-- 객층관리 매장적용 팝업 - 저장 insert -->
     <!--
         TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
         COMMENTS : [본사]명칭코드, [매장]명칭코드

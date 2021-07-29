@@ -120,7 +120,7 @@ public class GuestManageController {
     }
 
     /**
-     * 객층관리 매장적용 - 조회
+     * 객층관리 매장적용 팝업 - 조회
      *
      * @param guestManageVO
      * @param request
@@ -143,7 +143,7 @@ public class GuestManageController {
     }
 
     /**
-     * 객층관리 매장적용 - 저장
+     * 객층관리 매장적용 팝업 - 저장
      *
      * @param guestManageVOs
      * @param request

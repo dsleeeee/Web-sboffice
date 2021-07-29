@@ -28,9 +28,9 @@ public interface GuestManageService {
     /** 객층관리 - 저장 */
     int getGuestManageSave(GuestManageVO[] guestManageVOs, SessionInfoVO sessionInfoVO);
 
-    /** 객층관리 매장적용 - 조회 */
+    /** 객층관리 매장적용 팝업 - 조회 */
     List<DefaultMap<Object>> getGuestManageStoreRegistList(GuestManageVO guestManageVO, SessionInfoVO sessionInfoVO);
 
-    /** 객층관리 매장적용 - 저장 */
+    /** 객층관리 매장적용 팝업 - 저장 */
     int getGuestManageStoreRegistSave(GuestManageVO[] guestManageVOs, SessionInfoVO sessionInfoVO);
 }

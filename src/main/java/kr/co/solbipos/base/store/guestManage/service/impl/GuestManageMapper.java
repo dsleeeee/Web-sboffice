@@ -35,9 +35,9 @@ public interface GuestManageMapper {
     /** 객층관리 - 저장 delete */
     int getGuestManageSaveDelete(GuestManageVO guestManageVO);
 
-    /** 객층관리 매장적용 - 조회 */
+    /** 객층관리 매장적용 팝업 - 조회 */
     List<DefaultMap<Object>> getGuestManageStoreRegistList(GuestManageVO guestManageVO);
 
-    /** 객층관리 매장적용 - 저장 insert */
+    /** 객층관리 매장적용 팝업 - 저장 insert */
     int getGuestManageStoreRegistSaveInsert(GuestManageVO guestManageVO);
 }

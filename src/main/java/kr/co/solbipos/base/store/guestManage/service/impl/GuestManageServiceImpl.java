@@ -86,7 +86,7 @@ public class GuestManageServiceImpl implements GuestManageService {
         return procCnt;
     }
 
-    /** 객층관리 매장적용 - 조회 */
+    /** 객층관리 매장적용 팝업 - 조회 */
     @Override
     public List<DefaultMap<Object>> getGuestManageStoreRegistList(GuestManageVO guestManageVO, SessionInfoVO sessionInfoVO) {
 
@@ -95,7 +95,7 @@ public class GuestManageServiceImpl implements GuestManageService {
         return guestManageMapper.getGuestManageStoreRegistList(guestManageVO);
     }
 
-    /** 객층관리 매장적용 - 저장 */
+    /** 객층관리 매장적용 팝업 - 저장 */
     @Override
     public int getGuestManageStoreRegistSave(GuestManageVO[] guestManageVOs, SessionInfoVO sessionInfoVO) {
 
