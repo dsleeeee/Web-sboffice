@@ -48,6 +48,18 @@ public class MsgManageVO extends PageVO {
     /** 내용 */
     private String content;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
+    /** 매장코드 */
+    private String storeCd;
+
+    /** 매장명 */
+    private String storeNm;
+
+    /** 매장상태 */
+    private String sysStatFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -75,4 +87,24 @@ public class MsgManageVO extends PageVO {
     public String getContent() { return content; }
 
     public void setContent(String content) { this.content = content; }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getStoreCd() { return storeCd; }
+
+    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+
+    public String getStoreNm() { return storeNm; }
+
+    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+
+    public String getSysStatFg() { return sysStatFg; }
+
+    public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
 }

@@ -157,4 +157,50 @@ public class MsgManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 메세지관리 매장적용 팝업 - 조회
+     *
+     * @param msgManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 07. 29.
+     */
+    @RequestMapping(value = "/msgManage/getMsgManageStoreRegistList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMsgManageStoreRegistList(MsgManageVO msgManageVO, HttpServletRequest request,
+                                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = msgManageService.getMsgManageStoreRegistList(msgManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, msgManageVO);
+    }
+
+    /**
+     * 메세지관리 매장적용 팝업 - 저장
+     *
+     * @param msgManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 07. 29.
+     */
+    @RequestMapping(value = "/msgManage/getMsgManageStoreRegistSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMsgManageStoreRegistSave(@RequestBody MsgManageVO[] msgManageVOs, HttpServletRequest request,
+                                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = msgManageService.getMsgManageStoreRegistSave(msgManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

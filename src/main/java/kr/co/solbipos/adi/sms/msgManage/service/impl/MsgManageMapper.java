@@ -58,4 +58,13 @@ public interface MsgManageMapper {
 
     /** 메세지관리 - 메세지서식 저장 전체 delete */
     int getMsgManageDtlSaveDeleteAll(MsgManageVO msgManageVO);
+
+    /** 메세지관리 매장적용 팝업 - 조회 */
+    List<DefaultMap<Object>> getMsgManageStoreRegistList(MsgManageVO msgManageVO);
+
+    /** 메세지관리 매장적용 팝업 - 저장(메세지그룹) insert */
+    int getMsgManageStoreRegistSaveInsert(MsgManageVO msgManageVO);
+
+    /** 메세지관리 매장적용 팝업 - 저장(메세지서식) insert */
+    int getMsgManageStoreRegistDtlSaveInsert(MsgManageVO msgManageVO);
 }

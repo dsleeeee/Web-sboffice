@@ -149,25 +149,45 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
 
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            params.push($scope.flex.collectionView.itemsEdited[i]);
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            $scope.flex.collectionView.itemsAdded[i].status = "I";
-            params.push($scope.flex.collectionView.itemsAdded[i]);
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
-        }
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                $scope.flex.collectionView.itemsAdded[i].status = "I";
+                params.push($scope.flex.collectionView.itemsAdded[i]);
+            }
+            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+                $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withPopUp("/adi/sms/msgManage/msgManage/getMsgManageSave.sb", params, function(){ $scope.searchMsgManage();});
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._postJSONSave.withPopUp("/adi/sms/msgManage/msgManage/getMsgManageSave.sb", params, function(){ $scope.searchMsgManage();});
+        });
     };
     // <-- //그리드 저장 -->
+
+
+    // 매장적용
+    $scope.storeApply = function () {
+        $scope.wjMsgManageStoreRegistLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 메세지관리 매장적용 팝업 핸들러 추가
+        $scope.wjMsgManageStoreRegistLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('msgManageStoreRegistCtrl', null);
+            }, 50)
+        });
+    });
 }]);
 
 
@@ -184,6 +204,7 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
     };
 
     $("#lblTxtByte").text("0");
+    $("#lblTxtByteGubun").text("SMS");
 
     // <-- 검색 호출 -->
     $scope.$on("msgManageDtlCtrl", function(event, data) {
@@ -252,8 +273,19 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 바이트
     $scope.showByte = function() {
+        if($("#lblMsgGrpCd").text() == "") {
+            $scope._popMsg(messages["msgManage.msgGrpCdAlert"]); // 메세지그룹을 선택해주세요.
+            return false;
+        }
+
         var messageContent = document.getElementById("messageContent");
         $("#lblTxtByte").text(messageContent.value.getByteLength());
+
+        if(messageContent.value.getByteLength() > 80) {
+            $("#lblTxtByteGubun").text("LMS");
+        } else {
+            $("#lblTxtByteGubun").text("SMS");
+        }
     };
 
     // 신규
@@ -261,18 +293,12 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
         $("#srchTitle").val("");
         $scope.messageContent = "";
         $("#lblTxtByte").text("0");
+        $("#lblTxtByteGubun").text("SMS");
         $("#lblSeqNo").text("");
     };
 
     // 저장
     $scope.msgSave = function () {
-        // 바이트
-        var byte = $("#lblTxtByte").text();
-        if(byte > 80) {
-            $scope._popMsg(messages["msgManage.byteAlert"]); // 80Byte 이상은 저장할 수 없습니다.
-            return false;
-        }
-
         var seqNo = $("#lblSeqNo").text();
 
         $scope._popConfirm(messages["cmm.choo.save"], function() {

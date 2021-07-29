@@ -230,4 +230,142 @@
         AND MSG_GRP_CD = #{msgGrpCd}
     </delete>
 
+    <!-- 메세지관리 매장적용 팝업 - 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getMsgManageStoreRegistList" parameterType="MsgManageVO" resultType="DefaultMap">
+        /* MsgManageMapper.getMsgManageStoreRegistList */
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG
+        FROM TB_MS_STORE tms
+        WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 메세지관리 매장적용 팝업 - 저장(메세지그룹) insert -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보
+    -->
+    <insert id="getMsgManageStoreRegistSaveInsert" parameterType="MsgManageVO" >
+        /* MsgManageMapper.getMsgManageStoreRegistSaveInsert */
+        MERGE INTO HCS_MSGGR_T A
+        USING
+        (
+            SELECT
+            #{storeCd} AS OGN_CD,
+            MSG_GRP_CD,
+            MSG_GRP_NM,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM HCS_MSGGR_T
+            WHERE 1=1
+            AND OGN_CD = #{orgnCd}
+        ) B
+        ON  (
+                A.OGN_CD = B.OGN_CD
+                AND A.MSG_GRP_CD = B.MSG_GRP_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            MSG_GRP_NM = B.MSG_GRP_NM,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.OGN_CD,
+                A.MSG_GRP_CD,
+                A.MSG_GRP_NM,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.OGN_CD,
+                B.MSG_GRP_CD,
+                B.MSG_GRP_NM,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 메세지관리 매장적용 팝업 - 저장(메세지서식) insert -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        COMMENTS : [마스터-공용]SMS-고객메세지서식관리
+    -->
+    <insert id="getMsgManageStoreRegistDtlSaveInsert" parameterType="MsgManageVO" >
+        /* MsgManageMapper.getMsgManageStoreRegistDtlSaveInsert */
+        MERGE INTO HCS_SMSMS_T A
+        USING
+        (
+            SELECT
+            #{storeCd} AS OGN_CD,
+            MSG_GRP_CD,
+            SEQ_NO,
+            TITLE,
+            MESSAGE,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM HCS_SMSMS_T
+            WHERE 1=1
+            AND OGN_CD = #{orgnCd}
+        ) B
+        ON  (
+                A.OGN_CD = B.OGN_CD
+                AND A.MSG_GRP_CD = B.MSG_GRP_CD
+                AND A.SEQ_NO = B.SEQ_NO
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            TITLE = B.TITLE,
+            MESSAGE = B.MESSAGE,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.OGN_CD,
+                A.MSG_GRP_CD,
+                A.SEQ_NO,
+                A.TITLE,
+                A.MESSAGE,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.OGN_CD,
+                B.MSG_GRP_CD,
+                B.SEQ_NO,
+                B.TITLE,
+                B.MESSAGE,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
 </mapper>

@@ -129,4 +129,39 @@ public class MsgManageServiceImpl implements MsgManageService {
 
         return procCnt;
     }
+
+    /** 메세지관리 매장적용 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMsgManageStoreRegistList(MsgManageVO msgManageVO, SessionInfoVO sessionInfoVO) {
+
+        msgManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return msgManageMapper.getMsgManageStoreRegistList(msgManageVO);
+    }
+
+    /** 메세지관리 매장적용 팝업 - 저장 */
+    @Override
+    public int getMsgManageStoreRegistSave(MsgManageVO[] msgManageVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(MsgManageVO msgManageVO : msgManageVOs) {
+
+            msgManageVO.setRegDt(currentDt);
+            msgManageVO.setRegId(sessionInfoVO.getUserId());
+            msgManageVO.setModDt(currentDt);
+            msgManageVO.setModId(sessionInfoVO.getUserId());
+
+            msgManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+            // 메세지그룹
+            procCnt = msgManageMapper.getMsgManageStoreRegistSaveInsert(msgManageVO);
+
+            // 메세지서식
+            procCnt = msgManageMapper.getMsgManageStoreRegistDtlSaveInsert(msgManageVO);
+        }
+
+        return procCnt;
+    }
 }

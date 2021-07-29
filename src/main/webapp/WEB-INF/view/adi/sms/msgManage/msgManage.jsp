@@ -30,6 +30,11 @@
                     <span class="fl bk lh30">
                         <s:message code="msgManage.msgGroup"/>
                     </span>
+                    <%-- 본사일때만 --%>
+                    <c:if test="${orgnFg == 'HQ'}">
+                         <%--매장적용--%>
+                        <button class="btn_skyblue" id="btnStoreApply" ng-click="storeApply()"><s:message code="msgManage.storeApply" /></button>
+                    </c:if>
                     <button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
                     <button class="btn_skyblue" id="btnSave" ng-click="save()"><s:message code='cmm.save' /></button>
                     <button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>
@@ -101,8 +106,8 @@
                         <tr>
                             <td>
                                 <label id="lblTxtByte"></label>
-                                <s:message code="msgManage.80byte" />
                                 <s:message code="msgManage.byte" />
+                                <label id="lblTxtByteGubun"></label>
                             </td>
                         </tr>
                         <tr style="height: 10px"></tr>
@@ -153,4 +158,10 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20210625.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20210729.01" charset="utf-8"></script>
+
+<%-- 메세지관리 매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/msgManage/msgManageStoreRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

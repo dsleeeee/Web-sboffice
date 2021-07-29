@@ -33,4 +33,10 @@ public interface MsgManageService {
 
     /** 메세지관리 - 메세지서식 저장 */
     int getMsgManageDtlSave(MsgManageVO msgManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 메세지관리 매장적용 팝업 - 조회 */
+    List<DefaultMap<Object>> getMsgManageStoreRegistList(MsgManageVO msgManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 메세지관리 매장적용 팝업 - 저장 */
+    int getMsgManageStoreRegistSave(MsgManageVO[] msgManageVOs, SessionInfoVO sessionInfoVO);
 }
