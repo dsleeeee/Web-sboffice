@@ -46,7 +46,6 @@ app.controller('guestManageStoreRegistCtrl', ['$scope', '$http', function ($scop
 
     $scope.searchGuestManageStoreRegist = function(){
         var params = {};
-        // params.sysStatFg = $scope.srchSysStatFgCombo.selectedValue;
 
         $scope._inquiryMain("/base/store/guestManage/guestManage/getGuestManageStoreRegistList.sb", params, function() {}, false);
     };
