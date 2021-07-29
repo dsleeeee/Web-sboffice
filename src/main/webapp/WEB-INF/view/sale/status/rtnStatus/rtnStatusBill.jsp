@@ -113,25 +113,27 @@
 
 			  <!-- define columns -->
               <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"/>"   binding="storeCd"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"/>"   binding="storeNm"       width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"/>"     binding="storeCd"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"/>"     binding="storeNm"       width="150" align="left" is-read-only="true"></wj-flex-grid-column>
               </c:if>
-			  <wj-flex-grid-column header="<s:message code="rtnStatus.saleDate"/>"  binding="saleDate"      width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-			  <wj-flex-grid-column header="<s:message code="rtnStatus.posNo"/>"     binding="posNo"         width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-			  <wj-flex-grid-column header="<s:message code="rtnStatus.bill.no"/>"   binding="billNo"        width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-			  <wj-flex-grid-column header="<s:message code="rtnStatus.saleDate"/>"  binding="orgSaleDate"   width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-			  <wj-flex-grid-column header="<s:message code="rtnStatus.posNo"/>"     binding="orgPosNo"      width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-			  <wj-flex-grid-column header="<s:message code="rtnStatus.bill.no"/>"   binding="orgBillNo"     width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-
-                <%-- 결제수단 컬럼 생성--%>
+			  <wj-flex-grid-column header="<s:message code="rtnStatus.saleDate"/>"      binding="saleDate"      width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+			  <wj-flex-grid-column header="<s:message code="rtnStatus.posNo"/>"         binding="posNo"         width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+			  <wj-flex-grid-column header="<s:message code="rtnStatus.bill.no"/>"       binding="billNo"        width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+			  <wj-flex-grid-column header="<s:message code="rtnStatus.saleDate"/>"      binding="orgSaleDate"   width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+			  <wj-flex-grid-column header="<s:message code="rtnStatus.posNo"/>"         binding="orgPosNo"      width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+			  <wj-flex-grid-column header="<s:message code="rtnStatus.bill.no"/>"       binding="orgBillNo"     width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleAmt"/>"    binding="totSaleAmt"    width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="rtnStatus.totDcAmt"/>"          binding="totDcAmt"      width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>"   binding="realSaleAmt"   width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="rtnStatus.gaAmt"/>"         binding="gaAmt"         width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="rtnStatus.vatAmt"/>"        binding="vatAmt"        width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="rtnStatus.totTipAmt"/>"     binding="totTipAmt"     width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="rtnStatus.totEtcAmt"/>"     binding="totEtcAmt"     width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="rtnStatus.dtl.totPayAmt"/>" binding="totPayAmt"     width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <%-- 결제수단 컬럼 생성--%>
                 <c:forEach var="payCol" items="${payColList}">
                     <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </c:forEach>
-                <%-- 할인 컬럼 생성--%>
-                <c:forEach var="dcCol" items="${dcColList}">
-                    <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                </c:forEach>
-
             </wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
 			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
