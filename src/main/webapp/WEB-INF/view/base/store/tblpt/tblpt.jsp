@@ -13,6 +13,8 @@
 <c:set var="vUserIdChk" value="${sessionScope.sessionInfo.vUserId}"/>
 
 <style type="text/css">
+/* 소스 정리 안함 쏘리 */
+/* 소스 정리 안함 쏘리 */
 /* 단순버튼 01 */
 .btn01
 {
@@ -501,7 +503,13 @@ button[class*="btn02"] {border: 0;}
         </button>
 
  -->
+<!--
+<c:import url="/WEB-INF/view/base/prod/touchKey/touchKeyStyleView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 
+ -->
 
 </div>
 
@@ -509,6 +517,23 @@ button[class*="btn02"] {border: 0;}
     var s_userId      = "${userId}";
     var s_storeCd     = "${storeCd}";
     var s_vUserIdChk  = "${vUserIdChk}";
+
+
+/*
+    var imgFileName = "ie_setting_01";
+    var path = "/resource/solbipos/css/img/table/";
+    var ext = ".PNG";
+    var imgBtnFile = imgFileName + ext;
+    var viewStyleLayer2 = document.getElementById("viewStyleLayer");
+  //  viewStyleLayer.style.backgroundImage = "url('" + path + "/ie_setting_" + imgBtnFile + "')";
+
+    viewStyleLayer.style.backgroundImage = "url('" + path + imgBtnFile + "')";
+
+alert(0);
+//    /resource/solbipos/css/img/table/ie_setting_01.PNG
+//   /resources/solbipos/css/img/touchKey/touchKey_style01.png
+*/
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/tblpt/tblpt.js?ver=20210715.01" charset="utf-8"></script>

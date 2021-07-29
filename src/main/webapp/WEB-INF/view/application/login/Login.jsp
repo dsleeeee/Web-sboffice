@@ -6,8 +6,8 @@
 <%
 String mobile_url = "";
 System.out.println(request.getRequestURL());
-if     (request.getRequestURL().indexOf("://192") > 0 || request.getRequestURL().indexOf("://localhost") > 0 )  { mobile_url = "http://192.168.0.85:22001/mobile/login/login_form.jsp"; }
-else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )                                           { mobile_url = "http://mob.solbipos.com/mobile/login/login_form.jsp"; }
+if     (request.getRequestURL().indexOf("://192") > 0 || request.getRequestURL().indexOf("://localhost") > 0 )  { mobile_url = "http://192.168.0.85:10001/mobile/auth/login.sb"; }
+else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )                                           { mobile_url = "http://neo.solbipos.com/mobile/auth/login.sb"; }
 %>
 
 <div class="loginArea">
