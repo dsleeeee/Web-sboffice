@@ -715,28 +715,32 @@
     -->
     <select id="getMobileSaleProdWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* MobileContentMapper.getMobileSaleProdWeekList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        SELECT *
         FROM
         (
             SELECT *
             FROM
             (
                 SELECT
-                tsdp.SALE_DATE,
+                tsdp.PROD_CD,
+                tmp.PROD_NM,
                 SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_DAILY_PROD tsdp
+                FROM TB_SL_DAILY_PROD tsdp,
+                TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdp.STORE_CD = #{storeCd}
                 AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                GROUP BY tsdp.SALE_DATE
+                AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
+                AND tmp.STORE_CD = tsdp.STORE_CD
+                AND tmp.PROD_CD = tsdp.PROD_CD
+                GROUP BY tsdp.PROD_CD, tmp.PROD_NM
+                ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
             )
             UNION ALL
             (
                 SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
+                '' AS PROD_CD,
+                '-' AS PROD_NM,
                 0 AS REAL_SALE_AMT
                 FROM dual
                 <![CDATA[
@@ -744,8 +748,11 @@
                 ]]>
             )
         )
-        GROUP BY SALE_DATE
-        ORDER BY SALE_DATE
+        WHERE 1=1
+        <![CDATA[
+            AND ROWNUM <= 7
+        ]]>
+        ORDER BY REAL_SALE_AMT DESC
     </select>
 
     <!-- 매장 - 매출 상위 상품 -->
@@ -755,28 +762,33 @@
     -->
     <select id="getMobileSaleProdWeekStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* MobileContentMapper.getMobileSaleProdWeekStoreList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        SELECT *
         FROM
         (
             SELECT *
             FROM
             (
                 SELECT
-                tsdp.SALE_DATE,
+                tsdp.PROD_CD,
+                tmp.PROD_NM,
                 SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_DAILY_PROD tsdp
+                FROM TB_SL_DAILY_PROD tsdp,
+                TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdp.STORE_CD = #{storeCd}
                 AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                GROUP BY tsdp.SALE_DATE
+                AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
+                AND tmp.STORE_CD = tsdp.STORE_CD
+                AND tmp.PROD_CD = tsdp.PROD_CD
+                GROUP BY tsdp.PROD_CD, tmp.PROD_NM
+                ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
             )
             UNION ALL
             (
                 SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
+                '' AS PROD_CD,
+                '-' AS PROD_NM,
                 0 AS REAL_SALE_AMT
                 FROM dual
                 <![CDATA[
@@ -784,8 +796,11 @@
                 ]]>
             )
         )
-        GROUP BY SALE_DATE
-        ORDER BY SALE_DATE
+        WHERE 1=1
+        <![CDATA[
+            AND ROWNUM <= 7
+        ]]>
+        ORDER BY REAL_SALE_AMT DESC
     </select>
 
     <!-- 본사 - 매출 상위 가맹점 -->

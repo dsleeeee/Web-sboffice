@@ -185,7 +185,7 @@
     <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
     <c:forEach var="saleProdWeek" items="${saleProdWeekList}">
         var saleProdWeekParam = {};
-        saleProdWeekParam.saleDate = "${saleProdWeek.saleDate}";
+        saleProdWeekParam.prodNm = "${saleProdWeek.prodNm}";
         saleProdWeekParam.realSaleAmt = "${saleProdWeek.realSaleAmt}";
         saleProdWeekList.push(saleProdWeekParam);
     </c:forEach>
@@ -224,10 +224,14 @@
     <%-- // 랜덤 데이터 생성 (추후 데이터 받아오면서 변경)--%>
 
     <%-- 데이터 생성--%>
-    function getData(numCount) {
+    function getData(numCount, gubun) {
         var data = new wijmo.collections.ObservableArray();
         for (var i = 0; i < numCount.length; i++) {
-            data.push(getRandomData(numCount[i].saleDate, numCount[i].realSaleAmt));
+            if(gubun == "chart1") {
+                data.push(getRandomData(numCount[i].saleDate, numCount[i].realSaleAmt));
+            } else if(gubun == "chart2") {
+                data.push(getRandomData(numCount[i].prodNm, numCount[i].realSaleAmt));
+            }
         }
         return data;
     }
@@ -251,7 +255,7 @@
         var chart1 = new wijmo.chart.FlexChart('#chart1');
         chart1.beginUpdate();
         chart1.chartType = wijmo.chart.ChartType.Column;
-        chart1.itemsSource = getData(saleWeekList); // 여기에 받아온 데이터 넣기
+        chart1.itemsSource = getData(saleWeekList, 'chart1'); // 여기에 받아온 데이터 넣기
         chart1.bindingX = 'x';
         chart1.chartType = parseInt(1); // 세로차트형(Bar)
         // chart1.stacking = parseInt(1); // 겹쳐보이게
@@ -269,7 +273,7 @@
         var chart2 = new wijmo.chart.FlexChart('#chart2');
         chart2.beginUpdate();
         chart2.chartType = wijmo.chart.ChartType.Column;
-        chart2.itemsSource = getData(saleProdWeekList); // 여기에 받아온 데이터 넣기
+        chart2.itemsSource = getData(saleProdWeekList, 'chart2'); // 여기에 받아온 데이터 넣기
         chart2.bindingX = 'x';
         chart2.chartType = parseInt(1); // 세로차트형(Bar)
         // chart2.stacking = parseInt(1); // 겹쳐보이게
