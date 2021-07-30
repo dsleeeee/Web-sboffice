@@ -69,6 +69,9 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
         if (col.binding === "saleUprc") {
           var item = s.rows[e.row].dataItem;
           $scope.calcAmt(item);
+            if($scope.saleUprcApply){
+                $scope.saleUprc(item);
+            }
         }
       }
       s.collectionView.commitEdit();
@@ -180,6 +183,7 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("packSaleUprcChangeMode", modeFg);
   
   $scope.applyFg = true;
+  $scope.saleUprcApply = true;
   
   // <-- 검색 호출 -->
   // 상품정보관리 그리드 조회
@@ -196,8 +200,6 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
     params.listScale = $scope.listScaleCombo.text;
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
-
-    console.log('params', params);
 
     $scope._inquirySub('/base/price/salePrice/hqSalePrice/getHqSalePriceList.sb', params, function() {
 
@@ -537,6 +539,12 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
     item.storeMarginAmt = ((saleUprc - poUnitQty) - storeSplyUprc); // 매장마진금액
     item.storeMarginRate = ((saleUprc - poUnitQty) - storeSplyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
   };
+
+    $scope.saleUprc = function (item){
+        item.stinSaleUprc = item.saleUprc;
+        item.dlvrSaleUprc = item.saleUprc;
+        item.packSaleUprc = item.saleUprc;
+    };
 
   // 저장
   $scope.saveProdPrice = function(){

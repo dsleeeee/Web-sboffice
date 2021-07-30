@@ -61,6 +61,12 @@
         <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
       </td>
     </tr>
+    <c:if test="${subPriceFg == '1'}">
+    <tr>
+      <th><input type="checkbox" id="saleUprcApply" ng-model="saleUprcApply"/> <s:message code="salePrice.batchChange"/></th>
+      <td><s:message code="salePrice.saleUprcApply"/></td>
+    </tr>
+    </c:if>
    </tbody>
   </table>
   <%--//searchTbl--%>
@@ -329,7 +335,7 @@
 
     <%-- 저장 --%>
     <button class="btn_skyblue fr" ng-click="saveProdPrice()"><s:message code="cmm.save" /></button>
-    <span class="sb-radio fr mr10"><input type="checkbox" id="applyFg" ng-model="applyFg" checked /> 전매장적용</span>
+    <span class="fr mr10"><input type="checkbox" id="applyFg" ng-model="applyFg" /> 전매장적용</span>
   </div>
 
   <%--위즈모 테이블--%>
