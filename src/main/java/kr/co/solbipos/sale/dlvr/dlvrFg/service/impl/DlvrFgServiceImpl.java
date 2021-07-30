@@ -151,4 +151,32 @@ public class DlvrFgServiceImpl implements DlvrFgService {
 
         return dlvrFgMapper.getProdDtl(dlvrFgVO);
     }
+
+    /** 상품-영수별매출상세 */
+    @Override
+    public List<DefaultMap<Object>> getSaleDtl(DlvrFgVO dlvrFgVO, SessionInfoVO sessionInfoVO) {
+
+        dlvrFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
+                dlvrFgVO.setArrStoreCd(dlvrFgVO.getStoreCd().split(","));
+            }
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            dlvrFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 결제수단 array 값 세팅
+        dlvrFgVO.setArrPayCol(dlvrFgVO.getPayCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = dlvrFgVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+        }
+        dlvrFgVO.setPivotPayCol(pivotPayCol);
+
+        return dlvrFgMapper.getSaleDtl(dlvrFgVO);
+    }
 }

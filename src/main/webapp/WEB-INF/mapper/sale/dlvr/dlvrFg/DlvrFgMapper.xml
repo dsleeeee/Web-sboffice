@@ -431,4 +431,125 @@
             </when>
         </choose>
     </select>
+
+    <!-- 상품-영수별매출상세 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD_DLVR, TB_HQ_PRODUCT
+                   TB_SL_DAILY_PROD_DLVR, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD
+        PARAM    : dlvrFgVO
+        COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
+    -->
+    <select id="getSaleDtl"  parameterType="dlvrFgVO" resultType="DefaultMap">
+    /* DlvrFgMapper.getSaleDtl */
+      SELECT tssd.STORE_CD,
+              tms.STORE_NM,
+              tssd.PROD_CD,
+              tmp.PROD_NM,
+              tmpb.BARCD_CD,
+              TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+              tssd.POS_NO,
+              tssd.BILL_NO,
+              tssd.DLVR_PACK_FG,
+              tssd.DLVR_IN_FG,
+              tssd.COOK_MEMO,
+              tssd.SALE_QTY,
+              tssd.SALE_AMT,
+              tssd.DC_AMT,
+              tssd.REAL_SALE_AMT,
+              (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT,
+              tssd.VAT_AMT,
+        	  tssd.TIP_AMT,
+        	  tssd.ETC_AMT,
+             <foreach collection="arrPayCol" item="item" separator="+">
+                NVL(tssdp.PAY${item}, 0)
+             </foreach> AS TOT_PAY_AMT,
+             <foreach collection="arrPayCol" item="item" separator=",">
+                NVL(tssdp.PAY${item}, 0) AS PAY${item}
+             </foreach>
+        FROM TB_SL_SALE_DTL tssd,
+              TB_MS_STORE tms,
+              TB_MS_PRODUCT tmp,
+              TB_MS_PRODUCT_BARCD tmpb,
+              (
+                SELECT HQ_OFFICE_CD,
+                        STORE_CD,
+                        SALE_DATE,
+                        POS_NO,
+                        BILL_NO,
+                        BILL_DTL_NO,
+                       <foreach collection="arrPayCol" item="item" separator=",">
+                           PAY${item} AS PAY${item}
+                       </foreach>
+                  FROM (
+                            SELECT tssdp.HQ_OFFICE_CD,
+                                    tssdp.STORE_CD,
+                                    tssdp.SALE_DATE,
+                                    tssdp.POS_NO,
+                                    tssdp.BILL_NO,
+                                    tssdp.BILL_DTL_NO,
+                                    tssdp.PAY_CD,
+                                    tssdp.PAY_AMT
+                              FROM TB_SL_SALE_DTL_PAY tssdp
+                             WHERE tssdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                            <if test='orgnFg != null and orgnFg == "H"'>
+                                <if test='storeCd != null and storeCd != ""'>
+                                    AND tssdp.STORE_CD IN
+                                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='orgnFg != null and orgnFg == "S"'>
+                                AND tssdp.STORE_CD = #{storeCd}
+                            </if>
+                            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                                AND tssdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            </if>
+                            AND tssdp.DLVR_PACK_FG = #{dlvrPackFg}
+                            <if test="dlvrInFg != null and dlvrInFg != ''">
+                                AND tssdp.DLVR_IN_FG = #{dlvrInFg}
+                            </if>
+                            AND tssdp.PROD_CD = #{prodCd}
+                        )
+                        PIVOT
+                        (
+                        SUM(PAY_AMT)
+                        FOR PAY_CD
+                        IN (${pivotPayCol})
+                        )
+              ) tssdp
+       WHERE tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "H"'>
+            <if test='storeCd != null and storeCd != ""'>
+                AND tssd.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='orgnFg != null and orgnFg == "S"'>
+            AND tssd.STORE_CD = #{storeCd}
+        </if>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        AND tssd.PROD_CD = #{prodCd}
+        AND tmp.STORE_CD (+)= tssd.STORE_CD
+        AND tmp.PROD_CD (+)= tssd.PROD_CD
+        AND tms.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+        AND tms.STORE_CD = tssd.STORE_CD
+        AND tmpb.STORE_CD (+)= tssd.STORE_CD
+        AND tmpb.PROD_CD (+)= tssd.PROD_CD
+        AND tssdp.HQ_OFFICE_CD (+)= tssd.HQ_OFFICE_CD
+        AND tssdp.STORE_CD (+)= tssd.STORE_CD
+        AND tssdp.SALE_DATE (+)= tssd.SALE_DATE
+        AND tssdp.POS_NO (+)= tssd.POS_NO
+        AND tssdp.BILL_NO (+)= tssd.BILL_NO
+        AND tssdp.BILL_DTL_NO (+)= tssd.BILL_DTL_NO
+        AND tssd.DLVR_PACK_FG = #{dlvrPackFg}
+        <if test="dlvrInFg != null and dlvrInFg != ''">
+            AND tssd.DLVR_IN_FG = #{dlvrInFg}
+        </if>
+    </select>
+
 </mapper>

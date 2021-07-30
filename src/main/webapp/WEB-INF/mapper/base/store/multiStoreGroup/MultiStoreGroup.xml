@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MultiStoreGroup.xml
+    다중매장그룹관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.07.28     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.store.multiStoreGroup.service.impl.MultiStoreGroupMapper">
+</mapper>
