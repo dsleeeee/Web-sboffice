@@ -21,6 +21,15 @@ public class MobileWeekSaleVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
+    /**
+     * 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
     /** 본사코드 */
     private String hqOfficeCd;
 
@@ -35,6 +44,10 @@ public class MobileWeekSaleVO extends PageVO {
 
     /** 구분 */
     private String gubun;
+
+    public String getOrgnFg() { return orgnFg; }
+
+    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;

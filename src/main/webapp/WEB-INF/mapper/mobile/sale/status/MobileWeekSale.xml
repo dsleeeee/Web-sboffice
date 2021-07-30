@@ -65,10 +65,13 @@
                     FROM TB_SL_DAILY_TOTAL tsdt
                     WHERE 1=1
                     AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdt.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdt.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsdt.HQ_OFFICE_CD
                 ) A,
@@ -81,10 +84,13 @@
                     FROM TB_SL_DAILY_PAY tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsdp.HQ_OFFICE_CD
                 ) B
@@ -133,10 +139,13 @@
             FROM TB_SL_DAILY_PAY tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdp.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tsdp.PAY_CD
         ) A,
@@ -146,10 +155,13 @@
             FROM TB_SL_DAILY_PAY tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdp.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ) B
         ORDER BY A.PAY_CD
@@ -175,10 +187,13 @@
             FROM TB_SL_DAILY_DC tsdd
             WHERE 1=1
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdd.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tsdd.DC_CD
         ) A,
@@ -188,10 +203,13 @@
             FROM TB_SL_DAILY_DC tsdd
             WHERE 1=1
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdd.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ) B
         ORDER BY A.DC_CD
@@ -230,10 +248,13 @@
                     FROM TB_SL_DAILY_PROD tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     AND tsdp.DLVR_PACK_FG = '1'
                     GROUP BY tsdp.HQ_OFFICE_CD
@@ -245,10 +266,13 @@
                     FROM TB_SL_DAILY_PROD tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     AND tsdp.DLVR_PACK_FG = '1'
                     GROUP BY tsdp.HQ_OFFICE_CD
@@ -260,10 +284,13 @@
                     FROM TB_SL_DAILY_TOTAL_DLVR tsdtd
                     WHERE 1=1
                     AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdtd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdtd.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsdtd.HQ_OFFICE_CD
                 ) C
@@ -323,10 +350,13 @@
                     FROM TB_SL_DAILY_PROD tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsdp.DLVR_PACK_FG
                 ) A,
@@ -337,10 +367,13 @@
                     FROM TB_SL_DAILY_PROD tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsdp.DLVR_PACK_FG
                 ) B,
@@ -351,10 +384,13 @@
                     FROM TB_SL_DAILY_DTL_DLVR tsddd
                     WHERE 1=1
                     AND tsddd.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsddd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsddd.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsddd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP BY tsddd.DLVR_PACK_FG
                 ) C
@@ -405,10 +441,13 @@
                 FROM TB_SL_DAILY_PROD tsdp
                 WHERE 1=1
                 AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <!-- 매장 -->
+                <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                    AND tsdp.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
                 AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 GROUP BY tsdp.SALE_DATE, tsdp.DLVR_PACK_FG
             )
@@ -455,10 +494,13 @@
                     FROM TB_SL_DAILY_PROD tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
                     AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     AND tsdp.DLVR_PACK_FG = #{gubun}
                     GROUP BY tsdp.SALE_DATE
@@ -519,10 +561,13 @@
             FROM TB_SL_DAILY_TOTAL tsdt
             WHERE 1=1
             AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdt.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tsdt.SALE_DATE
         ) A,
@@ -538,10 +583,13 @@
             FROM TB_SL_DAILY_DTL_DLVR tsddd
             WHERE 1=1
             AND tsddd.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsddd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsddd.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsddd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tsddd.SALE_DATE
         ) B,
@@ -554,10 +602,13 @@
             FROM TB_SL_DAILY_PAY tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdp.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tsdp.SALE_DATE
         ) C,
@@ -570,10 +621,13 @@
             FROM TB_SL_DAILY_DC tsdd
             WHERE 1=1
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdd.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tsdd.SALE_DATE
         ) D,
@@ -584,10 +638,13 @@
             FROM TB_SL_SALE_HDR tssh
             WHERE 1=1
             AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tssh.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tssh.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP BY tssh.SALE_DATE
         ) E

@@ -36,10 +36,13 @@
         FROM TB_SL_DAILY_PROD tsdp,
         TB_MS_PRODUCT tmp
         WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdp.STORE_CD IN
-        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-            #{item}
-        </foreach>
+        <!-- 매장 -->
+        <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         <choose>
             <when test='todayBest3Fg != null and todayBest3Fg != "" and todayBest3Fg == "Y"'>
                 AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')

@@ -49,6 +49,7 @@ public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
     @Override
     public DefaultMap<String> getMobileDaySaleTotalList(MobileDaySaleVO mobileDaySaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileDaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileDaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -63,6 +64,7 @@ public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
     @Override
     public List<DefaultMap<Object>> getMobileDaySalePayList(MobileDaySaleVO mobileDaySaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileDaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileDaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -77,6 +79,7 @@ public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
     @Override
     public List<DefaultMap<Object>> getMobileDaySaleDcList(MobileDaySaleVO mobileDaySaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileDaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileDaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -91,6 +94,7 @@ public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
     @Override
     public DefaultMap<String> getMobileDaySaleShopList(MobileDaySaleVO mobileDaySaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileDaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileDaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -105,6 +109,7 @@ public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
     @Override
     public List<DefaultMap<Object>> getMobileDaySaleDlvrList(MobileDaySaleVO mobileDaySaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileDaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileDaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -119,6 +124,7 @@ public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
     @Override
     public List<DefaultMap<Object>> getMobileDaySaleDlvrChartList(MobileDaySaleVO mobileDaySaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileDaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileDaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -153,6 +159,7 @@ public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
     @Override
     public List<DefaultMap<Object>> getMobileDaySaleDtlList(MobileDaySaleVO mobileDaySaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileDaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileDaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.

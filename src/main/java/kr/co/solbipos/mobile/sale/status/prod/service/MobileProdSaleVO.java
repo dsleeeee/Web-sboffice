@@ -6,6 +6,14 @@ public class MobileProdSaleVO extends PageVO {
 
     private static final long serialVersionUID = -2874078033874862149L;
 
+    /**
+     * 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 매장코드 */
@@ -20,6 +28,10 @@ public class MobileProdSaleVO extends PageVO {
     private String arrStoreCd[];
     /** 당일 Best3 매출 조회 여부 */
     private String todayBest3Fg;
+
+    public String getOrgnFg() { return orgnFg; }
+
+    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;

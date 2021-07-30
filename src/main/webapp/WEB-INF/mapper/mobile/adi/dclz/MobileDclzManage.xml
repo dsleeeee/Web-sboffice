@@ -53,10 +53,13 @@
       <if test='inFg != null and inFg.toString() != ""'>
           AND tpec.IN_FG = #{inFg}
       </if>
-      AND tpec.STORE_CD IN
-      <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-          #{item}
-      </foreach>
+      <!-- 매장 -->
+      <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+          AND tpec.STORE_CD IN
+          <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+              #{item}
+          </foreach>
+      </if>
        ORDER
           BY tpec.SALE_DATE DESC, tpec.COMMUTE_IN_DT ASC
   </select>

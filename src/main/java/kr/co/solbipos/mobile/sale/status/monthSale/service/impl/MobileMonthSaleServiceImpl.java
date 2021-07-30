@@ -49,6 +49,7 @@ public class MobileMonthSaleServiceImpl implements  MobileMonthSaleService {
     @Override
     public DefaultMap<String> getMobileMonthSaleTotalList(MobileMonthSaleVO mobileMonthSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMonthSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMonthSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -63,6 +64,7 @@ public class MobileMonthSaleServiceImpl implements  MobileMonthSaleService {
     @Override
     public List<DefaultMap<Object>> getMobileMonthSalePayList(MobileMonthSaleVO mobileMonthSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMonthSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMonthSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -77,6 +79,7 @@ public class MobileMonthSaleServiceImpl implements  MobileMonthSaleService {
     @Override
     public List<DefaultMap<Object>> getMobileMonthSaleDcList(MobileMonthSaleVO mobileMonthSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMonthSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMonthSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -91,6 +94,7 @@ public class MobileMonthSaleServiceImpl implements  MobileMonthSaleService {
     @Override
     public DefaultMap<String> getMobileMonthSaleShopList(MobileMonthSaleVO mobileMonthSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMonthSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMonthSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -105,6 +109,7 @@ public class MobileMonthSaleServiceImpl implements  MobileMonthSaleService {
     @Override
     public List<DefaultMap<Object>> getMobileMonthSaleDlvrList(MobileMonthSaleVO mobileMonthSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMonthSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMonthSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -119,6 +124,7 @@ public class MobileMonthSaleServiceImpl implements  MobileMonthSaleService {
     @Override
     public List<DefaultMap<Object>> getMobileMonthSaleDlvrChartList(MobileMonthSaleVO mobileMonthSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMonthSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMonthSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -153,6 +159,7 @@ public class MobileMonthSaleServiceImpl implements  MobileMonthSaleService {
     @Override
     public List<DefaultMap<Object>> getMobileMonthSaleDtlList(MobileMonthSaleVO mobileMonthSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMonthSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMonthSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.

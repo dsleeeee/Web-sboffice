@@ -29,10 +29,13 @@
             FROM TB_SL_MONTHLY_TIME tsmt
             WHERE 1=1
             AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsmt.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
             AND tsmt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
             GROUP BY tsmt.SALE_YM, tsmt.SALE_HOUR
@@ -63,10 +66,13 @@
             FROM TB_SL_MONTHLY_TIME tsmt
             WHERE 1=1
             AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsmt.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
             AND tsmt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
             GROUP BY tsmt.SALE_HOUR
@@ -77,10 +83,13 @@
             FROM TB_SL_MONTHLY_TIME tsmt
             WHERE 1=1
             AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsmt.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         ) B
         ORDER BY A.SALE_TIME
@@ -99,10 +108,13 @@
         FROM TB_SL_MONTHLY_TIME tsmt
         WHERE 1=1
         AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsmt.STORE_CD IN
-        <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        <!-- 매장 -->
+        <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+            AND tsmt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         AND tsmt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
         GROUP BY tsmt.SALE_HOUR

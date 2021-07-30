@@ -49,6 +49,7 @@ public class MobileMultiStoreSaleServiceImpl implements  MobileMultiStoreSaleSer
     @Override
     public List<DefaultMap<Object>> getMobileMultiStoreSaleList(MobileMultiStoreSaleVO mobileMultiStoreSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMultiStoreSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMultiStoreSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMultiStoreSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -72,6 +73,7 @@ public class MobileMultiStoreSaleServiceImpl implements  MobileMultiStoreSaleSer
     @Override
     public List<DefaultMap<Object>> getMobileMultiStoreSaleChartList(MobileMultiStoreSaleVO mobileMultiStoreSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMultiStoreSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMultiStoreSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMultiStoreSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
@@ -86,6 +88,7 @@ public class MobileMultiStoreSaleServiceImpl implements  MobileMultiStoreSaleSer
     @Override
     public List<DefaultMap<Object>> getMobileMultiStoreSaleDayStoreList(MobileMultiStoreSaleVO mobileMultiStoreSaleVO, SessionInfoVO sessionInfoVO) {
 
+        mobileMultiStoreSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileMultiStoreSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileMultiStoreSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
