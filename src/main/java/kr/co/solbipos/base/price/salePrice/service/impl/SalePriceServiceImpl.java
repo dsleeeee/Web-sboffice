@@ -129,7 +129,8 @@ public class SalePriceServiceImpl implements SalePriceService {
 
         return salePriceMapper.getStoreSalePriceList(salePriceVO);
     }
-
+    
+    /** 본사 가격정보 조회 */
     @Override
     public List<DefaultMap<String>> getHqSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
@@ -138,6 +139,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getHqSalePriceList(salePriceVO);
     }
 
+    /** 본사 판매가 저장 */
     @Override
     public int saveHqProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 

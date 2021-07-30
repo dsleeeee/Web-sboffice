@@ -353,8 +353,8 @@
 
     <!-- 본사 판매가관리 -->
     <!--
-        TABLE    :
-        COMMENTS :
+        TABLE    : 본사판매가 관리 조회
+        COMMENTS : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
     -->
     <select id="getHqSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getHqSalePriceList */

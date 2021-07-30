@@ -1123,6 +1123,7 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getSideProdChk(prodVO);
     }
 
+    /** 프린트 조회 */
     @Override
     public List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -1134,6 +1135,7 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getKitchenprintList(prodVO);
     }
 
+    /** 프린트 연결 */
     @Override
     public int kitchenprintLink(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;

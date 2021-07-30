@@ -487,7 +487,7 @@ public class ProdController {
 
 
     /**
-     * 프린터 조회
+     * 프린터 연결
      *
      * @param prodVOs
      * @param request
