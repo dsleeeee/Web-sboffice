@@ -52,7 +52,7 @@
             <a href="#" class="open"><s:message code="mobile.prodSale.todaySaleBest3"/></a>
         </div>
         <div class="w100" id="todayBest3Grid" ng-controller="todayBest3Ctrl">
-            <div class="wj-gridWrap" style="height:100px; overflow-x: hidden; overflow-y: hidden;">
+            <div class="wj-gridWrap" style="height:130px; overflow-x: hidden; overflow-y: hidden;">
                 <wj-flex-grid
                         control="flexTodayBest3"
                         autoGenerateColumns="false"

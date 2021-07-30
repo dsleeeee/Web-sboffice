@@ -50,7 +50,7 @@
                 NVL(A.CARD_AMT, 0) AS CARD_AMT,
                 NVL(A.CASH_AMT, 0) AS CASH_AMT,
                 NVL(A.ETC_AMT, 0) AS ETC_AMT,
-                ROUND(A.TOT_SALE_AMT / A.BILL_CNT) AS BILL_UPRC
+                ROUND(A.REAL_SALE_AMT / A.BILL_CNT) AS BILL_UPRC
                 FROM
                 (
                     SELECT

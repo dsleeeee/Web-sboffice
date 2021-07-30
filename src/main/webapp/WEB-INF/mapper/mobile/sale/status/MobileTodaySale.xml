@@ -63,7 +63,7 @@
                     tssh.HQ_OFFICE_CD,
                     tssh.STORE_CD,
                     SUM(CASE WHEN tssh.SALE_FG = '1' THEN 1 ELSE 0 END) AS SALE_CNT,
-                    SUM(CASE WHEN tssh.SALE_FG = '-1' THEN -1 ELSE 0 END) AS RETURN_SALE_CNT,
+                    SUM(CASE WHEN tssh.SALE_FG = '-1' THEN 1 ELSE 0 END) AS RETURN_SALE_CNT,
                     COUNT(tssh.BILL_NO) AS BILL_CNT,
                     SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
                     SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
