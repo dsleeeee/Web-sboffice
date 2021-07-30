@@ -87,6 +87,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._setComboData('regOrgnFgComboData', regOrgnFgComboData);
   // 사용여부를 쓰는 콤보박스의 데이터
   $scope._setComboData('useYnComboData', useYnComboData);
+  // 브랜드명 콤보박스
+  $scope._setComboData('hqBrandCd', brandList);
   // 상품유형 콤보박스
   $scope._getComboDataQuery('008', 'prodTypeFgComboData');
   // 판매상품여부 콤보박스

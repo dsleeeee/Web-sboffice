@@ -105,6 +105,14 @@
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="80" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="70" align="right" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
+                <c:if test="${subPriceFg == '1'}">
+                  <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprc" width="70" align="right"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="70" align="right"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprc" width="70" align="right"></wj-flex-grid-column>
+                </c:if>
+                <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprcB" visible="false" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprcB" visible="false" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprcB" visible="false" ></wj-flex-grid-column>
                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
                   <wj-flex-grid-column header="<s:message code="prod.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="70" is-read-only="true" ></wj-flex-grid-column>
@@ -138,8 +146,13 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="80" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="70" align="right" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="70" align="right"  is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
+                <c:if test="${subPriceFg == '1'}">
+                  <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
                   <wj-flex-grid-column header="<s:message code="prod.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="70" is-read-only="true" ></wj-flex-grid-column>
@@ -162,4 +175,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.03" charset="utf-8"></script>

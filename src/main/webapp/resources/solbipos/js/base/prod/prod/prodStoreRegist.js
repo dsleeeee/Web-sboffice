@@ -94,10 +94,16 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
-        var saleUprcB = $scope.flex.collectionView.items[i].saleUprcB; // 기존 판매가
-        var saleUprc = $scope.flex.collectionView.items[i].saleUprc; // 현재 판매가
+        var saleUprcB       = $scope.flex.collectionView.items[i].saleUprcB;        // 기존 판매가
+        var saleUprc        = $scope.flex.collectionView.items[i].saleUprc;         // 현재 판매가
+        var stinSaleUprcB   = $scope.flex.collectionView.items[i].stinSaleUprcB;    // 기존 내점가
+        var stinSaleUprc    = $scope.flex.collectionView.items[i].stinSaleUprc;     // 현재 내점가
+        var dlvrSaleUprcB   = $scope.flex.collectionView.items[i].dlvrSaleUprcB;    // 기존 배달가
+        var dlvrSaleUprc    = $scope.flex.collectionView.items[i].dlvrSaleUprc;     // 현재 배달가
+        var packSaleUprcB   = $scope.flex.collectionView.items[i].packSaleUprcB;    // 기존 포장가
+        var packSaleUprc    = $scope.flex.collectionView.items[i].packSaleUprc;     // 현재 포장가
 
-        if(saleUprc !== saleUprcB){
+        if(saleUprc !== saleUprcB || stinSaleUprc !== stinSaleUprcB || dlvrSaleUprc !== dlvrSaleUprcB || packSaleUprc !== packSaleUprcB){
           $scope.flex.collectionView.items[i].prodCd = prodScope.getProdInfo().prodCd;
           params.push($scope.flex.collectionView.items[i]);
         }

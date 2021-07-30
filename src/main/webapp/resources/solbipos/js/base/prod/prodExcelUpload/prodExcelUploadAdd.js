@@ -102,6 +102,10 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
         // 업로드 된 데이터 JSON 형태로 생성
         for (var r = 0; r < rowLength; r++) {
             item = {};
+
+            //  브랜드 '미사용'인 경우에도 브랜드코드는 들어감
+            if(brandUseFg === "0") { item["hqBrandCd"] = brandList[0].name; }
+
             for (var c = 0; c < $scope.flex.columns.length; c++) {
                 // alert($scope.flex.columns[c].header); // 상품코드
                 // alert($scope.flex.getCellData(r, c, false)); // 00001

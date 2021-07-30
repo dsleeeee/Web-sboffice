@@ -187,6 +187,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
         return result;
     }
 
+    /** 검증결과 삭제 */
     @Override
     public int getExcelUploadCheckDeleteAll(ProdBarcdVO prodBarcdVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -203,6 +204,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
         return result;
     }
 
+    /** 검증결과 저장 */
     @Override
     public int getExcelUploadCheckSave(ProdBarcdVO[] prodBarcdVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -241,6 +243,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
         return result;
     }
 
+    /** 임시테이블 정보 조회 */
     @Override
     public List<DefaultMap<String>> getExcelList(ProdBarcdVO prodBarcdVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정

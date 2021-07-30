@@ -229,6 +229,38 @@ app.controller('dlvrFgProdProdCtrl', ['$scope', '$http', '$timeout', function ($
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("dlvrFgProdProdCtrl");
 
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "prodCd") {
+          var item = s.rows[e.row].dataItem;
+          wijmo.addClass(e.cell, 'wijLink');
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+      }
+    });
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        var params = {};
+        params.dlvrPackFg = selectedRow.dlvrPackFg;
+        params.prodCd = selectedRow.prodCd;
+        params.prodNm = selectedRow.prodNm;
+        params.startDate = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
+        params.storeCd = $("#dlvrFgProdStoreCd").val();
+        if (col.binding === "prodCd") {
+          // 매출상세 팝업
+          $scope._broadcast('dlvrFgSaleDtlPopCtrl', params);
+        }
+      }
+    });
+
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
@@ -367,6 +399,39 @@ app.controller('dlvrFgProdProdDtlCtrl', ['$scope', '$http', '$timeout', function
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("dlvrFgProdProdDtlCtrl");
+
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel == s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "prodCd") {
+          var item = s.rows[e.row].dataItem;
+          wijmo.addClass(e.cell, 'wijLink');
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+      }
+    });
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        var params = {};
+        params.dlvrPackFg = selectedRow.dlvrPackFg;
+        params.dlvrInFg = selectedRow.dlvrInFg;
+        params.prodCd = selectedRow.prodCd;
+        params.prodNm = selectedRow.prodNm;
+        params.startDate = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
+        params.storeCd = $("#dlvrFgProdStoreCd").val();
+        if (col.binding === "prodCd") {
+          // 매출상세 팝업
+          $scope._broadcast('dlvrFgSaleDtlPopCtrl', params);
+        }
+      }
+    });
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());

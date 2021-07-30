@@ -27,6 +27,9 @@ public interface HqBrandService {
     /** 브랜드 저장 */
     int save(HqBrandVO[] hqBrandVOs, SessionInfoVO sessionInfoVO);
 
+    /** 본사 브랜드코드 중복체크 */
+    String chkHqBrandCd(HqBrandVO hqBrandVO, SessionInfoVO sessionInfoVO);
+
     /** 환경설정 조회 */
     List<DefaultMap<String>> getConfigList(HqBrandVO hqBrand);
 

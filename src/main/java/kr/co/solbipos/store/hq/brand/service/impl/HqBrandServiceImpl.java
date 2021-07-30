@@ -1,21 +1,19 @@
 package kr.co.solbipos.store.hq.brand.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import java.util.List;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.hq.brand.service.HqBrandService;
 import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : HqBrandServiceImpl.java
@@ -75,24 +73,25 @@ public class HqBrandServiceImpl implements HqBrandService{
             hqBrandVO.setModId(sessionInfoVO.getUserId());
             hqBrandVO.setOrgnFg(sessionInfoVO.getOrgnFg());
 
-
-            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 List<DefaultMap<String>> storeList = mapper.getStoreList(hqBrandVO);
                 String[] arrStoreCd = storeList.toString().replace(" ", "").replace("[", "").replace("]", "").split(",");
                 hqBrandVO.setArrStoreCd(arrStoreCd);
-            }
+            }*/
 
             if(hqBrandVO.getStatus() == GridDataFg.INSERT) {
-                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+                // 본사는 브랜드코드 직접입력, 매장은 자동채번
+                /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                     hqBrandVO.setHqBrandCd(mapper.getHqBrandCd(hqBrandVO));
-                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                }*/
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                     hqBrandVO.setMsBrandCd(mapper.getHqBrandCd(hqBrandVO));
                 }
 
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                     procCnt += mapper.insertHqBrand(hqBrandVO);
-                    mapper.insertHqMsBrand(hqBrandVO);
-
+                    //mapper.insertHqMsBrand(hqBrandVO);
                 } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                     procCnt += mapper.insertMsBrand(hqBrandVO);
                 }
@@ -100,13 +99,22 @@ public class HqBrandServiceImpl implements HqBrandService{
             else if(hqBrandVO.getStatus() == GridDataFg.UPDATE) {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                     procCnt += mapper.updateHqBrand(hqBrandVO);
-                    mapper.updateHqMsBrand(hqBrandVO);
+                    //mapper.updateHqMsBrand(hqBrandVO);
                 } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                     procCnt += mapper.updateMsBrand(hqBrandVO);
                 }
             }
         }
         return procCnt;
+    }
+
+    /** 본사 브랜드코드 중복체크 */
+    @Override
+    public String chkHqBrandCd(HqBrandVO hqBrand, SessionInfoVO sessionInfoVO) {
+
+        hqBrand.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqBrand.setArrHqBrandCd(hqBrand.getHqBrandCd().split(","));
+        return mapper.chkHqBrandCd(hqBrand);
     }
 
     /** 환경설정 조회 */

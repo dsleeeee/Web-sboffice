@@ -202,5 +202,9 @@ public interface ProdMapper {
     /** 프린터 리스트 조회 */
     List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO);
 
+    /** 프린트 연결 */
     int kitchenprintLink(ProdVO prodVO);
+
+    /** 브랜드 리스트 조회(선택 콤보박스용) */
+    List<DefaultMap<Object>> getBrandList(ProdVO prodVO);
 }

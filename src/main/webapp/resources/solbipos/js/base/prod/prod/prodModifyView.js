@@ -47,6 +47,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         return $scope.prodModifyInfo;
     };
 
+    // 판매가 내점/배달/포장에 적용
+    $scope.saleUprcApply = true;
+
     // 상품정보 조회
     $scope.$on("prodModifyCtrl", function(event, data) {
         // data 조회하지 않고 상세정보와 동일하므로 파라미터로 처리
@@ -62,7 +65,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             // 신규 모드 시
         } else {
             var params = {};
+
             // 상품기본정보
+            params.hqBrandCd = brandList[0].value; // 브랜드명(브랜드 목록 중 가장 첫번째 항목으로 셋팅)
             params.prodTypeFg = "1"; // 상품유형
             params.prodCd = ""; // 상품코드
             params.prodNm = ""; // 상품명
@@ -145,6 +150,20 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     };
 
+    $('#prodModifySaleUprc').on('propertychange change keyup paste input', function() {
+        if($scope.saleUprcApply){
+            var prodInfo = $scope.getProdModifyInfo();
+            var saleUprc = $(this).val();
+            if(saleUprc == prodInfo.saleUprc) {
+                return;
+            }
+            prodInfo.stinSaleUprc = saleUprc;
+            prodInfo.packSaleUprc = saleUprc;
+            prodInfo.dlvrSaleUprc = saleUprc;
+            $scope.setProdModifyInfo(prodInfo);
+        };
+    });
+
     // 상품코드 중복체크
     $scope.chkProdCd = function () {
         if(isNull($scope.prodModifyInfo.prodCd)) {
@@ -208,7 +227,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = $scope.prodModifyInfo;
         params.prodNoEnv = $("#prodCdInputType").val();
         params.saveMode = $("#saveMode").val();
-
         params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
         params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
         params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
@@ -217,7 +235,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
         params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
         params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
-
         params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
 
         // 저장수행
@@ -489,8 +506,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/detail.sb", params, function(response){
                     // 상품정보
                     var prodModify = response.data.data.list;
+
                     // 상품정보 set
                     $scope.setProdModifyInfo(prodModify);
+
+                    // 브랜드가 없는 경우, 가장 맨앞 브랜드로 셋팅
+                    if($scope.prodModifyInfo.hqBrandCd === null || $scope.prodModifyInfo.hqBrandCd === ""){
+                        $scope.hqBrandCdCombo.selectedIndex = 0;
+                    }
 
                     // 상품 이미지
                     if(prodModify.imgUrl === null){

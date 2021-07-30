@@ -158,9 +158,9 @@
                SALE_UPRC,
                #{regDt},
                #{regId},
-               STIN_SALE_UPRC,
-               DLVR_SALE_UPRC,
-               PACK_SALE_UPRC
+               NVL(STIN_SALE_UPRC, SALE_UPRC),
+               NVL(DLVR_SALE_UPRC, SALE_UPRC),
+               NVL(PACK_SALE_UPRC, SALE_UPRC)
           FROM TB_MS_PRODUCT_SALE_PRICE
          WHERE STORE_CD = #{storeCd}
            AND PROD_CD = #{prodCd}
@@ -221,9 +221,9 @@
         UPDATE
         SET
             tmpsp.SALE_UPRC = #{saleUprc}, -- 판매가
-            tmpsp.STIN_SALE_UPRC = #{stinSaleUprc}, -- 내점가
-            tmpsp.DLVR_SALE_UPRC = #{dlvrSaleUprc}, -- 배달가
-            tmpsp.PACK_SALE_UPRC = #{packSaleUprc}, -- 포장가
+            tmpsp.STIN_SALE_UPRC = NVL(#{stinSaleUprc}, #{saleUprc}), -- 내점가
+            tmpsp.DLVR_SALE_UPRC = NVL(#{dlvrSaleUprc}, #{saleUprc}), -- 배달가
+            tmpsp.PACK_SALE_UPRC = NVL(#{packSaleUprc}, #{saleUprc}), -- 포장가
             tmpsp.MOD_DT = #{modDt},
             tmpsp.MOD_ID = #{modId}
         WHEN NOT MATCHED THEN
@@ -249,9 +249,9 @@
             #{startDate},
             #{endDate},
             #{saleUprc},
-            #{stinSaleUprc},
-            #{dlvrSaleUprc},
-            #{packSaleUprc},
+            NVL(#{stinSaleUprc}, #{saleUprc}),
+            NVL(#{dlvrSaleUprc}, #{saleUprc}),
+            NVL(#{packSaleUprc}, #{saleUprc}),
             #{regDt},
             #{regId},
             #{modDt},
@@ -346,7 +346,193 @@
         AND thpsp.PROD_CD = thp.PROD_CD
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        ORDER BY tmp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+
+    <!-- 본사 판매가관리 -->
+    <!--
+        TABLE    : 본사판매가 관리 조회
+        COMMENTS : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
+    -->
+    <select id="getHqSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getHqSalePriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        thp.PROD_CD,
+        thp.PROD_NM,
+        thp.PROD_CLASS_CD,  -- 상품분류코드
+        thp.PO_UNIT_QTY, -- 입수
+        thp.COST_UPRC AS HQ_COST_UPRC,   -- 본사원가
+        thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+        thpsp.SALE_UPRC AS SALE_UPRC, -- 변경판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,    -- 본사내점-판매가
+        thpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,       -- 변경내점-판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,    -- 본사배달-판매가
+        thpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,       -- 변경배달-판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,    -- 본사포장-판매가
+        thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
+        thp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT HQ_OFFICE_CD, PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE 1 = 1
+        <![CDATA[
+                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+        AND SALE_PRC_FG = '1'
+        GROUP BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+            SELECT PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 본사 판매가관리 > 판매가 히스토리 등록을 위한 COUNT 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가 히스토리 등록을 위한 COUNT 조회한다.
+    -->
+    <select id="getRegistHqProdCount" parameterType="salePriceVO" resultType="Integer">
+        /* USE : SalePriceMapper.getRegistHqProdCount */
+        SELECT COUNT(SALE_UPRC) AS CNT
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND PROD_CD = #{prodCd}
+          AND SALE_PRC_FG = '1'
+          AND START_DATE = #{startDate}
+    </select>
+
+    <!-- 본사 판매가관리 > 판매가 변경 히스토리 등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE_HISTORY
+        COMMENTS : 판매가 변경 히스토리를 등록한다.
+    -->
+    <insert id="updateHqProdSalePriceHistory"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.updateHqProdSalePriceHistory */
+        <![CDATA[
+        INSERT INTO TB_HQ_PRODUCT_SALE_PRICE_HISTORY
+        SELECT SQ_HQ_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+               HQ_OFFICE_CD,
+               PROD_CD,
+               SALE_PRC_FG,
+               START_DATE,
+               END_DATE,
+               SALE_UPRC,
+               #{regDt},
+               #{regId},
+               NVL(STIN_SALE_UPRC, SALE_UPRC),
+               NVL(DLVR_SALE_UPRC, SALE_UPRC),
+               NVL(PACK_SALE_UPRC, SALE_UPRC)
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND PROD_CD = #{prodCd}
+          AND SALE_PRC_FG = '1'
+          AND START_DATE = #{startDate}
+        ]]>
+    </insert>
+
+    <!-- 본사 판매가관리 > 판매가 변경 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가를 일괄 변경한다.
+    -->
+    <insert id="modifyHqProdSalePrice"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.modifyHqProdSalePrice */
+        MERGE INTO TB_HQ_PRODUCT_SALE_PRICE tmpsp
+            USING DUAL
+            ON (
+                    tmpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tmpsp.PROD_CD = #{prodCd}
+                    AND tmpsp.SALE_PRC_FG = '1'
+                    AND tmpsp.START_DATE = #{startDate}
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        tmpsp.SALE_UPRC = #{saleUprc}, -- 판매가
+                        tmpsp.STIN_SALE_UPRC = NVL(#{stinSaleUprc}, #{saleUprc}), -- 내점가
+                        tmpsp.DLVR_SALE_UPRC = NVL(#{dlvrSaleUprc}, #{saleUprc}), -- 배달가
+                        tmpsp.PACK_SALE_UPRC = NVL(#{packSaleUprc}, #{saleUprc}), -- 포장가
+                        tmpsp.MOD_DT = #{modDt},
+                        tmpsp.MOD_ID = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                     HQ_OFFICE_CD,
+                     PROD_CD,
+                     SALE_PRC_FG,
+                     START_DATE,
+                     END_DATE,
+                     SALE_UPRC,
+                     STIN_SALE_UPRC,
+                     DLVR_SALE_UPRC,
+                     PACK_SALE_UPRC,
+                     REG_DT,
+                     REG_ID,
+                     MOD_DT,
+                     MOD_ID
+                        ) VALUES (
+                                     #{hqOfficeCd},
+                                     #{prodCd},
+                                     '1',
+                                     #{startDate},
+                                     #{endDate},
+                                     #{saleUprc},
+                                     NVL(#{stinSaleUprc}, #{saleUprc}),
+                                     NVL(#{dlvrSaleUprc}, #{saleUprc}),
+                                     NVL(#{packSaleUprc}, #{saleUprc}),
+                                     #{regDt},
+                                     #{regId},
+                                     #{modDt},
+                                     #{modId}
+                                 )
+    </insert>
+
+    <!-- 매장 판매가 등록 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        PARAM    : salePriceVO
+        COMMENTS : 매장 판매가 등록
+    -->
+    <select id="saveStoreSalePrice" statementType="CALLABLE"  parameterType="salePriceVO">
+        /* USE : SalePriceMapper.saveStoreSalePrice */
+        {
+            CALL PKG_HQ_PRODUCT_SALE_PRICE.SP_HQ_PRODUCT_SALE_PRICE_I
+            (
+                #{hqOfficeCd},
+                #{prodCd},
+                #{storeCd},
+                #{workMode},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+            }
+    </select>
 </mapper>

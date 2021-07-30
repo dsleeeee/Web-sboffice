@@ -205,6 +205,15 @@ public class ProdVO extends PageVO {
     /** 포장가 */
     private String packSaleUprc;
 
+    /** 변경전 내점가 */
+    private String stinSaleUprcB;
+
+    /** 변경전 배달가 */
+    private String dlvrSaleUprcB;
+
+    /** 변경전 포장가 */
+    private String packSaleUprcB;
+
     /** 프린터코드 */
     private String prterNo;
 
@@ -1000,6 +1009,30 @@ public class ProdVO extends PageVO {
 
     public void setPackSaleUprc(String packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getStinSaleUprcB() {
+        return stinSaleUprcB;
+    }
+
+    public void setStinSaleUprcB(String stinSaleUprcB) {
+        this.stinSaleUprcB = stinSaleUprcB;
+    }
+
+    public String getDlvrSaleUprcB() {
+        return dlvrSaleUprcB;
+    }
+
+    public void setDlvrSaleUprcB(String dlvrSaleUprcB) {
+        this.dlvrSaleUprcB = dlvrSaleUprcB;
+    }
+
+    public String getPackSaleUprcB() {
+        return packSaleUprcB;
+    }
+
+    public void setPackSaleUprcB(String packSaleUprcB) {
+        this.packSaleUprcB = packSaleUprcB;
     }
 
     public String getPrterNo() {

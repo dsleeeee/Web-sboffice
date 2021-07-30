@@ -13,7 +13,8 @@
 <c:set var="vUserIdChk" value="${sessionScope.sessionInfo.vUserId}"/>
 
 <style type="text/css">
-
+/* 소스 정리 안함 쏘리 */
+/* 소스 정리 안함 쏘리 */
 /* 단순버튼 01 */
 .btn01
 {
@@ -504,12 +505,101 @@ button[class*="btn02"] {border: 0;}
  -->
 
 
+<!--
+
+
+<c:import url="/WEB-INF/view/base/store/tblms/tblmsSettingView.jsp">
+</c:import>
+
+      <div id="viewStyleLayer"   style="height: 580px; width: 630px"></div>
+
+
+ -->
+
+      <div id="viewStyleLayer"    style="height: 580px; width: 630px; display:none;"></div>
+      <div id="viewStyleLayer2"   style="height: 580px; width: 630px; display:none;"></div>
+      <div id="viewStyleLayer3"   style="height: 580px; width: 630px; display:none;"></div>
+      <div id="viewStyleLayer4"   style="height: 580px; width: 630px"></div>
+
 </div>
 
 <script type="text/javascript">
     var s_userId      = "${userId}";
     var s_storeCd     = "${storeCd}";
     var s_vUserIdChk  = "${vUserIdChk}";
+
+
+
+
+
+alert(0);
+    var styleCd = "01";
+    var path = "/resource/solbipos/css/img/touchKey/";
+    var ext = ".png";
+    var styleBtnFile = styleCd + ext;
+    var viewStyleLayer = document.getElementById("viewStyleLayer");
+    viewStyleLayer.style.backgroundImage = "url('" + path + "/touchKey_style" + styleBtnFile + "')";
+alert("url('" + path + "/touchKey_style" + styleBtnFile + "')");
+
+alert(1);
+    var styleCd = "01";
+    var path = "/resource/solbipos/css/img/tblms/";
+    var ext = ".png";
+    var styleBtnFile = styleCd + ext;
+    var viewStyleLayer2 = document.getElementById("viewStyleLayer2");
+    viewStyleLayer2.style.backgroundImage = "url('" + path + "/ie_setting_" + styleBtnFile + "')";
+alert("url('" + path + "/ie_setting_" + styleBtnFile + "')");
+
+alert(2);
+
+
+
+    var styleCd = "01";
+    var path = "/resource/solbipos/css/img/touchKey/";
+    var ext = ".png";
+    var styleBtnFile = styleCd + ext;
+    var viewStyleLayer3 = document.getElementById("viewStyleLayer3");
+    viewStyleLayer3.style.backgroundImage = "url('" + path + "/touchKey_style" + styleBtnFile + "')";
+alert("url('" + path + "/touchKey_style" + styleBtnFile + "')");
+
+alert(3);
+
+    var styleCd = "01";
+    var path = "/resource/solbipos/css/img/tblms/";
+    var ext = ".PNG";
+    var styleBtnFile = styleCd + ext;
+    var viewStyleLayer4 = document.getElementById("viewStyleLayer4");
+    viewStyleLayer4.style.backgroundImage = "url('" + path + "/ie_setting_" + styleBtnFile + "')";
+alert("url('" + path + "/ie_setting_" + styleBtnFile + "')");
+
+alert(4);
+
+
+
+
+
+
+
+/*
+
+
+1. 파일 만들고 임포트 해서
+2. 아래 작업으로 처리
+3. 탭은 사용할지 jsp에서 처리하면됨
+
+
+
+    var imgFileName = "01";
+    var path = "/resource/solbipos/css/img/table/";
+    var ext = ".PNG";
+    var imgBtnFile = imgFileName + ext;
+    var viewStyleLayer2 = document.getElementById("viewStyleLayer2");
+    viewStyleLayer2.style.backgroundImage = "url('" + path + "/ie_setting_" + imgBtnFile + "')";
+
+*/
+
+
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/tblms/tblms.js?ver=20210715.01" charset="utf-8"></script>

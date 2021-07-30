@@ -1,31 +1,27 @@
 package kr.co.solbipos.base.prod.prod.service.impl;
 
-import kr.co.common.system.BaseEnv;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
-import kr.co.solbipos.base.prod.prod.service.enums.HqProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -730,18 +726,25 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setModDt(currentDate);
             prodVO.setModId(sessionInfoVO.getUserId());
 
-            // 판매가 변경 히스토리 등록 count 조회
-            int prodCnt = prodMapper.getRegistProdCount(prodVO);
-
-            if(prodCnt > 0) {
-                // 매장 상품 판매가 변경 히스토리 등록
-                result = prodMapper.updateStoreSaleUprcHistory(prodVO);
-                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
 
             // 매장 상품 판매가 변경
             result = prodMapper.updateStoreSaleUprc(prodVO);
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            if(!prodVO.getSaleUprc().equals(prodVO.getSaleUprcB()) ||
+               (!CmmUtil.nvl(prodVO.getStinSaleUprc(),0).equals(0) && !prodVO.getStinSaleUprc().equals(CmmUtil.nvl(prodVO.getStinSaleUprcB(),0))) ||
+               (!CmmUtil.nvl(prodVO.getDlvrSaleUprc(),0).equals(0) && !prodVO.getDlvrSaleUprc().equals(CmmUtil.nvl(prodVO.getDlvrSaleUprcB(),0))) ||
+               (!CmmUtil.nvl(prodVO.getPackSaleUprc(),0).equals(0) && !prodVO.getPackSaleUprc().equals(CmmUtil.nvl(prodVO.getPackSaleUprcB(),0)))){
+                // 판매가 변경 히스토리 등록 count 조회
+                int prodCnt = prodMapper.getRegistProdCount(prodVO);
+
+                if(prodCnt > 0) {
+                    // 매장 상품 판매가 변경 히스토리 등록
+                    result = prodMapper.updateStoreSaleUprcHistory(prodVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+            }
+
         }
 
         return result;
@@ -1120,6 +1123,7 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getSideProdChk(prodVO);
     }
 
+    /** 프린트 조회 */
     @Override
     public List<DefaultMap<String>> getKitchenprintList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -1131,6 +1135,7 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getKitchenprintList(prodVO);
     }
 
+    /** 프린트 연결 */
     @Override
     public int kitchenprintLink(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -1144,5 +1149,18 @@ public class ProdServiceImpl implements ProdService {
             result += prodMapper.kitchenprintLink(prodVO);
         }
         return result;
+    }
+
+    /** 브랜드 리스트 조회(선택 콤보박스용) */
+    @Override
+    public List<DefaultMap<Object>> getBrandList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getBrandList(prodVO);
     }
 }

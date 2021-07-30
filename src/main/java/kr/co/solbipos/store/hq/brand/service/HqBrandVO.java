@@ -50,6 +50,8 @@ public class HqBrandVO extends PageVO {
      * S : 매장, 가맹점
      */
     private OrgnFg OrgnFg;
+    /** 브랜드코드 array */
+    private String arrHqBrandCd[];
 
 
     /**
@@ -152,5 +154,13 @@ public class HqBrandVO extends PageVO {
 
     public void setOrgnFg(OrgnFg orgnFg) {
         OrgnFg = orgnFg;
+    }
+
+    public String[] getArrHqBrandCd() {
+        return arrHqBrandCd;
+    }
+
+    public void setArrHqBrandCd(String[] arrHqBrandCd) {
+        this.arrHqBrandCd = arrHqBrandCd;
     }
 }

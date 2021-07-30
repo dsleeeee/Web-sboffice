@@ -121,4 +121,26 @@ public class DlvrFgController {
 
         return ReturnUtil.returnListJson(Status.OK, result, dlvrFgVO);
     }
+
+    /**
+     * 상품-영수별매출상세
+     *
+     * @param dlvrFgVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2021.07.29
+     */
+    @RequestMapping(value = "/dlvrFgProd/getSaleDtl.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleDtl(DlvrFgVO dlvrFgVO, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dlvrFgService.getSaleDtl(dlvrFgVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dlvrFgVO);
+    }
 }

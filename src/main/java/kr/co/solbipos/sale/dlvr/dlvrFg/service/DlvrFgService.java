@@ -31,11 +31,12 @@ public interface DlvrFgService {
     /** 상품별탭 - 유형별 */
     List<DefaultMap<Object>> getOrderFg(DlvrFgVO dlvrFgVO, SessionInfoVO sessionInfoVO);
 
-
     /** 상품별탭 - 유형별 */
     List<DefaultMap<Object>> getProd(DlvrFgVO dlvrFgVO, SessionInfoVO sessionInfoVO);
 
-
     /** 상품별탭 - 유형별 */
     List<DefaultMap<Object>> getProdDtl(DlvrFgVO dlvrFgVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품-영수별매출상세 */
+    List<DefaultMap<Object>> getSaleDtl(DlvrFgVO dlvrFgVO, SessionInfoVO sessionInfoVO);
 }

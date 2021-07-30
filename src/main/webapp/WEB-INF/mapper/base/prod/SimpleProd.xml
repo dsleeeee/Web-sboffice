@@ -246,7 +246,7 @@
             #{result},
             #{prodCd},
             #{prodNm},
-            '0000000', --HQ_BRAND_CD
+            #{hqBrandCd},
             #{prodClassCd},
             '', --CORNR_CD
             '', --ORGPLCE_CD
@@ -284,9 +284,9 @@
             #{modId},
             #{vendrCd},
             #{prcCtrlFg},
-            #{stinSaleUprc},
-            #{dlvrSaleUprc},
-            #{packSaleUprc}
+            NVL(#{stinSaleUprc}, #{saleUprc}),
+            NVL(#{dlvrSaleUprc}, #{saleUprc}),
+            NVL(#{packSaleUprc}, #{saleUprc})
         )
     </insert>
 

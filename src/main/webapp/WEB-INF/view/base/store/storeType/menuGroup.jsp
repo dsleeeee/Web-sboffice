@@ -47,7 +47,7 @@
         </table>
 
         <%-- left (메뉴그룹관리-메뉴그룹등록 grid) --%>
-        <div class="wj-TblWrap mt20 mb20 w30 fl">
+        <div class="wj-TblWrap mt20 mb20 w30 fl" style="width: 275px;">
             <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh30"><s:message code='storeType.menuGroupManage' /></span>
@@ -84,7 +84,7 @@
     </div>
 
     <%-- right --%>
-    <div class="wj-TblWrap w70 fr">
+    <div class="wj-TblWrap fr" style="width:calc(100% - 275px);">
 
         <%-- 메뉴그룹관리-상품연결 grid --%>
         <div class="wj-TblWrap mt20 mb5 w50 fl" ng-controller="prodMappingCtrl">

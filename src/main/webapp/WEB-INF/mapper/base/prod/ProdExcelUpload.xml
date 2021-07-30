@@ -218,7 +218,7 @@
             #{result},
             #{prodCd},
             #{prodNm},
-            '0000000', --HQ_BRAND_CD
+            #{hqBrandCd},
             #{prodClassCd},
             '', --CORNR_CD
             '', --ORGPLCE_CD
@@ -257,11 +257,39 @@
             #{vendrCd},
             #{startStockQty},
             #{prcCtrlFg},
-            #{stinSaleUprc},
-            #{dlvrSaleUprc},
-            #{packSaleUprc}
+            NVL(#{stinSaleUprc}, #{saleUprc}),
+            NVL(#{dlvrSaleUprc}, #{saleUprc}),
+            NVL(#{packSaleUprc}, #{saleUprc})
         )
     </insert>
+
+    <!-- 브랜드코드 검증 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        COMMENTS : [본사/매장]브랜드코드
+        * 매장 브랜드 코드 9자리로 변경될 예정이니 추후에 기본 브랜드코드 변경해야함
+    -->
+    <select id="getHqBrandCdCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getHqBrandCdCheck */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT NVL((MIN(HQ_BRAND_CD) KEEP(DENSE_RANK FIRST ORDER BY MOD_DT DESC)), '0000000') AS HQ_BRAND_CD
+                  FROM TB_HQ_BRAND
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND HQ_BRAND_NM = #{hqBrandCd}
+                   AND USE_YN = 'Y'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT NVL((MIN(MS_BRAND_CD) KEEP(DENSE_RANK FIRST ORDER BY MOD_DT DESC)), '0000000') AS MS_BRAND_CD
+                  FROM TB_MS_BRAND
+                 WHERE STORE_CD = #{storeCd}
+                   AND MS_BRAND_NM = #{hqBrandCd}
+                   AND USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
 
     <!-- 상품유형 검증 조회 -->
     <!--

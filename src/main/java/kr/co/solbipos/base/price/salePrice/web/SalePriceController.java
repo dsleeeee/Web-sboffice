@@ -74,9 +74,15 @@ public class SalePriceController {
 
         // 내점/배달/포장 가격관리 사용여부
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 내점/배달/포장 가격관리 사용여부
             model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+            // 매장판매가관리본사강제수정
+            model.addAttribute("coercionFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1113"), "0"));
+
         }else{
+            // 내점/배달/포장 가격관리 사용여부
             model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+            model.addAttribute("coercionFg", "0");
         }
 
         return "base/price/salePrice/salePriceView";
@@ -161,4 +167,75 @@ public class SalePriceController {
         return returnListJson(Status.OK, result, salePriceVO);
     }
 
+    /***
+     * 본사 정보 조회
+     * @param salePriceVO
+     * @param request
+     * @return
+     * @author  권지현
+     * @since   2021. 07. 20.
+     */
+    @RequestMapping(value = "/hqSalePrice/getHqSalePriceList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePriceList(SalePriceVO salePriceVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceService.getHqSalePriceList(salePriceVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceVO);
+    }
+
+    /**
+     * 본사 판매가 저장
+     * @param   salePriceVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  권지현
+     * @since   2021. 07. 20.
+     */
+    @RequestMapping(value = "/prodSalePrice/saveHqProdSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveHqProdSalePrice(@RequestBody SalePriceVO[] salePriceVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceService.saveHqProdSalePrice(salePriceVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 본사 판매가 관리 화면 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  김지은
+     * @since   2018. 12. 24.
+     */
+    @RequestMapping(value = "/salePrice/hqSalePriceView.sb", method = RequestMethod.GET)
+    public String hqView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+            // 매장판매가관리본사강제수정
+            model.addAttribute("coercionFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1113"), "0"));
+
+        }else{
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+            model.addAttribute("coercionFg", "0");
+        }
+
+        return "base/price/salePrice/hqSalePriceView";
+    }
 }

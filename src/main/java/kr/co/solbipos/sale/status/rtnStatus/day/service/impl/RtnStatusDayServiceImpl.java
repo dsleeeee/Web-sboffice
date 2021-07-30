@@ -2,6 +2,8 @@ package kr.co.solbipos.sale.status.rtnStatus.day.service.impl;
 
 import java.util.List;
 
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -140,7 +142,65 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
         return rtnStatusDayMapper.getRtnStatusPosDtlExcelList(rtnStatusDayVO);
 	}
 
+	@Override
+	public List<DefaultMap<String>> getPayColAddList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
+		return rtnStatusDayMapper.getPayColAddList(rtnStatusDayVO);
+	}
 
+	@Override
+	public List<DefaultMap<String>> getDcColList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
+		return rtnStatusDayMapper.getDcColList(rtnStatusDayVO);
+	}
 
+	@Override
+	public List<DefaultMap<String>> getGuestColList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+			rtnStatusDayVO.setStoreCd(sessionInfoVO.getStoreCd());
+		}
+		return rtnStatusDayMapper.getGuestColList(rtnStatusDayVO);
+	}
+
+	@Override
+	public List<DefaultMap<String>> getRtnstatusBillList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
+			String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
+			if (arrStoreCd.length > 0) {
+				if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+					rtnStatusDayVO.setArrStoreCd(arrStoreCd);
+				}
+			}
+		}
+
+		// 결제수단 array 값 세팅
+		rtnStatusDayVO.setArrPayCol(rtnStatusDayVO.getPayCol().split(","));
+		// 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+		String payCol= "";
+		String pivotPayCol = "";
+		String arrPayCol[] = rtnStatusDayVO.getPayCol().split(",");
+		for(int i=0; i < arrPayCol.length; i++) {
+			// 현금,현금영수증 제외
+			if(! (("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i])) ) {
+				pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+				payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+			}
+		}
+		rtnStatusDayVO.setPivotPayCol(pivotPayCol);
+		rtnStatusDayVO.setArrPayCol(payCol.split(","));
+
+		// 할인구분 array 값 세팅
+		rtnStatusDayVO.setArrDcCol(rtnStatusDayVO.getDcCol().split(","));
+		// 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+		String pivotDcCol = "";
+		String arrDcCol[] = rtnStatusDayVO.getDcCol().split(",");
+		for(int i=0; i < arrDcCol.length; i++) {
+			pivotDcCol += (pivotDcCol.equals("") ? "" : ",") + "'"+arrDcCol[i]+"'"+" AS DC"+arrDcCol[i];
+		}
+		rtnStatusDayVO.setPivotDcCol(pivotDcCol);
+
+		return rtnStatusDayMapper.getRtnstatusBillList(rtnStatusDayVO);
+	}
 
 }

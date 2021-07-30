@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.price.salePrice.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 
 /**
  * @Class Name : SalePriceVO.java
@@ -84,6 +85,20 @@ public class SalePriceVO extends PageVO {
 
     /** 포장가 */
     private String packSaleUprc;
+
+    /** 전매장적용 구분 */
+    private String applyFg;
+
+    /**
+     * workMode<br>
+     * 1 : 상품정보수정<br>
+     * 2 : 신규상품등록<br>
+     * 3 : 매장등록<br>
+     */
+    private WorkModeFg workMode;
+
+    /** 프로시져 실행 결과 */
+    private String result;
 
     /**
      * @return the hqOfficeCd
@@ -378,5 +393,29 @@ public class SalePriceVO extends PageVO {
 
     public void setPackSaleUprc(String packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getApplyFg() {
+        return applyFg;
+    }
+
+    public void setApplyFg(String applyFg) {
+        this.applyFg = applyFg;
+    }
+
+    public WorkModeFg getWorkMode() {
+        return workMode;
+    }
+
+    public void setWorkMode(WorkModeFg workMode) {
+        this.workMode = workMode;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

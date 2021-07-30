@@ -11,6 +11,7 @@
 <%--<c:set var="priceEnvstVal" value="${priceEnvstVal}" />--%>
 <c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />
 <c:set var="kitchenprintLink" value="${kitchenprintLink}" />
+<c:set var="brandUseFg" value="${brandUseFg}" />
 
 <div class="subCon" ng-controller="prodCtrl" id="prodView">
     <%--searchTbl--%>
@@ -115,11 +116,11 @@
                 </div>
             </td>
             <%-- 브랜드 --%>
-            <c:if test="${orgnFg == 'HQ'}">
+            <c:if test="${brandUseFg == '1'}">
                 <th><s:message code="prod.brandNm" /></th>
                 <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" /></td>
             </c:if>
-            <c:if test="${orgnFg != 'HQ'}">
+            <c:if test="${brandUseFg != '0'}">
                 <th></th>
                 <td></td>
             </c:if>
@@ -173,6 +174,9 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+                <c:if test="${brandUseFg == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.prodClassCd"/>" binding="prodClassCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
@@ -228,6 +232,9 @@
                     items-source="data"
                     item-formatter="_itemFormatter">
                 <!-- define columns -->
+                <c:if test="${brandUseFg == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.prodClassCd"/>" binding="prodClassCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
@@ -266,6 +273,10 @@
     var subPriceFg = "${subPriceFg}";
     // 프린터연결팝업창 여부(0:안띄움 1:띄움)
     var kitchenprintLink = "${kitchenprintLink}";
+    // (상품관리)브랜드사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 브랜드
+    var brandList = ${brandList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.04" charset="utf-8"></script>

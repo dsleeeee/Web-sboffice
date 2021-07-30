@@ -83,6 +83,7 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="simpleProd.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.brandNm"/>" binding="hqBrandCd" data-map="brandDataMap" width="85" align="center" <c:if test="${brandUseFg == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
                     <c:if test="${prodNoEnvFg == 'MANUAL'}">
                         <wj-flex-grid-column header="<s:message code="simpleProd.prodCd"/>" binding="prodCd" width="100" align="center"></wj-flex-grid-column>
                     </c:if>
@@ -145,9 +146,12 @@
     var vatFgData = ${ccu.getCommCodeExcpAll("039")};
     <%-- 가격관리구분 --%>
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
-
     <%-- 내점/배달/포장 가격관리 사용여부 --%>
     var subPriceFg = "${subPriceFg}";
+    <%-- (상품관리)브랜드사용여부 --%>
+    var brandUseFg = "${brandUseFg}";
+    <%-- 브랜드 --%>
+    var brandList = ${brandList};
 
 </script>
 
