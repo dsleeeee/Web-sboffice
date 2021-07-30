@@ -291,7 +291,7 @@
                     <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.6*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.monthSale.monthAvrSale"/>" binding="monthAvrSale" width="1.7*" align="right" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.monthSale.billCnt"/>" binding="billCnt" width="1.2*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="billUprc" width="1.4*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.monthSale.billUprc"/>" binding="billUprc" width="1.4*" align="right" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>

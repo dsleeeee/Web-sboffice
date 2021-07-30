@@ -290,7 +290,7 @@
                     <wj-flex-grid-column header="<s:message code="mobile.weekSale.realSaleAmt"/>" binding="realSaleAmt" width="1.6*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.weekSale.dayAvrSale"/>" binding="dayAvrSale" width="1.7*" align="right" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.weekSale.billCnt"/>" binding="billCnt" width="1.2*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="mobile.weekSale.billUprc"/>" binding="billUprc" width="1.4*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.weekSale.billUprc"/>" binding="billUprc" width="1.4*" align="right" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>

@@ -55,10 +55,10 @@
                 (
                     SELECT
                     tsdt.HQ_OFFICE_CD,
-                    SUM(tsdt.REAL_SALE_CNT) AS REAL_SALE_CNT,
+                    SUM(tsdt.SALE_CNT) AS REAL_SALE_CNT,
                     SUM(tsdt.RTN_SALE_CNT) AS RTN_SALE_CNT,
-                    SUM(tsdt.REAL_SALE_CNT) - SUM(tsdt.RTN_SALE_CNT) AS BILL_CNT,
-                    COUNT(tsdt.SALE_DATE) AS SALE_CNT,
+                    SUM(tsdt.BILL_CNT) AS BILL_CNT,
+                    COUNT(DISTINCT tsdt.SALE_DATE) AS SALE_CNT,
                     SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT,
                     SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
                     SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
@@ -244,7 +244,7 @@
                     SELECT
                     tsdp.HQ_OFFICE_CD,
                     SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                    COUNT(tsdp.SALE_DATE) AS SALE_CNT
+                    COUNT(DISTINCT tsdp.SALE_DATE) AS SALE_CNT
                     FROM TB_SL_DAILY_PROD tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -346,7 +346,7 @@
                     SELECT
                     tsdp.DLVR_PACK_FG,
                     SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                    COUNT(tsdp.SALE_DATE) AS SALE_CNT
+                    COUNT(DISTINCT tsdp.SALE_DATE) AS SALE_CNT
                     FROM TB_SL_DAILY_PROD tsdp
                     WHERE 1=1
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
