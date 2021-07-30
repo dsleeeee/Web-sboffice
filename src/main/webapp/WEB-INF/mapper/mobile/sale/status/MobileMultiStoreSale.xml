@@ -91,6 +91,13 @@
             FROM TB_SL_DAILY_PROD tsdp
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsdp.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ) D
         WHERE 1=1
@@ -153,7 +160,7 @@
             SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
             SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT,
             COUNT(tsdt.SALE_DATE) AS SALE_CNT,
-            SUM(tsdt.REAL_SALE_CNT) - SUM(tsdt.RTN_SALE_CNT) AS BILL_CNT
+            SUM(tsdt.BILL_CNT) AS BILL_CNT
             FROM TB_SL_DAILY_TOTAL tsdt
             WHERE 1=1
             AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -326,7 +333,7 @@
             SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT,
             SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
             SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT,
-            SUM(tsdt.REAL_SALE_CNT) - SUM(tsdt.RTN_SALE_CNT) AS BILL_CNT
+            SUM(tsdt.BILL_CNT) AS BILL_CNT
             FROM TB_SL_DAILY_TOTAL tsdt
             WHERE 1=1
             AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
