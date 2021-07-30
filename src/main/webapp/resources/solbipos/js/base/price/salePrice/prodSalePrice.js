@@ -69,9 +69,13 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     s.cellEditEnded.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
+          var item = s.rows[e.row].dataItem;
+          // 가격 변경시 체크박스 체크
+          if (col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
+              $scope.checked(item);
+          }
         // 판매가 변경시 다른 컬럼값도 변경
         if (col.binding === "saleUprc") {
-          var item = s.rows[e.row].dataItem;
           $scope.calcAmt(item);
           if($scope.prodSaleUprcApply){
             $scope.saleUprc(item);
@@ -266,11 +270,17 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     item.storeMarginRate = ((saleUprc - poUnitQty) - splyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
   };
 
+  // 일괄변경
   $scope.saleUprc = function (item){
     item.stinSaleUprc = item.saleUprc;
     item.dlvrSaleUprc = item.saleUprc;
     item.packSaleUprc = item.saleUprc;
   };
+
+  //판매가 수정시 체크박스 체크
+  $scope.checked = function (item){
+    item.gChk = true;
+  }
 
   // 판매가 그리드 조회
   $scope.searchSalePriceList = function(){
