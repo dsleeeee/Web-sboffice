@@ -272,7 +272,7 @@
         </div>
       <%-- 내점/배달/포장 가격 --%>
       <c:if test="${subPriceFg == '1'}">
-        <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/></h3>
+        <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/>&nbsp;&nbsp;<input type="checkbox" id="saleUprcApply" ng-model="saleUprcApply" />&nbsp;<s:message code="prod.saleUprcApply"/></h3>
         <div class="tblBr">
           <table class="tblType01">
             <colgroup>

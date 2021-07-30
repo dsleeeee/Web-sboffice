@@ -76,10 +76,16 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                var saleUprcB = $scope.flex.collectionView.items[i].saleUprcB; // 기존 판매가
-                var saleUprc = $scope.flex.collectionView.items[i].saleUprc; // 현재 판매가
+                var saleUprcB       = $scope.flex.collectionView.items[i].saleUprcB;        // 기존 판매가
+                var saleUprc        = $scope.flex.collectionView.items[i].saleUprc;         // 현재 판매가
+                var stinSaleUprcB   = $scope.flex.collectionView.items[i].stinSaleUprcB;    // 기존 내점가
+                var stinSaleUprc    = $scope.flex.collectionView.items[i].stinSaleUprc;     // 현재 내점가
+                var dlvrSaleUprcB   = $scope.flex.collectionView.items[i].dlvrSaleUprcB;    // 기존 배달가
+                var dlvrSaleUprc    = $scope.flex.collectionView.items[i].dlvrSaleUprc;     // 현재 배달가
+                var packSaleUprcB   = $scope.flex.collectionView.items[i].packSaleUprcB;    // 기존 포장가
+                var packSaleUprc    = $scope.flex.collectionView.items[i].packSaleUprc;     // 현재 포장가
 
-                if(saleUprc !== saleUprcB){
+                if(saleUprc !== saleUprcB || stinSaleUprc !== stinSaleUprcB || dlvrSaleUprc !== dlvrSaleUprcB || packSaleUprc !== packSaleUprcB){
                     $scope.flex.collectionView.items[i].hqOfficeCd = $("#hdHqOfficeCd").val();
                     $scope.flex.collectionView.items[i].storeCd = $("#hdStoreCd").val();
                     params.push($scope.flex.collectionView.items[i]);
@@ -122,7 +128,9 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.extend(this, new RootController('noRegProdCtrl', $scope, $http, true));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
-    $scope.initGrid = function (s, e) {};
+    $scope.initGrid = function (s, e) {
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+    };
 
     // 미등록 매장 그리드 조회
     $scope.$on("noRegProdCtrl", function(event, data) {

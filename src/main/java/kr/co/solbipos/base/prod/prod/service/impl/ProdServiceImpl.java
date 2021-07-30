@@ -726,18 +726,25 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setModDt(currentDate);
             prodVO.setModId(sessionInfoVO.getUserId());
 
-            // 판매가 변경 히스토리 등록 count 조회
-            int prodCnt = prodMapper.getRegistProdCount(prodVO);
-
-            if(prodCnt > 0) {
-                // 매장 상품 판매가 변경 히스토리 등록
-                result = prodMapper.updateStoreSaleUprcHistory(prodVO);
-                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
 
             // 매장 상품 판매가 변경
             result = prodMapper.updateStoreSaleUprc(prodVO);
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            if(!prodVO.getSaleUprc().equals(prodVO.getSaleUprcB()) ||
+               (!CmmUtil.nvl(prodVO.getStinSaleUprc(),0).equals(0) && !prodVO.getStinSaleUprc().equals(CmmUtil.nvl(prodVO.getStinSaleUprcB(),0))) ||
+               (!CmmUtil.nvl(prodVO.getDlvrSaleUprc(),0).equals(0) && !prodVO.getDlvrSaleUprc().equals(CmmUtil.nvl(prodVO.getDlvrSaleUprcB(),0))) ||
+               (!CmmUtil.nvl(prodVO.getPackSaleUprc(),0).equals(0) && !prodVO.getPackSaleUprc().equals(CmmUtil.nvl(prodVO.getPackSaleUprcB(),0)))){
+                // 판매가 변경 히스토리 등록 count 조회
+                int prodCnt = prodMapper.getRegistProdCount(prodVO);
+
+                if(prodCnt > 0) {
+                    // 매장 상품 판매가 변경 히스토리 등록
+                    result = prodMapper.updateStoreSaleUprcHistory(prodVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+            }
+
         }
 
         return result;

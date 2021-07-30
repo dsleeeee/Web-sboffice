@@ -57,6 +57,8 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
   $scope._setComboData("dlvrSaleUprcOption", dlvrSaleAmtOptionFg);
   $scope._setComboData("packSaleUprcOption", packSaleAmtOptionFg);
 
+  $scope.prodSaleUprcApply = true;
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodSalePriceCtrl', $scope, $http, false));
 
@@ -71,6 +73,9 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
         if (col.binding === "saleUprc") {
           var item = s.rows[e.row].dataItem;
           $scope.calcAmt(item);
+          if($scope.prodSaleUprcApply){
+            $scope.saleUprc(item);
+          }
         }
       }
       s.collectionView.commitEdit();
@@ -259,6 +264,12 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     item.saleUprcAmt = (saleUprc - poUnitQty); // 현재판매금액
     item.storeMarginAmt = ((saleUprc - poUnitQty) - splyUprc); // 매장마진금액
     item.storeMarginRate = ((saleUprc - poUnitQty) - splyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
+  };
+
+  $scope.saleUprc = function (item){
+    item.stinSaleUprc = item.saleUprc;
+    item.dlvrSaleUprc = item.saleUprc;
+    item.packSaleUprc = item.saleUprc;
   };
 
   // 판매가 그리드 조회

@@ -122,7 +122,11 @@ app.controller('rtnStatusBillCtrl', ['$scope', '$http', '$timeout', function ($s
 			  if (col.binding === ("pay" + payColList[i].payCd)) {
 				  // 값이 있으면 링크
 				  if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
-					  $scope._broadcast(payColList[i].payMethod.toLowerCase().replaceAll('_','') + 'Ctrl', params);
+					if(payColList[i].payCd == "021"){// 현금영수증 현금팝업
+						$scope._broadcast('cashCtrl', params);
+					} else {
+						$scope._broadcast(payColList[i].payMethod.toLowerCase().replaceAll('_','') + 'Ctrl', params);
+					}
 				  }
 			  }
 		  }
@@ -165,6 +169,13 @@ app.controller('rtnStatusBillCtrl', ['$scope', '$http', '$timeout', function ($s
     dataItem.orgSaleDate	= messages["rtnStatus.orgInfo"];
     dataItem.orgPosNo		= messages["rtnStatus.orgInfo"];
     dataItem.orgBillNo		= messages["rtnStatus.orgInfo"];
+    dataItem.totSaleAmt		= messages["rtnStatus.totSaleAmt"];
+    dataItem.totDcAmt  		= messages["rtnStatus.totDcAmt"];
+    dataItem.realSaleAmt	= messages["rtnStatus.realSaleAmt"];
+    dataItem.gaAmt     		= messages["rtnStatus.gaAmt"];
+    dataItem.vatAmt    		= messages["rtnStatus.vatAmt"];
+    dataItem.totTipAmt 		= messages["rtnStatus.totTipAmt"];
+    dataItem.totEtcAmt 		= messages["rtnStatus.totEtcAmt"];
 
 	  // 결제수단 헤더머지 컬럼 생성
 	  for (var i = 0; i < arrPayCol.length; i++) {

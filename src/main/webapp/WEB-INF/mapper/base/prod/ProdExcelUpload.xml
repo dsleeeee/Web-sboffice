@@ -257,9 +257,9 @@
             #{vendrCd},
             #{startStockQty},
             #{prcCtrlFg},
-            #{stinSaleUprc},
-            #{dlvrSaleUprc},
-            #{packSaleUprc}
+            NVL(#{stinSaleUprc}, #{saleUprc}),
+            NVL(#{dlvrSaleUprc}, #{saleUprc}),
+            NVL(#{packSaleUprc}, #{saleUprc})
         )
     </insert>
 

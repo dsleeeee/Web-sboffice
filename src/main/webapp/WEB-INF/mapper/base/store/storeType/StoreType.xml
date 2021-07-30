@@ -465,9 +465,9 @@
         /* USE : StoreTypeMapper.updateProdMapping */
         UPDATE TB_HQ_STORE_PROD_GROUP_DTL
             SET SALE_UPRC = #{saleUprc},
-                 STIN_SALE_UPRC = #{stinSaleUprc},
-                 DLVR_SALE_UPRC = #{dlvrSaleUprc},
-                 PACK_SALE_UPRC = #{packSaleUprc},
+                 STIN_SALE_UPRC = NVL(#{stinSaleUprc}, #{saleUprc}),
+                 DLVR_SALE_UPRC = NVL(#{dlvrSaleUprc}, #{saleUprc}),
+                 PACK_SALE_UPRC = NVL(#{packSaleUprc}, #{saleUprc}),
                  MOD_DT = #{modDt},
                  MOD_ID = #{modId}
           WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -612,9 +612,9 @@
                         #{regId},
                         #{modDt},
                         #{modId},
-                        #{stinSaleUprc},
-                        #{dlvrSaleUprc},
-                        #{packSaleUprc}
+                        NVL(#{stinSaleUprc}, #{saleUprc}),
+                        NVL(#{dlvrSaleUprc}, #{saleUprc}),
+                        NVL(#{packSaleUprc}, #{saleUprc})
                     )
     </insert>
 

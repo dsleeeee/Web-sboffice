@@ -485,7 +485,9 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       if ($scope._httpStatusCheck(response, true)) {
-        if (!$.isEmptyObject(response.data.data)) {
+        if(response.data.data == null){
+          $scope._gridDataInit();   // 조회결과가 null이면 그리드 초기화(위에 그리드 정보를 가지고 있음)
+        } else if (!$.isEmptyObject(response.data.data)) {
           var data = response.data.data;
 
           data.totSaleAmt   = addComma(data.totSaleAmt);

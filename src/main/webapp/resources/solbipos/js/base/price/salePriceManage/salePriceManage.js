@@ -79,6 +79,20 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.initGrid = function (s, e) {
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
 
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                // 판매가 변경시 다른 컬럼값도 변경
+                if (col.binding === "saleUprc") {
+                    var item = s.rows[e.row].dataItem;
+                    if($scope.saleUprcApply){
+                        $scope.saleUprc(item);
+                    }
+                }
+            }
+            s.collectionView.commitEdit();
+        });
+
         // 매장일때만
         if(hqOfficeCd != "00000") {
             // 그리드 링크 효과
@@ -200,6 +214,8 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("dlvrSaleUprcChangeMode", modeFg);
     $scope._setComboData("packSaleUprcChangeUnit", unitFg);
     $scope._setComboData("packSaleUprcChangeMode", modeFg);
+
+    $scope.saleUprcApply = true;
 
     // <-- 검색 호출 -->
     $scope.$on("salePriceManageCtrl", function(event, data) {
@@ -486,6 +502,12 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
         }
 
         return ChangeAmt;
+    };
+
+    $scope.saleUprc = function (item){
+        item.stinSaleUprc = item.saleUprc;
+        item.dlvrSaleUprc = item.saleUprc;
+        item.packSaleUprc = item.saleUprc;
     };
 
     // 저장

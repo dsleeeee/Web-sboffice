@@ -507,7 +507,17 @@
         ,       TO_CHAR(TO_DATE(tssh.ORG_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_SALE_DATE
         ,       tssh.ORG_POS_NO
         ,       tssh.ORG_BILL_NO
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       (tssh.REAL_SALE_AMT - tssh.VAT_AMT) AS GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.TOT_TIP_AMT
+        ,       tssh.TOT_ETC_AMT
         ]]>
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach> +  NVL(tsspc.PAY02, 0) +  NVL(tsspc.PAY021, 0) AS TOT_PAY_AMT
         ,       <foreach collection="arrPayCol" item="item" separator=",">
                     tsshp.PAY${item} AS PAY${item}
                 </foreach>
@@ -521,6 +531,13 @@
                     ,       tssh.ORG_SALE_DATE
                     ,       tssh.ORG_POS_NO
                     ,       tssh.ORG_BILL_NO
+                    ,       tssh.TOT_SALE_AMT
+                    ,       tssh.TOT_DC_AMT
+                    ,       tssh.REAL_SALE_AMT
+                    ,       (tssh.REAL_SALE_AMT - tssh.VAT_AMT) AS GA_AMT
+                    ,       tssh.VAT_AMT
+                    ,       tssh.TOT_TIP_AMT
+                    ,       tssh.TOT_ETC_AMT
                     FROM    (   SELECT  tssh.STORE_CD
                                 ,       tssh.SALE_DATE
                                 ,       tssh.POS_NO
@@ -528,6 +545,13 @@
                                 ,       SUBSTR(tssh.ORG_BILL_NO,-14,8) AS ORG_SALE_DATE
                                 ,       SUBSTR(tssh.ORG_BILL_NO,-6,2) AS ORG_POS_NO
                                 ,       SUBSTR(tssh.ORG_BILL_NO,-4,4) AS ORG_BILL_NO
+                                ,       tssh.TOT_SALE_AMT
+                                ,       tssh.TOT_DC_AMT
+                                ,       tssh.REAL_SALE_AMT
+                                ,       (tssh.REAL_SALE_AMT - tssh.VAT_AMT) AS GA_AMT
+                                ,       tssh.VAT_AMT
+                                ,       tssh.TOT_TIP_AMT
+                                ,       tssh.TOT_ETC_AMT
                                 FROM    TB_SL_SALE_HDR tssh
                                 WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND     tssh.SALE_YN = 'N'

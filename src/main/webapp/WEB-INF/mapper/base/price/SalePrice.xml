@@ -158,9 +158,9 @@
                SALE_UPRC,
                #{regDt},
                #{regId},
-               STIN_SALE_UPRC,
-               DLVR_SALE_UPRC,
-               PACK_SALE_UPRC
+               NVL(STIN_SALE_UPRC, SALE_UPRC),
+               NVL(DLVR_SALE_UPRC, SALE_UPRC),
+               NVL(PACK_SALE_UPRC, SALE_UPRC)
           FROM TB_MS_PRODUCT_SALE_PRICE
          WHERE STORE_CD = #{storeCd}
            AND PROD_CD = #{prodCd}
@@ -221,9 +221,9 @@
         UPDATE
         SET
             tmpsp.SALE_UPRC = #{saleUprc}, -- 판매가
-            tmpsp.STIN_SALE_UPRC = #{stinSaleUprc}, -- 내점가
-            tmpsp.DLVR_SALE_UPRC = #{dlvrSaleUprc}, -- 배달가
-            tmpsp.PACK_SALE_UPRC = #{packSaleUprc}, -- 포장가
+            tmpsp.STIN_SALE_UPRC = NVL(#{stinSaleUprc}, #{saleUprc}), -- 내점가
+            tmpsp.DLVR_SALE_UPRC = NVL(#{dlvrSaleUprc}, #{saleUprc}), -- 배달가
+            tmpsp.PACK_SALE_UPRC = NVL(#{packSaleUprc}, #{saleUprc}), -- 포장가
             tmpsp.MOD_DT = #{modDt},
             tmpsp.MOD_ID = #{modId}
         WHEN NOT MATCHED THEN
@@ -249,9 +249,9 @@
             #{startDate},
             #{endDate},
             #{saleUprc},
-            #{stinSaleUprc},
-            #{dlvrSaleUprc},
-            #{packSaleUprc},
+            NVL(#{stinSaleUprc}, #{saleUprc}),
+            NVL(#{dlvrSaleUprc}, #{saleUprc}),
+            NVL(#{packSaleUprc}, #{saleUprc}),
             #{regDt},
             #{regId},
             #{modDt},
@@ -448,9 +448,9 @@
                SALE_UPRC,
                #{regDt},
                #{regId},
-               STIN_SALE_UPRC,
-               DLVR_SALE_UPRC,
-               PACK_SALE_UPRC
+               NVL(STIN_SALE_UPRC, SALE_UPRC),
+               NVL(DLVR_SALE_UPRC, SALE_UPRC),
+               NVL(PACK_SALE_UPRC, SALE_UPRC)
         FROM TB_HQ_PRODUCT_SALE_PRICE
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
           AND PROD_CD = #{prodCd}
@@ -478,9 +478,9 @@
                 UPDATE
                     SET
                         tmpsp.SALE_UPRC = #{saleUprc}, -- 판매가
-                        tmpsp.STIN_SALE_UPRC = #{stinSaleUprc}, -- 내점가
-                        tmpsp.DLVR_SALE_UPRC = #{dlvrSaleUprc}, -- 배달가
-                        tmpsp.PACK_SALE_UPRC = #{packSaleUprc}, -- 포장가
+                        tmpsp.STIN_SALE_UPRC = NVL(#{stinSaleUprc}, #{saleUprc}), -- 내점가
+                        tmpsp.DLVR_SALE_UPRC = NVL(#{dlvrSaleUprc}, #{saleUprc}), -- 배달가
+                        tmpsp.PACK_SALE_UPRC = NVL(#{packSaleUprc}, #{saleUprc}), -- 포장가
                         tmpsp.MOD_DT = #{modDt},
                         tmpsp.MOD_ID = #{modId}
             WHEN NOT MATCHED THEN
@@ -506,9 +506,9 @@
                                      #{startDate},
                                      #{endDate},
                                      #{saleUprc},
-                                     #{stinSaleUprc},
-                                     #{dlvrSaleUprc},
-                                     #{packSaleUprc},
+                                     NVL(#{stinSaleUprc}, #{saleUprc}),
+                                     NVL(#{dlvrSaleUprc}, #{saleUprc}),
+                                     NVL(#{packSaleUprc}, #{saleUprc}),
                                      #{regDt},
                                      #{regId},
                                      #{modDt},
