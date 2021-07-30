@@ -255,7 +255,7 @@
         </div>
       <%-- 내점/배달/포장 가격 --%>
       <c:if test="${subPriceFg == '1'}">
-        <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/></h3>
+        <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/>&nbsp;&nbsp;<input type="checkbox" id="saleUprcApply" ng-model="saleUprcApply" />&nbsp;<s:message code="prod.saleUprcApply"/></h3>
         <div class="tblBr">
           <table class="tblType01">
             <colgroup>
@@ -713,7 +713,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210707.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210707.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

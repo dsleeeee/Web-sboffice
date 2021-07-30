@@ -47,6 +47,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         return $scope.prodModifyInfo;
     };
 
+    // 판매가 내점/배달/포장에 적용
+    $scope.saleUprcApply = true;
+
     // 상품정보 조회
     $scope.$on("prodModifyCtrl", function(event, data) {
         // data 조회하지 않고 상세정보와 동일하므로 파라미터로 처리
@@ -144,6 +147,20 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         });
     };
+
+    $('#prodModifySaleUprc').on('propertychange change keyup paste input', function() {
+        if($scope.saleUprcApply){
+            var prodInfo = $scope.getProdModifyInfo();
+            var saleUprc = $(this).val();
+            if(saleUprc == prodInfo.saleUprc) {
+                return;
+            }
+            prodInfo.stinSaleUprc = saleUprc;
+            prodInfo.packSaleUprc = saleUprc;
+            prodInfo.dlvrSaleUprc = saleUprc;
+            $scope.setProdModifyInfo(prodInfo);
+        };
+    });
 
     // 상품코드 중복체크
     $scope.chkProdCd = function () {
