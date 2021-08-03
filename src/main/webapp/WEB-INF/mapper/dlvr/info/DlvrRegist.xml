@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    DlvrRegist.xml
+    배달구역관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       ㅇㅇㅇ     2021.07.22     최초작성
+-->
 <mapper namespace="kr.co.solbipos.dlvr.info.regist.service.impl.DlvrRegistMapper">
+
     <select id="getDlvrManageList" parameterType="dlvrRegistVO" resultType="DefaultMap">
         /* DlvrRegistMapper.getDlvrManageList */
         SELECT STORE_CD
@@ -142,7 +151,7 @@
             , #{dlvrLzoneCd}
             , #{pageNo}
             , #{empNo}
-            , SBPENC.E(#{dlvrAddr})
+            , #{dlvrAddr}
             , #{inFg}
             , #{useYn}
             , #{regDt}
@@ -159,7 +168,7 @@
             , DLVR_LZONE_CD = #{dlvrLzoneCd}
             , PAGE_NO       = #{pageNo}
             , EMP_NO        = #{empNo}
-            , DLVR_ADDR     = SBPENC.E(#{dlvrAddr})
+            , DLVR_ADDR     = #{dlvrAddr}
             , IN_FG         = #{inFg}
             , USE_YN        = #{useYn}
             , MOD_DT        = #{modDt}
