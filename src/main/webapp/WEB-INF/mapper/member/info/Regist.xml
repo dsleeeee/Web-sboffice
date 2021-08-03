@@ -1295,30 +1295,6 @@
              )
     </insert>
 
-    <!-- 배달정보 수정 -->
-    <!--
-        TABLE    : TB_MB_MEMBER_DLVR_ADDR
-        COMMENTS : 배달정보 수정
-    -->
-    <update id="updateMemberDlvr" parameterType="registVO">
-        /* RegistMapper.updateMemberDlvr */
-        UPDATE TB_MB_MEMBER_DLVR_ADDR tmmda
-           SET
-          tmmda.DLVR_STORE_CD = #{reqStoreCd}
-          , tmmda.DLVR_LZONE_CD = #{dlvrLzoneCd}
-          , tmmda.DLVR_MZONE_CD = #{dlvrMzoneCd}
-          , tmmda.ADDR = SBPENC.E(#{addr})
-          , tmmda.ADDR_DTL = SBPENC.E(#{addrDtl})
-          , tmmda.LAST_DLVR_DATE = #{lastDlvrDate}
-          , tmmda.TOT_DLVR_CNT = #{totDlvrCnt}
-          , tmmda.USE_YN = #{useYn}
-          , tmmda.MOD_DT = #{modDt}
-          , tmmda.MOD_ID = #{modId}
-         WHERE tmmda.MEMBR_NO = #{membrNo}
-           AND tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
-           AND tmmda.DLVR_ADDR_SEQ = #{dlvrAddrSeq}
-    </update>
-
     <!-- 배달전화정보 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_DLVR_TEL,
