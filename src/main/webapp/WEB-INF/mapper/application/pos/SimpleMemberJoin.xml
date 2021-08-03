@@ -45,7 +45,7 @@
              USE_YN
        FROM TB_MB_MEMBER
       WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND MEMBR_NM = #{membrNm}
+        AND SBPENC.D(MEMBR_NM) = #{membrNm}
         AND TEL_NO = #{telNo}
     </select>
 
@@ -127,20 +127,20 @@
     (
         #{membrOrgnCd},
         #{membrNo},
-        #{membrNm},
+        SBPENC.E(#{membrNm}),
         #{membrNicknm},
         #{membrClassCd},
         #{membrCardNo},
         #{regStoreCd},
         #{postNo},
-        #{addr},
-        #{addrDtl},
+        SBPENC.E(#{addr}),
+        SBPENC.E(#{addrDtl}),
         #{birthday},
         #{lunarYn},
         #{gendrFg},
         #{emailAddr},
         #{shortNo},
-        #{telNo},
+        SBPENC.E(#{telNo}),
         #{weddingYn},
         #{weddingday},
         #{emailRecvYn},

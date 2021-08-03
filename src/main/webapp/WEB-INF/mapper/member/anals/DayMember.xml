@@ -40,7 +40,7 @@
             tsshp.SALE_DATE,
             tsshp.SALE_FG,
             tsshm.MEMBR_NO,
-            tmm.MEMBR_NM,
+            SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
             tsshm.MEMBR_CARD_NO,
             tssh.REAL_SALE_AMT,
             tssh.VAT_AMT,

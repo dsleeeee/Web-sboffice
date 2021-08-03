@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    DlvrReceipt.xml
+    배달지별 내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       ㅇㅇㅇ     2021.07.22     최초작성
+-->
 <mapper namespace="kr.co.solbipos.dlvr.anals.dlvrReceipt.service.impl.DlvrReceiptMapper">
+
     <select id="getDlvrReceiptList" parameterType="dlvrReceiptVO" resultType="DefaultMap">
         /* DlvrReceiptMapper.getDlvrReceiptList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tsshd.STORE_CD,
-                tsshd.DLVR_ADDR,
+                SBPENC.D(tsshd.DLVR_ADDR) AS DLVR_ADDR,
                 COUNT(tsshd.BILL_NO) AS BILL_COUNT,
                 SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
@@ -64,7 +73,7 @@
            AND tme.EMP_NO (+)= tsshd.DLVR_EMP_NO
            AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
            AND tsshd.STORE_CD = #{storeCd}
-           AND tsshd.DLVR_ADDR = #{dlvrAddr}
+           AND SBPENC.D(tsshd.DLVR_ADDR) = #{dlvrAddr}
            AND tssh.DLVR_YN = 'Y'
          GROUP
             BY tsshd.STORE_CD,

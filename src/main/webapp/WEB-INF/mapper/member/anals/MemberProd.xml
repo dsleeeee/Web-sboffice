@@ -20,7 +20,7 @@
         /* MembrProdMapper.getMembrProdList */
         SELECT
         tsshm.MEMBR_NO,
-        SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
+        tsshm.MEMBR_NM,
         tsdmp.PROD_CD,
         tmp.PROD_NM,
         SUM(tsdmp.TOT_SALE_QTY) AS SALE_QTY,
@@ -35,7 +35,7 @@
             STORE_CD,
             SALE_DATE,
             MEMBR_NO,
-            MEMBR_NM
+            SBPENC.D(MEMBR_NM) AS MEMBR_NM
             FROM TB_SL_SALE_HDR_MEMBR
             WHERE 1 = 1
             AND HQ_OFFICE_CD = #{membrOrgnCd}
@@ -46,7 +46,7 @@
             </if>
             AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test="membrNm != null and membrNm != ''">
-                AND SBPENC.D ( MEMBR_NM ) LIKE '%'|| #{membrNm} ||'%'
+                AND SBPENC.D(MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
             </if>
             GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, MEMBR_NO, MEMBR_NM
             ORDER BY SALE_DATE, MEMBR_NO
@@ -73,7 +73,8 @@
     -->
     <select id="getMembrProdDetail"  parameterType="registVO" resultType="DefaultMap">
         /* MembrProdMapper.getMembrProdDetail */
-        SELECT tmm.MEMBR_ORGN_CD,
+        SELECT
+        tmm.MEMBR_ORGN_CD,
         tmm.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_NICKNM,
@@ -102,7 +103,7 @@
         FROM TB_MB_MEMBER tmm
         WHERE tmm.MEMBR_NO = #{membrNo}
         AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND tmm.MEMBR_NM = #{membrNm}
+        AND SBPENC.D(tmm.MEMBR_NM) = #{membrNm}
     </select>
 
 </mapper>

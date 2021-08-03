@@ -1532,7 +1532,7 @@
         /* RegistMapper.getSearchMemberPointList */
         SELECT
         tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         NVL(tmmp.AVABL_POINT, 0) AS AVABL_POINT
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_POINT tmmp
@@ -1545,10 +1545,10 @@
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
         <if test="membrNm != null and membrNm != ''">
-            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
         <if test="telNo != null and telNo != ''">
-            AND (tmm.SHORT_NO = #{telNo} OR tmm.TEL_NO = #{telNo})
+            AND (tmm.SHORT_NO = #{telNo} OR SBPENC.D(tmm.TEL_NO) = #{telNo})
         </if>
         <if test="gubunMemberNo != null and gubunMemberNo != ''">
             AND tmm.MEMBR_NO != #{gubunMemberNo}
@@ -1568,7 +1568,7 @@
         /* RegistMapper.getSearchMemberPointReceiveList */
         SELECT
         tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         NVL(tmmp.AVABL_POINT, 0) AS AVABL_POINT
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_POINT tmmp
@@ -1581,10 +1581,10 @@
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
         <if test="membrNm != null and membrNm != ''">
-            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
         <if test="telNo != null and telNo != ''">
-            AND (tmm.SHORT_NO = #{telNo} OR tmm.TEL_NO = #{telNo})
+            AND (tmm.SHORT_NO = #{telNo} OR SBPENC.D(tmm.TEL_NO) = #{telNo})
         </if>
         <if test="gubunMemberNo != null and gubunMemberNo != ''">
             AND tmm.MEMBR_NO != #{gubunMemberNo}
@@ -1611,7 +1611,7 @@
         (
             SELECT
             tmm.MEMBR_NO,
-            tmm.MEMBR_NM,
+            SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
             tmm.MEMBR_CLASS_CD,
             tmmc.POINT_SAVE_FG,
             tmmcpr.PAY_CD,
@@ -1628,10 +1628,10 @@
                 AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
             </if>
             <if test="membrNm != null and membrNm != ''">
-                AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+                AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
             </if>
             <if test="telNo != null and telNo != ''">
-                AND (tmm.SHORT_NO = #{telNo} OR tmm.TEL_NO = #{telNo})
+                AND (tmm.SHORT_NO = #{telNo} OR SBPENC.D(tmm.TEL_NO) = #{telNo})
             </if>
             AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
             AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD

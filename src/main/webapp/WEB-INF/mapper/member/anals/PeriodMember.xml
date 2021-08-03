@@ -21,7 +21,7 @@
         SELECT
         tsshm.SALE_DATE,
         tsshm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tsshm.MEMBR_CARD_NO,
         COUNT(tsshm.MEMBR_NO) AS SALE_COUNT,
         SUM(tsdmp.REAL_SALE_AMT) AS REAL_SALE_AMT,

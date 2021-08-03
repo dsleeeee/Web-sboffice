@@ -24,7 +24,7 @@
                tmmtb.MEMBR_ORGN_CD,
                tmmtb.STORE_CD,
                tmmtb.MEMBR_NO,
-               tmm.MEMBR_NM,
+               SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                TO_CHAR(TO_DATE(tmmtb.REQUEST_DT, 'yyyyMMddHH24miss'), 'YYYY-MM-DD HH24:MI:SS') AS REQUEST_DT,
                tmmtb.REQUEST_AMT,
                tmmtb.STATUS_FG
@@ -38,7 +38,7 @@
            AND tmmtb.MEMBR_NO LIKE '%'|| #{membrNo}||'%'
         </if>
         <if test='membrNm != null and membrNm != ""'>
-           AND tmm.MEMBR_NM LIKE '%'|| #{membrNm}||'%'
+           AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm}||'%'
         </if>
         <if test="chkDt == false">
           <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">

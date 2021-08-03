@@ -1866,7 +1866,7 @@
     <select id="selectBillSalePop4" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.selectBillSalePop4 */
 		SELECT A.MEMBR_NO
-		    , A.MEMBR_NM
+		    , SBPENC.D(A.MEMBR_NM) AS MEMBR_NM
 		    , A.MEMBR_CARD_NO
 		    , A.SALE_SAVE_POINT
   		FROM TB_SL_SALE_HDR_MEMBR A

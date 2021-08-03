@@ -81,7 +81,7 @@
     -->
     <select id="getTodayGnrlzMemberList" parameterType="todayGnrlzVO" resultType="DefaultMap">
         /* USE : TodayGnrlzMapper.getTodayGnrlzMemberList */
-        SELECT  MEMBR_NO, SBPENC.D(MEMBR_NM) AS MEMBR_NM
+        SELECT  MEMBR_NO, MEMBR_NM
         ,      SUM(SAVE_POINT) AS SAVE_POINT
         ,      SUM(USE_POINT)  AS USE_POINT
         FROM    (

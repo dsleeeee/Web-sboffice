@@ -38,11 +38,11 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmmps.MEMBR_NO,
-                       tmm.MEMBR_NM,
+                       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                        tmmps.STORE_CD,
                        tms.STORE_NM,
                        tmmc.MEMBR_CLASS_NM,
-                       tmm.TEL_NO
+                       SBPENC.D(tmm.TEL_NO) AS TEL_NO
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MB_MEMBER_PREPAID_STORE tmmps,
                        TB_MB_MEMBER tmm,
@@ -59,13 +59,13 @@
                     AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                    AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+                    AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                   AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
@@ -82,11 +82,11 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmmps.MEMBR_NO,
-                       tmm.MEMBR_NM,
-                       tmmps.STORE_CD,
-                       tms.STORE_NM,
-                       tmmc.MEMBR_CLASS_NM,
-                       tmm.TEL_NO
+                        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+                        tmmps.STORE_CD,
+                        tms.STORE_NM,
+                        tmmc.MEMBR_CLASS_NM,
+                        SBPENC.D(tmm.TEL_NO) AS TEL_NO
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MB_MEMBER_PREPAID_STORE tmmps,
                        TB_MB_MEMBER tmm,
@@ -104,13 +104,13 @@
                    AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+                   AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                   AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -130,11 +130,11 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmm.MEMBR_NO,
-                       tmm.MEMBR_NM,
-                       tms.STORE_CD,
-                       tms.STORE_NM,
-                       tmmc.MEMBR_CLASS_NM,
-                       tmm.TEL_NO
+                        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+                        tms.STORE_CD,
+                        tms.STORE_NM,
+                        tmmc.MEMBR_CLASS_NM,
+                        SBPENC.D(tmm.TEL_NO) AS TEL_NO
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_STORE tms,
                        TB_MB_MEMBER tmm,
@@ -151,13 +151,13 @@
                    AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+                   AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                   AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
@@ -175,11 +175,11 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmm.MEMBR_NO,
-                       tmm.MEMBR_NM,
+                       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                        tms.STORE_CD,
                        tms.STORE_NM,
                        tmmc.MEMBR_CLASS_NM,
-                       tmm.TEL_NO
+                       SBPENC.D(tmm.TEL_NO) AS TEL_NO
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_STORE tms,
                        TB_MB_MEMBER tmm,
@@ -205,13 +205,13 @@
                    AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+                   AND  SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                   AND  SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -231,11 +231,11 @@
             <when test='orgnFg != null and orgnFg == "H"'>
             <include refid="CmmSQL.PagingTemplateHeader"/>
             SELECT tmmps.MEMBR_NO,
-                   tmm.MEMBR_NM,
+                   SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                    tmmps.STORE_CD,
                    tms.STORE_NM,
                    tmmc.MEMBR_CLASS_NM,
-                   tmm.TEL_NO
+                   SBPENC.D(tmm.TEL_NO) AS TEL_NO
             <include refid="CmmSQL.PagingTemplateCount"/>
               FROM TB_MB_MEMBER_POSTPAID_STORE tmmps,
                    TB_MB_MEMBER tmm,
@@ -252,13 +252,13 @@
                AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
             </if>
             <if test='membrNm != null and membrNm != ""'>
-               AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+               AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
             </if>
             <if test='membrClassCd != null and membrClassCd != ""'>
                AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
             </if>
             <if test='telNo != null and telNo != ""'>
-               AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+               AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
             </if>
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                AND tms.STORE_CD IN
@@ -276,11 +276,11 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmmps.MEMBR_NO,
-                       tmm.MEMBR_NM,
+                       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                        tmmps.STORE_CD,
                        tms.STORE_NM,
                        tmmc.MEMBR_CLASS_NM,
-                       tmm.TEL_NO
+                       SBPENC.D(tmm.TEL_NO) AS TEL_NO
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MB_MEMBER_POSTPAID_STORE tmmps,
                        TB_MB_MEMBER tmm,
@@ -298,13 +298,13 @@
                    AND tmmps.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+                   AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                   AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -324,11 +324,11 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmm.MEMBR_NO,
-                       tmm.MEMBR_NM,
+                       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                        tms.STORE_CD,
                        tms.STORE_NM,
                        tmmc.MEMBR_CLASS_NM,
-                       tmm.TEL_NO
+                       SBPENC.D(tmm.TEL_NO) AS TEL_NO
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_STORE tms,
                        TB_MB_MEMBER tmm,
@@ -345,13 +345,13 @@
                    AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+                   AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                   AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    AND tms.STORE_CD IN
@@ -369,11 +369,11 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmm.MEMBR_NO,
-                       tmm.MEMBR_NM,
+                       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                        tms.STORE_CD,
                        tms.STORE_NM,
                        tmmc.MEMBR_CLASS_NM,
-                       tmm.TEL_NO
+                       SBPENC.D(tmm.TEL_NO) AS TEL_NO
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_STORE tms,
                        TB_MB_MEMBER tmm,
@@ -399,13 +399,13 @@
                    AND tmm.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
                 </if>
                 <if test='membrNm != null and membrNm != ""'>
-                   AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+                   AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
                 </if>
                 <if test='membrClassCd != null and membrClassCd != ""'>
                    AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
                 </if>
                 <if test='telNo != null and telNo != ""'>
-                   AND tmm.TEL_NO LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                   AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>

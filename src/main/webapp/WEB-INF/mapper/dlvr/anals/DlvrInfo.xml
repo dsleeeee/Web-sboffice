@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    DlvrInfo.xml
+    배달내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       ㅇㅇㅇ     2021.07.22     최초작성
+-->
 <mapper namespace="kr.co.solbipos.dlvr.anals.dlvrInfo.service.impl.DlvrInfoMapper">
 
     <select id="getDlvrInfoList" parameterType="dlvrInfoVO" resultType="DefaultMap">
@@ -15,7 +23,7 @@
         tssh.HQ_OFFICE_CD,
         tssh.HQ_BRAND_CD,
         tssh.STORE_CD,
-        tsshd.DLVR_ADDR,
+		SBPENC.D(tsshd.DLVR_ADDR) AS DLVR_ADDR,
         SBPENC.D(tsshd.DLVR_TEL_NO) AS DLVR_TEL_NO,
         SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM,
         tsshm.MEMBR_NO,
@@ -43,7 +51,7 @@
         WHERE
         tssh.SALE_DATE BETWEEN #{ startDate } AND #{ endDate }
         <if test='membrNm != null and membrNm !=""'>
-            AND tsshm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            AND SBPENC.D(tsshm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
 		<if test='empNm != null and empNm !=""'>
 			AND tme.EMP_NM LIKE '%'||#{empNm}||'%'

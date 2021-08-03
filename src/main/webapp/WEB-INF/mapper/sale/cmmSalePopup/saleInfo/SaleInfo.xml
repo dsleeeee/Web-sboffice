@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    SaleInfoMapper.xml
+    SaleInfo.xml
     매출 공통팝업 > 매출 상세내역 (매출) 팝업
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
@@ -36,7 +36,7 @@
             NVL(tsshp.PAY${item}, 0) AS PAY${item}
         </foreach> ,
         tsshm.MEMBR_NO,
-        tsshm.MEMBR_NM,
+        SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM,
         tsshm.MEMBR_CARD_NO,
         NVL(tsshm.SALE_SAVE_POINT, 0) AS SALE_SAVE_POINT
         FROM TB_SL_SALE_HDR tssh,
