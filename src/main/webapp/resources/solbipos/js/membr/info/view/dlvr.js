@@ -429,6 +429,8 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope._popMsg(msg);
                 return false;
             }
+            $scope.flex.collectionView.itemsEdited[i].shortNo = $scope.flex.collectionView.itemsEdited[i].telNo.substring($scope.flex.collectionView.itemsEdited[i].telNo.length-4, $scope.flex.collectionView.itemsEdited[i].telNo.length);
+
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
