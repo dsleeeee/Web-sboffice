@@ -74,6 +74,23 @@ public class PrepaidServiceImpl implements PrepaidService {
         return mapper.getPrepaidMemberList(prepaidStoreVO);
     }
 
+    /** 선불 회원 충전, 사용 내역(엑셀) */
+    @Override
+    public List<DefaultMap<Object>> getPrepaidMemberListExcel(PrepaidStoreVO prepaidStoreVO,
+                                                         SessionInfoVO sessionInfoVO) {
+
+        String[] storeCds = prepaidStoreVO.getStoreCds().split(",");
+
+        prepaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prepaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        prepaidStoreVO.setStoreCdList(storeCds);
+
+        return mapper.getPrepaidMemberListExcel(prepaidStoreVO);
+    }
+
     /** 선불금 등록 대상 회원 조회 */
     @Override
     public List<DefaultMap<Object>> getChargeMemberList(PrepaidStoreVO prepaidStoreVO,

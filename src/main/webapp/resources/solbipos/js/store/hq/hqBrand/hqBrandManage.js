@@ -163,10 +163,10 @@ app.controller('hqBrandManageCtrl', ['$scope', '$http', function ($scope, $http)
           return false;
         }
         // 브랜드코드 7자리를 입력해주세요.
-        if($scope.flex.collectionView.itemsAdded[i].hqBrandCd.length !== 7) {
+        /*if($scope.flex.collectionView.itemsAdded[i].hqBrandCd.length !== 7) {
           $scope._popMsg(messages["hqBrand.require.brandCdDigit"]);
           return false;
-        }
+        }*/
         if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].hqBrandNm)) {
           $scope.flex.collectionView.itemsAdded[i].status = "I";
           params.push($scope.flex.collectionView.itemsAdded[i]);

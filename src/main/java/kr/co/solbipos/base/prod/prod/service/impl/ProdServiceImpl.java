@@ -1163,4 +1163,17 @@ public class ProdServiceImpl implements ProdService {
 
         return prodMapper.getBrandList(prodVO);
     }
+
+    /** 브랜드 리스트 조회(선택 콤보박스용, 선택한 상품에서 현재 사용중인 브랜드 + 사용여부 'Y'인 브랜드) */
+    @Override
+    public List<DefaultMap<Object>> getBrandList2(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getBrandList2(prodVO);
+    }
 }

@@ -27,6 +27,10 @@ public interface PrepaidService {
     List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO postpaidStoreVO,
         SessionInfoVO sessionInfoVO);
 
+    /** 선불 회원 입금, 사용 내역(엑셀) */
+    List<DefaultMap<Object>> getPrepaidMemberListExcel(PrepaidStoreVO postpaidStoreVO,
+                                                  SessionInfoVO sessionInfoVO);
+
     /** 후불 대상 회원 조회 */
     List<DefaultMap<Object>> getChargeMemberList(PrepaidStoreVO prepaidStoreVO,
         SessionInfoVO sessionInfoVO);

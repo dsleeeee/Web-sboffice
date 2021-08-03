@@ -1,5 +1,11 @@
 package kr.co.solbipos.base.store.multiStoreGroup.service;
 
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
+
+import java.util.List;
+
 /**
  * @Class Name : MultiStoreGroupService.java
  * @Description : 기초관리 - 매장관리 - 다중매장그룹관리
@@ -16,4 +22,18 @@ package kr.co.solbipos.base.store.multiStoreGroup.service;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface MultiStoreGroupService {
+
+    /** 그룹조회 */
+    List<DefaultMap<Object>> getMultiStoreGroup(MultiStoreGroupVO multiStoreGroupVO, SessionInfoVO sessionInfoVO);
+
+    /** 그룹저장 */
+    int saveMultiStoreGroup(MultiStoreGroupVO[] multiStoreGroupVOs, SessionInfoVO sessionInfoVO);
+
+
+
+
+
+    /** 매장조회 */
+    List<DefaultMap<Object>> getStoreList(MultiStoreGroupVO multiStoreGroupVO, SessionInfoVO sessionInfoVO);
+
 }

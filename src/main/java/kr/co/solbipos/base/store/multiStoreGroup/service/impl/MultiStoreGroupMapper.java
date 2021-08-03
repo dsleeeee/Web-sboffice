@@ -1,7 +1,12 @@
 package kr.co.solbipos.base.store.multiStoreGroup.service.impl;
 
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.base.store.multiStoreGroup.service.MultiStoreGroupVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : MultiStoreGroupMapper.java
@@ -21,4 +26,25 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface MultiStoreGroupMapper {
+
+    /** 그룹조회 */
+    List<DefaultMap<Object>> getMultiStoreGroup(MultiStoreGroupVO multiStoreGroupVO);
+
+    /** 그룹코드 생성 */
+    String getMultiStoreGroupCode(MultiStoreGroupVO multiStoreGroupVO);
+
+    /** 그룹생성 */
+    int insertMultiStoreGroup(MultiStoreGroupVO multiStoreGroupVO);
+
+    /** 그룹수정 */
+    int updateMultiStoreGroup(MultiStoreGroupVO multiStoreGroupVO);
+
+
+
+
+
+
+
+    /** 매장조회 */
+    List<DefaultMap<Object>> getStoreList(MultiStoreGroupVO multiStoreGroupVO);
 }

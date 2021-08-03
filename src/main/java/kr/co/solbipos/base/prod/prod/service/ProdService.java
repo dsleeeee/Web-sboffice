@@ -93,4 +93,7 @@ public interface ProdService {
 
     /** 브랜드 리스트 조회(선택 콤보박스용) */
     List<DefaultMap<Object>> getBrandList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 브랜드 리스트 조회(선택 콤보박스용, 선택한 상품에서 현재 사용중인 브랜드 + 사용여부 'Y'인 브랜드) */
+    List<DefaultMap<Object>> getBrandList2(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }
