@@ -49,8 +49,8 @@
                 NVL(tssh.TOT_DC_AMT, 0) AS TOT_DC_AMT,
                 NVL(tssh.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
                 NVL(tssh.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
-                ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT) AS GUEST_UPRC,
-                ROUND(tssh.REAL_SALE_AMT / tssh.BILL_CNT) AS BILL_UPRC,
+                DECODE(tssh.TOT_GUEST_CNT, 0, 0, ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT)) AS GUEST_UPRC,
+                DECODE(tssh.BILL_CNT, 0, 0, ROUND(tssh.REAL_SALE_AMT / tssh.BILL_CNT)) AS BILL_UPRC,
                 NVL(tsshp.CARD_AMT, 0) AS CARD_AMT,
                 NVL(tsshp.CASH_AMT, 0) AS CASH_AMT,
                 NVL(tsshp.ETC_AMT, 0) AS ETC_AMT,
@@ -165,7 +165,7 @@
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) AS NM,
         A.AMT_CNT,
         A.PAY_AMT AS REAL_SALE_AMT,
-        NVL(ROUND(A.PAY_AMT / DECODE(B.TOT_PAY_AMT, 0, null, B.TOT_PAY_AMT) * 100, 2), 0) AS AMT_RATE
+        DECODE(B.TOT_PAY_AMT, 0, 0, NVL(ROUND(A.PAY_AMT / B.TOT_PAY_AMT * 100, 2), 0)) AS AMT_RATE
         FROM
         (
             SELECT
@@ -215,7 +215,7 @@
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041' AND NMCODE_CD = A.DC_CD) AS NM,
         A.AMT_CNT,
         A.DC_AMT AS REAL_SALE_AMT,
-        NVL(ROUND(A.DC_AMT / DECODE(B.TOT_DC_AMT, 0, null, B.TOT_DC_AMT) * 100, 2), 0) AS AMT_RATE
+        DECODE(B.TOT_DC_AMT, 0, 0, NVL(ROUND(A.DC_AMT / B.TOT_DC_AMT * 100, 2), 0)) AS AMT_RATE
         FROM
         (
             SELECT
@@ -269,7 +269,7 @@
         ) AS NM,
         A.AMT_CNT,
         A.REAL_SALE_AMT,
-        NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+        DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
         FROM
         (
             SELECT
@@ -342,7 +342,7 @@
         A.SALE_TIME,
         A.AMT_CNT,
         A.REAL_SALE_AMT,
-        NVL(ROUND(A.REAL_SALE_AMT / DECODE(B.TOT_REAL_SALE_AMT, 0, null, B.TOT_REAL_SALE_AMT) * 100, 2), 0) AS AMT_RATE
+        DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
         FROM
         (
             SELECT
