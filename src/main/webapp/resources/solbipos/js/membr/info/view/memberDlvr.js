@@ -514,7 +514,8 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
         params.membrNo = $scope.memberParmas.membrNo;
         params.regStoreCd = $scope.memberParmas.dlvrStoreCd;
         params.telNo = $scope.memberTel.dlvrTelNo;
-        params.shortNo = $scope.memberParmas.shortNo;
+        // params.shortNo = $scope.memberParmas.shortNo;
+        params.shortNo = params.telNo.substring(params.telNo.length-4, params.telNo.length);
         params.useYn = $scope.memberTel.dlvrTelUseYn;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
