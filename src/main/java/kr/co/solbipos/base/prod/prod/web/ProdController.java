@@ -508,4 +508,38 @@ public class ProdController {
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }
+
+    /**
+     * 브랜드 리스트 조회(선택 콤보박스용)
+     * @param prodVO
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getBrandList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBrandList(ProdVO prodVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = prodService.getBrandList(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodVO);
+    }
+
+    /**
+     * 브랜드 리스트 조회(선택 콤보박스용, 선택한 상품에서 현재 사용중인 브랜드 + 사용여부 'Y'인 브랜드)
+     * @param prodVO
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getBrandList2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBrandList2(ProdVO prodVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = prodService.getBrandList2(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodVO);
+    }
 }

@@ -11,9 +11,9 @@
 /**
  * 팝업 그리드 생성
  */
-app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, $timeout, true));
 
     // var vProdNoEnvFg = prodNoEnvFg;
 
@@ -59,8 +59,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         // 수정 모드 시
         if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== "") {
 
+            // 브랜드 콤보박스 셋팅
+            $scope.setbrandDropdownList(data.prodCd);
+
             // 신규 모드 시
         } else {
+
+            // 브랜드 콤보박스 셋팅
+            $scope._setComboData("hqBrandCd", brandList);
+
             var params = {};
 
             // 상품기본정보
@@ -123,6 +130,53 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
+    
+    // 브랜드 콤보박스 셋팅
+    $scope.setbrandDropdownList = function(prodCd){
+
+        var url = "/base/prod/prod/prod/getBrandList2.sb";
+        var params = {};
+        
+        // 상품코드
+        params['prodCd'] = prodCd;
+
+        //가상로그인 session 설정
+        if(document.getElementsByName('sessionId')[0]){
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : url, /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data.list)) {
+                    var list = response.data.data.list;
+                    var comboArray = [];
+                    var comboData  = {};
+
+                    for (var i = 0; i < list.length; i++) {
+                        comboData = {};
+                        comboData.name  = list[i].name;
+                        comboData.value = list[i].value;
+                        comboArray.push(comboData);
+                    }
+
+                    //
+                    $scope._setComboData("hqBrandCd", comboArray);
+                }
+            }
+        }, function errorCallback(response) {
+            $scope._popMsg(messages["cmm.error"]);
+            return false;
+        }).then(function () {
+            $timeout(function () {
+            }, 10);
+        });
+    };
 
     // 상품분류정보 팝업
     $scope.popUpProdClass = function() {

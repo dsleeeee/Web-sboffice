@@ -33,6 +33,9 @@ public interface PrepaidMapper {
     /** 선불 회원 충전, 사용 내역 */
     List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO prepaidStoreVO);
 
+    /** 선불 회원 충전, 사용 내역(엑셀) */
+    List<DefaultMap<Object>> getPrepaidMemberListExcel(PrepaidStoreVO prepaidStoreVO);
+
     /** 후불 대상 회원 조회 */
     List<DefaultMap<Object>> getChargeMemberList(PrepaidStoreVO prepaidStoreVO);
 

@@ -90,6 +90,27 @@ public class PrepaidController {
     }
 
     /**
+     * 선불 회원 충전, 사용 내역(엑셀)
+     *
+     * @param prepaidStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "prepaid/getPrepaidMemberListExcel.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPrepaidMemberListExcel( PrepaidStoreVO prepaidStoreVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getPrepaidMemberListExcel(prepaidStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prepaidStoreVO);
+    }
+
+    /**
      * 후불 대상 회원 조회
      *
      * @param prepaidStoreVO

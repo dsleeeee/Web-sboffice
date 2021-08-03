@@ -3472,4 +3472,62 @@
             </when>
         </choose>
     </select>
+
+    <!-- 브랜드 리스트 조회(선택 콤보박스용, 선택한 상품에서 현재 사용중인 브랜드 + 사용여부 'Y'인 브랜드) -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        PARAM    : prodVO
+        COMMENTS : 상품등록시 선택할 브랜드 목록을 가져온다.
+    -->
+    <select id="getBrandList2" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getBrandList2 */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT A.VALUE,
+                        A.NAME
+                  FROM (
+                             SELECT thp.HQ_BRAND_CD AS VALUE,
+                                     thb.HQ_BRAND_NM  AS NAME
+                               FROM TB_HQ_PRODUCT thp,
+                                     TB_HQ_BRAND thb
+                              WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND thp.PROD_CD = #{prodCd}
+                                AND thb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                                AND thb.HQ_BRAND_CD (+)= thp.HQ_BRAND_CD
+                              UNION
+                             SELECT HQ_BRAND_CD AS VALUE,
+                                     HQ_BRAND_NM AS NAME
+                               FROM TB_HQ_BRAND
+                              WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND USE_YN = 'Y'
+                        ) A
+                  ORDER
+                      BY A.VALUE
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT A.VALUE,
+                        A.NAME
+                  FROM (
+                            SELECT tmp.HQ_BRAND_CD AS VALUE,
+                                    tmb.MS_BRAND_NM  AS NAME
+                              FROM TB_MS_PRODUCT tmp,
+                                    TB_MS_BRAND tmb
+                              WHERE tmp.STORE_CD = #{storeCd}
+                                AND tmp.PROD_CD = #{prodCd}
+                                AND tmb.STORE_CD (+)= tmp.STORE_CD
+                                AND tmb.MS_BRAND_CD (+)= tmp.HQ_BRAND_CD
+                             UNION
+                            SELECT MS_BRAND_CD AS VALUE,
+                                    MS_BRAND_NM AS NAME
+                              FROM TB_MS_BRAND
+                             WHERE STORE_CD = #{storeCd}
+                               AND USE_YN = 'Y'
+                        ) A
+                ORDER
+                   BY A.VALUE
+            </when>
+        </choose>
+    </select>
 </mapper>

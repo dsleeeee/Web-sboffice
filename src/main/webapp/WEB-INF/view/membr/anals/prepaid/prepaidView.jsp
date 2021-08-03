@@ -14,7 +14,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" ng-click="_broadcast('prepaidCtrl')">
+      <button class="btn_blue fr" ng-click="_pageView('prepaidCtrl', 1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -32,8 +32,8 @@
       <th><s:message code="prepaid.srchStore" /></th>
       <td>
         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-          <jsp:param name="targetId" value="store"/>
+        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+          <jsp:param name="targetId" value="prepaidChargeStore"/>
         </jsp:include>
         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
       </td>
@@ -73,7 +73,10 @@
     <button class="btn_skyblue ml5 fr"  ng-click="charge()">
       <s:message code="prepaid.charge" />
     </button>
-
+    <%-- 엑셀 다운로드 //TODO --%>
+    <button class="btn_skyblue fr" ng-click="excelDownload()">
+      <s:message code="cmm.excel.down" />
+    </button>
   </div>
 
   <%-- 그리드 --%>
@@ -110,12 +113,12 @@
           --%>
           <wj-flex-grid-column header="<s:message code="prepaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="left"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt"/>" binding="prepaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.prepaidUseAmt"/>" binding="prepaidUseAmt" width="*" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.prepaidBalAmt"/>" binding="prepaidBalAmt" width="*" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt"/>" binding="prepaidAmt" width="150" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidUseAmt"/>" binding="prepaidUseAmt" width="150" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidBalAmt"/>" binding="prepaidBalAmt" width="150" is-read-only="true" ></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
@@ -132,13 +135,40 @@
 
 </div>
 
+<%-- 엑셀 리스트 --%>
+<div class="w100 mt10 mb20">
+  <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; display: none;" ng-controller="prepaidExcelCtrl">
+    <div class="row">
+      <wj-flex-grid
+              autoGenerateColumns="false"
+              control="excelFlex"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              selection-mode="Row"
+              items-source="data"
+              item-formatter="_itemFormatter"
+              is-read-only="true">
+
+        <wj-flex-grid-column header="<s:message code="prepaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prepaid.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="left"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prepaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt"/>" binding="prepaidAmt" width="150" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prepaid.prepaidUseAmt"/>" binding="prepaidUseAmt" width="150" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prepaid.prepaidBalAmt"/>" binding="prepaidBalAmt" width="150" is-read-only="true" ></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   var arrayData = ${ccu.getCommCodeExcpAll("075")};
   var prepaidInFgData = ${ccu.getCommCodeExcpAll("073")};
   var prepaidPayFgData = ${ccu.getCommCodeExcpAll("074")};
   var baseUrl = "${baseUrl}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=20181226.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=20181226.02" charset="utf-8"></script>
 
 <%-- 선불금충전 팝업 --%>
 <c:import url="/WEB-INF/view/membr/anals/prepaid/charge.jsp">
