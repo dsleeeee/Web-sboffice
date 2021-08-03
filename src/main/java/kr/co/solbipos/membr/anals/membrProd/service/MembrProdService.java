@@ -25,6 +25,4 @@ public interface MembrProdService {
 
     /** 회원 상품 구매내역*/
     List<DefaultMap<Object>> getMembrProdList(MembrProdVO membrProdVO, SessionInfoVO sessionInfoVO);
-
-    DefaultMap<Object> getMembrProdDetail(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

@@ -29,6 +29,4 @@ public interface MembrProdMapper {
 
     /** 회원 상품 구매내역*/
     List<DefaultMap<Object>> getMembrProdList(MembrProdVO membrProdVO);
-
-    DefaultMap<Object> getMembrProdDetail(RegistVO registVO);
 }

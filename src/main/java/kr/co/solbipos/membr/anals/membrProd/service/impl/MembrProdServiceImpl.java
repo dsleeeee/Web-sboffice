@@ -40,8 +40,7 @@ public class MembrProdServiceImpl implements MembrProdService {
 
     /** 회원 상품 구매내역*/
     @Override
-    public List<DefaultMap<Object>> getMembrProdList(MembrProdVO membrProdVO,
-                                                    SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getMembrProdList(MembrProdVO membrProdVO, SessionInfoVO sessionInfoVO) {
 
         membrProdVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
@@ -49,14 +48,5 @@ public class MembrProdServiceImpl implements MembrProdService {
         }
 
         return mapper.getMembrProdList(membrProdVO);
-    }
-
-    @Override
-    public DefaultMap<Object> getMembrProdDetail(RegistVO registVO, SessionInfoVO sessionInfoVO) {
-        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            registVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-        return mapper.getMembrProdDetail(registVO);
     }
 }

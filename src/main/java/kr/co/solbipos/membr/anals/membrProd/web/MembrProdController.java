@@ -73,22 +73,6 @@ public class MembrProdController {
     }
 
     /**
-     * 상세
-     *
-     * @param request
-     * @param response
-     * @param model
-     * */
-    @RequestMapping(value = "membrProd/membrProdDetail.sb", method = RequestMethod.GET)
-    public Result membrProdDetail(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        DefaultMap<Object> result = service.getMembrProdDetail(registVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, result, registVO);
-    }
-
-    /**
      * 회원 상품 구매내역 조회
      *
      * @param membrProdVO

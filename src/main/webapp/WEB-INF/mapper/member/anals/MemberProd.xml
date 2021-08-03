@@ -66,44 +66,4 @@
         ORDER BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsdmp.PROD_CD
     </select>
 
-    <!-- 회원 상품 구매내역-->
-    <!--
-        TABLE    : TB_SL_SALE_DTL, TB_SL_SALE_HDR_MEMBR, TB_MS_PRODUCT
-        COMMENTS : [매출]상세 와 [매출]헤더_회원, [매장]상품
-    -->
-    <select id="getMembrProdDetail"  parameterType="registVO" resultType="DefaultMap">
-        /* MembrProdMapper.getMembrProdDetail */
-        SELECT
-        tmm.MEMBR_ORGN_CD,
-        tmm.MEMBR_NO,
-        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
-        tmm.MEMBR_NICKNM,
-        tmm.MEMBR_CLASS_CD,
-        tmm.MEMBR_CARD_NO,
-        tmm.REG_STORE_CD,
-        tmm.POST_NO,
-        SBPENC.D(tmm.ADDR) AS ADDR,
-        SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
-        tmm.LUNAR_YN,
-        tmm.BIRTHDAY,
-        tmm.GENDR_FG,
-        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
-        tmm.SHORT_NO,
-        tmm.WEDDING_YN,
-        tmm.WEDDINGDAY,
-        tmm.EMAIL_ADDR,
-        tmm.EMAIL_RECV_YN,
-        tmm.SMS_RECV_YN,
-        tmm.REMARK,
-        tmm.USE_YN,
-        tmm.REG_DT,
-        tmm.REG_ID,
-        tmm.MOD_DT,
-        tmm.MOD_ID
-        FROM TB_MB_MEMBER tmm
-        WHERE tmm.MEMBR_NO = #{membrNo}
-        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND SBPENC.D(tmm.MEMBR_NM) = #{membrNm}
-    </select>
-
 </mapper>
