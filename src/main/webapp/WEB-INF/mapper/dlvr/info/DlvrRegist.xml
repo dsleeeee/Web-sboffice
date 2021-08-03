@@ -106,7 +106,7 @@
         , DLVR_LZONE_CD
         , TO_NUMBER(PAGE_NO) AS PAGE_NO
         , EMP_NO
-        , SBPENC.D(DLVR_ADDR) AS DLVR_ADDR
+        , DLVR_ADDR
         , DECODE(IN_FG, 'W', 'WEB', 'POS') AS IN_NM
         , IN_FG
         , USE_YN
