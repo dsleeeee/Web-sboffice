@@ -33,6 +33,8 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 사용여부 조회조건 콤보박스 데이터 Set
     $scope._setComboData("useYnAll", useYnAllFgData);
 
+    $scope.saleUprcApply = true;
+
     $("#btnAddMenuGroup").css("display", "none");
     $("#btnSaveMenuGroup").css("display", "none");
     $("#btnDelProdMapping").css("display", "none");
@@ -257,11 +259,25 @@ app.controller('prodMappingCtrl', ['$scope', '$http', '$timeout', function ($sco
     angular.extend(this, new RootController('prodMappingCtrl', $scope, $http, true));
 
     $scope.initGrid = function (s, e) {
-
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 판매가 변경시 다른 컬럼값도 변경
+                if (col.binding === "saleUprc") {
+                    var scope = agrid.getScope('menuGroupCtrl');
+                    if(scope.saleUprcApply){
+                        item.stinSaleUprc = item.saleUprc;
+                        item.dlvrSaleUprc = item.saleUprc;
+                        item.packSaleUprc = item.saleUprc;
+                    }
+                }
+            }
+            s.collectionView.commitEdit();
+        });
     };
 
     $scope.$on("prodMappingCtrl", function(event, data) {
-
         // 상품연결조회
         $scope.searchProdMapping();
         event.preventDefault();
@@ -396,11 +412,10 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
 
                 // 체크박스
                 if (col.binding === "gChk" || col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
-                    var item = s.rows[e.row].dataItem;
-
                     // 이미 등록된 상품이면 체크박스와 가격입력 막기
                     if (item[("regYn")] === 'Y') {
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -411,7 +426,18 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
                         e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
+
+                // 판매가 변경시 다른 컬럼값도 변경
+                if (col.binding === "saleUprc") {
+                    var scope = agrid.getScope('menuGroupCtrl');
+                    if(scope.saleUprcApply){
+                        item.stinSaleUprc = item.saleUprc;
+                        item.dlvrSaleUprc = item.saleUprc;
+                        item.packSaleUprc = item.saleUprc;
+                    }
+                }
             }
+            s.collectionView.commitEdit();
         });
     };
 

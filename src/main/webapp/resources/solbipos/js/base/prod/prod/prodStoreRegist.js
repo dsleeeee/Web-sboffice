@@ -17,10 +17,32 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
 
+  $scope.prodSaleUprcApply = true;
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
     $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+
+    s.cellEditEnded.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        // 가격 변경시 체크박스 체크
+        if (col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
+          item.gChk = true;
+        }
+        // 판매가 변경시 다른 컬럼값도 변경
+        if (col.binding === "saleUprc") {
+          if($scope.prodSaleUprcApply){
+            item.stinSaleUprc = item.saleUprc;
+            item.dlvrSaleUprc = item.saleUprc;
+            item.packSaleUprc = item.saleUprc;
+          }
+        }
+      }
+      s.collectionView.commitEdit();
+    });
 
     var url             = '/base/prod/prod/prod/getBrandComboList.sb';
     var comboParams     = {};
