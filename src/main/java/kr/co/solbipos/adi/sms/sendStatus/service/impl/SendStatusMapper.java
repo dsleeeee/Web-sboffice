@@ -37,4 +37,10 @@ public interface SendStatusMapper {
     int getSendStatusReserveCancelSaveDeleteKT(SendStatusVO sendStatusVO);
     int getSendStatusReserveCancelSaveDeleteLMS(SendStatusVO sendStatusVO);
     int getSendStatusReserveCancelSaveDeleteLMSKT(SendStatusVO sendStatusVO);
+
+    /** 잔여수량 복구 */
+    int getSmsQtyRecoverSaveUpdate(SendStatusVO sendStatusVO);
+
+    /** 전송이력 복구 */
+    int getSmsSendSeqRecoverSaveUpdate(SendStatusVO sendStatusVO);
 }

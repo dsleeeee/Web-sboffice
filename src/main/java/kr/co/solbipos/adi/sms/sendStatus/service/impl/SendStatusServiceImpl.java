@@ -66,8 +66,14 @@ public class SendStatusServiceImpl implements SendStatusService {
     public int getSendStatusReserveCancelSave(SendStatusVO[] sendStatusVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
+        String currentDt = currentDateTimeString();
 
         for(SendStatusVO sendStatusVO : sendStatusVOs) {
+
+            sendStatusVO.setModDt(currentDt);
+            sendStatusVO.setModId(sessionInfoVO.getUserId());
+
+            sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
             if(sendStatusVO.getGubun().equals("HCS_MSGSS_T")) {
                 procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDelete(sendStatusVO); // HCS_MSGSS_T
@@ -81,6 +87,12 @@ public class SendStatusServiceImpl implements SendStatusService {
             } else if(sendStatusVO.getGubun().equals("HCS_MSGKM_T")) {
                 procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMSKT(sendStatusVO); // HCS_MSGKM_T
             }
+
+            // 잔여수량 복구
+            procCnt = sendStatusMapper.getSmsQtyRecoverSaveUpdate(sendStatusVO);
+
+            // 전송이력 복구
+            procCnt = sendStatusMapper.getSmsSendSeqRecoverSaveUpdate(sendStatusVO);
         }
 
         return procCnt;

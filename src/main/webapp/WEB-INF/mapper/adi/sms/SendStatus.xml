@@ -56,7 +56,8 @@
         (SELECT DECODE(RESULT_NM, NULL, RESULT_CD, RESULT_NM) FROM HCS_MSGCM_T WHERE RESULT_CD = hmt.RESULT_CD) AS RESULT_NM,
         DECODE(hmt.COMPANY, '1', 'MONO', '2', 'SMTNT', NULL) AS COMPANY,
         hmt.MSG_CONTENT,
-        hmt.GUBUN
+        hmt.GUBUN,
+        hmt.SMS_SEND_SEQ
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
@@ -84,7 +85,8 @@
                     '' AS RESULT_CD,
                     '2' AS COMPANY,
                     A.MSG_CONTENT,
-                    'HCS_MSGSS_T' AS GUBUN
+                    'HCS_MSGSS_T' AS GUBUN,
+                    A.SMS_SEND_SEQ
                     FROM HCS_MSGSS_T A
                     WHERE 1=1
                 )
@@ -110,7 +112,8 @@
                     '' AS RESULT_CD,
                     '1' AS COMPANY,
                     A.MSG_CONTENT,
-                    'HCS_MSGKS_T' AS GUBUN
+                    'HCS_MSGKS_T' AS GUBUN,
+                    A.SMS_SEND_SEQ
                     FROM HCS_MSGKS_T A
                     WHERE 1=1
                 )
@@ -136,7 +139,8 @@
                     '' AS RESULT_CD,
                     '2' AS COMPANY,
                     A.MSG_CONTENT,
-                    'HCS_MSGSM_T' AS GUBUN
+                    'HCS_MSGSM_T' AS GUBUN,
+                    A.SMS_SEND_SEQ
                     FROM HCS_MSGSM_T A
                     WHERE 1=1
                 )
@@ -162,7 +166,8 @@
                     '' AS RESULT_CD,
                     '1' AS COMPANY,
                     A.MSG_CONTENT,
-                    'HCS_MSGKM_T' AS GUBUN
+                    'HCS_MSGKM_T' AS GUBUN,
+                    A.SMS_SEND_SEQ
                     FROM HCS_MSGKM_T A
                     WHERE 1=1
                 )
@@ -188,7 +193,8 @@
                     (A.COMPANY || '_' || A.RESULT) AS RESULT_CD,
                     A.COMPANY,
                     A.MSG_CONTENT,
-                    'HCS_MSGLG_T' AS GUBUN
+                    'HCS_MSGLG_T' AS GUBUN,
+                     0 AS SMS_SEND_SEQ
                     FROM HCS_MSGLG_T A
                     WHERE 1=1
                 )
@@ -243,5 +249,40 @@
         WHERE 1=1
         AND MSG_ID = #{msgId}
     </delete>
+
+    <!-- 잔여수량 복구 -->
+    <!--
+        TABLE    : CET_SMSPT_T
+        COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
+    -->
+    <update id="getSmsQtyRecoverSaveUpdate" parameterType="SendStatusVO">
+        /* SendStatusMapper.getSmsQtyRecoverSaveUpdate */
+        UPDATE
+        CET_SMSPT_T
+        SET
+        SMS_QTY = (SELECT (SMS_QTY+1) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}),
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+    </update>
+
+    <!-- 전송이력 복구 -->
+    <!--
+        TABLE    : HCS_SMS_SEND_REG_T
+        COMMENTS : SMS전송이력
+    -->
+    <update id="getSmsSendSeqRecoverSaveUpdate" parameterType="SendStatusVO">
+        /* SendStatusMapper.getSmsSendSeqRecoverSaveUpdate */
+        UPDATE
+        HCS_SMS_SEND_REG_T
+        SET
+        SMS_SEND_COUNT = (SELECT (SMS_SEND_COUNT-1) FROM HCS_SMS_SEND_REG_T WHERE SMS_SEND_ORGN_CD = #{orgnCd} AND SMS_SEND_SEQ = #{smsSendSeq}),
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND SMS_SEND_ORGN_CD = #{orgnCd}
+        AND SMS_SEND_SEQ = #{smsSendSeq}
+    </update>
 
 </mapper>
