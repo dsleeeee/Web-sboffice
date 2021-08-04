@@ -103,10 +103,11 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            SMS_SEND_SEQ
         ) VALUES (
             HCS_MSGSS_S.NEXTVAL,
-            '1',
+            #{msgType}, -- 1:SMS 2:LMS 3:MMS
             #{title},
             #{content},
             #{regDt},
@@ -129,7 +130,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{smsSendSeq}
         )
     </insert>
 
@@ -166,10 +168,11 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            SMS_SEND_SEQ
         ) VALUES (
             HCS_MSGSS_S.NEXTVAL,
-            '1',
+            #{msgType}, -- 1:SMS 2:LMS 3:MMS
             #{title},
             #{content},
             #{regDt},
@@ -179,7 +182,7 @@
             #{phoneNumber},
             '0',
             '',
-             #{reserveYn},
+            #{reserveYn},
             #{smsOgnCd},
             #{cstOgnCd},
             #{cstNo},
@@ -192,7 +195,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{smsSendSeq}
         )
     </insert>
 
@@ -233,10 +237,11 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            SMS_SEND_SEQ
         ) VALUES (
             HCS_MSGSS_S.NEXTVAL,
-            '2',
+            #{msgType}, -- 1:SMS 2:LMS 3:MMS
             #{title},
             #{content},
             #{regDt},
@@ -263,7 +268,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{smsSendSeq}
         )
     </insert>
 
@@ -304,10 +310,11 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            SMS_SEND_SEQ
         ) VALUES (
             HCS_MSGSS_S.NEXTVAL,
-            '2',
+            #{msgType}, -- 1:SMS 2:LMS 3:MMS
             #{title},
             #{content},
             #{regDt},
@@ -334,7 +341,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{smsSendSeq}
         )
     </insert>
 
@@ -512,5 +520,93 @@
         </if>
         ORDER BY tce.EMP_NO
     </select>
+
+    <!-- 전송이력시퀀스 조회 -->
+    <!--
+        TABLE    : HCS_SMS_SEND_REG_T
+        COMMENTS : SMS전송이력
+    -->
+    <select id="getSmsSendSeq" parameterType="sessionInfoVO" resultType="String">
+        /* SmsSendMapper.getSmsSendSeq */
+        SELECT HCS_SMS_SEND_REG_S.NEXTVAL
+        FROM dual
+    </select>
+
+    <!-- 전송이력 저장 insert -->
+    <!--
+        TABLE    : HCS_SMS_SEND_REG_T
+        COMMENTS : SMS전송이력
+    -->
+    <insert id="getSmsSendSeqSaveInsert" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsSendSeqSaveInsert */
+        INSERT INTO HCS_SMS_SEND_REG_T
+        (
+            SMS_SEND_ORGN_CD,
+            SMS_SEND_SEQ,
+            SMS_SEND_COUNT,
+            MSG_ID,
+            MSG_TYPE,
+            SUBJECT,
+            MSG_CONTENT,
+            REG_DATE,
+            MOD_DATE,
+            SEND_DATE,
+            CALLBACK,
+            PHONE_NUMBER,
+            CONTENT_COUNT,
+            CONTENT_1,
+            CONTENT_2,
+            CONTENT_3,
+            SEND_STATUS,
+            READ_DATE,
+            RESERVE_YN,
+            SMS_OGN_CD,
+            CST_OGN_CD,
+            CST_NO,
+            R_OGN_CD,
+            R_OGN_FG,
+            R_USER_ID,
+            S_OGN_CD,
+            S_OGN_FG,
+            S_USER_ID,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{smsOgnCd},
+            #{smsSendSeq},
+            #{smsSendCount},
+            HCS_MSGSS_S.NEXTVAL,
+            #{msgType}, -- 1:SMS 2:LMS 3:MMS
+            #{title},
+            #{content},
+            #{regDt},
+            #{regDt},
+            #{sendDate},
+            #{callback},
+            #{phoneNumber},
+            '0',
+            '',
+            '',
+            '',
+            '0',
+            '',
+            #{reserveYn},
+            #{smsOgnCd},
+            #{cstOgnCd},
+            #{cstNo},
+            #{rrOrgnCd},
+            #{rrOrgnFg},
+            #{rrUserId},
+            #{ssOrgnCd},
+            #{ssOrgnFg},
+            #{ssUserId},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
 
 </mapper>

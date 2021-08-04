@@ -120,6 +120,12 @@ public class SmsSendVO extends PageVO {
     /** 수신자추가 팝업 - 관리자용 체크 구분 */
     private String authChk;
 
+    /** 전송이력시퀀스 */
+    private String smsSendSeq;
+
+    /** 전송건수 */
+    private String smsSendCount;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -274,5 +280,21 @@ public class SmsSendVO extends PageVO {
 
     public void setAuthChk(String authChk) {
         this.authChk = authChk;
+    }
+
+    public String getSmsSendSeq() {
+        return smsSendSeq;
+    }
+
+    public void setSmsSendSeq(String smsSendSeq) {
+        this.smsSendSeq = smsSendSeq;
+    }
+
+    public String getSmsSendCount() {
+        return smsSendCount;
+    }
+
+    public void setSmsSendCount(String smsSendCount) {
+        this.smsSendCount = smsSendCount;
     }
 }

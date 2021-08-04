@@ -80,6 +80,9 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         int rowCount = 1; // 홀수,짝수
 
+        // 전송이력시퀀스
+        String smsSendSeq = smsSendMapper.getSmsSendSeq(sessionInfoVO);
+
         for(SmsSendVO smsSendVO : smsSendVOs) {
 
             smsSendVO.setRegDt(currentDt);
@@ -127,6 +130,9 @@ public class SmsSendServiceImpl implements SmsSendService {
             // SMS등록전 체크
             String smsChk = smsSendMapper.getSmsChk(smsSendVO);
 
+            // 전송이력시퀀스
+            smsSendVO.setSmsSendSeq(smsSendSeq);
+
             // SMS
             if(smsSendVO.getMsgType().equals("1")) {
                 if(smsChk.equals("0")) {
@@ -146,7 +152,7 @@ public class SmsSendServiceImpl implements SmsSendService {
                 }
 
             // LMS
-            } else if(smsSendVO.getMsgType().equals("1")) {
+            } else if(smsSendVO.getMsgType().equals("2")) {
                 if(smsChk.equals("0")) {
                     // 홀수
                     if(rowCount%2 == 1) {
@@ -171,6 +177,15 @@ public class SmsSendServiceImpl implements SmsSendService {
             // 잔여수량 저장 update
             procCnt = smsSendMapper.getSmsQtySaveUpdate(smsSendVO);
 
+            // 마지막 데이터 저장시 전송이력
+            if(rowCount == smsSendVOs.length) {
+                // 전송건수
+                smsSendVO.setSmsSendCount(String.valueOf(smsSendVOs.length));
+
+                // 전송이력 저장
+                procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
+            }
+
             rowCount = rowCount + 1; // 홀수,짝수
         }
 
@@ -194,7 +209,6 @@ public class SmsSendServiceImpl implements SmsSendService {
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             smsSendVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-
 
         return smsSendMapper.getAddresseeAddList(smsSendVO);
     }

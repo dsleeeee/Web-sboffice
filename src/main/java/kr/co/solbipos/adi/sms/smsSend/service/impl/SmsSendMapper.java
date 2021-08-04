@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
 
@@ -52,4 +53,10 @@ public interface SmsSendMapper {
 
     /** 수신자추가 팝업 - 조회 */
     List<DefaultMap<Object>> getAddresseeAddList(SmsSendVO smsSendVO);
+
+    /** 전송이력시퀀스 조회 */
+    String getSmsSendSeq(SessionInfoVO sessionInfoVO);
+
+    /** 전송이력 저장 insert */
+    int getSmsSendSeqSaveInsert(SmsSendVO smsSendVO);
 }
