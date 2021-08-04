@@ -7,7 +7,7 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <wj-popup control="prodStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:920px;">
-  <div class="wj-dialog wj-dialog-columns title">
+  <div class="wj-dialog wj-dialog-columns title" ng-controller="regStoreCtrl">
 
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -71,6 +71,12 @@
             </td>
           </tr>
         </c:if>
+        <c:if test="${subPriceFg == '1'}">
+          <tr>
+            <th><input type="checkbox" id="prodSaleUprcApply" ng-model="prodSaleUprcApply"/> <s:message code="salePrice.batchChange"/></th>
+            <td><s:message code="salePrice.saleUprcApply"/></td>
+          </tr>
+        </c:if>
         </tbody>
       </table>
       <%-- 조회 --%>
@@ -80,7 +86,7 @@
 
       <%--- 적용매장 그리드 --%>
       <div class="oh mt20">
-        <div class="w50 fl" ng-controller="regStoreCtrl">
+        <div class="w50 fl">
           <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;">
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>
@@ -175,4 +181,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.04" charset="utf-8"></script>

@@ -43,6 +43,12 @@
                     </div>
                 </td>
             </tr>
+            <c:if test="${subPriceFg == '1'}">
+                <tr>
+                    <th><input type="checkbox" id="saleUprcApply" ng-model="saleUprcApply"/> <s:message code="salePrice.batchChange"/></th>
+                    <td><s:message code="salePrice.saleUprcApply"/></td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
 
@@ -300,7 +306,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20210701.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20210701.10" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

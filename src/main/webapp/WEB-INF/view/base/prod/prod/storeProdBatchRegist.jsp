@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <wj-popup id="storeProdBatchRegistLayer" control="storeProdBatchRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;">
-    <div class="wj-dialog wj-dialog-columns title">
+    <div class="wj-dialog wj-dialog-columns title" ng-controller="regProdCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
@@ -35,6 +35,12 @@
                     <th><s:message code="prod.prodNm"/></th>
                     <td><input type="text" id="srchBatProdNm" ng-model="prodNm" /></td>
                 </tr>
+                <c:if test="${subPriceFg == '1'}">
+                    <tr>
+                        <th><input type="checkbox" id="storeSaleUprcApply" ng-model="storeSaleUprcApply"/> <s:message code="salePrice.batchChange"/></th>
+                        <td><s:message code="salePrice.saleUprcApply"/></td>
+                    </tr>
+                </c:if>
                 </tbody>
             </table>
             <%-- 조회 --%>
@@ -43,7 +49,7 @@
             </div>
             <%--- 적용상품 그리드 --%>
             <div class="oh mt20">
-                <div class="w50 fl" ng-controller="regProdCtrl">
+                <div class="w50 fl">
                     <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;">
                         <div class="oh">
                             <span class="fl bk lh20 s14"><s:message code="prod.regProd"/></span>
@@ -129,4 +135,4 @@
     var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.03" charset="utf-8"></script>
