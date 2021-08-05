@@ -202,7 +202,7 @@
             WHERE 1=1
             AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
             AND S_OGN_CD = #{orgnCd}
-            ORDER BY REG_DT
+            ORDER BY REG_DT DESC
         ) hmt
         WHERE 1=1
         <if test="ssOrgnCd != null and ssOrgnCd != ''">

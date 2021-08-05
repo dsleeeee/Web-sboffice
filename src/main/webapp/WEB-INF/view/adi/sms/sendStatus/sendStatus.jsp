@@ -29,8 +29,10 @@
         </colgroup>
         <tbody>
         <tr>
-            <%-- 조회일자 --%>
-            <th><s:message code="cmm.search.date"/></th>
+            <%-- 동록일시 --%>
+            <th>
+                <s:message code="sendStatus.regDt"/>
+            </th>
             <td colspan="3">
                 <div class="sb-select">
                     <span class="txtIn"><input id="startDate" name="startDate" class="w110px" /></span>
@@ -112,17 +114,17 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.regDt"/>" binding="regDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="sendStatus.name"/>" binding="sUserNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="sendStatus.name"/>" binding="sUserNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.telNo"/>" binding="sPhoneNumber" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="sendStatus.ognNm"/>" binding="rOgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="sendStatus.name"/>" binding="rUserNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="sendStatus.ognNm"/>" binding="rOgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="sendStatus.name"/>" binding="rUserNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.telNo"/>" binding="rPhoneNumber" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.sendDate"/>" binding="sendDate" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.readDate"/>" binding="readDate" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.sendStatus"/>" binding="sendStatus" data-map="sendStatusFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.resultNm"/>" binding="resultNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.company"/>" binding="company" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="sendStatus.msgContent"/>" binding="msgContent" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="sendStatus.msgContent"/>" binding="msgContent" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
 
                 <%--저장시 필요--%>
                 <wj-flex-grid-column header="<s:message code="sendStatus.msgId"/>" binding="msgId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
