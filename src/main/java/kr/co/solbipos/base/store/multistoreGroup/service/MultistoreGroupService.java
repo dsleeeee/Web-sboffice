@@ -2,7 +2,7 @@ package kr.co.solbipos.base.store.multistoreGroup.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
+import kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupVO;
 
 import java.util.List;
 
