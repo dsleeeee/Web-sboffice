@@ -30,8 +30,10 @@ app.controller('messageDtlCtrl', ['$scope', '$http', function ($scope, $http) {
         var messageContentDtl = document.getElementById("messageContentDtl");
         if(data != undefined) {
             messageContentDtl.innerHTML = data.msgContent;
+            $("#srchMessageDtlSubject").val(data.subject);
         } else {
             messageContentDtl.innerHTML = "";
+            $("#srchMessageDtlSubject").val("");
         }
 
         event.preventDefault();

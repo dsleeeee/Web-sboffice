@@ -55,6 +55,7 @@
         hmt.SEND_STATUS,
         (SELECT DECODE(RESULT_NM, NULL, RESULT_CD, RESULT_NM) FROM HCS_MSGCM_T WHERE RESULT_CD = hmt.RESULT_CD) AS RESULT_NM,
         DECODE(hmt.COMPANY, '1', 'MONO', '2', 'SMTNT', NULL) AS COMPANY,
+        hmt.SUBJECT,
         hmt.MSG_CONTENT,
         hmt.GUBUN,
         hmt.SMS_SEND_SEQ
@@ -84,11 +85,25 @@
                     A.SEND_STATUS,
                     '' AS RESULT_CD,
                     '2' AS COMPANY,
+                    A.SUBJECT,
                     A.MSG_CONTENT,
                     'HCS_MSGSS_T' AS GUBUN,
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGSS_T A
                     WHERE 1=1
+                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                    </if>
+                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                    </if>
+                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                    </if>
                 )
                 UNION ALL
                 (
@@ -111,11 +126,25 @@
                     A.SEND_STATUS,
                     '' AS RESULT_CD,
                     '1' AS COMPANY,
+                    A.SUBJECT,
                     A.MSG_CONTENT,
                     'HCS_MSGKS_T' AS GUBUN,
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGKS_T A
                     WHERE 1=1
+                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                    </if>
+                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                    </if>
+                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                    </if>
                 )
                 UNION ALL
                 (
@@ -138,11 +167,25 @@
                     A.SEND_STATUS,
                     '' AS RESULT_CD,
                     '2' AS COMPANY,
+                    A.SUBJECT,
                     A.MSG_CONTENT,
                     'HCS_MSGSM_T' AS GUBUN,
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGSM_T A
                     WHERE 1=1
+                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                    </if>
+                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                    </if>
+                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                    </if>
                 )
                   UNION ALL
                 (
@@ -165,11 +208,25 @@
                     A.SEND_STATUS,
                     '' AS RESULT_CD,
                     '1' AS COMPANY,
+                    A.SUBJECT,
                     A.MSG_CONTENT,
                     'HCS_MSGKM_T' AS GUBUN,
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGKM_T A
                     WHERE 1=1
+                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                    </if>
+                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                    </if>
+                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                    </if>
                 )
                   UNION ALL
                 (
@@ -192,31 +249,73 @@
                     A.SEND_STATUS,
                     (A.COMPANY || '_' || A.RESULT) AS RESULT_CD,
                     A.COMPANY,
+                    A.SUBJECT,
                     A.MSG_CONTENT,
                     'HCS_MSGLG_T' AS GUBUN,
                      0 AS SMS_SEND_SEQ
                     FROM HCS_MSGLG_T A
                     WHERE 1=1
+                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                    </if>
+                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                    </if>
+                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                    </if>
                 )
             )
             WHERE 1=1
-            AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
             AND S_OGN_CD = #{orgnCd}
-            ORDER BY REG_DT DESC
-        ) hmt
+        ) hmt,
+        (
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                   ELSE null END
+            ) AS AGENCY_CD
+            FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
         WHERE 1=1
-        <if test="ssOrgnCd != null and ssOrgnCd != ''">
-            AND hmt.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
-        </if>
-        <if test="ssOrgnNm != null and ssOrgnNm != ''">
-            AND hmt.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
-        </if>
-        <if test="rrOrgnCd != null and rrOrgnCd != ''">
-            AND hmt.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
-        </if>
-        <if test="rrOrgnNm != null and rrOrgnNm != ''">
-            AND hmt.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
-        </if>
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twuidv01.AGENCY_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND hmt.S_OGN_CD = #{orgnCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        AND twuidv01.ORGN_CD = hmt.S_OGN_CD
+        ORDER BY REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

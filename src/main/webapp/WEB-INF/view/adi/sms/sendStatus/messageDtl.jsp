@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjMessageDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:320px;height:250px;" fade-in="false" fade-out="false">
+<wj-popup control="wjMessageDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:250px;height:290px;" fade-in="false" fade-out="false">
     <div ng-controller="messageDtlCtrl">
 
         <%-- header --%>
@@ -20,6 +20,12 @@
                 <tbody>
                 <tr>
                     <td>
+                        <input type="text" class="sb-input-msg w100" id="srchMessageDtlSubject" ng-model="subject" readonly/>
+                    </td>
+                </tr>
+                <tr style="height: 10px"></tr>
+                <tr>
+                    <td>
                         <textarea id="messageContentDtl" name="messageContentDtl" ng-model="messageContentDtl" style="width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF" readonly></textarea>
                     </td>
                 </tr>
@@ -30,4 +36,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/messageDtl.js?ver=20210625.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/messageDtl.js?ver=20210806.01" charset="utf-8"></script>
