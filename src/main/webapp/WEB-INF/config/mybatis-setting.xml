@@ -539,6 +539,8 @@
     <typeAlias alias="sendStatusVO" type="kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO"/>
     <!-- 부가서비스 > SMS관리 > 메세지관리 -->
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgManage.service.MsgManageVO"/>
+    <!-- 부가서비스 > SMS관리 > SMS전송이력 -->
+    <typeAlias alias="smsSendHistVO" type="kr.co.solbipos.adi.sms.smsSendHist.service.SmsSendHistVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>

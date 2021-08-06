@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsSendHist.xml
+    SMS전송이력
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.08.05     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.smsSendHist.service.impl.SmsSendHistMapper">
+
+    <!-- SMS전송이력 - 조회 -->
+    <!--
+        TABLE    : HCS_SMS_SEND_REG_T
+        COMMENTS : SMS전송이력
+    -->
+    <select id="getSmsSendHistList"  parameterType="SmsSendHistVO" resultType="DefaultMap">
+        /* SmsSendHistMapper.getSmsSendHistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        hssrt.REG_DT,
+        hssrt.SMS_SEND_ORGN_CD,
+        (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hssrt.SMS_SEND_ORGN_CD GROUP BY ORGN_NM) AS SMS_SEND_ORGN_NM,
+        hssrt.SMS_SEND_SEQ,
+        hssrt.SMS_SEND_COUNT,
+        hssrt.MSG_TYPE,
+        hssrt.SUBJECT,
+        hssrt.MSG_CONTENT,
+        DECODE(hssrt.RESERVE_YN, 'Y', hssrt.SEND_DATE, NULL) AS SEND_DATE,
+        hssrt.READ_DATE,
+        hssrt.RESERVE_YN
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM HCS_SMS_SEND_REG_T hssrt,
+        (
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                   ELSE null END
+            ) AS AGENCY_CD
+            FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        AND hssrt.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twuidv01.AGENCY_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                    <if test="subject != null and subject != ''">
+                        AND hssrt.SUBJECT LIKE '%'||#{subject}||'%'
+                    </if>
+                    <if test="msgContent != null and msgContent != ''">
+                        AND hssrt.MSG_CONTENT LIKE '%'||#{msgContent}||'%'
+                    </if>
+                    <if test="gubunCombo != null and gubunCombo != ''">
+                        <!-- 전체 -->
+                        <if test='gubunCombo == ""'>
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND twuidv01.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <!-- 본사 -->
+                        <if test='gubunCombo == "1"'>
+                            <![CDATA[
+                                AND twuidv01.ORGN_FG IN ('H')
+                            ]]>
+                        </if>
+                        <!-- 매장 -->
+                        <if test='gubunCombo == "2"'>
+                            <![CDATA[
+                                AND twuidv01.ORGN_FG IN ('S')
+                            ]]>
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND twuidv01.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                    </if>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND hssrt.SMS_SEND_ORGN_CD = #{orgnCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        AND twuidv01.ORGN_CD = hssrt.SMS_SEND_ORGN_CD
+        ORDER BY hssrt.REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>
