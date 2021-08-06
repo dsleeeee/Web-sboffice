@@ -9,7 +9,6 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupService;
 import kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupVO;
-import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -131,7 +130,7 @@ public class MultistoreGroupController {
     @RequestMapping(value = "/multistoreGroup/getMultiStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMultiStoreList(MultistoreGroupVO multistoreGroupVO, HttpServletRequest request,
-                               HttpServletResponse response, Model model) {
+                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -175,7 +174,7 @@ public class MultistoreGroupController {
     @RequestMapping(value = "/multistoreGroup/saveStoreMapping.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveStoreMapping(@RequestBody MultistoreGroupVO[] multistoreGroupVOs, HttpServletRequest request,
-                                  HttpServletResponse response, Model model) {
+                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -197,7 +196,7 @@ public class MultistoreGroupController {
     @RequestMapping(value = "/multistoreGroup/getMultiStoreUserList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMultiStoreUserList(MultistoreGroupVO multistoreGroupVO, HttpServletRequest request,
-                                    HttpServletResponse response, Model model) {
+                                        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
