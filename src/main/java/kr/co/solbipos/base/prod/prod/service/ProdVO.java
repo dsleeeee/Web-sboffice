@@ -217,6 +217,9 @@ public class ProdVO extends PageVO {
     /** 프린터코드 */
     private String prterNo;
 
+    /** 매장상품 prefix */
+    private String prefix;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1041,5 +1044,13 @@ public class ProdVO extends PageVO {
 
     public void setPrterNo(String prterNo) {
         this.prterNo = prterNo;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 }

@@ -28,6 +28,8 @@ public class MobileProdSaleVO extends PageVO {
     private String arrStoreCd[];
     /** 당일 Best3 매출 조회 여부 */
     private String todayBest3Fg;
+    /** 사용자 아이디 */
+    private String userId;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -91,5 +93,13 @@ public class MobileProdSaleVO extends PageVO {
 
     public void setTodayBest3Fg(String todayBest3Fg) {
         this.todayBest3Fg = todayBest3Fg;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MultistoreGroup.xml
+    다중매장그룹관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.07.28     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.store.multistoreGroup.service.impl.MultistoreGroupMapper">
+
+    <!-- 그룹조회 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_HDR
+        PARAM    : multistoreGroupVO
+        COMMENTS : 다중매장관리그룹을 조회한다.
+    -->
+    <select id="getMultistoreGroup" parameterType="multistoreGroupVO" resultType="DefaultMap">
+        /* USE : MultistoreGroupMapper.getMultistoreGroup */
+        SELECT HQ_OFFICE_CD,
+                MULTISTORE_CD,
+                MULTISTORE_NM,
+                MULTISTORE_USER_ID,
+                USE_YN,
+                REMARK
+          FROM TB_MS_MULTISTORE_HDR
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="multistoreNm != null and multistoreNm != ''">
+            AND MULTISTORE_NM LIKE '%' || #{multistoreNm} || '%'
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND USE_YN = #{useYn}
+        </if>
+        ORDER
+           BY MULTISTORE_CD ASC
+    </select>
+
+    <!-- 그룹코드 생성 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_HDR
+        PARAM    : multistoreGroupVO
+        COMMENTS : 다중매장관리그룹 코드를 생성한다.
+    -->
+    <select id="getMultistoreGroupCode" parameterType="multistoreGroupVO" resultType="String">
+        /* USE : MultistoreGroupMapper.getMultistoreGroupCode */
+        SELECT LPAD(NVL(MAX(MULTISTORE_CD), '0') + 1, 4, '0')
+          FROM TB_MS_MULTISTORE_HDR
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 그룹생성 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_HDR
+        PARAM    : multistoreGroupVO
+        COMMENTS : 새로운 다중매장관리그룹을 생성한다.
+    -->
+    <insert id="insertMultistoreGroup" parameterType="multistoreGroupVO">
+        /* USE : MultistoreGroupMapper.insertMultistoreGroup */
+        INSERT INTO TB_MS_MULTISTORE_HDR
+                    (
+                        HQ_OFFICE_CD,
+                        MULTISTORE_CD,
+                        MULTISTORE_NM,
+                        USE_YN,
+                        REMARK,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{multistoreCd},
+                        #{multistoreNm},
+                        #{useYn},
+                        #{remark},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </insert>
+
+    <!-- 그룹수정 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_HDR
+        PARAM    : multistoreGroupVO
+        COMMENTS : 다중매장관리그룹을 수정한다.
+    -->
+    <update id="updateMultistoreGroup" parameterType="multistoreGroupVO">
+        /* USE : MultistoreGroupMapper.updateMultistoreGroup */
+        UPDATE TB_MS_MULTISTORE_HDR
+           SET MULTISTORE_NM = #{multistoreNm},
+                MULTISTORE_USER_ID = #{multistoreUserId},
+                USE_YN = #{useYn},
+                REMARK = #{remark},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND MULTISTORE_CD = #{multistoreCd}
+    </update>
+
+    <!-- 등록매장조회 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_DTL
+        PARAM    : multistoreGroupVO
+        COMMENTS : 그룹에 등록된 매장을 조회한다.
+    -->
+    <select id="getMultiStoreList" parameterType="multistoreGroupVO" resultType="DefaultMap">
+        /* MultistoreGroupMapper.getMultiStoreList */
+        SELECT tmmd.HQ_OFFICE_CD,
+                tmmd.MULTISTORE_CD,
+                tmmd.STORE_CD,
+                tms.STORE_NM
+          FROM TB_MS_MULTISTORE_DTL tmmd,
+                TB_MS_STORE tms
+         WHERE tmmd.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tmmd.MULTISTORE_CD = #{multistoreCd}
+           AND tms.HQ_OFFICE_CD = tmmd.HQ_OFFICE_CD
+           AND tms.STORE_CD = tmmd.STORE_CD
+         ORDER
+             BY tmmd.STORE_CD ASC
+    </select>
+
+    <!-- 매장삭제 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_DTL
+        PARAM    : multistoreGroupVO
+        COMMENTS : 그룹에 매핑된 매장을 삭제한다.
+    -->
+    <delete id="deleteStoreMapping" parameterType="multistoreGroupVO">
+        /* MultistoreGroupMapper.deleteStoreMapping */
+        DELETE TB_MS_MULTISTORE_DTL
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND MULTISTORE_CD = #{multistoreCd}
+           AND STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 매장조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : multistoreGroupVO
+        COMMENTS : 그룹에 등록할 매장을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="multistoreGroupVO" resultType="DefaultMap">
+        /* MultistoreGroupMapper.getStoreList */
+        SELECT HQ_OFFICE_CD,
+                STORE_CD,
+                STORE_NM,
+                SYS_STAT_FG
+          FROM TB_MS_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+          AND STORE_CD NOT IN (SELECT STORE_CD FROM TB_MS_MULTISTORE_DTL WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        ORDER
+           BY STORE_CD ASC
+    </select>
+
+    <!-- 매장등록 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_DTL
+        PARAM    : multistoreGroupVO
+        COMMENTS : 그룹에 매장을 등록한다.
+    -->
+    <insert id="saveStoreMapping" parameterType="multistoreGroupVO">
+        /* MultistoreGroupMapper.saveStoreMapping */
+        INSERT INTO TB_MS_MULTISTORE_DTL
+                    (
+                        HQ_OFFICE_CD,
+                        MULTISTORE_CD,
+                        STORE_CD,
+                        REMARK,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    )
+                    VALUES
+                    (
+                        #{hqOfficeCd},
+                        #{multistoreCd},
+                        #{storeCd},
+                        #{remark},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+    </insert>
+
+    <!-- 매장 기능사용자 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_MULTISTORE_DTL, TB_WB_USER_INFO, TB_MS_EMPLOYEE
+        PARAM    : multistoreGroupVO
+        COMMENTS : 그룹에 등록된 매장을 조회한다.
+    -->
+    <select id="getMultiStoreUserList" parameterType="multistoreGroupVO" resultType="DefaultMap">
+        /* MultistoreGroupMapper.getMultiStoreUserList */
+        SELECT tme.STORE_CD,
+                tms.STORE_NM,
+                twui.USER_ID
+          FROM TB_WB_USER_INFO twui,
+                TB_MS_EMPLOYEE tme,
+                TB_MS_STORE tms
+         WHERE tme.STORE_CD IN (SELECT STORE_CD FROM TB_MS_MULTISTORE_DTL WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND MULTISTORE_CD = #{multistoreCd})
+           AND twui.USE_YN = 'Y'
+           AND tme.USE_YN = 'Y'
+           AND tme.WEB_USE_YN = 'Y'
+           AND twui.USER_ID = tme.USER_ID
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tms.STORE_CD = tme.STORE_CD
+         ORDER
+            BY tme.STORE_CD,
+                twui.USER_ID
+    </select>
+
+</mapper>

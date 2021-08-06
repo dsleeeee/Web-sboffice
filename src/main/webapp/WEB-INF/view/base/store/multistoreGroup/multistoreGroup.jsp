@@ -3,12 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="subCon">
-    <div  ng-controller="multiStoreGroupCtrl">
+    <div  ng-controller="multistoreGroupCtrl">
 
-        <div class="searchBar flddUnfld">
-            <a href="#" class="open fl"><s:message code="multiStoreGroup.title" /></a>
+        <div class="searchBar">
+            <a href="#" class="open fl"><s:message code="multistoreGroup.title" /></a>
             <%-- 조회 --%>
-            <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('multiStoreGroupCtrl', 1)">
+            <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('multistoreGroupCtrl', 1)">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -24,12 +24,12 @@
             <tbody>
             <tr>
                 <%-- 그룹명 --%>
-                <th><s:message code="multiStoreGroup.groupNm" /></th>
+                <th><s:message code="multistoreGroup.groupNm" /></th>
                 <td>
                     <input type="text" class="sb-input w100" ng-model="multistoreNm"/>
                 </td>
                 <%-- 사용여부 --%>
-                <th><s:message code="multiStoreGroup.useYn" /></th>
+                <th><s:message code="multistoreGroup.useYn" /></th>
                 <td>
                     <div class="sb-select" style="width:200px;">
                         <wj-combo-box
@@ -46,10 +46,10 @@
         </table>
 
         <%-- left (그룹 grid) --%>
-        <div class="wj-TblWrap mt20 mb20 w30 fl" style="width: 350px;">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
+        <div class="wj-TblWrap mt20 mb20 w30 fl" style="width: 500px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:610px;">
                 <div class="updownSet oh mb10 pd5">
-                    <%--<span class="fl bk lh30"><s:message code='multiStoreGroup.group' /></span>--%>
+                    <%--<span class="fl bk lh30"><s:message code='multistoreGroup.group' /></span>--%>
                     <button class="btn_skyblue" id="btnAddGroup" ng-click="addGroup()">
                         <s:message code="cmm.add" />
                     </button>
@@ -58,7 +58,7 @@
                     </button>
                 </div>
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:635px; overflow-x: hidden; overflow-y: hidden;">
+                    <div class="wj-gridWrap" style="height:535px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -69,37 +69,35 @@
                                 item-formatter="_itemFormatter">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="multiStoreGroup.code"/>" binding="multistoreCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="multiStoreGroup.groupNm"/>" binding="multistoreNm" width="150"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="multiStoreGroup.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="65"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="multiStoreGroup.remark"/>" binding="remark" width="150"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.code"/>" binding="multistoreCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.groupNm"/>" binding="multistoreNm" width="120"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="62"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.userId"/>" binding="multistoreUserId" width="200" <%--is-read-only="true"--%>></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.remark"/>" binding="remark" width="120"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
-                <input type="hidden" id="hdMultiStoreCd" />
+                <input type="hidden" id="hdMultistoreCd" />
             </div>
         </div>
     </div>
 
     <%-- right --%>
-    <div class="wj-TblWrap fr" style="width:calc(100% - 350px);">
+    <div class="wj-TblWrap fr" style="width:calc(100% - 500px);">
 
         <%-- 그룹-매장연결 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fl" ng-controller="multiStoreMappingCtrl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
+        <div class="wj-TblWrap mt20 mb5 w45 fl" ng-controller="multistoreMappingCtrl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:610px;">
                 <%--<div class="ml5">
-                    <span class="bk"><s:message code='multiStoreGroup.storeMapping' /></span>
+                    <span class="bk"><s:message code='multistoreGroup.storeMapping' /></span>
                 </div>--%>
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh30" id="lblGroup"></span>
                     <button class="btn_skyblue" id="btnDelStoreMapping" ng-click="delStoreMapping()">
                         <s:message code="cmm.del" />
                     </button>
-                    <button class="btn_skyblue" id="btnSaveStoreMapping" ng-click="saveStoreMapping()">
-                        <s:message code="cmm.save" />
-                    </button>
                 </div>
-                <div class="wj-gridWrap" style="height:620px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:530px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -111,37 +109,36 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="multiStoreGroup.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="multiStoreGroup.storeNm"/>" binding="storeNm" width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="multiStoreGroup.userId"/>" binding="multistoreUserId" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="multistoreGroup.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="multistoreGroup.storeNm"/>" binding="storeNm" width="150" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
         </div>
 
         <%-- 매장선택 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fr" ng-controller="multiStoreSelectCtrl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
+        <div class="wj-TblWrap mt20 mb5 w55 fr" ng-controller="multistoreSelectCtrl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:610px;">
                 <table class="tblType01">
                     <colgroup>
-                        <col class="w13" />
-                        <col class="w35" />
-                        <col class="w13" />
-                        <col class="w35" />
+                        <col class="w20" />
+                        <col class="w30" />
+                        <col class="w20" />
+                        <col class="w30" />
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th><s:message code="multiStoreGroup.storeCd" /></th><%--매장코드--%>
+                        <th><s:message code="multistoreGroup.storeCd" /></th><%--매장코드--%>
                         <td>
                             <input type="text" class="sb-input w100" id="searchStoreCd" />
                         </td>
-                        <th><s:message code="multiStoreGroup.storeNm" /></th><%--매장명--%>
+                        <th><s:message code="multistoreGroup.storeNm" /></th><%--매장명--%>
                         <td>
                             <input type="text" class="sb-input w100" id="searchStoreNm"/>
                         </td>
                     </tr>
                     <tr>
-                        <th><s:message code="multiStoreGroup.sysStatFg" /></th><%--매장상태--%>
+                        <th><s:message code="multistoreGroup.sysStatFg" /></th><%--매장상태--%>
                         <td>
                             <div class="sb-select w100">
                                 <wj-combo-box
@@ -160,13 +157,13 @@
                                 <s:message code="cmm.search" />
                             </button>
                             <button class="btn_skyblue" id="btnRegStore" ng-click="regStore()">
-                                <s:message code="multiStoreGroup.reg" />
+                                <s:message code="multistoreGroup.reg" />
                             </button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <div class="wj-gridWrap" style="height:430px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:495px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -178,10 +175,9 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="multiStoreGroup.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="multiStoreGroup.storeNm"/>" binding="storeNm" width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="multiStoreGroup.userId"/>" binding="multistoreUserId" width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="multiStoreGroup.sysStatFg"/>" binding="sysStatFg" width="80" align="center" data-map="sysStatFgDataMap" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="multistoreGroup.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="multistoreGroup.storeNm"/>" binding="storeNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="multistoreGroup.sysStatFg"/>" binding="sysStatFg" width="70" align="center" data-map="sysStatFgDataMap" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -198,5 +194,8 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/multiStoreGroup/multiStoreGroup.js?ver=20210730.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/multistoreGroup/multistoreGroup.js?ver=20210803.03" charset="utf-8"></script>
 
+<%-- 기능사용자 추가 --%>
+<c:import url="/WEB-INF/view/base/store/multistoreGroup/multistoreUserPop.jsp">
+</c:import>

@@ -64,6 +64,9 @@ public interface ProdMapper {
     /** 상품코드 조회 */
     String getProdCd(ProdVO prodVO);
 
+    /** prefix 상품코드 조회*/
+    String getPrefixProdCd(ProdVO prodVO);
+
     /** 본사 상품정보 등록시 매장 상품정보에 등록 */
     String insertHqProdToStoreProd(ProdVO prodVO);
 
