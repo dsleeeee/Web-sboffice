@@ -73,19 +73,35 @@
     -->
     <select id="getMultiStoreList" parameterType="mobileProdSaleVO" resultType="DefaultMap">
       /* USE : MobileProdSaleMapper.getMultiStoreList */
-      SELECT C.STORE_CD,
+      SELECT C.MULTISTORE_CD,
+              C.STORE_CD,
               D.STORE_NM
         FROM (
-                   SELECT DISTINCT B.STORE_CD
+                   SELECT B.MULTISTORE_CD,
+                           B.STORE_CD
                      FROM TB_MS_MULTISTORE_DTL A,
                            TB_MS_MULTISTORE_DTL B
                     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
                       AND A.STORE_CD = #{storeCd}
                       AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
                       AND B.MULTISTORE_CD = A.MULTISTORE_CD
+                    GROUP
+                       BY B.MULTISTORE_CD,
+                          B.STORE_CD
               ) C,
               TB_MS_STORE D
        WHERE D.STORE_CD = C.STORE_CD
+         AND C.MULTISTORE_CD = (
+                                    SELECT MULTISTORE_CD
+                                      FROM (
+                                                SELECT MULTISTORE_CD,
+                                                        REGEXP_SUBSTR(MULTISTORE_USER_ID,'[^,]+', 1, ROWNUM) AS MULTISTORE_USER_ID
+                                                  FROM (SELECT MULTISTORE_CD, MULTISTORE_USER_ID FROM TB_MS_MULTISTORE_HDR)
+                                               CONNECT
+                                                     BY ROWNUM <![CDATA[<= ]]> LENGTH(REGEXP_REPLACE(MULTISTORE_USER_ID,'[^,]+')) + 1
+                                            )
+                                     WHERE MULTISTORE_USER_ID = #{userId}
+                                )
        ORDER
           BY C.STORE_CD
     </select>

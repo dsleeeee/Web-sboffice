@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.store.multiStoreGroup.web;
+package kr.co.solbipos.base.store.multistoreGroup.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -7,8 +7,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.multiStoreGroup.service.MultiStoreGroupService;
-import kr.co.solbipos.base.store.multiStoreGroup.service.MultiStoreGroupVO;
+import kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupService;
+import kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupVO;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ import java.util.List;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
- * @Class Name : MultiStoreGroupController.java
+ * @Class Name : MultistoreGroupController.java
  * @Description : 기초관리 - 매장관리 - 매장타입관리
  * @Modification Information
  * @
@@ -40,20 +40,20 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping("/base/store/multiStoreGroup")
-public class MultiStoreGroupController {
+@RequestMapping("/base/store/multistoreGroup")
+public class MultistoreGroupController {
 
     private final SessionService sessionService;
-    private final MultiStoreGroupService multiStoreGroupService;
+    private final MultistoreGroupService multistoreGroupService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MultiStoreGroupController(SessionService sessionService, MultiStoreGroupService multiStoreGroupService, CmmEnvUtil cmmEnvUtil) {
+    public MultistoreGroupController(SessionService sessionService, MultistoreGroupService multistoreGroupService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
-        this.multiStoreGroupService = multiStoreGroupService;
+        this.multistoreGroupService = multistoreGroupService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -66,17 +66,17 @@ public class MultiStoreGroupController {
      * @author  이다솜
      * @since   2021. 07. 28.
      */
-    @RequestMapping(value = "/multiStoreGroup/view.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/multistoreGroup/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        return "base/store/multiStoreGroup/multiStoreGroup";
+        return "base/store/multistoreGroup/multistoreGroup";
     }
 
     /**
      * 그룹조회
-     * @param multiStoreGroupVO
+     * @param multistoreGroupVO
      * @param request
      * @param response
      * @param model
@@ -84,21 +84,21 @@ public class MultiStoreGroupController {
      * @author  이다솜
      * @since   2021. 07. 30.
      */
-    @RequestMapping(value = "/multiStoreGroup/getMultiStoreGroup.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/multistoreGroup/getMultistoreGroup.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getMultiStoreGroup(MultiStoreGroupVO multiStoreGroupVO, HttpServletRequest request,
-                               HttpServletResponse response, Model model) {
+    public Result getMultistoreGroup(MultistoreGroupVO multistoreGroupVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = multiStoreGroupService.getMultiStoreGroup(multiStoreGroupVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = multistoreGroupService.getMultistoreGroup(multistoreGroupVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, result);
     }
 
     /**
      * 그룹저장
-     * @param multiStoreGroupVOs
+     * @param multistoreGroupVOS
      * @param request
      * @param response
      * @param model
@@ -106,35 +106,21 @@ public class MultiStoreGroupController {
      * @author  이다솜
      * @since   2021. 07. 30.
      */
-    @RequestMapping(value = "/multiStoreGroup/saveMultiStoreGroup.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/multistoreGroup/saveMultistoreGroup.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveMultiStoreGroup(@RequestBody MultiStoreGroupVO[] multiStoreGroupVOs, HttpServletRequest request,
-                                HttpServletResponse response, Model model) {
+    public Result saveMultistoreGroup(@RequestBody MultistoreGroupVO[] multistoreGroupVOS, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = multiStoreGroupService.saveMultiStoreGroup(multiStoreGroupVOs, sessionInfoVO);
+        int result = multistoreGroupService.saveMultistoreGroup(multistoreGroupVOS, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * 매장조회
-     * @param multiStoreGroupVO
+     * 등록매장조회
+     * @param multistoreGroupVO
      * @param request
      * @param response
      * @param model
@@ -142,14 +128,80 @@ public class MultiStoreGroupController {
      * @author  이다솜
      * @since   2021. 08. 02.
      */
-    @RequestMapping(value = "/multiStoreGroup/getStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/multistoreGroup/getMultiStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreList(MultiStoreGroupVO multiStoreGroupVO, HttpServletRequest request,
+    public Result getMultiStoreList(MultistoreGroupVO multistoreGroupVO, HttpServletRequest request,
                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = multiStoreGroupService.getStoreList(multiStoreGroupVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = multistoreGroupService.getMultiStoreList(multistoreGroupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 매장조회
+     * @param multistoreGroupVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 08. 02.
+     */
+    @RequestMapping(value = "/multistoreGroup/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(MultistoreGroupVO multistoreGroupVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = multistoreGroupService.getStoreList(multistoreGroupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 매장등록, 삭제
+     * @param multistoreGroupVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 08. 02.
+     */
+    @RequestMapping(value = "/multistoreGroup/saveStoreMapping.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreMapping(@RequestBody MultistoreGroupVO[] multistoreGroupVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = multistoreGroupService.saveStoreMapping(multistoreGroupVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장 기능사용자 목록 조회
+     * @param multistoreGroupVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 08. 02.
+     */
+    @RequestMapping(value = "/multistoreGroup/getMultiStoreUserList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMultiStoreUserList(MultistoreGroupVO multistoreGroupVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = multistoreGroupService.getMultiStoreUserList(multistoreGroupVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, result);
     }
