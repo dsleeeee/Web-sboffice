@@ -263,9 +263,8 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 자동변환
     $scope.addMsg = function(str) {
-        var messageContent = document.getElementById("messageContent");
-        messageContent.focus();
-        messageContent.innerHTML = messageContent.innerHTML + str;
+        var msgContent = $("#messageContent").val();
+        $("#messageContent").val(msgContent + str);
 
         // 바이트
         $scope.showByte();
@@ -278,8 +277,7 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             return false;
         }
 
-        var messageContent = document.getElementById("messageContent");
-        $("#lblTxtByte").text(messageContent.value.getByteLength());
+        $("#lblTxtByte").text($("#messageContent").val().getByteLength());
 
         if(messageContent.value.getByteLength() > 80) {
             $("#lblTxtByteGubun").text("LMS");
@@ -291,7 +289,7 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
     // 신규
     $scope.msgNew = function () {
         $("#srchTitle").val("");
-        $scope.messageContent = "";
+        $("#messageContent").val("");
         $("#lblTxtByte").text("0");
         $("#lblTxtByteGubun").text("SMS");
         $("#lblSeqNo").text("");
@@ -299,13 +297,22 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 저장
     $scope.msgSave = function () {
+        if($("#srchTitle").val() == "") {
+            $scope._popMsg(messages["msgManage.titleAlert"]); // 제목을 입력해주세요.
+            return false;
+        }
+        if($("#messageContent").val() == "") {
+            $scope._popMsg(messages["msgManage.messageContentAlert"]); // 메세지를 입력해주세요.
+            return false;
+        }
+
         var seqNo = $("#lblSeqNo").text();
 
         $scope._popConfirm(messages["cmm.choo.save"], function() {
             var params = {};
             params.msgGrpCd = $("#lblMsgGrpCd").text();
-            params.title = $scope.title;
-            params.content = $scope.messageContent;
+            params.title = $("#srchTitle").val();
+            params.content = $("#messageContent").val();
             if(seqNo == "") {
                 params.seqNo = "";
                 params.status = "I";
@@ -335,10 +342,7 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
     $scope.msgModify = function (data) {
         $("#lblSeqNo").text(data.seqNo);
         $("#srchTitle").val(data.title);
-
-        var messageContent = document.getElementById("messageContent");
-        messageContent.focus();
-        messageContent.innerHTML = data.message;
+        $("#messageContent").val(data.message);
 
         // 바이트
         $scope.showByte();
