@@ -46,7 +46,7 @@
         </table>
 
         <%-- left (그룹 grid) --%>
-        <div class="wj-TblWrap mt20 mb20 w30 fl" style="width: 500px;">
+        <div class="wj-TblWrap mt20 mb20 w30 fl" style="width: 330px;">
             <div class="wj-TblWrapBr mr10 pd10" style="height:610px;">
                 <div class="updownSet oh mb10 pd5">
                     <%--<span class="fl bk lh30"><s:message code='multistoreGroup.group' /></span>--%>
@@ -69,11 +69,11 @@
                                 item-formatter="_itemFormatter">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="multistoreGroup.code"/>" binding="multistoreCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="multistoreGroup.groupNm"/>" binding="multistoreNm" width="120"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.code"/>" binding="multistoreCd" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.groupNm"/>" binding="multistoreNm" width="100"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.userId"/>" binding="multistoreUserId" width="120" <%--is-read-only="true"--%>></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="multistoreGroup.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="62"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="multistoreGroup.userId"/>" binding="multistoreUserId" width="200" <%--is-read-only="true"--%>></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="multistoreGroup.remark"/>" binding="remark" width="120"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="multistoreGroup.remark"/>" binding="remark" width="100"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
     </div>
 
     <%-- right --%>
-    <div class="wj-TblWrap fr" style="width:calc(100% - 500px);">
+    <div class="wj-TblWrap fr" style="width:calc(100% - 330px);">
 
         <%-- 그룹-매장연결 grid --%>
         <div class="wj-TblWrap mt20 mb5 w45 fl" ng-controller="multistoreMappingCtrl">
@@ -194,7 +194,7 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/multistoreGroup/multistoreGroup.js?ver=20210803.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/multistoreGroup/multistoreGroup.js?ver=20210803.05" charset="utf-8"></script>
 
 <%-- 기능사용자 추가 --%>
 <c:import url="/WEB-INF/view/base/store/multistoreGroup/multistoreUserPop.jsp">

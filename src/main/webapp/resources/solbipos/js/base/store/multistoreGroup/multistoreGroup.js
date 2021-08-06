@@ -51,13 +51,17 @@ app.controller('multistoreGroupCtrl', ['$scope', '$http', '$timeout', function (
                 }
 
                 if (col.binding === "multistoreUserId") {
-                    if (item.multistoreCd === "자동채번") {
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
-                        // Attribute 의 변경사항을 적용.
-                        e.cell.outerHTML = e.cell.outerHTML;
+                    if(item.multistoreUserId === null) {
+                        e.cell.textContent = "선택";
                     }
+
+                    wijmo.addClass(e.cell, 'wijLink');
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                    // Attribute 의 변경사항을 적용.
+                    e.cell.outerHTML = e.cell.outerHTML;
                 }
             }
         });
@@ -182,11 +186,13 @@ app.controller('multistoreGroupCtrl', ['$scope', '$http', '$timeout', function (
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = 'U';
+            $scope.flex.collectionView.itemsEdited[i].multistoreUserId = $scope.flex.collectionView.itemsEdited[i].multistoreUserId.replaceAll("선택", "");
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
 
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             $scope.flex.collectionView.itemsAdded[i].status = 'I';
+            $scope.flex.collectionView.itemsAdded[i].multistoreUserId = $scope.flex.collectionView.itemsAdded[i].multistoreUserId.replaceAll("선택", "");
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
 
@@ -204,7 +210,11 @@ app.controller('multistoreGroupCtrl', ['$scope', '$http', '$timeout', function (
     $scope.setMultistoreUserId = function (data) {
 
         // 기능사용자 데이터 set
-        $scope.flex.collectionView.items[data.rowNo].multistoreUserId = data.multistoreUserId;
+        if(data.multistoreUserId === null || data.multistoreUserId === ""){
+            $scope.flex.collectionView.items[data.rowNo].multistoreUserId = "선택";
+        }else{
+            $scope.flex.collectionView.items[data.rowNo].multistoreUserId = data.multistoreUserId;
+        }
 
         // 저장시, 수정되어야 하기 때문에 해당 그룹은 edit 처리
         var item = $scope.flex.collectionView.items[data.rowNo];
