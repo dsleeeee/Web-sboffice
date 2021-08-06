@@ -657,7 +657,7 @@
             <!-- 가맹점 (매장 등록 상품의 경우 상품코드가 '9'로 시작) -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <!-- 단독매장 -->
-                <if test='hqOfficeCd != null and hqOfficeCd == "0000"'>
+                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
                     SELECT
 --                     LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
                     NVL(MAX(TO_NUMBER(PROD_CD)), 8000000000000) + 1 AS PROD_CD
@@ -666,7 +666,7 @@
                     AND PROD_CD BETWEEN '8000000000001' AND '9999999999999'
                 </if>
                 <!-- 단독매장이 아닐 경우 -->
-                <if test='hqOfficeCd != null and hqOfficeCd != "0000"'>
+                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
                     SELECT
 --                     '9' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(PROD_CD, 2, 13))),0) + 1, 12, '0') AS PROD_CD
                     NVL(MAX(TO_NUMBER(PROD_CD)), 8000000000000) + 1 AS PROD_CD
@@ -677,6 +677,20 @@
                 </if>
             </when>
         </choose>
+    </select>
+
+    <!-- prefix 상품코드 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 프랜차이즈 매장의 경우, 본사 ([0002] 매장상품 prefix) 사용여부를 파악하여 상품코드를 생성한다.
+    -->
+    <select id="getPrefixProdCd" parameterType="prodVO" resultType="String">
+        /* ProdMapper.getPrefixProdCd */
+        SELECT #{prefix} || LPAD(NVL(MAX(TO_NUMBER(REGEXP_REPLACE(SUBSTR(PROD_CD, LENGTH(#{prefix}) + 1), '[^0-9]'))),0) + 1, 13 - LENGTH(#{prefix}), '0') AS PROD_CD
+          FROM TB_MS_PRODUCT
+         WHERE STORE_CD = #{storeCd}
+           AND PROD_CD LIKE #{prefix} || '%'
     </select>
 
     <!-- 상품정보 저장 -->

@@ -442,7 +442,7 @@
             #{hqOfficeCd},
             #{nmcodeGrpCd},
             #{nmcodeCd},
-            #{nmcodeCd},
+            #{nmcodeGrpCd},
             #{nmcodeNm},
             #{regDt},
             #{regId},

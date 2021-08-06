@@ -234,7 +234,27 @@ public class ProdServiceImpl implements ProdService {
 
         // 상품 신규등록이면서 자동채번인 경우 상품코드 조회
         if(prodVO.getProdNoEnv() == ProdNoEnvFg.AUTO && prodVO.getSaveMode().equals("REG")){
-            String prodCd = prodMapper.getProdCd(prodVO);
+
+            String prodCd = "";
+
+            // 프랜차이즈 매장의 경우, 본사 ([0002] 매장상품 prefix) 사용여부를 파악하여 상품코드를 생성
+            if(prodVO.getOrgnFg() == "S" && prodVO.getHqOfficeCd() != "00000"){
+
+                String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0002"), "");
+
+                // prefix 미사용시
+                if("*".equals(sPrefix) || "".equals(sPrefix)){
+                    prodCd = prodMapper.getProdCd(prodVO);
+                }else{
+                    // prefix 사용시
+                    prodVO.setPrefix(sPrefix);
+                    prodCd = prodMapper.getPrefixProdCd(prodVO);
+                }
+
+            }else{
+                prodCd = prodMapper.getProdCd(prodVO);
+            }
+
             prodVO.setProdCd(prodCd);
         }
 

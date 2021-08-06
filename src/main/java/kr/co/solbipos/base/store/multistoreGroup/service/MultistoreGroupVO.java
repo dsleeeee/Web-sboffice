@@ -1,8 +1,8 @@
-package kr.co.solbipos.base.store.multiStoreGroup.service;
+package kr.co.solbipos.base.store.multistoreGroup.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class MultiStoreGroupVO extends PageVO {
+public class MultistoreGroupVO extends PageVO {
 
     private static final long serialVersionUID = 6066190488614060344L;
 
@@ -22,6 +22,8 @@ public class MultiStoreGroupVO extends PageVO {
     private String storeNm;
     /** 매장상태 */
     private String sysStatFg;
+    /** 기능사용자 */
+    private String multistoreUserId;
 
 
     public String getHqOfficeCd() {
@@ -86,5 +88,13 @@ public class MultiStoreGroupVO extends PageVO {
 
     public void setSysStatFg(String sysStatFg) {
         this.sysStatFg = sysStatFg;
+    }
+
+    public String getMultistoreUserId() {
+        return multistoreUserId;
+    }
+
+    public void setMultistoreUserId(String multistoreUserId) {
+        this.multistoreUserId = multistoreUserId;
     }
 }

@@ -44,6 +44,7 @@ public class MobileProdSaleServiceImpl implements MobileProdSaleService {
 
         mobileProdSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         mobileProdSaleVO.setStoreCd(sessionInfoVO.getStoreCd());
+        mobileProdSaleVO.setUserId(sessionInfoVO.getUserId());
 
         return mobileProdSaleMapper.getMultiStoreList(mobileProdSaleVO);
     }

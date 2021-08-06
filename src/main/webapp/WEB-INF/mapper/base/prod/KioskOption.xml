@@ -27,27 +27,28 @@
                 thp.PROD_CD,
                 thp.PROD_NM,
                 NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                (SELECT BARCD_CD AS  FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CD = thp.PROD_CD) AS BAR_CD
-                FROM TB_HQ_PRODUCT thp
-                LEFT OUTER JOIN (
-                                    SELECT
-                                    HQ_OFFICE_CD,
-                                    PROD_CD,
-                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                    FROM TB_HQ_PRODUCT_SALE_PRICE
-                                    WHERE 1=1
-                                    AND HQ_OFFICE_CD = #{membrOrgnCd}
-                                    <![CDATA[
-                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                    ]]>
-                                    AND SALE_PRC_FG = '1'
-                                    GROUP BY HQ_OFFICE_CD, PROD_CD
-                                    ) thpsp ON
-                                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                                    AND thp.PROD_CD = thpsp.PROD_CD
+                thpb.BARCD_CD
+                FROM TB_HQ_PRODUCT_BARCD thpb, TB_HQ_PRODUCT thp, (
+                                                                    SELECT
+                                                                    HQ_OFFICE_CD,
+                                                                    PROD_CD,
+                                                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                                                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                                                                    WHERE 1=1
+                                                                    AND HQ_OFFICE_CD = #{membrOrgnCd}
+                                                                    <![CDATA[
+                                                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                                                    ]]>
+                                                                    AND SALE_PRC_FG = '1'
+                                                                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                                                                    ) thpsp
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD (+)= thp.PROD_CD
+                AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                AND thpsp.PROD_CD (+)= thp.PROD_CD
                 <if test='chkDt != true'>
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -62,7 +63,7 @@
                     AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND thpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                    AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn}
@@ -85,27 +86,28 @@
                 tmp.PROD_CD,
                 tmp.PROD_NM,
                 NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                (SELECT BARCD_CD AS  FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.PROD_CD) AS BAR_CD
-                FROM TB_MS_PRODUCT tmp
-                LEFT OUTER JOIN (
-                                    SELECT
-                                    STORE_CD,
-                                    PROD_CD,
-                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                    FROM TB_MS_PRODUCT_SALE_PRICE
-                                    WHERE 1=1
-                                    AND STORE_CD = #{storeCd}
-                                    <![CDATA[
-                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                    ]]>
-                                    AND SALE_PRC_FG = '1'
-                                    GROUP BY STORE_CD, PROD_CD
-                                    ) tmpsp ON
-                                    tmp.STORE_CD = tmpsp.STORE_CD
-                                    AND tmp.PROD_CD = tmpsp.PROD_CD
+                tmpb.BARCD_CD
+                FROM TB_MS_PRODUCT_BARCD tmpb, TB_MS_PRODUCT tmp, (
+                                                                    SELECT
+                                                                    STORE_CD,
+                                                                    PROD_CD,
+                                                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                                                    FROM TB_MS_PRODUCT_SALE_PRICE
+                                                                    WHERE 1=1
+                                                                    AND STORE_CD = #{storeCd}
+                                                                    <![CDATA[
+                                                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                                                    ]]>
+                                                                    AND SALE_PRC_FG = '1'
+                                                                    GROUP BY STORE_CD, PROD_CD
+                                                                    ) tmpsp
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
+                AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+                AND tmpsp.PROD_CD (+)= tmp.PROD_CD
                 <if test='chkDt != true'>
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -120,7 +122,7 @@
                     AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND tmpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                    AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn}
