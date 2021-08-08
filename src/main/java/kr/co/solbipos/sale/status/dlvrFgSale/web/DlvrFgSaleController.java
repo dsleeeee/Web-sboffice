@@ -34,7 +34,7 @@ public class DlvrFgSaleController {
     }
 
     /**
-     * 페이지 이동
+     * 페이지 이동 - 내점/배달/포장 현황
      *
      * @param request
      * @param response

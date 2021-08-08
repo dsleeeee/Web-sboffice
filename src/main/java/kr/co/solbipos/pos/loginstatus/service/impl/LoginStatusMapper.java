@@ -25,7 +25,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LoginStatusMapper {
-
+    /** POS 로그인 조회 */
     public <E> List<E> selectLoginStatus(LoginStatusVO loginStatusVO);
 
 }

@@ -27,6 +27,7 @@ public class DaySaleController {
         this.dayService = dayService;
     }
 
+    /** 매출현황 - 일자별 */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String daySaleView(HttpServletRequest request, HttpServletResponse response, Model model) {
 

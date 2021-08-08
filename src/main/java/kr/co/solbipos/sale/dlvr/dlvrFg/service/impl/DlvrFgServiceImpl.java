@@ -36,6 +36,7 @@ public class DlvrFgServiceImpl implements DlvrFgService {
         this.dlvrFgMapper = dlvrFgMapper;
     }
 
+    /** 배달구분 */
     @Override
     public String getDlvrFg(DlvrFgVO dlvrFgVO, SessionInfoVO sessionInfoVO) {
         dlvrFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -45,6 +46,7 @@ public class DlvrFgServiceImpl implements DlvrFgService {
         return String.valueOf(dlvrFgMapper.getDlvrFg(dlvrFgVO));
     }
 
+    /** 배달구분 콤보박스 데이터 */
     @Override
     public List<DefaultMap<String>> getDlvrFgData(DlvrFgVO dlvrFgVO, SessionInfoVO sessionInfoVO) {
         dlvrFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());

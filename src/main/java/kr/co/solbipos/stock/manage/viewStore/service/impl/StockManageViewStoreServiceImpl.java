@@ -18,6 +18,7 @@ public class StockManageViewStoreServiceImpl implements StockManageViewStoreServ
 		this.StockManageViewStoreMapper = StockManageViewStoreMapper;
 	}
 
+	/** 실사/조정/폐기 조회 - 매장-실사/조정/폐기 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStockManageViewStoreList(StockManageViewStoreVO StockManageViewStoreVO, SessionInfoVO sessionInfoVO) {
 
@@ -29,7 +30,8 @@ public class StockManageViewStoreServiceImpl implements StockManageViewStoreServ
 
         return StockManageViewStoreMapper.getStockManageViewStoreList(StockManageViewStoreVO);
 	}
-	
+
+	/** 실사/조정/폐기 조회 - 매장-실사/조정/폐기 리스트(엑셀) */
 	@Override
 	public List<DefaultMap<String>> getStockManageViewStoreExcelList(StockManageViewStoreVO StockManageViewStoreVO, SessionInfoVO sessionInfoVO) {
 

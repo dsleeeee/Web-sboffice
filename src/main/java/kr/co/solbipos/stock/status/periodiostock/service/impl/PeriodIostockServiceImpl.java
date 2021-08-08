@@ -18,6 +18,7 @@ public class PeriodIostockServiceImpl implements PeriodIostockService {
 		this.periodIostockMapper = periodIostockMapper;
 	}
 
+	/** 기간수불현황 - 기간수불현황 리스트 조회 */
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public List<DefaultMap<String>> getPeriodIostockList(PeriodIostockVO periodIostockVO, SessionInfoVO sessionInfoVO) {
@@ -37,6 +38,7 @@ public class PeriodIostockServiceImpl implements PeriodIostockService {
 		}
 	}
 
+	/** 기간수불현황 - 기간수불현황 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPeriodiostockProdDtlList(PeriodIostockVO periodIostockVO,
 			SessionInfoVO sessionInfoVO) {
@@ -51,6 +53,7 @@ public class PeriodIostockServiceImpl implements PeriodIostockService {
 		}
 	}
 
+	/** 기간수불현황 - 기간수불현황 엑셀 전체다운로드 조회 */
 	@Override
 	public List<DefaultMap<String>> getPeriodIostockExcelList(PeriodIostockVO periodIostockVO,
 			SessionInfoVO sessionInfoVO) {

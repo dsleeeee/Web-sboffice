@@ -111,6 +111,7 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 		return rtnStatusDayMapper.getRtnStatusProdExcelList(rtnStatusDayVO);
 	}
 
+	/** 반품현황 - 일자별 전체 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getRtnstatusDayExcelList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -128,30 +129,33 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
         return rtnStatusDayMapper.getRtnstatusDayExcelList(rtnStatusDayVO);
 	}
 
-
+	/** 반품현황 - 일자별 전체 엑셀 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getRtnstatusDayDtlExcelList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return rtnStatusDayMapper.getRtnstatusDayDtlExcelList(rtnStatusDayVO);
 	}
 
-
+	/** 반품현황 - 포스별 전체 엑셀 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getRtnStatusPosDtlExcelList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return rtnStatusDayMapper.getRtnStatusPosDtlExcelList(rtnStatusDayVO);
 	}
 
+	/** 반품현황 - 결제수단 컬럼 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPayColAddList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		return rtnStatusDayMapper.getPayColAddList(rtnStatusDayVO);
 	}
 
+	/** 반품현황 - 할인 컬럼 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getDcColList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		return rtnStatusDayMapper.getDcColList(rtnStatusDayVO);
 	}
 
+	/** 반품현황 - 객수 컬럼 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getGuestColList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -162,6 +166,7 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 		return rtnStatusDayMapper.getGuestColList(rtnStatusDayVO);
 	}
 
+	/** 반품현황 - 영수증별 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getRtnstatusBillList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

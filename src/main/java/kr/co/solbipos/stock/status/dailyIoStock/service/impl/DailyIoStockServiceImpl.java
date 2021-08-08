@@ -24,7 +24,7 @@ public class DailyIoStockServiceImpl implements DailyIoStockService {
         this.messageService = messageService;
     }
 
-
+    /** 일수불현황 - 일수불현황 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getDailyIoStockList(DailyIoStockVO dailyIoStockVO, SessionInfoVO sessionInfoVO) {
 
@@ -33,8 +33,8 @@ public class DailyIoStockServiceImpl implements DailyIoStockService {
 
         return dailyIoStockMapper.getDailyIoStockList(dailyIoStockVO);
     }
-	
 
+    /** 일수불현황 - 일수불현황 리스트(엑셀) 조회 */
 	@Override
 	public List<DefaultMap<String>> getDailyIoStockExcelList(DailyIoStockVO dailyIoStockVO, SessionInfoVO sessionInfoVO) {
 

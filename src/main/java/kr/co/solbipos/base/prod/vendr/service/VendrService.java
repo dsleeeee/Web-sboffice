@@ -22,49 +22,49 @@ import java.util.List;
  */
 public interface VendrService {
 
-    /**
+    /** 거래처 목록 조회
      * @param vendrVO
      * @return List
      */
     List<DefaultMap<String>> list(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /**
+    /** 거래처 상세정보 조회
      * @param vendrVO
      * @return DefaultMap
      */
     DefaultMap<String> dtlInfo(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /**
+    /** 거래처 등록
     * @param vendrVO
     * @return int
     */
     int save(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /**
+    /** 본사 수정
     * @param vendrVO
     * @return int
     */
     int modify(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /**
+    /** 취급상품 조회
      * @param vendrVO
      * @return List
      */
     List<DefaultMap<String>> vendrProdList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /**
+    /** 미취급상품 조회
      * @param vendrVO
      * @return List
      */
     List<DefaultMap<String>> prodList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
-    /**
+    /** 미취급상품 등록
     * @param vendrVO
     * @return int
     */
     int modifyProd(VendrVO[] vendrVO, SessionInfoVO sessionInfoVO);
 
-    /**
+    /** 취급상품 삭제
     * @param vendrVO
     * @return int
     */

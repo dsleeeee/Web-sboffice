@@ -19,7 +19,8 @@ public class StorePeriodServiceImpl implements StorePeriodService {
 	public StorePeriodServiceImpl(StorePeriodMapper storePeriodMapper) {
 		this.storePeriodMapper = storePeriodMapper;
 	}
-	
+
+	/** 매장기간수불 - 매장기간수불 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStorePeriodList(StorePeriodVO storePeriodVO, SessionInfoVO sessionInfoVO) {
 		// 거래처 멀티 선택
@@ -35,18 +36,21 @@ public class StorePeriodServiceImpl implements StorePeriodService {
         return storePeriodMapper.getStorePeriodList(storePeriodVO);
 	}
 
+	/** 매장기간수불 - 매장기간수불 상품코드 선택 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStorePeriodDtlList(StorePeriodVO storePeriodVO, SessionInfoVO sessionInfoVO) {
 		storePeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		return storePeriodMapper.getStorePeriodDtlList(storePeriodVO);
 	}
 
+	/** 매장기간수불 - 매장기간수불 수량 선택 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStorePeriodQtyDtlList(StorePeriodVO storePeriodVO, SessionInfoVO sessionInfoVO) {
 		storePeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		return storePeriodMapper.getStorePeriodQtyDtlList(storePeriodVO);
 	}
 
+	/** 매장기간수불 - 매장기간수불 엑셀 전체 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStoreperiodExcelList(StorePeriodVO storePeriodVO, SessionInfoVO sessionInfoVO) {
 		// 거래처 멀티 선택

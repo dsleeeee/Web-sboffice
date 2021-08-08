@@ -25,19 +25,17 @@ import java.util.List;
 @Repository
 public interface MemberPointMapper {
 
-  /**
-   * 회원 포인트 리그트
-   */
-  
-
+  /** 회원 포인트 조정 */
 //  int adjustAll(DefaultMap<Object> memberPointVO);
   int adjustAll(MemberPointVO memberPointVO);
 
 //  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO);
 
+  /** 회원검증 리스트 */
   DefaultMap<Object> getMemberPointListChk(MemberPointVO memberPointVO);
 
-    int updateMemberPoint(MemberPointVO memberPointVO);
+  int updateMemberPoint(MemberPointVO memberPointVO);
 
+  /** 회원 포인트조정 저장 */
   int insertMemberPointHist(MemberPointVO memberPointVO);
 }

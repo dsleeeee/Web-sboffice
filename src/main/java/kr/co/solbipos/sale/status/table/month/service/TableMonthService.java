@@ -13,6 +13,7 @@ public interface TableMonthService {
     /** 테이블별 매출 - 월별 엑셀 리스트 조회 */
     List<DefaultMap<String>> getTableMonthExcelList(TableMonthVO dayVO, SessionInfoVO sessionInfoVO);
 
+    /** 테이블별 매출 - 월별 테이블 콤보박스 리스트 조회 */
 	List<DefaultMap<String>> getStoreTableList(TableMonthVO tableMonthVO, SessionInfoVO sessionInfoVO);
 
 }

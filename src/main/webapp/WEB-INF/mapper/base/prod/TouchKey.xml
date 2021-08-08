@@ -398,27 +398,18 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 MERGE INTO TB_WB_HQ_CONFG_XML A
-                USING   (
-                            SELECT  #{hqOfficeCd}    AS HQ_OFFICE_CD
-                            ,       #{confgFg}       AS CONFG_FG
-                            ,       #{xml:CLOB}      AS XML
-                            ,       #{useYn}         AS USE_YN
-                            ,       #{regDt}         AS REG_DT
-                            ,       #{regId}         AS REG_ID
-                            ,       #{tukeyGrpCd}    AS GRP_CD
-                            FROM    DUAL
-                        ) B
+                USING   DUAL
                 ON      (
-                            B.HQ_OFFICE_CD  =   A.HQ_OFFICE_CD
-                        AND B.CONFG_FG      =   A.CONFG_FG
-                        AND B.GRP_CD        =   A.GRP_CD
+                            A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                        AND A.CONFG_FG      =   #{confgFg}
+                        AND A.GRP_CD        =   #{tukeyGrpCd}
                         )
                 WHEN MATCHED THEN
                 UPDATE
-                SET     A.XML       =   B.XML
-                ,       A.USE_YN    =   B.USE_YN
-                ,       A.MOD_DT    =   B.REG_DT
-                ,       A.MOD_ID    =   B.REG_ID
+                SET     A.XML       =   #{xml:CLOB}
+                ,       A.USE_YN    =   #{useYn}
+                ,       A.MOD_DT    =   #{regDt}
+                ,       A.MOD_ID    =   #{regId}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -432,39 +423,30 @@
                 )
                 VALUES
                 (
-                        B.HQ_OFFICE_CD
-                ,       B.CONFG_FG
-                ,       B.XML
-                ,       B.USE_YN
-                ,       B.REG_DT
-                ,       B.REG_ID
-                ,       B.GRP_CD
+                        #{hqOfficeCd}
+                ,       #{confgFg}
+                ,       #{xml:CLOB}
+                ,       #{useYn}
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{tukeyGrpCd}
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 MERGE INTO TB_WB_STORE_CONFG_XML A
-                USING   (
-                            SELECT  #{storeCd}       AS STORE_CD
-                            ,       #{confgFg}       AS CONFG_FG
-                            ,       #{xml:CLOB}      AS XML
-                            ,       #{useYn}         AS USE_YN
-                            ,       #{regDt}         AS REG_DT
-                            ,       #{regId}         AS REG_ID
-                            ,       #{tukeyGrpCd}    AS GRP_CD
-                            FROM    DUAL
-                        ) B
+                USING   DUAL
                 ON      (
-                            B.STORE_CD      =   A.STORE_CD
-                        AND B.CONFG_FG      =   A.CONFG_FG
-                        AND B.GRP_CD        =   A.GRP_CD
+                            B.STORE_CD      =   A.STORE_CD  =   #{storeCd}
+                        AND B.CONFG_FG      =   A.CONFG_FG  =   #{confgFg}
+                        AND B.GRP_CD        =   A.GRP_CD    =   #{tukeyGrpCd}
                         )
                 WHEN MATCHED THEN
                 UPDATE
-                SET     A.XML       =   B.XML
-                ,       A.USE_YN    =   B.USE_YN
-                ,       A.MOD_DT    =   B.REG_DT
-                ,       A.MOD_ID    =   B.REG_ID
+                SET     A.XML       =   #{xml:CLOB}
+                ,       A.USE_YN    =   #{useYn}
+                ,       A.MOD_DT    =   #{regDt}
+                ,       A.MOD_ID    =   #{regId}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -478,13 +460,13 @@
                 )
                 VALUES
                 (
-                        B.STORE_CD
-                ,       B.CONFG_FG
-                ,       B.XML
-                ,       B.USE_YN
-                ,       B.REG_DT
-                ,       B.REG_ID
-                ,       B.GRP_CD
+                        #{storeCd}
+                ,       #{confgFg}
+                ,       #{xml:CLOB}
+                ,       #{useYn}
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{tukeyGrpCd}
                 )
             </when>
         </choose>

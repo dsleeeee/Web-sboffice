@@ -19,5 +19,6 @@ import java.util.List;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface LoginStatusService {
+    /** POS 로그인 조회 */
     <E> List<E> selectLoginStatus(LoginStatusVO loginStatusVO);
 }

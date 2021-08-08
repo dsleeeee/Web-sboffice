@@ -21,8 +21,10 @@ import java.util.List;
  * @since 2020.06.17
  */
 public interface MemberExcelUploadService {
-
+  
+  /** 회원 엑셀 조회 */
   List<DefaultMap<Object>> getMemberExcelList(MemberExcelUploadVO memberExcelUploadVO, SessionInfoVO sessionInfoVO);
 
+  /** 회원 엑셀 저장 */
   int memberExcelSave(MemberExcelUploadVO[] memberExcelUploadVOs,  RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

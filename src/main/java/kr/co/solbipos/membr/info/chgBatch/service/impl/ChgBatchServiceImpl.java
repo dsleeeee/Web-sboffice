@@ -55,6 +55,7 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         return convertToJson(chgBatchList);
     }
 
+    /** 회원등급 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getMembrClassList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
@@ -78,6 +79,7 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         return resultList;
     }
 
+    /** 회원정보 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getMemberChgBatchList(ChgBatchVO chgBatchVO, SessionInfoVO sessionInfoVO) {
 
@@ -99,6 +101,7 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         return mapper.getMemberChgBatchList(chgBatchVO);
     }
 
+    /** 등급포인트 적립 저장 */
     @Override
     public int saveChgBatchList(ChgBatchVO[] chgBatchVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;

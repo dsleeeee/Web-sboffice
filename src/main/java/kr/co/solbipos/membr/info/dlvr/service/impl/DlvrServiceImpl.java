@@ -41,6 +41,7 @@ public class DlvrServiceImpl implements DlvrService {
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
+    /** 배달주소지 */
     @Override
     public List<DefaultMap<Object>> getDlvrList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
 //        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -58,6 +59,7 @@ public class DlvrServiceImpl implements DlvrService {
         return dlvrMapper.getDlvrList(dlvrVO);
     }
 
+    /** 배달 전호번호 */
     @Override
     public List<DefaultMap<Object>> getDlvrTelList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
 
@@ -70,6 +72,7 @@ public class DlvrServiceImpl implements DlvrService {
         return dlvrMapper.getDlvrTelList(dlvrVO);
     }
 
+    /** 회원등급 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getMembrClassList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
@@ -91,6 +94,7 @@ public class DlvrServiceImpl implements DlvrService {
         return resultList;
     }
 
+    /** 중분류구역 조회 */
     @Override
     public DefaultMap<Object> getDlvrMzoneList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
@@ -104,6 +108,7 @@ public class DlvrServiceImpl implements DlvrService {
         return result;
     }
 
+    /** 배달지 저장 */
     @Override
     public int saveDlvr(DlvrVO[] dlvrVOs, SessionInfoVO sessionInfoVO) {
         int resultCnt = 0;
@@ -138,6 +143,7 @@ public class DlvrServiceImpl implements DlvrService {
         return resultCnt;
     }
 
+    /** 배달 전화번호 저장 */
     @Override
     public int saveDlvrTel(DlvrVO[] dlvrVOs, SessionInfoVO sessionInfoVO) {
         int resultCnt = 0;
@@ -174,6 +180,7 @@ public class DlvrServiceImpl implements DlvrService {
         return resultCnt;
     }
 
+    /** 배달지 삭제 */
     @Override
     public int deleteDlvr(DlvrVO[] dlvrVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -205,6 +212,7 @@ public class DlvrServiceImpl implements DlvrService {
         return result;
     }
 
+    /** 배달지 전화번호 삭제 */
     @Override
     public int deleteDlvrTel(DlvrVO[] dlvrVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -237,7 +245,7 @@ public class DlvrServiceImpl implements DlvrService {
         return result;
     }
 
-
+    /** 배달대분류구역 조회  */
     @Override
     public List<DefaultMap<String>> getDlvrLzoneList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
 

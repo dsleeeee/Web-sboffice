@@ -52,6 +52,7 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
         return prodKitchenprintLinkMapper.getProdList(prodKitchenprintLinkVO);
     }
 
+    /* 연결된 프린터 */
     @Override
     public List<DefaultMap<String>> getLinkedList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
         String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
@@ -74,6 +75,7 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
         return prodKitchenprintLinkMapper.getLinkedList(prodKitchenprintLinkVO);
     }
 
+    /* 연결된 프린터 연결 해제 */
     @Override
     public int unlinkPrter(ProdKitchenprintLinkVO[] prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -83,6 +85,7 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
         return result;
     }
 
+    /* 안연결된 프린터 */
     @Override
     public List<DefaultMap<String>> getUnlinkList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
         String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
@@ -105,6 +108,7 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
         return prodKitchenprintLinkMapper.getUnlinkList(prodKitchenprintLinkVO);
     }
 
+    /* 안연결된 프린터 연결 */
     @Override
     public int linkedPrter(ProdKitchenprintLinkVO[] prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
         int result = 0;

@@ -92,6 +92,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setEnvHqOfficeCdVal = function(s,e){
 
     $scope.envHqOfficeCdVal = s.selectedValue;
+    $scope.envStoreCdVal = "";
+    $scope.store.copyStoreCd = "";
+    $scope.copyStoreSettingChk();
 
     if( isNull(s.selectedValue) ) {
       return false;
@@ -106,7 +109,49 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     );
   };
+  $scope.getEnvHqOfficeCdVal = function (){
+    return $scope.envHqOfficeCdVal;
+  };
 
+  $scope.searchStore = function(){
+
+    if( isNull( $scope.envHqOfficeCdVal) ) {
+      $scope._popMsg(messages["storeManage.hq.msg"]);
+      return false;
+    }
+
+    var storeScope = agrid.getScope('storeManageCtrl');
+
+    if(!$.isEmptyObject(storeScope.getSelectedStore()) ) {  // 신규등록시에만 매장 조회 팝업 호출
+      return false;
+    }
+
+    var popup = $scope.storeLayer;
+
+    // 팝업 닫을때
+    popup.show(true, function (s) {
+      var storeScope = agrid.getScope('searchStoreCtrl');
+      storeScope.hqOfficeCd = $scope.getEnvHqOfficeCdVal();
+      storeScope.$apply(function(){
+        storeScope._gridDataInit();
+
+        if( !$.isEmptyObject(storeScope.getStore())  ) {
+          if(storeScope.getStore().storeCd === undefined){
+            $scope.store.copyStoreCd = "";
+          } else {
+            $scope.store.copyStoreCd = "[" + storeScope.getStore().storeCd + "]" + storeScope.getStore().storeNm;
+          }
+          $scope.envStoreCdVal = storeScope.getStore().storeCd;
+
+          // 매장환경복사 체크 disabled
+          $scope.copyStoreSettingChk();
+        }
+      });
+      // 본사 정보 초기화(이전데이터 남아있는 현상 발생)
+      storeScope.setStore("");
+    });
+    event.preventDefault();
+  };
 
   /*********************************************************
    * grid 초기화

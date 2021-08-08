@@ -38,6 +38,7 @@ public class TableDayPeriodController {
         return "sale/status/table/dayperiod";
     }
 
+    /** 설정기간별 매출 - 조회일자별 리스트 조회 */
     @RequestMapping(value = "/dayperiod/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getTableDayPeriodList(HttpServletRequest request, HttpServletResponse response, Model model, TableDayPeriodVO tdpVO) {
@@ -47,6 +48,7 @@ public class TableDayPeriodController {
             return ReturnUtil.returnListJson(Status.OK, list, tdpVO);
     }
 
+    /** 설정기간별 매출 - 조회일자별 엑셀 리스트 조회 */
     @RequestMapping(value = "/dayperiod/excelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getTableDayPeriodExcelList(HttpServletRequest request, HttpServletResponse response, Model model, TableDayPeriodVO tdpVO) {

@@ -51,7 +51,7 @@ public class MemberPointServiceImpl implements MemberPointService {
 ////    }
 //        return memberPointMapper.getMemberPointList(memberPointVO);
 //    }
-
+    /** 회원 포인트 조정 */
     @Override
     public int getMemberPointSave(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO, HttpServletRequest request) {
 
@@ -95,7 +95,7 @@ public class MemberPointServiceImpl implements MemberPointService {
 //        }
 //        return res;
 //    }
-
+    /** 회원검증 리스트 */
     @Override
     public List<MemberPointVO> getMemberPointListChk(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
@@ -163,6 +163,7 @@ public class MemberPointServiceImpl implements MemberPointService {
         return resultList;
     }
 
+    /** 회원 포인트조정 저장 */
     @Override
     public int memberPointSave(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO) {
         int result = 0;

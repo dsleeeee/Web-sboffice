@@ -120,31 +120,43 @@ public interface RegistService {
     /** 회원 거래처 매핑 팝업 - 회원 거래처 매핑 조회 */
     List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 카드정보 리스트 조회 */
     List<DefaultMap<String>> getCardList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 카드정보 중복체크 */
     int registCardInfo(RegistVO registVO, SessionInfoVO si);
 
+    /** 배달정보 리스트 조회 */
     DefaultMap<Object> getDlvrList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 배달정보 등록 */
     int registDlvrInfo(RegistVO registVO, SessionInfoVO si);
 
+    /** 배달전화번호정보 등록 */
     int registDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
 
+    /** 배달전화번호정보 리스트 조회 */
     List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 중분류 리스트 조회 */
     DefaultMap<Object> getDlvrMzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 대분류 리스트 조회 */
     List getLzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 카드정보 등록 */
     int updateMembrCard(RegistVO registVO, SessionInfoVO si);
 
+    /** 카드정보 중복 체크 */
     int getMemberCardInfoCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     /** 카드 중복 체크( 카드번호 사용중인 회원번호 / X (해당 카드번호 미사용) ) */
     String getMemberCardInfoCountDetail(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 배달전화번호정보 수정 */
     int updateDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
 
+    /** 배달전화번호정보 삭제 */
     int deleteDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
 
     /** 배달주소지 수정 */

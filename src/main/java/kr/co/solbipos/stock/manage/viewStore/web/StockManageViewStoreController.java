@@ -67,6 +67,7 @@ public class StockManageViewStoreController {
 		return "stock/manage/viewStore/viewStore";
 	}
 
+	/** 실사/조정/폐기 조회 - 매장-실사/조정/폐기 리스트 조회 */
 	@RequestMapping(value = "/viewStore/getStockManageViewStoreList.sb", method = RequestMethod.POST)
 	@ResponseBody
 	public Result getStockManageViewStoreList(HttpServletRequest request, HttpServletResponse response, Model model, StockManageViewStoreVO stockManageViewStoreVO) {
@@ -74,7 +75,8 @@ public class StockManageViewStoreController {
 		List<DefaultMap<String>> list = stockManageViewStoreService.getStockManageViewStoreList(stockManageViewStoreVO, sessionInfoVO);
 		return ReturnUtil.returnListJson(Status.OK, list, stockManageViewStoreVO);
 	}
-	
+
+	/** 실사/조정/폐기 조회 - 매장-실사/조정/폐기 리스트(엑셀) */
 	@RequestMapping(value = "/viewStore/getStockManageViewStoreExcelList.sb", method = RequestMethod.POST)
 	@ResponseBody
 	public Result getStockManageViewStoreExcelList(HttpServletRequest request, HttpServletResponse response, Model model, StockManageViewStoreVO stockManageViewStoreVO) {

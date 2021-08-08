@@ -36,6 +36,7 @@ public class LoginStatusServiceImpl implements LoginStatusService {
         this.loginStatusMapper = loginStatusMapper;
     }
 
+    /** POS 로그인 조회 */
     @Override
     public <E> List<E> selectLoginStatus(LoginStatusVO loginStatusVO) {
         return loginStatusMapper.selectLoginStatus(loginStatusVO);

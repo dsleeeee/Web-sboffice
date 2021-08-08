@@ -18,6 +18,7 @@ public class StockManageViewServiceImpl implements StockManageViewService {
 		this.stockManageViewMapper = stockManageViewMapper;
 	}
 
+	/** 실사/조정/폐기 조회 - 실사/조정/폐기 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStockManageViewList(StockManageViewVO stockManageViewVO,
 			SessionInfoVO sessionInfoVO) {
@@ -34,6 +35,7 @@ public class StockManageViewServiceImpl implements StockManageViewService {
 		}
 	}
 
+	/** 실사/조정/폐기 조회 - 실사/조정/폐기 엑셀 전체 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStockManageViewExcelList(StockManageViewVO stockManageViewVO,
 			SessionInfoVO sessionInfoVO) {
