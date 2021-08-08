@@ -239,6 +239,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         return keyMapper.getTouchKeyProdInfoList(touchKeyVO);
     }
 
+    /** 판매터치키 저장 특정 상품정보 조회  */
     private DefaultMap<String> getTouchKeyProdInfo(String prodCd, List<DefaultMap<String>> list) {
         DefaultMap<String> result = new DefaultMap();
 

@@ -50,6 +50,7 @@ public class StoreDayServiceImpl implements StoreDayService {
 		return storeDayMapper.storeDayList(storeDayVO);
 	}
 
+	/** 매장일수불 엑셀 전체 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> storeDayExcelList(StoreDayVO storeDayVO, SessionInfoVO sessionInfoVO) {
 		storeDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

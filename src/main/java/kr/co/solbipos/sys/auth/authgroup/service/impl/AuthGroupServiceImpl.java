@@ -42,11 +42,13 @@ public class AuthGroupServiceImpl implements AuthGroupService {
     @Autowired
     MessageService messageService;
 
+    /** 로그인 아이디 기준 선택 가능 그룹 조회 */
     @Override
     public List<DefaultMap<String>> listAvailGroup(SessionInfoVO sessionInfoVO) {
         return mapper.selectAvailGroup(sessionInfoVO.getOrgnCd());
     }
 
+    /** 조회 */
     @Override
     public List<DefaultMap<String>> list(AuthGroupVO authGroupVO, SessionInfoVO sessionInfoVO) {
         if(sessionInfoVO.getOrgnFg() != OrgnFg.MASTER) {
@@ -55,6 +57,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         return mapper.selectGroup(authGroupVO);
     }
 
+    /** 저장 */
     @Override
     public int save(AuthGroupVO[] authGroupVOs, SessionInfoVO sessionInfo) {
 
@@ -89,6 +92,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         }
     }
 
+    /** 리소스 정보 조회 */
     @Override
     public List<AuthorGrpResrceVO> listResrce(AuthGroupVO authGroupVO, SessionInfoVO sessionInfoVO) {
 
@@ -107,6 +111,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         return makeTreeData(list, authedList);
     }
 
+    /** 리소스 정보 저장 */
     @Override
     public int saveResrce(AuthorGrpResrceVO[] authorGrpResrceVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
@@ -137,6 +142,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         }
     }
 
+    /** 트리 데이터 생성 */
     @Override
     public List<AuthorGrpResrceVO> makeTreeData(List<DefaultMap<String>> list,
             List<DefaultMap<String>> authedList) {
@@ -208,6 +214,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         return retrunData;
     }
 
+    /** 아이디 기준 리소스 정보 조회 - 예외 관리 */
     @Override
     public List<AuthorGrpResrceVO> listResrceById(String userId, SessionInfoVO sessionInfoVO) {
 
@@ -231,6 +238,7 @@ public class AuthGroupServiceImpl implements AuthGroupService {
         return makeTreeData(list, authedList);
     }
 
+    /** 아이디 기준 리소스 정보 저장 - 예외관리 */
     @Override
     public int saveResrceById(AuthorExceptVO[] authorExceptVOs, SessionInfoVO sessionInfoVO) {
 

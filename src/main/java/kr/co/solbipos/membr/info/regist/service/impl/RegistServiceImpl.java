@@ -571,6 +571,7 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
+    /** 배달정보 리스트 조회 */
     @Override
     public DefaultMap<Object> getDlvrList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
@@ -588,6 +589,7 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
+    /** 중분류 리스트 조회 */
     @Override
     public DefaultMap<Object> getDlvrMzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
@@ -596,6 +598,7 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
+    /** 대분류 리스트 조회 */
     @Override
     public List getLzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 

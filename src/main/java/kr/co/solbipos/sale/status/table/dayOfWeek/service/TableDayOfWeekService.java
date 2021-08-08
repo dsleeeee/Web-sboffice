@@ -10,6 +10,7 @@ public interface TableDayOfWeekService {
 	/** 테이블별 매출 - 요일별 리스트 조회 */
     List<DefaultMap<String>> getTableDayOfWeekList(TableDayOfWeekVO tableDayOfWeekVO, SessionInfoVO sessionInfoVO);
 
+	/** 테이블별 매출 - 요일별 테이블 콤보박스 리스트 조회 */
 	List<DefaultMap<String>> getStoreTableList(TableDayOfWeekVO tableDayOfWeekVO, SessionInfoVO sessionInfoVO);
 
 }

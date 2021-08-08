@@ -24,7 +24,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
         this.messageService = messageService;
     }
 
-
+    /** 본사매장통합현재고 - 본사매장통합현재고 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCurrUnityList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
 
@@ -37,6 +37,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
         return currUnityMapper.getCurrUnityList(currUnityVO);
     }
 
+    /** 본사매장통합현재고 - 본사매장통합현재고 본사 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCurrUnityHqDtlList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
 
@@ -49,7 +50,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
         return currUnityMapper.getCurrUnityHqDtlList(currUnityVO);
     }
 
-
+    /** 본사매장통합현재고 - 본사매장통합현재고 매장 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCurrUnityStoreDtlList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
 
@@ -62,7 +63,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
         return currUnityMapper.getCurrUnityStoreDtlList(currUnityVO);
     }
 
-
+    /** 본사매장통합현재고 - 본사매장통합현재고 전체 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCurrUnityExcelList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
 		currUnityVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -74,7 +75,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
         return currUnityMapper.getCurrUnityExcelList(currUnityVO);
 	}
 
-
+    /** 본사매장통합현재고 - 본사매장통합현재고 본사 상세 전체 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCurrUnityHqDtlExcelList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
 		currUnityVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -86,7 +87,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
         return currUnityMapper.getCurrUnityHqDtlExcelList(currUnityVO);
 	}
 
-
+    /** 본사매장통합현재고 - 본사매장통합현재고 매장 상세 전체 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCurrUnityStoreDtlExcelList(CurrUnityVO currUnityVO,
 			SessionInfoVO sessionInfoVO) {

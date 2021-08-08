@@ -64,7 +64,7 @@ public class DcDcfgServiceImpl implements DcDcfgService {
 		return dcDcfgMapper.getDcDcfgDtlList(dcDcfgVO);
 	}
 
-
+	/** 할인구분별 탭 - 할인유형 콤보박스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getDcNmlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

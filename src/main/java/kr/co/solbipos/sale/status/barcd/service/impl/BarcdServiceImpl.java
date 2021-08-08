@@ -59,7 +59,7 @@ public class BarcdServiceImpl implements BarcdService {
         return barcdMapper.getBarcdDtlList(barcdVO);
 	}
 
-
+	/** 코너별매출 일자별 탭 - 엑셀 전체 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getBarcdExcelList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
 		barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -76,7 +76,7 @@ public class BarcdServiceImpl implements BarcdService {
         return barcdMapper.getBarcdExcelList(barcdVO);
 	}
 
-
+	/** 코너별매출 일자별 탭 - 엑셀 전체 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getBarcdDtlExcelList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
 		barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

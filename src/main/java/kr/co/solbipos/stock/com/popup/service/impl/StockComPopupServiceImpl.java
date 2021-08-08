@@ -27,6 +27,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
         this.messageService = messageService;
     }
 
+	/** 일자별수불현황 - 일자별수불현황 상세 리스트 조회 */
     @Override
 	public List<DefaultMap<String>> getDailyIoStockInfoList(DailyIoStockVO dailyIoStockVO, SessionInfoVO sessionInfoVO) {
 
@@ -39,6 +40,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 		}
     }
 
+	/** 현재고현황 - 현재고현황 본사 상세 리스트 조회 */
     @Override
 	public List<DefaultMap<String>> getCmmStockStatusList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO) {
 
@@ -57,6 +59,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 		return stockComPopupMapper.getCmmStoreStockStatusList(hqCurrVO);
 	}
 
+	/** 각 상품코드별 팝업 리스트 조회 */
     @Override
 	public List<DefaultMap<String>> getCmmProdCodeDtlList(PeriodIostockVO periodIostockVO,
 			SessionInfoVO sessionInfoVO) {
@@ -67,18 +70,21 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 		}
 	}
 
+	/** 각 수량별 팝업 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCmmQtyDtlList(PeriodIostockVO periodIostockVO, SessionInfoVO sessionInfoVO) {
 System.out.println("periodIostockVO.getColCode:"+periodIostockVO.getColCode());
 		return stockComPopupMapper.getCmmQtyDtlList(periodIostockVO);
 	}
 
+	/** 실사/조정/폐기 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getCmmViewDtlList(StockManageViewVO stockManageViewVO,
 			SessionInfoVO sessionInfoVO) {
 		return stockComPopupMapper.getCmmViewDtlList(stockManageViewVO);
 	}
 
+	/** 실사/조정/폐기  - 창고선택모듈 리스트 조회 */
     @Override
     public List<DefaultMap<String>> selectStorageList(StockManageViewVO stockManageViewVO, SessionInfoVO sessionInfoVO) {
     	stockManageViewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

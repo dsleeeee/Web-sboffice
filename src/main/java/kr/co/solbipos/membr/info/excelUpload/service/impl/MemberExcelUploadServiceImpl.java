@@ -45,12 +45,14 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
+    /** 회원 엑셀 조회 */
     @Override
     public List<DefaultMap<Object>> getMemberExcelList(MemberExcelUploadVO memberExcelUploadVO, SessionInfoVO sessionInfoVO) {
 
         return mapper.getMemberExcelList(memberExcelUploadVO);
     }
 
+    /** 회원 엑셀 저장 */
     @Override
     public int memberExcelSave(MemberExcelUploadVO[] memberExcelUploadVOs, RegistVO registVO, SessionInfoVO sessionInfoVO) {
         int result = 0;

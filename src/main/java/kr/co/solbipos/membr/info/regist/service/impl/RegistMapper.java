@@ -161,24 +161,33 @@ public interface RegistMapper {
 
     DefaultMap<String> getMemberSelect(RegistVO registVO);
 
+    /** 카드정보 리스트 조회 */
     List<DefaultMap<String>> getCardList(RegistVO registVO);
 
+    /** 회원배달 등록 */
     int insertMembrDlvr(RegistVO registVO);
 
+    /** 배달전화정보 추가 */
     int insertMembrDlvrTel(RegistVO registVO);
 
+    /** 배달지 조회 */
     List<DefaultMap<String>> getDlvrList(RegistVO registVO);
 
+    /** 배달 전호번호 */
     List<DefaultMap<String>> getDlvrTelList(RegistVO registVO);
 
+    /** 대분류 리스트 조회 */
     List getMembrLzoneList(RegistVO registVO);
 
+    /** 배달구역 중분류 리스트 조회 */
     List getDlvrMzoneList(RegistVO registVO);
 
     int updateMemberCard(RegistVO registVO);
 
+    /** 회원정보 수정 */
     int updateMembr(RegistVO registVO);
 
+    /** 카드정보 중복 체크 */
     int getMemberCardInfoCount(RegistVO registVO);
 
     /** 카드 중복 체크( 카드번호 사용중인 회원번호 / X (해당 카드번호 미사용) ) */
@@ -190,8 +199,10 @@ public interface RegistMapper {
     /** 회원등급에 따른 신규가입 적립포인트 */
     void insertMembrPointHist(RegistVO registVO);
 
+    /** 배달전화정보 수정 */
     int updateMembrDlvrTel(RegistVO registVO);
 
+    /** 배달전화정보 삭제 */
     int deleteMembrDlvrTel(RegistVO registVO);
 
     /** 배달주소지 수정 */

@@ -40,6 +40,7 @@ public class PosHwInfoServiceImpl implements PosHwInfoService {
         this.authMapper = authMapper;
     }
 
+    /** 가상로그인 목록 조회 */
     @Override
     public List<DefaultMap<String>> getPosHwInfo(PosHwInfoVO posHwInfoVO, SessionInfoVO sessionInfoVO) {
         posHwInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());

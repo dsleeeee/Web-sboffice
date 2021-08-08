@@ -10,5 +10,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface MembrRecomendrMapper {
+    /** 회원 유치사원 */
     List<DefaultMap<Object>> getMembrPointList(MembrRecomendrVO membrRecomendrVO);
 }

@@ -25,8 +25,10 @@ public interface StoreLoanManageService {
     /** 매장여신 목록 조회 */
     List<DefaultMap<String>> getStoreLoanManageList(StoreLoanManageVO storeLoanManageVO);
 
+    /** 매장여신 저장 */
     int saveLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO);
-    
+
+    /** 매장여신 삭제 */
     int delLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO);
 
     /** 매장여신 상세 현황 조회 */

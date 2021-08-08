@@ -49,21 +49,25 @@ public class WebMenuServiceImpl implements WebMenuService {
         this.messageService = messageService;
     }
 
+    /** 리소스 하위 기능 정보 포함 조회 */
     @Override
     public List<String> selectWebMenu(ResrceInfoVO resrceInfoVO) {
         return webMenuMapper.selectWebMenu(resrceInfoVO);
     }
 
+    /** 리소스 트리 레벨로 조회 */
     @Override
     public List<ResrceInfoVO> selectWebMenuLevel(int level) {
         return webMenuMapper.selectWebMenuLevel(level);
     }
 
+    /** 리소스 저장 {@code selectKey} 를 사용해서 추가한 {@code resrceCd} 를 사용할수 있음 */
     @Override
     public int insertWebMenu(ResrceInfoVO resrceInfoVO) {
         return webMenuMapper.insertWebMenu(resrceInfoVO);
     }
 
+    /** 리소스 정보 업데이트 */
     @Override
     public int updateWebMenu(ResrceInfoVO resrceInfoVO) {
         // 수정 id, 날짜 세팅
@@ -73,6 +77,7 @@ public class WebMenuServiceImpl implements WebMenuService {
         return webMenuMapper.updateWebMenu(resrceInfoVO);
     }
 
+    /** 리소스 정보 삭제 {@code USE_YN} : N 으로 처리 */
     @Override
     public int deleteWebMenu(ResrceInfoVO resrceInfoVO) {
         // 수정 id, 날짜 세팅
@@ -82,6 +87,7 @@ public class WebMenuServiceImpl implements WebMenuService {
         return webMenuMapper.deleteWebMenuAll(resrceInfoVO);
     }
 
+    /** 위즈모 트리에 사용하는 데이터를 만듬 */
     @Override
     public List<HashMap<String, Object>> makeupTree() {
 
@@ -158,6 +164,7 @@ public class WebMenuServiceImpl implements WebMenuService {
         return rList;
     }
 
+    /** 리소스 메뉴, 기능을 저장한다. */
     @Override
     public boolean insertMenu(ResrceInfoVO resrceInfoVO) {
 

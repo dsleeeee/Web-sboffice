@@ -93,6 +93,7 @@ public class MemberClassServiceImpl implements MemberClassService {
         return convertToJson(classList);
     }
 
+    /** 회원등급설정 조회 */
     @Override
     public List<DefaultMap<String>> getMemberClassGridList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
@@ -231,6 +232,7 @@ public class MemberClassServiceImpl implements MemberClassService {
         return classCnt;
     }
 
+    /** 회원정보 삭제 */
     @Override
     public DefaultMap<Object> deleteClassInfoChk(MembrClassVO[] membrClassVOs, SessionInfoVO sessionInfoVO) {
         int deleteChk = 0;
@@ -335,6 +337,7 @@ public class MemberClassServiceImpl implements MemberClassService {
         return result;
     }
 
+    /** 등급포인트 적립 저장 */
     @Override
     public int getMemberClassPointDel(MembrClassPointVO[] membrClassPointVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;

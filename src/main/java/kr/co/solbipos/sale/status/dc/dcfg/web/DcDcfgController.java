@@ -38,6 +38,7 @@ public class DcDcfgController {
         return "sale/status/dc/dcSale";
     }
 
+    /** 할인구분별  탭- 리스트 조회 */
     @RequestMapping(value = "/dcfg/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcDcfgList(HttpServletRequest request, HttpServletResponse response,
@@ -49,6 +50,7 @@ public class DcDcfgController {
         return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
     }
 
+    /** 할인구분별  탭- 엑셀 리스트 조회 */
     @RequestMapping(value = "/dcfg/excelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcDcfgExcelList(HttpServletRequest request, HttpServletResponse response, Model model, DcDcfgVO dcDcfgVO) {
@@ -59,6 +61,7 @@ public class DcDcfgController {
         return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
     }
 
+    /** 할인구분별 탭 - 리스트 상세 조회 */
     @RequestMapping(value = "/dcfg/dtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcDcfgDtlList(HttpServletRequest request, HttpServletResponse response,
@@ -70,6 +73,7 @@ public class DcDcfgController {
         return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
     }
 
+    /** 할인구분별 탭 - 할인유형 콤보박스 리스트 조회 */
     @RequestMapping(value = "/dcfg/dcNmList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcNmList(HttpServletRequest request, HttpServletResponse response,

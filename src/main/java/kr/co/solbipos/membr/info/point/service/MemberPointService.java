@@ -25,16 +25,17 @@ import java.util.List;
 @Service
 public interface MemberPointService {
 
-  /**
-   * 회춴포이트 리스트
-   */
+  /** 회원 포인트 조회 */
 //  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO);
 
+  /** 회원 포인트 조정 */
   int getMemberPointSave(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO, HttpServletRequest request);
 
 //  int adjustAll(List<DefaultMap<Object>> result, MemberPointVO[] memberPointVOs, SessionInfoVO sessionInfoVO);
 
+  /** 회원검증 리스트 */
   List<MemberPointVO> getMemberPointListChk(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO);
 
-    int memberPointSave(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO);
+  /** 회원 포인트조정 저장 */
+  int memberPointSave(MemberPointVO[] memberPointVOs, RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

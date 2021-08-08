@@ -37,7 +37,8 @@ public class EmpDayPeriodController {
     public String empDayPeriodView(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "sale/sataus/emp/dayPeriod/dayPeriod";
     }
-    
+
+    /** 판매자별 설정기간별 탭 - 리스트 조회 */
     @RequestMapping(value = "/dayperiod/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getEmpDayPeriodList(HttpServletRequest request, HttpServletResponse response,
@@ -48,8 +49,8 @@ public class EmpDayPeriodController {
         List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodList(empDayPeriodVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
     }
-    
-    
+
+    /** 판매자별 설정기간별 탭 - 리스트(엑셀) 조회 */
     @RequestMapping(value = "/dayperiod/excelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getEmpDayPeriodExcelList(HttpServletRequest request, HttpServletResponse response,
@@ -60,7 +61,8 @@ public class EmpDayPeriodController {
         List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodExcelList(empDayPeriodVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
     }
-    
+
+    /** 판매자별 설정기간별 탭 - 리스트 상세 조회 */
     @RequestMapping(value = "/dayperiod/dtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getEmpDayPeriodDtlList(HttpServletRequest request, HttpServletResponse response,
@@ -71,7 +73,8 @@ public class EmpDayPeriodController {
         List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodDtlList(empDayPeriodVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
     }
-    
+
+    /** 판매자별 설정기간별 탭 - 리스트 상세(엑셀) 조회 */
     @RequestMapping(value = "/dayperiod/excelDtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getEmpDayPeriodDtlExcelList(HttpServletRequest request, HttpServletResponse response,

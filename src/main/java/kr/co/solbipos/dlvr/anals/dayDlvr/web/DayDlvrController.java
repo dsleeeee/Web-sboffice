@@ -23,6 +23,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @Class Name : DayDlvrController.java
+ * @Description :
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2020.07.09  Joshua      최초생성
+ *
+ * @author
+ * @since 2020.07.09
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+
 @Controller
 @RequestMapping("/dlvr/manage/anals")
 public class DayDlvrController {
@@ -50,6 +66,11 @@ public class DayDlvrController {
     return "dlvr/anals/dayDlvr/dayDlvrList";
   }
 
+  /**
+   * 일자별 배달현황(일자,배달매출,배달외매출)
+   *
+   * @param request
+   */
   @RequestMapping(value = "/dayDlvr/getDayDlvrList.sb", method = RequestMethod.POST)
   @ResponseBody
   public Result getDayDlvrSaleList(DayDlvrVO dayDlvrVO, HttpServletRequest request) {
@@ -64,6 +85,12 @@ public class DayDlvrController {
     return ReturnUtil.returnListJson(Status.OK, DayDlvrSale, dayDlvrVO);
   }
 
+
+  /**
+   * 일자별 배달현황 상세(상품정보)
+   *
+   * @param request
+   */
   @RequestMapping(value = "/dayDlvr/getDaySaleDtlList.sb", method = RequestMethod.POST)
   @ResponseBody
   public Result getDaySaleDtlList(DayDlvrVO dayDlvrVO, HttpServletRequest request) {
