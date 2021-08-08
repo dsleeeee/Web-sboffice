@@ -325,18 +325,19 @@
                     </div>
                     <%-- 매장선택 --%>
                     <div class="sb-select">
-                      <wj-combo-box
-                        id="envStoreCd"
-                        ng-model="store.copyStoreCd"
-                        control="envStoreCdCombo"
-                        items-source="_getComboData('envStoreCd')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)"
-                        selected-index-changed="setEnvStoreCdVal(s,e)">
-                      </wj-combo-box>
+<%--                      <wj-combo-box--%>
+<%--                              id="envStoreCd"--%>
+<%--                              ng-model="store.copyStoreCd"--%>
+<%--                              control="envStoreCdCombo"--%>
+<%--                              items-source="_getComboData('envStoreCd')"--%>
+<%--                              display-member-path="name"--%>
+<%--                              selected-value-path="value"--%>
+<%--                              is-editable="false"--%>
+<%--                              initialized="_initComboBox(s)"--%>
+<%--                              selected-index-changed="setEnvStoreCdVal(s,e)">--%>
+<%--                      </wj-combo-box>--%>
                     </div>
+                      <input type="text" id="envStoreCd" class="sb-input w100" ng-model="store.copyStoreCd" readonly="readonly" ng-click="searchStore()"/>
                   </div>
                   <%-- 매장환경조회 버튼 --%>
                   <%--<a id="btnStoreSetting" href="#" class="btn_grayS mt35 mb15"><s:message code="storeManage.srchStoreSetting" /></a><br />--%>
@@ -393,7 +394,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20210702.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20210702.05" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
@@ -413,4 +414,8 @@
 
 <%-- 설치포스수 추가 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storePosAdd.jsp">
+</c:import>
+
+<%-- 매장 조회 --%>
+<c:import url="/WEB-INF/view/application/layer/searchStore.jsp">
 </c:import>
