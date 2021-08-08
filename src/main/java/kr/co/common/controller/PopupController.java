@@ -145,6 +145,28 @@ public class PopupController {
     }
 
     /**
+     * [매장 선택 팝업] 해당 세션의 매장 목록 조회 (시스템용-세션에서 본사코드를 가져오지 않음)
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 권지현
+     * @since 2021.08.03
+     */
+    @RequestMapping(value = "/getStoreUnSesstionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreUnSesstionList(StoreManageVO storeManageVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = popupService.getStoreList(storeManageVO);
+
+        return returnListJson(Status.OK, list, storeManageVO);
+    }
+
+    /**
      * 상품정보 분류 트리 조회
      *
      * @param prodVO ProdVO
