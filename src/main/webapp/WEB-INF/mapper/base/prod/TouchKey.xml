@@ -437,9 +437,9 @@
                 MERGE INTO TB_WB_STORE_CONFG_XML A
                 USING   DUAL
                 ON      (
-                            B.STORE_CD      =   A.STORE_CD  =   #{storeCd}
-                        AND B.CONFG_FG      =   A.CONFG_FG  =   #{confgFg}
-                        AND B.GRP_CD        =   A.GRP_CD    =   #{tukeyGrpCd}
+                            A.STORE_CD  =   #{storeCd}
+                        AND A.CONFG_FG  =   #{confgFg}
+                        AND A.GRP_CD    =   #{tukeyGrpCd}
                         )
                 WHEN MATCHED THEN
                 UPDATE
