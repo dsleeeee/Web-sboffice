@@ -14,6 +14,11 @@
  */
 var app = agrid.getApp();
 
+var orderTypeFg = [
+	{"name": "수량", "value": "1"},
+	{"name": "실매출액	", "value": "2"}
+];
+
 /** 상품매출순위 상세현황 controller */
 app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -26,6 +31,7 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	// 콤보박스 데이터 Set
 	$scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
+	$scope._setComboData("orderType", orderTypeFg);
 
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
@@ -80,6 +86,7 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		params.storeCd   = $("#prodRankSelectStoreCd").val();
 		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+		params.orderType = $scope.orderTypeCombo.selectedValue; // 정렬기준
 
 		$scope._broadcast('prodRankExcelCtrl', params);
 	};
@@ -122,6 +129,7 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
             $scope.storeCd = data.storeCd;
 			$scope.startDate = data.startDate;
 			$scope.endDate = data.endDate;
+			//$scope.orderType = data.orderType;
 		}
 	    $scope.prodRankBarChartList(data);
 	    // 기능수행 종료 : 반드시 추가
@@ -135,6 +143,7 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
         params.storeCd = data.storeCd;
         params.startDate = data.startDate;
         params.endDate = data.endDate;
+        //params.orderType = data.orderType;
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/prod/rank/getProdRankChartList.sb", params);
@@ -228,6 +237,7 @@ app.controller('prodRankExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 		params.storeCd = data.storeCd;
 		params.startDate = data.startDate;
 		params.endDate = data.endDate;
+		params.orderType = data.orderType;
 
 		$scope.isChkProdClassDisplay();
 
