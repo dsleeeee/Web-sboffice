@@ -437,7 +437,6 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
                     }
                 }
             }
-            s.collectionView.commitEdit();
         });
     };
 
