@@ -21,48 +21,57 @@
     <select id="getProdRankList" parameterType="prodRankVO" resultType="DefaultMap">
         /* USE : ProdRankMapper.getProdRankList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        PATH_NM,
-        PROD_CD,
-        PROD_NM,
-        BARCD_CD,
-        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
-        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM
-        (
-            SELECT
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
-            tsdp.PROD_CD,
-            tmp.PROD_NM,
-            tmpb.BARCD_CD,
-            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
-            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-            FROM TB_SL_DAILY_PROD tsdp,
-            TB_MS_PRODUCT tmp,
-            TB_MS_PRODUCT_BARCD tmpb
-            WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </if>
-            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            AND tmp.STORE_CD = tsdp.STORE_CD
-            AND tmp.PROD_CD = tsdp.PROD_CD
-            AND tmpb.STORE_CD (+)= tmp.STORE_CD
-            AND tmpb.PROD_CD (+)= tmp.PROD_CD
-            GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
-            ORDER BY PROD_CD
-        )
-        GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
-        ORDER BY PROD_CD
+        SELECT A.*
+        FROM (
+                    SELECT PATH_NM,
+                            PROD_CD,
+                            PROD_NM,
+                            BARCD_CD,
+                            SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                            SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                            SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                    FROM
+                    (
+                        SELECT
+                        FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+                        tsdp.PROD_CD,
+                        tmp.PROD_NM,
+                        tmpb.BARCD_CD,
+                        SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                        SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                        FROM TB_SL_DAILY_PROD tsdp,
+                        TB_MS_PRODUCT tmp,
+                        TB_MS_PRODUCT_BARCD tmpb
+                        WHERE 1=1
+                        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCd != null and storeCd != ""'>
+                            AND tsdp.STORE_CD IN
+                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND tmp.STORE_CD = tsdp.STORE_CD
+                        AND tmp.PROD_CD = tsdp.PROD_CD
+                        AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                        AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                        GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
+
+                    )
+                    GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
+              ) A
+        <if test='orderType != null and orderType == "1"'>
+            ORDER
+               BY A.TOT_SALE_QTY DESC, A.PROD_CD ASC
+        </if>
+        <if test='orderType != null and orderType == "2"'>
+            ORDER
+               BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -74,25 +83,32 @@
     -->
     <select id="getProdRankChartList" parameterType="prodRankVO" resultType="DefaultMap">
         /* USE : ProdRankMapper.getProdRankChartList */
-        SELECT
-        tsdp.PROD_CD,
-        tmp.PROD_NM,
-        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM TB_SL_DAILY_PROD tsdp,
-        TB_MS_PRODUCT tmp
-        WHERE 1=1
-        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCd != null and storeCd != ""'>
-            AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND tmp.STORE_CD = tsdp.STORE_CD
-        AND tmp.PROD_CD = tsdp.PROD_CD
-        GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-        ORDER BY PROD_CD
+        SELECT A.*
+          FROM (
+                    SELECT tsdp.PROD_CD,
+                            tmp.PROD_NM,
+                            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                      FROM TB_SL_DAILY_PROD tsdp,
+                            TB_MS_PRODUCT tmp
+                     WHERE 1=1
+                       AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCd != null and storeCd != ""'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND tmp.STORE_CD = tsdp.STORE_CD
+                        AND tmp.PROD_CD = tsdp.PROD_CD
+                      GROUP
+                         BY tsdp.PROD_CD, tmp.PROD_NM
+
+               ) A
+            ORDER
+               BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
     </select>
 
     <!-- 상품매출순위탭 - 엑셀 조회 -->
@@ -103,47 +119,54 @@
     -->
     <select id="getProdRankExcelList" parameterType="prodRankVO" resultType="DefaultMap">
         /* USE : ProdRankMapper.getProdRankExcelList */
-        SELECT
-        PATH_NM,
-        PROD_CD,
-        PROD_NM,
-        BARCD_CD,
-        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
-        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
-            tsdp.PROD_CD,
-            tmp.PROD_NM,
-            tmpb.BARCD_CD,
-            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
-            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-            FROM TB_SL_DAILY_PROD tsdp,
-            TB_MS_PRODUCT tmp,
-            TB_MS_PRODUCT_BARCD tmpb
-            WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </if>
-            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            AND tmp.STORE_CD = tsdp.STORE_CD
-            AND tmp.PROD_CD = tsdp.PROD_CD
-            AND tmpb.STORE_CD (+)= tmp.STORE_CD
-            AND tmpb.PROD_CD (+)= tmp.PROD_CD
-            GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
-            ORDER BY PROD_CD
-        )
-        GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
-        ORDER BY PROD_CD
+        SELECT A.*
+        FROM (
+                SELECT PATH_NM,
+                        PROD_CD,
+                        PROD_NM,
+                        BARCD_CD,
+                        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM
+                (
+                    SELECT FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+                            tsdp.PROD_CD,
+                            tmp.PROD_NM,
+                            tmpb.BARCD_CD,
+                            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                            SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+                            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                      FROM TB_SL_DAILY_PROD tsdp,
+                            TB_MS_PRODUCT tmp,
+                            TB_MS_PRODUCT_BARCD tmpb
+                     WHERE 1=1
+                       AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCd != null and storeCd != ""'>AND tsdp.STORE_CD IN
+                        <foreach
+                                collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND tmp.STORE_CD = tsdp.STORE_CD
+                        AND tmp.PROD_CD = tsdp.PROD_CD
+                        AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                        AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                        GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
+                )
+                GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
+        ) A
+        <if test='orderType != null and orderType == "1"'>
+            ORDER
+               BY A.TOT_SALE_QTY DESC, A.PROD_CD ASC
+        </if>
+        <if test='orderType != null and orderType == "2"'>
+            ORDER
+               BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
+        </if>
     </select>
 
 </mapper>

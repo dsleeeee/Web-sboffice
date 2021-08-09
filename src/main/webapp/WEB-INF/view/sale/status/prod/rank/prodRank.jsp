@@ -47,6 +47,24 @@
 					</span>
 				</td>
 			</tr>
+			<tr>
+				<%-- 정렬기준 --%>
+				<th><s:message code="prodRank.orderType"/></th>
+				<td colspan="3">
+					<div class="sb-select" style="width:200px;">
+						<wj-combo-box
+							id="orderType"
+							ng-model="orderType"
+							items-source="_getComboData('orderType')"
+							display-member-path="name"
+							selected-value-path="value"
+							is-editable="false"
+							control="orderTypeCombo"
+							initialized="_initComboBox(s)">
+						</wj-combo-box>
+					</div>
+				</td>
+			</tr>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<tr>
 				<%-- 매장코드 --%>
@@ -231,4 +249,4 @@ $(document).ready(function() {
 });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/rank/prodRank.js?ver=20200107.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/rank/prodRank.js?ver=20210809.01" charset="utf-8"></script>
