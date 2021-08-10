@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjMessageDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:250px;height:290px;" fade-in="false" fade-out="false">
+<wj-popup control="wjMessageDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:230px;height:290px;" fade-in="false" fade-out="false">
     <div ng-controller="messageDtlCtrl">
 
         <%-- header --%>
@@ -36,4 +36,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/messageDtl.js?ver=20210806.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/messageDtl.js?ver=20210806.04" charset="utf-8"></script>
