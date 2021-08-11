@@ -30,13 +30,18 @@ function msgShow(title, message) {
 /**
  *  SMS전송 조회 그리드 생성
  */
-app.controller('smsSendCtrl', ['$scope', '$http', '$sce', function ($scope, $http, $sce) {
+app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('smsSendCtrl', $scope, $http, false));
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
+
+    $("#lblStoreNmInfo").text("(광고)" +  "");
+    $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
+    $("#lblTxtByte").text("0");
+    $("#lblSmsQty").text("0");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -47,11 +52,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$sce', function ($scope, $htt
         event.preventDefault();
     });
     // <-- //검색 호출 -->
-
-    $("#lblStoreNmInfo").text("(광고)" +  "");
-    $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
-    $("#lblTxtByte").text("0");
-    $("#lblSmsQty").text("0");
 
     // 페이지 로드시 호출
     $scope.initPageSmsSend = function(data, pageGubun) {
@@ -157,7 +157,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$sce', function ($scope, $htt
             var smsQtyList = response.data.data.result;
             $scope.smsQtyList = smsQtyList;
 
-            $("#lblSmsQty").text(smsQtyList.smsQty);
+            $("#lblSmsQty").text($scope.smsQtyList.smsQty);
         });
     };
 
@@ -243,6 +243,13 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$sce', function ($scope, $htt
             return;
         }
 
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].telNo === "") {
+                $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
+                return false;
+            }
+        }
+
         if(smsQty < $scope.flex.rows.length) {
             $scope._popMsg(messages["smsSend.smsQtyOverAlert"]); // 수신자가 전송가능한 수량보다 많습니다.
             return;
@@ -281,13 +288,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$sce', function ($scope, $htt
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
         var msg = messages["smsSend.smsSendConfirm"]  + " " + smsQty + messages["smsSend.smsSendConfirm2"];
         if (confirm(msg)) {
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                if($scope.flex.collectionView.items[i].telNo === "") {
-                    $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
-                    return false;
-                }
-            }
-
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
