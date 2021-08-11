@@ -25,7 +25,6 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT  NMCODE_GRP_CD
                 ,       NMCODE_CD
-                ,       PARENT_CD
                 ,       NMCODE_NM
                 ,       NMCODE_ITEM_1
                 ,       NMCODE_ITEM_2
@@ -57,7 +56,6 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT  NMCODE_GRP_CD
                 ,       NMCODE_CD
-                ,       PARENT_CD
                 ,       NMCODE_NM
                 ,       NMCODE_ITEM_1
                 ,       NMCODE_ITEM_2
