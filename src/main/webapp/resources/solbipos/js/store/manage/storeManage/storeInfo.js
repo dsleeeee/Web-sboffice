@@ -137,9 +137,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if( !$.isEmptyObject(storeScope.getStore())  ) {
           if(storeScope.getStore().storeCd === undefined){
-            $scope.store.copyStoreCd = "";
+            $scope.store.copyStoreInfo = "";
           } else {
-            $scope.store.copyStoreCd = "[" + storeScope.getStore().storeCd + "]" + storeScope.getStore().storeNm;
+            $scope.store.copyStoreInfo = "[" + storeScope.getStore().storeCd + "]" + storeScope.getStore().storeNm;
+            $scope.store.copyStoreCd = storeScope.getStore().storeCd;
           }
           $scope.envStoreCdVal = storeScope.getStore().storeCd;
 

@@ -337,7 +337,8 @@
 <%--                              selected-index-changed="setEnvStoreCdVal(s,e)">--%>
 <%--                      </wj-combo-box>--%>
                     </div>
-                      <input type="text" id="envStoreCd" class="sb-input w100" ng-model="store.copyStoreCd" readonly="readonly" ng-click="searchStore()"/>
+                      <input type="text" class="sb-input w100" ng-model="store.copyStoreInfo" readonly="readonly" ng-click="searchStore()"/>
+                      <input type="text" id="envStoreCd" class="sb-input w100" ng-model="store.copyStoreCd" readonly="readonly" style="display: none"/>
                   </div>
                   <%-- 매장환경조회 버튼 --%>
                   <%--<a id="btnStoreSetting" href="#" class="btn_grayS mt35 mb15"><s:message code="storeManage.srchStoreSetting" /></a><br />--%>
@@ -394,7 +395,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20210702.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20210702.06" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
