@@ -123,7 +123,7 @@
         ) VALUES (
             #{nmcodeGrpCd},
             #{nmcodeCd},
-            #{nmcodeCd},
+            #{nmcodeGrpCd},
             #{nmcodeNm},
             #{nmcodeItem1,jdbcType=VARCHAR},
             #{nmcodeItem2,jdbcType=VARCHAR},
