@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MarketingSmsSend.xml
+    마케팅용 SMS전송
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.08.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.marketingSmsSend.service.impl.MarketingSmsSendMapper">
+
+    <!-- 메세지그룹 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보
+    -->
+    <select id="getMsgGrpColList" parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+        /* MarketingSmsSendMapper.getMsgGrpColList */
+        SELECT
+        MSG_GRP_CD,
+        MSG_GRP_NM
+        FROM
+        (
+            SELECT
+            hmt.MSG_GRP_CD,
+            hmt.MSG_GRP_NM
+            FROM HCS_MSGGR_T hmt
+            WHERE 1=1
+            AND hmt.OGN_CD = #{orgnCd}
+            ORDER BY hmt.MSG_GRP_CD
+        )
+        UNION ALL
+        (
+            SELECT
+            '00' AS MSG_GRP_CD,
+            '최근이력' AS MSG_GRP_NM
+            FROM dual
+        )
+        ORDER BY MSG_GRP_CD
+    </select>
+
+    <!-- 메세지관리 - 메세지서식 조회 -->
+    <!--
+        TABLE    : HCS_SMS_SEND_REG_T
+        COMMENTS :
+    -->
+    <select id="getMarketingSmsSendMsgManageDtlList"  parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+        /* MarketingSmsSendMapper.getMarketingSmsSendMsgManageDtlList */
+        SELECT
+        0 AS SEQ_NO,
+        NVL(TITLE, ' ') AS TITLE,
+        MESSAGE
+        FROM
+        (
+            SELECT
+            0 AS SEQ_NO,
+            hssrt.SUBJECT AS TITLE,
+            hssrt.MSG_CONTENT AS MESSAGE
+            FROM HCS_SMS_SEND_REG_T hssrt,
+            (
+                SELECT
+                twuidv01.ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.STORE_CD,
+                (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                       WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                       ELSE null END
+                ) AS AGENCY_CD
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            ) twuidv01
+            WHERE 1=1
+            <choose>
+                <when test='orgnFg != null and orgnFg != ""'>
+                    <!-- 시스템 -->
+                    <if test='orgnFg == "M"'>
+                        <![CDATA[
+                        ]]>
+                    </if>
+                    <!-- 대리점 -->
+                    <if test='orgnFg == "A"'>
+                        <![CDATA[
+                            AND twuidv01.AGENCY_CD = #{orgnCd}
+                        ]]>
+                    </if>
+                    <!-- 본사 -->
+                    <if test='orgnFg == "H"'>
+                        <![CDATA[
+                            AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                        ]]>
+                    </if>
+                    <!-- 매장 -->
+                    <if test='orgnFg == "S"'>
+                        <![CDATA[
+                           AND hssrt.SMS_SEND_ORGN_CD = #{orgnCd}
+                        ]]>
+                    </if>
+                </when>
+            </choose>
+            AND twuidv01.ORGN_CD = hssrt.SMS_SEND_ORGN_CD
+            ORDER BY hssrt.REG_DT DESC
+        )
+        WHERE 1=1
+        <![CDATA[
+            AND ROWNUM <= 12
+        ]]>
+    </select>
+
+    <!-- 마케팅용 SMS전송 - 회원 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMarketingSmsSendList"  parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+        /* MarketingSmsSendMapper.getMarketingSmsSendList */
+        SELECT
+        SBPENC.D(tmm.MEMBR_NM) AS TEL_NM,
+        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+        tmmp.FIRST_SALE_DATE,
+        tmmp.LAST_SALE_DATE,
+        'C' AS R_OGN_FG,
+        #{orgnCd} AS R_OGN_CD,
+        '' AS R_USER_ID
+        FROM TB_MB_MEMBER tmm,
+        TB_MB_MEMBER_POINT tmmp
+        WHERE 1=1
+        AND tmm.MEMBR_ORGN_CD = #{orgnCd}
+        <if test="membrNo != null and membrNo != ''">
+            AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+        </if>
+        <if test="membrNm != null and membrNm != ''">
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
+        </if>
+        <if test="saleDateGubun != null and saleDateGubun != ''">
+            <![CDATA[
+                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{saleDateGubun}), 'yyyyMMdd')
+                AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+        </if>
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+    </select>
+
+</mapper>
