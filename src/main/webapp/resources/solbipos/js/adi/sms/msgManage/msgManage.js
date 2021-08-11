@@ -279,7 +279,7 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
         $("#lblTxtByte").text($("#messageContent").val().getByteLength());
 
-        if(messageContent.value.getByteLength() > 80) {
+        if($("#messageContent").val().getByteLength() > 80) {
             $("#lblTxtByteGubun").text("LMS");
         } else {
             $("#lblTxtByteGubun").text("SMS");

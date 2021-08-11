@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : smsSend.js
- * 설  명 : SMS전송 JavaScript (팝업, 페이지 둘다 호출해서 쓸수도 있어 따로 만듬) (현재는 팝업 로직만 구현 smsSendViewPop.jsp)
+ * 파일명 : marketingSmsSend.js
+ * 설  명 : 마케팅용 SMS전송 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.06.10     김설아      1.0
+ * 2021.08.10     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -18,9 +18,17 @@ var telNoComboData = [
     {"name":"선택","value":""}
 ];
 
+// 매장상태구분 DropBoxDataMap
+var saleDateGubunComboData = [
+    {"name": "1개월전", "value": "1"},
+    {"name": "3개월전", "value": "3"},
+    {"name": "6개월전", "value": "6"},
+    {"name": "12개월전", "value": "12"}
+];
+
 // 메세지관리 목록 내용 삽입
 function msgShow(title, message) {
-    var scope = agrid.getScope('smsSendCtrl');
+    var scope = agrid.getScope('marketingSmsSendCtrl');
     var params = {};
     params.title = title;
     params.message = message;
@@ -28,15 +36,16 @@ function msgShow(title, message) {
 }
 
 /**
- *  SMS전송 조회 그리드 생성
+ *  마케팅용 SMS전송 조회 그리드 생성
  */
-app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('smsSendCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('marketingSmsSendCtrl', $scope, $http, false));
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
+    $scope._setComboData("saleDateGubunCombo", saleDateGubunComboData); // 방문일자
 
     $("#lblStoreNmInfo").text("(광고)" +  "");
     $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
@@ -45,25 +54,25 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        // 페이지 로드시 호출
+        $scope.initPageSmsSend();
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("smsSendCtrl", function(event, data) {
+    $scope.$on("marketingSmsSendCtrl", function(event, data) {
+        $scope.searchMarketingSmsSend();
         event.preventDefault();
     });
+
+    $scope.searchMarketingSmsSend = function(){
+        var params = {};
+
+        $scope._inquiryMain("/adi/sms/marketingSmsSend/marketingSmsSend/getMarketingSmsSendList.sb", params, function() {}, false);
+    };
     // <-- //검색 호출 -->
 
     // 페이지 로드시 호출
     $scope.initPageSmsSend = function(data, pageGubun) {
-        if(pageGubun == "Y") {
-            $("#lblPageGubun").text(pageGubun);
-            $("#trStoreNmInfo").css("display", "");
-            $("#trMemoInfo").css("display", "");
-        } else {
-            $("#trStoreNmInfo").css("display", "none");
-            $("#trMemoInfo").css("display", "none");
-        }
-
         // 발신번호 유무 체크
         $scope.tellNumChk();
 
@@ -72,11 +81,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
         // 잔여수량
         $scope.restSmsQty();
-
-        if(data != undefined) {
-            // 수신자목록 셋팅
-            $scope.receiveNameSet(data);
-        }
 
         // 메세지그룹
         if(msgGrpColList == "") {
@@ -87,7 +91,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             $("#divMsgGrpPageAuth").css("display", "none");
 
             // 메세지그룹 탭
-            $scope.msgGrpShow("01");
+            $scope.msgGrpShow("00");
         }
     };
 
@@ -104,7 +108,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
 
                 // 등록된 발신번호가 없습니다. <br/> 문자메세지 발송을 위해서는 <br/> 발신번호를 사전 등록하셔야 합니다. <br/> 등록을 진행하시겠습니까?
-                if (confirm(messages["smsSend.telNoConfirm"])) {
+                if (confirm(messages["marketingSmsSend.telNoConfirm"])) {
                     // 발신번호 사전등록 팝업
                     $scope.wjSmsTelNoRegisterLayer.show(true);
                     event.preventDefault();
@@ -161,26 +165,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         });
     };
 
-    // 수신자목록 셋팅
-    $scope.receiveNameSet = function(data) {
-        for(var i = 0; i < data.length; i++) {
-            // 파라미터 설정
-            var params = {};
-            params.status = "I";
-            params.gChk = false;
-            params.membrNo = data[i].membrNo;
-            params.telNm = data[i].membrNm;
-            params.telNo = data[i].telNo;
-            params.memo = "";
-            params.rOgnFg = data[i].orgnFg;
-            params.rOgnCd = data[i].orgnCd;
-            params.rUserId = data[i].userId;
-
-            // 추가기능 수행 : 파라미터
-            $scope._addRow(params);
-        }
-    };
-
     // 자동변환
     $scope.addMsg = function(str) {
         var messageContent = document.getElementById("messageContent");
@@ -232,26 +216,26 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // 전송, 예약
     $scope.smsSendReserve = function(reserveYn) {
         if($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["smsSend.emptyAlert"]); // 수신자가 없습니다.
+            $scope._popMsg(messages["marketingSmsSend.emptyAlert"]); // 수신자가 없습니다.
             return false;
         }
 
         // 잔여 수량
         var smsQty = $("#lblSmsQty").text();
         if(smsQty < 1) {
-            $scope._popMsg(messages["smsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
+            $scope._popMsg(messages["marketingSmsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
             return;
         }
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].telNo === "") {
-                $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
+                $scope._popMsg(messages["marketingSmsSend.telNoBlank"]); // 수신번호를 입력해주세요.
                 return false;
             }
         }
 
         if(smsQty < $scope.flex.rows.length) {
-            $scope._popMsg(messages["smsSend.smsQtyOverAlert"]); // 수신자가 전송가능한 수량보다 많습니다.
+            $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 전송가능한 수량보다 많습니다.
             return;
         }
 
@@ -279,14 +263,14 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         var byte = $("#lblTxtByte").text();
         if(byte > 80) {
             // 80Byte 이상은 LMS로 전송됩니다. 전송하시겠습니까?
-            var byteMsg = messages["smsSend.byteConfirm"];
+            var byteMsg = messages["marketingSmsSend.byteConfirm"];
             if (confirm(byteMsg)) {
                 msgType = "2";
             }
         }
 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
-        var msg = messages["smsSend.smsSendConfirm"]  + " " + smsQty + messages["smsSend.smsSendConfirm2"];
+        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + smsQty + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
             // 파라미터 설정
             var params = new Array();
@@ -351,10 +335,17 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             }
         }
 
+        // 메세지 관리
+        var urlMsgManageDtl = "/adi/sms/msgManage/msgManage/getMsgManageDtlList.sb";
+        // 최근이력
+        if(msgGrpCd === "00") {
+            urlMsgManageDtl = "/adi/sms/marketingSmsSend/marketingSmsSend/getMarketingSmsSendMsgManageDtlList.sb";
+        }
+
         var params = {};
         params.msgGrpCd = msgGrpCd;
 
-        $scope._postJSONQuery.withOutPopUp("/adi/sms/msgManage/msgManage/getMsgManageDtlList.sb", params, function(response) {
+        $scope._postJSONQuery.withOutPopUp(urlMsgManageDtl, params, function(response) {
             var list = response.data.data.list;
             var innerHtml = "";
 
@@ -405,12 +396,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         event.preventDefault();
     };
 
-    // 수신자추가
-    $scope.addAddressee = function() {
-        $scope.wjAddresseeAddLayer.show(true);
-        event.preventDefault();
-    };
-
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
@@ -418,13 +403,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         $scope.wjSmsTelNoRegisterLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('smsTelNoRegisterCtrl', null);
-            }, 50)
-        });
-
-        // 수신자추가 팝업 핸들러 추가
-        $scope.wjAddresseeAddLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('addresseeAddCtrl', null);
             }, 50)
         });
 
