@@ -141,6 +141,36 @@
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 매장선택 조회(가맹점 로직 추가) -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 매장선택 리스트를 조회한다.(가맹점로직 추가)
+    -->
+    <select id="getSearchStoreList" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : PopupMapper.getSearchStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+          SELECT  tms.STORE_CD, tms.STORE_NM
+          ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+          FROM    TB_MS_STORE tms
+          WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+          ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND tms.AGENCY_CD = #{agencyCd}
+        </if>
+        ORDER BY tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
     <!-- 상품분류 트리 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,

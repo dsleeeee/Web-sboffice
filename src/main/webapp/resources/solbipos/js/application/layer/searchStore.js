@@ -70,9 +70,11 @@ app.controller('searchStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = scope.getEnvHqOfficeCdVal();
     params.storeCd = $scope.storeCd;
     params.storeNm = $scope.storeNm;
+    params.orgnFg = orgnFg;
+    params.agencyCd = pAgencyCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquirySub("/popup/getStoreUnSesstionList.sb", params, function() {
+    $scope._inquirySub("/popup/getSearchStoreList.sb", params, function() {
     }, false);
 
   };

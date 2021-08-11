@@ -1,6 +1,10 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 <wj-popup id="storeLayer" control="storeLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:600px;">
   <div class="wj-dialog wj-dialog-columns title">
 
@@ -24,7 +28,7 @@
         <tbody>
         <tr>
           <th><s:message code="application.store.search.storeCd"/></th>
-          <td><input type="text" id="srchPopupStoreCd" ng-model="storeCd" maxlength="5" /></td>
+          <td><input type="text" id="srchPopupStoreCd" ng-model="storeCd" maxlength="20" /></td>
           <th><s:message code="application.store.search.storeNm"/></th>
           <td><input type="text" id="srchPopupStoreeNm" ng-model="storeNm" maxlength="16" /></td>
         </tr>
@@ -88,4 +92,8 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchStore.js?ver=2018102301.10" charset="utf-8"></script>
+<script type="text/javascript">
+  var orgnFg = "${orgnFg}";
+  var pAgencyCd = "${pAgencyCd}";
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchStore.js?ver=2018102301.11" charset="utf-8"></script>

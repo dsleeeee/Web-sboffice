@@ -91,6 +91,19 @@ public class PopupServiceImpl implements PopupService{
         return popupMapper.getStoreList(storeManageVO);
     }
 
+    /** 매장 목록 조회(가맹점 로직 추가) */
+    @Override
+    public List<DefaultMap<String>> getSearchStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return popupMapper.getSearchStoreList(storeManageVO);
+    }
+
     /** 상품분류 트리 조회 */
     @Override
     public List<ProductClassVO> getProdClassTree(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
