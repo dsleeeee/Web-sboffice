@@ -13,6 +13,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
@@ -88,12 +89,18 @@
         // 문자 삽입
         function addMsgEmo(value, pageName)
         {
-            if(pageName == "메세지관리") {
+            if(pageName == "000316") {
                 var msgManageScope = agrid.getScope('msgManageDtlCtrl'); // 메세지관리
                 msgManageScope.addMsg(value);
-            } else {
-                var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송
+            } else if(pageName == "000317") {
+                var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송(문자전송현황)
                 smsSendScope.addMsg(value);
+            } else if(pageName == "000203") {
+                var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송(회원정보)
+                smsSendScope.addMsg(value);
+            } else {
+                var marketingSmsSendScope = agrid.getScope('marketingSmsSendCtrl'); // 마케팅용 SMS전송
+                marketingSmsSendScope.addMsg(value);
             }
         }
 
@@ -226,69 +233,69 @@
     <body>
         <div style="margin:0px;">
             <div class="emoWrap01">
-                <a href="#" onclick="addMsgEmo('★', '${menuNm}');">★</a>
-                <a href="#" onclick="addMsgEmo('☆', '${menuNm}');">☆</a>
-                <a href="#" onclick="addMsgEmo('☎', '${menuNm}');">☎</a>
-                <a href="#" onclick="addMsgEmo('☏', '${menuNm}');">☏</a>
-                <a href="#" onclick="addMsgEmo('☜', '${menuNm}');">☜</a>
-                <a href="#" onclick="addMsgEmo('☞', '${menuNm}');">☞</a>
-                <a href="#" onclick="addMsgEmo('※', '${menuNm}');">※</a>
-                <a href="#" onclick="addMsgEmo('♥', '${menuNm}');">♥</a>
-                <a href="#" onclick="addMsgEmo('♡', '${menuNm}');">♡</a>
-                <a href="#" onclick="addMsgEmo('♣', '${menuNm}');">♣</a>
-                <a href="#" onclick="addMsgEmo('♠', '${menuNm}');">♠</a>
-                <a href="#" onclick="addMsgEmo('♤', '${menuNm}');">♤</a>
-                <a href="#" onclick="addMsgEmo('♧', '${menuNm}');">♧</a>
-                <a href="#" onclick="addMsgEmo('♨', '${menuNm}');">♨</a>
-                <a href="#" onclick="addMsgEmo('ㆀ', '${menuNm}');">ㆀ</a>
-                <a href="#" onclick="addMsgEmo('♩', '${menuNm}');">♩</a>
-                <%--<a href="#" onclick="addMsgEmo('♪', '${menuNm}');">♪</a>--%>
-                <a href="#" onclick="addMsgEmo('♬', '${menuNm}');">♬</a>
-                <a href="#" onclick="addMsgEmo('■', '${menuNm}');">■</a>
-                <a href="#" onclick="addMsgEmo('□', '${menuNm}');">□</a>
-                <a href="#" onclick="addMsgEmo('▣', '${menuNm}');">▣</a>
-                <a href="#" onclick="addMsgEmo('▤', '${menuNm}');">▤</a>
-                <a href="#" onclick="addMsgEmo('▦', '${menuNm}');">▦</a>
-                <a href="#" onclick="addMsgEmo('▨', '${menuNm}');">▨</a>
-                <a href="#" onclick="addMsgEmo('▩', '${menuNm}');">▩</a>
-                <a href="#" onclick="addMsgEmo('▒', '${menuNm}');">▒</a>
-                <a href="#" onclick="addMsgEmo('▲', '${menuNm}');">▲</a>
-                <a href="#" onclick="addMsgEmo('△', '${menuNm}');">△</a>
-                <a href="#" onclick="addMsgEmo('▶', '${menuNm}');">▶</a>
-                <a href="#" onclick="addMsgEmo('▷', '${menuNm}');">▷</a>
-                <a href="#" onclick="addMsgEmo('▼', '${menuNm}');">▼</a>
-                <a href="#" onclick="addMsgEmo('▽', '${menuNm}');">▽</a>
-                <a href="#" onclick="addMsgEmo('◀', '${menuNm}');">◀</a>
-                <a href="#" onclick="addMsgEmo('◁', '${menuNm}');">◁</a>
-                <a href="#" onclick="addMsgEmo('◆', '${menuNm}');">◆</a>
-                <a href="#" onclick="addMsgEmo('◇', '${menuNm}');">◇</a>
-                <a href="#" onclick="addMsgEmo('◈', '${menuNm}');">◈</a>
-                <a href="#" onclick="addMsgEmo('●', '${menuNm}');">●</a>
-                <a href="#" onclick="addMsgEmo('○', '${menuNm}');">○</a>
-                <a href="#" onclick="addMsgEmo('◎', '${menuNm}');">◎</a>
-                <a href="#" onclick="addMsgEmo('⊙', '${menuNm}');">⊙</a>
-                <a href="#" onclick="addMsgEmo('◐', '${menuNm}');">◐</a>
-                <a href="#" onclick="addMsgEmo('◑', '${menuNm}');">◑</a>
-                <a href="#" onclick="addMsgEmo('←', '${menuNm}');">←</a>
-                <a href="#" onclick="addMsgEmo('↑', '${menuNm}');">↑</a>
-                <a href="#" onclick="addMsgEmo('→', '${menuNm}');">→</a>
-                <a href="#" onclick="addMsgEmo('↓', '${menuNm}');">↓</a>
-                <a href="#" onclick="addMsgEmo('⇒', '${menuNm}');">⇒</a>
-                <a href="#" onclick="addMsgEmo('§', '${menuNm}');">§</a>
-                <a href="#" onclick="addMsgEmo('Ø', '${menuNm}');">Ø</a>
-                <a href="#" onclick="addMsgEmo('∀', '${menuNm}');">∀</a>
-                <a href="#" onclick="addMsgEmo('∃', '${menuNm}');">∃</a>
-                <a href="#" onclick="addMsgEmo('∏', '${menuNm}');">∏</a>
-                <a href="#" onclick="addMsgEmo('∞', '${menuNm}');">∞</a>
-                <a href="#" onclick="addMsgEmo('∧', '${menuNm}');">∧</a>
-                <a href="#" onclick="addMsgEmo('∪', '${menuNm}');">∪</a>
-                <a href="#" onclick="addMsgEmo('∬', '${menuNm}');">∬</a>
-                <a href="#" onclick="addMsgEmo('∴', '${menuNm}');">∴</a>
-                <a href="#" onclick="addMsgEmo('∽', '${menuNm}');">∽</a>
-                <a href="#" onclick="addMsgEmo('≠', '${menuNm}');">≠</a>
-                <a href="#" onclick="addMsgEmo('⊃', '${menuNm}');">⊃</a>
-                <a href="#" onclick="addMsgEmo('￠', '${menuNm}');">￠</a>
-                <a href="#" onclick="addMsgEmo('￥', '${menuNm}');">￥</a>
+                <a href="#" onclick="addMsgEmo('★', '${menuCd}');">★</a>
+                <a href="#" onclick="addMsgEmo('☆', '${menuCd}');">☆</a>
+                <a href="#" onclick="addMsgEmo('☎', '${menuCd}');">☎</a>
+                <a href="#" onclick="addMsgEmo('☏', '${menuCd}');">☏</a>
+                <a href="#" onclick="addMsgEmo('☜', '${menuCd}');">☜</a>
+                <a href="#" onclick="addMsgEmo('☞', '${menuCd}');">☞</a>
+                <a href="#" onclick="addMsgEmo('※', '${menuCd}');">※</a>
+                <a href="#" onclick="addMsgEmo('♥', '${menuCd}');">♥</a>
+                <a href="#" onclick="addMsgEmo('♡', '${menuCd}');">♡</a>
+                <a href="#" onclick="addMsgEmo('♣', '${menuCd}');">♣</a>
+                <a href="#" onclick="addMsgEmo('♠', '${menuCd}');">♠</a>
+                <a href="#" onclick="addMsgEmo('♤', '${menuCd}');">♤</a>
+                <a href="#" onclick="addMsgEmo('♧', '${menuCd}');">♧</a>
+                <a href="#" onclick="addMsgEmo('♨', '${menuCd}');">♨</a>
+                <a href="#" onclick="addMsgEmo('ㆀ', '${menuCd}');">ㆀ</a>
+                <a href="#" onclick="addMsgEmo('♩', '${menuCd}');">♩</a>
+                <%--<a href="#" onclick="addMsgEmo('♪', '${menuCd}');">♪</a>--%>
+                <a href="#" onclick="addMsgEmo('♬', '${menuCd}');">♬</a>
+                <a href="#" onclick="addMsgEmo('■', '${menuCd}');">■</a>
+                <a href="#" onclick="addMsgEmo('□', '${menuCd}');">□</a>
+                <a href="#" onclick="addMsgEmo('▣', '${menuCd}');">▣</a>
+                <a href="#" onclick="addMsgEmo('▤', '${menuCd}');">▤</a>
+                <a href="#" onclick="addMsgEmo('▦', '${menuCd}');">▦</a>
+                <a href="#" onclick="addMsgEmo('▨', '${menuCd}');">▨</a>
+                <a href="#" onclick="addMsgEmo('▩', '${menuCd}');">▩</a>
+                <a href="#" onclick="addMsgEmo('▒', '${menuCd}');">▒</a>
+                <a href="#" onclick="addMsgEmo('▲', '${menuCd}');">▲</a>
+                <a href="#" onclick="addMsgEmo('△', '${menuCd}');">△</a>
+                <a href="#" onclick="addMsgEmo('▶', '${menuCd}');">▶</a>
+                <a href="#" onclick="addMsgEmo('▷', '${menuCd}');">▷</a>
+                <a href="#" onclick="addMsgEmo('▼', '${menuCd}');">▼</a>
+                <a href="#" onclick="addMsgEmo('▽', '${menuCd}');">▽</a>
+                <a href="#" onclick="addMsgEmo('◀', '${menuCd}');">◀</a>
+                <a href="#" onclick="addMsgEmo('◁', '${menuCd}');">◁</a>
+                <a href="#" onclick="addMsgEmo('◆', '${menuCd}');">◆</a>
+                <a href="#" onclick="addMsgEmo('◇', '${menuCd}');">◇</a>
+                <a href="#" onclick="addMsgEmo('◈', '${menuCd}');">◈</a>
+                <a href="#" onclick="addMsgEmo('●', '${menuCd}');">●</a>
+                <a href="#" onclick="addMsgEmo('○', '${menuCd}');">○</a>
+                <a href="#" onclick="addMsgEmo('◎', '${menuCd}');">◎</a>
+                <a href="#" onclick="addMsgEmo('⊙', '${menuCd}');">⊙</a>
+                <a href="#" onclick="addMsgEmo('◐', '${menuCd}');">◐</a>
+                <a href="#" onclick="addMsgEmo('◑', '${menuCd}');">◑</a>
+                <a href="#" onclick="addMsgEmo('←', '${menuCd}');">←</a>
+                <a href="#" onclick="addMsgEmo('↑', '${menuCd}');">↑</a>
+                <a href="#" onclick="addMsgEmo('→', '${menuCd}');">→</a>
+                <a href="#" onclick="addMsgEmo('↓', '${menuCd}');">↓</a>
+                <a href="#" onclick="addMsgEmo('⇒', '${menuCd}');">⇒</a>
+                <a href="#" onclick="addMsgEmo('§', '${menuCd}');">§</a>
+                <a href="#" onclick="addMsgEmo('Ø', '${menuCd}');">Ø</a>
+                <a href="#" onclick="addMsgEmo('∀', '${menuCd}');">∀</a>
+                <a href="#" onclick="addMsgEmo('∃', '${menuCd}');">∃</a>
+                <a href="#" onclick="addMsgEmo('∏', '${menuCd}');">∏</a>
+                <a href="#" onclick="addMsgEmo('∞', '${menuCd}');">∞</a>
+                <a href="#" onclick="addMsgEmo('∧', '${menuCd}');">∧</a>
+                <a href="#" onclick="addMsgEmo('∪', '${menuCd}');">∪</a>
+                <a href="#" onclick="addMsgEmo('∬', '${menuCd}');">∬</a>
+                <a href="#" onclick="addMsgEmo('∴', '${menuCd}');">∴</a>
+                <a href="#" onclick="addMsgEmo('∽', '${menuCd}');">∽</a>
+                <a href="#" onclick="addMsgEmo('≠', '${menuCd}');">≠</a>
+                <a href="#" onclick="addMsgEmo('⊃', '${menuCd}');">⊃</a>
+                <a href="#" onclick="addMsgEmo('￠', '${menuCd}');">￠</a>
+                <a href="#" onclick="addMsgEmo('￥', '${menuCd}');">￥</a>
             </div>
             <div class="emoWrap02">
                 <div class="tab02_sub">
@@ -301,152 +308,152 @@
                     <a href="#" onclick="emoChange('6')" id="tab6">기타</a>
                 </div>
                 <span id="emos0" style="display:inline">
-                    <span><a href="#" onclick="addMsgEmo('n.n', '${menuNm}');">n.n</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^Δ^', '${menuNm}');">^Δ^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^v^', '${menuNm}');">^v^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^.^', '${menuNm}');">^.^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^_^', '${menuNm}');">^_^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^0^', '${menuNm}');">^0^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^L^', '${menuNm}');">^L^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('⌒⌒', '${menuNm}');">⌒⌒</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^.~', '${menuNm}');">^.~</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^ε^', '${menuNm}');">^ε^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^-^b', '${menuNm}');">^-^b</a></span>
-                    <span><a href="#" onclick="addMsgEmo('*^^*', '${menuNm}');">*^^*</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^▽^', '${menuNm}');">^▽^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('=^.^=', '${menuNm}');">=^.^=</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(^^)γ', '${menuNm}');">(^^)γ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('&amp;lt;^O^&amp;gt;', '${menuNm}');">&lt;^O^&gt;</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*^-^)', '${menuNm}');">(*^-^)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*^o^*)', '${menuNm}');">(*^o^*)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('^o^~~♬', '${menuNm}');">^o^~~♬</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☞^.^☜', '${menuNm}');">☞^.^☜</a></span>
-                    <span><a href="#" onclick="addMsgEmo('o(^-^)o', '${menuNm}');">o(^-^)o</a></span>
-                    <span><a href="#" onclick="addMsgEmo('S(^.^)b', '${menuNm}');">S(^.^)b</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(￣∇￣)', '${menuNm}');">(￣∇￣)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('♬(^0^)~♩', '${menuNm}');">♬(^0^)~♩</a></span>
-                    <span><a href="#" onclick="addMsgEmo('s(￣▽￣)/', '${menuNm}');">s(￣▽￣)/</a></span>
+                    <span><a href="#" onclick="addMsgEmo('n.n', '${menuCd}');">n.n</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^Δ^', '${menuCd}');">^Δ^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^v^', '${menuCd}');">^v^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^.^', '${menuCd}');">^.^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^_^', '${menuCd}');">^_^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^0^', '${menuCd}');">^0^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^L^', '${menuCd}');">^L^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('⌒⌒', '${menuCd}');">⌒⌒</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^.~', '${menuCd}');">^.~</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^ε^', '${menuCd}');">^ε^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^-^b', '${menuCd}');">^-^b</a></span>
+                    <span><a href="#" onclick="addMsgEmo('*^^*', '${menuCd}');">*^^*</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^▽^', '${menuCd}');">^▽^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('=^.^=', '${menuCd}');">=^.^=</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(^^)γ', '${menuCd}');">(^^)γ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('&amp;lt;^O^&amp;gt;', '${menuCd}');">&lt;^O^&gt;</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*^-^)', '${menuCd}');">(*^-^)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*^o^*)', '${menuCd}');">(*^o^*)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('^o^~~♬', '${menuCd}');">^o^~~♬</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☞^.^☜', '${menuCd}');">☞^.^☜</a></span>
+                    <span><a href="#" onclick="addMsgEmo('o(^-^)o', '${menuCd}');">o(^-^)o</a></span>
+                    <span><a href="#" onclick="addMsgEmo('S(^.^)b', '${menuCd}');">S(^.^)b</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(￣∇￣)', '${menuCd}');">(￣∇￣)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('♬(^0^)~♩', '${menuCd}');">♬(^0^)~♩</a></span>
+                    <span><a href="#" onclick="addMsgEmo('s(￣▽￣)/', '${menuCd}');">s(￣▽￣)/</a></span>
                 </span>
                 <span id="emos1" style="display:none">
-                    <span><a href="#" onclick="addMsgEmo('♥.♥', '${menuNm}');">♥.♥</a></span>
-                    <span><a href="#" onclick="addMsgEmo('♡.♡', '${menuNm}');">♡.♡</a></span>
-                    <span><a href="#" onclick="addMsgEmo('*♥o♥*', '${menuNm}');">*♥o♥*</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(~.^)s', '${menuNm}');">(~.^)s</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☞♡☜', '${menuNm}');">☞♡☜</a></span>
-                    <span><a href="#" onclick="addMsgEmo('γ^ε^γ', '${menuNm}');">γ^ε^γ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(♡.♡)', '${menuNm}');">(♡.♡)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*`0`*)', '${menuNm}');">(*`0`*)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(⌒ε⌒*)', '${menuNm}');">(⌒ε⌒*)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*^}{^*)', '${menuNm}');">(*^}{^*)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('づ^0^)づ', '${menuNm}');">づ^0^)づ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ⓛⓞⓥⓔ', '${menuNm}');">ⓛⓞⓥⓔ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☜(^^*)☞', '${menuNm}');">☜(^^*)☞</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*^3(^^*)', '${menuNm}');">(*^3(^^*)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(^*^)kiss', '${menuNm}');">(^*^)kiss</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(つ＾з＾)つ', '${menuNm}');">(つ＾з＾)つ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*⌒.^)(^ε⌒*)', '${menuNm}');">(*⌒.^)(^ε⌒*)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*^-^)♡(^o^*)', '${menuNm}');">(*^-^)♡(^o^*)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('♥.♥', '${menuCd}');">♥.♥</a></span>
+                    <span><a href="#" onclick="addMsgEmo('♡.♡', '${menuCd}');">♡.♡</a></span>
+                    <span><a href="#" onclick="addMsgEmo('*♥o♥*', '${menuCd}');">*♥o♥*</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(~.^)s', '${menuCd}');">(~.^)s</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☞♡☜', '${menuCd}');">☞♡☜</a></span>
+                    <span><a href="#" onclick="addMsgEmo('γ^ε^γ', '${menuCd}');">γ^ε^γ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(♡.♡)', '${menuCd}');">(♡.♡)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*`0`*)', '${menuCd}');">(*`0`*)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(⌒ε⌒*)', '${menuCd}');">(⌒ε⌒*)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*^}{^*)', '${menuCd}');">(*^}{^*)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('づ^0^)づ', '${menuCd}');">づ^0^)づ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ⓛⓞⓥⓔ', '${menuCd}');">ⓛⓞⓥⓔ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☜(^^*)☞', '${menuCd}');">☜(^^*)☞</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*^3(^^*)', '${menuCd}');">(*^3(^^*)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(^*^)kiss', '${menuCd}');">(^*^)kiss</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(つ＾з＾)つ', '${menuCd}');">(つ＾з＾)つ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*⌒.^)(^ε⌒*)', '${menuCd}');">(*⌒.^)(^ε⌒*)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*^-^)♡(^o^*)', '${menuCd}');">(*^-^)♡(^o^*)</a></span>
                 </span>
                 <span id="emos2" style="display:none">
-                    <span><a href="#" onclick="addMsgEmo('?o?', '${menuNm}');">?o?</a></span>
-                    <span><a href="#" onclick="addMsgEmo('O_O', '${menuNm}');">O_O</a></span>
-                    <span><a href="#" onclick="addMsgEmo('@_@', '${menuNm}');">@_@</a></span>
-                    <span><a href="#" onclick="addMsgEmo('!.!', '${menuNm}');">!.!</a></span>
-                    <span><a href="#" onclick="addMsgEmo('⊙⊙', '${menuNm}');">⊙⊙</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(o_o)', '${menuNm}');">(o_o)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(@.@)', '${menuNm}');">(@.@)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(\'o\')', '${menuNm}');">('o')</a></span>
-                    <span><a href="#" onclick="addMsgEmo('★.★', '${menuNm}');">★.★</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☆_☆', '${menuNm}');">☆_☆</a></span>
-                    <span><a href="#" onclick="addMsgEmo('⊙.⊙', '${menuNm}');">⊙.⊙</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☆_☆', '${menuNm}');">☆_☆</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☞_☜', '${menuNm}');">☞_☜</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(o)(o)', '${menuNm}');">(o)(o)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(=_=;)', '${menuNm}');">(=_=;)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('⊙⊙ㆀ', '${menuNm}');">⊙⊙ㆀ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ㆀ-_-ㆀ', '${menuNm}');">ㆀ-_-ㆀ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ご,.ごㆀ', '${menuNm}');">ご,.ごㆀ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ㅡ..ㅡㆀ', '${menuNm}');">ㅡ..ㅡㆀ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('?o?', '${menuCd}');">?o?</a></span>
+                    <span><a href="#" onclick="addMsgEmo('O_O', '${menuCd}');">O_O</a></span>
+                    <span><a href="#" onclick="addMsgEmo('@_@', '${menuCd}');">@_@</a></span>
+                    <span><a href="#" onclick="addMsgEmo('!.!', '${menuCd}');">!.!</a></span>
+                    <span><a href="#" onclick="addMsgEmo('⊙⊙', '${menuCd}');">⊙⊙</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(o_o)', '${menuCd}');">(o_o)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(@.@)', '${menuCd}');">(@.@)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(\'o\')', '${menuCd}');">('o')</a></span>
+                    <span><a href="#" onclick="addMsgEmo('★.★', '${menuCd}');">★.★</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☆_☆', '${menuCd}');">☆_☆</a></span>
+                    <span><a href="#" onclick="addMsgEmo('⊙.⊙', '${menuCd}');">⊙.⊙</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☆_☆', '${menuCd}');">☆_☆</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☞_☜', '${menuCd}');">☞_☜</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(o)(o)', '${menuCd}');">(o)(o)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(=_=;)', '${menuCd}');">(=_=;)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('⊙⊙ㆀ', '${menuCd}');">⊙⊙ㆀ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ㆀ-_-ㆀ', '${menuCd}');">ㆀ-_-ㆀ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ご,.ごㆀ', '${menuCd}');">ご,.ごㆀ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ㅡ..ㅡㆀ', '${menuCd}');">ㅡ..ㅡㆀ</a></span>
                 </span>
                 <span id="emos3" style="display:none">
-                    <span><a href="#" onclick="addMsgEmo('T.T', '${menuNm}');">T.T</a></span>
-                    <span><a href="#" onclick="addMsgEmo(';_;', '${menuNm}');">;_;</a></span>
-                    <span><a href="#" onclick="addMsgEmo('TmT', '${menuNm}');">TmT</a></span>
-                    <span><a href="#" onclick="addMsgEmo('Θ_Θ', '${menuNm}');">Θ_Θ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ㅠ.ㅠ', '${menuNm}');">ㅠ.ㅠ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ㅜ.ㅜ', '${menuNm}');">ㅜ.ㅜ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ㅡ.ㅜ', '${menuNm}');">ㅡ.ㅜ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(v.v)', '${menuNm}');">(v.v)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(∏.∏)', '${menuNm}');">(∏.∏)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ご.ご', '${menuNm}');">ご.ご</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(X_X)', '${menuNm}');">(X_X)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(&amp;gt;_&amp;lt;)', '${menuNm}');">(&gt;_&lt;)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('+_+;;', '${menuNm}');">+_+;;</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(づ_T)', '${menuNm}');">(づ_T)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(づ_ど)', '${menuNm}');">(づ_ど)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('o(T^T)o', '${menuNm}');">o(T^T)o</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(ㅜ.ㅜ)', '${menuNm}');">(ㅜ.ㅜ)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(ㅠ.ㅠ)', '${menuNm}');">(ㅠ.ㅠ)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(♨_♨)', '${menuNm}');">(♨_♨)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(T(oo)T)', '${menuNm}');">(T(oo)T)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('T.T', '${menuCd}');">T.T</a></span>
+                    <span><a href="#" onclick="addMsgEmo(';_;', '${menuCd}');">;_;</a></span>
+                    <span><a href="#" onclick="addMsgEmo('TmT', '${menuCd}');">TmT</a></span>
+                    <span><a href="#" onclick="addMsgEmo('Θ_Θ', '${menuCd}');">Θ_Θ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ㅠ.ㅠ', '${menuCd}');">ㅠ.ㅠ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ㅜ.ㅜ', '${menuCd}');">ㅜ.ㅜ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ㅡ.ㅜ', '${menuCd}');">ㅡ.ㅜ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(v.v)', '${menuCd}');">(v.v)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(∏.∏)', '${menuCd}');">(∏.∏)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ご.ご', '${menuCd}');">ご.ご</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(X_X)', '${menuCd}');">(X_X)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(&amp;gt;_&amp;lt;)', '${menuCd}');">(&gt;_&lt;)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('+_+;;', '${menuCd}');">+_+;;</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(づ_T)', '${menuCd}');">(づ_T)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(づ_ど)', '${menuCd}');">(づ_ど)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('o(T^T)o', '${menuCd}');">o(T^T)o</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(ㅜ.ㅜ)', '${menuCd}');">(ㅜ.ㅜ)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(ㅠ.ㅠ)', '${menuCd}');">(ㅠ.ㅠ)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(♨_♨)', '${menuCd}');">(♨_♨)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(T(oo)T)', '${menuCd}');">(T(oo)T)</a></span>
                 </span>
                 <span id="emos4" style="display:none">
-                    <span><a href="#" onclick="addMsgEmo('=.=', '${menuNm}');">=.=</a></span>
-                    <span><a href="#" onclick="addMsgEmo('θ.θ', '${menuNm}');">θ.θ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('@L@', '${menuNm}');">@L@</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-0-)', '${menuNm}');">(-0-)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(@.@)', '${menuNm}');">(@.@)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(Z_Z)', '${menuNm}');">(Z_Z)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('∋.∈', '${menuNm}');">∋.∈</a></span>
-                    <span><a href="#" onclick="addMsgEmo('⊇.⊆', '${menuNm}');">⊇.⊆</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(u_u)', '${menuNm}');">(u_u)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(g_g)', '${menuNm}');">(g_g)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(づ_-)', '${menuNm}');">(づ_-)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-_ど)', '${menuNm}');">(-_ど)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(=.&amp;amp;=)', '${menuNm}');">(=.&amp;=)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-.-)Zzz..', '${menuNm}');">(-.-)Zzz..</a></span>
-                    <span><a href="#" onclick="addMsgEmo('[(￣.￣)]zZ', '${menuNm}');">[(￣.￣)]zZ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('=.=', '${menuCd}');">=.=</a></span>
+                    <span><a href="#" onclick="addMsgEmo('θ.θ', '${menuCd}');">θ.θ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('@L@', '${menuCd}');">@L@</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-0-)', '${menuCd}');">(-0-)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(@.@)', '${menuCd}');">(@.@)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(Z_Z)', '${menuCd}');">(Z_Z)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('∋.∈', '${menuCd}');">∋.∈</a></span>
+                    <span><a href="#" onclick="addMsgEmo('⊇.⊆', '${menuCd}');">⊇.⊆</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(u_u)', '${menuCd}');">(u_u)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(g_g)', '${menuCd}');">(g_g)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(づ_-)', '${menuCd}');">(づ_-)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-_ど)', '${menuCd}');">(-_ど)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(=.&amp;amp;=)', '${menuCd}');">(=.&amp;=)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-.-)Zzz..', '${menuCd}');">(-.-)Zzz..</a></span>
+                    <span><a href="#" onclick="addMsgEmo('[(￣.￣)]zZ', '${menuCd}');">[(￣.￣)]zZ</a></span>
                 </span>
                 <span id="emos5" style="display:none">
-                    <span><a href="#" onclick="addMsgEmo(':-&amp;lt;', '${menuNm}');">:-&lt;</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ㅡㅡ+', '${menuNm}');">ㅡㅡ+</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(`o\')', '${menuNm}');">(`o')</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(#_-)', '${menuNm}');">(#_-)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ㅡㅡ^', '${menuNm}');">ㅡㅡ^</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(@_@)', '${menuNm}');">(@_@)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☞_☜', '${menuNm}');">☞_☜</a></span>
-                    <span><a href="#" onclick="addMsgEmo('s(￣へ￣ )z', '${menuNm}');">s(￣へ￣ )z</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-.￥)', '${menuNm}');">(-.￥)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(｀へ´)', '${menuNm}');">(｀へ´)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('o(-&amp;quot;-)o', '${menuNm}');">o(-&quot;-)o</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-_-メ)', '${menuNm}');">(-_-メ)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-&amp;quot;-メ)', '${menuNm}');">(-&quot;-メ)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(↗∇↖)', '${menuNm}');">(↗∇↖)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-(oo)-)', '${menuNm}');">(-(oo)-)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-.-&amp;quot;)凸', '${menuNm}');">(-.-&quot;)凸</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(*｀Д´)/', '${menuNm}');">(*｀Д´)/</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(/ㅡ_-)/~', '${menuNm}');">(/ㅡ_-)/~</a></span>
-                    <span><a href="#" onclick="addMsgEmo('＼(*｀Д´)/', '${menuNm}');">＼(*｀Д´)/</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(-ヘㅡメ)', '${menuNm}');">(-ヘㅡメ)</a></span>
+                    <span><a href="#" onclick="addMsgEmo(':-&amp;lt;', '${menuCd}');">:-&lt;</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ㅡㅡ+', '${menuCd}');">ㅡㅡ+</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(`o\')', '${menuCd}');">(`o')</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(#_-)', '${menuCd}');">(#_-)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ㅡㅡ^', '${menuCd}');">ㅡㅡ^</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(@_@)', '${menuCd}');">(@_@)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☞_☜', '${menuCd}');">☞_☜</a></span>
+                    <span><a href="#" onclick="addMsgEmo('s(￣へ￣ )z', '${menuCd}');">s(￣へ￣ )z</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-.￥)', '${menuCd}');">(-.￥)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(｀へ´)', '${menuCd}');">(｀へ´)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('o(-&amp;quot;-)o', '${menuCd}');">o(-&quot;-)o</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-_-メ)', '${menuCd}');">(-_-メ)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-&amp;quot;-メ)', '${menuCd}');">(-&quot;-メ)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(↗∇↖)', '${menuCd}');">(↗∇↖)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-(oo)-)', '${menuCd}');">(-(oo)-)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-.-&amp;quot;)凸', '${menuCd}');">(-.-&quot;)凸</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(*｀Д´)/', '${menuCd}');">(*｀Д´)/</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(/ㅡ_-)/~', '${menuCd}');">(/ㅡ_-)/~</a></span>
+                    <span><a href="#" onclick="addMsgEmo('＼(*｀Д´)/', '${menuCd}');">＼(*｀Д´)/</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-ヘㅡメ)', '${menuCd}');">(-ヘㅡメ)</a></span>
                 </span>
                 <span id="emos6" style="display:none">
-                    <span><a href="#" onclick="addMsgEmo('(-_-)', '${menuNm}');">(-_-)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('($_$)', '${menuNm}');">($_$)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('( ㅅ )', '${menuNm}');">( ㅅ )</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(\'⌒\')', '${menuNm}');">('⌒')</a></span>
-                    <span><a href="#" onclick="addMsgEmo('ご,,ご', '${menuNm}');">ご,,ご</a></span>
-                    <span><a href="#" onclick="addMsgEmo('o(&amp;gt;_&amp;lt;)o', '${menuNm}');">o(&gt;_&lt;)o</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(\'º\')/)/)', '${menuNm}');">('º')/)/)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('( ㅅ)=333', '${menuNm}');">( ㅅ)=333</a></span>
-                    <span><a href="#" onclick="addMsgEmo('∠(- o -)', '${menuNm}');">∠(- o -)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('☞(&amp;gt;.&amp;lt;)☜', '${menuNm}');">☞(&gt;.&lt;)☜</a></span>
-                    <span><a href="#" onclick="addMsgEmo('&amp;lt;(&amp;gt;.&amp;lt;ㆀ)&amp;gt;', '${menuNm}');">&lt;(&gt;.&lt;ㆀ)&gt;</a></span>
-                    <span><a href="#" onclick="addMsgEmo('┌(ㆀ_ _)┐', '${menuNm}');">┌(ㆀ_ _)┐</a></span>
-                    <span><a href="#" onclick="addMsgEmo('s(ごoご)グ', '${menuNm}');">s(ごoご)グ</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(^(**)^))~', '${menuNm}');">(^(**)^))~</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(. .)|/)/)', '${menuNm}');">(. .)|/)/)</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(\'\' )( \'\')', '${menuNm}');">('' )( '')</a></span>
-                    <span><a href="#" onclick="addMsgEmo('(=`.`=)@@', '${menuNm}');">(=`.`=)@@</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(-_-)', '${menuCd}');">(-_-)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('($_$)', '${menuCd}');">($_$)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('( ㅅ )', '${menuCd}');">( ㅅ )</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(\'⌒\')', '${menuCd}');">('⌒')</a></span>
+                    <span><a href="#" onclick="addMsgEmo('ご,,ご', '${menuCd}');">ご,,ご</a></span>
+                    <span><a href="#" onclick="addMsgEmo('o(&amp;gt;_&amp;lt;)o', '${menuCd}');">o(&gt;_&lt;)o</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(\'º\')/)/)', '${menuCd}');">('º')/)/)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('( ㅅ)=333', '${menuCd}');">( ㅅ)=333</a></span>
+                    <span><a href="#" onclick="addMsgEmo('∠(- o -)', '${menuCd}');">∠(- o -)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('☞(&amp;gt;.&amp;lt;)☜', '${menuCd}');">☞(&gt;.&lt;)☜</a></span>
+                    <span><a href="#" onclick="addMsgEmo('&amp;lt;(&amp;gt;.&amp;lt;ㆀ)&amp;gt;', '${menuCd}');">&lt;(&gt;.&lt;ㆀ)&gt;</a></span>
+                    <span><a href="#" onclick="addMsgEmo('┌(ㆀ_ _)┐', '${menuCd}');">┌(ㆀ_ _)┐</a></span>
+                    <span><a href="#" onclick="addMsgEmo('s(ごoご)グ', '${menuCd}');">s(ごoご)グ</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(^(**)^))~', '${menuCd}');">(^(**)^))~</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(. .)|/)/)', '${menuCd}');">(. .)|/)/)</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(\'\' )( \'\')', '${menuCd}');">('' )( '')</a></span>
+                    <span><a href="#" onclick="addMsgEmo('(=`.`=)@@', '${menuCd}');">(=`.`=)@@</a></span>
                 </span>
             </div>
         </div>
