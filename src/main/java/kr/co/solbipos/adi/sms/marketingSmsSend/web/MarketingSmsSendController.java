@@ -1,10 +1,12 @@
 package kr.co.solbipos.adi.sms.marketingSmsSend.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO;
@@ -43,14 +45,16 @@ public class MarketingSmsSendController {
 
     private final SessionService sessionService;
     private final MarketingSmsSendService marketingSmsSendService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MarketingSmsSendController(SessionService sessionService, MarketingSmsSendService marketingSmsSendService) {
+    public MarketingSmsSendController(SessionService sessionService, MarketingSmsSendService marketingSmsSendService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.marketingSmsSendService = marketingSmsSendService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -69,6 +73,11 @@ public class MarketingSmsSendController {
         // SMS전송 - 메세지그룹 조회
         List<DefaultMap<String>> msgGrpColList = marketingSmsSendService.getMsgGrpColList(marketingSmsSendVO, sessionInfoVO);
         model.addAttribute("msgGrpColList", msgGrpColList);
+
+        // 회원등급 리스트 조회
+        List membrClassList = marketingSmsSendService.getMembrClassList(marketingSmsSendVO, sessionInfoVO);
+        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.ALL);
+        model.addAttribute("memberClassList", membrClassListAll);
 
         return "adi/sms/marketingSmsSend/marketingSmsSend";
     }

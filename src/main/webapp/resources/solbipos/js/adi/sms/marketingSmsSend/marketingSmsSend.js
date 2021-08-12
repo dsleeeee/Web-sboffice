@@ -18,6 +18,13 @@ var telNoComboData = [
     {"name":"선택","value":""}
 ];
 
+// 검색기간 콤보박스
+var periodData = [
+    {"name":"기간 미사용","value":"all"},
+    {"name":"가입일","value":"reg"},
+    {"name":"최종방문일","value":"last"}
+];
+
 // 광고성 SMS전송 DropBoxDataMap
 var marketingSmsGubunComboData = [
     {"name": "전체", "value": ""},
@@ -49,6 +56,26 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
     $scope._setComboData("marketingSmsGubunCombo", marketingSmsGubunComboData); // 광고성 SMS전송
+    $scope._setComboData("rMemberClass", memberClassList); // 회원등급
+    $scope._setComboData("periodType", periodData); // 검색기간 콤보박스
+    $scope._getComboDataQuery('299', 'membrCardFg', 'A');
+    $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
+    $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
+    $scope._getComboDataQuery('055', 'gendrFg', 'A');
+    $scope._getComboDataQuery('067', 'useYnAll', 'A');
+    $scope._getComboDataQuery('076', 'weddingYn', 'A');
+    $scope._getComboDataQuery('032', 'anvType', 'A');
+
+    $scope.memberSaleList = [
+        {value: "0", name: messages["marketingSmsSend.saveSale"]},
+        {value: "1", name: messages["marketingSmsSend.saveSaleAmount"]}
+    ];
+    $scope.memberPointList = [
+        {value: "0", name: messages["marketingSmsSend.membrPoint.add"] + messages["marketingSmsSend.membrPoint"]},
+        {value: "1", name: messages["marketingSmsSend.membrPoint.use"] + messages["marketingSmsSend.membrPoint"]},
+        {value: "2", name: messages["marketingSmsSend.membrPoint.adj"] + messages["marketingSmsSend.membrPoint"]},
+        {value: "3", name: messages["marketingSmsSend.membrPoint.ava"] + messages["marketingSmsSend.membrPoint"]}
+    ];
 
     $("#lblStoreNmInfo").text("(광고)" +  "");
     $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
@@ -61,6 +88,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
+
+                if (col.format === "date") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
+                } else if (col.format === "dateTime") {
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+                } else if (col.format === "time") {
+                    e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
+                }
 
                 // 수신자, 수신번호
                 if (col.binding === "telNm" || col.binding === "telNo") {
@@ -76,6 +111,15 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                         // Attribute 의 변경사항을 적용.
                         e.cell.outerHTML = e.cell.outerHTML;
                     }
+                }
+
+                // 주소, 생일, 결혼기념일
+                if (col.binding === "addr" || col.binding === "birthday" || col.binding === "weddingDay") {
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                    // Attribute 의 변경사항을 적용.
+                    e.cell.outerHTML = e.cell.outerHTML;
                 }
             }
         });
@@ -220,6 +264,9 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         params.membrNo = "";
         params.telNm = "";
         params.telNo = "";
+        params.addr = "";
+        params.birthday = "";
+        params.weddingDay = "";
         params.memo = "";
         params.rOgnFg = "X";
         params.rOgnCd = "";
@@ -447,6 +494,25 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             }, 50)
         });
     });
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.regStoreShow = function () {
+        $scope._broadcast('regStoreCtrl');
+    };
+    $scope.regUseStoreShow = function () {
+        $scope._broadcast('regUseStoreCtrl');
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
+    };
 }]);
 
 

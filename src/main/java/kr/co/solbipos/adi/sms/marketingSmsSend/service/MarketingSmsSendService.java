@@ -25,6 +25,9 @@ public interface MarketingSmsSendService {
     /** 메세지그룹 컬럼 리스트 조회 */
     List<DefaultMap<String>> getMsgGrpColList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 
+    /** 회원등급 리스트 조회 */
+    List<DefaultMap<String>> getMembrClassList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
+
     /** 마케팅용 SMS전송 - 회원 조회 */
     List<DefaultMap<Object>> getMarketingSmsSendList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 

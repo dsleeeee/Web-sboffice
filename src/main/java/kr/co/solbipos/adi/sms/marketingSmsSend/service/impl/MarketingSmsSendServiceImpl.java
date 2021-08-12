@@ -51,6 +51,24 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         return marketingSmsSendMapper.getMsgGrpColList(marketingSmsSendVO);
     }
 
+    /** 회원등급 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getMembrClassList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+
+        marketingSmsSendVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
+
+        List<DefaultMap<String>> resultList = marketingSmsSendMapper.getMembrClassList(marketingSmsSendVO);
+
+        // 등록된 회원등급이 없을때는 기본등급을 리스트에 넣어줌.
+        if (resultList.size() == 0) {
+            DefaultMap<String> tmpList = new DefaultMap<String>();
+            tmpList.put("value", "000");
+            tmpList.put("name", "기본등급");
+            resultList.add(tmpList);
+        }
+        return resultList;
+    }
+
     /** 메세지관리 - 메세지서식 조회 */
     @Override
     public List<DefaultMap<Object>> getMarketingSmsSendMsgManageDtlList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
@@ -65,7 +83,21 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     @Override
     public List<DefaultMap<Object>> getMarketingSmsSendList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
-        marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        marketingSmsSendVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        marketingSmsSendVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            if (!StringUtil.isEmpties(marketingSmsSendVO.getRegStoreCd())) {
+                marketingSmsSendVO.setRegStoreCds(marketingSmsSendVO.getRegStoreCd().split(","));
+            }
+            if (!StringUtil.isEmpties(marketingSmsSendVO.getRegUseStoreCd())) {
+                marketingSmsSendVO.setRegUseStoreCds(marketingSmsSendVO.getRegUseStoreCd().split(","));
+            }
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            marketingSmsSendVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return marketingSmsSendMapper.getMarketingSmsSendList(marketingSmsSendVO);
     }
