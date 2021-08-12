@@ -465,7 +465,9 @@ button[class*="btn02"] {border: 0;}
   </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnSetting" ng-click="fnTblpt('setting');"><s:message code="tblpt.setting" /></button></span>
+        <span><button class="btn02-gradient green" style="cursor:pointer;display:none;" id="btnSetting" ng-click="fnTblpt('setting');"><s:message code="tblpt.setting" /></button></span>
+        &nbsp;
+        <span><button class="btn02-gradient green" style="cursor:pointer;"  id="btnExplainSetting" ng-click="fnTblpt('explainSetting');"><s:message code="tblms.setting" /></button></span>
         &nbsp;
         <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnChromeSetup" ng-click="fnTblpt('chromeSetup');"><s:message code="tblpt.chromeSetup" /></button></span>
     </div>
@@ -474,7 +476,7 @@ button[class*="btn02"] {border: 0;}
         <span><a href="#" class="btn01 first01" id="tblptOpn" ng-click="fnTblpt('tblptOpn');"><s:message code="tblpt.open" /></a></span>
         <span><a href="#" class="btn01 first01" id="tblptClr" ng-click="fnTblpt('tblptClr');"><s:message code="tblpt.clear" /></a></span>
     </div>
-<br><br><br><br><br>
+
     <div style="margin-top:10px; text-align:center;display:none;">
         <button  class="btn02-gradient purple"   type='button' onclick="window.open('http://192.168.0.72:2020/login/login_check_tbl.jsp?AutoFg=M&user_id=a000005&user_pwd=&login_auto_serial=&appfg=web&tblfg=tblpt', 'popup', '');" style='width:200px; height:50px;'>
         창 오픈 샘플
@@ -511,6 +513,30 @@ button[class*="btn02"] {border: 0;}
 
  -->
 
+    <div style="margin-top:10px; text-align:left;display:none;">
+        <span><button class="btn02-gradient orange" style="cursor:pointer;"  id="btnExplainSetting2" ng-click="fnTblms('explainSetting');"><s:message code="tblms.setting" /></button></span>
+    </div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        1/4
+    </div>
+    <div id="viewStyleLayer1"   style="height: 406px; width: 924px;display:none;"></div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        2/4
+    </div>
+    <div id="viewStyleLayer2"   style="height: 406px; width: 924px;display:none;"></div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        3/4
+    </div>
+    <div id="viewStyleLayer3"   style="height: 406px; width: 924px;display:none;"></div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        4/4
+    </div>
+    <div id="viewStyleLayer4"   style="height: 406px; width: 924px;display:none;"></div>
+
 </div>
 
 <script type="text/javascript">
@@ -518,21 +544,10 @@ button[class*="btn02"] {border: 0;}
     var s_storeCd     = "${storeCd}";
     var s_vUserIdChk  = "${vUserIdChk}";
 
-
-/*
-    var imgFileName = "ie_setting_01";
-    var path = "/resource/solbipos/css/img/table/";
-    var ext = ".PNG";
-    var imgBtnFile = imgFileName + ext;
-    var viewStyleLayer2 = document.getElementById("viewStyleLayer");
-  //  viewStyleLayer.style.backgroundImage = "url('" + path + "/ie_setting_" + imgBtnFile + "')";
-
-    viewStyleLayer.style.backgroundImage = "url('" + path + imgBtnFile + "')";
-
-alert(0);
-//    /resource/solbipos/css/img/table/ie_setting_01.PNG
-//   /resources/solbipos/css/img/touchKey/touchKey_style01.png
-*/
+    document.getElementById("viewStyleLayer1").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "01" + ".PNG" + "')";
+    document.getElementById("viewStyleLayer2").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "02" + ".PNG" + "')";
+    document.getElementById("viewStyleLayer3").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "03" + ".PNG" + "')";
+    document.getElementById("viewStyleLayer4").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "04" + ".PNG" + "')";
 
 </script>
 

@@ -466,7 +466,9 @@ button[class*="btn02"] {border: 0;}
   </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnSetting" ng-click="fnTblms('setting');"><s:message code="tblms.setting" /></button></span>
+        <span><button class="btn02-gradient green" style="cursor:pointer;display:none;" id="btnSetting" ng-click="fnTblms('setting');"><s:message code="tblms.setting" /></button></span>
+        &nbsp;
+        <span><button class="btn02-gradient green" style="cursor:pointer;"  id="btnExplainSetting" ng-click="fnTblms('explainSetting');"><s:message code="tblms.setting" /></button></span>
         &nbsp;
         <span><button class="btn02-gradient green" style="cursor:pointer;" id="btnChromeSetup" ng-click="fnTblms('chromeSetup');"><s:message code="tblms.chromeSetup" /></button></span>
     </div>
@@ -474,7 +476,7 @@ button[class*="btn02"] {border: 0;}
     <div style="margin-top:10px; text-align:center;">
         <span><a href="#" class="btn01 first01" id="tblmsOpn" ng-click="fnTblms('tblmsOpn');"><s:message code="tblms.open" /></a></span>
     </div>
-<br><br><br><br><br>
+
     <div style="margin-top:10px; text-align:center;display:none;">
         <button  class="btn02-gradient purple"   type='button' onclick="window.open('http://192.168.0.72:2020/login/login_check_tbl.jsp?AutoFg=M&user_id=a000005&user_pwd=&login_auto_serial=&appfg=web&tblfg=tblms', 'popup', '');" style='width:200px; height:50px;'>
         창 오픈 샘플
@@ -516,10 +518,29 @@ button[class*="btn02"] {border: 0;}
 
  -->
 
-      <div id="viewStyleLayer"    style="height: 580px; width: 630px; display:none;"></div>
-      <div id="viewStyleLayer2"   style="height: 580px; width: 630px; display:none;"></div>
-      <div id="viewStyleLayer3"   style="height: 580px; width: 630px; display:none;"></div>
-      <div id="viewStyleLayer4"   style="height: 580px; width: 630px"></div>
+    <div style="margin-top:10px; text-align:left;display:none;">
+        <span><button class="btn02-gradient orange" style="cursor:pointer;"  id="btnExplainSetting2" ng-click="fnTblms('explainSetting');"><s:message code="tblms.setting" /></button></span>
+    </div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        1/4
+    </div>
+    <div id="viewStyleLayer1"   style="height: 406px; width: 924px;display:none;"></div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        2/4
+    </div>
+    <div id="viewStyleLayer2"   style="height: 406px; width: 924px;display:none;"></div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        3/4
+    </div>
+    <div id="viewStyleLayer3"   style="height: 406px; width: 924px;display:none;"></div>
+
+    <div style="margin-top:10px; text-align:left;display:none;">
+        4/4
+    </div>
+    <div id="viewStyleLayer4"   style="height: 406px; width: 924px;display:none;"></div>
 
 </div>
 
@@ -528,77 +549,10 @@ button[class*="btn02"] {border: 0;}
     var s_storeCd     = "${storeCd}";
     var s_vUserIdChk  = "${vUserIdChk}";
 
-
-
-
-
-alert(0);
-    var styleCd = "01";
-    var path = "/resource/solbipos/css/img/touchKey/";
-    var ext = ".png";
-    var styleBtnFile = styleCd + ext;
-    var viewStyleLayer = document.getElementById("viewStyleLayer");
-    viewStyleLayer.style.backgroundImage = "url('" + path + "/touchKey_style" + styleBtnFile + "')";
-alert("url('" + path + "/touchKey_style" + styleBtnFile + "')");
-
-alert(1);
-    var styleCd = "01";
-    var path = "/resource/solbipos/css/img/tblms/";
-    var ext = ".png";
-    var styleBtnFile = styleCd + ext;
-    var viewStyleLayer2 = document.getElementById("viewStyleLayer2");
-    viewStyleLayer2.style.backgroundImage = "url('" + path + "/ie_setting_" + styleBtnFile + "')";
-alert("url('" + path + "/ie_setting_" + styleBtnFile + "')");
-
-alert(2);
-
-
-
-    var styleCd = "01";
-    var path = "/resource/solbipos/css/img/touchKey/";
-    var ext = ".png";
-    var styleBtnFile = styleCd + ext;
-    var viewStyleLayer3 = document.getElementById("viewStyleLayer3");
-    viewStyleLayer3.style.backgroundImage = "url('" + path + "/touchKey_style" + styleBtnFile + "')";
-alert("url('" + path + "/touchKey_style" + styleBtnFile + "')");
-
-alert(3);
-
-    var styleCd = "01";
-    var path = "/resource/solbipos/css/img/tblms/";
-    var ext = ".PNG";
-    var styleBtnFile = styleCd + ext;
-    var viewStyleLayer4 = document.getElementById("viewStyleLayer4");
-    viewStyleLayer4.style.backgroundImage = "url('" + path + "/ie_setting_" + styleBtnFile + "')";
-alert("url('" + path + "/ie_setting_" + styleBtnFile + "')");
-
-alert(4);
-
-
-
-
-
-
-
-/*
-
-
-1. 파일 만들고 임포트 해서
-2. 아래 작업으로 처리
-3. 탭은 사용할지 jsp에서 처리하면됨
-
-
-
-    var imgFileName = "01";
-    var path = "/resource/solbipos/css/img/table/";
-    var ext = ".PNG";
-    var imgBtnFile = imgFileName + ext;
-    var viewStyleLayer2 = document.getElementById("viewStyleLayer2");
-    viewStyleLayer2.style.backgroundImage = "url('" + path + "/ie_setting_" + imgBtnFile + "')";
-
-*/
-
-
+    document.getElementById("viewStyleLayer1").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "01" + ".PNG" + "')";
+    document.getElementById("viewStyleLayer2").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "02" + ".PNG" + "')";
+    document.getElementById("viewStyleLayer3").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "03" + ".PNG" + "')";
+    document.getElementById("viewStyleLayer4").style.backgroundImage = "url('" + "/resource/solbipos/css/img/tblms/" + "/ie_setting_" + "04" + ".PNG" + "')";
 
 </script>
 

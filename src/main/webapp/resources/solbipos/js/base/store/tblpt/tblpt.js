@@ -138,24 +138,7 @@ app.controller('tblptListCtrl', ['$scope', '$http', '$timeout', function ($scope
     var tblFgOption     = tblFgOp;
     var tblptTempPw     = '';
     var tblptTempPwDate = getCurDateTime();
-/*
-alert('window.location.href:'+window.location.href);
-alert('window.location.hostname:'+window.location.hostname);
-alert('window.location.pathname:'+window.location.pathname);
-alert('window.location.protocol:'+window.location.protocol);
-alert('window.location.assign:'+window.location.assign);
-alert('s_userId:'+s_userId+', s_storeCd:'+s_storeCd);
 
-alert('hrefChk:'+hrefChk);
-alert('hrefChk:'+hrefChk);
-alert('hrefChk:'+hrefChk);
-alert('hrefChk:'+hrefChk);
-window.location.href - 현재 페이지의 href (URL) 반환
-window.location.hostname - 웹 호스트의 도메인 네임 반환
-window.location.pathname - 현재 페이지의 경로와 파일 이름 반환
-window.location.protocol - 사용하는 웹 프로토콜 반환 (http:// 혹은 https://)
-window.location.assign - 새 document 로드
-*/
     if(hrefChk.indexOf("neo.solbipos.com") != -1)   open_url = 'http://mob.solbipos.com/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.85") != -1)  open_url = 'http://192.168.0.85:22001/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.72") != -1)  open_url = 'http://192.168.0.72:2020/login/login_check_tbl.jsp?';
@@ -166,38 +149,49 @@ window.location.assign - 새 document 로드
         return false;
     }
 
-    $scope._postJSONSave.withPopUp("/base/store/tblpt/tblpt/tblptOpn.sb", params, function (response) {
-        var result = response.data.data;
+    if(tblFgOp == 'explainSetting')
+    {
+        window.open('http://mob.solbipos.com/etc/manual/explain_manual.jsp');
+    }
+    else if(tblFgOp == 'chromeSetup')
+    {
+        window.open('https://www.google.com/chrome/');
+    }
+    else
+    {
+        $scope._postJSONSave.withPopUp("/base/store/tblpt/tblpt/tblptOpn.sb", params, function (response) {
+            var result = response.data.data;
 
-        if(result === ""){
-            $scope._popMsg(messages["tblpt.connectFail"]);
-            return false;
-        }else{
-            tblptTempPw = result;
-            var tblpt_url   = open_url
-                            + 'AutoFg=M'
-                            + '&nx_user_store_cd='+userStoreCd
-                            + '&user_id='+userIdChk
-                            + '&v_user_id='+vUserIdChk
-                            + '&user_pwd='+userpwChk
-                            + '&nx_user_id='+userIdChk
-                            + '&nx_v_user_id='+vUserIdChk
-                            + '&nx_user_pwd='+userpwChk
-                            + '&login_auto_serial='
-                            + '&appfg=web'
-                            + '&tblfg='+tblFg
-                            + '&tblFgOption='+tblFgOption
-                            + '&nx_tmp_pw='+ tblptTempPw
-                            + '&nx_tmp_pw_date=' + tblptTempPwDate
-                            ;
+            if(result === ""){
+                $scope._popMsg(messages["tblpt.connectFail"]);
+                return false;
+            }else{
+                tblptTempPw = result;
+                var tblpt_url   = open_url
+                                + 'AutoFg=M'
+                                + '&nx_user_store_cd='+userStoreCd
+                                + '&user_id='+userIdChk
+                                + '&v_user_id='+vUserIdChk
+                                + '&user_pwd='+userpwChk
+                                + '&nx_user_id='+userIdChk
+                                + '&nx_v_user_id='+vUserIdChk
+                                + '&nx_user_pwd='+userpwChk
+                                + '&login_auto_serial='
+                                + '&appfg=web'
+                                + '&tblfg='+tblFg
+                                + '&tblFgOption='+tblFgOption
+                                + '&nx_tmp_pw='+ tblptTempPw
+                                + '&nx_tmp_pw_date=' + tblptTempPwDate
+                                ;
 
-            //window.open( tblpt_url, 'popup', '');
-            var win = window.open(tblpt_url, tblptTempPwDate, '');
-            //window.open( tblpt_url);
+                //window.open( tblpt_url, 'popup', '');
+                var win = window.open(tblpt_url, tblptTempPwDate, '');
+                //window.open( tblpt_url);
 
-            $scope._popMsg(messages["tblpt.connectSuccess"]);
-        }
-    });
+                $scope._popMsg(messages["tblpt.connectSuccess"]);
+            }
+        });
+    }
   };
 
 
