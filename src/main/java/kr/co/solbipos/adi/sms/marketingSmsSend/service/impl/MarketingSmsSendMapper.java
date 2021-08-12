@@ -29,6 +29,9 @@ public interface MarketingSmsSendMapper {
     /** 메세지그룹 컬럼 리스트 조회 */
     List<DefaultMap<String>> getMsgGrpColList(MarketingSmsSendVO marketingSmsSendVO);
 
+    /** 회원등급 리스트 조회 */
+    List<DefaultMap<String>> getMembrClassList(MarketingSmsSendVO marketingSmsSendVO);
+
     /** 메세지관리 - 메세지서식 조회 */
     List<DefaultMap<Object>> getMarketingSmsSendMsgManageDtlList(MarketingSmsSendVO marketingSmsSendVO);
 

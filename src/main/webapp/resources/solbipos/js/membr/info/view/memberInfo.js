@@ -21,6 +21,17 @@ var periodData = [
     {"name":"최종방문일","value":"last"}
 ];
 
+// 광고성 SMS전송 DropBoxDataMap
+var marketingSmsGubunComboData = [
+    {"name": "전체", "value": ""},
+    {"name": "1개월전", "value": "1"},
+    {"name": "2개월전", "value": "2"},
+    {"name": "3개월전", "value": "3"},
+    {"name": "4개월전", "value": "4"},
+    {"name": "5개월전", "value": "5"},
+    {"name": "6개월전", "value": "6"}
+];
+
 /**********************************************************************
  *  회원정보 그리드
  **********************************************************************/
@@ -56,6 +67,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope._getComboDataQuery('072', 'recvYn', 'S');
     $scope._getComboDataQuery('299', 'membrCardFg', 'A');
     /*$scope._setComboData("periodType", periodDataMap);*/
+    $scope._setComboData("marketingSmsGubunCombo", marketingSmsGubunComboData); // 광고성 SMS전송
 
     // 선택 회원
     $scope.selectedMember;
@@ -505,6 +517,15 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         $scope.setSelectedMember(params);
         $scope.wjSmsSendViewPopLayer.show(true);
         event.preventDefault();
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
     };
 }]);
 

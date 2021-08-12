@@ -17,12 +17,17 @@
 <%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
 
 <div class="subCon" ng-controller="memberCtrl">
-    <div class="searchBar flddUnfld">
+
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberCtrl', 1)">
                 <s:message code="cmm.search"/>
+            </button>
+            <%-- 확장조회 --%>
+            <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                <s:message code="cmm.search.addShow" />
             </button>
         </div>
     </div>
@@ -86,60 +91,6 @@
                     </span>
                 </div>
             </td>
-            <%-- 생일, 결혼기념일 날짜 --%>
-            <th>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="anvType"
-                            ng-model="anvType"
-                            control="anvTypeCombo"
-                            items-source="_getComboData('anvType')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </th>
-            <td>
-                <div class="sb-select">
-                    <span class="txtIn">
-                      <div class="sb-select w110px">
-                        <wj-input-date
-                                value="anvStartDate"
-                                ng-model="anvStartDate"
-                                control="anvStartDateCombo"
-                                format="yyyy/MM/dd"
-                                min="2000-01-01"
-                                max="2099-12-31"
-                                initialized="_initDateBox(s)">
-                        </wj-input-date>
-                      </div>
-                    </span>
-                    <span class="rg">~</span>
-                    <span class="txtIn">
-                        <div class="sb-select w110px">
-                            <wj-input-date
-                                value="anvEndDate"
-                                ng-model="anvEndDate"
-                                control="anvEndDateCombo"
-                                format="yyyy/MM/dd"
-                                min="2000-01-01"
-                                max="2099-12-31"
-                                initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </div>
-                    </span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <%-- 회원번호 --%>
-            <th><s:message code="regist.membr.no"/></th>
-            <td>
-                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
-            </td>
-
             <%-- 회원등급 --%>
             <th><s:message code="regist.memberClass"/></th>
             <td>
@@ -157,6 +108,33 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <%-- 회원번호 --%>
+            <th><s:message code="regist.membr.no"/></th>
+            <td>
+                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
+            </td>
+            <%-- 회원명(한글) --%>
+            <th><s:message code="regist.membr.nm"/></th>
+            <td>
+                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
+        <colgroup>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+        </colgroup>
+        <tbody>
         <%-- 매장 선택 --%>
         <c:if test="${orgnFg == 'HQ'}">
             <tr>
@@ -353,12 +331,52 @@
             </td>
         </tr>
         <tr>
-            <%-- 회원명(한글) --%>
-            <th><s:message code="regist.membr.nm"/></th>
+            <%-- 생일, 결혼기념일 날짜 --%>
+            <th>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="anvType"
+                            ng-model="anvType"
+                            control="anvTypeCombo"
+                            items-source="_getComboData('anvType')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </th>
             <td>
-                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
+                <div class="sb-select">
+                    <span class="txtIn">
+                      <div class="sb-select w110px">
+                        <wj-input-date
+                                value="anvStartDate"
+                                ng-model="anvStartDate"
+                                control="anvStartDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                      </div>
+                    </span>
+                    <span class="rg">~</span>
+                    <span class="txtIn">
+                        <div class="sb-select w110px">
+                            <wj-input-date
+                                    value="anvEndDate"
+                                    ng-model="anvEndDate"
+                                    control="anvEndDateCombo"
+                                    format="yyyy/MM/dd"
+                                    min="2000-01-01"
+                                    max="2099-12-31"
+                                    initialized="_initDateBox(s)">
+                            </wj-input-date>
+                        </div>
+                    </span>
+                </div>
             </td>
-
             <%-- 회원명(영문) --%>
             <th><s:message code="regist.membr.nm.eng"/></th>
             <td>
@@ -374,6 +392,29 @@
             <th><s:message code="regist.membr.new"/></th>
             <td>
                 <input type="checkbox" id="newMemberYn" class="mt5" ng-model="newMemberYn"/>
+            </td>
+        </tr>
+        <tr>
+            <%-- 광고성 SMS전송 --%>
+            <th><s:message code="regist.marketingSmsSend"/></th>
+            <td >
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMarketingSmsGubunCombo"
+                            ng-model="marketingSmsGubun"
+                            items-source="_getComboData('marketingSmsGubunCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="marketingSmsGubunCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <%-- 주소 --%>
+            <th><s:message code="regist.addr"/></th>
+            <td>
+                <input type="text" id="addr" class="sb-input w100" ng-model="addr"/>
             </td>
         </tr>
         </tbody>
@@ -611,7 +652,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210624.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210812.01" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">

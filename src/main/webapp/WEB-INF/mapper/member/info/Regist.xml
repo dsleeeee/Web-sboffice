@@ -263,6 +263,15 @@
         <if test='newMemberYn != null and newMemberYn != "" and newMemberYn == true'>
             AND tmm.REG_DT BETWEEN TO_CHAR(SYSDATE - 30, 'yyyyMMdd')||'000000' AND TO_CHAR(SYSDATE, 'yyyyMMdd')||'999999'
         </if>
+        <if test='addr != null and addr != ""'>
+            AND SBPENC.D(tmm.ADDR) LIKE '%'||#{addr}||'%'
+        </if>
+        <if test="marketingSmsGubun != null and marketingSmsGubun != ''">
+            <![CDATA[
+                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
+                AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+        </if>
         ORDER BY tmm.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -487,6 +496,15 @@
         </if>
         <if test='newMemberYn != null and newMemberYn != "" and newMemberYn == true'>
             AND tmm.REG_DT BETWEEN TO_CHAR(SYSDATE - 30, 'yyyyMMdd')||'000000' AND TO_CHAR(SYSDATE, 'yyyyMMdd')||'999999'
+        </if>
+        <if test='addr != null and addr != ""'>
+            AND SBPENC.D(tmm.ADDR) LIKE '%'||#{addr}||'%'
+        </if>
+        <if test="marketingSmsGubun != null and marketingSmsGubun != ''">
+            <![CDATA[
+                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
+                AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
         </if>
         ORDER BY tmm.MEMBR_NO
     </select>

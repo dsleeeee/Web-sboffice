@@ -41,6 +41,22 @@
         ORDER BY MSG_GRP_CD
     </select>
 
+    <!-- 회원등급 리스트 조회-->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
+        COMMENTS : 회원정보 등록시 등록매장 콤보박스 내용 조회
+    -->
+    <select id="getMembrClassList" parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+        /* MarketingSmsSendMapper.getMembrClassList */
+        SELECT
+        MEMBR_CLASS_CD AS VALUE,
+        MEMBR_CLASS_NM AS NAME
+        FROM TB_MB_MEMBER_CLASS
+        WHERE USE_YN = 'Y'
+        AND MEMBR_ORGN_CD = #{orgnGrpCd}
+        ORDER BY DEFLT_YN DESC
+    </select>
+
     <!-- 메세지관리 - 메세지서식 조회 -->
     <!--
         TABLE    : HCS_SMS_SEND_REG_T
@@ -119,29 +135,142 @@
         SELECT
         SBPENC.D(tmm.MEMBR_NM) AS TEL_NM,
         SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+        SBPENC.D(tmm.ADDR) AS ADDR,
+        tmm.BIRTHDAY,
+        tmm.WEDDINGDAY,
         tmmp.FIRST_SALE_DATE,
         tmmp.LAST_SALE_DATE,
         'C' AS R_OGN_FG,
         #{orgnCd} AS R_OGN_CD,
         '' AS R_USER_ID
         FROM TB_MB_MEMBER tmm,
+        <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
+            TB_MB_MEMBER_POINT_STORE tmmps,
+        </if>
         TB_MB_MEMBER_POINT tmmp
-        WHERE 1=1
-        AND tmm.MEMBR_ORGN_CD = #{orgnCd}
-        <if test="membrNo != null and membrNo != ''">
+        WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
+            AND tmmps.MEMBR_ORGN_CD (+) = tmm.REG_STORE_CD
+            AND tmmps.CHG_MEMBR_ORGN_CD (+)= tmm.REG_STORE_CD
+            AND tmmps.MEMBR_NO (+)= tmm.MEMBR_NO
+            <if test='visitStoreMembr == "true"'>
+                AND tmmps.CHG_MEMBR_ORGN_CD = #{storeCd}
+            </if>
+            <if test='regUseStoreCd != null and !regUseStoreCd.equals("")'>
+                AND tmmps.CHG_MEMBR_ORGN_CD IN
+                <foreach collection="regUseStoreCds" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='storeMembr == "true"'>
+                AND tmm.REG_STORE_CD = #{storeCd}
+            </if>
+        </if>
+        <if test='cstCardUseFg != null and cstCardUseFg != ""'>
+            AND tmm.CST_CARD_USE_FG = #{cstCardUseFg}
+        </if>
+        <if test='membrCardNo != null and membrCardNo != ""'>
+            AND tmm.MEMBR_CARD_NO LIKE '%'||#{membrCardNo}||'%'
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
-        <if test="membrNm != null and membrNm != ''">
+        <if test='membrNm != null and membrNm != ""'>
             AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
-        <if test="saleDateGubun != null and saleDateGubun != ''">
+        <if test='membrEngNm != null and membrEngNm != ""'>
+            AND tmm.MEMBER_ENG_NM LIKE '%'||#{membrEngNm}||'%'
+        </if>
+        <if test='telNo != null and telNo != ""'>
+            AND SBPENC.D(tmm.TEL_NO) LIKE '%'||#{telNo}||'%'
+        </if>
+        <if test='emailAddr != null and emailAddr.toString() != ""'>
+            AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
+        </if>
+        <if test='regStoreCd != null and regStoreCd.toString() != ""'>
+            AND tmm.REG_STORE_CD IN
+            <foreach collection="regStoreCds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='membrClassCd != null and membrClassCd.toString() != ""'>
+            AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+        </if>
+        <if test='gendrFg != null and gendrFg.toString() != ""'>
+            AND tmm.GENDR_FG = #{gendrFg}
+        </if>
+        <if test='emailRecvYn != null and emailRecvYn.toString() != ""'>
+            AND tmm.EMAIL_RECV_YN = #{emailRecvYn}
+        </if>
+        <if test='smsRecvYn != null and smsRecvYn.toString() != ""'>
+            AND tmm.SMS_RECV_YN = #{smsRecvYn}
+        </if>
+        <if test='periodType != null and periodType.toString() != ""'>
+            <!-- 가입일 -->
+            <if test='periodType.getCode() == "reg"'>
+                AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
+            </if>
+            <!-- 최종방문일 -->
+            <if test='periodType.getCode() == "last"'>
+                AND tmmp.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
+            </if>
+        </if>
+        <if test='anvType != null and anvType.toString() != ""'>
+            <if test='anvType.getCode() == "1"'>
+                AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+            </if>
+            <if test='anvType.getCode() == "2"'>
+                AND tmm.WEDDINGDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+            </if>
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND tmm.USE_YN = #{useYn}
+        </if>
+        <if test='startSaveSale != null and startSaveSale != "" and endSaveSale != null and endSaveSale != ""'>
+            <if test='memberSaleFg == "0"'>
+                AND tmmp.POINT_ACC_CNT BETWEEN #{startSaveSale} AND #{endSaveSale}
+            </if>
+            <if test='memberSaleFg == "1"'>
+                AND tmmp.TOT_SALE_AMT BETWEEN #{startSaveSale} AND #{endSaveSale}
+            </if>
+        </if>
+        <if test='startAvablPoint != null and startAvablPoint != "" and endAvablPoint != null and endAvablPoint != ""'>
+            <if test='memberPointFg == "0"'>
+                AND tmmp.TOT_SAVE_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
+            </if>
+            <if test='memberPointFg == "1"'>
+                AND tmmp.TOT_USE_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
+            </if>
+            <if test='memberPointFg == "2"'>
+                AND tmmp.TOT_ADJ_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
+            </if>
+            <if test='memberPointFg == "3"'>
+                AND tmmp.AVABL_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
+            </if>
+        </if>
+        <if test='shortNo != null and shortNo != ""'>
+            AND tmm.SHORT_NO = #{shortNo}
+        </if>
+        <if test='weddingYn != null and weddingYn.toString() != ""'>
+            AND tmm.WEDDING_YN = #{weddingYn}
+        </if>
+        <if test='newMemberYn != null and newMemberYn != "" and newMemberYn == true'>
+            AND tmm.REG_DT BETWEEN TO_CHAR(SYSDATE - 30, 'yyyyMMdd')||'000000' AND TO_CHAR(SYSDATE, 'yyyyMMdd')||'999999'
+        </if>
+        <if test='addr != null and addr != ""'>
+            AND SBPENC.D(tmm.ADDR) LIKE '%'||#{addr}||'%'
+        </if>
+        <if test="marketingSmsGubun != null and marketingSmsGubun != ''">
             <![CDATA[
-                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{saleDateGubun}), 'yyyyMMdd')
+                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
                 AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
         </if>
-        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
-        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        ORDER BY tmm.MEMBR_NO
     </select>
 
 </mapper>
