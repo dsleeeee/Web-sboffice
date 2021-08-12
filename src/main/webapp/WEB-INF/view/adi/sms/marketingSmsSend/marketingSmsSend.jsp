@@ -22,7 +22,8 @@
 <div class="subCon" id ="divSmsSendPage" ng-controller="marketingSmsSendCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar">
+    <%--<div class="searchBar flddUnfld">--%>
+        <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
