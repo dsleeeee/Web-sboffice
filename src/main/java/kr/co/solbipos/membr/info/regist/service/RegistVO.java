@@ -218,6 +218,9 @@ public class RegistVO extends PageVO {
     /** 신용카드 적립률 */
     private String memberCard;
 
+    /** 광고성 SMS전송 */
+    private String marketingSmsGubun;
+
     /**
      * @return the orgnFg
      */
@@ -1251,6 +1254,14 @@ public class RegistVO extends PageVO {
 
     public void setMemberCard(String memberCard) {
         this.memberCard = memberCard;
+    }
+
+    public String getMarketingSmsGubun() {
+        return marketingSmsGubun;
+    }
+
+    public void setMarketingSmsGubun(String marketingSmsGubun) {
+        this.marketingSmsGubun = marketingSmsGubun;
     }
 
     @Override
