@@ -9,7 +9,8 @@
 
 <div class="subCon" id="hqSalePriceArea" ng-controller="hqSalePriceCtrl">
   <%--searchTbl--%>
-  <div class="searchBar flddUnfld">
+  <%--<div class="searchBar flddUnfld">--%>
+  <div class="searchBar">
     <a href="#" class="open fl"><s:message code="salePrice.hqSalePrice" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
