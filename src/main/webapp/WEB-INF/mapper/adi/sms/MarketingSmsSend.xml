@@ -134,9 +134,9 @@
         <if test="membrNm != null and membrNm != ''">
             AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
-        <if test="saleDateGubun != null and saleDateGubun != ''">
+        <if test="marketingSmsGubun != null and marketingSmsGubun != ''">
             <![CDATA[
-                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{saleDateGubun}), 'yyyyMMdd')
+                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
                 AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
         </if>

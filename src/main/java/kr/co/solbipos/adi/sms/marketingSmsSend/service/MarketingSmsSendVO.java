@@ -39,8 +39,8 @@ public class MarketingSmsSendVO extends PageVO {
     /** 회원명 */
     private String membrNm;
 
-    /** 방문일자 */
-    private String saleDateGubun;
+    /** 광고성 SMS전송 */
+    private String marketingSmsGubun;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -66,11 +66,11 @@ public class MarketingSmsSendVO extends PageVO {
         this.membrNm = membrNm;
     }
 
-    public String getSaleDateGubun() {
-        return saleDateGubun;
+    public String getMarketingSmsGubun() {
+        return marketingSmsGubun;
     }
 
-    public void setSaleDateGubun(String saleDateGubun) {
-        this.saleDateGubun = saleDateGubun;
+    public void setMarketingSmsGubun(String marketingSmsGubun) {
+        this.marketingSmsGubun = marketingSmsGubun;
     }
 }

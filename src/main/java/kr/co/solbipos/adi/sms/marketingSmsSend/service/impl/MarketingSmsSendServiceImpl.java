@@ -55,6 +55,7 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     @Override
     public List<DefaultMap<Object>> getMarketingSmsSendMsgManageDtlList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
+        marketingSmsSendVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
         return marketingSmsSendMapper.getMarketingSmsSendMsgManageDtlList(marketingSmsSendVO);
