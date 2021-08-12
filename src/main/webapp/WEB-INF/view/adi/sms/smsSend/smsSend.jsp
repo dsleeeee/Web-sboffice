@@ -22,29 +22,24 @@
 <div class="subCon" id ="divSmsSendPage" ng-controller="smsSendCtrl">
 
     <%-- 좌측 --%>
-    <div class="wj-TblWrapBr w60 fl">
+    <div class="wj-TblWrapBr w55 fl">
         <%-- (광고), (무료수신거부) display 여부 : pageGubun값이 SMS일때만 보여줌 --%>
         <label id="lblPageGubun" style="display: none;"></label>
         <%-- 제목 --%>
-        <div class="w55 fl pd10" style="height:360px;">
+        <div class="w50 fl pd10" style="height:360px;">
             <table>
                 <colgroup>
-                    <col class="w20" />
-                    <col class="w80" />
+                    <col class="w100" />
                 </colgroup>
                 <tbody>
                 <tr>
                     <%-- 제목 --%>
-                    <th>
-                        <s:message code="smsSend.title" />
-                    </th>
                     <td>
                         <input type="text" class="sb-input-msg w100" id="srchTitle" ng-model="title" />
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr id="trStoreNmInfo" style="display: none">
-                    <td></td>
                     <td>
                         <label id="lblStoreNmInfo"></label>
                     </td>
@@ -52,23 +47,18 @@
                 <tr style="height: 10px"></tr>
                 <tr>
                     <%-- 메세지내용 --%>
-                    <th>
-                        <s:message code="smsSend.messageContext" />
-                    </th>
                     <td>
                         <textarea id="messageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr id="trMemoInfo" style="display: none;">
-                    <td></td>
                     <td>
                         <label id="lblMemoInfo"></label>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr>
-                    <td></td>
                     <td>
                         <label id="lblTxtByte"></label>
                         <s:message code="smsSend.byte" />
@@ -76,11 +66,11 @@
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr>
-                    <%-- 전송자 --%>
-                    <th>
-                        <s:message code="smsSend.sendName" />
-                    </th>
                     <td>
+                        <%-- 전송자 --%>
+                        <div class="sb-select dkbr fl">
+                            <s:message code="smsSend.sendName" />
+                        </div>
                         <%-- 전송자번호 --%>
                         <div class="sb-select dkbr ml5 fl">
                             <wj-combo-box
@@ -94,23 +84,22 @@
                                     initialized="_initComboBox(s)">
                             </wj-combo-box>
                         </div>
-                        <%-- 발신번호추가 --%>
-                        <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
-                            <s:message code="smsSend.telNoAdd" />
-                        </button>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr>
-                    <td></td>
                     <td>
                         <%-- 전송 --%>
-                        <button class="btn_skyblue ml5 fl" id="btnSmsSend" ng-click="smsSendReserve('N')">
+                        <button class="btn_skyblue fl" id="btnSmsSend" ng-click="smsSendReserve('N')">
                             <s:message code="smsSend.send" />
                         </button>
                         <%-- 예약 --%>
                         <button class="btn_skyblue ml5 fl" id="btnSmsReserve" ng-click="smsSendReserve('Y')">
                             <s:message code="smsSend.reserve" />
+                        </button>
+                        <%-- 발신번호추가 --%>
+                        <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
+                            <s:message code="smsSend.telNoAdd" />
                         </button>
                     </td>
                 </tr>
@@ -118,7 +107,7 @@
             </table>
         </div>
         <%-- 자동변환 --%>
-        <div class="w45 fl pd10 bl" style="height:360px;">
+        <div class="w50 fl pd10 bl" style="height:360px;">
             <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                 <table>
                     <tr>
@@ -173,7 +162,7 @@
     <%-- //좌측 --%>
 
     <%-- 우측 --%>
-    <div class="wj-TblWrapBr w40 fl">
+    <div class="wj-TblWrapBr w45 fl">
         <%-- 수신자목록 --%>
         <div class="w100 fl pd10" style="height:580px;">
             <table>
@@ -255,7 +244,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210625.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210811.02" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

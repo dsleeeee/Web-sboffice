@@ -45,6 +45,28 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 수신자, 수신번호
+                if (col.binding === "telNm" || col.binding === "telNo") {
+                    var item = s.rows[e.row].dataItem;
+
+                    // 값이 있으면 링크 효과
+                    // C:회원조회, X:추가
+                    // M:시스템, A:대리점, H:본사, S:매장
+                    if (item[("rOgnFg")] !== 'X') {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+                }
+            }
+        });
     };
 
     // <-- 검색 호출 -->
@@ -167,7 +189,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             // 파라미터 설정
             var params = {};
             params.status = "I";
-            params.gChk = false;
+            params.gChk = true;
             params.membrNo = data[i].membrNo;
             params.telNm = data[i].membrNm;
             params.telNo = data[i].telNo;
@@ -183,9 +205,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 자동변환
     $scope.addMsg = function(str) {
-        var messageContent = document.getElementById("messageContent");
-        messageContent.focus();
-        messageContent.innerHTML = messageContent.innerHTML + str;
+        var msgContent = $("#messageContent").val();
+        $("#messageContent").val(msgContent + str);
 
         // 바이트
         $scope.showByte();
@@ -193,8 +214,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 바이트
     $scope.showByte = function() {
-        var messageContent = document.getElementById("messageContent");
-        $("#lblTxtByte").text(messageContent.value.getByteLength());
+        $("#lblTxtByte").text($("#messageContent").val().getByteLength());
     };
 
     // <-- 그리드 행 추가 -->
@@ -202,7 +222,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         // 파라미터 설정
         var params = {};
         params.status = "I";
-        params.gChk = false;
+        params.gChk = true;
         params.membrNo = "";
         params.telNm = "";
         params.telNo = "";
@@ -231,9 +251,24 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // <-- 전송, 예약 -->
     // 전송, 예약
     $scope.smsSendReserve = function(reserveYn) {
-        if($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["smsSend.emptyAlert"]); // 수신자가 없습니다.
-            return false;
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+        if(params.length <= 0) {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                if ($scope.flex.collectionView.items[i].telNo === "") {
+                    $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
+                    return false;
+                }
+            }
         }
 
         // 잔여 수량
@@ -241,13 +276,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         if(smsQty < 1) {
             $scope._popMsg(messages["smsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
             return;
-        }
-
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].telNo === "") {
-                $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
-                return false;
-            }
         }
 
         if(smsQty < $scope.flex.rows.length) {
@@ -291,33 +319,35 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                // 내용
-                var messageContent = $scope.messageContent;
-                if(messageContent == undefined) {
-                    messageContent = "";
-                }
-                messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
-                messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
-                var content = messageContent;
-                if($("#lblPageGubun").text() == "Y") {
-                    content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
-                }
+                if($scope.flex.collectionView.items[i].gChk) {
+                    // 내용
+                    var messageContent = $("#messageContent").val();
+                    if (messageContent == undefined) {
+                        messageContent = "";
+                    }
+                    messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
+                    messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
+                    var content = messageContent;
+                    if ($("#lblPageGubun").text() == "Y") {
+                        content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
+                    }
 
-                $scope.flex.collectionView.items[i].reserveYn = reserveYn; // N:전송, Y:예약
-                if(reserveYn == "Y") {
-                    $scope.flex.collectionView.items[i].sendDate = reserveDate; // 전송일시
-                }
-                $scope.flex.collectionView.items[i].title = $scope.title; // 제목
-                $scope.flex.collectionView.items[i].content = content; // 내용
-                $scope.flex.collectionView.items[i].msgType = msgType; // 메세지타입
-                $scope.flex.collectionView.items[i].cstNo = $scope.flex.collectionView.items[i].membrNo; // 회원번호
-                $scope.flex.collectionView.items[i].callback = $scope.telNoCombo; // 보내는사람 번호
-                $scope.flex.collectionView.items[i].phoneNumber = $scope.flex.collectionView.items[i].telNo; // 받는사람 번호
-                $scope.flex.collectionView.items[i].rrOrgnFg = $scope.flex.collectionView.items[i].rOgnFg; // 받는사람 소속구분
-                $scope.flex.collectionView.items[i].rrOrgnCd = $scope.flex.collectionView.items[i].rOgnCd; // 받는사람 소속코드
-                $scope.flex.collectionView.items[i].rrUserId = $scope.flex.collectionView.items[i].rUserId; // 받는사람ID
+                    $scope.flex.collectionView.items[i].reserveYn = reserveYn; // N:전송, Y:예약
+                    if (reserveYn == "Y") {
+                        $scope.flex.collectionView.items[i].sendDate = reserveDate; // 전송일시
+                    }
+                    $scope.flex.collectionView.items[i].title = $("#srchTitle").val(); // 제목
+                    $scope.flex.collectionView.items[i].content = content; // 내용
+                    $scope.flex.collectionView.items[i].msgType = msgType; // 메세지타입
+                    $scope.flex.collectionView.items[i].cstNo = $scope.flex.collectionView.items[i].membrNo; // 회원번호
+                    $scope.flex.collectionView.items[i].callback = $scope.telNoCombo; // 보내는사람 번호
+                    $scope.flex.collectionView.items[i].phoneNumber = $scope.flex.collectionView.items[i].telNo; // 받는사람 번호
+                    $scope.flex.collectionView.items[i].rrOrgnFg = $scope.flex.collectionView.items[i].rOgnFg; // 받는사람 소속구분
+                    $scope.flex.collectionView.items[i].rrOrgnCd = $scope.flex.collectionView.items[i].rOgnCd; // 받는사람 소속코드
+                    $scope.flex.collectionView.items[i].rrUserId = $scope.flex.collectionView.items[i].rUserId; // 받는사람ID
 
-                params.push($scope.flex.collectionView.items[i]);
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -327,8 +357,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 재조회
     $scope.allSearch = function () {
-        $scope.title = "";
-        $scope.messageContent = "";
+        $("#srchTitle").val("");
+        $("#messageContent").val("");
         $("#lblTxtByte").text("0");
 
         $scope._gridDataInit();
@@ -381,10 +411,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // 메세지관리 목록 내용 삽입
     $scope.msgShow = function (data) {
         $("#srchTitle").val(data.title);
-
-        var messageContent = document.getElementById("messageContent");
-        messageContent.focus();
-        messageContent.innerHTML = data.message;
+        $("#messageContent").val(data.message);
 
         // 바이트
         $scope.showByte();
