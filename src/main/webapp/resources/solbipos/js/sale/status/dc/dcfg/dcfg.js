@@ -88,8 +88,8 @@ app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scop
         var params       = {};
         	params.dcCd   = selectedRow.dcCd;
         	params.storeCd   = selectedRow.storeCd;
-        	params.startDate   = selectedRow.saleDate;
-    	    params.endDate   = selectedRow.saleDate;
+        	params.startDate   = selectedRow.saleDate.replaceAll("-","");
+    	    params.endDate   = selectedRow.saleDate.replaceAll("-","");
         if (col.binding === "realSaleAmt") { // 실매출
           $scope._broadcast('dcDcfgDtlCtrlSrch', params);
         }
@@ -156,8 +156,8 @@ app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scop
 		var params		 = {};
 
 		if(rows.length != 0) {
-			 params.startDate   = rows[0].dataItem.saleDate;
-		     params.endDate   = rows[0].dataItem.saleDate;
+			 params.startDate   = rows[0].dataItem.saleDate.replaceAll("-","");
+		     params.endDate   = rows[0].dataItem.saleDate.replaceAll("-","");
 			 params.dcCd   = rows[0].dataItem.dcCd;
 			 params.storeCd   = rows[0].dataItem.storeCd;
 			 params.isPageChk = false;

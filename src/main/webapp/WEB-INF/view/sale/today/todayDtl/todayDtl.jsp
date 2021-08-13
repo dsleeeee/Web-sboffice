@@ -6,9 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayDtl/todayDtl/"/>
 
-<div class="subCon">
-
-  <div id="todayDtlView" style="display: none;" ng-controller="todayDtlCtrl">
+  <div id="todayDtlView" class="subCon" style="display: none;" ng-controller="todayDtlCtrl">
       <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="todayDtl.todaySaleDtl"/></a>
         <%-- 조회 --%>
@@ -130,7 +128,6 @@
             <%--//위즈모 테이블--%>
           </div>
       </div>
-  </div>
 
   <div id="todayDtlView2" style="display: none;" ng-controller="todayDtlDetailCtrl">
     <div class="wj-TblWrap mt10">
@@ -196,8 +193,7 @@
       </div>
   </div>
 
-</div>
-
+  </div>
 <script type="text/javascript">
   var payColList = [];
   var dcColList  = [];
@@ -325,6 +321,12 @@
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 스마트오더 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/smartorder.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 <%-- //결제수단 팝업 레이어 --%>
 
 
@@ -367,6 +369,12 @@
 
 <%-- VMEM 쿠폰할인 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/vcoupnDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 스마트 오더 할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/vorderDc.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

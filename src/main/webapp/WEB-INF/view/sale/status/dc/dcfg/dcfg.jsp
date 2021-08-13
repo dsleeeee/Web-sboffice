@@ -215,7 +215,7 @@
 </div>
 
 <script type="text/javascript"
-	src="/resource/solbipos/js/sale/status/dc/dcfg/dcfg.js?ver=20190125.02"
+	src="/resource/solbipos/js/sale/status/dc/dcfg/dcfg.js?ver=20190125.03"
 	charset="utf-8"></script>
 
 <%-- 상품매출내역 팝업 상세 레이어 --%>

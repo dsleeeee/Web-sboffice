@@ -137,7 +137,7 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
                 if (col.binding === "totSaleQty") {
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params = {};
-                    params.saleDate = selectedRow.saleDate;
+                    params.saleDate = selectedRow.saleDate.replaceAll("-","");
                     params.strProdClassCd = $("#hdProdClassCd").val();
                     params.level = $scope.level;
                     params.prodCd = $scope.prodCd;
@@ -157,7 +157,7 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
 
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params = {};
-                        params.saleDate = selectedRow.saleDate;
+                        params.saleDate = selectedRow.saleDate.replaceAll("-","");
                         // params.strProdClassCd = $("#hdProdClassCd").val();
                         params.strProdClassCd = arr[i];
                         params.level = $scope.level;

@@ -123,7 +123,7 @@
                     id="wjDayProdClassList">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="day.prodClass.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="day.prodClass.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.yoil"/>" binding="yoil" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.totSaleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -147,4 +147,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20210118.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20210118.04" charset="utf-8"></script>

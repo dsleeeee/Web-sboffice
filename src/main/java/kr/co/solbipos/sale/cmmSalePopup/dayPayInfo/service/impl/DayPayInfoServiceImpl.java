@@ -229,4 +229,16 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
 
         return dayPayInfoMapper.getDayTemporaryList(dayPayInfoVO);
     }
+
+    /** 일자별 매출공통팝업 - 스마트오더 상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDaySmartorderList(DayPayInfoVO dayPayInfoVO, SessionInfoVO sessionInfoVO) {
+        dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
+            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+        }
+
+        return dayPayInfoMapper.getDaySmartorderList(dayPayInfoVO);
+    }
 }

@@ -6,7 +6,7 @@
 	<select id="getTableDayList" parameterType="tableDayVO" resultType="DefaultMap">
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT STORE_CD
-			, SALE_DATE SALE_DATE
+			, TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
        		, TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
        		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
        		, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
@@ -49,7 +49,7 @@
 	<select id="getTableDayExcelList" parameterType="tableDayVO" resultType="DefaultMap">
 
         SELECT TSDT.STORE_CD
-        	, SALE_DATE SALE_DATE
+        	, TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
             , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
             , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
             , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT

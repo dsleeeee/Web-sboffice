@@ -66,7 +66,7 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
         params.storeCd  = $("#dayTotalSelectStoreCd").val();
-        params.saleDate = selectedRow.saleDate;
+        params.saleDate = selectedRow.saleDate.replaceAll("-","");
         params.gubun = "day";
 
         if (col.binding === "saleDate") { // 일자 클릭

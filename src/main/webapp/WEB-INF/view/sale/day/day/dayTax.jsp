@@ -76,7 +76,7 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="day.tax.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="day.tax.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.tax.yoil"/>" binding="yoil" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.tax.storeCnt"/>" binding="storeCnt" width="80" align="center" is-read-only="true" ng-if="orgnFg == 'H'"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.tax.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -103,4 +103,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20191219" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20191219.01" charset="utf-8"></script>

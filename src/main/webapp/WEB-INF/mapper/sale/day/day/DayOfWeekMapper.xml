@@ -18,133 +18,94 @@
     -->
     <select id="getDayOfWeekTotalList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekTotalList */
-        SELECT
-        tsshpd.YOIL,
-        tsshpd.STORE_CNT,
-        tsshpd.TOT_SALE_AMT,
-        tsshpd.TOT_DC_AMT,
-        tsshpd.REAL_SALE_AMT,
-        tsshpd.BILL_CNT,
-        tsshpd.BILL_UPRC,
-        tsshpd.GA_AMT,
-        tsshpd.VAT_AMT,
-        tsshpd.TOT_TIP_AMT,
-        tsshpd.TOT_ETC_AMT,
-        <foreach collection="arrPayCol" item="item" separator="+">
-            NVL(tsshpd.PAY${item}, 0)
-        </foreach> AS TOT_PAY_AMT,
-        <foreach collection="arrPayCol" item="item" separator=",">
-            NVL(tsshpd.PAY${item}, 0) AS PAY${item}
-        </foreach> ,
-        tsshpd.GEN_REAL_SALE_AMT,
-        tsshpd.DLVR_REAL_SALE_AMT,
-        tsshpd.PACK_REAL_SALE_AMT
-        FROM
-        (
-            SELECT
-            HQ_OFFICE_CD,
-            YOIL,
-            COUNT(DISTINCT STORE_CD) AS STORE_CNT,
-            SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-            COUNT(BILL_NO) AS BILL_CNT,
-            ROUND(SUM(REAL_SALE_AMT) / COUNT(BILL_NO)) AS BILL_UPRC,
-            SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
-            SUM(VAT_AMT) AS VAT_AMT,
-            SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
-            SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
-            <foreach collection="arrPayCol" item="item" separator=",">
-                SUM(PAY${item}) AS PAY${item}
-            </foreach> ,
-            SUM(GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
-            SUM(DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
-            SUM(PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
-            FROM
-            (
-                SELECT
-                tssh.SALE_DATE,
-                TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-                tssh.HQ_OFFICE_CD,
-                tssh.STORE_CD,
+        SELECT  tssh.YOIL,
+                tssh.STORE_CNT,
                 tssh.TOT_SALE_AMT,
                 tssh.TOT_DC_AMT,
                 tssh.REAL_SALE_AMT,
-                tssh.BILL_NO,
+                tssh.BILL_CNT,
+                tssh.BILL_UPRC,
+                tssh.GA_AMT,
                 tssh.VAT_AMT,
                 tssh.TOT_TIP_AMT,
                 tssh.TOT_ETC_AMT,
-                tsshp.PAY_CD,
-                tsshp.PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach> AS TOT_PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    NVL(tsshp.PAY${item}, 0) AS PAY${item}
+                </foreach>
+                ,
                 tssd.GEN_REAL_SALE_AMT,
                 tssd.DLVR_REAL_SALE_AMT,
                 tssd.PACK_REAL_SALE_AMT
-                FROM TB_SL_SALE_HDR tssh,
-                TB_SL_SALE_HDR_PAY tsshp,
-                (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    HQ_BRAND_CD,
-                    STORE_CD,
-                    SALE_DATE,
-                    POS_NO,
-                    BILL_NO,
+        FROM
+        (   SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+                    COUNT(DISTINCT STORE_CD) AS STORE_CNT,
+                    SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                    SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                    SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                    SUM(VAT_AMT) AS VAT_AMT,
+                    COUNT(BILL_NO) AS BILL_CNT,
+                    ROUND(SUM(REAL_SALE_AMT) / COUNT(BILL_NO)) AS BILL_UPRC,
+                    SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+                    SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+                    SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+            FROM    TB_SL_SALE_HDR
+            WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+            AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='storeCds != null and storeCds != ""'>
+                AND STORE_CD IN
+                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            GROUP BY TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY')
+        ) tssh,
+        (   SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
                     SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
                     SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
                     SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                    FROM TB_SL_SALE_DTL
-                    GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO
-                ) tssd
-                WHERE 1=1
-                AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
-                AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            FROM    TB_SL_SALE_DTL
+            WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+            AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='storeCds != null and storeCds != ""'>
+                AND STORE_CD IN
+                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            GROUP BY TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY')
+        ) tssd,
+        (   SELECT  YOIL,
+                    <foreach collection="arrPayCol" item="item" separator=",">
+                        NVL(PAY${item}, 0) AS PAY${item}
+                    </foreach>
+            FROM
+            (   SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+                        PAY_CD,
+                        SUM(PAY_AMT) AS PAY_AMT
+                FROM    TB_SL_SALE_HDR_PAY
+                WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+                AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tssh.STORE_CD IN
+                    AND STORE_CD IN
                     <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                         #{item}
                     </foreach>
                 </if>
-                AND tssh.HQ_OFFICE_CD = tsshp.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tsshp.HQ_BRAND_CD
-                AND tssh.STORE_CD = tsshp.STORE_CD
-                AND tssh.SALE_DATE = tsshp.SALE_DATE
-                AND tssh.POS_NO = tsshp.POS_NO
-                AND tssh.BILL_NO = tsshp.BILL_NO
-                AND tssh.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tssd.HQ_BRAND_CD
-                AND tssh.STORE_CD = tssd.STORE_CD
-                AND tssh.SALE_DATE = tssd.SALE_DATE
-                AND tssh.POS_NO = tssd.POS_NO
-                AND tssh.BILL_NO = tssd.BILL_NO
-            )
-            PIVOT
-            (
+                GROUP BY TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY'), PAY_CD
+                )
+                PIVOT
+                (
                 SUM(PAY_AMT)
                 FOR PAY_CD
                 IN (${pivotPayCol})
-               /* IN ('01' AS PAY01,
-                '02' AS PAY02,
-                '03' AS PAY03,
-                '04' AS PAY04,
-                '05' AS PAY05,
-                '06' AS PAY06,
-                '07' AS PAY07,
-                '08' AS PAY08,
-                '09' AS PAY09,
-                '10' AS PAY10,
-                '11' AS PAY11,
-                '12' AS PAY12,
-                '13' AS PAY13,
-                '14' AS PAY14,
-                '15' AS PAY15,
-                '16' AS PAY16,
-                '17' AS PAY17,
-                '18' AS PAY18)*/
             )
-            GROUP BY HQ_OFFICE_CD, YOIL
-        ) tsshpd
-        WHERE 1=1
-        ORDER BY tsshpd.YOIL
+        ) tsshp
+        WHERE   tssh.YOIL = tssd.YOIL(+)
+        AND     tssh.YOIL = tsshp.YOIL(+)
+        ORDER BY tssh.YOIL
     </select>
 
     <!-- 할인구별별탭 - 할인구분별 매출조회-->

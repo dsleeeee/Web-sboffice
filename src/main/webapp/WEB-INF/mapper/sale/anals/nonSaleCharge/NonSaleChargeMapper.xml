@@ -22,7 +22,7 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT hdr.STORE_CD,
                 tms.STORE_NM,
-                hdr.SALE_DATE,
+                TO_CHAR(TO_DATE(hdr.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                 hdr.POS_NO,
                 hdr.BILL_NO,
                 hdr.NONSALE_TYPE_NO,
@@ -114,7 +114,7 @@
         /* USE : NonSaleChargeMapper.getNonSaleChargeExcelList */
         SELECT hdr.STORE_CD,
                 tms.STORE_NM,
-                hdr.SALE_DATE,
+                TO_CHAR(TO_DATE(hdr.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                 hdr.POS_NO,
                 hdr.BILL_NO,
                 hdr.NONSALE_TYPE_NO,

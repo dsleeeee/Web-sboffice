@@ -33,4 +33,7 @@ public interface DcInfoService {
     /** 매출공통팝업 - VMEM 쿠폰할인 상세 리스트 조회 */
     List<DefaultMap<String>> getVcoupnDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO);
 
+    /** 매출공통팝업 - 스마트오더 할인 상세 리스트 조회 */
+    List<DefaultMap<String>> getSmartorderDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO);
+
 }

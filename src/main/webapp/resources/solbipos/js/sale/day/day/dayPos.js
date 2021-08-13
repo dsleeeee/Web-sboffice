@@ -161,7 +161,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 if ( col.binding === "totSaleQty") {
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
-                    params.saleDate = selectedRow.saleDate;
+                    params.saleDate = selectedRow.saleDate.replaceAll("-","");
                     params.storeCd = $("#dayPosStoreCd").val();
                     params.gubun = "day";
 
@@ -174,7 +174,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params      = {};
-                        params.saleDate = selectedRow.saleDate;
+                        params.saleDate = selectedRow.saleDate.replaceAll("-","");
                         params.storeCd = posColList[i].storeCd;
                         params.posNo = posColList[i].posNo;
                         params.gubun = "dayPos";

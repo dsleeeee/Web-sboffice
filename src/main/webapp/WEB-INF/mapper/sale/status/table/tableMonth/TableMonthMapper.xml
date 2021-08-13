@@ -6,7 +6,7 @@
 	<select id="getTableMonthList" parameterType="tableMonthVO" resultType="DefaultMap">
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT STORE_CD
-			, SALE_YM SALE_YM
+			, TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
        		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
        		, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
        		, NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
@@ -42,7 +42,7 @@
 
     <select id="getTableMonthExcelList" parameterType="tableMonthVO" resultType="DefaultMap">
         SELECT STORE_CD
-        	, SALE_YM SALE_YM
+        	, TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
             , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
             , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
             , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT

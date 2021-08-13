@@ -76,7 +76,7 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="day.dayDc.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="day.dayDc.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="day.dayDc.yoil"/>" binding="yoil" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="day.dayDc.storeCnt"/>" binding="storeCnt" width="80" align="center" is-read-only="true" ng-if="orgnFg == 'H'"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="day.dayDc.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -110,5 +110,5 @@
   var dcCol    = '${dcCol}';
   var arrDcCol = dcCol.split(',');
 </script>--%>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayDc.js?ver=20190220.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayDc.js?ver=20190220.03" charset="utf-8"></script>
 

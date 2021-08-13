@@ -14,7 +14,7 @@
         /* USE : SaleComPopupMapper.getTablePopList */
 		SELECT TSSH.STORE_CD
 			, TMS.STORE_NM
-            , TSSH.SALE_DATE
+            , TO_CHAR(TO_DATE(TSSH.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 		    , TSSH.POS_NO
 			, TSSH.BILL_NO
 <!-- 		    , TO_CHAR(TO_DATE(TSSH.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT -->
@@ -825,9 +825,7 @@
     -->
     <select id="getEmpPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.getEmpPopList */
-        SELECT  A.LV1_NM,
-               A.LV2_NM,
-               A.LV3_NM,
+        SELECT  A.LV1_NM || '▶' || A.LV2_NM || '▶' || A.LV3_NM AS PATH_NM,
                C.PROD_CD,
                A.PROD_NM,
                SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY,

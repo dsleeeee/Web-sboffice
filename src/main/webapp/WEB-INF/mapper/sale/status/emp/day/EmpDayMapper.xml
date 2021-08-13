@@ -12,7 +12,7 @@
     <select id="getEmpDayList" parameterType="empDayVO" resultType="DefaultMap">
         /* USE : EmpDayMapper.getEmpDayList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT A.SALE_DATE
+        SELECT TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 		      , A.STORE_CNT	
 		      , TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
 		      , SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
@@ -66,7 +66,7 @@
     -->
     <select id="getEmpDayExcelList" parameterType="empDayVO" resultType="DefaultMap">
         /* USE : EmpDayMapper.getEmpDayExcelList */
-        SELECT A.SALE_DATE
+        SELECT TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 		      , A.STORE_CNT	
 		      , TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
 		      , SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT

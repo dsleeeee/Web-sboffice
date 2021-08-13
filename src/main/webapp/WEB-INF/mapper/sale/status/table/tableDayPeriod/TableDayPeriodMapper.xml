@@ -6,7 +6,7 @@
 
 	<select id="getTableDayPeriodList" parameterType="tableDayPeriodVO" resultType="DefaultMap">
 		<include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT TSDT.SALE_DATE,
+		SELECT TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
 		       TMTG.STORE_CD,
                TMS.STORE_NM,
 			   TMT.TBL_CD,
@@ -48,7 +48,7 @@
 	</select>
 
     <select id="getTableDayPeriodExcelList" parameterType="tableDayPeriodVO" resultType="DefaultMap">
-        SELECT TSDT.SALE_DATE,
+        SELECT TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                TMTG.STORE_CD,
                TMS.STORE_NM,
                TMT.TBL_CD,

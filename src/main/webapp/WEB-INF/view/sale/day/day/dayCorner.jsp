@@ -76,7 +76,7 @@
                     id="wjGridDayCornerList">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="day.corner.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.corner.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.corner.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.corner.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.corner.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
@@ -105,4 +105,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCorner.js?ver=20200121.21" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCorner.js?ver=20200121.22" charset="utf-8"></script>

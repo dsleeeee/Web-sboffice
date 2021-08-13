@@ -162,7 +162,7 @@
         SELECT  tsspp.PARTN_CD, tmp.PARTN_NM
         ,       tsspp.PARTN_CARD_NO
         ,       SUBSTR(tsspp.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspp.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspp.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspp.APPR_NO
         ,       tsspp.DC_AMT
         FROM    TB_SL_SALE_HDR_DC tsshd
@@ -343,6 +343,48 @@
         ORDER
         BY      tsspv.VCOUPN_NO
         ,       tsspv.VCOUPN_NM
+        ]]>
+    </select>
+
+    <!-- 매출공통팝업 - 스마트 오더 할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_DC, TB_SL_SALE_PAY_VORDER
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 스마트 오더 할인 상세 리스트를 조회한다.
+    -->
+    <select id="getSmartorderDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getSmartorderDcList */
+        <![CDATA[
+        SELECT  tsspv.PICKUP_FG,
+                SUBSTR(tsspv.APPR_DT, 9, 14) AS APPR_TIME,
+                tsspv.PICKUP_TEL_NO,
+                tsspv.DC_AMT
+        FROM    TB_SL_SALE_HDR_DC tsshd
+        ,       TB_SL_SALE_PAY_VORDER tsspv
+        WHERE   tsshd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsshd.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsshd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsshd.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsshd.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
+        AND     tsshd.DC_CD               =   #{dcCd}
+        AND     tsspv.HQ_OFFICE_CD        =   tsshd.HQ_OFFICE_CD
+        AND     tsspv.STORE_CD            =   tsshd.STORE_CD
+        AND     tsspv.SALE_DATE           =   tsshd.SALE_DATE
+        AND     tsspv.POS_NO              =   tsshd.POS_NO
+        AND     tsspv.BILL_NO             =   tsshd.BILL_NO
+        ORDER
+        BY      tsspv.PICKUP_FG, tsspv.APPR_DT
         ]]>
     </select>
 

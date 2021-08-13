@@ -337,7 +337,7 @@
     <select id="getDayPeriodGiftDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodGiftDetailList */
         SELECT
-        tsspgd.SALE_DATE,
+        TO_CHAR(TO_DATE(tsspgd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tsspgd.STORE_CD) STORE_NM,
         tsspgd.POS_NO,
         tsspgd.BILL_NO,

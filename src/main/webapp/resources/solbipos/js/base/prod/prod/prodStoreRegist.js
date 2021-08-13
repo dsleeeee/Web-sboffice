@@ -34,7 +34,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 판매가 변경시 다른 컬럼값도 변경
         if (col.binding === "saleUprc") {
-          if($scope.prodSaleUprcApply){
+          if($("#prodSaleUprcApply").prop("checked")){
             item.stinSaleUprc = item.saleUprc;
             item.dlvrSaleUprc = item.saleUprc;
             item.packSaleUprc = item.saleUprc;
@@ -63,6 +63,10 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
+  $scope.prodSaleUprcApplyChk = function (){
+
+  }
 
   // 등록된 매장 조회
   $scope.searchRegStore = function(){
