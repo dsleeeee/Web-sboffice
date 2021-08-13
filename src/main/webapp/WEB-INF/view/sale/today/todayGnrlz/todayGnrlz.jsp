@@ -6,9 +6,11 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayGnrlz/todayGnrlz/"/>
 
-<div id="todayGnrlzView" class="subCon">
+<div id="todayGnrlzView" class="subCon" ng-controller="storeCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl"><s:message code="todayGnrlz.todaySaleTotal"/></a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayGnrlzCtrl')"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -28,7 +30,7 @@
       </td>
     </tr>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-    <tr ng-controller="storeCtrl">
+    <tr>
       <%-- 매장코드 --%>
       <th><s:message code="todayGnrlz.store"/></th>
       <td>
@@ -45,11 +47,6 @@
     </c:if>
     </tbody>
   </table>
-
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('todayGnrlzCtrl')"><s:message code="cmm.search"/></button>
-  </div>
 
   <div class="w40 fl" style="width:44%;">
     <%-- 매출종합 --%>
@@ -179,7 +176,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="todayGnrlz.prodCd"/>" binding="prodCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="todayGnrlz.prodCd"/>" binding="prodCd" width="80" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayGnrlz.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayGnrlz.saleQty"/>" binding="saleQty" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayGnrlz.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>

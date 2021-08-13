@@ -137,8 +137,8 @@
         /* USE : TodayGnrlzMapper.getTodayGnrlzProdList */
         SELECT tsdp.PROD_CD,
                tmp.PROD_NM,
-               tsdp.REAL_SALE_AMT,
-               tsdp.TOT_SALE_QTY AS SALE_QTY
+               SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+               SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY
           FROM TB_SL_DAILY_PROD tsdp,
                TB_MS_PRODUCT tmp
          WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -151,6 +151,7 @@
         </if>
            AND tmp.STORE_CD = tsdp.STORE_CD
            AND tmp.PROD_CD  = tsdp.PROD_CD
-         ORDER BY tsdp.REAL_SALE_AMT DESC, tsdp.TOT_SALE_QTY DESC
+         GROUP BY tsdp.PROD_CD, tmp.PROD_NM
+         ORDER BY REAL_SALE_AMT DESC, SALE_QTY DESC
     </select>
 </mapper>
