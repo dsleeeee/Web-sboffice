@@ -4,10 +4,10 @@
 
 <mapper namespace="kr.co.solbipos.base.store.tblms.service.impl.TblmsMapper">
 
-    <!--  테이블관리 관리 임시패스워드 저장  -->
+    <!--  테이블관리 임시패스워드 저장  -->
     <!--
         TABLE    : TB_MS_TBL_TEMPPW_T
-        COMMENTS : 임시패스워드 저장
+        COMMENTS : 테이블관리 임시패스워드 저장
     -->
     <update id="tblmsOpn" parameterType="tblmsVO">
         /* USE : TblmsMapper.tblmsOpn */

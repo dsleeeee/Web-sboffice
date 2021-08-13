@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
 * @Class Name : TblptService.java
-* @Description :
+* @Description : 기초관리 > 매장관리 > 테이블속성
 * @Modification Information
 * @
 * @  수정일      수정자              수정내용
@@ -22,9 +22,6 @@ import java.util.List;
 *  Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 public interface TblptService {
-
-    /** 창고정보 리스트조회 */
-    List<DefaultMap<String>> getTblptList(TblptVO tblptVO, SessionInfoVO sessionInfoVO);
     /** 임시패스워드 등록 */
     String tblptOpn(TblptVO tblptVO, SessionInfoVO sessionInfoVO);
 }

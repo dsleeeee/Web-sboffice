@@ -25,7 +25,7 @@ public class TblmsVO extends PageVO {
     private String storeCd;
     /** '테이블관리 임시패스워드' */
     private String tblmsTempPw;
-    /** '테이블관리 접속구분(0: 대기, 1: 접속성공, 2:접속실패(패스워드 틀림), 3:접속실패(시간초과 1분)' */
+    /** '테이블관리 접속구분(0: 대기, 1: 접속성공, 2:접속실패' */
     private String tblmsLoginFg;
     /** '테이블관리 임시패스워드 생성일시' */
     private String tblmsTempPwDt;

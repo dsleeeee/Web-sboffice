@@ -23,7 +23,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
 * @Class Name : TblptController.java
-* @Description :
+* @Description : 기초관리 > 매장관리 > 테이블속성
 * @Modification Information
 * @
 * @  수정일      수정자              수정내용
@@ -41,8 +41,6 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @Controller
 @RequestMapping(value = "/base/store/tblpt")
 public class TblptController {
-
-
     private final TblptService tblptService;
     private final SessionService sessionService;
 
@@ -54,7 +52,7 @@ public class TblptController {
     }
 
     /**
-     * 창고정보 화면 이동
+     * 테이블속성 화면 이동
      *
      * @param request
      * @param response
@@ -63,30 +61,10 @@ public class TblptController {
      */
     @RequestMapping(value = "/tblpt/view.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+                       Model model) {
         return "base/store/tblpt/tblpt";
     }
 
-    /**
-     * 창고정보 리스트조회
-     *
-     * @param tblptVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/tblpt/list.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getTblptList(TblptVO tblptVO, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        List<DefaultMap<String>> list = tblptService.getTblptList(tblptVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, list, tblptVO);
-    }
 
     /**
      * 임시패스워드 생성 등록

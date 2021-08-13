@@ -23,14 +23,14 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
 * @Class Name : TblmsController.java
-* @Description :
+* @Description : 기초관리 > 매장관리 > 테이블관리
 * @Modification Information
 * @
 * @  수정일      수정자              수정내용
 * @ ----------  ---------   -------------------------------
- * @ 2018.08.13  김영근      최초생성
- * @ 2018.11.20  김지은      기능오류 수정 및 angular 변경
- * @ 2018.12.28  김지은      매장환경 복사 팝업 생성
+ * @
+ * @
+ * @
 *
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.13
@@ -41,8 +41,6 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 @Controller
 @RequestMapping(value = "/base/store/tblms")
 public class TblmsController {
-
-
     private final TblmsService tblmsService;
     private final SessionService sessionService;
 
@@ -54,7 +52,7 @@ public class TblmsController {
     }
 
     /**
-     * 창고정보 화면 이동
+     * 테이블관리 화면 이동
      *
      * @param request
      * @param response
@@ -65,27 +63,6 @@ public class TblmsController {
     public String list(HttpServletRequest request, HttpServletResponse response,
             Model model) {
         return "base/store/tblms/tblms";
-    }
-
-    /**
-     * 창고정보 리스트조회
-     *
-     * @param tblmsVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/tblms/list.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getTblmsList(TblmsVO tblmsVO, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        List<DefaultMap<String>> list = tblmsService.getTblmsList(tblmsVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, list, tblmsVO);
     }
 
     /**

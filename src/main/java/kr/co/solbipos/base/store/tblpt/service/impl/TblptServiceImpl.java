@@ -17,7 +17,7 @@ import static kr.co.common.utils.spring.StringUtil.getRandomNumber;
 
 /**
 * @Class Name : TblptServiceImpl.java
-* @Description : 기초관리 > 매장관리 > 매장정보조회
+* @Description : 기초관리 > 매장관리 > 테이블속성
 * @Modification Information
 * @
 * @  수정일      수정자              수정내용
@@ -46,17 +46,6 @@ public class TblptServiceImpl implements TblptService {
         this.messageService = messageService;
     }
 
-    /** 창고정보 리스트조회 */
-    @Override
-    public List<DefaultMap<String>> getTblptList(TblptVO tblptVO, SessionInfoVO sessionInfoVO){
-
-    	tblptVO.setStoreCd(sessionInfoVO.getStoreCd());
-
-    	List<DefaultMap<String>> list = null;
-
-        return list;
-    }
-
     /** 임시패스워드 등록 */
     @Override
     public String tblptOpn(TblptVO tblptVO, SessionInfoVO sessionInfoVO) {
@@ -77,29 +66,5 @@ public class TblptServiceImpl implements TblptService {
 
         return newPassword;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -17,7 +17,7 @@ import static kr.co.common.utils.spring.StringUtil.getRandomNumber;
 
 /**
 * @Class Name : TblmsServiceImpl.java
-* @Description :
+* @Description : 기초관리 > 매장관리 > 테이블관리
 * @Modification Information
 * @
 * @  수정일      수정자              수정내용
@@ -38,23 +38,11 @@ public class TblmsServiceImpl implements TblmsService {
     private final TblmsMapper tblmsMapper;
     private final MessageService messageService;
 
-
     /** Constructor Injection */
     @Autowired
     public TblmsServiceImpl(TblmsMapper tblmsMapper, MessageService messageService) {
         this.tblmsMapper = tblmsMapper;
         this.messageService = messageService;
-    }
-
-    /** 창고정보 리스트조회 */
-    @Override
-    public List<DefaultMap<String>> getTblmsList(TblmsVO tblmsVO, SessionInfoVO sessionInfoVO){
-
-    	tblmsVO.setStoreCd(sessionInfoVO.getStoreCd());
-
-    	List<DefaultMap<String>> list = null;
-
-        return list;
     }
 
     /** 임시패스워드 등록 */
@@ -77,29 +65,4 @@ public class TblmsServiceImpl implements TblmsService {
 
         return newPassword;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

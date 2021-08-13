@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
 * @Class Name : TblmsMapper.java
-* @Description :
+* @Description : 기초관리 > 매장관리 > 테이블관리
 * @Modification Information
 * @
 * @  수정일      수정자              수정내용
@@ -25,16 +25,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface TblmsMapper {
-
-    /** 창고정보 리스트 조회 */
-//    List<DefaultMap<String>> getTblmsList(TblmsVO tblmsVO);
-
-    /** 본사 창고정보 리스트 조회 */
-    List<DefaultMap<String>> getHqTblmsList(TblmsVO tblmsVO);
-
-    /** 매장 창고정보 리스트 조회 */
-    List<DefaultMap<String>> getStoreTblmsList(TblmsVO tblmsVO);
-
     /** 임시패스워드 등록 */
     int tblmsOpn(TblmsVO tblmsVO);
 }
