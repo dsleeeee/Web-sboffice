@@ -156,13 +156,13 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     if($scope.gubun == "month"){
     	params.storeCd  	= $scope.storeCd;
     	params.tblCd    	= $scope.tblCd;
-    	params.saleYm     	= $scope.saleYm;
+    	params.saleYm     	= $scope.saleYm.replaceAll("-","");
     }else{
         params.storeCd  	= $scope.storeCd;
         params.startDate 	= $scope.startDate;
         params.endDate 		= $scope.endDate;
         params.tblCd    	= $scope.tblCd;
-        params.saleDate 	= $scope.saleDate;
+        params.saleDate 	= $scope.saleDate.replaceAll("-","");
         params.saleDay     	= $scope.saleDay;
     }
         

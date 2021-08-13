@@ -57,7 +57,7 @@ app.controller('dayDcCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
         params.storeCd  = $scope.searchedStoreCd;
-        params.saleDate = selectedRow.saleDate;
+        params.saleDate = selectedRow.saleDate.replaceAll("-","");
 
         // 할인
         for (var i = 0; i < dcColList.length; i++) {

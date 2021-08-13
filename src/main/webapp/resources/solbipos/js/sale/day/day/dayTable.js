@@ -148,7 +148,7 @@ app.controller('dayTableCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
                 var selectedRow = s.rows[ht.row].dataItem;
                 var params      = {};
-                params.saleDate = selectedRow.saleDate;
+                params.saleDate = selectedRow.saleDate.replaceAll("-","");
                 params.gubun = "day";
 
                 // 실매출

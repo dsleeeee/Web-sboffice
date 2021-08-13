@@ -79,7 +79,7 @@
     
     <select id="getEmpDayPeriodDtlList" parameterType="empDayPeriodVO" resultType="DefaultMap">
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT TSSH.SALE_DATE
+        SELECT TO_CHAR(TO_DATE(TSSH.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
              , TSSH.STORE_CD
 		     , TSSH.POS_NO
 		     , TSSH.BILL_NO
@@ -106,7 +106,7 @@
     </select>
    
      <select id="getEmpDayPeriodDtlExcelList" parameterType="empDayPeriodVO" resultType="DefaultMap">
-        SELECT TSSH.SALE_DATE
+        SELECT TO_CHAR(TO_DATE(TSSH.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
              , TSSH.STORE_CD
 		     , TSSH.POS_NO
 		     , TSSH.BILL_NO

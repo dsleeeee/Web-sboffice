@@ -8,7 +8,7 @@
     	<include refid="CmmSQL.PagingTemplateHeader"/>
     	SELECT STORE.STORE_NM
     		 , TSDT.STORE_CD
-     		 , TSDT.SALE_DATE
+     		 , TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
      		 , NMCODE.NMCODE_CD AS DC_CD
      		 , NMCODE.NMCODE_NM AS DC_NM
      		 , TSDD.TOT_SALE_QTY
@@ -104,7 +104,7 @@
     <select id="getDcDcfgExcelList" parameterType="dcDcfgVO" resultType="DefaultMap">
         SELECT STORE.STORE_NM
              , TSDT.STORE_CD
-             , TSDT.SALE_DATE
+             , TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
              , NMCODE.NMCODE_CD AS DC_CD
              , NMCODE.NMCODE_NM AS DC_NM
              , TSDD.TOT_SALE_QTY
@@ -142,7 +142,7 @@
 
     <select id="getDcDcfgDtlList" parameterType="dcDcfgVO" resultType="DefaultMap">
 	       SELECT A.STORE_NM
-             , A.SALE_DATE
+             , TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
              , A.LV1_NM
 		     , A.LV2_NM
 		     , A.LV3_NM

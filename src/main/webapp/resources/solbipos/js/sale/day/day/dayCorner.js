@@ -153,7 +153,7 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
                 if ( col.binding === "totSaleQty") {
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
-                    params.saleDate  = selectedRow.saleDate;
+                    params.saleDate  = selectedRow.saleDate.replaceAll("-","");
                     params.storeCd = $("#dayCornerStoreCd").val();
                     params.gubun = "dayCorner";
 
@@ -166,7 +166,7 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
 
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params      = {};
-                        params.saleDate  = selectedRow.saleDate;
+                        params.saleDate  = selectedRow.saleDate.replaceAll("-","");
                         params.storeCd = cornerColList[i].storeCd;
                         params.gubun = "dayCorner";
 

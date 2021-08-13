@@ -12,7 +12,7 @@
     -->
     <select id="getPosDayList" parameterType="posDayVO" resultType="DefaultMap">
     	<include refid="CmmSQL.PagingTemplateHeader"/>
-    	SELECT	A.SALE_DATE
+    	SELECT	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
     			, TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS DAY_NAME
     			, A.SALE_STORE_CNT
     			, A.TOT_SALE_AMT
@@ -87,7 +87,7 @@
     </select>
 
     <select id="getPosDayExcelList" parameterType="posDayVO" resultType="DefaultMap">
-    	SELECT	A.SALE_DATE
+    	SELECT	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
     			, TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS DAY_NAME
     			, A.SALE_STORE_CNT
     			, A.TOT_SALE_AMT

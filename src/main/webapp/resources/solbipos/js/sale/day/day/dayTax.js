@@ -50,7 +50,7 @@ app.controller('dayTaxCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 var selectedRow = s.rows[ht.row].dataItem;
                 var params      = {};
                 params.storeCd  = $scope.searchedStoreCd;
-                params.saleDate = selectedRow.saleDate;
+                params.saleDate = selectedRow.saleDate.replaceAll("-","");
                 params.gubun = "day";
 
                 if (col.binding === "saleDate") { // 일자 클릭
