@@ -34,7 +34,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
                 // 판매가 변경시 다른 컬럼값도 변경
                 if (col.binding === "saleUprc") {
-                    if($scope.storeSaleUprcApply){
+                    if($("#storeSaleUprcApply").prop("checked")){
                         item.stinSaleUprc = item.saleUprc;
                         item.dlvrSaleUprc = item.saleUprc;
                         item.packSaleUprc = item.saleUprc;

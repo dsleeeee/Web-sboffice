@@ -135,4 +135,4 @@
     var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.04" charset="utf-8"></script>
