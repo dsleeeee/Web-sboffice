@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <wj-popup id="storeProdBatchRegistLayer" control="storeProdBatchRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;">
-    <div class="wj-dialog wj-dialog-columns title" ng-controller="regProdCtrl">
+    <div class="wj-dialog wj-dialog-columns title">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
@@ -14,7 +14,7 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
-            <table class="tblType01">
+            <table class="tblType01" ng-controller="regProdCtrl">
                 <colgroup>
                     <col class="w15" />
                     <col class="w35" />
@@ -49,7 +49,7 @@
             </div>
             <%--- 적용상품 그리드 --%>
             <div class="oh mt20">
-                <div class="w50 fl">
+                <div class="w50 fl" ng-controller="regProdCtrl">
                     <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;">
                         <div class="oh">
                             <span class="fl bk lh20 s14"><s:message code="prod.regProd"/></span>
