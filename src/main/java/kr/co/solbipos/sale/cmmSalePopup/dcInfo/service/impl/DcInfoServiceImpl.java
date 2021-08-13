@@ -108,4 +108,18 @@ public class DcInfoServiceImpl implements DcInfoService {
         return dcInfoMapper.getVcoupnDcList(dcInfoVO);
     }
 
+    /** 매출공통팝업 - 스마트오더 할인 상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSmartorderDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            dcInfoVO.setArrStoreCd(dcInfoVO.getStoreCd().split(","));
+        }
+        return dcInfoMapper.getSmartorderDcList(dcInfoVO);
+    }
+
 }

@@ -253,4 +253,26 @@ public class DcInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
     }
+
+    /**
+     * 당일매출상세현황 - 스마트오더 할인 상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dcInfoVO
+     * @return  String
+     * @author  권지현
+     * @since   2021.08.11
+     */
+    @RequestMapping(value = "/vorderDc/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmartorderDcList(HttpServletRequest request, HttpServletResponse response,
+                                  Model model, DcInfoVO dcInfoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dcInfoService.getSmartorderDcList(dcInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
+    }
 }

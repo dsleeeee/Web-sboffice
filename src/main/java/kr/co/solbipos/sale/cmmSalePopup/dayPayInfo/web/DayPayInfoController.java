@@ -415,4 +415,26 @@ public class DayPayInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, list, dayPayInfoVO);
     }
+
+    /**
+     * 일자별 매출공통팝업 - 스마트오더 상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayPayInfoVO
+     * @return  String
+     * @author  권지현
+     * @since   2021.08.11
+     */
+    @RequestMapping(value = "/daySmartorder/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDaySmartorderList(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, DayPayInfoVO dayPayInfoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayPayInfoService.getDaySmartorderList(dayPayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayPayInfoVO);
+    }
 }

@@ -53,4 +53,7 @@ public interface DayPayInfoService {
 
     /** 일자별 매출공통팝업 - 가승인 상세 리스트 조회 */
     List<DefaultMap<String>> getDayTemporaryList(DayPayInfoVO dayPayInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 일자별 매출공통팝업 - 스마트오더 상세 리스트 조회 */
+    List<DefaultMap<String>> getDaySmartorderList(DayPayInfoVO dayPayInfoVO, SessionInfoVO sessionInfoVO);
 }

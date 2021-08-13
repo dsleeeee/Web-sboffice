@@ -17,7 +17,7 @@
         ,       SUM(DECODE(tsspc.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
         ,       SUM(DECODE(tsspc.SALE_YN, 'Y', tsspc.APPR_AMT, 0)) AS APPR_AMT
         ,       SUM(DECODE(tsspc.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
-        ,       SUM(DECODE(tsspc.SALE_YN, 'N', tsspc.APPR_AMT, 0)) AS CANCEL_AMT
+        ,       SUM(DECODE(tsspc.SALE_YN, 'N', tsspc.SALE_AMT, 0)) AS CANCEL_AMT
         FROM    TB_SL_SALE_PAY_CARD tsspc
         WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
         ]]>
@@ -68,7 +68,7 @@
         ,       tsspc.APPR_NO
         ,       tsspc.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspc.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspc.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspc.VAN_CD, tcvc.VAN_NM
         FROM    TB_SL_SALE_PAY_CASH tsspc
         ,       TB_MS_CORNER tmc
@@ -330,7 +330,7 @@
         ,       tsspm.APPR_NO
         ,       tsspm.SALE_AMT
         ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspm.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspm.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspm.MCOUPN_UPRC
         ,       tsspm.MCOUPN_REMAIN_AMT
         FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
@@ -833,5 +833,48 @@
         ORDER
         BY      tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM
         ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 스마트오더 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VORDER
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 스마트오더 상세 리스트를 조회한다.
+    -->
+    <select id="getDaySmartorderList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDaySmartorderList */
+        <![CDATA[
+        SELECT 	PICKUP_FG,
+                SUM(SALE_AMT) AS SALE_AMT
+        FROM 	TB_SL_SALE_PAY_VORDER
+        WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
+        ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        GROUP
+        BY      PICKUP_FG
+        ORDER
+        BY      PICKUP_FG
     </select>
 </mapper>

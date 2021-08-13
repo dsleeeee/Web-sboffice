@@ -149,13 +149,12 @@ public class PayInfoServiceImpl implements PayInfoService {
         return payInfoMapper.getTemporaryList(payInfoVO);
     }
 
-
-
-
-
-
-
-
+    /** 매출공통팝업 - 스마트오더 상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSmartOrderList(PayInfoVO payInfoVO, SessionInfoVO sessionInfoVO) {
+        payInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return payInfoMapper.getSmartOrderList(payInfoVO);
+    }
 
 
 }

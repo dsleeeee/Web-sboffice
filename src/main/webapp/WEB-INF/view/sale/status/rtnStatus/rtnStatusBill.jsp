@@ -276,6 +276,12 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 스마트오더 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/smartorder.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 <%-- //결제수단 팝업 레이어 --%>
 
 
@@ -318,6 +324,12 @@
 
 <%-- VMEM 쿠폰할인 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/vcoupnDc.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 스마트 오더 할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/vorderDc.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

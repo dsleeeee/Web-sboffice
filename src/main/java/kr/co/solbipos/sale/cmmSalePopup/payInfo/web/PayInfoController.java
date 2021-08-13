@@ -416,4 +416,26 @@ public class PayInfoController {
         return ReturnUtil.returnListJson(Status.OK, list, payInfoVO);
     }
 
+    /**
+     * 당일매출상세현황 - 스마트오더 상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   payInfoVO
+     * @return  String
+     * @author  권지현
+     * @since   2021.08.11
+     */
+    @RequestMapping(value = "/smartOrder/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmartOrderList(HttpServletRequest request, HttpServletResponse response,
+                                   Model model, PayInfoVO payInfoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = payInfoService.getSmartOrderList(payInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, payInfoVO);
+    }
+
 }

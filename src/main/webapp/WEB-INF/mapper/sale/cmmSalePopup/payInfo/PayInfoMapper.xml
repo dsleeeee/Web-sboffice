@@ -17,14 +17,14 @@
         ,       tsspc.APPR_PROC_FG, tsspc.CARD_TYPE_FG, tsspc.CARD_NO
         ,       tsspc.INST_CNT, tsspc.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspc.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspc.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspc.APPR_NO
         ,       tsspc.VAN_CD, tcvc.VAN_NM
         ,       tsspc.ISSUE_CD, tsspc.ISSUE_NM
         ,       tsspc.ACQUIRE_CD, tsspc.ACQUIRE_NM
         ,       tsspcorg.APPR_DT AS ORG_APPR_DT
         ,       SUBSTR(tsspcorg.APPR_DT, 0, 8) AS ORG_APPR_DATE
-        ,       SUBSTR(tsspcorg.APPR_DT, 8, 14) AS ORG_APPR_TIME
+        ,       SUBSTR(tsspcorg.APPR_DT, 9, 14) AS ORG_APPR_TIME
         ,       tsspcorg.APPR_NO AS ORG_APPR_NO
         FROM    TB_SL_SALE_PAY_CARD tsspc
         ,       TB_SL_SALE_PAY_CARD tsspcorg
@@ -72,7 +72,7 @@
         ,       tsspc.APPR_NO
         ,       tsspc.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspc.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspc.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspc.VAN_CD, tcvc.VAN_NM
         FROM    TB_SL_SALE_PAY_CASH tsspc
         ,       TB_MS_CORNER tmc
@@ -114,7 +114,7 @@
         ,       tsspp.APPR_PROC_FG, tsspp.PAYCO_BARCD_TYPE_FG, tsspp.PAYCO_BARCD_NO
         ,       tsspp.INST_CNT, tsspp.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspp.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspp.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspp.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspp.APPR_NO
         ,       tsspp.APPR_COMPANY_NM
         ,       tsspp.VAN_CD, tcvc.VAN_NM
@@ -232,7 +232,7 @@
         ,       tsspm.APPR_NO
         ,       tsspm.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspm.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspm.APPR_DT, 9, 14) AS APPR_TIME
         FROM    TB_SL_SALE_PAY_MPAY tsspm
         ,       TB_MS_CORNER tmc
         ,       TB_CM_NMCODE tcn
@@ -272,7 +272,7 @@
         ,       tsspm.APPR_NO
         ,       tsspm.SALE_AMT
         ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspm.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspm.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspm.MCOUPN_UPRC
         ,       tsspm.MCOUPN_REMAIN_AMT
         FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
@@ -533,7 +533,7 @@
         ,       tsspp.PARTN_CARD_NO
         ,       tsspp.VAN_CD, tcvc.VAN_NM
         ,       SUBSTR(tsspp.APPR_DT, 0, 8) AS APPR_DATE
-        ,       SUBSTR(tsspp.APPR_DT, 8, 14) AS APPR_TIME
+        ,       SUBSTR(tsspp.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspp.APPR_NO
         ,       tsspp.SALE_AMT
         ,       tsspp.DC_AMT
@@ -627,5 +627,33 @@
         AND     tcn.NMCODE_GRP_CD         =   '111'
         AND     tcn.NMCODE_CD             =   tsspt.TEMPORARY_PAY_CD
         ]]>
+    </select>
+
+    <!-- 매출공통팝업 - 스마트오더 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VORDER
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 스마트오더 상세 리스트를 조회한다.
+    -->
+    <select id="getSmartOrderList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getSmartOrderList */
+        <![CDATA[
+        SELECT 	PICKUP_FG,
+                SUBSTR(APPR_DT, 9, 14) AS APPR_TIME,
+                PICKUP_TEL_NO,
+                SALE_AMT
+        FROM 	TB_SL_SALE_PAY_VORDER
+        WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND BILL_NO = #{billNo}
+        </if>
     </select>
 </mapper>

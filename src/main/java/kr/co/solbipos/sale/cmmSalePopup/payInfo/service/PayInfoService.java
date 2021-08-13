@@ -54,5 +54,8 @@ public interface PayInfoService {
     /** 매출공통팝업 - 가승인 상세 리스트 조회 */
     List<DefaultMap<String>> getTemporaryList(PayInfoVO payInfoVO, SessionInfoVO sessionInfoVO);
 
+    /** 매출공통팝업 - 스마트오더 상세 리스트 조회 */
+    List<DefaultMap<String>> getSmartOrderList(PayInfoVO payInfoVO, SessionInfoVO sessionInfoVO);
+
 
 }
