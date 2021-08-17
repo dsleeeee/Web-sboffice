@@ -156,14 +156,16 @@
         <%-- 우리매장 --%>
         <c:if test="${orgnFg == 'STORE'}">
             <c:if test="${hqOfficeCd ne '00000'}">
-                <th><s:message code="regist.use.store.membr"/></th>
-                <td>
-                    <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
-                </td>
-                <th><s:message code="regist.use.visit.store.membr"/></th>
-                <td>
-                    <input type="checkbox" id="visitStoreMembr" ng-model="visitStoreMembr"/>
-                </td>
+                <tr>
+                    <th><s:message code="regist.use.store.membr"/></th>
+                    <td>
+                        <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
+                    </td>
+                    <th><s:message code="regist.use.visit.store.membr"/></th>
+                    <td>
+                        <input type="checkbox" id="visitStoreMembr" ng-model="visitStoreMembr"/>
+                    </td>
+                </tr>
             </c:if>
         </c:if>
         <tr>
@@ -309,7 +311,7 @@
             </td>
         </tr>
         <tr>
-            <%-- 회사단축번호 --%>
+            <%-- 회원단축번호 --%>
             <th><s:message code="regist.membr.stortNo"/></th>
             <td>
                 <input type="text" id="shortNo" class="sb-input w100" ng-model="shortNo" maxlength="15"/>
@@ -387,7 +389,7 @@
         <tr>
             <%-- 연락처 --%>
             <th><s:message code="regist.tel"/></th>
-            <td >
+            <td>
                 <input type="text" id="telNo" class="sb-input w100" ng-model="telNo" maxlength="15"/>
             </td>
             <th><s:message code="regist.membr.new"/></th>
@@ -398,7 +400,7 @@
         <tr>
             <%-- 광고성 SMS전송 --%>
             <th><s:message code="regist.marketingSmsSend"/></th>
-            <td >
+            <td>
                 <div class="sb-select">
                     <wj-combo-box
                             id="srchMarketingSmsGubunCombo"
