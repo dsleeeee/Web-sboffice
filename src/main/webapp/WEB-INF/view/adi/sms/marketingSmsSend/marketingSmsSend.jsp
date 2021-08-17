@@ -495,6 +495,7 @@
                     <td>
                         <label id="lblTxtByte"></label>
                         <s:message code="marketingSmsSend.byte" />
+                        <label id="lblTxtByteGubun"></label>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
@@ -700,7 +701,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210812.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210817.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

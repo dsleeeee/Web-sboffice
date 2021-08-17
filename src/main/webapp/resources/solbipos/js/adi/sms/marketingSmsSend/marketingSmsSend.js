@@ -80,6 +80,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     $("#lblStoreNmInfo").text("(광고)" +  "");
     $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
     $("#lblTxtByte").text("0");
+    $("#lblTxtByteGubun").text("SMS");
     $("#lblSmsQty").text("0");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -253,6 +254,12 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // 바이트
     $scope.showByte = function() {
         $("#lblTxtByte").text($("#messageContent").val().getByteLength());
+
+        if($("#messageContent").val().getByteLength() > 80) {
+            $("#lblTxtByteGubun").text("LMS");
+        } else {
+            $("#lblTxtByteGubun").text("SMS");
+        }
     };
 
     // <-- 그리드 행 추가 -->
@@ -318,8 +325,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             $scope._popMsg(messages["marketingSmsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
             return;
         }
-
-        if(smsQty < $scope.flex.rows.length) {
+        if(smsQty < params.length) {
             $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 전송가능한 수량보다 많습니다.
             return;
         }
@@ -340,22 +346,15 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // 전송 저장
     $scope.smsSendSave = function(reserveYn, reserveDate) {
-        // 잔여 수량
-        var smsQty = $("#lblSmsQty").text();
-
         // 바이트
         var msgType = "1"; // 메세지타입 1:SMS 2:LMS 3:MMS
         var byte = $("#lblTxtByte").text();
         if(byte > 80) {
-            // 80Byte 이상은 LMS로 전송됩니다. 전송하시겠습니까?
-            var byteMsg = messages["marketingSmsSend.byteConfirm"];
-            if (confirm(byteMsg)) {
-                msgType = "2";
-            }
+            msgType = "2";
         }
 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
-        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + smsQty + messages["marketingSmsSend.smsSendConfirm2"];
+        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + $("#lblSmsQty").text() + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
             // 파라미터 설정
             var params = new Array();
@@ -398,6 +397,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         $("#srchTitle").val("");
         $("#messageContent").val("");
         $("#lblTxtByte").text("0");
+        $("#lblTxtByteGubun").text("SMS");
 
         $scope._gridDataInit();
 
