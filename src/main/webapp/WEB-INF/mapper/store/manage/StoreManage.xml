@@ -455,7 +455,8 @@
           REG_DT,
           REG_ID,
           MOD_DT,
-          MOD_ID
+          MOD_ID,
+          CLS_LEVEL_CD
         )
         SELECT #{storeCd},
                PROD_CLASS_CD,
@@ -464,7 +465,8 @@
                #{regDt},
                #{regId},
                #{modDt},
-               #{modId}
+               #{modId},
+               CLS_LEVEL_CD
           FROM TB_HQ_PRODUCT_CLASS
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
     </insert>
@@ -1440,7 +1442,8 @@
             #{regDt} AS REG_DT,
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
+            #{modId} AS MOD_ID,
+            CLS_LEVEL_CD
             FROM TB_MS_PRODUCT_CLASS
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -1465,7 +1468,8 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.CLS_LEVEL_CD
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CLASS_CD,
@@ -1474,7 +1478,8 @@
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,
-                B.MOD_ID
+                B.MOD_ID,
+                B.CLS_LEVEL_CD
             )
     </insert>
 
@@ -1497,7 +1502,8 @@
             #{regDt} AS REG_DT,
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
+            #{modId} AS MOD_ID,
+            CLS_LEVEL_CD
             FROM TB_HQ_PRODUCT_CLASS
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1522,7 +1528,8 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.CLS_LEVEL_CD
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CLASS_CD,
@@ -1531,7 +1538,8 @@
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,
-                B.MOD_ID
+                B.MOD_ID,
+                B.CLS_LEVEL_CD
             )
     </insert>
 
