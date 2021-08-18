@@ -1388,9 +1388,13 @@
         COMMENTS : 콤보박스에 넣을 브랜드를 조회한다.
     -->
     <select id="getBrandComboList" parameterType="prodVO" resultType="DefaultMap">
-        SELECT HQ_BRAND_CD AS NMCODE_CD, HQ_BRAND_NM AS NMCODE_NM
-        FROM TB_HQ_BRAND
-        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT HQ_BRAND_CD AS NMCODE_CD,
+                HQ_BRAND_NM AS NMCODE_NM
+          FROM TB_HQ_BRAND
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND USE_YN = 'Y'
+         ORDER
+            BY HQ_BRAND_CD ASC
     </select>
 
     <!-- 상품 적용 매장 등록 -->

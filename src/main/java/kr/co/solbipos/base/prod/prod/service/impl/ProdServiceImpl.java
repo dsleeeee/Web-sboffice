@@ -1126,7 +1126,6 @@ public class ProdServiceImpl implements ProdService {
     /** 브랜드 콤보박스 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getBrandComboList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return prodMapper.getBrandComboList(prodVO);
     }
 
