@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EmpCardInfo.xml
+    사원카드정보관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.08.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.emp.cardInfo.service.impl.EmpCardInfoMapper">
+
+    <!-- 사원카드정보 조회 -->
+    <!--
+        TABLE    : TB_EM_EMPLOYEE_CARD
+        PARAM    : empCardInfoVO
+        COMMENTS : 사원카드정보를 조회한다.
+    -->
+    <select id="getEmpCardInfo" parameterType="empCardInfoVO" resultType="DefaultMap">
+        /* USE : EmpCardInfoMapper.getEmpCardInfo */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT EMPLOYEE_ORGN_CD,
+                EMPLOYEE_CARD_NO,
+                EMPLOYEE_NO,
+                EMPLOYEE_NM,
+                DIV_NM,
+                DEPT_NM,
+                POSITION_NM,
+                USE_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+              <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_EM_EMPLOYEE_CARD
+         WHERE EMPLOYEE_ORGN_CD = #{employeeOrgnCd}
+        <if test="employeeCardNo != null and employeeCardNo != ''">
+            AND EMPLOYEE_CARD_NO LIKE '%' || #{employeeCardNo} || '%'
+        </if>
+        <if test="employeeNo != null and employeeNo != ''">
+            AND EMPLOYEE_NO LIKE '%' || #{employeeNo} || '%'
+        </if>
+        <if test="employeeNm != null and employeeNm != ''">
+            AND EMPLOYEE_NM LIKE '%' || #{employeeNm} || '%'
+        </if>
+        <if test="divNm != null and divNm != ''">
+            AND DIV_NM LIKE '%' || #{divNm} || '%'
+        </if>
+        <if test="deptNm != null and deptNm != ''">
+            AND DEPT_NM LIKE '%' || #{deptNm} || '%'
+        </if>
+        <if test="positionNm != null and positionNm != ''">
+            AND POSITION_NM LIKE '%' || #{positionNm} || '%'
+        </if>
+        ORDER
+          BY EMPLOYEE_CARD_NO ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 사원카드정보 삭제 -->
+    <!--
+        TABLE    : TB_EM_EMPLOYEE_CARD
+        PARAM    : empCardInfoVO
+        COMMENTS : 기존 사원카드정보를 전부 삭제한다.
+    -->
+    <delete id="deleteEmpCardInfo" parameterType="empCardInfoVO">
+        /* USE : EmpCardInfoMapper.deleteEmpCardInfo */
+        DELETE
+          FROM TB_EM_EMPLOYEE_CARD
+         WHERE EMPLOYEE_ORGN_CD = #{employeeOrgnCd}
+    </delete>
+
+    <!-- 사원카드정보 등록 -->
+    <!--
+        TABLE    : TB_EM_EMPLOYEE_CARD
+        PARAM    : empCardInfoVO
+        COMMENTS : 사원카드정보를 등록한다.
+    -->
+    <insert id="insertEmpCardInfo" parameterType="empCardInfoVO">
+        /* USE : EmpCardInfoMapper.insertEmpCardInfo */
+        INSERT INTO TB_EM_EMPLOYEE_CARD
+                (
+                EMPLOYEE_ORGN_CD,
+                EMPLOYEE_CARD_NO,
+                EMPLOYEE_NO,
+                EMPLOYEE_NM,
+                DIV_NM,
+                DEPT_NM,
+                POSITION_NM,
+                USE_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                )
+                VALUES
+                (
+                #{employeeOrgnCd},
+                #{employeeCardNo},
+                #{employeeNo},
+                #{employeeNm},
+                #{divNm},
+                #{deptNm},
+                #{positionNm},
+                #{useFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+    </insert>
+
+</mapper>
