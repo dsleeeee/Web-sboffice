@@ -83,7 +83,7 @@ public class MarketingSmsSendController {
     }
 
     /**
-     * 메세지관리 - 메세지서식 조회
+     * 메세지관리 - 메세지서식 조회(최근이력)
      *
      * @param marketingSmsSendVO
      * @param request

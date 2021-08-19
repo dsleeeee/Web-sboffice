@@ -32,7 +32,7 @@ public interface MarketingSmsSendMapper {
     /** 회원등급 리스트 조회 */
     List<DefaultMap<String>> getMembrClassList(MarketingSmsSendVO marketingSmsSendVO);
 
-    /** 메세지관리 - 메세지서식 조회 */
+    /** 메세지관리 - 메세지서식 조회(최근이력) */
     List<DefaultMap<Object>> getMarketingSmsSendMsgManageDtlList(MarketingSmsSendVO marketingSmsSendVO);
 
     /** 마케팅용 SMS전송 - 회원 조회 */
