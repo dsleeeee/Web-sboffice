@@ -1161,7 +1161,8 @@
                     thp.PROD_NM,
                     thpsp.ADD_PROD_UPRC,
                     thpsp.ADD_PROD_QTY,
-                    thpsp.DISP_SEQ
+                    thpsp.DISP_SEQ,
+                    NVL(thpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG
                 FROM
                     TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
@@ -1186,7 +1187,8 @@
                     tmp.PROD_NM,
                     tmpsp.ADD_PROD_UPRC,
                     tmpsp.ADD_PROD_QTY,
-                    tmpsp.DISP_SEQ
+                    tmpsp.DISP_SEQ,
+                    NVL(tmpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG
                 FROM
                     TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
@@ -1241,7 +1243,8 @@
                          REG_DT,
                          REG_ID,
                          MOD_DT,
-                         MOD_ID
+                         MOD_ID,
+                         FIX_PROD_FG
                      ) VALUES (
                          #{hqOfficeCd},
                          #{sdselClassCd},
@@ -1253,7 +1256,8 @@
                          #{regDt},
                          #{regId},
                          #{modDt},
-                         #{modId}
+                         #{modId},
+                         #{fixProdFg}
                      )
             </when>
             <!-- 매장 -->
@@ -1283,7 +1287,8 @@
                          REG_DT,
                          REG_ID,
                          MOD_DT,
-                         MOD_ID
+                         MOD_ID,
+                         FIX_PROD_FG
                      ) VALUES (
                          #{storeCd},
                          #{sdselClassCd},
@@ -1295,7 +1300,8 @@
                          #{regDt},
                          #{regId},
                          #{modDt},
-                         #{modId}
+                         #{modId},
+                         #{fixProdFg}
                      )
             </when>
         </choose>
@@ -1318,7 +1324,8 @@
                     ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                    MOD_ID = #{modId},
+                    FIX_PROD_FG = #{fixProdFg}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -1332,7 +1339,8 @@
                     ADD_PROD_QTY = #{addProdQty},
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                    MOD_ID = #{modId},
+                    FIX_PROD_FG = #{fixProdFg}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}

@@ -9,6 +9,12 @@
  *
  * **************************************************************/
 
+// 고정상품구분
+var fixProdFgDataMap = new wijmo.grid.DataMap([
+  {id: "0", name: "선택"},
+  {id: "1", name: "고정"}
+], 'id', 'name');
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -334,7 +340,11 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === 'sdselClassCd' && selectedRow.status !== 'I') {
           $("#sideClassTitle").html(" [" + selectedRow.sdselClassCd+ "]" + selectedRow.sdselClassNm );
-          $scope._broadcast('sideMenuSelectProdCtrl', selectedRow.sdselClassCd);
+
+          var params = {};
+          params.sdselClassCd = selectedRow.sdselClassCd;
+          params.sdselQty = selectedRow.sdselQty;
+          $scope._broadcast('sideMenuSelectProdCtrl', params);
         }
       }
     });
@@ -569,6 +579,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   $scope.$on('selectMenuRefresh', function (event, data) {
     $scope.flex.refresh();
   });
+
   // sdselGrpCd Data Setter
   $scope.setSdselClassCd = function (value) {
     sdselClassCd.set(value);
@@ -577,6 +588,10 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   $scope.getSdselClassCd = function () {
     return sdselClassCd.get();
   };
+
+  // 선택분류의 수량 set
+  $scope.sdselQty = 0;
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
@@ -591,6 +606,10 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     //     }
     //   }
     // });
+
+    // 그리드 내 콤보박스 설정
+    $scope.fixProdFgDataMap = fixProdFgDataMap;
+
     // 선택상품 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
@@ -614,10 +633,11 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   // 선택상품 그리드 조회
   $scope.$on('sideMenuSelectProdCtrl', function(event, data) {
     // scope 영역에 변수 Set
-    $scope.setSdselClassCd(data);
+    $scope.setSdselClassCd(data.sdselClassCd); // 선택분류코드
+    $scope.sdselQty = parseInt(data.sdselQty); // 선택분류의 수량
     // 파라미터
     var params = {};
-    params.sdselClassCd = data;
+    params.sdselClassCd = data.sdselClassCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/sideMenu/menuProd/list.sb', params);
     // 기능수행 종료 : 반드시 추가
@@ -701,13 +721,31 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
         }
       }
 
+      // 구분이 '고정'인 상품의 수량합 체크(선택분류의 수량보다 크면 안됨)
+      var chkFixProdCnt = 0;
+      for (var m = 0; m < params.length; m++) {
+        if(params[m].status !== 'D') {
+          if(params[m].fixProdFg === "1") {
+            chkFixProdCnt += parseInt(params[m].addProdQty);
+          }
+        }
+      }
+
+      if(chkFixProdCnt > parseInt($scope.sdselQty)){
+        $scope._popMsg(messages["sideMenu.selectMenu.fixProdCntChk.msg"]); // 구분이 '고정'인 상품의 수량합이 선택분류의 수량보다 클 수 없습니다.
+        return false;
+      }
+
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
 
         // // 선택상품이 없을 경우 선택분류까지 재조회 해야한다.
         // if($scope.flex.collectionView.itemCount > 0){
           // 그리드 저장 후 재조회
-          $scope._broadcast('sideMenuSelectProdCtrl', $scope.getSdselClassCd());
+          var params = {};
+          params.sdselClassCd = $scope.getSdselClassCd();
+          params.sdselQty = $scope.sdselQty;
+          $scope._broadcast('sideMenuSelectProdCtrl', params);
           var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
           var sdselGrpCd = grpGrid.getSelectedSdselGrpCd();
           $scope._broadcast('sideMenuSelectClassCtrl', sdselGrpCd);
@@ -783,6 +821,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
                 params.addProdUprc = 0;
                 params.addProdQty = 1; // 기본으로 하나씩 들어가도록 // todo 추후 수정
                 params.gChk = true;
+                params.fixProdFg = 0;
                 // 추가기능 수행 : 파라미터
                 $scope._addRow(params);
               } else {
