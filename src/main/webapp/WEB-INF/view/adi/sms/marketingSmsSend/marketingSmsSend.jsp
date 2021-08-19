@@ -38,10 +38,14 @@
     </div>
     <table class="searchTbl">
         <colgroup>
-            <col class="w10" />
-            <col class="w40" />
-            <col class="w10" />
-            <col class="w40" />
+            <col class="w12"/>
+            <col class="w13"/>
+            <col class="w12"/>
+            <col class="w13"/>
+            <col class="w12"/>
+            <col class="w13"/>
+            <col class="w12"/>
+            <col class="w13"/>
         </colgroup>
         <tbody>
         <tr>
@@ -60,7 +64,7 @@
                     </wj-combo-box>
                 </div>
             </th>
-            <td>
+            <td colspan="3">
                 <div class="sb-select">
                     <span class="txtIn">
                       <div class="sb-select w110px">
@@ -91,6 +95,25 @@
                     </span>
                 </div>
             </td>
+            <%-- 광고성 SMS전송 --%>
+            <th>
+                <s:message code="marketingSmsSend.marketingSmsSend" />
+            </th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMarketingSmsGubunCombo"
+                            ng-model="marketingSmsGubun"
+                            items-source="_getComboData('marketingSmsGubunCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="marketingSmsGubunCombo"
+                            selected-index="6">
+                    </wj-combo-box>
+                </div>
+            </td>
             <%-- 회원등급 --%>
             <th>
                 <s:message code="marketingSmsSend.memberClass"/>
@@ -111,6 +134,13 @@
             </td>
         </tr>
         <tr>
+            <%-- 주소 --%>
+            <th>
+                <s:message code="marketingSmsSend.addr"/>
+            </th>
+            <td colspan="3">
+                <input type="text" id="addr" class="sb-input w100" ng-model="addr"/>
+            </td>
             <%-- 회원번호 --%>
             <th>
                 <s:message code="marketingSmsSend.membrNo"/>
@@ -118,50 +148,26 @@
             <td>
                 <input type="text" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
             </td>
-                <%-- 회원명 --%>
-                <th>
-                    <s:message code="marketingSmsSend.membrNm"/>
-                </th>
+            <%-- 회원명 --%>
+            <th>
+                <s:message code="marketingSmsSend.membrNm"/>
+            </th>
             <td>
                 <input type="text" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
-            </td>
-        </tr>
-        <tr>
-            <%-- 광고성 SMS전송 --%>
-            <th>
-                <s:message code="marketingSmsSend.marketingSmsSend" />
-            </th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="srchMarketingSmsGubunCombo"
-                            ng-model="marketingSmsGubun"
-                            items-source="_getComboData('marketingSmsGubunCombo')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)"
-                            control="marketingSmsGubunCombo"
-                            selected-index="6">
-                    </wj-combo-box>
-                </div>
-            </td>
-            <%-- 주소 --%>
-            <th>
-                <s:message code="marketingSmsSend.addr"/>
-            </th>
-            <td>
-                <input type="text" id="addr" class="sb-input w100" ng-model="addr"/>
             </td>
         </tr>
         </tbody>
     </table>
     <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
         <colgroup>
-            <col class="w10" />
-            <col class="w40" />
-            <col class="w10" />
-            <col class="w40" />
+            <col class="w12"/>
+            <col class="w13"/>
+            <col class="w12"/>
+            <col class="w13"/>
+            <col class="w12"/>
+            <col class="w13"/>
+            <col class="w12"/>
+            <col class="w13"/>
         </colgroup>
         <tbody>
         <%-- 매장 선택 --%>
@@ -171,7 +177,7 @@
                 <th>
                     <s:message code="marketingSmsSend.regStoreCd"/>
                 </th>
-                <td>
+                <td colspan="3">
                     <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
                         <jsp:param name="targetId" value="regStore"/>
                     </jsp:include>
@@ -180,7 +186,7 @@
                 <th>
                     <s:message code="marketingSmsSend.useStoreCd"/>
                 </th>
-                <td>
+                <td colspan="3">
                     <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
                         <jsp:param name="targetId" value="regUseStore"/>
                     </jsp:include>
@@ -190,20 +196,22 @@
         <%-- 우리매장 --%>
         <c:if test="${orgnFg == 'STORE'}">
             <c:if test="${hqOfficeCd ne '00000'}">
-                <%-- 우리매장 등록회원 --%>
-                <th>
-                    <s:message code="marketingSmsSend.useStoreMembr"/>
-                </th>
-                <td>
-                    <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
-                </td>
-                <%-- 우리매장 방문회원 --%>
-                <th>
-                    <s:message code="marketingSmsSend.useVisitStoreMembr"/>
-                </th>
-                <td>
-                    <input type="checkbox" id="visitStoreMembr" ng-model="visitStoreMembr"/>
-                </td>
+                <tr>
+                    <%-- 우리매장 등록회원 --%>
+                    <th>
+                        <s:message code="marketingSmsSend.useStoreMembr"/>
+                    </th>
+                    <td colspan="3">
+                        <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
+                    </td>
+                    <%-- 우리매장 방문회원 --%>
+                    <th>
+                        <s:message code="marketingSmsSend.useVisitStoreMembr"/>
+                    </th>
+                    <td colspan="3">
+                        <input type="checkbox" id="visitStoreMembr" ng-model="visitStoreMembr"/>
+                    </td>
+                </tr>
             </c:if>
         </c:if>
         <tr>
@@ -211,7 +219,7 @@
             <th>
                 <s:message code="marketingSmsSend.membrCardNo"/>
             </th>
-            <td>
+            <td colspan="3">
                 <input type="text" id="membrCardNo" class="sb-input w60 fl" ng-model="membrCardNo" maxlength="15"/>
                 <div class="sb-select w30 ml5 fl">
                     <wj-combo-box
@@ -230,8 +238,35 @@
             <td>
                 <input type="text" id="emailAddr" class="sb-input w100" ng-model="emailAddr" maxlength="15"/>
             </td>
+            <%-- 회원단축번호 --%>
+            <th>
+                <s:message code="marketingSmsSend.membrStortNo"/>
+            </th>
+            <td>
+                <input type="text" id="shortNo" class="sb-input w100" ng-model="shortNo" maxlength="15"/>
+            </td>
         </tr>
         <tr>
+            <%-- 적립매출횟수/금액 --%>
+            <th>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="memberSaleList"
+                            ng-model="memberSaleFg"
+                            control="memberSaleListCombo"
+                            items-source="memberSaleList"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </th>
+            <td colspan="3">
+                <input type="text" id="startSaveSale" class="sb-input w100px" ng-model="startSaveSale" maxlength="15"/>
+                <span class="rg">~</span>
+                <input type="text" id="endSaveSale" class="sb-input w100px" ng-model="endSaveSale" maxlength="15"/>
+            </td>
             <%-- 이메일 수신 --%>
             <th>
                 <s:message code="marketingSmsSend.emailRecv"/>
@@ -270,6 +305,26 @@
             </td>
         </tr>
         <tr>
+            <%-- 가용포인트 --%>
+            <th>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="memberSaleLmemberPointListist"
+                            ng-model="memberPointFg"
+                            control="memberPointListCombo"
+                            items-source="memberPointList"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </th>
+            <td colspan="3">
+                <input type="text" id="startAvablPoint" class="sb-input w100px" ng-model="startAvablPoint" maxlength="15"/>
+                <span class="rg">~</span>
+                <input type="text" id="endAvablPoint" class="sb-input w100px" ng-model="endAvablPoint" maxlength="15"/>
+            </td>
             <%-- 성별 --%>
             <th>
                 <s:message code="marketingSmsSend.gender"/>
@@ -308,75 +363,6 @@
             </td>
         </tr>
         <tr>
-            <%-- 적립매출횟수/금액 --%>
-            <th>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="memberSaleList"
-                            ng-model="memberSaleFg"
-                            control="memberSaleListCombo"
-                            items-source="memberSaleList"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </th>
-            <td>
-                <input type="text" id="startSaveSale" class="sb-input w100px" ng-model="startSaveSale" maxlength="15"/>
-                <span class="rg">~</span>
-                <input type="text" id="endSaveSale" class="sb-input w100px" ng-model="endSaveSale" maxlength="15"/>
-            </td>
-            <%-- 가용포인트 --%>
-            <th>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="memberSaleLmemberPointListist"
-                            ng-model="memberPointFg"
-                            control="memberPointListCombo"
-                            items-source="memberPointList"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </th>
-            <td>
-                <input type="text" id="startAvablPoint" class="sb-input w100px" ng-model="startAvablPoint" maxlength="15"/>
-                <span class="rg">~</span>
-                <input type="text" id="endAvablPoint" class="sb-input w100px" ng-model="endAvablPoint" maxlength="15"/>
-            </td>
-        </tr>
-        <tr>
-            <%-- 회사단축번호 --%>
-            <th>
-                <s:message code="marketingSmsSend.membrStortNo"/>
-            </th>
-            <td>
-                <input type="text" id="shortNo" class="sb-input w100" ng-model="shortNo" maxlength="15"/>
-            </td>
-            <%-- 결혼여부 --%>
-            <th>
-                <s:message code="marketingSmsSend.wedding"/>
-            </th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="weddingYn"
-                            ng-model="weddingYn"
-                            control="weddingYnCombo"
-                            items-source="_getComboData('weddingYn')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </td>
-        </tr>
-        <tr>
             <%-- 생일, 결혼기념일 날짜 --%>
             <th>
                 <div class="sb-select">
@@ -392,7 +378,7 @@
                     </wj-combo-box>
                 </div>
             </th>
-            <td>
+            <td colspan="3">
                 <div class="sb-select">
                     <span class="txtIn">
                         <div class="sb-select w110px">
@@ -423,6 +409,24 @@
                 </span>
                 </div>
             </td>
+            <%-- 결혼여부 --%>
+            <th>
+                <s:message code="marketingSmsSend.wedding"/>
+            </th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="weddingYn"
+                            ng-model="weddingYn"
+                            control="weddingYnCombo"
+                            items-source="_getComboData('weddingYn')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
             <%-- 회원명(영문) --%>
             <th>
                 <s:message code="marketingSmsSend.membrEngNm"/>
@@ -436,7 +440,7 @@
             <th>
                 <s:message code="marketingSmsSend.tel"/>
             </th>
-            <td >
+            <td colspan="3">
                 <input type="text" id="telNo" class="sb-input w100" ng-model="telNo" maxlength="15"/>
             </td>
             <%-- 신규회원 --%>
@@ -446,6 +450,8 @@
             <td>
                 <input type="checkbox" id="newMemberYn" class="mt5" ng-model="newMemberYn"/>
             </td>
+            <th></th>
+            <td></td>
         </tr>
         </tbody>
     </table>
@@ -457,7 +463,6 @@
             <table>
                 <colgroup>
                     <col class="w100" />
-                    <col class="w80" />
                 </colgroup>
                 <tbody>
                 <tr>
@@ -490,6 +495,7 @@
                     <td>
                         <label id="lblTxtByte"></label>
                         <s:message code="marketingSmsSend.byte" />
+                        <label id="lblTxtByteGubun"></label>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
@@ -695,7 +701,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210812.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210817.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

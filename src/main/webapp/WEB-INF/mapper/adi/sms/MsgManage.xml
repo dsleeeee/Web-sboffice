@@ -144,10 +144,11 @@
     <select id="getMsgManageMsgSeqNo" parameterType="MsgManageVO" resultType="String">
         /* MsgManageMapper.getMsgManageMsgSeqNo */
         SELECT
-        (NVL(MAX(SEQ_NO), 0) + 1) AS SEQ_NO
+        (NVL(MAX(TO_NUMBER(SEQ_NO)), 0) + 1) AS SEQ_NO
         FROM HCS_SMSMS_T
         WHERE 1=1
         AND OGN_CD = #{orgnCd}
+        AND MSG_GRP_CD = #{msgGrpCd}
     </select>
 
     <!-- 메세지관리 - 메세지서식 저장 insert -->
