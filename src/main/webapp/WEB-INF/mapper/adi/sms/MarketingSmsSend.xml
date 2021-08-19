@@ -57,7 +57,7 @@
         ORDER BY DEFLT_YN DESC
     </select>
 
-    <!-- 메세지관리 - 메세지서식 조회 -->
+    <!-- 메세지관리 - 메세지서식 조회(최근이력) -->
     <!--
         TABLE    : HCS_SMS_SEND_REG_T
         COMMENTS :
@@ -111,7 +111,7 @@
                     <!-- 매장 -->
                     <if test='orgnFg == "S"'>
                         <![CDATA[
-                           AND hssrt.SMS_SEND_ORGN_CD = #{orgnCd}
+                           AND twuidv01.STORE_CD = #{orgnCd}
                         ]]>
                     </if>
                 </when>
