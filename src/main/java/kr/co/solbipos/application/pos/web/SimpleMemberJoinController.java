@@ -16,6 +16,8 @@ import kr.co.solbipos.application.pos.service.SimpleMemberJoinService;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdService;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
@@ -86,6 +88,8 @@ public class SimpleMemberJoinController {
     PosBoardService posBoardService;
     @Autowired
     TouchKeyService touchKeyService;
+    @Autowired
+    ProdService prodService;
 
     private final String POS_MEMBER_FG_ENVST_CD = "1067"; // 포스회원등록 구분
 
@@ -248,6 +252,8 @@ public class SimpleMemberJoinController {
                  *  상품정보관리
                  * */
 
+                ProdVO prodVO = new ProdVO();
+
                 // 상품생성설정
                 ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
 
@@ -262,8 +268,10 @@ public class SimpleMemberJoinController {
                 model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
                 model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
+                model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
                 // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
-                String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1100"));
+                String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"));
                 model.addAttribute("sideEnvstVal", sideEnvstVal);
 
                 model.addAttribute("startDate", sessionInfoVO.getStartDate());

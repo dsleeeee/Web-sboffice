@@ -8,6 +8,8 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdService;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
@@ -48,11 +50,13 @@ public class StoreSideMenuController {
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
     private final TouchKeyService touchkeyService;
+    private final ProdService prodService;
 
-    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService) {
+    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService, ProdService prodService) {
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.touchkeyService = touchkeyService;
+        this.prodService = prodService;
     }
 
 
@@ -103,6 +107,8 @@ public class StoreSideMenuController {
 
         /**  상품정보관리  */
 
+        ProdVO prodVO = new ProdVO();
+
         // 상품생성설정
         ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
 
@@ -116,6 +122,8 @@ public class StoreSideMenuController {
 
         model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
+
+        model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
         return "base/prod/storeSideMenu/storeSideMenu";
     }

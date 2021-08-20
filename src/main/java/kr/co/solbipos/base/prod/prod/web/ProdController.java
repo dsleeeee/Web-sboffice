@@ -191,7 +191,7 @@ public class ProdController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
-        String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1100"));
+        String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"));
 
         if(sideEnvstVal.equals("1")){
             if(!prodVO.getSideProdYn().equals("Y")){
