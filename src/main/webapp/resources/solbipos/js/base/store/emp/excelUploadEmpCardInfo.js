@@ -137,25 +137,6 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
         }
         $timeout(function () {
 
-            // 필수값 체크
-            for(var i=0; i<jsonData.length; i++){
-                var item = jsonData[i];
-
-                // 사원카드번호
-                if (nvl(item.employeeCardNo, '') === '') {
-                    msg = messages["empCardInfo.empCardNo"] + messages["empCardInfo.require.data"]; // 사원카드번호(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
-                    $scope.valueCheckErrPopup(msg);
-                    return false;
-                }
-
-                // 사원번호
-                if (nvl(item.employeeNo, '') === '') {
-                    msg = messages["empCardInfo.empNo"] + messages["empCardInfo.require.data"]; // 사원번호(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
-                    $scope.valueCheckErrPopup(msg);
-                    return false;
-                }
-            }
-
             // 기존 데이터 삭제
             var params = {};
             $scope._save("/base/store/emp/cardInfo/deleteEmpCardInfo.sb", params, function(){});
@@ -189,44 +170,10 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
         for (var i = $scope.progressCnt; i < loopCnt; i++) {
             var item = jsonData[i];
 
-            /*// 필수값 및 길이 체크
-            // 사원카드번호
-            if (nvl(item.employeeCardNo, '') === '') {
-                msg = messages["empCardInfo.empCardNo"] + messages["empCardInfo.require.data"]; // 사원카드번호(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 사원번호
-            if (nvl(item.employeeNo, '') === '') {
-                msg = messages["empCardInfo.empNo"] + messages["empCardInfo.require.data"]; // 사원번호(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 사원이름
-            if (nvl(item.employeeNm, '') === '') {
-                msg = messages["empCardInfo.empNm"] + messages["empCardInfo.require.data"]; // 사원이름(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }*/
-
-            // 사원카드번호 길이 체크하여 30byte 이상이면 문자 자르기
-            if(nvl(item.employeeCardNo, '') !== '' && nvl(item.employeeCardNo, '').getByteLengthForOracle() > 30) {
-                item.employeeCardNo = item.employeeCardNo.substr(0, 15);
-            }
-
-            // 사원번호 길이 체크하여 50byte 이상이면 문자 자르기
-            if(nvl(item.employeeNo, '') !== '' && nvl(item.employeeNo, '').getByteLengthForOracle() > 50) {
-                item.employeeNo = item.employeeNo.substr(0, 25);
-            }
-
-            // 사원이름 길이 체크하여 100byte 이상이면 문자 자르기
-            if(nvl(item.employeeNm, '') !== '' && nvl(item.employeeNm, '').getByteLengthForOracle() > 100) {
-                item.employeeNm = item.employeeNm.substr(0, 30);
-            }
-
-            params.push(item);
+           // 사원카드번호 필수값 체크
+           if(item.employeeCardNo !== null && item.employeeCardNo != ''){
+               params.push(item);
+           }
         }
 
         //가상로그인 session 설정

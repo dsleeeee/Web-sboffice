@@ -798,8 +798,9 @@
                     thpsc.SDSEL_GRP_CD,
                     thpsc.DISP_SEQ,
                     thpsc.SDSEL_QTY,
-                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD  = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT
-              FROM
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
+                    (SELECT SUM(ADD_PROD_QTY) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT
+                FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
                     thpsc.HQ_OFFICE_CD = #{hqOfficeCd}

@@ -19,7 +19,7 @@
     -->
     <select id="getEmpCardInfo" parameterType="empCardInfoVO" resultType="DefaultMap">
         /* USE : EmpCardInfoMapper.getEmpCardInfo */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <!-- <include refid="CmmSQL.PagingTemplateHeader"/> -->
         SELECT EMPLOYEE_ORGN_CD,
                 EMPLOYEE_CARD_NO,
                 EMPLOYEE_NO,
@@ -32,7 +32,7 @@
                 REG_ID,
                 MOD_DT,
                 MOD_ID
-              <include refid="CmmSQL.PagingTemplateCount"/>
+              <!-- <include refid="CmmSQL.PagingTemplateCount"/> -->
           FROM TB_EM_EMPLOYEE_CARD
          WHERE EMPLOYEE_ORGN_CD = #{employeeOrgnCd}
         <if test="employeeCardNo != null and employeeCardNo != ''">
@@ -55,7 +55,7 @@
         </if>
         ORDER
           BY EMPLOYEE_CARD_NO ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <!-- <include refid="CmmSQL.PagingTemplateBottom"/> -->
     </select>
 
     <!-- 사원카드정보 삭제 -->
@@ -79,36 +79,72 @@
     -->
     <insert id="insertEmpCardInfo" parameterType="empCardInfoVO">
         /* USE : EmpCardInfoMapper.insertEmpCardInfo */
-        INSERT INTO TB_EM_EMPLOYEE_CARD
-                (
-                EMPLOYEE_ORGN_CD,
-                EMPLOYEE_CARD_NO,
-                EMPLOYEE_NO,
-                EMPLOYEE_NM,
-                DIV_NM,
-                DEPT_NM,
-                POSITION_NM,
-                USE_FG,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-                )
-                VALUES
-                (
-                #{employeeOrgnCd},
-                #{employeeCardNo},
-                #{employeeNo},
-                #{employeeNm},
-                #{divNm},
-                #{deptNm},
-                #{positionNm},
-                #{useFg},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
-                )
+        MERGE INTO TB_EM_EMPLOYEE_CARD teec
+        USING (
+                    SELECT #{employeeOrgnCd} AS EMPLOYEE_ORGN_CD,
+                            #{employeeCardNo} AS EMPLOYEE_CARD_NO,
+                            #{employeeNo} AS EMPLOYEE_NO,
+                            #{employeeNm} AS EMPLOYEE_NM,
+                            #{divNm} AS DIV_NM,
+                            #{deptNm} AS DEPT_NM,
+                            #{positionNm} AS POSITION_NM,
+                            #{useFg} AS USE_FG,
+                            #{regDt} AS REG_DT,
+                            #{regId} AS REG_ID,
+                            #{modDt} AS MOD_DT,
+                            #{modId} AS MOD_ID
+                      FROM DUAL
+                     WHERE LENGTHB(#{employeeCardNo}) <![CDATA[<= ]]> 30
+                       AND NVL(LENGTHB(#{employeeNo}), '0') <![CDATA[<= ]]> 50
+                       AND NVL(LENGTHB(#{employeeNm}), '0') <![CDATA[<= ]]> 100
+                       AND NVL(LENGTHB(#{divNm}), '0') <![CDATA[<= ]]> 60
+                       AND NVL(LENGTHB(#{deptNm}), '0') <![CDATA[<= ]]> 60
+                       AND NVL(LENGTHB(#{positionNm}), '0') <![CDATA[<= ]]> 30
+               ) A
+        ON ( teec.EMPLOYEE_ORGN_CD = A.EMPLOYEE_ORGN_CD
+             AND teec.EMPLOYEE_CARD_NO = A.EMPLOYEE_CARD_NO )
+        WHEN MATCHED THEN
+          UPDATE
+             SET teec.EMPLOYEE_NO = A.EMPLOYEE_NO,
+                  teec.EMPLOYEE_NM = A.EMPLOYEE_NM,
+                  teec.DIV_NM = A.DIV_NM,
+                  teec.DEPT_NM = A.DEPT_NM,
+                  teec.POSITION_NM = A.POSITION_NM,
+                  teec.USE_FG = A.USE_FG,
+                  teec.MOD_DT = A.MOD_DT,
+                  teec.MOD_ID = A.MOD_ID
+        WHEN NOT MATCHED THEN
+          INSERT
+          (
+              teec.EMPLOYEE_ORGN_CD,
+              teec.EMPLOYEE_CARD_NO,
+              teec.EMPLOYEE_NO,
+              teec.EMPLOYEE_NM,
+              teec.DIV_NM,
+              teec.DEPT_NM,
+              teec.POSITION_NM,
+              teec.USE_FG,
+              teec.REG_DT,
+              teec.REG_ID,
+              teec.MOD_DT,
+              teec.MOD_ID
+          )
+          VALUES
+          (
+               A.EMPLOYEE_ORGN_CD,
+               A.EMPLOYEE_CARD_NO,
+               A.EMPLOYEE_NO,
+               A.EMPLOYEE_NM,
+               A.DIV_NM,
+               A.DEPT_NM,
+               A.POSITION_NM,
+               A.USE_FG,
+               A.REG_DT,
+               A.REG_ID,
+               A.MOD_DT,
+               A.MOD_ID
+          )
+
     </insert>
 
 </mapper>
