@@ -37,8 +37,11 @@
                 </foreach>
                 ,
                 tssd.GEN_REAL_SALE_AMT,
+                DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssd.GEN_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
                 tssd.DLVR_REAL_SALE_AMT,
-                tssd.PACK_REAL_SALE_AMT
+                DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssd.DLVR_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
+                tssd.PACK_REAL_SALE_AMT,
+                DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssd.PACK_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
         FROM
         (   SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
                     COUNT(DISTINCT STORE_CD) AS STORE_CNT,
@@ -66,7 +69,7 @@
                     SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
                     SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
                     SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-            FROM    TB_SL_SALE_DTL
+            FROM    TB_SL_DAILY_DTL_DLVR
             WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
             AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>

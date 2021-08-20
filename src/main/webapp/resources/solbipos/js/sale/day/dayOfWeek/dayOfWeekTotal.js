@@ -59,6 +59,9 @@ app.controller('dayOfWeekTotalCtrl', ['$scope', '$http', '$timeout', function ($
         dataItem.genRealSaleAmt   = messages["dayofweek.dlvrPack"];
         dataItem.dlvrRealSaleAmt   = messages["dayofweek.dlvrPack"];
         dataItem.packRealSaleAmt   = messages["dayofweek.dlvrPack"];
+        dataItem.genRealSaleRate   = messages["dayofweek.dlvrPack"];
+        dataItem.dlvrRealSaleRate   = messages["dayofweek.dlvrPack"];
+        dataItem.packRealSaleRate   = messages["dayofweek.dlvrPack"];
 
         // 결제수단 헤더머지 컬럼 생성
         for (var i = 0; i < arrPayCol.length; i++) {
