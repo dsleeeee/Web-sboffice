@@ -278,7 +278,7 @@
 </c:import>
 
 <%-- 스마트오더 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/smartorder.jsp">
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/vorder.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -4,9 +4,9 @@
 var app = agrid.getApp();
 
 /** 스마트오더 상세 내역 controller */
-app.controller('smartorderCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('vorderCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('smartorderCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('vorderCtrl', $scope, $http, true));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -34,15 +34,15 @@ app.controller('smartorderCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("smartorderCtrl", function (event, data) {
+  $scope.$on("vorderCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
     $scope.posNo    = nvl(data.posNo, '');
     $scope.billNo   = nvl(data.billNo, '');
 
-    $scope.wjSmartorderLayer.show(true);
+    $scope.wjVorderLayer.show(true);
 
-    $scope.searchsmartOrderList();
+    $scope.searchVorderList();
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -50,7 +50,7 @@ app.controller('smartorderCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 
   // 스마트오더 내역 리스트 조회
-  $scope.searchsmartOrderList = function () {
+  $scope.searchVorderList = function () {
     // 파라미터
     var params       = {};
     params.storeCd   = $scope.storeCd;
