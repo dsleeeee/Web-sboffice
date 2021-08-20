@@ -11,7 +11,10 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/base/store/tblms/"/>
 <c:set var="vUserIdChk" value="${sessionScope.sessionInfo.vUserId}"/>
-<link rel="stylesheet" type="text/css" media="screen" href="http://mob.solbipos.com/mobile/css/button_style1.css" />
+<style type="text/css">
+    @import url("http://mob.solbipos.com/mobile/css/button_style1.css");
+</style>
+
 
 <div class="subCon3" ng-controller="tblmsListCtrl">
 
@@ -29,6 +32,8 @@
 
     <div style="margin-top:10px; text-align:center;">
         <span><a href="#" class="btn01 first01" id="tblmsOpn" ng-click="fnTblms('tblmsOpn');"><s:message code="tblms.open" /></a></span>
+        <span><a href="#" class="btn01 first01" id="tblptOpn" ng-click="fnTblpt('tblptOpn');"><s:message code="tblpt.open" /></a></span>
+        <span><a href="#" class="btn01 first01" id="tblptClr" ng-click="fnTblpt('tblptClr');"><s:message code="tblpt.clear" /></a></span>
     </div>
 
     <div style="margin-top:10px; text-align:center;display:none;">
