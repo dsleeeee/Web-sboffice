@@ -18,139 +18,74 @@
     -->
     <select id="getMonthTotalList"  parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTotalList */
-        SELECT
-        tssh.YEAR_MONTH,
-        tssh.STORE_CNT,
-        tssh.SALE_CNT,
-        tssh.TOT_SALE_AMT,
-        tssh.TOT_DC_AMT,
-        tssh.REAL_SALE_AMT,
-        tssh.BILL_CNT,
-        tssh.BILL_UPRC,
-        tssh.GA_AMT,
-        tssh.VAT_AMT,
-        tssh.TOT_TIP_AMT,
-        tssh.TOT_ETC_AMT,
-        <foreach collection="arrPayCol" item="item" separator=",">
-            tsshpd.PAY${item}
-        </foreach> ,
-        tsshpd.TOT_PAY_AMT
-        FROM
-        (
-            SELECT
-            YEAR_MONTH,
-            COUNT(DISTINCT STORE_CD) AS STORE_CNT,
-            COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
-            SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-            SUM(BILL_CNT) AS BILL_CNT,
-            ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC,
-            SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
-            SUM(VAT_AMT) AS VAT_AMT,
-            SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
-            SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
-            SUM(GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
-            SUM(DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
-            SUM(PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
-            FROM
-            (
-                SELECT
-                tssh.SALE_DATE,
-                TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-                tssh.HQ_OFFICE_CD,
-                tssh.STORE_CD,
-                SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
-                SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
-                SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                COUNT(tssh.BILL_NO) AS BILL_CNT,
-                SUM(tssh.VAT_AMT) AS VAT_AMT,
-                SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT,
-                SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT,
-                SUM(tssd.GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
-                SUM(tssd.DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
-                SUM(tssd.PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
-                FROM TB_SL_SALE_HDR tssh,
-                (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    HQ_BRAND_CD,
-                    STORE_CD,
-                    SALE_DATE,
-                    POS_NO,
-                    BILL_NO,
-                    SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
-                    SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-                    SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                    FROM TB_SL_SALE_DTL
-                    GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO
-                ) tssd
-                WHERE 1=1
-                AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
-                AND tssh.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
-                <if test='storeCds != null and storeCds != ""'>
-                    AND tssh.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                        #{item}
-                    </foreach>
-                </if>
-                AND tssd.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
-                AND tssd.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
-                AND tssd.STORE_CD (+)= tssh.STORE_CD
-                AND tssd.SALE_DATE (+)= tssh.SALE_DATE
-                AND tssd.POS_NO (+)= tssh.POS_NO
-                AND tssd.BILL_NO (+)= tssh.BILL_NO
-                GROUP BY tssh.SALE_DATE, tssh.HQ_OFFICE_CD, tssh.STORE_CD
-            )
-            GROUP BY YEAR_MONTH, HQ_OFFICE_CD
-        ) tssh,
-        (
-            SELECT
-            <foreach collection="arrPayCol" item="item" separator="+">
-                NVL(PAY${item}, 0)
-            </foreach> AS TOT_PAY_AMT,
+        SELECT  TO_CHAR(TO_DATE(tsdt.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                tsdt.STORE_CNT,
+                tsdt.SALE_CNT,
+                tsdt.TOT_SALE_AMT,
+                tsdt.TOT_DC_AMT,
+                tsdt.REAL_SALE_AMT,
+                tsdt.BILL_CNT,
+                tsdt.BILL_UPRC,
+                tsdt.GA_AMT,
+                tsdt.VAT_AMT,
+                tsdt.TOT_TIP_AMT,
+                tsdt.TOT_ETC_AMT,
             <foreach collection="arrPayCol" item="item" separator=",">
-                NVL(PAY${item}, 0) AS PAY${item}
+                tsdt.PAY_AMT_${item} AS PAY${item}
             </foreach> ,
-            YEAR_MONTH
-            FROM
-            (
-                SELECT
-                <foreach collection="arrPayCol" item="item" separator=",">
-                    SUM(PAY${item}) AS PAY${item}
-                </foreach> ,
-                YEAR_MONTH
-                FROM
-                (
-                    SELECT
-                    tsshp.SALE_DATE,
-                    TO_CHAR(TO_DATE(tsshp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-                    tsshp.PAY_CD,
-                    tsshp.PAY_AMT
-                    FROM TB_SL_SALE_HDR_PAY tsshp
-                    WHERE 1=1
-                    AND tsshp.HQ_OFFICE_CD = #{membrOrgnCd}
-                    AND tsshp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                tsdt.TOT_PAY_AMT,
+                tsddd.GEN_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
+                tsddd.DLVR_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
+                tsddd.PACK_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        FROM    (
+                    SELECT  SUBSTR(SALE_DATE,0,6) AS SALE_YM,
+                            COUNT(DISTINCT STORE_CD) AS STORE_CNT,
+                            COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
+                            SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                            SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                            SUM(BILL_CNT) AS BILL_CNT,
+                            ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC,
+                            SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+                            SUM(VAT_AMT) AS VAT_AMT,
+                            SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+                            SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+                            <foreach collection="arrPayCol" item="item" separator="+">
+                                SUM(NVL(PAY_AMT_${item}, 0))
+                            </foreach> AS TOT_PAY_AMT,
+                            <foreach collection="arrPayCol" item="item" separator=",">
+                                SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
+                            </foreach>
+                    FROM    TB_SL_DAILY_TOTAL
+                    WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+                    AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tsshp.STORE_CD IN
+                        AND STORE_CD IN
                         <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                             #{item}
                         </foreach>
                     </if>
-                )
-                PIVOT
-                (
-                    SUM(PAY_AMT)
-                    FOR PAY_CD
-                    IN (${pivotPayCol})
-                )
-                GROUP BY  YEAR_MONTH
-            )
-            WHERE 1=1
-            ORDER BY YEAR_MONTH
-        ) tsshpd
-        WHERE tsshpd.YEAR_MONTH = tssh.YEAR_MONTH
-
+                    GROUP BY    SUBSTR(SALE_DATE,0,6)
+                ) tsdt,
+                (	SELECT 	SUBSTR(SALE_DATE,0,6) AS SALE_YM,
+                            SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+                            SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                            SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                    FROM 	TB_SL_DAILY_DTL_DLVR
+                    WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+                    AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    GROUP BY    SUBSTR(SALE_DATE,0,6)
+                ) tsddd
+        WHERE   tsdt.SALE_YM = tsddd.SALE_YM (+)  -- TB_SL_DAILY_PROD_DLVR 테이블이 생기기 전 매출이 없는 경우 나오지 않음
     </select>
 
     <!-- 월별종합탭 - 월별종합조회-->
@@ -360,44 +295,28 @@
     -->
     <select id="getMonthTaxList"  parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTaxList */
-        SELECT
-        YEAR_MONTH,
-        COUNT(DISTINCT STORE_CD) AS STORE_CNT,
-        COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
-        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-        SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,
-        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
-        SUM(VAT_AMT) AS VAT_AMT,
-        SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,
-        SUM(NET_SALE_AMT) AS NET_SALE_AMT
-        FROM
-        (
-            SELECT
-            TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-            tssh.STORE_CD,
-            tssh.SALE_DATE,
-            tssh.TOT_SALE_AMT,
-            tssh.TOT_DC_AMT,
-            tssh.REAL_SALE_AMT,
-            tssh.TAX_SALE_AMT,
-            tssh.VAT_AMT,
-            tssh.NO_TAX_SALE_AMT,
-            tssh.NET_SALE_AMT
-            FROM TB_SL_SALE_HDR tssh
-            WHERE 1=1
-            AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
-            AND tssh.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
-            <if test='storeCds != null and storeCds != ""'>
-                AND tssh.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
-                </foreach>
-            </if>
-        )
-        GROUP BY YEAR_MONTH
-        ORDER BY YEAR_MONTH
+        SELECT  TO_CHAR(TO_DATE(SUBSTR(SALE_DATE, 0, 6), 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                COUNT(DISTINCT STORE_CD) AS STORE_CNT,
+                COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
+                SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,
+                SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+                SUM(VAT_AMT) AS VAT_AMT,
+                SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,
+                SUM(NET_SALE_AMT) AS NET_SALE_AMT
+        FROM    TB_SL_DAILY_TOTAL
+        WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+        AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY SUBSTR(SALE_DATE, 0, 6)
+        ORDER BY SUBSTR(SALE_DATE, 0, 6)
     </select>
 
     <!-- 시간대별탭 - 시간대별 매출조회-->
@@ -814,21 +733,21 @@
             FROM
             (
                 SELECT
-                TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-                tssd.STORE_CD,
-                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                SUM(tssd.SALE_QTY) AS SALE_QTY,
-                (tssd.STORE_CD || tssd.CORNR_CD) AS STORE_CORNR_CD
-                FROM TB_SL_SALE_DTL tssd
+                TO_CHAR(TO_DATE(tsdcp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
+                tsdcp.STORE_CD,
+                SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
+                (tsdcp.STORE_CD || tsdcp.CORNR_CD) AS STORE_CORNR_CD
+                FROM TB_SL_DAILY_CORNR_PROD tsdcp
                 WHERE 1=1
-                AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
-                AND tssd.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                AND tsdcp.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND tsdcp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
                 <if test='storeCd != null and storeCd != ""'>
                     <![CDATA[
-                        AND tssd.STORE_CD = #{storeCd}
+                        AND tsdcp.STORE_CD = #{storeCd}
                     ]]>
                 </if>
-                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.CORNR_CD
+                GROUP BY tsdcp.SALE_DATE, tsdcp.STORE_CD, tsdcp.CORNR_CD
             )
             PIVOT
             (
