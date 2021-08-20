@@ -242,7 +242,7 @@
                     , SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
                     , SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
                     , SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                    FROM	TB_SL_SALE_DTL tssd
+                    FROM	TB_SL_DAILY_DTL_DLVR tssd
                     WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
                     <if test='arrStoreCd != null and arrStoreCd != ""'>
                         AND tssd.STORE_CD IN
@@ -258,7 +258,7 @@
                     -- 현금,현금영수증 분리
                     SELECT
                     tsspc.SALE_DATE,
-                    SUM(CASE WHEN tsspc.APPR_PROC_FG = '3' THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02, -- 현금
+                    SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02, -- 현금
                     SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
                     FROM TB_SL_SALE_PAY_CASH tsspc
                     WHERE 1=1
