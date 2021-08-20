@@ -105,7 +105,7 @@
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     <![CDATA[
-                       AND hssrt.SMS_SEND_ORGN_CD = #{orgnCd}
+                       AND twuidv01.STORE_CD = #{orgnCd}
                     ]]>
                 </if>
             </when>

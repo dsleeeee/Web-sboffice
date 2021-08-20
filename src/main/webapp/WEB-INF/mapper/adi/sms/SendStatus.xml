@@ -91,18 +91,18 @@
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGSS_T A
                     WHERE 1=1
-                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
                     </if>
                     <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
                     </if>
                     <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
                     </if>
                 )
                 UNION ALL
@@ -132,18 +132,18 @@
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGKS_T A
                     WHERE 1=1
-                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
                     </if>
                     <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
                     </if>
                     <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
                     </if>
                 )
                 UNION ALL
@@ -173,18 +173,18 @@
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGSM_T A
                     WHERE 1=1
-                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
                     </if>
                     <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
                     </if>
                     <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
                     </if>
                 )
                   UNION ALL
@@ -214,18 +214,18 @@
                     A.SMS_SEND_SEQ
                     FROM HCS_MSGKM_T A
                     WHERE 1=1
-                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
                     </if>
                     <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
                     </if>
                     <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
                     </if>
                 )
                   UNION ALL
@@ -255,18 +255,18 @@
                      0 AS SMS_SEND_SEQ
                     FROM HCS_MSGLG_T A
                     WHERE 1=1
-                    AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
                     </if>
                     <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
                     </if>
                     <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
                     </if>
                 )
             )
@@ -309,7 +309,7 @@
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     <![CDATA[
-                       AND hmt.S_OGN_CD = #{orgnCd}
+                       AND twuidv01.STORE_CD = #{orgnCd}
                     ]]>
                 </if>
             </when>

@@ -28,9 +28,9 @@ public interface MarketingSmsSendService {
     /** 회원등급 리스트 조회 */
     List<DefaultMap<String>> getMembrClassList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 
+    /** 메세지관리 - 메세지서식 조회(최근이력) */
+    List<DefaultMap<Object>> getMarketingSmsSendMsgManageDtlList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
+
     /** 마케팅용 SMS전송 - 회원 조회 */
     List<DefaultMap<Object>> getMarketingSmsSendList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
-
-    /** 메세지관리 - 메세지서식 조회 */
-    List<DefaultMap<Object>> getMarketingSmsSendMsgManageDtlList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 }

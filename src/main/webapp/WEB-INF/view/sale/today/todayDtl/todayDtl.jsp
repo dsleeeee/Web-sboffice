@@ -142,7 +142,7 @@
                     autoGenerateColumns="false"
                     selection-mode="Row"
                     items-source="data"
-                    control="flex"
+                    control="flexDtl"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter"
@@ -221,7 +221,7 @@
   var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20210706.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20210819.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

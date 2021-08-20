@@ -583,7 +583,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
       for (var j = 0; j < columnsCnt; j++) {
         if(columns[j].binding == "guest01" || columns[j].binding == "guest02" || columns[j].binding == "guest03" || columns[j].binding == "guest04" || columns[j].binding == "guest05" || columns[j].binding == "guest06") {
           // 합계행 값 가져오기
-          if($scope.flex.columnFooters.getCellData(0, j, true) == 0) {
+          if($scope.flexDtl.columnFooters.getCellData(0, j, true) == 0) {
             columns[j].visible = false;
           } else {
             columns[j].visible = true;
@@ -596,14 +596,14 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
 
   // 매출상세 엑셀 다운로드
   $scope.excelDownloadPeriodSaleDtl = function () {
-    if ($scope.flex.rows.length <= 0) {
+    if ($scope.flexDtl.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
     }
 
     $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
     $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexDtl, {
         includeColumnHeaders: true,
         includeCellStyles: true,
         includeColumns: function (column) {

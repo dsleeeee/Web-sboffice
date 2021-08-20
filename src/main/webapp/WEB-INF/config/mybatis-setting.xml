@@ -544,11 +544,10 @@
     <typeAlias alias="smsSendHistVO" type="kr.co.solbipos.adi.sms.smsSendHist.service.SmsSendHistVO"/>
     <!-- 부가서비스 > SMS관리 > 마케팅용 SMS전송 -->
     <typeAlias alias="marketingSmsSendVO" type="kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO"/>
+    <!-- 부가서비스 > SMS관리 > SMS충전내역 -->
+    <!--<typeAlias alias="smsChargeHistVO" type="kr.co.solbipos.adi.sms.smsChargeHist.service.SmsChargeHistVO"/>-->
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
-    <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>
-    <typeAlias alias="sendStatVO" type="kr.co.solbipos.adi.sms.sendstat.service.SendStatVO"/>
-    <typeAlias alias="chargeHistVO" type="kr.co.solbipos.adi.sms.chargehist.service.ChargeHistVO"/>
     <typeAlias alias="useSmVO" type="kr.co.solbipos.adi.sms.usesm.service.UseSmVO"/>
     <typeAlias alias="autoManageSysVO" type="kr.co.solbipos.adi.sms.automanagesys.service.AutoManageSysVO"/>
     <typeAlias alias="autoManageVO" type="kr.co.solbipos.adi.sms.automanage.service.AutoManageVO"/>

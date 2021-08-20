@@ -69,7 +69,7 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         return resultList;
     }
 
-    /** 메세지관리 - 메세지서식 조회 */
+    /** 메세지관리 - 메세지서식 조회(최근이력) */
     @Override
     public List<DefaultMap<Object>> getMarketingSmsSendMsgManageDtlList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
