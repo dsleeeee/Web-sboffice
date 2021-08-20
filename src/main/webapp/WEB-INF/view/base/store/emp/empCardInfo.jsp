@@ -64,11 +64,29 @@
         </tbody>
     </table>
 
+    <%--엑셀업로드 관련 comment --%>
+    <table class="searchTbl mt10">
+        <colgroup>
+            <col class="w100" />
+        </colgroup>
+        <tbody>
+        <tr class="brt">
+            <th class="oh gr fl w50" style="height: 35px;">
+                <p class="s12 bk lh20">
+                    * <s:message code="empCardInfo.excelUpload.chk.msg"/>
+                </p>
+            </th>
+            <th class="oh gr fr w50" style="height: 35px; font-size:15px">
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
     <%-- grid --%>
     <div id="grid" class="w100">
         <div class="mt20 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
-            <wj-combo-box
+            <%--<wj-combo-box
                     class="w100px fl"
                     id="listScaleBox"
                     ng-model="listScale"
@@ -77,8 +95,13 @@
                     selected-value-path="value"
                     is-editable="false"
                     initialized="initComboBox(s)">
-            </wj-combo-box>
+            </wj-combo-box>--%>
             <%--// 페이지 스케일  --%>
+
+            <%-- excel 다운로드 --%>
+            <button class="btn_skyblue ml5 fr" id="btnExcelDataDownload" ng-click="excelDataDownload()">
+               <s:message code="empCardInfo.excelDownload"/>
+            </button>
 
             <%-- excel 업로드 --%>
             <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
@@ -112,11 +135,11 @@
             </div>
         </div>
         <%-- 페이지 리스트 --%>
-        <div class="pageNum mt20">
-            <%-- id --%>
+        <%--<div class="pageNum mt20">
+            &lt;%&ndash; id &ndash;%&gt;
             <ul id="empCardInfoCtrlPager" data-size="10">
             </ul>
-        </div>
+        </div>--%>
         <%--//페이지 리스트--%>
     </div>
 </div>
@@ -124,7 +147,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20210818.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20210818.02" charset="utf-8"></script>
 
 <%-- 사원카드정보관리 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/base/store/emp/excelUploadEmpCardInfo.jsp">

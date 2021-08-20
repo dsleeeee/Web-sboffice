@@ -437,6 +437,14 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           $scope._popMsg(messages["sideMenu.selectMenu.sdselClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
           return false;
         }
+
+        if(nvl($scope.flex.collectionView.itemsEdited[u].fixProdCnt, 0) > nvl($scope.flex.collectionView.itemsEdited[u].sdselQty, 0)){
+          $scope._popMsg( "'" + $scope.flex.collectionView.itemsEdited[u].sdselClassNm + "[" + $scope.flex.collectionView.itemsEdited[u].sdselClassCd + "]'"
+                                 + messages["sideMenu.selectMenu.sdselQtyChk.msg"]
+                                 + "<br/> (선택분류수량 : " + $scope.flex.collectionView.itemsEdited[u].sdselQty + " / 고정상품수량합계 : "  + $scope.flex.collectionView.itemsEdited[u].fixProdCnt+ ")");
+          return false;
+        }
+
         if($scope.maxChk($scope.flex.collectionView.itemsEdited[u].sdselClassNm)){
           $scope.flex.collectionView.itemsEdited[u].status = 'U';
           params.push($scope.flex.collectionView.itemsEdited[u]);
@@ -732,7 +740,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       }
 
       if(chkFixProdCnt > parseInt($scope.sdselQty)){
-        $scope._popMsg(messages["sideMenu.selectMenu.fixProdCntChk.msg"]); // 구분이 '고정'인 상품의 수량합이 선택분류의 수량보다 클 수 없습니다.
+        $scope._popMsg(messages["sideMenu.selectMenu.fixProdCntChk.msg"] + "<br/> (고정상품수량합계 : " + chkFixProdCnt + " / 선택분류수량 : "  + $scope.sdselQty + ")"); // 구분이 '고정'인 상품의 수량합이 선택분류의 수량보다 클 수 없습니다.
         return false;
       }
 
