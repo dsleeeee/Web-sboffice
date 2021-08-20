@@ -4,10 +4,10 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/sale/cmmSalePopup/payInfo/smartOrder/"/>
+<c:set var="baseUrl" value="/sale/cmmSalePopup/payInfo/Vorder/"/>
 
-<wj-popup id="wjSmartorderLayer" control="wjSmartorderLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
-  <div id="smartOrderLayer" class="wj-dialog wj-dialog-columns" ng-controller="smartorderCtrl">
+<wj-popup id="wjVorderLayer" control="wjVorderLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+  <div id="vorderLayer" class="wj-dialog wj-dialog-columns" ng-controller="vorderCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="smartorder.smartOrderPay"/>
       <span id="spanDtlTitle"></span>
@@ -41,4 +41,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/payInfo/smartorder.js?ver=20210811.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/payInfo/vorder.js?ver=20210811.01" charset="utf-8"></script>

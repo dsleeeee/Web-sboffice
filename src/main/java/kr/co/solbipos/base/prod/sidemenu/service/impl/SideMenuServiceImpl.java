@@ -354,7 +354,7 @@ public class SideMenuServiceImpl implements SideMenuService {
 
         if(sideMenuSelProdVO.getSideEnvstVal() != ""){
             // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
-            String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1100"));
+            String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"));
             if(sideEnvstVal.equals("1")){
                 sideMenuSelProdVO.setSideEnvstVal(sideEnvstVal);
             } else {

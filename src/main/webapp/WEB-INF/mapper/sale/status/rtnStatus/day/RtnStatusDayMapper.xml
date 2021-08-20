@@ -602,34 +602,12 @@
                             )
                     GROUP BY STORE_CD, SALE_DATE, POS_NO, BILL_NO
                 ) tsshp
-        ,       (   SELECT	tssd.STORE_CD
-                    ,       tssd.SALE_DATE
-                    ,       tssd.POS_NO
-                    ,       tssd.BILL_NO
-                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
-                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
-                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                    FROM	TB_SL_SALE_DTL tssd
-                    WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
-                    AND     tssd.SALE_YN = 'N'
-        ]]>
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                        AND tssd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                            #{item}
-                        </foreach>
-                    </if>
-        <![CDATA[
-                    AND     tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    GROUP
-                    BY      tssd.STORE_CD, tssd.SALE_DATE, tssd.POS_NO, tssd.BILL_NO
-                ) tssddp
            ,    (
                     SELECT  tsspc.STORE_CD,
                             tsspc.SALE_DATE,
                             tsspc.POS_NO,
                             tsspc.BILL_NO,
-                            SUM(CASE WHEN tsspc.APPR_PROC_FG = '3' THEN tsspc.SALE_AMT ELSE NULL END) AS PAY02, -- 현금
+                            CASE WHEN SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE NULL END) = 0 THEN NULL ELSE SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE NULL END) END AS PAY02, -- 현금
                             SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE NULL END) AS PAY021 -- 현금영수증
                     FROM    TB_SL_SALE_PAY_CASH tsspc
                     WHERE   tsspc.HQ_OFFICE_CD =	#{hqOfficeCd}
@@ -650,10 +628,6 @@
         AND     tsshp.SALE_DATE(+)  = tssh.SALE_DATE
         AND     tsshp.POS_NO(+)     = tssh.POS_NO
         AND     tsshp.BILL_NO(+)    = tssh.BILL_NO
-        AND     tssddp.STORE_CD(+)  = tssh.STORE_CD
-        AND     tssddp.SALE_DATE(+) = tssh.SALE_DATE
-        AND     tssddp.POS_NO(+)    = tssh.POS_NO
-        AND     tssddp.BILL_NO(+)   = tssh.BILL_NO
         AND     tms.STORE_CD        = tssh.STORE_CD
         AND     tsspc.STORE_CD(+)   = tssh.STORE_CD
         AND     tsspc.SALE_DATE(+)  = tssh.SALE_DATE

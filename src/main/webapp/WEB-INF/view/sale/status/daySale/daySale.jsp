@@ -312,7 +312,7 @@
 </c:import>
 
 <%-- 스마트오더 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/daySmartorder.jsp">
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayVorder.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

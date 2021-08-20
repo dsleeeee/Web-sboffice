@@ -64,11 +64,11 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
         dataItem.totEtcAmt   = messages["month.totEtcAmt"];
         dataItem.totPayAmt   = messages["month.payMethod"];
         dataItem.genRealSaleAmt   = messages["month.dlvrPack"];
-        dataItem.genRealSaleAmtPer   = messages["month.dlvrPack"];
+        dataItem.genRealSaleRate   = messages["month.dlvrPack"];
         dataItem.dlvrRealSaleAmt   = messages["month.dlvrPack"];
-        dataItem.dlvrRealSaleAmtPer   = messages["month.dlvrPack"];
+        dataItem.dlvrRealSaleRate   = messages["month.dlvrPack"];
         dataItem.packRealSaleAmt   = messages["month.dlvrPack"];
-        dataItem.packRealSaleAmtPer   = messages["month.dlvrPack"];
+        dataItem.packRealSaleRate   = messages["month.dlvrPack"];
 
         // 결제수단 헤더머지 컬럼 생성
         for (var i = 0; i < arrPayCol.length; i++) {

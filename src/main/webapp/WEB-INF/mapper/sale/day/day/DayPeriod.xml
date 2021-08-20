@@ -22,7 +22,7 @@
         SALE_TIME,
         SUM(BILL_CNT) AS BILL_CNT,
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-        SUM(BILL_UPRC) AS BILL_UPRC
+        ROUND(SUM(TOT_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC
         FROM
         (
             SELECT
@@ -34,7 +34,7 @@
             ) AS SALE_TIME,
             COUNT(tssh.BILL_NO) AS BILL_CNT,
             SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-            ROUND(SUM(tssh.TOT_SALE_AMT) / COUNT(tssh.BILL_NO)) AS BILL_UPRC
+            SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
             FROM TB_SL_SALE_HDR tssh
             WHERE 1=1
             AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}

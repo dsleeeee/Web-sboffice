@@ -124,6 +124,12 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
     dataItem.totTipAmt   = messages["day.dayTotal.totTipAmt"];
     dataItem.totEtcAmt   = messages["day.dayTotal.totEtcAmt"];
     dataItem.totPayAmt   = messages["day.dayTotal.payMethod"];
+    dataItem.genRealSaleAmt   = messages["day.dayTotal.dlvrPack"];
+    dataItem.genRealSaleRate   = messages["day.dayTotal.dlvrPack"];
+    dataItem.dlvrRealSaleAmt   = messages["day.dayTotal.dlvrPack"];
+    dataItem.dlvrRealSaleRate   = messages["day.dayTotal.dlvrPack"];
+    dataItem.packRealSaleAmt   = messages["day.dayTotal.dlvrPack"];
+    dataItem.packRealSaleRate   = messages["day.dayTotal.dlvrPack"];
 
     // 결제수단 헤더머지 컬럼 생성
     for (var i = 0; i < arrPayCol.length; i++) {
