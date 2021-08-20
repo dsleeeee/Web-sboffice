@@ -104,4 +104,9 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManageStoreRegist.js?ver=20210729.01" charset="utf-8"></script>
+<script type="text/javascript">
+    <%-- 매장상태구분 --%>
+    var sysStatFgComboData = ${ccu.getCommCode("005")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManageStoreRegist.js?ver=20210729.03" charset="utf-8"></script>

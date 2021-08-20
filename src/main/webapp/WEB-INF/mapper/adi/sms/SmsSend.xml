@@ -415,6 +415,24 @@
                 TB_HQ_OFFICE B
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                <if test="empNo != null and empNo != ''">
+                    AND A.EMP_NO LIKE '%' || #{empNo} || '%'
+                </if>
+                <if test="empNm != null and empNm != ''">
+                    AND A.EMP_NM LIKE '%' || #{empNm} || '%'
+                </if>
+                <if test="userId != null and userId != ''">
+                    AND A.USER_ID LIKE '%' || #{userId} || '%'
+                </if>
+                <if test="mpNo != null and mpNo != ''">
+                    AND A.MP_NO LIKE '%' || #{mpNo} || '%'
+                </if>
+                <if test="smsRecvYn != null and smsRecvYn != ''">
+                    AND A.SMS_RECV_YN = #{smsRecvYn}
+                </if>
+                <if test="serviceFg != null and serviceFg != ''">
+                    AND A.SERVICE_FG = #{serviceFg}
+                </if>
             )
             UNION ALL
             (
@@ -440,6 +458,24 @@
                 WHERE 1=1
                 AND A.STORE_CD = B.STORE_CD
                 AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                <if test="empNo != null and empNo != ''">
+                    AND A.EMP_NO LIKE '%' || #{empNo} || '%'
+                </if>
+                <if test="empNm != null and empNm != ''">
+                    AND A.EMP_NM LIKE '%' || #{empNm} || '%'
+                </if>
+                <if test="userId != null and userId != ''">
+                    AND A.USER_ID LIKE '%' || #{userId} || '%'
+                </if>
+                <if test="mpNo != null and mpNo != ''">
+                    AND A.MP_NO LIKE '%' || #{mpNo} || '%'
+                </if>
+                <if test="smsRecvYn != null and smsRecvYn != ''">
+                    AND A.SMS_RECV_YN = #{smsRecvYn}
+                </if>
+                <if test="serviceFg != null and serviceFg != ''">
+                    AND A.SERVICE_FG = #{serviceFg}
+                </if>
             )
             UNION ALL
             (
@@ -463,6 +499,24 @@
                 TB_CM_AGENCY B
                 WHERE 1=1
                 AND A.AGENCY_CD = B.AGENCY_CD
+                <if test="empNo != null and empNo != ''">
+                    AND A.EMP_NO LIKE '%' || #{empNo} || '%'
+                </if>
+                <if test="empNm != null and empNm != ''">
+                    AND A.EMP_NM LIKE '%' || #{empNm} || '%'
+                </if>
+                <if test="userId != null and userId != ''">
+                    AND A.USER_ID LIKE '%' || #{userId} || '%'
+                </if>
+                <if test="mpNo != null and mpNo != ''">
+                    AND A.MP_NO LIKE '%' || #{mpNo} || '%'
+                </if>
+                <if test="smsRecvYn != null and smsRecvYn != ''">
+                    AND A.SMS_RECV_YN = #{smsRecvYn}
+                </if>
+                <if test="serviceFg != null and serviceFg != ''">
+                    AND A.SERVICE_FG = #{serviceFg}
+                </if>
             )
         ) tce
         WHERE 1=1
@@ -500,24 +554,6 @@
                 </if>
             </when>
         </choose>
-        <if test="empNo != null and empNo != ''">
-            AND tce.EMP_NO LIKE '%' || #{empNo} || '%'
-        </if>
-        <if test="empNm != null and empNm != ''">
-            AND tce.EMP_NM LIKE '%' || #{empNm} || '%'
-        </if>
-        <if test="userId != null and userId != ''">
-            AND tce.USER_ID LIKE '%' || #{userId} || '%'
-        </if>
-        <if test="mpNo != null and mpNo != ''">
-            AND tce.MP_NO LIKE '%' || #{mpNo} || '%'
-        </if>
-        <if test="smsRecvYn != null and smsRecvYn != ''">
-            AND tce.SMS_RECV_YN = #{smsRecvYn}
-        </if>
-        <if test="serviceFg != null and serviceFg != ''">
-            AND tce.SERVICE_FG = #{serviceFg}
-        </if>
         ORDER BY tce.EMP_NO
     </select>
 

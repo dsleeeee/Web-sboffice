@@ -13,15 +13,6 @@
  */
 var app = agrid.getApp();
 
-// 매장상태구분 DropBoxDataMap
-var sysStatFgComboData = [
-    {"name": "전체", "value": ""},
-    {"name": "오픈", "value": "1"},
-    {"name": "폐점", "value": "2"},
-    {"name": "중지", "value": "3"},
-    {"name": "데모", "value": "9"}
-];
-
 /**
  *  메세지관리 매장적용 팝업 조회 그리드 생성
  */
