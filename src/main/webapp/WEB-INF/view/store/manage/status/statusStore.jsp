@@ -152,6 +152,8 @@
             initialized="initComboBox(s)">
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadStatusStore()"><s:message code="cmm.excel.down" /></button>
     </div>
 
     <%-- 그리드 --%>
