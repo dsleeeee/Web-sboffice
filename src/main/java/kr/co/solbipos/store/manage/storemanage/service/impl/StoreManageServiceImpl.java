@@ -317,6 +317,8 @@ public class StoreManageServiceImpl implements StoreManageService{
                     procCnt += mapper.insertStoreHqBarcd(storeManageVO);
                     // 본사 상품을 취급상품 테이블에 생성
                     procCnt += mapper.insertStoreHqProductStore(storeManageVO);
+                    // 본사 세트구성상품 매장에 생성
+                    procCnt += mapper.insertStoreHqSetConfigProd(storeManageVO);
                 }
             }
 

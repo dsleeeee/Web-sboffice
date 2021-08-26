@@ -67,11 +67,31 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                     $("#goodsYesProdDetail").css('display', 'block');
                     $("#imgProdImageProdDetail").attr("src", prodDetail.imgUrl);
                 }
+                
+                // 세트구성상품 팝업버튼 visible 처리
+                if(prodDetail.setProdFg === "1"){
+                    $("#btnDtlSetConfigProd").css("display", "none");
+                } else {
+                    $("#btnDtlSetConfigProd").css("display", "");
+                }
 
             }
         );
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
+
+    // 세트구성상품 팝업
+    $scope.dtlSetConfigProd = function () {
+
+        var params = {};
+        params.prodCd = $scope.prodDetail.prodCd;
+        params.setProdFg = $scope.prodDetail.setProdFg;
+        params.viewType = "detail";
+
+        $scope.setConfigProdLayer.show(true);
+        $scope._broadcast('setConfigProdCtrl', params);
+        event.preventDefault();
+    };
 
 }]);

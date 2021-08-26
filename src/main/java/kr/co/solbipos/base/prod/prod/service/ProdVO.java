@@ -220,6 +220,18 @@ public class ProdVO extends PageVO {
     /** 매장상품 prefix */
     private String prefix;
 
+    /** 구성상품코드*/
+    private String unitProdCd;
+
+    /** 구성상품수량*/
+    private String unitProdQty;
+
+    /** 표기순서*/
+    private String dispSeq;
+
+    /** 매장상품제한구분 여부 */
+    private String storeProdUseFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1052,5 +1064,37 @@ public class ProdVO extends PageVO {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public String getUnitProdCd() {
+        return unitProdCd;
+    }
+
+    public void setUnitProdCd(String unitProdCd) {
+        this.unitProdCd = unitProdCd;
+    }
+
+    public String getUnitProdQty() {
+        return unitProdQty;
+    }
+
+    public void setUnitProdQty(String unitProdQty) {
+        this.unitProdQty = unitProdQty;
+    }
+
+    public String getDispSeq() {
+        return dispSeq;
+    }
+
+    public void setDispSeq(String dispSeq) {
+        this.dispSeq = dispSeq;
+    }
+
+    public String getStoreProdUseFg() {
+        return storeProdUseFg;
+    }
+
+    public void setStoreProdUseFg(String storeProdUseFg) {
+        this.storeProdUseFg = storeProdUseFg;
     }
 }

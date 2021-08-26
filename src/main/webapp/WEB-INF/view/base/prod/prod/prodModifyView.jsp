@@ -361,10 +361,17 @@
                                 popover-enable="myForm.setProdFg.$invalid"
                                 popover-placement="bottom-left"
                                 popover-trigger="'mouseenter'"
-                                uib-popover="<s:message code="prod.setProdFg" />은(는) 필수 입력항목 입니다.">
+                                uib-popover="<s:message code="prod.setProdFg" />은(는) 필수 입력항목 입니다."
+                                selected-index-changed="setProdFgSelected(s)">
                   </wj-combo-box>
                 </div>
               </td>
+              <td>
+                <a href="#" id="btnSetConfigProd" class="btn_grayS" ng-click="setConfigProd()" style="display: none;"><s:message code="prod.configProd"/></a>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
               <%--포인트적립여부--%>
               <th><s:message code="prod.pointSaveYn"/></th>
               <td>
@@ -384,8 +391,6 @@
                   </wj-combo-box>
                 </div>
               </td>
-            </tr>
-            <tr>
               <%--사이드사용여부--%>
               <th><s:message code="prod.sideProdYn"/></th>
               <td>
@@ -730,7 +735,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210707.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210827.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -744,4 +749,8 @@
 
 <%-- 프린터연결 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/kitchenprintLink.jsp">
+</c:import>
+
+<%-- 세트구성상품 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/setConfigProdRegist.jsp">
 </c:import>
