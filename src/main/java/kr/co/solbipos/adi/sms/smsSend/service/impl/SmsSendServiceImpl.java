@@ -170,7 +170,7 @@ public class SmsSendServiceImpl implements SmsSendService {
                 }
             }
 
-            // 잔여수량
+            // 잔여수량 -1
             String smsQty = smsSendMapper.getSmsQty(smsSendVO);
             smsSendVO.setSmsQty(String.valueOf(smsQty));
 

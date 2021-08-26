@@ -24,6 +24,9 @@ app.controller('addresseeAddCtrl', ['$scope', '$http', function ($scope, $http) 
     // 조회조건 콤보박스 데이터 Set
     $scope._getComboDataQuery('072', 'smsRecvYnAddresseeAddCombo', 'A'); // SMS수신구분
     $scope._getComboDataQuery('007', 'serviceFgAddresseeAddCombo', 'A'); // 재직구분
+    if(orgnFg == "MASTER") {
+        $scope._getComboDataQuery('002', 'srchOrgnFgAddresseeAddCombo', 'A'); // 소속구분
+    }
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -42,7 +45,9 @@ app.controller('addresseeAddCtrl', ['$scope', '$http', function ($scope, $http) 
         var params = {};
         params.smsRecvYn = $scope.smsRecvYnAddresseeAddCombo;
         params.serviceFg = $scope.serviceFgAddresseeAddCombo;
-        params.authChk = userAuth;
+        if(orgnFg == "MASTER") {
+            params.srchOrgnFg = $scope.srchOrgnFgAddresseeAddCombo;
+        }
 
         $scope._inquiryMain("/adi/sms/smsSend/smsSend/getAddresseeAddList.sb", params, function() {}, false);
     };
@@ -68,54 +73,21 @@ app.controller('addresseeAddCtrl', ['$scope', '$http', function ($scope, $http) 
         var addresseeAddScope = agrid.getScope('smsSendCtrl');
         addresseeAddScope.receiveNameSet(params);
 
-        $scope.wjAddresseeAddLayer.hide();
-        event.preventDefault();
+        // 팝업 닫기
+        $scope.close();
     });
 
-    // <-- 체크박스 이벤트 -->
-    // 체크박스
-    var userAuth = "";
-    $scope.totYn = true;
+    // 팝업 닫기
+    $scope.close = function(){
+        $scope.empNm = "";
+        $scope.userId = "";
+        $scope.mpNo = "";
+        $scope.srchSmsRecvYnAddresseeAddCombo.selectedIndex = 0;
+        $scope.srchServiceFgAddresseeAddCombo.selectedIndex = 0;
+        if(orgnFg == "MASTER") {
+            $scope.srchOrgnFgAddresseeAddCombo.selectedIndex = 0;
+        }
 
-    // 전체
-    $scope.totYnChk = function(){
-        $scope.systemYn = false;
-        $scope.agencyYn = false;
-        $scope.hqOfficeYn = false;
-        $scope.storeYn = false;
-        userAuth = "all"; // 시스템,대리점 로그인시 전체 체크박스
+        $scope.wjAddresseeAddLayer.hide();
     };
-    // 시스템
-    $scope.systemYnChk = function(){
-        $scope.totYn = false;
-        $scope.agencyYn = false;
-        $scope.hqOfficeYn = false;
-        $scope.storeYn = false;
-        userAuth = "M"; // M
-    };
-    // 대리점
-    $scope.agencyYnChk = function(){
-        $scope.totYn = false;
-        $scope.systemYn = false;
-        $scope.hqOfficeYn = false;
-        $scope.storeYn = false;
-        userAuth = "A"; // A
-    };
-    // 본사
-    $scope.hqOfficeYnChk = function(){
-        $scope.totYn = false;
-        $scope.systemYn = false;
-        $scope.agencyYn = false;
-        $scope.storeYn = false;
-        userAuth = "H"; // H
-    };
-    // 매장
-    $scope.storeYnChk = function(){
-        $scope.totYn = false;
-        $scope.systemYn = false;
-        $scope.agencyYn = false;
-        $scope.hqOfficeYn = false;
-        userAuth = "S"; // S
-    };
-    // <-- 체크박스 이벤트 -->
 }]);

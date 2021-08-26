@@ -545,7 +545,7 @@
     <!-- 부가서비스 > SMS관리 > 마케팅용 SMS전송 -->
     <typeAlias alias="marketingSmsSendVO" type="kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO"/>
     <!-- 부가서비스 > SMS관리 > SMS충전내역 -->
-    <!--<typeAlias alias="smsChargeHistVO" type="kr.co.solbipos.adi.sms.smsChargeHist.service.SmsChargeHistVO"/>-->
+    <typeAlias alias="smsChargeHistVO" type="kr.co.solbipos.adi.sms.smsChargeHist.service.SmsChargeHistVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="useSmVO" type="kr.co.solbipos.adi.sms.usesm.service.UseSmVO"/>
