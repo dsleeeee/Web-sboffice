@@ -116,6 +116,9 @@ public class ProdController {
             model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
         }
 
+        // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
+        model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
+
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
@@ -542,4 +545,74 @@ public class ProdController {
 
         return returnListJson(Status.OK, list, prodVO);
     }
+
+    /**
+     * 세트구성상품 팝업 - 구성내역 리스트 조회
+     *
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021. 08. 21.
+     */
+    @RequestMapping(value = "/getSetConfigProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSetConfigProdList(ProdVO prodVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSetConfigProdList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
+     * 세트구성상품 팝업 - 상품 리스트 조회
+     *
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021. 08. 21.
+     */
+    @RequestMapping(value = "/getSrchSetConfigProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSrchSetConfigProdList(ProdVO prodVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSrchSetConfigProdList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
+     * 세트구성상품 팝업 - 상품 등록/수정/삭제
+     *
+     * @param prodVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021. 08. 23.
+     */
+    @RequestMapping(value = "/saveSetConfigProd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSetConfigProd(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.saveSetConfigProd(prodVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

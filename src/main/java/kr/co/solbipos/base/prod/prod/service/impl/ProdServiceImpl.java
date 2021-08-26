@@ -8,6 +8,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
@@ -1194,5 +1195,74 @@ public class ProdServiceImpl implements ProdService {
         }
 
         return prodMapper.getBrandList2(prodVO);
+    }
+
+    /** 세트구성상품 팝업 - 구성내역 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSetConfigProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getSetConfigProdList(prodVO);
+    }
+
+    /** 세트구성상품 팝업 - 상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSrchSetConfigProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getSrchSetConfigProdList(prodVO);
+    }
+
+    /** 세트구성상품 팝업 - 상품 등록/수정/삭제 */
+    @Override
+    public int saveSetConfigProd(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        int result = 0;
+        int procResult = 0;
+
+        for(ProdVO prodVO : prodVOs) {
+
+            prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            prodVO.setRegDt(dt);
+            prodVO.setRegId(sessionInfoVO.getUserId());
+            prodVO.setModDt(dt);
+            prodVO.setModId(sessionInfoVO.getUserId());
+
+            if ( prodVO.getStatus() == GridDataFg.INSERT ) { // 등록
+
+                // 상품 새 표기순번
+                prodVO.setDispSeq(prodMapper.getSetConfigProdDispSeq(prodVO));
+                result += prodMapper.insertSetConfigProd(prodVO);
+
+            } else if ( prodVO.getStatus() == GridDataFg.UPDATE ) { // 수정
+                result += prodMapper.updateSetConfigProd(prodVO);
+
+            } else if ( prodVO.getStatus() == GridDataFg.DELETE ) { // 삭제
+                result += prodMapper.deleteSetConfigProd(prodVO);
+            }
+        }
+
+        if (result == prodVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
     }
 }

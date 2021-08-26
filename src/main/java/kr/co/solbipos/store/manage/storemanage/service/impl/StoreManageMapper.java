@@ -353,4 +353,8 @@ public interface StoreManageMapper {
 
     /** 사업자번호 중복체크 */
     DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO);
+
+    /** 본사 세트구성상품 복사  */
+    int insertStoreHqSetConfigProd(StoreManageVO storeManageVO);
+
 }

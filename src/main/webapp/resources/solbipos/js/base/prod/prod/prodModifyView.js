@@ -11,6 +11,10 @@
 /**
  * 팝업 그리드 생성
  */
+
+// 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
+var vSetProdFg = "";
+
 app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, $timeout, true));
@@ -265,13 +269,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                         $scope._popMsg(messages["prod.sideProdChk.msg"]); // 사이드메뉴관리에 선택상품으로 등록된 상품은 <br/> '사이드상품여부'를 '사용'으로 선택할 수 없습니다.
                         return false;
                     } else {
-                        // 상품저장
-                        $scope.saveProdSave();
+                        // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
+                        $scope.setConfigProdChk();
                     }
                 });
             } else {
-                // 상품저장
-                $scope.saveProdSave();
+                // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
+                $scope.setConfigProdChk();
             }
         }
     }
@@ -305,16 +309,53 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 $scope.prodImageFileSave(result);
 
                     if($scope.getMode() == "I"){
-                        if(kitchenprintLink == "1"){
-                            $scope.setKitchenprrint(result);
-                            $scope.kitchenprintLinkLayer.show(true);
-                            var scope = agrid.getScope('kitchenprintLinkCtrl');
-                            scope._broadcast('kitchenprintLinkCtrl');
-                        } else {
+
+                        if(kitchenprintLink ==="0" && $scope.prodModifyInfo.setProdFg ==="1"){
+                            $scope.prodModifyLayer.hide();
+
+                        }else{
+                            // 프린터연결팝업창 사용시, 팝업 오픈
+                            if(kitchenprintLink === "1"){
+                                $scope.setKitchenprrint(result);
+                                $scope.kitchenprintLinkLayer.show(true);
+                                var scope = agrid.getScope('kitchenprintLinkCtrl');
+                                scope._broadcast('kitchenprintLinkCtrl');
+                            }
+
+                            // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
+                            if($scope.prodModifyInfo.setProdFg !== "1"){
+                                var params = {};
+                                params.prodCd = result;
+                                params.setProdFg = $scope.prodModifyInfo.setProdFg;
+                                params.viewType = "modify";
+
+                                $scope.setConfigProdLayer.show(true);
+                                $scope._broadcast('setConfigProdCtrl', params);
+                            }
+                        }
+
+                    } else {
+
+                        // 기존 세트상품구분값과 변경된 세트상품구분값 비교하여 세트구성상품 팝업 띄우기
+                        if(vSetProdFg === "1"){
+
+                            // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
+                            if($scope.prodModifyInfo.setProdFg !== "1"){
+                                var params = {};
+                                params.prodCd = result;
+                                params.setProdFg = $scope.prodModifyInfo.setProdFg;
+                                params.viewType = "modify";
+
+                                $scope.setConfigProdLayer.show(true);
+                                $scope._broadcast('setConfigProdCtrl', params);
+
+                            }else{
+                                $scope.prodModifyLayer.hide();
+                            }
+
+                        }else {
                             $scope.prodModifyLayer.hide();
                         }
-                    } else {
-                        $scope.prodModifyLayer.hide();
                     }
 
                 // 저장기능 수행후 재조회
@@ -584,6 +625,16 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                             alert(e);
                         }
                     }
+
+                    // 세트구성상품 등록버튼 visible 처리
+                    if($scope.prodModifyInfo.setProdFg === "1"){
+                        $("#btnSetConfigProd").css("display", "none");
+                    }else{
+                        $("#btnSetConfigProd").css("display", "");
+                    }
+
+                    // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
+                    vSetProdFg = $scope.prodModifyInfo.setProdFg
                 }
             );
 
@@ -643,6 +694,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#prodModifyPoMinQty").val("1"); // 최소발주수량
             $("#prodModifyStartStockQty").val("0"); // 초기재고
             $("#prodModifySafeStockQty").val("0"); // 안전재고
+
+            // 세트구성상품 등록버튼 visible 처리
+            $("#btnSetConfigProd").css("display", "none");
         }
     };
 
@@ -774,5 +828,65 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }, 50)
         });
     });
+    
+    // 세트구성상품 팝업
+    $scope.setConfigProd = function () {
+
+        var params = {};
+        params.prodCd = $scope.prodModifyInfo.prodCd;
+        params.setProdFg = $scope.prodModifyInfo.setProdFg;
+        params.viewType = "modify";
+
+        $scope.setConfigProdLayer.show(true);
+        $scope._broadcast('setConfigProdCtrl', params);
+        event.preventDefault();
+    };
+
+    // 세트구성상품 등록버튼 visible 처리
+    $scope.setProdFgSelected = function(s) {
+
+        // 수정일 떄만 구성상품 등록 가능
+        if($scope.getMode() === "U"){
+            if (s.selectedValue === "1") {
+                $("#btnSetConfigProd").css("display", "none");
+            } else {
+                $("#btnSetConfigProd").css("display", "");
+            }
+        }
+    };
+
+    // 신규등록인 경우, 세트구성상품 팝업 닫기 클릭시 상품정보등록화면 자동으로 닫히게 처리
+    $scope.closeView = function () {
+
+        if($scope.getMode() === "I"){
+            $scope.prodModifyLayer.hide();
+        }
+    };
+    
+    // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
+    $scope.setConfigProdChk = function () {
+
+        if($("#saveMode").val() === "MOD" && $scope.prodModifyInfo.setProdFg === "1") {
+            var params = {};
+            params.prodCd = $scope.prodModifyInfo.prodCd;
+
+            $scope._postJSONQuery.withOutPopUp('/base/prod/prod/prod/getSetConfigProdList.sb', params, function (response) {
+                var list = response.data.data.list;
+
+                if(list.length > 0) {
+                    $scope._popMsg(messages["prod.setConfigProdCountChk.msg"]); // 세트 구성 상품이 이미 등록되어 있어<br>일반상품으로 전환 하실 수 없습니다.<br>세트 구성 상품을 먼저 삭제하여 주십시오.
+                    return false;
+
+                }else{
+                    // 상품저장
+                    $scope.saveProdSave();
+                }
+            });
+        }else{
+            // 상품저장
+            $scope.saveProdSave();
+        }
+    };
+
 
 }]);

@@ -257,6 +257,8 @@
     var brandUseFg = "${brandUseFg}";
     // 브랜드
     var brandList = ${brandList};
+    // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
+    var storeProdUseFg = "${storeProdUseFg}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.04" charset="utf-8"></script>

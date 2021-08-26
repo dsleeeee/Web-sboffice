@@ -3652,4 +3652,256 @@
             </when>
         </choose>
     </select>
+
+    <!-- 세트구성상품 팝업 - 구성내역 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD
+        PARAM    : prodVO
+        COMMENTS : 세트구성상품 구성내역을 조회한다.
+    -->
+    <select id="getSetConfigProdList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getSetConfigProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thpup.UNIT_PROD_CD,
+                        thpup.UNIT_PROD_QTY,
+                        thpup.DISP_SEQ,
+                        thp.PROD_NM,
+                        thp.PO_UNIT_FG,
+                        thp.COST_UPRC
+                  FROM TB_HQ_PRODUCT_UNITST_PROD thpup,
+                        TB_HQ_PRODUCT thp
+                 WHERE thpup.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thpup.PROD_CD = #{prodCd}
+                   AND thp.HQ_OFFICE_CD = thpup.HQ_OFFICE_CD
+                   AND thp.PROD_CD = thpup.UNIT_PROD_CD
+                 ORDER
+                    BY thpup.DISP_SEQ
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmpup.UNIT_PROD_CD,
+                        tmpup.UNIT_PROD_QTY,
+                        tmpup.DISP_SEQ,
+                        tmp.PROD_NM,
+                        tmp.PO_UNIT_FG,
+                        tmp.COST_UPRC
+                  FROM TB_MS_PRODUCT_UNITST_PROD tmpup,
+                        TB_MS_PRODUCT tmp
+                 WHERE tmpup.STORE_CD = #{storeCd}
+                   AND tmpup.PROD_CD = #{prodCd}
+                   AND tmp.STORE_CD = tmpup.STORE_CD
+                   AND tmp.PROD_CD = tmpup.UNIT_PROD_CD
+                 ORDER
+                    BY tmpup.DISP_SEQ
+            </when>
+        </choose>
+    </select>
+
+    <!-- 세트구성상품 팝업 - 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD
+        PARAM    : prodVO
+        COMMENTS : 세트구성상품 구성내역으로 등록할 상품 리스트를 조회한다.
+    -->
+    <select id="getSrchSetConfigProdList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getSrchSetConfigProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thp.PROD_CD AS UNIT_PROD_CD,
+                        thp.PROD_NM,
+                        thp.PO_UNIT_FG
+                  FROM TB_HQ_PRODUCT thp
+                 WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thp.SET_PROD_FG IN ('1', '4')
+                   AND thp.USE_YN = 'Y'
+                   AND thp.SALE_PROD_YN = 'Y'
+                   AND thp.PROD_CD != #{prodCd}
+                   AND thp.PROD_CD NOT IN (SELECT UNIT_PROD_CD FROM TB_HQ_PRODUCT_UNITST_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd})
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%' || #{prodNm} ||'%'
+                </if>
+                 ORDER
+                    BY thp.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmp.PROD_CD AS UNIT_PROD_CD,
+                        tmp.PROD_NM,
+                        tmp.PO_UNIT_FG
+                 FROM TB_MS_PRODUCT tmp
+                WHERE tmp.STORE_CD = #{storeCd}
+                  AND tmp.SET_PROD_FG IN ('1', '4')
+                  AND tmp.USE_YN = 'Y'
+                  AND tmp.SALE_PROD_YN = 'Y'
+                  AND tmp.PROD_CD != #{prodCd}
+                  AND tmp.PROD_CD NOT IN (SELECT UNIT_PROD_CD FROM TB_MS_PRODUCT_UNITST_PROD WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd})
+                <if test='prodNm != null and prodNm != ""'>
+                  AND tmp.PROD_NM LIKE '%' || #{prodNm} ||'%'
+                </if>
+                <if test='storeProdUseFg != null and storeProdUseFg == "1"'>
+                  AND tmp.REG_FG = 'H'
+                </if>
+                ORDER
+                   BY tmp.PROD_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 세트구성상품 팝업 - 상품 새 표기순번 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD
+        PARAM    : prodVO
+        COMMENTS : 세트구성상품을 등록하기 위해 새 표기순번을 조회한다.
+    -->
+    <select id="getSetConfigProdDispSeq" parameterType="prodVO" resultType="String">
+        /* ProdMapper.getSetConfigProdDispSeq */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT NVL(MAX(DISP_SEQ), 0) + 1
+                  FROM TB_HQ_PRODUCT_UNITST_PROD
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT NVL(MAX(DISP_SEQ), 0) + 1
+                  FROM TB_MS_PRODUCT_UNITST_PROD
+                 WHERE STORE_CD = #{storeCd}
+                  AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 세트구성상품 팝업 - 구성내역 상품등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD
+        PARAM    : prodVO
+        COMMENTS : 구성내역 상품을 등록한다.
+    -->
+    <insert id="insertSetConfigProd" parameterType="prodVO">
+        /* ProdMapper.insertSetConfigProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_UNITST_PROD
+                            (
+                            HQ_OFFICE_CD,
+                            PROD_CD,
+                            UNIT_PROD_CD,
+                            SET_PROD_FG,
+                            UNIT_PROD_QTY,
+                            DISP_SEQ,
+                            REG_DT,
+                            REG_ID,
+                            MOD_DT,
+                            MOD_ID
+                ) VALUES (
+                            #{hqOfficeCd},
+                            #{prodCd},
+                            #{unitProdCd},
+                            #{setProdFg},
+                            #{unitProdQty},
+                            #{dispSeq},
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_UNITST_PROD
+                            (
+                            STORE_CD,
+                            PROD_CD,
+                            UNIT_PROD_CD,
+                            SET_PROD_FG,
+                            UNIT_PROD_QTY,
+                            DISP_SEQ,
+                            REG_DT,
+                            REG_ID,
+                            MOD_DT,
+                            MOD_ID
+                ) VALUES (
+                            #{storeCd},
+                            #{prodCd},
+                            #{unitProdCd},
+                            #{setProdFg},
+                            #{unitProdQty},
+                            #{dispSeq},
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 세트구성상품 팝업 - 구성내역 상품수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD
+        PARAM    : prodVO
+        COMMENTS : 구성내역 상품을 수정한다.
+    -->
+    <update id="updateSetConfigProd" parameterType="prodVO">
+        /* ProdMapper.updateSetConfigProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_UNITST_PROD
+                   SET UNIT_PROD_QTY = #{unitProdQty},
+                        DISP_SEQ = #{dispSeq},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD = #{prodCd}
+                   AND UNIT_PROD_CD = #{unitProdCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_UNITST_PROD
+                    SET UNIT_PROD_QTY = #{unitProdQty},
+                        DISP_SEQ = #{dispSeq},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROD_CD = #{prodCd}
+                   AND UNIT_PROD_CD = #{unitProdCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 세트구성상품 팝업 - 구성내역 상품삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD
+        PARAM    : prodVO
+        COMMENTS : 구성내역 상품을 삭제한다.
+    -->
+    <delete id="deleteSetConfigProd" parameterType="prodVO">
+        /* ProdMapper.deleteSetConfigProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                  FROM TB_HQ_PRODUCT_UNITST_PROD
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD = #{prodCd}
+                   AND UNIT_PROD_CD = #{unitProdCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                  FROM TB_MS_PRODUCT_UNITST_PROD
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROD_CD = #{prodCd}
+                   AND UNIT_PROD_CD = #{unitProdCd}
+            </when>
+        </choose>
+    </delete>
+
 </mapper>
