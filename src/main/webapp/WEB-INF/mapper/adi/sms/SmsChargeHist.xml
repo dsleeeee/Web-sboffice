@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsChargeHist.xml
+    SMS충전내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.08.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.smsChargeHist.service.impl.SmsChargeHistMapper">
+
+    <!-- SMS충전내역 - 조회 -->
+    <!--
+        TABLE    : CET_PGLOG_T, CET_SMSPT_T, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : [로그-시스템]서버관리-본사매장-SMS충전결제기록, [마스터-공용]SMS-본사/매장-SMS잔여수량, 웹 사용자 정보 veiw
+    -->
+    <select id="getSmsChargeHistList"  parameterType="SmsChargeHistVO" resultType="DefaultMap">
+        /* SmsChargeHistMapper.getSmsChargeHistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        cpt.OGN_CD AS ORGN_CD,
+        twuidv01.ORGN_NM,
+        cst.SMS_QTY,
+        cpt.CHARGE_DATE,
+        cpt.CHARGE_TIME,
+        cpt.PGRESOURCE,
+        cpt.CONTROLNO,
+        cpt.CHARGE_AMT,
+        cpt.SMS_BASE_QTY,
+        cpt.SMS_CHARGE_QTY,
+        cpt.SUCCESS_YN,
+        (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = cpt.CHARGE_ID) AS CHARGE_ID_NM,
+        cpt.RESULTMESSAGE
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM CET_PGLOG_T cpt,
+        CET_SMSPT_T cst,
+        (
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                   ELSE null END
+            ) AS AGENCY_CD
+            FROM
+            (
+                SELECT
+                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.ORGN_NM,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.STORE_CD
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            ) twuidv01
+            WHERE 1=1
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        AND cpt.CHARGE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test="successYn != null and successYn != ''">
+            <![CDATA[
+                AND cpt.SUCCESS_YN = #{successYn}
+            ]]>
+        </if>
+        <if test="pgresource != null and pgresource != ''">
+            <![CDATA[
+                AND cpt.PGRESOURCE = #{pgresource}
+            ]]>
+        </if>
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twuidv01.AGENCY_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND twuidv01.STORE_CD = #{orgnCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        AND cst.OGN_CD (+)= cpt.OGN_CD
+        AND twuidv01.ORGN_CD = cst.OGN_CD
+        ORDER BY cpt.OGN_CD ASC, cpt.CHARGE_DATE DESC, cpt.CHARGE_TIME DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- SMS임의충전 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSmsChargeRegistList"  parameterType="SmsChargeHistVO" resultType="DefaultMap">
+        /* SmsChargeHistMapper.getSmsChargeRegistList */
+        SELECT
+        twuidv01.ORGN_CD,
+        twuidv01.ORGN_NM,
+        twuidv01.CLS_FG,
+        twuidv01.SYS_STAT_FG,
+        NVL(cst.SMS_QTY, 0) AS SMS_QTY
+        FROM CET_SMSPT_T cst,
+        (
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                   ELSE null END
+            ) AS AGENCY_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT CLS_FG FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT CLS_FG FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                   ELSE null END
+            ) AS CLS_FG,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT SYS_STAT_FG FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT SYS_STAT_FG FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                   ELSE null END
+            ) AS SYS_STAT_FG
+            FROM
+            (
+                SELECT
+                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.ORGN_NM,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.STORE_CD
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                WHERE 1=1
+                <if test='srchOrgnCd != null and srchOrgnCd != ""'>
+                    AND twuidv01.ORGN_CD LIKE '%'||#{srchOrgnCd}||'%'
+                </if>
+                <if test='srchOrgnNm != null and srchOrgnNm != ""'>
+                    AND twuidv01.ORGN_NM LIKE '%'||#{srchOrgnNm}||'%'
+                </if>
+                <!-- 시스템 -->
+                <if test='orgnFg != null and orgnFg != "" and orgnFg == "M"'>
+                    <!-- 검색조건 소속구분 -->
+                    <if test='srchOrgnFg != null and srchOrgnFg != ""'>
+                        <![CDATA[
+                            AND twuidv01.ORGN_FG = #{srchOrgnFg}
+                        ]]>
+                    </if>
+                </if>
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            ) twuidv01
+            WHERE 1=1
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        <if test='clsFg != null and clsFg != ""'>
+            AND twuidv01.CLS_FG = #{clsFg}
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND twuidv01.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twuidv01.AGENCY_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND twuidv01.STORE_CD = #{orgnCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        AND cst.OGN_CD (+)= twuidv01.ORGN_CD
+        ORDER BY twuidv01.ORGN_FG, twuidv01.ORGN_CD
+    </select>
+
+    <!-- SMS임의충전 팝업 - 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSmsChargeRegistSaveInsert" parameterType="SmsChargeHistVO">
+        /* SmsChargeHistMapper.getSmsChargeRegistSaveInsert */
+        INSERT INTO CET_PGLOG_T
+        (
+            OGN_CD,
+            CHARGE_DATE,
+            CHARGE_TIME,
+            CHARGE_ID,
+            PGRESOURCE,
+            CHARGE_AMT,
+            SUCCESS_YN,
+            CONTROLNO,
+            APPROVALNUM,
+            RESULTCODE,
+            RESULTMESSAGE,
+            RTN_DATE,
+            RTN_TIME,
+            RTN_ID,
+            RTN_CONTROLNO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            SMS_BASE_QTY,
+            SMS_CHARGE_QTY,
+            SPP_CORP_CD,
+            SPP_SLIP_NO,
+            SPP_SLIP_FG,
+            SPP_POST_NO,
+            SPP_ADDR,
+            SPP_ADDR_DTL,
+            SPP_TEL_NO,
+            PG_FG,
+            PG_VAN_CD,
+            ORDER_NO,
+            CASH_YN,
+            CASH_AUTHNO
+        ) VALUES (
+            #{selectOrgnCd},
+            TO_CHAR(SYSDATE, 'yyyyMMdd'),
+            TO_CHAR(SYSDATE, 'HH24MISS'),
+            #{regId},
+            '*',
+            '0',
+            'Y',
+            '*',
+            '',
+            '0000',
+            '임의등록',
+            '',
+            '',
+            '',
+            '',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{smsBaseQty},
+            #{smsChargeQty},
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '0',
+            '',
+            '',
+            '',
+            ''
+        )
+    </insert>
+
+    <!-- 잔여수량 저장 insert -->
+    <!--
+        TABLE    : CET_SMSPT_T
+        COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
+    -->
+    <insert id="getSmsQtySaveInsert" parameterType="SmsChargeHistVO">
+        /* SmsChargeHistMapper.getSmsQtySaveInsert */
+        MERGE INTO CET_SMSPT_T
+        USING DUAL
+        ON  (
+                OGN_CD = #{selectOrgnCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            SMS_QTY = #{smsQty},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                OGN_CD,
+                SMS_QTY,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{selectOrgnCd},
+                #{smsQty},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+</mapper>
