@@ -117,8 +117,8 @@ public class SmsSendVO extends PageVO {
     /** 팝업 구분 */
     private String pageGubun;
 
-    /** 수신자추가 팝업 - 관리자용 체크 구분 */
-    private String authChk;
+    /** 소속구분 */
+    private String srchOrgnFg;
 
     /** 전송이력시퀀스 */
     private String smsSendSeq;
@@ -274,13 +274,9 @@ public class SmsSendVO extends PageVO {
         this.pageGubun = pageGubun;
     }
 
-    public String getAuthChk() {
-        return authChk;
-    }
+    public String getSrchOrgnFg() { return srchOrgnFg; }
 
-    public void setAuthChk(String authChk) {
-        this.authChk = authChk;
-    }
+    public void setSrchOrgnFg(String srchOrgnFg) { this.srchOrgnFg = srchOrgnFg; }
 
     public String getSmsSendSeq() {
         return smsSendSeq;

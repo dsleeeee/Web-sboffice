@@ -539,9 +539,9 @@
                 <!-- 시스템 -->
                 <if test='orgnFg == "M"'>
                     <!-- 전체 체크박스 제외 -->
-                    <if test='authChk != null and authChk != "" and authChk != "all"'>
+                    <if test='srchOrgnFg != null and srchOrgnFg != ""'>
                         <![CDATA[
-                            AND tce.ORGN_FG = #{authChk}
+                            AND tce.ORGN_FG = #{srchOrgnFg}
                         ]]>
                     </if>
                 </if>
