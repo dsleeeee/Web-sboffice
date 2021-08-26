@@ -77,7 +77,33 @@
             <foreach collection="arrPayCol" item="item" separator=",">
                 SUM(tsdpp.PAY${item}) AS PAY${item}
             </foreach>
-            FROM TB_SL_DAILY_PROD tsdp,
+            FROM
+            (
+                SELECT
+                HQ_OFFICE_CD,
+                HQ_BRAND_CD,
+                STORE_CD,
+                PROD_CD,
+                SALE_DATE,
+                SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
+                SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+                SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                FROM TB_SL_DAILY_PROD
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCd != null and storeCd != ""'>
+                    AND STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, PROD_CD, SALE_DATE
+            ) tsdp,
             TB_MS_PRODUCT tmp,
             TB_MS_PRODUCT_BARCD tmpb,
             (
@@ -123,17 +149,6 @@
                 GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, PROD_CD, SALE_DATE
             ) tsdpp
             WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </if>
-            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            <if test="prodCd != null and prodCd != ''">
-                AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
-            </if>
             <if test="prodNm != null and prodNm != ''">
                 AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
             </if>
