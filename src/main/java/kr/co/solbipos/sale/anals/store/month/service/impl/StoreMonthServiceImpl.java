@@ -94,7 +94,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	    	sQuery1 +=", MAX(M.REAL_SALE_AMT"+ j +") AS REAL_SALE_AMT" + j + "\n";
 	    	sQuery1 +=", MAX(M.BILL_CNT"+ j +") AS BILL_CNT" + j + "\n";
 	    	sQuery1 +=", ROUND(SUM(REAL_SALE_AMT"+ j +")/DECODE(SUM(M.BILL_CNT"+ j +"),0, NULL, SUM(BILL_CNT" + j +")),0) AS TOT_BILL_AMT" + j + "\n";
-	    	sQuery1 +=", ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT" + j + ")) OVER(), 2) *100 AS STORE_RAT" + j + "\n";
+	    	sQuery1 +=", ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT" + j + ")) OVER(), 4) *100 AS STORE_RAT" + j + "\n";
 	    	
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_CD,'') AS STORE_CD" + j + "\n";
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_NM,'') AS STORE_NM" + j + "\n";
