@@ -121,7 +121,7 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
             if (panel.cellType === wijmo.grid.CellType.Cell) {
 
                 // 컬럼 병합(그리드 합치기)
-                if(panel.columns[c].binding == "orgnCd" || panel.columns[c].binding == "orgnNm" || panel.columns[c].binding == "smsQty") {
+                if(panel.columns[c].binding == "orgn") {
                     panel.columns[c].allowMerging = true;
                 }
 

@@ -111,14 +111,15 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="smsChargeHist.orgnCd"/>" binding="orgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="smsChargeHist.orgnNm"/>" binding="orgnNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="smsChargeHist.smsQty"/>" binding="smsQty" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <%--<wj-flex-grid-column header="<s:message code="smsChargeHist.orgnCd"/>" binding="orgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>--%>
+                <%--<wj-flex-grid-column header="<s:message code="smsChargeHist.orgnNm"/>" binding="orgnNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>--%>
+                <%--<wj-flex-grid-column header="<s:message code="smsChargeHist.smsQty"/>" binding="smsQty" width="80" is-read-only="true" align="center"></wj-flex-grid-column>--%>
+                <wj-flex-grid-column header="<s:message code="smsChargeHist.orgn"/>" binding="orgn" width="300" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="smsChargeHist.chargeDate"/>" binding="chargeDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="smsChargeHist.chargeTime"/>" binding="chargeTime" width="70" is-read-only="true" align="center" format="time"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="smsChargeHist.pgresource"/>" binding="pgresource" data-map="pgresourceDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="smsChargeHist.controlno"/>" binding="controlno" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="smsChargeHist.chargeAmt"/>" binding="chargeAmt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsChargeHist.chargeAmt"/>" binding="chargeAmt" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="smsChargeHist.smsBaseQty"/>" binding="smsBaseQty" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="smsChargeHist.smsChargeQty"/>" binding="smsChargeQty" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="smsChargeHist.successYn"/>" binding="successYn" data-map="successYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -140,7 +141,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20210823.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20210823.02" charset="utf-8"></script>
 
 <%-- SMS임의충전 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsChargeHist/smsChargeRegist.jsp">
