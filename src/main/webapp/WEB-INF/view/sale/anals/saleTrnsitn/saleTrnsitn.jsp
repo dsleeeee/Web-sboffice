@@ -39,7 +39,7 @@
 			<tr>
 		        <th><s:message code="prod.prodClass" /></th>	<%-- 분류조회 --%>
 		        <td>
-		          	<input type="text" 		class="sb-input w80" 		id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;" placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+		          	<input type="text" 		class="sb-input w70" 		id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;" placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
 		          	<input type="hidden" 								id="_prodClassCd" name="prodClassCd" ng-model="prodClassCdModel" disabled />
 		        	<button type="button" 	class="btn_skyblue fl mr5" 	id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
 		        </td>
@@ -91,7 +91,7 @@
     </table>
 
 
-    <div class="mt20 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
           class="w100px fl"

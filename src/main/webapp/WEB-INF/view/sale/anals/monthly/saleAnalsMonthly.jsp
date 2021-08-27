@@ -28,7 +28,7 @@
       <th><s:message code="cmm.search.month"/></th>
       <td>
         <div class="sb-select">
-              <span class="txtIn"> <input id="reqYearMonth" name="startDate" class="w120px" /></span>
+              <span class="txtIn"> <input id="reqYearMonth" name="startDate" class="w110px" /></span>
             </span>
         </div>
       </td>

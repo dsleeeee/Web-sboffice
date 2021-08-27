@@ -27,9 +27,9 @@
 				<th><s:message code="cmm.search.date" /></th>
 				<td>
 					<div class="sb-select">
-						<span class="txtIn"><input id="srchStoreBrandStartDate" class="w120px"></span>
+						<span class="txtIn"><input id="srchStoreBrandStartDate" class="w110px"></span>
 						<span class="rg">~</span>
-						<span class="txtIn"><input id="srchStoreBrandEndDate" class="w120px"></span>
+						<span class="txtIn"><input id="srchStoreBrandEndDate" class="w110px"></span>
 						<span class="chk ml10" style="display: none;">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 							<label for="chkDt"><s:message code="cmm.all.day" /></label>
@@ -70,7 +70,7 @@
 		</tbody>
 	</table>
 
-	<div class="mt40 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		    <%-- 엑셀 다운로드 //TODO --%>
 		    <button class="btn_skyblue fr" ng-click="excelDownloadStoreBrand()"><s:message code="cmm.excel.down" />
 		    </button>

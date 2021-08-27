@@ -29,9 +29,9 @@
             <th><s:message code="cmm.search.date"/></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"><input id="srchProdClassStartDate" ng-model="startDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchProdClassStartDate" ng-model="startDate" class="w110px"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchProdClassEndDate" ng-model="endDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchProdClassEndDate" ng-model="endDate" class="w110px"></span>
                 </div>
             </td>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">

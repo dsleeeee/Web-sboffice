@@ -35,9 +35,9 @@
                 </th>
                 <td colspan="3">
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="startDateDayCorner" name="startDate" class="w200px" /></span>
+                        <span class="txtIn"> <input id="startDateDayCorner" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="endDateDayCorner" name="endDate" class="w200px" /></span>
+                        <span class="txtIn"> <input id="endDateDayCorner" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
             </tr>

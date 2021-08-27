@@ -56,6 +56,11 @@ app.controller('apprSaleCtrl', ['$scope', function ($scope) {
         $("#apprPartnerView").hide();
         $("#apprNcardView").hide();
         $("#apprNcashView").hide();
+
+        $("#apprAcquireCardView").hide();
+        $("#apprAcquireMpayView").hide();
+        $("#apprAcquireMcouponView").hide();
+        $("#apprAcquireeNcardView").hide();
     };
     
     //매입현황 하위 탭
@@ -65,11 +70,20 @@ app.controller('apprSaleCtrl', ['$scope', function ($scope) {
         $("#apprAcquireMcouponTab").removeClass("on");
         $("#apprAcquireNcardTab").removeClass("on");
 
+        $("#apprCardView").hide();
+        $("#apprCashView").hide();
+        $("#apprPaycoView").hide();
+        $("#apprMpayView").hide();
+        $("#apprMcouponView").hide();
+        $("#apprPartnerView").hide();
+        $("#apprNcardView").hide();
+        $("#apprNcashView").hide();
+
         $("#apprAcquireCardView").show();
         $("#apprAcquireMpayView").hide();
         $("#apprAcquireMcouponView").hide();
         $("#apprAcquireeNcardView").hide();
-        
+
     };
     
     //승인현황 하위 탭 초기화

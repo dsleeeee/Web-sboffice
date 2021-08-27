@@ -34,9 +34,9 @@
                 </th>
                 <td>
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="startMonthMonthProdClass" name="startDate" class="w120px" /></span>
+                        <span class="txtIn"> <input id="startMonthMonthProdClass" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="endMonthMonthProdClass" name="endDate" class="w120px" /></span>
+                        <span class="txtIn"> <input id="endMonthMonthProdClass" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
                 <c:if test="${orgnFg == 'HQ'}">

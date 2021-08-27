@@ -27,9 +27,9 @@
         <th><s:message code="cmm.search.date"/></th>
         <td>
         <div class="sb-select">
-            <span class="txtIn"><input id="srchRtnStatusDayStartDate" class="w120px"></span>
+            <span class="txtIn"><input id="srchRtnStatusDayStartDate" class="w110px"></span>
                 <span class="rg">~</span>
-            <span class="txtIn"><input id="srchRtnStatusDayEndDate" class="w120px"></span>
+            <span class="txtIn"><input id="srchRtnStatusDayEndDate" class="w110px"></span>
             <span class="chk ml10" style="display: none;">
                 <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
                 <label for="chkDt">
@@ -65,9 +65,9 @@
     <div style="clear: both;"></div>
 
     <!-- contents start -->
-	<div class="wj-gridWrap2 mt20" ng-controller="rtnStatusDayMainCtrl">
+	<div class="wj-gridWrap2 mt10" ng-controller="rtnStatusDayMainCtrl">
 	    <%-- wj grid start --%>
-	    <div class="mt20 oh sb-select dkbr">
+	    <div class="mt10 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
                 class="w100px fl"
@@ -150,10 +150,10 @@
 	<!-- 하단 그리드 2개 -->
     <!-- contents start -->
     <%-- wj grid start --%>
-    <div class="wj-TblWrap" style="height:400px; overflow-y: hidden; overflow-x: hidden;">
+    <div class="wj-TblWrap" style="height:550px; overflow-y: hidden; overflow-x: hidden;">
 		<%-- left --%>
 		<div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl" style="width:48%">
-	        <div class="mt20 oh sb-select dkbr mb10 mr10" >
+	        <div class="mt10 oh sb-select dkbr mb10 mr10" >
 				<%-- 페이지 스케일  --%>
 				<wj-combo-box
 						class="w100px fl"
@@ -239,7 +239,7 @@
 
         <%-- right --%>
         <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl" style="width:48%">
-			<div class="mt20 oh sb-select dkbr mb10">
+			<div class="mt10 oh sb-select dkbr mb10">
 			   <%-- 페이지 스케일  --%>
 			   <wj-combo-box
 					   class="w100px fl"

@@ -31,9 +31,9 @@
                 <th><s:message code="cmm.search.date" /></th>
                 <td>
                     <div class="sb-select">
-                        <span class="txtIn"><input id="srchAbcStartDate" class="w120px"></span>
+                        <span class="txtIn"><input id="srchAbcStartDate" class="w110px"></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"><input id="srchAbcEndDate" class="w120px"></span>
+                        <span class="txtIn"><input id="srchAbcEndDate" class="w110px"></span>
                         <span class="chk ml10" style="display: none;">
                             <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
                             <label for="chkDt"><s:message code="cmm.all.day" /></label>
@@ -60,27 +60,17 @@
             <tr>
                 <%-- 누적판매비율 --%>
                 <th><s:message code="abc.totSaleRate" /></th>
-                <td>
-                    <span class="txtIn" style="width:32%;">A등급<input id="abcGradeA" class="sb-input" value="70" style="width:40%;">%</span>
-                    <span class="txtIn" style="width:32%;">B등급<input id="abcGradeB" class="sb-input" value="90" style="width:40%;">%</span>
-                    <span class="txtIn" style="width:32%;">C등급<input id="abcGradeC" class="sb-input" value="100" style="width:45%;">%</span>
-                    <span class="txtIn" style="width:32%;">그외 Z등급</span>
+                <td colspan="3">
+                    <span class="txtIn" style="width:20%;">A등급<input id="abcGradeA" class="sb-input" value="70" style="width:40%;">%</span>
+                    <span class="txtIn" style="width:20%;">B등급<input id="abcGradeB" class="sb-input" value="90" style="width:40%;">%</span>
+                    <span class="txtIn" style="width:20%;">C등급<input id="abcGradeC" class="sb-input" value="100" style="width:45%;">%</span>
+                    <span class="txtIn" style="width:20%;">그외 Z등급</span>
                 </td>
-	            <%-- 조회옵션 --%>
-				<th><s:message code="periodIostock.srchOption" /></th>
-				<td>
-		          	<span class="chk ml10">
-						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
-		              	<label for="chkDt">
-	                		<s:message code="periodIostock.prodClassDisplay" />
-	              		</label>
-	            	</span>
-				</td>
             </tr>
             <tr>
                 <%-- 정렬순서 --%>
                 <th><s:message code="abc.order" /></th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn">
                             <wj-combo-box id="srchAbcDisplay" ng-model="sortFg"
@@ -91,11 +81,21 @@
                         </span>
                     </div>
                 </td>
+                <%-- 조회옵션 --%>
+                <th><s:message code="periodIostock.srchOption" /></th>
+                <td>
+                <span class="chk ml10">
+                    <input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+                    <label for="chkDt">
+                        <s:message code="periodIostock.prodClassDisplay" />
+                    </label>
+                </span>
+                </td>
             </tr>
         </tbody>
     </table>
 
-    <div class="mt20 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
 
             <%-- 엑셀 다운로드 //TODO --%>
             <button class="btn_skyblue fr" ng-click="excelDownloadAbc()"><s:message code="cmm.excel.down" />

@@ -101,7 +101,7 @@
 		</tbody>
 	</table>
 
-	<div class="mt40 oh sb-select dkbr">	
+	<div class="mt10 oh sb-select dkbr">
 	    <%-- 엑셀 다운로드 //TODO --%>
 	    <button class="btn_skyblue fr" ng-click="excelDownloadStoreMonth()"><s:message code="cmm.excel.down" />
 	    </button>

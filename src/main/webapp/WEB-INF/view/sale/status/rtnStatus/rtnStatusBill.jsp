@@ -90,9 +90,9 @@
     <div style="clear: both;"></div>
 
     <!-- contents start -->
-	<div class="wj-gridWrap2 mt20">
+	<div class="wj-gridWrap2 mt10">
 	    <%-- wj grid start --%>
-	    <div class="mt20 oh sb-select dkbr">
+	    <div class="mt10 oh sb-select dkbr">
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="text" id="rtnStatusBillSelectStoreStoreNum" ng-model="storeNum">
         </c:if>

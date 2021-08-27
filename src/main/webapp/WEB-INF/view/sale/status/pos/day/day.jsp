@@ -17,7 +17,8 @@
 	<table class="searchTbl">
 		<colgroup>
 			<col class="w15"/>
-			<col class="w35"/><col class="w15"/>
+			<col class="w35"/>
+			<col class="w15"/>
         	<col class="w35"/>
        	</colgroup>
        	<tbody>
@@ -25,9 +26,9 @@
        			<th><s:message code="cmm.search.date"/></th>
        			<td>
 					<div class="sb-select">
-						<span class="txtIn"><input id="srchPosDayStartDate" class="w120px"></span>
+						<span class="txtIn"><input id="srchPosDayStartDate" class="w110px"></span>
 						<span class="rg">~</span>
-						<span class="txtIn"><input id="srchPosDayEndDate" class="w120px"></span>
+						<span class="txtIn"><input id="srchPosDayEndDate" class="w110px"></span>
 						<span class="chk ml10" style="display: none;">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 							<label for="chkDt">
@@ -80,7 +81,7 @@
 	</table>
 	<div style="clear: both;"></div>
 
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
 			class="w100px fl"

@@ -22,10 +22,10 @@
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
-        	<col class="w13"/>
-	        <col class="w37"/>
-	        <col class="w13"/>
-	        <col class="w37"/>
+			<col class="w15"/>
+			<col class="w35"/>
+			<col class="w15"/>
+			<col class="w35"/>
       	</colgroup>
       	<tbody>
        	<%-- 조회일자 --%>
@@ -33,9 +33,9 @@
 	    	<th><s:message code="cmm.search.date" /></th>
         	<td colspan="3">
           	<div class="sb-select">
-       		    <span class="txtIn"><input id="srchRankStartDate" class="w120px"></span>
+       		    <span class="txtIn"><input id="srchRankStartDate" class="w110px"></span>
                 <span class="rg">~</span>
-                <span class="txtIn"><input id="srchRankEndDate" class="w120px"></span>
+                <span class="txtIn"><input id="srchRankEndDate" class="w110px"></span>
             	<span class="chk ml10" style="display: none;">
 					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 	              	<label for="chkDt">
@@ -96,7 +96,7 @@
 		</tbody>
 	</table>
 
-	<div class="mt40 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 	    
 	  <div class="fr">
 	  	<%-- 차트 --%>

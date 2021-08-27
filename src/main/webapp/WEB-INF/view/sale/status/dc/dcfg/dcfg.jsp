@@ -28,9 +28,9 @@
 				<td>
 				<%--<td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >--%>
 					<div class="sb-select">
-						<span class="txtIn"><input id="srchDcDcfgStartDate" class="w120px"></span>
+						<span class="txtIn"><input id="srchDcDcfgStartDate" class="w110px"></span>
 						<span class="rg">~</span>
-						<span class="txtIn"><input id="srchDcDcfgEndDate" class="w120px"></span>
+						<span class="txtIn"><input id="srchDcDcfgEndDate" class="w110px"></span>
 						<span class="chk ml10" style="display: none;">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 			              	<label for="chkDt">
@@ -92,7 +92,7 @@
 
 	<div id="gridRepresent" ng-controller="dcDcfgMainCtrl" class="w50 fl" style="width: 49%;">
 		<%-- 할인구분별 --%>
-		<div class="w100 mt20">
+		<div class="w100 mt10">
 			<div class="oh sb-select mb10">
 				<%-- 페이지 스케일  --%>
 				<wj-combo-box
@@ -147,7 +147,7 @@
 
 	<div id="gridDetail" class="w50 fr" style="width: 49%;">
 		<%-- 상품상세 --%>
-		<div class="w100 mt20" ng-controller="dcDcfgDtlCtrl">
+		<div class="w100 mt10" ng-controller="dcDcfgDtlCtrl">
 			<div class="oh sb-select mb10">
 				<%-- 할인구분별 매출 상세 엑셀다운로드 --%>
 				<button class="btn_skyblue fr"

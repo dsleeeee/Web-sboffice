@@ -17,8 +17,9 @@
 	<table class="searchTbl">
 		<colgroup>
 			<col class="w15"/>
-			<col class="w35"/><col class="w15"/>
-        	<col class="w35"/>
+			<col class="w35"/>
+			<col class="w15"/>
+			<col class="w35"/>
        	</colgroup>
        	<tbody>
        		<tr>
@@ -95,7 +96,7 @@
 	</table>
 	<div style="clear: both;"></div>
 
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
 			class="w100px fl"
