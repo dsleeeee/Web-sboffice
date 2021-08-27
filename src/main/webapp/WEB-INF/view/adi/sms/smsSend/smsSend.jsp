@@ -40,7 +40,7 @@
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr id="trStoreNmInfo" style="display: none">
-                    <td>
+                    <td class="s14">
                         <label id="lblStoreNmInfo"></label>
                     </td>
                 </tr>
@@ -53,13 +53,13 @@
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr id="trMemoInfo" style="display: none;">
-                    <td>
+                    <td class="s14">
                         <label id="lblMemoInfo"></label>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr>
-                    <td>
+                    <td class="s14">
                         <label id="lblTxtByte"></label>
                         <s:message code="smsSend.byte" />
                         <label id="lblTxtByteGubun"></label>
@@ -69,7 +69,7 @@
                 <tr>
                     <td>
                         <%-- 전송자 --%>
-                        <div class="sb-select dkbr fl">
+                        <div class="sb-select dkbr fl s14">
                             <s:message code="smsSend.sendName" />
                         </div>
                         <%-- 전송자번호 --%>
@@ -168,14 +168,14 @@
         <div class="w100 fl pd10" style="height:580px;">
             <table>
                 <tr>
-                    <td>
+                    <td class="s14">
                         <%-- 받는사람 --%>
                         <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
                         <span><s:message code="smsSend.receiveName" /></span>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="s14">
                         <%-- 잔여수량 --%>
                         <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
                         <span><s:message code="smsSend.smsQty" /></span>
@@ -184,13 +184,13 @@
                 </tr>
             </table>
             <%-- 그리드 --%>
-            <div class="w100 mt10 mb20">
-                <div class="updownSet oh mb10">
+            <div class="w100 mb10">
+                <div class="updownSet oh mb5">
                     <button class="btn_skyblue" id="btnAddresseeAdd" ng-click="addAddressee()"><s:message code='smsSend.addresseeAdd' /></button>
                     <button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
                     <button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>
                 </div>
-                <div class="wj-gridWrap" style="height:470px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:490px; overflow-y: hidden; overflow-x: hidden;">
                     <div class="row">
                         <wj-flex-grid
                                 autoGenerateColumns.="false"
@@ -203,14 +203,14 @@
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="smsSend.telNm"/>" binding="telNm" width="80" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="smsSend.telNm"/>" binding="telNm" width="100" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="smsSend.telNo"/>" binding="telNo" width="100" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="smsSend.memo"/>" binding="memo" width="80" align="center"></wj-flex-grid-column>
 
                             <%--저장시 필요--%>
                             <wj-flex-grid-column header="<s:message code="smsSend.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="smsSend.rOgnFg"/>" binding="rOgnFg" width="110" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="smsSend.rOgnCd"/>" binding="rOgnCd" width="110" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="smsSend.rOgnFg"/>" binding="rOgnFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="smsSend.rOgnCd"/>" binding="rOgnCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="smsSend.rUserId"/>" binding="rUserId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
