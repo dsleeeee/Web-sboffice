@@ -18,7 +18,6 @@ app.controller('dlvrFgProdCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope._setComboData("dlvrInFg", comboFgData);
   } else {// 배달경로(상품별-배달포장구분 CM 112)
     $scope._setComboData("dlvrInFg", dlvrInFg);
-    dlvrInFg.unshift({name: "CID", value: "1"});
     dlvrInFg.unshift({name: "일반", value: "0"});
     dlvrInFg.unshift({name: "전체", value: ""});
   };
