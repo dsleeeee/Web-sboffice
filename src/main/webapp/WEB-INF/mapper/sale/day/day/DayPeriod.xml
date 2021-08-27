@@ -18,37 +18,21 @@
     -->
     <select id="getDayPeriodTimeList"  parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodTimeList */
-        SELECT
-        SALE_TIME,
-        SUM(BILL_CNT) AS BILL_CNT,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-        ROUND(SUM(TOT_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC
-        FROM
-        (
-            SELECT
-            (CASE WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN '심야[00~06]'
-                  WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('07','08','09','10') THEN '아침[07~10]'
-                  WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('11','12','13','14','15') THEN '점심[11~15]'
-                  WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN '저녁[16~23]'
-                  ELSE null END
-            ) AS SALE_TIME,
-            COUNT(tssh.BILL_NO) AS BILL_CNT,
-            SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-            SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
-            FROM TB_SL_SALE_HDR tssh
-            WHERE 1=1
-            AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
-            <if test='storeCds != null and storeCds != ""'>
-                AND tssh.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                    #{item}
-                </foreach>
-            </if>
-            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            GROUP BY tssh.REG_DT
-            ORDER BY tssh.REG_DT
-        )
-        GROUP BY SALE_TIME
+         SELECT  SALE_HOUR AS SALE_TIME,
+                SUM(SALE_CNT) AS SALE_CNT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                ROUND(SUM(TOT_SALE_AMT) / SUM(SALE_CNT)) AS BILL_UPRC
+        FROM    TB_SL_DAILY_TIME
+        WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP BY SALE_HOUR
+        ORDER BY SALE_HOUR
     </select>
 
     <!-- 시간대별탭 - 시간대별 매출상세조회 -->
@@ -58,27 +42,25 @@
     -->
     <select id="getDayPeriodTimeDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodTimeDetailList */
-        SELECT
-        tssd.PROD_CD,
-        tmp.PROD_NM,
-        SUM(tssd.SALE_QTY) AS SALE_QTY,
-        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM TB_SL_SALE_DTL tssd,
-        TB_MS_PRODUCT tmp
-        WHERE 1=1
-        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+        SELECT  tsdpt.PROD_CD,
+                tmp.PROD_NM,
+                SUM(tsdpt.TOT_SALE_QTY) AS SALE_QTY,
+                SUM(tsdpt.TOT_SALE_AMT - tsdpt.TOT_DC_AMT - tsdpt.TOT_TIP_AMT - tsdpt.TOT_ETC_AMT) AS REAL_SALE_AMT
+        FROM    TB_SL_DAILY_PROD_TIME tsdpt,
+                TB_MS_PRODUCT tmp
+        WHERE   tsdpt.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tssd.STORE_CD IN
+            AND tsdpt.STORE_CD IN
             <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND SUBSTR(tssd.REG_DT, 9, 2) IN ( ${saleTime} )
-        AND tmp.STORE_CD (+)= tssd.STORE_CD
-        AND tmp.PROD_CD (+)= tssd.PROD_CD
-        GROUP BY tssd.PROD_CD, tmp.PROD_NM
-        ORDER BY tssd.PROD_CD
+        AND     tsdpt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tsdpt.SALE_HOUR = ${saleTime}
+        AND     tmp.STORE_CD (+)= tsdpt.STORE_CD
+        AND     tmp.PROD_CD (+)= tsdpt.PROD_CD
+        GROUP BY tsdpt.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdpt.PROD_CD
     </select>
 
     <!-- 상품분류별탭 - 상품분류별 매출조회 -->
@@ -156,25 +138,24 @@
     <select id="getDayPeriodProdClassDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodProdClassDetailList */
         SELECT
-        tmp.STORE_CD,
         tmp.PROD_CLASS_CD,
-        tssd.PROD_CD,
+        tsdp.PROD_CD,
         tmp.PROD_NM,
-        SUM(tssd.SALE_QTY) AS SALE_QTY,
-        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM TB_SL_SALE_DTL tssd,
+        SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
+        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_DAILY_PROD tsdp,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND tsdp.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tssd.STORE_CD IN
+            AND tsdp.STORE_CD IN
             <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND tmp.STORE_CD = tssd.STORE_CD
-        AND tmp.PROD_CD = tssd.PROD_CD
+        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tmp.STORE_CD = tsdp.STORE_CD
+        AND tmp.PROD_CD = tsdp.PROD_CD
         AND tmp.PROD_CLASS_CD IN (
                                     SELECT  #{prodClassCd} AS PROD_CLASS_CD
                                     FROM    DUAL
@@ -185,8 +166,8 @@
                                     START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = tmp.STORE_CD
                                     CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = tmp.STORE_CD
                                 )
-        GROUP BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tssd.PROD_CD, tmp.PROD_NM
-        ORDER BY tssd.PROD_CD
+        GROUP BY tmp.PROD_CLASS_CD, tsdp.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdp.PROD_CD
     </select>
 
     <!-- 외식테이블별탭 - 외식테이블별 매출조회 -->
