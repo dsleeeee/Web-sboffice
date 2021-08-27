@@ -155,15 +155,7 @@ app.controller('dayPeriodTimeDetailCtrl', ['$scope', '$http', '$timeout', functi
 
     $scope.searchDayPeriodTimeDetail = function(data) {
         var params = {};
-        if (data.saleTime === '심야[00~06]') {
-            params.saleTime = '00,01,02,03,04,05,06';
-        } else if (data.saleTime === '아침[07~10]') {
-            params.saleTime = '07,08,09,10';
-        } else if (data.saleTime === '점심[11~15]') {
-            params.saleTime = '11,12,13,14,15';
-        } else if (data.saleTime === '저녁[16~23]') {
-            params.saleTime = '16,17,18,19,20,21,22,23';
-        }
+        params.saleTime = data.saleTime;
         params.storeCds = data.storeCds;
         params.startDate = data.startDate;
         params.endDate = data.endDate;

@@ -35,9 +35,9 @@
                          </th>
                          <td colspan="3">
                               <div class="sb-select">
-                                   <span class="txtIn"> <input id="startDateDayPeriodTime" name="startDate" class="w200px" /></span>
+                                   <span class="txtIn"> <input id="startDateDayPeriodTime" name="startDate" class="w110px" /></span>
                                    <span class="rg">~</span>
-                                   <span class="txtIn"> <input id="endDateDayPeriodTime" name="endDate" class="w200px" /></span>
+                                   <span class="txtIn"> <input id="endDateDayPeriodTime" name="endDate" class="w110px" /></span>
                               </div>
                          </td>
                     </tr>
@@ -80,7 +80,7 @@
 
                                    <!-- define columns -->
                                    <wj-flex-grid-column header="<s:message code="dayPeriod.saleTime"/>" binding="saleTime" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                   <wj-flex-grid-column header="<s:message code="dayPeriod.billCnt"/>" binding="billCnt" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                                   <wj-flex-grid-column header="<s:message code="dayPeriod.saleCnt"/>" binding="saleCnt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                                    <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                                    <wj-flex-grid-column header="<s:message code="dayPeriod.billUprc"/>" binding="billUprc" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
@@ -143,4 +143,4 @@
      var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodTime.js?ver=20200131.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodTime.js?ver=20200131.06" charset="utf-8"></script>
