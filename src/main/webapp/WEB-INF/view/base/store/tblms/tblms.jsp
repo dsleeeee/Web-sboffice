@@ -15,7 +15,6 @@
     @import url("http://mob.solbipos.com/mobile/css/button_style1.css");
 </style>
 
-
 <div class="subCon3" ng-controller="tblmsListCtrl">
 
   <div class="searchBar">
