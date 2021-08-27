@@ -43,7 +43,7 @@ public class StoreRankServiceImpl implements StoreRankService {
             	sQuery2 +=", NVL(SUM(TSDP.TOT_PAY_AMT),0) AS PAY0" + "\n";
             for(int i = 0; i < payCd.size(); i++) {
             	int j = Integer.parseInt(payCd.get(i).get("payCd"));
-            	sQuery1 +=", M.PAY" + j + "\n";
+            	sQuery1 +=", N.PAY" + j + "\n";
             	sQuery2 +=",  NVL(SUM(CASE WHEN TSDP.PAY_CD = "+ j + " THEN TSDP.TOT_PAY_AMT ELSE NULL END),0) AS PAY" + j +  "\n";
             }
         }else {
