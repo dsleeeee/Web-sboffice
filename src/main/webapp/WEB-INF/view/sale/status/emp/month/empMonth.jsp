@@ -20,17 +20,17 @@
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
-        	<col class="w13"/>
-	        <col class="w37"/>
-	        <col class="w13"/>
-	        <col class="w37"/>
+			<col class="w15"/>
+			<col class="w35"/>
+			<col class="w15"/>
+			<col class="w35"/>
       	</colgroup>
       	<tbody>
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.month" /></th>
-        	<td colspan="2">
-          	<div class="sb-select">
+        	<td colspan="3">
+          	<div class="sb-select fl">
 	          <span class="txtIn w110px">
 	              <wj-input-date
 	                      id="srchMonthStartDate"
@@ -65,8 +65,6 @@
 					</label>
 				</span>
           	</div>
-        	</td>
-        	<td>
         		<%-- 판매자 전체보기 --%>
             	<span class="chk ml10">
                 	<input type="checkbox"  ng-model="isCheckedEmpAll" ng-change="totalEmpMonth()" />

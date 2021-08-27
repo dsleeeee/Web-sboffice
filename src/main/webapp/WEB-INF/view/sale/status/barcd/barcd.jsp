@@ -29,9 +29,9 @@
 	        <th><s:message code="cmm.search.date"/></th>
 	        <td>
 		        <div class="sb-select">
-		            <span class="txtIn"><input id="srchBarcdStartDate" class="w120px"></span>
+		            <span class="txtIn"><input id="srchBarcdStartDate" class="w110px"></span>
 		                <span class="rg">~</span>
-		            <span class="txtIn"><input id="srchBarcdEndDate" class="w120px"></span>
+		            <span class="txtIn"><input id="srchBarcdEndDate" class="w110px"></span>
 		            <span class="chk ml10" style="display: none;">
 		                <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
 		                <label for="chkDt">
@@ -97,7 +97,7 @@
     <%-- left --%>
     <div id="gridRepresent" ng-controller="barcdMainCtrl" class="w50 fl" style="width: 49%;">
         <%-- 할인구분별 --%>
-        <div class="w100 mt20">
+        <div class="w100 mt10">
             <div class="oh sb-select mb10">
 	            <%-- 페이지 스케일  --%>
 	            <wj-combo-box
@@ -187,7 +187,7 @@
       <%-- right --%>
       <div id="gridDetail" class="w50 fr" style="width: 49%;">
         <%-- 상품상세 --%>
-        <div class="w100 mt20" ng-controller="barcdDtlCtrl">
+        <div class="w100 mt10" ng-controller="barcdDtlCtrl">
             <div class="oh sb-select mb10">
            <%-- 페이지 스케일  --%>
            <wj-combo-box

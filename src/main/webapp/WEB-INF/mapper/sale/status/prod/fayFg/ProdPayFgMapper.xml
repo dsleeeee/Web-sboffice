@@ -34,137 +34,116 @@
     <!--
         TABLE    :
         PARAM    : prodPayFgVO
-        COMMENTS :
+        COMMENTS : MAX(BARCD_CD) : 매장별로 바코드가 다를 경우 N개의 줄로 보여서 MAX처리
+                    AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = {hqOfficeCd}) : 재개발필요(김중선, HQ_OFFICE_CD INDEX, 쿼리튜닝)
     -->
     <select id="getProdPayFgList" parameterType="prodPayFgVO" resultType="DefaultMap">
         /* USE : ProdPayFgMapper.getProdPayFgList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        PATH_NM,
-        PROD_CD,
-        PROD_NM,
-        BARCD_CD,
-        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
-        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-        SUM(TOT_GA_AMT) AS TOT_GA_AMT,
-        SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
-        SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
-        SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
-        <foreach collection="arrPayCol" item="item" separator="+">
-            NVL(SUM(PAY${item}), 0)
-        </foreach> AS TOT_PAY_AMT,
-        <foreach collection="arrPayCol" item="item" separator=",">
-            NVL(SUM(PAY${item}), 0) AS PAY${item}
-        </foreach>
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM
-        (
-            SELECT
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
-            tsdp.PROD_CD,
-            tmp.PROD_NM,
-            tmpb.BARCD_CD,
-            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
-            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
-            (SUM(tsdp.REAL_SALE_AMT) - SUM(tsdp.TOT_VAT_AMT)) AS TOT_GA_AMT,
-            SUM(tsdp.TOT_VAT_AMT) AS TOT_VAT_AMT,
-            SUM(tsdp.TOT_TIP_AMT) AS TOT_TIP_AMT,
-            SUM(tsdp.TOT_ETC_AMT) AS TOT_ETC_AMT,
-            <foreach collection="arrPayCol" item="item" separator=",">
-                SUM(tsdpp.PAY${item}) AS PAY${item}
-            </foreach>
-            FROM
-            (
-                SELECT
-                HQ_OFFICE_CD,
-                HQ_BRAND_CD,
-                STORE_CD,
-                PROD_CD,
-                SALE_DATE,
+        SELECT  PATH_NM,
+                tsdp.PROD_CD,
+                PROD_NM,
+                BARCD_CD,
                 SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
                 SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
                 SUM(TOT_DC_AMT) AS TOT_DC_AMT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(TOT_GA_AMT) AS TOT_GA_AMT,
                 SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
                 SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
-                SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
-                FROM TB_SL_DAILY_PROD
-                WHERE 1=1
-                AND HQ_OFFICE_CD = #{hqOfficeCd}
-                <if test='storeCd != null and storeCd != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-                </if>
-                AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, PROD_CD, SALE_DATE
-            ) tsdp,
-            TB_MS_PRODUCT tmp,
-            TB_MS_PRODUCT_BARCD tmpb,
-            (
-                SELECT
-                HQ_OFFICE_CD,
-                HQ_BRAND_CD,
-                STORE_CD,
-                PROD_CD,
-                SALE_DATE,
+                SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(SUM(PAY${item}), 0)
+                </foreach> AS TOT_PAY_AMT,
                 <foreach collection="arrPayCol" item="item" separator=",">
-                    SUM(PAY${item}) AS PAY${item}
+                    NVL(SUM(PAY${item}), 0) AS PAY${item}
                 </foreach>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    (
+                SELECT 	PATH_NM,
+                        PROD_CD,
+                        PROD_NM,
+                        MAX(BARCD_CD) AS BARCD_CD,
+                        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                        SUM(TOT_GA_AMT) AS TOT_GA_AMT,
+                        SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
+                        SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+                        SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                FROM (
+                        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+                                tsdp.PROD_CD,
+                                tmp.PROD_NM,
+                                MAX(tmpb.BARCD_CD) AS BARCD_CD,
+                                SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                                SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                                SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+                                SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                                SUM(tsdp.REAL_SALE_AMT - tsdp.TOT_VAT_AMT) AS TOT_GA_AMT,
+                                SUM(tsdp.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                                SUM(tsdp.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                                SUM(tsdp.TOT_ETC_AMT) AS TOT_ETC_AMT
+                        FROM    TB_SL_DAILY_PROD tsdp,
+                                TB_MS_PRODUCT tmp,
+                                TB_MS_PRODUCT_BARCD tmpb
+                        WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCd != null and storeCd != ""'>
+                            AND tsdp.STORE_CD IN
+                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        <if test="prodCd != null and prodCd != ''">
+                            AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                        </if>
+                        <if test="prodNm != null and prodNm != ''">
+                            AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                        </if>
+                        AND     tmp.STORE_CD = tsdp.STORE_CD
+                        AND     tmp.PROD_CD = tsdp.PROD_CD
+                        AND     tmpb.STORE_CD (+)= tmp.STORE_CD
+                        AND     tmpb.PROD_CD (+)= tmp.PROD_CD
+                        GROUP BY tsdp.PROD_CD, tmp.PROD_NM,tmp.STORE_CD, tmp.PROD_CLASS_CD
+                    )
+                    GROUP BY PATH_NM, PROD_CD, PROD_NM
+                ) tsdp,
+                (
+                SELECT  PROD_CD,
+                        <foreach collection="arrPayCol" item="item" separator=",">
+                            SUM(PAY${item}) AS PAY${item}
+                        </foreach>
                 FROM
                 (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    HQ_BRAND_CD,
-                    STORE_CD,
-                    PROD_CD,
-                    SALE_DATE,
-                    PAY_AMT,
-                    PAY_CD
-                    FROM TB_SL_DAILY_PROD_PAY
-                    WHERE 1=1
-                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    SELECT  PROD_CD,
+                            PAY_AMT,
+                            PAY_CD
+                    FROM    TB_SL_DAILY_PROD_PAY
+                    WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                     <if test='storeCd != null and storeCd != ""'>
                         AND STORE_CD IN
                         <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                             #{item}
                         </foreach>
                     </if>
-                    AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     <if test="prodCd != null and prodCd != ''">
                         AND PROD_CD LIKE '%'|| #{prodCd} ||'%'
                     </if>
-                )
-                PIVOT
-                (
-                    SUM(PAY_AMT)
-                    FOR PAY_CD
-                    IN (${pivotPayCol})
-                )
-                GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, PROD_CD, SALE_DATE
-            ) tsdpp
-            WHERE 1=1
-            <if test="prodNm != null and prodNm != ''">
-                AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
-            </if>
-            AND tmp.STORE_CD = tsdp.STORE_CD
-            AND tmp.PROD_CD = tsdp.PROD_CD
-            AND tmpb.STORE_CD (+)= tmp.STORE_CD
-            AND tmpb.PROD_CD (+)= tmp.PROD_CD
-            AND tsdpp.HQ_OFFICE_CD (+)= tsdp.HQ_OFFICE_CD
-            AND tsdpp.HQ_BRAND_CD (+)= tsdp.HQ_BRAND_CD
-            AND tsdpp.STORE_CD (+)= tsdp.STORE_CD
-            AND tsdpp.PROD_CD (+)= tsdp.PROD_CD
-            AND tsdpp.SALE_DATE (+)= tsdp.SALE_DATE
-            GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
-        )
-        GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
-        ORDER BY PROD_CD
+                    )
+                    PIVOT
+                    (
+                        SUM(PAY_AMT)
+                        FOR PAY_CD
+                        IN (${pivotPayCol})
+                    )
+                    GROUP BY PROD_CD
+                ) tsdpp
+        WHERE tsdpp.PROD_CD = tsdp.PROD_CD
+        GROUP BY tsdp.PROD_CD, PROD_NM, BARCD_CD, PATH_NM
+        ORDER BY tsdp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -176,105 +155,97 @@
     -->
     <select id="getProdPayFgExcelList" parameterType="prodPayFgVO" resultType="DefaultMap">
         /* USE : ProdPayFgMapper.getProdPayFgExcelList */
-        SELECT
-        PATH_NM,
-        PROD_CD,
-        PROD_NM,
-        BARCD_CD,
-        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
-        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-        SUM(TOT_GA_AMT) AS TOT_GA_AMT,
-        SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
-        SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
-        SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
-        <foreach collection="arrPayCol" item="item" separator="+">
-            NVL(SUM(PAY${item}), 0)
-        </foreach> AS TOT_PAY_AMT,
-        <foreach collection="arrPayCol" item="item" separator=",">
-            NVL(SUM(PAY${item}), 0) AS PAY${item}
-        </foreach>
-        FROM
-        (
-            SELECT
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
-            tsdp.PROD_CD,
-            tmp.PROD_NM,
-            tmpb.BARCD_CD,
-            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
-            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
-            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
-            (SUM(tsdp.REAL_SALE_AMT) - SUM(tsdp.TOT_VAT_AMT)) AS TOT_GA_AMT,
-            SUM(tsdp.TOT_VAT_AMT) AS TOT_VAT_AMT,
-            SUM(tsdp.TOT_TIP_AMT) AS TOT_TIP_AMT,
-            SUM(tsdp.TOT_ETC_AMT) AS TOT_ETC_AMT,
-            <foreach collection="arrPayCol" item="item" separator=",">
-                SUM(tsdpp.PAY${item}) AS PAY${item}
-            </foreach>
-            FROM
-            (
-                SELECT
-                HQ_OFFICE_CD,
-                HQ_BRAND_CD,
-                STORE_CD,
-                PROD_CD,
-                SALE_DATE,
+        SELECT  PATH_NM,
+                tsdp.PROD_CD,
+                PROD_NM,
+                BARCD_CD,
                 SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
                 SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
                 SUM(TOT_DC_AMT) AS TOT_DC_AMT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(TOT_GA_AMT) AS TOT_GA_AMT,
                 SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
                 SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
-                SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
-                FROM TB_SL_DAILY_PROD
-                WHERE 1=1
-                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(SUM(PAY${item}), 0)
+                </foreach> AS TOT_PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    NVL(SUM(PAY${item}), 0) AS PAY${item}
+                </foreach>
+        FROM    (
+                SELECT 	PATH_NM,
+                        PROD_CD,
+                        PROD_NM,
+                        MAX(BARCD_CD) AS BARCD_CD,
+                        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                        SUM(TOT_GA_AMT) AS TOT_GA_AMT,
+                        SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
+                        SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+                        SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                FROM    (
+                        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+                                tsdp.PROD_CD,
+                                tmp.PROD_NM,
+                                MAX(tmpb.BARCD_CD) AS BARCD_CD,
+                                SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                                SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                                SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+                                SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                                SUM(tsdp.REAL_SALE_AMT - tsdp.TOT_VAT_AMT) AS TOT_GA_AMT,
+                                SUM(tsdp.TOT_VAT_AMT) AS TOT_VAT_AMT,
+                                SUM(tsdp.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                                SUM(tsdp.TOT_ETC_AMT) AS TOT_ETC_AMT
+                        FROM    TB_SL_DAILY_PROD tsdp,
+                                TB_MS_PRODUCT tmp,
+                                TB_MS_PRODUCT_BARCD tmpb
+                        WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCd != null and storeCd != ""'>
+                            AND tsdp.STORE_CD IN
+                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        <if test="prodCd != null and prodCd != ''">
+                            AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                        </if>
+                        <if test="prodNm != null and prodNm != ''">
+                            AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                        </if>
+                        AND     tmp.STORE_CD = tsdp.STORE_CD
+                        AND     tmp.PROD_CD = tsdp.PROD_CD
+                        AND     tmpb.STORE_CD (+)= tmp.STORE_CD
+                        AND     tmpb.PROD_CD (+)= tmp.PROD_CD
+                        GROUP BY tsdp.PROD_CD, tmp.PROD_NM,tmp.STORE_CD, tmp.PROD_CLASS_CD
+                        )
+                GROUP BY PATH_NM, PROD_CD, PROD_NM
+                ) tsdp,
+                (
+                SELECT  PROD_CD,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    SUM(PAY${item}) AS PAY${item}
+                </foreach>
+                FROM
+                (
+                SELECT  PROD_CD,
+                        PAY_AMT,
+                        PAY_CD
+                FROM    TB_SL_DAILY_PROD_PAY
+                WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                 <if test='storeCd != null and storeCd != ""'>
                     AND STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         #{item}
                     </foreach>
                 </if>
-                AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, PROD_CD, SALE_DATE
-            ) tsdp,
-            TB_MS_PRODUCT tmp,
-            TB_MS_PRODUCT_BARCD tmpb,
-            (
-                SELECT
-                HQ_OFFICE_CD,
-                HQ_BRAND_CD,
-                STORE_CD,
-                PROD_CD,
-                SALE_DATE,
-                <foreach collection="arrPayCol" item="item" separator=",">
-                    SUM(PAY${item}) AS PAY${item}
-                </foreach>
-                FROM
-                (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    HQ_BRAND_CD,
-                    STORE_CD,
-                    PROD_CD,
-                    SALE_DATE,
-                    PAY_AMT,
-                    PAY_CD
-                    FROM TB_SL_DAILY_PROD_PAY
-                    WHERE 1=1
-                    AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    <if test='storeCd != null and storeCd != ""'>
-                        AND STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                            #{item}
-                        </foreach>
-                    </if>
-                    AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    <if test="prodCd != null and prodCd != ''">
-                        AND PROD_CD LIKE '%'|| #{prodCd} ||'%'
-                    </if>
+                AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test="prodCd != null and prodCd != ''">
+                    AND PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
                 )
                 PIVOT
                 (
@@ -282,25 +253,11 @@
                     FOR PAY_CD
                     IN (${pivotPayCol})
                 )
-                GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, PROD_CD, SALE_DATE
-            ) tsdpp
-            WHERE 1=1
-            <if test="prodNm != null and prodNm != ''">
-                AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
-            </if>
-            AND tmp.STORE_CD = tsdp.STORE_CD
-            AND tmp.PROD_CD = tsdp.PROD_CD
-            AND tmpb.STORE_CD (+)= tmp.STORE_CD
-            AND tmpb.PROD_CD (+)= tmp.PROD_CD
-            AND tsdpp.HQ_OFFICE_CD (+)= tsdp.HQ_OFFICE_CD
-            AND tsdpp.HQ_BRAND_CD (+)= tsdp.HQ_BRAND_CD
-            AND tsdpp.STORE_CD (+)= tsdp.STORE_CD
-            AND tsdpp.PROD_CD (+)= tsdp.PROD_CD
-            AND tsdpp.SALE_DATE (+)= tsdp.SALE_DATE
-            GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
-        )
-        GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
-        ORDER BY PROD_CD
+                GROUP BY PROD_CD
+                ) tsdpp
+        WHERE   tsdpp.PROD_CD = tsdp.PROD_CD
+        GROUP BY tsdp.PROD_CD, PROD_NM, BARCD_CD, PATH_NM
+        ORDER BY tsdp.PROD_CD
     </select>
 
 </mapper>

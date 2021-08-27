@@ -19,7 +19,8 @@
 	<table class="searchTbl">
 		<colgroup>
 			<col class="w15"/>
-			<col class="w35"/><col class="w15"/>
+			<col class="w35"/>
+			<col class="w15"/>
         	<col class="w35"/>
        	</colgroup>
        	<tbody>
@@ -28,9 +29,9 @@
        			<th><s:message code="cmm.search.date"/></th>
        			<td>
 					<div class="sb-select">
-						<span class="txtIn"><input id="startDateProd" class="w120px"></span>
+						<span class="txtIn"><input id="startDateProd" class="w110px"></span>
 						<span class="rg">~</span>
-						<span class="txtIn"><input id="endDateProd" class="w120px"></span>
+						<span class="txtIn"><input id="endDateProd" class="w110px"></span>
 					</div>
 				</td>
 				<%-- 조회옵션 --%>
@@ -85,7 +86,7 @@
 		</tbody>
 	</table>
 
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
 			class="w100px fl"

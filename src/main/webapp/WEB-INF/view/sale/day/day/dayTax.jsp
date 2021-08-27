@@ -27,9 +27,9 @@
             <th><s:message code="cmm.search.date"/></th>
             <td colspan="3">
                 <div class="sb-select">
-                    <span class="txtIn"><input id="srchTaxStartDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchTaxStartDate" class="w110px"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchTaxEndDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchTaxEndDate" class="w110px"></span>
                 </div>
             </td>
         </tr>

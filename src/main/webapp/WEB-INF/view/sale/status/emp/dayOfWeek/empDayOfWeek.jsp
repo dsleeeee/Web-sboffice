@@ -20,20 +20,20 @@
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
-        	<col class="w13"/>
-	        <col class="w37"/>
-	        <col class="w13"/>
-	        <col class="w37"/>
+			<col class="w15"/>
+			<col class="w35"/>
+			<col class="w15"/>
+			<col class="w35"/>
       	</colgroup>
       	<tbody>
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colspan="2">
-          	<div class="sb-select">
-       		    <span class="txtIn"><input id="srchDayOfWeekStartDate" class="w120px"></span>
+        	<td colspan="3">
+          	<div class="sb-select fl">
+       		    <span class="txtIn"><input id="srchDayOfWeekStartDate" class="w110px"></span>
                 <span class="rg">~</span>
-                <span class="txtIn"><input id="srchDayOfWeekEndDate" class="w120px"></span>
+                <span class="txtIn"><input id="srchDayOfWeekEndDate" class="w110px"></span>
             	<span class="chk ml10" style="display: none;">
 					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 	              	<label for="chkDt">
@@ -41,8 +41,6 @@
               		</label>
             	</span>
           	</div>
-        	</td>
-        	<td>
         		<%-- 판매자 전체보기 --%>
             	<span class="chk ml10">
                 	<input type="checkbox"  ng-model="isCheckedEmpAll" ng-change="totalEmpDayOfWeek()" />

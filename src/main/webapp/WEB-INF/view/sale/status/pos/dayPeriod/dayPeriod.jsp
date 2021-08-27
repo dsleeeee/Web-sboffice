@@ -29,9 +29,9 @@
 	        <th><s:message code="cmm.search.date"/></th>
 	        <td>
 	        <div class="sb-select">
-	            <span class="txtIn"><input id="srchPosDayPeriodStartDate" class="w120px"></span>
+	            <span class="txtIn"><input id="srchPosDayPeriodStartDate" class="w110px"></span>
 	                <span class="rg">~</span>
-	            <span class="txtIn"><input id="srchPosDayPeriodEndDate" class="w120px"></span>
+	            <span class="txtIn"><input id="srchPosDayPeriodEndDate" class="w110px"></span>
 	            <span class="chk ml10" style="display: none;">
 	                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 	                <label for="chkDt">
@@ -84,7 +84,7 @@
     <div style="clear: both;"></div>
        <%-- left --%>
        <div class="w50 fl" ng-controller="posDayPeriodMainCtrl" style="width: 49%;">
-            <div class="mt20 oh sb-select dkbr mb10">
+            <div class="mt10 oh sb-select dkbr mb10">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
                     class="w100px fl"
@@ -157,7 +157,7 @@
 
         <%-- right --%>
         <div class="w50 fr" ng-controller="posDayPeriodDtlCtrl">
-        <div class="mt20 oh sb-select dkbr mb10">
+        <div class="mt10 oh sb-select dkbr mb10">
            <%-- 페이지 스케일  --%>
            <%--<wj-combo-box--%>
                    <%--class="w100px fl"--%>

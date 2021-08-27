@@ -29,9 +29,9 @@
        			<th><s:message code="cmm.search.date"/></th>
        			<td>
 					<div class="sb-select">
-						<span class="txtIn"><input id="startDateProdPos" class="w120px"></span>
+						<span class="txtIn"><input id="startDateProdPos" class="w110px"></span>
 						<span class="rg">~</span>
-						<span class="txtIn"><input id="endDateProdPos" class="w120px"></span>
+						<span class="txtIn"><input id="endDateProdPos" class="w110px"></span>
 					</div>
 				</td>
 				<%-- 조회옵션 --%>
@@ -85,7 +85,7 @@
 	</table>
 	<div style="clear: both;"></div>
 
-	<div class="mt20 oh sb-select dkbr"> <%-- 수정 사항 || 클래스변경 :: class="mt40" >> class="mt20" --%>
+	<div class="mt10 oh sb-select dkbr"> <%-- 수정 사항 || 클래스변경 :: class="mt40" >> class="mt20" --%>
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
 			class="w100px fl"

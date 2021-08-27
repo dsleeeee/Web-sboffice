@@ -26,7 +26,7 @@
             <th><s:message code="cmm.search.month"/></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="saleMonth" name="saleMonth" class="w120px" /></span>
+                    <span class="txtIn"> <input id="saleMonth" name="saleMonth" class="w110px" /></span>
                 </div>
             </td>
         </tr>
@@ -48,7 +48,7 @@
         </tbody>
     </table>
 
-    <div class="mt20 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
                 class="w100px fl"

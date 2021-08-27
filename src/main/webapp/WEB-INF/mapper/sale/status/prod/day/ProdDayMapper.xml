@@ -22,7 +22,7 @@
         /* USE : ProdDayMapper.getProdDayList */
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT
-		SALE_DATE,
+		TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
 		PATH_NM,
 		PROD_CD,
 		PROD_NM,
@@ -77,7 +77,7 @@
     <select id="getProdDayExcelList" parameterType="prodDayVO" resultType="DefaultMap">
         /* USE : ProdDayMapper.getProdDayExcelList */
 		SELECT
-		SALE_DATE,
+		TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
 		PATH_NM,
 		PROD_CD,
 		PROD_NM,

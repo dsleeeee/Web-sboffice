@@ -31,9 +31,9 @@
 		    	<th><s:message code="cmm.search.date" /></th>
 	        	<td>
 					<div class="sb-select">
-						<span class="txtIn"> <input id="startDatePayFg" name="startDate" class="w120px" /></span>
+						<span class="txtIn"> <input id="startDatePayFg" name="startDate" class="w110px" /></span>
 						<span class="rg">~</span>
-						<span class="txtIn"> <input id="endDatePayFg" name="endDate" class="w120px" /></span>
+						<span class="txtIn"> <input id="endDatePayFg" name="endDate" class="w110px" /></span>
 					</div>
 	        	</td>
 	        	<%-- 조회옵션 --%>
@@ -73,7 +73,7 @@
 			</tbody>
 		</table>
 
-		<div class="mt40 oh sb-select dkbr">
+		<div class="mt10 oh sb-select dkbr">
 		    <%-- 페이지 스케일  --%>
 		    <wj-combo-box
 		      class="w100px fl"

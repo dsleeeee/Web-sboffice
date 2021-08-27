@@ -27,11 +27,11 @@
 				<td>
 					<div class="sb-select">
 						<span class="txtIn">
-							<input id="srchCornerDayPeriodStartDate" class="w120px"/>
+							<input id="srchCornerDayPeriodStartDate" class="w110px"/>
 						</span>
 						<span class="rg">~</span>
 						<span class="txtIn">
-							<input id="srchCornerDayPeriodEndDate" class="w120px"/>
+							<input id="srchCornerDayPeriodEndDate" class="w110px"/>
 						</span>
 						<span class="chk ml10" style="display: none;">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
@@ -94,7 +94,7 @@
 
 	<div id="gridRepresent" class="w50 fl" style="width: 49%;">
 		<%-- 코너별 --%>
-		<div class="w100 mt20" ng-controller="cornerDayPeriodMainCtrl">
+		<div class="w100 mt10" ng-controller="cornerDayPeriodMainCtrl">
 			<div class="oh sb-select mb10">
 				<%-- 페이지 스케일  --%>
 				<wj-combo-box
@@ -156,7 +156,7 @@
 
 	<div id="gridDetail" class="w50 fr" style="width: 49%;">
 		<%-- 코너별 --%>
-		<div class="w100 mt20" ng-controller="cornerDayPeriodDtlCtrl">
+		<div class="w100 mt10" ng-controller="cornerDayPeriodDtlCtrl">
 			<div class="oh sb-select mb10">
 				<%--          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span> --%>
 				<%-- 페이지 스케일  --%>

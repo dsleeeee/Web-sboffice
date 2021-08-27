@@ -28,34 +28,35 @@
             </li>
         </ul>
     </div>
-        <%-- 탭페이지 레이어 시작 --%>
-        <%-- 신용카드 매출현황 --%>
-        <c:import url="/WEB-INF/view/sale/status/appr/acquire/card/card.jsp">
-            <c:param name="menuCd" value="${menuCd}"/>
-            <c:param name="menuNm" value="${menuNm}"/>
-        </c:import>
-        
-        <%-- Mpay 매출현황 --%>
-        <c:import url="/WEB-INF/view/sale/status/appr/acquire/mpay/mpay.jsp">
-            <c:param name="menuCd" value="${menuCd}"/>
-            <c:param name="menuNm" value="${menuNm}"/>
-        </c:import>
-        
-        <%-- Mcoupn 매출현황 --%>
-        <c:import url="/WEB-INF/view/sale/status/appr/acquire/mcoupon/mcoupon.jsp">
-            <c:param name="menuCd" value="${menuCd}"/>
-            <c:param name="menuNm" value="${menuNm}"/>
-        </c:import>
-        
-        <%-- Ncard 매출현황 --%>
-        <c:import url="/WEB-INF/view/sale/status/appr/acquire/ncard/ncard.jsp">
-            <c:param name="menuCd" value="${menuCd}"/>
-            <c:param name="menuNm" value="${menuNm}"/>
-        </c:import>
 </div>
 
 <script type="text/javascript">
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/acquire/acquire.js" charset="utf-8"></script>
+
+<%-- 탭페이지 레이어 시작 --%>
+<%-- 신용카드 매출현황 --%>
+<c:import url="/WEB-INF/view/sale/status/appr/acquire/card/card.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- Mpay 매출현황 --%>
+<c:import url="/WEB-INF/view/sale/status/appr/acquire/mpay/mpay.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- Mcoupn 매출현황 --%>
+<c:import url="/WEB-INF/view/sale/status/appr/acquire/mcoupon/mcoupon.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- Ncard 매출현황 --%>
+<c:import url="/WEB-INF/view/sale/status/appr/acquire/ncard/ncard.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 

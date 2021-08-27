@@ -29,28 +29,15 @@
         </th>
         <td>
           <div class="sb-select">
-              <span class="txtIn"> <input id="startMonth" name="startDate" class="w100px" /></span>
+              <span class="txtIn"> <input id="startMonth" name="startDate" class="w110px" /></span>
               <span class="rg">~</span>
-              <span class="txtIn"> <input id="endMonth" name="endDate" class="w100px" /></span>
+              <span class="txtIn"> <input id="endMonth" name="endDate" class="w110px" /></span>
           </div>
         </td>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <th>
-            <s:message code="todayBillSaleDtl.store"/>
+            <s:message code="rtnStatus.srchOption"/>
         </th>
-        </c:if>
         <td>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <%-- 매장선택 모듈 싱글 선택 사용시 include
-                        param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                     displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                     modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                     closeFunc - 팝업 닫기시 호출할 함수
-                   --%>
-                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                    <jsp:param name="targetId" value="rtnStatusProdSelectStore"/>
-                </jsp:include>
-            </c:if>
             <%--상품분류 항목표시--%>
             <div class="mt10">
                 <span class="chk ml10">
@@ -61,12 +48,28 @@
                 </span>
             </div>
         </td>
-        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-            <td>
-                <input type="hidden" id="rtnStatusProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
-            </td>
-        </c:if>
       </tr>
+      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      <tr>
+        <th>
+            <s:message code="todayBillSaleDtl.store"/>
+        </th>
+        <td>
+                <%-- 매장선택 모듈 싱글 선택 사용시 include
+                        param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                     displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                     modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                     closeFunc - 팝업 닫기시 호출할 함수
+                   --%>
+                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                    <jsp:param name="targetId" value="rtnStatusProdSelectStore"/>
+                </jsp:include>
+        </td>
+      </tr>
+      </c:if>
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+              <input type="hidden" id="rtnStatusProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
+      </c:if>
       </tbody>
     </table>
     <div style="clear: both;"></div>
@@ -74,7 +77,7 @@
     <!-- contents start -->
     <div class="">
         <%-- wj grid start --%>
-        <div class="mt20 oh sb-select dkbr">
+        <div class="mt10 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
                 class="w100px fl"

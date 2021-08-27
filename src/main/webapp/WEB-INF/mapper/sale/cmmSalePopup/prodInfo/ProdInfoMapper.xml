@@ -379,9 +379,9 @@
                 SUM(tsmp.TOT_SALE_AMT) AS SALE_AMT,
                 SUM(tsmp.TOT_DC_AMT) AS DC_AMT,
                 SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                SUM(tsmt.TAX_SALE_AMT) AS TAX_SALE_AMT,
-                SUM(tsmt.VAT_AMT) AS VAT_AMT,
-                SUM(tsmt.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+                SUM(CASE WHEN tssd.VAT_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS TAX_SALE_AMT,
+                SUM(tssd.VAT_AMT) AS VAT_AMT,
+                SUM(CASE WHEN tssd.VAT_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS NO_TAX_SALE_AMT
                 FROM
                 <if test='gubun != "monthPos"'>
                     TB_SL_MONTHLY_PROD tsmp,
@@ -389,9 +389,25 @@
                 <if test='gubun == "monthPos"'>
                     TB_SL_MONTHLY_POS_PROD tsmp,
                 </if>
-                TB_SL_MONTHLY_TOTAL tsmt,
                 TB_MS_PRODUCT tmp,
-                TB_MS_PRODUCT_BARCD tmpb
+                (
+                    SELECT  STORE_CD,
+                            SUBSTR(SALE_DATE,0,6) AS SALE_YM,
+                            PROD_CD,
+                            VAT_FG,
+                            SUM(VAT_AMT) AS VAT_AMT,
+                            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    FROM    TB_SL_SALE_DTL
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    AND     SALE_DATE BETWEEN #{yearMonth} || '01' AND #{yearMonth} || '31'
+                    GROUP BY STORE_CD, SUBSTR(SALE_DATE,0,6), PROD_CD, VAT_FG
+        ) tssd
                 WHERE 1=1
                 AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='storeCds != null and storeCds != ""'>
@@ -404,13 +420,10 @@
                     AND tsmp.POS_NO = #{posNo}
                 </if>
                 AND tsmp.SALE_YM = #{yearMonth}
-                AND tsmt.HQ_OFFICE_CD (+)= tsmp.HQ_OFFICE_CD
-                AND tsmt.STORE_CD (+)= tsmp.STORE_CD
-                AND tsmt.SALE_YM (+)= tsmp.SALE_YM
+                AND tssd.STORE_CD (+)=tsmp.STORE_CD
+                AND tssd.PROD_CD (+)= tsmp.PROD_CD
                 AND tmp.STORE_CD (+)= tsmp.STORE_CD
                 AND tmp.PROD_CD (+)= tsmp.PROD_CD
-                AND tmpb.STORE_CD (+)= tmp.STORE_CD
-                AND tmpb.PROD_CD (+)= tmp.PROD_CD
                 <!-- 본사 -->
                 <if test='orgnFg == "H"'>
                     GROUP BY tsmp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsmp.PROD_CD, tmp.PROD_NM
