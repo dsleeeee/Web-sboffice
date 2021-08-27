@@ -459,7 +459,7 @@
     <%-- 상단 --%>
     <div class="wj-TblWrapBr w100 fl">
         <%-- 제목 --%>
-        <div class="w30 fl pd10" style="height:370px; width:220px;">
+        <div class="w30 fl pd10" style="height:360px; width:250px;">
             <table>
                 <colgroup>
                     <col class="w100" />
@@ -473,7 +473,7 @@
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr>
-                    <td>
+                    <td class="s14">
                         <label id="lblStoreNmInfo"></label>
                     </td>
                 </tr>
@@ -486,13 +486,13 @@
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr>
-                    <td>
+                    <td class="s14">
                         <label id="lblMemoInfo"></label>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
                 <tr>
-                    <td>
+                    <td class="s14">
                         <label id="lblTxtByte"></label>
                         <s:message code="marketingSmsSend.byte" />
                         <label id="lblTxtByteGubun"></label>
@@ -502,7 +502,7 @@
                 <tr>
                     <td>
                         <%-- 전송자 --%>
-                        <div class="sb-select dkbr fl">
+                        <div class="sb-select dkbr fl s14">
                             <s:message code="marketingSmsSend.sendName" />
                         </div>
                         <%-- 전송자번호 --%>
@@ -541,36 +541,32 @@
             </table>
         </div>
         <%-- 수신자목록 --%>
-        <div class="w70 fl pd10 bl" style="height:370px; width:calc(100% - 220px);">
+        <div class="w70 fl pd10 bl" style="height:360px; width:calc(100% - 250px);">
             <div class="w100">
                 <div class="w70 fl">
                     <table>
                         <tr>
-                            <td>
+                            <td class="s14">
+                                <%-- 잔여수량 --%>
+                                <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
+                                <span><s:message code="marketingSmsSend.smsQty" /></span>
+                                <span class="mr5"><label id="lblSmsQty"></label></span>
                                 <%-- 받는사람 --%>
                                 <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
                                 <span><s:message code="marketingSmsSend.receiveName" /></span>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <%-- 잔여수량 --%>
-                                <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
-                                <span><s:message code="marketingSmsSend.smsQty" /></span>
-                                <span><label id="lblSmsQty"></label></span>
-                            </td>
-                        </tr>
                     </table>
                 </div>
                 <div class="w30 fl">
-                    <div class="updownSet oh mb10">
+                    <div class="updownSet oh mb5">
                         <button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
                         <button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>
                     </div>
                 </div>
             </div>
             <%-- 그리드 --%>
-            <div class="w100 mt10 mb20">
+            <div class="w100 mt10 mb10">
                 <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
                     <div class="row">
                         <wj-flex-grid
@@ -584,7 +580,7 @@
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="marketingSmsSend.telNm"/>" binding="telNm" width="80" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="marketingSmsSend.telNm"/>" binding="telNm" width="100" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="marketingSmsSend.telNo"/>" binding="telNo" width="100" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="marketingSmsSend.addr"/>" binding="addr" width="80" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="marketingSmsSend.birthday"/>" binding="birthday" width="80" align="center" format="date"></wj-flex-grid-column>
