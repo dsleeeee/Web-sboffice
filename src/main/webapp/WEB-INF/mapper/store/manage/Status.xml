@@ -33,13 +33,62 @@
         (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY_NM,
         (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_CD = tms.VAN_CD AND VAN_FG = '01') AS VAN_NM,
         (SELECT ENVST_VAL_NM FROM TB_CM_ENVST_DTL WHERE ENVST_VAL_CD = NVL(tmse.ENVST_VAL,'0') AND ENVST_CD = tmse.ENVST_CD AND USE_YN = tmse.USE_YN) AS ENVST_VAL_NM,
-        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE,
-        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
-        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE
+        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE
+        ,       CASE WHEN G.MIN_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(G.MIN_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MIN_SALE_DATE
+        ,       CASE WHEN G.MAX_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(G.MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MAX_SALE_DATE
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_STORE tms,
         TB_HQ_OFFICE tho,
         TB_MS_STORE_ENVST tmse
+        ,       (
+                    SELECT  A.STORE_CD              STORE_CD
+                    ,       A.BILL_CNT              BILL_CNT
+                    ,       A.SALE_CNT              SALE_CNT
+                    ,       A.RTN_SALE_CNT          RTN_SALE_CNT
+                    ,       A.REAL_SALE_CNT         REAL_SALE_CNT
+                    ,       A.TOT_GUEST_CNT         TOT_GUEST_CNT
+                    ,       A.TOT_DLVR_CNT          TOT_DLVR_CNT
+                    ,       A.TOT_RESVE_CNT         TOT_RESVE_CNT
+                    ,       A.TOT_REFUND_CNT        TOT_REFUND_CNT
+                    ,       A.MIN_SALE_YM           MIN_SALE_YM
+                    ,       A.MAX_SALE_YM           MAX_SALE_YM
+                    ,       MIN(B.SALE_DATE)        MIN_SALE_DATE
+                    ,       MAX(C.SALE_DATE)        MAX_SALE_DATE
+                    FROM    (
+                                SELECT  A.STORE_CD
+                                ,       SUM(NVL(A.BILL_CNT      , 0))   BILL_CNT
+                                ,       SUM(NVL(A.SALE_CNT      , 0))   SALE_CNT
+                                ,       SUM(NVL(A.RTN_SALE_CNT  , 0))   RTN_SALE_CNT
+                                ,       SUM(NVL(A.REAL_SALE_CNT , 0))   REAL_SALE_CNT
+                                ,       SUM(NVL(A.TOT_GUEST_CNT , 0))   TOT_GUEST_CNT
+                                ,       SUM(NVL(A.TOT_DLVR_CNT  , 0))   TOT_DLVR_CNT
+                                ,       SUM(NVL(A.TOT_RESVE_CNT , 0))   TOT_RESVE_CNT
+                                ,       SUM(NVL(A.TOT_REFUND_CNT, 0))   TOT_REFUND_CNT
+                                ,       MIN(A.SALE_YM)                  MIN_SALE_YM
+                                ,       MAX(A.SALE_YM)                  MAX_SALE_YM
+                                FROM    TB_SL_MONTHLY_TOTAL A
+                                GROUP
+                                BY      A.STORE_CD
+                            ) A
+                    ,       TB_SL_DAILY_TOTAL B
+                    ,       TB_SL_DAILY_TOTAL C
+                    WHERE   B.STORE_CD  (+) =   A.STORE_CD
+                    AND     B.SALE_DATE (+) LIKE    A.MIN_SALE_YM||'%'
+                    AND     C.STORE_CD  (+) =   A.STORE_CD
+                    AND     C.SALE_DATE (+) LIKE    A.MAX_SALE_YM||'%'
+                    GROUP
+                    BY      A.STORE_CD
+                    ,       A.BILL_CNT
+                    ,       A.SALE_CNT
+                    ,       A.RTN_SALE_CNT
+                    ,       A.REAL_SALE_CNT
+                    ,       A.TOT_GUEST_CNT
+                    ,       A.TOT_DLVR_CNT
+                    ,       A.TOT_RESVE_CNT
+                    ,       A.TOT_REFUND_CNT
+                    ,       A.MIN_SALE_YM
+                    ,       A.MAX_SALE_YM
+                ) G
         WHERE 1=1
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
             <![CDATA[
@@ -88,9 +137,10 @@
                 AND tho. HQ_OFFICE_CD != '00000'
             ]]>
         </if>
-        AND tms.STORE_CD = tmse.STORE_CD
-        AND tmse.ENVST_CD = '2028'
-        AND tmse.USE_YN = 'Y'
+        AND     tmse.STORE_CD   (+) =   tms.STORE_CD
+        AND     tmse.ENVST_CD   (+) =   '2028'
+        AND     tmse.USE_YN     (+) =   'Y'
+        AND     G.STORE_CD      (+) =   tms.STORE_CD
         ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
