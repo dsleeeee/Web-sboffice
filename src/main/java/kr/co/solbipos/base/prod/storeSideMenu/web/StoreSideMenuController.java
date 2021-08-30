@@ -1,9 +1,8 @@
 package kr.co.solbipos.base.prod.storeSideMenu.web;
 
-import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
@@ -74,6 +72,52 @@ public class StoreSideMenuController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        /**  상품정보관리  */
+        // 상품생성설정
+        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
+
+        // 상품코드 채번방식
+        ProdNoEnvFg prodNoEnvFg;
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0028"));
+        }else{
+            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
+        }
+
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
+        model.addAttribute("prodNoEnvFg", prodNoEnvFg);
+
+        // 내점/배달/포장 가격관리 사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+        }else{
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+        }
+
+        // 본사
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043"),"0").equals("0")){ // 0043 본사신규상품 매장생성기준
+                model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
+            }
+        } else {
+            model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
+        }
+
+        // (상품관리)브랜드사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        }else{
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+        }
+
+        // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
+        model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
+
+        // 브랜드 리스트 조회(선택 콤보박스용)
+        ProdVO prodVO = new ProdVO();
+        model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+
         /** 판매터치키등록  */
         TouchKeyVO params = new TouchKeyVO();
         params.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -104,26 +148,6 @@ public class StoreSideMenuController {
         // 터치키 그룹 가져오기
         List<DefaultMap<String>> touchKeyGrpList = touchkeyService.getTouchKeyGrp(params, sessionInfoVO);
         model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
-
-        /**  상품정보관리  */
-
-        ProdVO prodVO = new ProdVO();
-
-        // 상품생성설정
-        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
-
-        // 상품코드 채번방식
-        ProdNoEnvFg prodNoEnvFg;
-        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0028"));
-        }else{
-            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
-        }
-
-        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
-        model.addAttribute("prodNoEnvFg", prodNoEnvFg);
-
-        model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
         return "base/prod/storeSideMenu/storeSideMenu";
     }
