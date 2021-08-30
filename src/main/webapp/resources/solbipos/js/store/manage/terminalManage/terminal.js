@@ -399,10 +399,11 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         if (col.binding === "vendorFg" || col.binding === "vendorCd") {
           var item = s.rows[e.row].dataItem;
           if (item.status !== "I") {
-            wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
-          } else {
-            wijmo.removeClass(e.cell, 'wj-custom-readonly');
+            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+            // Attribute 의 변경사항을 적용.
+            e.cell.outerHTML = e.cell.outerHTML;
           }
         }
       }
@@ -414,7 +415,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
       if (col.binding === "vendorFg" || col.binding === "vendorCd") {
         var dataItem = s.rows[elements.row].dataItem;
         if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
-          // elements.cancel = true;
+           elements.cancel = true;
         }
       }
     });
