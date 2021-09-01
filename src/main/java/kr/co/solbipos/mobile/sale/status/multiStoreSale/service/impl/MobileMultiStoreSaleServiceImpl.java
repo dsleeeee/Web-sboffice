@@ -32,7 +32,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service(",obileMultiStoreSaleService")
+@Service("mobileMultiStoreSaleService")
 @Transactional
 public class MobileMultiStoreSaleServiceImpl implements  MobileMultiStoreSaleService {
     private final MobileMultiStoreSaleMapper mobileMultiStoreSaleMapper;
