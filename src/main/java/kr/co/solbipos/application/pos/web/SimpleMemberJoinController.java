@@ -149,7 +149,8 @@ public class SimpleMemberJoinController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "posLogin.sb", method = RequestMethod.POST)
+//    @RequestMapping(value = "posLogin.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "posLogin.sb", method = {RequestMethod.POST, RequestMethod.GET})
     public String posLoginProcess(@Validated(Login.class) SessionInfoVO sessionInfoVO,
                                   BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
                                   Model model) {
