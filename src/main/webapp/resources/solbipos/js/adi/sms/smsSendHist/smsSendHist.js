@@ -21,8 +21,8 @@ var msgTypeDataMapData = [
 ];
 // 예약여부
 var reserveYnDataMapData = [
-    {"name":"예약","value":"Y"},
-    {"name":"즉시","value":"N"}
+    {"name":"예약","value":"1"},
+    {"name":"즉시","value":"0"}
 ];
 // 조회구분
 var gubunComboData = [

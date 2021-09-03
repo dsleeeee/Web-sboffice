@@ -36,14 +36,9 @@ public interface SmsSendMapper {
     /** 잔여수량 조회 */
     DefaultMap<Object> getSmsQtyList(SmsSendVO smsSendVO);
 
-    /** SMS등록전 체크 */
-    String getSmsChk(SmsSendVO smsSendVO);
-
     /** 전송,예약 저장 insert */
     int getSmsSendReserveSaveInsert(SmsSendVO smsSendVO);
-    int getSmsSendReserveSaveInsertKT(SmsSendVO smsSendVO);
     int getSmsSendReserveSaveInsertLMS(SmsSendVO smsSendVO);
-    int getSmsSendReserveSaveInsertLMSKT(SmsSendVO smsSendVO);
 
     /** 잔여수량 조회 */
     String getSmsQty(SmsSendVO smsSendVO);

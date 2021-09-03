@@ -56,6 +56,8 @@ public class SendStatusServiceImpl implements SendStatusService {
     @Override
     public List<DefaultMap<Object>> getSendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO) {
 
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        sendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
         return sendStatusMapper.getSendStatusList(sendStatusVO);
@@ -75,17 +77,11 @@ public class SendStatusServiceImpl implements SendStatusService {
 
             sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
-            if(sendStatusVO.getGubun().equals("HCS_MSGSS_T")) {
-                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDelete(sendStatusVO); // HCS_MSGSS_T
+            if(sendStatusVO.getGubun().equals("SDK_SMS_SEND")) {
+                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDelete(sendStatusVO); // SDK_SMS_SEND
 
-            } else if(sendStatusVO.getGubun().equals("HCS_MSGKS_T")) {
-                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteKT(sendStatusVO); // HCS_MSGKS_T
-
-            } else if(sendStatusVO.getGubun().equals("HCS_MSGSM_T")) {
-                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS(sendStatusVO); // HCS_MSGSM_T
-
-            } else if(sendStatusVO.getGubun().equals("HCS_MSGKM_T")) {
-                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMSKT(sendStatusVO); // HCS_MSGKM_T
+            } else if(sendStatusVO.getGubun().equals("SDK_MMS_SEND")) {
+                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS(sendStatusVO); // SDK_MMS_SEND
             }
 
             // 잔여수량 복구

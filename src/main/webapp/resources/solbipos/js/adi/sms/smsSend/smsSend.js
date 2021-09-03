@@ -289,10 +289,11 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             return;
         }
 
-        // N:전송, Y:예약
-        if(reserveYn == "Y") {
+        // 0:전송, 1:예약
+        if(reserveYn == "1") {
             var param = {};
             param.reserveYn = reserveYn;
+            param.gubun = "smsSend";
 
             $scope.setSelectedSmsSend(param);
             $scope.wjSmsReserveLayer.show(true);
@@ -331,8 +332,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                         content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
                     }
 
-                    $scope.flex.collectionView.items[i].reserveYn = reserveYn; // N:전송, Y:예약
-                    if (reserveYn == "Y") {
+                    $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
+                    if (reserveYn == "1") {
                         $scope.flex.collectionView.items[i].sendDate = reserveDate; // 전송일시
                     }
                     $scope.flex.collectionView.items[i].title = $("#srchTitle").val(); // 제목
@@ -340,7 +341,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                     $scope.flex.collectionView.items[i].msgType = msgType; // 메세지타입
                     $scope.flex.collectionView.items[i].cstNo = $scope.flex.collectionView.items[i].membrNo; // 회원번호
                     $scope.flex.collectionView.items[i].callback = $scope.telNoCombo; // 보내는사람 번호
-                    $scope.flex.collectionView.items[i].phoneNumber = $scope.flex.collectionView.items[i].telNo; // 받는사람 번호
+                    $scope.flex.collectionView.items[i].phoneNumber = $scope.flex.collectionView.items[i].telNo.replaceAll("-", ""); // 받는사람 번호
                     $scope.flex.collectionView.items[i].rrOrgnFg = $scope.flex.collectionView.items[i].rOgnFg; // 받는사람 소속구분
                     $scope.flex.collectionView.items[i].rrOrgnCd = $scope.flex.collectionView.items[i].rOgnCd; // 받는사람 소속코드
                     $scope.flex.collectionView.items[i].rrUserId = $scope.flex.collectionView.items[i].rUserId; // 받는사람ID

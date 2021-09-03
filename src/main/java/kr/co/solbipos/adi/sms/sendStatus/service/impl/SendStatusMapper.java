@@ -34,9 +34,7 @@ public interface SendStatusMapper {
 
     /** 문자전송현황 - 예약취소 */
     int getSendStatusReserveCancelSaveDelete(SendStatusVO sendStatusVO);
-    int getSendStatusReserveCancelSaveDeleteKT(SendStatusVO sendStatusVO);
     int getSendStatusReserveCancelSaveDeleteLMS(SendStatusVO sendStatusVO);
-    int getSendStatusReserveCancelSaveDeleteLMSKT(SendStatusVO sendStatusVO);
 
     /** 잔여수량 복구 */
     int getSmsQtyRecoverSaveUpdate(SendStatusVO sendStatusVO);
