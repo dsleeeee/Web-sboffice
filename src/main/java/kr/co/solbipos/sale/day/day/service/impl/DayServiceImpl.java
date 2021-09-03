@@ -10,7 +10,9 @@ import kr.co.solbipos.sale.day.day.service.DayVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("dayService")
 public class DayServiceImpl implements DayService {
@@ -382,16 +384,45 @@ public class DayServiceImpl implements DayService {
             dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
         }
 
-        // 포스구분 array 값 세팅
-        dayVO.setArrPosCol(dayVO.getPosCol().split(","));
-        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-        String pivotPosCol = "";
-        String arrPosCol[] = dayVO.getPosCol().split(",");
-        for(int i=0; i < arrPosCol.length; i++) {
-            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS_"+arrPosCol[i];
-        }
-        dayVO.setPivotPosCol(pivotPosCol);
+//        // 포스구분 array 값 세팅
+//        dayVO.setArrPosCol(dayVO.getPosCol().split(","));
+//        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+//        String pivotPosCol = "";
+//        String arrPosCol[] = dayVO.getPosCol().split(",");
+//        for(int i=0; i < arrPosCol.length; i++) {
+//            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS_"+arrPosCol[i];
+//        }
+//        dayVO.setPivotPosCol(pivotPosCol);
 
-        return dayMapper.getDayPosList(dayVO);
+        List<DefaultMap<Object>> result =  dayMapper.getDayPosList(dayVO);
+
+        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+
+        DefaultMap<Object> map = new DefaultMap<>();
+
+        for(int i = 0; i < result.size(); i++) {
+            if(result.get(i).get("storePosNo").equals("TOTAL")){
+                // 총매출정보
+                map.put("TOT_SALE_AMT", result.get(i).get("saleAmt"));
+                map.put("TOT_DC_AMT", result.get(i).get("dcAmt"));
+                map.put("TOT_REAL_SALE_AMT", result.get(i).get("realSaleAmt"));
+                map.put("TOT_SALE_QTY", result.get(i).get("saleQty"));
+
+                selectList.add(map);
+
+                map = new DefaultMap<>();
+            } else {
+                // 공통정보 날짜,요일
+                map.put("SALE_DATE", result.get(i).get("saleDate"));
+                map.put("YOIL", result.get(i).get("yoil"));
+                // 매장별 정보
+                map.put("POS_" + result.get(i).get("storePosNo") + "_SALE_AMT", result.get(i).get("saleAmt"));
+                map.put("POS_" + result.get(i).get("storePosNo") + "_DC_AMT", result.get(i).get("dcAmt"));
+                map.put("POS_" + result.get(i).get("storePosNo") + "_REAL_SALE_AMT", result.get(i).get("realSaleAmt"));
+                map.put("POS_" + result.get(i).get("storePosNo") + "_SALE_QTY", result.get(i).get("saleQty"));
+            }
+        }
+
+        return selectList;
     }
 }
