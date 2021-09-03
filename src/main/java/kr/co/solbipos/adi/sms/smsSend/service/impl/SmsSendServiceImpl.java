@@ -121,53 +121,22 @@ public class SmsSendServiceImpl implements SmsSendService {
             }
 
             // 전송일시
-            if(smsSendVO.getReserveYn().equals("Y")) { // 예약
+            if(smsSendVO.getReserveYn().equals("1")) { // 예약
                 smsSendVO.setSendDate(smsSendVO.getSendDate());
-            } else {
+            } else { // 즉시
                 smsSendVO.setSendDate(currentDt);
             }
-
-            // SMS등록전 체크
-            String smsChk = smsSendMapper.getSmsChk(smsSendVO);
 
             // 전송이력시퀀스
             smsSendVO.setSmsSendSeq(smsSendSeq);
 
             // SMS
             if(smsSendVO.getMsgType().equals("1")) {
-                if(smsChk.equals("0")) {
-                    // 홀수
-                    if(rowCount%2 == 1) {
-                        procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // HCS_MSGSS_T
-                    // 짝수
-                    } else if(rowCount%2 == 0) {
-                        procCnt = smsSendMapper.getSmsSendReserveSaveInsertKT(smsSendVO); // HCS_MSGKS_T
-                    }
-
-                } else if(smsChk.equals("2")) {
-                    procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // HCS_MSGSS_T
-
-                } else if(smsChk.equals("1")) {
-                    procCnt = smsSendMapper.getSmsSendReserveSaveInsertKT(smsSendVO); // HCS_MSGKS_T
-                }
+                procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND
 
             // LMS
             } else if(smsSendVO.getMsgType().equals("2")) {
-                if(smsChk.equals("0")) {
-                    // 홀수
-                    if(rowCount%2 == 1) {
-                        procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // HCS_MSGSM_T
-                        // 짝수
-                    } else if(rowCount%2 == 0) {
-                        procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMSKT(smsSendVO); // HCS_MSGKM_T
-                    }
-
-                } else if(smsChk.equals("2")) {
-                    procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // HCS_MSGSM_T
-
-                } else if(smsChk.equals("1")) {
-                    procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMSKT(smsSendVO); // HCS_MSGKM_T
-                }
+                procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND
             }
 
             // 잔여수량 -1

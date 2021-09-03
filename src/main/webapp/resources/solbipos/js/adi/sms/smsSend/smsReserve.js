@@ -53,6 +53,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
     // <-- 검색 호출 -->
     $scope.$on("smsReserveCtrl", function(event, data) {
         $("#lblReserveYn").text(data.reserveYn);
+        $("#lblGubun").text(data.gubun);
         event.preventDefault();
     });
     // <-- //검색 호출 -->
@@ -62,6 +63,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         var startDate = wijmo.Globalize.format(startDateSmsReserve.value, 'yyyyMMdd');
         var reserveDate = startDate + $scope.startTimeSmsReserveCombo + $scope.startMinuteSmsReserveCombo + "00";
         var reserveYn = $("#lblReserveYn").text();
+        var gubun = $("#lblGubun").text();
 
         if(parseInt(reserveDate) < parseInt(getCurDateTime())) {
             $scope._popMsg(messages["sendStatus.reserveTimeAlert"]); // 예약시간은 현재시간 이후로 가능합니다.
@@ -69,7 +71,14 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 전송 저장
-        var smsReserveScope = agrid.getScope('smsSendCtrl');
+        if(gubun == "smsSend") {
+            // SMS전송 팝업
+            var smsReserveScope = agrid.getScope('smsSendCtrl');
+
+        } else if(gubun == "marketingSmsSend") {
+            // 마케팅용 SMS전송
+            var smsReserveScope = agrid.getScope('marketingSmsSendCtrl');
+        }
         smsReserveScope.smsSendSave(reserveYn, reserveDate);
 
         // 팝업 닫기
@@ -78,6 +87,9 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 팝업 닫기
     $scope.close = function() {
+        $("#lblReserveYn").text("");
+        $("#lblGubun").text("");
+
         $scope.wjSmsReserveLayer.hide();
         event.preventDefault();
     };

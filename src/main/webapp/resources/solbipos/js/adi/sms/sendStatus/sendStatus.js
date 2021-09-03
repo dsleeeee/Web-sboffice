@@ -16,12 +16,8 @@ var app = agrid.getApp();
 // 결과
 var sendStatusFgData = [
     {"name":"발송대기","value":"0"},
-    {"name":"발송대기","value":"1"},
-    {"name":"발송대기","value":"2"},
-    {"name":"발송대기","value":"-2"},
-    {"name":"발송실패","value":"3"},
-    {"name":"성공","value":"100"},
-    {"name":"실패","value":"9999"}
+    {"name":"발송완료","value":"3"},
+    {"name":"발송실패","value":"-1"}
 ];
 
 /**
@@ -179,8 +175,8 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                if($scope.flex.collectionView.items[i].reserveYn != "Y"
-                    || $scope.flex.collectionView.items[i].sendStatus == "100"
+                if($scope.flex.collectionView.items[i].reserveYn != "1"
+                    || $scope.flex.collectionView.items[i].sendStatus == "3"
                     || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 8)) <= parseInt(getToday())) ) {
 
                     $scope._popMsg(messages["sendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.

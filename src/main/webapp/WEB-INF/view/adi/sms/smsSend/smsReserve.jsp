@@ -53,6 +53,8 @@
                             </button>
                             <%-- 예약여부 --%>
                             <label id="lblReserveYn" style="display: none;"></label>
+                            <%-- 팝업 사용한화면 구분 --%>
+                            <label id="lblGubun" style="display: none;"></label>
                         </div>
                     </td>
                 </tr>
@@ -63,4 +65,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20210625.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20210625.03" charset="utf-8"></script>

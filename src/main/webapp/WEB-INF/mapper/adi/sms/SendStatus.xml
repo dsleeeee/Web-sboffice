@@ -29,8 +29,8 @@
 
     <!-- 문자전송현황 - 조회 -->
     <!--
-        TABLE    : HCS_MSGSS_T, HCS_MSGKS_T, HCS_MSGSM_T, HCS_MSGKM_T, HCS_MSGLG_T
-        COMMENTS : SMS 발송||SMTNT, SMS 발송||KT, LMS/MMS 발송||SMTNT, LMS/MMS 발송||KT, 문자전송현황
+        TABLE    : SDK_SMS_SEND, SDK_MMS_SEND, SDK_SMS_REPORT, SDK_SMS_REPORT_DETAIL, SDK_MMS_REPORT, SDK_MMS_REPORT_DETAIL
+        COMMENTS : SMS 발송, LMS/MMS 발송, SMS 문자전송결과, LMS/MMS 문자전송결과
     -->
     <select id="getSendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
         /* SendStatusMapper.getSendStatusList */
@@ -39,11 +39,11 @@
         hmt.MSG_ID,
         hmt.REG_DT,
         hmt.S_OGN_CD,
-        (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.S_OGN_CD GROUP BY ORGN_NM) AS S_OGN_NM,
-        (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = hmt.S_USER_ID GROUP BY USER_NM) AS S_USER_NM,
+        hmt.S_OGN_NM,
+        hmt.S_USER_NM,
         hmt.CALLBACK AS S_PHONE_NUMBER,
         hmt.R_OGN_CD,
-        (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD GROUP BY ORGN_NM) AS R_OGN_NM,
+        hmt.R_OGN_NM,
         (CASE WHEN hmt.R_OGN_FG = 'C' THEN (SELECT SBPENC.D(MEMBR_NM) FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = hmt.R_OGN_CD AND MEMBR_NO = hmt.CST_NO GROUP BY MEMBR_NM)
                WHEN hmt.R_OGN_FG NOT IN ('C') THEN (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD AND USER_ID = hmt.R_USER_ID GROUP BY USER_NM)
                ELSE null END
@@ -57,8 +57,8 @@
         DECODE(hmt.COMPANY, '1', 'MONO', '2', 'SMTNT', NULL) AS COMPANY,
         hmt.SUBJECT,
         hmt.MSG_CONTENT,
-        hmt.GUBUN,
-        hmt.SMS_SEND_SEQ
+        hmt.SMS_SEND_SEQ,
+        hmt.GUBUN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
@@ -69,81 +69,36 @@
                     --SMS
                     SELECT
                     A.MSG_ID,
-                    A.REG_DT,
-                    A.S_OGN_CD,
-                    A.S_OGN_FG,
-                    A.S_USER_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
                     A.CALLBACK,
-                    A.R_OGN_CD,
-                    A.R_OGN_FG,
-                    A.R_USER_ID,
-                    A.CST_NO,
-                    A.PHONE_NUMBER,
-                    A.RESERVE_YN,
-                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
-                    A.READ_DATE,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.SEND_PROC_TIME AS READ_DATE,
                     A.SEND_STATUS,
                     '' AS RESULT_CD,
-                    '2' AS COMPANY,
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
                     A.SUBJECT,
-                    A.MSG_CONTENT,
-                    'HCS_MSGSS_T' AS GUBUN,
-                    A.SMS_SEND_SEQ
-                    FROM HCS_MSGSS_T A
+                    A.SMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    'SDK_SMS_SEND' AS GUBUN
+                    FROM SDK_SMS_SEND A
                     WHERE 1=1
-                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
-                    </if>
-                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
-                    </if>
-                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
-                    </if>
-                )
-                UNION ALL
-                (
-                    --SMS KT
-                    SELECT
-                    A.MSG_ID,
-                    A.REG_DT,
-                    A.S_OGN_CD,
-                    A.S_OGN_FG,
-                    A.S_USER_ID,
-                    A.CALLBACK,
-                    A.R_OGN_CD,
-                    A.R_OGN_FG,
-                    A.R_USER_ID,
-                    A.CST_NO,
-                    A.PHONE_NUMBER,
-                    A.RESERVE_YN,
-                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
-                    A.READ_DATE,
-                    A.SEND_STATUS,
-                    '' AS RESULT_CD,
-                    '1' AS COMPANY,
-                    A.SUBJECT,
-                    A.MSG_CONTENT,
-                    'HCS_MSGKS_T' AS GUBUN,
-                    A.SMS_SEND_SEQ
-                    FROM HCS_MSGKS_T A
-                    WHERE 1=1
-                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
-                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
-                    </if>
-                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
-                    </if>
-                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
-                    </if>
-                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                 )
                 UNION ALL
@@ -151,140 +106,155 @@
                     --LMS
                     SELECT
                     A.MSG_ID,
-                    A.REG_DT,
-                    A.S_OGN_CD,
-                    A.S_OGN_FG,
-                    A.S_USER_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
                     A.CALLBACK,
-                    A.R_OGN_CD,
-                    A.R_OGN_FG,
-                    A.R_USER_ID,
-                    A.CST_NO,
-                    A.PHONE_NUMBER,
-                    A.RESERVE_YN,
-                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
-                    A.READ_DATE,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.SEND_PROC_TIME AS READ_DATE,
                     A.SEND_STATUS,
                     '' AS RESULT_CD,
-                    '2' AS COMPANY,
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
                     A.SUBJECT,
-                    A.MSG_CONTENT,
-                    'HCS_MSGSM_T' AS GUBUN,
-                    A.SMS_SEND_SEQ
-                    FROM HCS_MSGSM_T A
+                    A.MMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    'SDK_MMS_SEND' AS GUBUN
+                    FROM SDK_MMS_SEND A
                     WHERE 1=1
-                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
-                    </if>
-                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
-                    </if>
-                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                 )
-                  UNION ALL
+                UNION ALL
                 (
-                    --LMS KT
+                    --SMS 문자 전송결과
                     SELECT
                     A.MSG_ID,
-                    A.REG_DT,
-                    A.S_OGN_CD,
-                    A.S_OGN_FG,
-                    A.S_USER_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
                     A.CALLBACK,
-                    A.R_OGN_CD,
-                    A.R_OGN_FG,
-                    A.R_USER_ID,
-                    A.CST_NO,
-                    A.PHONE_NUMBER,
-                    A.RESERVE_YN,
-                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
-                    A.READ_DATE,
-                    A.SEND_STATUS,
-                    '' AS RESULT_CD,
-                    '1' AS COMPANY,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    B.DELIVER_DATE AS READ_DATE,
+                    (CASE WHEN A.SUCC_COUNT = 0 THEN -1
+                           WHEN A.SUCC_COUNT = 1 THEN 3
+                           ELSE null END
+                    ) AS SEND_STATUS, --현재는 1건씩 전송해서
+                    ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
                     A.SUBJECT,
-                    A.MSG_CONTENT,
-                    'HCS_MSGKM_T' AS GUBUN,
-                    A.SMS_SEND_SEQ
-                    FROM HCS_MSGKM_T A
+                    A.SMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    'SDK_SMS_REPORT' AS GUBUN
+                    FROM SDK_SMS_REPORT A,
+                    SDK_SMS_REPORT_DETAIL B
                     WHERE 1=1
-                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND B.MSG_ID = A.MSG_ID
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
-                    </if>
-                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
-                    </if>
-                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                 )
-                  UNION ALL
+                UNION ALL
                 (
-                    --문자 전송결과
+                    --LMS 문자 전송결과
                     SELECT
                     A.MSG_ID,
-                    A.REG_DT,
-                    A.S_OGN_CD,
-                    A.S_OGN_FG,
-                    A.S_USER_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
                     A.CALLBACK,
-                    A.R_OGN_CD,
-                    A.R_OGN_FG,
-                    A.R_USER_ID,
-                    A.CST_NO,
-                    A.PHONE_NUMBER,
-                    A.RESERVE_YN,
-                    DECODE(A.RESERVE_YN, 'Y', A.SEND_DATE, NULL) AS SEND_DATE,
-                    A.READ_DATE,
-                    A.SEND_STATUS,
-                    (A.COMPANY || '_' || A.RESULT) AS RESULT_CD,
-                    A.COMPANY,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    B.DELIVER_DATE AS READ_DATE,
+                    (CASE WHEN A.SUCC_COUNT = 0 THEN -1
+                           WHEN A.SUCC_COUNT = 1 THEN 3
+                           ELSE null END
+                    ) AS SEND_STATUS, --현재는 1건씩 전송해서
+                    ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
                     A.SUBJECT,
-                    A.MSG_CONTENT,
-                    'HCS_MSGLG_T' AS GUBUN,
-                     0 AS SMS_SEND_SEQ
-                    FROM HCS_MSGLG_T A
+                    A.MMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    'SDK_MMS_REPORT' AS GUBUN
+                    FROM SDK_MMS_REPORT A,
+                    SDK_MMS_REPORT_DETAIL B
                     WHERE 1=1
-                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    AND B.MSG_ID = A.MSG_ID
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
-                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
-                    </if>
-                    <if test="ssOrgnNm != null and ssOrgnNm != ''">
-                        AND A.S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
-                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
-                    </if>
-                    <if test="rrOrgnNm != null and rrOrgnNm != ''">
-                        AND A.R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                 )
             )
             WHERE 1=1
-            AND S_OGN_CD = #{orgnCd}
+            <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+            </if>
+            <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+            </if>
         ) hmt,
         (
             SELECT
             twuidv01.ORGN_FG,
             twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
             twuidv01.HQ_OFFICE_CD,
             twuidv01.STORE_CD,
             (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
-                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
-                   ELSE null END
+                  WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                  ELSE null END
             ) AS AGENCY_CD
-            FROM TB_WB_USER_INFO_DTL_V01 twuidv01
-            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            FROM
+            (
+                SELECT
+                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.ORGN_NM,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.STORE_CD
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            ) twuidv01
+            WHERE 1=1
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
         ) twuidv01
         WHERE 1=1
         <choose>
@@ -315,36 +285,24 @@
             </when>
         </choose>
         AND twuidv01.ORGN_CD = hmt.S_OGN_CD
-        ORDER BY REG_DT DESC
+        ORDER BY hmt.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 문자전송현황 - 예약취소 delete -->
     <!--
-        TABLE    : HCS_MSGSS_T, HCS_MSGKS_T, HCS_MSGSM_T, HCS_MSGKM_T
-        COMMENTS : SMS 발송||SMTNT, SMS 발송||KT, LMS/MMS 발송||SMTNT, LMS/MMS 발송||KT
+        TABLE    : SDK_SMS_SEND, SDK_MMS_SEND
+        COMMENTS : SMS 발송, LMS/MMS 발송
     -->
     <delete id="getSendStatusReserveCancelSaveDelete" parameterType="SendStatusVO">
         /* SendStatusMapper.getSendStatusReserveCancelSaveDelete */
-        DELETE HCS_MSGSS_T
-        WHERE 1=1
-        AND MSG_ID = #{msgId}
-    </delete>
-    <delete id="getSendStatusReserveCancelSaveDeleteKT" parameterType="SendStatusVO">
-        /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteKT */
-        DELETE HCS_MSGKS_T
+        DELETE SDK_SMS_SEND
         WHERE 1=1
         AND MSG_ID = #{msgId}
     </delete>
     <delete id="getSendStatusReserveCancelSaveDeleteLMS" parameterType="SendStatusVO">
         /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS */
-        DELETE HCS_MSGSM_T
-        WHERE 1=1
-        AND MSG_ID = #{msgId}
-    </delete>
-    <delete id="getSendStatusReserveCancelSaveDeleteLMSKT" parameterType="SendStatusVO">
-        /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteLMSKT */
-        DELETE HCS_MSGKM_T
+        DELETE SDK_MMS_SEND
         WHERE 1=1
         AND MSG_ID = #{msgId}
     </delete>

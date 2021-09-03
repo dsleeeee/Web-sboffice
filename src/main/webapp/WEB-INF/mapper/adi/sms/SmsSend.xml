@@ -56,293 +56,143 @@
         AND cst.OGN_CD = #{orgnCd}
     </select>
 
-    <!-- SMS등록전 체크 -->
-    <!--
-        TABLE    : TB_CM_NMCODE
-        COMMENTS : [공통]명칭코드
-    -->
-    <select id="getSmsChk" parameterType="SmsSendVO" resultType="String">
-        /* SmsSendMapper.getSmsChk */
-        SELECT NMCODE_NM -- 0:전체 1:KS 2:SS
-        FROM TB_CM_NMCODE
-        WHERE 1=1
-        AND NMCODE_GRP_CD = '118'
-        AND NMCODE_CD = '01'
-    </select>
-
     <!-- 전송,예약 저장 insert -->
     <!--
-        TABLE    : HCS_MSGSS_T
-        COMMENTS : SMS 발송||SMTNT
+        TABLE    : SDK_SMS_SEND
+        COMMENTS : SMS 발송
     -->
     <insert id="getSmsSendReserveSaveInsert" parameterType="SmsSendVO">
         /* SmsSendMapper.getSmsSendReserveSaveInsert */
-        INSERT INTO HCS_MSGSS_T
+        INSERT INTO SDK_SMS_SEND
         (
             MSG_ID,
-            MSG_TYPE,
-            SUBJECT,
-            MSG_CONTENT,
-            REG_DATE,
-            MOD_DATE,
+            USER_ID,
+            SCHEDULE_TYPE,
+            NOW_DATE,
             SEND_DATE,
+            DEST_TYPE,
+            DEST_COUNT,
+            DEST_INFO,
             CALLBACK,
-            PHONE_NUMBER,
+            SUBJECT,
+            SMS_MSG,
+            CALLBACK_URL,
+            KT_OFFICE_CODE,
+            CDR_ID,
+            RESERVED1,
+            RESERVED2,
+            RESERVED3,
+            RESERVED4,
+            RESERVED5,
+            RESERVED6,
+            RESERVED7,
+            RESERVED8,
+            RESERVED9,
             SEND_STATUS,
-            READ_DATE,
-            RESERVE_YN,
-            SMS_OGN_CD,
-            CST_OGN_CD,
-            CST_NO,
-            R_OGN_CD,
-            R_OGN_FG,
-            R_USER_ID,
-            S_OGN_CD,
-            S_OGN_FG,
-            S_USER_ID,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            SMS_SEND_SEQ
+            SEND_COUNT,
+            SEND_RESULT,
+            SEND_PROC_TIME,
+            STD_ID
         ) VALUES (
-            HCS_MSGSS_S.NEXTVAL,
-            #{msgType}, -- 1:SMS 2:LMS 3:MMS
-            #{title},
-            #{content},
-            #{regDt},
-            #{regDt},
-            #{sendDate},
-            #{callback},
-            #{phoneNumber},
-            '0',
-            '',
-             #{reserveYn},
-            #{smsOgnCd},
-            #{cstOgnCd},
-            #{cstNo},
-            #{rrOrgnCd},
-            #{rrOrgnFg},
-            #{rrUserId},
-            #{ssOrgnCd},
-            #{ssOrgnFg},
-            #{ssUserId},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId},
-            #{smsSendSeq}
+            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{smsOgnCd}, --USER_ID,
+            #{reserveYn}, --SCHEDULE_TYPE,
+            #{regDt}, --NOW_DATE,
+            #{sendDate}, --SEND_DATE,
+            0, --DEST_TYPE,
+            1, --DEST_COUNT,
+            ''||'^'|| #{phoneNumber}, --DEST_INFO,
+            #{callback}, --CALLBACK,
+            #{title}, --SUBJECT,
+            #{content}, --SMS_MSG,
+            '', --CALLBACK_URL,
+            '', --KT_OFFICE_CODE,
+            '', --CDR_ID,
+            '', --RESERVED1,
+            #{cstOgnCd}, --RESERVED2,
+            #{cstNo}, --RESERVED3,
+            #{rrOrgnCd}, --RESERVED4,
+            #{rrOrgnFg}, --RESERVED5,
+            #{rrUserId}, --RESERVED6,
+            #{ssOrgnCd}, --RESERVED7,
+            #{ssUserId}, --RESERVED8,
+            #{smsSendSeq}, --RESERVED9,
+            0, --SEND_STATUS,
+            0, --SEND_COUNT,
+            0, --SEND_RESULT,
+            '', --SEND_PROC_TIME,
+            '' --STD_ID
         )
     </insert>
 
     <!-- 전송,예약 저장 insert -->
     <!--
-        TABLE    : HCS_MSGKS_T
-        COMMENTS : SMS 발송||KT
-    -->
-    <insert id="getSmsSendReserveSaveInsertKT" parameterType="SmsSendVO">
-        /* SmsSendMapper.getSmsSendReserveSaveInsertKT */
-        INSERT INTO HCS_MSGKS_T
-         (
-            MSG_ID,
-            MSG_TYPE,
-            SUBJECT,
-            MSG_CONTENT,
-            REG_DATE,
-            MOD_DATE,
-            SEND_DATE,
-            CALLBACK,
-            PHONE_NUMBER,
-            SEND_STATUS,
-            READ_DATE,
-            RESERVE_YN,
-            SMS_OGN_CD,
-            CST_OGN_CD,
-            CST_NO,
-            R_OGN_CD,
-            R_OGN_FG,
-            R_USER_ID,
-            S_OGN_CD,
-            S_OGN_FG,
-            S_USER_ID,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            SMS_SEND_SEQ
-        ) VALUES (
-            HCS_MSGSS_S.NEXTVAL,
-            #{msgType}, -- 1:SMS 2:LMS 3:MMS
-            #{title},
-            #{content},
-            #{regDt},
-            #{regDt},
-            #{sendDate},
-            #{callback},
-            #{phoneNumber},
-            '0',
-            '',
-            #{reserveYn},
-            #{smsOgnCd},
-            #{cstOgnCd},
-            #{cstNo},
-            #{rrOrgnCd},
-            #{rrOrgnFg},
-            #{rrUserId},
-            #{ssOrgnCd},
-            #{ssOrgnFg},
-            #{ssUserId},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId},
-            #{smsSendSeq}
-        )
-    </insert>
-
-    <!-- 전송,예약 저장 insert -->
-    <!--
-        TABLE    : HCS_MSGSM_T
-        COMMENTS : LMS/MMS 발송||SMTNT
+        TABLE    : SDK_MMS_SEND
+        COMMENTS : LMS/MMS 발송
     -->
     <insert id="getSmsSendReserveSaveInsertLMS" parameterType="SmsSendVO">
         /* SmsSendMapper.getSmsSendReserveSaveInsertLMS */
-        INSERT INTO HCS_MSGSM_T
+        INSERT INTO SDK_MMS_SEND
         (
             MSG_ID,
-            MSG_TYPE,
-            SUBJECT,
-            MSG_CONTENT,
-            REG_DATE,
-            MOD_DATE,
+            USER_ID,
+            SCHEDULE_TYPE,
+            NOW_DATE,
             SEND_DATE,
+            DEST_COUNT,
+            DEST_INFO,
             CALLBACK,
-            PHONE_NUMBER,
-            CONTENT_COUNT,
-            CONTENT_1,
-            CONTENT_2,
-            CONTENT_3,
-            SEND_STATUS,
-            READ_DATE,
-            RESERVE_YN,
-            SMS_OGN_CD,
-            CST_OGN_CD,
-            CST_NO,
-            R_OGN_CD,
-            R_OGN_FG,
-            R_USER_ID,
-            S_OGN_CD,
-            S_OGN_FG,
-            S_USER_ID,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            SMS_SEND_SEQ
-        ) VALUES (
-            HCS_MSGSS_S.NEXTVAL,
-            #{msgType}, -- 1:SMS 2:LMS 3:MMS
-            #{title},
-            #{content},
-            #{regDt},
-            #{regDt},
-            #{sendDate},
-            #{callback},
-            #{phoneNumber},
-            '0',
-            '',
-            '',
-            '',
-            '0',
-            '',
-            #{reserveYn},
-            #{smsOgnCd},
-            #{cstOgnCd},
-            #{cstNo},
-            #{rrOrgnCd},
-            #{rrOrgnFg},
-            #{rrUserId},
-            #{ssOrgnCd},
-            #{ssOrgnFg},
-            #{ssUserId},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId},
-            #{smsSendSeq}
-        )
-    </insert>
-
-    <!-- 전송,예약 저장 insert -->
-    <!--
-        TABLE    : HCS_MSGKM_T
-        COMMENTS : LMS/MMS 발송||KT
-    -->
-    <insert id="getSmsSendReserveSaveInsertLMSKT" parameterType="SmsSendVO">
-        /* SmsSendMapper.getSmsSendReserveSaveInsertLMSKT */
-        INSERT INTO HCS_MSGKM_T
-        (
-            MSG_ID,
-            MSG_TYPE,
             SUBJECT,
-            MSG_CONTENT,
-            REG_DATE,
-            MOD_DATE,
-            SEND_DATE,
-            CALLBACK,
-            PHONE_NUMBER,
+            MSG_TYPE,
+            MMS_MSG,
             CONTENT_COUNT,
-            CONTENT_1,
-            CONTENT_2,
-            CONTENT_3,
+            CONTENT_DATA,
+            KT_OFFICE_CODE,
+            CDR_ID,
+            RESERVED1,
+            RESERVED2,
+            RESERVED3,
+            RESERVED4,
+            RESERVED5,
+            RESERVED6,
+            RESERVED7,
+            RESERVED8,
+            RESERVED9,
             SEND_STATUS,
-            READ_DATE,
-            RESERVE_YN,
-            SMS_OGN_CD,
-            CST_OGN_CD,
-            CST_NO,
-            R_OGN_CD,
-            R_OGN_FG,
-            R_USER_ID,
-            S_OGN_CD,
-            S_OGN_FG,
-            S_USER_ID,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            SMS_SEND_SEQ
+            SEND_COUNT,
+            SEND_RESULT,
+            SEND_PROC_TIME,
+            STD_ID
         ) VALUES (
-            HCS_MSGSS_S.NEXTVAL,
-            #{msgType}, -- 1:SMS 2:LMS 3:MMS
-            #{title},
-            #{content},
-            #{regDt},
-            #{regDt},
-            #{sendDate},
-            #{callback},
-            #{phoneNumber},
-            '0',
-            '',
-            '',
-            '',
-            '0',
-            '',
-            #{reserveYn},
-            #{smsOgnCd},
-            #{cstOgnCd},
-            #{cstNo},
-            #{rrOrgnCd},
-            #{rrOrgnFg},
-            #{rrUserId},
-            #{ssOrgnCd},
-            #{ssOrgnFg},
-            #{ssUserId},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId},
-            #{smsSendSeq}
+            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{smsOgnCd}, --USER_ID,
+            #{reserveYn}, --SCHEDULE_TYPE,
+            #{regDt}, --NOW_DATE,
+            #{sendDate}, --SEND_DATE,
+            1, --DEST_COUNT,
+            ''||'^'|| #{phoneNumber}, --DEST_INFO,
+            #{callback}, --CALLBACK,
+            #{title}, --SUBJECT,
+            0, --MSG_TYPE,
+            #{content}, --MMS_MSG,
+            0, --CONTENT_COUNT,
+            ''||'^'||''||'^'||'', --CONTENT_DATA,
+            '', --KT_OFFICE_CODE,
+            '', --CDR_ID,
+            '', --RESERVED1,
+            #{cstOgnCd}, --RESERVED2,
+            #{cstNo}, --RESERVED3,
+            #{rrOrgnCd}, --RESERVED4,
+            #{rrOrgnFg}, --RESERVED5,
+            #{rrUserId}, --RESERVED6,
+            #{ssOrgnCd}, --RESERVED7,
+            #{ssUserId}, --RESERVED8,
+            #{smsSendSeq}, --RESERVED9,
+            0, --SEND_STATUS,
+            0, --SEND_COUNT,
+            0, --SEND_RESULT,
+            '', --SEND_PROC_TIME,
+            '' --STD_ID
         )
     </insert>
 

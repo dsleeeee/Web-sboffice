@@ -140,6 +140,7 @@
         tmm.WEDDINGDAY,
         tmmp.FIRST_SALE_DATE,
         tmmp.LAST_SALE_DATE,
+        tmm.MEMBR_NO,
         'C' AS R_OGN_FG,
         #{orgnCd} AS R_OGN_CD,
         '' AS R_USER_ID

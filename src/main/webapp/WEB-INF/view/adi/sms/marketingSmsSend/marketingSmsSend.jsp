@@ -524,11 +524,11 @@
                 <tr>
                     <td>
                         <%-- 전송 --%>
-                        <button class="btn_skyblue fl" id="btnSmsSend" ng-click="smsSendReserve('N')">
+                        <button class="btn_skyblue fl" id="btnSmsSend" ng-click="smsSendReserve('0')">
                             <s:message code="marketingSmsSend.send" />
                         </button>
                         <%-- 예약 --%>
-                        <button class="btn_skyblue ml5 fl" id="btnSmsReserve" ng-click="smsSendReserve('Y')">
+                        <button class="btn_skyblue ml5 fl" id="btnSmsReserve" ng-click="smsSendReserve('1')">
                             <s:message code="marketingSmsSend.reserve" />
                         </button>
                         <%-- 발신번호추가 --%>
@@ -697,7 +697,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210817.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210817.03" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">
