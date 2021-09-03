@@ -726,6 +726,8 @@
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
+    <!-- 매출관리 > 배달현황 > 주문채널별현황 -->
+    <typeAlias alias="orderChannelVO" type="kr.co.solbipos.sale.dlvr.orderChannel.service.OrderChannelVO"/>
     <!-- 수불관리 > 본사-매장간 입출고 내역 -> 주문대비 입출고현황  -->
     <typeAlias alias="orderVO" type="kr.co.solbipos.iostock.frnchs.order.service.OrderVO"/>
     <!-- 수불관리 > 본사-매장간 입출고 내역 -> 전표별 입출고내역  -->

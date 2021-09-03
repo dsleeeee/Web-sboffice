@@ -247,7 +247,7 @@ app.controller('mobileOrderChannelSaleDtlCtrl', ['$scope', '$http', '$timeout', 
         var dataItem = {};
         dataItem.saleDate = messages["mobile.orderChannelSale.saleDate"];
         dataItem.totBillCnt = messages["mobile.orderChannelSale.totBillCnt"];
-        dataItem.totRealSaleAmt = messages["mobile.daySale.totRealSaleAmt"];
+        dataItem.totRealSaleAmt = messages["mobile.orderChannelSale.totRealSaleAmt"];
         
         // 주문채널별 header 셋팅
         for (var i = 0; i < arrDlvrInFgCol.length; i++) {
