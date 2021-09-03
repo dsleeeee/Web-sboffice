@@ -25,7 +25,7 @@
            FROM TB_CM_NMCODE tcn
           WHERE tcn.NMCODE_GRP_CD = '112'
             AND tcn.NMCODE_CD NOT IN ('1') /* 코드 1(포스앱)은 포스에서 사용하는 코드이므로 나오지 않도록 함 */
-      ORDER BY tcn.NMCODE_CD
+      ORDER BY TO_NUMBER(tcn.NMCODE_CD)
 
     </select>
 

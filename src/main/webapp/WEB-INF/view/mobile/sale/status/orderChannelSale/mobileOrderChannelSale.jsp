@@ -166,4 +166,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderChannelSale/mobileOrderChannelSale.js?ver=20210901.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderChannelSale/mobileOrderChannelSale.js?ver=20210903.01" charset="utf-8"></script>
