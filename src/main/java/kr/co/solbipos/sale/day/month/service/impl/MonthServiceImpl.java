@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -262,15 +263,43 @@ public class MonthServiceImpl implements MonthService {
         monthVO.setStoreCdList(storeCds);
 
         // 포스구분 array 값 세팅
-        monthVO.setArrPosCol(monthVO.getPosCol().split(","));
-        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-        String pivotPosCol = "";
-        String arrPosCol[] = monthVO.getPosCol().split(",");
-        for(int i=0; i < arrPosCol.length; i++) {
-            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS_"+arrPosCol[i];
-        }
-        monthVO.setPivotPosCol(pivotPosCol);
+//        monthVO.setArrPosCol(monthVO.getPosCol().split(","));
+//        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+//        String pivotPosCol = "";
+//        String arrPosCol[] = monthVO.getPosCol().split(",");
+//        for(int i=0; i < arrPosCol.length; i++) {
+//            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS_"+arrPosCol[i];
+//        }
+//        monthVO.setPivotPosCol(pivotPosCol);
 
-        return monthMapper.getMonthPosList(monthVO);
+        List<DefaultMap<Object>> result =  monthMapper.getMonthPosList(monthVO);
+
+        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+
+        DefaultMap<Object> map = new DefaultMap<>();
+
+        for(int i = 0; i < result.size(); i++) {
+            if(result.get(i).get("storePosNo").equals("TOTAL")){
+                // 총매출정보
+                map.put("TOT_SALE_AMT", result.get(i).get("saleAmt"));
+                map.put("TOT_DC_AMT", result.get(i).get("dcAmt"));
+                map.put("TOT_REAL_SALE_AMT", result.get(i).get("realSaleAmt"));
+                map.put("TOT_SALE_QTY", result.get(i).get("saleQty"));
+
+                selectList.add(map);
+
+                map = new DefaultMap<>();
+            } else {
+                // 공통정보 요일
+                map.put("YEAR_MONTH", result.get(i).get("yearMonth"));
+                // 매장별 정보
+                map.put("POS_" + result.get(i).get("storePosNo") + "_SALE_AMT", result.get(i).get("saleAmt"));
+                map.put("POS_" + result.get(i).get("storePosNo") + "_DC_AMT", result.get(i).get("dcAmt"));
+                map.put("POS_" + result.get(i).get("storePosNo") + "_REAL_SALE_AMT", result.get(i).get("realSaleAmt"));
+                map.put("POS_" + result.get(i).get("storePosNo") + "_SALE_QTY", result.get(i).get("saleQty"));
+            }
+        }
+
+        return selectList;
     }
 }

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileOrderChannelSale.xml
+    (모바일) 매출현황 > 주문채널별현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.08.31     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.orderChannelSale.service.impl.MobileOrderChannelSaleMapper">
+
+    <!-- 모바일 매출현황 - 주문채널 구분자 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_MS_NMCODE, TB_HQ_NMCODE
+        PARAM    : mobileOrderChannelSaleVO
+        COMMENTS : 모바일 매출현황 - 주문채널 구분자를 조회한다.
+    -->
+    <select id="getDlvrInFgColList" parameterType="mobileOrderChannelSaleVO" resultType="DefaultMap">
+		/* USE : MobileOrderChannelSaleMapper.getDlvrInFgColList */
+        <choose>
+            <when test='hqOfficeCd != "A0001"'>
+                SELECT *
+                  FROM (
+                            SELECT '0' AS DLVR_IN_FG,
+                                    '일반' AS DLVR_IN_FG_NM
+                              FROM DUAL
+                             UNION
+                            SELECT NMCODE_CD AS DLVR_IN_FG,
+                                    NMCODE_NM AS DLVR_IN_FG_NM
+                              FROM TB_CM_NMCODE
+                             WHERE NMCODE_GRP_CD = '112'
+                        ) A
+                 ORDER
+                    BY TO_NUMBER(A.DLVR_IN_FG)
+            </when>
+            <otherwise>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    SELECT *
+                      FROM (
+                                SELECT '0' AS DLVR_IN_FG,
+                                        '일반' AS DLVR_IN_FG_NM,
+                                        1 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT '1' AS DLVR_IN_FG,
+                                        'CID' AS DLVR_IN_FG_NM,
+                                        2 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT *
+                                  FROM (
+                                            SELECT NMCODE_CD AS DLVR_IN_FG,
+                                                    NMCODE_NM AS DLVR_IN_FG_NM,
+                                                    (ROWNUM + 2) AS RNUM
+                                              FROM TB_HQ_NMCODE
+                                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                               AND NMCODE_GRP_CD = '113'
+                                             ORDER
+                                                BY NMCODE_CD
+                                        ) B
+                            ) A
+                     ORDER
+                        BY TO_NUMBER(A.RNUM)
+                </if>
+                <if test='orgnFg != null and orgnFg == "S"'>
+                    SELECT *
+                      FROM (
+                                SELECT '0' AS DLVR_IN_FG,
+                                        '일반' AS DLVR_IN_FG_NM,
+                                        1 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT '1' AS DLVR_IN_FG,
+                                        'CID' AS DLVR_IN_FG_NM,
+                                        2 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT *
+                                  FROM (
+                                            SELECT NMCODE_CD AS DLVR_IN_FG,
+                                                    NMCODE_NM AS DLVR_IN_FG_NM,
+                                                    (ROWNUM + 2) AS RNUM
+                                              FROM TB_MS_STORE_NMCODE
+                                             WHERE STORE_CD = #{storeCd}
+                                               AND NMCODE_GRP_CD = '113'
+                                             ORDER
+                                                BY NMCODE_CD
+                                        ) B
+                            ) A
+                     ORDER
+                        BY TO_NUMBER(A.RNUM)
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 모바일 매출현황 - 주문채널별 현황 조회-->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP, TB_CM_NMCODE, TB_HQ_NMCODE, TB_MS_NMCODE
+        PARAM    : mobileOrderChannelSaleVO
+        COMMENTS : 모바일 매출현황 - 주문채널별 현황을 조회한다.
+    -->
+    <select id="getOrderChannelSalePayList" parameterType="mobileOrderChannelSaleVO" resultType="DefaultMap">
+      /* USE : MobileOrderChannelSaleMapper.getOrderChannelSalePayList */
+       SELECT *
+         FROM (
+                 SELECT tsdto.DLVR_IN_FG,
+                        tcn.NMCODE_NM AS DLVR_IN_FG_NM,
+                        SUM(tsdto.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                        ROUND(RATIO_TO_REPORT(SUM(tsdto.REAL_SALE_AMT)) OVER (), 4) * 100 AS REAL_SALE_PER
+                   FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto,
+                        (
+                        <choose>
+                            <when test='hqOfficeCd != "A0001"'>
+                                SELECT '0' AS NMCODE_CD,
+                                        '일반' AS NMCODE_NM
+                                  FROM DUAL
+                                 UNION
+                                SELECT NMCODE_CD,
+                                        NMCODE_NM
+                                  FROM TB_CM_NMCODE
+                                 WHERE NMCODE_GRP_CD = '112'
+                            </when>
+                            <otherwise>
+                              <if test='orgnFg != null and orgnFg == "H"'>
+                                  SELECT '0' AS NMCODE_CD,
+                                          '일반' AS NMCODE_NM
+                                    FROM DUAL
+                                   UNION
+                                  SELECT '1' AS NMCODE_CD,
+                                          'CID' AS NMCODE_NM
+                                    FROM DUAL
+                                   UNION
+                                  SELECT NMCODE_CD,
+                                          NMCODE_NM
+                                    FROM TB_HQ_NMCODE
+                                   WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                     AND NMCODE_GRP_CD = '113'
+                              </if>
+                              <if test='orgnFg != null and orgnFg == "S"'>
+                                  SELECT '0' AS NMCODE_CD,
+                                          '일반' AS NMCODE_NM
+                                    FROM DUAL
+                                   UNION
+                                  SELECT '1' AS NMCODE_CD,
+                                          'CID' AS NMCODE_NM
+                                    FROM DUAL
+                                   UNION
+                                  SELECT NMCODE_CD,
+                                          NMCODE_NM
+                                   FROM TB_MS_STORE_NMCODE
+                                  WHERE STORE_CD = #{storeCd}
+                                    AND NMCODE_GRP_CD = '113'
+                              </if>
+                            </otherwise>
+                        </choose>
+                        ) tcn
+                  WHERE 1=1
+                    AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND tsdto.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                    AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND tsdto.DLVR_IN_FG = tcn.NMCODE_CD
+                  GROUP
+                     BY tsdto.DLVR_IN_FG,
+                        tcn.NMCODE_NM
+              ) B
+        <choose>
+            <when test='orderType != null and orderType == "dlvrInFg"'>
+                ORDER
+                   BY TO_NUMBER(DLVR_IN_FG)
+            </when>
+            <otherwise>
+                ORDER
+                   BY REAL_SALE_AMT
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 모바일 매출현황 - 주문채널 일자별 매출현황 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : mobileOrderChannelSaleVO
+        COMMENTS : 모바일 매출현황 - 주문채널 일자별 매출현황을 조회한다.
+    -->
+    <select id="getOrderChannelSaleDtlList" parameterType="mobileOrderChannelSaleVO" resultType="DefaultMap">
+      /* USE : MobileOrderChannelSaleMapper.getOrderChannelSaleDtlList */
+           SELECT tsdto.SALE_DATE,
+                   SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
+                   SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+                    <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                      SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
+                      SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
+                    </foreach>
+             FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
+            WHERE 1=1
+              AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                AND tsdto.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+              AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP
+               BY tsdto.SALE_DATE
+    </select>
+
+</mapper>

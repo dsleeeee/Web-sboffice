@@ -852,88 +852,116 @@
     -->
     <select id="getMonthPosList"  parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthPosList */
-        SELECT
-        YEAR_MONTH,
-        <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS_${item}_SALE_AMT, 0)
-        </foreach> AS TOT_SALE_AMT,
-        <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS_${item}_DC_AMT, 0)
-        </foreach> AS TOT_DC_AMT,
-        <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS_${item}_REAL_SALE_AMT, 0)
-        </foreach> AS TOT_REAL_SALE_AMT,
-        <foreach collection="arrPosCol" item="item" separator="+">
-            NVL(POS_${item}_SALE_QTY, 0)
-        </foreach> AS TOT_SALE_QTY,
-        <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS_${item}_SALE_AMT,0) AS POS_${item}_SALE_AMT
-        </foreach> ,
-        <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS_${item}_DC_AMT,0) AS POS_${item}_DC_AMT
-        </foreach> ,
-        <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS_${item}_REAL_SALE_AMT,0) AS POS_${item}_REAL_SALE_AMT
-        </foreach> ,
-        <foreach collection="arrPosCol" item="item" separator=",">
-            NVL(POS_${item}_SALE_QTY,0) AS POS_${item}_SALE_QTY
-        </foreach>
---         SUM(POS_A00000101_SALE_AMT) AS POS_A00000101_SALE_AMT,
---         SUM(POS_A00000101_DC_AMT) AS POS_A00000101_DC_AMT,
---         SUM(POS_A00000101_REAL_SALE_AMT) AS POS_A00000101_REAL_SALE_AMT,
---         SUM(POS_A00000101_SALE_QTY) AS POS_A00000101_SALE_QTY
-        FROM
-        (
-            SELECT
-            YEAR_MONTH,
-            <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS_${item}_SALE_AMT) AS POS_${item}_SALE_AMT
-            </foreach> ,
-            <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS_${item}_DC_AMT) AS POS_${item}_DC_AMT
-            </foreach> ,
-            <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS_${item}_REAL_SALE_AMT) AS POS_${item}_REAL_SALE_AMT
-            </foreach> ,
-            <foreach collection="arrPosCol" item="item" separator=",">
-                SUM(POS_${item}_SALE_QTY) AS POS_${item}_SALE_QTY
-            </foreach>
-            FROM
-            (
-                SELECT
-                TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-                SUM(tssd.SALE_AMT) AS SALE_AMT,
-                SUM(tssd.DC_AMT) AS DC_AMT,
-                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                SUM(tssd.SALE_QTY) AS SALE_QTY,
-                (tssd.STORE_CD || tssd.POS_NO) AS STORE_POS_NO
-                FROM TB_SL_SALE_DTL tssd
-                WHERE 1=1
-                AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tssd.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
-                <if test='storeCds != null and storeCds != ""'>
-                    AND tssd.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
-                    </foreach>
-                </if>
-                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.POS_NO
-            )
-            PIVOT
-            (
+        SELECT	DECODE(GROUPING(STORE_POS_NO), 1, 'TOTAL', STORE_POS_NO) AS STORE_POS_NO,
+                YEAR_MONTH,
                 SUM(SALE_AMT) AS SALE_AMT,
                 SUM(DC_AMT) AS DC_AMT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
                 SUM(SALE_QTY) AS SALE_QTY
-                FOR STORE_POS_NO
-                IN (${pivotPosCol})
-                /*IN ('A00000101' AS POS_A00000101,
-                'DS0000201' AS POS_DS0000201,
-                'DS0000601' AS POS_DS0000601)*/
-            )
-            GROUP BY YEAR_MONTH
-        )
-        ORDER BY YEAR_MONTH
+        FROM    (
+                SELECT 	STORE_CD || POS_NO AS STORE_POS_NO,
+                        TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
+                        SUM(SALE_AMT) AS SALE_AMT,
+                        SUM(DC_AMT) AS DC_AMT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                        SUM(SALE_QTY) AS SALE_QTY
+                FROM 	TB_SL_SALE_DTL tssd
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                <if test='storeCds != null and storeCds != ""'>
+                    AND STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                GROUP BY STORE_CD || POS_NO, SALE_DATE
+                )
+        GROUP BY YEAR_MONTH,  ROLLUP(STORE_POS_NO)
     </select>
+<!--    <select id="getMonthPosList"  parameterType="MonthVO" resultType="DefaultMap">-->
+<!--        /* MonthMapper.getMonthPosList */-->
+<!--        SELECT-->
+<!--        YEAR_MONTH,-->
+<!--        <foreach collection="arrPosCol" item="item" separator="+">-->
+<!--            NVL(POS_${item}_SALE_AMT, 0)-->
+<!--        </foreach> AS TOT_SALE_AMT,-->
+<!--        <foreach collection="arrPosCol" item="item" separator="+">-->
+<!--            NVL(POS_${item}_DC_AMT, 0)-->
+<!--        </foreach> AS TOT_DC_AMT,-->
+<!--        <foreach collection="arrPosCol" item="item" separator="+">-->
+<!--            NVL(POS_${item}_REAL_SALE_AMT, 0)-->
+<!--        </foreach> AS TOT_REAL_SALE_AMT,-->
+<!--        <foreach collection="arrPosCol" item="item" separator="+">-->
+<!--            NVL(POS_${item}_SALE_QTY, 0)-->
+<!--        </foreach> AS TOT_SALE_QTY,-->
+<!--        <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--            NVL(POS_${item}_SALE_AMT,0) AS POS_${item}_SALE_AMT-->
+<!--        </foreach> ,-->
+<!--        <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--            NVL(POS_${item}_DC_AMT,0) AS POS_${item}_DC_AMT-->
+<!--        </foreach> ,-->
+<!--        <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--            NVL(POS_${item}_REAL_SALE_AMT,0) AS POS_${item}_REAL_SALE_AMT-->
+<!--        </foreach> ,-->
+<!--        <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--            NVL(POS_${item}_SALE_QTY,0) AS POS_${item}_SALE_QTY-->
+<!--        </foreach>-->
+<!--&#45;&#45;         SUM(POS_A00000101_SALE_AMT) AS POS_A00000101_SALE_AMT,-->
+<!--&#45;&#45;         SUM(POS_A00000101_DC_AMT) AS POS_A00000101_DC_AMT,-->
+<!--&#45;&#45;         SUM(POS_A00000101_REAL_SALE_AMT) AS POS_A00000101_REAL_SALE_AMT,-->
+<!--&#45;&#45;         SUM(POS_A00000101_SALE_QTY) AS POS_A00000101_SALE_QTY-->
+<!--        FROM-->
+<!--        (-->
+<!--            SELECT-->
+<!--            YEAR_MONTH,-->
+<!--            <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--                SUM(POS_${item}_SALE_AMT) AS POS_${item}_SALE_AMT-->
+<!--            </foreach> ,-->
+<!--            <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--                SUM(POS_${item}_DC_AMT) AS POS_${item}_DC_AMT-->
+<!--            </foreach> ,-->
+<!--            <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--                SUM(POS_${item}_REAL_SALE_AMT) AS POS_${item}_REAL_SALE_AMT-->
+<!--            </foreach> ,-->
+<!--            <foreach collection="arrPosCol" item="item" separator=",">-->
+<!--                SUM(POS_${item}_SALE_QTY) AS POS_${item}_SALE_QTY-->
+<!--            </foreach>-->
+<!--            FROM-->
+<!--            (-->
+<!--                SELECT-->
+<!--                TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,-->
+<!--                SUM(tssd.SALE_AMT) AS SALE_AMT,-->
+<!--                SUM(tssd.DC_AMT) AS DC_AMT,-->
+<!--                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,-->
+<!--                SUM(tssd.SALE_QTY) AS SALE_QTY,-->
+<!--                (tssd.STORE_CD || tssd.POS_NO) AS STORE_POS_NO-->
+<!--                FROM TB_SL_SALE_DTL tssd-->
+<!--                WHERE 1=1-->
+<!--                AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}-->
+<!--                AND tssd.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'-->
+<!--                <if test='storeCds != null and storeCds != ""'>-->
+<!--                    AND tssd.STORE_CD IN-->
+<!--                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >-->
+<!--                        #{item}-->
+<!--                    </foreach>-->
+<!--                </if>-->
+<!--                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.POS_NO-->
+<!--            )-->
+<!--            PIVOT-->
+<!--            (-->
+<!--                SUM(SALE_AMT) AS SALE_AMT,-->
+<!--                SUM(DC_AMT) AS DC_AMT,-->
+<!--                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,-->
+<!--                SUM(SALE_QTY) AS SALE_QTY-->
+<!--                FOR STORE_POS_NO-->
+<!--                IN (${pivotPosCol})-->
+<!--                /*IN ('A00000101' AS POS_A00000101,-->
+<!--                'DS0000201' AS POS_DS0000201,-->
+<!--                'DS0000601' AS POS_DS0000601)*/-->
+<!--            )-->
+<!--            GROUP BY YEAR_MONTH-->
+<!--        )-->
+<!--        ORDER BY YEAR_MONTH-->
+<!--    </select>-->
 
 </mapper>
