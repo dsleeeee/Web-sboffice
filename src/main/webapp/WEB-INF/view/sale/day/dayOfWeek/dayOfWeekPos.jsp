@@ -81,7 +81,7 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="dayofweek.yoil"/>" binding="yoil" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayofweek.storeCnt"/>" binding="storeCnt" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+<%--                    <wj-flex-grid-column header="<s:message code="dayofweek.storeCnt"/>" binding="storeCnt" width="60" is-read-only="true" align="center"></wj-flex-grid-column>--%>
                     <wj-flex-grid-column header="<s:message code="dayofweek.pos.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayofweek.pos.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayofweek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
