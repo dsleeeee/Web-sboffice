@@ -143,4 +143,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos /posBoard/posBoardDetail.js?ver=20210408.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoardDetail.js?ver=20210408.05" charset="utf-8"></script>
