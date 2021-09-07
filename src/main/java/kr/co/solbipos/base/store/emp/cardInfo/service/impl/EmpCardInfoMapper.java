@@ -35,4 +35,10 @@ public interface EmpCardInfoMapper {
     /** 사원카드정보 등록 */
     int insertEmpCardInfo(EmpCardInfoVO empCardInfoVO);
 
+    /** 사원카드정보 단일건 삭제 */
+    int deleteSelEmpCardInfo(EmpCardInfoVO empCardInfoVO);
+
+    /** 사원카드번호 중복체크 */
+    List<DefaultMap<Object>> getChkEmpCardNo(EmpCardInfoVO empCardInfoVO);
+
 }

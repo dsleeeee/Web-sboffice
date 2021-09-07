@@ -147,4 +147,36 @@
 
     </insert>
 
+    <!-- 사원카드정보 단일건 삭제 -->
+    <!--
+        TABLE    : TB_EM_EMPLOYEE_CARD
+        PARAM    : empCardInfoVO
+        COMMENTS : 선택한 사원카드정보를 삭제한다.
+    -->
+    <delete id="deleteSelEmpCardInfo" parameterType="empCardInfoVO">
+        /* USE : EmpCardInfoMapper.deleteSelEmpCardInfo */
+        DELETE
+          FROM TB_EM_EMPLOYEE_CARD
+         WHERE EMPLOYEE_ORGN_CD = #{employeeOrgnCd}
+           AND EMPLOYEE_CARD_NO = #{employeeCardNo}
+    </delete>
+
+    <!-- 사원카드번호 중복체크 -->
+    <!--
+        TABLE    : TB_EM_EMPLOYEE_CARD
+        PARAM    : empCardInfoVO
+        COMMENTS : 등록하려는 사원카드번호가 중복인지 체크한다.
+    -->
+    <select id="getChkEmpCardNo" parameterType="empCardInfoVO" resultType="DefaultMap">
+       /* EmpCardInfoMapper.getChkEmpCardNo */
+       SELECT EMPLOYEE_CARD_NO
+         FROM TB_EM_EMPLOYEE_CARD
+        WHERE EMPLOYEE_ORGN_CD = #{employeeOrgnCd}
+        <if test='arrEmpCardNo != null and arrEmpCardNo != ""'>
+            AND EMPLOYEE_CARD_NO IN
+            <foreach collection="arrEmpCardNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
 </mapper>

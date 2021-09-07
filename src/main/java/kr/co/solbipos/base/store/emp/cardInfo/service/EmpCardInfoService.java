@@ -30,4 +30,7 @@ public interface EmpCardInfoService {
 
     /** 사원카드정보 저장 */
     int saveEmpCardInfo(EmpCardInfoVO[] empCardInfoVOs, SessionInfoVO sessionInfoVO);
+
+    /** 사원카드번호 중복체크 */
+    List<DefaultMap<Object>> getChkEmpCardNo(EmpCardInfoVO empCardInfoVO, SessionInfoVO sessionInfoVO);
 }
