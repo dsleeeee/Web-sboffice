@@ -4,6 +4,8 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.emp.cardInfo.service.EmpCardInfoService;
@@ -100,11 +102,20 @@ public class EmpCardInfoServiceImpl implements EmpCardInfoService {
             empCardInfoVO.setModId(sessionInfoVO.getUserId());
 
             // "'" 제거
-            empCardInfoVO.setEmployeeCardNo(empCardInfoVO.getEmployeeCardNo().replaceAll("'",""));
-            empCardInfoVO.setEmployeeNo(empCardInfoVO.getEmployeeNo().replaceAll("'",""));
+            empCardInfoVO.setEmployeeCardNo(empCardInfoVO.getEmployeeCardNo() != null ? empCardInfoVO.getEmployeeCardNo().replaceAll("'","") : "");
+            empCardInfoVO.setEmployeeNo(empCardInfoVO.getEmployeeNo() != null ? empCardInfoVO.getEmployeeNo().replaceAll("'","") : "");
 
-            result = empCardInfoMapper.insertEmpCardInfo(empCardInfoVO);
-            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            // 추가 또는 수정
+            if ( empCardInfoVO.getStatus() == GridDataFg.INSERT || empCardInfoVO.getStatus() == GridDataFg.UPDATE ) {
+
+                result = empCardInfoMapper.insertEmpCardInfo(empCardInfoVO);
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            } else if ( empCardInfoVO.getStatus() == GridDataFg.DELETE ) { // 삭제
+
+                result = empCardInfoMapper.deleteSelEmpCardInfo(empCardInfoVO);
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
 
             procCnt ++;
         }
@@ -115,5 +126,23 @@ public class EmpCardInfoServiceImpl implements EmpCardInfoService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
+    }
+
+    /** 사원카드번호 중복체크 */
+    @Override
+    public List<DefaultMap<Object>> getChkEmpCardNo(EmpCardInfoVO empCardInfoVO, SessionInfoVO sessionInfoVO) {
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            empCardInfoVO.setEmployeeOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            empCardInfoVO.setEmployeeOrgnCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 사원카드번호 arr Set
+        if(!StringUtil.getOrBlank(empCardInfoVO.getEmployeeCardNo()).equals("")) {
+            empCardInfoVO.setArrEmpCardNo(empCardInfoVO.getEmployeeCardNo().split(","));
+        }
+
+        return empCardInfoMapper.getChkEmpCardNo(empCardInfoVO);
     }
 }

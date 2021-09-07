@@ -138,4 +138,26 @@ public class EmpCardInfoController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 사원카드번호 중복체크
+     * @param empCardInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 09. 06.
+     */
+    @RequestMapping(value = "/getChkEmpCardNo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChkEmpCardNo(EmpCardInfoVO empCardInfoVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = empCardInfoService.getChkEmpCardNo(empCardInfoVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, empCardInfoVO);
+    }
 }

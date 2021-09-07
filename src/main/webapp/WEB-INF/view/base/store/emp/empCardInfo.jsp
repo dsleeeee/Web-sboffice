@@ -71,12 +71,13 @@
         </colgroup>
         <tbody>
         <tr class="brt">
-            <th class="oh gr fl w50" style="height: 35px;">
+            <th class="oh gr fl w50" style="height: 55px;">
                 <p class="s12 bk lh20">
-                    * <s:message code="empCardInfo.excelUpload.chk.msg"/>
+                    * <s:message code="empCardInfo.excelUpload.chk.msg1"/><br/>
+                    * <s:message code="empCardInfo.excelUpload.chk.msg2"/>
                 </p>
             </th>
-            <th class="oh gr fr w50" style="height: 35px; font-size:15px">
+            <th class="oh gr fr w50" style="height: 55px; font-size:15px">
             </th>
         </tr>
         </tbody>
@@ -113,6 +114,19 @@
                 <s:message code="empCardInfo.sampleDownload"/>
             </button>
 
+            <%-- 추가, 수정, 삭제 --%>
+            <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveChkRow()">
+                <s:message code="cmm.save" />
+            </button>
+
+            <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="delRow()">
+                <s:message code="cmm.delete" />
+            </button>
+
+            <button class="btn_skyblue ml5 fr" id="btnAdd" ng-click="addRow()">
+                <s:message code="cmm.add" />
+            </button>
+
         </div>
         <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
             <div class="row">
@@ -125,12 +139,13 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.empCardNo"/>" binding="employeeCardNo" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.empNo"/>" binding="employeeNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.empNm"/>" binding="employeeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.divNm"/>" binding="divNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.deptNm"/>" binding="deptNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.positionNm"/>" binding="positionNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.empCardNo"/>" binding="employeeCardNo" width="200" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.empNo"/>" binding="employeeNo" width="150" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.empNm"/>" binding="employeeNm" width="150" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.divNm"/>" binding="divNm" width="200" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.deptNm"/>" binding="deptNm" width="200" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.positionNm"/>" binding="positionNm" width="150" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -147,7 +162,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20210818.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20210907.01" charset="utf-8"></script>
 
 <%-- 사원카드정보관리 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/base/store/emp/excelUploadEmpCardInfo.jsp">

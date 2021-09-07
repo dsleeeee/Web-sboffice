@@ -131,6 +131,7 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
                     var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
                     var cellValue  = $scope.flex.getCellData(r, c, false) + '';
                     item[colBinding] = cellValue;
+                    item["status"] = "I";
                 }
             }
             jsonData.push(item);
@@ -138,8 +139,8 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
         $timeout(function () {
 
             // 기존 데이터 삭제
-            var params = {};
-            $scope._save("/base/store/emp/cardInfo/deleteEmpCardInfo.sb", params, function(){});
+            /*var params = {};
+            $scope._save("/base/store/emp/cardInfo/deleteEmpCardInfo.sb", params, function(){});*/
 
             setTimeout(function() {
                 // 새 데이터 등록

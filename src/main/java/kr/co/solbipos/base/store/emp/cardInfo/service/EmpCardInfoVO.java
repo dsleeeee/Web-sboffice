@@ -49,6 +49,8 @@ public class EmpCardInfoVO extends PageVO {
     private String positionNm;
     /** 카드사용구분 */
     private String useFg;
+    /** 사원카드번호 array (중복체크용) */
+    private String arrEmpCardNo[];
 
     public String getOrgnFg() {
         return orgnFg;
@@ -136,5 +138,13 @@ public class EmpCardInfoVO extends PageVO {
 
     public void setUseFg(String useFg) {
         this.useFg = useFg;
+    }
+
+    public String[] getArrEmpCardNo() {
+        return arrEmpCardNo;
+    }
+
+    public void setArrEmpCardNo(String[] arrEmpCardNo) {
+        this.arrEmpCardNo = arrEmpCardNo;
     }
 }
