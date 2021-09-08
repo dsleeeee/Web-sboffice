@@ -26,7 +26,7 @@
         <%-- (광고), (무료수신거부) display 여부 : pageGubun값이 SMS일때만 보여줌 --%>
         <label id="lblPageGubun" style="display: none;"></label>
         <%-- 제목 --%>
-        <div class="w50 fl pd10" style="height:360px;">
+        <div class="w50 fl pd10" style="height:450px;">
             <table>
                 <colgroup>
                     <col class="w100" />
@@ -48,7 +48,7 @@
                 <tr>
                     <%-- 메세지내용 --%>
                     <td>
-                        <textarea id="messageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
+                        <textarea id="messageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:140px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
@@ -62,7 +62,7 @@
                     <td class="s14">
                         <label id="lblTxtByte"></label>
                         <s:message code="smsSend.byte" />
-                        <label id="lblTxtByteGubun"></label>
+                        <label id="lblMsgType"></label>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
@@ -104,11 +104,30 @@
                         </button>
                     </td>
                 </tr>
+                <%-- 첨부파일 --%>
+                <f:form id="smsSendForm" name="smsSendForm" method="post" enctype="multipart/form-data">
+                    <tr style="height: 10px"></tr>
+                    <tr>
+                        <td>
+                            <input class="form-control" type="file" id="fileSms1" name="fileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-control" type="file" id="fileSms2" name="fileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-control" type="file" id="fileSms3" name="fileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                        </td>
+                    </tr>
+                </f:form>
                 </tbody>
             </table>
         </div>
         <%-- 자동변환 --%>
-        <div class="w50 fl pd10 bl" style="height:360px;">
+        <div class="w50 fl pd10 bl" style="height:450px;">
             <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                 <table>
                     <tr>
@@ -165,7 +184,7 @@
     <%-- 우측 --%>
     <div class="wj-TblWrapBr w45 fl">
         <%-- 수신자목록 --%>
-        <div class="w100 fl pd10" style="height:580px;">
+        <div class="w100 fl pd10" style="height:670px;">
             <table>
                 <tr>
                     <td class="s14">
@@ -190,7 +209,7 @@
                     <button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
                     <button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>
                 </div>
-                <div class="wj-gridWrap" style="height:490px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:580px; overflow-y: hidden; overflow-x: hidden;">
                     <div class="row">
                         <wj-flex-grid
                                 autoGenerateColumns.="false"
@@ -245,7 +264,11 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210817.03" charset="utf-8"></script>
+<script type="text/javascript">
+    var orgnCd = "${orgnCd}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210901.09" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

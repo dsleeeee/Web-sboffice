@@ -1,17 +1,22 @@
 package kr.co.solbipos.adi.sms.smsSend.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendService;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.File;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -134,8 +139,8 @@ public class SmsSendServiceImpl implements SmsSendService {
             if(smsSendVO.getMsgType().equals("1")) {
                 procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND
 
-            // LMS
-            } else if(smsSendVO.getMsgType().equals("2")) {
+            // LMS, MMS
+            } else if(smsSendVO.getMsgType().equals("2") || smsSendVO.getMsgType().equals("3")) {
                 procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND
             }
 
@@ -159,6 +164,117 @@ public class SmsSendServiceImpl implements SmsSendService {
         }
 
         return procCnt;
+    }
+
+    /** 첨부파일 저장 */
+    @Override
+    public String getSmsSendFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+
+//        System.out.println("test1111");
+        boolean isSuccess = true;
+
+        // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
+        String contentData = "";
+
+        try{
+
+            String orgnCd = multi.getParameter("orgnCd");
+
+            // 저장경로 폴더
+            String path_folder = orgnCd;
+
+            // 저장 경로 설정 (개발시 로컬) (파일 저장용)
+//            String path = "D:\\Workspace\\javaWeb\\testSmsImg\\" + path_folder + "\\";
+
+            // 파일서버 대응 경로 지정 (운영) (파일 저장용)
+            String path = "/home/daemon/sms/X_McsAgent/file/mms/" + path_folder + "/";
+
+            // 저장 경로 설정 (디비 저장용)
+            String path_table = "/" + path_folder + "/";
+
+            // 업로드 되는 파일명
+            String newFileName = "";
+            // 원본 파일명
+            String orgFileName = "";
+
+            // 경로에 폴도가 있는지 체크
+            File dir = new File(path);
+            if(!dir.isDirectory()){
+                dir.mkdir();
+            }
+
+            // 첨부파일1
+            List<MultipartFile> fileList = multi.getFiles("fileSms1");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 파일 저장하는 부분
+                    try {
+                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    contentData = contentData + path_table + newFileName + fileExt + "^1^0|";
+                }
+            }
+
+            // 첨부파일2
+            List<MultipartFile> fileList2 = multi.getFiles("fileSms2");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList2)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 파일 저장하는 부분
+                    try {
+                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    contentData = contentData + path_table + newFileName + fileExt + "^1^0|";
+                }
+            }
+
+            // 첨부파일3
+            List<MultipartFile> fileList3 = multi.getFiles("fileSms3");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList3)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 파일 저장하는 부분
+                    try {
+                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    contentData = contentData + path_table + newFileName + fileExt + "^1^0|";
+                }
+            }
+
+        }catch(Exception e){
+
+            isSuccess = false;
+        }
+
+        return contentData;
     }
 
     /** 수신자추가 팝업 - 조회 */

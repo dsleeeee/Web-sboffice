@@ -126,6 +126,12 @@ public class SmsSendVO extends PageVO {
     /** 전송건수 */
     private String smsSendCount;
 
+    /** 전송할 컨텐츠 개수 */
+    private String contentCount;
+
+    /** 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입) */
+    private String contentData;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -292,5 +298,21 @@ public class SmsSendVO extends PageVO {
 
     public void setSmsSendCount(String smsSendCount) {
         this.smsSendCount = smsSendCount;
+    }
+
+    public String getContentCount() {
+        return contentCount;
+    }
+
+    public void setContentCount(String contentCount) {
+        this.contentCount = contentCount;
+    }
+
+    public String getContentData() {
+        return contentData;
+    }
+
+    public void setContentData(String contentData) {
+        this.contentData = contentData;
     }
 }

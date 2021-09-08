@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -167,6 +168,24 @@ public class SmsSendController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = smsSendService.getSmsSendReserveSave(smsSendVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 첨부파일 저장
+     *
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 06. 14.
+     */
+    @RequestMapping(value = "/smsSend/getSmsSendFileSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsSendFileSave(MultipartHttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = smsSendService.getSmsSendFileSave(request, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
