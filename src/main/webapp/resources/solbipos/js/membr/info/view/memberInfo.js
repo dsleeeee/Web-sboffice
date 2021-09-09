@@ -429,9 +429,9 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         });
 
         // SMS전송 팝업 핸들러 추가
-        $scope.wjSmsSendViewPopLayer.shown.addHandler(function (s) {
+        $scope.wjSmsSendLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('smsSendViewPopYCtrl', $scope.getSelectedMember());
+                $scope._broadcast('smsSendYCtrl', $scope.getSelectedMember());
             }, 50)
         });
     });
@@ -515,7 +515,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             }
         }
         $scope.setSelectedMember(params);
-        $scope.wjSmsSendViewPopLayer.show(true);
+        $scope.wjSmsSendLayer.show(true);
         event.preventDefault();
     };
 

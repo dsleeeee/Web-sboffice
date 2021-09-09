@@ -2,6 +2,7 @@ package kr.co.solbipos.adi.sms.smsSend.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -33,6 +34,9 @@ public interface SmsSendService {
 
     /** 전송,예약 저장 */
     int getSmsSendReserveSave(SmsSendVO[] smsSendVOs, SessionInfoVO sessionInfoVO);
+
+    /** 첨부파일 저장 */
+    String getSmsSendFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO);
 
     /** 수신자추가 팝업 - 조회 */
     List<DefaultMap<Object>> getAddresseeAddList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);

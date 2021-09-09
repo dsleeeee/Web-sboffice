@@ -459,7 +459,7 @@
     <%-- 상단 --%>
     <div class="wj-TblWrapBr w100 fl">
         <%-- 제목 --%>
-        <div class="w30 fl pd10" style="height:360px; width:250px;">
+        <div class="w30 fl pd10" style="height:450px; width:250px;">
             <table>
                 <colgroup>
                     <col class="w100" />
@@ -481,7 +481,7 @@
                 <tr>
                     <%-- 메세지내용 --%>
                     <td>
-                        <textarea id="messageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
+                        <textarea id="messageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:140px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
@@ -495,7 +495,7 @@
                     <td class="s14">
                         <label id="lblTxtByte"></label>
                         <s:message code="marketingSmsSend.byte" />
-                        <label id="lblTxtByteGubun"></label>
+                        <label id="lblMsgType"></label>
                     </td>
                 </tr>
                 <tr style="height: 10px"></tr>
@@ -537,11 +537,30 @@
                         </button>
                     </td>
                 </tr>
+                <%-- 첨부파일 --%>
+                <f:form id="smsForm" name="smsForm" method="post" enctype="multipart/form-data">
+                    <tr style="height: 10px"></tr>
+                    <tr>
+                        <td>
+                            <input class="form-control" type="file" id="fileSms1" name="fileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-control" type="file" id="fileSms2" name="fileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-control" type="file" id="fileSms3" name="fileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                        </td>
+                    </tr>
+                </f:form>
                 </tbody>
             </table>
         </div>
         <%-- 수신자목록 --%>
-        <div class="w70 fl pd10 bl" style="height:360px; width:calc(100% - 250px);">
+        <div class="w70 fl pd10 bl" style="height:450px; width:calc(100% - 250px);">
             <div class="w100">
                 <div class="w70 fl">
                     <table>
@@ -567,7 +586,7 @@
             </div>
             <%-- 그리드 --%>
             <div class="w100 mt10 mb10">
-                <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:390px; overflow-y: hidden; overflow-x: hidden;">
                     <div class="row">
                         <wj-flex-grid
                                 autoGenerateColumns.="false"
@@ -678,11 +697,13 @@
             </div>
         </div>
     </div>
-    <!-- 팝업 -->
+    <!-- //팝업 -->
 
 </div>
 
 <script type="text/javascript">
+    var orgnCd = "${orgnCd}";
+
     // SMS전송 - 메세지그룹
     var msgGrpColList = [];
     <%--javascript에서 사용할 할인 json 데이터 생성--%>
@@ -697,7 +718,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210817.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210901.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

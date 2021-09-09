@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : smsSend.js
- * 설  명 : SMS전송 JavaScript (팝업, 페이지 둘다 호출해서 쓸수도 있어 따로 만듬) (현재는 팝업 로직만 구현 smsSendViewPop.jsp)
+ * 설  명 : SMS전송 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -41,7 +41,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $("#lblStoreNmInfo").text("(광고)" +  "");
     $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
     $("#lblTxtByte").text("0");
-    $("#lblTxtByteGubun").text("SMS");
+    $("#lblMsgType").text("SMS");
     $("#lblSmsQty").text("0");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -72,8 +72,22 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // <-- 검색 호출 -->
     $scope.$on("smsSendCtrl", function(event, data) {
+        // 페이지 로드시 호출
+        $scope.searchSmsSendViewPop(data, "N");
         event.preventDefault();
     });
+    $scope.$on("smsSendYCtrl", function(event, data) {
+        // 페이지 로드시 호출
+        $scope.searchSmsSendViewPop(data, "Y");
+        event.preventDefault();
+    });
+    // 페이지 로드시 호출
+    $scope.searchSmsSendViewPop = function(data, pageGubun) {
+        var smsSendViewPopScope = agrid.getScope('smsSendCtrl');
+        smsSendViewPopScope.initPageSmsSend(data, pageGubun);
+        var smsSendViewPopSmsPopupScope = agrid.getScope("smsPopupCtrl");
+        smsSendViewPopSmsPopupScope._broadcast('smsPopupCtrl');
+    };
     // <-- //검색 호출 -->
 
     // 페이지 로드시 호출
@@ -217,10 +231,12 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.showByte = function() {
         $("#lblTxtByte").text($("#messageContent").val().getByteLength());
 
-        if($("#messageContent").val().getByteLength() > 80) {
-            $("#lblTxtByteGubun").text("LMS");
-        } else {
-            $("#lblTxtByteGubun").text("SMS");
+        if($("#lblMsgType").text() != "MMS") {
+            if($("#messageContent").val().getByteLength() > 80) {
+                $("#lblMsgType").text("LMS");
+            } else {
+                $("#lblMsgType").text("SMS");
+            }
         }
     };
 
@@ -306,53 +322,78 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 전송 저장
     $scope.smsSendSave = function(reserveYn, reserveDate) {
-        // 바이트
-        var msgType = "1"; // 메세지타입 1:SMS 2:LMS 3:MMS
-        var byte = $("#lblTxtByte").text();
-        if(byte > 80) {
+        // 메세지타입 1:SMS 2:LMS 3:MMS
+        var msgType = "1";
+        var msgTypeGubun = $("#lblMsgType").text();
+        if(msgTypeGubun == "LMS") {
             msgType = "2";
+        } else if(msgTypeGubun == "MMS") {
+            msgType = "3";
+        }
+
+        // 첨부파일 개수
+        var fileCount = 0;
+        // MMS 첨부파일 체크
+        if(msgType == "3") {
+            // 첨부파일 체크
+            fileCount = $scope.chkSmsFile();
         }
 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
         var msg = messages["smsSend.smsSendConfirm"]  + " " + $("#lblSmsQty").text() + messages["smsSend.smsSendConfirm2"];
         if (confirm(msg)) {
-            // 파라미터 설정
-            var params = new Array();
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                if($scope.flex.collectionView.items[i].gChk) {
-                    // 내용
-                    var messageContent = $("#messageContent").val();
-                    if (messageContent == undefined) {
-                        messageContent = "";
-                    }
-                    messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
-                    messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
-                    var content = messageContent;
-                    if ($("#lblPageGubun").text() == "Y") {
-                        content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
-                    }
-
-                    $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
-                    if (reserveYn == "1") {
-                        $scope.flex.collectionView.items[i].sendDate = reserveDate; // 전송일시
-                    }
-                    $scope.flex.collectionView.items[i].title = $("#srchTitle").val(); // 제목
-                    $scope.flex.collectionView.items[i].content = content; // 내용
-                    $scope.flex.collectionView.items[i].msgType = msgType; // 메세지타입
-                    $scope.flex.collectionView.items[i].cstNo = $scope.flex.collectionView.items[i].membrNo; // 회원번호
-                    $scope.flex.collectionView.items[i].callback = $scope.telNoCombo; // 보내는사람 번호
-                    $scope.flex.collectionView.items[i].phoneNumber = $scope.flex.collectionView.items[i].telNo.replaceAll("-", ""); // 받는사람 번호
-                    $scope.flex.collectionView.items[i].rrOrgnFg = $scope.flex.collectionView.items[i].rOgnFg; // 받는사람 소속구분
-                    $scope.flex.collectionView.items[i].rrOrgnCd = $scope.flex.collectionView.items[i].rOgnCd; // 받는사람 소속코드
-                    $scope.flex.collectionView.items[i].rrUserId = $scope.flex.collectionView.items[i].rUserId; // 받는사람ID
-
-                    params.push($scope.flex.collectionView.items[i]);
-                }
+            // MMS
+            if(msgType == "3") {
+                // 첨부파일 저장
+                $scope.smsSendFileSave(reserveYn, reserveDate, msgType, fileCount);
+            // SMS, LMS
+            } else {
+                // 전송 저장 save
+                $scope.smsSendSaveSave(reserveYn, reserveDate, msgType, 0, "");
             }
-
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch() });
         }
+    };
+
+    // 전송 저장 save
+    $scope.smsSendSaveSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                // 내용
+                var messageContent = $("#messageContent").val();
+                if (messageContent == undefined) {
+                    messageContent = "";
+                }
+                messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
+                messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
+                var content = messageContent;
+                if ($("#lblPageGubun").text() == "Y") {
+                    content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
+                }
+
+                $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
+                if (reserveYn == "1") {
+                    $scope.flex.collectionView.items[i].sendDate = reserveDate; // 전송일시
+                }
+                $scope.flex.collectionView.items[i].title = $("#srchTitle").val(); // 제목
+                $scope.flex.collectionView.items[i].content = content; // 내용
+                $scope.flex.collectionView.items[i].msgType = msgType; // 메세지타입
+                $scope.flex.collectionView.items[i].cstNo = $scope.flex.collectionView.items[i].membrNo; // 회원번호
+                $scope.flex.collectionView.items[i].callback = $scope.telNoCombo; // 보내는사람 번호
+                $scope.flex.collectionView.items[i].phoneNumber = $scope.flex.collectionView.items[i].telNo.replaceAll("-", ""); // 받는사람 번호
+                $scope.flex.collectionView.items[i].rrOrgnFg = $scope.flex.collectionView.items[i].rOgnFg; // 받는사람 소속구분
+                $scope.flex.collectionView.items[i].rrOrgnCd = $scope.flex.collectionView.items[i].rOgnCd; // 받는사람 소속코드
+                $scope.flex.collectionView.items[i].rrUserId = $scope.flex.collectionView.items[i].rUserId; // 받는사람ID
+                $scope.flex.collectionView.items[i].contentCount = fileCount; // 전송할 컨텐츠 개수
+                $scope.flex.collectionView.items[i].contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
+
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch() });
     };
 
     // 재조회
@@ -360,12 +401,71 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         $("#srchTitle").val("");
         $("#messageContent").val("");
         $("#lblTxtByte").text("0");
-        $("#lblTxtByteGubun").text("SMS");
+        $("#lblMsgType").text("SMS");
 
         $scope._gridDataInit();
 
         // 잔여수량
         $scope.restSmsQty();
+
+        // 첨부파일 초기화
+        $scope.clearSmsFile();
+    };
+
+    // 첨부파일 저장
+    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
+        var formData = new FormData($("#smsForm")[0]);
+        formData.append("orgnCd", orgnCd);
+
+        var url = '/adi/sms/smsSend/smsSend/getSmsSendFileSave.sb';
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            // async:false,
+            success: function(result) {
+                // alert(result.status);
+                // alert(result.data);
+                // console.log('save result', result);
+                if (result.status === "OK") {
+                    // $scope._popMsg("저장되었습니다.");
+                    $scope.$broadcast('loadingPopupInactive');
+
+                    // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
+                    var contentData = result.data;
+                    contentData = contentData.substring(0, contentData.length-1);
+
+                    // 전송 저장 save
+                    $scope.smsSendSaveSave(reserveYn, reserveDate, msgType, fileCount, contentData);
+                }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                /*else if(result.status === undefined) {
+                    location.href = "/";
+                }*/
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },
+            error : function(result){
+                $scope._popMsg("error");
+                $scope.$broadcast('loadingPopupInactive');
+            }
+        },function() {
+            $scope._popMsg("Ajax Fail By HTTP Request");
+            $scope.$broadcast('loadingPopupInactive');
+        });
     };
     // <-- //전송, 예약 -->
 
@@ -463,6 +563,138 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             }, 50)
         });
     });
+
+    // 첨부파일
+    $scope.changeSmsImage = function (value) {
+        if(value.files[0]) {
+            $("#lblMsgType").text("MMS");
+        }
+    };
+
+    // 첨부파일 체크
+    $scope.chkSmsFile = function () {
+        // 첨부파일 개수
+        var fileCount = 0;
+
+        // 첨부파일1
+        if (!isNull($("#fileSms1")[0].files[0])) {
+            // 크기제한 체크
+            var maxSize = 300 * 1024;
+            var fileSize = $("#fileSms1")[0].files[0].size;
+            if (fileSize > maxSize) {
+                $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
+                return;
+            }
+
+            // 파일명 형식 체크
+            var imgFullNm = $("#fileSms1").val().substring($("#fileSms1").val().lastIndexOf('\\') + 1);
+            if(1 > imgFullNm.lastIndexOf('.')){
+                $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
+                return;
+            }
+
+            // 확장자 체크
+            var reg = /(.*?)\.(jpg|JPG)$/;
+            if(! $("#fileSms1").val().match(reg)) {
+                $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
+                return;
+            }
+
+            fileCount = fileCount + 1;
+        }
+
+        // 첨부파일2
+        if (!isNull($("#fileSms2")[0].files[0])) {
+            // 크기제한 체크
+            var maxSize = 300 * 1024;
+            var fileSize = $("#fileSms2")[0].files[0].size;
+            if (fileSize > maxSize) {
+                $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
+                return;
+            }
+
+            // 파일명 형식 체크
+            var imgFullNm = $("#fileSms2").val().substring($("#fileSms2").val().lastIndexOf('\\') + 1);
+            if(1 > imgFullNm.lastIndexOf('.')){
+                $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
+                return;
+            }
+
+            // 확장자 체크
+            var reg = /(.*?)\.(jpg|JPG)$/;
+            if(! $("#fileSms2").val().match(reg)) {
+                $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
+                return;
+            }
+
+            fileCount = fileCount + 1;
+        }
+
+        // 첨부파일3
+        if (!isNull($("#fileSms3")[0].files[0])) {
+            // 크기제한 체크
+            var maxSize = 300 * 1024;
+            var fileSize = $("#fileSms3")[0].files[0].size;
+            if (fileSize > maxSize) {
+                $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
+                return;
+            }
+
+            // 파일명 형식 체크
+            var imgFullNm = $("#fileSms3").val().substring($("#fileSms3").val().lastIndexOf('\\') + 1);
+            if(1 > imgFullNm.lastIndexOf('.')){
+                $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
+                return;
+            }
+
+            // 확장자 체크
+            var reg = /(.*?)\.(jpg|JPG)$/;
+            if(! $("#fileSms3").val().match(reg)) {
+                $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
+                return;
+            }
+
+            fileCount = fileCount + 1;
+        }
+
+        return fileCount
+    };
+
+    // 첨부파일 초기화
+    $scope.clearSmsFile = function () {
+        // 첨부파일 리셋
+        var agent = navigator.userAgent.toLowerCase();
+        if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+            // ie 일때
+            // $("#fileSms1").replaceWith( $("#fileSms1").clone(true) );
+            // $("#fileSms2").replaceWith( $("#fileSms2").clone(true) );
+            // $("#fileSms3").replaceWith( $("#fileSms3").clone(true) );
+            $("#fileSms1").val("");
+            $("#fileSms2").val("");
+            $("#fileSms3").val("");
+        } else {
+            // other browser 일때
+            $("#fileSms1").val("");
+            $("#fileSms2").val("");
+            $("#fileSms3").val("");
+        }
+        $("#smsForm")[0].reset();
+    };
+
+    // 팝업 닫기
+    $scope.close = function() {
+        $("#srchTitle").val("");
+        $("#messageContent").val("");
+        $("#lblTxtByte").text("0");
+        $("#lblMsgType").text("SMS");
+        $scope._gridDataInit();
+
+        // 첨부파일 초기화
+        $scope.clearSmsFile();
+
+        $scope.wjSmsSendViewPopLayer.hide();
+        event.preventDefault();
+    };
 }]);
 
 
