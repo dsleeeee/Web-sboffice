@@ -71,7 +71,7 @@ public class SmsSendController {
 //    @RequestMapping(value = "/smsSend/list.sb", method = RequestMethod.GET)
 //    public String smsSendView(HttpServletRequest request, HttpServletResponse response, Model model) {
 //
-//        return "adi/sms/smsSend/smsSendView";
+//        return "adi/sms/smsSend/smsSend";
 //    }
 
     /**

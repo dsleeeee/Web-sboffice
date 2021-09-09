@@ -196,7 +196,7 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // SMS전송
     $scope.smsSendPop = function () {
-        $scope.wjSmsSendViewPopLayer.show(true);
+        $scope.wjSmsSendLayer.show(true);
         event.preventDefault();
     };
 
@@ -220,9 +220,9 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
         });
 
         // SMS전송 팝업 핸들러 추가
-        $scope.wjSmsSendViewPopLayer.shown.addHandler(function (s) {
+        $scope.wjSmsSendLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('smsSendViewPopCtrl', null);
+                $scope._broadcast('smsSendCtrl', null);
             }, 50)
         });
     });

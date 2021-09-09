@@ -655,7 +655,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210812.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210812.02" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
@@ -700,7 +700,7 @@
 </c:import>
 
 <%-- SMS전송 팝업 --%>
-<c:import url="/WEB-INF/view/adi/sms/smsSend/smsSendViewPop.jsp">
+<c:import url="/WEB-INF/view/adi/sms/smsSend/smsSend.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

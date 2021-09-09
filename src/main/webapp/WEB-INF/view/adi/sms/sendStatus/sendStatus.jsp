@@ -158,7 +158,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20210806.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20210806.02" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">
@@ -167,7 +167,7 @@
 </c:import>
 
 <%-- SMS전송 팝업 --%>
-<c:import url="/WEB-INF/view/adi/sms/smsSend/smsSendViewPop.jsp">
+<c:import url="/WEB-INF/view/adi/sms/smsSend/smsSend.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

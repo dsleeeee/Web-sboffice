@@ -9,6 +9,8 @@ import kr.co.solbipos.adi.sms.smsSend.service.SmsSendService;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class SmsSendServiceImpl implements SmsSendService {
     private final SmsSendMapper smsSendMapper;
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor Injection
@@ -188,6 +191,9 @@ public class SmsSendServiceImpl implements SmsSendService {
 
             // 파일서버 대응 경로 지정 (운영) (파일 저장용)
             String path = "/home/daemon/sms/X_McsAgent/file/mms/" + path_folder + "/";
+
+            System.out.println("test1111 : " + path);
+            LOGGER.info("MSS 파일 저장 >>> 경로 : " + path);
 
             // 저장 경로 설정 (디비 저장용)
             String path_table = "/" + path_folder + "/";

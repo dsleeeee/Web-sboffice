@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : smsSend.js
- * 설  명 : SMS전송 JavaScript (팝업, 페이지 둘다 호출해서 쓸수도 있어 따로 만듬) (현재는 팝업 로직만 구현 smsSendViewPop.jsp)
+ * 설  명 : SMS전송 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -72,8 +72,22 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // <-- 검색 호출 -->
     $scope.$on("smsSendCtrl", function(event, data) {
+        // 페이지 로드시 호출
+        $scope.searchSmsSendViewPop(data, "N");
         event.preventDefault();
     });
+    $scope.$on("smsSendYCtrl", function(event, data) {
+        // 페이지 로드시 호출
+        $scope.searchSmsSendViewPop(data, "Y");
+        event.preventDefault();
+    });
+    // 페이지 로드시 호출
+    $scope.searchSmsSendViewPop = function(data, pageGubun) {
+        var smsSendViewPopScope = agrid.getScope('smsSendCtrl');
+        smsSendViewPopScope.initPageSmsSend(data, pageGubun);
+        var smsSendViewPopSmsPopupScope = agrid.getScope("smsPopupCtrl");
+        smsSendViewPopSmsPopupScope._broadcast('smsPopupCtrl');
+    };
     // <-- //검색 호출 -->
 
     // 페이지 로드시 호출
@@ -400,7 +414,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 첨부파일 저장
     $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
-        var formData = new FormData($("#smsSendForm")[0]);
+        var formData = new FormData($("#smsForm")[0]);
         formData.append("orgnCd", orgnCd);
 
         var url = '/adi/sms/smsSend/smsSend/getSmsSendFileSave.sb';
@@ -664,7 +678,22 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             $("#fileSms2").val("");
             $("#fileSms3").val("");
         }
-        $("#smsSendForm")[0].reset();
+        $("#smsForm")[0].reset();
+    };
+
+    // 팝업 닫기
+    $scope.close = function() {
+        $("#srchTitle").val("");
+        $("#messageContent").val("");
+        $("#lblTxtByte").text("0");
+        $("#lblMsgType").text("SMS");
+        $scope._gridDataInit();
+
+        // 첨부파일 초기화
+        $scope.clearSmsFile();
+
+        $scope.wjSmsSendViewPopLayer.hide();
+        event.preventDefault();
     };
 }]);
 
