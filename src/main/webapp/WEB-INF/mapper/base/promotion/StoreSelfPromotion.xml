@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreSelfPromotion.xml
+    매장자체프로모션현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.09.07     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.promotion.storeSelfPromotion.service.impl.StoreSelfPromotionMapper">
+
+    <!-- 매장자체프로모션현황 - 매장자체 프로모션 조회 -->
+    <!--
+        TABLE    : TB_MS_PROMO_H
+        PARAM    : storeSelfPromotionVO
+        COMMENTS : 매장에서 자체적으로 진행하는 프로모션 내역을 조회한다.
+    -->
+    <select id="getStoreSelfPromotionList" parameterType="storeSelfPromotionVO" resultType="DefaultMap">
+        /* USE : StoreSelfPromotionMapper.getStoreSelfPromotionList */
+        SELECT *
+          FROM (
+                    SELECT tmph.STORE_CD,
+                            tms.STORE_NM,
+                            tmph.PROMOTION_CD,
+                            tmph.PROMOTION_NM,
+                            TO_CHAR(TO_DATE(tmpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD,
+                            TO_CHAR(TO_DATE(tmpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                      FROM TB_MS_PROMO_H tmph,
+                            TB_MS_PROMO_CONDI tmpc,
+                            TB_MS_STORE tms
+                      WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND tmph.STORE_CD = tmpc.STORE_CD
+                        AND tmph.PROMOTION_CD = tmpc.PROMOTION_CD
+                        AND tmph.STORE_CD = tms.STORE_CD
+                        AND tmpc.DATE_YN = 'N'
+                        <if test='arrStoreCd != null and arrStoreCd != ""'>
+                            AND tmph.STORE_CD IN
+                            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </if>
+                        AND tmph.REG_FG = 'S'
+                      UNION
+                    SELECT tmph.STORE_CD,
+                            tms.STORE_NM,
+                            tmph.PROMOTION_CD,
+                            tmph.PROMOTION_NM,
+                            TO_CHAR(TO_DATE(tmpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD,
+                            TO_CHAR(TO_DATE(tmpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                      FROM TB_MS_PROMO_H tmph,
+                            TB_MS_PROMO_CONDI tmpc,
+                            TB_MS_STORE tms
+                      WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND tmph.STORE_CD = tmpc.STORE_CD
+                        AND tmph.PROMOTION_CD = tmpc.PROMOTION_CD
+                        AND tmph.STORE_CD = tms.STORE_CD
+                        AND tmpc.DATE_YN = 'Y'
+                        <if test='startDate != null and startDate != ""'>
+                            AND tmpc.START_YMD >= #{startDate}
+                        </if>
+                        <if test='endDate != null and endDate != ""'>
+                            AND tmpc.END_YMD <![CDATA[<= ]]> #{endDate}
+                        </if>
+                        <if test='arrStoreCd != null and arrStoreCd != ""'>
+                            AND tmph.STORE_CD IN
+                            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </if>
+                        AND tmph.REG_FG = 'S'
+               ) A
+         ORDER
+             BY A.STORE_CD ASC, A.PROMOTION_CD DESC
+    </select>
+
+    <!-- 매장자체프로모션현황 - 매장자체 프로모션 상세 조회 -->
+    <!--
+        TABLE    : TB_MS_PROMO_CONDI_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        PARAM    : storeSelfPromotionVO
+        COMMENTS : 매장에서 자체적으로 진행하는 프로모션의 상세정보를 조회한다.
+    -->
+    <select id="getStoreSelfPromotionDtl" parameterType="storeSelfPromotionVO" resultType="DefaultMap">
+      /* USE : StoreSelfPromotionMapper.getStoreSelfPromotionDtl */
+      SELECT tmph.STORE_CD,
+              tmph.PROMOTION_CD,
+              tmph.PROMOTION_NM,
+              tmph.MEMO,
+              tmph.USE_YN,
+              tmph.REG_FG,
+              SUBSTR(tmph.REG_DT, 1, 8) AS REG_DT,
+              tmpc.DATE_YN,
+              tmpc.START_YMD,
+              tmpc.END_YMD,
+              tmpc.TIME_YN,
+              tmpc.START_TIME,
+              tmpc.END_TIME,
+              tmpc.WEEK_YN,
+              tmpc.MON_YN,
+              tmpc.TUE_YN,
+              tmpc.WED_YN,
+              tmpc.THU_YN,
+              tmpc.FRI_YN,
+              tmpc.SAT_YN,
+              tmpc.SUN_YN,
+              tmpc.MEMBER_TARGET_DS,
+              tmpc.MEMBER_CLASS_CD,
+              tmpc.MIN_SALE_AMT,
+              tmpc.PROD_CD_YN,
+              tmpc.SELECT_PROD_DS,
+              tmpc.SELECT_CROSS_FG AS SELECT_PROD_CROSS_FG,
+              tmpc.SELECT_PROD_CNT,
+              tmpc.PROD_SELECT_EXCEPT_FG,
+              tmpc.DLV1_YN,
+              tmpc.DLV2_YN,
+              tmpc.DLV3_YN,
+              tmpb.TYPE_CD,
+              tmpb.APPLY_DC_DS,
+              tmpb.DC_SET,
+              tmpb.PRINT_MESSAGE,
+              tmpb.PRESENT_DS,
+              tmpb.SELECT_CROSS_FG,
+              tmpb.SELECT_GIFT_CNT
+        FROM TB_MS_PROMO_H tmph,
+              TB_MS_PROMO_CONDI tmpc,
+              TB_MS_PROMO_BENE tmpb
+       WHERE 1=1
+         AND tmph.STORE_CD = #{storeCd}
+         AND tmph.PROMOTION_CD = #{promotionCd}
+         AND tmpc.STORE_CD (+)= tmph.STORE_CD
+         AND tmpc.PROMOTION_CD (+)= tmph.PROMOTION_CD
+         AND tmpb.STORE_CD (+)= tmph.STORE_CD
+         AND tmpb.PROMOTION_CD (+)= tmph.PROMOTION_CD
+         AND tmpb.BENE_SEQ = #{beneSeq}
+    </select>
+
+    <!-- 매장자체프로모션현황 - 적용상품 리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_PROMO_CONDI_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+          PARAM    : storeSelfPromotionVO
+          COMMENTS : 프로모션 적용상품 리스트를 조회한다.
+    -->
+    <select id="getStoreSelfPromotionProdList" parameterType="storeSelfPromotionVO" resultType="DefaultMap">
+        /* StoreSelfPromotionMapper.getStoreSelfPromotionProdList */
+        SELECT tmpcp.STORE_CD,
+                tmpcp.PROMOTION_CD,
+                tmpcp.CONDI_PROD_SEQ,
+                tmpcp.GUBUN_DS,
+                CASE WHEN tmpcp.GUBUN_DS = '1' THEN tmpcp.PROD_CD ELSE tmpcp.PROD_CLASS_CD END AS PROD_CD,
+                CASE WHEN tmpcp.GUBUN_DS = '1' THEN tmp.PROD_NM ELSE
+                (
+                CASE WHEN FN_GET_PROD_CLASS_CD_NM_STR(tmpcp.STORE_CD, tmpcp.PROD_CLASS_CD, 'NM_STR') != 'NO_DATA_FOUND' THEN
+                FN_GET_PROD_CLASS_CD_NM_STR(tmpcp.STORE_CD, tmpcp.PROD_CLASS_CD, 'NM_STR') ELSE
+                tmpc.PROD_CLASS_NM
+                END
+                )
+                END AS PROD_NM,
+                tmpcp.PROD_QTY
+          FROM TB_MS_PROMO_CONDI_PROD tmpcp,
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_CLASS tmpc
+         WHERE tmpcp.STORE_CD = #{storeCd}
+           AND tmpcp.PROMOTION_CD = #{promotionCd}
+           AND tmp.STORE_CD (+)= tmpcp.STORE_CD
+           AND tmp.PROD_CD (+)= tmpcp.PROD_CD
+           AND tmpc.STORE_CD (+)= tmpcp.STORE_CD
+           AND tmpc.PROD_CLASS_CD (+)= tmpcp.PROD_CLASS_CD
+         ORDER
+            BY tmpcp.GUBUN_DS ASC, tmpcp.PROD_CD ASC, tmpcp.PROD_CLASS_CD ASC
+    </select>
+
+    <!-- 매장자체프로모션현황 - 혜택상품 리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_PROMO_CONDI_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+          PARAM    : storeSelfPromotionVO
+          COMMENTS : 프로모션 혜택상품 리스트를 조회한다.
+    -->
+    <select id="getStoreSelfPromotionPresentList" parameterType="storeSelfPromotionVO" resultType="DefaultMap">
+        /* StoreSelfPromotionMapper.getStoreSelfPromotionPresentList */
+        SELECT tmpbp.STORE_CD,
+                tmpbp.PROMOTION_CD,
+                tmpbp.PROD_CD,
+                tmp.PROD_NM,
+                tmpbp.GIFT_QTY
+          FROM TB_MS_PROMO_BENE_PROD tmpbp,
+                TB_MS_PRODUCT tmp
+         WHERE tmpbp.STORE_CD = #{storeCd}
+           AND tmpbp.PROMOTION_CD = #{promotionCd}
+           AND tmp.STORE_CD (+)= tmpbp.STORE_CD
+           AND tmp.PROD_CD (+)= tmpbp.PROD_CD
+         ORDER
+             BY tmpbp.PROD_CD ASC
+    </select>
+</mapper>

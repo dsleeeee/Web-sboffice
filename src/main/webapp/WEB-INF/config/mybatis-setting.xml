@@ -157,6 +157,8 @@
     <!-- 기초관리 > 프로모션관리 > 이벤트문구출력관리 -->
     <typeAlias alias="eventMessageVO" type="kr.co.solbipos.base.promotion.eventMessage.service.EventMessageVO"/>
 
+    <!-- 기초관리 > 프로모션관리 > 매장자체프로모션현황 -->
+    <typeAlias alias="storeSelfPromotionVO" type="kr.co.solbipos.base.promotion.storeSelfPromotion.service.StoreSelfPromotionVO"/>
 <!--
     <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
     <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>
