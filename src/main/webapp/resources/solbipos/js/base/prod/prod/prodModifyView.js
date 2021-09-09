@@ -467,6 +467,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(messages["prod.prodNmChk.msg"]);
             return false;
         }
+        // 상품명 길이 체크
+        if(nvl($scope.prodModifyInfo.prodNm, '').getByteLengthForOracle() > 100){
+            $scope._popMsg(messages['prod.prodNm'] + "은 " + messages["cmm.max100Chk"]);
+            return; false;
+        }
         // 판매단가
         if (isNull($("#prodModifySaleUprc").val())) {
             $scope._popMsg(messages["prod.saleUprcChk.msg"]);
