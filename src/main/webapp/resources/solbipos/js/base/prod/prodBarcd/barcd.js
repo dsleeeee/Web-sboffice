@@ -224,8 +224,13 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
           $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.maxBarCd.msg"]);
           return false;
         }
-        $scope.flex.collectionView.itemsEdited[i].status = "U";
-        params.push($scope.flex.collectionView.itemsEdited[i]);
+      }
+
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        if($scope.flex.collectionView.itemsEdited[i].barCd !== null && $scope.flex.collectionView.itemsEdited[i].barCd !== ""){
+          $scope.flex.collectionView.itemsEdited[i].status = "U";
+          params.push($scope.flex.collectionView.itemsEdited[i]);
+        }
       }
 
       if (params.length > 0) {
