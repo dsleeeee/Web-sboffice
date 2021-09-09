@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<wj-popup control="wjSmsSendLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:970px;height:770px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSmsSendLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:970px;height:740px;" fade-in="false" fade-out="false">
 
     <div class="contents" id ="divSmsSendPageAuth" style="display: none;">
         <div class="elseCon">
@@ -144,28 +144,23 @@
 
                 <%-- 첨부파일 --%>
                 <f:form id="smsForm" name="smsForm" method="post" enctype="multipart/form-data">
-                <div class="w100 fl pd10 bt" style="height:120px;">
-                    <div class="w50 fl">
-                         <table>
-                            <tr>
-                                <td>
-                                    <input class="form-control" type="file" id="fileSms1" name="fileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input class="form-control" type="file" id="fileSms2" name="fileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input class="form-control" type="file" id="fileSms3" name="fileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="w50 fl">
-                    </div>
+                <div class="w100 fl pd10 bt" style="height:90px;">
+                     <table>
+                        <tr>
+                            <td>
+                                <input class="form-control" type="file" id="fileSms1" name="fileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                            </td>
+                            <td>
+                                <input class="form-control" type="file" id="fileSms2" name="fileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input class="form-control" type="file" id="fileSms3" name="fileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
                 </div>
                 </f:form>
 
@@ -202,7 +197,7 @@
             <%-- 우측 --%>
             <div class="wj-TblWrapBr w45 fl">
                 <%-- 수신자목록 --%>
-                <div class="w100 fl pd10" style="height:680px;">
+                <div class="w100 fl pd10" style="height:650px;">
                     <table>
                         <tr>
                             <td class="s14">
@@ -227,7 +222,7 @@
                             <button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
                             <button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>
                         </div>
-                        <div class="wj-gridWrap" style="height:590px; overflow-y: hidden; overflow-x: hidden;">
+                        <div class="wj-gridWrap" style="height:560px; overflow-y: hidden; overflow-x: hidden;">
                             <div class="row">
                                 <wj-flex-grid
                                         autoGenerateColumns.="false"
