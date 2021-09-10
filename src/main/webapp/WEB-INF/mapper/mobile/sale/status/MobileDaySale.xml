@@ -128,7 +128,7 @@
         /* MobileDaySaleMapper.getMobileDaySalePayList */
         SELECT
         A.PAY_CD,
-        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) AS NM,
+        CASE WHEN A.PAY_CD = '021' THEN '현금영수증 ' ELSE (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) END AS NM,
         A.REAL_SALE_AMT,
         DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
         FROM
@@ -147,7 +147,39 @@
                 </foreach>
             </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tsdp.PAY_CD != '02'
             GROUP BY tsdp.PAY_CD
+            UNION
+            SELECT
+            '02' AS PAY_CD,
+            SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS REAL_SALE_AMT
+            FROM TB_SL_SALE_PAY_CASH tsspc
+            WHERE 1=1
+            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsspc.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            UNION
+            SELECT
+            '021' AS PAY_CD,
+            SUM(tsspc.SALE_AMT) AS REAL_SALE_AMT
+            FROM TB_SL_SALE_PAY_CASH tsspc
+            WHERE 1=1
+            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsspc.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tsspc.APPR_PROC_FG IN ('1','2','4')
         ) A,
         (
             SELECT
