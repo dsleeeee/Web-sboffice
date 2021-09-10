@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : SmsChargeMapper.java
- * @Description : 부가서비스 > SMS관리 > SMS충전
+ * @Description : 부가서비스 > SMS관리 > SMS충전/KCP PG
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

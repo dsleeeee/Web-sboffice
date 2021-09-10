@@ -534,7 +534,7 @@
     <!-- 부가서비스 > 예약관리 > 예약현황 -->
     <typeAlias alias="resveInfoVO" type="kr.co.solbipos.adi.resve.resveInfo.service.ResveInfoVO"/>
 
-    <!-- 부가서비스 > SMS관리 > SMS충전 -->
+    <!-- 부가서비스 > SMS관리 > SMS충전/KCP PG -->
     <typeAlias alias="smsChargeVO" type="kr.co.solbipos.adi.sms.smsCharge.service.SmsChargeVO"/>
     <!-- 부가서비스 > SMS관리 > SMS전송 -->
     <typeAlias alias="smsSendVO" type="kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO"/>

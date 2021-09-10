@@ -17,7 +17,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : SmsChargeServiceImpl.java
- * @Description : 부가서비스 > SMS관리 > SMS충전
+ * @Description : 부가서비스 > SMS관리 > SMS충전/KCP PG
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
