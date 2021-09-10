@@ -44,6 +44,8 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
+    // 중복체크(회원명, 전화번호, 카드번호) 여부
+    $scope.isCheckedMembr = false;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -220,7 +222,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
             return false;
         }
         var jsonData = $scope.flex.collectionView.items;
-        scope.valChk(jsonData);
+        scope.valChk(jsonData, $scope.isCheckedMembr);
         $scope.flex.collectionView.commitEdit();
         $scope.flex.collectionView.refresh();
         $scope.isEdited = false;

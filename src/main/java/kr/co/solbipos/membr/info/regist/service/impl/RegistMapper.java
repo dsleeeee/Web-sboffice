@@ -187,6 +187,12 @@ public interface RegistMapper {
     /** 회원정보 수정 */
     int updateMembr(RegistVO registVO);
 
+    /** 회원명 중복 체크 */
+    int getMemberNmCount(RegistVO registVO);
+
+    /** 전화번호 중복 체크 */
+    int getMemberTelNoCount(RegistVO registVO);
+
     /** 카드정보 중복 체크 */
     int getMemberCardInfoCount(RegistVO registVO);
 

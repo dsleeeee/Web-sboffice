@@ -335,10 +335,14 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
             }
         }
 
-        // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/membr/info/view/base/remove.sb", params, function () {
-            $scope.getMemberChgBatchList()
-        });
+        if(params.length !== 0){
+            $scope._popConfirm(messages["regist.membr.delYn.msg"], function() {
+                // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
+                $scope._save("/membr/info/view/base/remove.sb", params, function () {
+                    $scope.getMemberChgBatchList()
+                });
+            });
+        }
     };
 
     // 저장

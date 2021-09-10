@@ -147,6 +147,12 @@ public interface RegistService {
     /** 카드정보 등록 */
     int updateMembrCard(RegistVO registVO, SessionInfoVO si);
 
+    /** 회원명 중복 체크 */
+    int getMemberNmCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 전화번호 중복 체크 */
+    int getMemberTelNoCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
     /** 카드정보 중복 체크 */
     int getMemberCardInfoCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
