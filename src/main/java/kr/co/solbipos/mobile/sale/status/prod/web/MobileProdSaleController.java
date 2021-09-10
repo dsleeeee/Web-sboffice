@@ -113,4 +113,25 @@ public class MobileProdSaleController {
 
         return returnListJson(Status.OK, list, list);
     }
+
+    /**
+     * 모바일 매출현황 - 매장조회
+     * @param mobileProdSaleVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  String
+     * @author  권지현
+     * @since   2021.09.07
+     */
+    @RequestMapping(value = "/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(MobileProdSaleVO mobileProdSaleVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = mobileProdSaleService.getStoreList(mobileProdSaleVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, list);
+    }
 }

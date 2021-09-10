@@ -49,4 +49,13 @@ public class MobileProdSaleServiceImpl implements MobileProdSaleService {
         return mobileProdSaleMapper.getMultiStoreList(mobileProdSaleVO);
     }
 
+    /** 모바일 매출현황 - 매장조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreList(MobileProdSaleVO mobileProdSaleVO, SessionInfoVO sessionInfoVO) {
+
+        mobileProdSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return mobileProdSaleMapper.getStoreList(mobileProdSaleVO);
+    }
+
 }

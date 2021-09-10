@@ -304,6 +304,8 @@
     <typeAlias alias="salePriceVO" type="kr.co.solbipos.base.price.salePrice.service.SalePriceVO"/>
     <!-- 기초관리 > 가격관리 > 판매가관리(매장용) -->
     <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salePriceManage.service.SalePriceManageVO"/>
+    <!-- 기초관리 > 가격관리 > 매장판매가현황 -->
+<!--    <typeAlias alias="storeSalePriceVO" type="kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceVO"/>-->
 
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
@@ -803,6 +805,14 @@
     <typeAlias alias="mobileDclzManageVO" type="kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageVO"/>
     <!-- (모바일) 부가서비스 > 예약현황 -->
     <typeAlias alias="mobileResveInfoVO" type="kr.co.solbipos.mobile.adi.resve.resveInfo.service.MobileResveInfoVO"/>
+    <!-- (모바일) 모바일 매장매출 > 일별매출 -->
+    <typeAlias alias="mobileStoreDaySaleVO" type="kr.co.solbipos.mobile.sale.status.storeDaySale.service.MobileStoreDaySaleVO"/>
+    <!-- (모바일) 모바일 매장매출 > 월별매출 -->
+    <typeAlias alias="mobileStoreMonthSaleVO" type="kr.co.solbipos.mobile.sale.status.storeMonthSale.service.MobileStoreMonthSaleVO"/>
+    <!-- (모바일) 모바일 매장매출 > 상품별매출 -->
+    <typeAlias alias="mobileStoreProdSaleVO" type="kr.co.solbipos.mobile.sale.status.storeProdSale.service.MobileStoreProdSaleVO"/>
+    <!-- (모바일) 모바일 매장매출 > 반품현황 -->
+    <typeAlias alias="mobileStoreRtnStatusVO" type="kr.co.solbipos.mobile.sale.status.storeRtnStatus.service.MobileStoreRtnStatusVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>
