@@ -987,8 +987,7 @@
                     thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thpsp.PROD_CD = #{prodCd}
                 AND thpsp.SALE_PRC_FG = '1'
-                AND thpsp.START_DATE <= SYSDATE
-                AND thpsp.end_date >= SYSDATE
+                AND thpsp.START_DATE = SYSDATE
                 )
                 WHEN MATCHED THEN
                 UPDATE
@@ -1040,8 +1039,7 @@
                     thpsp.STORE_CD = #{storeCd}
                 AND thpsp.PROD_CD = #{prodCd}
                 AND thpsp.SALE_PRC_FG = '1'
-                AND thpsp.START_DATE <= SYSDATE
-                AND thpsp.end_date >= SYSDATE
+                AND thpsp.START_DATE = SYSDATE
                 )
                 WHEN MATCHED THEN
                 UPDATE
