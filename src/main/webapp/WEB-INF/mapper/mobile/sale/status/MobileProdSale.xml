@@ -106,4 +106,18 @@
           BY C.STORE_CD
     </select>
 
+    <!-- 모바일 매출현황 - 매장조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : mobileProdSaleVO
+        COMMENTS : 모바일 매출현황 - 매장을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="mobileProdSaleVO" resultType="DefaultMap">
+        /* USE : MobileProdSaleMapper.getStoreList */
+        SELECT  STORE_CD,
+                STORE_NM
+        FROM    TB_MS_STORE
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
 </mapper>
