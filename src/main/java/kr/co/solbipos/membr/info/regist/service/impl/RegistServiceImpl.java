@@ -505,6 +505,42 @@ public class RegistServiceImpl implements RegistService {
     }
 
     /**
+     *  회원명 중복 체크
+     */
+    @Override
+    public int getMemberNmCount(RegistVO registVO, SessionInfoVO sessionInfoVO){
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        int result = mapper.getMemberNmCount(registVO);
+        return result;
+    }
+
+    /**
+     *  전화번호 중복 체크
+     */
+    @Override
+    public int getMemberTelNoCount(RegistVO registVO, SessionInfoVO sessionInfoVO){
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        int result = mapper.getMemberTelNoCount(registVO);
+        return result;
+    }
+
+    /**
      *  카드 중복 체크
      */
     @Override

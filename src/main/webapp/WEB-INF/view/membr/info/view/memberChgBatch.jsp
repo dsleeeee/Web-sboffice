@@ -517,7 +517,7 @@
     var regstrStoreList = ${regstrStoreList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20201117.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20201117.07" charset="utf-8"></script>
 
 <%-- 회원정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDtl.jsp">

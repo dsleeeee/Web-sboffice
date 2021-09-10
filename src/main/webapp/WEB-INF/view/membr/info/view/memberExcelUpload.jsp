@@ -111,6 +111,13 @@
         <button id="btnSave" class="btn_skyblue ml5 fr" ng-click="save()"><s:message code="cmm.save"/></button>
         <%-- 양식검증 --%>
         <button class="btn_skyblue ml5 fr" ng-click="formChk()"><s:message code="member.excel.check"/></button>
+        <%-- 중복체크(회원명, 전화번호, 카드번호)  --%>
+        <span class="s14 bk fr lh25 mr10" >
+           <input type="checkbox" id="chkMembr" ng-model="isCheckedMembr" />
+                <label for="chkMembr">
+                    <s:message code="member.excel.chk.duplicate" />
+                </label>
+        </span>
     </div>
     <%-- 회원내역 --%>
     <s:message code="member.excel.memberInfo"/>
@@ -191,7 +198,7 @@
     var orgnFg = "${orgnFg}"; <%-- 본사매장구분 --%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.13" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.11" charset="utf-8"></script>
 
 <%-- 수불 엑셀업로드 공통 팝업 --%>

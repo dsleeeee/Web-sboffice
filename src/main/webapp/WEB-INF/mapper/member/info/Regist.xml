@@ -810,6 +810,32 @@
         </if>
     </update>
 
+    <!-- 회원명 중복체크-->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : 회원명 중복 체크
+    -->
+    <select id="getMemberNmCount" parameterType="registVO" resultType="int">
+        /* RegistMapper.getMemberNmCount */
+        SELECT COUNT(1)
+        FROM TB_MB_MEMBER
+        WHERE MEMBR_ORGN_CD =  #{membrOrgnCd}
+        AND	SBPENC.D(MEMBR_NM) = #{membrNm}
+    </select>
+
+    <!-- 전화번호 중복체크-->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : 전화번호 중복 체크
+    -->
+    <select id="getMemberTelNoCount" parameterType="registVO" resultType="int">
+        /* RegistMapper.getMemberTelNoCount */
+        SELECT COUNT(1)
+        FROM TB_MB_MEMBER
+        WHERE MEMBR_ORGN_CD =  #{membrOrgnCd}
+        AND	SBPENC.D(TEL_NO) = #{telNo}
+    </select>
+
     <!-- 카드정보 중복체크-->
     <!--
         TABLE    : TB_MB_MEMBER_CARD
