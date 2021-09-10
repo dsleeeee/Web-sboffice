@@ -30,13 +30,12 @@
                thp.COST_UPRC, 		-- 본사 원가
                thp.SPLY_UPRC   		-- 본사 공급가
           FROM TB_HQ_PRODUCT thp,
-               TB_HQ_PRODUCT_SALE_PRICE thpsp
+               TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp
          WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thp.PROD_CD = #{prodCd}
            AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
            AND thpsp.PROD_CD = thp.PROD_CD
-           AND thpsp.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-           AND thpsp.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+           AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
     </select>
 
@@ -535,4 +534,42 @@
             )
             }
     </select>
+
+
+    <!-- 전매장적용: 매장 판매가 등록 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </mapper>
