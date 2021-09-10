@@ -752,7 +752,7 @@
         <![CDATA[
             AND ROWNUM <= 7
         ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        ORDER BY REAL_SALE_AMT ASC
     </select>
 
     <!-- 매장 - 매출 상위 상품 -->
@@ -800,7 +800,7 @@
         <![CDATA[
             AND ROWNUM <= 7
         ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        ORDER BY REAL_SALE_AMT ASC
     </select>
 
     <!-- 본사 - 매출 상위 가맹점 -->
