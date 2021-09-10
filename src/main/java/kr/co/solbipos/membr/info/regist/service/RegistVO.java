@@ -221,6 +221,9 @@ public class RegistVO extends PageVO {
     /** 광고성 SMS전송 */
     private String marketingSmsGubun;
 
+    /** 엑셀 다운로드 구분 */
+    private String excelGubun;
+
     /**
      * @return the orgnFg
      */
@@ -1262,6 +1265,14 @@ public class RegistVO extends PageVO {
 
     public void setMarketingSmsGubun(String marketingSmsGubun) {
         this.marketingSmsGubun = marketingSmsGubun;
+    }
+
+    public String getExcelGubun() {
+        return excelGubun;
+    }
+
+    public void setExcelGubun(String excelGubun) {
+        this.excelGubun = excelGubun;
     }
 
     @Override

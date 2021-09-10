@@ -443,6 +443,10 @@
         <button class="btn_skyblue ml5 fr" id="save" ng-click="gridSave()">
             <s:message code="cmm.save"/>
         </button>
+        <%-- 삭제 --%>
+        <button class="btn_skyblue ml5 fr" id="save" ng-click="gridDel()">
+            <s:message code="cmm.del"/>
+        </button>
     </div>
 
     <%-- 회원목록 그리드 --%>
@@ -473,6 +477,7 @@
                 <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="lastSaleDate" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="75" align="center" ></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -512,7 +517,7 @@
     var regstrStoreList = ${regstrStoreList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20201117.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20201117.05" charset="utf-8"></script>
 
 <%-- 회원정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDtl.jsp">

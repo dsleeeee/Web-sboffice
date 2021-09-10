@@ -324,6 +324,23 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         $scope.flex.collectionView.refresh();
     };
 
+    // 삭제
+    $scope.gridDel = function () {
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                var obj = {};
+                obj.membrNo = $scope.flex.collectionView.items[i].membrNo;
+                params.push(obj);
+            }
+        }
+
+        // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/membr/info/view/base/remove.sb", params, function () {
+            $scope.getMemberChgBatchList()
+        });
+    };
+
     // 저장
     $scope.gridSave = function () {
         // 파라미터 설정
