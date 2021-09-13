@@ -111,7 +111,12 @@ public class StoreSideMenuController {
         }
 
         // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
-        model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) { // 본사는 해당옵션의 제약X
+            model.addAttribute("storeProdUseFg", "0");
+        } else {
+            model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
+        }
+
 
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
