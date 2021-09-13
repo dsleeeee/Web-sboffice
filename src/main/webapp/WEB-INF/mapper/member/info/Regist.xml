@@ -844,9 +844,10 @@
     <select id="getMemberCardInfoCount" parameterType="registVO" resultType="int">
         /* RegistMapper.getMemberCardInfoCount */
         SELECT COUNT(1)
-        FROM TB_MB_MEMBER_CARD tmmc
-        WHERE membr_orgn_cd =  #{membrOrgnCd}
-        AND	membr_card_no = #{membrCardNo}
+          FROM TB_MB_MEMBER_CARD tmmc
+         WHERE MEMBR_ORGN_CD =  #{membrOrgnCd}
+           AND	MEMBR_CARD_NO = #{membrCardNo}
+           AND CST_CARD_STAT_FG = '0'
     </select>
 
     <!-- 카드정보 중복체크( 카드번호 사용중인 회원번호 / X (해당 카드번호 미사용) ) -->
