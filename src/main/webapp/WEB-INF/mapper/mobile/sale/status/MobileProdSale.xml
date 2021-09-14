@@ -94,11 +94,11 @@
          AND C.MULTISTORE_CD = (
                                     SELECT MULTISTORE_CD
                                       FROM (
-                                                SELECT MULTISTORE_CD,
-                                                        REGEXP_SUBSTR(MULTISTORE_USER_ID,'[^,]+', 1, ROWNUM) AS MULTISTORE_USER_ID
+                                                SELECT DISTINCT MULTISTORE_CD,
+                                                        REGEXP_SUBSTR(MULTISTORE_USER_ID,'[^,]+', 1, LEVEL) AS MULTISTORE_USER_ID
                                                   FROM (SELECT MULTISTORE_CD, MULTISTORE_USER_ID FROM TB_MS_MULTISTORE_HDR WHERE USE_YN = 'Y')
                                                CONNECT
-                                                     BY ROWNUM <![CDATA[<= ]]> LENGTH(REGEXP_REPLACE(MULTISTORE_USER_ID,'[^,]+')) + 1
+                                                     BY LEVEL <![CDATA[<= ]]> LENGTH(REGEXP_REPLACE(MULTISTORE_USER_ID,'[^,]+')) + 1
                                             )
                                      WHERE MULTISTORE_USER_ID = #{userId}
                                 )
