@@ -5,6 +5,9 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}" />
 
 <%-- 우편번호 찾기 팝업 --%>
 <%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
@@ -17,6 +20,7 @@
     <h2 class="h2_tit oh lh30">
       <s:message code="myInfo.title1" />
       <div class="txtIn fr">
+        <button class="btn_skyblue" onclick="envSetting()"><s:message code="myInfo.myInfo.envSetting" /></button>
         <button class="btn_skyblue" onclick="saveMyInfo()"><s:message code="cmm.save" /></button>
       </div>
     </h2>
@@ -301,6 +305,11 @@ function saveMyInfo(){
 
 }
 
+// 환경설정 팝업
+function envSetting(){
+  openEnvSettingLayer($("#hqOfficeCd").val(), $("#hqOfficeNm").val());
+}
+
 gridIds.forEach(function( gridId ){
   var selector = "#" + gridId,
       gridSelector = selector + "Grid",
@@ -361,3 +370,12 @@ gridIds.forEach(function( gridId ){
   });
 });
 </script>
+
+<%-- 환경설정 --%>
+<c:import url="/WEB-INF/view/store/hq/hqManage/config.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="orgnFg" value="${orgnFg}"/>
+  <c:param name="orgnCd" value="${orgnCd}"/>
+  <c:param name="orgnNm" value="${orgnNm}"/>
+</c:import>

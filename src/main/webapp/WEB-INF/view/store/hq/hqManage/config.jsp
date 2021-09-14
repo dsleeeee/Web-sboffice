@@ -6,7 +6,7 @@
 <div id="envDim" class="fullDimmed" style="display:none;"></div>
 <div id="envLayer" class="layer" style="display:none;">
   <div class="layer_inner">
-    <div class="title w65">
+    <div class="title w80">
       <p id="popTitle" class="tit"></p>
       <a href="#" class="btn_close"></a>
       <div class="con">
@@ -48,11 +48,24 @@ function openEnvLayer(){
   getConfigList();
 }
 
+<%-- 환경설정 팝업 오픈(본사가 기초관리 - 내정보관리 - 내정보관리에서 오픈) --%>
+var hqOfficeCd = "";
+function openEnvSettingLayer(cd, nm){
+  var envTitle = "[" + cd + "] "+ nm;
+  $(".tabType1").hide();
+  $("#envLayer").show();
+  hqOfficeCd = cd;
+  getConfigList();
+}
+
 <%-- 환경설정 테이블 --%>
 function getConfigList(){
   var param = {};
-  param.hqOfficeCd = selectedHq.hqOfficeCd;
-
+  if($(".tabType1").is(':visible')){
+    param.hqOfficeCd = selectedHq.hqOfficeCd;
+  } else {
+    param.hqOfficeCd = hqOfficeCd;
+  }
   var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 
   $.postJSON("/store/hq/hqManage/config/getConfiglist.sb", param, function(result) {
@@ -269,7 +282,12 @@ $("#envLayer #btnSave").click(function(){
     for(var i=0; i<arrChg.length; i++) {
       var x = arrChg[i];
       var param = {};
-      param.hqOfficeCd  = selectedHq.hqOfficeCd;
+
+      if($(".tabType1").is(':visible')){ 
+        param.hqOfficeCd = selectedHq.hqOfficeCd;
+      } else {
+        param.hqOfficeCd = hqOfficeCd;
+      }
       param.status      = objStatus[x].value;
       param.envstCd     = objEnvstCd[x].value;
       param.envstNm     = objEnvstNm[x].value;
