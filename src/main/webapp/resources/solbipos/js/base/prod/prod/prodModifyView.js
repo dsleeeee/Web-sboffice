@@ -111,7 +111,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.sideProdYn = "N"; // sideProdYn
             params.pointSaveYn = "Y"; // 포인트적립여부
             params.sdattrClassCd = ""; // 속성
-            params.sdselGrpCd = ""; // 선택매뉴
+            params.sdselGrpNm = ""; // 선택매뉴명
+            params.sdselGrpCd = ""; // 선택매뉴코드
             // 상품발주정보
             params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
             params.splyUprcUseYn = "Y"; // 공급단가사용여부
@@ -639,7 +640,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     }
 
                     // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
-                    vSetProdFg = $scope.prodModifyInfo.setProdFg
+                    vSetProdFg = $scope.prodModifyInfo.setProdFg;
+
+                    // 사이드상품여부가 '미사용'인 경우 선택메뉴 값이 있더라도 빈칸으로 셋팅
+                    if($scope.prodModifyInfo.sideProdYn === 'N'){
+                        $scope.prodModifyInfo.sdselGrpNm = "";
+                        $scope.prodModifyInfo.sdselGrpCd = "";
+                    }
                 }
             );
 
@@ -814,12 +821,22 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         prodImageDelFg = null;
     };
 
-    // 회원 포인트 조회 팝업
+    // 거래처 팝업
     $scope.popUpVendrCd = function() {
         var params = $scope.prodModifyInfo;
         $scope.setProdModifyInfo(params);
 
         $scope.wjSearchProdVendrLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 선택메뉴 팝업
+    $scope.popUpSdselGrp = function() {
+        var params = $scope.prodModifyInfo;
+        $scope.setProdModifyInfo(params);
+
+        $scope.wjSearchSdselGrpLayer.show(true);
+        $scope._broadcast('searchSdselGrpCtrl');
         event.preventDefault();
     };
 

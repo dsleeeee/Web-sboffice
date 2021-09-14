@@ -615,4 +615,26 @@ public class ProdController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 선택메뉴 조회 팝업
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 09. 13.
+     */
+    @RequestMapping(value = "/getSearchSdselGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchSdselGrpList(ProdVO prodVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchSdselGrpList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
 }

@@ -105,4 +105,7 @@ public interface ProdService {
 
     /** 세트구성상품 팝업 - 상품 등록/수정/삭제 */
     int saveSetConfigProd(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택메뉴 조회 팝업 */
+    List<DefaultMap<String>> getSearchSdselGrpList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }
