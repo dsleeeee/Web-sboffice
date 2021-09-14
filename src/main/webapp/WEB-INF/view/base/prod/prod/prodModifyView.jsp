@@ -453,7 +453,7 @@
               <%--사이드선택그룹코드(선택메뉴) --%>
               <th><s:message code="prod.sdselGrpCd"/></th>
               <td>
-                <div class="sb-select">
+                <%--<div class="sb-select">
                   <wj-combo-box id="_sdselGrpCd" name="sdselGrpCd"
                                 ng-model="prodModifyInfo.sdselGrpCd"
                                 items-source="_getComboData('sdselGrpCdComboData')"
@@ -462,7 +462,10 @@
                                 is-editable="false"
                                 initialized="_initComboBox(s)">
                   </wj-combo-box>
-                </div>
+                </div>--%>
+                  <input type="text" class="sb-input w70" id="srchSdselGrpNm" ng-model="prodModifyInfo.sdselGrpNm" ng-click="popUpSdselGrp()" style="float: left;"
+                         placeholder="<s:message code="prod.sdselGrpCd" /> 선택" readonly/>
+                  <input type="hidden" id="_sdselGrpCd" name="sdselGrpCd" ng-model="prodModifyInfo.sdselGrpCd" disabled />
               </td>
             </tr>
           </tbody>
@@ -735,7 +738,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210827.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20210827.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -753,4 +756,10 @@
 
 <%-- 세트구성상품 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/setConfigProdRegist.jsp">
+</c:import>
+
+<%-- 선택메뉴 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/searchSdselGrp.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

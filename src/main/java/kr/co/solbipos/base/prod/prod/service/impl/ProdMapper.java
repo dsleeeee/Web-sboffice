@@ -231,4 +231,7 @@ public interface ProdMapper {
 
     /** 세트구성상품 팝업 - 구성내역 상품삭제 */
     int deleteSetConfigProd(ProdVO prodVO);
+
+    /** 선택메뉴 조회 팝업 */
+    List<DefaultMap<String>> getSearchSdselGrpList(ProdVO prodVO);
 }

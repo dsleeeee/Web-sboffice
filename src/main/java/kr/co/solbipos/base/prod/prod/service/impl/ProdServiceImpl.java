@@ -1265,4 +1265,17 @@ public class ProdServiceImpl implements ProdService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+    /** 선택메뉴 조회 팝업 */
+    @Override
+    public List<DefaultMap<String>> getSearchSdselGrpList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getSearchSdselGrpList(prodVO);
+    }
 }
