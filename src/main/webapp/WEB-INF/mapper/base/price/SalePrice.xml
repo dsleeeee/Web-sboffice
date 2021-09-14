@@ -520,6 +520,7 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_SALE_PRICE_HISTORY
         PARAM    : salePriceVO
         COMMENTS : 매장 판매가 등록
+                   20210914 미사용 -> SalePriceMapper.modifyMsProdSalePrice 로 변경
     -->
     <select id="saveStoreSalePrice" statementType="CALLABLE"  parameterType="salePriceVO">
         /* USE : SalePriceMapper.saveStoreSalePrice */
@@ -535,41 +536,83 @@
             }
     </select>
 
-
     <!-- 전매장적용: 매장 판매가 등록 -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가를 일괄 변경한다.
+    -->
+    <insert id="modifyMsProdSalePrice"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.modifyMsProdSalePrice */
+        MERGE INTO TB_MS_PRODUCT_SALE_PRICE A
+        USING   (
+                    SELECT  A.STORE_CD
+                    ,       B.PROD_CD
+                    ,       B.SALE_PRC_FG
+                    ,       B.START_DATE
+                    ,       B.END_DATE
+                    ,       B.SALE_UPRC
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    ,       B.STIN_SALE_UPRC
+                    ,       B.DLVR_SALE_UPRC
+                    ,       B.PACK_SALE_UPRC
+                    FROM    TB_MS_STORE A
+                    ,       TB_HQ_PRODUCT_SALE_PRICE B
+                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     B.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     B.PROD_CD       =   #{prodCd}
+                    AND     B.SALE_PRC_FG   =   '1'
+                    AND     B.START_DATE    =   #{startDate}
+                ) B
+        ON      (           A.STORE_CD      =   B.STORE_CD
+                AND         A.PROD_CD       =   B.PROD_CD
+                AND         A.SALE_PRC_FG   =   B.SALE_PRC_FG
+                AND         A.START_DATE    =   B.START_DATE
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.END_DATE          =   B.END_DATE
+        ,       A.SALE_UPRC         =   B.SALE_UPRC
+        ,       A.STIN_SALE_UPRC    =   B.STIN_SALE_UPRC
+        ,       A.DLVR_SALE_UPRC    =   B.DLVR_SALE_UPRC
+        ,       A.PACK_SALE_UPRC    =   B.PACK_SALE_UPRC
+        ,       A.MOD_DT            =   B.MOD_DT
+        ,       A.MOD_ID            =   B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.PROD_CD
+        ,       A.SALE_PRC_FG
+        ,       A.START_DATE
+        ,       A.END_DATE
+        ,       A.SALE_UPRC
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.STIN_SALE_UPRC
+        ,       A.DLVR_SALE_UPRC
+        ,       A.PACK_SALE_UPRC
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.PROD_CD
+        ,       B.SALE_PRC_FG
+        ,       B.START_DATE
+        ,       B.END_DATE
+        ,       B.SALE_UPRC
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.STIN_SALE_UPRC
+        ,       B.DLVR_SALE_UPRC
+        ,       B.PACK_SALE_UPRC
+        )
+    </insert>
 
 </mapper>

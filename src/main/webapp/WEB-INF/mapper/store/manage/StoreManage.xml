@@ -1953,6 +1953,9 @@
             SET
             END_DATE = B.END_DATE,
             SALE_UPRC = B.SALE_UPRC,
+            STIN_SALE_UPRC = B.STIN_SALE_UPRC,
+            DLVR_SALE_UPRC = B.DLVR_SALE_UPRC,
+            PACK_SALE_UPRC = B.PACK_SALE_UPRC,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID
         WHEN NOT MATCHED THEN
@@ -2027,6 +2030,9 @@
             SET
             END_DATE = B.END_DATE,
             SALE_UPRC = B.SALE_UPRC,
+            STIN_SALE_UPRC = B.STIN_SALE_UPRC,
+            DLVR_SALE_UPRC = B.DLVR_SALE_UPRC,
+            PACK_SALE_UPRC = B.PACK_SALE_UPRC,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID
         WHEN NOT MATCHED THEN
