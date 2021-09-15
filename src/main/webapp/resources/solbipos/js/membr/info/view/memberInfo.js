@@ -463,6 +463,8 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     // <-- 엑셀다운로드 호출 -->
     $scope.excelDownload = function(){
         var params       = {};
+        params.excelGubun = 'C';
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
             return false;
@@ -471,6 +473,20 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         $scope._broadcast('memberExcelCtrl', params);
     };
     // <-- //엑셀다운로드 호출 -->
+
+    // <-- 전체 엑셀다운로드 호출 -->
+    $scope.excelDownloadTotal = function(){
+        var params       = {};
+        params.excelGubun = 'T';
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope._broadcast('memberExcelCtrl', params);
+    };
+    // <-- //전체 엑셀다운로드 호출 -->
 
     $scope.$watch('newMemberYn', function (val) {
         if(val === true ){
@@ -692,12 +708,14 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // <-- 검색 호출 -->
     $scope.$on("memberExcelCtrl", function(event, data) {
-        $scope.getMemberListExcel();
+        $scope.getMemberListExcel(data);
         event.preventDefault();
     });
 
-    $scope.getMemberListExcel = function(){
+    $scope.getMemberListExcel = function(data){
         var params = {};
+        params.excelGubun = data.excelGubun;
+
         params.periodType = $scope.periodType;
         params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
         params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
@@ -745,6 +763,13 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                 return false;
             }
 
+            var excelGubun;
+            if(data.excelGubun == 'C'){
+                excelGubun = '(조회조건)_';
+            } else if(data.excelGubun == 'T'){
+                excelGubun = '(전체)_';
+            }
+
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
             $timeout(function()	{
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.excelFlex,
@@ -755,7 +780,7 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                             return column.visible;
                         }
                     },
-                    '회원정보_'+getToday()+'.xlsx',
+                    '회원정보_' + excelGubun +getToday()+'.xlsx',
                     function () {
                         $timeout(function () {
                             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기

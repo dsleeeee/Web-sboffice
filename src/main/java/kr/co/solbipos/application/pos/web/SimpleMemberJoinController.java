@@ -272,7 +272,12 @@ public class SimpleMemberJoinController {
                 model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
                 // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
-                String sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"));
+                String sideEnvstVal;
+                if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) { // 본사는 해당옵션의 제약X
+                    sideEnvstVal = "0";
+                } else {
+                    sideEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"));
+                }
                 model.addAttribute("sideEnvstVal", sideEnvstVal);
 
                 model.addAttribute("startDate", sessionInfoVO.getStartDate());

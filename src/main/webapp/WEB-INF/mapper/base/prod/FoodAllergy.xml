@@ -246,8 +246,8 @@
 
     <!-- 알레르기-상품 조회 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT_ALGI_PROD, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_SALE_PRICE_V99,
-                   TB_MS_PRODUCT_ALGI_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_SALE_PRICE_V99
+        TABLE    : TB_HQ_PRODUCT_ALGI_PROD, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_SALE_PRICE_V99 -> TB_HQ_PRODUCT_SALE_PRICE_V01,
+                   TB_MS_PRODUCT_ALGI_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_SALE_PRICE_V99 -> TB_MS_PRODUCT_SALE_PRICE_V01
         COMMENTS : [본사-식품안전]재료/알러지-상품맵핑정보, [본사]상품, [본사]상품_분류,
                    [매장-식품안전]재료/알러지-상품맵핑정보, [매장]상품, [매장]상품_분류
     -->
@@ -260,7 +260,7 @@
                 SUBSTR(thpc_p.PATH_NM, 2) AS PATH_NM,
                 thpap.PROD_CD,
                 thp.PROD_NM,
-                NVL(thpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                NVL(v01.SALE_UPRC, 0) AS SALE_UPRC
                 FROM TB_HQ_PRODUCT_ALGI_PROD thpap,
                 TB_HQ_PRODUCT thp,
                 (
@@ -275,7 +275,7 @@
                     START WITH thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
                     CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
                 ) thpc_p,
-                TB_HQ_PRODUCT_SALE_PRICE_V99 thpspv99 --view
+                TB_HQ_PRODUCT_SALE_PRICE_V01 v01 --view
                 WHERE 1=1
                 AND thpap.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpap.PROD_CD = thp.PROD_CD
@@ -283,11 +283,10 @@
                 AND thpc_p.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpap.HQ_OFFICE_CD = #{membrOrgnCd}
                 AND thpap.RECIPES_CD = #{recipesCd}
-                AND thpspv99.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpspv99.PROD_CD = thp.PROD_CD
+                AND v01.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND v01.PROD_CD = thp.PROD_CD
                 <![CDATA[
-                    AND thpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND thpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
                 ORDER BY thpap.PROD_CD
             </when>
@@ -297,7 +296,7 @@
                 SUBSTR(tmpc_p.PATH_NM, 2) AS PATH_NM,
                 tmpap.PROD_CD,
                 tmp.PROD_NM,
-                NVL(tmpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                NVL(v01.SALE_UPRC, 0) AS SALE_UPRC
                 FROM TB_MS_PRODUCT_ALGI_PROD tmpap,
                 TB_MS_PRODUCT tmp,
                 (
@@ -311,7 +310,7 @@
                     START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
                     CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
                 ) tmpc_p,
-                TB_MS_PRODUCT_SALE_PRICE_V99 tmpspv99 --view
+                TB_MS_PRODUCT_SALE_PRICE_V01 v01 --view
                 WHERE 1=1
                 AND tmpap.STORE_CD = tmp.STORE_CD
                 AND tmpap.PROD_CD = tmp.PROD_CD
@@ -319,11 +318,10 @@
                 AND tmpc_p.PROD_CLASS_CD = tmp.PROD_CLASS_CD
                 AND tmpap.STORE_CD = #{storeCd}
                 AND tmpap.RECIPES_CD = #{recipesCd}
-                AND tmpspv99.STORE_CD = tmp.STORE_CD
-                AND tmpspv99.PROD_CD = tmp.PROD_CD
+                AND v01.STORE_CD = tmp.STORE_CD
+                AND v01.PROD_CD = tmp.PROD_CD
                 <![CDATA[
-                    AND tmpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
                 ORDER BY tmpap.PROD_CD
             </when>
@@ -332,8 +330,8 @@
 
     <!-- 알레르기-상품 조회 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_ALGI_PROD, TB_HQ_PRODUCT_SALE_PRICE_V99,
-                   TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_ALGI_PROD, TB_MS_PRODUCT_SALE_PRICE_V99
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_ALGI_PROD, TB_HQ_PRODUCT_SALE_PRICE_V99 -> TB_HQ_PRODUCT_SALE_PRICE_V01,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_ALGI_PROD, TB_MS_PRODUCT_SALE_PRICE_V99 -> TB_MS_PRODUCT_SALE_PRICE_V01
         COMMENTS : [본사]상품, [본사]상품_분류, [본사-식품안전]재료/알러지-상품맵핑정보,
                    [매장]상품, [매장]상품_분류, [매장-식품안전]재료/알러지-상품맵핑정보
     -->
@@ -346,7 +344,7 @@
                 SUBSTR(thpc_p.PATH_NM, 2) AS PATH_NM,
                 thp.PROD_CD,
                 thp.PROD_NM,
-                NVL(thpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                NVL(v01.SALE_UPRC, 0) AS SALE_UPRC
                 FROM TB_HQ_PRODUCT thp,
                 TB_HQ_PRODUCT_CLASS thpc,
                 (
@@ -360,7 +358,7 @@
                     START WITH thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
                     CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
                 ) thpc_p,
-                TB_HQ_PRODUCT_SALE_PRICE_V99 thpspv99 --view
+                TB_HQ_PRODUCT_SALE_PRICE_V01 v01 --view
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{membrOrgnCd}
                 <if test="prodCd != null and prodCd != ''">
@@ -378,11 +376,10 @@
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpc_p.PROD_CLASS_CD = thpc.PROD_CLASS_CD
-                AND thpspv99.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpspv99.PROD_CD = thp.PROD_CD
+                AND v01.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND v01.PROD_CD = thp.PROD_CD
                 <![CDATA[
-                    AND thpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND thpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
                 AND NOT EXISTS
                 (
@@ -401,7 +398,7 @@
                 SUBSTR(tmpc_p.PATH_NM, 2) AS PATH_NM,
                 tmp.PROD_CD,
                 tmp.PROD_NM,
-                NVL(tmpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                NVL(v01.SALE_UPRC, 0) AS SALE_UPRC
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_PRODUCT_CLASS tmpc,
                 (
@@ -414,7 +411,7 @@
                     START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
                     CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
                 ) tmpc_p,
-                TB_MS_PRODUCT_SALE_PRICE_V99 tmpspv99 --view
+                TB_MS_PRODUCT_SALE_PRICE_V01 v01 --view
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test="prodCd != null and prodCd != ''">
@@ -429,11 +426,10 @@
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
                 AND tmpc_p.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
-                AND tmpspv99.STORE_CD = tmp.STORE_CD
-                AND tmpspv99.PROD_CD = tmp.PROD_CD
+                AND v01.STORE_CD = tmp.STORE_CD
+                AND v01.PROD_CD = tmp.PROD_CD
                 <![CDATA[
-                    AND tmpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
                 AND NOT EXISTS
                 (

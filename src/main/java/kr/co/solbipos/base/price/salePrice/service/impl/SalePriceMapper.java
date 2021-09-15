@@ -59,6 +59,9 @@ public interface SalePriceMapper {
     /** 본사 판매가 저장 */
     int modifyHqProdSalePrice(SalePriceVO salePriceVO);
 
+    /** 전매장 적용 판매가 저장 */
+    int modifyMsProdSalePrice(SalePriceVO salePriceVO);
+
     /** 매장 판매가 등록 */
     String saveStoreSalePrice(SalePriceVO salePriceVO);
 }

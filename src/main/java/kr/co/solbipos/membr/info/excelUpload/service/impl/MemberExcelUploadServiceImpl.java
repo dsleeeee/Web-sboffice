@@ -87,7 +87,9 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
             if(memberExcelUploadVO.getWeddingYn() == WeddingYn.N) {
                 memberExcelUploadVO.setWeddingday(null);
             } else {
-                memberExcelUploadVO.setWeddingday(memberExcelUploadVO.getWeddingday().replaceAll("-",""));
+                if(memberExcelUploadVO.getWeddingday() != null || "".equals(memberExcelUploadVO.getWeddingday()) ) {
+                    memberExcelUploadVO.setWeddingday(memberExcelUploadVO.getWeddingday().replaceAll("-", ""));
+                }
             }
             memberExcelUploadVO.setRegDt(dt);
             memberExcelUploadVO.setRegId(sessionInfoVO.getUserId());

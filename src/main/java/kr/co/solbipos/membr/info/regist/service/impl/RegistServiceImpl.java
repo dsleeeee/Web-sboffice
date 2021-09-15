@@ -164,6 +164,42 @@ public class RegistServiceImpl implements RegistService {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        if (registVO.getExcelGubun().equals("T")) { // 전체 엑셀다운로드시(T) 조회조건 날림
+            registVO.setPeriodType(null);
+            registVO.setPeriodStartDate(null);
+            registVO.setPeriodEndDate(null);
+            registVO.setAnvType(null);
+            registVO.setAnvStartDate(null);
+            registVO.setAnvEndDate(null);
+            registVO.setStartSaveSale(null);
+            registVO.setEndSaveSale(null);
+            registVO.setStartAvablPoint(null);
+            registVO.setEndAvablPoint(null);
+            registVO.setShortNo(null);
+            registVO.setWeddingYn(null);
+            registVO.setPhoneNo(null);
+            registVO.setMembrClassCd(null);
+            registVO.setMembrNo(null);
+            registVO.setMembrNm(null);
+            registVO.setMembrEngNm(null);
+            registVO.setStoreMembr(null);
+            registVO.setVisitStoreMembr(null);
+            registVO.setRegUseStoreCds(null);
+            registVO.setRegUseStoreCd(null);
+            registVO.setRegStoreCds(null);
+            registVO.setRegStoreCd(null);
+            registVO.setTelNo(null);
+            registVO.setMembrCardNo(null);
+            registVO.setCstCardUseFg(null);
+            registVO.setEmailAddr(null);
+            registVO.setEmailRecvYn(null);
+            registVO.setSmsRecvYn(null);
+            registVO.setGendrFg(null);
+            registVO.setMemberSaleFg(null);
+            registVO.setMemberPointFg(null);
+            registVO.setUseYn(null);
+        }
+
         return mapper.getMemberListExcel(registVO);
     }
 
@@ -466,6 +502,42 @@ public class RegistServiceImpl implements RegistService {
         registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         return mapper.getCardList(registVO);
+    }
+
+    /**
+     *  회원명 중복 체크
+     */
+    @Override
+    public int getMemberNmCount(RegistVO registVO, SessionInfoVO sessionInfoVO){
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        int result = mapper.getMemberNmCount(registVO);
+        return result;
+    }
+
+    /**
+     *  전화번호 중복 체크
+     */
+    @Override
+    public int getMemberTelNoCount(RegistVO registVO, SessionInfoVO sessionInfoVO){
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        int result = mapper.getMemberTelNoCount(registVO);
+        return result;
     }
 
     /**

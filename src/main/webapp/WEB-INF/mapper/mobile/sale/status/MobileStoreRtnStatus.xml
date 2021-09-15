@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileStoreRtnStatus.xml
+    모바일 매장매출 > 반품현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.09.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.storeRtnStatus.service.impl.MobileStoreRtnStatusMapper">
+
+    <!-- 반품현황 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE
+        COMMENTS : 모바일용 반품현황 조회
+    -->
+    <select id="getMobileStoreRtnStatusDtlList" parameterType="MobileStoreRtnStatusVO" resultType="DefaultMap">
+        /* MobileStoreRtnStatusMapper.getMobileStoreRtnStatusDtlList */
+        SELECT 	'[' || tsdt.STORE_CD || ']' || tms.STORE_NM AS STORE,
+                tsdt.STORE_CD,
+                tms.STORE_NM,
+                tsdt.SALE_DATE,
+                tsdt.RTN_REAL_SALE_AMT,
+                tsdt.RTN_SALE_CNT
+        FROM 	TB_SL_DAILY_TOTAL tsdt,
+                TB_MS_STORE tms
+        WHERE	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND		tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND 	tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
+        AND 	tms.STORE_CD = tsdt.STORE_CD
+        ORDER BY tsdt.STORE_CD, tms.STORE_NM, tsdt.SALE_DATE
+    </select>
+
+</mapper>

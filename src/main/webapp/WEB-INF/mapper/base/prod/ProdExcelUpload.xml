@@ -414,7 +414,7 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT (CASE WHEN COUNT(PROD_CLASS_CD) = '0' THEN '' ELSE PROD_CLASS_CD END) AS PROD_CLASS_CD
+                SELECT MAX((CASE WHEN COUNT(PROD_CLASS_CD) = '0' THEN '' ELSE PROD_CLASS_CD END)) AS PROD_CLASS_CD
                 FROM
                 (
                     SELECT
@@ -433,7 +433,7 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT (CASE WHEN COUNT(PROD_CLASS_CD) = '0' THEN '' ELSE PROD_CLASS_CD END) AS PROD_CLASS_CD
+                SELECT MAX((CASE WHEN COUNT(PROD_CLASS_CD) = '0' THEN '' ELSE PROD_CLASS_CD END)) AS PROD_CLASS_CD
                 FROM
                 (
                     SELECT

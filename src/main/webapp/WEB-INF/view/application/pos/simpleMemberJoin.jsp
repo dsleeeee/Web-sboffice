@@ -136,11 +136,13 @@
             }
 
             <%-- 생년월일을 입력해주세요. --%>
+            /* 20210910 생년월일 없이 저장 허용
             var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.text'/>";
             if($("#birthday").val() === "") {
                 s_alert.popOk(msg, function(){ $("#birthday").focus(); });
                 return false;
             }
+            */
 
             <%-- 생년월일은 숫자만 입력할 수 있습니다. --%>
             var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.number'/>";
@@ -150,8 +152,9 @@
             }
 
             <%-- 생년월일을 정확히 입력해주세요. --%>
+            /* 20210910 생년월일 없이 저장 허용 */
             var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='application.pos.simpleMemberJoin.validCheck'/>";
-            if($("#birthday").val().length < 8) {
+            if($("#birthday").val() !== "" && $("#birthday").val().length < 8) {
                 s_alert.popOk(msg, function(){ $("#birthday").select(); });
                 return false;
             }

@@ -51,6 +51,8 @@ public class ProdVO extends PageVO {
     private String sdattrClassCd;
     /** 사이드선택그룹코드 */
     private String sdselGrpCd;
+    /** 사이드선택그룹명 */
+    private String sdselGrpNm;
     /** 포인트적립여부 */
     private String pointSaveYn;
     /** 상품할인구분 */
@@ -401,6 +403,14 @@ public class ProdVO extends PageVO {
      */
     public void setSdselGrpCd(String sdselGrpCd) {
         this.sdselGrpCd = sdselGrpCd;
+    }
+
+    public String getSdselGrpNm() {
+        return sdselGrpNm;
+    }
+
+    public void setSdselGrpNm(String sdselGrpNm) {
+        this.sdselGrpNm = sdselGrpNm;
     }
 
     /**

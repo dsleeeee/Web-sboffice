@@ -392,6 +392,7 @@
                 thp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
                 thp.SDATTR_CLASS_CD,    -- 사이드속성분류코드
                 thp.SDSEL_GRP_CD,       -- 사이드선택그룹코드
+                thpsg.SDSEL_GRP_NM,
                 thp.POINT_SAVE_YN,
                 thp.PROD_DC_FG,
                 thp.VAT_FG,                                     -- 과세여부
@@ -480,6 +481,10 @@
                 ) thvp ON
                 thp.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
                 AND thp.PROD_CD = thvp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SDSEL_GROUP thpsg ON
+                thp.HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD
+                AND thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD
+                AND thpsg.USE_YN = 'Y'
                 WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thp.PROD_CD = #{prodCd}
             </when>
@@ -498,6 +503,7 @@
                 tmp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
                 tmp.SDATTR_CLASS_CD,
                 tmp.SDSEL_GRP_CD,
+                tmpsg.SDSEL_GRP_NM,
                 tmp.POINT_SAVE_YN,
                 tmp.PROD_DC_FG,
                 tmp.VAT_FG,                                     -- 과세여부
@@ -586,6 +592,10 @@
                 ) tmvp ON
                 tmp.STORE_CD = tmvp.STORE_CD
                 AND tmp.PROD_CD = tmvp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SDSEL_GROUP tmpsg ON
+                tmp.STORE_CD = tmpsg.STORE_CD
+                AND tmp.SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD
+                AND tmpsg.USE_YN = 'Y'
                 WHERE tmp.STORE_CD = #{storeCd}
                 AND tmp.PROD_CD = #{prodCd}
             </when>
@@ -987,8 +997,7 @@
                     thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thpsp.PROD_CD = #{prodCd}
                 AND thpsp.SALE_PRC_FG = '1'
-                AND thpsp.START_DATE <= SYSDATE
-                AND thpsp.end_date >= SYSDATE
+                AND thpsp.START_DATE = #{startDate}
                 )
                 WHEN MATCHED THEN
                 UPDATE
@@ -1040,8 +1049,7 @@
                     thpsp.STORE_CD = #{storeCd}
                 AND thpsp.PROD_CD = #{prodCd}
                 AND thpsp.SALE_PRC_FG = '1'
-                AND thpsp.START_DATE <= SYSDATE
-                AND thpsp.end_date >= SYSDATE
+                AND thpsp.START_DATE = #{startDate}
                 )
                 WHEN MATCHED THEN
                 UPDATE
@@ -1617,16 +1625,21 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_SALE_PRICE_HISTORY
         PARAM    : prodVO
         COMMENTS : 상품판매가 본사통제여부가 본사인 경우, 본사 판매가 등록시 매장 판매가 등록
+                   20210914 SP_HQ_PRODUCT_SALE_PRICE_I -> SP_HQ_PRODUCT_SALE_PRICE_I2 변경
     -->
     <select id="saveStoreSalePrice" statementType="CALLABLE"  parameterType="prodVO">
         /* USE : ProdMapper.saveStoreSalePrice */
         {
-          CALL PKG_HQ_PRODUCT_SALE_PRICE.SP_HQ_PRODUCT_SALE_PRICE_I
+          CALL PKG_HQ_PRODUCT_SALE_PRICE.SP_HQ_PRODUCT_SALE_PRICE_I2
           (
             #{hqOfficeCd},
             #{prodCd},
             #{storeCd},
             #{workMode},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
             #{result, mode=OUT, jdbcType=VARCHAR}
           )
         }
@@ -3903,5 +3916,39 @@
             </when>
         </choose>
     </delete>
+
+    <!-- 선택메뉴 조회 팝업 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD
+        PARAM    : prodVO
+        COMMENTS : 구성내역 상품을 삭제한다.
+    -->
+    <select id="getSearchSdselGrpList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getSearchSdselGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT thpsg.SDSEL_GRP_CD,
+                        thpsg.SDSEL_GRP_NM
+                  FROM TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                 WHERE thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thpsg.USE_YN = 'Y'
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                   AND thpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT tmpsg.SDSEL_GRP_CD,
+                        tmpsg.SDSEL_GRP_NM
+                  FROM TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                 WHERE tmpsg.STORE_CD = #{storeCd}
+                   AND tmpsg.USE_YN = 'Y'
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND tmpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+            </when>
+        </choose>
+    </select>
 
 </mapper>

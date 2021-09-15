@@ -129,7 +129,7 @@ public class SalePriceServiceImpl implements SalePriceService {
 
         return salePriceMapper.getStoreSalePriceList(salePriceVO);
     }
-    
+
     /** 본사 가격정보 조회 */
     @Override
     public List<DefaultMap<String>> getHqSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
@@ -144,6 +144,7 @@ public class SalePriceServiceImpl implements SalePriceService {
     public int saveHqProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
+        int result2 = 0;
         String currentDate = currentDateString();
         String currentDt = currentDateTimeString();
 
@@ -166,13 +167,14 @@ public class SalePriceServiceImpl implements SalePriceService {
             }
             // todo 추후 최초 판매가도 히스토리 등록할 경우에 이 주석 해제하여 사용
 
-            // 매장 판매가 변경
+            // 본사 판매가 변경
             result = salePriceMapper.modifyHqProdSalePrice(salePriceVO);
 
             if(salePriceVO.getApplyFg().equals("true")){
                 salePriceVO.setWorkMode(WorkModeFg.MOD_PROD);
-                // 매장에 수정정보 내려줌
-                String storeSalePriceReulst = salePriceMapper.saveStoreSalePrice(salePriceVO);
+                //전매장 적용, 상품이 있으면 머지 업데이트 처리
+                //String storeSalePriceReulst = salePriceMapper.saveStoreSalePrice(salePriceVO);
+                result2 = salePriceMapper.modifyMsProdSalePrice(salePriceVO);
             }
         }
         return result;

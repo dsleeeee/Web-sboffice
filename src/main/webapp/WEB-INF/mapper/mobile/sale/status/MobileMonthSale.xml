@@ -112,13 +112,13 @@
     <select id="getMobileMonthSalePayList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSalePayList */
         SELECT
-        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = PAY_CD) AS NM,
+        CASE WHEN PAY_CD = '021' THEN '현금영수증 ' ELSE (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = PAY_CD) END AS NM,
         REAL_SALE_AMT,
         AMT_RATE
         FROM
         (
             SELECT
-            SUBSTR(A.COL_NM, -2) AS PAY_CD,
+            CASE WHEN A.COL_NM = 'PAY_AMT_021' THEN SUBSTR(A.COL_NM, -3) ELSE SUBSTR(A.COL_NM, -2) END AS PAY_CD,
             A.COL_VAL AS REAL_SALE_AMT,
             DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.COL_VAL / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
             FROM
@@ -129,7 +129,7 @@
                 FROM
                 (
                     SELECT
-                    SUM(tsmt.PAY_AMT_01) AS PAY_AMT_01, SUM(tsmt.PAY_AMT_02) AS PAY_AMT_02, SUM(tsmt.PAY_AMT_03) AS PAY_AMT_03, SUM(tsmt.PAY_AMT_04) AS PAY_AMT_04, SUM(tsmt.PAY_AMT_05) AS PAY_AMT_05,
+                    SUM(tsmt.PAY_AMT_01) AS PAY_AMT_01, /*SUM(tsmt.PAY_AMT_02) AS PAY_AMT_02, */SUM(tsmt.PAY_AMT_03) AS PAY_AMT_03, SUM(tsmt.PAY_AMT_04) AS PAY_AMT_04, SUM(tsmt.PAY_AMT_05) AS PAY_AMT_05,
                     SUM(tsmt.PAY_AMT_06) AS PAY_AMT_06, SUM(tsmt.PAY_AMT_07) AS PAY_AMT_07, SUM(tsmt.PAY_AMT_08) AS PAY_AMT_08, SUM(tsmt.PAY_AMT_09) AS PAY_AMT_09, SUM(tsmt.PAY_AMT_10) AS PAY_AMT_10,
                     SUM(tsmt.PAY_AMT_11) AS PAY_AMT_11, SUM(tsmt.PAY_AMT_12) AS PAY_AMT_12, SUM(tsmt.PAY_AMT_13) AS PAY_AMT_13, SUM(tsmt.PAY_AMT_14) AS PAY_AMT_14, SUM(tsmt.PAY_AMT_15) AS PAY_AMT_15,
                     SUM(tsmt.PAY_AMT_16) AS PAY_AMT_16, SUM(tsmt.PAY_AMT_17) AS PAY_AMT_17, SUM(tsmt.PAY_AMT_18) AS PAY_AMT_18, SUM(tsmt.PAY_AMT_19) AS PAY_AMT_19
@@ -151,12 +151,43 @@
                     FOR COL_NM
                     IN
                     (
-                        PAY_AMT_01, PAY_AMT_02, PAY_AMT_03, PAY_AMT_04, PAY_AMT_05,
+                        PAY_AMT_01, /*PAY_AMT_02, */PAY_AMT_03, PAY_AMT_04, PAY_AMT_05,
                         PAY_AMT_06, PAY_AMT_07, PAY_AMT_08, PAY_AMT_09, PAY_AMT_10,
                         PAY_AMT_11, PAY_AMT_12, PAY_AMT_13, PAY_AMT_14, PAY_AMT_15,
                         PAY_AMT_16, PAY_AMT_17, PAY_AMT_18, PAY_AMT_19
                     )
                 )
+            UNION
+            SELECT
+            'PAY_AMT_02' AS COL_NM,
+            SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS COL_VAL
+            FROM TB_SL_SALE_PAY_CASH tsspc
+            WHERE 1=1
+            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsspc.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND tsspc.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+            UNION
+            SELECT
+            'PAY_AMT_021' AS COL_NM,
+            SUM(tsspc.SALE_AMT) AS COL_VAL
+            FROM TB_SL_SALE_PAY_CASH tsspc
+            WHERE 1=1
+            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsspc.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND tsspc.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+            AND tsspc.APPR_PROC_FG IN ('1','2','4')
             ) A,
             (
                 SELECT
@@ -174,7 +205,7 @@
                         #{item}
                     </foreach>
                 </if>
-                AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
             ) B
         )
         ORDER BY PAY_CD

@@ -94,16 +94,30 @@
          AND C.MULTISTORE_CD = (
                                     SELECT MULTISTORE_CD
                                       FROM (
-                                                SELECT MULTISTORE_CD,
-                                                        REGEXP_SUBSTR(MULTISTORE_USER_ID,'[^,]+', 1, ROWNUM) AS MULTISTORE_USER_ID
+                                                SELECT DISTINCT MULTISTORE_CD,
+                                                        REGEXP_SUBSTR(MULTISTORE_USER_ID,'[^,]+', 1, LEVEL) AS MULTISTORE_USER_ID
                                                   FROM (SELECT MULTISTORE_CD, MULTISTORE_USER_ID FROM TB_MS_MULTISTORE_HDR WHERE USE_YN = 'Y')
                                                CONNECT
-                                                     BY ROWNUM <![CDATA[<= ]]> LENGTH(REGEXP_REPLACE(MULTISTORE_USER_ID,'[^,]+')) + 1
+                                                     BY LEVEL <![CDATA[<= ]]> LENGTH(REGEXP_REPLACE(MULTISTORE_USER_ID,'[^,]+')) + 1
                                             )
                                      WHERE MULTISTORE_USER_ID = #{userId}
                                 )
        ORDER
           BY C.STORE_CD
+    </select>
+
+    <!-- 모바일 매출현황 - 매장조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : mobileProdSaleVO
+        COMMENTS : 모바일 매출현황 - 매장을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="mobileProdSaleVO" resultType="DefaultMap">
+        /* USE : MobileProdSaleMapper.getStoreList */
+        SELECT  STORE_CD,
+                STORE_NM
+        FROM    TB_MS_STORE
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
     </select>
 
 </mapper>

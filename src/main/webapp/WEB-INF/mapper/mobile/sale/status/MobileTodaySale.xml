@@ -162,7 +162,7 @@
         /* MobileTodaySaleMapper.getMobileTodaySalePayList */
         SELECT
         A.PAY_CD,
-        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) AS NM,
+        CASE WHEN A.PAY_CD = '021' THEN '현금영수증 ' ELSE (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) END AS NM,
         A.AMT_CNT,
         A.PAY_AMT AS REAL_SALE_AMT,
         DECODE(B.TOT_PAY_AMT, 0, 0, NVL(ROUND(A.PAY_AMT / B.TOT_PAY_AMT * 100, 2), 0)) AS AMT_RATE
@@ -183,8 +183,41 @@
                 </foreach>
             </if>
             AND tsshp.SALE_DATE = #{startDate}
+            AND tsshp.PAY_CD != '02'
             GROUP BY tsshp.PAY_CD
-            ORDER BY tsshp.PAY_CD
+            UNION
+            SELECT
+            '02' AS PAY_CD,
+            COUNT(CASE WHEN tsspc.APPR_PROC_FG = '3' THEN tsspc.BILL_NO END) AS AMT_CNT,
+            SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY_AMT
+            FROM TB_SL_SALE_PAY_CASH tsspc
+            WHERE 1=1
+            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsspc.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND tsspc.SALE_DATE = #{startDate}
+            UNION
+            SELECT
+            '021' AS PAY_CD,
+            COUNT(tsspc.BILL_NO) AS AMT_CNT,
+            SUM(tsspc.SALE_AMT) AS PAY_AMT
+            FROM TB_SL_SALE_PAY_CASH tsspc
+            WHERE 1=1
+            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsspc.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND tsspc.SALE_DATE = #{startDate}
+            AND tsspc.APPR_PROC_FG IN ('1','2','4')
         ) A,
         (
             SELECT

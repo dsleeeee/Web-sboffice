@@ -425,6 +425,46 @@ public class RegistController {
     }
 
     /**
+     * 회원명 중복체크
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/getMemberNmCount.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberNmCount(RegistVO registVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.getMemberNmCount(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 전화번호 중복체크
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/getMemberTelNoCount.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberTelNoCount(RegistVO registVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.getMemberTelNoCount(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
      * 카드정보 중복체크
      * @param registVO
      * @param request

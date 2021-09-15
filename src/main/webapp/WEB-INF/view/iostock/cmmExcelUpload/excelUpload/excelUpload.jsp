@@ -630,7 +630,7 @@
             }
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             $timeout(function () {
-                if ($scope.valChk(jsonData)) {
+                if ($scope.valChk(jsonData, scope.isCheckedMembr)) {
                     scope.data = new wijmo.collections.CollectionView(jsonData);
                 } else {
                     scope.data = new wijmo.collections.CollectionView(jsonData);
@@ -640,7 +640,7 @@
         };
 
         //회원 엑셀 값체크
-        $scope.valChk = function (jsonData) {
+        $scope.valChk = function (jsonData, isChecked) {
             $scope.totalRows = jsonData.length;
             var scope = agrid.getScope('memberExcelUploadCtrl');
             var failCnt = 0;
@@ -652,6 +652,34 @@
 
                 // 회원명(한글) 값 체크
                 if (nvl(item.membrNm, '') !== '') {
+                    if(isChecked) { // 중복체크(회원명, 전화번호, 카드번호)할 경우 검증
+                        // Grid 내에서의 회원명(한글) 중복체크
+                        var isDuplicateNmInGrid = false;
+                        for (var j = 0; j < $scope.totalRows; j++) {
+                            var itemj = jsonData[j];
+                            if (j != i && itemj.membrNm === item.membrNm) {
+                                isDuplicateNmInGrid = true;
+                                break;
+                            }
+                        }
+                        if (isDuplicateNmInGrid) {
+                            msg = messages["member.excel.nm.add.overlap"]; // 중복되는 회원명(한글)이 있습니다. 다시 확인해주세요.
+                            item.result = msg;
+                            failCnt++;
+                            continue;
+                        }
+                        // DB상의 회원명(한글) 중복체크
+                        var params = {};
+                        params.membrOrgnCd = '${sessionScope.sessionInfo.orgnCd}';
+                        params.membrNm = item.membrNm;
+                        if (isDuplicateMemberNm(params)) { // 회원명(한글) 중복체크
+                            msg = messages["member.excel.nm.add.overlap"]; // 중복되는 회원명(한글)이 있습니다. 다시 확인해주세요.
+                            item.result = msg;
+                            failCnt++;
+                            continue;
+                        }
+                    }
+
                     // 회원명(한글) 최대길이 체크
                     if (nvl(item.membrNm + '', '').getByteLengthForOracle() > 100) {
                         msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"]; // 회원명(한글)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 100 (영문:2byte, 한글:3byte)
@@ -721,32 +749,33 @@
 
                 // 회원카드번호
                 if (nvl(item.membrCardNo, '') !== '') {
-                    // Grid 내에서의 회원카드번호 중복체크
-                    var isDuplicateCardNoInGrid = false;
-                    for (var j = 0; j < $scope.totalRows; j++) {
-                        var itemj = jsonData[j];
-                        if (j != i && itemj.membrCardNo === item.membrCardNo) {
-                            isDuplicateCardNoInGrid = true;
-                            break;
+                    if(isChecked) { // 중복체크(회원명, 전화번호, 카드번호)할 경우 검증
+                        // Grid 내에서의 회원카드번호 중복체크
+                        var isDuplicateCardNoInGrid = false;
+                        for (var j = 0; j < $scope.totalRows; j++) {
+                            var itemj = jsonData[j];
+                            if (j != i && itemj.membrCardNo === item.membrCardNo) {
+                                isDuplicateCardNoInGrid = true;
+                                break;
+                            }
                         }
-                    }
-                    if (isDuplicateCardNoInGrid) {
-                        msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
-                        item.result = msg;
-                        failCnt++;
-                        continue;
-                    }
-
-                    // DB상의 회원카드번호 중복체크
-                    var params = {};
-                    params.membrOrgnCd = '${sessionScope.sessionInfo.orgnCd}';
-                    params.membrCardNo = item.membrCardNo;
-                    if (isDuplicateMemberCard(params)) { // 회원카드 중복체크
-                        // msg = messages["member.excel.membrCardNo"] + " : " + messages["member.excel.upload.duplicate.data"]; // 회원카드번호(이)가 중복되었습니다. 다시 확인하세요.
-                        msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
-                        item.result = msg;
-                        failCnt++;
-                        continue;
+                        if (isDuplicateCardNoInGrid) {
+                            msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
+                            item.result = msg;
+                            failCnt++;
+                            continue;
+                        }
+                        // DB상의 회원카드번호 중복체크
+                        var params = {};
+                        params.membrOrgnCd = '${sessionScope.sessionInfo.orgnCd}';
+                        params.membrCardNo = item.membrCardNo;
+                        if (isDuplicateMemberCard(params)) { // 회원카드 중복체크
+                            // msg = messages["member.excel.membrCardNo"] + " : " + messages["member.excel.upload.duplicate.data"]; // 회원카드번호(이)가 중복되었습니다. 다시 확인하세요.
+                            msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
+                            item.result = msg;
+                            failCnt++;
+                            continue;
+                        }
                     }
                     var numChkregexp = /[^A-za-z0-9]/g;
                     if (numChkregexp.test(item.membrCardNo)) {
@@ -821,6 +850,33 @@
 
                 // 전화번호
                 if (nvl(item.memberTelNo, '') !== '') {
+                    if(isChecked) { // 중복체크(회원명, 전화번호, 카드번호)할 경우 검증
+                        // Grid 내에서의 전화번호 중복체크
+                        var isDuplicateTelNoInGrid = false;
+                        for (var j = 0; j < $scope.totalRows; j++) {
+                            var itemj = jsonData[j];
+                            if (j != i && itemj.memberTelNo === item.memberTelNo) {
+                                isDuplicateTelNoInGrid = true;
+                                break;
+                            }
+                        }
+                        if (isDuplicateTelNoInGrid) {
+                            msg = messages["member.excel.telNo.add.overlap"]; // 중복되는 전화번호가 있습니다. 다시 확인해주세요.
+                            item.result = msg;
+                            failCnt++;
+                            continue;
+                        }
+                        // DB상의 전화번호 중복체크
+                        var params = {};
+                        params.membrOrgnCd = '${sessionScope.sessionInfo.orgnCd}';
+                        params.telNo = item.memberTelNo;
+                        if (isDuplicateMemberTelNo(params)) { // 전화번호 중복체크
+                            msg = messages["member.excel.telNo.add.overlap"]; // 중복되는 전화번호가 있습니다. 다시 확인해주세요.
+                            item.result = msg;
+                            failCnt++;
+                            continue;
+                        }
+                    }
                     var numChkexp = /[^0-9]/g;
                     if (numChkexp.test(nvl(item.memberTelNo, 0))) {
                         msg = messages["member.excel.telNo"] + messages["excelUpload.not.numberData"]; // 전화번호의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
@@ -1488,6 +1544,54 @@
 
     }])
     ;
+
+    // 회원명 중복체크
+    function isDuplicateMemberNm(params) {
+        var checked = false;
+        var url = "/membr/info/view/base/getMemberNmCount.sb";
+        // 가상로그인시 세션활용
+        if (document.getElementsByName("sessionId")[0]) {
+            url += '?sid=' + document.getElementsByName("sessionId")[0].value;
+        }
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: false,
+            dataType: "json",
+            url: url,
+            data: params,
+            success: function (result) {
+                if (result.data > 0) {
+                    checked = true;
+                }
+            }
+        });
+        return checked;
+    }
+
+    // 전화번호 중복체크
+    function isDuplicateMemberTelNo(params) {
+        var checked = false;
+        var url = "/membr/info/view/base/getMemberTelNoCount.sb";
+        // 가상로그인시 세션활용
+        if (document.getElementsByName("sessionId")[0]) {
+            url += '?sid=' + document.getElementsByName("sessionId")[0].value;
+        }
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: false,
+            dataType: "json",
+            url: url,
+            data: params,
+            success: function (result) {
+                if (result.data > 0) {
+                    checked = true;
+                }
+            }
+        });
+        return checked;
+    }
 
     // 회원카드번호 중복체크
     function isDuplicateMemberCard(params) {
