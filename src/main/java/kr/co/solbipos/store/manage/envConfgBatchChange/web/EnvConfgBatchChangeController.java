@@ -235,4 +235,73 @@ public class EnvConfgBatchChangeController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 기능키 조회 팝업 - 조회
+     *
+     * @param envConfgBatchChangeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.09.14
+     */
+    @RequestMapping(value = "/searchFnkey/getSearchFnkeyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = envConfgBatchChangeService.getSearchFnkeyList(envConfgBatchChangeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, envConfgBatchChangeVO);
+    }
+
+    /**
+     * 기능키명칭탭 - 조회
+     *
+     * @param envConfgBatchChangeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.09.14
+     */
+    @RequestMapping(value = "/envConfgBatchChangeFnkey/getEnvConfgBatchChangeFnkeyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEnvConfgBatchChangeFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = envConfgBatchChangeService.getEnvConfgBatchChangeFnkeyList(envConfgBatchChangeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, envConfgBatchChangeVO);
+    }
+
+    /**
+     * 기능키명칭탭 - 저장
+     *
+     * @param envConfgBatchChangeVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.09.15
+     */
+    @RequestMapping(value = "/envConfgBatchChangeFnkey/getEnvConfgBatchChangeFnkeySave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEnvConfgBatchChangeFnkeySave(@RequestBody EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, HttpServletRequest request,
+                                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = envConfgBatchChangeService.getEnvConfgBatchChangeFnkeySave(envConfgBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

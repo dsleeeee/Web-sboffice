@@ -465,4 +465,73 @@
             )
     </update>
 
+    <!-- 기능키 조회 팝업 - 조회(기능키명칭탭) -->
+    <!--
+        TABLE    : TB_CM_ENVST, TB_CM_NMCODE
+        COMMENTS : [공통]환경설정, [공통]명칭코드
+    -->
+    <select id="getSearchFnkeyList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getSearchFnkeyList */
+        SELECT 	FNKEY_NO, FNKEY_NM
+        FROM 	TB_CM_POS_FNKEY tcpf
+        WHERE 	USE_YN ='Y'
+        AND 	FNKEY_FG = '6020'
+        ORDER BY FNKEY_NO
+    </select>
+
+    <!-- 기능키명칭탭 - 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY, TB_MS_STORE, TB_HQ_OFFICE
+        COMMENTS : [공통]환경설정, [공통]명칭코드
+    -->
+    <select id="getEnvConfgBatchChangeFnkeyList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeFnkeyList */
+        SELECT 	tms.HQ_OFFICE_CD,
+                tho.HQ_OFFICE_NM,
+                tmsf.STORE_CD,
+                tms.STORE_NM,
+                FNKEY_NM
+        FROM 	TB_MS_STORE_FNKEY tmsf,
+                TB_MS_STORE tms,
+                TB_HQ_OFFICE tho
+        WHERE 	tms.STORE_CD = tmsf.STORE_CD
+        AND 	tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tmsf.FNKEY_FG ='6020' -- 결제메뉴(좌)
+        AND		TMSF.fnkey_no = #{fnkeyNo}
+        <if test="hqOfficeCd != null and hqOfficeCd != ''">
+            AND tms.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+        </if>
+        <if test="hqOfficeNm != null and hqOfficeNm != ''">
+            AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND tmsf.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+        ORDER BY tms.HQ_OFFICE_CD, tmsf.STORE_CD
+    </select>
+
+
+    <!-- 기능키명칭탭 - 저장 insert, update -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        COMMENTS : [매장]환경설정
+    -->
+    <update id="getEnvConfgBatchChangeFnkeySave" parameterType="EnvConfgBatchChangeVO">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeFnkeySave */
+        MERGE INTO TB_MS_STORE_FNKEY
+            USING DUAL ON
+                (
+                    STORE_CD = #{storeCd} AND FNKEY_FG ='6020' AND FNKEY_NO = #{fnkeyNo}
+                    )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        FNKEY_NM = #{fnkeyNm},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+            WHERE STORE_CD = #{storeCd} AND FNKEY_FG ='6020' AND FNKEY_NO = #{fnkeyNo}
+    </update>
 </mapper>

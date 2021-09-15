@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreSalePrice.xml
+    매장판매가현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.09.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.storeSalePrice.service.impl.StoreSalePriceMapper">
+
+   <!-- 매장판매가현황 > 가격정보 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_SALE_PRICE
+        COMMENTS : 매장 판매가 현황을 조회함
+    -->
+    <select id="getSalePriceList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+        /* StoreSalePrice.getSalePriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        tmpsp.SALE_UPRC AS SALE_UPRC,    -- 매장 판매가
+        tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,    -- 매장 내점판매가
+        tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,    -- 매장 배달판매가
+        tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,    -- 매장 포장판매가
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,   -- 본사 판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,   -- 본사 내점판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,   -- 본사 배달판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC    -- 본사 포장판매가
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_PRODUCT tmp,
+        TB_MS_STORE tms,
+        (
+        SELECT STORE_CD, PROD_CD,
+        NVL(MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS SALE_UPRC,
+        NVL(MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS STIN_SALE_UPRC,
+        NVL(MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS DLVR_SALE_UPRC,
+        NVL(MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS PACK_SALE_UPRC
+        FROM TB_MS_PRODUCT_SALE_PRICE
+        WHERE 1 = 1
+        AND SALE_PRC_FG = '1'
+        GROUP BY STORE_CD, PROD_CD
+        ) tmpsp,
+        (
+        SELECT PROD_CD,
+        NVL(MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS SALE_UPRC,
+        NVL(MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS STIN_SALE_UPRC,
+        NVL(MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS DLVR_SALE_UPRC,
+        NVL(MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS PACK_SALE_UPRC
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE 1 = 1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SALE_PRC_FG = '1'
+        GROUP BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tms.STORE_CD = tmp.STORE_CD
+        AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+        AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND thpsp.PROD_CD = tmp.PROD_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+            SELECT PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='saleUprc == true or stinSaleUprc == true or dlvrSaleUprc == true or packSaleUprc == true'>
+         AND ( 1!= 1
+            <if test='saleUprc == true'>
+                OR tmpsp.SALE_UPRC != thpsp.SALE_UPRC
+            </if>
+            <if test='stinSaleUprc == true'>
+                OR tmpsp.STIN_SALE_UPRC != thpsp.STIN_SALE_UPRC
+            </if>
+            <if test='dlvrSaleUprc == true'>
+                OR tmpsp.DLVR_SALE_UPRC != thpsp.DLVR_SALE_UPRC
+            </if>
+            <if test='packSaleUprc == true'>
+                OR tmpsp.PACK_SALE_UPRC != thpsp.PACK_SALE_UPRC
+            </if>
+            )
+        </if>
+        ORDER BY tmp.PROD_CD, tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장판매가현황 > 가격정보 조회(엑셀다운로드) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        COMMENTS : 매장 판매가 현황을 조회함
+    -->
+    <select id="getSalePriceExcelList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+        /* StoreSalePrice.getSalePriceExcelList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        tmpsp.SALE_UPRC AS SALE_UPRC,    -- 매장 판매가
+        tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,    -- 매장 내점판매가
+        tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,    -- 매장 배달판매가
+        tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,    -- 매장 포장판매가
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,   -- 본사 판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,   -- 본사 내점판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,   -- 본사 배달판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC    -- 본사 포장판매가
+        FROM TB_MS_PRODUCT tmp,
+        TB_MS_STORE tms,
+        (
+        SELECT STORE_CD, PROD_CD,
+        NVL(MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS SALE_UPRC,
+        NVL(MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS STIN_SALE_UPRC,
+        NVL(MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS DLVR_SALE_UPRC,
+        NVL(MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS PACK_SALE_UPRC
+        FROM TB_MS_PRODUCT_SALE_PRICE
+        WHERE 1 = 1
+        AND SALE_PRC_FG = '1'
+        GROUP BY STORE_CD, PROD_CD
+        ) tmpsp,
+        (
+        SELECT PROD_CD,
+        NVL(MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS SALE_UPRC,
+        NVL(MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS STIN_SALE_UPRC,
+        NVL(MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS DLVR_SALE_UPRC,
+        NVL(MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS PACK_SALE_UPRC
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE 1 = 1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SALE_PRC_FG = '1'
+        GROUP BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tms.STORE_CD = tmp.STORE_CD
+        AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+        AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND thpsp.PROD_CD = tmp.PROD_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+            SELECT PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='saleUprc == true or stinSaleUprc == true or dlvrSaleUprc == true or packSaleUprc == true'>
+            AND ( 1!= 1
+            <if test='saleUprc == true'>
+                OR tmpsp.SALE_UPRC != thpsp.SALE_UPRC
+            </if>
+            <if test='stinSaleUprc == true'>
+                OR tmpsp.STIN_SALE_UPRC != thpsp.STIN_SALE_UPRC
+            </if>
+            <if test='dlvrSaleUprc == true'>
+                OR tmpsp.DLVR_SALE_UPRC != thpsp.DLVR_SALE_UPRC
+            </if>
+            <if test='packSaleUprc == true'>
+                OR tmpsp.PACK_SALE_UPRC != thpsp.PACK_SALE_UPRC
+            </if>
+            )
+        </if>
+        ORDER BY tmp.PROD_CD, tms.STORE_CD
+    </select>
+</mapper>
