@@ -1025,14 +1025,14 @@ Graph.prototype.init = function () {
 
   //마우스 클릭 할 때 focus 처리
   //https://jgraph.github.io/mxgraph/docs/known-issues.html
-  if (mxClient.IS_NS) {
+  /*if (mxClient.IS_NS) {
     mxEvent.addListener(graph.container, 'mousedown', function () {
       if (!graph.isEditing()) {
         graph.container.setAttribute('tabindex', '-1');
         graph.container.focus();
       }
     });
-  }
+  }*/
 
 };
 
