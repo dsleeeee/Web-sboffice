@@ -45,4 +45,14 @@ public interface EnvConfgBatchChangeService {
 
     /** 매장포스환경탭 - 저장 */
     int getEnvConfgBatchChangeStorePosSave(EnvConfgBatchChangeVO[] EnvConfgBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
+    /** 기능키 조회 팝업 - 조회 */
+    List<DefaultMap<Object>> getSearchFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO);
+
+    /** 기능키명칭탭 - 조회 */
+    List<DefaultMap<Object>> getEnvConfgBatchChangeFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO);
+
+    /** 기능키명칭탭 - 저장 */
+    int getEnvConfgBatchChangeFnkeySave(EnvConfgBatchChangeVO[] EnvConfgBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
 }

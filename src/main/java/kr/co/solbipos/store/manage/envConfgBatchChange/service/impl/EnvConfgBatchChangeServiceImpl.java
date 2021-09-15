@@ -183,4 +183,44 @@ public class EnvConfgBatchChangeServiceImpl implements EnvConfgBatchChangeServic
 
         return procCnt;
     }
+
+    /** 기능키 조회 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSearchFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO) {
+        List<DefaultMap<Object>> result = new ArrayList<DefaultMap<Object>>();
+
+        result = envConfgBatchChangeMapper.getSearchFnkeyList(envConfgBatchChangeVO);
+
+        return result;
+    }
+
+    /** 기능키명칭탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getEnvConfgBatchChangeFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO) {
+        List<DefaultMap<Object>> result = new ArrayList<DefaultMap<Object>>();
+
+        result = envConfgBatchChangeMapper.getEnvConfgBatchChangeFnkeyList(envConfgBatchChangeVO);
+
+        return result;
+    }
+
+    /** 기능키명칭탭 - 저장 */
+    @Override
+    public int getEnvConfgBatchChangeFnkeySave(EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(EnvConfgBatchChangeVO envConfgBatchChangeVO : envConfgBatchChangeVOs) {
+
+            envConfgBatchChangeVO.setModDt(currentDt);
+            envConfgBatchChangeVO.setModId(sessionInfoVO.getUserId());
+            envConfgBatchChangeVO.setRegDt(currentDt);
+            envConfgBatchChangeVO.setRegId(sessionInfoVO.getUserId());
+
+            procCnt = envConfgBatchChangeMapper.getEnvConfgBatchChangeFnkeySave(envConfgBatchChangeVO);
+        }
+
+        return procCnt;
+    }
 }

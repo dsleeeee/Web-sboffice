@@ -72,6 +72,12 @@ public class EnvConfgBatchChangeVO extends PageVO {
     /** POS번호 */
     private String posNo;
 
+    /** 기능키번호 */
+    private String fnkeyNo;
+
+    /** 기능키명 */
+    private String fnkeyNm;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -139,4 +145,20 @@ public class EnvConfgBatchChangeVO extends PageVO {
     public String getPosNo() { return posNo; }
 
     public void setPosNo(String posNo) { this.posNo = posNo; }
+
+    public String getFnkeyNo() {
+        return fnkeyNo;
+    }
+
+    public void setFnkeyNo(String fnkeyNo) {
+        this.fnkeyNo = fnkeyNo;
+    }
+
+    public String getFnkeyNm() {
+        return fnkeyNm;
+    }
+
+    public void setFnkeyNm(String fnkeyNm) {
+        this.fnkeyNm = fnkeyNm;
+    }
 }

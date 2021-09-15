@@ -59,4 +59,14 @@ public interface EnvConfgBatchChangeMapper {
 
     /** 매장포스환경탭 - 저장 insert, update */
     int getEnvConfgBatchChangeStorePosSave(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
+    /**  기능키 조회 팝업 - 조회 */
+    List<DefaultMap<Object>> getSearchFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
+    /**  기능키명칭탭 - 조회 */
+    List<DefaultMap<Object>> getEnvConfgBatchChangeFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
+    /** 기능키명칭탭 - 저장  */
+    int getEnvConfgBatchChangeFnkeySave(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
 }

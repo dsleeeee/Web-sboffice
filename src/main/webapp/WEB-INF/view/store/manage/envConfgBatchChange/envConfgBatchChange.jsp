@@ -21,11 +21,15 @@
             <li>
                 <a id="storePosTab" href="#" ng-click="storePosShow()"><s:message code="envConfgBatchChange.storePos"/></a>
             </li>
+            <%-- 기능키명칭 탭 --%>
+            <li>
+                <a id="fnkeyTab" href="#" ng-click="fnkeyShow()"><s:message code="envConfgBatchChange.fnkey"/></a>
+            </li>
         </ul>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChange.js?ver=20210322.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChange.js?ver=20210322.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 본사환경 레이어 --%>
@@ -47,8 +51,21 @@
 </c:import>
 <%-- 탭페이지 레이어 끝 --%>
 
+<%-- 기능키명칭 레이어 --%>
+<c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/envConfgBatchChangeFnkey.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- 탭페이지 레이어 끝 --%>
+
 <%-- 환경설정 조회 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/searchEnvConfg.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 터치키 조회 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/searchFnkey.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
