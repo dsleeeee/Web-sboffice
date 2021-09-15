@@ -305,7 +305,7 @@
     <!-- 기초관리 > 가격관리 > 판매가관리(매장용) -->
     <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salePriceManage.service.SalePriceManageVO"/>
     <!-- 기초관리 > 가격관리 > 매장판매가현황 -->
-<!--    <typeAlias alias="storeSalePriceVO" type="kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceVO"/>-->
+    <typeAlias alias="storeSalePriceVO" type="kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceVO"/>
 
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
