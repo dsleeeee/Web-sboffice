@@ -723,13 +723,13 @@
 <script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210915.05" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
-<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>
+    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
+    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
 <%-- SMS예약 팝업 --%>
-<c:import url="/WEB-INF/view/adi/sms/smsSend/smsReserve.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsReserve.jsp">--%>
+    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
+    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
