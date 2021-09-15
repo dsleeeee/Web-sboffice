@@ -350,7 +350,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             param.reserveYn = reserveYn;
             param.gubun = "marketingSmsSend";
 
-            $scope.setSelectedSmsSend(param);
+            $scope.setSelectedMarketingSmsSend(param);
             $scope.wjSmsReserveLayer.show(true);
             event.preventDefault();
         } else {
@@ -563,12 +563,12 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 선택
-    $scope.selectedSmsSend;
-    $scope.setSelectedSmsSend = function(store) {
-        $scope.selectedSmsSend = store;
+    $scope.selectedMarketingSmsSend;
+    $scope.setSelectedMarketingSmsSend = function(store) {
+        $scope.selectedMarketingSmsSend = store;
     };
-    $scope.getSelectedSmsSend = function() {
-        return $scope.selectedSmsSend;
+    $scope.getSelectedMarketingSmsSend = function() {
+        return $scope.selectedMarketingSmsSend;
     };
 
     // 발신번호추가
@@ -590,7 +590,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         // SMS예약 팝업 핸들러 추가
         $scope.wjSmsReserveLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('smsReserveCtrl', $scope.getSelectedSmsSend());
+                $scope._broadcast('smsReserveCtrl', $scope.getSelectedMarketingSmsSend());
             }, 50)
         });
     });
