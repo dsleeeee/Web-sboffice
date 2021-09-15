@@ -31,7 +31,7 @@
         <div class="subCon">
             <%-- 좌측 --%>
             <div class="wj-TblWrapBr w55 fl">
-                <%-- (광고), (무료수신거부) display 여부 : pageGubun값이 SMS일때만 보여줌 --%>
+                <%-- (광고), (무료수신거부) display 여부 : pageGubun값이 Y일때만 보여줌 --%>
                 <label id="lblPageGubun" style="display: none;"></label>
                 <%-- 제목 --%>
                 <div class="w50 fl pd10" style="height:340px;">
@@ -284,7 +284,7 @@
     var orgnCd = "${orgnCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210902.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210915.02" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

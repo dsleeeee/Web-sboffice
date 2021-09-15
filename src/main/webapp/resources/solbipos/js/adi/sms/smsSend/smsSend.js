@@ -44,6 +44,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $("#lblMsgType").text("SMS");
     $("#lblSmsQty").text("0");
 
+    var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 링크 효과
@@ -200,6 +202,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 수신자목록 셋팅
     $scope.receiveNameSet = function(data) {
+        gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+
         for(var i = 0; i < data.length; i++) {
             // 파라미터 설정
             var params = {};
@@ -242,6 +246,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // <-- 그리드 행 추가 -->
     $scope.addRow = function() {
+        gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+
         // 파라미터 설정
         var params = {};
         params.status = "I";
@@ -274,6 +280,12 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // <-- 전송, 예약 -->
     // 전송, 예약
     $scope.smsSendReserve = function(reserveYn) {
+        // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+        if(gridYn == "N") {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
+
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
@@ -416,6 +428,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
         var formData = new FormData($("#smsForm")[0]);
         formData.append("orgnCd", orgnCd);
+        formData.append("pageGubun", "fileSms");
 
         var url = '/adi/sms/smsSend/smsSend/getSmsSendFileSave.sb';
         $.ajax({

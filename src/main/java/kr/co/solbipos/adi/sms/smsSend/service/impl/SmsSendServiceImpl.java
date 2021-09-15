@@ -182,6 +182,7 @@ public class SmsSendServiceImpl implements SmsSendService {
         try{
 
             String orgnCd = multi.getParameter("orgnCd");
+            String fileId = multi.getParameter("pageGubun");
 
             // 저장경로 폴더
             String path_folder = orgnCd;
@@ -193,7 +194,7 @@ public class SmsSendServiceImpl implements SmsSendService {
             String path = "/home/daemon/sms/X_McsAgent/file/mms/" + path_folder + "/";
 
             System.out.println("test1111 : " + path);
-            LOGGER.info("MSS 파일 저장 >>> 경로 : " + path);
+            LOGGER.info("SMS전송 >>> MSS 파일 저장 >>> 파일 저장 경로 : " + path);
 
             // 저장 경로 설정 (디비 저장용)
             String path_table = "/" + path_folder + "/";
@@ -210,7 +211,8 @@ public class SmsSendServiceImpl implements SmsSendService {
             }
 
             // 첨부파일1
-            List<MultipartFile> fileList = multi.getFiles("fileSms1");
+//            List<MultipartFile> fileList = multi.getFiles("fileSms1");
+            List<MultipartFile> fileList = multi.getFiles(fileId + "1");
             // 선택한 파일이 있으면
             for(MultipartFile mFile : fileList)
             {
@@ -227,12 +229,13 @@ public class SmsSendServiceImpl implements SmsSendService {
                         e.printStackTrace();
                     }
 
-                    contentData = contentData + path_table + newFileName + fileExt + "^1^0|";
+                    contentData = contentData + path_table + newFileName + "." + fileExt + "^1^0|";
                 }
             }
 
             // 첨부파일2
-            List<MultipartFile> fileList2 = multi.getFiles("fileSms2");
+//            List<MultipartFile> fileList2 = multi.getFiles("fileSms2");
+            List<MultipartFile> fileList2 = multi.getFiles(fileId + "2");
             // 선택한 파일이 있으면
             for(MultipartFile mFile : fileList2)
             {
@@ -249,12 +252,13 @@ public class SmsSendServiceImpl implements SmsSendService {
                         e.printStackTrace();
                     }
 
-                    contentData = contentData + path_table + newFileName + fileExt + "^1^0|";
+                    contentData = contentData + path_table + newFileName + "." + fileExt + "^1^0|";
                 }
             }
 
             // 첨부파일3
-            List<MultipartFile> fileList3 = multi.getFiles("fileSms3");
+//            List<MultipartFile> fileList3 = multi.getFiles("fileSms3");
+            List<MultipartFile> fileList3 = multi.getFiles(fileId + "3");
             // 선택한 파일이 있으면
             for(MultipartFile mFile : fileList3)
             {
@@ -271,9 +275,11 @@ public class SmsSendServiceImpl implements SmsSendService {
                         e.printStackTrace();
                     }
 
-                    contentData = contentData + path_table + newFileName + fileExt + "^1^0|";
+                    contentData = contentData + path_table + newFileName + "." + fileExt + "^1^0|";
                 }
             }
+
+            LOGGER.info("SMS전송 >>> MSS 파일 저장 >>> 저장할 CONTENT_DATA 컬럼값 : " + contentData);
 
         }catch(Exception e){
 

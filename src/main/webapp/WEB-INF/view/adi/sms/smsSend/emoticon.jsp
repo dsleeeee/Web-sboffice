@@ -89,19 +89,22 @@
         // 문자 삽입
         function addMsgEmo(value, pageName)
         {
-            if(pageName == "000316") {
-                var msgManageScope = agrid.getScope('msgManageDtlCtrl'); // 메세지관리
-                msgManageScope.addMsg(value);
-            } else if(pageName == "000317") {
-                var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송(문자전송현황)
-                smsSendScope.addMsg(value);
-            } else if(pageName == "000203") {
-                var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송(회원정보)
-                smsSendScope.addMsg(value);
-            } else {
-                var marketingSmsSendScope = agrid.getScope('marketingSmsSendCtrl'); // 마케팅용 SMS전송
-                marketingSmsSendScope.addMsg(value);
-            }
+            var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송(회원정보, 문자전송현황)
+            smsSendScope.addMsg(value);
+
+            // if(pageName == "000316") {
+            //     var msgManageScope = agrid.getScope('msgManageDtlCtrl'); // 메세지관리
+            //     msgManageScope.addMsg(value);
+            // } else if(pageName == "000317") {
+            //     var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송(문자전송현황)
+            //     smsSendScope.addMsg(value);
+            // } else if(pageName == "000203") {
+            //     var smsSendScope = agrid.getScope('smsSendCtrl'); // SMS전송(회원정보)
+            //     smsSendScope.addMsg(value);
+            // } else {
+            //     var marketingSmsSendScope = agrid.getScope('marketingSmsSendCtrl'); // 마케팅용 SMS전송
+            //     marketingSmsSendScope.addMsg(value);
+            // }
         }
 
         // 이모티콘 탭 변경

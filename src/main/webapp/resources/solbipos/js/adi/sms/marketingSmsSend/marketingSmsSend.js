@@ -77,11 +77,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         {value: "3", name: messages["marketingSmsSend.membrPoint.ava"] + messages["marketingSmsSend.membrPoint"]}
     ];
 
-    $("#lblStoreNmInfo").text("(광고)" +  "");
-    $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
-    $("#lblTxtByte").text("0");
-    $("#lblMsgType").text("SMS");
-    $("#lblSmsQty").text("0");
+    $("#lblMarketingSmsSendStoreNmInfo").text("(광고)" +  "");
+    $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-000-0000");
+    $("#lblMarketingSmsSendTxtByte").text("0");
+    $("#lblMarketingSmsSendMsgType").text("SMS");
+    $("#lblMarketingSmsSendSmsQty").text("0");
+
+    var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -139,6 +141,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
 
         $scope._inquiryMain("/adi/sms/marketingSmsSend/marketingSmsSend/getMarketingSmsSendList.sb", params, function() {
+            gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+
             // 회원은 조회 후 체크박스 체크
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 $scope.flex.collectionView.items[i].gChk = true;
@@ -160,7 +164,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         $scope.restSmsQty();
 
         // 메세지그룹
-        if(msgGrpColList == "") {
+        if(msgGrpAddColList == "") {
             $("#divMsgGrpPage").css("display", "none");
             $("#divMsgGrpPageAuth").css("display", "");
         } else {
@@ -226,7 +230,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             var storeNmList = response.data.data.result;
             $scope.storeNmList = storeNmList;
 
-            $("#lblStoreNmInfo").text("(광고)" +  storeNmList.storeNm);
+            $("#lblMarketingSmsSendStoreNmInfo").text("(광고)" +  storeNmList.storeNm);
         });
     };
 
@@ -238,14 +242,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             var smsQtyList = response.data.data.result;
             $scope.smsQtyList = smsQtyList;
 
-            $("#lblSmsQty").text($scope.smsQtyList.smsQty);
+            $("#lblMarketingSmsSendSmsQty").text($scope.smsQtyList.smsQty);
         });
     };
 
     // 자동변환
     $scope.addMsg = function(str) {
-        var msgContent = $("#messageContent").val();
-        $("#messageContent").val(msgContent + str);
+        var msgContent = $("#marketingSmsSendMessageContent").val();
+        $("#marketingSmsSendMessageContent").val(msgContent + str);
 
         // 바이트
         $scope.showByte();
@@ -253,19 +257,21 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // 바이트
     $scope.showByte = function() {
-        $("#lblTxtByte").text($("#messageContent").val().getByteLength());
+        $("#lblMarketingSmsSendTxtByte").text($("#marketingSmsSendMessageContent").val().getByteLength());
 
-        if($("#lblMsgType").text() != "MMS") {
-            if($("#messageContent").val().getByteLength() > 80) {
-                $("#lblMsgType").text("LMS");
+        if($("#lblMarketingSmsSendMsgType").text() != "MMS") {
+            if($("#marketingSmsSendMessageContent").val().getByteLength() > 80) {
+                $("#lblMarketingSmsSendMsgType").text("LMS");
             } else {
-                $("#lblMsgType").text("SMS");
+                $("#lblMarketingSmsSendMsgType").text("SMS");
             }
         }
     };
 
     // <-- 그리드 행 추가 -->
     $scope.addRow = function() {
+        gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+
         // 파라미터 설정
         var params = {};
         params.status = "I";
@@ -301,6 +307,12 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // <-- 전송, 예약 -->
     // 전송, 예약
     $scope.smsSendReserve = function(reserveYn) {
+        // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+        if(gridYn == "N") {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
+
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
@@ -322,7 +334,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 잔여 수량
-        var smsQty = $("#lblSmsQty").text();
+        var smsQty = $("#lblMarketingSmsSendSmsQty").text();
         if(smsQty < 1) {
             $scope._popMsg(messages["marketingSmsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
             return;
@@ -351,7 +363,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     $scope.smsSendSave = function(reserveYn, reserveDate) {
         // 메세지타입 1:SMS 2:LMS 3:MMS
         var msgType = "1";
-        var msgTypeGubun = $("#lblMsgType").text();
+        var msgTypeGubun = $("#lblMarketingSmsSendMsgType").text();
         if(msgTypeGubun == "LMS") {
             msgType = "2";
         } else if(msgTypeGubun == "MMS") {
@@ -367,7 +379,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
-        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + $("#lblSmsQty").text() + messages["marketingSmsSend.smsSendConfirm2"];
+        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + $("#lblMarketingSmsSendSmsQty").text() + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
             // MMS
            if(msgType == "3") {
@@ -388,19 +400,19 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 // 내용
-                var messageContent = $("#messageContent").val();
+                var messageContent = $("#marketingSmsSendMessageContent").val();
                 if (messageContent == undefined) {
                     messageContent = "";
                 }
                 messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
                 messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
-                var content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
+                var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
 
                 $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
                 if (reserveYn == "1") {
                     $scope.flex.collectionView.items[i].sendDate = reserveDate; // 전송일시
                 }
-                $scope.flex.collectionView.items[i].title = $("#srchTitle").val(); // 제목
+                $scope.flex.collectionView.items[i].title = $("#marketingSmsSendTitle").val(); // 제목
                 $scope.flex.collectionView.items[i].content = content; // 내용
                 $scope.flex.collectionView.items[i].msgType = msgType; // 메세지타입
                 $scope.flex.collectionView.items[i].cstNo = $scope.flex.collectionView.items[i].membrNo; // 회원번호
@@ -422,10 +434,10 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // 재조회
     $scope.allSearch = function () {
-        $("#srchTitle").val("");
-        $("#messageContent").val("");
-        $("#lblTxtByte").text("0");
-        $("#lblMsgType").text("SMS");
+        $("#marketingSmsSendTitle").val("");
+        $("#marketingSmsSendMessageContent").val("");
+        $("#lblMarketingSmsSendTxtByte").text("0");
+        $("#lblMarketingSmsSendMsgType").text("SMS");
 
         $scope._gridDataInit();
 
@@ -438,8 +450,9 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // 첨부파일 저장
     $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
-        var formData = new FormData($("#smsForm")[0]);
+        var formData = new FormData($("#marketingSmsSendSmsForm")[0]);
         formData.append("orgnCd", orgnCd);
+        formData.append("pageGubun", "marketingSmsSendFileSms");
 
         var url = '/adi/sms/smsSend/smsSend/getSmsSendFileSave.sb';
         $.ajax({
@@ -495,14 +508,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // 메세지그룹 탭
     $scope.msgGrpShow = function(msgGrpCd) {
-        $("#divMsgComment").html("");
+        $("#divMarketingSmsSendMsgComment").html("");
 
         // 탭 색상변경
-        for(var i=0; i < msgGrpColList.length; i++) {
-            if(msgGrpColList[i].msgGrpCd == msgGrpCd) {
-                $("#msgGrpTab"+ msgGrpColList[i].msgGrpCd).addClass("on");
+        for(var i=0; i < msgGrpAddColList.length; i++) {
+            if(msgGrpAddColList[i].msgGrpCd == msgGrpCd) {
+                $("#msgGrpTab"+ msgGrpAddColList[i].msgGrpCd).addClass("on");
             } else {
-                $("#msgGrpTab" + msgGrpColList[i].msgGrpCd).removeClass("on");
+                $("#msgGrpTab" + msgGrpAddColList[i].msgGrpCd).removeClass("on");
             }
         }
 
@@ -535,15 +548,15 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     innerHtml += "</table>";
                     innerHtml += "</div>";
                 }
-                $("#divMsgComment").html(innerHtml);
+                $("#divMarketingSmsSendMsgComment").html(innerHtml);
             }
         }, false);
     };
 
     // 메세지관리 목록 내용 삽입
     $scope.msgShow = function (data) {
-        $("#srchTitle").val(data.title);
-        $("#messageContent").val(data.message);
+        $("#marketingSmsSendTitle").val(data.title);
+        $("#marketingSmsSendMessageContent").val(data.message);
 
         // 바이트
         $scope.showByte();
@@ -604,7 +617,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // 첨부파일
     $scope.changeSmsImage = function (value) {
         if(value.files[0]) {
-            $("#lblMsgType").text("MMS");
+            $("#lblMarketingSmsSendMsgType").text("MMS");
         }
     };
 
@@ -614,17 +627,17 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         var fileCount = 0;
 
         // 첨부파일1
-        if (!isNull($("#fileSms1")[0].files[0])) {
+        if (!isNull($("#marketingSmsSendFileSms1")[0].files[0])) {
             // 크기제한 체크
             var maxSize = 300 * 1024;
-            var fileSize = $("#fileSms1")[0].files[0].size;
+            var fileSize = $("#marketingSmsSendFileSms1")[0].files[0].size;
             if (fileSize > maxSize) {
                 $scope._popMsg(messages["marketingSmsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
                 return;
             }
 
             // 파일명 형식 체크
-            var imgFullNm = $("#fileSms1").val().substring($("#fileSms1").val().lastIndexOf('\\') + 1);
+            var imgFullNm = $("#marketingSmsSendFileSms1").val().substring($("#marketingSmsSendFileSms1").val().lastIndexOf('\\') + 1);
             if(1 > imgFullNm.lastIndexOf('.')){
                 $scope._popMsg(messages["marketingSmsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
                 return;
@@ -632,7 +645,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
             // 확장자 체크
             var reg = /(.*?)\.(jpg|JPG)$/;
-            if(! $("#fileSms1").val().match(reg)) {
+            if(! $("#marketingSmsSendFileSms1").val().match(reg)) {
                 $scope._popMsg(messages["marketingSmsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
                 return;
             }
@@ -641,17 +654,17 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 첨부파일2
-        if (!isNull($("#fileSms2")[0].files[0])) {
+        if (!isNull($("#marketingSmsSendFileSms2")[0].files[0])) {
             // 크기제한 체크
             var maxSize = 300 * 1024;
-            var fileSize = $("#fileSms2")[0].files[0].size;
+            var fileSize = $("#marketingSmsSendFileSms2")[0].files[0].size;
             if (fileSize > maxSize) {
                 $scope._popMsg(messages["marketingSmsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
                 return;
             }
 
             // 파일명 형식 체크
-            var imgFullNm = $("#fileSms2").val().substring($("#fileSms2").val().lastIndexOf('\\') + 1);
+            var imgFullNm = $("#marketingSmsSendFileSms2").val().substring($("#marketingSmsSendFileSms2").val().lastIndexOf('\\') + 1);
             if(1 > imgFullNm.lastIndexOf('.')){
                 $scope._popMsg(messages["marketingSmsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
                 return;
@@ -659,7 +672,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
             // 확장자 체크
             var reg = /(.*?)\.(jpg|JPG)$/;
-            if(! $("#fileSms2").val().match(reg)) {
+            if(! $("#marketingSmsSendFileSms2").val().match(reg)) {
                 $scope._popMsg(messages["marketingSmsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
                 return;
             }
@@ -668,17 +681,17 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 첨부파일3
-        if (!isNull($("#fileSms3")[0].files[0])) {
+        if (!isNull($("#marketingSmsSendFileSms3")[0].files[0])) {
             // 크기제한 체크
             var maxSize = 300 * 1024;
-            var fileSize = $("#fileSms3")[0].files[0].size;
+            var fileSize = $("#marketingSmsSendFileSms3")[0].files[0].size;
             if (fileSize > maxSize) {
                 $scope._popMsg(messages["marketingSmsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
                 return;
             }
 
             // 파일명 형식 체크
-            var imgFullNm = $("#fileSms3").val().substring($("#fileSms3").val().lastIndexOf('\\') + 1);
+            var imgFullNm = $("#marketingSmsSendFileSms3").val().substring($("#marketingSmsSendFileSms3").val().lastIndexOf('\\') + 1);
             if(1 > imgFullNm.lastIndexOf('.')){
                 $scope._popMsg(messages["marketingSmsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
                 return;
@@ -686,7 +699,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
             // 확장자 체크
             var reg = /(.*?)\.(jpg|JPG)$/;
-            if(! $("#fileSms3").val().match(reg)) {
+            if(! $("#marketingSmsSendFileSms3").val().match(reg)) {
                 $scope._popMsg(messages["marketingSmsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
                 return;
             }
@@ -703,19 +716,19 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         var agent = navigator.userAgent.toLowerCase();
         if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
             // ie 일때
-            // $("#fileSms1").replaceWith( $("#fileSms1").clone(true) );
-            // $("#fileSms2").replaceWith( $("#fileSms2").clone(true) );
-            // $("#fileSms3").replaceWith( $("#fileSms3").clone(true) );
-            $("#fileSms1").val("");
-            $("#fileSms2").val("");
-            $("#fileSms3").val("");
+            // $("#marketingSmsSendFileSms1").replaceWith( $("#marketingSmsSendFileSms1").clone(true) );
+            // $("#marketingSmsSendFileSms2").replaceWith( $("#marketingSmsSendFileSms2").clone(true) );
+            // $("#marketingSmsSendFileSms3").replaceWith( $("#marketingSmsSendFileSms3").clone(true) );
+            $("#marketingSmsSendFileSms1").val("");
+            $("#marketingSmsSendFileSms2").val("");
+            $("#marketingSmsSendFileSms3").val("");
         } else {
             // other browser 일때
-            $("#fileSms1").val("");
-            $("#fileSms2").val("");
-            $("#fileSms3").val("");
+            $("#marketingSmsSendFileSms1").val("");
+            $("#marketingSmsSendFileSms2").val("");
+            $("#marketingSmsSendFileSms3").val("");
         }
-        $("#smsForm")[0].reset();
+        $("#marketingSmsSendSmsForm")[0].reset();
     };
 }]);
 
@@ -723,17 +736,17 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 /**
  *  팝업 조회 그리드 생성
  */
-app.controller('smsPopupCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('marketingSmsSendPopupCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('smsPopupCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('marketingSmsSendPopupCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("smsPopupCtrl", function(event, data) {
+    $scope.$on("marketingSmsSendPopupCtrl", function(event, data) {
         // 닫았다 다시 호출하면 안떠서
         // 날짜 비교하여 팝업 띄우기
         if(Number(now) >= Number(startDate)){

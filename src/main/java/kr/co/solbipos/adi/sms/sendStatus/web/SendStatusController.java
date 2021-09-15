@@ -63,13 +63,13 @@ public class SendStatusController {
     @RequestMapping(value = "/sendStatus/list.sb", method = RequestMethod.GET)
     public String sendStatusView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        SendStatusVO sendStatusVO = new SendStatusVO();
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+//        SendStatusVO sendStatusVO = new SendStatusVO();
+//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // SMS전송 - 메세지그룹 조회
-        List<DefaultMap<String>> msgGrpColList = sendStatusService.getMsgGrpColList(sendStatusVO, sessionInfoVO);
-        model.addAttribute("msgGrpColList", msgGrpColList);
-//        System.out.println("msgGrpColList : "+msgGrpColList);
+//        // SMS전송 - 메세지그룹 조회
+//        List<DefaultMap<String>> msgGrpColList = sendStatusService.getMsgGrpColList(sendStatusVO, sessionInfoVO);
+//        model.addAttribute("msgGrpColList", msgGrpColList);
+////        System.out.println("msgGrpColList : "+msgGrpColList);
 
         return "adi/sms/sendStatus/sendStatus";
     }

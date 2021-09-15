@@ -1,3 +1,5 @@
+<div id="smsChargeView" style="display: none;">
+
 <%--<%@ page language="java" contentType="text/html;charset=euc-kr"%>--%>
 <%@ page pageEncoding="UTF-8"%>
 
@@ -114,3 +116,5 @@
         </div>
     </body>
 </html>
+
+</div>

@@ -203,12 +203,12 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
     $scope.initGrid = function (s, e) {
     };
 
-    $("#lblTxtByte").text("0");
-    $("#lblTxtByteGubun").text("SMS");
+    $("#lblMsgManageTxtByte").text("0");
+    $("#lblMsgManageMsgType").text("SMS");
 
     // <-- 검색 호출 -->
     $scope.$on("msgManageDtlCtrl", function(event, data) {
-        $("#divMsgComment").html("");
+        $("#divMsgManageMsgComment").html("");
         // 신규
         $scope.msgNew();
 
@@ -255,7 +255,7 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
                     innerHtml += "</table>";
                     innerHtml += "</div>";
                 }
-                $("#divMsgComment").html(innerHtml);
+                $("#divMsgManageMsgComment").html(innerHtml);
             }
         }, false);
     };
@@ -263,8 +263,8 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 자동변환
     $scope.addMsg = function(str) {
-        var msgContent = $("#messageContent").val();
-        $("#messageContent").val(msgContent + str);
+        var msgContent = $("#msgManageMessageContent").val();
+        $("#msgManageMessageContent").val(msgContent + str);
 
         // 바이트
         $scope.showByte();
@@ -277,31 +277,31 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             return false;
         }
 
-        $("#lblTxtByte").text($("#messageContent").val().getByteLength());
+        $("#lblMsgManageTxtByte").text($("#msgManageMessageContent").val().getByteLength());
 
-        if($("#messageContent").val().getByteLength() > 80) {
-            $("#lblTxtByteGubun").text("LMS");
+        if($("#msgManageMessageContent").val().getByteLength() > 80) {
+            $("#lblMsgManageMsgType").text("LMS");
         } else {
-            $("#lblTxtByteGubun").text("SMS");
+            $("#lblMsgManageMsgType").text("SMS");
         }
     };
 
     // 신규
     $scope.msgNew = function () {
-        $("#srchTitle").val("");
-        $("#messageContent").val("");
-        $("#lblTxtByte").text("0");
-        $("#lblTxtByteGubun").text("SMS");
+        $("#msgManageTitle").val("");
+        $("#msgManageMessageContent").val("");
+        $("#lblMsgManageTxtByte").text("0");
+        $("#lblMsgManageMsgType").text("SMS");
         $("#lblSeqNo").text("");
     };
 
     // 저장
     $scope.msgSave = function () {
-        if($("#srchTitle").val() == "") {
+        if($("#msgManageTitle").val() == "") {
             $scope._popMsg(messages["msgManage.titleAlert"]); // 제목을 입력해주세요.
             return false;
         }
-        if($("#messageContent").val() == "") {
+        if($("#msgManageMessageContent").val() == "") {
             $scope._popMsg(messages["msgManage.messageContentAlert"]); // 메세지를 입력해주세요.
             return false;
         }
@@ -311,8 +311,8 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope._popConfirm(messages["cmm.choo.save"], function() {
             var params = {};
             params.msgGrpCd = $("#lblMsgGrpCd").text();
-            params.title = $("#srchTitle").val();
-            params.content = $("#messageContent").val();
+            params.title = $("#msgManageTitle").val();
+            params.content = $("#msgManageMessageContent").val();
             if(seqNo == "") {
                 params.seqNo = "";
                 params.status = "I";
@@ -341,8 +341,8 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
     // 메세지관리 목록 수정
     $scope.msgModify = function (data) {
         $("#lblSeqNo").text(data.seqNo);
-        $("#srchTitle").val(data.title);
-        $("#messageContent").val(data.message);
+        $("#msgManageTitle").val(data.title);
+        $("#msgManageMessageContent").val(data.message);
 
         // 바이트
         $scope.showByte();

@@ -67,17 +67,17 @@ public class MarketingSmsSendController {
     @RequestMapping(value = "/marketingSmsSend/list.sb", method = RequestMethod.GET)
     public String marketingSmsSendView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        MarketingSmsSendVO marketingSmsSendVO = new MarketingSmsSendVO();
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+//        MarketingSmsSendVO marketingSmsSendVO = new MarketingSmsSendVO();
+//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // SMS전송 - 메세지그룹 조회
-        List<DefaultMap<String>> msgGrpColList = marketingSmsSendService.getMsgGrpColList(marketingSmsSendVO, sessionInfoVO);
-        model.addAttribute("msgGrpColList", msgGrpColList);
-
-        // 회원등급 리스트 조회
-        List membrClassList = marketingSmsSendService.getMembrClassList(marketingSmsSendVO, sessionInfoVO);
-        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.ALL);
-        model.addAttribute("memberClassList", membrClassListAll);
+//        // 마케팅용 SMS전송 - 메세지그룹 조회
+//        List<DefaultMap<String>> msgGrpAddColList = marketingSmsSendService.getMsgGrpColList(marketingSmsSendVO, sessionInfoVO);
+//        model.addAttribute("msgGrpAddColList", msgGrpAddColList);
+//
+//        // 마케팅용 SMS전송 - 회원등급 리스트 조회
+//        List membrClassList = marketingSmsSendService.getMembrClassList(marketingSmsSendVO, sessionInfoVO);
+//        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.ALL);
+//        model.addAttribute("memberClassList", membrClassListAll);
 
         return "adi/sms/marketingSmsSend/marketingSmsSend";
     }

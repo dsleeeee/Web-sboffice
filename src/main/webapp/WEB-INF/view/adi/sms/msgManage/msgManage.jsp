@@ -8,11 +8,11 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="subCon">
+<div id="msgManageView" class="subCon" style="display: none;">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl">${menuNm}</a>
+        <a href="#" class="open fl"><s:message code="msgManage.info"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" ng-click="_broadcast('msgManageCtrl',1)">
@@ -64,7 +64,7 @@
             <%-- 문구 --%>
             <div ng-controller="msgManageDtlCtrl">
                 <div class="w100 fl bt bb" style="height:260px; overflow-x: hidden; overflow-y: auto;">
-                    <div id="divMsgComment"></div>
+                    <div id="divMsgManageMsgComment"></div>
                 </div>
             </div>
         </div>
@@ -93,21 +93,21 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="text" class="sb-input-msg w100" id="srchTitle" ng-model="title" />
+                                <input type="text" class="sb-input-msg w100" id="msgManageTitle" ng-model="title" />
                             </td>
                         </tr>
                         <tr style="height: 10px"></tr>
                         <tr>
                             <td>
-                                <textarea id="messageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
+                                <textarea id="msgManageMessageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
                             </td>
                         </tr>
                         <tr style="height: 10px"></tr>
                         <tr>
                             <td>
-                                <label id="lblTxtByte"></label>
+                                <label id="lblMsgManageTxtByte"></label>
                                 <s:message code="msgManage.byte" />
-                                <label id="lblTxtByteGubun"></label>
+                                <label id="lblMsgManageMsgType"></label>
                             </td>
                         </tr>
                         <tr style="height: 10px"></tr>
@@ -144,7 +144,7 @@
                             <tr>
                                 <td>
                                     <%-- 이모티콘 --%>
-                                    <c:import url="/WEB-INF/view/adi/sms/smsSend/emoticon.jsp">
+                                    <c:import url="/WEB-INF/view/adi/sms/msgManage/emoticon2.jsp">
                                     </c:import>
                                 </td>
                             </tr>
@@ -158,7 +158,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20210806.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20210915.01" charset="utf-8"></script>
 
 <%-- 메세지관리 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/msgManage/msgManageStoreRegist.jsp">
