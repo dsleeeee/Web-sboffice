@@ -11,7 +11,7 @@
 -->
 <mapper namespace="kr.co.solbipos.adi.sms.smsSend.service.impl.SmsSendMapper">
 
-    <!-- 발신번호 유무 체크 -->
+    <!-- 발신번호 조회 -->
     <!--
         TABLE    : HCS_SENDM_T
         COMMENTS : [본사매장]발신번호인증||
@@ -19,8 +19,8 @@
     <select id="getSmsTelNoComboList"  parameterType="SmsSendVO" resultType="DefaultMap">
         /* SmsSendMapper.getSmsTelNoComboList */
         SELECT
-        hst.TEL_NO AS VALUE,
-        (SUBSTR(hst.TEL_NO, 1, 3) || '-' || SUBSTR(hst.TEL_NO, 4, 4) || '-' || SUBSTR(hst.TEL_NO, 8, 4)) AS NAME
+        SBPENC.D(hst.TEL_NO) AS VALUE,
+        (SUBSTR(SBPENC.D(hst.TEL_NO), 1, 3) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 4, 4) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 8, 4)) AS NAME
         FROM HCS_SENDM_T hst
         WHERE 1=1
         AND hst.OGN_CD = #{orgnCd}
