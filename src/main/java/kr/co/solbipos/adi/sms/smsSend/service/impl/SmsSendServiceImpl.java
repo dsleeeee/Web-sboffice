@@ -52,7 +52,7 @@ public class SmsSendServiceImpl implements SmsSendService {
         this.smsSendMapper = smsSendMapper;
     }
 
-    /** 발신번호 유무 체크 */
+    /** 발신번호 조회 */
     @Override
     public List<DefaultMap<Object>> getSmsTelNoComboList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
 

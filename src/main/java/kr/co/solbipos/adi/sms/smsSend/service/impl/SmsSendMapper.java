@@ -27,7 +27,7 @@ import java.util.List;
 @Repository
 public interface SmsSendMapper {
 
-    /** 발신번호 유무 체크 */
+    /** 발신번호 조회 */
     List<DefaultMap<Object>> getSmsTelNoComboList(SmsSendVO smsSendVO);
 
     /** 관리자/총판/본사/매장 명칭 조회 */

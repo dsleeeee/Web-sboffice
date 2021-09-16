@@ -75,7 +75,7 @@ public class SmsSendController {
 //    }
 
     /**
-     * 발신번호 유무 체크
+     * 발신번호 조회
      *
      * @param smsSendVO
      * @param request
