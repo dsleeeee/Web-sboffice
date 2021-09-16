@@ -22,18 +22,15 @@
             </div>
         </div>
 
-        <div class="mt10 oh sb-select dkbr">
-        </div>
-
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
-            <div class="updownSet">
-                <%-- 저장 --%>
-                <button class="btn_skyblue ml5 fr" id="btnTelNoSave" ng-click="save()"><s:message code="cmm.save" /></button>
-                <%-- DOWN --%>
-                <button class="btn_down ml5 fr" id="btnTelNoDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
+            <div class="updownSet oh mb10">
                 <%-- UP --%>
-                <button class="btn_up ml5 fr" id="btnTelNoUp" ng-click="rowMoveUp()"><s:message code="cmm.up" /></button>
+                <button class="btn_up" id="btnProdUp" ng-click="rowMoveUp()"><s:message code="cmm.up" /></button>
+                <%-- DOWN --%>
+                <button class="btn_down" id="btnProdDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
+                <%-- 저장 --%>
+                <button class="btn_skyblue" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
             </div>
             <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
