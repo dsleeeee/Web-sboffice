@@ -26,11 +26,11 @@
         <div class="w100 mt10 mb20">
             <div class="updownSet oh mb10">
                 <%-- UP --%>
-                <button class="btn_up" id="btnProdUp" ng-click="rowMoveUp()"><s:message code="cmm.up" /></button>
+                <button class="btn_up" id="btnTelNoUp" ng-click="rowMoveUp()"><s:message code="cmm.up" /></button>
                 <%-- DOWN --%>
-                <button class="btn_down" id="btnProdDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
+                <button class="btn_down" id="btnTelNoDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
                 <%-- 저장 --%>
-                <button class="btn_skyblue" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                <button class="btn_skyblue" id="btnTelNoSave" ng-click="save()"><s:message code="cmm.save" /></button>
             </div>
             <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
