@@ -24,6 +24,10 @@
             <li>
                 <a id="msgManageTab" href="#" ng-click="msgManageShow()"><s:message code="smsSendTab.msgManage"/></a>
             </li>
+            <%-- 발신번호관리 탭 --%>
+            <li>
+                <a id="smsTelNoManageTab" href="#" ng-click="smsTelNoManageShow()"><s:message code="smsSendTab.smsTelNoManage"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -32,7 +36,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendTab/smsSendTab.js?ver=20210915.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendTab/smsSendTab.js?ver=20210915.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <c:if test="${orgnFg == 'HQ' or orgnFg == 'STORE'}">
@@ -51,6 +55,12 @@
 
 <%-- 메세지관리 레이어 --%>
 <c:import url="/WEB-INF/view/adi/sms/msgManage/msgManage.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 발신번호관리 레이어 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsTelNoManage.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

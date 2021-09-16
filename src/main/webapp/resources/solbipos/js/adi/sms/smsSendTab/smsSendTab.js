@@ -20,14 +20,17 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
             $("#marketingSmsSendView").show();
             $("#sendStatusView").hide();
             $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
         } else {
             $("#marketingSmsSendTab").removeClass("on");
             $("#sendStatusTab").addClass("on");
             $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
 
             $("#marketingSmsSendView").hide();
             $("#sendStatusView").show();
             $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
         }
     };
 
@@ -36,10 +39,12 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
         $("#marketingSmsSendTab").addClass("on");
         $("#sendStatusTab").removeClass("on");
         $("#msgManageTab").removeClass("on");
+        $("#smsTelNoManageTab").removeClass("on");
 
         $("#marketingSmsSendView").show();
         $("#sendStatusView").hide();
         $("#msgManageView").hide();
+        $("#smsTelNoManageView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("marketingSmsSendCtrl");
@@ -51,10 +56,12 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
         $("#marketingSmsSendTab").removeClass("on");
         $("#sendStatusTab").addClass("on");
         $("#msgManageTab").removeClass("on");
+        $("#smsTelNoManageTab").removeClass("on");
 
         $("#marketingSmsSendView").hide();
         $("#sendStatusView").show();
         $("#msgManageView").hide();
+        $("#smsTelNoManageView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sendStatusCtrl");
@@ -66,13 +73,32 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
         $("#marketingSmsSendTab").removeClass("on");
         $("#sendStatusTab").removeClass("on");
         $("#msgManageTab").addClass("on");
+        $("#smsTelNoManageTab").removeClass("on");
 
         $("#marketingSmsSendView").hide();
         $("#sendStatusView").hide();
         $("#msgManageView").show();
+        $("#smsTelNoManageView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("msgManageCtrl");
+        scope.flex.refresh();
+    };
+
+    // 발신번호관리 탭 보이기
+    $scope.smsTelNoManageShow = function () {
+        $("#marketingSmsSendTab").removeClass("on");
+        $("#sendStatusTab").removeClass("on");
+        $("#msgManageTab").removeClass("on");
+        $("#smsTelNoManageTab").addClass("on");
+
+        $("#marketingSmsSendView").hide();
+        $("#sendStatusView").hide();
+        $("#msgManageView").hide();
+        $("#smsTelNoManageView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("smsTelNoManageCtrl");
         scope.flex.refresh();
     };
 }]);
