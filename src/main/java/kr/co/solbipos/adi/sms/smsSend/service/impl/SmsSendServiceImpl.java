@@ -191,7 +191,8 @@ public class SmsSendServiceImpl implements SmsSendService {
 //            String path = "D:\\Workspace\\javaWeb\\testSmsImg\\" + path_folder + "\\";
 
             // 파일서버 대응 경로 지정 (운영) (파일 저장용)
-            String path = "/home/daemon/sms/X_McsAgent/file/mms/" + path_folder + "/";
+//            String path = "/home/daemon/sms/X_McsAgent/file/mms/" + path_folder + "/";
+            String path = BaseEnv.FILE_UPLOAD_DIR + "sms_img/" + path_folder + "/";
 
             System.out.println("test1111 : " + path);
             LOGGER.info("SMS전송 >>> MSS 파일 저장 >>> 파일 저장 경로 : " + path);
