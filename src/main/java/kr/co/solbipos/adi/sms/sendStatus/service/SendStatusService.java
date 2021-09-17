@@ -30,4 +30,7 @@ public interface SendStatusService {
 
     /** 문자전송현황 - 예약취소 */
     int getSendStatusReserveCancelSave(SendStatusVO[] sendStatusVOs, SessionInfoVO sessionInfoVO);
+
+    /** 일자별 전송현황 - 조회 */
+    List<DefaultMap<Object>> getDaySendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO);
 }

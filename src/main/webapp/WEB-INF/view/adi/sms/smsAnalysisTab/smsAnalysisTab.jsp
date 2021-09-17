@@ -13,15 +13,25 @@
             <li>
                 <a id="smsSendHistTab" href="#" class="on" ng-click="smsSendHistShow()"><s:message code="smsAnalysisTab.smsSendHist"/></a>
             </li>
+            <%-- 일자별 전송현황 탭 --%>
+            <li>
+                <a id="daySendStatusTab" href="#" ng-click="daySendStatusShow()"><s:message code="smsAnalysisTab.daySendStatus"/></a>
+            </li>
         </ul>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsAnalysisTab/smsAnalysisTab.js?ver=20210910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsAnalysisTab/smsAnalysisTab.js?ver=20210917.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- SMS전송이력 레이어 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSendHist/smsSendHist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 일자별 전송현황 레이어 --%>
+<c:import url="/WEB-INF/view/adi/sms/sendStatus/daySendStatus.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

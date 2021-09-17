@@ -93,4 +93,15 @@ public class SendStatusServiceImpl implements SendStatusService {
 
         return procCnt;
     }
+
+    /** 일자별 전송현황 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDaySendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        sendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return sendStatusMapper.getDaySendStatusList(sendStatusVO);
+    }
 }
