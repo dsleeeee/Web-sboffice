@@ -119,4 +119,27 @@ public class SendStatusController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 일자별 전송현황 - 조회
+     *
+     * @param sendStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 09. 17.
+     */
+    @RequestMapping(value = "/daySendStatus/getDaySendStatusList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDaySendStatusList(SendStatusVO sendStatusVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sendStatusService.getDaySendStatusList(sendStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sendStatusVO);
+    }
 }
