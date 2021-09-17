@@ -30,7 +30,7 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 동록일시 --%>
+                <%-- 등록일시 --%>
                 <th>
                     <s:message code="smsSendHist.regDt"/>
                 </th>

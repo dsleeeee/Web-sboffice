@@ -86,6 +86,7 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
         var dataItem = {};
         dataItem.gChk = messages["cmm.chk"];
         dataItem.regDt = messages["sendStatus.regDt"];
+        dataItem.sOgnNm = messages["sendStatus.send"];
         dataItem.sUserNm = messages["sendStatus.send"];
         dataItem.sPhoneNumber = messages["sendStatus.send"];
         dataItem.rOgnNm = messages["sendStatus.receive"];
