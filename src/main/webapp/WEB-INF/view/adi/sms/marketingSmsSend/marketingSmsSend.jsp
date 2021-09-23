@@ -657,7 +657,7 @@
                             <%-- 메세지그룹 탭 --%>
                             <c:forEach var="msgGrpAddCol" items="${msgGrpAddColList}">
                                 <li>
-                                    <a id="msgGrpTab${msgGrpAddCol.msgGrpCd}" href="#" ng-click="msgGrpShow('${msgGrpAddCol.msgGrpCd}')">${msgGrpAddCol.msgGrpNm}</a>
+                                    <a id="msgGrpAddTab${msgGrpAddCol.msgGrpCd}" href="#" ng-click="msgGrpShow('${msgGrpAddCol.msgGrpCd}')">${msgGrpAddCol.msgGrpNm}</a>
                                 </li>
                             </c:forEach>
                         </ul>

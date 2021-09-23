@@ -513,9 +513,9 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         // 탭 색상변경
         for(var i=0; i < msgGrpAddColList.length; i++) {
             if(msgGrpAddColList[i].msgGrpCd == msgGrpCd) {
-                $("#msgGrpTab"+ msgGrpAddColList[i].msgGrpCd).addClass("on");
+                $("#msgGrpAddTab"+ msgGrpAddColList[i].msgGrpCd).addClass("on");
             } else {
-                $("#msgGrpTab" + msgGrpAddColList[i].msgGrpCd).removeClass("on");
+                $("#msgGrpAddTab" + msgGrpAddColList[i].msgGrpCd).removeClass("on");
             }
         }
 
