@@ -302,4 +302,20 @@ public class MonthServiceImpl implements MonthService {
 
         return selectList;
     }
+
+    /** 사원카드별탭 - 사원카드별 매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getMonthEmpCardList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
+
+        monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = monthVO.getStoreCds().split(",");
+        monthVO.setStoreCdList(storeCds);
+
+        return monthMapper.getMonthEmpCardList(monthVO);
+    }
 }
