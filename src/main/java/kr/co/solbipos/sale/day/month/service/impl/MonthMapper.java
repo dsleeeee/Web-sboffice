@@ -34,4 +34,7 @@ public interface MonthMapper {
 
     /** 포스별탭 - 포스별 매출조회 */
     List<DefaultMap<Object>> getMonthPosList(MonthVO monthVO);
+
+    /** 사원카드별탭 - 사원카드별 매출조회 */
+    List<DefaultMap<Object>> getMonthEmpCardList(MonthVO monthVO);
 }

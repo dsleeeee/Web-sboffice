@@ -71,8 +71,8 @@
                 <wj-flex-grid-column header="<s:message code="mobile.storeRtnStatus.storeNm"/>"     binding="storeNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.storeRtnStatus.store"/>"       binding="store" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.storeRtnStatus.saleDate"/>"    binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.storeRtnStatus.rtnSaleCnt"/>"  binding="rtnSaleCnt" width="70" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.storeRtnStatus.rtnSaleAmt"/>"  binding="rtnRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.storeRtnStatus.rtnSaleCnt"/>"  binding="rtnSaleCnt" width="35" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.storeRtnStatus.orderAmt"/>"    binding="rtnRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
                 <div class="gridMsg" id="mobileStoreRtnStatusDtlMsg" style="line-height: 150px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
             </wj-flex-grid>
         </div>
@@ -81,4 +81,8 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeRtnStatus/mobileStoreRtnStatus.js?ver=20210907.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeRtnStatus/mobileStoreRtnStatus.js?ver=20210907.03" charset="utf-8"></script>
+
+<%-- 반품현황 상세 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/com/popup/rtnStatusDtl.jsp">
+</c:import>

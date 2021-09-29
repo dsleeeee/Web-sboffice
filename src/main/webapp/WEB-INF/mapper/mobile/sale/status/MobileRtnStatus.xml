@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileRtnStatus.xml
+    모바일 매출현황 > 반품현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.09.28     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.rtnStatus.service.impl.MobileRtnStatusMapper">
+
+    <!-- 반품현황 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        COMMENTS : 모바일용 반품현황 조회(매장)
+    -->
+    <select id="getMobileRtnStatusList" parameterType="MobileRtnStatusVO" resultType="DefaultMap">
+        /* MobileRtnStatusMapper.getMobileRtnStatusList */
+        SELECT  SALE_DATE,
+                SUM(RTN_SALE_CNT) AS RTN_SALE_CNT,
+                SUM(RTN_REAL_SALE_AMT) AS RTN_REAL_SALE_AMT
+        FROM 	TB_SL_DAILY_TOTAL
+        WHERE	HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND		SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND 	RTN_SALE_CNT > 0 OR RTN_SALE_AMT > 0
+        GROUP BY SALE_DATE
+        ORDER BY SALE_DATE
+    </select>
+
+    <!-- 반품현황 상세 팝업 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE
+        COMMENTS : 모바일용 반품현황 상세 팝업 조회
+    -->
+    <select id="getMobileRtnStatusDtlList" parameterType="MobileRtnStatusVO" resultType="DefaultMap">
+        /* MobileRtnStatusMapper.getMobileRtnStatusDtlList */
+        SELECT 	tssh.STORE_CD,
+                tms.STORE_NM,
+                tssh.POS_NO,
+                tssh.BILL_NO,
+                tme.EMP_NM,
+                TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'mm-dd hh24:mi') AS BILL_DT,
+                tssh.REAL_SALE_AMT
+        FROM 	TB_SL_SALE_HDR tssh,
+                TB_MS_EMPLOYEE tme,
+                TB_MS_STORE tms
+        WHERE 	tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND		tssh.SALE_DATE = #{startDate}
+        AND		tssh.SALE_YN = 'N'
+        AND 	tme.STORE_CD = tssh.STORE_CD
+        AND 	tme.EMP_NO = tssh.EMP_NO
+        AND 	tms.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND 	tms.STORE_CD = tssh.STORE_CD
+        ORDER BY tssh.STORE_CD, tssh.POS_NO, tssh.BILL_NO
+    </select>
+</mapper>

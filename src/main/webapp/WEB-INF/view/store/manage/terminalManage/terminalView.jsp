@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<%--<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />--%>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/store/manage/terminalManage/" />
 
 <div class="subCon">
@@ -29,22 +29,24 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <tr>
-      <%-- 본사코드 --%>
-      <th>
-        <s:message code="terminalManage.hqOfficeCd" />
-      </th>
-      <td>
-        <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" />
-      </td>
-      <%-- 본사명 --%>
-      <th>
-        <s:message code="terminalManage.hqOfficeNm" />
-      </th>
-      <td>
-        <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" />
-      </td>
-    </tr>
+    <c:if test="${orgnFg != 'HQ'}">
+      <tr>
+        <%-- 본사코드 --%>
+        <th>
+          <s:message code="terminalManage.hqOfficeCd" />
+        </th>
+        <td>
+          <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" />
+        </td>
+        <%-- 본사명 --%>
+        <th>
+          <s:message code="terminalManage.hqOfficeNm" />
+        </th>
+        <td>
+          <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" />
+        </td>
+      </tr>
+    </c:if>
     <tr>
       <%-- 매장코드 --%>
       <th>
@@ -240,13 +242,13 @@
 </div>
 
 <script type="text/javascript">
-  <%--var orgnFg = "${orgnFg}";--%>
+  var orgnFg = "${orgnFg}";
   var baseUrl = "${baseUrl}";
   var vendorFg = ${ccu.getCommCodeExcpAll("078")};
   var vandorList = ${vendorList};
   var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
   var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
-  <%--var hqOfficeCd = "${hqOfficeCd}";--%>
+  var hqOfficeCd = "${hqOfficeCd}";
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>

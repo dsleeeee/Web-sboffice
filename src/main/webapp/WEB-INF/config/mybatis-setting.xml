@@ -306,6 +306,10 @@
     <typeAlias alias="salePriceManageVO" type="kr.co.solbipos.base.price.salePriceManage.service.SalePriceManageVO"/>
     <!-- 기초관리 > 가격관리 > 매장판매가현황 -->
     <typeAlias alias="storeSalePriceVO" type="kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceVO"/>
+    <!-- 기초관리 > 가격관리 > 본사판매가변경이력 -->
+<!--    <typeAlias alias="hqSalePriceHistoryVO" type="kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryVO"/>-->
+    <!-- 기초관리 > 가격관리 > 판매가변경이력 -->
+<!--    <typeAlias alias="salePriceHistoryVO" type="kr.co.solbipos.base.price.salePriceHistory.service.SalePriceHistoryVO"/>-->
 
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
@@ -803,6 +807,8 @@
     <typeAlias alias="mobileTimeMonthSaleVO" type="kr.co.solbipos.mobile.sale.status.timeMonthSale.service.MobileTimeMonthSaleVO"/>
     <!-- (모바일) 매출현황 > 주문채널별매출현황 -->
     <typeAlias alias="mobileOrderChannelSaleVO" type="kr.co.solbipos.mobile.sale.status.orderChannelSale.service.MobileOrderChannelSaleVO"/>
+    <!-- (모바일) 매출현황 > 반품현황 -->
+    <typeAlias alias="mobileRtnStatusVO" type="kr.co.solbipos.mobile.sale.status.rtnStatus.service.MobileRtnStatusVO"/>
     <!-- (모바일) 부가서비스 > 근태현황 -->
     <typeAlias alias="mobileDclzManageVO" type="kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageVO"/>
     <!-- (모바일) 부가서비스 > 예약현황 -->

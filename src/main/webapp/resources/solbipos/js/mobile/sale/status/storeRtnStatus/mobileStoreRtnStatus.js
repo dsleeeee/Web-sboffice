@@ -60,7 +60,6 @@ app.controller('mobileStoreRtnStatusCtrl', ['$scope', '$http', function ($scope,
     });
     // <-- //검색 호출 -->
 
-
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -100,6 +99,10 @@ app.controller('mobileStoreRtnStatusDtlCtrl', ['$scope', '$http', function ($sco
                 } else if (col.format === "time") {
                     e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
                 }
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "rtnRealSaleAmt" && item[("saleDate")] != undefined) {
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
             }
         });
 
@@ -115,6 +118,18 @@ app.controller('mobileStoreRtnStatusDtlCtrl', ['$scope', '$http', function ($sco
                 s.allowSorting = false;
             } else {
                 s.allowSorting = true;
+            }
+
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+                if (col.binding === "rtnRealSaleAmt" && selectedRow.saleDate != undefined) { // 반품금액 클릭
+                    var params    = {};
+                    params.srchStoreCd = selectedRow.storeCd;
+                    params.startDate = selectedRow.saleDate;
+                    $scope.wjRtnStatusDtlLayer.show(true);
+                    $scope._broadcast('rtnStatusDtlCtrl', params);
+                }
             }
         });
     };
@@ -175,8 +190,6 @@ app.controller('mobileStoreRtnStatusDtlCtrl', ['$scope', '$http', function ($sco
                     }
                 }
             });
-
-
         });
 
         // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------

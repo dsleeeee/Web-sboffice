@@ -23,6 +23,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").hide();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
     };
 
     // 월별종합 탭 보이기
@@ -35,6 +36,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").removeClass("on");
         $("#monthTableTab").removeClass("on");
         $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").show();
         $("#monthDcView").hide();
@@ -44,6 +46,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").hide();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthTotalCtrl");
@@ -60,6 +63,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").removeClass("on");
         $("#monthTableTab").removeClass("on");
         $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").hide();
         $("#monthDcView").show();
@@ -69,6 +73,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").hide();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthDcCtrl");
@@ -85,6 +90,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").removeClass("on");
         $("#monthTableTab").removeClass("on");
         $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").hide();
         $("#monthDcView").hide();
@@ -94,6 +100,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").hide();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthTaxCtrl");
@@ -110,6 +117,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").removeClass("on");
         $("#monthTableTab").removeClass("on");
         $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").hide();
         $("#monthDcView").hide();
@@ -119,6 +127,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").hide();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthTimeCtrl");
@@ -135,6 +144,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").removeClass("on");
         $("#monthTableTab").removeClass("on");
         $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").hide();
         $("#monthDcView").hide();
@@ -144,6 +154,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").hide();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthProdClassCtrl");
@@ -160,6 +171,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").addClass("on");
         $("#monthTableTab").removeClass("on");
         $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").hide();
         $("#monthDcView").hide();
@@ -169,6 +181,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").show();
         $("#monthTableView").hide();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthCornerCtrl");
@@ -185,6 +198,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").removeClass("on");
         $("#monthTableTab").addClass("on");
         $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").hide();
         $("#monthDcView").hide();
@@ -194,6 +208,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").show();
         $("#monthPosView").hide();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthTableCtrl");
@@ -210,6 +225,7 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerTab").removeClass("on");
         $("#monthTableTab").removeClass("on");
         $("#monthPosTab").addClass("on");
+        $("#monthEmpCardTab").removeClass("on");
 
         $("#monthTotalView").hide();
         $("#monthDcView").hide();
@@ -219,10 +235,37 @@ app.controller('monthSaleCtrl', ['$scope', function ($scope) {
         $("#monthCornerView").hide();
         $("#monthTableView").hide();
         $("#monthPosView").show();
+        $("#monthEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthPosCtrl");
         scope.flex.refresh();
     };
 
+    // 사원카드 탭 보이기
+    $scope.monthEmpCardShow = function () {
+        $("#monthTotalTab").removeClass("on");
+        $("#monthDcTab").removeClass("on");
+        $("#monthTaxTab").removeClass("on");
+        $("#monthTimeTab").removeClass("on");
+        $("#monthProdClassTab").removeClass("on");
+        $("#monthCornerTab").removeClass("on");
+        $("#monthTableTab").removeClass("on");
+        $("#monthPosTab").removeClass("on");
+        $("#monthEmpCardTab").addClass("on");
+
+        $("#monthTotalView").hide();
+        $("#monthDcView").hide();
+        $("#monthTaxView").hide();
+        $("#monthTimeView").hide();
+        $("#monthProdClassView").hide();
+        $("#monthCornerView").hide();
+        $("#monthTableView").hide();
+        $("#monthPosView").hide();
+        $("#monthEmpCardView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("monthEmpCardCtrl");
+        scope.flex.refresh();
+    };
 }]);
