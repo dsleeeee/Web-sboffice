@@ -154,6 +154,7 @@
     ];*/
 
     var boardCd = "${boardCd}";
+    var rootUrl = "${rootUrl}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.02" charset="utf-8"></script>
