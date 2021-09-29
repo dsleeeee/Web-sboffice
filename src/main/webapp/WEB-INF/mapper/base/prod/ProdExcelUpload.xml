@@ -235,31 +235,31 @@
             #{stockProdYn},
             'N', --SIDE_PROD_YN
             '1', --SET_PROD_FG
-            #{costUprc},
+            REPLACE(#{costUprc}, ',',''),
             '0', --LAST_COST_UPRC
-            #{splyUprc},
+            REPLACE(#{splyUprc}, ',',''),
             'Y', --SPLY_UPRC_USE_YN
             #{poProdFg},
             #{poUnitFg}, --PO_UNIT_FG
-            #{poUnitQty}, --PO_UNIT_QTY
+            REPLACE(#{poUnitQty}, ',',''), --PO_UNIT_QTY
             '', --PO_UNIT_ALLOW_FG
-            #{poMinQty},
-            #{safeStockQty},
+            REPLACE(#{poMinQty}, ',',''),
+            REPLACE(#{safeStockQty}, ',',''),
             '', --STOCK_UNIT_FG
             'Y', --USE_YN
             #{remark}, --REMARK
-            #{saleUprc},
+            REPLACE(#{saleUprc}, ',',''),
             #{barCd},
             #{regDt},
             #{regId},
             #{modDt},
             #{modId},
             #{vendrCd},
-            #{startStockQty},
+            REPLACE(#{startStockQty}, ',',''),
             #{prcCtrlFg},
-            NVL(#{stinSaleUprc}, #{saleUprc}),
-            NVL(#{dlvrSaleUprc}, #{saleUprc}),
-            NVL(#{packSaleUprc}, #{saleUprc})
+            REPLACE(NVL(#{stinSaleUprc}, #{saleUprc}), ',',''),
+            REPLACE(NVL(#{dlvrSaleUprc}, #{saleUprc}), ',',''),
+            REPLACE(NVL(#{packSaleUprc}, #{saleUprc}), ',','')
         )
     </insert>
 
