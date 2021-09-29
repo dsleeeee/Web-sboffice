@@ -711,8 +711,11 @@
         SELECT
 --         SUBSTR(SUBSTR(twba.ORGINL_FILE_NM, INSTR(twba.ORGINL_FILE_NM, '\', -1, 1)), 2) AS ORGINL_FILE_NM,
         (twba.ORGINL_FILE_NM || '.' || twba.FILE_EXT) AS ORGINL_FILE_NM,
+        '본문적용' AS IMG_APPLY,
         '삭제' AS DEL,
-        twba.IDX
+        twba.IDX,
+        twba.FILE_NM AS TEMP_PATH,
+        twba.FILE_EXT
         FROM TB_WB_BOARD_ATCH twba
         WHERE 1=1
         AND twba.BOARD_CD = #{boardCd}
@@ -818,4 +821,50 @@
         ORDER BY READNG_DT DESC
     </select>
 
+    <!-- 첨부파일에 임시경로 UPDATE -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 첨부파일에 임시경로 UPDATE
+    -->
+    <update id="setTempPath" parameterType="BoardVO">
+        /* BoardMapper.setTempPath */
+        UPDATE TB_WB_BOARD_ATCH
+           SET TEMP_PATH = #{tempPath}
+         WHERE 1=1
+           AND BOARD_CD = #{boardCd}
+           AND BOARD_SEQ_NO = #{boardSeqNo}
+           AND (ORGINL_FILE_NM || '.' || FILE_EXT) = #{orginlFileNm}
+           AND USE_YN = 'Y'
+    </update>
+
+    <!-- 게시글에 속한 첨부파일 조회 -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS :  게시글에 속한 첨부파일 조회
+    -->
+    <select id="getAtchList"  parameterType="BoardVO" resultType="DefaultMap">
+        /* BoardMapper.getAtchList */
+        SELECT TEMP_PATH,
+                FILE_NM
+          FROM TB_WB_BOARD_ATCH
+         WHERE BOARD_CD = #{boardCd}
+           AND BOARD_SEQ_NO = #{boardSeqNo}
+           AND USE_YN = 'Y'
+    </select>
+
+    <!-- 게시글 내 이미지 파일 임시경로 서버경로로 치환 -->
+    <!--
+        TABLE    : TB_WB_BOARD_INFO
+        COMMENTS : 게시글 내 이미지 파일 임시경로 서버경로로 치환
+    -->
+    <update id="saveBoardInfoContent" parameterType="BoardVO">
+        /* BoardMapper.saveBoardInfoContent */
+        UPDATE TB_WB_BOARD_INFO
+           SET CONTENT = REPLACE(CONTENT, #{tempPath}, #{rootUrl}),
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+         WHERE BOARD_CD = #{boardCd}
+           AND BOARD_SEQ_NO = #{boardSeqNo}
+           AND USE_YN = 'Y'
+    </update>
 </mapper>

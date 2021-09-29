@@ -121,4 +121,14 @@ public interface BoardMapper {
 
     /** 열람자목록 팝업 - 검색 */
     List<DefaultMap<Object>> getBoardReadingHistList(BoardVO boardVO);
+
+    /** 첨부파일에 임시경로 UPDATE */
+    int setTempPath(BoardVO boardVO);
+
+    /** 게시글에 속한 첨부파일 조회 */
+    List<DefaultMap<Object>> getAtchList(BoardVO boardVO);
+
+    /** 게시글 내 이미지 파일 임시경로 서버경로로 치환 */
+    int saveBoardInfoContent(BoardVO boardVO);
+
 }

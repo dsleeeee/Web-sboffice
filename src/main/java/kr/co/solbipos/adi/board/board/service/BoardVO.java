@@ -117,6 +117,12 @@ public class BoardVO extends PageVO {
     /** 열람구분 */
     private String gubunReadCombo;
 
+    /** 임시파일경로 */
+    private String tempPath;
+
+    /** 웹 접속 경로 */
+    private String rootUrl;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -255,5 +261,21 @@ public class BoardVO extends PageVO {
 
     public void setEmergencyYn(String emergencyYn) {
         this.emergencyYn = emergencyYn;
+    }
+
+    public String getTempPath() {
+        return tempPath;
+    }
+
+    public void setTempPath(String tempPath) {
+        this.tempPath = tempPath;
+    }
+
+    public String getRootUrl() {
+        return rootUrl;
+    }
+
+    public void setRootUrl(String rootUrl) {
+        this.rootUrl = rootUrl;
     }
 }

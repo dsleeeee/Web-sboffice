@@ -60,6 +60,9 @@ public class BoardController {
 //        System.out.println("test1111 : " + boardCd);
         model.addAttribute("boardCd", boardCd);
 
+        // 웹 접속 경로
+        model.addAttribute("rootUrl" , request.getRequestURL().toString().replace(request.getRequestURI(),""));
+
         return "adi/board/board/boardList";
     }
 
@@ -374,5 +377,28 @@ System.out.println("kjs: reFileNM : " + reFileNM);
         List<DefaultMap<Object>> result = boardService.getBoardReadingHistList(boardVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, boardVO);
+    }
+
+    /**
+     * 첨부파일에 임시경로 UPDATE 후 게시글 이미지 서버경로로 치환
+     *
+     * @param boardVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021. 09. 17.
+     */
+    @RequestMapping(value = "/board/setServerPathFile.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result setServerPathFile(@RequestBody BoardVO[] boardVOs, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = boardService.setServerPathFile(boardVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }
