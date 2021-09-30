@@ -64,6 +64,7 @@ public class SmsChargeController {
     public String smsChargeView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "adi/sms/smsCharge/smsCharge";
+//        return "adi/sms/smsCharge/sample/order";
     }
 
 }

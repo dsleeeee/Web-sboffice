@@ -1,6 +1,5 @@
-<div id="smsChargeView" style="display: none;">
-
 <%@ page language="java" contentType="text/html;charset=euc-kr"%>
+
 <%
     /* ============================================================================== */
     /* =   PAGE : 결제 요청 PAGE                                                    = */
@@ -20,7 +19,7 @@
     /* =   테스트 및 실결제 연동시 site_conf_inc.jsp 파일을 수정하시기 바랍니다.    = */
     /* = -------------------------------------------------------------------------- = */
 %>
-<%@ include file="../smsCharge/cfg/site_conf_inc.jsp"%>
+<%@ include file="../cfg/site_conf_inc.jsp"%>
 <%
     request.setCharacterEncoding ( "euc-kr" ) ;
     /* = -------------------------------------------------------------------------- = */
@@ -43,7 +42,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <title>SMS충전</title>
+    <title>가맹점 결제 샘플페이지</title>
 
     <!-- 공통: font preload -->
     <link rel="preload" href="https://cdn.kcp.co.kr/font/NotoSansCJKkr-Regular.woff" type="font/woff" as="font" crossorigin>
@@ -56,14 +55,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
-    <style type="text/css" >
-        a {text-decoration:none; color:inherit;}
-        p.txt {line-height:23px; color:#4383b0; white-space: pre;}
-        p.txt span {font-weight:bold; color:#e44541;}
-
-        #sample_wrap h1 {width:700px; margin:50px auto 0 ; font-size:12px; background:#0e66a4; color:#fff; height:35px; line-height:35px; text-align:center;}
-        .sample {margin:0 auto; width:698px; border-left:1px solid #0e66a4; border-right:1px solid #0e66a4; border-bottom:1px solid #0e66a4;}
-    </style>
+    <link href="/resource/solbipos/css/cmm/sms.style.css" rel="stylesheet" type="text/css" id="cssLink"/>
 
     <script type="text/javascript">
         /****************************************************************/
@@ -119,42 +111,52 @@
         /* ============================================================================== */
     %>
     <script type="text/javascript">
-        function amt()
+
+
+        function pay()
         {
             var frm = document.order_info;
 
-            if (frm.amt[0].checked)
+            if (frm.pay_method[0].checked)
             {
-                frm.good_mny.value = frm.amt[0].value;
+                frm.pay_method.value="100000000000"; //신용카드
             }
 
-            else if (frm.amt[1].checked)
+            else if (frm.pay_method[1].checked)
             {
-                frm.good_mny.value = frm.amt[1].value;
+                frm.pay_method.value="010000000000"; //계좌이체
             }
 
-            else if (frm.amt[2].checked)
+            else if (frm.pay_method[2].checked)
             {
-                frm.good_mny.value = frm.amt[2].value;
+                frm.pay_method.value="001000000000"; //가상계좌
             }
 
-            else if (frm.amt[3].checked)
+            else if (frm.pay_method[3].checked)
             {
-                frm.good_mny.value = frm.amt[3].value;
+                frm.pay_method.value="000010000000"; //휴대폰
             }
 
-            else if (frm.amt[4].checked)
+            else if (frm.pay_method[4].checked)
             {
-                frm.good_mny.value = frm.amt[4].value;
+                frm.pay_method.value="000100000000"; //포인트
             }
+
+            else if (frm.pay_method[5].checked)
+            {
+                frm.pay_method.value="000000001000"; //상품권
+            }
+
+            else if (frm.pay_method[6].checked)
+            {
+                frm.pay_method.value="111000000000"; //신용카드/계좌이체/가상계좌
+            }
+
         }
-
         /* 표준웹 실행 */
-        function jsf__pay( pay, form )
+        function jsf__pay( form )
         {
-            form.pay_method.value = pay; //신용카드, 계좌이체, 휴대폰결제
-
-            amt();
+            pay();
 
             try
             {
@@ -164,6 +166,7 @@
             {
                 /* IE 에서 결제 정상종료시 throw로 스크립트 종료 */
             }
+
         }
 
         /* 주문번호 생성 예제 */
@@ -187,14 +190,17 @@
 
             document.order_info.ordr_idxx.value = order_idxx;
         }
+
     </script>
 </head>
 
 <body onload="init_orderid();">
-<!--wrap-->
+
 <div class="wrap">
+
     <!-- 주문정보 입력 form : order_info -->
     <form name="order_info" method="post" action="pp_cli_hub.jsp" >
+
         <%
             /* ============================================================================== */
             /* =   1. 주문 정보 입력                                                        = */
@@ -202,97 +208,168 @@
             /* =   결제에 필요한 주문 정보를 입력 및 설정합니다.                            = */
             /* = -------------------------------------------------------------------------- = */
         %>
+        <!-- header -->
+        <div class="header">
+            <a href="../index.html" class="btn-back"><span>뒤로가기</span></a>
+            <h1 class="title">주문/결제 SAMPLE</h1>
+        </div>
+        <!-- //header -->
         <!-- contents -->
-        <div id="sample_wrap">
-            <h1>SMS 충전</h1>
-            <!-- 상단 문구 -->
-            <div class="sample">
-                <table class="tbl" cellpadding="0" cellspacing="0" align="center">
-                    <tr>
-                        <td>
-                            <table width='640' border='0' cellpadding='2' cellspacing='0' style="margin-left: 20px; margin-right: 20px;">
-                                <colgroup>
-                                    <col width="30%"/>
-                                    <col width="35%"/>
-                                    <col width="35%"/>
-                                </colgroup>
-                                <tr height='34'>
-                                    <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> 충전금액을 선택하시기 바랍니다.</b></td>
-                                </tr>
-                                <tr bgcolor='#79a9d2' height='3'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td style='color:#585858;'><b>선택</b></td>
-                                    <td style='color:#585858;'><b>금액</b></td>
-                                    <td style='color:#585858;'><b>충전수량</b></td>
-                                </tr>
-                                <tr bgcolor='#79a9d2' height='1'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='8250' checked/><input type='hidden' name='qty' value='500'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>7,500원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>500통</font></td>
-                                </tr>
-                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='16500'/><input type='hidden' name='qty' value='1000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>15,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>1,000통</font></td>
-                                </tr>
-                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='33000'/><input type='hidden' name='qty' value='2000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>30,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>2,000통</font></td>
-                                </tr>
-                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='49500'/><input type='hidden' name='qty' value='3000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>45,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>3,000통</font></td>
-                                </tr>
-                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='82500'/><input type='hidden' name='qty' value='5000'/></td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>5,000통</font></td>
-                                </tr>
-                                <tr bgcolor='#bfccd8' height='1'><td colspan='3'></td></tr>
-                                <tr height='30'>
-                                    <td colspan='3' style='color:#585858;' align='right'>* 부가세 별도금액 입니다.</td>
-                                </tr>
-                                <tr height='34'>
-                                    <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> 결제수단을 선택하시기 바랍니다.</b></td>
-                                </tr>
-                                <tr bgcolor='#79a9d2' height='3'><td colspan='3'></td></tr>
-                                <tr height='10'><td colspan='3'></td></tr>
-                                <tr>
-                                    <td colspan='3' align='center'>
-                                        <%-- 신용카드 --%>
-                                        <img src='/resource/solbipos/css/img/sms/btn_pay_card.jpg'    onclick="jsf__pay('100000000000', document.order_info);"/>
-                                        &nbsp;
-                                        <%-- 계좌이체 --%>
-                                        <img src='/resource/solbipos/css/img/sms/btn_pay_account.jpg'    onclick="jsf__pay('010000000000', document.order_info);"/>
-                                        &nbsp;
-                                        <%-- 휴대폰결제 --%>
-                                        <img src='/resource/solbipos/css/img/sms/btn_pay_hp.jpg'    onclick="jsf__pay('000010000000', document.order_info);"/>
-                                    </td>
-                                </tr>
-                                <tr height='20'><td></td></tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-                <!-- Payplus Plug-in 설치 안내 -->
-                <%--<div id="display_setup_message" style="display:none">--%>
-                <%--<div id="display_setup_message">--%>
-                    <%--<p class="txt">--%>
-            <%--결제를 계속 하시려면 상단의 노란색 표시줄을 클릭 하시거나 <a href="http://pay.kcp.co.kr/plugin_new/file/KCPUXWizard.exe"><span>[수동설치]</span></a>를 눌러--%>
-            <%--Payplus Plug-in을 설치하시기 바랍니다.--%>
-            <%--[수동설치]를 눌러 설치하신 경우 새로고침(F5)키를 눌러 진행하시기 바랍니다.--%>
-                    <%--</p>--%>
-                <%--</div>--%>
-            </div>
+        <div id="skipCont" class="contents">
+            <p class="txt-type-1">이 페이지는 결제를 요청하는 샘플 페이지입니다.</p>
+            <p class="txt-type-2">소스 수정 시 [※ 필수] 또는 [※ 옵션] 표시가 포함된 문장은 가맹점의 상황에 맞게 적절히 수정 적용하시기 바랍니다.</p>
+            <!-- 주문내역 -->
+            <h2 class="title-type-3">주문내역</h2>
+            <ul class="list-type-1">
+                <!-- 주문번호(ordr_idxx) -->
+                <li>
+                    <div class="left"><p class="title">주문번호</p></div>
+                    <div class="right">
+                        <div class="ipt-type-1 pc-wd-2">
+                            <input type="text" name="ordr_idxx" value="" maxlength="40" />
+                            <a href="#none" class="btn-clear"></a>
+                        </div>
+                    </div>
+                </li>
+                <!-- 상품명(good_name) -->
+                <li>
+                    <div class="left"><p class="title">상품명</p></div>
+                    <div class="right">
+                        <div class="ipt-type-1 pc-wd-2">
+                            <input type="text" name="good_name" value="운동화" />
+                            <a href="#none" class="btn-clear"></a>
+                        </div>
+                    </div>
+                </li>
+                <!-- 결제금액(good_mny) - ※ 필수 : 값 설정시 ,(콤마)를 제외한 숫자만 입력하여 주십시오. -->
+                <li>
+                    <div class="left"><p class="title">상품금액</p></div>
+                    <div class="right">
+                        <div class="ipt-type-1 gap-2 pc-wd-2">
+                            <input type="text" name="good_mny" value="1004" maxlength="9" />
+                            <a href="#none" class="btn-clear"></a>
+                            <span class="txt-price">원</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="line-type-1"></div>
+            <!-- 주문정보 -->
+            <h2 class="title-type-3">주문정보</h2>
+            <ul class="list-type-1">
+                <!-- 주문자명(buyr_name) -->
+                <li>
+                    <div class="left"><p class="title">주문자명</p></div>
+                    <div class="right">
+                        <div class="ipt-type-1 pc-wd-2">
+                            <input type="text" name="buyr_name" value="홍길동" />
+                            <a href="#none" class="btn-clear"></a>
+                        </div>
+                    </div>
+                </li>
+                <!-- 주문자 연락처1(buyr_tel1) -->
+                <li>
+                    <div class="left"><p class="title">전화번호</p></div>
+                    <div class="right">
+                        <div class="ipt-type-1 pc-wd-2">
+                            <input type="text" name="buyr_tel1" value="02-0000-0000" />
+                            <a href="#none" class="btn-clear"></a>
+                        </div>
+                    </div>
+                </li>
+                <!-- 휴대폰번호(buyr_tel2) -->
+                <li>
+                    <div class="left"><p class="title">휴대폰번호</p></div>
+                    <div class="right">
+                        <div class="ipt-type-1 pc-wd-2">
+                            <input type="text" name="buyr_tel2" value="010-0000-0000" />
+                            <a href="#none" class="btn-clear"></a>
+                        </div>
+                    </div>
+                </li>
+                <!-- 주문자 E-mail(buyr_mail) -->
+                <li>
+                    <div class="left"><p class="title">이메일</p></div>
+                    <div class="right">
+                        <div class="ipt-type-1 pc-wd-2">
+                            <input type="text" name="buyr_mail" value="test@test.co.kr" />
+                            <a href="#none" class="btn-clear"></a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="line-type-1"></div>
+            <%
+                /* ============================================================================== */
+                /* =   결제 수단 정보 설정                                                 = */
+                /* = -------------------------------------------------------------------------- = */
+                /* =   결제에 필요한 결제 수단 정보를 설정합니다.                               = */
+                /* =                                                                            = */
+                /* =  신용카드 : 100000000000, 계좌이체 : 010000000000, 가상계좌 : 001000000000 = */
+                /* =  포인트   : 000100000000, 휴대폰   : 000010000000, 상품권   : 000000001000 = */
+                /* =                                                                            = */
+                /* =  위와 같이 설정한 경우 표준웹에서 설정한 결제수단이 표시됩니다.            = */
+                /* =  표준웹에서 여러 결제수단을 표시하고 싶으신 경우 설정하시려는 결제         = */
+                /* =  수단에 해당하는 위치에 해당하는 값을 1로 변경하여 주십시오.               = */
+                /* =                                                                            = */
+                /* =  예) 신용카드, 계좌이체, 가상계좌를 동시에 표시하고자 하는 경우            = */
+                /* =  pay_method = "111000000000"                                               = */
+                /* =  신용카드(100000000000), 계좌이체(010000000000), 가상계좌(001000000000)에  = */
+                /* =  해당하는 값을 모두 더해주면 됩니다.                                       = */
+                /* =                                                                            = */
+                /* = ※ 필수                                                                    = */
+                /* =  KCP에 신청된 결제수단으로만 결제가 가능합니다.                            = */
+                /* = -------------------------------------------------------------------------- = */
+            %>
+            <h2 class="title-type-3">결제수단</h2>
+            <ul class="list-check-1">
+                <li>
+                    <input type="radio" id="radio-2-1" class="ipt-radio-1" name="pay_method" value="100000000000" checked />
+                    <label for="radio-2-1"><span class="ico-radio"><span></span></span>신용카드</label>
+                </li>
+                <li>
+                    <input type="radio" id="radio-2-2" class="ipt-radio-1" name="pay_method" value="010000000000" />
+                    <label for="radio-2-2"><span class="ico-radio"><span></span></span>계좌이체</label>
+                </li>
+                <li>
+                    <input type="radio" id="radio-2-3" class="ipt-radio-1" name="pay_method" value="001000000000" />
+                    <label for="radio-2-3"><span class="ico-radio"><span></span></span>가상계좌</label>
+                </li>
+                <li>
+                    <input type="radio" id="radio-2-4" class="ipt-radio-1" name="pay_method" value="000010000000" />
+                    <label for="radio-2-4"><span class="ico-radio"><span></span></span>휴대폰</label>
+                </li>
+                <li>
+                    <input type="radio" id="radio-2-5" class="ipt-radio-1" name="pay_method" value="000100000000" />
+                    <label for="radio-2-5"><span class="ico-radio"><span></span></span>포인트</label>
+                </li>
+                <li>
+                    <input type="radio" id="radio-2-6" class="ipt-radio-1" name="pay_method" value="000000001000" />
+                    <label for="radio-2-6"><span class="ico-radio"><span></span></span>상품권</label>
+                </li>
+                <li>
+                    <input type="radio" id="radio-2-8" class="ipt-radio-1" name="pay_method" value="111000000000" />
+                    <label for="radio-2-8"><span class="ico-radio"><span></span></span>신용카드/계좌이체/가상계좌</label>
+                </li>
+            </ul>
+            <div Class="Line-Type-1"></div>
+            <ul class="list-btn-2">
+                <!-- D : 버튼 비활성시 a태그에 class disable 추가 -->
+                <li class="pc-only-show"><a href="../index.html" class="btn-type-3 pc-wd-2">뒤로</a></li>
+                <li><a href="#none" onclick="jsf__pay(document.order_info);" class="btn-type-2 pc-wd-3">결제요청</a></li>
+            </ul>
         </div>
         <!-- //contents -->
+
+        <div class="grid-footer">
+            <div class="inner">
+                <!-- footer -->
+                <div class="footer">
+                    ⓒ NHN KCP Corp.
+                </div>
+                <!-- //footer -->
+            </div>
+        </div>
 
         <!-- 공통: js -->
         <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
@@ -319,9 +396,7 @@
         <input type="hidden" name="req_tx"          value="pay" />
         <input type="hidden" name="site_cd"         value="<%= g_conf_site_cd   %>" />
         <input type="hidden" name="site_name"       value="<%= g_conf_site_name %>" />
-        <input type="hidden" name="pay_method" value="100000000000"> <!-- 결제 수단 - 디폴트값 : 신용카드 -->
-        <input type="hidden" name="ordr_idxx" value="" maxlength="40" /> <!-- 주문번호 -->
-        <input type="hidden" name="good_mny" value="" /> <!-- 결제금액(good_mny) - ※ 필수 : 값 설정시 ,(콤마)를 제외한 숫자만 입력하여 주십시오. -->
+        <input type="hidden" name="pay_method" value=""> <!-- 결제 수단 -->
         <%
             /*
                할부옵션 : 표준웹에서 카드결제시 최대로 표시할 할부개월 수를 설정합니다.(0 ~ 18 까지 설정 가능)
@@ -431,7 +506,7 @@
 
     /* 현금영수증 등록 창을 출력 여부를 설정하는 파라미터 입니다
          ※ Y : 현금영수증 등록 창 출력
-         ※ N : 현금영수증 등록 창 출력 안함
+         ※ N : 현금영수증 등록 창 출력 안함 
     ※ 주의 : 현금영수증 사용 시 KCP 상점관리자 페이지에서 현금영수증 사용 동의를 하셔야 합니다
         <input type="hidden" name="disp_tax_yn"     value="Y"/> */
 
@@ -445,29 +520,29 @@
         2010-06월 현재 신용카드와 가상계좌만 지원됩니다
         <input type="hidden" name="eng_flag"      value="Y"> */
 
-    /* KCP는 과세상품과 비과세상품을 동시에 판매하는 업체들의 결제관리에 대한 편의성을 제공해드리고자,
+    /* KCP는 과세상품과 비과세상품을 동시에 판매하는 업체들의 결제관리에 대한 편의성을 제공해드리고자, 
         복합과세 전용 사이트코드를 지원해 드리며 총 금액에 대해 복합과세 처리가 가능하도록 제공하고 있습니다
         복합과세 전용 사이트 코드로 계약하신 가맹점에만 해당이 됩니다
         상품별이 아니라 금액으로 구분하여 요청하셔야 합니다
-        총결제 금액은 과세금액 + 부과세 + 비과세금액의 합과 같아야 합니다.
+        총결제 금액은 과세금액 + 부과세 + 비과세금액의 합과 같아야 합니다. 
         (good_mny = comm_tax_mny + comm_vat_mny + comm_free_mny)
-
+        
         <input type="hidden" name="tax_flag"       value="TG03">  <!-- 변경불가    -->
-        <input type="hidden" name="comm_tax_mny"   value=""    >  <!-- 과세금액    -->
+        <input type="hidden" name="comm_tax_mny"   value=""    >  <!-- 과세금액    --> 
         <input type="hidden" name="comm_vat_mny"   value=""    >  <!-- 부가세     -->
         <input type="hidden" name="comm_free_mny"  value=""    >  <!-- 비과세 금액 --> */
 
-    /* skin_indx 값은 스킨을 변경할 수 있는 파라미터이며 총 7가지가 지원됩니다.
-        변경을 원하시면 1부터 7까지 값을 넣어주시기 바랍니다.
+    /* skin_indx 값은 스킨을 변경할 수 있는 파라미터이며 총 7가지가 지원됩니다. 
+        변경을 원하시면 1부터 7까지 값을 넣어주시기 바랍니다. 
 
         <input type="hidden" name="skin_indx"      value="1"> */
 
     /* 상품코드 설정 파라미터 입니다.(상품권을 따로 구분하여 처리할 수 있는 옵션기능입니다.)
         <input type="hidden" name="good_cd"      value=""> */
-
+        
     /* 가맹점에서 관리하는 고객 아이디 설정을 해야 합니다. 상품권 결제 시 반드시 입력하시기 바랍니다.
         <input type="hidden" name="shop_user_id"    value=""/> */
-
+        
     /* 복지포인트 결제시 가맹점에 할당되어진 코드 값을 입력해야합니다.
         <input type="hidden" name="pt_memcorp_cd"   value=""/> */
 
@@ -482,5 +557,3 @@
 <!--//wrap-->
 </body>
 </html>
-
-</div>
