@@ -202,6 +202,8 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         // 총판인 경우, session의 AgencyCode 값 넣기
         if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             storeTerminalVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            storeTerminalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         }
 
         return mapper.getTerminalManageList(storeTerminalVO);

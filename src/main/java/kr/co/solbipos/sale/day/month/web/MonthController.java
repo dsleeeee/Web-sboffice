@@ -229,4 +229,27 @@ public class MonthController {
 
         return ReturnUtil.returnListJson(Status.OK, result, monthVO);
     }
+
+    /**
+     * 사원카드별 - 사원카드별 매출조회
+     *
+     * @param monthVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.09.23
+     */
+    @RequestMapping(value = "/month/getMonthEmpCardList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMonthEmpCardList(MonthVO monthVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = monthService.getMonthEmpCardList(monthVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, monthVO);
+    }
 }

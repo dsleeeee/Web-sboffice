@@ -45,6 +45,10 @@
             <li>
                 <a id="monthPosTab" href="#" ng-click="monthPosShow()"><s:message code="month.pos"/></a>
             </li>
+            <%-- 사원카드별 탭 --%>
+            <li>
+                <a id="monthEmpCardTab" href="#" ng-click="monthEmpCardShow()"><s:message code="month.empCard"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -128,7 +132,7 @@
     var maxLevel    = '${maxLevel}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/monthSale/monthSale.js?ver=20210322.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/monthSale/monthSale.js?ver=20210322.03" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 월별종합 레이어 --%>
@@ -177,6 +181,12 @@
 
 <%-- 포스별 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/month/monthPos.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 사원카드별 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/month/monthEmpCard.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

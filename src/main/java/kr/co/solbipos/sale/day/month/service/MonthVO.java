@@ -120,6 +120,19 @@ public class MonthVO extends PageVO {
     /** 상품분류코드*/
     private String prodClassCd;
 
+    /** 회사명 */
+    private String officeNm;
+
+    /** 부서명 */
+    private String officeDeptNm;
+
+    /** 사원번호 */
+    private String officeEmpNo;
+
+    /** 사원명 */
+    private String officeEmpNm;
+
+
     /** 다중 상품분류코드(string 형) */
     private String strProdClassCd;
     /** 다중 상품분류코드(배열형) */
@@ -374,5 +387,37 @@ public class MonthVO extends PageVO {
 
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getOfficeNm() {
+        return officeNm;
+    }
+
+    public void setOfficeNm(String officeNm) {
+        this.officeNm = officeNm;
+    }
+
+    public String getOfficeDeptNm() {
+        return officeDeptNm;
+    }
+
+    public void setOfficeDeptNm(String officeDeptNm) {
+        this.officeDeptNm = officeDeptNm;
+    }
+
+    public String getOfficeEmpNo() {
+        return officeEmpNo;
+    }
+
+    public void setOfficeEmpNo(String officeEmpNo) {
+        this.officeEmpNo = officeEmpNo;
+    }
+
+    public String getOfficeEmpNm() {
+        return officeEmpNm;
+    }
+
+    public void setOfficeEmpNm(String officeEmpNm) {
+        this.officeEmpNm = officeEmpNm;
     }
 }
