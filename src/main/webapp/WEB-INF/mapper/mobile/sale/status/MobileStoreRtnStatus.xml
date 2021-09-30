@@ -36,7 +36,6 @@
         AND		tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND 	tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
         AND 	tms.STORE_CD = tsdt.STORE_CD
-        AND 	tsdt.RTN_SALE_CNT > 0 OR tsdt.RTN_SALE_AMT > 0
         ORDER BY tsdt.STORE_CD, tms.STORE_NM, tsdt.SALE_DATE
     </select>
 

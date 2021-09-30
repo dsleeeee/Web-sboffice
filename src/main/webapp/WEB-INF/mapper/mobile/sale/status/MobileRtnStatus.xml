@@ -30,7 +30,6 @@
             </foreach>
         </if>
         AND		SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND 	RTN_SALE_CNT > 0 OR RTN_SALE_AMT > 0
         GROUP BY SALE_DATE
         ORDER BY SALE_DATE
     </select>
