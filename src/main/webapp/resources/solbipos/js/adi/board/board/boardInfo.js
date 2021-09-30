@@ -21,10 +21,10 @@ var app = agrid.getApp();
 /**
  *  팝업 그리드 생성
  */
-app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('boardInfoCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('boardInfoCtrl', $scope, $http, $timeout, true));
 
     // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S: 매장)
     $scope.orgnFg = gvOrgnFg;
@@ -46,6 +46,22 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
 
+                // 본문적용
+                if (col.binding === "imgApply") {
+                    // 값이 있으면 링크 효과
+                    if(item["fileExt"] === "png" || item["fileExt"] === "PNG" ||
+                        item["fileExt"] === "jpg" || item["fileExt"] === "JPG" ||
+                        item["fileExt"] === "jpeg" || item["fileExt"] === "JPEG" ||
+                        item["fileExt"] === "gif" || item["fileExt"] === "GIF"){
+                        if (item["imgApply"] === '본문적용') {
+                            wijmo.addClass(e.cell, 'wijLink');
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        }
+                    }else{
+                        e.cell.innerHTML = "";
+                    }
+                }
+
                 // 삭제
                 if (col.binding === "del") {
                     // 값이 있으면 링크 효과
@@ -64,14 +80,73 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
 
-                // 삭제 클릭시 상세정보 조회
-                if ( col.binding === "del") {
-                    // 값이 있으면 링크
-                    if (selectedRow["del"] === '삭제') {
-                        var params = {};
-                        params.idx = selectedRow.idx;
+                // '본문추가' 클릭 시 이미지 본문에 적용
+                if(col.binding === "imgApply"){
+                    if(selectedRow["fileExt"] === "png" || selectedRow["fileExt"] === "PNG" ||
+                        selectedRow["fileExt"] === "jpg" || selectedRow["fileExt"] === "JPG" ||
+                        selectedRow["fileExt"] === "gif" || selectedRow["fileExt"] === "GIF") {
+                        if (selectedRow["imgApply"] === '본문적용') {
+                            var params = {};
+                            params.tempPath = selectedRow.tempPath;
+                            params.idx = selectedRow.idx;
 
-                        $scope.delAtch(params);
+                            $scope.addImgContents(params);
+                        }
+                    }
+                }
+
+                // 삭제 클릭 시 파일 제거
+                if ( col.binding === "del") {
+                    if (selectedRow["del"] === '삭제') {
+                        // 서버에 있는 파일 삭제 인 경우
+                        if(selectedRow["idx"] !== "" && selectedRow["idx"] !== null) {
+
+                            // 게시글에서 파일관련 내용 제거
+                            var html = $('#summernote').summernote('code');
+                            $('#summernote').summernote('code', html.replaceAll("<p><img src=\"" + rootUrl + "/Board/" + selectedRow["tempPath"] + "\"></p>", ""));
+
+                            // 첨부파일도 삭제하시겠습니까?
+                            $scope._popConfirm(messages["boardInfo.tempFileDel.msg"], function() {
+
+                                var params = {};
+                                params.idx = selectedRow.idx;
+
+                                $scope.delAtch(params);
+                            });
+
+                        }else{ // 로컬 파일 삭제인 경우
+
+                            // 게시글에서 파일관련 내용 제거
+                            var html = $('#summernote').summernote('code');
+                            $('#summernote').summernote('code', html.replaceAll("<p><img src=\"" + selectedRow["tempPath"] + "\"></p>", ""));
+
+                            // 첨부파일도 삭제하시겠습니까?
+                            $scope._popConfirm(messages["boardInfo.tempFileDel.msg"], function() {
+
+                                // input file 에서 삭제하려는 파일 제거
+                                var files = document.getElementById("file").files;
+                                var dt = new DataTransfer();
+
+                                for (var i = 0; i < files.length; i++) {
+                                    if (files[i].name !== selectedRow["orginlFileNm"]) {
+                                        dt.items.add(files.item(i));
+                                    }
+                                }
+
+                                document.getElementById("file").files = dt.files;
+
+                                // 파일 리스트에서 제거
+                                for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                                    var item = $scope.flex.collectionView.items[i];
+                                    if (item.orginlFileNm === selectedRow["orginlFileNm"]) {
+                                        $scope.flex.collectionView.removeAt(i);
+                                    }
+                                }
+
+                                // 객체 URL 제거
+                                URL.revokeObjectURL(selectedRow["tempPath"]);
+                            });
+                        }
                     }
                 }
             }
@@ -106,6 +181,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.title = $scope.boardInfo.title;
             $scope.userNm = $scope.boardInfo.userNm;
             $scope.apprFg = $scope.boardInfo.apprFg;
+            if($scope.boardInfo.fullSizeYn === "Y") {
+                $scope.fullSizeYn = true;
+            } else if ($scope.boardInfo.fullSizeYn === "N") {
+                $scope.fullSizeYn = false;
+            }
             $scope.targetFg = $scope.boardInfo.targetFg;
             $("#boardInfoStoreCd").val($scope.boardInfo.partOrgnCd);
             $("#boardInfoStoreNm").val($scope.boardInfo.partOrgnNm);
@@ -153,6 +233,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.title = "";
         $scope.userNm = userNm;
         $scope.apprFg = "1";
+        $scope.fullSizeYn = false;
         $scope.targetFg = "1";
         $scope.noticeYn = false;
         $scope.emergencyYn = false;
@@ -164,8 +245,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.noticeYnChk();
         $scope.setSelectedBoardInfo(null);
 
-        var storeScope = agrid.getScope('boardInfoCtrl');
-        storeScope._gridDataInit();   // 그리드 초기화
+        // 첨부파일 그리드 초기화
+        $scope.gridDefault();
 
         // 서머노트 리셋
         $('#summernote').summernote('reset');
@@ -219,6 +300,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         params.userId = userId;
         params.userNm = $scope.userNm;
         params.apprFg = $scope.apprFg;
+        if($scope.fullSizeYn === true) {
+            params.fullSizeYn = "Y";
+        } else if ($scope.fullSizeYn === false) {
+            params.fullSizeYn = "N";
+        }
         params.targetFg = $scope.targetFg;
         if($scope.noticeYn === true) {
             params.noticeYn = "Y";
@@ -355,6 +441,39 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     //첨부파일 저장
                     $scope.atchSave(params);
 
+                    // 첨부파일 임시경로 UPDATE 후 게시글 이미지 서버경로로 치환
+                    var params2 = new Array();
+
+                    $scope.flex.collectionView.commitEdit();
+                    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                        var item = $scope.flex.collectionView.itemsAdded[i];
+
+                        if(item.idx === "" && item.orginlFileNm !== "" && item.tempPath !== ""){
+
+                            if(item.fileExt === "png" || item.fileExt === "PNG" ||
+                                item.fileExt === "jpg" || item.fileExt === "JPG" ||
+                                item.fileExt === "jpeg" || item.fileExt === "JPEG" ||
+                                item.fileExt === "gif" || item.fileExt === "GIF") {
+
+                                item.boardCd = params.boardCd;
+                                item.boardSeqNo = params.boardSeqNo;
+                                item.rootUrl = rootUrl;
+
+                                params2.push(item);
+                            }
+                        }
+
+                        // 객체 URL 제거
+                        URL.revokeObjectURL(item.tempPath);
+                    }
+
+                    if(params2.length > 0) {
+                        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                        setTimeout(function() {
+                            $scope._postJSONSave.withOutPopUp("/adi/board/board/board/setServerPathFile.sb", params2, function () {});
+                        },1500)
+                    }
+
                     // 수정
                     if(params.status === "U") {
                         params.userId = $scope.selectedBoardInfo.userId;
@@ -410,8 +529,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             success: function(result) {
                 // console.log('save result', result);
                 if (result.status === "OK") {
-                    $scope._popMsg("저장되었습니다.");
-                    $scope.$broadcast('loadingPopupInactive');
+                    //$scope._popMsg("저장되었습니다.");
+                    //$scope.$broadcast('loadingPopupInactive');
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -443,7 +562,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 첨부파일 삭제
     $scope.delAtch = function(data){
         // 해당 파일을 삭제하시겠습니까?
-        $scope._popConfirm(messages["boardInfo.delConfirmAtch"], function() {
+        //$scope._popConfirm(messages["boardInfo.delConfirmAtch"], function() {
 
             var params = {};
             params.boardCd = $scope.selectedBoardInfo.boardCd;
@@ -452,7 +571,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/adi/board/board/board/getBoardInfoAtchDel.sb", params, function(){ $scope.allSearch() });
-        });
+        //});
     };
 
     // 재조회
@@ -507,4 +626,106 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     });
 
+    // 첨부파일 리스트에 바인딩
+    $scope.previewFile = function () {
+
+        var fileInput = document.getElementById("file");
+        var files = fileInput.files;
+        var file;
+        var temp;
+
+        // 첨부파일 바인딩 전 그리드 초기화
+        if($scope.selectedBoardInfo === null || $scope.selectedBoardInfo === undefined || $scope.selectedBoardInfo === ""){
+
+            if($scope.flex.collectionView !== undefined){
+                for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                    var item = $scope.flex.collectionView.items[i];
+
+                    // 게시글에서 파일관련 내용 제거
+                    var html = $('#summernote').summernote('code');
+                    $('#summernote').summernote('code', html.replaceAll("<p><img src=\"" + item.tempPath + "\"></p>", ""));
+
+                    // 객체 URL 제거
+                    URL.revokeObjectURL(item.tempPath);
+                }
+            }
+
+            // 신규 게시글은 리스트 전체 삭제
+            $scope.gridDefault();
+
+        }else{
+            // 수정 게시글은 서버에 저장된 파일은 삭제 안되게 처리
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                var item = $scope.flex.collectionView.items[i];
+                if (item.idx === "") {
+                    $scope.flex.collectionView.removeAt(i);
+
+                    // 게시글에서 파일관련 내용 제거
+                    var html = $('#summernote').summernote('code');
+                    $('#summernote').summernote('code', html.replaceAll("<p><img src=\"" + item.tempPath + "\"></p>", ""));
+
+                    // 객체 URL 제거
+                    URL.revokeObjectURL(item.tempPath);
+                }
+            }
+        }
+
+        // 첨부파일 리스트에 Add
+        setTimeout(function() {
+            for (var i = 0; i < files.length; i++) {
+                file = files[i];
+                temp = URL.createObjectURL(file); // 객체 URL 생성
+
+                // 파라미터 설정
+                var params = {};
+                params.orginlFileNm = file.name;
+                params.del = "삭제";
+                params.fileExt = file.name.split(".")[1];
+                params.tempPath = temp;
+                params.idx = "";
+
+                if(params.fileExt === "png" || params.fileExt === "PNG" ||
+                    params.fileExt === "jpg" || params.fileExt === "JPG" ||
+                    params.fileExt === "jpeg" || params.fileExt === "JPEG" ||
+                    params.fileExt === "gif" || params.fileExt === "GIF"){
+                    params.imgApply = "본문적용";
+                }else{
+                    params.imgApply = "";
+                }
+
+                // 추가기능 수행 : 파라미터
+                $scope._addRow(params);
+            }
+        }, 700)
+    };
+    
+    // 본문에 이미지 적용
+    $scope.addImgContents = function (data){
+
+        var html = $('#summernote').summernote('code');
+
+        if(data.idx === ""){ // 신규 첨부파일인 경우
+            $('#summernote').summernote('code', html + "<p><img src=\"" + data.tempPath + "\"></p>");
+        }else{
+            $('#summernote').summernote('code', html + "<p><img src=\"" + rootUrl + "/Board/" + data.tempPath + "\"></p>");
+        }
+
+    };
+
+    // 그리드 초기화
+    $scope.gridDefault = function () {
+        $timeout(function () {
+            var cv = new wijmo.collections.CollectionView([]);
+            cv.trackChanges = true;
+            $scope.data     = cv;
+            $scope.flex.refresh();
+        }, 10);
+    };
+
 }]);
+
+// 첨부파일 리스트에 바인딩
+function previewFile() {
+    var scope = agrid.getScope('boardInfoCtrl');
+    scope.previewFile();
+}

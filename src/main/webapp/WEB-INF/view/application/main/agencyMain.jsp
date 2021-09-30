@@ -173,7 +173,7 @@
                 <div class="title" style="width:560px;">
                     <a href="#" class="btn_close" ng-click="close()"></a>
                     <div class="con">
-                        <img src="/resource/solbipos/css/img/popUp/20210127.jpg" style="width:100%" alt="2021 상반기 프린터 할인행사" />
+                        <img src="/resource/solbipos/css/img/popUp/20211001.png" style="width:100%" alt="2021년 특별할인 판매 안내문" />
                     </div>
                     <div class="btnSet">
                         <span><a href="#" class="btn_blue" id="btnCloseToday" ng-click="closeToday()">오늘하루 열지않기</a></span>
@@ -348,8 +348,8 @@
         angular.extend(this, new RootController('agencyMainPopupCtrl', $scope, $http, true));
 
         // 팝업 게시 기간
-        var startDate = '20210201';
-        var endDate = '20210331';
+        var startDate = '20211001';
+        var endDate = '20211031';
 
         // 오늘 날짜
         var date = new Date();

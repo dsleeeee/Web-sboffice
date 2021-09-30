@@ -55,4 +55,7 @@ public interface BoardService {
 
     /** 열람자목록 팝업 - 검색 */
     List<DefaultMap<Object>> getBoardReadingHistList(BoardVO boardVO, SessionInfoVO sessionInfoVO);
+
+    /** 첨부파일에 임시경로 UPDATE 후 게시글 이미지 서버경로로 치환 */
+    int setServerPathFile(BoardVO[] boardVOs, SessionInfoVO sessionInfoVO);
 }

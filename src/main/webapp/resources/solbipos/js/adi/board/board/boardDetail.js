@@ -83,6 +83,11 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.boardDetail.title = $scope.boardDetail.title;
             $scope.boardDetail.userNm = $scope.boardDetail.userNm;
             $scope.boardDetail.regDt = $scope.boardDetail.regDt;
+            if($scope.boardDetail.fullSizeYn === "Y") {
+                $scope.boardDetail.fullSizeYn = true;
+            } else if ($scope.boardDetail.fullSizeYn === "N") {
+                $scope.boardDetail.fullSizeYn = false;
+            }
             if($scope.boardDetail.targetFg === "1") {
                 $scope.boardDetail.targetFg = "전체";
             } else if($scope.boardDetail.targetFg === "2") {

@@ -1,25 +1,28 @@
 package kr.co.solbipos.adi.board.board.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.common.utils.CmmUtil;
 import kr.co.solbipos.adi.board.board.service.BoardService;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
 import java.util.List;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static kr.co.common.utils.DateUtil.currentDateString;
-import kr.co.common.utils.CmmUtil;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : BoardServiceImpl.java
@@ -41,13 +44,15 @@ import kr.co.common.utils.CmmUtil;
 @Transactional
 public class BoardServiceImpl implements BoardService {
     private final BoardMapper boardMapper;
+    private final MessageService messageService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public BoardServiceImpl(BoardMapper boardMapper) {
+    public BoardServiceImpl(BoardMapper boardMapper, MessageService messageService){
         this.boardMapper = boardMapper;
+        this.messageService = messageService;
     }
 
     /** 일반게시판 조회 */
@@ -385,5 +390,44 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return boardMapper.getBoardReadingHistList(boardVO);
+    }
+
+    /** 첨부파일에 임시경로 UPDATE 후 게시글 이미지 서버경로로 치환 */
+    @Override
+    public int setServerPathFile(BoardVO[] boardVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        String rootUrl = boardVOs[0].getRootUrl(); // 웹 접속경로
+
+        // 첨부파일에 임시경로 UPDATE
+        for(BoardVO boardVO : boardVOs){
+            boardVO.setModDt(currentDt);
+            boardVO.setModId(sessionInfoVO.getUserId());
+            procCnt = boardMapper.setTempPath(boardVO);
+            if(procCnt < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+        }
+
+        // 첨부파일 정보 조회
+        BoardVO boardContentVO = new BoardVO();
+        boardContentVO.setBoardCd(boardVOs[0].getBoardCd());
+        boardContentVO.setBoardSeqNo(boardVOs[0].getBoardSeqNo());
+        boardContentVO.setModDt(currentDt);
+        boardContentVO.setModId(sessionInfoVO.getUserId());
+
+        // 게시글 내 이미지 파일 임시경로 서버경로로 치환
+        List<DefaultMap<Object>> list = boardMapper.getAtchList(boardContentVO);
+
+        for(int i = 0; i < list.size(); i++) {
+
+            boardContentVO.setTempPath(list.get(i).getStr("tempPath"));
+            boardContentVO.setRootUrl(rootUrl + "/Board/" + list.get(i).getStr("fileNm"));
+            result = boardMapper.saveBoardInfoContent(boardContentVO);
+            if(result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+        }
+
+        return result;
     }
 }
