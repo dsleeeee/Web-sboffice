@@ -71,9 +71,18 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // 제목 클릭시 상세정보 조회
                 if ( col.binding === "title") {
+                    var selectedRow = s.rows[ht.row].dataItem;
                     $scope.setSelectedStore(s.rows[ht.row].dataItem);
-                    $scope.wjBoardDetailLayer.show(true);
-                    event.preventDefault();
+
+                    // FULL SIZE 표시 여부에 따라 상세화면 사이즈가 달라짐.
+                    // if(selectedRow.fullSizeYn === "Y"){
+                    //     $scope.wjBoardDetailFullSizeLayer.show(true);
+                    //     event.preventDefault();
+                    // }else{
+                        $scope.wjBoardDetailLayer.show(true);
+                        event.preventDefault();
+                    //}
+
                 }
             }
         });
@@ -119,6 +128,13 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._broadcast('boardDetailCtrl', $scope.getSelectedStore());
             }, 50)
         });
+
+        // 게시판 상세 FULL SIZE 팝업 핸들러 추가
+        // $scope.wjBoardDetailFullSizeLayer.shown.addHandler(function (s) {
+        //     setTimeout(function() {
+        //         $scope._broadcast('boardDetailFullSizeCtrl', $scope.getSelectedStore());
+        //     }, 50)
+        // });
 
         // 게시판 신규,수정 팝업 핸들러 추가
         $scope.wjBoardInfoLayer.shown.addHandler(function (s) {

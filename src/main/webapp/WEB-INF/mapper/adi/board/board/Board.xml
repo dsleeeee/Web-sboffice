@@ -40,7 +40,8 @@
             twbi.USER_NM,
             (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE,
             twbi.REMARK,
-            DECODE(twbrh.VIEW_YN, null, 'N', 'Y') AS VIEW_YN
+            DECODE(twbrh.VIEW_YN, null, 'N', 'Y') AS VIEW_YN,
+            DECODE(twbi.FULL_SiZE_YN, null, 'N', 'Y') AS FULL_SiZE_YN
             <include refid="CmmSQL.PagingTemplateCount"/>
             FROM TB_WB_BOARD_INFO twbi,
             TB_WB_USER_INFO_DTL_V01 twuidv01,
@@ -181,7 +182,8 @@
         TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
         twbm.ANSWER_FG,
         twbi.REMARK,
-        twbi.EMERGENCY_YN
+        twbi.EMERGENCY_YN,
+        twbi.FULL_SIZE_YN
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_BOARD_MASTER twbm,
         (
@@ -319,7 +321,8 @@
             USER_ID,
             USER_NM,
             REMARK,
-            EMERGENCY_YN
+            EMERGENCY_YN,
+            FULL_SIZE_YN
         ) VALUES (
             #{boardCd},
             #{startDate},
@@ -340,7 +343,8 @@
             #{regId},
             #{userNm},
             #{remark},
-            #{emergencyYn}
+            #{emergencyYn},
+            #{fullSizeYn}
         )
     </insert>
 
@@ -365,7 +369,8 @@
         MOD_DT = #{modDt},
         MOD_ID = #{modId},
         REMARK = #{remark},
-        EMERGENCY_YN = #{emergencyYn}
+        EMERGENCY_YN = #{emergencyYn},
+        FULL_SIZE_YN = #{fullSizeYn}
         WHERE 1=1
         AND BOARD_CD = #{boardCd}
         AND BOARD_SEQ_NO = #{boardSeqNo}

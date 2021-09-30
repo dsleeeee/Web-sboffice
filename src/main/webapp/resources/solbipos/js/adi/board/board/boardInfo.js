@@ -181,6 +181,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope.title = $scope.boardInfo.title;
             $scope.userNm = $scope.boardInfo.userNm;
             $scope.apprFg = $scope.boardInfo.apprFg;
+            if($scope.boardInfo.fullSizeYn === "Y") {
+                $scope.fullSizeYn = true;
+            } else if ($scope.boardInfo.fullSizeYn === "N") {
+                $scope.fullSizeYn = false;
+            }
             $scope.targetFg = $scope.boardInfo.targetFg;
             $("#boardInfoStoreCd").val($scope.boardInfo.partOrgnCd);
             $("#boardInfoStoreNm").val($scope.boardInfo.partOrgnNm);
@@ -228,6 +233,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope.title = "";
         $scope.userNm = userNm;
         $scope.apprFg = "1";
+        $scope.fullSizeYn = false;
         $scope.targetFg = "1";
         $scope.noticeYn = false;
         $scope.emergencyYn = false;
@@ -239,8 +245,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope.noticeYnChk();
         $scope.setSelectedBoardInfo(null);
 
-        var storeScope = agrid.getScope('boardInfoCtrl');
-        storeScope._gridDataInit();   // 그리드 초기화
+        // 첨부파일 그리드 초기화
+        $scope.gridDefault();
 
         // 서머노트 리셋
         $('#summernote').summernote('reset');
@@ -294,6 +300,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.userId = userId;
         params.userNm = $scope.userNm;
         params.apprFg = $scope.apprFg;
+        if($scope.fullSizeYn === true) {
+            params.fullSizeYn = "Y";
+        } else if ($scope.fullSizeYn === false) {
+            params.fullSizeYn = "N";
+        }
         params.targetFg = $scope.targetFg;
         if($scope.noticeYn === true) {
             params.noticeYn = "Y";

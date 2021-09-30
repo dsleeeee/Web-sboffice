@@ -123,6 +123,9 @@ public class BoardVO extends PageVO {
     /** 웹 접속 경로 */
     private String rootUrl;
 
+    /** FULL SIZE 표시 */
+    private String fullSizeYn;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -277,5 +280,13 @@ public class BoardVO extends PageVO {
 
     public void setRootUrl(String rootUrl) {
         this.rootUrl = rootUrl;
+    }
+
+    public String getFullSizeYn() {
+        return fullSizeYn;
+    }
+
+    public void setFullSizeYn(String fullSizeYn) {
+        this.fullSizeYn = fullSizeYn;
     }
 }

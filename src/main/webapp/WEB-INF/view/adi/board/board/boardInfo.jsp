@@ -22,8 +22,8 @@
                 <colgroup>
                     <col class="w15"/>
                     <col class="w35"/>
-                    <col class="w15"/>
-                    <col class="w35"/>
+                    <col class="w20"/>
+                    <col class="w30"/>
                 </colgroup>
                 <tbody>
                     <tr>
@@ -49,7 +49,7 @@
                         <th>
                             <s:message code="boardInfo.apprFg"/>
                         </th>
-                        <td colspan="3">
+                        <td>
                             <div class="sb-select">
                                 <span class="txtIn w150px">
                                     <wj-combo-box
@@ -62,6 +62,18 @@
                                         initialized="_initComboBox(s)">
                                     </wj-combo-box>
                                 </span>
+                            </div>
+                        </td>
+                        <%-- FULL SIZE 표시 --%>
+                        <th>
+                            <s:message code="boardInfo.fullSizeYn"/>
+                        </th>
+                        <td>
+                            <div class="sb-select">
+                                <span class="chk ml10">
+                                    <input type="checkbox" id="fullSizeYn" name="fullSizeYnChk" ng-model="fullSizeYn">
+                                    <label for="fullSizeYn"><s:message code='boardInfo.fullSizeYn' /></label>
+                               </span>
                             </div>
                         </td>
                     </tr>
@@ -249,7 +261,7 @@
 <%--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>--%>
 <!-- include summernote css/js -->
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210924.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210924.05" charset="utf-8"></script>

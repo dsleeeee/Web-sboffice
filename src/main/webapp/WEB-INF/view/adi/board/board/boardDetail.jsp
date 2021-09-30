@@ -20,84 +20,98 @@
                 <colgroup>
                     <col class="w15"/>
                     <col class="w35"/>
-                    <col class="w15"/>
-                    <col class="w35"/>
+                    <col class="w20"/>
+                    <col class="w30"/>
                 </colgroup>
                 <tbody>
-                    <tr>
-                        <%-- 제목 --%>
-                        <th>
-                            <s:message code="boardDetail.title"/>
-                        </th>
-                        <td colspan="3">
-                            {{boardDetail.title}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%-- 작성자 --%>
-                        <th>
-                            <s:message code="boardDetail.userNm"/>
-                        </th>
-                        <td colspan="3">
-                            {{boardDetail.userNm}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%-- 게시일시 --%>
-                        <th>
-                            <s:message code="boardDetail.regDt"/>
-                        </th>
-                        <td>
-                            {{boardDetail.regDt}}
-                        </td>
-                        <%-- 게시대상 --%>
-                        <th>
-                            <s:message code="boardDetail.targetFg"/>
-                        </th>
-                        <td>
-                            {{boardDetail.targetFg}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%-- 알림여부 --%>
-                        <th>
-                            <s:message code="boardDetail.alarmYn"/>
-                        </th>
-                        <td colspan="3">
-                            <div class="sb-select">
+                <tr>
+                    <%-- 제목 --%>
+                    <th>
+                        <s:message code="boardDetail.title"/>
+                    </th>
+                    <td colspan="3">
+                        {{boardDetail.title}}
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 작성자 --%>
+                    <th>
+                        <s:message code="boardDetail.userNm"/>
+                    </th>
+                    <td colspan="3">
+                        {{boardDetail.userNm}}
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 게시일시 --%>
+                    <th>
+                        <s:message code="boardDetail.regDt"/>
+                    </th>
+                    <td>
+                        {{boardDetail.regDt}}
+                    </td>
+                    <%-- FULL SIZE 표시 --%>
+                    <th>
+                        <s:message code="boardDetail.fullSizeYn"/>
+                    </th>
+                    <td>
+                        <div class="sb-select">
+                                <span class="chk ml10">
+                                    <input type="checkbox" id="fullSizeYnBoardDetail" name="fullSizeYnChk" ng-model="boardDetail.fullSizeYn" disabled="true" >
+                                    <label for="fullSizeYnBoardDetail"><s:message code='boardDetail.fullSizeYn' /></label>
+                                </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 게시대상 --%>
+                    <th>
+                        <s:message code="boardDetail.targetFg"/>
+                    </th>
+                    <td colspan="3">
+                        {{boardDetail.targetFg}}
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 알림여부 --%>
+                    <th>
+                        <s:message code="boardDetail.alarmYn"/>
+                    </th>
+                    <td colspan="3">
+                        <div class="sb-select">
                                 <span class="chk ml10">
                                     <input type="checkbox" id="noticeYnBoardDetail" name="noticeYnChk" ng-model="boardDetail.noticeYn" disabled="true" >
                                     <label for="noticeYnBoardDetail"><s:message code='boardDetail.noticeYn' /></label>
                                 </span>
-                                <span class="chk ml10" ng-if="boardDetail.noticeYn">
+                            <span class="chk ml10" ng-if="boardDetail.noticeYn">
                                     <input type="checkbox" id="emergencyYnBoardDetail" name="emergencyYnChk" ng-model="boardDetail.emergencyYn" disabled="true" >
                                     <label for="emergencyYnBoardDetail"><s:message code='boardDetail.emergencyYn' /></label>
                                 </span>
-                                <span class="chk ml10" style="display: none;">
+                            <span class="chk ml10" style="display: none;">
                                     <input type="checkbox" id="smsYnBoardDetail" name="smsYnChk" ng-model="boardDetail.smsYn" disabled="true" >
                                     <label for="smsYnBoardDetail"><s:message code='boardDetail.smsYn' /></label>
                                 </span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <%-- 공지기간 --%>
-                        <th>
-                            <s:message code="boardDetail.date"/>
-                        </th>
-                        <td colspan="3">
-                            {{boardDetail.startDate}} ~ {{boardDetail.endDate}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%-- 비고 --%>
-                        <th>
-                            <s:message code="boardDetail.remark"/>
-                        </th>
-                        <td colspan="3">
-                            {{boardDetail.remark}}
-                        </td>
-                    </tr>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 공지기간 --%>
+                    <th>
+                        <s:message code="boardDetail.date"/>
+                    </th>
+                    <td colspan="3">
+                        {{boardDetail.startDate}} ~ {{boardDetail.endDate}}
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 비고 --%>
+                    <th>
+                        <s:message code="boardDetail.remark"/>
+                    </th>
+                    <td colspan="3">
+                        {{boardDetail.remark}}
+                    </td>
+                </tr>
                 </tbody>
             </table>
 
@@ -119,15 +133,15 @@
                             <col width="15%" />
                         </colgroup>
                         <tbody>
-                            <tr style="border: 0px;">
-                                <td><input type="text" style="border: 1px solid #d0d0d0;" id="srchContent" ng-model="content" placeholder="댓글을 입력해주세요"/></td>
-                                <td>
-                                    <%-- 댓글등록 --%>
-                                    <button class="btn_skyblue m15 fr" id="btnAddRepresent" ng-click="saveAnswer()">
-                                        <s:message code="boardDetail.newAnswer" />
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr style="border: 0px;">
+                            <td><input type="text" style="border: 1px solid #d0d0d0;" id="srchContent" ng-model="content" placeholder="댓글을 입력해주세요"/></td>
+                            <td>
+                                <%-- 댓글등록 --%>
+                                <button class="btn_skyblue m15 fr" id="btnAddRepresent" ng-click="saveAnswer()">
+                                    <s:message code="boardDetail.newAnswer" />
+                                </button>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -154,10 +168,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.07" charset="utf-8"></script>
-
-<%-- 열람자목록 팝업 --%>
-<c:import url="/WEB-INF/view/adi/board/board/boardReadingHist.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.09" charset="utf-8"></script>

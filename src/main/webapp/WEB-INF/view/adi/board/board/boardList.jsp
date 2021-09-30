@@ -11,7 +11,7 @@
 <div class="subCon" ng-controller="boardListCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -123,6 +123,7 @@
                 <wj-flex-grid-column header="<s:message code="board.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.boardSeqNo"/>" binding="boardSeqNo" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.userId"/>" binding="userId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.fullSizeYn"/>" binding="fullSizeYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -157,7 +158,7 @@
     var rootUrl = "${rootUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.04" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">
@@ -167,6 +168,12 @@
 
 <%-- 게시판 신규등록,수정 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 열람자목록 팝업 --%>
+<c:import url="/WEB-INF/view/adi/board/board/boardReadingHist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
