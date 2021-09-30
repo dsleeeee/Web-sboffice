@@ -21,7 +21,7 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
 --         cpt.OGN_CD AS ORGN_CD,
---         twuidv01.ORGN_NM,
+        twuidv01.ORGN_NM,
 --         cst.SMS_QTY,
         ('[' || cpt.OGN_CD || '] ' || twuidv01.ORGN_NM || ' (현재잔여수량 : ' || cst.SMS_QTY || ')') AS ORGN,
         cpt.CHARGE_DATE,

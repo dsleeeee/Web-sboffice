@@ -38,8 +38,8 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#chargeTimeDtl").val(data.chargeTime.substring(0,2) + ":" + data.chargeTime.substring(2,4) + ":" + data.chargeTime.substring(4,6));
             $("#chargeAmtDtl").val(data.chargeAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             $("#smsChargeQtyDtl").val(data.smsChargeQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#pgresourceDtl").val(data.pgresource);
             $scope.pgresourceDtlCombo.selectedValue = data.pgresource;
+            $("#controlnoDtl").val(data.controlno);
             $scope.successYnDtlCombo.selectedValue = data.successYn;
             $("#resultmessageDtl").val(data.resultmessage);
         } else {
