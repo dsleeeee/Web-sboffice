@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    HqSalePriceHistory.xml
+    본사판매가변경이력
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.09.29     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.hqSalePriceHistory.service.impl.HqSalePriceHistoryMapper">
+
+   <!-- 본사판매가변경이력 > 매장판매가변경이력 조회 -->
+    <!--
+        TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_CLASS
+        COMMENTS : 매장판매가변경이력을 조회함
+    -->
+    <select id="getStoreSalePriceHistoryList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+        /* HqSalePriceHistory.getStoreSalePriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	tlmpspl.STORE_CD,
+                tms.STORE_NM,
+                tlmpspl.PROD_CD,
+                tmp.PROD_NM,
+                tlmpspl.SALE_UPRC,
+                tlmpspl.B_SALE_UPRC,
+                TO_CHAR(TO_DATE(tlmpspl.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,
+                TO_CHAR(TO_DATE(tlmpspl.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,
+                tlmpspl.STIN_SALE_UPRC,
+                tlmpspl.B_STIN_SALE_UPRC,
+                tlmpspl.DLVR_SALE_UPRC,
+                tlmpspl.B_DLVR_SALE_UPRC,
+                tlmpspl.PACK_SALE_UPRC,
+                tlmpspl.B_PACK_SALE_UPRC,
+                tlmpspl.PROC_FG,
+                TO_CHAR(TO_DATE(tlmpspl.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                tlmpspl.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_LG_MS_PRODUCT_SALE_PRICE_LOG tlmpspl,
+                TB_MS_PRODUCT tmp,
+                TB_MS_STORE tms
+        WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tlmpspl.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tlmpspl.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_MS_PRODUCT_CLASS
+                                    WHERE   STORE_CD = tlmpspl.STORE_CD
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tlmpspl.STORE_CD
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tlmpspl.STORE_CD
+                                    )
+        </if>
+        AND 	tmp.STORE_CD = tlmpspl.STORE_CD
+        AND 	tmp.PROD_CD (+) = tlmpspl.PROD_CD
+        AND 	tms.STORE_CD = tlmpspl.STORE_CD
+        ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 본사판매가변경이력 > 매장판매가변경이력 조회(엑셀다운로드) -->
+    <!--
+        TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_CLASS
+        COMMENTS : 매장판매가변경이력을 조회함
+    -->
+    <select id="getStoreSalePriceHistoryExcelList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+        /* HqSalePriceHistory.getStoreSalePriceHistoryExcelList */
+        SELECT 	tlmpspl.STORE_CD,
+                tms.STORE_NM,
+                tlmpspl.PROD_CD,
+                tmp.PROD_NM,
+                tlmpspl.SALE_UPRC,
+                tlmpspl.B_SALE_UPRC,
+                TO_CHAR(TO_DATE(tlmpspl.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,
+                TO_CHAR(TO_DATE(tlmpspl.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,
+                tlmpspl.STIN_SALE_UPRC,
+                tlmpspl.B_STIN_SALE_UPRC,
+                tlmpspl.DLVR_SALE_UPRC,
+                tlmpspl.B_DLVR_SALE_UPRC,
+                tlmpspl.PACK_SALE_UPRC,
+                tlmpspl.B_PACK_SALE_UPRC,
+                tlmpspl.PROC_FG,
+                TO_CHAR(TO_DATE(tlmpspl.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                tlmpspl.MOD_ID
+        FROM 	TB_LG_MS_PRODUCT_SALE_PRICE_LOG tlmpspl,
+                TB_MS_PRODUCT tmp,
+                TB_MS_STORE tms
+        WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tlmpspl.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tlmpspl.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_MS_PRODUCT_CLASS
+                                    WHERE   STORE_CD = tlmpspl.STORE_CD
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tlmpspl.STORE_CD
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tlmpspl.STORE_CD
+                                    )
+        </if>
+        AND 	tmp.STORE_CD = tlmpspl.STORE_CD
+        AND 	tmp.PROD_CD (+) = tlmpspl.PROD_CD
+        AND 	tms.STORE_CD = tlmpspl.STORE_CD
+        ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
+    </select>
+    <!-- 본사판매가변경이력 > 본사판매가변경이력 조회 -->
+    <!--
+        TABLE    : TB_LG_HQ_PRODUCT_SALE_PRICE_LOG, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS
+        COMMENTS : 본사판매가변경이력을 조회함
+    -->
+    <select id="getHqSalePriceHistoryList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+        /* HqSalePriceHistory.getHqSalePriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	tlhpspl.PROD_CD,
+                thp.PROD_NM,
+                tlhpspl.SALE_UPRC,
+                tlhpspl.B_SALE_UPRC,
+                TO_CHAR(TO_DATE(tlhpspl.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,
+                TO_CHAR(TO_DATE(tlhpspl.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,
+                tlhpspl.STIN_SALE_UPRC,
+                tlhpspl.B_STIN_SALE_UPRC,
+                tlhpspl.DLVR_SALE_UPRC,
+                tlhpspl.B_DLVR_SALE_UPRC,
+                tlhpspl.PACK_SALE_UPRC,
+                tlhpspl.B_PACK_SALE_UPRC,
+                tlhpspl.PROC_FG,
+                TO_CHAR(TO_DATE(tlhpspl.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                tlhpspl.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_LG_HQ_PRODUCT_SALE_PRICE_LOG tlhpspl,
+                TB_HQ_PRODUCT thp
+        WHERE 	tlhpspl.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tlhpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodCd != null and prodCd != ""'>
+            AND tlhpspl.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        AND 	thp.HQ_OFFICE_CD = tlhpspl.HQ_OFFICE_CD
+        AND 	thp.PROD_CD (+) = tlhpspl.PROD_CD
+        ORDER BY tlhpspl.PROD_CD, tlhpspl.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 본사판매가변경이력 > 본사판매가변경이력 조회(엑셀다운로드) -->
+    <!--
+        TABLE    : TB_LG_HQ_PRODUCT_SALE_PRICE_LOG, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS
+        COMMENTS : 본사판매가변경이력을 조회함
+    -->
+    <select id="getHqSalePriceHistoryExcelList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+        /* HqSalePriceHistory.getHqSalePriceHistoryExcelList */
+        SELECT 	tlhpspl.PROD_CD,
+                thp.PROD_NM,
+                tlhpspl.SALE_UPRC,
+                tlhpspl.B_SALE_UPRC,
+                TO_CHAR(TO_DATE(tlhpspl.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,
+                TO_CHAR(TO_DATE(tlhpspl.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,
+                tlhpspl.STIN_SALE_UPRC,
+                tlhpspl.B_STIN_SALE_UPRC,
+                tlhpspl.DLVR_SALE_UPRC,
+                tlhpspl.B_DLVR_SALE_UPRC,
+                tlhpspl.PACK_SALE_UPRC,
+                tlhpspl.B_PACK_SALE_UPRC,
+                tlhpspl.PROC_FG,
+                TO_CHAR(TO_DATE(tlhpspl.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                tlhpspl.MOD_ID
+        FROM 	TB_LG_HQ_PRODUCT_SALE_PRICE_LOG tlhpspl,
+                TB_HQ_PRODUCT thp
+        WHERE 	tlhpspl.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tlhpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodCd != null and prodCd != ""'>
+            AND tlhpspl.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+            SELECT  PROD_CLASS_CD
+            FROM    TB_HQ_PRODUCT_CLASS
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        AND 	thp.HQ_OFFICE_CD = tlhpspl.HQ_OFFICE_CD
+        AND 	thp.PROD_CD (+) = tlhpspl.PROD_CD
+        ORDER BY tlhpspl.PROD_CD, tlhpspl.PROC_DT
+    </select>
+</mapper>

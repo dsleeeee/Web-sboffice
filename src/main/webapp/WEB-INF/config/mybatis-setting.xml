@@ -307,9 +307,9 @@
     <!-- 기초관리 > 가격관리 > 매장판매가현황 -->
     <typeAlias alias="storeSalePriceVO" type="kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceVO"/>
     <!-- 기초관리 > 가격관리 > 본사판매가변경이력 -->
-<!--    <typeAlias alias="hqSalePriceHistoryVO" type="kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryVO"/>-->
+    <typeAlias alias="hqSalePriceHistoryVO" type="kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryVO"/>
     <!-- 기초관리 > 가격관리 > 판매가변경이력 -->
-<!--    <typeAlias alias="salePriceHistoryVO" type="kr.co.solbipos.base.price.salePriceHistory.service.SalePriceHistoryVO"/>-->
+    <typeAlias alias="salePriceHistoryVO" type="kr.co.solbipos.base.price.salePriceHistory.service.SalePriceHistoryVO"/>
 
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
@@ -695,6 +695,9 @@
 
     <!-- 반품현황 -->
     <typeAlias alias="rtnStatusDayVO" type="kr.co.solbipos.sale.status.rtnStatus.day.service.RtnStatusDayVO"/>
+
+    <!-- 주문현황 -->
+<!--    <typeAlias alias="orderStatusVO" type="kr.co.solbipos.sale.orderStatus.orderStatus.service.OrderStatusVO"/>-->
 
     <!-- 매출관리 > 매출분석 > 매장별배출분석 -->
     <typeAlias alias="storeRankVO" 	type="kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO"/>
