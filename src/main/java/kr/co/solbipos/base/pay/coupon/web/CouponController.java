@@ -79,9 +79,9 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        String envstCd = "0019";
-        String coupnEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
-        String orgnFg = String.valueOf(sessionInfoVO.getOrgnFg());
+//        String envstCd = "0019";
+//        String coupnEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
+//        String orgnFg = String.valueOf(sessionInfoVO.getOrgnFg());
 
 
         // 환경설정값 체크 : [0019] 쿠폰등록-본사통제여부 확인 ( 1: 매장통제, 2:본사통제 )
@@ -98,8 +98,9 @@ public class CouponController {
         // 원래 본사통제면 매장 접근 금지였는데
         // 매장에서 등록은 안되고 조회만 가능하도록 수정 (2018-10-04)
 
-        model.addAttribute("coupnEnvstVal", coupnEnvstVal);
-
+//        model.addAttribute("coupnEnvstVal", coupnEnvstVal);
+        // [0019] 사용하지 않는 코드인데 에러나서 고정값으로 수정 (2021-09-30)
+        model.addAttribute("coupnEnvstVal", "1");
         return "base/pay/coupon/couponView";
     }
 

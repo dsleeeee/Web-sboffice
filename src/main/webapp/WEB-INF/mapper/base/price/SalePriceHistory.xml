@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SalePriceHistory.xml
+    판매가변경이력
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.09.29     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.salePriceHistory.service.impl.SalePriceHistoryMapper">
+
+   <!-- 판매가변경이력 조회 -->
+    <!--
+        TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        COMMENTS : 판매가변경이력을 조회함
+    -->
+    <select id="getSalePriceHistoryList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+        /* SalePriceHistory.getSalePriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	tlmpspl.PROD_CD,
+                tmp.PROD_NM,
+                tlmpspl.SALE_UPRC,
+                tlmpspl.B_SALE_UPRC,
+                TO_CHAR(TO_DATE(tlmpspl.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,
+                TO_CHAR(TO_DATE(tlmpspl.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,
+                tlmpspl.STIN_SALE_UPRC,
+                tlmpspl.B_STIN_SALE_UPRC,
+                tlmpspl.DLVR_SALE_UPRC,
+                tlmpspl.B_DLVR_SALE_UPRC,
+                tlmpspl.PACK_SALE_UPRC,
+                tlmpspl.B_PACK_SALE_UPRC,
+                tlmpspl.PROC_FG,
+                TO_CHAR(TO_DATE(tlmpspl.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                tlmpspl.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_LG_MS_PRODUCT_SALE_PRICE_LOG tlmpspl,
+                TB_MS_PRODUCT tmp
+        WHERE 	tlmpspl.STORE_CD = #{storeCd}
+        AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodCd != null and prodCd != ""'>
+            AND tlmpspl.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+            SELECT  PROD_CLASS_CD
+            FROM    TB_MS_PRODUCT_CLASS
+            WHERE   STORE_CD = #{storeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+            )
+        </if>
+        AND 	tmp.STORE_CD = tlmpspl.STORE_CD
+        AND 	tmp.PROD_CD (+) = tlmpspl.PROD_CD
+        ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 판매가변경이력 조회(엑셀다운로드) -->
+    <!--
+        TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        COMMENTS : 판매가변경이력을 조회함
+    -->
+    <select id="getSalePriceHistoryExcelList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+        /* SalePriceHistory.getSalePriceHistoryExcelList */
+        SELECT 	tlmpspl.PROD_CD,
+                tmp.PROD_NM,
+                tlmpspl.SALE_UPRC,
+                tlmpspl.B_SALE_UPRC,
+                TO_CHAR(TO_DATE(tlmpspl.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,
+                TO_CHAR(TO_DATE(tlmpspl.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,
+                tlmpspl.STIN_SALE_UPRC,
+                tlmpspl.B_STIN_SALE_UPRC,
+                tlmpspl.DLVR_SALE_UPRC,
+                tlmpspl.B_DLVR_SALE_UPRC,
+                tlmpspl.PACK_SALE_UPRC,
+                tlmpspl.B_PACK_SALE_UPRC,
+                tlmpspl.PROC_FG,
+                TO_CHAR(TO_DATE(tlmpspl.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                tlmpspl.MOD_ID
+        FROM 	TB_LG_MS_PRODUCT_SALE_PRICE_LOG tlmpspl,
+                TB_MS_PRODUCT tmp
+        WHERE 	tlmpspl.STORE_CD = #{storeCd}
+        AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodCd != null and prodCd != ""'>
+            AND tlmpspl.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+            SELECT  PROD_CLASS_CD
+            FROM    TB_MS_PRODUCT_CLASS
+            WHERE   STORE_CD = #{storeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+            )
+        </if>
+        AND 	tmp.STORE_CD = tlmpspl.STORE_CD
+        AND 	tmp.PROD_CD (+) = tlmpspl.PROD_CD
+        ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
+    </select>
+</mapper>
