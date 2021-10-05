@@ -161,10 +161,16 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20210806.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20210806.03" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 수신자정보 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsSendHist/addresseeDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

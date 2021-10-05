@@ -88,4 +88,27 @@ public class SmsSendHistController {
 
         return ReturnUtil.returnListJson(Status.OK, result, smsSendHistVO);
     }
+
+    /**
+     * 수신자정보 팝업 - 조회
+     *
+     * @param smsSendHistVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 10. 05.
+     */
+    @RequestMapping(value = "/addresseeDtl/getAddresseeDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAddresseeDtlList(SmsSendHistVO smsSendHistVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsSendHistService.getAddresseeDtlList(smsSendHistVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsSendHistVO);
+    }
 }
