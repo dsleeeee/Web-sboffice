@@ -52,11 +52,32 @@
     -->
     <select id="getMsgManageMsgGrpCd" parameterType="MsgManageVO" resultType="String">
         /* MsgManageMapper.getMsgManageMsgGrpCd */
-        SELECT
-        LPAD(NVL(MAX(MSG_GRP_CD), 0) + 1, 2, '0') AS MSG_GRP_CD
-        FROM HCS_MSGGR_T
-        WHERE 1=1
-        AND OGN_CD = #{orgnCd}
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사,시스템,대리점 -->
+                <if test='orgnFg != "S"'>
+                    <![CDATA[
+                        SELECT
+                        LPAD(NVL(MAX(TO_NUMBER(MSG_GRP_CD)), 0) + 1, 2, '0') AS MSG_GRP_CD
+                        FROM HCS_MSGGR_T
+                        WHERE 1=1
+                        AND OGN_CD = #{orgnCd}
+                        AND MSG_GRP_CD BETWEEN '01' AND '80'
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                        SELECT
+                        LPAD(NVL(MAX(TO_NUMBER(MSG_GRP_CD)), 80) + 1, 2, '0') AS MSG_GRP_CD
+                        FROM HCS_MSGGR_T
+                        WHERE 1=1
+                        AND OGN_CD = #{orgnCd}
+                        AND MSG_GRP_CD BETWEEN '81' AND '99'
+                    ]]>
+                </if>
+            </when>
+        </choose>
     </select>
 
     <!-- 메세지관리 - 그룹 저장 insert -->
@@ -278,6 +299,7 @@
             FROM HCS_MSGGR_T
             WHERE 1=1
             AND OGN_CD = #{orgnCd}
+            AND MSG_GRP_CD IN (${selectMsgGrpCd})
         ) B
         ON  (
                 A.OGN_CD = B.OGN_CD
@@ -332,6 +354,7 @@
             FROM HCS_SMSMS_T
             WHERE 1=1
             AND OGN_CD = #{orgnCd}
+            AND MSG_GRP_CD IN (${selectMsgGrpCd})
         ) B
         ON  (
                 A.OGN_CD = B.OGN_CD

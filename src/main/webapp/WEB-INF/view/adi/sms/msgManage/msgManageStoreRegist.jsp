@@ -9,6 +9,7 @@
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="msgManageStoreRegist.info"/>
+            <label id="lblMsgGrpCd" style="display: none"></label>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
@@ -109,4 +110,4 @@
     var sysStatFgComboData = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManageStoreRegist.js?ver=20210729.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManageStoreRegist.js?ver=20211005.01" charset="utf-8"></script>

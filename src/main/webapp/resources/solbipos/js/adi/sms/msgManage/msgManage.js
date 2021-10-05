@@ -51,6 +51,22 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
                     // var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+
+                if(orgnFg == "STORE") {
+                    // 그룹명
+                    if (col.binding === "msgGrpNm" || col.binding === "gChk") {
+                        var item = s.rows[e.row].dataItem;
+                        // 값이 있으면 링크 효과
+                        if (parseInt(item[("msgGrpCd")]) < 81) {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                            item[("gChk")] = false; // 전체 체크시 오류
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
+                    }
+                }
             }
         });
 
@@ -124,6 +140,19 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
+        // 파라미터 설정
+        var paramsChk = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                paramsChk.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        if(paramsChk.length <= 0) {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
+
         // 메세지그룹을 삭제하시면 <br/> 해당 그룹의 메세지 전체가 삭제됩니다. <br/> 그래도 삭제하시겠습니까?
         $scope._popConfirm(messages["msgManage.delMsgConfirm"], function() {
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
@@ -134,8 +163,15 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
 
-            // 저장
-            $scope.save();
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+                $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            }
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._postJSONSave.withPopUp("/adi/sms/msgManage/msgManage/getMsgManageSave.sb", params, function(){ $scope.searchMsgManage();});
         });
     };
     // <-- //그리드 행 삭제 -->
@@ -160,10 +196,6 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.flex.collectionView.itemsAdded[i].status = "I";
                 params.push($scope.flex.collectionView.itemsAdded[i]);
             }
-            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-                $scope.flex.collectionView.itemsRemoved[i].status = "D";
-                params.push($scope.flex.collectionView.itemsRemoved[i]);
-            }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/sms/msgManage/msgManage/getMsgManageSave.sb", params, function(){ $scope.searchMsgManage();});
@@ -174,8 +206,31 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 매장적용
     $scope.storeApply = function () {
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        if(params.length <= 0) {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
+
+        $scope.setSelectedMsgManage(params);
         $scope.wjMsgManageStoreRegistLayer.show(true);
         event.preventDefault();
+    };
+
+    // 선택
+    $scope.selectedMsgManage;
+    $scope.setSelectedMsgManage = function(store) {
+        $scope.selectedMsgManage = store;
+    };
+    $scope.getSelectedMsgManage = function() {
+        return $scope.selectedMsgManage;
     };
 
     // 화면 ready 된 후 설정
@@ -184,7 +239,7 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
         // 메세지관리 매장적용 팝업 핸들러 추가
         $scope.wjMsgManageStoreRegistLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('msgManageStoreRegistCtrl', null);
+                $scope._broadcast('msgManageStoreRegistCtrl', $scope.getSelectedMsgManage());
             }, 50)
         });
     });
@@ -248,10 +303,15 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
                     innerHtml += "<tr><td><textarea style=\"width:100%; height:90px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + list[i].message + "</textarea></td></tr>";
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
-                    innerHtml += "<tr><td>";
-                    innerHtml += "<span style=\"padding-right: 10px;\"><a href=\"#\" onclick=\"msgModify(\'"+ list[i].seqNo + "\', \'"+ list[i].title + "\', \'"+ list[i].message + "\')\"><img src=\"/resource/solbipos/css/img/sms/btn_upd.jpg\"></a></span>";
-                    innerHtml += "<span><a href=\"#\" onclick=\"msgDel(\'"+ list[i].seqNo + "\')\"><img src=\"/resource/solbipos/css/img/sms/btn_del.jpg\"></a></span>";
-                    innerHtml += "</td></tr>";
+                    // 본사 메세지 수정 불가
+                    if(orgnFg == "STORE") {
+                        if(parseInt(params.msgGrpCd) > 80) {
+                            innerHtml += "<tr><td>";
+                            innerHtml += "<span style=\"padding-right: 10px;\"><a href=\"#\" onclick=\"msgModify(\'"+ list[i].seqNo + "\', \'"+ list[i].title + "\', \'"+ list[i].message + "\')\"><img src=\"/resource/solbipos/css/img/sms/btn_upd.jpg\"></a></span>";
+                            innerHtml += "<span><a href=\"#\" onclick=\"msgDel(\'"+ list[i].seqNo + "\')\"><img src=\"/resource/solbipos/css/img/sms/btn_del.jpg\"></a></span>";
+                            innerHtml += "</td></tr>";
+                        }
+                    }
                     innerHtml += "</table>";
                     innerHtml += "</div>";
                 }
@@ -297,6 +357,14 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 저장
     $scope.msgSave = function () {
+        // 본사 메세지 수정 불가
+        if(orgnFg == "STORE") {
+            if (parseInt($("#lblMsgGrpCd").text()) < 81) {
+                $scope._popMsg(messages["msgManage.saveHqMsgGrpCdAlert"]); // 본사 메세지그룹에는 신규등록 할 수 없습니다.
+                return false;
+            }
+        }
+
         if($("#msgManageTitle").val() == "") {
             $scope._popMsg(messages["msgManage.titleAlert"]); // 제목을 입력해주세요.
             return false;

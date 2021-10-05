@@ -158,7 +158,11 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20210915.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var orgnFg = "${orgnFg}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20211006.02" charset="utf-8"></script>
 
 <%-- 메세지관리 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/msgManage/msgManageStoreRegist.jsp">
