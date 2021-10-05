@@ -77,11 +77,11 @@ public class SendStatusServiceImpl implements SendStatusService {
 
             sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
-            if(sendStatusVO.getGubun().equals("SDK_SMS_SEND")) {
-                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDelete(sendStatusVO); // SDK_SMS_SEND
+            if(sendStatusVO.getGubun().equals("SDK_SMS_SEND_ENC")) {
+                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDelete(sendStatusVO); // SDK_SMS_SEND_ENC
 
-            } else if(sendStatusVO.getGubun().equals("SDK_MMS_SEND")) {
-                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS(sendStatusVO); // SDK_MMS_SEND
+            } else if(sendStatusVO.getGubun().equals("SDK_MMS_SEND_ENC")) {
+                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS(sendStatusVO); // SDK_MMS_SEND_ENC
             }
 
             // 잔여수량 복구

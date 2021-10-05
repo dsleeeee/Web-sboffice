@@ -29,7 +29,7 @@
 
     <!-- 문자전송현황 - 조회 -->
     <!--
-        TABLE    : SDK_SMS_SEND, SDK_MMS_SEND, SDK_SMS_REPORT, SDK_SMS_REPORT_DETAIL, SDK_MMS_REPORT, SDK_MMS_REPORT_DETAIL
+        TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC, SDK_SMS_REPORT, SDK_SMS_REPORT_DETAIL, SDK_MMS_REPORT, SDK_MMS_REPORT_DETAIL
         COMMENTS : SMS 발송, LMS/MMS 발송, SMS 문자전송결과, LMS/MMS 문자전송결과
     -->
     <select id="getSendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
@@ -90,8 +90,8 @@
                     A.SUBJECT,
                     A.SMS_MSG AS MSG_CONTENT,
                     A.RESERVED9 AS SMS_SEND_SEQ,
-                    'SDK_SMS_SEND' AS GUBUN
-                    FROM SDK_SMS_SEND A
+                    'SDK_SMS_SEND_ENC' AS GUBUN
+                    FROM SDK_SMS_SEND_ENC A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
@@ -127,8 +127,8 @@
                     A.SUBJECT,
                     A.MMS_MSG AS MSG_CONTENT,
                     A.RESERVED9 AS SMS_SEND_SEQ,
-                    'SDK_MMS_SEND' AS GUBUN
-                    FROM SDK_MMS_SEND A
+                    'SDK_MMS_SEND_ENC' AS GUBUN
+                    FROM SDK_MMS_SEND_ENC A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
@@ -291,18 +291,18 @@
 
     <!-- 문자전송현황 - 예약취소 delete -->
     <!--
-        TABLE    : SDK_SMS_SEND, SDK_MMS_SEND
+        TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC
         COMMENTS : SMS 발송, LMS/MMS 발송
     -->
     <delete id="getSendStatusReserveCancelSaveDelete" parameterType="SendStatusVO">
         /* SendStatusMapper.getSendStatusReserveCancelSaveDelete */
-        DELETE SDK_SMS_SEND
+        DELETE SDK_SMS_SEND_ENC
         WHERE 1=1
         AND MSG_ID = #{msgId}
     </delete>
     <delete id="getSendStatusReserveCancelSaveDeleteLMS" parameterType="SendStatusVO">
         /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS */
-        DELETE SDK_MMS_SEND
+        DELETE SDK_MMS_SEND_ENC
         WHERE 1=1
         AND MSG_ID = #{msgId}
     </delete>

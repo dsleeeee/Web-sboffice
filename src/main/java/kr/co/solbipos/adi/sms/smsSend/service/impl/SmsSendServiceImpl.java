@@ -140,11 +140,11 @@ public class SmsSendServiceImpl implements SmsSendService {
 
             // SMS
             if(smsSendVO.getMsgType().equals("1")) {
-                procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND
+                procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
 
             // LMS, MMS
             } else if(smsSendVO.getMsgType().equals("2") || smsSendVO.getMsgType().equals("3")) {
-                procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND
+                procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC
             }
 
             // 잔여수량 -1
