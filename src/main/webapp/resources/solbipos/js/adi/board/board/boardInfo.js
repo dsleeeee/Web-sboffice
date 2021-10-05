@@ -479,11 +479,28 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                         params.userId = $scope.selectedBoardInfo.userId;
 
                         // 저장기능 수행후 재조회
-                        $scope._broadcast('boardDetailCtrl', params);
+                        if($scope.selectedBoardInfo.fullSizeYn === 'Y'){
+                            if($scope.fullSizeYn === true){
+                                $scope._broadcast('boardDetailFullSizeCtrl', params);
+                            }else{
+                                $scope.wjBoardDetailFullSizeLayer.hide();
+                                $scope.wjBoardDetailLayer.show(true);
+                                $scope._broadcast('boardDetailCtrl', params);
+                            }
+                        }
+                        if($scope.selectedBoardInfo.fullSizeYn === 'N'){
+                            if($scope.fullSizeYn === true){
+                                $scope.wjBoardDetailLayer.hide();
+                                $scope.wjBoardDetailFullSizeLayer.show(true);
+                                $scope._broadcast('boardDetailFullSizeCtrl', params);
+                            }else{
+                                $scope._broadcast('boardDetailCtrl', params);
+                            }
+                        }
                     }
 
                     $scope._popMsg("저장되었습니다.");
-                    $scope.close();
+                    $scope.close2();
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -588,11 +605,30 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     // 팝업 닫기
     $scope.close = function(){
+
+        if($scope.selectedBoardInfo !== null && $scope.selectedBoardInfo !== "" && $scope.selectedBoardInfo !== undefined) {
+            var params = {};
+            params.boardCd = $scope.selectedBoardInfo.boardCd;
+            params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
+            params.userId = $scope.selectedBoardInfo.userId;
+
+            if ($scope.boardInfo.fullSizeYn === "Y") {
+                $scope._broadcast('boardDetailFullSizeCtrl', params);
+            } else {
+                $scope._broadcast('boardDetailCtrl', params);
+            }
+        }
+
         $scope.newForm();  //신규
         $scope.wjBoardInfoLayer.hide();
 
         // 저장기능 수행후 재조회
         $scope._broadcast('boardListCtrl');
+    };
+
+    $scope.close2 = function(){
+        $scope.newForm();  //신규
+        $scope.wjBoardInfoLayer.hide();
     };
 
     // 공지사항등록 체크
@@ -609,7 +645,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 글쓰기 에디터
     $(document).ready(function() {
         $('#summernote').summernote( {
-            height: 190,
+            height: 230,
+            width:630,
             toolbar: [
                 /*['fontname', ['fontname']],*/
                 ['fontsize', ['fontsize']],

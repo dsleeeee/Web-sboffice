@@ -75,13 +75,13 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.setSelectedStore(s.rows[ht.row].dataItem);
 
                     // FULL SIZE 표시 여부에 따라 상세화면 사이즈가 달라짐.
-                    // if(selectedRow.fullSizeYn === "Y"){
-                    //     $scope.wjBoardDetailFullSizeLayer.show(true);
-                    //     event.preventDefault();
-                    // }else{
+                    if(selectedRow.fullSizeYn === "Y"){
+                        $scope.wjBoardDetailFullSizeLayer.show(true);
+                        event.preventDefault();
+                    }else{
                         $scope.wjBoardDetailLayer.show(true);
                         event.preventDefault();
-                    //}
+                    }
 
                 }
             }
@@ -116,6 +116,7 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.addInfo = function(){
         $scope.setSelectedStore(null);
         $scope.wjBoardInfoLayer.show(true);
+        $scope._broadcast('boardInfoCtrl', $scope.getSelectedStore());
         event.preventDefault();
     };
 
@@ -130,16 +131,9 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
         });
 
         // 게시판 상세 FULL SIZE 팝업 핸들러 추가
-        // $scope.wjBoardDetailFullSizeLayer.shown.addHandler(function (s) {
-        //     setTimeout(function() {
-        //         $scope._broadcast('boardDetailFullSizeCtrl', $scope.getSelectedStore());
-        //     }, 50)
-        // });
-
-        // 게시판 신규,수정 팝업 핸들러 추가
-        $scope.wjBoardInfoLayer.shown.addHandler(function (s) {
+        $scope.wjBoardDetailFullSizeLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('boardInfoCtrl', $scope.getSelectedStore());
+                $scope._broadcast('boardDetailFullSizeCtrl', $scope.getSelectedStore());
             }, 50)
         });
     });

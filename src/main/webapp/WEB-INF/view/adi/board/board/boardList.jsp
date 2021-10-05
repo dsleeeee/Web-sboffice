@@ -22,11 +22,11 @@
     </div>
     <table class="searchTbl">
         <colgroup>
-            <col class="w15" />
-            <col class="w20" />
-            <col class="w20" />
-            <col class="w15" />
+            <col class="w10" />
+            <col class="w10" />
             <col class="w30" />
+            <col class="w10" />
+            <col class="w40" />
         </colgroup>
         <tbody>
             <tr>
@@ -55,7 +55,7 @@
                     <s:message code="board.srchGubunRead" />
                 </th>
                 <td>
-                    <div class="sb-select">
+                    <div class="sb-select w200px">
                         <wj-combo-box
                                 id="srchGubunReadCombo"
                                 ng-model="gubunReadCombo"
@@ -107,7 +107,7 @@
                 is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewCnt"/>" binding="viewCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewYn"/>" binding="viewYn" data-map="viewYnDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                 <c:if test="${orgnFg == 'HQ'}">
@@ -117,7 +117,7 @@
                 <wj-flex-grid-column header="<s:message code="board.agencyNm"/>" binding="agencyNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.userNm"/>" binding="userNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.noticeDate"/>" binding="noticeDate" width="160" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="board.remark"/>" binding="remark" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.remark"/>" binding="remark" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
 
                 <%--팝업 조회시 필요--%>
                 <wj-flex-grid-column header="<s:message code="board.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -158,10 +158,16 @@
     var rootUrl = "${rootUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.06" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 게시판 상세 Full Size팝업 --%>
+<c:import url="/WEB-INF/view/adi/board/board/boardDetailFullSize.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

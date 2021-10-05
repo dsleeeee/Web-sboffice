@@ -102,8 +102,7 @@ app.controller('mobileWeekSaleCtrl', ['$scope', '$http', function ($scope, $http
         $("#lblDate").text("");
 
         var params = {};
-        params.startDate = getToday(); // 조회기간
-        params.endDate = getToday(); // 조회기간
+        params.startDate =  wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.srchStoreCd = $("#mobileWeekSaleStoreCd").val();
 
         // 바 차트
