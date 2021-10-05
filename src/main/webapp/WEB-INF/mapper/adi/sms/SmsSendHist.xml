@@ -30,7 +30,11 @@
         hssrt.MSG_CONTENT,
         DECODE(hssrt.RESERVE_YN, '1', hssrt.SEND_DATE, NULL) AS SEND_DATE,
         hssrt.READ_DATE,
-        hssrt.RESERVE_YN
+        hssrt.RESERVE_YN,
+        hssrt.SEND_QTY,
+        hssrt.WAIT_QTY,
+        hssrt.SUCCESS_QTY,
+        hssrt.FAIL_QTY
        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM HCS_SMS_SEND_REG_T hssrt,
         (

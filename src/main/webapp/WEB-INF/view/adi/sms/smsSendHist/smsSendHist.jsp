@@ -139,6 +139,10 @@
                     <wj-flex-grid-column header="<s:message code="smsSendHist.sendDate"/>" binding="sendDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsSendHist.readDate"/>" binding="readDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsSendHist.reserveYn"/>" binding="reserveYn" data-map="reserveYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsSendHist.sendQty"/>" binding="sendQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsSendHist.waitQty"/>" binding="waitQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsSendHist.successQty"/>" binding="successQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsSendHist.failQty"/>" binding="failQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%--저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="smsSendHist.smsSendSeq"/>" binding="smsSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -157,7 +161,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20210806.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20210806.02" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">

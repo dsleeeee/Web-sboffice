@@ -110,6 +110,10 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem.sendDate = messages["smsSendHist.sendDate"];
         dataItem.readDate = messages["smsSendHist.readDate"];
         dataItem.reserveYn = messages["smsSendHist.reserveYn"];
+        dataItem.sendQty = messages["smsSendHist.sendQty"];
+        dataItem.waitQty = messages["smsSendHist.waitQty"];
+        dataItem.successQty = messages["smsSendHist.successQty"];
+        dataItem.failQty = messages["smsSendHist.failQty"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
