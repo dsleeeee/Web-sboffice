@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<%--<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />--%>
 
 <div id="marketingSmsSendView" style="display: none;">
 
@@ -704,7 +704,7 @@
 </div>
 
 <script type="text/javascript">
-    var orgnCd = "${orgnCd}";
+    <%--var orgnCd = "${orgnCd}";--%>
 
     // SMS전송 - 메세지그룹
     var msgGrpAddColList = [];

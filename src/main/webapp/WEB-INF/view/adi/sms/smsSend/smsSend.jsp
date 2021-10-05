@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<%--<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />--%>
 
 <wj-popup control="wjSmsSendLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:970px;height:740px;" fade-in="false" fade-out="false">
 
@@ -281,7 +281,7 @@
 </wj-popup>
 
 <script type="text/javascript">
-    var orgnCd = "${orgnCd}";
+    <%--var orgnCd = "${orgnCd}";--%>
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210915.02" charset="utf-8"></script>

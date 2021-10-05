@@ -427,7 +427,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // 첨부파일 저장
     $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
         var formData = new FormData($("#smsForm")[0]);
-        formData.append("orgnCd", orgnCd);
+        // formData.append("orgnCd", orgnCd);
         formData.append("pageGubun", "fileSms");
 
         var url = '/adi/sms/smsSend/smsSend/getSmsSendFileSave.sb';
