@@ -479,28 +479,17 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                         params.userId = $scope.selectedBoardInfo.userId;
 
                         // 저장기능 수행후 재조회
-                        if($scope.selectedBoardInfo.fullSizeYn === 'Y'){
-                            if($scope.fullSizeYn === true){
-                                $scope._broadcast('boardDetailFullSizeCtrl', params);
-                            }else{
-                                $scope.wjBoardDetailFullSizeLayer.hide();
-                                $scope.wjBoardDetailLayer.show(true);
-                                $scope._broadcast('boardDetailCtrl', params);
-                            }
-                        }
-                        if($scope.selectedBoardInfo.fullSizeYn === 'N'){
-                            if($scope.fullSizeYn === true){
-                                $scope.wjBoardDetailLayer.hide();
-                                $scope.wjBoardDetailFullSizeLayer.show(true);
-                                $scope._broadcast('boardDetailFullSizeCtrl', params);
-                            }else{
-                                $scope._broadcast('boardDetailCtrl', params);
-                            }
+                        if($scope.fullSizeYn === true) {
+                            $scope.wjBoardDetailLayer.hide();
+                            $scope.wjBoardDetailFullSizeLayer.show(true);
+                        }else{
+                            $scope.wjBoardDetailFullSizeLayer.hide();
+                            $scope.wjBoardDetailLayer.show(true);
                         }
                     }
 
                     $scope._popMsg("저장되었습니다.");
-                    $scope.close2();
+                    $scope.close();
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -612,7 +601,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
             params.userId = $scope.selectedBoardInfo.userId;
 
-            if ($scope.boardInfo.fullSizeYn === "Y") {
+            if($scope.fullSizeYn){
                 $scope._broadcast('boardDetailFullSizeCtrl', params);
             } else {
                 $scope._broadcast('boardDetailCtrl', params);
@@ -624,11 +613,6 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 저장기능 수행후 재조회
         $scope._broadcast('boardListCtrl');
-    };
-
-    $scope.close2 = function(){
-        $scope.newForm();  //신규
-        $scope.wjBoardInfoLayer.hide();
     };
 
     // 공지사항등록 체크

@@ -299,7 +299,7 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             //$scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
-            $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardInfoSave.sb", params, function () { $scope.close(); });
+            $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardInfoSave.sb", params, function () { $scope.closeFs(); });
         });
     };
 
