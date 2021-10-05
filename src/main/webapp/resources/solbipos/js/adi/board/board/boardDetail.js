@@ -156,7 +156,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                     innerHtml += "</tr>";
 
                     innerHtml += "<tr>";
-                    innerHtml += "<td align=\"left\" style=\"padding:15px;\" colspan=\"2\">" + list[i].content +"</td>";
+                    innerHtml += "<td align=\"left\" style=\"padding:5px;\" colspan=\"2\">" + list[i].content +"</td>";
                     innerHtml += "</tr>";
 
                     innerHtml += "<tr id=\"hdAnswer_" + list[i].idx + "\" style=\"display: none;\">";
@@ -308,26 +308,9 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 수정
     $scope.modify = function(){
         $scope.wjBoardInfoLayer.show(true);
+        $scope._broadcast('boardInfoCtrl', $scope.getSelectedBoardDetail());
         event.preventDefault();
     };
-
-    // 화면 ready 된 후 설정
-    angular.element(document).ready(function () {
-
-        // 게시판 신규,수정 팝업 핸들러 추가
-        $scope.wjBoardInfoLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('boardInfoCtrl', $scope.getSelectedBoardDetail());
-            }, 50)
-        });
-
-        // 열림자목록 팝업 핸들러 추가
-        $scope.wjBoardReadingHistLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('boardReadingHistCtrl', $scope.getSelectedBoardDetail());
-            }, 50)
-        });
-    });
 
     // 팝업 닫기
     $scope.close = function(){
@@ -343,6 +326,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 열람자 목록
     $scope.readingHist = function(){
         $scope.wjBoardReadingHistLayer.show(true);
+        $scope._broadcast('boardReadingHistCtrl', $scope.getSelectedBoardDetail());
         event.preventDefault();
     };
 

@@ -79,8 +79,8 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', function ($scope, $http)
     angular.extend(this, new RootController('mobileDaySaleCtrl', $scope, $http, false));
 
     // 검색조건에 조회기간
-    var startDate = wcombo.genDateVal("#startDate", gvStartDate);
-    var endDate = wcombo.genDateVal("#endDate", gvEndDate);
+    var startDate = wcombo.genDateVal("#startDate", getToday());
+    var endDate = wcombo.genDateVal("#endDate", getToday());
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -100,8 +100,8 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', function ($scope, $http)
     // 차트 초기값 셋팅
     $scope.searchMobileDaySaleChartSet = function(){
         var params = {};
-        params.startDate = getToday(); // 조회기간
-        params.endDate = getToday(); // 조회기간
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
         params.srchStoreCd = $("#mobileDaySaleStoreCd").val();
         params.diffDay = 1; // 조회기간 차이(차트 높이 때문에)
 

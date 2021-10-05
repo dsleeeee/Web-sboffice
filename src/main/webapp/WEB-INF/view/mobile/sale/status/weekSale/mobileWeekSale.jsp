@@ -490,4 +490,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/weekSale/mobileWeekSale.js?ver=20210601.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/weekSale/mobileWeekSale.js?ver=20210601.02" charset="utf-8"></script>

@@ -6,7 +6,7 @@
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="userNm" value="${sessionScope.sessionInfo.userNm}" />
 
-<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:800px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:820px;" fade-in="false" fade-out="false">
     <div ng-controller="boardInfoCtrl">
 
         <%-- header --%>
@@ -17,13 +17,13 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="height:750px;">
+        <div class="wj-dialog-body sc2" style="height:770px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
                     <col class="w35"/>
-                    <col class="w20"/>
-                    <col class="w30"/>
+                    <col class="w15"/>
+                    <col class="w35"/>
                 </colgroup>
                 <tbody>
                     <tr>
@@ -40,11 +40,9 @@
                         <th>
                             <s:message code="boardInfo.userNm"/>
                         </th>
-                        <td colspan="3">
+                        <td>
                             <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" />
                         </td>
-                    </tr>
-                    <tr>
                         <%-- 승인구분 --%>
                         <th>
                             <s:message code="boardInfo.apprFg"/>
@@ -62,18 +60,6 @@
                                         initialized="_initComboBox(s)">
                                     </wj-combo-box>
                                 </span>
-                            </div>
-                        </td>
-                        <%-- FULL SIZE 표시 --%>
-                        <th>
-                            <s:message code="boardInfo.fullSizeYn"/>
-                        </th>
-                        <td>
-                            <div class="sb-select">
-                                <span class="chk ml10">
-                                    <input type="checkbox" id="fullSizeYn" name="fullSizeYnChk" ng-model="fullSizeYn">
-                                    <label for="fullSizeYn"><s:message code='boardInfo.fullSizeYn' /></label>
-                               </span>
                             </div>
                         </td>
                     </tr>
@@ -113,11 +99,23 @@
                         </tr>
                     </c:if>
                     <tr>
+                        <%-- FULL SIZE 표시 --%>
+                        <th>
+                            <s:message code="boardInfo.viewSize"/>
+                        </th>
+                        <td>
+                            <div class="sb-select">
+                                <span class="chk ml10">
+                                    <input type="checkbox" id="fullSizeYn" name="fullSizeYnChk" ng-model="fullSizeYn">
+                                    <label for="fullSizeYn"><s:message code='boardInfo.fullSizeYn' /></label>
+                               </span>
+                            </div>
+                        </td>
                         <%-- 알림여부 --%>
                         <th>
                             <s:message code="boardInfo.alarmYn"/>
                         </th>
-                        <td colspan="3">
+                        <td>
                             <div class="sb-select">
                                 <span class="chk ml10">
                                     <input type="checkbox" id="noticeYn" name="noticeYnChk" ng-model="noticeYn" ng-change="noticeYnChk()">
@@ -198,7 +196,7 @@
             </table>
 
             <%-- 첨부파일 그리드 --%>
-            <div class="w100 mt10 mb20">
+            <div class="w100 mt10">
                 <div class="wj-gridWrap" style="height:100px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
@@ -224,7 +222,7 @@
             </div>
 
             <%-- 저장 버튼 --%>
-            <div class="tc mt20">
+            <div class="tc mt10">
                 <button id="funcSave" class="btn_blue">
                     <s:message code="cmm.save" />
                 </button>
@@ -264,4 +262,4 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210924.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210924.08" charset="utf-8"></script>

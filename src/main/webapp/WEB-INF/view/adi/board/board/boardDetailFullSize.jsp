@@ -1,21 +1,25 @@
-<%@ page pageEncoding="UTF-8"%>
-<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:700px;" fade-in="false" fade-out="false">
-
-    <div ng-controller="boardDetailCtrl">
+<wj-popup control="wjBoardDetailFullSizeLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1024px; height:768px;" fade-in="false" fade-out="false">
+    <div ng-controller="boardDetailFullSizeCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="boardDetail.info"/>
-            <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
+            <a href="#" class="wj-hide btn_close" ng-click="closeFs()"></a>
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="overflow:auto; height:650px;">
+        <div class="wj-dialog-body sc2" style="overflow:auto; height:718px;">
+
+            <%-- 게시글내용 --%>
+            <div id="summernoteDetailFs" style="overflow:auto; height:400px;"></div>
+
+            <%-- 게시글정보 --%>
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
@@ -30,7 +34,7 @@
                         <s:message code="boardDetail.title"/>
                     </th>
                     <td colspan="3">
-                        {{boardDetail.title}}
+                        {{boardDetailFs.title}}
                     </td>
                 </tr>
                 <tr>
@@ -39,14 +43,14 @@
                         <s:message code="boardDetail.userNm"/>
                     </th>
                     <td>
-                        {{boardDetail.userNm}}
+                        {{boardDetailFs.userNm}}
                     </td>
                     <%-- 게시일시 --%>
                     <th>
                         <s:message code="boardDetail.regDt"/>
                     </th>
                     <td>
-                        {{boardDetail.regDt}}
+                        {{boardDetailFs.regDt}}
                     </td>
                 </tr>
                 <tr>
@@ -56,10 +60,10 @@
                     </th>
                     <td>
                         <div class="sb-select">
-                            <span class="chk ml10">
-                                <input type="checkbox" id="fullSizeYnBoardDetail" name="fullSizeYnChk" ng-model="boardDetail.fullSizeYn" disabled="true" >
-                                <label for="fullSizeYnBoardDetail"><s:message code='boardDetail.fullSizeYn' /></label>
-                            </span>
+                                <span class="chk ml10">
+                                    <input type="checkbox" id="fullSizeYnBoardDetailFs" name="fullSizeYnChkFs" ng-model="boardDetailFs.fullSizeYn" disabled="true">
+                                    <label for="fullSizeYnBoardDetailFs"><s:message code='boardDetail.fullSizeYn'/></label>
+                                </span>
                         </div>
                     </td>
                     <%-- 게시대상 --%>
@@ -67,7 +71,7 @@
                         <s:message code="boardDetail.targetFg"/>
                     </th>
                     <td>
-                        {{boardDetail.targetFg}}
+                        {{boardDetailFs.targetFg}}
                     </td>
                 </tr>
                 <tr>
@@ -77,18 +81,18 @@
                     </th>
                     <td>
                         <div class="sb-select">
-                                <span class="chk ml10">
-                                    <input type="checkbox" id="noticeYnBoardDetail" name="noticeYnChk" ng-model="boardDetail.noticeYn" disabled="true" >
-                                    <label for="noticeYnBoardDetail"><s:message code='boardDetail.noticeYn' /></label>
-                                </span>
+                            <span class="chk ml10">
+                                <input type="checkbox" id="noticeYnBoardDetailFs" name="noticeYnChkFs" ng-model="boardDetailFs.noticeYn" disabled="true">
+                                <label for="noticeYnBoardDetailFs"><s:message code='boardDetail.noticeYn'/></label>
+                            </span>
                             <span class="chk ml10" ng-if="boardDetail.noticeYn">
-                                    <input type="checkbox" id="emergencyYnBoardDetail" name="emergencyYnChk" ng-model="boardDetail.emergencyYn" disabled="true" >
-                                    <label for="emergencyYnBoardDetail"><s:message code='boardDetail.emergencyYn' /></label>
-                                </span>
+                                <input type="checkbox" id="emergencyYnBoardDetailFs" name="emergencyYnChkFs" ng-model="boardDetailFs.emergencyYn" disabled="true">
+                                <label for="emergencyYnBoardDetailFs"><s:message code='boardDetail.emergencyYn'/></label>
+                            </span>
                             <span class="chk ml10" style="display: none;">
-                                    <input type="checkbox" id="smsYnBoardDetail" name="smsYnChk" ng-model="boardDetail.smsYn" disabled="true" >
-                                    <label for="smsYnBoardDetail"><s:message code='boardDetail.smsYn' /></label>
-                                </span>
+                                <input type="checkbox" id="smsYnBoardDetailFs" name="smsYnChkFs" ng-model="boardDetailFs.smsYn" disabled="true">
+                                <label for="smsYnBoardDetailFs"><s:message code='boardDetail.smsYn'/></label>
+                            </span>
                         </div>
                     </td>
                     <%-- 공지기간 --%>
@@ -96,7 +100,7 @@
                         <s:message code="boardDetail.date"/>
                     </th>
                     <td>
-                        {{boardDetail.startDate}} ~ {{boardDetail.endDate}}
+                        {{boardDetailFs.startDate}} ~ {{boardDetailFs.endDate}}
                     </td>
                 </tr>
                 <tr>
@@ -105,36 +109,33 @@
                         <s:message code="boardDetail.remark"/>
                     </th>
                     <td colspan="3">
-                        {{boardDetail.remark}}
+                        {{boardDetailFs.remark}}
                     </td>
                 </tr>
                 </tbody>
             </table>
 
-            <%-- 게시글내용 --%>
-            <div id="summernoteDetail" style="overflow:auto; height:300px;"></div>
-
             <%-- 첨부파일 --%>
-            <div id="fileContent"></div>
+            <div id="fileContentFs"></div>
 
             <%-- 댓글 --%>
-            <div class="w100 mt10 mb20" id="divAnswer">
+            <div class="w100 mt10 mb20" id="divAnswerFs">
                 <%-- 댓글 리스트 --%>
-                <div id="divComment"></div>
+                <div id="divCommentFs"></div>
                 <%-- 댓글 입력 --%>
                 <div style="padding-top:10px;">
                     <table class="tblType01" style="border: 0px;">
                         <colgroup>
-                            <col width="85%" />
-                            <col width="15%" />
+                            <col width="85%"/>
+                            <col width="15%"/>
                         </colgroup>
                         <tbody>
                         <tr style="border: 0px;">
-                            <td><input type="text" style="border: 1px solid #d0d0d0;" id="srchContent" ng-model="content" placeholder="댓글을 입력해주세요"/></td>
+                            <td><input type="text" style="border: 1px solid #d0d0d0;" id="srchContentFs" ng-model="contentFs" placeholder="댓글을 입력해주세요"/></td>
                             <td>
                                 <%-- 댓글등록 --%>
-                                <button class="btn_skyblue m15 fr" id="btnAddRepresent" ng-click="saveAnswer()">
-                                    <s:message code="boardDetail.newAnswer" />
+                                <button class="btn_skyblue m15 fr" id="btnAddRepresentFs" ng-click="saveAnswerFs()">
+                                    <s:message code="boardDetail.newAnswer"/>
                                 </button>
                             </td>
                         </tr>
@@ -143,19 +144,19 @@
                 </div>
             </div>
 
+            <%-- 버튼 --%>
             <div class="btnSet tc">
                 <%-- 열람자목록 --%>
-                <span><a href="#" class="btn_blue" ng-click="readingHist()"><s:message code="boardDetail.readingHist" /></a></span>
+                <span><a href="#" class="btn_blue" ng-click="readingHistFs()"><s:message code="boardDetail.readingHist"/></a></span>
                 <%-- 삭제 --%>
-                <span id="delButton"><a href="#" class="btn_blue" ng-click="del()"><s:message code="boardDetail.del" /></a></span>
+                <span id="delButtonFs"><a href="#" class="btn_blue" ng-click="delFs()"><s:message code="boardDetail.del"/></a></span>
                 <%-- 수정 --%>
-                <span id="modifyButton"><a href="#" class="btn_blue" ng-click="modify()"><s:message code="boardDetail.modify" /></a></span>
+                <span id="modifyButtonFs"><a href="#" class="btn_blue" ng-click="modifyFs()"><s:message code="boardDetail.modify"/></a></span>
                 <%-- 닫기 --%>
-                <span><a href="#" class="btn_blue" ng-click="close()"><s:message code="cmm.close" /></a></span>
+                <span><a href="#" class="btn_blue" ng-click="closeFs()"><s:message code="cmm.close"/></a></span>
             </div>
 
         </div>
-        <%-- //body --%>
 
     </div>
 </wj-popup>
@@ -164,4 +165,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetailFullSize.js?ver=20210930.03" charset="utf-8"></script>
