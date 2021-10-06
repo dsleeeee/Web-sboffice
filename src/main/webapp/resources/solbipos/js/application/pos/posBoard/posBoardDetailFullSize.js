@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : boardDetailFullSize.js
- * 설  명 : 일반게시판 상세 FullSize 팝업 JavaScript
+ * 파일명 : posBoardDetailFullSize.js
+ * 설  명 : POS 화면에서 게시판 상세 FullSize 팝업(포스용) JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.09.30     이다솜      1.0
+ * 2021.10.05     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -25,7 +25,7 @@ function viewAnswerAreaFs(idx, mod){
 
 // 댓글 삭제
 function viewDelAnswerFs(idx){
-    var scope = agrid.getScope('boardDetailFullSizeCtrl');
+    var scope = agrid.getScope('posBoardDetailFullSizeCtrl');
     var params = {};
 
     params.idx = idx;
@@ -34,7 +34,7 @@ function viewDelAnswerFs(idx){
 
 // 댓글 수정
 function viewEditAnswerFs(idx){
-    var scope = agrid.getScope('boardDetailFullSizeCtrl');
+    var scope = agrid.getScope('posBoardDetailFullSizeCtrl');
     var params = {};
 
     params.idx = idx;
@@ -45,90 +45,80 @@ function viewEditAnswerFs(idx){
 /**
  *  팝업 그리드 생성
  */
-app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('posBoardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('boardDetailFullSizeCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('posBoardDetailFullSizeCtrl', $scope, $http, false));
 
     // <-- 검색 호출 -->
-    $scope.$on("boardDetailFullSizeCtrl", function (event, data) {
+    $scope.$on("posBoardDetailFullSizeCtrl", function(event, data) {
         // 파일과 댓글 DIV 값 초기화
         $("#fileContentFs").html("");
         $("#divCommentFs").html("");
 
-        if(userId !== data.userId) {
-            $("#delButtonFs").hide();
-            $("#modifyButtonFs").hide();
-        } else if (userId === data.userId) {
-            $("#delButtonFs").show();
-            $("#modifyButtonFs").show();
-        }
-
-        $scope.setSelectedBoardDetailFs(data);
-        $scope.searchBoardDetailFs();
-        $scope.searchBoardDetailAnswerFs();
-        $scope.searchBoardDetailAtchFs();
+        $scope.setSelectedPosBoardDetailFs(data);
+        $scope.searchPosBoardDetailFs();
+        $scope.searchPosBoardDetailAnswerFs();
+        $scope.searchPosBoardDetailAtchFs();
         event.preventDefault();
     });
 
-    // 게시글 정보
-    $scope.searchBoardDetailFs = function() {
+    $scope.searchPosBoardDetailFs = function() {
         var params = {};
-        params.boardCd = $scope.selectedBoardDetailFs.boardCd;
-        params.boardSeqNo = $scope.selectedBoardDetailFs.boardSeqNo;
+        params.boardCd = $scope.selectedPosBoardDetailFs.boardCd;
+        params.boardSeqNo = $scope.selectedPosBoardDetailFs.boardSeqNo;
         params.userId = userId;
 
         $scope._postJSONQuery.withOutPopUp( "/adi/board/board/board/getBoardDetailList.sb", params, function(response){
-            var boardDetailFs = response.data.data.result;
-            $scope.boardDetailFs = boardDetailFs;
+            var posBoardDetailFs = response.data.data.result;
+            $scope.posBoardDetailFs = posBoardDetailFs;
 
-            if($scope.boardDetailFs.fullSizeYn === "Y") {
-                $scope.boardDetailFs.fullSizeYn = true;
-            } else if ($scope.boardDetailFs.fullSizeYn === "N") {
-                $scope.boardDetailFs.fullSizeYn = false;
+            if($scope.posBoardDetailFs.fullSizeYn === "Y") {
+                $scope.posBoardDetailFs.fullSizeYn = true;
+            } else if ($scope.posBoardDetailFs.fullSizeYn === "N") {
+                $scope.posBoardDetailFs.fullSizeYn = false;
             }
-            if($scope.boardDetailFs.targetFg === "1") {
-                $scope.boardDetailFs.targetFg = "전체";
-            } else if($scope.boardDetailFs.targetFg === "2") {
-                $scope.boardDetailFs.targetFg = $scope.boardDetailFs.partOrgnNm;
+            if($scope.posBoardDetailFs.targetFg === "1") {
+                $scope.posBoardDetailFs.targetFg = "전체";
+            } else if($scope.posBoardDetailFs.targetFg === "2") {
+                $scope.posBoardDetailFs.targetFg = $scope.posBoardDetailFs.partOrgnNm;
             }
-            if($scope.boardDetailFs.noticeYn === "Y") {
-                $scope.boardDetailFs.noticeYn = true;
-            } else if ($scope.boardDetailFs.noticeYn === "N") {
-                $scope.boardDetailFs.noticeYn = false;
+            if($scope.posBoardDetailFs.noticeYn === "Y") {
+                $scope.posBoardDetailFs.noticeYn = true;
+            } else if ($scope.posBoardDetailFs.noticeYn === "N") {
+                $scope.posBoardDetailFs.noticeYn = false;
             }
-            if($scope.boardDetailFs.emergencyYn === "Y") {
-                $scope.boardDetailFs.emergencyYn = true;
-            } else if($scope.boardDetailFs.emergencyYn === "N")  {
-                $scope.boardDetailFs.emergencyYn = false;
+            if($scope.posBoardDetailFs.emergencyYn === "Y") {
+                $scope.posBoardDetailFs.emergencyYn = true;
+            } else if ($scope.posBoardDetailFs.emergencyYn === "N") {
+                $scope.posBoardDetailFs.emergencyYn = false;
             }
-            // if($scope.boardDetailFs.smsYn === "Y") {
-            //     $scope.boardDetailFs.smsYn = true;
-            // } else if ($scope.boardDetailFs.smsYn === "N") {
-            //     $scope.boardDetailFs.smsYn = false;
+            // if($scope.posBoardDetailFs.smsYn === "Y") {
+            //     $scope.posBoardDetailFs.smsYn = true;
+            // } else if ($scope.posBoardDetailFs.smsYn === "N") {
+            //     $scope.posBoardDetailFs.smsYn = false;
             // }
-            var startDate = $scope.boardDetailFs.startDate.substr(0, 4) + "-" + $scope.boardDetailFs.startDate.substr(4, 2) + "-" + $scope.boardDetailFs.startDate.substr(6, 2);
-            var endDate = $scope.boardDetailFs.endDate.substr(0, 4) + "-" + $scope.boardDetailFs.endDate.substr(4, 2) + "-" + $scope.boardDetailFs.endDate.substr(6, 2);
-            $scope.boardDetailFs.startDate = startDate;
-            $scope.boardDetailFs.endDate = endDate;
-            $scope.boardDetailFs.remark = $scope.boardDetailFs.remark;
+            var startDate = $scope.posBoardDetailFs.startDate.substr(0, 4) + "-" + $scope.posBoardDetailFs.startDate.substr(4, 2) + "-" + $scope.posBoardDetailFs.startDate.substr(6, 2);
+            var endDate = $scope.posBoardDetailFs.endDate.substr(0, 4) + "-" + $scope.posBoardDetailFs.endDate.substr(4, 2) + "-" + $scope.posBoardDetailFs.endDate.substr(6, 2);
+            $scope.posBoardDetailFs.startDate = startDate;
+            $scope.posBoardDetailFs.endDate = endDate;
 
             // 게시글 내용 div 에 넣기
-            $("#summernoteDetailFs").html($scope.boardDetailFs.content);
+            $("#summernoteDetailFs").html($scope.posBoardDetailFs.content);
 
-            if($scope.boardDetailFs.answerFg === "Y") {
+            if($scope.posBoardDetailFs.answerFg === "Y") {
                 $("#divAnswerFs").show();
-            } else if($scope.boardDetailFs.answerFg === "N") {
+            } else if($scope.posBoardDetailFs.answerFg === "N") {
                 $("#divAnswerFs").hide();
             }
         });
     };
 
     // 댓글 조회
-    $scope.searchBoardDetailAnswerFs = function() {
+    $scope.searchPosBoardDetailAnswerFs = function() {
         var params = {};
-        params.boardCd = $scope.selectedBoardDetailFs.boardCd;
-        params.boardSeqNo = $scope.selectedBoardDetailFs.boardSeqNo;
+        params.boardCd = $scope.selectedPosBoardDetailFs.boardCd;
+        params.boardSeqNo = $scope.selectedPosBoardDetailFs.boardSeqNo;
         params.userId = userId;
 
         $scope._postJSONQuery.withOutPopUp("/adi/board/board/board/getBoardDetailAnswerList.sb", params, function(response) {
@@ -138,7 +128,7 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
             if(list.length > 0){
 
                 innerHtml += "<table class=\"tblType01 mt10\">";
-                innerHtml += "<colgroup><col width=\"90%\" /><col width=\"10%\" /></colgroup>";
+                innerHtml += "<colgroup><col width=\"85%\" /><col width=\"15%\" /></colgroup>";
                 innerHtml += "<tbody>";
 
                 for(var i=0; i< list.length; i++) {
@@ -175,10 +165,10 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
     };
 
     // 첨부파일 다운로드 조회
-    $scope.searchBoardDetailAtchFs = function() {
+    $scope.searchPosBoardDetailAtchFs = function() {
         var params = {};
-        params.boardCd = $scope.selectedBoardDetailFs.boardCd;
-        params.boardSeqNo = $scope.selectedBoardDetailFs.boardSeqNo;
+        params.boardCd = $scope.selectedPosBoardDetailFs.boardCd;
+        params.boardSeqNo = $scope.selectedPosBoardDetailFs.boardSeqNo;
 
         $scope._postJSONQuery.withOutPopUp( "/adi/board/board/board/getBoardDetailAtchList.sb", params, function(response){
             if($.isEmptyObject(response.data) ) {
@@ -199,7 +189,7 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
 
                     innerHtml += "<tr>";
                     if (i === 0) {
-                        innerHtml += "<th rowspan='" + list.length + "'>" + messages["boardDetail.file"] + "</th>";
+                        innerHtml += "<th rowspan='" + list.length + "'>" + messages["posBoardDetail.file"] + "</th>";
                     }
                     // innerHtml += "<a href=\"" + list[i].filePath + "\">" + list[i].orginlFileNm + "</a>";
                     // innerHtml += "<td>"+"<a href=\"" + list[i].filePath + "\" download >" + list[i].orginlFileNm + "</a>"+"</td>";
@@ -216,26 +206,27 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
             }
         });
     };
+    // <-- //검색 호출 -->
 
     // 선택 매장
-    $scope.selectedBoardDetailFs;
-    $scope.setSelectedBoardDetailFs = function(store) {
-        $scope.selectedBoardDetailFs = store;
+    $scope.selectedPosBoardDetailFs;
+    $scope.setSelectedPosBoardDetailFs = function(store) {
+        $scope.selectedPosBoardDetailFs = store;
     };
-    $scope.getSelectedBoardDetailFs = function(){
-        return $scope.selectedBoardDetailFs;
+    $scope.getSelectedPosBoardDetailFs = function(){
+        return $scope.selectedPosBoardDetailFs;
     };
 
     // 댓글 등록
     $scope.saveAnswerFs = function(){
         if($scope.contentFs === "") {
-            $scope._popMsg(messages["boardDetail.contentBlank"]); // 댓글을 입력해주세요
+            $scope._popMsg(messages["posBoardDetail.contentBlank"]); // 댓글을 입력해주세요
             return false;
         }
 
         var params = {};
-        params.boardCd = $scope.selectedBoardDetailFs.boardCd;
-        params.boardSeqNo = $scope.selectedBoardDetailFs.boardSeqNo;
+        params.boardCd = $scope.selectedPosBoardDetailFs.boardCd;
+        params.boardSeqNo = $scope.selectedPosBoardDetailFs.boardSeqNo;
         params.content = $scope.contentFs;
         params.status = "I";
         params.userId = userId;
@@ -247,11 +238,11 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
     // 댓글 삭제
     $scope.delAnswerFs = function(data){
         // 해당 댓글을 삭제하시겠습니까?
-        $scope._popConfirm(messages["boardDetail.delConfirmAnswer"], function() {
+        $scope._popConfirm(messages["posBoardDetail.delConfirmAnswer"], function() {
 
             var params = {};
-            params.boardCd = $scope.selectedBoardDetailFs.boardCd;
-            params.boardSeqNo = $scope.selectedBoardDetailFs.boardSeqNo;
+            params.boardCd = $scope.selectedPosBoardDetailFs.boardCd;
+            params.boardSeqNo = $scope.selectedPosBoardDetailFs.boardSeqNo;
             params.idx = data.idx;
             params.status = "D";
             params.userId = userId;
@@ -264,8 +255,8 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
     // 댓글 수정저장
     $scope.editAnswerFs = function(data){
         var params = {};
-        params.boardCd = $scope.selectedBoardDetailFs.boardCd;
-        params.boardSeqNo = $scope.selectedBoardDetailFs.boardSeqNo;
+        params.boardCd = $scope.selectedPosBoardDetailFs.boardCd;
+        params.boardSeqNo = $scope.selectedPosBoardDetailFs.boardSeqNo;
         params.idx = data.idx;
         params.content = data.contentFs;
         params.status = "U";
@@ -279,54 +270,22 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
     $scope.allSearchFs = function () {
         // 댓글 DIV 값 초기화 해준 뒤 재조회
         $("#divCommentFs").html("");
-        $scope.searchBoardDetailAnswerFs();
+        $scope.searchPosBoardDetailAnswerFs();
         $scope.contentFs = "";
 
         // 게시판 목록 재조회(댓글 변동에 따른 리스트 제목 옆 댓글 갯수 알림을 위해)
-        $scope._broadcast('boardListCtrl');
-    };
-
-    // 게시글 삭제
-    $scope.delFs = function(){
-        // 해당 게시물을 삭제하시겠습니까?
-        $scope._popConfirm(messages["boardDetail.delConfirm"], function() {
-
-            var params = {};
-            params.boardCd = $scope.selectedBoardDetailFs.boardCd;
-            params.boardSeqNo = $scope.selectedBoardDetailFs.boardSeqNo;
-            params.status = "D";
-            params.userId = userId;
-
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            //$scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
-            $scope._postJSONSave.withPopUp("/adi/board/board/board/getBoardInfoSave.sb", params, function () { $scope.closeFs(); });
-        });
-    };
-
-    // 게시글 수정
-    $scope.modifyFs = function(){
-        $scope.wjBoardInfoLayer.show(true);
-        $scope._broadcast('boardInfoCtrl', $scope.getSelectedBoardDetailFs());
-        event.preventDefault();
+        $scope._broadcast('posBoardListCtrl');
     };
 
     // 팝업 닫기
     $scope.closeFs = function(){
-        $scope.setSelectedBoardDetailFs(null);
+        $scope.setSelectedPosBoardDetailFs(null);
         $scope.contentFs = "";
 
-        $scope.wjBoardDetailFullSizeLayer.hide();
+        $scope.wjPosBoardDetailFullSizeLayer.hide();
 
         // 재조회
-        $scope._broadcast('boardListCtrl');
+        $scope._broadcast('posBoardListCtrl');
     };
-
-    // 열람자 목록
-    $scope.readingHistFs = function(){
-        $scope.wjBoardReadingHistLayer.show(true);
-        $scope._broadcast('boardReadingHistCtrl', $scope.getSelectedBoardDetailFs());
-        event.preventDefault();
-    };
-
 
 }]);

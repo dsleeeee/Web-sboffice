@@ -17,7 +17,7 @@
         <div class="wj-dialog-body sc2" style="overflow:auto; height:718px;">
 
             <%-- 게시글내용 --%>
-            <div id="summernoteDetailFs" style="overflow:auto; height:400px;"></div>
+            <div id="summernoteDetailFs" style="overflow-x:auto; overflow-y: hidden; min-height:350px;"></div>
 
             <%-- 게시글정보 --%>
             <table class="tblType01">
@@ -165,4 +165,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetailFullSize.js?ver=20210930.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetailFullSize.js?ver=20210930.06" charset="utf-8"></script>

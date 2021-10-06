@@ -76,6 +76,11 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
             $scope.posBoardDetail.title = $scope.posBoardDetail.title;
             $scope.posBoardDetail.userNm = $scope.posBoardDetail.userNm;
             $scope.posBoardDetail.regDt = $scope.posBoardDetail.regDt;
+            if($scope.posBoardDetail.fullSizeYn === "Y") {
+                $scope.posBoardDetail.fullSizeYn = true;
+            } else if ($scope.posBoardDetail.fullSizeYn === "N") {
+                $scope.posBoardDetail.fullSizeYn = false;
+            }
             if($scope.posBoardDetail.targetFg === "1") {
                 $scope.posBoardDetail.targetFg = "전체";
             } else if($scope.posBoardDetail.targetFg === "2") {
@@ -144,7 +149,7 @@ app.controller('posBoardDetailCtrl', ['$scope', '$http', function ($scope, $http
                     innerHtml += "</tr>";
 
                     innerHtml += "<tr>";
-                    innerHtml += "<td align=\"left\" style=\"padding:15px;\" colspan=\"2\">" + list[i].content +"</td>";
+                    innerHtml += "<td align=\"left\" style=\"padding:5px;\" colspan=\"2\">" + list[i].content +"</td>";
                     innerHtml += "</tr>";
 
                     innerHtml += "<tr id=\"hdAnswer_" + list[i].idx + "\" style=\"display: none;\">";

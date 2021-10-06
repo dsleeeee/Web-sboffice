@@ -35,7 +35,8 @@
             twbi.USER_NM,
             (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE,
             twbi.REMARK,
-            DECODE(twbrh.VIEW_YN, null, 'N', 'Y') AS VIEW_YN
+            DECODE(twbrh.VIEW_YN, null, 'N', 'Y') AS VIEW_YN,
+            DECODE(twbi.FULL_SiZE_YN, null, 'N', twbi.FULL_SiZE_YN) AS FULL_SiZE_YN
             <include refid="CmmSQL.PagingTemplateCount"/>
             FROM TB_WB_BOARD_INFO twbi,
             TB_WB_USER_INFO_DTL_V01 twuidv01,

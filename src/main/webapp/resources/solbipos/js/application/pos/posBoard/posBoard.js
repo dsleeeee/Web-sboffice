@@ -66,11 +66,20 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
             var ht = s.hitTest(e);
             if( ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
+
                 // 제목 클릭시 상세정보 조회
                 if ( col.binding === "title") {
+                    var selectedRow = s.rows[ht.row].dataItem;
                     $scope.setSelectedStore(s.rows[ht.row].dataItem);
-                    $scope.wjPosBoardDetailLayer.show(true);
-                    event.preventDefault();
+
+                    // FULL SIZE 표시 여부에 따라 상세화면 사이즈가 달라짐.
+                    if(selectedRow.fullSizeYn === "Y"){
+                        $scope.wjPosBoardDetailFullSizeLayer.show(true);
+                        event.preventDefault();
+                    }else{
+                        $scope.wjPosBoardDetailLayer.show(true);
+                        event.preventDefault();
+                    }
                 }
             }
         });
@@ -138,13 +147,31 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._broadcast('posBoardDetailCtrl', $scope.getSelectedStore());
             }, 50)
         });
+
+        // 게시판 상세 FULL SIZE 팝업 핸들러 추가
+        $scope.wjPosBoardDetailFullSizeLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+
+                // 상세팝업 사이즈로 내부 게시글 div height 값을 계산한다.
+                var clientHeight = document.getElementById('wjPosBoardDetailFullSizeLayer').clientHeight;
+                document.getElementById("divFullSizeMain").style.height = (clientHeight - 50) + 'px';
+
+                $scope._broadcast('posBoardDetailFullSizeCtrl', $scope.getSelectedStore());
+            }, 50)
+        });
     });
 
     // 공지팝업 여부(미열람 공지사항 띄움)
     $scope.posBoardPopupOpen = function(params){
         $scope.setSelectedStore(params);
-        $scope.wjPosBoardDetailLayer.show(true);
-        event.preventDefault();
+
+        if(params.fullSizeYn === "Y"){
+            $scope.wjPosBoardDetailFullSizeLayer.show(true);
+            event.preventDefault();
+        }else {
+            $scope.wjPosBoardDetailLayer.show(true);
+            event.preventDefault();
+        }
     };
 
 }]);
@@ -186,6 +213,7 @@ app.controller('posBoardPopupCtrl', ['$scope', '$http', function ($scope, $http)
                 var params = {};
                 params.boardCd = selectedRow.boardCd;
                 params.boardSeqNo = selectedRow.boardSeqNo;
+                params.fullSizeYn = selectedRow.fullSizeYn;
 
                 // 공지팝업 여부(미열람 공지사항 띄움)
                 var scope = agrid.getScope('posBoardCtrl');

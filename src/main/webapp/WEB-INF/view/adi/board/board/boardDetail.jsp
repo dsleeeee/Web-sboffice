@@ -112,7 +112,7 @@
             </table>
 
             <%-- 게시글내용 --%>
-            <div id="summernoteDetail" style="overflow:auto; height:300px;"></div>
+            <div id="summernoteDetail" style="overflow-x:auto; overflow-y: hidden; min-height:300px;"></div>
 
             <%-- 첨부파일 --%>
             <div id="fileContent"></div>
@@ -164,4 +164,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.12" charset="utf-8"></script>
