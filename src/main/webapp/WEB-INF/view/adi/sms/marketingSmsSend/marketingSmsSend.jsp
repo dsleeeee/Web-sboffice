@@ -24,7 +24,7 @@
     <div class="subCon" id ="divSmsSendPage" ng-controller="marketingSmsSendCtrl">
         <%-- 조회조건 --%>
         <%--<div class="searchBar flddUnfld">--%>
-            <div class="searchBar">
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="marketingSmsSend.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -460,7 +460,7 @@
         <%-- 상단 --%>
         <div class="wj-TblWrapBr w100 fl">
             <%-- 제목 --%>
-            <div class="w30 fl pd10" style="height:450px; width:250px;">
+            <div class="w30 fl pd10" style="height:340px; width:250px;">
                 <table>
                     <colgroup>
                         <col class="w100" />
@@ -538,30 +538,11 @@
                             </button>
                         </td>
                     </tr>
-                    <%-- 첨부파일 --%>
-                    <f:form id="marketingSmsSendSmsForm" name="marketingSmsSendSmsForm" method="post" enctype="multipart/form-data">
-                        <tr style="height: 10px"></tr>
-                        <tr>
-                            <td>
-                                <input class="form-control" type="file" id="marketingSmsSendFileSms1" name="marketingSmsSendFileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input class="form-control" type="file" id="marketingSmsSendFileSms2" name="marketingSmsSendFileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input class="form-control" type="file" id="marketingSmsSendFileSms3" name="marketingSmsSendFileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                            </td>
-                        </tr>
-                    </f:form>
                     </tbody>
                 </table>
             </div>
             <%-- 수신자목록 --%>
-            <div class="w70 fl pd10 bl" style="height:450px; width:calc(100% - 250px);">
+            <div class="w70 fl pd10 bl" style="height:340px; width:calc(100% - 250px);">
                 <div class="w100">
                     <div class="w70 fl">
                         <table>
@@ -580,14 +561,14 @@
                     </div>
                     <div class="w30 fl">
                         <div class="updownSet oh mb5">
-                            <button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-                            <button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>
+                            <%--<button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>--%>
+                            <%--<button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
                         </div>
                     </div>
                 </div>
                 <%-- 그리드 --%>
                 <div class="w100 mt10 mb10">
-                    <div class="wj-gridWrap" style="height:390px; overflow-y: hidden; overflow-x: hidden;">
+                    <div class="wj-gridWrap" style="height:280px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row">
                             <wj-flex-grid
                                     autoGenerateColumns.="false"
@@ -600,17 +581,14 @@
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.telNm"/>" binding="telNm" width="100" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="marketingSmsSend.telNo"/>" binding="telNo" width="100" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="marketingSmsSend.addr"/>" binding="addr" width="80" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.birthday"/>" binding="birthday" width="80" align="center" format="date"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.weddingDay"/>" binding="weddingDay" width="80" align="center" format="date"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.memo"/>" binding="memo" width="80" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.lastSaleDate"/>" binding="lastSaleDate" width="80" align="center" format="date"></wj-flex-grid-column>
 
                                 <%--저장시 필요--%>
                                 <wj-flex-grid-column header="<s:message code="marketingSmsSend.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.rOgnFg"/>" binding="rOgnFg" width="110" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.rOgnCd"/>" binding="rOgnCd" width="110" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.rOgnFg"/>" binding="rOgnFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.rOgnCd"/>" binding="rOgnCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="marketingSmsSend.rUserId"/>" binding="rUserId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
@@ -624,19 +602,37 @@
         <%-- 하단 --%>
         <div class="wj-TblWrapBr w100 fl">
             <%-- 자동변환 --%>
-            <div class="w30 fl pd10" style="height:320px; width:250px;">
+            <div class="w30 fl pd10" style="height:400px; width:250px;">
                 <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                     <table>
-                        <tr>
-                            <td>
-                                <%-- 자동변환 --%>
-                                <span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>
-                                <%-- 이름 --%>
-                                <span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>
-                                <%-- 추가사항 --%>
-                                <span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>
-                            </td>
-                        </tr>
+                        <%-- 첨부파일 --%>
+                        <f:form id="marketingSmsSendSmsForm" name="marketingSmsSendSmsForm" method="post" enctype="multipart/form-data">
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="file" id="marketingSmsSendFileSms1" name="marketingSmsSendFileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="file" id="marketingSmsSendFileSms2" name="marketingSmsSendFileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="file" id="marketingSmsSendFileSms3" name="marketingSmsSendFileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                                </td>
+                            </tr>
+                        </f:form>
+                        <%--<tr>--%>
+                            <%--<td>--%>
+                                <%--&lt;%&ndash; 자동변환 &ndash;%&gt;--%>
+                                <%--<span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>--%>
+                                <%--&lt;%&ndash; 이름 &ndash;%&gt;--%>
+                                <%--<span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>--%>
+                                <%--&lt;%&ndash; 추가사항 &ndash;%&gt;--%>
+                                <%--<span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>--%>
+                            <%--</td>--%>
+                        <%--</tr>--%>
                         <tr style="height: 10px"></tr>
                         <tr>
                             <td>
@@ -649,7 +645,7 @@
                 </div>
             </div>
             <%-- 문구 --%>
-            <div class="w70 fl pd10 bl" style="height:320px; width:calc(100% - 250px);">
+            <div class="w70 fl pd10 bl" style="height:400px; width:calc(100% - 250px);">
                 <div id ="divMsgGrpPage">
                     <%--subTab--%>
                     <div class="tabType1">
@@ -661,7 +657,7 @@
                                 </li>
                             </c:forEach>
                         </ul>
-                        <div style="height:270px; overflow-x: hidden; overflow-y: auto;">
+                        <div style="height:340px; overflow-x: hidden; overflow-y: auto;">
                             <div id="divMarketingSmsSendMsgComment"></div>
                         </div>
                     </div>
@@ -720,7 +716,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20210915.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211006.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>

@@ -133,12 +133,9 @@
     <select id="getMarketingSmsSendList"  parameterType="MarketingSmsSendVO" resultType="DefaultMap">
         /* MarketingSmsSendMapper.getMarketingSmsSendList */
         SELECT
-        SBPENC.D(tmm.MEMBR_NM) AS TEL_NM,
+--         SBPENC.D(tmm.MEMBR_NM) AS TEL_NM,
         SBPENC.D(tmm.TEL_NO) AS TEL_NO,
-        SBPENC.D(tmm.ADDR) AS ADDR,
-        tmm.BIRTHDAY,
-        tmm.WEDDINGDAY,
-        tmmp.FIRST_SALE_DATE,
+        SBPENC.D(tmm.ADDR) || ' ' || SBPENC.D(tmm.ADDR_DTL) AS ADDR,
         tmmp.LAST_SALE_DATE,
         tmm.MEMBR_NO,
         'C' AS R_OGN_FG,

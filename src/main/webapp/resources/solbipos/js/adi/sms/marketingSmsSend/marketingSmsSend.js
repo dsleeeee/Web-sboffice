@@ -100,8 +100,9 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
                 }
 
-                // 수신자, 수신번호
-                if (col.binding === "telNm" || col.binding === "telNo") {
+                // 수신번호
+                // if (col.binding === "telNm" || col.binding === "telNo") {
+                if (col.binding === "telNo") {
                     var item = s.rows[e.row].dataItem;
 
                     // 값이 있으면 링크 효과
@@ -116,8 +117,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     }
                 }
 
-                // 주소, 생일, 결혼기념일
-                if (col.binding === "addr" || col.binding === "birthday" || col.binding === "weddingDay") {
+                // 주소, 최근매출일
+                if (col.binding === "addr" || col.binding === "lastSaleDate") {
                     wijmo.addClass(e.cell, 'wj-custom-readonly');
                     wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
@@ -246,7 +247,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         });
     };
 
-    // 자동변환
+    // 자동변환(이모티콘도 사용)
     $scope.addMsg = function(str) {
         var msgContent = $("#marketingSmsSendMessageContent").val();
         $("#marketingSmsSendMessageContent").val(msgContent + str);
@@ -269,39 +270,38 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // <-- 그리드 행 추가 -->
-    $scope.addRow = function() {
-        gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
-
-        // 파라미터 설정
-        var params = {};
-        params.status = "I";
-        params.gChk = true;
-        params.membrNo = "";
-        params.telNm = "";
-        params.telNo = "";
-        params.addr = "";
-        params.birthday = "";
-        params.weddingDay = "";
-        params.memo = "";
-        params.rOgnFg = "X";
-        params.rOgnCd = "";
-        params.rUserId = "";
-
-        // 추가기능 수행 : 파라미터
-        $scope._addRow(params);
-    };
+    // $scope.addRow = function() {
+    //     gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+    //
+    //     // 파라미터 설정
+    //     var params = {};
+    //     params.status = "I";
+    //     params.gChk = true;
+    //     params.membrNo = "";
+    // //     params.telNm = "";
+    //     params.telNo = "";
+    //     params.addr = "";
+    //     params.lastSaleDate = "";
+    // //     params.memo = "";
+    //     params.rOgnFg = "X";
+    //     params.rOgnCd = "";
+    //     params.rUserId = "";
+    //
+    //     // 추가기능 수행 : 파라미터
+    //     $scope._addRow(params);
+    // };
     // <-- //그리드 행 추가 -->
 
     // <-- 그리드 행 삭제 -->
-    $scope.del = function(){
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flex.collectionView.items[i];
-
-            if(item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
-            }
-        }
-    };
+    // $scope.del = function(){
+    //     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+    //         var item = $scope.flex.collectionView.items[i];
+    //
+    //         if(item.gChk) {
+    //             $scope.flex.collectionView.removeAt(i);
+    //         }
+    //     }
+    // };
     // <-- //그리드 행 삭제 -->
 
     // <-- 전송, 예약 -->
@@ -404,8 +404,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 if (messageContent == undefined) {
                     messageContent = "";
                 }
-                messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
-                messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
+                // messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
+                // messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
                 var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
 
                 $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
