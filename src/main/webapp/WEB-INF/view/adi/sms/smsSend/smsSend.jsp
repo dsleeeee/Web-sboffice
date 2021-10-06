@@ -120,17 +120,17 @@
                 <div class="w50 fl pd10 bl" style="height:340px;">
                     <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                         <table>
-                            <tr>
-                                <td>
-                                    <%-- 자동변환 --%>
-                                    <span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>
-                                    <%-- 이름 --%>
-                                    <span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>
-                                    <%-- 추가사항 --%>
-                                    <span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>
-                                </td>
-                            </tr>
-                            <tr style="height: 10px"></tr>
+                            <%--<tr>--%>
+                                <%--<td>--%>
+                                    <%--&lt;%&ndash; 자동변환 &ndash;%&gt;--%>
+                                    <%--<span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>--%>
+                                    <%--&lt;%&ndash; 이름 &ndash;%&gt;--%>
+                                    <%--<span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>--%>
+                                    <%--&lt;%&ndash; 추가사항 &ndash;%&gt;--%>
+                                    <%--<span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>--%>
+                                <%--</td>--%>
+                            <%--</tr>--%>
+                            <%--<tr style="height: 10px"></tr>--%>
                             <tr>
                                 <td>
                                     <%-- 이모티콘 --%>
@@ -235,9 +235,7 @@
 
                                     <!-- define columns -->
                                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="smsSend.telNm"/>" binding="telNm" width="100" align="center"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="smsSend.telNo"/>" binding="telNo" width="100" align="center"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="smsSend.memo"/>" binding="memo" width="80" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="smsSend.telNo"/>" binding="telNo" width="300" align="center"></wj-flex-grid-column>
 
                                     <%--저장시 필요--%>
                                     <wj-flex-grid-column header="<s:message code="smsSend.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -280,11 +278,11 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript">
+<%--<script type="text/javascript">--%>
     <%--var orgnCd = "${orgnCd}";--%>
-</script>
+<%--</script>--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20210915.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20211006.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

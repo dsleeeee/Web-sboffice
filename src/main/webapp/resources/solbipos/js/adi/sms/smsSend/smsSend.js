@@ -53,8 +53,9 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
 
-                // 수신자, 수신번호
-                if (col.binding === "telNm" || col.binding === "telNo") {
+                // 수신번호
+                // if (col.binding === "telNm" || col.binding === "telNo") {
+                if (col.binding === "telNo") {
                     var item = s.rows[e.row].dataItem;
 
                     // 값이 있으면 링크 효과
@@ -210,9 +211,9 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             params.status = "I";
             params.gChk = true;
             params.membrNo = data[i].membrNo;
-            params.telNm = data[i].membrNm;
+            // params.telNm = data[i].membrNm;
             params.telNo = data[i].telNo;
-            params.memo = "";
+            // params.memo = "";
             params.rOgnFg = data[i].orgnFg;
             params.rOgnCd = data[i].orgnCd;
             params.rUserId = data[i].userId;
@@ -222,7 +223,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
     };
 
-    // 자동변환
+    // 자동변환(이모티콘도 사용)
     $scope.addMsg = function(str) {
         var msgContent = $("#messageContent").val();
         $("#messageContent").val(msgContent + str);
@@ -253,9 +254,9 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.status = "I";
         params.gChk = true;
         params.membrNo = "";
-        params.telNm = "";
+        // params.telNm = "";
         params.telNo = "";
-        params.memo = "";
+        // params.memo = "";
         params.rOgnFg = "X";
         params.rOgnCd = "";
         params.rUserId = "";
@@ -377,8 +378,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 if (messageContent == undefined) {
                     messageContent = "";
                 }
-                messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
-                messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
+                // messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
+                // messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
                 var content = messageContent;
                 if ($("#lblPageGubun").text() == "Y") {
                     content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
