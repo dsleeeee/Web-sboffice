@@ -14,13 +14,24 @@
 var app = agrid.getApp();
 
 // 시 VALUE
-var Hh = [24];
-for(i =0 ; i < 24; i++){
+// var Hh = [24];
+// for(i =0 ; i < 24; i++){
+//     var timeVal = i.toString();
+//     if(i>=0 && i<=9){
+//         timeVal = "0" + timeVal;
+//     }
+//     Hh[i] = {"name":timeVal,"value":timeVal}
+// }
+
+// 전송가능 시간 체크(09~21시)
+// 시 VALUE
+var Hh = [13];
+for(i =9 ; i < 22; i++){
     var timeVal = i.toString();
     if(i>=0 && i<=9){
         timeVal = "0" + timeVal;
     }
-    Hh[i] = {"name":timeVal,"value":timeVal}
+    Hh[i-9] = {"name":timeVal,"value":timeVal}
 }
 
 // 분 VALUE
