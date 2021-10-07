@@ -27,7 +27,7 @@ var periodData = [
 
 // 광고성 SMS전송 DropBoxDataMap
 var marketingSmsGubunComboData = [
-    {"name": "전체", "value": ""},
+    // {"name": "전체", "value": ""},
     {"name": "1개월전", "value": "1"},
     {"name": "2개월전", "value": "2"},
     {"name": "3개월전", "value": "3"},
@@ -340,7 +340,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             return;
         }
         if(smsQty < params.length) {
-            $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 전송가능한 수량보다 많습니다.
+            $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
             return;
         }
 
@@ -378,9 +378,25 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             fileCount = $scope.chkSmsFile();
         }
 
+        // 전송수량(체크된 수신자)
+        var smsSendQty = 0;
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                smsSendQty = smsSendQty + 1;
+            }
+        }
+
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
-        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + $("#lblMarketingSmsSendSmsQty").text() + messages["marketingSmsSend.smsSendConfirm2"];
+        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + smsSendQty + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
+            // 전송가능 시간 체크(09~21시)
+            var date = new Date();
+            var hh = new String(date.getHours());
+            if(parseInt(hh) < 9 || parseInt(hh) > 21) {
+                $scope._popMsg(messages["marketingSmsSend.smsSendTimeAlert"]); // 전송가능한 시간대가 아닙니다. 09~21시만 전송가능합니다.
+                return;
+            }
+
             // MMS
            if(msgType == "3") {
                // 첨부파일 저장
@@ -388,13 +404,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
            // SMS, LMS
            } else {
                // 전송 저장 save
-               $scope.smsSendSaveSave(reserveYn, reserveDate, msgType, 0, "");
+               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, 0, "");
            }
         }
     };
 
     // 전송 저장 save
-    $scope.smsSendSaveSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
+    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -476,7 +492,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     contentData = contentData.substring(0, contentData.length-1);
 
                     // 전송 저장 save
-                    $scope.smsSendSaveSave(reserveYn, reserveDate, msgType, fileCount, contentData);
+                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, fileCount, contentData);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
