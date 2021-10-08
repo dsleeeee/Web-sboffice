@@ -41,6 +41,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
     $scope.coupnApplyFgDataMap = new wijmo.grid.DataMap(coupnApplyFg, 'value', 'name');
     $scope.coupnTargetFgDataMap = new wijmo.grid.DataMap(coupnTargetFg, 'value', 'name');
+    $scope.mappingCdDataMap = new wijmo.grid.DataMap(mappingCd, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -89,7 +90,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     // 쿠폰 분류 그리드 조회 후에 dropdown readonly 되는 것 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
-      if (col.binding === "serNoYn" || col.binding === "useYn") {
+      if (col.binding === "serNoYn" || col.binding === "useYn" || col.binding === "mappingCode" ) {
           e.cancel = false;
       }
     });
@@ -157,6 +158,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     params.payClassCd="자동채번"
     params.serNoYn = "Y";
     params.useYn = "Y";
+    params.mappingCode = "0601";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);

@@ -65,6 +65,9 @@
             <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="100" data-map="useYnDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="gift.giftCnt"/>" binding="giftCnt" visible="false"></wj-flex-grid-column>
+              <c:if test="${mappingFg == '1'}">
+                  <wj-flex-grid-column header="<s:message code="gift.mappingCd"/>" binding="mappingCode" data-map="mappingCdDataMap" ></wj-flex-grid-column>
+              </c:if>
           </wj-flex-grid>
         </div>
         <%-- 페이지 리스트 --%>
@@ -141,6 +144,7 @@ var useYn        = ${ccu.getCommCodeExcpAll("067")};
 var giftDcFg     = ${ccu.getCommCodeExcpAll("013")};
 var giftApplyFg  = ${ccu.getCommCodeExcpAll("043")};
 var baseUrl      = "${baseUrl}";
-
+var mappingFg = "${mappingFg}";
+var mappingCd   = ${ccu.getCommCodeExcpAll("801")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20180815" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20180816" charset="utf-8"></script>

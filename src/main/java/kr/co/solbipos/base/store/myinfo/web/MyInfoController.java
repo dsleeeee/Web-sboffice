@@ -1,6 +1,9 @@
 package kr.co.solbipos.base.store.myinfo.web;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
+import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.base.store.myinfo.service.MyInfoService;
 import kr.co.solbipos.base.store.myinfo.service.MyInfoVO;
 import kr.co.solbipos.base.store.myinfo.service.WijmoGridVO;
@@ -9,15 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.solbipos.base.store.myinfo.enums.NmcodeGrpCd.*;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -43,11 +45,15 @@ public class MyInfoController{
     static final String PREFIX = "base/store/myInfo";
 
     private final MyInfoService myInfoService;
+    private final SessionService sessionService;
+    private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public MyInfoController(MyInfoService myInfoService) {
+    public MyInfoController(MyInfoService myInfoService, SessionService sessionService, MessageService messageService) {
         this.myInfoService = myInfoService;
+        this.sessionService = sessionService;
+        this.messageService = messageService;
     }
 
     @GetMapping( "/myInfo/list.sb" )
@@ -120,5 +126,27 @@ public class MyInfoController{
                 delList = params.getOrDefault("delItems", emptyList );
 
         return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, GUEST)), OK );
+    }
+
+    /**
+     *  상단로고이미지 - 이미지저장
+     *
+     * @param request MultipartHttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/titleImg/saveTitleImg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveTitleImg(MultipartHttpServletRequest request) {
+        String result = myInfoService.saveTitleImg(request);
+
+        if(result.equals("0")) {
+            return returnJson(Status.OK);
+        } else if(result.equals("1")) {
+            return returnJson(Status.FAIL, "msg", "이미지 저장에 실패했습니다.");
+        } else if(result.equals("3")) {
+            return returnJson(Status.FAIL, "msg", messageService.get("myInfo.fileExtensionChk.msg"));
+        } else{
+            return returnJson(Status.FAIL, "msg", "이미지 저장에 실패했습니다.");
+        }
     }
 }

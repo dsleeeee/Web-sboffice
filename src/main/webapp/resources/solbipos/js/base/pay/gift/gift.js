@@ -36,6 +36,7 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.giftDcFgDataMap = new wijmo.grid.DataMap(giftDcFg, 'value', 'name');
     $scope.giftApplyFgDataMap = new wijmo.grid.DataMap(giftApplyFg, 'value', 'name');
+    $scope.mappingCdDataMap = new wijmo.grid.DataMap(mappingCd, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -112,6 +113,7 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
     params.payClassCd="자동채번"
     params.serNoYn = "N";
     params.useYn = "Y";
+    params.mappingCode = "0801";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);

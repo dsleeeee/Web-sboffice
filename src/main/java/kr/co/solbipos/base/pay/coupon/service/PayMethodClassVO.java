@@ -42,6 +42,8 @@ public class PayMethodClassVO extends PageVO {
     private UseYn useYn;
     /** 쿠폰등록 본사 통제여부 */
     private CoupnEnvFg coupnEnvstVal;
+    /** 매핑코드 */
+    private String mappingCode;
     /** 프로시져 실행 결과 */
     private String result;
 
@@ -173,6 +175,14 @@ public class PayMethodClassVO extends PageVO {
      * @param coupnEnvstVal the coupnEnvstVal to set
      */
     public void setCoupnEnvstVal(CoupnEnvFg coupnEnvstVal) { this.coupnEnvstVal = coupnEnvstVal; }
+
+    public String getMappingCode() {
+        return mappingCode;
+    }
+
+    public void setMappingCode(String mappingCode) {
+        this.mappingCode = mappingCode;
+    }
 
     /**
      * @return the result

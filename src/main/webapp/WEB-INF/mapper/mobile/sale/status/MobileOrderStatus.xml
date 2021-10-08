@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileOrderStatus.xml
+    주문현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.10.04     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.orderStatus.service.impl.MobileOrderStatusMapper">
+
+   <!-- 주문현황 조회 -->
+    <!--
+        TABLE    : TB_OD_ORDER_HDR
+        COMMENTS : 주문현황을 조회함
+    -->
+    <select id="getMobileOrderStatusList"  parameterType="mobileOrderStatusVO" resultType="DefaultMap">
+        /* MobileOrderStatus.getMobileOrderStatusList */
+        SELECT	TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,		-- 영업일자
+                POS_NO,			-- 포스번호
+                ORDER_NO,		-- 주문번호
+                ORDER_FG,		-- 주문구분 1:주문 2:취소 3:결제
+                DLVR_ORDER_FG,	-- 배달주문구분 1:일반 2:배달 3:포장
+                TO_CHAR(TO_DATE(ORDER_START_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_START_DT,  -- 최초주문일시
+                TO_CHAR(TO_DATE(ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_END_DT,      -- 최종주문일시
+                TOT_SALE_AMT,	-- 총판매금액
+                TOT_DC_AMT,		-- 총할인금액
+                TOT_TIP_AMT,	-- 총봉사료금액
+                TOT_ETC_AMT,	-- 총에누리금액
+                REAL_SALE_AMT,	-- 실판매금액
+                TAX_SALE_AMT,	-- 과세금액
+                VAT_AMT,		-- 부가세금액
+                NO_TAX_SALE_AMT,-- 면세금액
+                PURE_SALE_AMT,	-- 순판매금액
+                EXPECT_PAY_AMT,	-- 받을금액
+                RECV_PAY_AMT,	-- 받은금액
+                RTN_PAY_AMT,	-- 거스름액
+                DUTCH_PAY_CNT,	-- 더치페이인원수
+                TOT_GUEST_CNT,	-- 총인원
+                KITCHEN_MEMO,	-- 주방메모
+                TBL_CD,			-- 테이블코드
+                MOVE_ORDER_NO,	-- 이동주문번호
+                EMP_NO,			-- 사원번호
+                PAGER_NO,		-- 진동벨번호
+                DLVR_YN,		-- 배달여부
+                MEMBR_YN,		-- 회원여부
+                RESVE_YN,		-- 예약여부
+                REFUND_YN,		-- 환급여부
+                SEND_YN,		-- 전송여부
+                TO_CHAR(TO_DATE(SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS SEND_DT -- 전송일시
+        FROM 	TB_OD_ORDER_HDR
+        WHERE   STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+
+    <!-- 주문현황 조회 -->
+    <!--
+        TABLE    : TB_OD_ORDER_DTL
+        COMMENTS : 주문현황 상세 팝업을 조회함
+    -->
+    <select id="getMobileOrderStatusDtlList"  parameterType="mobileOrderStatusVO" resultType="DefaultMap">
+        /* MobileOrderStatus.getMobileOrderStatusDtlList */
+        SELECT  POS_NO,
+                ORDER_NO,
+                ORDER_DTL_FG,
+                DLVR_PACK_FG,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM 	TB_OD_ORDER_DTL
+        WHERE   STORE_CD IN
+        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+            #{item}
+        </foreach>
+        AND 	SALE_DATE = #{saleDate}
+        AND     ORDER_NO = #{orderNo}
+        GROUP BY POS_NO, ORDER_NO, ORDER_DTL_FG, DLVR_PACK_FG
+    </select>
+</mapper>

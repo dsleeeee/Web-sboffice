@@ -5,6 +5,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -78,6 +79,7 @@ public class CouponController {
             Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        model.addAttribute("mappingFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1118"), "0"));
 
 //        String envstCd = "0019";
 //        String coupnEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));

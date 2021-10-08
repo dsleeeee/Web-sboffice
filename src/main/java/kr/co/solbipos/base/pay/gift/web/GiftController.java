@@ -5,6 +5,8 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import kr.co.solbipos.base.pay.gift.service.GiftService;
@@ -49,12 +51,14 @@ public class GiftController {
 
     private final GiftService giftService;
     private final SessionService sessionService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public GiftController(GiftService giftService, SessionService sessionService) {
+    public GiftController(GiftService giftService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.giftService = giftService;
         this.sessionService = sessionService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -69,6 +73,9 @@ public class GiftController {
     @RequestMapping(value = "/class/giftView.sb", method = RequestMethod.GET)
     public String prodClassView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        model.addAttribute("mappingFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1118"), "0"));
         return "base/pay/gift/giftView";
     }
 

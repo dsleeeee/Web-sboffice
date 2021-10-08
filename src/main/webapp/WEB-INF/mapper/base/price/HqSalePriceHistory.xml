@@ -64,7 +64,7 @@
                                     )
         </if>
         AND 	tmp.STORE_CD = tlmpspl.STORE_CD
-        AND 	tmp.PROD_CD (+) = tlmpspl.PROD_CD
+        AND 	tmp.PROD_CD = tlmpspl.PROD_CD
         AND 	tms.STORE_CD = tlmpspl.STORE_CD
         ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -121,7 +121,7 @@
                                     )
         </if>
         AND 	tmp.STORE_CD = tlmpspl.STORE_CD
-        AND 	tmp.PROD_CD (+) = tlmpspl.PROD_CD
+        AND 	tmp.PROD_CD = tlmpspl.PROD_CD
         AND 	tms.STORE_CD = tlmpspl.STORE_CD
         ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
     </select>
@@ -169,7 +169,7 @@
                                     )
         </if>
         AND 	thp.HQ_OFFICE_CD = tlhpspl.HQ_OFFICE_CD
-        AND 	thp.PROD_CD (+) = tlhpspl.PROD_CD
+        AND 	thp.PROD_CD = tlhpspl.PROD_CD
         ORDER BY tlhpspl.PROD_CD, tlhpspl.PROC_DT
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -216,7 +216,7 @@
             )
         </if>
         AND 	thp.HQ_OFFICE_CD = tlhpspl.HQ_OFFICE_CD
-        AND 	thp.PROD_CD (+) = tlhpspl.PROD_CD
+        AND 	thp.PROD_CD = tlhpspl.PROD_CD
         ORDER BY tlhpspl.PROD_CD, tlhpspl.PROC_DT
     </select>
 </mapper>

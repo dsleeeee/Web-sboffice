@@ -109,6 +109,20 @@
             <input type="text" class="sb-input w100" id="addrDtl" name="addrDtl" placeholder="주소2" value="${myInfo.addrDtl}"/>
           </td>
         </tr>
+        <tr>
+          <%--상단 로고 이미지--%>
+          <th><s:message code="myInfo.myInfo.image.title1" /></th>
+          <td>
+            <p class="shopimg fl">
+              <span><s:message code="myInfo.myInfo.image.suggest" /></span>
+              <f:form id="regForm" name="regForm" method="post" enctype="multipart/form-data">
+                <input type="file" id="fileTitle" name="fileTitle" class="form-control" accept="image/x-png, .jpg, .gif" onchange="imagePreview(this, 'title')"/>
+                <input type="hidden" id="hdTitleFileNm" />
+              </f:form>
+            </p>
+            <div id="imgTitle" style="width:125px;height:25px;clear:both;border:1px solid #e8e8e8;overflow: hidden;"></div>
+          </td>
+        </tr>
         <tr class="brt" style="display: none;">
           <%--상단 로고 이미지--%>
           <th><s:message code="myInfo.myInfo.image.title1" /></th>
@@ -194,6 +208,8 @@
 </div>
 
 <script>
+    var orgnCd      = "${orgnCd}";
+
 function generateWijmoComponent( elementIds ){
   var dropComponent = wijmo.input.ComboBox,
       textComponent = wijmo.input.InputMask,
@@ -247,6 +263,106 @@ function arrayCopy( items ){
 
   items instanceof Array && items.forEach(function( item ){ arr.push( item ); });
   return arr;
+}
+
+function imagePreview(imgVal, imgFg){
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    if(imgFg === 'title') $("#imgTitle").html("<img src='" +  e.target.result + "' class='imgPic'>");
+  };
+  reader.readAsDataURL(imgVal.files[0]);
+
+  var fileSize = 0;
+  var element = "";
+  var errMsg = "";
+
+  if(imgFg === "title"){
+    fileSize = 1024;
+    element = "fileTitle";
+    errMsg = messages["myInfo.fileSizeChk.1024.msg"];
+  }
+  // 상품이미지 크기제한 체크
+  if (!isNull($("#" + element)[0].files[0])) {
+    var maxSize = fileSize * 1024;
+    var fileSize = $("#" + element)[0].files[0].size;
+    if (fileSize > maxSize) {
+      s_alert.pop(errMsg);
+      return;
+    }
+  }
+
+  // 이미지 파일 여부 체크
+  if (isNull($("#" + element)[0].files[0])) {
+    errMsg = messages["myInfo.require.msg"];
+    s_alert.pop(errMsg);
+    return;
+  }
+
+  // 이미지명 형식 체크
+  var imgFullNm = $("#" + element).val().substring($("#" + element).val().lastIndexOf('\\') + 1);
+  if(1 > imgFullNm.lastIndexOf('.')){
+    s_alert.pop(messages["myInfo.fileNmChk.msg"]);
+    return;
+  }
+
+  // 이미지(.png) 확장자 체크
+  var reg = /(.*?)\.(png|PNG|jpg|JPG|gif|GIF)$/;
+
+  if(! $("#" + element).val().match(reg)) {
+    s_alert.pop(messages["myInfo.fileExtensionChk.msg"]);
+    return;
+  }
+
+  // 이미지를 등록하시겠습니까?
+  var msg = messages["myInfo.fileReg.msg"];
+  s_alert.popConf(msg, function () {
+
+    // var formData = new FormData($("#regForm")[0]);
+
+    var file = $("#" + element)[0].files[0];
+
+      // ajax로 전달할 폼 객체
+      var formData = new FormData();
+      // 폼 객체에 파일추가, append("변수명", 값)
+      formData.append("file", file);
+      formData.append("newFileName", orgnCd);
+      console.log(orgnCd);
+
+    $.ajax({
+      url: "/base/store/myInfo/titleImg/saveTitleImg.sb",
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      cache: false,
+      success: function(result) {
+        if (result.status === "OK") {
+          s_alert.pop("등록되었습니다.");
+        }
+        else if (result.status === "FAIL") {
+          var msg = result.status + " : " + result.data.msg;
+          s_alert.pop(msg);
+          // $scope.$broadcast('loadingPopupInactive');
+        }
+        else if (result.status === "SERVER_ERROR") {
+          s_alert.pop(result.message);
+          // $scope.$broadcast('loadingPopupInactive');
+        }
+        else {
+          var msg = result.status + " : " + result.message;
+          s_alert.pop(msg);
+          // $scope.$broadcast('loadingPopupInactive');
+        }
+      },
+      error : function(result){
+        s_alert.pop("error");
+        // $scope.$broadcast('loadingPopupInactive');
+      }
+    },function(){
+      s_alert.pop("Ajax Fail By HTTP Request 2");
+      // $scope.$broadcast('loadingPopupInactive');
+    });
+  });
 }
 
 var win = window,
