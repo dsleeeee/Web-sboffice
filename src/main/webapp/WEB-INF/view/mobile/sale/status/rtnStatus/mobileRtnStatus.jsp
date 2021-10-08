@@ -11,7 +11,7 @@
 <div class="subCon" ng-controller="mobileRtnStatusCtrl">
 
     <div class="searchBar">
-        <%-- 시간대별(일자별) --%>
+        <%-- 반품현황 --%>
         <a href="#" class="fl"><s:message code="mobile.rtnStatus"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileRtnStatusCtrl', 1)">
