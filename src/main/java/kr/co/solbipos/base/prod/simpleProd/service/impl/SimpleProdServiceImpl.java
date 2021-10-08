@@ -334,6 +334,9 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     // 자동채번 Start
                     String prodCd = prodMapper.getProdCd(prodVO);
                     prodVO.setProdCd(prodCd);
+                    if(simpleProdVO.getVendrCd() != null && !"".equals(simpleProdVO.getVendrCd())){
+                        simpleProdVO.setProdCd(prodCd);
+                    }
                 // 수동채번인 경우 중복체크
                 } else if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.MANUAL) {
                     // 값이 있을때만
