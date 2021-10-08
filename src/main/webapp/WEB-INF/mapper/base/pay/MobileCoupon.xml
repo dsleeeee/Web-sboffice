@@ -107,7 +107,8 @@
       REG_DT,
       REG_ID,
       MOD_DT,
-      MOD_ID
+      MOD_ID,
+      MAPPING_CODE
     )
     VALUES
     (
@@ -120,7 +121,8 @@
       #{regDt},
       #{regId},
       #{modDt},
-      #{modId}
+      #{modId},
+      #{mappingCode}
     )
   </insert>
 
@@ -136,7 +138,8 @@
            SER_NO_YN = #{serNoYn},
            USE_YN = #{useYn},
            MOD_DT = #{modDt},
-           MOD_ID = #{modId}
+           MOD_ID = #{modId},
+           MAPPING_CODE = #{mappingCode}
      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        AND PAY_CLASS_CD = #{payClassCd}
        AND PAY_TYPE_FG =  #{payTypeFg}
@@ -176,7 +179,8 @@
       REG_DT,
       REG_ID,
       MOD_DT,
-      MOD_ID
+      MOD_ID,
+      MAPPING_CODE
     )
     VALUES
     (
@@ -189,7 +193,8 @@
       #{regDt},
       #{regId},
       #{modDt},
-      #{modId}
+      #{modId},
+      #{mappingCode}
     )
   </insert>
 
@@ -205,7 +210,8 @@
            SER_NO_YN = #{serNoYn},
            USE_YN = #{useYn},
            MOD_DT = #{modDt},
-           MOD_ID = #{modId}
+           MOD_ID = #{modId},
+           MAPPING_CODE = #{mappingCode}
      WHERE STORE_CD = #{storeCd}
        AND PAY_CLASS_CD = #{payClassCd}
        AND PAY_TYPE_FG =  #{payTypeFg}

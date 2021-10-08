@@ -7,13 +7,12 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
   <div id="selectMenuArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isMenuTab">
-    <div class="w30 fl">
+    <div class="w40 fl">
+    <div>
       <%--위즈모 테이블--%>
-      <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="sideMenuSelectGroupCtrl">
-        <div class="updownSet oh mb10" style="height:60px;">
+      <div id="gridPrint" class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="sideMenuSelectGroupCtrl">
+        <div class="updownSet oh mb5">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
-          <br>
-          <br>
               <button class="btn_skyblue" id="btnAddSelGroup" ng-click="addRow()" >
                 <s:message code="cmm.add" />
               </button>
@@ -26,7 +25,7 @@
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div style="height:370px">
+        <div style="height:170px">
           <wj-flex-grid
             autoGenerateColumns="false"
             control="flex"
@@ -50,9 +49,9 @@
       <%--//위즈모 테이블--%>
     </div>
 
-    <div class="w35 fl">
+    <div>
       <%--위즈모 테이블--%>
-      <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="sideMenuSelectClassCtrl">
+      <div id="gridMapng" class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="sideMenuSelectClassCtrl">
         <div class="updownSet oh mb10" style="height:60px;">
           <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span> </span>
           <br>
@@ -75,7 +74,7 @@
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div style="height:370px;">
+        <div style="height:130px;">
           <wj-flex-grid
             autoGenerateColumns="false"
             control="flex"
@@ -98,10 +97,11 @@
       </div>
       <%--//위즈모 테이블--%>
     </div>
-
-    <div class="w35 fl">
+    </div>
+    <div class="w60 fl">
+    <div>
       <%--위즈모 테이블--%>
-      <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="sideMenuSelectProdCtrl">
+      <div id="gridMapng" class="wj-TblWrapBr ml10 pd5" style="height: 480px;" ng-controller="sideMenuSelectProdCtrl">
         <div class="updownSet oh mb10" style="height:60px;">
           <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselProd' /><span id="sideClassTitle"></span> </span>
           <br>
@@ -135,12 +135,12 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="100"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="150"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="100"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdUprc"/>" binding="addProdUprc" width="50"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdQty"/>" binding="addProdQty" width="50"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="80"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" width="50" data-map="fixProdFgDataMap"></wj-flex-grid-column>
             <%--<wj-flex-grid-column header="순서" binding="dispSeq" width="50"></wj-flex-grid-column>--%>
 
           </wj-flex-grid>
@@ -148,6 +148,7 @@
         </div>
       </div>
       <%--//위즈모 테이블--%>
+    </div>
     </div>
   </div>
 <script>
