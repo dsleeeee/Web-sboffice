@@ -140,11 +140,11 @@ public class SmsSendServiceImpl implements SmsSendService {
 
             // SMS
             if(smsSendVO.getMsgType().equals("1")) {
-                procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND
+                procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
 
             // LMS, MMS
             } else if(smsSendVO.getMsgType().equals("2") || smsSendVO.getMsgType().equals("3")) {
-                procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND
+                procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC
             }
 
             // 잔여수량 -1
@@ -181,24 +181,22 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         try{
 
-            String orgnCd = multi.getParameter("orgnCd");
             String fileId = multi.getParameter("pageGubun");
 
             // 저장경로 폴더
-            String path_folder = orgnCd;
+            String path_folder = "sms_img/";
 
             // 저장 경로 설정 (개발시 로컬) (파일 저장용)
-//            String path = "D:\\Workspace\\javaWeb\\testSmsImg\\" + path_folder + "\\";
+//            String path = "D:\\Workspace\\javaWeb\\testSmsImg\\";
 
             // 파일서버 대응 경로 지정 (운영) (파일 저장용)
-//            String path = "/home/daemon/sms/X_McsAgent/file/mms/" + path_folder + "/";
-            String path = BaseEnv.FILE_UPLOAD_DIR + "sms_img/" + path_folder + "/";
+            String path = BaseEnv.FILE_UPLOAD_DIR + path_folder;
 
             System.out.println("test1111 : " + path);
             LOGGER.info("SMS전송 >>> MSS 파일 저장 >>> 파일 저장 경로 : " + path);
 
             // 저장 경로 설정 (디비 저장용)
-            String path_table = "/" + path_folder + "/";
+            String path_table = path_folder;
 
             // 업로드 되는 파일명
             String newFileName = "";

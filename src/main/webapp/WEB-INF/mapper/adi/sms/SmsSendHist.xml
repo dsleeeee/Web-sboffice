@@ -30,7 +30,11 @@
         hssrt.MSG_CONTENT,
         DECODE(hssrt.RESERVE_YN, '1', hssrt.SEND_DATE, NULL) AS SEND_DATE,
         hssrt.READ_DATE,
-        hssrt.RESERVE_YN
+        hssrt.RESERVE_YN,
+        hssrt.SEND_QTY,
+        hssrt.WAIT_QTY,
+        hssrt.SUCCESS_QTY,
+        hssrt.FAIL_QTY
        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM HCS_SMS_SEND_REG_T hssrt,
         (
@@ -125,6 +129,22 @@
         AND twuidv01.ORGN_CD = hssrt.SMS_SEND_ORGN_CD
         ORDER BY hssrt.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 수신자정보 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAddresseeDtlList"  parameterType="SmsSendHistVO" resultType="DefaultMap">
+        /* SmsSendHistMapper.getAddresseeDtlList */
+        SELECT
+        SUBSTR(sssemr.DEST_INFO, INSTR(sssemr.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+        (sssemr.ADDR || ' ' ||  sssemr.ADDR_DTL) AS ADDR,
+        sssemr.SALE_DATE
+        FROM SDK_SMS_SEND_ENC_MEMBER_READY sssemr
+        WHERE 1=1
+        AND sssemr.SMS_SEND_SEQ = #{smsSendSeq}
     </select>
 
 </mapper>

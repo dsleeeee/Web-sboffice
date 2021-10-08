@@ -268,12 +268,12 @@
                                     <td colspan='3' align='center'>
                                         <%-- 신용카드 --%>
                                         <img src='/resource/solbipos/css/img/sms/btn_pay_card.jpg'    onclick="jsf__pay('100000000000', document.order_info);"/>
-                                        &nbsp;
+                                        <%--&nbsp;--%>
                                         <%-- 계좌이체 --%>
-                                        <img src='/resource/solbipos/css/img/sms/btn_pay_account.jpg'    onclick="jsf__pay('010000000000', document.order_info);"/>
-                                        &nbsp;
+                                        <%--<img src='/resource/solbipos/css/img/sms/btn_pay_account.jpg'    onclick="jsf__pay('010000000000', document.order_info);"/>--%>
+                                        <%--&nbsp;--%>
                                         <%-- 휴대폰결제 --%>
-                                        <img src='/resource/solbipos/css/img/sms/btn_pay_hp.jpg'    onclick="jsf__pay('000010000000', document.order_info);"/>
+                                        <%--<img src='/resource/solbipos/css/img/sms/btn_pay_hp.jpg'    onclick="jsf__pay('000010000000', document.order_info);"/>--%>
                                     </td>
                                 </tr>
                                 <tr height='20'><td></td></tr>

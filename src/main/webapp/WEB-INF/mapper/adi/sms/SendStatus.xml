@@ -29,7 +29,7 @@
 
     <!-- 문자전송현황 - 조회 -->
     <!--
-        TABLE    : SDK_SMS_SEND, SDK_MMS_SEND, SDK_SMS_REPORT, SDK_SMS_REPORT_DETAIL, SDK_MMS_REPORT, SDK_MMS_REPORT_DETAIL
+        TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC, SDK_SMS_REPORT, SDK_SMS_REPORT_DETAIL, SDK_MMS_REPORT, SDK_MMS_REPORT_DETAIL
         COMMENTS : SMS 발송, LMS/MMS 발송, SMS 문자전송결과, LMS/MMS 문자전송결과
     -->
     <select id="getSendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
@@ -44,10 +44,10 @@
         hmt.CALLBACK AS S_PHONE_NUMBER,
         hmt.R_OGN_CD,
         hmt.R_OGN_NM,
-        (CASE WHEN hmt.R_OGN_FG = 'C' THEN (SELECT SBPENC.D(MEMBR_NM) FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = hmt.R_OGN_CD AND MEMBR_NO = hmt.CST_NO GROUP BY MEMBR_NM)
-               WHEN hmt.R_OGN_FG NOT IN ('C') THEN (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD AND USER_ID = hmt.R_USER_ID GROUP BY USER_NM)
-               ELSE null END
-        ) AS R_USER_NM,
+--         (CASE WHEN hmt.R_OGN_FG = 'C' THEN (SELECT SBPENC.D(MEMBR_NM) FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = hmt.R_OGN_CD AND MEMBR_NO = hmt.CST_NO GROUP BY MEMBR_NM)
+--                WHEN hmt.R_OGN_FG NOT IN ('C') THEN (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD AND USER_ID = hmt.R_USER_ID GROUP BY USER_NM)
+--                ELSE null END
+--         ) AS R_USER_NM,
         hmt.PHONE_NUMBER AS R_PHONE_NUMBER,
         hmt.RESERVE_YN,
         hmt.SEND_DATE,
@@ -74,13 +74,13 @@
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
                     A.RESERVED8 AS S_USER_ID,
                     (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
-                    A.CALLBACK,
+                    SBPENC.D(A.CALLBACK) AS CALLBACK,
                     A.RESERVED4 AS R_OGN_CD,
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
                     A.RESERVED5 AS R_OGN_FG,
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
-                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     A.SEND_PROC_TIME AS READ_DATE,
@@ -90,8 +90,8 @@
                     A.SUBJECT,
                     A.SMS_MSG AS MSG_CONTENT,
                     A.RESERVED9 AS SMS_SEND_SEQ,
-                    'SDK_SMS_SEND' AS GUBUN
-                    FROM SDK_SMS_SEND A
+                    'SDK_SMS_SEND_ENC' AS GUBUN
+                    FROM SDK_SMS_SEND_ENC A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
@@ -111,13 +111,13 @@
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
                     A.RESERVED8 AS S_USER_ID,
                     (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
-                    A.CALLBACK,
+                    SBPENC.D(A.CALLBACK) AS CALLBACK,
                     A.RESERVED4 AS R_OGN_CD,
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
                     A.RESERVED5 AS R_OGN_FG,
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
-                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     A.SEND_PROC_TIME AS READ_DATE,
@@ -127,8 +127,8 @@
                     A.SUBJECT,
                     A.MMS_MSG AS MSG_CONTENT,
                     A.RESERVED9 AS SMS_SEND_SEQ,
-                    'SDK_MMS_SEND' AS GUBUN
-                    FROM SDK_MMS_SEND A
+                    'SDK_MMS_SEND_ENC' AS GUBUN
+                    FROM SDK_MMS_SEND_ENC A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                     <if test="ssOrgnCd != null and ssOrgnCd != ''">
@@ -148,13 +148,13 @@
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
                     A.RESERVED8 AS S_USER_ID,
                     (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
-                    A.CALLBACK,
+                    SBPENC.D(A.CALLBACK) AS CALLBACK,
                     A.RESERVED4 AS R_OGN_CD,
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
                     A.RESERVED5 AS R_OGN_FG,
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
-                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
@@ -190,13 +190,13 @@
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
                     A.RESERVED8 AS S_USER_ID,
                     (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
-                    A.CALLBACK,
+                    SBPENC.D(A.CALLBACK) AS CALLBACK,
                     A.RESERVED4 AS R_OGN_CD,
                     (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
                     A.RESERVED5 AS R_OGN_FG,
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
-                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
@@ -291,18 +291,18 @@
 
     <!-- 문자전송현황 - 예약취소 delete -->
     <!--
-        TABLE    : SDK_SMS_SEND, SDK_MMS_SEND
+        TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC
         COMMENTS : SMS 발송, LMS/MMS 발송
     -->
     <delete id="getSendStatusReserveCancelSaveDelete" parameterType="SendStatusVO">
         /* SendStatusMapper.getSendStatusReserveCancelSaveDelete */
-        DELETE SDK_SMS_SEND
+        DELETE SDK_SMS_SEND_ENC
         WHERE 1=1
         AND MSG_ID = #{msgId}
     </delete>
     <delete id="getSendStatusReserveCancelSaveDeleteLMS" parameterType="SendStatusVO">
         /* SendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS */
-        DELETE SDK_MMS_SEND
+        DELETE SDK_MMS_SEND_ENC
         WHERE 1=1
         AND MSG_ID = #{msgId}
     </delete>

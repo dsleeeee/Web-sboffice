@@ -60,4 +60,12 @@ public class SmsSendHistServiceImpl implements SmsSendHistService {
 
         return smsSendHistMapper.getSmsSendHistList(smsSendHistVO);
     }
+
+
+    /** 수신자정보 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getAddresseeDtlList(SmsSendHistVO smsSendHistVO, SessionInfoVO sessionInfoVO) {
+
+        return smsSendHistMapper.getAddresseeDtlList(smsSendHistVO);
+    }
 }

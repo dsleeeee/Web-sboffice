@@ -31,6 +31,13 @@ app.controller('msgManageStoreRegistCtrl', ['$scope', '$http', function ($scope,
 
     // <-- 검색 호출 -->
     $scope.$on("msgManageStoreRegistCtrl", function(event, data) {
+        if(data != undefined) {
+            var selectMsgGrpCd = "";
+            for(var i = 0; i < data.length; i++) {
+                selectMsgGrpCd += data[i].msgGrpCd + ",";
+            }
+            $("#lblMsgGrpCd").text(selectMsgGrpCd.substr(0, selectMsgGrpCd.length - 1));
+        }
         $scope.searchMsgManageStoreRegist();
         event.preventDefault();
     });
@@ -54,6 +61,7 @@ app.controller('msgManageStoreRegistCtrl', ['$scope', '$http', function ($scope,
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].selectMsgGrpCd = $("#lblMsgGrpCd").text();
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }

@@ -58,12 +58,12 @@
 
     <!-- 전송,예약 저장 insert -->
     <!--
-        TABLE    : SDK_SMS_SEND
+        TABLE    : SDK_SMS_SEND_ENC
         COMMENTS : SMS 발송
     -->
     <insert id="getSmsSendReserveSaveInsert" parameterType="SmsSendVO">
         /* SmsSendMapper.getSmsSendReserveSaveInsert */
-        INSERT INTO SDK_SMS_SEND
+        INSERT INTO SDK_SMS_SEND_ENC
         (
             MSG_ID,
             USER_ID,
@@ -101,8 +101,8 @@
             #{sendDate}, --SEND_DATE,
             0, --DEST_TYPE,
             1, --DEST_COUNT,
-            ''||'^'|| #{phoneNumber}, --DEST_INFO,
-            #{callback}, --CALLBACK,
+            SBPENC.E(''||'^'|| #{phoneNumber}), --DEST_INFO,
+            SBPENC.E(#{callback}), --CALLBACK,
             #{title}, --SUBJECT,
             #{content}, --SMS_MSG,
             '', --CALLBACK_URL,
@@ -127,12 +127,12 @@
 
     <!-- 전송,예약 저장 insert -->
     <!--
-        TABLE    : SDK_MMS_SEND
+        TABLE    : SDK_MMS_SEND_ENC
         COMMENTS : LMS/MMS 발송
     -->
     <insert id="getSmsSendReserveSaveInsertLMS" parameterType="SmsSendVO">
         /* SmsSendMapper.getSmsSendReserveSaveInsertLMS */
-        INSERT INTO SDK_MMS_SEND
+        INSERT INTO SDK_MMS_SEND_ENC
         (
             MSG_ID,
             USER_ID,
@@ -170,8 +170,8 @@
             #{regDt}, --NOW_DATE,
             #{sendDate}, --SEND_DATE,
             1, --DEST_COUNT,
-            ''||'^'|| #{phoneNumber}, --DEST_INFO,
-            #{callback}, --CALLBACK,
+            SBPENC.E(''||'^'|| #{phoneNumber}), --DEST_INFO,
+            SBPENC.E(#{callback}), --CALLBACK,
             #{title}, --SUBJECT,
             0, --MSG_TYPE,
             #{content}, --MMS_MSG,

@@ -62,6 +62,7 @@ public class MsgManageServiceImpl implements MsgManageService {
 
         for(MsgManageVO msgManageVO : msgManageVOs) {
 
+            msgManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             msgManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
             msgManageVO.setModDt(currentDt);
             msgManageVO.setModId(sessionInfoVO.getUserId());

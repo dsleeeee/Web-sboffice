@@ -90,7 +90,6 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
         dataItem.sUserNm = messages["sendStatus.send"];
         dataItem.sPhoneNumber = messages["sendStatus.send"];
         dataItem.rOgnNm = messages["sendStatus.receive"];
-        dataItem.rUserNm = messages["sendStatus.receive"];
         dataItem.rPhoneNumber = messages["sendStatus.receive"];
         dataItem.sendDate = messages["sendStatus.sendDate"];
         dataItem.readDate = messages["sendStatus.readDate"];

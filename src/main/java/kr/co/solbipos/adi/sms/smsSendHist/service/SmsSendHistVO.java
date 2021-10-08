@@ -48,6 +48,9 @@ public class SmsSendHistVO extends PageVO {
     /** 조회매장 */
     private String storeCds;
 
+    /** 전송이력시퀀스 */
+    private String smsSendSeq;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -83,4 +86,12 @@ public class SmsSendHistVO extends PageVO {
     public String getStoreCds() { return storeCds; }
 
     public void setStoreCds(String storeCds) { this.storeCds = storeCds; }
+
+    public String getSmsSendSeq() {
+        return smsSendSeq;
+    }
+
+    public void setSmsSendSeq(String smsSendSeq) {
+        this.smsSendSeq = smsSendSeq;
+    }
 }

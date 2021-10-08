@@ -66,6 +66,11 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
                     wijmo.addClass(e.cell, 'wijLink');
                 }
 
+                // 건수
+                if (col.binding === "smsSendCount") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+
                 if (col.format === "date") {
                     e.cell.innerHTML = getFormatDate(e.cell.innerText);
                 } else if (col.format === "dateTime") {
@@ -89,6 +94,14 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
                     $scope.wjMessageDtlLayer.show(true);
                     event.preventDefault();
                 }
+
+                // 건수 클릭시 상세정보 조회
+                if ( col.binding === "smsSendCount") {
+                    var selectedRow = s.rows[ht.row].dataItem;
+                    $scope.setSelectedSmsSendHist(selectedRow);
+                    $scope.wjAddresseeeDtlLayer.show(true);
+                    event.preventDefault();
+                }
             }
         });
 
@@ -110,6 +123,10 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem.sendDate = messages["smsSendHist.sendDate"];
         dataItem.readDate = messages["smsSendHist.readDate"];
         dataItem.reserveYn = messages["smsSendHist.reserveYn"];
+        dataItem.sendQty = messages["smsSendHist.sendQty"];
+        dataItem.waitQty = messages["smsSendHist.waitQty"];
+        dataItem.successQty = messages["smsSendHist.successQty"];
+        dataItem.failQty = messages["smsSendHist.failQty"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -193,6 +210,13 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         $scope.wjMessageDtlLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('messageDtlCtrl', $scope.getSelectedSmsSendHist());
+            }, 50)
+        });
+
+        // 수신자정보 팝업 핸들러 추가
+        $scope.wjAddresseeeDtlLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('addresseeDtlCtrl', $scope.getSelectedSmsSendHist());
             }, 50)
         });
     });

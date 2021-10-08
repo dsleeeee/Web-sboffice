@@ -27,7 +27,7 @@ var periodData = [
 
 // 광고성 SMS전송 DropBoxDataMap
 var marketingSmsGubunComboData = [
-    {"name": "전체", "value": ""},
+    // {"name": "전체", "value": ""},
     {"name": "1개월전", "value": "1"},
     {"name": "2개월전", "value": "2"},
     {"name": "3개월전", "value": "3"},
@@ -100,8 +100,9 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
                 }
 
-                // 수신자, 수신번호
-                if (col.binding === "telNm" || col.binding === "telNo") {
+                // 수신번호
+                // if (col.binding === "telNm" || col.binding === "telNo") {
+                if (col.binding === "telNo") {
                     var item = s.rows[e.row].dataItem;
 
                     // 값이 있으면 링크 효과
@@ -116,8 +117,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     }
                 }
 
-                // 주소, 생일, 결혼기념일
-                if (col.binding === "addr" || col.binding === "birthday" || col.binding === "weddingDay") {
+                // 주소, 최근매출일
+                if (col.binding === "addr" || col.binding === "lastSaleDate") {
                     wijmo.addClass(e.cell, 'wj-custom-readonly');
                     wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
@@ -246,7 +247,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         });
     };
 
-    // 자동변환
+    // 자동변환(이모티콘도 사용)
     $scope.addMsg = function(str) {
         var msgContent = $("#marketingSmsSendMessageContent").val();
         $("#marketingSmsSendMessageContent").val(msgContent + str);
@@ -269,39 +270,38 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // <-- 그리드 행 추가 -->
-    $scope.addRow = function() {
-        gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
-
-        // 파라미터 설정
-        var params = {};
-        params.status = "I";
-        params.gChk = true;
-        params.membrNo = "";
-        params.telNm = "";
-        params.telNo = "";
-        params.addr = "";
-        params.birthday = "";
-        params.weddingDay = "";
-        params.memo = "";
-        params.rOgnFg = "X";
-        params.rOgnCd = "";
-        params.rUserId = "";
-
-        // 추가기능 수행 : 파라미터
-        $scope._addRow(params);
-    };
+    // $scope.addRow = function() {
+    //     gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+    //
+    //     // 파라미터 설정
+    //     var params = {};
+    //     params.status = "I";
+    //     params.gChk = true;
+    //     params.membrNo = "";
+    // //     params.telNm = "";
+    //     params.telNo = "";
+    //     params.addr = "";
+    //     params.lastSaleDate = "";
+    // //     params.memo = "";
+    //     params.rOgnFg = "X";
+    //     params.rOgnCd = "";
+    //     params.rUserId = "";
+    //
+    //     // 추가기능 수행 : 파라미터
+    //     $scope._addRow(params);
+    // };
     // <-- //그리드 행 추가 -->
 
     // <-- 그리드 행 삭제 -->
-    $scope.del = function(){
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flex.collectionView.items[i];
-
-            if(item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
-            }
-        }
-    };
+    // $scope.del = function(){
+    //     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+    //         var item = $scope.flex.collectionView.items[i];
+    //
+    //         if(item.gChk) {
+    //             $scope.flex.collectionView.removeAt(i);
+    //         }
+    //     }
+    // };
     // <-- //그리드 행 삭제 -->
 
     // <-- 전송, 예약 -->
@@ -340,7 +340,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             return;
         }
         if(smsQty < params.length) {
-            $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 전송가능한 수량보다 많습니다.
+            $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
             return;
         }
 
@@ -378,9 +378,25 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             fileCount = $scope.chkSmsFile();
         }
 
+        // 전송수량(체크된 수신자)
+        var smsSendQty = 0;
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                smsSendQty = smsSendQty + 1;
+            }
+        }
+
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
-        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + $("#lblMarketingSmsSendSmsQty").text() + messages["marketingSmsSend.smsSendConfirm2"];
+        var msg = messages["marketingSmsSend.smsSendConfirm"]  + " " + smsSendQty + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
+            // 전송가능 시간 체크(09~21시)
+            var date = new Date();
+            var hh = new String(date.getHours());
+            if(parseInt(hh) < 9 || parseInt(hh) > 21) {
+                $scope._popMsg(messages["marketingSmsSend.smsSendTimeAlert"]); // 전송가능한 시간대가 아닙니다. 09~21시만 전송가능합니다.
+                return;
+            }
+
             // MMS
            if(msgType == "3") {
                // 첨부파일 저장
@@ -388,13 +404,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
            // SMS, LMS
            } else {
                // 전송 저장 save
-               $scope.smsSendSaveSave(reserveYn, reserveDate, msgType, 0, "");
+               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, 0, "");
            }
         }
     };
 
     // 전송 저장 save
-    $scope.smsSendSaveSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
+    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -404,8 +420,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 if (messageContent == undefined) {
                     messageContent = "";
                 }
-                messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
-                messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
+                // messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
+                // messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
                 var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
 
                 $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
@@ -451,7 +467,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // 첨부파일 저장
     $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
         var formData = new FormData($("#marketingSmsSendSmsForm")[0]);
-        formData.append("orgnCd", orgnCd);
+        // formData.append("orgnCd", orgnCd);
         formData.append("pageGubun", "marketingSmsSendFileSms");
 
         var url = '/adi/sms/smsSend/smsSend/getSmsSendFileSave.sb';
@@ -476,7 +492,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     contentData = contentData.substring(0, contentData.length-1);
 
                     // 전송 저장 save
-                    $scope.smsSendSaveSave(reserveYn, reserveDate, msgType, fileCount, contentData);
+                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, fileCount, contentData);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');

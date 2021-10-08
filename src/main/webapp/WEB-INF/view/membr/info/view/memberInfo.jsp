@@ -398,7 +398,7 @@
             </td>
         </tr>
         <tr>
-            <%-- 광고성 SMS전송 --%>
+            <%-- SMS기간(광고성 SMS전송) --%>
             <th><s:message code="regist.marketingSmsSend"/></th>
             <td>
                 <div class="sb-select">
