@@ -5,6 +5,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.exception.BizException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.jsp.ColumnLayout;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.myinfo.enums.NmcodeGrpCd;
@@ -14,10 +15,14 @@ import kr.co.solbipos.base.store.myinfo.service.MyInfoVO;
 import kr.co.solbipos.base.store.myinfo.service.WijmoGridColumnVO;
 import kr.co.solbipos.base.store.myinfo.service.WijmoGridVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.File;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -243,5 +248,74 @@ public class MyInfoServiceImpl implements MyInfoService{
         myInfo.setModDt( modDt );
 
         return myInfoMapper.updateHqOffice( myInfo ) == 1 ? OK : FAIL;
+    }
+
+    @Override
+    public String saveTitleImg(MultipartHttpServletRequest multi) {
+
+        String isSuccess = "";
+
+        try{
+
+            // 서버용 - 개발/운영 서버에 반영할 진짜 경로!!!!!!
+            String path = BaseEnv.FILE_UPLOAD_DIR + "logo_img/";
+
+            // 로컬 테스트용 - 로컬에서 파일 업로드가 잘되는지 확인하기 위해 임의로 설정한 경로
+//            String path = "D:\\logo_img\\";
+
+            // 경로에 폴더가 있는지 체크 없으면 생성
+            File dir = new File(path);
+            if(!dir.isDirectory()){
+                dir.mkdir();
+            }
+
+            // 업로드를 위한 새 파일명
+            String newFileName = "";
+            // 원본 파일명
+            String orgFileName = "";
+            // 파일 확장자
+            String fileExt = "";
+
+            List<MultipartFile> fileList = multi.getFiles("file");
+            for(MultipartFile mFile : fileList)
+            {
+                newFileName = multi.getParameter("newFileName"); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename();
+                fileExt = FilenameUtils.getExtension(orgFileName);
+
+                // orgFileName
+                if ( orgFileName.contains(".") ) {
+                    orgFileName = orgFileName.substring(0, orgFileName.lastIndexOf("."));
+                }
+
+                // IE에선 C:\Users\김설아\Desktop\123\new2.txt
+                // 크롬에선 new2.txt
+                if ( orgFileName.contains("\\") ) {
+                    orgFileName = orgFileName.substring(orgFileName.lastIndexOf("\\"));
+                    orgFileName = orgFileName.substring(1);
+                }
+
+                if(!fileExt.equals("png") && !fileExt.equals("PNG") && !fileExt.equals("jpg") && !fileExt.equals("JPG") && !fileExt.equals("gif") && !fileExt.equals("GIF") )
+                {
+                    isSuccess = "3";
+                    break;
+                }
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+                    // 파일 저장하는 부분
+                    try {
+                        File destFile = new File(path + newFileName + "." + fileExt);
+                        mFile.transferTo(destFile);
+                        isSuccess = "0";
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }catch(Exception e){
+            isSuccess = "1";
+        }
+        return isSuccess;
     }
 }

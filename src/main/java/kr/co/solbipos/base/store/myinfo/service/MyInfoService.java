@@ -3,6 +3,7 @@ package kr.co.solbipos.base.store.myinfo.service;
 import kr.co.common.data.enums.Status;
 import kr.co.solbipos.base.store.myinfo.enums.NmcodeGrpCd;
 import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -80,4 +81,8 @@ public interface MyInfoService{
      * @return 성공여부
      */
     Status modifyMyInfo(MyInfoVO myInfo);
+
+    /** 상단로고이미지 - 이미지저장 */
+    String saveTitleImg(MultipartHttpServletRequest multi);
+
 }
