@@ -174,6 +174,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     
     if($.isEmptyObject(storeScope.getSelectedStore()) ) {
       $scope.resetForm();
+
+      // 본사에서 등록시 본사정보 자동셋팅
+      if(orgnFg === "HQ"){
+        $scope.setHqInfo();
+      }
+
     } else {
       $scope.getStoreInfo();
     }
@@ -243,6 +249,21 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.store.mapStoreCd = "";
 
+    // 매장코드8이상사용 확인 초기화
+    $("#hdDigit8Store").val("");
+
+    // 웹사용자아이디 입력 영역 숨김
+    $("#userId").val("");
+    $("#userIdChkFg").val("");
+    $("#userPwd").val("");
+    $("#userPwdConf").val("");
+    $("#trUser").css("display", "none");
+
+    $scope.store.userId = "";
+    $scope.store.userIdChkFg = "";
+    $scope.store.userPwd = "";
+    $scope.store.userPwdConf = "";
+
   };
 
   /*********************************************************
@@ -302,6 +323,22 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
     });
+
+    // 매장코드8이상사용 확인 초기화(상세화면에서는 필요가 없음)
+    $("#hdDigit8Store").val("");
+
+    // 웹사용자아이디 입력 영역 숨김(상세화면에서는 필요가 없음)
+    $("#userId").val("");
+    $("#userIdChkFg").val("");
+    $("#userPwd").val("");
+    $("#userPwdConf").val("");
+    $("#trUser").css("display", "none");
+
+    $scope.store.userId = "";
+    $scope.store.userIdChkFg = "";
+    $scope.store.userPwd = "";
+    $scope.store.userPwdConf = "";
+
   };
 
   /*********************************************************
@@ -367,6 +404,62 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     if( isNull( $scope.store.ownerNm)) {
       $scope._popMsg(msg);
       return;
+    }
+
+    // 매장코드 수동입력 시 웹 사용자 아이디 관련
+    if ($scope.store.storeCdInputType === "1") {
+      if($("#hdDigit8Store").val() !== "" && $("#hdDigit8Store").val() !== null && $("#hdDigit8Store").val() !== undefined){
+
+        // 웹사용자아이디(을)를입력해주세요.
+        var msg = messages["storeManage.userId"] + messages["cmm.require.text"];
+        if (isNull($scope.store.userId)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 웹사용자아이디 중복체크를 해주세요.
+        var msg = messages["storeManage.userIdDuplicateChk.msg"];
+        if (isNull($scope.store.userIdChkFg)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 웹사용자아이디 중복체크를 다시 해주세요.
+        var msg = messages["storeManage.userIdDuplicateChkAgain.msg"];
+        if ($scope.store.userId !== $scope.store.userIdChkFg) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 비밀번호를 입력하세요.
+        var msg = messages["storeManage.pwd"] + messages["cmm.require.text"];
+        if (isNull($scope.store.userPwd)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 비밀번호확인을 입력하세요.
+        var msg = messages["storeManage.pwdConf"] + messages["cmm.require.text"];
+        if (isNull($scope.store.userPwdConf)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 비밀번호는 8자 이상 16자 이하로 입력해주세요.
+        var msg = messages["storeManage.userPwdLengthRegexp.msg"];
+        if (8 > $scope.store.userPwd.length || $scope.store.userPwd.length > 16) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 비밀번호와 비밀번호확인이 일치하지 않습니다.
+        var msg = messages["storeManage.pwdNotMatch.msg"];
+        if ($scope.store.userPwd !== $scope.store.userPwdConf) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+      }
     }
 
     // 매장상태구분을 선택해주세요.
@@ -526,6 +619,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.postNo = $("#postNo").val();
     params.addr = $("#addr").val();
     params.addrdtl = $("#addrDtl").val();
+    params.digit8Store = $("#hdDigit8Store").val();
 
     console.log('params',params);
 
@@ -598,6 +692,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
+    // 관리자등록시에만 본사 조회 팝업 호출(본사에서 등록시 본사정보 자동셋팅)
+    if(orgnFg === "HQ"){
+      return false;
+    }
+
     var popup = $scope.hqLayer;
 
     // 팝업 닫을때
@@ -606,29 +705,57 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       hqScope.$apply(function(){
         hqScope._gridDataInit();
 
+        // 매장코드8이상사용 확인 초기화
+        $("#hdDigit8Store").val("");
+
+        // 웹사용자아이디 입력 영역 숨김
+        $("#userId").val("");
+        $("#userIdChkFg").val("");
+        $("#userPwd").val("");
+        $("#userPwdConf").val("");
+        $("#trUser").css("display", "none");
+
+        $scope.store.userId = "";
+        $scope.store.userIdChkFg = "";
+        $scope.store.userPwd = "";
+        $scope.store.userPwdConf = "";
+
         if( !$.isEmptyObject(hqScope.getHq())  ) {
+          // 본사정보 셋팅
           $scope.store.hqOfficeCd = hqScope.getHq().hqOfficeCd;
           $scope.store.hqOfficeNm = hqScope.getHq().hqOfficeNm;
           $scope.store.storeCdInputType = hqScope.getHq().envst0027; // 매장코드 채번방식(자동/수동)
           $scope.store.storeCdChkFg = "";
           $scope.store.envst0043 = hqScope.getHq().envst0043; // 본사신규상품매장생성
+          $("#hdDigit8Store").val( hqScope.getHq().digit8Store); // 매장코드8이상사용
 
           // 매장코드 채번방식
           if (hqScope.getHq().envst0027 === '1') { //수동
-            $scope.store.storeCd = ''
+            $scope.store.storeCd = '';
             $("#storeCd").removeAttr("readonly");
             $("#storeCd").css("width", "60%");
             $("#btnChkStoreCd").css("display", "");
 
+            if($("#hdDigit8Store").val() === "" || $("#hdDigit8Store").val() === null || $("#hdDigit8Store").val() === undefined){
+              // 웹 사용자 자동 등록
+              $("#trUser").css("display", "none");
+            }else{
+              // 웹 사용자 직접 등록
+              $("#trUser").css("display", "");
+            }
+
           } else {
             if (hqScope.getHq().envst0027 === '0') { //자동
-              $scope.store.storeCd = '자동채번'
+              $scope.store.storeCd = '자동채번';
             } else {
-              $scope.store.storeCd = ''
+              $scope.store.storeCd = '';
             }
             $("#storeCd").attr("readonly", true);
             $("#storeCd").css("width", "100%");
             $("#btnChkStoreCd").css("display", "none");
+
+            // 웹 사용자 자동 등록
+            $("#trUser").css("display", "none");
           }
 
           if (hqScope.getHq().sysStatFg === '9') {
@@ -761,7 +888,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
    * 대리점 조회
    * *******************************************************/
   $scope.searchAgency = function(){
-    if(orgnFg === "MASTER" || pAgencyCd === "00000") {
+    if(orgnFg === "MASTER" || pAgencyCd === "00000" || orgnFg === "HQ") {
       var popup = $scope.agencyLayer;
 
       // 팝업 닫을때
@@ -909,8 +1036,24 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.chkStoreCd = function(){
 
     if(isNull($scope.store.storeCd)) {
+      // 매장코드을(를) 입력하세요.
       $scope._popMsg(messages["storeManage.storeCd"]+messages["cmm.require.text"]);
       return false;
+    }
+
+    // 매장코드 길이체크
+    if($("#hdDigit8Store").val() === '') {
+      if($("#storeCd").val().length !== 7) {
+        // 매장코드는 7자리로 입력하세요.
+        $scope._popMsg(messages["storeManage.require.storeCdLength7"]);
+        return false;
+      }
+    }else {
+      if(7 > $("#storeCd").val().length ||  $("#storeCd").val().length > 12) {
+        // 매장코드는 7~12자리로 입력하세요.
+        $scope._popMsg(messages["storeManage.require.storeCdLength7To12"]);
+        return false;
+      }
     }
 
     var params    = {};
@@ -923,6 +1066,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           if(result === 0){ // 사용가능
               $scope._popMsg(messages["storeManage.notStoreCdDuplicate.msg"]);
               $scope.store.storeCdChkFg = $scope.store.storeCd;
+              
+              // 매장코드 수동채번이면서, 매장코드8자리이상 사용매장인 경우만
+              if ($scope.store.storeCdInputType === "1") {
+                  if($("#hdDigit8Store").val() !== "" && $("#hdDigit8Store").val() !== null && $("#hdDigit8Store").val() !== undefined){
+                      // 웹사용자아이디에 바인딩
+                      $scope.setUserId();
+                  }
+              }
 
           }else{ // 중복
               $scope._popMsg(messages["storeManage.storeCdDuplicate.msg"]);
@@ -930,6 +1081,118 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           }
       });
 
+  };
+
+  // 본사에서 등록시 본사정보 자동셋팅
+  $scope.setHqInfo = function () {
+    $scope.store.hqOfficeCd = hqOfficeCd;
+    $scope.store.hqOfficeNm = hqOfficeNm;
+    $scope.store.storeCdInputType = hqEnvst0027; // 매장코드 채번방식 [0:자동(기본) / 1:수동]
+    $scope.store.storeCdChkFg = "";
+    $scope.store.envst0043 = hqEnvst0043; // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
+    $("#hdDigit8Store").val(digit8Store); // 매장코드8이상사용매장
+
+    // input에 값이 사라지는 현상방지
+    $("#hqOfficeCd").val(hqOfficeCd);
+    $("#hqOfficeNm").val(hqOfficeNm);
+
+    // 매장코드 채번방식
+    if (hqEnvst0027 === '1') { //수동
+      $scope.store.storeCd = '';
+      $("#storeCd").removeAttr("readonly");
+      $("#storeCd").css("width", "60%");
+      $("#btnChkStoreCd").css("display", "");
+      
+      // 매장코드8이상 사용매장인 경우만 웹 사용자 직접등록
+      if($("#hdDigit8Store").val() === "" || $("#hdDigit8Store").val() === null || $("#hdDigit8Store").val() === undefined){
+          // 웹 사용자 자동 등록
+          $("#trUser").css("display", "none");
+      }else{
+          // 웹 사용자 직접 등록
+          $("#trUser").css("display", "");
+      }
+    } else {
+      if (hqEnvst0027 === '0') { //자동
+        $scope.store.storeCd = '자동채번';
+        $("#storeCd").val('자동채번');
+      } else {
+        $scope.store.storeCd = '';
+      }
+      $("#storeCd").attr("readonly", true);
+      $("#storeCd").css("width", "100%");
+      $("#btnChkStoreCd").css("display", "none");
+
+      // 웹 사용자 자동 등록
+      $("#trUser").css("display", "none");
+    }
+
+    if (hqSysStatFg === '9') {
+      $scope.sysStatFgCombo.selectedValue = '9';
+      $scope.sysStatFgCombo.isReadOnly = true;
+    } else {
+      $scope.sysStatFgCombo.selectedValue = '1';
+      $scope.sysStatFgCombo.isReadOnly = false;
+    }
+
+    // 매장환경복사 체크 disabled
+    $scope.copyStoreSettingChk();
+  };
+  
+  // 웹 사용자 아이디 중복체크
+  $scope.chkUserId = function () {
+
+     // 입력체크
+     if(isNull($("#userId").val())){
+       // 웹사용자아이디(을)를 입력하세요.
+       $scope._popMsg(messages["storeManage.userId"]+messages["cmm.require.text"]);
+       return false;
+     }
+
+     // 길이 및 형식 체크
+     if(8 > $("#userId").val().length || $("#userId").val().length > 12){
+       // 웹사용자아이디는 8자 이상 12자 이하로 입력해주세요.
+       $scope._popMsg(messages["storeManage.userIdLengthRegexp.msg"]);
+       return false;
+     }
+
+     // 중복체크
+     var params    = {};
+     params.userId = $("#userId").val();
+     $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/chkUserId.sb", params, function(response){
+
+       var result = response.data.data;
+
+       console.log('chk duplicate result', result);
+
+       if(result == "SUCCESS"){
+         $("#userIdChkFg").val($("#userId").val());
+         $scope.store.userIdChkFg = $scope.store.userId;
+         $scope._popMsg(messages["storeManage.notDuplicate.msg"]);
+       } else if(result === "USER_ID_REGEXP"){
+         $scope._popMsg(messages["storeManage.userIdRegexp.msg"]);
+       } else if(result === "USER_ID_LENGHTH_REGEXP"){
+         $scope._popMsg(messages["storeManage.userIdLengthRegexp.msg"]);
+       } else if(result === "USER_ID_CANNOT_USE_HANGEUL"){
+         $scope._popMsg(messages["storeManage.userIdNotUseHangeul.msg"]);
+       } else if(result === "USER_ID_MUST_CONTAIN_ENG_CAHR"){
+         $scope._popMsg(messages["storeManage.userIdContainEngChar.msg"]);
+       } else if(result === "USER_ID_ONLY_ENG_NUM_CHAR"){
+         $scope._popMsg(messages["storeManage.userIdOnlyEnvNumChar.msg"]);
+       } else if(result === "USER_ID_DUPLICATE"){
+         $("#userIdChkFg").val("");
+         $scope.store.userIdChkFg = "";
+         $scope._popMsg(messages["storeManage.userId.duplicate.msg"]);
+       } else {
+         $scope._popMsg(messages["storeManage.userId.notDuplicate.msg"]);
+       }
+
+     });
+  };
+
+  // 매장코드를 웹 사용자 아이디로 자동 바인딩
+  $scope.setUserId = function () {
+    $("#userId").val($("#storeCd").val().toString().toLowerCase());
+    $scope.store.userId = $("#storeCd").val().toString().toLowerCase();
   };
 
 }]);

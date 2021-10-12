@@ -6,6 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeNm" value="${sessionScope.sessionInfo.hqOfficeNm}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
@@ -105,7 +106,7 @@
     </wj-combo-box>
     <%--// 페이지 스케일  --%>
 
-    <c:if test="${orgnFg != 'HQ'}">
+    <c:if test="${orgnFg != 'STORE'}">
       <%-- 신규매장등록 --%>
       <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addStore()">
         <s:message code="storeManage.regist.new.store" />
@@ -191,6 +192,13 @@ var orgnCd = "${orgnCd}";
 var orgnNm = "${orgnNm}";
 var pAgencyCd = "${pAgencyCd}";
 var authHqList = ${authHqList};
+var hqOfficeNm = "${hqOfficeNm}";
+
+// 본사에서 등록시 본사정보 자동셋팅
+var hqEnvst0027 = "${hqEnvst0027}"; // 매장코드 채번방식 [0:자동(기본) / 1:수동]
+var hqEnvst0043 = "${hqEnvst0043}"; // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
+var hqSysStatFg = "${hqSysStatFg}"; // 본사 상태구분 값
+var digit8Store = "${digit8Store}"; // 매장코드 8 자리 이상 사용하는 본사인지 조회
 
 </script>
 

@@ -219,6 +219,7 @@
         FROM TB_MS_STORE
         WHERE 1=1
         AND STORE_CD LIKE 'S%'
+        AND LENGTH(STORE_CD) = 7
     </select>
 
     <!-- 매출재이관 -->

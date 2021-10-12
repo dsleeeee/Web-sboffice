@@ -5,12 +5,14 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.store.common.enums.ConfgFg;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
@@ -193,8 +195,18 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         if(storeCd != "") {
 
-            String wUuserId = storeCd.toLowerCase(); // 웹 사용자 아이디
-            String wUserPwd = EncUtil.setEncSHA256(wUuserId + DEFAULT_WEB_PASSWORD);    // 웹 패스워드
+            String wUuserId = "";
+            String wUserPwd = "";
+
+            if("1".equals(storeManageVO.getStoreCdInputType()) && !"".equals(storeManageVO.getDigit8Store()) &&
+                    !"".equals(storeManageVO.getUserId()) && !"".equals(storeManageVO.getUserPwd())){
+                wUuserId = storeManageVO.getUserId(); // 웹 사용자 아이디
+                wUserPwd = EncUtil.setEncSHA256(wUuserId + storeManageVO.getUserPwd()); // 웹 패스워드
+            }else{
+                wUuserId = storeCd.toLowerCase(); // 웹 사용자 아이디
+                wUserPwd = EncUtil.setEncSHA256(wUuserId + DEFAULT_WEB_PASSWORD);    // 웹 패스워드
+            }
+
             String pEmpNo = DEFAULT_POS_EMPNO; // 포스 기본 사용자 사원번호
             String pUserPwd = EncUtil.setEncSHA256(pEmpNo + DEFAULT_POS_PASSWORD);  // 포스 패스워드
 
@@ -1247,4 +1259,35 @@ public class StoreManageServiceImpl implements StoreManageService{
         return resultMap;
     }
 
+    /** 본사 상태구분 값 조회 */
+    @Override
+    public String getHqSysStatFg(StoreManageVO storeManageVO,  SessionInfoVO sessionInfoVO) {
+
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return mapper.getHqSysStatFg(storeManageVO);
+    }
+
+    /** 매장코드 8 자리 이상 사용하는 본사인지 조회 */
+    @Override
+    public String getUseDigit8Store(StoreManageVO storeManageVO,  SessionInfoVO sessionInfoVO) {
+
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return mapper.getUseDigit8Store(storeManageVO);
+    }
+
+    /** 웹 사용자 아이디 체크 */
+    public EmpResult chkUserId(StoreManageVO storeManageVO){
+
+        if(CmmUtil.checkUserId(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
+            return CmmUtil.checkUserId(storeManageVO.getUserId());
+        }
+
+        // 웹사용자아이디 중복체크
+        if(mapper.getUserIdCnt(storeManageVO) < 1) {
+            return EmpResult.SUCCESS;
+        }
+        else {
+            return EmpResult.USER_ID_DUPLICATE;
+        }
+    }
 }

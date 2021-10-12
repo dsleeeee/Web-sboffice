@@ -544,7 +544,7 @@
                                 ,       tssh.BILL_NO
                                 ,       SUBSTR(tssh.ORG_BILL_NO,-14,8) AS ORG_SALE_DATE
                                 ,       SUBSTR(tssh.ORG_BILL_NO,-6,2) AS ORG_POS_NO
-                                ,       SUBSTR(tssh.ORG_BILL_NO,-4,4) AS ORG_BILL_NO
+                                ,       SUBSTR(tssh.ORG_BILL_NO,-4) AS ORG_BILL_NO
                                 ,       tssh.TOT_SALE_AMT
                                 ,       tssh.TOT_DC_AMT
                                 ,       tssh.REAL_SALE_AMT

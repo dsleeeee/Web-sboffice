@@ -1,12 +1,13 @@
 package kr.co.solbipos.store.manage.storemanage.service;
 
-import java.util.List;
-import java.util.Map;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : StoreManageService.java
@@ -129,4 +130,13 @@ public interface StoreManageService {
 
     /** 사업자번호 중복체크 */
     DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사 상태구분 값 조회 */
+    String getHqSysStatFg(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장코드 8 자리 이상 사용하는 본사인지 조회 */
+    String getUseDigit8Store(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 웹 사용자 아이디 체크*/
+    EmpResult chkUserId(StoreManageVO storeManageVO);
 }
