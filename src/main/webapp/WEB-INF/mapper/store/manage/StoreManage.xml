@@ -284,11 +284,13 @@
             SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 3, 6)), 0) + 1), 5, '0') AS STORE_CD
               FROM TB_MS_STORE
              WHERE STORE_CD LIKE 'DS%'
+               AND LENGTH(STORE_CD) = 7
         </if>
         <if test='sysStatFg.toString() != "DEMO"'>
             SELECT 'S'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
               FROM TB_MS_STORE
              WHERE STORE_CD LIKE 'S%'
+               AND LENGTH(STORE_CD) = 7
         </if>
     </select>
 
@@ -5345,4 +5347,43 @@
                 )
     </insert>
 
+    <!-- 본사 상태구분 값 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE
+        PARAM    : storeManageVO
+        COMMENTS : 본사의 상태구분 값을 조회하여, 매장등록시 적용한다.
+    -->
+    <select id="getHqSysStatFg" parameterType="storeManageVO" resultType="String">
+        /* USE : StoreManageMapper.getHqSysStatFg */
+        SELECT SYS_STAT_FG
+          FROM TB_HQ_OFFICE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 매장코드 8 자리 이상 사용하는 본사인지 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeManageVO
+        COMMENTS : 매장코드 8 자리 이상 사용하는 본사인지 조회한다.
+    -->
+    <select id="getUseDigit8Store" parameterType="storeManageVO" resultType="String">
+        /* USE : StoreManageMapper.getUseDigit8Store */
+        SELECT NMCODE_CD
+          FROM TB_CM_NMCODE
+         WHERE NMCODE_GRP_CD = '124'
+           AND NMCODE_ITEM_1 = #{hqOfficeCd}
+    </select>
+
+    <!-- 웹 사용자 아이디 중복체크 -->
+    <!--
+          TABLE    : TB_WB_USER_INFO
+          PARAM    : storeManageVO
+          COMMENTS : 해당 웹 사용자 아이디가 이미 등록된 아이디인지 확인 (중복체크)
+    -->
+    <select id="getUserIdCnt" parameterType="storeManageVO" resultType="Integer">
+        /* USE : StoreManageMapper.getUserIdCnt */
+        SELECT COUNT(1) AS CNT
+          FROM TB_WB_USER_INFO
+         WHERE USER_ID = #{userId}
+    </select>
 </mapper>

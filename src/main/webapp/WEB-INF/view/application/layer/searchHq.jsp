@@ -74,6 +74,7 @@
                 <wj-flex-grid-column header="<s:message code="application.hq.search.sysStatFg"/>" binding="sysStatFg" width="70" align="center" data-map="sysStatFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="application.hq.search.0027"/>" binding="envst0027" width="70" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="application.hq.search.0043"/>" binding="envst0043" width="70" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="application.hq.search.digit8Store"/>" binding="digit8Store" width="70" align="center" visible="false"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>

@@ -59,10 +59,11 @@
               <%-- 매장코드 --%>
               <th><s:message code="storeManage.storeCd" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="storeCd" class="sb-input w100" ng-model="store.storeCd" readonly="readonly"/>
+                <input type="text" id="storeCd" class="sb-input w100" ng-model="store.storeCd" readonly="readonly" maxlength="12" placeholder="대문자로 입력하세요." onkeyup="this.value=this.value.replace(/[^A-Z0-9]/g,'');"/>
                 <input type="hidden" id="storeCdChkFg" ng-model="store.storeCdChkFg"/>
                 <input type="hidden" id="storeCdInputType" ng-model="store.storeCdInputType"/>
                 <input type="hidden" id="envst0043" ng-model="store.envst0043"/>
+                <input type="hidden" id="hdDigit8Store"/>
                 <a id="btnChkStoreCd" href="#" class="btn_grayS ml5" ng-click="chkStoreCd()" style="display: none;"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
               <%-- 매장명 --%>
@@ -81,6 +82,21 @@
               <th><s:message code="storeManage.onwerNm" /><em class="imp">*</em></th>
               <td>
                 <input type="text" id="ownerNm" class="sb-input w100" ng-model="store.ownerNm" maxlength="10"/>
+              </td>
+            </tr>
+            <tr id="trUser" style="display: none;">
+              <%-- 웹사용자아이디 --%>
+              <th><s:message code="storeManage.userId" /><em class="imp">*</em></th>
+              <td>
+                <input type="text" id="userId" class="sb-input w60" ng-model="store.userId" maxlength="12" placeholder="소문자로 입력하세요." onkeyup="this.value=this.value.replace(/[^a-z0-9]/g,'');" />
+                <input type="hidden" id="userIdChkFg" ng-model="store.userIdChkFg"/>
+                <a id="btnChkUserId" href="#" class="btn_grayS ml5" ng-click="chkUserId()"><s:message code="storeManage.chk.duplicate" /></a><Br />
+              </td>
+              <%-- 비밀번호 --%>
+              <th><s:message code="storeManage.pwd" /><em class="imp">*</em></th>
+              <td>
+                <input type="password" class="sb-input w45" id="userPwd" ng-model="store.userPwd" maxlength="16" placeholder="<s:message code="storeManage.pwd" />"/>
+                <input type="password" class="sb-input w45" id="userPwdConf" ng-model="store.userPwdConf" maxlength="16" placeholder="<s:message code="storeManage.pwdConf" />"/>
               </td>
             </tr>
             <tr>
@@ -395,7 +411,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20210702.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20211012.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

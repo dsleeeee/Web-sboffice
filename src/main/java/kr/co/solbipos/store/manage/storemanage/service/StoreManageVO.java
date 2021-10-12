@@ -136,6 +136,9 @@ public class StoreManageVO extends PageVO {
     /** 본사신규상품매장생성 */
     private String envst0043;
 
+    /** 매장코드8이상 사용매장여부(값이 있으면 사용, 없으면 미사용)*/
+    private String digit8Store;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -727,5 +730,13 @@ public class StoreManageVO extends PageVO {
 
     public void setEnvst0043(String envst0043) {
         this.envst0043 = envst0043;
+    }
+
+    public String getDigit8Store() {
+        return digit8Store;
+    }
+
+    public void setDigit8Store(String digit8Store) {
+        this.digit8Store = digit8Store;
     }
 }

@@ -357,4 +357,13 @@ public interface StoreManageMapper {
     /** 본사 세트구성상품 복사  */
     int insertStoreHqSetConfigProd(StoreManageVO storeManageVO);
 
+    /** 본사 상태구분 값 조회 */
+    String getHqSysStatFg(StoreManageVO storeManageVO);
+
+    /** 매장코드 8 자리 이상 사용하는 본사인지 조회 */
+    String getUseDigit8Store(StoreManageVO storeManageVO);
+
+    /** 웹사용자아이디 중복체크*/
+    int getUserIdCnt(StoreManageVO storeManageVO);
+
 }

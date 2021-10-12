@@ -5,7 +5,11 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
 import org.apache.commons.lang3.StringUtils;
@@ -55,12 +59,14 @@ public class StoreManageController {
     /** service */
     private final StoreManageService service;
     private final SessionService sessionService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreManageController(StoreManageService service, SessionService sessionService) {
+    public StoreManageController(StoreManageService service, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.service = service;
         this.sessionService = sessionService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -81,6 +87,17 @@ public class StoreManageController {
         // 메뉴권한 복사할 본사목록 조회
         List<DefaultMap<String>> authHqList = service.authHqList(storeManageVO, sessionInfoVO);
         model.addAttribute("authHqList", convertToJson(authHqList));
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장코드 채번방식 [0:자동(기본) / 1:수동]
+            model.addAttribute("hqEnvst0027", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0027"), "0"));
+            // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
+            model.addAttribute("hqEnvst0043", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043"), "0"));
+            // 본사의 상태구분 값 조회
+            model.addAttribute("hqSysStatFg", CmmUtil.nvl(service.getHqSysStatFg(storeManageVO, sessionInfoVO), ""));
+            // 매장코드 8 자리 이상 사용하는 본사인지 조회
+            model.addAttribute("digit8Store", CmmUtil.nvl(service.getUseDigit8Store(storeManageVO, sessionInfoVO), ""));
+        }
 
         return "store/manage/storeManage/storeManage";
     }
@@ -801,5 +818,21 @@ public class StoreManageController {
 //        System.out.println("test1111 : " + result);
 
         return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 웹 사용자 아이디 체크
+     * @param   storeManageVO
+     * @return  Result
+     * @author  이다솜
+     * @since   2021. 10. 08.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/storeManage/chkUserId.sb", method = RequestMethod.POST)
+    public Result chkUserId(StoreManageVO storeManageVO) {
+
+        EmpResult empResult= service.chkUserId(storeManageVO);
+
+        return returnJson(Status.OK, empResult);
     }
 }

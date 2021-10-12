@@ -44,10 +44,10 @@
         </if>
         <![CDATA[
         AND     tsspcorg.HQ_OFFICE_CD (+) =   tsspc.HQ_OFFICE_CD
-        AND     tsspcorg.STORE_CD     (+) =   SUBSTR(tsspc.ORG_BILL_NO, 0, 7)
-        AND     tsspcorg.SALE_DATE    (+) =   SUBSTR(tsspc.ORG_BILL_NO, 8, 16)
-        AND     tsspcorg.POS_NO       (+) =   SUBSTR(tsspc.ORG_BILL_NO, 16, 2)
-        AND     tsspcorg.BILL_NO      (+) =   SUBSTR(tsspc.ORG_BILL_NO, 18, 4)
+        AND     tsspcorg.STORE_CD     (+) =   SUBSTR(tsspc.ORG_BILL_NO, 0, LENGTH(tsspc.STORE_CD))
+        AND     tsspcorg.SALE_DATE    (+) =   SUBSTR(tsspc.ORG_BILL_NO, -14, 8)
+        AND     tsspcorg.POS_NO       (+) =   SUBSTR(tsspc.ORG_BILL_NO, -6, 2)
+        AND     tsspcorg.BILL_NO      (+) =   SUBSTR(tsspc.ORG_BILL_NO, -4)
         AND     tmc.STORE_CD          (+) =   tsspc.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspc.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcvc.VAN_FG               =   '01'

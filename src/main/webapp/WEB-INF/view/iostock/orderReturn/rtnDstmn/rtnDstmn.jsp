@@ -86,7 +86,7 @@
       <%-- 매장코드 --%>
       <th><s:message code="rtnDstmn.storeCd"/></th>
       <td>
-        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/>
+        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="12"/>
       </td>
       <%-- 매장명 --%>
       <th><s:message code="rtnDstmn.storeNm"/></th>

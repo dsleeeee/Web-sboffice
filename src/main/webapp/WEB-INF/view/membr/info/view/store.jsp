@@ -28,7 +28,7 @@
             <tbody>
               <tr>
                 <th><s:message code="regist.membr.storeCd" /></th>
-                <td><input type="text" id="srchStoreCd" maxlength="7"/></td>
+                <td><input type="text" id="srchStoreCd" maxlength="12"/></td>
                 <th><s:message code="regist.membr.storeNm" /></th>
                 <td><input type="text" id="srchStoreNm" maxlength="20"/></td>
               </tr>
