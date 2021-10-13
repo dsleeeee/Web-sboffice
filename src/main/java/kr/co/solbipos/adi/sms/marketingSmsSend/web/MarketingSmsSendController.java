@@ -127,4 +127,27 @@ public class MarketingSmsSendController {
 
         return ReturnUtil.returnListJson(Status.OK, result, marketingSmsSendVO);
     }
+
+    /**
+     * 마케팅용 SMS전송 - 검색 결과 저장
+     *
+     * @param marketingSmsSendVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 10. 07.
+     */
+    @RequestMapping(value = "/marketingSmsSend/getMarketingSmsSendListSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMarketingSmsSendListSave(@RequestBody MarketingSmsSendVO marketingSmsSendVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = marketingSmsSendService.getMarketingSmsSendListSave(marketingSmsSendVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

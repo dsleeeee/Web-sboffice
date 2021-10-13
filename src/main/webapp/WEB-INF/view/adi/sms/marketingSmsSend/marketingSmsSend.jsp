@@ -96,7 +96,7 @@
                         </span>
                     </div>
                 </td>
-                <%-- 기간(광고성 SMS전송) --%>
+                <%-- SMS기간(광고성 SMS전송) --%>
                 <th>
                     <s:message code="marketingSmsSend.marketingSmsSend" />
                 </th>
@@ -111,7 +111,7 @@
                                 is-editable="false"
                                 initialized="_initComboBox(s)"
                                 control="marketingSmsGubunCombo"
-                                selected-index="6">
+                                selected-index="5">
                         </wj-combo-box>
                     </div>
                 </td>
@@ -123,7 +123,7 @@
                     <div class="sb-select">
                         <wj-combo-box
                                 id="rMemberClass"
-                                ng-model="member.membrClassCd"
+                                ng-model="membrClassCd"
                                 control="memberClassCombo"
                                 items-source="_getComboData('rMemberClass')"
                                 display-member-path="name"
@@ -147,14 +147,14 @@
                     <s:message code="marketingSmsSend.membrNo"/>
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
+                    <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
                 </td>
                 <%-- 회원명 --%>
                 <th>
                     <s:message code="marketingSmsSend.membrNm"/>
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
+                    <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
                 </td>
             </tr>
             </tbody>
@@ -433,7 +433,7 @@
                     <s:message code="marketingSmsSend.membrEngNm"/>
                 </th>
                 <td>
-                    <input type="text" id="memberEngNm" class="sb-input w100" ng-model="member.membrEngNm" maxlength="15" ng-disabled="newMemberYn === true"/>
+                    <input type="text" id="memberEngNm" class="sb-input w100" ng-model="membrEngNm" maxlength="15" ng-disabled="newMemberYn === true"/>
                 </td>
             </tr>
             <tr>
@@ -555,6 +555,10 @@
                                     <%-- 받는사람 --%>
                                     <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
                                     <span><s:message code="marketingSmsSend.receiveName" /></span>
+                                    <%-- 조회건수 --%>
+                                    <span style="display: none;"><label id="lblMarketingSmsSendListCnt"/></span>
+                                    <%-- 전송이력시퀀스 --%>
+                                    <span style="display: none;"><label id="lblMarketingSmsSendSmsSendSeq"/></span>
                                 </td>
                             </tr>
                         </table>
@@ -569,10 +573,10 @@
                 <%-- 그리드 --%>
                 <div class="w100 mt10 mb10">
                     <div class="wj-gridWrap" style="height:280px; overflow-y: hidden; overflow-x: hidden;">
-                        <div class="row">
+                        <div class="row" id="marketingSmsSendGrid" style="display: block;">
                             <wj-flex-grid
                                     autoGenerateColumns.="false"
-                                    control="flex"
+                                    control="flexMarketingSmsSend"
                                     initialized="initGrid(s,e)"
                                     sticky-headers="true"
                                     selection-mode="Row"
@@ -586,12 +590,11 @@
                                 <wj-flex-grid-column header="<s:message code="marketingSmsSend.lastSaleDate"/>" binding="lastSaleDate" width="80" align="center" format="date"></wj-flex-grid-column>
 
                                 <%--저장시 필요--%>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="marketingSmsSend.rOgnFg"/>" binding="rOgnFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.rOgnCd"/>" binding="rOgnCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="marketingSmsSend.rUserId"/>" binding="rUserId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
+                        <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                        <div class="gridMsg" id="marketingSmsSendGridMsg" style="line-height: 100px; display: none;"><label id="lblMarketingSmsSendGridMsg"/></div>
                     </div>
                 </div>
                 <%-- //그리드 --%>
@@ -700,7 +703,7 @@
 </div>
 
 <script type="text/javascript">
-    <%--var orgnCd = "${orgnCd}";--%>
+    var orgnCd = "${orgnCd}";
 
     // SMS전송 - 메세지그룹
     var msgGrpAddColList = [];
@@ -716,7 +719,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211007.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211013.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>

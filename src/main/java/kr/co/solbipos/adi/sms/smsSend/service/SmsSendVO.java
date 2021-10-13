@@ -33,11 +33,20 @@ public class SmsSendVO extends PageVO {
     /** 소속코드 */
     private String orgnCd;
 
-    /** 사용자ID */
-    private String userId;
+    /** 본사코드 */
+    private String hqOfficeCd;
+
+    /** 매장코드 */
+    private String storeCd;
 
     /** 매장명 */
     private String storeNm;
+
+    /** 업체코드 */
+    private String agencyCd;
+
+    /** 사용자ID */
+    private String userId;
 
     /** 잔여수량 */
     private String smsQty;
@@ -90,6 +99,12 @@ public class SmsSendVO extends PageVO {
     /** 받는사람 번호 */
     private String phoneNumber;
 
+    /** 전송할 컨텐츠 개수 */
+    private String contentCount;
+
+    /** 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입) */
+    private String contentData;
+
     /** 사원번호 */
     private String empNo;
 
@@ -105,15 +120,6 @@ public class SmsSendVO extends PageVO {
     /** 재직구분 */
     private String serviceFg;
 
-    /** 본사코드 */
-    private String hqOfficeCd;
-
-    /** 매장코드 */
-    private String storeCd;
-
-    /** 업체코드 */
-    private String agencyCd;
-
     /** 팝업 구분 */
     private String pageGubun;
 
@@ -126,11 +132,8 @@ public class SmsSendVO extends PageVO {
     /** 전송건수 */
     private String smsSendCount;
 
-    /** 전송할 컨텐츠 개수 */
-    private String contentCount;
-
-    /** 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입) */
-    private String contentData;
+    /** 조회한 회원수 */
+    private String smsSendListCnt;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -140,13 +143,29 @@ public class SmsSendVO extends PageVO {
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
 
-    public String getUserId() { return userId; }
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
 
-    public void setUserId(String userId) { this.userId = userId; }
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getStoreCd() { return storeCd; }
+
+    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
 
     public String getStoreNm() { return storeNm; }
 
     public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+
+    public String getAgencyCd() { return agencyCd; }
+
+    public void setAgencyCd(String agencyCd) { this.agencyCd = agencyCd; }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
 
     public String getSmsQty() { return smsQty; }
 
@@ -216,6 +235,22 @@ public class SmsSendVO extends PageVO {
 
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
+    public String getContentCount() {
+        return contentCount;
+    }
+
+    public void setContentCount(String contentCount) {
+        this.contentCount = contentCount;
+    }
+
+    public String getContentData() {
+        return contentData;
+    }
+
+    public void setContentData(String contentData) {
+        this.contentData = contentData;
+    }
+
     public String getEmpNo() {
         return empNo;
     }
@@ -256,22 +291,6 @@ public class SmsSendVO extends PageVO {
         this.serviceFg = serviceFg;
     }
 
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
-    }
-
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
-    }
-
-    public String getStoreCd() { return storeCd; }
-
-    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
-
-    public String getAgencyCd() { return agencyCd; }
-
-    public void setAgencyCd(String agencyCd) { this.agencyCd = agencyCd; }
-
     public String getPageGubun() {
         return pageGubun;
     }
@@ -300,19 +319,7 @@ public class SmsSendVO extends PageVO {
         this.smsSendCount = smsSendCount;
     }
 
-    public String getContentCount() {
-        return contentCount;
-    }
+    public String getSmsSendListCnt() { return smsSendListCnt; }
 
-    public void setContentCount(String contentCount) {
-        this.contentCount = contentCount;
-    }
-
-    public String getContentData() {
-        return contentData;
-    }
-
-    public void setContentData(String contentData) {
-        this.contentData = contentData;
-    }
+    public void setSmsSendListCnt(String smsSendListCnt) { this.smsSendListCnt = smsSendListCnt; }
 }

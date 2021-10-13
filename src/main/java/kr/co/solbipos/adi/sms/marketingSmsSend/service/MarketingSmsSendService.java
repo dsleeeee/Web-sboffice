@@ -33,4 +33,7 @@ public interface MarketingSmsSendService {
 
     /** 마케팅용 SMS전송 - 회원 조회 */
     List<DefaultMap<Object>> getMarketingSmsSendList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 마케팅용 SMS전송 - 검색 결과 저장 */
+    String getMarketingSmsSendListSave(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 }

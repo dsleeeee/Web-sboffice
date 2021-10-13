@@ -309,7 +309,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
         // 잔여 수량
         var smsQty = $("#lblSmsQty").text();
-        if(smsQty < 1) {
+        if(parseInt(smsQty) < 1) {
             $scope._popMsg(messages["smsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
             return;
         }
@@ -416,6 +416,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope.flex.collectionView.items[i].rrUserId = $scope.flex.collectionView.items[i].rUserId; // 받는사람ID
                 $scope.flex.collectionView.items[i].contentCount = fileCount; // 전송할 컨텐츠 개수
                 $scope.flex.collectionView.items[i].contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
+                $scope.flex.collectionView.items[i].pageGubun = "smsSend"; // 페이지구분
+                $scope.flex.collectionView.items[i].smsSendSeq = ""; // 전송이력시퀀스(SMS전송 팝업 : 전송시 채번 / 마케팅용 SMS전송 : 회원조회시 채번)
 
                 params.push($scope.flex.collectionView.items[i]);
             }

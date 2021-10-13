@@ -35,6 +35,9 @@ public interface SmsSendService {
     /** 전송,예약 저장 */
     int getSmsSendReserveSave(SmsSendVO[] smsSendVOs, SessionInfoVO sessionInfoVO);
 
+    /** 전송,예약 1000건 저장 */
+    int getSmsSendReserve1000Save(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
     /** 첨부파일 저장 */
     String getSmsSendFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO);
 

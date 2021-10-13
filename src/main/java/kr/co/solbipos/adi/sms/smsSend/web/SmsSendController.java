@@ -173,6 +173,29 @@ public class SmsSendController {
     }
 
     /**
+     * 전송,예약 1000건 저장
+     *
+     * @param smsSendVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 10. 08.
+     */
+    @RequestMapping(value = "/smsSend/getSmsSendReserve1000Save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsSendReserve1000Save(@RequestBody SmsSendVO smsSendVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsSendService.getSmsSendReserve1000Save(smsSendVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 첨부파일 저장
      *
      * @return  Object

@@ -6,6 +6,7 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO;
+import kr.co.solbipos.adi.sms.smsSend.service.impl.SmsSendMapper;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,12 +36,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     private final MarketingSmsSendMapper marketingSmsSendMapper;
+    private final SmsSendMapper smsSendMapper; // SMS전송 팝업
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper) { this.marketingSmsSendMapper = marketingSmsSendMapper; }
+    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper, SmsSendMapper smsSendMapper) {
+        this.marketingSmsSendMapper = marketingSmsSendMapper;
+        this.smsSendMapper = smsSendMapper; // SMS전송 팝업
+    }
 
     /** 메세지그룹 컬럼 리스트 조회 */
     @Override
@@ -83,6 +88,25 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     @Override
     public List<DefaultMap<Object>> getMarketingSmsSendList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
+        return marketingSmsSendMapper.getMarketingSmsSendList(marketingSmsSendVO);
+    }
+
+    /** 마케팅용 SMS전송 - 검색 결과 저장 */
+    @Override
+    public String getMarketingSmsSendListSave(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        // 전송이력시퀀스
+        String smsSendSeq = smsSendMapper.getSmsSendSeq(sessionInfoVO);
+        marketingSmsSendVO.setSmsSendSeq(smsSendSeq);
+
+        marketingSmsSendVO.setRegDt(currentDt);
+        marketingSmsSendVO.setRegId(sessionInfoVO.getUserId());
+        marketingSmsSendVO.setModDt(currentDt);
+        marketingSmsSendVO.setModId(sessionInfoVO.getUserId());
+
         marketingSmsSendVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         marketingSmsSendVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
 
@@ -99,6 +123,8 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
             marketingSmsSendVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        return marketingSmsSendMapper.getMarketingSmsSendList(marketingSmsSendVO);
+        procCnt = marketingSmsSendMapper.getMarketingSmsSendListSaveInsert(marketingSmsSendVO);
+
+        return smsSendSeq;
     }
 }
