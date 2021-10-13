@@ -27,7 +27,7 @@ var periodData = [
 
 // 광고성 SMS전송 DropBoxDataMap
 var marketingSmsGubunComboData = [
-    // {"name": "전체", "value": ""},
+    {"name": "전체", "value": ""},
     {"name": "1개월전", "value": "1"},
     {"name": "2개월전", "value": "2"},
     {"name": "3개월전", "value": "3"},
@@ -175,7 +175,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             var smsSendListCnt = $scope.flexMarketingSmsSend.collectionView.items.length;
 
             // 1000건 이상
-            if(parseInt(smsSendListCnt) > 1000) {
+            if(parseInt(smsSendListCnt) >= 1000) {
                 $("#lblMarketingSmsSendListCnt").text(smsSendListCnt);
                 $("#lblMarketingSmsSendGridMsg").text("전송시 조회된 " + smsSendListCnt + "건의 회원에게 전송됩니다.");
                 $("#marketingSmsSendGridMsg").css("display", "block");
@@ -371,7 +371,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         var smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
 
         // 1000건 이상
-        if(parseInt(smsSendListCnt) > 1000) {
+        if(parseInt(smsSendListCnt) >= 1000) {
             if(parseInt(smsQty) < parseInt(smsSendListCnt)) {
                 $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
                 return;
@@ -444,7 +444,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         var smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
 
         // 1000건 이상
-        if(parseInt(smsSendListCnt) > 1000) {
+        if(parseInt(smsSendListCnt) >= 1000) {
             smsSendQty = smsSendListCnt;
         } else {
             for (var i = 0; i < $scope.flexMarketingSmsSend.collectionView.items.length; i++) {
@@ -480,7 +480,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // 전송 저장 save
     $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
         // 1000건 이상
-        if(parseInt($("#lblMarketingSmsSendListCnt").text()) > 1000) {
+        if(parseInt($("#lblMarketingSmsSendListCnt").text()) >= 1000) {
             // 파라미터 설정
             var params = {};
             // 내용
