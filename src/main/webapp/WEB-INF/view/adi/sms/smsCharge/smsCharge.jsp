@@ -92,6 +92,10 @@
                 /*
                     가맹점 리턴값 처리 영역
                 */
+                // alert(frm.res_cd.value);
+                // alert(frm.res_msg.value);
+                // alert(frm.enc_info.value);
+                // alert(frm.enc_data.value);
 
                 frm.submit();
             }
@@ -147,6 +151,16 @@
             {
                 frm.good_mny.value = frm.amt[4].value;
             }
+
+            else if (frm.amt[5].checked)
+            {
+                frm.good_mny.value = frm.amt[5].value;
+            }
+
+            else if (frm.amt[6].checked)
+            {
+                frm.good_mny.value = frm.amt[6].value;
+            }
         }
 
         /* 표준웹 실행 */
@@ -194,7 +208,7 @@
 <!--wrap-->
 <div class="wrap">
     <!-- 주문정보 입력 form : order_info -->
-    <form name="order_info" method="post" action="pp_cli_hub.jsp" >
+    <form name="order_info" method="post" action="/adi/sms/smsCharge/smsCharge/charge.sb" >
         <%
             /* ============================================================================== */
             /* =   1. 주문 정보 입력                                                        = */
@@ -254,6 +268,18 @@
                                     <td><input type='radio' name='amt' value='82500'/><input type='hidden' name='qty' value='5000'/></td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000원</font></td>
                                     <td><font style='width:50px; text-align:right; color:#585858;                  '>5,000통</font></td>
+                                </tr>
+                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
+                                <tr height='26' align='center'>
+                                    <td><input type='radio' name='amt' value='100'/><input type='hidden' name='qty' value='100'/></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>100원</font></td>
+                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>
+                                </tr>
+                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
+                                <tr height='26' align='center'>
+                                    <td><input type='radio' name='amt' value='1004'/><input type='hidden' name='qty' value='1004'/></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>1004원</font></td>
+                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>
                                 </tr>
                                 <tr bgcolor='#bfccd8' height='1'><td colspan='3'></td></tr>
                                 <tr height='30'>
