@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <wj-popup control="wjSmsChargeDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;height:290px;" fade-in="false" fade-out="false">
     <div ng-controller="smsChargeDtlCtrl">
@@ -15,8 +16,10 @@
         <%-- body --%>
         <div class="wj-dialog-body">
             <div class="mb10 oh sb-select dkbr">
-                <%-- 결제취소 --%>
-                <button class="btn_skyblue ml5 fr" id="btnSmsChargeCencel" onclick="jsf__cancel(document.cancel_info);"><s:message code="smsChargeDtl.smsChargeCencel" /></button>
+                <c:if test="${orgnFg eq 'MASTER'}">
+                    <%-- 결제취소 --%>
+                    <button class="btn_skyblue ml5 fr" id="btnSmsChargeCencel" onclick="jsf__cancel(document.cancel_info);"><s:message code="smsChargeDtl.smsChargeCencel" /></button>
+                </c:if>
             </div>
             <table class="tblType01">
                 <colgroup>
