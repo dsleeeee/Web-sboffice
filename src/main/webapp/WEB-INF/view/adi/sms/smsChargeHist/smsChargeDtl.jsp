@@ -16,7 +16,7 @@
         <div class="wj-dialog-body">
             <div class="mb10 oh sb-select dkbr">
                 <%-- 결제취소 --%>
-                <button class="btn_skyblue ml5 fr" id="btnSmsChargeCencel" ng-click="smsChargeCencel()"><s:message code="smsChargeDtl.smsChargeCencel" /></button>
+                <button class="btn_skyblue ml5 fr" id="btnSmsChargeCencel" onclick="jsf__cancel(document.cancel_info);"><s:message code="smsChargeDtl.smsChargeCencel" /></button>
             </div>
             <table class="tblType01">
                 <colgroup>
@@ -140,4 +140,21 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20210823.01" charset="utf-8"></script>
+<form id="cancel_info" name="cancel_info" method="post" action="/adi/sms/smsCharge/smsCharge/cancel.sb">
+    <input type="hidden" name="req_tx"      value="mod"  /> <%--프로세스 요청 종류 구분 변수--%>
+    <input type="hidden" name="mod_type"    value="STSC" /> <%--프로세스 요청의 구분 변수--%>
+    <input type="hidden" name="tno"         value="" /> <%--결제 건에 대한 NHN KCP 거래 고유번호--%>
+    <input type="hidden" name="mod_desc"    value="" /> <%--프로세스 취소 사유에 대한 변수 값--%>
+</form>
+
+<script type="text/javascript">
+    function jsf__cancel( form )
+    {
+        // alert(form);
+        // alert(form.req_tx.value);
+        form.tno.value = $("#controlnoDtl").val(); // 승인번호
+        document.cancel_info.submit();
+    }
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211011.01" charset="utf-8"></script>

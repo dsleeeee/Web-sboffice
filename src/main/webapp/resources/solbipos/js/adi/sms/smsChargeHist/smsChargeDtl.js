@@ -58,11 +58,6 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
     });
     // <-- //검색 호출 -->
 
-    // 결제취소
-    $scope.smsChargeCencel = function () {
-        alert("준비중");
-    };
-
     // 팝업 닫기
     $scope.close = function(){
         $scope.wjSmsChargeDtlLayer.hide();
