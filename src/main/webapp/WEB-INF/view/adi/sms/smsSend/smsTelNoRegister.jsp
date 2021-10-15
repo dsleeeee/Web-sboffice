@@ -2,8 +2,14 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.text.*" %>
+<%@ page import="java.util.*" %>
+<%@ include file="cert_conf.jsp"%>
+<%
+    String cret_id = new SimpleDateFormat("yyyyMMddHHmmssSSSSSSS").format(new Date()); // 요청번호 생성 예제
+%>
+<wj-popup control="wjSmsTelNoRegisterLayer" show-trigger="Click" hide-trigger="Click" style="display:none;" fade-in="false" fade-out="false">
 
-<wj-popup control="wjSmsTelNoRegisterLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;height:240px;" fade-in="false" fade-out="false">
     <div ng-controller="smsTelNoRegisterCtrl">
 
         <%-- header --%>
@@ -23,10 +29,14 @@
 
             <div class="mt20 oh sb-select dkbr">
                 <%-- 사전등록 발신번호 --%>
-                <s:message code="smsTelNoRegister.registerTelNo" />
-                <input type="text" class="sb-input w40" id="srchTelNo" ng-model="telNo" />
+<%--                <s:message code="smsTelNoRegister.registerTelNo" />--%>
+                <input type="hidden" class="sb-input w70" id="cret_id" value="<%=cret_id%>" />
+                <input type="hidden" class="sb-input w70" id="site_cd" value="<%=g_conf_site_cd%>" />
+                <input type="hidden" class="sb-input w70" id="gw_url" value="<%=g_conf_gw_url%>" />
+                <input type="hidden" class="sb-input w70" id="Ret_URL" value="<%=g_conf_Ret_URL%>" />
+<%--                <input type="text" class="sb-input w40" id="srchTelNo" ng-model="telNo" />--%>
                 <%-- 인증요청 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="telNoRequest()">
+                <button id="request" class="btn_skyblue ml5 fr" ng-click="telNoRequest()">
                     <s:message code="smsTelNoRegister.telNoRequest" />
                 </button>
             </div>
@@ -35,4 +45,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister.js?ver=20210625.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister.js?ver=20210625.02" charset="utf-8"></script>

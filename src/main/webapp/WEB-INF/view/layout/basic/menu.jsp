@@ -15,7 +15,7 @@
   <span><img src="/resource/solbipos/css/img/TwoColor_logo.png" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
 </c:if>
 <c:if test="${orgnFg == 'HQ' or orgnFg == 'STORE'}">
-  <span><img src="http://neo.solbipos.com/logo_img/${orgnCd}.png" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
+  <span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
 </c:if>
       <%--//로고영역--%>
 

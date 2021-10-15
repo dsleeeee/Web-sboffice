@@ -209,7 +209,6 @@ public class SmsSendController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = smsSendService.getAddresseeAddList(smsSendVO, sessionInfoVO);
-
         return ReturnUtil.returnListJson(Status.OK, result, smsSendVO);
     }
 }
