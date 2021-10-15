@@ -295,7 +295,7 @@ public class MyInfoServiceImpl implements MyInfoService{
                     orgFileName = orgFileName.substring(1);
                 }
 
-                if(!fileExt.equals("png") && !fileExt.equals("PNG") && !fileExt.equals("jpg") && !fileExt.equals("JPG") && !fileExt.equals("gif") && !fileExt.equals("GIF") )
+                if(!fileExt.equals("png") && !fileExt.equals("PNG") && !fileExt.equals("jpg") && !fileExt.equals("JPG"))
                 {
                     isSuccess = "3";
                     break;
@@ -304,7 +304,7 @@ public class MyInfoServiceImpl implements MyInfoService{
                 if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
                     // 파일 저장하는 부분
                     try {
-                        File destFile = new File(path + newFileName + "." + fileExt);
+                        File destFile = new File(path + newFileName);
                         mFile.transferTo(destFile);
                         isSuccess = "0";
                     } catch (Exception e) {

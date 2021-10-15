@@ -116,11 +116,13 @@
             <p class="shopimg fl">
               <span><s:message code="myInfo.myInfo.image.suggest" /></span>
               <f:form id="regForm" name="regForm" method="post" enctype="multipart/form-data">
-                <input type="file" id="fileTitle" name="fileTitle" class="form-control" accept="image/x-png, .jpg, .gif" onchange="imagePreview(this, 'title')"/>
+                <input type="file" id="fileTitle" name="fileTitle" class="form-control" accept="image/x-png, .jpg" onchange="imagePreview(this, 'title')"/>
                 <input type="hidden" id="hdTitleFileNm" />
               </f:form>
             </p>
-            <div id="imgTitle" style="width:125px;height:25px;clear:both;border:1px solid #e8e8e8;overflow: hidden;"></div>
+            <div id="imgTitle" style="width:125px;height:25px;clear:both;border:1px solid #e8e8e8;overflow: hidden;">
+              <img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}" alt="No Image"/>
+            </div>
           </td>
         </tr>
         <tr class="brt" style="display: none;">
@@ -306,7 +308,7 @@ function imagePreview(imgVal, imgFg){
   }
 
   // 이미지(.png) 확장자 체크
-  var reg = /(.*?)\.(png|PNG|jpg|JPG|gif|GIF)$/;
+  var reg = /(.*?)\.(png|PNG|jpg|JPG)$/;
 
   if(! $("#" + element).val().match(reg)) {
     s_alert.pop(messages["myInfo.fileExtensionChk.msg"]);
