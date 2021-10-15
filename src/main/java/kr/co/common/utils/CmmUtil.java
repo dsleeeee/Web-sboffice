@@ -108,6 +108,10 @@ public class CmmUtil {
 
         // ds 와 s로 시작하는 id는 본사 관리자 또는 매장 관리자의 id가 될 수 있어서
         // 해당 아이디로는 등록이 불가능하도록 함.
+        // 2021.10.15 1. 현재 사용자 아이디 로직이 8~12 생성임으로 기존 7자리 이하의 소속코드(관리자/본사/매장)에 따른 기본 아이디는 생성될 수 없는 상태
+        // 2021.10.15 2. 매장코드 직접입력 상태, 8자리 이상 매장코드가 생성되는 경우 기존 생성된 아이디와 중복될 수 있기 때문에 아이디 직접입력 및 [중복체크]가 들어갔음
+        // 2021.10.15 3. 1번과 같은 이유로 ds s h 로 시작하는 아이디 생성 못하게 하는 부분은 제거해야 2번에서 8자리 이상의 정상적인 아이디가 생성됨
+
 
         if( len > 12 || len < 8 ) {
             return EmpResult.USER_ID_LENGHTH_REGEXP;
@@ -117,7 +121,7 @@ public class CmmUtil {
             return EmpResult.USER_ID_MUST_CONTAIN_ENG_CAHR;
         } else if( flag3 == false ) {
             return EmpResult.USER_ID_ONLY_ENG_NUM_CHAR;
-        } else if(value.startsWith("ds")) { // 데모 본사, 매장 사원
+        } /*else if(value.startsWith("ds")) { // 데모 본사, 매장 사원
             if(Pattern.matches("[0-9]*", value.substring(2, len))){
                 return EmpResult.USER_ID_DUPLICATE;
             }
@@ -129,7 +133,7 @@ public class CmmUtil {
             if(Pattern.matches("[0-9]*", value.substring(1, len))){
                 return EmpResult.USER_ID_DUPLICATE;
             }
-        }
+        }*/
 
         return EmpResult.SUCCESS;
     }
