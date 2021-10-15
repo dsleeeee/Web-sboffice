@@ -228,8 +228,8 @@
                             <table width='640' border='0' cellpadding='2' cellspacing='0' style="margin-left: 20px; margin-right: 20px;">
                                 <colgroup>
                                     <col width="30%"/>
-                                    <col width="35%"/>
-                                    <col width="35%"/>
+                                    <col width="70%"/>
+                                    <%--<col width="35%"/>--%>
                                 </colgroup>
                                 <tr height='34'>
                                     <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> 충전금액을 선택하시기 바랍니다.</b></td>
@@ -238,49 +238,70 @@
                                 <tr height='26' align='center'>
                                     <td style='color:#585858;'><b>선택</b></td>
                                     <td style='color:#585858;'><b>금액</b></td>
-                                    <td style='color:#585858;'><b>충전수량</b></td>
+                                    <%--<td style='color:#585858;'><b>충전수량</b></td>--%>
                                 </tr>
                                 <tr bgcolor='#79a9d2' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='8250' checked/><input type='hidden' name='qty' value='500'/></td>
+                                    <td>
+                                        <input type='radio' name='amt' value='8250' checked/>
+                                        <%--<input type='hidden' name='qty' value='500'/>--%>
+                                    </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>7,500원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>500통</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>500통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='16500'/><input type='hidden' name='qty' value='1000'/></td>
+                                    <td>
+                                        <input type='radio' name='amt' value='16500'/>
+                                        <%--<input type='hidden' name='qty' value='1000'/>--%>
+                                    </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>15,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>1,000통</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>1,000통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='33000'/><input type='hidden' name='qty' value='2000'/></td>
+                                    <td>
+                                        <input type='radio' name='amt' value='33000'/>
+                                        <%--<input type='hidden' name='qty' value='2000'/>--%>
+                                    </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>30,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>2,000통</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>2,000통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='49500'/><input type='hidden' name='qty' value='3000'/></td>
+                                    <td>
+                                        <input type='radio' name='amt' value='49500'/>
+                                        <%--<input type='hidden' name='qty' value='3000'/>--%>
+                                    </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>45,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>3,000통</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>3,000통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='82500'/><input type='hidden' name='qty' value='5000'/></td>
+                                    <td>
+                                        <input type='radio' name='amt' value='82500'/>
+                                        <%--<input type='hidden' name='qty' value='5000'/>--%>
+                                    </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>5,000통</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>5,000통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='100'/><input type='hidden' name='qty' value='100'/></td>
+                                    <td>
+                                        <input type='radio' name='amt' value='100'/>
+                                        <%--<input type='hidden' name='qty' value='100'/>--%>
+                                    </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>100원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
-                                    <td><input type='radio' name='amt' value='1004'/><input type='hidden' name='qty' value='1004'/></td>
+                                    <td>
+                                        <input type='radio' name='amt' value='1004'/>
+                                        <%--<input type='hidden' name='qty' value='1004'/>--%>
+                                    </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>1004원</font></td>
-                                    <td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#bfccd8' height='1'><td colspan='3'></td></tr>
                                 <tr height='30'>
