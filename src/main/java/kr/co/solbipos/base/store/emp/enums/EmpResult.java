@@ -41,7 +41,7 @@ public enum EmpResult implements CodeEnum {
     PASSWORD_REGEXP("PASSWORD_REGEXP"),
     /** 웹 사용자ID 정책이 맞지 않음 */
     USER_ID_REGEXP("USER_ID_REGEXP"),
-    /** 사용자 아이디는 6자 이상 12자 이하로 입력해주세요. */
+    /** 사용자 아이디는 8자 이상 12자 이하로 입력해주세요. */
     USER_ID_LENGHTH_REGEXP("USER_ID_LENGHTH_REGEXP"),
     /** 한글을 사용할 수 없습니다. */
     USER_ID_CANNOT_USE_HANGEUL("USER_ID_CANNOT_USE_HANGEUL"),
