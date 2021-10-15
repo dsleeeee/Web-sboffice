@@ -16,7 +16,7 @@
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="storeManage.storeInfo" />
       <span id="storeInfoTitle" class="ml20"></span>
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" ng-click="closeStoreInfo()"></a>
     </div>
 
     <%-- body --%>
@@ -34,7 +34,10 @@
 
       <div style="height:400px; overflow-y: auto;">
         <f:form id="viewForm">
-          <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>
+          <h3 class="h3_tbl" style="height: 36px;">
+            <div class="fl" style="padding-top: 7px;"><s:message code="storeManage.basicInfo" /></div>
+            <div class="fr"><a id="btnErpStoreSet" href="#" class="btn_grayS ml5" ng-click="erpStoreSet()" style="display: none;"><label id="lblErpStoreSet"></label></a></div>
+          </h3>
           <table class="searchTbl">
             <colgroup>
               <col class="w15" />
@@ -59,11 +62,12 @@
               <%-- 매장코드 --%>
               <th><s:message code="storeManage.storeCd" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="storeCd" class="sb-input w100" ng-model="store.storeCd" readonly="readonly" maxlength="12" placeholder="대문자로 입력하세요." onkeyup="this.value=this.value.replace(/[^A-Z0-9]/g,'');"/>
+                <input type="text" id="storeCd" class="sb-input w100" ng-model="store.storeCd" readonly="readonly" maxlength="12" onkeyup="this.value=this.value.replace(/[^A-Z0-9]/g,'');"/>
                 <input type="hidden" id="storeCdChkFg" ng-model="store.storeCdChkFg"/>
                 <input type="hidden" id="storeCdInputType" ng-model="store.storeCdInputType"/>
                 <input type="hidden" id="envst0043" ng-model="store.envst0043"/>
                 <input type="hidden" id="hdDigit8Store"/>
+                <input type="hidden" id="hdBbqStoreCd" />
                 <a id="btnChkStoreCd" href="#" class="btn_grayS ml5" ng-click="chkStoreCd()" style="display: none;"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
               <%-- 매장명 --%>
@@ -88,7 +92,7 @@
               <%-- 웹사용자아이디 --%>
               <th><s:message code="storeManage.userId" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="userId" class="sb-input w60" ng-model="store.userId" maxlength="12" placeholder="소문자로 입력하세요." onkeyup="this.value=this.value.replace(/[^a-z0-9]/g,'');" />
+                <input type="text" id="userId" class="sb-input w60" ng-model="store.userId" maxlength="12" placeholder="소문자, 숫자 입력가능" onkeyup="this.value=this.value.replace(/[^a-z0-9]/g,'');" />
                 <input type="hidden" id="userIdChkFg" ng-model="store.userIdChkFg"/>
                 <a id="btnChkUserId" href="#" class="btn_grayS ml5" ng-click="chkUserId()"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
@@ -411,7 +415,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20211012.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20211015.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
@@ -435,4 +439,8 @@
 
 <%-- 매장 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchStore.jsp">
+</c:import>
+
+<%-- ERP 연동 매장 셋팅 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/erpStoreSet.jsp">
 </c:import>

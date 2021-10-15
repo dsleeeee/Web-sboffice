@@ -233,10 +233,16 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.readOnlyStatus               = false;
 
     $("#installPosCnt").css('background-color', '#ffffff');
+    $("#storeCd").attr('placeholder','');
     $("#storeCd").attr("readonly",true);
     $("#storeCd").css("width", "100%");
     $("#btnChkStoreCd").css("display", "none");
     $("#additionalArea").css("display", "");
+
+    $scope.store.vanCd = "";
+    $scope.store.vanNm = "";
+    $scope.store.agencyCd = "";
+    $scope.store.agencyNm = "";
 
     // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
     // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
@@ -264,6 +270,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.userPwd = "";
     $scope.store.userPwdConf = "";
 
+    // BBQ 매장코드 초기화
+    $("#hdBbqStoreCd").val("");
   };
 
   /*********************************************************
@@ -338,6 +346,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.userIdChkFg = "";
     $scope.store.userPwd = "";
     $scope.store.userPwdConf = "";
+
+    // ERP 연동 매장 셋팅 팝업 관련 visible 처리(상세화면에서는 필요가 없음)
+    $("#btnErpStoreSet").css("display", "none");
+
+    // BBQ 매장코드 초기화(상세화면에서는 필요가 없음)
+    $("#hdBbqStoreCd").val("");
 
   };
 
@@ -621,6 +635,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.addrdtl = $("#addrDtl").val();
     params.digit8Store = $("#hdDigit8Store").val();
 
+     // ERP 연동 매장 등록인 경우, NXPOS_STORE_CD 값을 Update 하기 위함.
+    if(orgnFg === "HQ") {
+        if($("#hdBbqStoreCd").val() !== "") {
+            params.bbqStoreCd = $("#hdBbqStoreCd").val();
+        }
+     }
+
     console.log('params',params);
 
     // 사업자번호 중복체크
@@ -720,7 +741,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.store.userPwd = "";
         $scope.store.userPwdConf = "";
 
-        if( !$.isEmptyObject(hqScope.getHq())  ) {
+        // BBQ 매장코드 초기화(본사 선택시에는 사용안함)
+        $("#hdBbqStoreCd").val("");
+
+          if( !$.isEmptyObject(hqScope.getHq())  ) {
           // 본사정보 셋팅
           $scope.store.hqOfficeCd = hqScope.getHq().hqOfficeCd;
           $scope.store.hqOfficeNm = hqScope.getHq().hqOfficeNm;
@@ -732,6 +756,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           // 매장코드 채번방식
           if (hqScope.getHq().envst0027 === '1') { //수동
             $scope.store.storeCd = '';
+            $("#storeCd").attr('placeholder','대문자, 숫자 입력가능');
             $("#storeCd").removeAttr("readonly");
             $("#storeCd").css("width", "60%");
             $("#btnChkStoreCd").css("display", "");
@@ -747,8 +772,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           } else {
             if (hqScope.getHq().envst0027 === '0') { //자동
               $scope.store.storeCd = '자동채번';
+              $("#storeCd").attr('placeholder','자동채번');
             } else {
               $scope.store.storeCd = '';
+              $("#storeCd").attr('placeholder','');
             }
             $("#storeCd").attr("readonly", true);
             $("#storeCd").css("width", "100%");
@@ -1099,6 +1126,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 매장코드 채번방식
     if (hqEnvst0027 === '1') { //수동
       $scope.store.storeCd = '';
+      $("#storeCd").attr('placeholder','대문자, 숫자 입력가능');
       $("#storeCd").removeAttr("readonly");
       $("#storeCd").css("width", "60%");
       $("#btnChkStoreCd").css("display", "");
@@ -1115,8 +1143,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if (hqEnvst0027 === '0') { //자동
         $scope.store.storeCd = '자동채번';
         $("#storeCd").val('자동채번');
+        $("#storeCd").attr('placeholder','자동채번');
       } else {
         $scope.store.storeCd = '';
+        $("#storeCd").attr('placeholder','');
       }
       $("#storeCd").attr("readonly", true);
       $("#storeCd").css("width", "100%");
@@ -1136,6 +1166,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 매장환경복사 체크 disabled
     $scope.copyStoreSettingChk();
+    
+    // ERP 연동 매장 셋팅 팝업 관련 visible 처리
+    $("#lblErpStoreSet").text(hqOfficeNm + " 매장");
+    
+    if(erpLinkHq !== ""){ // ERP 연동 매장등록을 사용하는 본사인 경우
+      $("#btnErpStoreSet").css("display", "");
+    }else{
+      $("#btnErpStoreSet").css("display", "none");
+    }
   };
   
   // 웹 사용자 아이디 중복체크
@@ -1193,6 +1232,68 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setUserId = function () {
     $("#userId").val($("#storeCd").val().toString().toLowerCase());
     $scope.store.userId = $("#storeCd").val().toString().toLowerCase();
+    
+    // 자동바인딩 후에 다시 웹 사용자 아이디 중복체크를 하도록 유도하기 위해 초기화
+    $("#userIdChkFg").val("");
+    $scope.store.userIdChkFg = "";
   };
 
+  // ERP 연동 매장 셋팅 팝업
+  $scope.erpStoreSet = function () {
+
+    var storeScope = agrid.getScope('storeManageCtrl');
+
+    if(!$.isEmptyObject(storeScope.getSelectedStore()) ) {  // 신규등록시에만 ERP 연동 매장 셋팅 팝업 호출
+      return false;
+    }
+
+    var popup = $scope.erpStoreSetLayer;
+
+    // 팝업 닫을때
+    popup.show(true, function (s) {
+      var erpStoreScope = agrid.getScope('erpStoreSetCtrl');
+      erpStoreScope.$apply(function(){
+        erpStoreScope._gridDataInit();
+        
+        // 기존 값 초기화
+        $("#storeCd").val("");
+        $("#storeCdChkFg").val("");
+        $("#storeNm").val("");
+        $("#ownerNm").val("");
+        $scope.store.storeCd = "";
+        $scope.store.storeCdChkFg = "";
+        $scope.store.storeNm = "";
+        $scope.store.ownerNm = "";
+
+        if(!$.isEmptyObject(erpStoreScope.getErpStore())) {
+
+          // ERP 연동 매장 정보 셋팅
+          if($scope.store.storeCdInputType === "1") {
+            $("#storeCd").val(erpStoreScope.getErpStore().bbqStoreCd);
+            $scope.store.storeCd = erpStoreScope.getErpStore().bbqStoreCd;
+          }
+
+          $("#storeNm").val(erpStoreScope.getErpStore().storeNm);
+          $("#ownerNm").val(erpStoreScope.getErpStore().ownerNm);
+          $scope.store.storeNm = erpStoreScope.getErpStore().storeNm;
+          $scope.store.ownerNm = erpStoreScope.getErpStore().ownerNm;
+
+          // Bbq 매장코드 갖고있기
+          $("#hdBbqStoreCd").val(erpStoreScope.getErpStore().bbqStoreCd);
+
+        }
+      });
+
+      // ERP 연동 매장 정보 초기화(이전데이터 남아있는 현상 발생)
+      erpStoreScope.getErpStore("");
+
+    });
+    event.preventDefault();
+
+  };
+
+  // 팝업 닫기 전 초기화
+  $scope.closeStoreInfo = function () {
+    $scope.resetForm();
+  }
 }]);

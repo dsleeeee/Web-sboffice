@@ -5390,4 +5390,89 @@
           FROM TB_WB_USER_INFO
          WHERE USER_ID = #{userId}
     </select>
+
+    <!-- ERP를 연동하는 본사인지 확인 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeManageVO
+        COMMENTS : ERP를 연동하는 본사인지 확인한다.
+    -->
+    <select id="getErpLinkHq" parameterType="storeManageVO" resultType="String">
+        /* USE : StoreManageMapper.getErpLinkHq */
+        SELECT NMCODE_CD
+          FROM TB_CM_NMCODE
+         WHERE NMCODE_GRP_CD = '123'
+           AND NMCODE_ITEM_1 = #{hqOfficeCd}
+    </select>
+
+    <!-- ERP 연동 매장 조회 -->
+    <!--
+        TABLE    : TB_MS_BBQ_STORE
+        PARAM    : storeManageVO
+        COMMENTS : ERP 연동 매장을 조회한다.
+    -->
+    <select id="getErpStore" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.getErpStore */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT BBQ_STORE_CD,
+                STORE_NM,
+                OWNER_NM,
+                CASE WHEN STORE_FG = '1' AND NXPOS_STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END AS REG_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MS_BBQ_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='srchStoreCd != null and srchStoreCd != ""'>
+            AND BBQ_STORE_CD LIKE '%'|| #{srchStoreCd} ||'%'
+        </if>
+        <if test='srchStoreNm != null and srchStoreNm != ""'>
+            AND STORE_NM LIKE '%'|| #{srchStoreNm} ||'%'
+        </if>
+        <if test='bizNo != null and bizNo != ""'>
+            AND BIZ_NO LIKE '%'|| #{bizNo} ||'%'
+        </if>
+        <if test='regYn != null and regYn == "N"'>
+            AND (STORE_FG != '1' OR STORE_FG IS NULL)
+            AND NXPOS_STORE_CD IS NULL
+        </if>
+        <if test='regYn != null and regYn == "Y"'>
+            AND STORE_FG = '1'
+            AND NXPOS_STORE_CD IS NOT NULL
+        </if>
+        ORDER
+           BY BBQ_STORE_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- ERP 연동 매장에 NXPOS_STORE_CD 값 Update -->
+    <!--
+        TABLE    : TB_MS_BBQ_STORE
+        PARAM    : storeManageVO
+        COMMENTS : ERP 연동 매장에 NXPOS_STORE_CD 값을 Update 한다.
+    -->
+    <update id="updateErpStore" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.updateErpStore */
+        UPDATE TB_MS_BBQ_STORE
+           SET STORE_FG = '1',
+                NXPOS_STORE_CD = #{storeCd},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND BBQ_STORE_CD = #{bbqStoreCd}
+    </update>
+
+    <!-- 선택한 ERP 연동 매장이 미등록 매장이 맞는지 확인 -->
+    <!--
+        TABLE    : TB_MS_BBQ_STORE
+        PARAM    : storeManageVO
+        COMMENTS :선택한 ERP 연동 매장이 미등록 매장이 맞는지 확인한다.
+    -->
+    <select id="getErpStoreUnRegConfm" parameterType="storeManageVO" resultType="int">
+        /* USE : StoreManageMapper.getErpStoreUnRegConfm */
+        SELECT COUNT(*)
+          FROM TB_MS_BBQ_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND BBQ_STORE_CD = #{bbqStoreCd}
+           AND (STORE_FG != '1' OR STORE_FG IS NULL)
+           AND NXPOS_STORE_CD IS NULL
+    </select>
 </mapper>

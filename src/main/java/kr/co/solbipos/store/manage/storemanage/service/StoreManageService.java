@@ -139,4 +139,11 @@ public interface StoreManageService {
 
     /** 웹 사용자 아이디 체크*/
     EmpResult chkUserId(StoreManageVO storeManageVO);
+
+    /** ERP를 연동하는 본사인지 확인 */
+    String getErpLinkHq(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** ERP 연동 매장 조회 */
+    List<DefaultMap<String>> getErpStore(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
 }

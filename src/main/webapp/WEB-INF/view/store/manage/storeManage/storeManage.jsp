@@ -199,6 +199,7 @@ var hqEnvst0027 = "${hqEnvst0027}"; // 매장코드 채번방식 [0:자동(기�
 var hqEnvst0043 = "${hqEnvst0043}"; // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
 var hqSysStatFg = "${hqSysStatFg}"; // 본사 상태구분 값
 var digit8Store = "${digit8Store}"; // 매장코드 8 자리 이상 사용하는 본사인지 조회
+var erpLinkHq = "${erpLinkHq}"; // ERP를 연동하는 본사인지 확인
 
 </script>
 

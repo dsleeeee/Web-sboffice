@@ -68,6 +68,8 @@ public class StoreTypeVO extends PageVO {
     private String dlvrSaleUprc;
     /** 포장가 */
     private String packSaleUprc;
+    /** 프로시져 실행 결과 */
+    private String result;
 
 
     public String getOrgnFg() {
@@ -292,5 +294,13 @@ public class StoreTypeVO extends PageVO {
 
     public void setPackSaleUprc(String packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

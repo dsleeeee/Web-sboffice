@@ -972,4 +972,40 @@
             BY VALUE NULLS FIRST
     </select>
 
+    <!-- 매장타입관리 - 매장타입 매장적용 팝업 매장적용 시 본사상품 > 매장등록 PKG 호출   -->
+    <!--
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입 매장적용 시 본사상품 > 매장등록 PKG를 호출한다.
+    -->
+    <select id="insertHqProductToStore" statementType="CALLABLE"  parameterType="storeTypeVO" resultType="String">
+        /* USE : StoreTypeMapper.insertHqProductToStore   */
+        {
+            CALL PKG_HQ_STORE_TYPE_APP.SP_HQ_STORE_TYPE_APP_IU
+          (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 매장타입관리 - 매장타입 매장적용 팝업 매장적용 시 본사 상품 > 매장 등록 > 가격 처리 PKG 호출   -->
+    <!--
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입 매장적용 시 본사 상품 > 매장 등록 > 가격 처리 PKG를 호출한다.
+    -->
+    <select id="insertHqProductSalePriceToStore" statementType="CALLABLE"  parameterType="storeTypeVO" resultType="String">
+        /* USE : StoreTypeMapper.insertHqProductSalePriceToStore   */
+        {
+            CALL PKG_HQ_STORE_TYPE_APP.SP_HQ_STORE_TYPE_APP_SALE_PRICE_IU
+          (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
 </mapper>

@@ -446,6 +446,15 @@ public class StoreTypeServiceImpl implements StoreTypeService {
 
             result += storeTypeMapper.saveStoreTypeApplyStore(storeTypeVO);
 
+            //  본사상품 > 매장등록 PKG 호출
+            storeTypeMapper.insertHqProductToStore(storeTypeVO);
+
+            // 판매가 같이 적용 체크 시
+            if("1".equals(storeTypeVO.getApplyFg())){
+
+                // 본사 상품 > 매장 등록 > 가격 처리 PKG 호출
+                storeTypeMapper.insertHqProductSalePriceToStore(storeTypeVO);
+            }
         }
 
         if (result == storeTypeVOs.length) {

@@ -97,6 +97,8 @@ public class StoreManageController {
             model.addAttribute("hqSysStatFg", CmmUtil.nvl(service.getHqSysStatFg(storeManageVO, sessionInfoVO), ""));
             // 매장코드 8 자리 이상 사용하는 본사인지 조회
             model.addAttribute("digit8Store", CmmUtil.nvl(service.getUseDigit8Store(storeManageVO, sessionInfoVO), ""));
+            // ERP를 연동하는 본사인지 확인
+            model.addAttribute("erpLinkHq", CmmUtil.nvl(service.getErpLinkHq(storeManageVO, sessionInfoVO), ""));
         }
 
         return "store/manage/storeManage/storeManage";
@@ -834,5 +836,27 @@ public class StoreManageController {
         EmpResult empResult= service.chkUserId(storeManageVO);
 
         return returnJson(Status.OK, empResult);
+    }
+
+    /**
+     * ERP 연동 매장 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2021.10.13
+     */
+    @RequestMapping(value = "storeManage/getErpStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getErpStore(StoreManageVO storeManageVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = service.getErpStore(storeManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, storeManageVO);
     }
 }

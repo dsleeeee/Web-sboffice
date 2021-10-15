@@ -551,6 +551,24 @@ public class StoreManageServiceImpl implements StoreManageService{
             storeNmcodeVO.setStoreCd(storeCd);
             String copyNmCode = mapper.copyCmmNameCode(storeNmcodeVO);
 
+            // ERP 연동 매장 등록인 경우, NXPOS_STORE_CD 값을 Update 한다.
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                if(storeManageVO.getBbqStoreCd() != null && !"".equals(storeManageVO.getBbqStoreCd())) {
+
+                    // 1. ERP 연동 매장 등록이 가능한 본사인지 확인
+                    String strErpLinkHq = mapper.getErpLinkHq(storeManageVO);
+                    if (strErpLinkHq != null && !"".equals(strErpLinkHq)) {
+
+                        // 2. 선택한 ERP 연동 매장이 미등록 매장이 맞는지 확인
+                        int erpUnRegCnt = mapper.getErpStoreUnRegConfm(storeManageVO);
+                        if(erpUnRegCnt > 0){
+                            // ERP 연동 매장에 NXPOS_STORE_CD 값 Update
+                            procCnt += mapper.updateErpStore(storeManageVO);
+                        }
+                    }
+                }
+            }
+
             // todo 공통코드 중 CMM 코드 복사 (프로시져)
 
 
@@ -1289,5 +1307,20 @@ public class StoreManageServiceImpl implements StoreManageService{
         else {
             return EmpResult.USER_ID_DUPLICATE;
         }
+    }
+
+    /** ERP를 연동하는 본사인지 확인 */
+    @Override
+    public String getErpLinkHq(StoreManageVO storeManageVO,  SessionInfoVO sessionInfoVO) {
+
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return mapper.getErpLinkHq(storeManageVO);
+    }
+
+    /** ERP 연동 매장 조회 */
+    @Override
+    public List<DefaultMap<String>> getErpStore(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return mapper.getErpStore(storeManageVO);
     }
 }

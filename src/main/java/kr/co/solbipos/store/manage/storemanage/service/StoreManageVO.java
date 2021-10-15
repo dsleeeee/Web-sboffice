@@ -130,6 +130,9 @@ public class StoreManageVO extends PageVO {
     /** 조회용 매장코드 */
     private String srchStoreCd;
 
+    /** 조회용 매장명 */
+    private String srchStoreNm;
+
     /** 매핑매장코드*/
     private String mapStoreCd;
 
@@ -138,6 +141,12 @@ public class StoreManageVO extends PageVO {
 
     /** 매장코드8이상 사용매장여부(값이 있으면 사용, 없으면 미사용)*/
     private String digit8Store;
+
+    /** ERP 연동 매장 등록여부 */
+    private String regYn;
+
+    /** BBQ 매장코드 */
+    private String bbqStoreCd;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -716,6 +725,14 @@ public class StoreManageVO extends PageVO {
         this.srchStoreCd = srchStoreCd;
     }
 
+    public String getSrchStoreNm() {
+        return srchStoreNm;
+    }
+
+    public void setSrchStoreNm(String srchStoreNm) {
+        this.srchStoreNm = srchStoreNm;
+    }
+
     public String getMapStoreCd() {
         return mapStoreCd;
     }
@@ -738,5 +755,21 @@ public class StoreManageVO extends PageVO {
 
     public void setDigit8Store(String digit8Store) {
         this.digit8Store = digit8Store;
+    }
+
+    public String getRegYn() {
+        return regYn;
+    }
+
+    public void setRegYn(String regYn) {
+        this.regYn = regYn;
+    }
+
+    public String getBbqStoreCd() {
+        return bbqStoreCd;
+    }
+
+    public void setBbqStoreCd(String bbqStoreCd) {
+        this.bbqStoreCd = bbqStoreCd;
     }
 }

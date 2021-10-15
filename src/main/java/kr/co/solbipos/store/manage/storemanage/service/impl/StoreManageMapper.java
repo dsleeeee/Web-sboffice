@@ -366,4 +366,15 @@ public interface StoreManageMapper {
     /** 웹사용자아이디 중복체크*/
     int getUserIdCnt(StoreManageVO storeManageVO);
 
+    /** ERP를 연동하는 본사인지 확인 */
+    String getErpLinkHq(StoreManageVO storeManageVO);
+
+    /** ERP 연동 매장 조회 */
+    List<DefaultMap<String>> getErpStore(StoreManageVO storeManageVO);
+
+    /** ERP 연동 매장에 NXPOS_STORE_CD 값 Update */
+    int updateErpStore(StoreManageVO storeManageVO);
+
+    /** 선택한 ERP 연동 매장이 미등록 매장이 맞는지 확인 */
+    int getErpStoreUnRegConfm(StoreManageVO storeManageVO);
 }

@@ -112,4 +112,11 @@ public interface StoreTypeMapper {
 
     /** 매장타입관리 - 메뉴그룹조회(콤보박스용) */
     List<DefaultMap<Object>> getStoreGroupCombo(StoreTypeVO storeTypeVO);
+
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 시 본사상품 > 매장등록 PKG 호출 */
+    String insertHqProductToStore(StoreTypeVO storeTypeVO);
+
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 시 본사 상품 > 매장 등록 > 가격 처리 PKG 호출 */
+    String insertHqProductSalePriceToStore(StoreTypeVO storeTypeVO);
+
 }

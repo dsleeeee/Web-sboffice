@@ -191,7 +191,7 @@
             #{chgDate},
             SQ_TB_MEMBER_POINT_HIST.NEXTVAL,
             '3',
-            #{avablPoint},
+            #{totAdjPoint},
             #{remark},
             #{regDt},
             #{regId},
