@@ -171,8 +171,6 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // SMS충전영수증
     $scope.smsChargeBill = function (data) {
-        alert("준비중");
-
         var cmd = "";
         var height = "";
         // 신용카드
@@ -183,17 +181,12 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
             cmd = "vcnt_bill";
             height = "695";
         }
-        var tno = "16123456789123"; // KCP거래번호
-        var order_no = "TEST2014031013944143"; // 주문번호
-        var trade_mony = data.chargeAmt; // 거래금액
-
+        var tno = data.controlno; // KCP거래번호
+        var order_no = data.approvalnum; // 주문번호 ordr_idxx
+        var trade_mony = data.chargeAmt; // 거래금액 amount
 
         var url = "http://admin8.kcp.co.kr/assist/bill.BillActionNew.do?cmd=" + cmd + "&tno=" + tno + "&order_no=" + order_no + "&trade_mony=" + trade_mony;
         window.open(url, "", "width=470,height=" + height + ",resizable=yes,scrollbars=yes");
-        // https://admin8.kcp.co.kr/assist/bill.BillAction.do?cmd=card_bill&tno=20350231869748&order_no=C00006202004091586415126120&trade_mony=8250
-        // var url = "https://admin8.kcp.co.kr/assist/bill.BillAction.do?cmd=card_bill&tno=20110011111111&order_no=C00006111001111111111111111&trade_mony=1111";
-        // var url = "http://admin8.kcp.co.kr/assist/bill.BillActionNew.do?cmd=card_bill&tno=16123456789123&order_no=TEST2014031013944143&trade_mony=1004";
-        // window.open(url, "", "width=470,height=560,resizable=yes,scrollbars=yes");
     };
 
     // 선택
