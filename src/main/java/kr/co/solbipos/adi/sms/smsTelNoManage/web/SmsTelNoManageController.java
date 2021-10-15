@@ -90,6 +90,73 @@ public class SmsTelNoManageController {
     }
 
     /**
+     * 발신번호관리 - 발신번호 등록 요청 저장
+     *
+     * @param smsTelNoManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.10.14
+     */
+    @RequestMapping(value = "/smsTelNoManage/getSmsTelNoManageSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsTelNoManageSave(@RequestBody SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsTelNoManageService.getSmsTelNoManageSave(smsTelNoManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+    /**
+     * 페이지 이동
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "/smsTelNoManage/getSmsTelNoRegisterRequest.sb", method = RequestMethod.GET)
+    public String getSmsTelNoRegister(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        System.out.println("결과값 받음");
+        System.out.println("res_cd : " + request.getParameterValues("res_cd"));
+        System.out.println("res_msg : " + request.getParameterValues("res_msg"));
+
+        System.out.println("cert_no : " + request.getParameterValues("cert_no"));
+        System.out.println("ordr_idxx : " + request.getParameterValues("ordr_idxx"));
+        System.out.println("enc_cert_data2 : " + request.getParameterValues("enc_cert_data2"));
+        System.out.println("up_hash : " + request.getParameterValues("up_hash"));
+        System.out.println("dn_hash : " + request.getParameterValues("dn_hash"));
+
+        System.out.println("phone_no : " + request.getParameterValues("phone_no"));
+        System.out.println("comm_id : " + request.getParameterValues("comm_id"));
+        System.out.println("user_name : " + request.getParameterValues("user_name"));
+        System.out.println("birth_day : " + request.getParameterValues("birth_day"));
+        System.out.println("sex_code : " + request.getParameterValues("sex_code"));
+        System.out.println("local_code : " + request.getParameterValues("local_code"));
+        System.out.println("ci : " + request.getParameterValues("ci"));
+        System.out.println("di : " + request.getParameterValues("di"));
+        System.out.println("ci_url : " + request.getParameterValues("ci_url"));
+        System.out.println("di_url : " + request.getParameterValues("di_url"));
+        System.out.println("web_siteid : " + request.getParameterValues("web_siteid"));
+
+        if( request.getParameterValues("res_cd").equals( "0000" ) ){
+            SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
+            smsTelNoManageVO.setCertId(request.getParameterValues("cert_no").toString());
+            smsTelNoManageVO.setTelNo(request.getParameterValues("phone_no").toString());
+
+            int result = smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO);
+        }
+        model.addAttribute("res_cd", request.getParameterValues("res_cd").toString());
+
+        return "adi/sms/smsSend/smsTelNoRequest";
+    }
+
+    /**
      * 발신번호관리 저장
      *
      * @param smsTelNoManageVOs

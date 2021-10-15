@@ -92,4 +92,16 @@ public class SmsSendTabController {
         return "adi/sms/smsSendTab/smsSendTab";
     }
 
+    /**
+     * 페이지 이동
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "/smsSendTab/smsTelNoRegister.sb", method = RequestMethod.POST)
+    public void smsTelNoRegister(HttpServletRequest request, HttpServletResponse response, Model model) {
+        System.out.println("본인인증 결과는??");
+    }
+
 }

@@ -28,6 +28,54 @@
         ORDER BY hst.USE_SEQ
     </select>
 
+    <!-- 발신번호관리 - 발신번호 등록 요청 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSmsTelNoManageSave" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.getSmsTelNoManageSave */
+        INSERT INTO HCS_CRTLG_T
+        (
+            CERT_ID,
+            OGN_CD,
+            PROC_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{certId},
+            #{orgnCd},
+            '0',
+            #{modDt},
+            #{modId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 발신번호관리 수정 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getSmsTelNoManageUpdate" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.getSmsTelNoManageUpdate */
+        UPDATE
+            HCS_CRTLG_T
+        SET
+            PROC_FG = "1",
+            RES_RECV_NUMBER = SBPENC.E(#{telNo})
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE 1=1
+            AND CERT_ID = #{certId}
+            AND ONG_CD = #{certId}
+    </update>
+
     <!-- 발신번호관리 저장 -->
     <!--
         TABLE    :
@@ -36,14 +84,13 @@
     <update id="getSmsTelNoManageSaveUpdate" parameterType="SmsTelNoManageVO">
         /* SmsTelNoManageMapper.getSmsTelNoManageSaveUpdate */
         UPDATE
-        HCS_SENDM_T
+            HCS_SENDM_T
         SET
-        USE_SEQ = #{useSeq},
-        MOD_DT = #{modDt},
-        MOD_ID = #{modId}
+            USE_SEQ = #{useSeq},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
         WHERE 1=1
-        AND OGN_CD = #{orgnCd}
-        AND TEL_NO = SBPENC.E(#{telNo})
+          AND OGN_CD = #{orgnCd}
+          AND TEL_NO = SBPENC.E(#{telNo})
     </update>
-
 </mapper>

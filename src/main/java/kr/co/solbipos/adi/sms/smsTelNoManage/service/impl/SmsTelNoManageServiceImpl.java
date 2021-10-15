@@ -1,5 +1,6 @@
 package kr.co.solbipos.adi.sms.smsTelNoManage.service.impl;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -48,6 +49,41 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
         return smsTelNoManageMapper.getSmsTelNoManageList(smsTelNoManageVO);
+    }
+
+    /** 발신번호관리 - 발신번호 등록 요청 저장 */
+    @Override
+    public int getSmsTelNoManageSave(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        String currentDt = currentDateTimeString();
+
+        smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        smsTelNoManageVO.setModDt(currentDt);
+        smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt = smsTelNoManageMapper.getSmsTelNoManageSave(smsTelNoManageVO);
+
+        return procCnt;
+    }
+
+    @Override
+    public int getSmsTelNoManageUpdate(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        String currentDt = currentDateTimeString();
+
+        smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        smsTelNoManageVO.setModDt(currentDt);
+        smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt = smsTelNoManageMapper.getSmsTelNoManageUpdate(smsTelNoManageVO);
+
+        return procCnt;
     }
 
     /** 발신번호관리 저장 */

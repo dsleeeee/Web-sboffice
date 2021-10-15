@@ -30,6 +30,9 @@ public class SmsTelNoManageVO extends PageVO {
     /** 노출우선순위 */
     private String useSeq;
 
+    /** 관리요청번호 */
+    private String certId;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -45,4 +48,12 @@ public class SmsTelNoManageVO extends PageVO {
     public String getUseSeq() { return useSeq; }
 
     public void setUseSeq(String useSeq) { this.useSeq = useSeq; }
+
+    public String getCertId() {
+        return certId;
+    }
+
+    public void setCertId(String certId) {
+        this.certId = certId;
+    }
 }
