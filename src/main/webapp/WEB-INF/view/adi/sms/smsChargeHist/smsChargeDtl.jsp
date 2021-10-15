@@ -17,8 +17,10 @@
         <div class="wj-dialog-body">
             <div class="mb10 oh sb-select dkbr">
                 <c:if test="${orgnFg eq 'MASTER'}">
-                    <%-- 결제취소 --%>
-                    <button class="btn_skyblue ml5 fr" id="btnSmsChargeCencel" onclick="jsf__cancel(document.cancel_info);"><s:message code="smsChargeDtl.smsChargeCencel" /></button>
+                    <div id="divCancel" style="display: none;">
+                            <%-- 결제취소 --%>
+                        <button class="btn_skyblue ml5 fr" id="btnSmsChargeCancel" onclick="jsf__cancel(document.cancel_info);"><s:message code="smsChargeDtl.smsChargeCencel" /></button>
+                    </div>
                 </c:if>
             </div>
             <table class="tblType01">
@@ -160,4 +162,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211011.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211015.01" charset="utf-8"></script>

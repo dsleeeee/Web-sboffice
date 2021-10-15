@@ -42,6 +42,12 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#controlnoDtl").val(data.controlno);
             $scope.successYnDtlCombo.selectedValue = data.successYn;
             $("#resultmessageDtl").val(data.resultmessage);
+
+            if(data.successYn == "Y") {
+                $("#divCancel").css('display', '');
+            } else {
+                $("#divCancel").css('display', 'none');
+            }
         } else {
             $("#orgnNmDtl").val("");
             $("#chargeIdNmDtl").val("");
@@ -53,6 +59,8 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#controlnoDtl").val("");
             $("#successYnDtl").val("");
             $("#resultmessageDtl").val("");
+
+            $("#divCancel").css('display', 'none');
         }
         event.preventDefault();
     });
