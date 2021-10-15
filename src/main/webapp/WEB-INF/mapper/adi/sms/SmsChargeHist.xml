@@ -28,9 +28,10 @@
         cpt.CHARGE_TIME,
         cpt.PGRESOURCE,
         cpt.CONTROLNO,
+        cpt.APPROVALNUM,
         cpt.CHARGE_AMT,
-        cpt.SMS_BASE_QTY,
-        cpt.SMS_CHARGE_QTY,
+        NVL(cpt.SMS_BASE_QTY, 0) AS SMS_BASE_QTY,
+        NVL(cpt.SMS_CHARGE_QTY, 0) AS SMS_CHARGE_QTY,
         cpt.SUCCESS_YN,
         (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = cpt.CHARGE_ID) AS CHARGE_ID_NM,
         cpt.RESULTMESSAGE
