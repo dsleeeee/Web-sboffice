@@ -166,8 +166,8 @@
 
             ordr_data_set_no = c_PayPlus.mf_add_set( "ordr_data" );
 
-            c_PayPlus.mf_set_us( ordr_data_set_no, "ordr_mony", "1" );
-
+//            c_PayPlus.mf_set_us( ordr_data_set_no, "ordr_mony", "1" );
+            c_PayPlus.mf_set_us( ordr_data_set_no, "ordr_mony", f_get_parm( request.getParameter( "good_mny" ) ) );
 
     }
 
@@ -367,8 +367,17 @@
             // 07-1-1. 신용카드
             if ( use_pay_method.equals( "100000000000" ) )
             {
+                System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
+                System.out.println("충전결제 >>> app_time : " + app_time);
+                System.out.println("충전결제 >>> amount : " + amount);
+                System.out.println("충전결제 >>> successYn : Y");
+                System.out.println("충전결제 >>> tno : " + tno);
+                System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
+                System.out.println("충전결제 >>> ordr_res_cdidxx : " + res_cd);
+                System.out.println("충전결제 >>> res_msg : " + res_msg);
+
                 // DB 호출
-                goSave = "smsChargeSave('" + use_pay_method + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
+                goSave = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
 
                 // 07-1-1-1. 복합결제(신용카드+포인트)
                 if ( pnt_issue.equals( "SCSK" ) || pnt_issue.equals( "SCWB" ) )
@@ -409,8 +418,17 @@
         /* = -------------------------------------------------------------------------- = */
         if( !"0000".equals ( res_cd ) )
         {
+            System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
+            System.out.println("충전결제 >>> app_time : " + app_time);
+            System.out.println("충전결제 >>> amount : " + amount);
+            System.out.println("충전결제 >>> successYn : Y");
+            System.out.println("충전결제 >>> tno : " + tno);
+            System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
+            System.out.println("충전결제 >>> ordr_res_cdidxx : " + res_cd);
+            System.out.println("충전결제 >>> res_msg : " + res_msg);
+
             // DB 호출
-            goSave = "smsChargeSave('" + use_pay_method + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
+            goSave = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
         }
 
         System.out.println("충전결제 >>> DB insert >>> end");
@@ -484,21 +502,31 @@
     /* -----------------------------------------------------------------------------= */
 %>
 
+<script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=2019072403" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=2018100401" charset="utf-8"></script>
 <script>
     <%=goSave%>
 
-    function smsChargeSave(use_pay_method, amount, successYn, tno, ordr_idxx, res_cd, res_msg)
+    // 결제내역 저장
+    function pp_fun_smsChargeSave(use_pay_method, app_time, amount, successYn, tno, ordr_idxx, res_cd, res_msg)
     {
         var params = {};
         if(use_pay_method == "100000000000") {
             params.pgresource = "11"; // 신용카드
         }
+        params.chargeTime = app_time; // 승인시간
         params.chargeAmt = amount; // KCP 실제 거래 금액
         params.successYn = successYn; // 결제성공여부
         params.controlno = tno; // KCP 거래번호
         params.approvalnum = ordr_idxx; // 주문번호
         params.resultcode = res_cd; // 결과 코드
         params.resultmessage = res_msg; // 결과 메세지
+
+        $.postJSONSave("/adi/sms/smsCharge/smsCharge/getSmsChargeSaveInsert.sb", params, function (result) {
+            }
+            , function (result) {
+            });
     }
 </script>
 
