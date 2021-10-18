@@ -78,7 +78,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     ];
 
     $("#lblMarketingSmsSendStoreNmInfo").text("(광고)" +  "");
-    $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-000-0000");
+    $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-936-2859");
     $("#lblMarketingSmsSendTxtByte").text("0");
     $("#lblMarketingSmsSendMsgType").text("SMS");
     $("#lblMarketingSmsSendSmsQty").text("0");

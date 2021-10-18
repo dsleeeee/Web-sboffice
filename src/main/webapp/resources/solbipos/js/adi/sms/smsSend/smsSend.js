@@ -39,7 +39,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
 
     $("#lblStoreNmInfo").text("(광고)" +  "");
-    $("#lblMemoInfo").text("(무료수신거부)" +  "080-000-0000");
+    $("#lblMemoInfo").text("(무료수신거부)" +  "080-936-2859");
     $("#lblTxtByte").text("0");
     $("#lblMsgType").text("SMS");
     $("#lblSmsQty").text("0");
