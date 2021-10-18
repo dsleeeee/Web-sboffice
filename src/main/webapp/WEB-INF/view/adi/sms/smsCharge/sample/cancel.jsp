@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html;charset=euc-kr"%>
+
+<%
+    String goCancel = "";
+//    goCancel = "alert(1);";
+%>
+
 <%
     /* ============================================================================== */
     /* =   PAGE : 지불 요청 및 결과 처리 PAGE                                       = */
@@ -233,6 +239,14 @@
         out.println( "쿠폰 금액: "      + coupon_mny + "<br>");
         out.println( "취소 시간: "      + canc_time  + "<br>");
         out.println( "결과메세지 : "    + res_msg    + "<p>");
+
+        System.out.println("충전결제 >>> canc_time : " + canc_time);
+        System.out.println("충전결제 >>> tno : " + tno);
+
+        // DB 호출
+        goCancel = "pp_fun_smsChargeCancel('" + canc_time + "', '" + tno + "');";
+
+        System.out.println("결제취소 >>> DB insert >>> end");
     }
     else if ( res_cd.equals( "0000" ) && mod_type.equals( "STPC"))
     {
@@ -262,3 +276,24 @@
     /* =   07. 취소 결과 출력 END                                                   = */
     /* ============================================================================== */
 %>
+
+<script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=2019072403" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=2018100401" charset="utf-8"></script>
+<script>
+    <%=goCancel%>
+
+    // 결제내역 저장
+    function pp_fun_smsChargeCancel(canc_time, tno)
+    {
+        var params = {};
+        params.rtnTime = canc_time; // 취소시간
+        params.successYn = "R"; // 결제성공여부
+        params.controlno = tno; // KCP 거래번호
+
+        $.postJSONSave("/adi/sms/smsCharge/smsCharge/getSmsChargeSaveUpdate.sb", params, function (result) {
+            }
+            , function (result) {
+            });
+    }
+</script>
