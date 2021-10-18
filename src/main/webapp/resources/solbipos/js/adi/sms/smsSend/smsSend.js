@@ -724,7 +724,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         // 첨부파일 초기화
         $scope.clearSmsFile();
 
-        $scope.wjSmsSendViewPopLayer.hide();
+        $scope.wjSmsSendLayer.hide();
         event.preventDefault();
     };
 }]);
