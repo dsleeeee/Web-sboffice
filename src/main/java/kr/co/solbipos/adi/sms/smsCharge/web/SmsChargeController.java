@@ -67,4 +67,80 @@ public class SmsChargeController {
 //        return "adi/sms/smsCharge/sample/order";
     }
 
+    /**
+     * 충전결제
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "/smsCharge/charge.sb", method = RequestMethod.POST)
+    public String charge(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        return "adi/sms/smsCharge/sample/pp_cli_hub";
+    }
+    @RequestMapping(value = "/smsCharge/chargeResult.sb", method = RequestMethod.POST)
+    public String chargeResult(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        return "adi/sms/smsCharge/sample/result";
+    }
+
+    /**
+     * 결제취소
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "/smsCharge/cancel.sb", method = RequestMethod.POST)
+    public String cancel(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        return "adi/sms/smsCharge/sample/cancel";
+    }
+
+    /**
+     * 충전결제 저장
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 10. 13.
+     */
+    @RequestMapping(value = "/smsCharge/getSmsChargeSaveInsert.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsChargeSaveInsert(@RequestBody SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsChargeService.getSmsChargeSaveInsert(smsChargeVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 결제취소 저장
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 10. 13.
+     */
+    @RequestMapping(value = "/smsCharge/getSmsChargeSaveUpdate.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsChargeSaveUpdate(@RequestBody SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsChargeService.getSmsChargeSaveUpdate(smsChargeVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

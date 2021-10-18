@@ -22,4 +22,9 @@ import java.util.List;
  */
 public interface SmsChargeService {
 
+    /** 충전결제 저장 */
+    int getSmsChargeSaveInsert(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
+
+    /** 결제취소 저장 */
+    int getSmsChargeSaveUpdate(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
 }
