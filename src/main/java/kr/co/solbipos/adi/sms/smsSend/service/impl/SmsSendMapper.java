@@ -40,8 +40,12 @@ public interface SmsSendMapper {
     int getSmsSendReserveSaveInsert(SmsSendVO smsSendVO);
     int getSmsSendReserveSaveInsertLMS(SmsSendVO smsSendVO);
 
+    /** 전송,예약 1000건 저장 insert */
+    int getSmsSendReserve1000SaveInsert(SmsSendVO smsSendVO);
+    int getSmsSendReserve1000SaveInsertLMS(SmsSendVO smsSendVO);
+
     /** 잔여수량 조회 */
-    String getSmsQty(SmsSendVO smsSendVO);
+    String getSmsQtySelect(SmsSendVO smsSendVO);
 
     /** 잔여수량 저장 update */
     int getSmsQtySaveUpdate(SmsSendVO smsSendVO);

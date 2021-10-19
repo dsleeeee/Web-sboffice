@@ -42,6 +42,12 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#controlnoDtl").val(data.controlno);
             $scope.successYnDtlCombo.selectedValue = data.successYn;
             $("#resultmessageDtl").val(data.resultmessage);
+
+            if(data.successYn == "Y") {
+                $("#divCancel").css('display', '');
+            } else {
+                $("#divCancel").css('display', 'none');
+            }
         } else {
             $("#orgnNmDtl").val("");
             $("#chargeIdNmDtl").val("");
@@ -53,15 +59,12 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#controlnoDtl").val("");
             $("#successYnDtl").val("");
             $("#resultmessageDtl").val("");
+
+            $("#divCancel").css('display', 'none');
         }
         event.preventDefault();
     });
     // <-- //검색 호출 -->
-
-    // 결제취소
-    $scope.smsChargeCencel = function () {
-        alert("준비중");
-    };
 
     // 팝업 닫기
     $scope.close = function(){

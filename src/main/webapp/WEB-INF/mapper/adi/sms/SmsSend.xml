@@ -196,15 +196,175 @@
         )
     </insert>
 
+    <!-- 전송,예약 1000건 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS : SMS 발송
+    -->
+    <insert id="getSmsSendReserve1000SaveInsert" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsSendReserve1000SaveInsert */
+        INSERT INTO SDK_SMS_SEND_ENC_READY
+        (
+            SMS_READY_SEQ,
+            SMS_SEND_SEQ,
+            READY_FG,
+            MSG_ID,
+            USER_ID,
+            SCHEDULE_TYPE,
+            NOW_DATE,
+            SEND_DATE,
+            DEST_TYPE,
+            DEST_COUNT,
+            DEST_INFO,
+            CALLBACK,
+            SUBJECT,
+            SMS_MSG,
+            CALLBACK_URL,
+            KT_OFFICE_CODE,
+            CDR_ID,
+            RESERVED1,
+            RESERVED2,
+            RESERVED3,
+            RESERVED4,
+            RESERVED5,
+            RESERVED6,
+            RESERVED7,
+            RESERVED8,
+            RESERVED9,
+            SEND_STATUS,
+            SEND_COUNT,
+            SEND_RESULT,
+            SEND_PROC_TIME,
+            STD_ID,
+            PROC_DT,
+            PROC_REMARK
+        ) VALUES (
+            HCS_SMS_READY_REG_S.NEXTVAL, --SMS_READY_SEQ,
+            #{smsSendSeq}, --SMS_SEND_SEQ,
+            '0', --READY_FG,
+            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{smsOgnCd}, --USER_ID,
+            #{reserveYn}, --SCHEDULE_TYPE,
+            #{regDt}, --NOW_DATE,
+            #{sendDate}, --SEND_DATE,
+            0, --DEST_TYPE,
+            1, --DEST_COUNT,
+            SBPENC.E(''||'^'|| #{phoneNumber}), --DEST_INFO,
+            SBPENC.E(#{callback}), --CALLBACK,
+            #{title}, --SUBJECT,
+            #{content}, --SMS_MSG,
+            '', --CALLBACK_URL,
+            '', --KT_OFFICE_CODE,
+            '', --CDR_ID,
+            '', --RESERVED1,
+            #{cstOgnCd}, --RESERVED2,
+            #{cstNo}, --RESERVED3,
+            #{rrOrgnCd}, --RESERVED4,
+            #{rrOrgnFg}, --RESERVED5,
+            #{rrUserId}, --RESERVED6,
+            #{ssOrgnCd}, --RESERVED7,
+            #{ssUserId}, --RESERVED8,
+            #{smsSendSeq}, --RESERVED9,
+            0, --SEND_STATUS,
+            0, --SEND_COUNT,
+            0, --SEND_RESULT,
+            '', --SEND_PROC_TIME,
+            '', --STD_ID,
+            '', --PROC_DT,
+            '' --PROC_REMARK
+        )
+    </insert>
+
+    <!-- 전송,예약 1000건 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS : LMS/MMS 발송
+    -->
+    <insert id="getSmsSendReserve1000SaveInsertLMS" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsSendReserve1000SaveInsertLMS */
+        INSERT INTO SDK_MMS_SEND_ENC_READY
+        (
+            SMS_READY_SEQ,
+            SMS_SEND_SEQ,
+            READY_FG,
+            MSG_ID,
+            USER_ID,
+            SCHEDULE_TYPE,
+            NOW_DATE,
+            SEND_DATE,
+            DEST_COUNT,
+            DEST_INFO,
+            CALLBACK,
+            SUBJECT,
+            MSG_TYPE,
+            MMS_MSG,
+            CONTENT_COUNT,
+            CONTENT_DATA,
+            KT_OFFICE_CODE,
+            CDR_ID,
+            RESERVED1,
+            RESERVED2,
+            RESERVED3,
+            RESERVED4,
+            RESERVED5,
+            RESERVED6,
+            RESERVED7,
+            RESERVED8,
+            RESERVED9,
+            SEND_STATUS,
+            SEND_COUNT,
+            SEND_RESULT,
+            SEND_PROC_TIME,
+            STD_ID,
+            PROC_DT,
+            PROC_REMARK
+        ) VALUES (
+            HCS_SMS_READY_REG_S.NEXTVAL, --SMS_READY_SEQ,
+            #{smsSendSeq}, --SMS_SEND_SEQ,
+            '0', --READY_FG,
+            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{smsOgnCd}, --USER_ID,
+            #{reserveYn}, --SCHEDULE_TYPE,
+            #{regDt}, --NOW_DATE,
+            #{sendDate}, --SEND_DATE,
+            1, --DEST_COUNT,
+            SBPENC.E(''||'^'|| #{phoneNumber}), --DEST_INFO,
+            SBPENC.E(#{callback}), --CALLBACK,
+            #{title}, --SUBJECT,
+            0, --MSG_TYPE,
+            #{content}, --MMS_MSG,
+            #{contentCount}, --CONTENT_COUNT,
+            #{contentData}, --CONTENT_DATA,
+            '', --KT_OFFICE_CODE,
+            '', --CDR_ID,
+            '', --RESERVED1,
+            #{cstOgnCd}, --RESERVED2,
+            #{cstNo}, --RESERVED3,
+            #{rrOrgnCd}, --RESERVED4,
+            #{rrOrgnFg}, --RESERVED5,
+            #{rrUserId}, --RESERVED6,
+            #{ssOrgnCd}, --RESERVED7,
+            #{ssUserId}, --RESERVED8,
+            #{smsSendSeq}, --RESERVED9,
+            0, --SEND_STATUS,
+            0, --SEND_COUNT,
+            0, --SEND_RESULT,
+            '', --SEND_PROC_TIME,
+            '', --STD_ID,
+            '', --PROC_DT,
+            '' --PROC_REMARK
+        )
+    </insert>
+
     <!-- 잔여수량 조회 -->
     <!--
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <select id="getSmsQty" parameterType="SmsSendVO" resultType="String">
-        /* SmsSendMapper.getSmsQty */
+    <select id="getSmsQtySelect" parameterType="SmsSendVO" resultType="String">
+        /* SmsSendMapper.getSmsQtySelect */
         SELECT
-        (cst.SMS_QTY -1) AS SMS_QTY
+        cst.SMS_QTY AS SMS_QTY
         FROM CET_SMSPT_T cst
         WHERE 1=1
         AND cst.OGN_CD = #{orgnCd}

@@ -72,6 +72,27 @@ public class SmsChargeHistVO extends PageVO {
     /** 잔여수량 */
     private String smsQty;
 
+    /** 충전일자 */
+    private String chargeDate;
+
+    /** 충전시각 */
+    private String chargeTime;
+
+    /** 충전금액 */
+    private String chargeAmt;
+
+    /** KICC승인번호 */
+    private String controlno;
+
+    /** 승인번호 */
+    private String approvalnum;
+
+    /** 결과코드 */
+    private String resultcode;
+
+    /** 결과메세지 */
+    private String resultmessage;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -139,4 +160,32 @@ public class SmsChargeHistVO extends PageVO {
     public String getSmsQty() { return smsQty; }
 
     public void setSmsQty(String smsQty) {  this.smsQty = smsQty; }
+
+    public String getChargeDate() { return chargeDate; }
+
+    public void setChargeDate(String chargeDate) { this.chargeDate = chargeDate; }
+
+    public String getChargeTime() { return chargeTime; }
+
+    public void setChargeTime(String chargeTime) { this.chargeTime = chargeTime; }
+
+    public String getChargeAmt() { return chargeAmt; }
+
+    public void setChargeAmt(String chargeAmt) { this.chargeAmt = chargeAmt; }
+
+    public String getControlno() { return controlno; }
+
+    public void setControlno(String controlno) { this.controlno = controlno; }
+
+    public String getApprovalnum() { return approvalnum; }
+
+    public void setApprovalnum(String approvalnum) { this.approvalnum = approvalnum; }
+
+    public String getResultcode() { return resultcode; }
+
+    public void setResultcode(String resultcode) { this.resultcode = resultcode; }
+
+    public String getResultmessage() { return resultmessage; }
+
+    public void setResultmessage(String resultmessage) { this.resultmessage = resultmessage; }
 }

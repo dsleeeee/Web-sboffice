@@ -14,8 +14,9 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.DateUtil.currentDateString;
+import static kr.co.common.utils.DateUtil.currentTimeString;
 
 /**
  * @Class Name : SmsChargeHistServiceImpl.java
@@ -71,12 +72,24 @@ public class SmsChargeHistServiceImpl implements SmsChargeHistService {
 
         int procCnt = 0;
         String currentDt = currentDateTimeString();
+        String currentDate = currentDateString();
+        String currentTime = currentTimeString();
 
         smsChargeHistVO.setOrgnCd(sessionInfoVO.getOrgnCd());
         smsChargeHistVO.setRegDt(currentDt);
         smsChargeHistVO.setRegId(sessionInfoVO.getUserId());
         smsChargeHistVO.setModDt(currentDt);
         smsChargeHistVO.setModId(sessionInfoVO.getUserId());
+
+        smsChargeHistVO.setChargeDate(currentDate);
+        smsChargeHistVO.setChargeTime(currentTime);
+        smsChargeHistVO.setPgresource("*");
+        smsChargeHistVO.setChargeAmt("0"); // 충전금액
+        smsChargeHistVO.setSuccessYn("Y");
+        smsChargeHistVO.setControlno("*");
+        smsChargeHistVO.setApprovalnum("");
+        smsChargeHistVO.setResultcode("0000");
+        smsChargeHistVO.setResultmessage("임의등록");
 
         procCnt = smsChargeHistMapper.getSmsChargeRegistSaveInsert(smsChargeHistVO);
 

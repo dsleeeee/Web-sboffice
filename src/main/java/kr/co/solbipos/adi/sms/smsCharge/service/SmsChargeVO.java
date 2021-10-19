@@ -21,4 +21,115 @@ public class SmsChargeVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
+    /** 소속코드 */
+    private String orgnCd;
+
+    /** 충전일자 */
+    private String chargeDate;
+
+    /** 충전시각 */
+    private String chargeTime;
+
+    /** 결제수단 */
+    private String pgresource;
+
+    /** 충전금액 */
+    private String chargeAmt;
+
+    /** 결제성공여부 */
+    private String successYn;
+
+    /** KICC승인번호 */
+    private String controlno;
+
+    /** 승인번호 */
+    private String approvalnum;
+
+    /** 결과코드 */
+    private String resultcode;
+
+    /** 결과메세지 */
+    private String resultmessage;
+
+    /** SMS 기초수량 */
+    private String smsBaseQty;
+
+    /** SMS 충전수량 */
+    private String smsChargeQty;
+
+    /** 잔여수량 */
+    private String smsQty;
+
+    /** 소속코드 */
+    private String selectOrgnCd;
+
+    /** 결제취소일자 */
+    private String rtnDate;
+
+    /** 결제취소시각 */
+    private String rtnTime;
+
+    public String getOrgnCd() { return orgnCd; }
+
+    public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
+
+    public String getChargeDate() { return chargeDate; }
+
+    public void setChargeDate(String chargeDate) { this.chargeDate = chargeDate; }
+
+    public String getChargeTime() { return chargeTime; }
+
+    public void setChargeTime(String chargeTime) { this.chargeTime = chargeTime; }
+
+    public String getPgresource() { return pgresource; }
+
+    public void setPgresource(String pgresource) { this.pgresource = pgresource; }
+
+    public String getChargeAmt() { return chargeAmt; }
+
+    public void setChargeAmt(String chargeAmt) { this.chargeAmt = chargeAmt; }
+
+    public String getSuccessYn() { return successYn; }
+
+    public void setSuccessYn(String successYn) { this.successYn = successYn; }
+
+    public String getControlno() { return controlno; }
+
+    public void setControlno(String controlno) { this.controlno = controlno; }
+
+    public String getApprovalnum() { return approvalnum; }
+
+    public void setApprovalnum(String approvalnum) { this.approvalnum = approvalnum; }
+
+    public String getResultcode() { return resultcode; }
+
+    public void setResultcode(String resultcode) { this.resultcode = resultcode; }
+
+    public String getResultmessage() { return resultmessage; }
+
+    public void setResultmessage(String resultmessage) { this.resultmessage = resultmessage; }
+
+    public String getSmsBaseQty() { return smsBaseQty; }
+
+    public void setSmsBaseQty(String smsBaseQty) { this.smsBaseQty = smsBaseQty; }
+
+    public String getSmsChargeQty() { return smsChargeQty; }
+
+    public void setSmsChargeQty(String smsChargeQty) { this.smsChargeQty = smsChargeQty; }
+
+    public String getSmsQty() { return smsQty; }
+
+    public void setSmsQty(String smsQty) {  this.smsQty = smsQty; }
+
+    public String getSelectOrgnCd() { return selectOrgnCd; }
+
+    public void setSelectOrgnCd(String selectOrgnCd) { this.selectOrgnCd = selectOrgnCd; }
+
+    public String getRtnDate() { return rtnDate; }
+
+    public void setRtnDate(String rtnDate) { this.rtnDate = rtnDate; }
+
+    public String getRtnTime() { return rtnTime; }
+
+    public void setRtnTime(String rtnTime) { this.rtnTime = rtnTime; }
 }

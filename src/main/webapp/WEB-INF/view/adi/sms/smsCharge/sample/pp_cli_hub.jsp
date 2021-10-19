@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html;charset=euc-kr"%>
 
 <%
+    String goSave = "";
+//    goSave = "alert(1);";
+%>
+
+<%
     /* ============================================================================== */
     /* =   PAGE : 지불 요청 및 결과 처리 PAGE                                       = */
     /* = -------------------------------------------------------------------------- = */
@@ -38,7 +43,9 @@
     /* ============================================================================== */
     /* =   POST 형식 체크부분                                                       = */
     /* = -------------------------------------------------------------------------- = */
-    if ( request.getMethod() != "POST" )
+    System.out.println("충전결제 >>> 01.pp_cli_hub.jsp 호출 >>> request.getMethod() : " + request.getMethod());
+
+    if ( !request.getMethod().equals("POST") )
     {
         out.println("잘못된 경로로 접속하였습니다.");
         return;
@@ -122,11 +129,18 @@
     /* = -------------------------------------------------------------------------- = */
     /* =       결제에 필요한 인스턴스를 생성하고 초기화 합니다.                     = */
     /* = -------------------------------------------------------------------------- = */
+    System.out.println("충전결제 >>> 03.인스턴스 생성 및 초기화 >>> start");
+    System.out.println("충전결제 >>> g_conf_gw_url : " + g_conf_gw_url);
+    System.out.println("충전결제 >>> g_conf_gw_port : " + g_conf_gw_port);
+    System.out.println("충전결제 >>> g_conf_tx_mode : " + g_conf_tx_mode);
+    System.out.println("충전결제 >>> g_conf_log_dir : " + g_conf_log_dir);
+
     J_PP_CLI_N c_PayPlus = new J_PP_CLI_N();
 
     c_PayPlus.mf_init( "", g_conf_gw_url, g_conf_gw_port, g_conf_tx_mode, g_conf_log_dir );
     c_PayPlus.mf_init_set();
 
+    System.out.println("충전결제 >>> 03.인스턴스 생성 및 초기화 >>> end");
     /* ============================================================================== */
     /* =   03. 인스턴스 생성 및 초기화 END                                          = */
     /* ============================================================================== */
@@ -138,6 +152,9 @@
     /* = -------------------------------------------------------------------------- = */
     /* =   04-1. 승인 요청 정보 설정                                                = */
     /* = -------------------------------------------------------------------------- = */
+    System.out.println("충전결제 >>> 04-1.승인 요청 정보 설정 >>> start");
+    System.out.println("충전결제 >>> req_tx : " + req_tx);
+
     if ( req_tx.equals( "pay" ) )
     {
             c_PayPlus.mf_set_enc_data( f_get_parm( request.getParameter( "enc_data" ) ),
@@ -149,10 +166,12 @@
 
             ordr_data_set_no = c_PayPlus.mf_add_set( "ordr_data" );
 
-            c_PayPlus.mf_set_us( ordr_data_set_no, "ordr_mony", "1" );
-
+//            c_PayPlus.mf_set_us( ordr_data_set_no, "ordr_mony", "1" );
+            c_PayPlus.mf_set_us( ordr_data_set_no, "ordr_mony", f_get_parm( request.getParameter( "good_mny" ) ) );
 
     }
+
+    System.out.println("충전결제 >>> 04-1.승인 요청 정보 설정 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   04. 처리 요청 정보 설정 END                                              = */
     /* = ========================================================================== = */
@@ -161,6 +180,13 @@
     /* = ========================================================================== = */
     /* =   05. 실행                                                                 = */
     /* = -------------------------------------------------------------------------- = */
+    System.out.println("충전결제 >>> 05.실행 >>> start");
+    System.out.println("충전결제 >>> tran_cd : " + tran_cd);
+    System.out.println("충전결제 >>> g_conf_site_cd : " + g_conf_site_cd);
+    System.out.println("충전결제 >>> g_conf_site_key : " + g_conf_site_key);
+    System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
+    System.out.println("충전결제 >>> g_conf_log_level : " + g_conf_log_level);
+
     if ( tran_cd.length() > 0 )
     {
         c_PayPlus.mf_do_tx( g_conf_site_cd, g_conf_site_key, tran_cd, "", ordr_idxx, g_conf_log_level, "0" );
@@ -171,8 +197,12 @@
         c_PayPlus.m_res_msg = "연동 오류|tran_cd값이 설정되지 않았습니다.";
     }
 
-        res_cd  = c_PayPlus.m_res_cd;  // 결과 코드
-        res_msg = c_PayPlus.m_res_msg; // 결과 메시지
+    res_cd  = c_PayPlus.m_res_cd;  // 결과 코드
+    res_msg = c_PayPlus.m_res_msg; // 결과 메시지
+
+    System.out.println("충전결제 >>> res_cd : " + res_cd);
+    System.out.println("충전결제 >>> res_msg : " + res_msg);
+    System.out.println("충전결제 >>> 05.실행 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   05. 실행 END                                                             = */
     /* ============================================================================== */
@@ -181,6 +211,11 @@
     /* ============================================================================== */
     /* =   06. 승인 결과 값 추출                                                    = */
     /* = -------------------------------------------------------------------------- = */
+    System.out.println("충전결제 >>> 06.승인 결과 값 추출 >>> start");
+    System.out.println("충전결제 >>> req_tx : " + req_tx);
+    System.out.println("충전결제 >>> res_cd : " + res_cd);
+    System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
+
     if ( req_tx.equals( "pay" ) )
     {
         if ( res_cd.equals( "0000" ) )
@@ -189,6 +224,11 @@
             amount    = c_PayPlus.mf_get_res( "amount"    ); // KCP 실제 거래 금액
             pnt_issue = c_PayPlus.mf_get_res( "pnt_issue" ); // 결제 포인트사 코드
             coupon_mny = c_PayPlus.mf_get_res( "coupon_mny" ); // 쿠폰금액
+
+            System.out.println("충전결제 >>> tno : " + tno);
+            System.out.println("충전결제 >>> amount : " + amount);
+            System.out.println("충전결제 >>> pnt_issue : " + pnt_issue);
+            System.out.println("충전결제 >>> coupon_mny : " + coupon_mny);
 
     /* = -------------------------------------------------------------------------- = */
     /* =   06-1. 신용카드 승인 결과 처리                                            = */
@@ -205,6 +245,17 @@
                 card_bin_type_01 = c_PayPlus.mf_get_res( "card_bin_type_01" ); // 카드구분1
                 card_bin_type_02 = c_PayPlus.mf_get_res( "card_bin_type_02" ); // 카드구분2
                 card_mny = c_PayPlus.mf_get_res( "card_mny" ); // 카드결제금액
+
+                System.out.println("충전결제 >>> card_cd : " + card_cd);
+                System.out.println("충전결제 >>> card_name : " + card_name);
+                System.out.println("충전결제 >>> app_time : " + app_time);
+                System.out.println("충전결제 >>> app_no : " + app_no);
+                System.out.println("충전결제 >>> noinf : " + noinf);
+                System.out.println("충전결제 >>> quota : " + quota);
+                System.out.println("충전결제 >>> partcanc_yn : " + partcanc_yn);
+                System.out.println("충전결제 >>> card_bin_type_01 : " + card_bin_type_01);
+                System.out.println("충전결제 >>> card_bin_type_02 : " + card_bin_type_02);
+                System.out.println("충전결제 >>> card_mny : " + card_mny);
 
                 /* = -------------------------------------------------------------- = */
                 /* =   06-1.1. 복합결제(포인트+신용카드) 승인 결과 처리             = */
@@ -282,6 +333,8 @@
             cash_no     = c_PayPlus.mf_get_res( "cash_no"     ); // 현금영수증 거래번호
         }
     }
+
+    System.out.println("충전결제 >>> 06.승인 결과 값 추출 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   06. 승인 결과 처리 END                                                   = */
     /* ============================================================================== */
@@ -292,6 +345,11 @@
     /* = -------------------------------------------------------------------------- = */
     /* =      결과를 업체 자체적으로 DB 처리 작업하시는 부분입니다.                 = */
     /* = -------------------------------------------------------------------------- = */
+    System.out.println("충전결제 >>> 07.승인 및 실패 결과 DB 처리 >>> start");
+    System.out.println("충전결제 >>> req_tx : " + req_tx);
+    System.out.println("충전결제 >>> res_cd : " + res_cd);
+    System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
+    System.out.println("충전결제 >>> pnt_issue : " + pnt_issue);
 
     if ( req_tx.equals( "pay" ) )
     {
@@ -301,11 +359,26 @@
     /* = -------------------------------------------------------------------------- = */
     /* =        각 결제수단을 구분하시어 DB 처리를 하시기 바랍니다.                 = */
     /* = -------------------------------------------------------------------------- = */
+
+        System.out.println("충전결제 >>> DB insert >>> start");
+
         if ( res_cd.equals( "0000" ) )
         {
             // 07-1-1. 신용카드
             if ( use_pay_method.equals( "100000000000" ) )
             {
+                System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
+                System.out.println("충전결제 >>> app_time : " + app_time);
+                System.out.println("충전결제 >>> amount : " + amount);
+                System.out.println("충전결제 >>> successYn : Y");
+                System.out.println("충전결제 >>> tno : " + tno);
+                System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
+                System.out.println("충전결제 >>> ordr_res_cdidxx : " + res_cd);
+                System.out.println("충전결제 >>> res_msg : " + res_msg);
+
+                // DB 호출
+                goSave = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
+
                 // 07-1-1-1. 복합결제(신용카드+포인트)
                 if ( pnt_issue.equals( "SCSK" ) || pnt_issue.equals( "SCWB" ) )
                 {
@@ -345,8 +418,23 @@
         /* = -------------------------------------------------------------------------- = */
         if( !"0000".equals ( res_cd ) )
         {
+            System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
+            System.out.println("충전결제 >>> app_time : " + app_time);
+            System.out.println("충전결제 >>> amount : " + amount);
+            System.out.println("충전결제 >>> successYn : Y");
+            System.out.println("충전결제 >>> tno : " + tno);
+            System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
+            System.out.println("충전결제 >>> ordr_res_cdidxx : " + res_cd);
+            System.out.println("충전결제 >>> res_msg : " + res_msg);
+
+            // DB 호출
+            goSave = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
         }
+
+        System.out.println("충전결제 >>> DB insert >>> end");
     }
+
+    System.out.println("충전결제 >>> 07.승인 및 실패 결과 DB 처리 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   07. 승인 및 실패 결과 DB 처리 END                                        = */
     /* = ========================================================================== = */
@@ -363,6 +451,9 @@
     /* =      로 설정해 주시기 바랍니다. (DB 작업 성공의 경우에는 "false" 이외의    = */
     /* =      값을 설정하시면 됩니다.)                                              = */
     /* = -------------------------------------------------------------------------- = */
+    System.out.println("충전결제 >>> 08.승인 결과 DB 처리 실패시 >>> start");
+    System.out.println("충전결제 >>> req_tx : " + req_tx);
+    System.out.println("충전결제 >>> res_cd : " + res_cd);
 
     // 승인 결과 DB 처리 에러시 bSucc값을 false로 설정하여 거래건을 취소 요청
     bSucc = "";
@@ -371,6 +462,8 @@
     {
         if (res_cd.equals("0000") )
         {
+            System.out.println("충전결제 >>> bSucc : " + bSucc);
+
             if ( bSucc.equals("false") )
             {
                 int mod_data_set_no;
@@ -390,10 +483,15 @@
 
                 res_cd  = c_PayPlus.m_res_cd;                                 // 결과 코드
                 res_msg = c_PayPlus.m_res_msg;                                // 결과 메시지
+
+                System.out.println("충전결제 >>> res_cd : " + res_cd);
+                System.out.println("충전결제 >>> res_msg : " + res_msg);
             }
         }
     }
         // End of [res_cd = "0000"]
+
+    System.out.println("충전결제 >>> 08.승인 결과 DB 처리 실패시 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   08. 승인 결과 DB 처리 END                                                = */
     /* = ========================================================================== = */
@@ -403,6 +501,34 @@
     /* =   09. 폼 구성 및 결과페이지 호출                                           = */
     /* -----------------------------------------------------------------------------= */
 %>
+
+<script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=2019072403" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=2018100401" charset="utf-8"></script>
+<script>
+    <%=goSave%>
+
+    // 결제내역 저장
+    function pp_fun_smsChargeSave(use_pay_method, app_time, amount, successYn, tno, ordr_idxx, res_cd, res_msg)
+    {
+        var params = {};
+        if(use_pay_method == "100000000000") {
+            params.pgresource = "11"; // 신용카드
+        }
+        params.chargeTime = app_time; // 승인시간
+        params.chargeAmt = amount; // KCP 실제 거래 금액
+        params.successYn = successYn; // 결제성공여부
+        params.controlno = tno; // KCP 거래번호
+        params.approvalnum = ordr_idxx; // 주문번호
+        params.resultcode = res_cd; // 결과 코드
+        params.resultmessage = res_msg; // 결과 메세지
+
+        $.postJSONSave("/adi/sms/smsCharge/smsCharge/getSmsChargeSaveInsert.sb", params, function (result) {
+            }
+            , function (result) {
+            });
+    }
+</script>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -419,7 +545,12 @@
             function noRefresh()
             {
                 /* CTRL + N키 막음. */
-                if ((event.keyCode == 78) && (event.ctrlKey == true))
+                if ((event.keyCode == 78))
+                {
+                    event.keyCode = 0;
+                    return false;
+                }
+                if ((event.ctrlKey == true))
                 {
                     event.keyCode = 0;
                     return false;
@@ -436,62 +567,62 @@
     </head>
 
     <body onload="goResult()">
-    <form name="pay_info" method="post" action="./result.jsp">
-        <!-- 필수 정보 -->
-        <input type="hidden" name="site_cd"         value="<%= g_conf_site_cd   %>">    <!-- 사이트 코드 -->
-        <input type="hidden" name="req_tx"          value="<%= req_tx           %>">    <!-- 요청 구분 -->
-        <input type="hidden" name="use_pay_method"  value="<%= use_pay_method   %>">    <!-- 사용한 결제 수단 -->
-        <input type="hidden" name="bSucc"           value="<%= bSucc            %>">    <!-- 쇼핑몰 DB 처리 성공 여부 -->
-        <!-- 주문 정보 -->
-        <input type="hidden" name="amount"          value="<%= amount           %>">    <!-- KCP 실제 거래 금액 -->
-        <input type="hidden" name="res_cd"          value="<%= res_cd           %>">    <!-- 결과 코드 -->
-        <input type="hidden" name="res_msg"         value="<%= res_msg          %>">    <!-- 결과 메세지 -->
-        <input type="hidden" name="ordr_idxx"       value="<%= ordr_idxx        %>">    <!-- 주문번호 -->
-        <input type="hidden" name="tno"             value="<%= tno              %>">    <!-- KCP 거래번호 -->
-        <input type="hidden" name="good_name"       value="<%= good_name        %>">    <!-- 상품명 -->
-        <input type="hidden" name="buyr_name"       value="<%= buyr_name        %>">    <!-- 주문자명 -->
-        <input type="hidden" name="buyr_tel1"       value="<%= buyr_tel1        %>">    <!-- 주문자 전화번호 -->
-        <input type="hidden" name="buyr_tel2"       value="<%= buyr_tel2        %>">    <!-- 주문자 휴대폰번호 -->
-        <input type="hidden" name="buyr_mail"       value="<%= buyr_mail        %>">    <!-- 주문자 E-mail -->
-        <input type="hidden" name="app_time"        value="<%= app_time         %>">    <!-- 승인시간 -->
-        <!-- 신용카드 정보 -->
-        <input type="hidden" name="card_cd"         value="<%= card_cd          %>">    <!-- 카드코드 -->
-        <input type="hidden" name="card_name"       value="<%= card_name        %>">    <!-- 카드이름 -->
-        <input type="hidden" name="app_no"          value="<%= app_no           %>">    <!-- 승인번호 -->
-        <input type="hidden" name="noinf"           value="<%= noinf            %>">    <!-- 무이자여부 -->
-        <input type="hidden" name="quota"           value="<%= quota            %>">    <!-- 할부개월 -->
-        <input type="hidden" name="partcanc_yn"     value="<%= partcanc_yn      %>">    <!-- 부분취소가능유무 -->
-        <input type="hidden" name="card_bin_type_01" value="<%= card_bin_type_01 %>">   <!-- 카드구분1 -->
-        <input type="hidden" name="card_bin_type_02" value="<%= card_bin_type_02 %>">   <!-- 카드구분2 -->
-        <!-- 계좌이체 정보 -->
-        <input type="hidden" name="bank_name"       value="<%= bank_name        %>">    <!-- 은행명 -->
-        <input type="hidden" name="bank_code"       value="<%= bank_code        %>">    <!-- 은행코드 -->
-        <!-- 가상계좌 정보 -->
-        <input type="hidden" name="bankname"        value="<%= bankname         %>">    <!-- 입금 은행 -->
-        <input type="hidden" name="depositor"       value="<%= depositor        %>">    <!-- 입금계좌 예금주 -->
-        <input type="hidden" name="account"         value="<%= account          %>">    <!-- 입금계좌 번호 -->
-        <input type="hidden" name="va_date"         value="<%= va_date          %>">    <!-- 가상계좌 입금마감시간 -->
-        <!-- 포인트 정보 -->
-        <input type="hidden" name="pnt_issue"       value="<%= pnt_issue        %>">    <!-- 포인트 서비스사 -->
-        <input type="hidden" name="pnt_app_time"    value="<%= pnt_app_time     %>">    <!-- 승인시간 -->
-        <input type="hidden" name="pnt_app_no"      value="<%= pnt_app_no       %>">    <!-- 승인번호 -->
-        <input type="hidden" name="pnt_amount"      value="<%= pnt_amount       %>">    <!-- 적립금액 or 사용금액 -->
-        <input type="hidden" name="add_pnt"         value="<%= add_pnt          %>">    <!-- 발생 포인트 -->
-        <input type="hidden" name="use_pnt"         value="<%= use_pnt          %>">    <!-- 사용가능 포인트 -->
-        <input type="hidden" name="rsv_pnt"         value="<%= rsv_pnt          %>">    <!-- 총 누적 포인트 -->
-        <!-- 휴대폰 정보 -->
-        <input type="hidden" name="commid"          value="<%= commid           %>">    <!-- 통신사 코드 -->
-        <input type="hidden" name="mobile_no"       value="<%= mobile_no        %>">    <!-- 휴대폰 번호 -->
-        <!-- 상품권 정보 -->
-        <input type="hidden" name="tk_van_code"     value="<%= tk_van_code      %>">    <!-- 발급사 코드 -->
-        <input type="hidden" name="tk_app_no"       value="<%= tk_app_no        %>">    <!-- 승인 번호 -->
-        <!-- 현금영수증 정보 -->
-        <input type="hidden" name="cash_yn"         value="<%= cash_yn          %>">    <!-- 현금영수증 등록 여부 -->
-        <input type="hidden" name="cash_authno"     value="<%= cash_authno      %>">    <!-- 현금 영수증 승인 번호 -->
-        <input type="hidden" name="cash_tr_code"    value="<%= cash_tr_code     %>">    <!-- 현금 영수증 발행 구분 -->
-        <input type="hidden" name="cash_id_info"    value="<%= cash_id_info     %>">    <!-- 현금 영수증 등록 번호 -->
-        <input type="hidden" name="cash_no"         value="<%= cash_no          %>">    <!-- 현금 영수증 거래 번호 -->
+        <form name="pay_info" method="post" action="/adi/sms/smsCharge/smsCharge/chargeResult.sb">
+            <!-- 필수 정보 -->
+            <input type="hidden" name="site_cd"         value="<%= g_conf_site_cd   %>">    <!-- 사이트 코드 -->
+            <input type="hidden" name="req_tx"          value="<%= req_tx           %>">    <!-- 요청 구분 -->
+            <input type="hidden" name="use_pay_method"  value="<%= use_pay_method   %>">    <!-- 사용한 결제 수단 -->
+            <input type="hidden" name="bSucc"           value="<%= bSucc            %>">    <!-- 쇼핑몰 DB 처리 성공 여부 -->
+            <!-- 주문 정보 -->
+            <input type="hidden" name="amount"          value="<%= amount           %>">    <!-- KCP 실제 거래 금액 -->
+            <input type="hidden" name="res_cd"          value="<%= res_cd           %>">    <!-- 결과 코드 -->
+            <input type="hidden" name="res_msg"         value="<%= res_msg          %>">    <!-- 결과 메세지 -->
+            <input type="hidden" name="ordr_idxx"       value="<%= ordr_idxx        %>">    <!-- 주문번호 -->
+            <input type="hidden" name="tno"             value="<%= tno              %>">    <!-- KCP 거래번호 -->
+            <input type="hidden" name="good_name"       value="<%= good_name        %>">    <!-- 상품명 -->
+            <input type="hidden" name="buyr_name"       value="<%= buyr_name        %>">    <!-- 주문자명 -->
+            <input type="hidden" name="buyr_tel1"       value="<%= buyr_tel1        %>">    <!-- 주문자 전화번호 -->
+            <input type="hidden" name="buyr_tel2"       value="<%= buyr_tel2        %>">    <!-- 주문자 휴대폰번호 -->
+            <input type="hidden" name="buyr_mail"       value="<%= buyr_mail        %>">    <!-- 주문자 E-mail -->
+            <input type="hidden" name="app_time"        value="<%= app_time         %>">    <!-- 승인시간 -->
+            <!-- 신용카드 정보 -->
+            <input type="hidden" name="card_cd"         value="<%= card_cd          %>">    <!-- 카드코드 -->
+            <input type="hidden" name="card_name"       value="<%= card_name        %>">    <!-- 카드이름 -->
+            <input type="hidden" name="app_no"          value="<%= app_no           %>">    <!-- 승인번호 -->
+            <input type="hidden" name="noinf"           value="<%= noinf            %>">    <!-- 무이자여부 -->
+            <input type="hidden" name="quota"           value="<%= quota            %>">    <!-- 할부개월 -->
+            <input type="hidden" name="partcanc_yn"     value="<%= partcanc_yn      %>">    <!-- 부분취소가능유무 -->
+            <input type="hidden" name="card_bin_type_01" value="<%= card_bin_type_01 %>">   <!-- 카드구분1 -->
+            <input type="hidden" name="card_bin_type_02" value="<%= card_bin_type_02 %>">   <!-- 카드구분2 -->
+            <!-- 계좌이체 정보 -->
+            <input type="hidden" name="bank_name"       value="<%= bank_name        %>">    <!-- 은행명 -->
+            <input type="hidden" name="bank_code"       value="<%= bank_code        %>">    <!-- 은행코드 -->
+            <!-- 가상계좌 정보 -->
+            <input type="hidden" name="bankname"        value="<%= bankname         %>">    <!-- 입금 은행 -->
+            <input type="hidden" name="depositor"       value="<%= depositor        %>">    <!-- 입금계좌 예금주 -->
+            <input type="hidden" name="account"         value="<%= account          %>">    <!-- 입금계좌 번호 -->
+            <input type="hidden" name="va_date"         value="<%= va_date          %>">    <!-- 가상계좌 입금마감시간 -->
+            <!-- 포인트 정보 -->
+            <input type="hidden" name="pnt_issue"       value="<%= pnt_issue        %>">    <!-- 포인트 서비스사 -->
+            <input type="hidden" name="pnt_app_time"    value="<%= pnt_app_time     %>">    <!-- 승인시간 -->
+            <input type="hidden" name="pnt_app_no"      value="<%= pnt_app_no       %>">    <!-- 승인번호 -->
+            <input type="hidden" name="pnt_amount"      value="<%= pnt_amount       %>">    <!-- 적립금액 or 사용금액 -->
+            <input type="hidden" name="add_pnt"         value="<%= add_pnt          %>">    <!-- 발생 포인트 -->
+            <input type="hidden" name="use_pnt"         value="<%= use_pnt          %>">    <!-- 사용가능 포인트 -->
+            <input type="hidden" name="rsv_pnt"         value="<%= rsv_pnt          %>">    <!-- 총 누적 포인트 -->
+            <!-- 휴대폰 정보 -->
+            <input type="hidden" name="commid"          value="<%= commid           %>">    <!-- 통신사 코드 -->
+            <input type="hidden" name="mobile_no"       value="<%= mobile_no        %>">    <!-- 휴대폰 번호 -->
+            <!-- 상품권 정보 -->
+            <input type="hidden" name="tk_van_code"     value="<%= tk_van_code      %>">    <!-- 발급사 코드 -->
+            <input type="hidden" name="tk_app_no"       value="<%= tk_app_no        %>">    <!-- 승인 번호 -->
+            <!-- 현금영수증 정보 -->
+            <input type="hidden" name="cash_yn"         value="<%= cash_yn          %>">    <!-- 현금영수증 등록 여부 -->
+            <input type="hidden" name="cash_authno"     value="<%= cash_authno      %>">    <!-- 현금 영수증 승인 번호 -->
+            <input type="hidden" name="cash_tr_code"    value="<%= cash_tr_code     %>">    <!-- 현금 영수증 발행 구분 -->
+            <input type="hidden" name="cash_id_info"    value="<%= cash_id_info     %>">    <!-- 현금 영수증 등록 번호 -->
+            <input type="hidden" name="cash_no"         value="<%= cash_no          %>">    <!-- 현금 영수증 거래 번호 -->
 
-    </form>
+        </form>
     </body>
 </html>

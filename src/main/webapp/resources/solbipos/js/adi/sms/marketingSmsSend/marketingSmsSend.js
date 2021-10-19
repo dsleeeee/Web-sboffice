@@ -78,7 +78,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     ];
 
     $("#lblMarketingSmsSendStoreNmInfo").text("(광고)" +  "");
-    $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-000-0000");
+    $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-936-2859");
     $("#lblMarketingSmsSendTxtByte").text("0");
     $("#lblMarketingSmsSendMsgType").text("SMS");
     $("#lblMarketingSmsSendSmsQty").text("0");
@@ -134,21 +134,68 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // <-- 검색 호출 -->
     $scope.$on("marketingSmsSendCtrl", function(event, data) {
-        $scope.searchMarketingSmsSend();
+        $("#lblMarketingSmsSendSmsSendSeq").text("");
+
+        $scope.searchSaveMarketingSmsSend();
         event.preventDefault();
     });
 
-    $scope.searchMarketingSmsSend = function(){
+    $scope.searchSaveMarketingSmsSend = function(){
         var params = {};
+        params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
+        params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
+        params.anvStartDate = dateToDaystring($scope.anvStartDate).replaceAll('-', '');
+        params.anvEndDate = dateToDaystring($scope.anvEndDate).replaceAll('-', '');
+        params.membrNo = $("#memberNo").val();
+        params.membrNm = $("#memberNm").val();
+        params.regStoreCd = $("#regStoreCd").val();
+        params.telNo = $("#telNo").val();
+        params.regUseStoreCd = $("#regUseStoreCd").val();
+        params.membrCardNo = $("#membrCardNo").val();
+        params.emailAddr = $("#emailAddr").val();
+        params.useYn = 'Y';
+        params.marketingSmsGubun = $scope.marketingSmsGubun;
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/adi/sms/marketingSmsSend/marketingSmsSend/getMarketingSmsSendListSave.sb", params, function(response){
+            var smsSendSeq = response.data.data;
+            $("#lblMarketingSmsSendSmsSendSeq").text(smsSendSeq);
+            $scope.searchMarketingSmsSend(smsSendSeq);
+        });
+    };
+
+    $scope.searchMarketingSmsSend = function(smsSendSeq){
+        var params = {};
+        params.smsSendSeq = smsSendSeq;
 
         $scope._inquiryMain("/adi/sms/marketingSmsSend/marketingSmsSend/getMarketingSmsSendList.sb", params, function() {
             gridYn = "Y"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
 
-            // 회원은 조회 후 체크박스 체크
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                $scope.flex.collectionView.items[i].gChk = true;
+            // 조회한 회원수
+            var smsSendListCnt = $scope.flexMarketingSmsSend.collectionView.items.length;
+
+            // 1000건 이상
+            if(parseInt(smsSendListCnt) >= 1000) {
+                $("#lblMarketingSmsSendListCnt").text(smsSendListCnt);
+                $("#lblMarketingSmsSendGridMsg").text("전송시 조회된 " + smsSendListCnt + "건의 회원에게 전송됩니다.");
+                $("#marketingSmsSendGridMsg").css("display", "block");
+                $("#marketingSmsSendGrid").css("display", "none");
+
+                $scope.$apply(function() {
+                    $scope._gridDataInit();
+                });
+            } else {
+                $("#lblMarketingSmsSendListCnt").text("");
+                $("#lblMarketingSmsSendGridMsg").text("");
+                $("#marketingSmsSendGridMsg").css("display", "none");
+                $("#marketingSmsSendGrid").css("display", "block");
+
+                // 회원은 조회 후 체크박스 체크
+                for (var i = 0; i < $scope.flexMarketingSmsSend.collectionView.items.length; i++) {
+                    $scope.flexMarketingSmsSend.collectionView.items[i].gChk = true;
+                }
+                $scope.flexMarketingSmsSend.refresh();
             }
-            $scope.flex.refresh();
         }, false);
     };
     // <-- //검색 호출 -->
@@ -277,15 +324,15 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     //     var params = {};
     //     params.status = "I";
     //     params.gChk = true;
-    //     params.membrNo = "";
+    // //    params.membrNo = "";
     // //     params.telNm = "";
     //     params.telNo = "";
     //     params.addr = "";
     //     params.lastSaleDate = "";
     // //     params.memo = "";
     //     params.rOgnFg = "X";
-    //     params.rOgnCd = "";
-    //     params.rUserId = "";
+    // //    params.rOgnCd = "";
+    // //    params.rUserId = "";
     //
     //     // 추가기능 수행 : 파라미터
     //     $scope._addRow(params);
@@ -294,11 +341,11 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // <-- 그리드 행 삭제 -->
     // $scope.del = function(){
-    //     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-    //         var item = $scope.flex.collectionView.items[i];
+    //     for(var i = $scope.flexMarketingSmsSend.collectionView.items.length-1; i >= 0; i-- ){
+    //         var item = $scope.flexMarketingSmsSend.collectionView.items[i];
     //
     //         if(item.gChk) {
-    //             $scope.flex.collectionView.removeAt(i);
+    //             $scope.flexMarketingSmsSend.collectionView.removeAt(i);
     //         }
     //     }
     // };
@@ -313,35 +360,48 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             return;
         }
 
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                params.push($scope.flex.collectionView.items[i]);
-            }
-        }
-        if(params.length <= 0) {
-            s_alert.pop(messages["cmm.not.select"]);
-            return;
-        }
-
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                if ($scope.flex.collectionView.items[i].telNo === "") {
-                    $scope._popMsg(messages["marketingSmsSend.telNoBlank"]); // 수신번호를 입력해주세요.
-                    return false;
-                }
-            }
-        }
-
         // 잔여 수량
         var smsQty = $("#lblMarketingSmsSendSmsQty").text();
-        if(smsQty < 1) {
+        if(parseInt(smsQty) < 1) {
             $scope._popMsg(messages["marketingSmsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
             return;
         }
-        if(smsQty < params.length) {
-            $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
-            return;
+
+        // 조회한 회원수
+        var smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
+
+        // 1000건 이상
+        if(parseInt(smsSendListCnt) >= 1000) {
+            if(parseInt(smsQty) < parseInt(smsSendListCnt)) {
+                $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
+                return;
+            }
+
+        } else {
+            var params = new Array();
+            for (var i = 0; i < $scope.flexMarketingSmsSend.collectionView.items.length; i++) {
+                if($scope.flexMarketingSmsSend.collectionView.items[i].gChk) {
+                    params.push($scope.flexMarketingSmsSend.collectionView.items[i]);
+                }
+            }
+            if(params.length <= 0) {
+                s_alert.pop(messages["cmm.not.select"]);
+                return;
+            }
+
+            for (var i = 0; i < $scope.flexMarketingSmsSend.collectionView.items.length; i++) {
+                if($scope.flexMarketingSmsSend.collectionView.items[i].gChk) {
+                    if ($scope.flexMarketingSmsSend.collectionView.items[i].telNo === "") {
+                        $scope._popMsg(messages["marketingSmsSend.telNoBlank"]); // 수신번호를 입력해주세요.
+                        return false;
+                    }
+                }
+            }
+
+            if(smsQty < params.length) {
+                $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
+                return;
+            }
         }
 
         // 0:전송, 1:예약
@@ -380,9 +440,17 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
         // 전송수량(체크된 수신자)
         var smsSendQty = 0;
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                smsSendQty = smsSendQty + 1;
+        // 조회한 회원수
+        var smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
+
+        // 1000건 이상
+        if(parseInt(smsSendListCnt) >= 1000) {
+            smsSendQty = smsSendListCnt;
+        } else {
+            for (var i = 0; i < $scope.flexMarketingSmsSend.collectionView.items.length; i++) {
+                if($scope.flexMarketingSmsSend.collectionView.items[i].gChk) {
+                    smsSendQty = smsSendQty + 1;
+                }
             }
         }
 
@@ -411,41 +479,76 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // 전송 저장 save
     $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                // 내용
-                var messageContent = $("#marketingSmsSendMessageContent").val();
-                if (messageContent == undefined) {
-                    messageContent = "";
-                }
-                // messageContent = messageContent.replaceAll("#이름#", $scope.flex.collectionView.items[i].telNm);
-                // messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
-                var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
-
-                $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
-                if (reserveYn == "1") {
-                    $scope.flex.collectionView.items[i].sendDate = reserveDate; // 전송일시
-                }
-                $scope.flex.collectionView.items[i].title = $("#marketingSmsSendTitle").val(); // 제목
-                $scope.flex.collectionView.items[i].content = content; // 내용
-                $scope.flex.collectionView.items[i].msgType = msgType; // 메세지타입
-                $scope.flex.collectionView.items[i].cstNo = $scope.flex.collectionView.items[i].membrNo; // 회원번호
-                $scope.flex.collectionView.items[i].callback = $scope.telNoCombo; // 보내는사람 번호
-                $scope.flex.collectionView.items[i].phoneNumber = $scope.flex.collectionView.items[i].telNo.replaceAll("-", ""); // 받는사람 번호
-                $scope.flex.collectionView.items[i].rrOrgnFg = $scope.flex.collectionView.items[i].rOgnFg; // 받는사람 소속구분
-                $scope.flex.collectionView.items[i].rrOrgnCd = $scope.flex.collectionView.items[i].rOgnCd; // 받는사람 소속코드
-                $scope.flex.collectionView.items[i].rrUserId = $scope.flex.collectionView.items[i].rUserId; // 받는사람ID
-                $scope.flex.collectionView.items[i].contentCount = fileCount; // 전송할 컨텐츠 개수
-                $scope.flex.collectionView.items[i].contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
-
-                params.push($scope.flex.collectionView.items[i]);
+        // 1000건 이상
+        if(parseInt($("#lblMarketingSmsSendListCnt").text()) >= 1000) {
+            // 파라미터 설정
+            var params = {};
+            // 내용
+            var messageContent = $("#marketingSmsSendMessageContent").val();
+            if (messageContent == undefined) {
+                messageContent = "";
             }
-        }
+            var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch() });
+            params.reserveYn = reserveYn; // 0:전송, 1:예약
+            if (reserveYn == "1") {
+                params.sendDate = reserveDate; // 전송일시
+            }
+            params.title = $("#marketingSmsSendTitle").val(); // 제목
+            params.content = content; // 내용
+            params.msgType = msgType; // 메세지타입
+            params.cstNo = ""; // 회원번호
+            params.callback = $scope.telNoCombo; // 보내는사람 번호
+            params.phoneNumber = ""; // 받는사람 번호
+            params.rrOrgnFg = "C"; // 받는사람 소속구분
+            params.rrOrgnCd = orgnCd; // 받는사람 소속코드
+            params.rrUserId = ""; // 받는사람ID
+            params.contentCount = fileCount; // 전송할 컨텐츠 개수
+            params.contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
+            params.pageGubun = "marketingSmsSend"; // 페이지구분
+            params.smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스
+            params.smsSendListCnt = $("#lblMarketingSmsSendListCnt").text(); // 조회한 회원수
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(){ $scope.allSearch() });
+        } else {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flexMarketingSmsSend.collectionView.items.length; i++) {
+                if($scope.flexMarketingSmsSend.collectionView.items[i].gChk) {
+                    // 내용
+                    var messageContent = $("#marketingSmsSendMessageContent").val();
+                    if (messageContent == undefined) {
+                        messageContent = "";
+                    }
+                    // messageContent = messageContent.replaceAll("#이름#", $scope.flexMarketingSmsSend.collectionView.items[i].telNm);
+                    // messageContent = messageContent.replaceAll("#추가사항#", $scope.flexMarketingSmsSend.collectionView.items[i].memo);
+                    var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
+
+                    $scope.flexMarketingSmsSend.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
+                    if (reserveYn == "1") {
+                        $scope.flexMarketingSmsSend.collectionView.items[i].sendDate = reserveDate; // 전송일시
+                    }
+                    $scope.flexMarketingSmsSend.collectionView.items[i].title = $("#marketingSmsSendTitle").val(); // 제목
+                    $scope.flexMarketingSmsSend.collectionView.items[i].content = content; // 내용
+                    $scope.flexMarketingSmsSend.collectionView.items[i].msgType = msgType; // 메세지타입
+                    $scope.flexMarketingSmsSend.collectionView.items[i].cstNo = ""; // 회원번호
+                    $scope.flexMarketingSmsSend.collectionView.items[i].callback = $scope.telNoCombo; // 보내는사람 번호
+                    $scope.flexMarketingSmsSend.collectionView.items[i].phoneNumber = $scope.flexMarketingSmsSend.collectionView.items[i].telNo.replaceAll("-", ""); // 받는사람 번호
+                    $scope.flexMarketingSmsSend.collectionView.items[i].rrOrgnFg = $scope.flexMarketingSmsSend.collectionView.items[i].rOgnFg; // 받는사람 소속구분
+                    $scope.flexMarketingSmsSend.collectionView.items[i].rrOrgnCd = ""; // 받는사람 소속코드
+                    $scope.flexMarketingSmsSend.collectionView.items[i].rrUserId = ""; // 받는사람ID
+                    $scope.flexMarketingSmsSend.collectionView.items[i].contentCount = fileCount; // 전송할 컨텐츠 개수
+                    $scope.flexMarketingSmsSend.collectionView.items[i].contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
+                    $scope.flexMarketingSmsSend.collectionView.items[i].pageGubun = "marketingSmsSend"; // 페이지구분
+                    $scope.flexMarketingSmsSend.collectionView.items[i].smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스(SMS전송 팝업 : 전송시 채번 / 마케팅용 SMS전송 : 회원조회시 채번)
+
+                    params.push($scope.flexMarketingSmsSend.collectionView.items[i]);
+                }
+            }
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch() });
+        }
     };
 
     // 재조회

@@ -141,6 +141,9 @@ public class MarketingSmsSendVO extends PageVO {
     /** 사용여부 */
     private String useYn;
 
+    /** 전송이력시퀀스 */
+    private String smsSendSeq;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -165,9 +168,7 @@ public class MarketingSmsSendVO extends PageVO {
         return membrNo;
     }
 
-    public void setMembrNo(String membrNo) {
-        this.membrNo = membrNo;
-    }
+    public void setMembrNo(String membrNo) { this.membrNo = membrNo; }
 
     public String getMembrNm() {
         return membrNm;
@@ -432,4 +433,8 @@ public class MarketingSmsSendVO extends PageVO {
     public String getUseYn() { return useYn; }
 
     public void setUseYn(String useYn) { this.useYn = useYn; }
+
+    public String getSmsSendSeq() { return smsSendSeq; }
+
+    public void setSmsSendSeq(String smsSendSeq) { this.smsSendSeq = smsSendSeq; }
 }

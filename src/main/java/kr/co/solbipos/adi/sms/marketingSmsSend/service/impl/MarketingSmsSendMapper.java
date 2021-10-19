@@ -37,4 +37,7 @@ public interface MarketingSmsSendMapper {
 
     /** 마케팅용 SMS전송 - 회원 조회 */
     List<DefaultMap<Object>> getMarketingSmsSendList(MarketingSmsSendVO marketingSmsSendVO);
+
+    /** 마케팅용 SMS전송 - 검색 결과 저장 */
+    int getMarketingSmsSendListSaveInsert(MarketingSmsSendVO marketingSmsSendVO);
 }
