@@ -207,6 +207,8 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                     params.hqOfficeCd = "00000";
                     params.hqOfficeNm = "단독매장";
                     params.hqBrandCd = "0000000";
+                    params.hdDigit8Store = "";
+                    params.digit8Store = "";
                     var bizNo = nvl($scope.flex.collectionView.items[i].bizNo, "0000000000");
                     params.bizNo = bizNo;
                     params.bizNo1 = bizNo.substr(0,3);
