@@ -18,7 +18,7 @@
             <div class="mb10 oh sb-select dkbr">
                 <c:if test="${orgnFg eq 'MASTER'}">
                     <div id="divCancel" style="display: none;">
-                            <%-- 결제취소 --%>
+                        <%-- 결제취소 --%>
                         <button class="btn_skyblue ml5 fr" id="btnSmsChargeCancel" onclick="jsf__cancel(document.cancel_info);"><s:message code="smsChargeDtl.smsChargeCencel" /></button>
                     </div>
                 </c:if>
@@ -145,7 +145,9 @@
     </div>
 </wj-popup>
 
-<form id="cancel_info" name="cancel_info" method="post" action="/adi/sms/smsCharge/smsCharge/cancel.sb">
+<form id="cancel_info" name="cancel_info" method="post" action="/adi/sms/smsCharge/smsCharge/cancel.sb" target="cancelFrm">
+    <iframe name="cancelFrm" style="display:none;"></iframe>
+
     <input type="hidden" name="req_tx"      value="mod"  /> <%--프로세스 요청 종류 구분 변수--%>
     <input type="hidden" name="mod_type"    value="STSC" /> <%--프로세스 요청의 구분 변수--%>
     <input type="hidden" name="tno"         value="" /> <%--결제 건에 대한 NHN KCP 거래 고유번호--%>
@@ -162,4 +164,10 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211015.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211019.01" charset="utf-8"></script>
+
+<%-- SMS결제취소 결과 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsCharge/smsCancelResult.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

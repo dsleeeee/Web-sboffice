@@ -13,6 +13,17 @@
  */
 var app = agrid.getApp();
 
+// SMS결제취소 결과
+function goCancelResult(resCd, resMsg)
+{
+    var params = {};
+    params.resCd = resCd;
+    params.resMsg = resMsg;
+
+    var scope = agrid.getScope('smsChargeDtlCtrl');
+    scope.cancelResultShow(params);
+}
+
 /**
  *  SMS결제상세 팝업 조회 그리드 생성
  */
@@ -74,4 +85,30 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
         var smsChargeHistScope = agrid.getScope('smsChargeHistCtrl');
         smsChargeHistScope.searchSmsChargeHist();
     };
+
+    // SMS결제취소 결과
+    $scope.cancelResultShow = function(data){
+        $scope.setSelectedSmsChargeDtl(data);
+        $scope.wjSmsCancelResultLayer.show(true);
+    };
+
+    // 선택
+    $scope.selectedSmsChargeDtl;
+    $scope.setSelectedSmsChargeDtl = function(store) {
+        $scope.selectedSmsChargeDtl = store;
+    };
+    $scope.getSelectedSmsChargeDtl = function() {
+        return $scope.selectedSmsChargeDtl;
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // SMS결제취소 결과 팝업 핸들러 추가
+        $scope.wjSmsCancelResultLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('smsCancelResultCtrl', $scope.getSelectedSmsChargeDtl());
+            }, 50)
+        });
+    });
 }]);

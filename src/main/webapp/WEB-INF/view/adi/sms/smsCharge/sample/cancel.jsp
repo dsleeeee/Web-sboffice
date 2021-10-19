@@ -283,6 +283,9 @@
 <script>
     <%=goCancel%>
 
+    // SMS결제취소 결과 팝업
+    parent.goCancelResult('<%=res_cd%>', '<%=res_msg%>');
+
     // 결제내역 저장
     function pp_fun_smsChargeCancel(canc_time, tno)
     {
