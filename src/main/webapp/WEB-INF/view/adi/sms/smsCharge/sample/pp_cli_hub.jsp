@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html;charset=euc-kr"%>
 
 <%
-    String goSave = "";
-//    goSave = "alert(1);";
+    String goCharge = "";
+//    goCharge = "alert(1);";
 %>
 
 <%
@@ -377,7 +377,7 @@
                 System.out.println("충전결제 >>> res_msg : " + res_msg);
 
                 // DB 호출
-                goSave = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
+                goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
 
                 // 07-1-1-1. 복합결제(신용카드+포인트)
                 if ( pnt_issue.equals( "SCSK" ) || pnt_issue.equals( "SCWB" ) )
@@ -428,7 +428,7 @@
             System.out.println("충전결제 >>> res_msg : " + res_msg);
 
             // DB 호출
-            goSave = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
+            goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
         }
 
         System.out.println("충전결제 >>> DB insert >>> end");
@@ -506,7 +506,10 @@
 <script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=2019072403" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=2018100401" charset="utf-8"></script>
 <script>
-    <%=goSave%>
+    <%=goCharge%>
+
+    // SMS충전결제 결과 팝업
+    parent.goChargeResult('<%=use_pay_method%>', '<%=app_time%>', '<%=amount%>', '<%=tno%>', '<%=res_cd%>', '<%=res_msg%>');
 
     // 결제내역 저장
     function pp_fun_smsChargeSave(use_pay_method, app_time, amount, successYn, tno, ordr_idxx, res_cd, res_msg)
@@ -515,7 +518,8 @@
         if(use_pay_method == "100000000000") {
             params.pgresource = "11"; // 신용카드
         }
-        params.chargeTime = app_time; // 승인시간
+        params.chargeDate = app_time.substring(0,8); // 승인시간
+        params.chargeTime = app_time.substring(8,14); // 승인시간
         params.chargeAmt = amount; // KCP 실제 거래 금액
         params.successYn = successYn; // 결제성공여부
         params.controlno = tno; // KCP 거래번호

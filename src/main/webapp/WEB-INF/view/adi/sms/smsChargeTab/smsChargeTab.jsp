@@ -21,7 +21,11 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeTab/smsChargeTab.js?ver=20210910.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var tabVal = "${tabVal}"; // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeTab/smsChargeTab.js?ver=20211020.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- SMS충전/KCP PG 레이어 --%>

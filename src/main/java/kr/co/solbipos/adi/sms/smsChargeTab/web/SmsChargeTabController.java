@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @Class Name : SmsChargeTabController.java
@@ -58,6 +59,14 @@ public class SmsChargeTabController {
      */
     @RequestMapping(value = "/smsChargeTab/list.sb", method = RequestMethod.GET)
     public String smsChargeTabView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
+        String tabVal = "";
+        System.out.println("tabVal : " + request.getParameter("tabVal"));
+        if(!isEmpty(request.getParameter("tabVal"))) {
+            tabVal = request.getParameter("tabVal");
+        }
+        model.addAttribute("tabVal", tabVal);
 
         return "adi/sms/smsChargeTab/smsChargeTab";
     }

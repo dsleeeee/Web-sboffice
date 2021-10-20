@@ -88,7 +88,7 @@
 
             if( frm.res_cd.value == "0000" )
             {
-                alert("결제 승인 요청 전,\n\n반드시 결제창에서 고객님이 결제 인증 완료 후\n\n리턴 받은 ordr_chk 와 업체 측 주문정보를\n\n다시 한번 검증 후 결제 승인 요청하시기 바랍니다."); //업체 연동 시 필수 확인 사항.
+                // alert("결제 승인 요청 전,\n\n반드시 결제창에서 고객님이 결제 인증 완료 후\n\n리턴 받은 ordr_chk 와 업체 측 주문정보를\n\n다시 한번 검증 후 결제 승인 요청하시기 바랍니다."); //업체 연동 시 필수 확인 사항.
                 /*
                     가맹점 리턴값 처리 영역
                 */
@@ -208,8 +208,87 @@
 <body onload="init_orderid();">
 <!--wrap-->
 <div class="wrap">
+
+
+    <!-- SMS충전결제 결과 -->
+    <div ng-controller="smsChargeCtrl">
+    </div>
+    <script type="text/javascript">
+        var app = agrid.getApp();
+
+        // SMS충전결제 결과
+        function goChargeResult(use_pay_method, app_time, amount, tno, res_cd, res_msg)
+        {
+            var params = {};
+            if(use_pay_method == "100000000000") {
+                params.pgresource = "11"; // 신용카드
+            }
+            params.chargeDate = app_time.substring(0,8); // 승인시간
+            params.chargeTime = app_time.substring(8,14); // 승인시간
+            params.chargeAmt = amount; // KCP 실제 거래 금액
+            params.controlno = tno; // KCP 거래번호
+            params.resultcode = res_cd; // 결과 코드
+            params.resultmessage = res_msg; // 결과 메세지
+
+            var scope = agrid.getScope('smsChargeCtrl');
+            scope.chargeResultShow(params);
+        }
+
+        app.controller('smsChargeCtrl', ['$scope', '$http', function ($scope, $http) {
+
+            // 상위 객체 상속 : T/F 는 picker
+            angular.extend(this, new RootController('smsChargeCtrl', $scope, $http, false));
+
+            // grid 초기화 : 생성되기전 초기화되면서 생성된다
+            $scope.initGrid = function (s, e) {
+            };
+
+            // <-- 검색 호출 -->
+            $scope.$on("smsChargeCtrl", function(event, data) {
+                event.preventDefault();
+            });
+            // <-- //검색 호출 -->
+
+            // SMS충전결제 결과
+            $scope.chargeResultShow = function(data){
+                $scope.setSelectedSmsChargeResult(data);
+                $scope.wjSmsChargeResultLayer.show(true);
+            };
+
+            // 선택
+            $scope.selectedSmsChargeResult;
+            $scope.setSelectedSmsChargeResult = function(store) {
+                $scope.selectedSmsChargeResult = store;
+            };
+            $scope.getSelectedSmsChargeResult = function() {
+                return $scope.selectedSmsChargeResult;
+            };
+
+            // 화면 ready 된 후 설정
+            angular.element(document).ready(function () {
+
+                // SMS충전결제 결과 팝업 핸들러 추가
+                $scope.wjSmsChargeResultLayer.shown.addHandler(function (s) {
+                    setTimeout(function() {
+                        $scope._broadcast('smsChargeResultCtrl', $scope.getSelectedSmsChargeResult());
+                    }, 50)
+                });
+            });
+        }]);
+    </script>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%-- SMS충전결제 결과 팝업 --%>
+    <c:import url="/WEB-INF/view/adi/sms/smsCharge/smsChargeResult.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+    <!-- //SMS충전결제 결과 -->
+
+
     <!-- 주문정보 입력 form : order_info -->
-    <form name="order_info" method="post" action="/adi/sms/smsCharge/smsCharge/charge.sb" >
+    <form name="order_info" method="post" action="/adi/sms/smsCharge/smsCharge/charge.sb" target="chargeFrm">
+        <iframe name="chargeFrm" style="display:none;"></iframe>
+
         <%
             /* ============================================================================== */
             /* =   1. 주문 정보 입력                                                        = */

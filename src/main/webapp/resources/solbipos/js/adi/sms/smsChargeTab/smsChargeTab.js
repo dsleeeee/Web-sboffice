@@ -18,6 +18,15 @@ app.controller('smsChargeTabCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#smsChargeView").show();
         $("#smsChargeHistView").hide();
+
+        // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
+        if(tabVal == "5") {
+            $("#smsChargeTab").addClass("on");
+            $("#smsChargeHistTab").removeClass("on");
+
+            $("#smsChargeView").show();
+            $("#smsChargeHistView").hide();
+        }
     };
 
     // SMS충전/KCP PG 탭 보이기
@@ -27,6 +36,9 @@ app.controller('smsChargeTabCtrl', ['$scope', function ($scope) {
 
         $("#smsChargeView").show();
         $("#smsChargeHistView").hide();
+
+        // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
+        tabVal = "";
     };
 
     // SMS충전내역 탭 보이기
@@ -40,6 +52,9 @@ app.controller('smsChargeTabCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("smsChargeHistCtrl");
         scope.flex.refresh();
+
+        // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
+        tabVal = "";
     };
 
 }]);
