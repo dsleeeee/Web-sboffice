@@ -185,9 +185,9 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
         var order_no = data.approvalnum; // 주문번호 ordr_idxx
         var trade_mony = data.chargeAmt; // 거래금액 amount
 
-        // https://testadmin8.kcp.co.kr // 테스트
-        // http://admin8.kcp.co.kr // 운영
-        var url = "http://admin8.kcp.co.kr/assist/bill.BillActionNew.do?cmd=" + cmd + "&tno=" + tno + "&order_no=" + order_no + "&trade_mony=" + trade_mony;
+        // var siteUrl = "https://testadmin8.kcp.co.kr"; // 테스트
+        var siteUrl = "http://admin8.kcp.co.kr"; // 운영
+        var url = siteUrl + "/assist/bill.BillActionNew.do?cmd=" + cmd + "&tno=" + tno + "&order_no=" + order_no + "&trade_mony=" + trade_mony;
         window.open(url, "", "width=470,height=" + height + ",resizable=yes,scrollbars=yes");
     };
 
