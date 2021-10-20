@@ -160,11 +160,16 @@
         // alert(form);
         // alert(form.req_tx.value);
         form.tno.value = $("#controlnoDtl").val(); // 승인번호
+
+        var scope = agrid.getScope('smsChargeDtlCtrl');
+        // 로딩바 show
+        scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+
         document.cancel_info.submit();
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211019.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211020.04" charset="utf-8"></script>
 
 <%-- SMS결제취소 결과 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsCharge/smsCancelResult.jsp">

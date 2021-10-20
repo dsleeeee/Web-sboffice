@@ -24,16 +24,30 @@
                         <label id="lblContentSmsCancelResult"></label>
                     </td>
                 </tr>
-                <tr style="height: 30px"></tr>
+                </tbody>
+            </table>
+            <table class="tblType01 mt30">
+                <colgroup>
+                    <col class="w30"/>
+                    <col class="w70"/>
+                </colgroup>
+                <tbody>
                 <tr>
+                    <%-- 결과코드 --%>
+                    <th>
+                        <s:message code="smsCancelResult.resultcode" />
+                    </th>
                     <td>
-                        <label id="lblContentSmsCancelResult2"></label>
+                        <input type="text" class="sb-input w100" id="resultcodeSmsCancelResult" ng-model="resultcodeSmsCancelResult" readonly />
                     </td>
                 </tr>
-                <tr style="height: 10px"></tr>
                 <tr>
+                    <%-- 결과메세지 --%>
+                    <th>
+                        <s:message code="smsCancelResult.resultmessage" />
+                    </th>
                     <td>
-                        <label id="lblContentSmsCancelResult3"></label>
+                        <input type="text" class="sb-input w100" id="resultmessageSmsCancelResult" ng-model="resultmessageSmsCancelResult" readonly />
                     </td>
                 </tr>
                 </tbody>
@@ -44,4 +58,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsCancelResult.js?ver=20211019.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsCancelResult.js?ver=20211020.02" charset="utf-8"></script>

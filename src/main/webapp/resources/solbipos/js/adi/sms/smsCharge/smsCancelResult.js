@@ -28,26 +28,19 @@ app.controller('smsCancelResultCtrl', ['$scope', '$http', function ($scope, $htt
     // <-- 검색 호출 -->
     $scope.$on("smsCancelResultCtrl", function(event, data) {
         if(data != undefined) {
-            if(data.resCd == "0000") {
+            if(data.resultcode == "0000") {
                 $("#lblContentSmsCancelResult").text("취소요청이 완료되었습니다.");
-                $("#lblContentSmsCancelResult2").text("결과코드 : " + data.resCd);
-                $("#lblContentSmsCancelResult3").text("결과메세지 : " + data.resMsg);
-
-                $("#lblContentSmsCancelResult").css("color", "blue");
+                $("#resultcodeSmsCancelResult").val(data.resultcode);
+                $("#resultmessageSmsCancelResult").val(data.resultmessage);
             } else {
-
                 $("#lblContentSmsCancelResult").text("취소요청이 처리 되지 못하였습니다.");
-                $("#lblContentSmsCancelResult2").text("결과코드 : " + data.resCd);
-                $("#lblContentSmsCancelResult3").text("결과메세지 : " + data.resMsg);
-
-                $("#lblContentSmsCancelResult").css("color", "red");
+                $("#resultcodeSmsCancelResult").val(data.resultcode);
+                $("#resultmessageSmsCancelResult").val(data.resultmessage);
             }
         } else {
             $("#lblContentSmsCancelResult").text("잘못된 경로 입니다.");
-            $("#lblContentSmsCancelResult2").text("");
-            $("#lblContentSmsCancelResult3").text("");
-
-            $("#lblContentSmsCancelResult").css("color", "black");
+            $("#resultcodeSmsCancelResult").val("");
+            $("#resultmessageSmsCancelResult").val("");
         }
         event.preventDefault();
     });
@@ -56,10 +49,8 @@ app.controller('smsCancelResultCtrl', ['$scope', '$http', function ($scope, $htt
     // 팝업 닫기
     $scope.close = function(){
         $("#lblContentSmsCancelResult").text("");
-        $("#lblContentSmsCancelResult2").text("");
-        $("#lblContentSmsCancelResult3").text("");
-
-        $("#lblContentSmsCancelResult").css("color", "black");
+        $("#resultcodeSmsCancelResult").val("");
+        $("#resultmessageSmsCancelResult").val("");
 
         var smsChargeDtlScope = agrid.getScope('smsChargeDtlCtrl');
         smsChargeDtlScope.close();

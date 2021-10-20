@@ -14,13 +14,15 @@
 var app = agrid.getApp();
 
 // SMS결제취소 결과
-function goCancelResult(resCd, resMsg)
+function goCancelResult(res_cd, res_msg)
 {
     var params = {};
-    params.resCd = resCd;
-    params.resMsg = resMsg;
+    params.resultcode = res_cd;
+    params.resultmessage = res_msg;
 
     var scope = agrid.getScope('smsChargeDtlCtrl');
+    // 로딩바 hide
+    scope.$broadcast('loadingPopupInactive');
     scope.cancelResultShow(params);
 }
 

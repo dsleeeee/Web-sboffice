@@ -61,20 +61,20 @@
     /* ============================================================================== */
     /* =   02. 지불 요청 정보 설정                                                  = */
     /* = -------------------------------------------------------------------------- = */
-    String req_tx         = "";                                                     // 취소요청
+    String req_tx         = f_get_parm( request.getParameter( "req_tx"      ) );    // 취소요청
     String tran_cd        = "";                                                     // 업무코드
     String cust_ip        = f_get_parm( request.getRemoteAddr()                  ); // 요청 IP
     /* = -------------------------------------------------------------------------- = */
     String res_cd         = "";                                                     // 응답코드
     String res_msg        = "";                                                     // 응답 메세지
-    String tno            = "";                                                     // KCP 거래 고유 번호
+    String tno            = f_get_parm( request.getParameter( "tno"      ) );       // KCP 거래 고유 번호
     String card_cd        = "";                                                     // 카드 코드
     String card_name      = "";                                                     // 카드 명
     String amount         = "";                                                     // 결제 금액
     String coupon_mny     = "";                                                     // 쿠폰 금액
     String canc_time       = "";                                                    // 취소요청시간
     /* = -------------------------------------------------------------------------- = */
-    String mod_type       = "";                                                     // 변경TYPE(승인취소시 필요)
+    String mod_type       = f_get_parm( request.getParameter( "mod_type"      ) );  // 변경TYPE(승인취소시 필요)
     String mod_desc       = "";                                                     // 변경사유
     String panc_mod_mny   = "";                                                     // 부분취소 금액
     String panc_rem_mny   = "";                                                     // 부분취소 가능 금액
@@ -124,7 +124,7 @@
     System.out.println("결제취소 >>> tno : " + tno);
     System.out.println("결제취소 >>> cust_ip : " + cust_ip);
 
-    if ( req_tx.equals( "" ) )
+    if ( req_tx.equals( "mod" ) )
     {
         int    mod_data_set_no;
 
@@ -132,7 +132,7 @@
         mod_data_set_no = c_PayPlus.mf_add_set( "mod_data" );
 
         c_PayPlus.mf_set_us( mod_data_set_no, "tno",      tno         );                                        // KCP 원거래 거래번호
-        c_PayPlus.mf_set_us( mod_data_set_no, "mod_type", request.getParameter( "mod_type"));                   // 전체취소 STSC / 부분취소 STPC
+        c_PayPlus.mf_set_us( mod_data_set_no, "mod_type", mod_type);                                            // 전체취소 STSC / 부분취소 STPC
         c_PayPlus.mf_set_us( mod_data_set_no, "mod_ip",   cust_ip     );                                        // 변경 요청자 IP
         c_PayPlus.mf_set_us( mod_data_set_no, "mod_desc", ""          );
 
@@ -290,7 +290,8 @@
     function pp_fun_smsChargeCancel(canc_time, tno)
     {
         var params = {};
-        params.rtnTime = canc_time; // 취소시간
+        params.rtnDate = canc_time.substring(0,8); // 취소시간
+        params.rtnTime = canc_time.substring(8,14); // 취소시간
         params.successYn = "R"; // 결제성공여부
         params.controlno = tno; // KCP 거래번호
 
