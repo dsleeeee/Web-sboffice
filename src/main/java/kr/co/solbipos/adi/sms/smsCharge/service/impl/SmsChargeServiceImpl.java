@@ -68,8 +68,8 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         smsChargeHistVO.setModId(sessionInfoVO.getUserId());
 
         smsChargeHistVO.setSelectOrgnCd(sessionInfoVO.getOrgnCd());
-        smsChargeHistVO.setChargeDate(smsChargeVO.getChargeTime().substring(0,8));
-        smsChargeHistVO.setChargeTime(smsChargeVO.getChargeTime().substring(8,14));
+        smsChargeHistVO.setChargeDate(smsChargeVO.getChargeDate());
+        smsChargeHistVO.setChargeTime(smsChargeVO.getChargeTime());
         smsChargeHistVO.setPgresource(smsChargeVO.getPgresource());
         smsChargeHistVO.setChargeAmt(smsChargeVO.getChargeAmt()); // 충전금액
         smsChargeHistVO.setSuccessYn(smsChargeVO.getSuccessYn());
@@ -104,8 +104,6 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         smsChargeVO.setModId(sessionInfoVO.getUserId());
 
         smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-        smsChargeVO.setRtnDate(smsChargeVO.getRtnTime().substring(0,8));
-        smsChargeVO.setRtnTime(smsChargeVO.getRtnTime().substring(8,14));
 
         procCnt = smsChargeMapper.getSmsChargeSaveUpdate(smsChargeVO);
 
