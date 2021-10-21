@@ -75,7 +75,7 @@
                     <wj-flex-grid-column header="<s:message code="daySendStatus.orgnCd"/>" binding="ognCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.orgnNm"/>" binding="orgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.smsDate"/>" binding="smsDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="daySendStatus.smsChargeQty"/>" binding="smsChargeQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="daySendStatus.smsChargeAmt"/>" binding="smsChargeAmt" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.smsChargeCnt"/>" binding="smsChargeCnt" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.sendQty"/>" binding="totSendQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.waitQty"/>" binding="totWaitQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -108,4 +108,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20210817.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20211021.01" charset="utf-8"></script>

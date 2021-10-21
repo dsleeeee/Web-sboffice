@@ -55,7 +55,7 @@ app.controller('daySendStatusCtrl', ['$scope', '$http', function ($scope, $http)
         dataItem.ognCd = messages["daySendStatus.orgnCd"];
         dataItem.orgnNm = messages["daySendStatus.orgnNm"];
         dataItem.smsDate = messages["daySendStatus.smsDate"];
-        dataItem.smsChargeQty = messages["daySendStatus.smsChargeQty"];
+        dataItem.smsChargeAmt = messages["daySendStatus.smsChargeAmt"];
         dataItem.smsChargeCnt = messages["daySendStatus.smsChargeCnt"];
         dataItem.totSendQty = messages["daySendStatus.tot"];
         dataItem.totWaitQty = messages["daySendStatus.tot"];

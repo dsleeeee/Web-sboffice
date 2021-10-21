@@ -355,7 +355,7 @@
         hdt.OGN_CD,
         twuidv01.ORGN_NM,
         hdt.SMS_DATE,
-        hdt.SMS_CHARGE_QTY,
+        hdt.SMS_CHARGE_AMT,
         hdt.SMS_CHARGE_CNT,
         hdt.TOT_SEND_QTY,
         hdt.TOT_WAIT_QTY,
