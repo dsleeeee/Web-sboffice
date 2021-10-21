@@ -138,13 +138,13 @@
                         <td>
                             <input type="text" class="sb-input w100" id="selectOrgnNm" ng-model="selectOrgnNm" readonly/>
                         </td>
-                        <%-- 충전수량 --%>
+                        <%-- 충전금액 --%>
                         <th>
-                            <s:message code="smsChargeRegist.smsChargeQty"/>
+                            <s:message code="smsChargeRegist.smsChargeAmt"/>
                         </th>
                         <td>
-                            <input type="text" class="sb-input w100" id="smsChargeQty" ng-model="smsChargeQty" style="text-align: right;" />
-                            <input type="text" class="sb-input w100" id="smsBaseQty" ng-model="smsBaseQty" style="display: none;" readonly />
+                            <input type="text" class="sb-input w100" id="smsChargeAmt" ng-model="smsChargeAmt" style="text-align: right;" />
+                            <input type="text" class="sb-input w100" id="smsBaseAmt" ng-model="smsBaseAmt" style="display: none;" readonly />
                         </td>
                         <td>
                             <%-- 저장 --%>
@@ -172,7 +172,7 @@
                         <wj-flex-grid-column header="<s:message code="smsChargeRegist.orgnNm"/>" binding="orgnNm" width="190" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsChargeRegist.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsChargeRegist.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="smsChargeRegist.smsQty"/>" binding="smsQty" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsChargeRegist.smsAmt"/>" binding="smsAmt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -192,4 +192,4 @@
     var sysStatFgComboData = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeRegist.js?ver=20210823.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeRegist.js?ver=20211020.01" charset="utf-8"></script>

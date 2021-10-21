@@ -71,13 +71,8 @@
                     <td>
                         <input type="text" class="sb-input w100" id="chargeAmtDtl" ng-model="chargeAmtDtl" style="text-align: right;" readonly />
                     </td>
-                    <%-- 충전수량 --%>
-                    <th>
-                        <s:message code="smsChargeDtl.smsChargeQty" />
-                    </th>
-                    <td>
-                        <input type="text" class="sb-input w100" id="smsChargeQtyDtl" ng-model="smsChargeQtyDtl" style="text-align: right;" readonly />
-                    </td>
+                    <th></th>
+                    <td></td>
                 </tr>
                 <tr>
                     <%-- 결제수단 --%>
@@ -169,7 +164,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211020.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211021.01" charset="utf-8"></script>
 
 <%-- SMS결제취소 결과 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsCharge/smsCancelResult.jsp">
