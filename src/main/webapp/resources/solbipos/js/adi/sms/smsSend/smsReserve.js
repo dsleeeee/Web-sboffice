@@ -63,10 +63,10 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 검색 호출 -->
     $scope.$on("smsReserveCtrl", function(event, data) {
-        $("#lblReserveYn").text(data.reserveYn);
-        $("#lblGubun").text(data.gubun);
-        $("#lblMsgType").text(data.msgType);
-        $("#lblMsgOneAmt").text(data.msgOneAmt);
+        $("#lblSmsReserveReserveYn").text(data.reserveYn);
+        $("#lblSmsReserveGubun").text(data.gubun);
+        $("#lblSmsReserveMsgType").text(data.msgType);
+        $("#lblSmsReserveMsgOneAmt").text(data.msgOneAmt);
         event.preventDefault();
     });
     // <-- //검색 호출 -->
@@ -75,10 +75,10 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.smsReserveSave = function() {
         var startDate = wijmo.Globalize.format(startDateSmsReserve.value, 'yyyyMMdd');
         var reserveDate = startDate + $scope.startTimeSmsReserveCombo + $scope.startMinuteSmsReserveCombo + "00";
-        var reserveYn = $("#lblReserveYn").text();
-        var gubun = $("#lblGubun").text();
-        var msgType = $("#lblMsgType").text();
-        var msgOneAmt = $("#lblMsgOneAmt").text();
+        var reserveYn = $("#lblSmsReserveReserveYn").text();
+        var gubun = $("#lblSmsReserveGubun").text();
+        var msgType = $("#lblSmsReservesgType").text();
+        var msgOneAmt = $("#lblSmsReserveMsgOneAmt").text();
 
         if(parseInt(reserveDate) < parseInt(getCurDateTime())) {
             $scope._popMsg(messages["sendStatus.reserveTimeAlert"]); // 예약시간은 현재시간 이후로 가능합니다.
@@ -102,10 +102,10 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 팝업 닫기
     $scope.close = function() {
-        $("#lblReserveYn").text("");
-        $("#lblGubun").text("");
-        $("#lblMsgType").text("");
-        $("#lblMsgOneAmt").text("");
+        $("#lblSmsReserveReserveYn").text("");
+        $("#lblSmsReserveGubun").text("");
+        $("#lblSmsReserveMsgType").text("");
+        $("#lblSmsReserveMsgOneAmt").text("");
 
         $scope.wjSmsReserveLayer.hide();
         event.preventDefault();
