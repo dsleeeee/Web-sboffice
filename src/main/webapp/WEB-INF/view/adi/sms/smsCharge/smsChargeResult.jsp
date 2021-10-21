@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="sessionId" value="${param.sid}" />
 
 <wj-popup control="wjSmsChargeResultLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:350px;height:370px;" fade-in="false" fade-out="false">
     <div ng-controller="smsChargeResultCtrl">
@@ -116,4 +117,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsChargeResult.js?ver=20211019.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsChargeResult.js?ver=20211019.03" charset="utf-8"></script>
