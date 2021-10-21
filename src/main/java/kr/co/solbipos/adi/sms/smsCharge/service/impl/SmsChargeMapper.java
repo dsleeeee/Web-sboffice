@@ -26,12 +26,12 @@ import java.util.List;
 @Repository
 public interface SmsChargeMapper {
 
-    /** 잔여수량 조회 */
-    String getSmsBaseQtySelect(SmsChargeVO smsChargeVO);
+    /** 잔여금액 조회 */
+    String getSmsBaseAmtSelect(SmsChargeVO smsChargeVO);
 
     /** 결제취소 저장 */
     int getSmsChargeSaveUpdate(SmsChargeVO smsChargeVO);
 
-    /** 충전수량 조회 */
-    String getSmsChargeQtySelect(SmsChargeVO smsChargeVO);
+    /** 충전금액 조회 */
+    String getSmsChargeAmtSelect(SmsChargeVO smsChargeVO);
 }

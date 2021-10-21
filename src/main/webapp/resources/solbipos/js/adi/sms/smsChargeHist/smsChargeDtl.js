@@ -50,7 +50,6 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#chargeDateDtl").val(data.chargeDate.substring(0,4) + "-" + data.chargeDate.substring(4,6) + "-" + data.chargeDate.substring(6,8));
             $("#chargeTimeDtl").val(data.chargeTime.substring(0,2) + ":" + data.chargeTime.substring(2,4) + ":" + data.chargeTime.substring(4,6));
             $("#chargeAmtDtl").val(data.chargeAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#smsChargeQtyDtl").val(data.smsChargeQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             $scope.pgresourceDtlCombo.selectedValue = data.pgresource;
             $("#controlnoDtl").val(data.controlno);
             $scope.successYnDtlCombo.selectedValue = data.successYn;
@@ -67,10 +66,9 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#chargeDateDtl").val("");
             $("#chargeTimeDtl").val("");
             $("#chargeAmtDtl").val("");
-            $("#smsChargeQtyDtl").val("");
-            $("#pgresourceDtl").val("");
+            $scope.pgresourceDtlCombo.selectedValue = "";
             $("#controlnoDtl").val("");
-            $("#successYnDtl").val("");
+            $scope.successYnDtlCombo.selectedValue = "";
             $("#resultmessageDtl").val("");
 
             $("#divCancel").css('display', 'none');
@@ -81,6 +79,18 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 팝업 닫기
     $scope.close = function(){
+        $("#orgnNmDtl").val("");
+        $("#chargeIdNmDtl").val("");
+        $("#chargeDateDtl").val("");
+        $("#chargeTimeDtl").val("");
+        $("#chargeAmtDtl").val("");
+        $scope.pgresourceDtlCombo.selectedValue = "";
+        $("#controlnoDtl").val("");
+        $scope.successYnDtlCombo.selectedValue = "";
+        $("#resultmessageDtl").val("");
+
+        $("#divCancel").css('display', 'none');
+
         $scope.wjSmsChargeDtlLayer.hide();
 
         // 재조회

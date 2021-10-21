@@ -56,8 +56,8 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
-        // 현재 잔여수량
-        String smsBaseQty = smsChargeMapper.getSmsBaseQtySelect(smsChargeVO);
+        // 현재 잔여금액
+        String smsBaseAmt = smsChargeMapper.getSmsBaseAmtSelect(smsChargeVO);
 
 
         // SmsChargeHistVO
@@ -77,17 +77,15 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         smsChargeHistVO.setApprovalnum(smsChargeVO.getApprovalnum());
         smsChargeHistVO.setResultcode(smsChargeVO.getResultcode());
         smsChargeHistVO.setResultmessage(smsChargeVO.getResultmessage());
-
-        smsChargeHistVO.setSmsBaseQty(smsBaseQty); // SMS 기초수량
-        smsChargeHistVO.setSmsChargeQty("1"); // SMS 충전수량
+        smsChargeHistVO.setBaseChargeAmt(smsBaseAmt); // 기초충전금액
 
         procCnt = smsChargeHistMapper.getSmsChargeRegistSaveInsert(smsChargeHistVO);
 
-        // 잔여수량
-        int smsQty = Integer.parseInt(smsChargeHistVO.getSmsBaseQty()) + Integer.parseInt(smsChargeHistVO.getSmsChargeQty());
-        smsChargeHistVO.setSmsQty(String.valueOf(smsQty));
+        // 잔여금액
+        int smsAmt = Integer.parseInt(smsChargeHistVO.getBaseChargeAmt()) + Integer.parseInt(smsChargeHistVO.getChargeAmt());
+        smsChargeHistVO.setSmsAmt(String.valueOf(smsAmt));
 
-        // 잔여수량 저장 insert
+        // 잔여금액 저장 insert
         procCnt = smsChargeHistMapper.getSmsQtySaveInsert(smsChargeHistVO);
 
         return procCnt;
@@ -107,11 +105,11 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         procCnt = smsChargeMapper.getSmsChargeSaveUpdate(smsChargeVO);
 
-        // 현재 잔여수량
-        String smsBaseQty = smsChargeMapper.getSmsBaseQtySelect(smsChargeVO);
+        // 현재 잔여금액
+        String smsBaseAmt = smsChargeMapper.getSmsBaseAmtSelect(smsChargeVO);
 
-        // 충전수량
-        String smsChargeQty = smsChargeMapper.getSmsChargeQtySelect(smsChargeVO);
+        // 충전금액
+        String smsChargeAmt = smsChargeMapper.getSmsChargeAmtSelect(smsChargeVO);
 
 
         // SmsChargeHistVO
@@ -123,14 +121,11 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         smsChargeHistVO.setSelectOrgnCd(sessionInfoVO.getOrgnCd());
 
-        smsChargeHistVO.setSmsBaseQty(smsBaseQty); // SMS 기초수량
-        smsChargeHistVO.setSmsChargeQty(smsChargeQty); // SMS 충전수량
+        // 잔여금액
+        int smsAmt = Integer.parseInt(smsBaseAmt) - Integer.parseInt(smsChargeAmt);
+        smsChargeHistVO.setSmsAmt(String.valueOf(smsAmt));
 
-        // 잔여수량
-        int smsQty = Integer.parseInt(smsChargeHistVO.getSmsBaseQty()) - Integer.parseInt(smsChargeHistVO.getSmsChargeQty());
-        smsChargeHistVO.setSmsQty(String.valueOf(smsQty));
-
-        // 잔여수량 저장 insert
+        // 잔여금액 저장 insert
         procCnt = smsChargeHistMapper.getSmsQtySaveInsert(smsChargeHistVO);
 
         return procCnt;

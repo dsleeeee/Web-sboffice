@@ -95,8 +95,10 @@
                     is-editable="false"
                     initialized="initComboBox(s)">
             </wj-combo-box>
-            <%-- SMS임의충전 --%>
-            <button class="btn_skyblue ml5 fr" id="btnSmsChargeRegist" ng-click="smsChargeRegist()"><s:message code="smsChargeHist.smsChargeRegist" /></button>
+            <c:if test="${orgnFg eq 'MASTER'}">
+                <%-- SMS임의충전 --%>
+                <button class="btn_skyblue ml5 fr" id="btnSmsChargeRegist" ng-click="smsChargeRegist()"><s:message code="smsChargeHist.smsChargeRegist" /></button>
+            </c:if>
         </div>
 
         <%-- 그리드 --%>
@@ -112,16 +114,13 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <%--<wj-flex-grid-column header="<s:message code="smsChargeHist.orgnCd"/>" binding="orgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>--%>
-                    <%--<wj-flex-grid-column header="<s:message code="smsChargeHist.smsQty"/>" binding="smsQty" width="80" is-read-only="true" align="center"></wj-flex-grid-column>--%>
                     <wj-flex-grid-column header="<s:message code="smsChargeHist.orgn"/>" binding="orgn" width="300" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsChargeHist.chargeDate"/>" binding="chargeDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsChargeHist.chargeTime"/>" binding="chargeTime" width="70" is-read-only="true" align="center" format="time"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsChargeHist.pgresource"/>" binding="pgresource" data-map="pgresourceDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsChargeHist.controlno"/>" binding="controlno" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsChargeHist.baseChargeAmt"/>" binding="baseChargeAmt" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsChargeHist.chargeAmt"/>" binding="chargeAmt" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="smsChargeHist.smsBaseQty"/>" binding="smsBaseQty" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="smsChargeHist.smsChargeQty"/>" binding="smsChargeQty" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsChargeHist.successYn"/>" binding="successYn" data-map="successYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%--조회시 필요--%>

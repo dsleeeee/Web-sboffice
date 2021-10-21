@@ -72,6 +72,9 @@ public class SmsChargeHistVO extends PageVO {
     /** 잔여수량 */
     private String smsQty;
 
+    /** 잔여금액 */
+    private String smsAmt;
+
     /** 충전일자 */
     private String chargeDate;
 
@@ -80,6 +83,9 @@ public class SmsChargeHistVO extends PageVO {
 
     /** 충전금액 */
     private String chargeAmt;
+
+    /** 기초충전금액 */
+    private String baseChargeAmt;
 
     /** KICC승인번호 */
     private String controlno;
@@ -161,6 +167,10 @@ public class SmsChargeHistVO extends PageVO {
 
     public void setSmsQty(String smsQty) {  this.smsQty = smsQty; }
 
+    public String getSmsAmt() { return smsAmt; }
+
+    public void setSmsAmt(String smsAmt) {  this.smsAmt = smsAmt; }
+
     public String getChargeDate() { return chargeDate; }
 
     public void setChargeDate(String chargeDate) { this.chargeDate = chargeDate; }
@@ -172,6 +182,10 @@ public class SmsChargeHistVO extends PageVO {
     public String getChargeAmt() { return chargeAmt; }
 
     public void setChargeAmt(String chargeAmt) { this.chargeAmt = chargeAmt; }
+
+    public String getBaseChargeAmt() { return baseChargeAmt; }
+
+    public void setBaseChargeAmt(String baseChargeAmt) { this.baseChargeAmt = baseChargeAmt; }
 
     public String getControlno() { return controlno; }
 

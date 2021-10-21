@@ -58,8 +58,8 @@ app.controller('smsChargeRegistCtrl', ['$scope', '$http', function ($scope, $htt
 
                     $("#selectOrgnCd").val(selectedRow.orgnCd);
                     $("#selectOrgnNm").val(selectedRow.orgnNm);
-                    $("#smsChargeQty").val("0");
-                    $("#smsBaseQty").val(selectedRow.smsQty);
+                    $("#smsChargeAmt").val("0");
+                    $("#smsBaseAmt").val(selectedRow.smsAmt);
                 }
             }
         });
@@ -77,8 +77,8 @@ app.controller('smsChargeRegistCtrl', ['$scope', '$http', function ($scope, $htt
         $scope._inquiryMain("/adi/sms/smsChargeHist/smsChargeHist/getSmsChargeRegistList.sb", params, function() {
             $("#selectOrgnCd").val("");
             $("#selectOrgnNm").val("");
-            $("#smsChargeQty").val("");
-            $("#smsBaseQty").val("");
+            $("#smsChargeAmt").val("");
+            $("#smsBaseAmt").val("");
         }, false);
     };
     // <-- //검색 호출 -->
@@ -89,8 +89,8 @@ app.controller('smsChargeRegistCtrl', ['$scope', '$http', function ($scope, $htt
             $scope._popMsg(messages["smsChargeRegist.orgnCdBlank"]); // 소속코드를 선택해주세요.
             return false;
         }
-        if($("#smsChargeQty").val() === "" || $("#smsChargeQty").val() === undefined || $("#smsChargeQty").val() === "0") {
-            $scope._popMsg(messages["smsChargeRegist.chargeSmsQtyBlank"]); // 충전수량을 입력해주세요.
+        if($("#smsChargeAmt").val() === "" || $("#smsChargeAmt").val() === undefined || $("#smsChargeAmt").val() === "0") {
+            $scope._popMsg(messages["smsChargeRegist.chargeSmsAmtBlank"]); // 충전금액을 입력해주세요.
             return false;
         }
 
@@ -98,8 +98,8 @@ app.controller('smsChargeRegistCtrl', ['$scope', '$http', function ($scope, $htt
             var params = {};
             params.selectOrgnCd = $("#selectOrgnCd").val();
             params.selectOrgnNm = $("#selectOrgnNm").val();
-            params.smsChargeQty = $("#smsChargeQty").val();
-            params.smsBaseQty = $("#smsBaseQty").val();
+            params.chargeAmt = $("#smsChargeAmt").val();
+            params.baseChargeAmt = $("#smsBaseAmt").val();
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/sms/smsChargeHist/smsChargeHist/getSmsChargeRegistSave.sb", params, function(){ $scope.allSearch(); });
@@ -124,8 +124,8 @@ app.controller('smsChargeRegistCtrl', ['$scope', '$http', function ($scope, $htt
 
         $("#selectOrgnCd").val("");
         $("#selectOrgnNm").val("");
-        $("#smsChargeQty").val("");
-        $("#smsBaseQty").val("");
+        $("#smsChargeAmt").val("");
+        $("#smsBaseAmt").val("");
 
         $scope.wjSmsChargeRegistLayer.hide();
 

@@ -11,15 +11,15 @@
 -->
 <mapper namespace="kr.co.solbipos.adi.sms.smsCharge.service.impl.SmsChargeMapper">
 
-    <!-- 잔여수량 조회 -->
+    <!-- 잔여금액 조회 -->
     <!--
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <select id="getSmsBaseQtySelect" parameterType="SmsChargeVO" resultType="String">
-        /* SmsChargeMapper.getSmsBaseQtySelect */
+    <select id="getSmsBaseAmtSelect" parameterType="SmsChargeVO" resultType="String">
+        /* SmsChargeMapper.getSmsBaseAmtSelect */
         SELECT
-        cst.SMS_QTY
+        NVL(cst.SMS_AMT, 0) AS SMS_AMT
         FROM CET_SMSPT_T cst
         WHERE 1=1
         AND cst.OGN_CD = #{orgnCd}
@@ -43,18 +43,18 @@
         AND CONTROLNO = #{controlno}
     </update>
 
-    <!-- 충전수량 조회 -->
+    <!-- 충전금액 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSmsChargeQtySelect" parameterType="SmsChargeVO" resultType="String">
-        /* SmsChargeMapper.getSmsChargeQtySelect */
+    <select id="getSmsChargeAmtSelect" parameterType="SmsChargeVO" resultType="String">
+        /* SmsChargeMapper.getSmsChargeAmtSelect */
         SELECT
-        cpt.SMS_CHARGE_QTY
+        NVL(cpt.CHARGE_AMT, 0) AS CHARGE_AMT
         FROM CET_PGLOG_T cpt
         WHERE 1=1
-        AND cpt.OGN_CD = #{controlno}
+        AND cpt.CONTROLNO = #{controlno}
     </select>
 
 </mapper>

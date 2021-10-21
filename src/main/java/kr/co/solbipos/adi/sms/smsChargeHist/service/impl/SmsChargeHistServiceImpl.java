@@ -84,7 +84,6 @@ public class SmsChargeHistServiceImpl implements SmsChargeHistService {
         smsChargeHistVO.setChargeDate(currentDate);
         smsChargeHistVO.setChargeTime(currentTime);
         smsChargeHistVO.setPgresource("*");
-        smsChargeHistVO.setChargeAmt("0"); // 충전금액
         smsChargeHistVO.setSuccessYn("Y");
         smsChargeHistVO.setControlno("*");
         smsChargeHistVO.setApprovalnum("");
@@ -93,11 +92,11 @@ public class SmsChargeHistServiceImpl implements SmsChargeHistService {
 
         procCnt = smsChargeHistMapper.getSmsChargeRegistSaveInsert(smsChargeHistVO);
 
-        // 잔여수량
-        int smsQty = Integer.parseInt(smsChargeHistVO.getSmsBaseQty()) + Integer.parseInt(smsChargeHistVO.getSmsChargeQty());
-        smsChargeHistVO.setSmsQty(String.valueOf(smsQty));
+        // 잔여금액
+        int smsAmt = Integer.parseInt(smsChargeHistVO.getBaseChargeAmt()) + Integer.parseInt(smsChargeHistVO.getChargeAmt());
+        smsChargeHistVO.setSmsAmt(String.valueOf(smsAmt));
 
-        // 잔여수량 저장 insert
+        // 잔여금액 저장 insert
         procCnt = smsChargeHistMapper.getSmsQtySaveInsert(smsChargeHistVO);
 
         return procCnt;

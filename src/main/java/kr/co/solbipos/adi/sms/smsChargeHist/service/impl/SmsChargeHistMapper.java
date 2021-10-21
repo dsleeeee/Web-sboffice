@@ -35,6 +35,6 @@ public interface SmsChargeHistMapper {
     /** SMS임의충전 팝업 - 저장 insert */
     int getSmsChargeRegistSaveInsert(SmsChargeHistVO smsChargeHistVO);
 
-    /** 잔여수량 저장 insert */
+    /** 잔여금액 저장 insert */
     int getSmsQtySaveInsert(SmsChargeHistVO smsChargeHistVO);
 }
