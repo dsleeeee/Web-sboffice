@@ -95,10 +95,10 @@
                     is-editable="false"
                     initialized="initComboBox(s)">
             </wj-combo-box>
-            <%--<c:if test="${orgnFg eq 'MASTER'}">--%>
+            <c:if test="${orgnFg eq 'MASTER'}">
                 <%-- SMS임의충전 --%>
                 <button class="btn_skyblue ml5 fr" id="btnSmsChargeRegist" ng-click="smsChargeRegist()"><s:message code="smsChargeHist.smsChargeRegist" /></button>
-            <%--</c:if>--%>
+            </c:if>
         </div>
 
         <%-- 그리드 --%>

@@ -27,7 +27,7 @@ var periodData = [
 
 // 광고성 SMS전송 DropBoxDataMap
 var marketingSmsGubunComboData = [
-    {"name": "전체", "value": ""},
+    // {"name": "전체", "value": ""},
     {"name": "1개월전", "value": "1"},
     {"name": "2개월전", "value": "2"},
     {"name": "3개월전", "value": "3"},
