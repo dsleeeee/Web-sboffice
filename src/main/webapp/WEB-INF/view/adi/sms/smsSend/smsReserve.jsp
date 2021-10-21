@@ -55,6 +55,10 @@
                             <label id="lblReserveYn" style="display: none;"></label>
                             <%-- 팝업 사용한화면 구분 --%>
                             <label id="lblGubun" style="display: none;"></label>
+                            <%-- 메세지타입 --%>
+                            <label id="lblMsgType" style="display: none;"></label>
+                            <%-- 메세지별 건당금액 --%>
+                            <label id="lblMsgOneAmt" style="display: none;"></label>
                         </div>
                     </td>
                 </tr>
@@ -65,4 +69,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20211007.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20211021.01" charset="utf-8"></script>

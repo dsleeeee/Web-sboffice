@@ -27,7 +27,7 @@ var periodData = [
 
 // 광고성 SMS전송 DropBoxDataMap
 var marketingSmsGubunComboData = [
-    // {"name": "전체", "value": ""},
+    {"name": "전체", "value": ""},
     {"name": "1개월전", "value": "1"},
     {"name": "2개월전", "value": "2"},
     {"name": "3개월전", "value": "3"},
@@ -81,7 +81,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-936-2859");
     $("#lblMarketingSmsSendTxtByte").text("0");
     $("#lblMarketingSmsSendMsgType").text("SMS");
-    $("#lblMarketingSmsSendSmsQty").text("0");
+    $("#lblMarketingSmsSendSmsAmt").text("0");
 
     var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
 
@@ -208,8 +208,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         // 관리자/총판/본사/매장 명칭
         $scope.storeNmInfo();
 
-        // 잔여수량
-        $scope.restSmsQty();
+        // 잔여금액
+        $scope.restSmsAmt();
 
         // 메세지그룹
         if(msgGrpAddColList == "") {
@@ -282,15 +282,18 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         });
     };
 
-    // 잔여수량
-    $scope.restSmsQty = function() {
+    // 잔여금액
+    $scope.restSmsAmt = function() {
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getSmsQtyList.sb', params, function (response) {
-            var smsQtyList = response.data.data.result;
-            $scope.smsQtyList = smsQtyList;
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getSmsAmtList.sb', params, function (response) {
+            var smsAmtList = response.data.data.result;
+            $scope.smsAmtList = smsAmtList;
 
-            $("#lblMarketingSmsSendSmsQty").text($scope.smsQtyList.smsQty);
+            $("#lblMarketingSmsSendSmsAmt").text($scope.smsAmtList.smsAmt);
+            $("#lblMarketingSmsSendSmsOneAmt").text($scope.smsAmtList.smsOneAmt); // SMS건당금액
+            $("#lblMarketingSmsSendLmsOneAmt").text($scope.smsAmtList.lmsOneAmt); // LMS건당금액
+            $("#lblMarketingSmsSendMmsOneAmt").text($scope.smsAmtList.mmsOneAmt); // MMS건당금액
         });
     };
 
@@ -308,7 +311,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         $("#lblMarketingSmsSendTxtByte").text($("#marketingSmsSendMessageContent").val().getByteLength());
 
         if($("#lblMarketingSmsSendMsgType").text() != "MMS") {
-            if($("#marketingSmsSendMessageContent").val().getByteLength() > 80) {
+            if($("#marketingSmsSendMessageContent").val().getByteLength() > 90) {
                 $("#lblMarketingSmsSendMsgType").text("LMS");
             } else {
                 $("#lblMarketingSmsSendMsgType").text("SMS");
@@ -360,20 +363,40 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             return;
         }
 
-        // 잔여 수량
-        var smsQty = $("#lblMarketingSmsSendSmsQty").text();
-        if(parseInt(smsQty) < 1) {
-            $scope._popMsg(messages["marketingSmsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
+        // 메세지타입 1:SMS 2:LMS 3:MMS
+        var msgType = "1";
+        var msgTypeGubun = $("#lblMarketingSmsSendMsgType").text();
+        var txtByte = $("#lblMarketingSmsSendTxtByte").text();
+        var msgOneAmt = $("#lblMarketingSmsSendSmsOneAmt").text(); // SMS건당금액
+        if(msgTypeGubun == "LMS") {
+            msgType = "2";
+            msgOneAmt = $("#lblMarketingSmsSendLmsOneAmt").text(); // LMS건당금액
+            if(parseInt(txtByte) > 2000) {
+                $scope._popMsg(messages["marketingSmsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                return;
+            }
+        } else if(msgTypeGubun == "MMS") {
+            msgType = "3";
+            msgOneAmt = $("#lblMarketingSmsSendMmsOneAmt").text(); // MMS건당금액
+            if(parseInt(txtByte) > 2000) {
+                $scope._popMsg(messages["marketingSmsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                return;
+            }
+        }
+
+        // 잔여금액
+        var smsAmt = $("#lblMarketingSmsSendSmsAmt").text();
+        if(parseInt(smsAmt) < 1) {
+            $scope._popMsg(messages["marketingSmsSend.smsAmtAlert"]); // 전송가능한 금액이 없습니다.
             return;
         }
 
         // 조회한 회원수
         var smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
-
         // 1000건 이상
         if(parseInt(smsSendListCnt) >= 1000) {
-            if(parseInt(smsQty) < parseInt(smsSendListCnt)) {
-                $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
+            if(parseInt(smsAmt) < (parseInt(smsSendListCnt) * parseInt(msgOneAmt))) {
+                $scope._popMsg(messages["marketingSmsSend.smsAmtOverAlert"] + (parseInt(smsSendListCnt) * parseInt(msgOneAmt)) + messages["marketingSmsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
                 return;
             }
 
@@ -398,8 +421,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 }
             }
 
-            if(smsQty < params.length) {
-                $scope._popMsg(messages["marketingSmsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
+            if(parseInt(smsAmt) < (parseInt(params.length) * parseInt(msgOneAmt))) {
+                $scope._popMsg(messages["marketingSmsSend.smsAmtOverAlert"] + (parseInt(params.length) * parseInt(msgOneAmt)) + messages["marketingSmsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
                 return;
             }
         }
@@ -409,27 +432,20 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             var param = {};
             param.reserveYn = reserveYn;
             param.gubun = "marketingSmsSend";
+            param.msgType = msgType;
+            param.msgOneAmt = msgOneAmt;
 
             $scope.setSelectedMarketingSmsSend(param);
             $scope.wjSmsReserveLayer.show(true);
             event.preventDefault();
         } else {
             // 전송 저장
-            $scope.smsSendSave(reserveYn, "");
+            $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt);
         }
     };
 
     // 전송 저장
-    $scope.smsSendSave = function(reserveYn, reserveDate) {
-        // 메세지타입 1:SMS 2:LMS 3:MMS
-        var msgType = "1";
-        var msgTypeGubun = $("#lblMarketingSmsSendMsgType").text();
-        if(msgTypeGubun == "LMS") {
-            msgType = "2";
-        } else if(msgTypeGubun == "MMS") {
-            msgType = "3";
-        }
-
+    $scope.smsSendSave = function(reserveYn, reserveDate, msgType, msgOneAmt) {
         // 첨부파일 개수
         var fileCount = 0;
         // MMS 첨부파일 체크
@@ -468,17 +484,17 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             // MMS
            if(msgType == "3") {
                // 첨부파일 저장
-               $scope.smsSendFileSave(reserveYn, reserveDate, msgType, fileCount);
+               $scope.smsSendFileSave(reserveYn, reserveDate, msgType, msgOneAmt, fileCount);
            // SMS, LMS
            } else {
                // 전송 저장 save
-               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, 0, "");
+               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, 0, "");
            }
         }
     };
 
     // 전송 저장 save
-    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
+    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, msgOneAmt, fileCount, contentData) {
         // 1000건 이상
         if(parseInt($("#lblMarketingSmsSendListCnt").text()) >= 1000) {
             // 파라미터 설정
@@ -508,6 +524,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             params.pageGubun = "marketingSmsSend"; // 페이지구분
             params.smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스
             params.smsSendListCnt = $("#lblMarketingSmsSendListCnt").text(); // 조회한 회원수
+            params.msgOneAmt = msgOneAmt; // 메세지별 건당금액
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(){ $scope.allSearch() });
@@ -542,6 +559,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     $scope.flexMarketingSmsSend.collectionView.items[i].contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
                     $scope.flexMarketingSmsSend.collectionView.items[i].pageGubun = "marketingSmsSend"; // 페이지구분
                     $scope.flexMarketingSmsSend.collectionView.items[i].smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스(SMS전송 팝업 : 전송시 채번 / 마케팅용 SMS전송 : 회원조회시 채번)
+                    $scope.flexMarketingSmsSend.collectionView.items[i].msgOneAmt = msgOneAmt; // 메세지별 건당금액
 
                     params.push($scope.flexMarketingSmsSend.collectionView.items[i]);
                 }
@@ -560,15 +578,15 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
         $scope._gridDataInit();
 
-        // 잔여수량
-        $scope.restSmsQty();
+        // 잔여금액
+        $scope.restSmsAmt();
 
         // 첨부파일 초기화
         $scope.clearSmsFile();
     };
 
     // 첨부파일 저장
-    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
+    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, msgOneAmt, fileCount) {
         var formData = new FormData($("#marketingSmsSendSmsForm")[0]);
         // formData.append("orgnCd", orgnCd);
         formData.append("pageGubun", "marketingSmsSendFileSms");
@@ -595,7 +613,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     contentData = contentData.substring(0, contentData.length-1);
 
                     // 전송 저장 save
-                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, fileCount, contentData);
+                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, fileCount, contentData);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');

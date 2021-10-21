@@ -42,7 +42,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $("#lblMemoInfo").text("(무료수신거부)" +  "080-936-2859");
     $("#lblTxtByte").text("0");
     $("#lblMsgType").text("SMS");
-    $("#lblSmsQty").text("0");
+    $("#lblSmsAmt").text("0");
 
     var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
 
@@ -110,8 +110,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         // 관리자/총판/본사/매장 명칭
         $scope.storeNmInfo();
 
-        // 잔여수량
-        $scope.restSmsQty();
+        // 잔여금액
+        $scope.restSmsAmt();
 
         if(data != undefined) {
             // 수신자목록 셋팅
@@ -189,15 +189,18 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         });
     };
 
-    // 잔여수량
-    $scope.restSmsQty = function() {
+    // 잔여금액
+    $scope.restSmsAmt = function() {
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getSmsQtyList.sb', params, function (response) {
-            var smsQtyList = response.data.data.result;
-            $scope.smsQtyList = smsQtyList;
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getSmsAmtList.sb', params, function (response) {
+            var smsAmtList = response.data.data.result;
+            $scope.smsAmtList = smsAmtList;
 
-            $("#lblSmsQty").text($scope.smsQtyList.smsQty);
+            $("#lblSmsAmt").text($scope.smsAmtList.smsAmt);
+            $("#lblSmsOneAmt").text($scope.smsAmtList.smsOneAmt); // SMS건당금액
+            $("#lblLmsOneAmt").text($scope.smsAmtList.lmsOneAmt); // LMS건당금액
+            $("#lblMmsOneAmt").text($scope.smsAmtList.mmsOneAmt); // MMS건당금액
         });
     };
 
@@ -237,7 +240,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         $("#lblTxtByte").text($("#messageContent").val().getByteLength());
 
         if($("#lblMsgType").text() != "MMS") {
-            if($("#messageContent").val().getByteLength() > 80) {
+            if($("#messageContent").val().getByteLength() > 90) {
                 $("#lblMsgType").text("LMS");
             } else {
                 $("#lblMsgType").text("SMS");
@@ -287,6 +290,27 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             return;
         }
 
+        // 메세지타입 1:SMS 2:LMS 3:MMS
+        var msgType = "1";
+        var msgTypeGubun = $("#lblMsgType").text();
+        var txtByte = $("#lblTxtByte").text();
+        var msgOneAmt = $("#lblSmsOneAmt").text(); // SMS건당금액
+        if(msgTypeGubun == "LMS") {
+            msgType = "2";
+            msgOneAmt = $("#lblLmsOneAmt").text(); // LMS건당금액
+            if(parseInt(txtByte) > 2000) {
+                $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                return;
+            }
+        } else if(msgTypeGubun == "MMS") {
+            msgType = "3";
+            msgOneAmt = $("#lblMmsOneAmt").text(); // MMS건당금액
+            if(parseInt(txtByte) > 2000) {
+                $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                return;
+            }
+        }
+
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
@@ -307,14 +331,14 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             }
         }
 
-        // 잔여 수량
-        var smsQty = $("#lblSmsQty").text();
-        if(parseInt(smsQty) < 1) {
-            $scope._popMsg(messages["smsSend.smsQtyAlert"]); // 전송가능한 수량이 없습니다.
+        // 잔여금액
+        var smsAmt = $("#lblSmsAmt").text();
+        if(parseInt(smsAmt) < 1) {
+            $scope._popMsg(messages["smsSend.smsAmtAlert"]); // 전송가능한 금액이 없습니다.
             return;
         }
-        if(smsQty < params.length) {
-            $scope._popMsg(messages["smsSend.smsQtyOverAlert"]); // 수신자가 잔여수량 보다 많습니다.
+        if(parseInt(smsAmt) < (parseInt(params.length) * parseInt(msgOneAmt))) {
+            $scope._popMsg(messages["smsSend.smsAmtOverAlert"] + (parseInt(params.length) * parseInt(msgOneAmt)) + messages["smsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
             return;
         }
 
@@ -323,27 +347,20 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             var param = {};
             param.reserveYn = reserveYn;
             param.gubun = "smsSend";
+            param.msgType = msgType;
+            param.msgOneAmt = msgOneAmt;
 
             $scope.setSelectedSmsSend(param);
             $scope.wjSmsReserveLayer.show(true);
             event.preventDefault();
         } else {
             // 전송 저장
-            $scope.smsSendSave(reserveYn, "");
+            $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt);
         }
     };
 
     // 전송 저장
-    $scope.smsSendSave = function(reserveYn, reserveDate) {
-        // 메세지타입 1:SMS 2:LMS 3:MMS
-        var msgType = "1";
-        var msgTypeGubun = $("#lblMsgType").text();
-        if(msgTypeGubun == "LMS") {
-            msgType = "2";
-        } else if(msgTypeGubun == "MMS") {
-            msgType = "3";
-        }
-
+    $scope.smsSendSave = function(reserveYn, reserveDate, msgType, msgOneAmt) {
         // 첨부파일 개수
         var fileCount = 0;
         // MMS 첨부파일 체크
@@ -374,17 +391,17 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             // MMS
             if(msgType == "3") {
                 // 첨부파일 저장
-                $scope.smsSendFileSave(reserveYn, reserveDate, msgType, fileCount);
+                $scope.smsSendFileSave(reserveYn, reserveDate, msgType, msgOneAmt, fileCount);
             // SMS, LMS
             } else {
                 // 전송 저장 save
-                $scope.smsSendRealSave(reserveYn, reserveDate, msgType, 0, "");
+                $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, 0, "");
             }
         }
     };
 
     // 전송 저장 save
-    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, fileCount, contentData) {
+    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, msgOneAmt, fileCount, contentData) {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -418,6 +435,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope.flex.collectionView.items[i].contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
                 $scope.flex.collectionView.items[i].pageGubun = "smsSend"; // 페이지구분
                 $scope.flex.collectionView.items[i].smsSendSeq = ""; // 전송이력시퀀스(SMS전송 팝업 : 전송시 채번 / 마케팅용 SMS전송 : 회원조회시 채번)
+                $scope.flex.collectionView.items[i].msgOneAmt = msgOneAmt; // 메세지별 건당금액
 
                 params.push($scope.flex.collectionView.items[i]);
             }
@@ -436,15 +454,15 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
         $scope._gridDataInit();
 
-        // 잔여수량
-        $scope.restSmsQty();
+        // 잔여금액
+        $scope.restSmsAmt();
 
         // 첨부파일 초기화
         $scope.clearSmsFile();
     };
 
     // 첨부파일 저장
-    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, fileCount) {
+    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, msgOneAmt, fileCount) {
         var formData = new FormData($("#smsForm")[0]);
         // formData.append("orgnCd", orgnCd);
         formData.append("pageGubun", "fileSms");
@@ -471,7 +489,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                     contentData = contentData.substring(0, contentData.length-1);
 
                     // 전송 저장 save
-                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, fileCount, contentData);
+                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, fileCount, contentData);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');

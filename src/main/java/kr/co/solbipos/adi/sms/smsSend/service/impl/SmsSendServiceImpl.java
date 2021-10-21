@@ -70,13 +70,13 @@ public class SmsSendServiceImpl implements SmsSendService {
         return smsSendMapper.getStoreNmList(smsSendVO);
     }
 
-    /** 잔여수량 조회 */
+    /** 잔여금액 조회 */
     @Override
-    public DefaultMap<Object> getSmsQtyList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
+    public DefaultMap<Object> getSmsAmtList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
 
         smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
-        return smsSendMapper.getSmsQtyList(smsSendVO);
+        return smsSendMapper.getSmsAmtList(smsSendVO);
     }
 
     /** 전송,예약 저장 */
@@ -158,16 +158,16 @@ public class SmsSendServiceImpl implements SmsSendService {
                 procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC
             }
 
-            // 현재 잔여수량
-            String smsQty = smsSendMapper.getSmsQtySelect(smsSendVO);
-            // 잔여수량 -1
-            smsSendVO.setSmsQty(String.valueOf(Integer.parseInt(smsQty) -1));
+            // 현재 잔여금액
+            String smsAmt = smsSendMapper.getSmsAmtSelect(smsSendVO);
+            // 잔여금액 - 사용금액
+            smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - Integer.parseInt(smsSendVO.getMsgOneAmt()) ));
 
-            LOGGER.info("SMS전송 >>> 현재 잔여수량 : " + smsQty);
-            LOGGER.info("SMS전송 >>> 수정될 잔여수량 : " + smsSendVO.getSmsQty());
+            LOGGER.info("SMS전송 >>> 현재 잔여금액 : " + smsAmt);
+            LOGGER.info("SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
 
-            // 잔여수량 저장 update
-            procCnt = smsSendMapper.getSmsQtySaveUpdate(smsSendVO);
+            // 잔여금액 저장 update
+            procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
 
             // 마지막 데이터 저장시 전송이력
             if(rowCount == smsSendVOs.length) {
@@ -252,16 +252,16 @@ public class SmsSendServiceImpl implements SmsSendService {
             procCnt = smsSendMapper.getSmsSendReserve1000SaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC_READY
         }
 
-        // 현재 잔여수량
-        String smsQty = smsSendMapper.getSmsQtySelect(smsSendVO);
-        // 잔여수량 - 조회한 회원수
-        smsSendVO.setSmsQty(String.valueOf(Integer.parseInt(smsQty) - Integer.parseInt(smsSendVO.getSmsSendListCnt())));
+        // 현재 잔여금액
+        String smsAmt = smsSendMapper.getSmsAmtSelect(smsSendVO);
+        // 잔여금액 - 사용금액
+        smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - (Integer.parseInt(smsSendVO.getMsgOneAmt()) * Integer.parseInt(smsSendVO.getSmsSendListCnt())) ));
 
-        LOGGER.info("SMS전송 >>> 현재 잔여수량 : " + smsQty);
-        LOGGER.info("SMS전송 >>> 수정될 잔여수량 : " + smsSendVO.getSmsQty());
+        LOGGER.info("SMS전송 >>> 현재 잔여금액 : " + smsAmt);
+        LOGGER.info("SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
 
-        // 잔여수량 저장 update
-        procCnt = smsSendMapper.getSmsQtySaveUpdate(smsSendVO);
+        // 잔여금액 저장 update
+        procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
 
         // 전송건수
         smsSendVO.setSmsSendCount(smsSendVO.getSmsSendListCnt());

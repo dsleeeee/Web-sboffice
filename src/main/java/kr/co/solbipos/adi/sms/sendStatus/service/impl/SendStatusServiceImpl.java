@@ -77,15 +77,25 @@ public class SendStatusServiceImpl implements SendStatusService {
 
             sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
+            String msgType = ""; // 메세지타입
+
             if(sendStatusVO.getGubun().equals("SDK_SMS_SEND_ENC")) {
+                msgType = "001"; // 메세지타입
                 procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDelete(sendStatusVO); // SDK_SMS_SEND_ENC
 
+            } else if(sendStatusVO.getGubun().equals("SDK_LMS_SEND_ENC")) {
+                msgType = "002"; // 메세지타입
+                procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS(sendStatusVO); // SDK_MMS_SEND_ENC
+
             } else if(sendStatusVO.getGubun().equals("SDK_MMS_SEND_ENC")) {
+                msgType = "003"; // 메세지타입
                 procCnt = sendStatusMapper.getSendStatusReserveCancelSaveDeleteLMS(sendStatusVO); // SDK_MMS_SEND_ENC
             }
 
-            // 잔여수량 복구
-            procCnt = sendStatusMapper.getSmsQtyRecoverSaveUpdate(sendStatusVO);
+            sendStatusVO.setMsgType(msgType);
+
+            // 잔여금액 복구
+            procCnt = sendStatusMapper.getSmsAmtRecoverSaveUpdate(sendStatusVO);
 
             // 전송이력 복구
             procCnt = sendStatusMapper.getSmsSendSeqRecoverSaveUpdate(sendStatusVO);

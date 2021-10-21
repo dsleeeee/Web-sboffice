@@ -127,7 +127,7 @@
                     A.SUBJECT,
                     A.MMS_MSG AS MSG_CONTENT,
                     A.RESERVED9 AS SMS_SEND_SEQ,
-                    'SDK_MMS_SEND_ENC' AS GUBUN
+                    (CASE WHEN A.CONTENT_COUNT = '0' THEN 'SDK_LMS_SEND_ENC' ELSE 'SDK_MMS_SEND_ENC' END) AS GUBUN
                     FROM SDK_MMS_SEND_ENC A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
@@ -307,17 +307,17 @@
         AND MSG_ID = #{msgId}
     </delete>
 
-    <!-- 잔여수량 복구 -->
+    <!-- 잔여금액 복구 -->
     <!--
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <update id="getSmsQtyRecoverSaveUpdate" parameterType="SendStatusVO">
-        /* SendStatusMapper.getSmsQtyRecoverSaveUpdate */
+    <update id="getSmsAmtRecoverSaveUpdate" parameterType="SendStatusVO">
+        /* SendStatusMapper.getSmsAmtRecoverSaveUpdate */
         UPDATE
         CET_SMSPT_T
         SET
-        SMS_QTY = (SELECT (SMS_QTY+1) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}),
+        SMS_AMT = (SELECT (SMS_AMT + (SELECT NMCODE_ITEM_2 FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '222' AND NMCODE_CD = #{msgType})) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}),
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1
@@ -341,7 +341,6 @@
         AND SMS_SEND_ORGN_CD = #{orgnCd}
         AND SMS_SEND_SEQ = #{smsSendSeq}
     </update>
-
 
     <!-- 일자별 전송현황 - 조회 -->
     <!--

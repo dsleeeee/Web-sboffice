@@ -42,16 +42,40 @@
         AND twuidv01.USER_ID = #{userId}
     </select>
 
-    <!-- 잔여수량 조회 -->
+    <!-- 잔여금액 조회 -->
     <!--
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <select id="getSmsQtyList"  parameterType="SmsSendVO" resultType="DefaultMap">
-        /* SmsSendMapper.getSmsQtyList */
+    <select id="getSmsAmtList"  parameterType="SmsSendVO" resultType="DefaultMap">
+        /* SmsSendMapper.getSmsAmtList */
         SELECT
-        cst.SMS_QTY
-        FROM CET_SMSPT_T cst
+        NVL(cst.SMS_AMT, 0) AS SMS_AMT,
+        tcn.SMS AS SMS_ONE_AMT,
+        tcn.LMS AS LMS_ONE_AMT,
+        tcn.MMS AS MMS_ONE_AMT
+        FROM CET_SMSPT_T cst,
+        (
+            SELECT *
+            FROM
+            (
+                SELECT
+                tcn.NMCODE_NM,
+                tcn.NMCODE_ITEM_2
+                FROM TB_CM_NMCODE tcn
+                WHERE 1=1
+                AND tcn.NMCODE_GRP_CD = '222'
+                AND tcn.NMCODE_CD IN ('001', '002', '003')
+            )
+            PIVOT
+            (
+               SUM(NMCODE_ITEM_2)
+               FOR NMCODE_NM
+               IN ('SMS' AS SMS,
+              'LMS' AS LMS,
+              'MMS' AS MMS)
+            )
+        ) tcn
         WHERE 1=1
         AND cst.OGN_CD = #{orgnCd}
     </select>
@@ -356,31 +380,31 @@
         )
     </insert>
 
-    <!-- 잔여수량 조회 -->
+    <!-- 잔여금액 조회 -->
     <!--
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <select id="getSmsQtySelect" parameterType="SmsSendVO" resultType="String">
-        /* SmsSendMapper.getSmsQtySelect */
+    <select id="getSmsAmtSelect" parameterType="SmsSendVO" resultType="String">
+        /* SmsSendMapper.getSmsAmtSelect */
         SELECT
-        cst.SMS_QTY AS SMS_QTY
+        NVL(cst.SMS_AMT, 0) AS SMS_AMT
         FROM CET_SMSPT_T cst
         WHERE 1=1
         AND cst.OGN_CD = #{orgnCd}
     </select>
 
-    <!-- 잔여수량 저장 update -->
+    <!-- 잔여금액 저장 update -->
     <!--
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <update id="getSmsQtySaveUpdate" parameterType="SmsSendVO">
-        /* SmsSendMapper.getSmsQtySaveUpdate */
+    <update id="getSmsAmtSaveUpdate" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsAmtSaveUpdate */
         UPDATE
         CET_SMSPT_T
         SET
-        SMS_QTY = #{smsQty},
+        SMS_AMT = #{smsAmt},
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1

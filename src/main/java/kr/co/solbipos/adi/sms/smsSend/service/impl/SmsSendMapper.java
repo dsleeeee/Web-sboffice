@@ -33,8 +33,8 @@ public interface SmsSendMapper {
     /** 관리자/총판/본사/매장 명칭 조회 */
     DefaultMap<Object> getStoreNmList(SmsSendVO smsSendVO);
 
-    /** 잔여수량 조회 */
-    DefaultMap<Object> getSmsQtyList(SmsSendVO smsSendVO);
+    /** 잔여금액 조회 */
+    DefaultMap<Object> getSmsAmtList(SmsSendVO smsSendVO);
 
     /** 전송,예약 저장 insert */
     int getSmsSendReserveSaveInsert(SmsSendVO smsSendVO);
@@ -44,11 +44,11 @@ public interface SmsSendMapper {
     int getSmsSendReserve1000SaveInsert(SmsSendVO smsSendVO);
     int getSmsSendReserve1000SaveInsertLMS(SmsSendVO smsSendVO);
 
-    /** 잔여수량 조회 */
-    String getSmsQtySelect(SmsSendVO smsSendVO);
+    /** 잔여금액 조회 */
+    String getSmsAmtSelect(SmsSendVO smsSendVO);
 
-    /** 잔여수량 저장 update */
-    int getSmsQtySaveUpdate(SmsSendVO smsSendVO);
+    /** 잔여금액 저장 update */
+    int getSmsAmtSaveUpdate(SmsSendVO smsSendVO);
 
     /** 수신자추가 팝업 - 조회 */
     List<DefaultMap<Object>> getAddresseeAddList(SmsSendVO smsSendVO);

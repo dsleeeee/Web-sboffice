@@ -57,6 +57,9 @@ public class SendStatusVO extends PageVO {
     /** 전송이력시퀀스 */
     private String smsSendSeq;
 
+    /** 메세지타입 */
+    private String msgType;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -100,4 +103,8 @@ public class SendStatusVO extends PageVO {
     public void setSmsSendSeq(String smsSendSeq) {
         this.smsSendSeq = smsSendSeq;
     }
+
+    public String getMsgType() { return msgType; }
+
+    public void setMsgType(String msgType) { this.msgType = msgType; }
 }

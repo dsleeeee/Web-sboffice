@@ -208,10 +208,17 @@
                         </tr>
                         <tr>
                             <td class="s14">
-                                <%-- 잔여수량 --%>
+                                <%-- 잔여금액 --%>
                                 <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
-                                <span><s:message code="smsSend.smsQty" /></span>
-                                <span><label id="lblSmsQty"></label></span>
+                                <span><s:message code="smsSend.smsAmt" /></span>
+                                <span><label id="lblSmsAmt"></label></span>
+
+                                <%-- SMS건당금액 --%>
+                                <span style="display: none;"><label id="lblSmsOneAmt"/></span>
+                                <%-- LMS건당금액 --%>
+                                <span style="display: none;"><label id="lblLmsOneAmt"/></span>
+                                <%-- MMS건당금액 --%>
+                                <span style="display: none;"><label id="lblMmsOneAmt"/></span>
                             </td>
                         </tr>
                     </table>
@@ -282,7 +289,7 @@
     <%--var orgnCd = "${orgnCd}";--%>
 <%--</script>--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20211018.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20211022.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">

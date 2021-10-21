@@ -124,7 +124,7 @@ public class SmsSendController {
     }
 
     /**
-     * 잔여수량 조회
+     * 잔여금액 조회
      *
      * @param smsSendVO
      * @param request
@@ -134,14 +134,14 @@ public class SmsSendController {
      * @author  김설아
      * @since   2021. 06. 14.
      */
-    @RequestMapping(value = "/smsSend/getSmsQtyList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/smsSend/getSmsAmtList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSmsQtyList(SmsSendVO smsSendVO, HttpServletRequest request,
                                  HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        DefaultMap<Object> result = smsSendService.getSmsQtyList(smsSendVO, sessionInfoVO);
+        DefaultMap<Object> result = smsSendService.getSmsAmtList(smsSendVO, sessionInfoVO);
 
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
         resultMap.put("result", result);

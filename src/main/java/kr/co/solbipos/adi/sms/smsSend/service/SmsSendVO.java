@@ -51,6 +51,9 @@ public class SmsSendVO extends PageVO {
     /** 잔여수량 */
     private String smsQty;
 
+    /** 잔여금액 */
+    private String smsAmt;
+
     /** 제목 */
     private String title;
 
@@ -135,6 +138,9 @@ public class SmsSendVO extends PageVO {
     /** 조회한 회원수 */
     private String smsSendListCnt;
 
+    /** 메세지별 건당금액 */
+    private String msgOneAmt;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -170,6 +176,10 @@ public class SmsSendVO extends PageVO {
     public String getSmsQty() { return smsQty; }
 
     public void setSmsQty(String smsQty) {  this.smsQty = smsQty; }
+
+    public String getSmsAmt() { return smsAmt; }
+
+    public void setSmsAmt(String smsAmt) {  this.smsAmt = smsAmt; }
 
     public String getTitle() { return title; }
 
@@ -322,4 +332,8 @@ public class SmsSendVO extends PageVO {
     public String getSmsSendListCnt() { return smsSendListCnt; }
 
     public void setSmsSendListCnt(String smsSendListCnt) { this.smsSendListCnt = smsSendListCnt; }
+
+    public String getMsgOneAmt() { return msgOneAmt; }
+
+    public void setMsgOneAmt(String msgOneAmt) { this.msgOneAmt = msgOneAmt; }
 }

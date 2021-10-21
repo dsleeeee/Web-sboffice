@@ -29,8 +29,8 @@ public interface SmsSendService {
     /** 관리자/총판/본사/매장 명칭 조회 */
     DefaultMap<Object> getStoreNmList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
 
-    /** 잔여수량 조회 */
-    DefaultMap<Object> getSmsQtyList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+    /** 잔여금액 조회 */
+    DefaultMap<Object> getSmsAmtList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
 
     /** 전송,예약 저장 */
     int getSmsSendReserveSave(SmsSendVO[] smsSendVOs, SessionInfoVO sessionInfoVO);

@@ -548,13 +548,21 @@
                         <table>
                             <tr>
                                 <td class="s14">
-                                    <%-- 잔여수량 --%>
+                                    <%-- 잔여금액 --%>
                                     <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
-                                    <span><s:message code="marketingSmsSend.smsQty" /></span>
-                                    <span class="mr5"><label id="lblMarketingSmsSendSmsQty"></label></span>
+                                    <span><s:message code="marketingSmsSend.smsAmt" /></span>
+                                    <span class="mr5"><label id="lblMarketingSmsSendSmsAmt"></label></span>
                                     <%-- 받는사람 --%>
                                     <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
                                     <span><s:message code="marketingSmsSend.receiveName" /></span>
+
+                                    <%-- SMS건당금액 --%>
+                                    <span style="display: none;"><label id="lblMarketingSmsSendSmsOneAmt"/></span>
+                                    <%-- LMS건당금액 --%>
+                                    <span style="display: none;"><label id="lblMarketingSmsSendLmsOneAmt"/></span>
+                                    <%-- MMS건당금액 --%>
+                                    <span style="display: none;"><label id="lblMarketingSmsSendMmsOneAmt"/></span>
+
                                     <%-- 조회건수 --%>
                                     <span style="display: none;"><label id="lblMarketingSmsSendListCnt"/></span>
                                     <%-- 전송이력시퀀스 --%>
@@ -719,7 +727,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211018.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211022.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>
