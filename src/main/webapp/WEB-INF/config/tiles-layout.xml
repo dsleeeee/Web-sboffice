@@ -121,6 +121,11 @@
         <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     </definition>
 
+    <!-- POS 화면에서 SMS전송(포스용) -->
+    <definition name="application/pos/posSmsSend/*" extends="posEmptyLayout">
+        <put-attribute name="body" value="/WEB-INF/view/application/pos/posSmsSend/{1}.jsp"/>
+        <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
+    </definition>
     <!-- POS 화면용 웹 설정 끝 -->
 
     <!-- 에러화면 -->

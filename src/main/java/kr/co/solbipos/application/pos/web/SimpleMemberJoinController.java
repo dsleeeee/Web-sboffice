@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.pos.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
@@ -25,7 +26,12 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
-import kr.co.solbipos.application.pos.posBoard.service.PosBoardService;
+import kr.co.solbipos.application.pos.posBoard.service.PosBoardService; // 게시판
+import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService; // 마케팅용 SMS전송
+import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO; // 마케팅용 SMS전송
+import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusService; // 문자전송현황
+import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO; // 문자전송현황
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,11 +91,15 @@ public class SimpleMemberJoinController {
     CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    PosBoardService posBoardService;
+    PosBoardService posBoardService; // 게시판
     @Autowired
     TouchKeyService touchKeyService;
     @Autowired
     ProdService prodService;
+    @Autowired
+    MarketingSmsSendService marketingSmsSendService; // 마케팅용 SMS전송
+    @Autowired
+    SendStatusService sendStatusService; // 문자전송현황
 
     private final String POS_MEMBER_FG_ENVST_CD = "1067"; // 포스회원등록 구분
 
@@ -405,6 +415,33 @@ public class SimpleMemberJoinController {
 
                 if(touchKeyAuth.equals("0")) {
                     throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posKitchenPrint/posKitchenPrint.sb");
+                }
+            }
+            // POS 화면에서 SMS전송(포스용)
+            else if(request.getParameter("url").equals("posSmsSend/posSmsSend")) {
+
+                MarketingSmsSendVO marketingSmsSendVO = new MarketingSmsSendVO();
+
+                // 마케팅용 SMS전송 - 메세지그룹 조회
+                List<DefaultMap<String>> msgGrpAddColList = marketingSmsSendService.getMsgGrpColList(marketingSmsSendVO, sessionInfoVO);
+                model.addAttribute("msgGrpAddColList", msgGrpAddColList);
+
+                // 마케팅용 SMS전송 - 회원등급 리스트 조회
+                List membrClassList = marketingSmsSendService.getMembrClassList(marketingSmsSendVO, sessionInfoVO);
+                String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.ALL);
+                model.addAttribute("memberClassList", membrClassListAll);
+
+                SendStatusVO sendStatusVO = new SendStatusVO();
+
+                // SMS전송 - 메세지그룹 조회
+                List<DefaultMap<String>> msgGrpColList = sendStatusService.getMsgGrpColList(sendStatusVO, sessionInfoVO);
+                model.addAttribute("msgGrpColList", msgGrpColList);
+
+                /** SMS전송 페이지이동 권한체크 */
+                String boardAuth = posBoardService.getBoardAuth(sessionInfoVO, "000318"); // 메뉴코드 추가 SMS전송(000318)
+                LOGGER.info("posLogin boardAuth : {}", boardAuth);
+                if (boardAuth.equals("0")) {
+                    throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posSmsSend/smsSendMenuAuth.sb");
                 }
             }
         }
