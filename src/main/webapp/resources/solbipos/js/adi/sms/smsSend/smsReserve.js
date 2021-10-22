@@ -77,7 +77,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         var reserveDate = startDate + $scope.startTimeSmsReserveCombo + $scope.startMinuteSmsReserveCombo + "00";
         var reserveYn = $("#lblSmsReserveReserveYn").text();
         var gubun = $("#lblSmsReserveGubun").text();
-        var msgType = $("#lblSmsReservesgType").text();
+        var msgType = $("#lblSmsReserveMsgType").text();
         var msgOneAmt = $("#lblSmsReserveMsgOneAmt").text();
 
         if(parseInt(reserveDate) < parseInt(getCurDateTime())) {
