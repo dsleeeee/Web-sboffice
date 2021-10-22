@@ -38,7 +38,7 @@
     var gvEndDate = "${endDate}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posSmsSend/posSmsSend.js?ver=20211022.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posSmsSend/posSmsSend.js?ver=20211022.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <c:if test="${orgnFg == 'HQ' or orgnFg == 'STORE'}">

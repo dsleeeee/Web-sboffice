@@ -48,7 +48,7 @@ app.controller('posSmsSendCtrl', ['$scope', function ($scope) {
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("marketingSmsSendCtrl");
-        scope.flex.refresh();
+        scope.flexMarketingSmsSend.refresh();
     };
 
     // 문자전송현황 탭 보이기
