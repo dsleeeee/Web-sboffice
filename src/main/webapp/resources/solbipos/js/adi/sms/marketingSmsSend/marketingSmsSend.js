@@ -435,8 +435,10 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             param.msgType = msgType;
             param.msgOneAmt = msgOneAmt;
 
-            $scope.setSelectedMarketingSmsSend(param);
-            $scope.wjSmsReserveLayer.show(true);
+            // SMS전송 팝업
+            var smsSendScope = agrid.getScope('smsSendCtrl');
+            smsSendScope.setSelectedSmsSend(param);
+            smsSendScope.wjSmsReserveLayer.show(true);
             event.preventDefault();
         } else {
             // 전송 저장
@@ -700,13 +702,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 선택
-    $scope.selectedMarketingSmsSend;
-    $scope.setSelectedMarketingSmsSend = function(store) {
-        $scope.selectedMarketingSmsSend = store;
-    };
-    $scope.getSelectedMarketingSmsSend = function() {
-        return $scope.selectedMarketingSmsSend;
-    };
+    // $scope.selectedMarketingSmsSend;
+    // $scope.setSelectedMarketingSmsSend = function(store) {
+    //     $scope.selectedMarketingSmsSend = store;
+    // };
+    // $scope.getSelectedMarketingSmsSend = function() {
+    //     return $scope.selectedMarketingSmsSend;
+    // };
 
     // 발신번호추가
     $scope.telNoAdd = function() {
@@ -725,11 +727,11 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         });
 
         // SMS예약 팝업 핸들러 추가
-        $scope.wjSmsReserveLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('smsReserveCtrl', $scope.getSelectedMarketingSmsSend());
-            }, 50)
-        });
+        // $scope.wjSmsReserveLayer.shown.addHandler(function (s) {
+        //     setTimeout(function() {
+        //         $scope._broadcast('smsReserveCtrl', $scope.getSelectedMarketingSmsSend());
+        //     }, 50)
+        // });
     });
 
     // 매장선택 모듈 팝업 사용시 정의
