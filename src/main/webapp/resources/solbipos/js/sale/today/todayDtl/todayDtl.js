@@ -187,7 +187,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/today/todayDtl/todayDtl/list.sb", params, function () {
       var params       = {};
-      params.saleYn    = 'Y';
+      params.saleYn    = '';
       params.startDate = $scope.searchedStartDate;
       params.storeCd   = $scope.searchedStoreCd;
       params.posNo     = $scope.searchedPosNo;

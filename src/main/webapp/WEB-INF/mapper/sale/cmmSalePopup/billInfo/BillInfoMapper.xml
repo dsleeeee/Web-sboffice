@@ -90,7 +90,8 @@
     -->
     <select id="getBillProdList" parameterType="billInfoVO" resultType="DefaultMap">
         /* USE : BillInfoMapper.getBillProdList */
-        SELECT  tssd.PROD_CD, tmp.PROD_NM
+        SELECT  tssd.BILL_DTL_NO
+        ,       tssd.PROD_CD, tmp.PROD_NM
         ,       tssd.SALE_QTY, tssd.SALE_UPRC
         ,       tssd.SALE_AMT, tssd.DC_AMT, tssd.REAL_SALE_AMT
         ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
@@ -127,6 +128,7 @@
         AND 	tssdd.BILL_DTL_NO  (+) = tssd.BILL_DTL_NO
         AND     tmp.STORE_CD  (+) = tssd.STORE_CD
         AND     tmp.PROD_CD   (+) = tssd.PROD_CD
+        ORDER BY tssd.BILL_DTL_NO
     </select>
 
 </mapper>

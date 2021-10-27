@@ -142,6 +142,7 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="billInfo.billDtlNo"/>" binding="billDtlNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="billInfo.prodCd"/>" binding="prodCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="billInfo.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="billInfo.saleQty"/>" binding="saleQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -291,6 +292,7 @@
               item-formatter="_itemFormatter">
 
               <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="billInfo.billDtlNo"/>" binding="billDtlNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="billInfo.prodCd"/>" binding="prodCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="billInfo.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="billInfo.saleQty"/>" binding="saleQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -320,4 +322,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.18" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.19" charset="utf-8"></script>
