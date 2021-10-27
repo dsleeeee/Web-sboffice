@@ -1,16 +1,12 @@
 package kr.co.solbipos.adi.sms.smsTelNoManage.service.impl;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.utils.spring.StringUtil;
-import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageService;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
 
@@ -72,7 +68,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
     @Override
     public int getSmsTelNoManageUpdate(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
 
-        int procCnt = 0;
+        int cnt = 0;
 
         String currentDt = currentDateTimeString();
 
@@ -81,9 +77,14 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         smsTelNoManageVO.setModDt(currentDt);
         smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
 
-        procCnt = smsTelNoManageMapper.getSmsTelNoManageUpdate(smsTelNoManageVO);
+        // 중복체크
+        if(smsTelNoManageMapper.getSmsTelNoManageChk(smsTelNoManageVO) == 1){
+            cnt = -1;
+        } else {
+            cnt = smsTelNoManageMapper.getSmsTelNoManageUpdate(smsTelNoManageVO);
+        }
 
-        return procCnt;
+        return cnt;
     }
 
     /** 발신번호관리 저장 */
