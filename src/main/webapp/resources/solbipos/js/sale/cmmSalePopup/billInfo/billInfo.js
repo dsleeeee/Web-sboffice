@@ -73,6 +73,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     // 첫째줄 헤더 생성
     var dataItem         = {};
+    dataItem.billDtlNo   = messages["billInfo.billDtlNo"];
     dataItem.prodCd      = messages["billInfo.prodCd"];
     dataItem.prodNm      = messages["billInfo.prodNm"];
     dataItem.saleQty     = messages["billInfo.saleQty"];
@@ -403,6 +404,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 첫째줄 헤더 생성
     var dataItem         = {};
+    dataItem.billDtlNo   = messages["billInfo.billDtlNo"];
     dataItem.prodCd      = messages["billInfo.prodCd"];
     dataItem.prodNm      = messages["billInfo.prodNm"];
     dataItem.saleQty     = messages["billInfo.saleQty"];

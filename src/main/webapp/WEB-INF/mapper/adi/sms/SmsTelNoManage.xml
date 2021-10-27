@@ -57,6 +57,18 @@
         )
     </insert>
 
+    <!-- 발신번호관리 - 기존에 등록된 번호인지 확인 -->
+    <!--
+        TABLE    : HCS_SENDM_T
+        COMMENTS : [본사매장]발신번호인증||
+    -->
+    <select id="getSmsTelNoManageChk"  parameterType="SmsTelNoManageVO" resultType="Integer">
+        /* SmsTelNoManageMapper.getSmsTelNoManageChk */
+        SELECT  COUNT(*)
+        FROM    HCS_CRTLG_T
+        WHERE   SBPENC.D(RES_RECV_NUMBER) = #{telNo}
+    </select>
+
     <!-- 발신번호관리 수정 -->
     <!--
         TABLE    :
@@ -67,13 +79,13 @@
         UPDATE
             HCS_CRTLG_T
         SET
-            PROC_FG = "1",
-            RES_RECV_NUMBER = SBPENC.E(#{telNo})
+            PROC_FG = '1',
+            RES_RECV_NUMBER = SBPENC.E(#{telNo}),
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
         WHERE 1=1
             AND CERT_ID = #{certId}
-            AND ONG_CD = #{certId}
+            AND OGN_CD = #{orgnCd}
     </update>
 
     <!-- 발신번호관리 저장 -->

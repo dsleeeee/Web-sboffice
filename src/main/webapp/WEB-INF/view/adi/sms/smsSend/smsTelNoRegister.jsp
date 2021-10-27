@@ -1,10 +1,9 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.text.*" %>
 <%@ page import="java.util.*" %>
-<%@ include file="cert_conf.jsp"%>
 <%
     String cret_id = new SimpleDateFormat("yyyyMMddHHmmssSSSSSSS").format(new Date()); // 요청번호 생성 예제
 %>
@@ -31,10 +30,9 @@
                 <%-- 사전등록 발신번호 --%>
 <%--                <s:message code="smsTelNoRegister.registerTelNo" />--%>
                 <input type="hidden" class="sb-input w70" id="cret_id" value="<%=cret_id%>" />
-                <input type="hidden" class="sb-input w70" id="site_cd" value="<%=g_conf_site_cd%>" />
-                <input type="hidden" class="sb-input w70" id="gw_url" value="<%=g_conf_gw_url%>" />
-                <input type="hidden" class="sb-input w70" id="Ret_URL" value="<%=g_conf_Ret_URL%>" />
-<%--                <input type="text" class="sb-input w40" id="srchTelNo" ng-model="telNo" />--%>
+                <input type="hidden" class="sb-input w70" id="site_cd" value="${siteCd}" />
+                <input type="hidden" class="sb-input w70" id="gw_url" value="${gwUrl}" />
+                <input type="hidden" class="sb-input w70" id="Ret_URL" value="${retUrl}" />
                 <%-- 인증요청 --%>
                 <button id="request" class="btn_skyblue ml5 fr" ng-click="telNoRequest()">
                     <s:message code="smsTelNoRegister.telNoRequest" />
