@@ -43,7 +43,7 @@
                     </div>
                 </td>
             </tr>
-            <c:if test="${subPriceFg == '1'}">
+            <c:if test="${subPriceFg == '1' and storeTypeApplyEnvstVal == '1'}">
                 <tr>
                     <th><input type="checkbox" id="saleUprcApply" ng-model="saleUprcApply"/> <s:message code="salePrice.batchChange"/></th>
                     <td><s:message code="salePrice.saleUprcApply"/></td>

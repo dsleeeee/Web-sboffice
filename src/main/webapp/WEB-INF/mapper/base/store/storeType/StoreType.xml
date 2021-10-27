@@ -984,6 +984,7 @@
           (
             #{hqOfficeCd},
             #{storeCd},
+            #{applyFg},
             #{regId},
             #{result, mode=OUT, jdbcType=VARCHAR}
           )
