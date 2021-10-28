@@ -271,14 +271,6 @@
       <version>2.2.4</version>
     </dependency>
 
-    <dependency>
-      <groupId>ctCli</groupId>
-      <artifactId>ctCli</artifactId>
-      <version>1.0.7</version>
-      <scope>provided</scope>
-      <systemPath>${basedir}/lib/CtCli-1.0.7.jar</systemPath>
-    </dependency>
-
   </dependencies>
 
 
