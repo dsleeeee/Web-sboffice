@@ -53,7 +53,7 @@ public class SmsSendTabController {
     public static final String SITE_CD      = "AGSVU";
     public static final String WEB_SITEID   = "J21101407426";
     public static final String ENC_KEY      = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
-    public static final String RET_URL      = "https://neo.solbipos.com/adi/sms/smsSendTab/smsSendTab/getSmsTelNoRegisterRequest.sb";
+    public static final String RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
     public static final String GW_URL       = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
     /**
