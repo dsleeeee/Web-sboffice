@@ -45,6 +45,80 @@ function msgShow(title, message) {
     scope.msgShow(params);
 }
 
+/** 로딩바 */
+// 1000건 이상 전송시 전송테이블에 Insert 되는동안 로딩바
+var tid;
+function smsSendloadingInsert1000(smsSendSeq, smsSendListCnt){
+    var scope = agrid.getScope('marketingSmsSendCtrl');
+    // 로딩바 show
+    scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+
+    // 1초마다 확인
+    tid = setInterval(function () {
+        smsSendloadingBarChk(smsSendSeq, smsSendListCnt);
+    }, 1000);
+}
+
+var sendingCnt = 0; // 현재 전송테이블에 저장된 건수
+function smsSendloadingBarChk(smsSendSeq, smsSendListCnt){
+    var params = {};
+    params.smsSendSeq = smsSendSeq;
+    // params.smsSendListCnt = smsSendListCnt; // 전송할 총건수
+
+    if (sendingCnt <= smsSendListCnt) {
+        var scope = agrid.getScope('marketingSmsSendCtrl');
+        $.ajax({
+            url: "/adi/sms/marketingSmsSend/marketingSmsSend/getSmsSendInsert1000Count.sb",
+            type: "POST",
+            data: params,
+            processData: false,
+            contentType: false,
+            cache: false,
+            // async:false,
+            success: function(result) {
+                // alert(result.status);
+                // alert(result.data);
+                // alert(result.data.result.sendCount);
+                if (result.status === "OK") {
+                    sendingCnt = result.data.result.sendCount; // 현재 전송테이블에 저장된 건수
+
+                    if(sendingCnt == smsSendListCnt) {
+                        scope._popMsg("저장되었습니다.");
+                        // 로딩바 hide
+                        scope.$broadcast('loadingPopupInactive');
+                        scope.allSearch()
+                    }
+                }
+                else if (result.status === "FAIL") {
+                    scope._popMsg('Ajax Fail By HTTP Request');
+                    scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    scope._popMsg(result.message);
+                    scope.$broadcast('loadingPopupInactive');
+                }
+                /*else if(result.status === undefined) {
+                    location.href = "/";
+                }*/
+                else {
+                    var msg = result.status + " : " + result.message;
+                    scope._popMsg(msg);
+                    scope.$broadcast('loadingPopupInactive');
+                }
+            },
+            error : function(result){
+                scope._popMsg("error");
+                scope.$broadcast('loadingPopupInactive');
+            }
+        },function() {
+            scope._popMsg("Ajax Fail By HTTP Request");
+            scope.$broadcast('loadingPopupInactive');
+        });
+    }
+}
+/** //로딩바 */
+
+
 /**
  *  마케팅용 SMS전송 조회 그리드 생성
  */
@@ -529,7 +603,12 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             params.msgOneAmt = msgOneAmt; // 메세지별 건당금액
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(){ $scope.allSearch() });
+            $scope._postJSONSave.withOutPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(){
+                // $scope.allSearch()
+
+                // 1000건 이상 전송시 전송테이블에 Insert 되는동안 로딩바
+                smsSendloadingInsert1000(params.smsSendSeq, params.smsSendListCnt);
+            });
         } else {
             // 파라미터 설정
             var params = new Array();
@@ -578,7 +657,12 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         $("#lblMarketingSmsSendTxtByte").text("0");
         $("#lblMarketingSmsSendMsgType").text("SMS");
 
+        // 그리드 초기화
         $scope._gridDataInit();
+        $("#lblMarketingSmsSendListCnt").text("");
+        $("#lblMarketingSmsSendGridMsg").text("");
+        $("#marketingSmsSendGridMsg").css("display", "none");
+        $("#marketingSmsSendGrid").css("display", "block");
 
         // 잔여금액
         $scope.restSmsAmt();

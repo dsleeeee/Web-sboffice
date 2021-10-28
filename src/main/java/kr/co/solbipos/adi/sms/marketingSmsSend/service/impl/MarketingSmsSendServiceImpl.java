@@ -2,7 +2,6 @@ package kr.co.solbipos.adi.sms.marketingSmsSend.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.spring.StringUtil;
-import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO;
@@ -11,7 +10,6 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
 
@@ -126,5 +124,14 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         procCnt = marketingSmsSendMapper.getMarketingSmsSendListSaveInsert(marketingSmsSendVO);
 
         return smsSendSeq;
+    }
+
+    /** 마케팅용 SMS전송 - 1000건 이상 전송시 전송테이블에 몇건 Insert 됬는지 조회 */
+    @Override
+    public DefaultMap<String> getSmsSendInsert1000Count(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+
+        marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return marketingSmsSendMapper.getSmsSendInsert1000Count(marketingSmsSendVO);
     }
 }

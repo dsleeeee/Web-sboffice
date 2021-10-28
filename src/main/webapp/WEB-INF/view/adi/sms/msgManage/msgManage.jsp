@@ -130,17 +130,17 @@
                 <div class="w60 fl pdt10 pdl10 bl" style="height:320px;">
                     <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                         <table>
-                            <tr>
-                                <td>
-                                    <%-- 자동변환 --%>
-                                    <span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>
-                                    <%-- 이름 --%>
-                                    <span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>
-                                    <%-- 추가사항 --%>
-                                    <span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>
-                                </td>
-                            </tr>
-                            <tr style="height: 10px"></tr>
+                            <%--<tr>--%>
+                                <%--<td>--%>
+                                    <%--&lt;%&ndash; 자동변환 &ndash;%&gt;--%>
+                                    <%--<span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>--%>
+                                    <%--&lt;%&ndash; 이름 &ndash;%&gt;--%>
+                                    <%--<span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>--%>
+                                    <%--&lt;%&ndash; 추가사항 &ndash;%&gt;--%>
+                                    <%--<span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>--%>
+                                <%--</td>--%>
+                            <%--</tr>--%>
+                            <%--<tr style="height: 10px"></tr>--%>
                             <tr>
                                 <td>
                                     <%-- 이모티콘 --%>
@@ -162,7 +162,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20211006.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManage.js?ver=20211006.03" charset="utf-8"></script>
 
 <%-- 메세지관리 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/msgManage/msgManageStoreRegist.jsp">
