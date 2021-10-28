@@ -311,6 +311,11 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
                             innerHtml += "<span><a href=\"#\" onclick=\"msgDel(\'"+ list[i].seqNo + "\')\"><img src=\"/resource/solbipos/css/img/sms/btn_del.jpg\"></a></span>";
                             innerHtml += "</td></tr>";
                         }
+                    } else {
+                        innerHtml += "<tr><td>";
+                        innerHtml += "<span style=\"padding-right: 10px;\"><a href=\"#\" onclick=\"msgModify(\'"+ list[i].seqNo + "\', \'"+ list[i].title + "\', \'"+ list[i].message + "\')\"><img src=\"/resource/solbipos/css/img/sms/btn_upd.jpg\"></a></span>";
+                        innerHtml += "<span><a href=\"#\" onclick=\"msgDel(\'"+ list[i].seqNo + "\')\"><img src=\"/resource/solbipos/css/img/sms/btn_del.jpg\"></a></span>";
+                        innerHtml += "</td></tr>";
                     }
                     innerHtml += "</table>";
                     innerHtml += "</div>";
