@@ -1,7 +1,6 @@
 package kr.co.solbipos.adi.sms.marketingSmsSend.web;
 
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
@@ -149,5 +148,33 @@ public class MarketingSmsSendController {
         String result = marketingSmsSendService.getMarketingSmsSendListSave(marketingSmsSendVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 마케팅용 SMS전송 - 1000건 이상 전송시 전송테이블에 몇건 Insert 됬는지 조회
+     *
+     * @param marketingSmsSendVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 10. 22.
+     */
+    @RequestMapping(value = "/marketingSmsSend/getSmsSendInsert1000Count.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsSendInsert1000Count(MarketingSmsSendVO marketingSmsSendVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        marketingSmsSendVO.setSmsSendSeq(request.getParameter("smsSendSeq"));
+
+        DefaultMap<String> result = marketingSmsSendService.getSmsSendInsert1000Count(marketingSmsSendVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
     }
 }

@@ -466,4 +466,34 @@
         )
     </insert>
 
+    <!-- 마케팅용 SMS전송 - 1000건 이상 전송시 전송테이블에 몇건 Insert 됬는지 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSmsSendInsert1000Count" parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+        /* MarketingSmsSendMapper.getSmsSendInsert1000Count */
+        SELECT SUM(SEND_COUNT) AS SEND_COUNT
+        FROM
+        (
+            (
+                --SMS
+                SELECT COUNT(A.MSG_ID) AS SEND_COUNT
+                FROM SDK_SMS_SEND_ENC A
+                WHERE 1=1
+                AND A.RESERVED7 = #{orgnCd} --S_OGN_CD
+                AND A.RESERVED9 = #{smsSendSeq} --A.SMS_SEND_SEQ
+            )
+            UNION ALL
+            (
+                --LMS
+                SELECT COUNT(A.MSG_ID) AS SEND_COUNT
+                FROM SDK_MMS_SEND_ENC A
+                WHERE 1=1
+                AND A.RESERVED7 = #{orgnCd} --S_OGN_CD
+                AND A.RESERVED9 = #{smsSendSeq} --A.SMS_SEND_SEQ
+            )
+        )
+    </select>
+
 </mapper>
