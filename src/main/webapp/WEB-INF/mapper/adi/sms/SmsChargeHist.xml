@@ -269,8 +269,8 @@
             #{regId},
             #{modDt},
             #{modId},
-            '', --SMS_BASE_QTY
-            '', --SMS_CHARGE_QTY
+            '0', --SMS_BASE_QTY
+            '0', --SMS_CHARGE_QTY
             '', --SPP_CORP_CD,
             '', --SPP_SLIP_NO,
             '1', --SPP_SLIP_FG,
@@ -316,7 +316,7 @@
                 SMS_AMT
             ) VALUES (
                 #{selectOrgnCd},
-                '', --SMS_QTY
+                '0', --SMS_QTY
                 #{regDt},
                 #{regId},
                 #{modDt},
