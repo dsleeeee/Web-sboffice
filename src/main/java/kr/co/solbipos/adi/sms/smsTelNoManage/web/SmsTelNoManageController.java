@@ -127,7 +127,7 @@ public class SmsTelNoManageController {
     @RequestMapping(value = "/smsTelNoManage/getSmsTelNoRegisterRequest.sb", method = RequestMethod.POST)
     public String getSmsTelNoRegisterRequest(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         System.out.println("결과 : " + request.getQueryString());
         System.out.println("site_cd : " + request.getParameter("site_cd"));
