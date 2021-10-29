@@ -8,6 +8,18 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
+<%
+    System.out.println("WEB_SMS >>> 결제상세 >>> request.getRequestURL() : " + request.getRequestURL());
+
+    String pay_site_url = "";
+    if(request.getRequestURL().indexOf("://192") > 0 || request.getRequestURL().indexOf("://localhost") > 0) {
+        pay_site_url = "https://testadmin8.kcp.co.kr"; // 테스트(로컬)
+    }
+    else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0) {
+        pay_site_url = "http://admin8.kcp.co.kr"; // 운영
+    }
+%>
+
 <div id="smsChargeHistView" class="subCon" style="display: none;">
     <div ng-controller="smsChargeHistCtrl">
 
@@ -143,7 +155,11 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20211021.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var siteUrl = '<%=pay_site_url%>'; // 결제상세 URL
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20211021.02" charset="utf-8"></script>
 
 <%-- SMS임의충전 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsChargeHist/smsChargeRegist.jsp">
