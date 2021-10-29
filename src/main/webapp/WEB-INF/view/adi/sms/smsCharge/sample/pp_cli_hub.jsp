@@ -13,6 +13,19 @@
     /* ============================================================================== */
 
     /* ============================================================================== */
+    /* =   POST 형식 체크부분                                                       = */
+    /* = -------------------------------------------------------------------------- = */
+    System.out.println("WEB_SMS >>> 충전결제 >>> 01.pp_cli_hub.jsp 호출 >>> request.getMethod() : " + request.getMethod());
+
+    if ( !request.getMethod().equals("POST") )
+    {
+        out.println("잘못된 경로로 접속하였습니다.");
+        return;
+    }
+    /* ============================================================================== */
+%>
+<%
+    /* ============================================================================== */
     /* =   환경 설정 파일 Include                                                   = */
     /* = -------------------------------------------------------------------------- = */
     /* =   ※ 필수                                                                  = */
@@ -37,19 +50,6 @@
           if ( val == null ) val = "";
           return  val;
         }
-    /* ============================================================================== */
-%>
-<%
-    /* ============================================================================== */
-    /* =   POST 형식 체크부분                                                       = */
-    /* = -------------------------------------------------------------------------- = */
-    System.out.println("충전결제 >>> 01.pp_cli_hub.jsp 호출 >>> request.getMethod() : " + request.getMethod());
-
-    if ( !request.getMethod().equals("POST") )
-    {
-        out.println("잘못된 경로로 접속하였습니다.");
-        return;
-    }
     /* ============================================================================== */
 %>
 <%
@@ -129,18 +129,18 @@
     /* = -------------------------------------------------------------------------- = */
     /* =       결제에 필요한 인스턴스를 생성하고 초기화 합니다.                     = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("충전결제 >>> 03.인스턴스 생성 및 초기화 >>> start");
-    System.out.println("충전결제 >>> g_conf_gw_url : " + g_conf_gw_url);
-    System.out.println("충전결제 >>> g_conf_gw_port : " + g_conf_gw_port);
-    System.out.println("충전결제 >>> g_conf_tx_mode : " + g_conf_tx_mode);
-    System.out.println("충전결제 >>> g_conf_log_dir : " + g_conf_log_dir);
+    System.out.println("WEB_SMS >>> 충전결제 >>> 03.인스턴스 생성 및 초기화 >>> start");
+    System.out.println("WEB_SMS >>> 충전결제 >>> g_conf_gw_url : " + g_conf_gw_url);
+    System.out.println("WEB_SMS >>> 충전결제 >>> g_conf_gw_port : " + g_conf_gw_port);
+    System.out.println("WEB_SMS >>> 충전결제 >>> g_conf_tx_mode : " + g_conf_tx_mode);
+    System.out.println("WEB_SMS >>> 충전결제 >>> g_conf_log_dir : " + g_conf_log_dir);
 
     J_PP_CLI_N c_PayPlus = new J_PP_CLI_N();
 
     c_PayPlus.mf_init( "", g_conf_gw_url, g_conf_gw_port, g_conf_tx_mode, g_conf_log_dir );
     c_PayPlus.mf_init_set();
 
-    System.out.println("충전결제 >>> 03.인스턴스 생성 및 초기화 >>> end");
+    System.out.println("WEB_SMS >>> 충전결제 >>> 03.인스턴스 생성 및 초기화 >>> end");
     /* ============================================================================== */
     /* =   03. 인스턴스 생성 및 초기화 END                                          = */
     /* ============================================================================== */
@@ -152,8 +152,8 @@
     /* = -------------------------------------------------------------------------- = */
     /* =   04-1. 승인 요청 정보 설정                                                = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("충전결제 >>> 04-1.승인 요청 정보 설정 >>> start");
-    System.out.println("충전결제 >>> req_tx : " + req_tx);
+    System.out.println("WEB_SMS >>> 충전결제 >>> 04-1.승인 요청 정보 설정 >>> start");
+    System.out.println("WEB_SMS >>> 충전결제 >>> req_tx : " + req_tx);
 
     if ( req_tx.equals( "pay" ) )
     {
@@ -171,7 +171,7 @@
 
     }
 
-    System.out.println("충전결제 >>> 04-1.승인 요청 정보 설정 >>> end");
+    System.out.println("WEB_SMS >>> 충전결제 >>> 04-1.승인 요청 정보 설정 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   04. 처리 요청 정보 설정 END                                              = */
     /* = ========================================================================== = */
@@ -180,12 +180,12 @@
     /* = ========================================================================== = */
     /* =   05. 실행                                                                 = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("충전결제 >>> 05.실행 >>> start");
-    System.out.println("충전결제 >>> tran_cd : " + tran_cd);
-    System.out.println("충전결제 >>> g_conf_site_cd : " + g_conf_site_cd);
-    System.out.println("충전결제 >>> g_conf_site_key : " + g_conf_site_key);
-    System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
-    System.out.println("충전결제 >>> g_conf_log_level : " + g_conf_log_level);
+    System.out.println("WEB_SMS >>> 충전결제 >>> 05.실행 >>> start");
+    System.out.println("WEB_SMS >>> 충전결제 >>> tran_cd : " + tran_cd);
+    System.out.println("WEB_SMS >>> 충전결제 >>> g_conf_site_cd : " + g_conf_site_cd);
+    System.out.println("WEB_SMS >>> 충전결제 >>> g_conf_site_key : " + g_conf_site_key);
+    System.out.println("WEB_SMS >>> 충전결제 >>> ordr_idxx : " + ordr_idxx);
+    System.out.println("WEB_SMS >>> 충전결제 >>> g_conf_log_level : " + g_conf_log_level);
 
     if ( tran_cd.length() > 0 )
     {
@@ -200,9 +200,9 @@
     res_cd  = c_PayPlus.m_res_cd;  // 결과 코드
     res_msg = c_PayPlus.m_res_msg; // 결과 메시지
 
-    System.out.println("충전결제 >>> res_cd : " + res_cd);
-    System.out.println("충전결제 >>> res_msg : " + res_msg);
-    System.out.println("충전결제 >>> 05.실행 >>> end");
+    System.out.println("WEB_SMS >>> 충전결제 >>> res_cd : " + res_cd);
+    System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
+    System.out.println("WEB_SMS >>> 충전결제 >>> 05.실행 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   05. 실행 END                                                             = */
     /* ============================================================================== */
@@ -211,10 +211,10 @@
     /* ============================================================================== */
     /* =   06. 승인 결과 값 추출                                                    = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("충전결제 >>> 06.승인 결과 값 추출 >>> start");
-    System.out.println("충전결제 >>> req_tx : " + req_tx);
-    System.out.println("충전결제 >>> res_cd : " + res_cd);
-    System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
+    System.out.println("WEB_SMS >>> 충전결제 >>> 06.승인 결과 값 추출 >>> start");
+    System.out.println("WEB_SMS >>> 충전결제 >>> req_tx : " + req_tx);
+    System.out.println("WEB_SMS >>> 충전결제 >>> res_cd : " + res_cd);
+    System.out.println("WEB_SMS >>> 충전결제 >>> use_pay_method : " + use_pay_method);
 
     if ( req_tx.equals( "pay" ) )
     {
@@ -225,10 +225,10 @@
             pnt_issue = c_PayPlus.mf_get_res( "pnt_issue" ); // 결제 포인트사 코드
             coupon_mny = c_PayPlus.mf_get_res( "coupon_mny" ); // 쿠폰금액
 
-            System.out.println("충전결제 >>> tno : " + tno);
-            System.out.println("충전결제 >>> amount : " + amount);
-            System.out.println("충전결제 >>> pnt_issue : " + pnt_issue);
-            System.out.println("충전결제 >>> coupon_mny : " + coupon_mny);
+            System.out.println("WEB_SMS >>> 충전결제 >>> tno : " + tno);
+            System.out.println("WEB_SMS >>> 충전결제 >>> amount : " + amount);
+            System.out.println("WEB_SMS >>> 충전결제 >>> pnt_issue : " + pnt_issue);
+            System.out.println("WEB_SMS >>> 충전결제 >>> coupon_mny : " + coupon_mny);
 
     /* = -------------------------------------------------------------------------- = */
     /* =   06-1. 신용카드 승인 결과 처리                                            = */
@@ -246,16 +246,16 @@
                 card_bin_type_02 = c_PayPlus.mf_get_res( "card_bin_type_02" ); // 카드구분2
                 card_mny = c_PayPlus.mf_get_res( "card_mny" ); // 카드결제금액
 
-                System.out.println("충전결제 >>> card_cd : " + card_cd);
-                System.out.println("충전결제 >>> card_name : " + card_name);
-                System.out.println("충전결제 >>> app_time : " + app_time);
-                System.out.println("충전결제 >>> app_no : " + app_no);
-                System.out.println("충전결제 >>> noinf : " + noinf);
-                System.out.println("충전결제 >>> quota : " + quota);
-                System.out.println("충전결제 >>> partcanc_yn : " + partcanc_yn);
-                System.out.println("충전결제 >>> card_bin_type_01 : " + card_bin_type_01);
-                System.out.println("충전결제 >>> card_bin_type_02 : " + card_bin_type_02);
-                System.out.println("충전결제 >>> card_mny : " + card_mny);
+                System.out.println("WEB_SMS >>> 충전결제 >>> card_cd : " + card_cd);
+                System.out.println("WEB_SMS >>> 충전결제 >>> card_name : " + card_name);
+                System.out.println("WEB_SMS >>> 충전결제 >>> app_time : " + app_time);
+                System.out.println("WEB_SMS >>> 충전결제 >>> app_no : " + app_no);
+                System.out.println("WEB_SMS >>> 충전결제 >>> noinf : " + noinf);
+                System.out.println("WEB_SMS >>> 충전결제 >>> quota : " + quota);
+                System.out.println("WEB_SMS >>> 충전결제 >>> partcanc_yn : " + partcanc_yn);
+                System.out.println("WEB_SMS >>> 충전결제 >>> card_bin_type_01 : " + card_bin_type_01);
+                System.out.println("WEB_SMS >>> 충전결제 >>> card_bin_type_02 : " + card_bin_type_02);
+                System.out.println("WEB_SMS >>> 충전결제 >>> card_mny : " + card_mny);
 
                 /* = -------------------------------------------------------------- = */
                 /* =   06-1.1. 복합결제(포인트+신용카드) 승인 결과 처리             = */
@@ -334,7 +334,7 @@
         }
     }
 
-    System.out.println("충전결제 >>> 06.승인 결과 값 추출 >>> end");
+    System.out.println("WEB_SMS >>> 충전결제 >>> 06.승인 결과 값 추출 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   06. 승인 결과 처리 END                                                   = */
     /* ============================================================================== */
@@ -345,11 +345,11 @@
     /* = -------------------------------------------------------------------------- = */
     /* =      결과를 업체 자체적으로 DB 처리 작업하시는 부분입니다.                 = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("충전결제 >>> 07.승인 및 실패 결과 DB 처리 >>> start");
-    System.out.println("충전결제 >>> req_tx : " + req_tx);
-    System.out.println("충전결제 >>> res_cd : " + res_cd);
-    System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
-    System.out.println("충전결제 >>> pnt_issue : " + pnt_issue);
+    System.out.println("WEB_SMS >>> 충전결제 >>> 07.승인 및 실패 결과 DB 처리 >>> start");
+    System.out.println("WEB_SMS >>> 충전결제 >>> req_tx : " + req_tx);
+    System.out.println("WEB_SMS >>> 충전결제 >>> res_cd : " + res_cd);
+    System.out.println("WEB_SMS >>> 충전결제 >>> use_pay_method : " + use_pay_method);
+    System.out.println("WEB_SMS >>> 충전결제 >>> pnt_issue : " + pnt_issue);
 
     if ( req_tx.equals( "pay" ) )
     {
@@ -360,21 +360,21 @@
     /* =        각 결제수단을 구분하시어 DB 처리를 하시기 바랍니다.                 = */
     /* = -------------------------------------------------------------------------- = */
 
-        System.out.println("충전결제 >>> DB insert >>> start");
+        System.out.println("WEB_SMS >>> 충전결제 >>> DB insert >>> start");
 
         if ( res_cd.equals( "0000" ) )
         {
             // 07-1-1. 신용카드
             if ( use_pay_method.equals( "100000000000" ) )
             {
-                System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
-                System.out.println("충전결제 >>> app_time : " + app_time);
-                System.out.println("충전결제 >>> amount : " + amount);
-                System.out.println("충전결제 >>> successYn : Y");
-                System.out.println("충전결제 >>> tno : " + tno);
-                System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
-                System.out.println("충전결제 >>> ordr_res_cdidxx : " + res_cd);
-                System.out.println("충전결제 >>> res_msg : " + res_msg);
+                System.out.println("WEB_SMS >>> 충전결제 >>> use_pay_method : " + use_pay_method);
+                System.out.println("WEB_SMS >>> 충전결제 >>> app_time : " + app_time);
+                System.out.println("WEB_SMS >>> 충전결제 >>> amount : " + amount);
+                System.out.println("WEB_SMS >>> 충전결제 >>> successYn : Y");
+                System.out.println("WEB_SMS >>> 충전결제 >>> tno : " + tno);
+                System.out.println("WEB_SMS >>> 충전결제 >>> ordr_idxx : " + ordr_idxx);
+                System.out.println("WEB_SMS >>> 충전결제 >>> ordr_res_cdidxx : " + res_cd);
+                System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
 
                 // DB 호출
                 goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
@@ -418,23 +418,23 @@
         /* = -------------------------------------------------------------------------- = */
         if( !"0000".equals ( res_cd ) )
         {
-            System.out.println("충전결제 >>> use_pay_method : " + use_pay_method);
-            System.out.println("충전결제 >>> app_time : " + app_time);
-            System.out.println("충전결제 >>> amount : " + amount);
-            System.out.println("충전결제 >>> successYn : Y");
-            System.out.println("충전결제 >>> tno : " + tno);
-            System.out.println("충전결제 >>> ordr_idxx : " + ordr_idxx);
-            System.out.println("충전결제 >>> ordr_res_cdidxx : " + res_cd);
-            System.out.println("충전결제 >>> res_msg : " + res_msg);
+            System.out.println("WEB_SMS >>> 충전결제 >>> use_pay_method : " + use_pay_method);
+            System.out.println("WEB_SMS >>> 충전결제 >>> app_time : " + app_time);
+            System.out.println("WEB_SMS >>> 충전결제 >>> amount : " + amount);
+            System.out.println("WEB_SMS >>> 충전결제 >>> successYn : Y");
+            System.out.println("WEB_SMS >>> 충전결제 >>> tno : " + tno);
+            System.out.println("WEB_SMS >>> 충전결제 >>> ordr_idxx : " + ordr_idxx);
+            System.out.println("WEB_SMS >>> 충전결제 >>> ordr_res_cdidxx : " + res_cd);
+            System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
 
             // DB 호출
             goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
         }
 
-        System.out.println("충전결제 >>> DB insert >>> end");
+        System.out.println("WEB_SMS >>> 충전결제 >>> DB insert >>> end");
     }
 
-    System.out.println("충전결제 >>> 07.승인 및 실패 결과 DB 처리 >>> end");
+    System.out.println("WEB_SMS >>> 충전결제 >>> 07.승인 및 실패 결과 DB 처리 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   07. 승인 및 실패 결과 DB 처리 END                                        = */
     /* = ========================================================================== = */
@@ -451,9 +451,9 @@
     /* =      로 설정해 주시기 바랍니다. (DB 작업 성공의 경우에는 "false" 이외의    = */
     /* =      값을 설정하시면 됩니다.)                                              = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("충전결제 >>> 08.승인 결과 DB 처리 실패시 >>> start");
-    System.out.println("충전결제 >>> req_tx : " + req_tx);
-    System.out.println("충전결제 >>> res_cd : " + res_cd);
+    System.out.println("WEB_SMS >>> 충전결제 >>> 08.승인 결과 DB 처리 실패시 >>> start");
+    System.out.println("WEB_SMS >>> 충전결제 >>> req_tx : " + req_tx);
+    System.out.println("WEB_SMS >>> 충전결제 >>> res_cd : " + res_cd);
 
     // 승인 결과 DB 처리 에러시 bSucc값을 false로 설정하여 거래건을 취소 요청
     bSucc = "";
@@ -462,7 +462,7 @@
     {
         if (res_cd.equals("0000") )
         {
-            System.out.println("충전결제 >>> bSucc : " + bSucc);
+            System.out.println("WEB_SMS >>> 충전결제 >>> bSucc : " + bSucc);
 
             if ( bSucc.equals("false") )
             {
@@ -484,14 +484,14 @@
                 res_cd  = c_PayPlus.m_res_cd;                                 // 결과 코드
                 res_msg = c_PayPlus.m_res_msg;                                // 결과 메시지
 
-                System.out.println("충전결제 >>> res_cd : " + res_cd);
-                System.out.println("충전결제 >>> res_msg : " + res_msg);
+                System.out.println("WEB_SMS >>> 충전결제 >>> res_cd : " + res_cd);
+                System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
             }
         }
     }
         // End of [res_cd = "0000"]
 
-    System.out.println("충전결제 >>> 08.승인 결과 DB 처리 실패시 >>> end");
+    System.out.println("WEB_SMS >>> 충전결제 >>> 08.승인 결과 DB 처리 실패시 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   08. 승인 결과 DB 처리 END                                                = */
     /* = ========================================================================== = */
