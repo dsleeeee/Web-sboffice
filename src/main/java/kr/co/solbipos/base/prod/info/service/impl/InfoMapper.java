@@ -71,4 +71,10 @@ public interface InfoMapper {
 
     /** 상품분류정보관리(3단계) - 분류 조회 */
     List<DefaultMap<String>> getProdClass(ProductClassVO productClassVO);
+
+    /** 상품분류코드 채번방식 조회 */
+    String getProdClassCdInputType(ProductClassVO productClassVO);
+
+    /** 상품분류코드 중복체크 */
+    List<DefaultMap<Object>> getChkProdClassCd(ProductClassVO productClassVO);
 }

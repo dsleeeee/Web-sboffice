@@ -49,8 +49,24 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
                 if (col.binding === 'prodClassCd') {
-                    if(item.prodClassCd !== '자동채번') {
+                    
+                    // 기존 등록 분류는 분류코드 수정불가
+                    if (item.newRowYn !== 'Y' && item.prodClassCd !== '' && item.prodClassCd !== '자동채번') {
                         wijmo.addClass(e.cell, 'wijLink');
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+
+                    // 새로 등록하는 분류중 '자동채번' 분류는 분류코드 입력불가
+                    if(item.newRowYn === 'Y' && item.prodClassCd === '자동채번'){
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
 
@@ -79,8 +95,10 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "prodClassCd") {
-                    if(selectedRow.prodClassCd !== '자동채번') {
-                        
+
+                    // 기존 등록 분류는 분류코드 클릭시 하위 분류 조회
+                    if(selectedRow.newRowYn !== 'Y' && selectedRow.prodClassCd !== '' && selectedRow.prodClassCd !== '자동채번') {
+
                         // 현재 메뉴 선택 경로
                         $("#lblLevel1").text("[" + selectedRow.prodClassCd + "]" + selectedRow.prodClassNm);
                         $("#hdLevel1").val(selectedRow.prodClassCd);
@@ -126,13 +144,23 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
     $scope.addLevel1 = function () {
 
         var params = {};
+        var focusLine = 0;
+
+        // 본사권한이면서, 상품분류코드직접입력여부 값이 있는 경우만 상품분류코드 수동입력 가능
+        if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+            params.prodClassCd = '';
+            focusLine = 1;
+        }else{
+            params.prodClassCd = '자동채번';
+            focusLine = 2;
+        }
 
         params.gChk = true;
-        params.prodClassCd = '자동채번';
         params.prodClassNm = '';
+        params.newRowYn = 'Y'; // 새로 입력한 분류인지 확인을 위해 추가
 
         // 행추가
-        $scope._addRow(params, 2);
+        $scope._addRow(params, focusLine);
     };
 
     // 대분류 삭제
@@ -149,18 +177,18 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
             $scope._popMsg(messages["info.delProdClassChk.msg"]); // 삭제할 분류의 체크박스를 선택하세요.
             return false;
         }else{
-            // 선택 분류 중 자동채번(아직 저장하지 않은 분류)을 체크한 경우, grid에서 삭제
+            // 선택 분류 중 신규추가분류를 체크한 경우, grid에서 삭제
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
                 if(item.gChk){
-                    if(item.prodClassCd === "자동채번" || item.prodClassCd === "" || item.prodClassCd === null) {
+                    if(item.newRowYn === 'Y'){
                         $scope.flex.collectionView.removeAt(i);
                     }
                 }
             }
         }
 
-        // 2. 다시 선택 분류 체크(자동채번 선택분류를 삭제하고 남은 분류가 있는지 확인)
+        // 2. 다시 선택 분류 체크(신규추가분류를 삭제하고 남은 분류가 있는지 확인)
         chkCount = 0;
         for (var i=0; i< $scope.flex.collectionView.itemCount; i++) {
             var item =  $scope.flex.collectionView.items[i];
@@ -237,16 +265,108 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
 
         $scope.flex.collectionView.commitEdit();
 
+        var strProdClassCd = ""; // 상품분류코드 중복체크를 위함.
+
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+
+            if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+                if($scope.flex.collectionView.items[i].prodClassCd === null || $scope.flex.collectionView.items[i].prodClassCd === ''){
+                    $scope._popMsg(messages['info.saveProdClassCdChk.msg']); // 분류코드를 입력하세요.
+                    return;
+                }
+
+                if($scope.flex.collectionView.items[i].prodClassCd.length > 5){
+                    $scope._popMsg(messages['info.prodClassCdLength.msg']); // 분류코드는 최대 5자리까지 입력할 수 있습니다.
+                    return;
+                }
+            }
+
             if($scope.flex.collectionView.items[i].prodClassNm === null || $scope.flex.collectionView.items[i].prodClassNm === '') {
                 $scope._popMsg(messages['info.saveProdClassChk.msg']); // 분류명을 입력하세요.
                 return;
             }
 
-            if($scope.flex.collectionView.items[i].prodClassNm.length > 15){
+            /*if($scope.flex.collectionView.items[i].prodClassNm.length > 15){
+                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+                return;
+            }*/
+        }
+
+        // 분류명 길이체크 따로 함(기존에 등록된 분류명중 이미 15자리 넘는 분류가 있어, 새로 추가하거나 수정한 분류만 체크하는걸로 변경)
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            if($scope.flex.collectionView.itemsAdded[i].prodClassNm.length > 15){
                 $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
                 return;
             }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].prodClassNm.length > 15){
+                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+                return;
+            }
+        }
+        
+        // 상품코드 수동입력인 경우, 중복체크 필요
+        if(orgnFg === "HQ" && prodClassCdInputType !== '') {
+
+            var arr = [];
+            var arr2 = [];
+            var inputProdClassCd = "";
+
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if ($scope.flex.collectionView.itemsAdded[i].newRowYn === 'Y') {
+                    arr[i] = $scope.flex.collectionView.itemsAdded[i].prodClassCd;
+                    strProdClassCd += $scope.flex.collectionView.itemsAdded[i].prodClassCd + ",";
+                }
+            }
+            
+            // 1. 중복체크 : 새로 입력한 분류코드 중 중복코드가 있는지 체크
+            arr.forEach(function(element){
+                if(!arr2.includes(element)){
+                    arr2.push(element);
+                }else{
+                    inputProdClassCd += element + ",";
+                }
+            });
+
+            if(inputProdClassCd !== ""){
+                $scope._popMsg(messages["info.prodClassCdDuplicate.msg"] + "<br>(" + inputProdClassCd.substr(0, inputProdClassCd.length - 1) + ")"); // 중복된 분류코드 입니다.
+                return;
+            }
+        }
+
+        // 상품분류명수정만 했거나, 분류코드 채번방식이 자동인경우
+        if(strProdClassCd === "") {
+
+            // 저장
+            $scope.saveProdClassLevel1();
+
+        }else{
+
+            // 2. 중복체크 : 이미 등록한 분류코드 중 중복코드가 있는지 체크
+            var params = {};
+            params.prodClassCd = strProdClassCd.substr(0, strProdClassCd.length - 1);
+
+            $scope._postJSONQuery.withOutPopUp( "/base/prod/info/getChkProdClassCd.sb", params, function(response){
+                var list = response.data.data.list;
+
+                if(list.length > 0) { //  중복
+
+                    var duplicateProdClassCd = "";
+                    for(var i=0; i< list.length; i++){
+                        duplicateProdClassCd += list[i].prodClassCd + ",";
+                    }
+
+                    $scope._popMsg(messages["info.prodClassCdDuplicate.msg"] + "<br>(" + duplicateProdClassCd.substr(0, duplicateProdClassCd.length - 1) + ")"); // 중복된 분류코드 입니다.
+                    return;
+
+                }else{
+
+                    // 저장
+                    $scope.saveProdClassLevel1();
+                }
+            });
         }
 
         // 프랜차이즈 매장권한 일때 코드값이 80001 이하면 본사이므로 수정불가
@@ -264,6 +384,11 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
             }
         }*/
 
+    };
+
+    // 대분류 실제 저장
+    $scope.saveProdClassLevel1 = function(){
+
         var params = new Array();
 
         // 대분류를 저장하시겠습니까?
@@ -274,7 +399,10 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                 var item = $scope.flex.collectionView.itemsAdded[i];
                 var obj = {};
 
-                if(item.prodClassCd === "자동채번"){
+                if(item.newRowYn === "Y") {
+                    if(orgnFg === "HQ" && prodClassCdInputType !== '' && item.prodClassCd !== "자동채번"){
+                     obj.prodClassCd = item.prodClassCd;
+                    }
                     obj.status = "I";
                     obj.prodClassNm = item.prodClassNm;
                     obj.pProdClassCd = "00000";
@@ -289,7 +417,7 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
 
                 // 프랜차이즈매장은 80001번 이상인 분류만 저장되도록 처리
                 if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
-                    if(item.prodClassCd !== "자동채번"){
+                    if(item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         if(item.prodClassCd > 80000) {
                             obj.status = "U";
                             obj.prodClassCd = item.prodClassCd;
@@ -300,8 +428,8 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                     }
                 }
 
-                if (orgnFg === "HQ" || (orgnFg == "STORE" && hqOfficeCd === "00000")) {
-                    if (item.prodClassCd !== "자동채번") {
+                if (orgnFg === "HQ" || (orgnFg === "STORE" && hqOfficeCd === "00000")) {
+                    if (item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         obj.status = "U";
                         obj.prodClassCd = item.prodClassCd;
                         obj.prodClassNm = item.prodClassNm;
@@ -333,6 +461,7 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
 
             });
         });
+
     };
 
     // 조회 버튼
@@ -372,8 +501,24 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
                 if (col.binding === 'prodClassCd') {
-                    if(item.prodClassCd !== '자동채번') {
+
+                    // 기존 등록 분류는 분류코드 수정불가
+                    if (item.newRowYn !== 'Y' && item.prodClassCd !== '' && item.prodClassCd !== '자동채번') {
                         wijmo.addClass(e.cell, 'wijLink');
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+
+                    // 새로 등록하는 분류중 '자동채번' 분류는 분류코드 입력불가
+                    if(item.newRowYn === 'Y' && item.prodClassCd === '자동채번'){
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
 
@@ -402,7 +547,9 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "prodClassCd") {
-                    if(selectedRow.prodClassCd !== '자동채번') {
+
+                    // 기존 등록 분류는 분류코드 클릭시 하위 분류 조회
+                    if(selectedRow.newRowYn !== 'Y' && selectedRow.prodClassCd !== '' && selectedRow.prodClassCd !== '자동채번') {
 
                         // 현재 메뉴 선택 경로
                         $("#lblLevel2").text(" ▶ [" + selectedRow.prodClassCd + "]" + selectedRow.prodClassNm);
@@ -443,13 +590,23 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
         }
 
         var params = {};
+        var focusLine = 0;
+
+        // 본사권한이면서, 상품분류코드직접입력여부 값이 있는 경우만 상품분류코드 수동입력 가능
+        if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+            params.prodClassCd = '';
+            focusLine = 1;
+        }else{
+            params.prodClassCd = '자동채번';
+            focusLine = 2;
+        }
 
         params.gChk = true;
-        params.prodClassCd = '자동채번';
         params.prodClassNm = '';
+        params.newRowYn = 'Y'; // 새로 입력한 분류인지 확인을 위해 추가
 
         // 행추가
-        $scope._addRow(params, 2);
+        $scope._addRow(params, focusLine);
     };
 
     // 중분류 삭제
@@ -471,18 +628,18 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
             $scope._popMsg(messages["info.delProdClassChk.msg"]); // 삭제할 분류의 체크박스를 선택하세요.
             return false;
         }else{
-            // 선택 분류 중 자동채번(아직 저장하지 않은 분류)을 체크한 경우, grid에서 삭제
+            // 선택 분류 중 신규추가분류를 체크한 경우, grid에서 삭제
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
                 if(item.gChk){
-                    if(item.prodClassCd === "자동채번" || item.prodClassCd === "" || item.prodClassCd === null) {
+                    if(item.newRowYn === 'Y'){
                         $scope.flex.collectionView.removeAt(i);
                     }
                 }
             }
         }
 
-        // 2. 다시 선택 분류 체크(자동채번 선택분류를 삭제하고 남은 분류가 있는지 확인)
+        // 2. 다시 선택 분류 체크(신규추가분류를 삭제하고 남은 분류가 있는지 확인)
         chkCount = 0;
         for (var i=0; i< $scope.flex.collectionView.itemCount; i++) {
             var item =  $scope.flex.collectionView.items[i];
@@ -562,16 +719,108 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
 
         $scope.flex.collectionView.commitEdit();
 
+        var strProdClassCd = ""; // 상품분류코드 중복체크를 위함.
+
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+
+            if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+                if($scope.flex.collectionView.items[i].prodClassCd === null || $scope.flex.collectionView.items[i].prodClassCd === ''){
+                    $scope._popMsg(messages['info.saveProdClassCdChk.msg']); // 분류코드를 입력하세요.
+                    return;
+                }
+
+                if($scope.flex.collectionView.items[i].prodClassCd.length > 5){
+                    $scope._popMsg(messages['info.prodClassCdLength.msg']); // 분류코드는 최대 5자리까지 입력할 수 있습니다.
+                    return;
+                }
+            }
+
             if($scope.flex.collectionView.items[i].prodClassNm === null || $scope.flex.collectionView.items[i].prodClassNm === '') {
                 $scope._popMsg(messages['info.saveProdClassChk.msg']); // 분류명을 입력하세요.
                 return;
             }
 
-            if($scope.flex.collectionView.items[i].prodClassNm.length > 15){
+            /*if($scope.flex.collectionView.items[i].prodClassNm.length > 15){
+                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+                return;
+            }*/
+        }
+
+        // 분류명 길이체크 따로 함(기존에 등록된 분류명중 이미 15자리 넘는 분류가 있어, 새로 추가하거나 수정한 분류만 체크하는걸로 변경)
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            if($scope.flex.collectionView.itemsAdded[i].prodClassNm.length > 15){
                 $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
                 return;
             }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].prodClassNm.length > 15){
+                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+                return;
+            }
+        }
+
+        // 상품코드 수동입력인 경우, 중복체크 필요
+        if(orgnFg === "HQ" && prodClassCdInputType !== '') {
+
+            var arr = [];
+            var arr2 = [];
+            var inputProdClassCd = "";
+
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if ($scope.flex.collectionView.itemsAdded[i].newRowYn === 'Y') {
+                    arr[i] = $scope.flex.collectionView.itemsAdded[i].prodClassCd;
+                    strProdClassCd += $scope.flex.collectionView.itemsAdded[i].prodClassCd + ",";
+                }
+            }
+
+            // 1. 중복체크 : 새로 입력한 분류코드 중 중복코드가 있는지 체크
+            arr.forEach(function(element){
+                if(!arr2.includes(element)){
+                    arr2.push(element);
+                }else{
+                    inputProdClassCd += element + ",";
+                }
+            });
+
+            if(inputProdClassCd !== ""){
+                $scope._popMsg(messages["info.prodClassCdDuplicate.msg"] + "<br>(" + inputProdClassCd.substr(0, inputProdClassCd.length - 1) + ")"); // 중복된 분류코드 입니다.
+                return;
+            }
+        }
+
+        // 상품분류명수정만 했거나, 분류코드 채번방식이 자동인경우
+        if(strProdClassCd === "") {
+
+            // 저장
+            $scope.saveProdClassLevel2();
+
+        }else{
+
+            // 2. 중복체크 : 이미 등록한 분류코드 중 중복코드가 있는지 체크
+            var params = {};
+            params.prodClassCd = strProdClassCd.substr(0, strProdClassCd.length - 1);
+
+            $scope._postJSONQuery.withOutPopUp( "/base/prod/info/getChkProdClassCd.sb", params, function(response){
+                var list = response.data.data.list;
+
+                if(list.length > 0) { //  중복
+
+                    var duplicateProdClassCd = "";
+                    for(var i=0; i< list.length; i++){
+                        duplicateProdClassCd += list[i].prodClassCd + ",";
+                    }
+
+                    $scope._popMsg(messages["info.prodClassCdDuplicate.msg"] + "<br>(" + duplicateProdClassCd.substr(0, duplicateProdClassCd.length - 1) + ")"); // 중복된 분류코드 입니다.
+                    return;
+
+                }else{
+
+                    // 저장
+                    $scope.saveProdClassLevel2();
+                }
+            });
         }
 
         // 프랜차이즈 매장권한 일때 코드값이 80001 이하면 본사이므로 수정불가
@@ -589,6 +838,11 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
             }
         }*/
 
+    };
+
+    // 중분류 실제 저장
+    $scope.saveProdClassLevel2 = function(){
+
         var params = new Array();
 
         // 중분류를 저장하시겠습니까?
@@ -599,7 +853,10 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                 var item = $scope.flex.collectionView.itemsAdded[i];
                 var obj = {};
 
-                if(item.prodClassCd === "자동채번"){
+                if(item.newRowYn === "Y") {
+                    if(orgnFg === "HQ" && prodClassCdInputType !== '' && item.prodClassCd !== "자동채번"){
+                        obj.prodClassCd = item.prodClassCd;
+                    }
                     obj.status = "I";
                     obj.prodClassNm = item.prodClassNm;
                     obj.pProdClassCd = $("#hdLevel1").val();
@@ -614,7 +871,7 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
 
                 // 프랜차이즈매장은 80001번 이상인 분류만 저장되도록 처리
                 if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
-                    if(item.prodClassCd !== "자동채번"){
+                    if(item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         if(item.prodClassCd > 80000) {
                             obj.status = "U";
                             obj.prodClassCd = item.prodClassCd;
@@ -625,8 +882,8 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                     }
                 }
 
-                if (orgnFg === "HQ" || (orgnFg == "STORE" && hqOfficeCd === "00000")) {
-                    if (item.prodClassCd !== "자동채번") {
+                if (orgnFg === "HQ" || (orgnFg === "STORE" && hqOfficeCd === "00000")) {
+                    if (item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         obj.status = "U";
                         obj.prodClassCd = item.prodClassCd;
                         obj.prodClassNm = item.prodClassNm;
@@ -682,6 +939,26 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
+                if (col.binding === 'prodClassCd') {
+
+                    // 기존 등록 분류는 분류코드 수정불가
+                    if (item.newRowYn !== 'Y' && item.prodClassCd !== '' && item.prodClassCd !== '자동채번') {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+
+                    // 새로 등록하는 분류중 '자동채번' 분류는 분류코드 입력불가
+                    if(item.newRowYn === 'Y' && item.prodClassCd === '자동채번'){
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+                }
 
                 // 프랜차이즈 매장은 본사에서 등록한 분류 수정불가
                 if (orgnFg == "STORE") {
@@ -733,13 +1010,23 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
         }
 
         var params = {};
+        var focusLine = 0;
+
+        // 본사권한이면서, 상품분류코드직접입력여부 값이 있는 경우만 상품분류코드 수동입력 가능
+        if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+            params.prodClassCd = '';
+            focusLine = 1;
+        }else{
+            params.prodClassCd = '자동채번';
+            focusLine = 2;
+        }
 
         params.gChk = true;
-        params.prodClassCd = '자동채번';
         params.prodClassNm = '';
+        params.newRowYn = 'Y'; // 새로 입력한 분류인지 확인을 위해 추가
 
         // 행추가
-        $scope._addRow(params, 2);
+        $scope._addRow(params, focusLine);
     };
 
     // 소분류 삭제
@@ -766,18 +1053,18 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
             $scope._popMsg(messages["info.delProdClassChk.msg"]); // 삭제할 분류의 체크박스를 선택하세요.
             return false;
         }else{
-            // 선택 분류 중 자동채번(아직 저장하지 않은 분류)을 체크한 경우, grid에서 삭제
+            // 선택 분류 중 신규추가분류를 체크한 경우, grid에서 삭제
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
                 if(item.gChk){
-                    if(item.prodClassCd === "자동채번" || item.prodClassCd === "" || item.prodClassCd === null) {
+                    if(item.newRowYn === 'Y'){
                         $scope.flex.collectionView.removeAt(i);
                     }
                 }
             }
         }
 
-        // 2. 다시 선택 분류 체크(자동채번 선택분류를 삭제하고 남은 분류가 있는지 확인)
+        // 2. 다시 선택 분류 체크(신규추가분류를 삭제하고 남은 분류가 있는지 확인)
         chkCount = 0;
         for (var i=0; i< $scope.flex.collectionView.itemCount; i++) {
             var item =  $scope.flex.collectionView.items[i];
@@ -854,16 +1141,108 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
 
         $scope.flex.collectionView.commitEdit();
 
+        var strProdClassCd = ""; // 상품분류코드 중복체크를 위함.
+
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+
+            if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+                if($scope.flex.collectionView.items[i].prodClassCd === null || $scope.flex.collectionView.items[i].prodClassCd === ''){
+                    $scope._popMsg(messages['info.saveProdClassCdChk.msg']); // 분류코드를 입력하세요.
+                    return;
+                }
+
+                if($scope.flex.collectionView.items[i].prodClassCd.length > 5){
+                    $scope._popMsg(messages['info.prodClassCdLength.msg']); // 분류코드는 최대 5자리까지 입력할 수 있습니다.
+                    return;
+                }
+            }
+
             if($scope.flex.collectionView.items[i].prodClassNm === null || $scope.flex.collectionView.items[i].prodClassNm === '') {
                 $scope._popMsg(messages['info.saveProdClassChk.msg']); // 분류명을 입력하세요.
                 return;
             }
 
-            if($scope.flex.collectionView.items[i].prodClassNm.length > 15){
+            /*if($scope.flex.collectionView.items[i].prodClassNm.length > 15){
+                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+                return;
+            }*/
+        }
+
+        // 분류명 길이체크 따로 함(기존에 등록된 분류명중 이미 15자리 넘는 분류가 있어, 새로 추가하거나 수정한 분류만 체크하는걸로 변경)
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            if($scope.flex.collectionView.itemsAdded[i].prodClassNm.length > 15){
                 $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
                 return;
             }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].prodClassNm.length > 15){
+                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+                return;
+            }
+        }
+
+        // 상품코드 수동입력인 경우, 중복체크 필요
+        if(orgnFg === "HQ" && prodClassCdInputType !== '') {
+
+            var arr = [];
+            var arr2 = [];
+            var inputProdClassCd = "";
+
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if ($scope.flex.collectionView.itemsAdded[i].newRowYn === 'Y') {
+                    arr[i] = $scope.flex.collectionView.itemsAdded[i].prodClassCd;
+                    strProdClassCd += $scope.flex.collectionView.itemsAdded[i].prodClassCd + ",";
+                }
+            }
+
+            // 1. 중복체크 : 새로 입력한 분류코드 중 중복코드가 있는지 체크
+            arr.forEach(function(element){
+                if(!arr2.includes(element)){
+                    arr2.push(element);
+                }else{
+                    inputProdClassCd += element + ",";
+                }
+            });
+
+            if(inputProdClassCd !== ""){
+                $scope._popMsg(messages["info.prodClassCdDuplicate.msg"] + "<br>(" + inputProdClassCd.substr(0, inputProdClassCd.length - 1) + ")"); // 중복된 분류코드 입니다.
+                return;
+            }
+        }
+
+        // 상품분류명수정만 했거나, 분류코드 채번방식이 자동인경우
+        if(strProdClassCd === "") {
+
+            // 저장
+            $scope.saveProdClassLevel3();
+
+        }else{
+
+            // 2. 중복체크 : 이미 등록한 분류코드 중 중복코드가 있는지 체크
+            var params = {};
+            params.prodClassCd = strProdClassCd.substr(0, strProdClassCd.length - 1);
+
+            $scope._postJSONQuery.withOutPopUp( "/base/prod/info/getChkProdClassCd.sb", params, function(response){
+                var list = response.data.data.list;
+
+                if(list.length > 0) { //  중복
+
+                    var duplicateProdClassCd = "";
+                    for(var i=0; i< list.length; i++){
+                        duplicateProdClassCd += list[i].prodClassCd + ",";
+                    }
+
+                    $scope._popMsg(messages["info.prodClassCdDuplicate.msg"] + "<br>(" + duplicateProdClassCd.substr(0, duplicateProdClassCd.length - 1) + ")"); // 중복된 분류코드 입니다.
+                    return;
+
+                }else{
+
+                    // 저장
+                    $scope.saveProdClassLevel3();
+                }
+            });
         }
 
         // 프랜차이즈 매장권한 일때 코드값이 80001 이하면 본사이므로 수정불가
@@ -881,6 +1260,11 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
             }
         }*/
 
+    };
+
+    // 소분류 실제 저장
+    $scope.saveProdClassLevel3 = function(){
+
         var params = new Array();
 
         // 소분류를 저장하시겠습니까?
@@ -891,7 +1275,10 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
                 var item = $scope.flex.collectionView.itemsAdded[i];
                 var obj = {};
 
-                if(item.prodClassCd === "자동채번"){
+                if(item.newRowYn === "Y") {
+                    if(orgnFg === "HQ" && prodClassCdInputType !== '' && item.prodClassCd !== "자동채번"){
+                        obj.prodClassCd = item.prodClassCd;
+                    }
                     obj.status = "I";
                     obj.prodClassNm = item.prodClassNm;
                     obj.pProdClassCd = $("#hdLevel2").val();
@@ -906,7 +1293,7 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
 
                 // 프랜차이즈매장은 80001번 이상인 분류만 저장되도록 처리
                 if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
-                    if(item.prodClassCd !== "자동채번"){
+                    if(item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         if(item.prodClassCd > 80000) {
                             obj.status = "U";
                             obj.prodClassCd = item.prodClassCd;
@@ -917,8 +1304,8 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
                     }
                 }
 
-                if (orgnFg === "HQ" || (orgnFg == "STORE" && hqOfficeCd === "00000")) {
-                    if (item.prodClassCd !== "자동채번") {
+                if (orgnFg === "HQ" || (orgnFg === "STORE" && hqOfficeCd === "00000")) {
+                    if (item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         obj.status = "U";
                         obj.prodClassCd = item.prodClassCd;
                         obj.prodClassNm = item.prodClassNm;
