@@ -69,6 +69,9 @@ public class SmsChargeVO extends PageVO {
     /** 결제취소시각 */
     private String rtnTime;
 
+    /** 사용자ID */
+    private String userId;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -132,4 +135,8 @@ public class SmsChargeVO extends PageVO {
     public String getRtnTime() { return rtnTime; }
 
     public void setRtnTime(String rtnTime) { this.rtnTime = rtnTime; }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
 }

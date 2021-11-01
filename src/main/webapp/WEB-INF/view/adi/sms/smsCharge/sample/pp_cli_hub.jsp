@@ -119,6 +119,9 @@
     String cash_tr_code   = f_get_parm( request.getParameter( "cash_tr_code"   ) ); // 현금 영수증 발행 구분
     String cash_id_info   = f_get_parm( request.getParameter( "cash_id_info"   ) ); // 현금 영수증 등록 번호
     String cash_no        = "";                                                     // 현금 영수증 거래 번호
+    /* = -------------------------------------------------------------------------- = */
+    String orgnCd         = f_get_parm( request.getParameter( "orgnCd"         ) ); // 소속코드
+    String userId         = f_get_parm( request.getParameter( "userId"         ) ); // 사용자ID
     /* ============================================================================== */
     /* =   02. 지불 요청 정보 설정 END
     /* ============================================================================== */
@@ -377,7 +380,7 @@
                 System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
 
                 // DB 호출
-                goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
+                goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "', '" + orgnCd + "', '" + userId + "');";
 
                 // 07-1-1-1. 복합결제(신용카드+포인트)
                 if ( pnt_issue.equals( "SCSK" ) || pnt_issue.equals( "SCWB" ) )
@@ -428,7 +431,7 @@
             System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
 
             // DB 호출
-            goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "');";
+            goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "', '" + orgnCd + "', '" + userId + "');";
         }
 
         System.out.println("WEB_SMS >>> 충전결제 >>> DB insert >>> end");
@@ -512,7 +515,7 @@
     parent.goChargeResult('<%=use_pay_method%>', '<%=app_time%>', '<%=amount%>', '<%=tno%>', '<%=res_cd%>', '<%=res_msg%>');
 
     // 결제내역 저장
-    function pp_fun_smsChargeSave(use_pay_method, app_time, amount, successYn, tno, ordr_idxx, res_cd, res_msg)
+    function pp_fun_smsChargeSave(use_pay_method, app_time, amount, successYn, tno, ordr_idxx, res_cd, res_msg, orgnCd, userId)
     {
         var params = {};
         if(use_pay_method == "100000000000") {
@@ -526,6 +529,8 @@
         params.approvalnum = ordr_idxx; // 주문번호
         params.resultcode = res_cd; // 결과 코드
         params.resultmessage = res_msg; // 결과 메세지
+        params.orgnCd = orgnCd; // 소속코드
+        params.userId = userId; // 사용자ID
 
         $.postJSONSave("/adi/sms/smsCharge/smsCharge/getSmsChargeSaveInsert.sb", params, function (result) {
             }

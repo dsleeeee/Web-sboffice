@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <wj-popup control="wjSmsChargeDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;height:290px;" fade-in="false" fade-out="false">
     <div ng-controller="smsChargeDtlCtrl">
@@ -147,6 +149,9 @@
     <input type="hidden" name="mod_type"    value="STSC" /> <%--프로세스 요청의 구분 변수--%>
     <input type="hidden" name="tno"         value="" /> <%--결제 건에 대한 NHN KCP 거래 고유번호--%>
     <input type="hidden" name="mod_desc"    value="" /> <%--프로세스 취소 사유에 대한 변수 값--%>
+
+    <input type="hidden" name="orgnCd" value="" /> <!-- 소속코드 -->
+    <input type="hidden" name="userId" value="" /> <!-- 사용자ID -->
 </form>
 
 <script type="text/javascript">
@@ -155,6 +160,8 @@
         // alert(form);
         // alert(form.req_tx.value);
         form.tno.value = $("#controlnoDtl").val(); // 승인번호
+        form.orgnCd.value = "${orgnCd}"; // 소속코드
+        form.userId.value = "${userId}"; // 사용자ID
 
         var scope = agrid.getScope('smsChargeDtlCtrl');
         // 로딩바 show

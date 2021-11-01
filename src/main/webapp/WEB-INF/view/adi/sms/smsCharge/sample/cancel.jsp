@@ -84,6 +84,9 @@
     String mod_tax_mny    = "";                                                     // 공급가 부분 취소 요청 금액
     String mod_vat_mny    = "";                                                     // 부과세 부분 취소 요청 금액
     String mod_free_mny   = "";                                                     // 비과세 부분 취소 요청 금액
+    /* = -------------------------------------------------------------------------- = */
+    String orgnCd         = f_get_parm( request.getParameter( "orgnCd"         ) ); // 소속코드
+    String userId         = f_get_parm( request.getParameter( "userId"         ) ); // 사용자ID
     /* ============================================================================== */
     /* =   02. 지불 요청 정보 설정 END                                              = */
     /* ============================================================================== */
@@ -244,7 +247,7 @@
         System.out.println("충전결제 >>> tno : " + tno);
 
         // DB 호출
-        goCancel = "pp_fun_smsChargeCancel('" + canc_time + "', '" + tno + "');";
+        goCancel = "pp_fun_smsChargeCancel('" + canc_time + "', '" + tno + "', '" + orgnCd + "', '" + userId + "');";
 
         System.out.println("WEB_SMS >>> 결제취소 >>> DB insert >>> end");
     }
@@ -287,13 +290,15 @@
     parent.goCancelResult('<%=res_cd%>', '<%=res_msg%>');
 
     // 결제내역 저장
-    function pp_fun_smsChargeCancel(canc_time, tno)
+    function pp_fun_smsChargeCancel(canc_time, tno, orgnCd, userId)
     {
         var params = {};
         params.rtnDate = canc_time.substring(0,8); // 취소시간
         params.rtnTime = canc_time.substring(8,14); // 취소시간
         params.successYn = "R"; // 결제성공여부
         params.controlno = tno; // KCP 거래번호
+        params.orgnCd = orgnCd; // 소속코드
+        params.userId = userId; // 사용자ID
 
         $.postJSONSave("/adi/sms/smsCharge/smsCharge/getSmsChargeSaveUpdate.sb", params, function (result) {
             }

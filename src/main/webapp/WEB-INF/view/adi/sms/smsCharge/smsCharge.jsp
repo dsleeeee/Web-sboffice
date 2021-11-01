@@ -1,6 +1,11 @@
 <div id="smsChargeView" style="display: none;">
 
 <%@ page language="java" contentType="text/html;charset=euc-kr"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
+
 <%
     /* ============================================================================== */
     /* =   PAGE : 결제 요청 PAGE                                                    = */
@@ -200,7 +205,10 @@
             // var order_idxx = "TEST" + year + "" + month + "" + date + "" + time;
             var order_idxx = year + "" + month + "" + date + "" + time;
 
-            document.order_info.ordr_idxx.value = order_idxx;
+            document.order_info.ordr_idxx.value = order_idxx; // 주문번호
+
+            document.order_info.orgnCd.value = "${orgnCd}"; // 소속코드
+            document.order_info.userId.value = "${userId}"; // 사용자ID
         }
     </script>
 </head>
@@ -604,6 +612,20 @@
             /* =   4. 옵션 정보 END                                                         = */
             /* ============================================================================== */
         %>
+
+        <%
+            /* = -------------------------------------------------------------------------- = */
+            /* =   5. 추가정보                                 = */
+            /* ============================================================================== */
+        %>
+        <input type="hidden" name="orgnCd" value="" /> <!-- 소속코드 -->
+        <input type="hidden" name="userId" value="" /> <!-- 사용자ID -->
+        <%
+            /* = -------------------------------------------------------------------------- = */
+            /* =   5. 추가정보 END                                             = */
+            /* ============================================================================== */
+        %>
+
     </form>
 </div>
 <!--//wrap-->

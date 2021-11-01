@@ -114,9 +114,7 @@ public class SmsChargeController {
     public Result getSmsChargeSaveInsert(@RequestBody SmsChargeVO smsChargeVO, HttpServletRequest request,
                                             HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = smsChargeService.getSmsChargeSaveInsert(smsChargeVO, sessionInfoVO);
+        int result = smsChargeService.getSmsChargeSaveInsert(smsChargeVO);
 
         return returnJson(Status.OK, result);
     }
@@ -137,9 +135,7 @@ public class SmsChargeController {
     public Result getSmsChargeSaveUpdate(@RequestBody SmsChargeVO smsChargeVO, HttpServletRequest request,
                                          HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = smsChargeService.getSmsChargeSaveUpdate(smsChargeVO, sessionInfoVO);
+        int result = smsChargeService.getSmsChargeSaveUpdate(smsChargeVO);
 
         return returnJson(Status.OK, result);
     }
