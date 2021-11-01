@@ -284,7 +284,7 @@
             });
         }]);
     </script>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>--%>
     <%-- SMS충전결제 결과 팝업 --%>
     <c:import url="/WEB-INF/view/adi/sms/smsCharge/smsChargeResult.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
@@ -430,7 +430,7 @@
         <!-- //contents -->
 
         <!-- 공통: js -->
-        <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
+        <%--<script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>--%>
         <script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/front.js"></script>
         <!-- //공통: js -->
 
