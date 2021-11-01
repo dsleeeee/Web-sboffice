@@ -193,6 +193,8 @@ public class SmsTelNoManageController {
                // 정상등록
                result = "0";
            }
+        } else {
+            result = resCd;
         }
         model.addAttribute("result", result);
 
