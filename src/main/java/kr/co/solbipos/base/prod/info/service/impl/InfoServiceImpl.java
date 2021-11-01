@@ -4,12 +4,12 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.info.service.InfoService;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
-import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.iostock.cmm.service.impl.IostockCmmMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,7 +156,10 @@ public class InfoServiceImpl implements InfoService {
                 String prodClassCd = "";
                 prodClassCd = mapper.getClsCd(productClassVO);
                 productClassVO.setProdClassCd(prodClassCd);
+            }
 
+            // 새로 저장하려는 분류의 Level값 조회
+            if(productClassVO.getStatus() == GridDataFg.INSERT) {
                 if("00000".equals(productClassVO.getpProdClassCd())){
                     productClassVO.setClsLevelCd("1");
                 }else{
@@ -256,6 +259,32 @@ public class InfoServiceImpl implements InfoService {
         }
 
         return mapper.getProdClass(productClassVO);
+    }
+
+    /** 상품분류코드 채번방식 조회 */
+    @Override
+    public String getProdClassCdInputType(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO){
+
+        productClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return mapper.getProdClassCdInputType(productClassVO);
+    }
+
+    /** 상품분류코드 중복체크 */
+    @Override
+    public List<DefaultMap<Object>> getChkProdClassCd(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO) {
+
+        productClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        productClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            productClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 상품분류코드 arr Set
+        if(!StringUtil.getOrBlank(productClassVO.getProdClassCd()).equals("")) {
+            productClassVO.setArrProdClassCd(productClassVO.getProdClassCd().split(","));
+        }
+
+        return mapper.getChkProdClassCd(productClassVO);
     }
 
 }
