@@ -69,12 +69,13 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="" binding="newRowYn" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -114,12 +115,13 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="" binding="newRowYn" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -158,12 +160,13 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="" binding="newRowYn" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -176,9 +179,10 @@
 
 <script type="text/javascript">
     var prodAuthEnvstVal = "${prodAuthEnvstVal}";
+    var prodClassCdInputType = "${prodClassCdInputType}";
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/info/prodClass3LevelView.js?ver=20210624.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/info/prodClass3LevelView.js?ver=20211101.01" charset="utf-8"></script>

@@ -10,7 +10,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.info.service.InfoService;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -190,8 +189,11 @@ public class InfoController {
 
         // 상품생성권한
         ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
-
         model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
+
+        // 상품분류코드직접입력여부
+        ProductClassVO productClassVO = new ProductClassVO();
+        model.addAttribute("prodClassCdInputType", service.getProdClassCdInputType(productClassVO, sessionInfoVO));
 
         return "base/prod/info/prodClass3LevelView";
     }
@@ -214,6 +216,28 @@ public class InfoController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = service.getProdClass(productClassVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, productClassVO);
+    }
+
+    /**
+     * 상품분류코드 중복체크
+     * @param productClassVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 10. 29.
+     */
+    @RequestMapping(value = "/getChkProdClassCd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChkProdClassCd(ProductClassVO productClassVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = service.getChkProdClassCd(productClassVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, productClassVO);
     }

@@ -47,6 +47,9 @@ public class ProductClassVO extends CmmVO {
     /** 분류레벨코드 */
     private String clsLevelCd;
 
+    /** 상품분류코드 array (중복체크용) */
+    private String arrProdClassCd[];
+
     /**
      * @return the orgnFg
      */
@@ -146,5 +149,13 @@ public class ProductClassVO extends CmmVO {
 
     public void setClsLevelCd(String clsLevelCd) {
         this.clsLevelCd = clsLevelCd;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
     }
 }

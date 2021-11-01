@@ -448,4 +448,45 @@
       </choose>
     </select>
 
+    <!-- 상품분류코드 채번방식 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : productClassVO
+        COMMENTS : 상품분류코드 채번방식을 조회한다.
+    -->
+    <select id="getProdClassCdInputType" parameterType="productClassVO" resultType="String">
+        /* USE : InfoMapper.getProdClassCdInputType */
+        SELECT NMCODE_CD
+          FROM TB_CM_NMCODE
+         WHERE NMCODE_GRP_CD = '223'
+           AND NMCODE_ITEM_1 = #{hqOfficeCd}
+    </select>
+
+    <!-- 상품분류코드 중복체크 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS
+        PARAM    : productClassVO
+        COMMENTS : 등록하려는 상품분류코드가 중복인지 체크한다.
+    -->
+    <select id="getChkProdClassCd" parameterType="productClassVO" resultType="DefaultMap">
+        /* InfoMapper.getChkProdClassCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT PROD_CLASS_CD
+                  FROM TB_HQ_PRODUCT_CLASS
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='arrProdClassCd != null and arrProdClassCd != ""'>
+                   AND PROD_CLASS_CD IN
+                    <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            </when>
+        </choose>
+    </select>
+
 </mapper>
