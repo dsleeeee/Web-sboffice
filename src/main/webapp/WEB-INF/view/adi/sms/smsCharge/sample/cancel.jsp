@@ -18,7 +18,7 @@
     /* ============================================================================== */
     /* =   POST 형식 체크부분                                                       = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("결제취소 >>> 01.cancel.jsp 호출 >>> request.getMethod() : " + request.getMethod());
+    System.out.println("WEB_SMS >>> 결제취소 >>> 01.cancel.jsp 호출 >>> request.getMethod() : " + request.getMethod());
 
     if ( !request.getMethod().equals("POST") )
     {
@@ -94,18 +94,18 @@
     /* = -------------------------------------------------------------------------- = */
     /* =       결제에 필요한 인스턴스를 생성하고 초기화 합니다.                     = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("결제취소 >>> 03.인스턴스 생성 및 초기화 >>> start");
-    System.out.println("결제취소 >>> g_conf_gw_url : " + g_conf_gw_url);
-    System.out.println("결제취소 >>> g_conf_gw_port : " + g_conf_gw_port);
-    System.out.println("결제취소 >>> g_conf_tx_mode : " + g_conf_tx_mode);
-    System.out.println("결제취소 >>> g_conf_log_dir : " + g_conf_log_dir);
+    System.out.println("WEB_SMS >>> 결제취소 >>> 03.인스턴스 생성 및 초기화 >>> start");
+    System.out.println("WEB_SMS >>> 결제취소 >>> g_conf_gw_url : " + g_conf_gw_url);
+    System.out.println("WEB_SMS >>> 결제취소 >>> g_conf_gw_port : " + g_conf_gw_port);
+    System.out.println("WEB_SMS >>> 결제취소 >>> g_conf_tx_mode : " + g_conf_tx_mode);
+    System.out.println("WEB_SMS >>> 결제취소 >>> g_conf_log_dir : " + g_conf_log_dir);
 
     J_PP_CLI_N c_PayPlus = new J_PP_CLI_N();
 
     c_PayPlus.mf_init( "", g_conf_gw_url, g_conf_gw_port, g_conf_tx_mode, g_conf_log_dir );
     c_PayPlus.mf_init_set();
 
-    System.out.println("결제취소 >>> 03.인스턴스 생성 및 초기화 >>> end");
+    System.out.println("WEB_SMS >>> 결제취소 >>> 03.인스턴스 생성 및 초기화 >>> end");
     /* ============================================================================== */
     /* =   03. 인스턴스 생성 및 초기화 END                                          = */
     /* ============================================================================== */
@@ -118,11 +118,11 @@
     /* = -------------------------------------------------------------------------- = */
     /* =   04-1. 취소/매입 요청                                                     = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("결제취소 >>> 04-1.취소/매입 요청 >>> start");
-    System.out.println("결제취소 >>> req_tx : " + req_tx);
-    System.out.println("결제취소 >>> mod_type : " + mod_type);
-    System.out.println("결제취소 >>> tno : " + tno);
-    System.out.println("결제취소 >>> cust_ip : " + cust_ip);
+    System.out.println("WEB_SMS >>> 결제취소 >>> 04-1.취소/매입 요청 >>> start");
+    System.out.println("WEB_SMS >>> 결제취소 >>> req_tx : " + req_tx);
+    System.out.println("WEB_SMS >>> 결제취소 >>> mod_type : " + mod_type);
+    System.out.println("WEB_SMS >>> 결제취소 >>> tno : " + tno);
+    System.out.println("WEB_SMS >>> 결제취소 >>> cust_ip : " + cust_ip);
 
     if ( req_tx.equals( "mod" ) )
     {
@@ -150,7 +150,7 @@
         }
     }
 
-    System.out.println("결제취소 >>> 04-1.취소/매입 요청 >>> end");
+    System.out.println("WEB_SMS >>> 결제취소 >>> 04-1.취소/매입 요청 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   04. 처리 요청 정보 설정 END                                              = */
     /* = ========================================================================== = */
@@ -159,11 +159,11 @@
     /* = ========================================================================== = */
     /* =   05. 실행                                                                 = */
     /* = -------------------------------------------------------------------------- = */
-    System.out.println("결제취소 >>> 05.실행 >>> start");
-    System.out.println("결제취소 >>> tran_cd : " + tran_cd);
-    System.out.println("결제취소 >>> g_conf_site_cd : " + g_conf_site_cd);
-    System.out.println("결제취소 >>> g_conf_site_key : " + g_conf_site_key);
-    System.out.println("결제취소 >>> g_conf_log_level : " + g_conf_log_level);
+    System.out.println("WEB_SMS >>> 결제취소 >>> 05.실행 >>> start");
+    System.out.println("WEB_SMS >>> 결제취소 >>> tran_cd : " + tran_cd);
+    System.out.println("WEB_SMS >>> 결제취소 >>> g_conf_site_cd : " + g_conf_site_cd);
+    System.out.println("WEB_SMS >>> 결제취소 >>> g_conf_site_key : " + g_conf_site_key);
+    System.out.println("WEB_SMS >>> 결제취소 >>> g_conf_log_level : " + g_conf_log_level);
 
    if ( tran_cd.length() > 0 )
     {
@@ -177,9 +177,9 @@
     res_cd  = c_PayPlus.m_res_cd;                      // 결과 코드
     res_msg = c_PayPlus.m_res_msg;                     // 결과 메시지
 
-    System.out.println("결제취소 >>> res_cd : " + res_cd);
-    System.out.println("결제취소 >>> res_msg : " + res_msg);
-    System.out.println("결제취소 >>> 05.실행 >>> end");
+    System.out.println("WEB_SMS >>> 결제취소 >>> res_cd : " + res_cd);
+    System.out.println("WEB_SMS >>> 결제취소 >>> res_msg : " + res_msg);
+    System.out.println("WEB_SMS >>> 결제취소 >>> 05.실행 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   05. 실행 END                                                             = */
     /* ============================================================================== */
@@ -187,9 +187,9 @@
     /* = -------------------------------------------------------------------------- = */
     /* =   06. 취소 결과 처리                                                       = */
     /* ============================================================================== */
-    System.out.println("결제취소 >>> 06.취소 결과 처리 >>> start");
-    System.out.println("결제취소 >>> res_cd : " + res_cd);
-    System.out.println("결제취소 >>> mod_type : " + mod_type);
+    System.out.println("WEB_SMS >>> 결제취소 >>> 06.취소 결과 처리 >>> start");
+    System.out.println("WEB_SMS >>> 결제취소 >>> res_cd : " + res_cd);
+    System.out.println("WEB_SMS >>> 결제취소 >>> mod_type : " + mod_type);
 
     if ( res_cd.equals( "0000" )) // 정상결제 인 경우
     {
@@ -216,18 +216,18 @@
         }
     }
 
-    System.out.println("결제취소 >>> card_cd : " + card_cd);
-    System.out.println("결제취소 >>> card_name : " + card_name);
-    System.out.println("결제취소 >>> amount : " + amount);
-    System.out.println("결제취소 >>> coupon_mny : " + coupon_mny);
-    System.out.println("결제취소 >>> canc_time : " + canc_time);
-    System.out.println("결제취소 >>> 06.취소 결과 처리 >>> end");
+    System.out.println("WEB_SMS >>> 결제취소 >>> card_cd : " + card_cd);
+    System.out.println("WEB_SMS >>> 결제취소 >>> card_name : " + card_name);
+    System.out.println("WEB_SMS >>> 결제취소 >>> amount : " + amount);
+    System.out.println("WEB_SMS >>> 결제취소 >>> coupon_mny : " + coupon_mny);
+    System.out.println("WEB_SMS >>> 결제취소 >>> canc_time : " + canc_time);
+    System.out.println("WEB_SMS >>> 결제취소 >>> 06.취소 결과 처리 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   07. 취소 결과 출력                                                       = */
     /* ============================================================================== */
-    System.out.println("결제취소 >>> 07.취소 결과 출력 >>> start");
-    System.out.println("결제취소 >>> res_cd : " + res_cd);
-    System.out.println("결제취소 >>> mod_type : " + mod_type);
+    System.out.println("WEB_SMS >>> 결제취소 >>> 07.취소 결과 출력 >>> start");
+    System.out.println("WEB_SMS >>> 결제취소 >>> res_cd : " + res_cd);
+    System.out.println("WEB_SMS >>> 결제취소 >>> mod_type : " + mod_type);
 
      if ( res_cd.equals( "0000" ) && mod_type.equals( "STSC"))
     {
@@ -246,7 +246,7 @@
         // DB 호출
         goCancel = "pp_fun_smsChargeCancel('" + canc_time + "', '" + tno + "');";
 
-        System.out.println("결제취소 >>> DB insert >>> end");
+        System.out.println("WEB_SMS >>> 결제취소 >>> DB insert >>> end");
     }
     else if ( res_cd.equals( "0000" ) && mod_type.equals( "STPC"))
     {
@@ -271,7 +271,7 @@
         out.println( "결과메세지 : "    + res_msg      + "<p>");
     }
 
-    System.out.println("결제취소 >>> 07.취소 결과 출력 >>> end");
+    System.out.println("WEB_SMS >>> 결제취소 >>> 07.취소 결과 출력 >>> end");
     /* = -------------------------------------------------------------------------- = */
     /* =   07. 취소 결과 출력 END                                                   = */
     /* ============================================================================== */

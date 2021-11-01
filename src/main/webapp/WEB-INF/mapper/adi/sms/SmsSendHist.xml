@@ -139,12 +139,64 @@
     <select id="getAddresseeDtlList"  parameterType="SmsSendHistVO" resultType="DefaultMap">
         /* SmsSendHistMapper.getAddresseeDtlList */
         SELECT
-        SUBSTR(sssemr.DEST_INFO, INSTR(sssemr.DEST_INFO, '^')+1) AS PHONE_NUMBER,
-        (sssemr.ADDR || ' ' ||  sssemr.ADDR_DTL) AS ADDR,
-        sssemr.SALE_DATE
-        FROM SDK_SMS_SEND_ENC_MEMBER_READY sssemr
+        A.PHONE_NUMBER,
+        B.ADDR,
+        B.SALE_DATE
+        FROM
+        --SMS전송 팝업
+        (
+              SELECT *
+              FROM
+              (
+                  (
+                      --SMS
+                      SELECT
+                      SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER
+                      FROM SDK_SMS_SEND_ENC A
+                      WHERE 1=1
+                      AND A.RESERVED9 = #{smsSendSeq} --SMS_SEND_SEQ
+                  )
+                  UNION ALL
+                  (
+                      --LMS
+                      SELECT
+                      SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER
+                      FROM SDK_MMS_SEND_ENC A
+                      WHERE 1=1
+                      AND A.RESERVED9 = #{smsSendSeq} --SMS_SEND_SEQ
+                  )
+                  UNION ALL
+                  (
+                      --SMS 문자 전송결과
+                      SELECT
+                      SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER
+                      FROM SDK_SMS_REPORT A
+                      WHERE 1=1
+                       AND A.RESERVED9 = #{smsSendSeq} --SMS_SEND_SEQ
+                  )
+                  UNION ALL
+                  (
+                      --LMS 문자 전송결과
+                      SELECT
+                      SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER
+                      FROM SDK_MMS_REPORT A
+                      WHERE 1=1
+                      AND A.RESERVED9 = #{smsSendSeq} --SMS_SEND_SEQ
+                  )
+              )
+        )  A,
+        --마케팅용SMS전송
+        (
+            SELECT
+            SUBSTR(SBPENC.D(sssemr.DEST_INFO), INSTR(SBPENC.D(sssemr.DEST_INFO), '^')+1) AS PHONE_NUMBER,
+            (sssemr.ADDR || ' ' ||  sssemr.ADDR_DTL) AS ADDR,
+            sssemr.SALE_DATE
+            FROM SDK_SMS_SEND_ENC_MEMBER_READY sssemr
+            WHERE 1=1
+            AND sssemr.SMS_SEND_SEQ = #{smsSendSeq}
+        ) B
         WHERE 1=1
-        AND sssemr.SMS_SEND_SEQ = #{smsSendSeq}
+        AND B.PHONE_NUMBER (+)= A.PHONE_NUMBER
     </select>
 
 </mapper>
