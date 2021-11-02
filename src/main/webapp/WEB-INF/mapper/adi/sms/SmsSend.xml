@@ -642,7 +642,11 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            SEND_QTY,
+            WAIT_QTY,
+            SUCCESS_QTY,
+            FAIL_QTY
         ) VALUES (
             #{smsOgnCd},
             #{smsSendSeq},
@@ -675,7 +679,11 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{smsSendCount},
+            #{smsSendCount},
+            '0',
+            '0'
         )
     </insert>
 
