@@ -147,6 +147,17 @@ public class SmsSendServiceImpl implements SmsSendService {
             // 전송이력시퀀스
             smsSendVO.setSmsSendSeq(smsSendSeq);
 
+            // 전송이력 저장
+            if(rowCount == 1) {
+                // 전송건수
+                smsSendVO.setSmsSendCount("0");
+
+                LOGGER.info("SMS전송 >>> 전송이력 저장");
+
+                // 전송이력 저장
+                procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
+            }
+
             LOGGER.info("SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
 
             // SMS
@@ -168,17 +179,6 @@ public class SmsSendServiceImpl implements SmsSendService {
 
             // 잔여금액 저장 update
             procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
-
-            // 마지막 데이터 저장시 전송이력
-            if(rowCount == smsSendVOs.length) {
-                // 전송건수
-                smsSendVO.setSmsSendCount(String.valueOf(smsSendVOs.length));
-
-                LOGGER.info("SMS전송 >>> 수정될 전송건수 : " + smsSendVO.getSmsSendCount());
-
-                // 전송이력 저장
-                procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
-            }
 
             rowCount = rowCount + 1; // 홀수,짝수
         }
@@ -241,6 +241,16 @@ public class SmsSendServiceImpl implements SmsSendService {
         smsSendVO.setSmsSendSeq(smsSendVO.getSmsSendSeq());
 
         LOGGER.info("SMS전송 >>> 전송이력시퀀스 : " + smsSendVO.getSmsSendSeq());
+
+        // 전송건수
+        smsSendVO.setSmsSendCount("0");
+
+        LOGGER.info("SMS전송 >>> 전송이력 저장");
+
+        // 전송이력 저장
+        smsSendVO.setPhoneNumber("00000000000");
+        procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
+
         LOGGER.info("SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
 
         // SMS
@@ -262,15 +272,6 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         // 잔여금액 저장 update
         procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
-
-        // 전송건수
-        smsSendVO.setSmsSendCount(smsSendVO.getSmsSendListCnt());
-
-        LOGGER.info("SMS전송 >>> 수정될 전송건수 : " + smsSendVO.getSmsSendCount());
-
-        // 전송이력 저장
-        smsSendVO.setPhoneNumber("00000000000");
-        procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
 
         return procCnt;
     }
