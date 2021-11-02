@@ -335,6 +335,8 @@
         HCS_SMS_SEND_REG_T
         SET
         SMS_SEND_COUNT = (SELECT (SMS_SEND_COUNT-1) FROM HCS_SMS_SEND_REG_T WHERE SMS_SEND_ORGN_CD = #{orgnCd} AND SMS_SEND_SEQ = #{smsSendSeq}),
+        SEND_QTY = (SELECT (SEND_QTY-1) FROM HCS_SMS_SEND_REG_T WHERE SMS_SEND_ORGN_CD = #{orgnCd} AND SMS_SEND_SEQ = #{smsSendSeq}),
+        WAIT_QTY = (SELECT (WAIT_QTY-1) FROM HCS_SMS_SEND_REG_T WHERE SMS_SEND_ORGN_CD = #{orgnCd} AND SMS_SEND_SEQ = #{smsSendSeq}),
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1
