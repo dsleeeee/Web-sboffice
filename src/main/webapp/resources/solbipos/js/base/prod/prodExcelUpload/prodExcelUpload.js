@@ -444,8 +444,8 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                     result = messages["prodExcelUpload.prodCdBlank"]; // 상품코드를 입력하세요.
                 } else {
                     // 숫자/영문만 입력
-                    var numChkexp = /[^A-Za-z0-9]/g;
-                    if (numChkexp.test($scope.flex.collectionView.items[i].prodCd)) { result = messages["prodExcelUpload.prodCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
+                    //var numChkexp = /[^A-Za-z0-9]/g;
+                    //if (numChkexp.test($scope.flex.collectionView.items[i].prodCd)) { result = messages["prodExcelUpload.prodCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
 
                     // 최대길이 체크
                     if (nvl($scope.flex.collectionView.items[i].prodCd, '').getByteLengthForOracle() > 13) { result = messages["prodExcelUpload.prodCdLengthChk"]; } // 상품코드 길이가 너무 깁니다.
