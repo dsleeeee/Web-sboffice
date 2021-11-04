@@ -29,6 +29,8 @@
         cpt.APPROVALNUM,
         NVL(cpt.BASE_CHARGE_AMT, 0) AS BASE_CHARGE_AMT,
         NVL(cpt.CHARGE_AMT, 0) AS CHARGE_AMT,
+        NVL(cpt.CHARGE_TOT - cpt.CHARGE_AMT, 0) AS VAT_AMT,
+        NVL(cpt.CHARGE_TOT, 0) AS CHARGE_TOT,
         cpt.SUCCESS_YN,
         (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = cpt.CHARGE_ID) AS CHARGE_ID_NM,
         cpt.RESULTMESSAGE
@@ -248,7 +250,8 @@
             ORDER_NO,
             CASH_YN,
             CASH_AUTHNO,
-            BASE_CHARGE_AMT
+            BASE_CHARGE_AMT,
+            CHARGE_TOT
         ) VALUES (
             #{selectOrgnCd},
             #{chargeDate},
@@ -283,7 +286,8 @@
             '', --ORDER_NO,
             '', --CASH_YN,
             '', --CASH_AUTHNO,
-            #{baseChargeAmt}
+            #{baseChargeAmt},
+            #{chargeTot}
         )
     </insert>
 

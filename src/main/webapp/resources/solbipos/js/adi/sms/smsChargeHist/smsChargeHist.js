@@ -183,7 +183,7 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
         }
         var tno = data.controlno; // KCP거래번호
         var order_no = data.approvalnum; // 주문번호 ordr_idxx
-        var trade_mony = data.chargeAmt; // 거래금액 amount
+        var trade_mony = data.chargeTot; // 거래금액 amount
 
         var url = siteUrl + "/assist/bill.BillActionNew.do?cmd=" + cmd + "&tno=" + tno + "&order_no=" + order_no + "&trade_mony=" + trade_mony;
         window.open(url, "", "width=470,height=" + height + ",resizable=yes,scrollbars=yes");

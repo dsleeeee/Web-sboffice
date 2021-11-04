@@ -89,6 +89,7 @@ public class SmsChargeHistServiceImpl implements SmsChargeHistService {
         smsChargeHistVO.setApprovalnum("");
         smsChargeHistVO.setResultcode("0000");
         smsChargeHistVO.setResultmessage("임의등록");
+        smsChargeHistVO.setChargeTot(smsChargeHistVO.getChargeAmt()); // 결제금액(KCP 실제 거래 금액)
 
         procCnt = smsChargeHistMapper.getSmsChargeRegistSaveInsert(smsChargeHistVO);
 

@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="sessionId" value="${param.sid}" />
 
-<wj-popup control="wjSmsChargeResultLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:350px;height:370px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSmsChargeResultLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:350px;height:390px;" fade-in="false" fade-out="false">
     <div ng-controller="smsChargeResultCtrl">
 
         <%-- header --%>
@@ -53,6 +53,15 @@
                         </wj-combo-box>
                         <%--{{_pgresourceDtl}}--%>
                         <input type="text" class="sb-input w100" id="pgresourceSmsChargeResult" ng-model="_pgresourceSmsChargeResult" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 결제금액 --%>
+                    <th>
+                        <s:message code="smsChargeResult.chargeTot" />
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="chargeTotSmsChargeResult" ng-model="chargeTotSmsChargeResult" style="text-align: right;" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -117,4 +126,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsChargeResult.js?ver=20211019.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsChargeResult.js?ver=20211104.02" charset="utf-8"></script>
