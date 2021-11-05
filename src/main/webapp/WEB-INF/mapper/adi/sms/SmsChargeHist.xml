@@ -20,6 +20,7 @@
         /* SmsChargeHistMapper.getSmsChargeHistList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
+        cpt.OGN_CD AS ORGN_CD,
         twuidv01.ORGN_NM,
         ('[' || cpt.OGN_CD || '] ' || twuidv01.ORGN_NM || ' (현재잔여금액 : ' || cst.SMS_AMT || ')') AS ORGN,
         cpt.CHARGE_DATE,
