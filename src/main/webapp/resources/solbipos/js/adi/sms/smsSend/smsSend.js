@@ -415,7 +415,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 // messageContent = messageContent.replaceAll("#추가사항#", $scope.flex.collectionView.items[i].memo);
                 var content = messageContent;
                 if ($("#lblPageGubun").text() == "Y") {
-                    content = $("#lblStoreNmInfo").text() + messageContent + $("#lblMemoInfo").text();
+                    content = $("#lblStoreNmInfo").text() + "\n" + messageContent + "\n" + $("#lblMemoInfo").text();
                 }
 
                 $scope.flex.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약

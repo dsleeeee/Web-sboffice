@@ -580,7 +580,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             if (messageContent == undefined) {
                 messageContent = "";
             }
-            var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
+            var content = $("#lblMarketingSmsSendStoreNmInfo").text() + "\n" + messageContent + "\n" + $("#lblMarketingSmsSendMemoInfo").text();
 
             params.reserveYn = reserveYn; // 0:전송, 1:예약
             if (reserveYn == "1") {
@@ -621,7 +621,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     }
                     // messageContent = messageContent.replaceAll("#이름#", $scope.flexMarketingSmsSend.collectionView.items[i].telNm);
                     // messageContent = messageContent.replaceAll("#추가사항#", $scope.flexMarketingSmsSend.collectionView.items[i].memo);
-                    var content = $("#lblMarketingSmsSendStoreNmInfo").text() + messageContent + $("#lblMarketingSmsSendMemoInfo").text();
+                    var content = $("#lblMarketingSmsSendStoreNmInfo").text() + "\n" + messageContent + "\n" + $("#lblMarketingSmsSendMemoInfo").text();
 
                     $scope.flexMarketingSmsSend.collectionView.items[i].reserveYn = reserveYn; // 0:전송, 1:예약
                     if (reserveYn == "1") {
