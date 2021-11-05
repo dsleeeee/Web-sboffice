@@ -44,6 +44,7 @@ app.controller('smsChargeResultCtrl', ['$scope', '$http', function ($scope, $htt
             if(data.resultcode == "0000") {
                 $("#lblContentSmsChargeResult").text("충전결제가 완료되었습니다.");
                 $scope.pgresourceSmsChargeResultCombo.selectedValue = data.pgresource;
+                $("#chargeTotSmsChargeResult").val(data.chargeTot.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#chargeDateSmsChargeResult").val(data.chargeDate.substring(0,4) + "-" + data.chargeDate.substring(4,6) + "-" + data.chargeDate.substring(6,8));
                 $("#chargeTimeSmsChargeResult").val(data.chargeTime.substring(0,2) + ":" + data.chargeTime.substring(2,4) + ":" + data.chargeTime.substring(4,6));
                 $("#chargeAmtSmsChargeResult").val(data.chargeAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -53,6 +54,7 @@ app.controller('smsChargeResultCtrl', ['$scope', '$http', function ($scope, $htt
             } else {
                 $("#lblContentSmsChargeResult").text("충전결제가 처리 되지 못하였습니다.");
                 $("#pgresourceSmsChargeResult").val("");
+                $("#chargeTotSmsChargeResult").val("");
                 $("#chargeDateSmsChargeResult").val("");
                 $("#chargeTimeSmsChargeResult").val("");
                 $("#chargeAmtSmsChargeResult").val("");
@@ -63,6 +65,7 @@ app.controller('smsChargeResultCtrl', ['$scope', '$http', function ($scope, $htt
         } else {
             $("#lblContentSmsChargeResult").text("잘못된 경로 입니다.");
             $("#pgresourceSmsChargeResult").val("");
+            $("#chargeTotSmsChargeResult").val("");
             $("#chargeDateSmsChargeResult").val("");
             $("#chargeTimeSmsChargeResult").val("");
             $("#chargeAmtSmsChargeResult").val("");
@@ -78,6 +81,7 @@ app.controller('smsChargeResultCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.close = function(){
         $("#lblContentSmsChargeResult").text("");
         $("#pgresourceSmsChargeResult").val("");
+        $("#chargeTotSmsChargeResult").val("");
         $("#chargeDateSmsChargeResult").val("");
         $("#chargeTimeSmsChargeResult").val("");
         $("#chargeAmtSmsChargeResult").val("");

@@ -45,6 +45,7 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
     // <-- 검색 호출 -->
     $scope.$on("smsChargeDtlCtrl", function(event, data) {
         if(data != undefined) {
+            $("#orgnCdDtl").val(data.orgnCd);
             $("#orgnNmDtl").val(data.orgnNm);
             $("#chargeIdNmDtl").val(data.chargeIdNm);
             $("#chargeDateDtl").val(data.chargeDate.substring(0,4) + "-" + data.chargeDate.substring(4,6) + "-" + data.chargeDate.substring(6,8));
@@ -61,6 +62,7 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
                 $("#divCancel").css('display', 'none');
             }
         } else {
+            $("#orgnCdDtl").val("");
             $("#orgnNmDtl").val("");
             $("#chargeIdNmDtl").val("");
             $("#chargeDateDtl").val("");
@@ -79,6 +81,7 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 팝업 닫기
     $scope.close = function(){
+        $("#orgnCdDtl").val("");
         $("#orgnNmDtl").val("");
         $("#chargeIdNmDtl").val("");
         $("#chargeDateDtl").val("");

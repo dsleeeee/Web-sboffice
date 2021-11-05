@@ -329,7 +329,10 @@ public class SmsSendServiceImpl implements SmsSendService {
 
                     // 파일 저장하는 부분
                     try {
-                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+//                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                        File destFile = new File(path+newFileName+"."+fileExt);
+                        mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 664 " + destFile); // 권한
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -352,7 +355,10 @@ public class SmsSendServiceImpl implements SmsSendService {
 
                     // 파일 저장하는 부분
                     try {
-                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+//                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                        File destFile = new File(path+newFileName+"."+fileExt);
+                        mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 664 " + destFile); // 권한
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -375,7 +381,10 @@ public class SmsSendServiceImpl implements SmsSendService {
 
                     // 파일 저장하는 부분
                     try {
-                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+//                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                        File destFile = new File(path+newFileName+"."+fileExt);
+                        mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 664 " + destFile); // 권한
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

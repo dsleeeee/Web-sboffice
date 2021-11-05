@@ -135,36 +135,43 @@
             if (frm.amt[0].checked)
             {
                 frm.good_mny.value = frm.amt[0].value;
+                frm.good_mny_qty.value = frm.qty[0].value;
             }
 
             else if (frm.amt[1].checked)
             {
                 frm.good_mny.value = frm.amt[1].value;
+                frm.good_mny_qty.value = frm.qty[1].value;
             }
 
             else if (frm.amt[2].checked)
             {
                 frm.good_mny.value = frm.amt[2].value;
+                frm.good_mny_qty.value = frm.qty[2].value;
             }
 
             else if (frm.amt[3].checked)
             {
                 frm.good_mny.value = frm.amt[3].value;
+                frm.good_mny_qty.value = frm.qty[3].value;
             }
 
             else if (frm.amt[4].checked)
             {
                 frm.good_mny.value = frm.amt[4].value;
+                frm.good_mny_qty.value = frm.qty[4].value;
             }
 
             else if (frm.amt[5].checked)
             {
                 frm.good_mny.value = frm.amt[5].value;
+                frm.good_mny_qty.value = frm.qty[5].value;
             }
 
             else if (frm.amt[6].checked)
             {
                 frm.good_mny.value = frm.amt[6].value;
+                frm.good_mny_qty.value = frm.qty[6].value;
             }
         }
 
@@ -225,7 +232,7 @@
         var app = agrid.getApp();
 
         // SMS충전결제 결과
-        function goChargeResult(use_pay_method, app_time, amount, tno, res_cd, res_msg)
+        function goChargeResult(use_pay_method, app_time, amount, amount_qty, tno, res_cd, res_msg)
         {
             var params = {};
             if(use_pay_method == "100000000000") {
@@ -233,7 +240,8 @@
             }
             params.chargeDate = app_time.substring(0,8); // 승인시간
             params.chargeTime = app_time.substring(8,14); // 승인시간
-            params.chargeAmt = amount; // KCP 실제 거래 금액
+            params.chargeTot = amount; // 결제금액(KCP 실제 거래 금액)
+            params.chargeAmt = amount_qty; // 충전금액
             params.controlno = tno; // KCP 거래번호
             params.resultcode = res_cd; // 결과 코드
             params.resultmessage = res_msg; // 결과 메세지
@@ -331,7 +339,7 @@
                                 <tr height='26' align='center'>
                                     <td>
                                         <input type='radio' name='amt' value='8250' checked/>
-                                        <%--<input type='hidden' name='qty' value='500'/>--%>
+                                        <input type='hidden' name='qty' value='7500'/>
                                     </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>7,500원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>500통</font></td>--%>
@@ -340,7 +348,7 @@
                                 <tr height='26' align='center'>
                                     <td>
                                         <input type='radio' name='amt' value='16500'/>
-                                        <%--<input type='hidden' name='qty' value='1000'/>--%>
+                                        <input type='hidden' name='qty' value='15000'/>
                                     </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>15,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>1,000통</font></td>--%>
@@ -349,7 +357,7 @@
                                 <tr height='26' align='center'>
                                     <td>
                                         <input type='radio' name='amt' value='33000'/>
-                                        <%--<input type='hidden' name='qty' value='2000'/>--%>
+                                        <input type='hidden' name='qty' value='30000'/>
                                     </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>30,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>2,000통</font></td>--%>
@@ -358,7 +366,7 @@
                                 <tr height='26' align='center'>
                                     <td>
                                         <input type='radio' name='amt' value='49500'/>
-                                        <%--<input type='hidden' name='qty' value='3000'/>--%>
+                                        <input type='hidden' name='qty' value='45000'/>
                                     </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>45,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>3,000통</font></td>--%>
@@ -367,7 +375,7 @@
                                 <tr height='26' align='center'>
                                     <td>
                                         <input type='radio' name='amt' value='82500'/>
-                                        <%--<input type='hidden' name='qty' value='5000'/>--%>
+                                        <input type='hidden' name='qty' value='75000'/>
                                     </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>5,000통</font></td>--%>
@@ -376,7 +384,7 @@
                                 <tr height='26' align='center'>
                                     <td>
                                         <input type='radio' name='amt' value='100'/>
-                                        <%--<input type='hidden' name='qty' value='100'/>--%>
+                                        <input type='hidden' name='qty' value='100'/>
                                     </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>100원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>--%>
@@ -385,7 +393,7 @@
                                 <tr height='26' align='center'>
                                     <td>
                                         <input type='radio' name='amt' value='1004'/>
-                                        <%--<input type='hidden' name='qty' value='1004'/>--%>
+                                        <input type='hidden' name='qty' value='1004'/>
                                     </td>
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>1004원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>--%>
@@ -457,6 +465,7 @@
         <input type="hidden" name="pay_method" value="100000000000"> <!-- 결제 수단 - 디폴트값 : 신용카드 -->
         <input type="hidden" name="ordr_idxx" value="" maxlength="40" /> <!-- 주문번호 -->
         <input type="hidden" name="good_mny" value="" /> <!-- 결제금액(good_mny) - ※ 필수 : 값 설정시 ,(콤마)를 제외한 숫자만 입력하여 주십시오. -->
+        <input type="hidden" name="good_mny_qty" value="" /> <!-- 충전금액(good_mny_qty) - ※ 필수 : 값 설정시 ,(콤마)를 제외한 숫자만 입력하여 주십시오. -->
         <%
             /*
                할부옵션 : 표준웹에서 카드결제시 최대로 표시할 할부개월 수를 설정합니다.(0 ~ 18 까지 설정 가능)

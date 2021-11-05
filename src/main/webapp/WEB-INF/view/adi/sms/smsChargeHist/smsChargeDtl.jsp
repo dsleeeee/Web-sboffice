@@ -34,6 +34,13 @@
                 </colgroup>
                 <tbody>
                 <tr>
+                    <%-- 소속코드 --%>
+                    <th>
+                        <s:message code="smsChargeDtl.orgnCd" />
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="orgnCdDtl" ng-model="orgnCdDtl" readonly />
+                    </td>
                     <%-- 소속명 --%>
                     <th>
                         <s:message code="smsChargeDtl.orgnNm" />
@@ -41,6 +48,8 @@
                     <td>
                         <input type="text" class="sb-input w100" id="orgnNmDtl" ng-model="orgnNmDtl" readonly />
                     </td>
+                </tr>
+                <tr>
                     <%-- 결제자 --%>
                     <th>
                         <s:message code="smsChargeDtl.chargeIdNm" />
@@ -48,8 +57,6 @@
                     <td>
                         <input type="text" class="sb-input w100" id="chargeIdNmDtl" ng-model="chargeIdNmDtl" readonly />
                     </td>
-                </tr>
-                <tr>
                     <%-- 충전일자 --%>
                     <th>
                         <s:message code="smsChargeDtl.chargeDate" />
@@ -57,6 +64,8 @@
                     <td>
                         <input type="text" class="sb-input w100" id="chargeDateDtl" ng-model="chargeDateDtl" readonly />
                     </td>
+                </tr>
+                <tr>
                     <%-- 충전시간 --%>
                     <th>
                         <s:message code="smsChargeDtl.chargeTime" />
@@ -64,8 +73,6 @@
                     <td>
                         <input type="text" class="sb-input w100" id="chargeTimeDtl" ng-model="chargeTimeDtl" readonly />
                     </td>
-                </tr>
-                <tr>
                     <%-- 충전금액 --%>
                     <th>
                         <s:message code="smsChargeDtl.chargeAmt" />
@@ -73,8 +80,6 @@
                     <td>
                         <input type="text" class="sb-input w100" id="chargeAmtDtl" ng-model="chargeAmtDtl" style="text-align: right;" readonly />
                     </td>
-                    <th></th>
-                    <td></td>
                 </tr>
                 <tr>
                     <%-- 결제수단 --%>
@@ -160,7 +165,7 @@
         // alert(form);
         // alert(form.req_tx.value);
         form.tno.value = $("#controlnoDtl").val(); // 승인번호
-        form.orgnCd.value = "${orgnCd}"; // 소속코드
+        form.orgnCd.value = $("#orgnCdDtl").val(); // 소속코드
         form.userId.value = "${userId}"; // 사용자ID
 
         var scope = agrid.getScope('smsChargeDtlCtrl');
@@ -171,7 +176,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211021.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211021.02" charset="utf-8"></script>
 
 <%-- SMS결제취소 결과 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsCharge/smsCancelResult.jsp">

@@ -122,6 +122,7 @@
     /* = -------------------------------------------------------------------------- = */
     String orgnCd         = f_get_parm( request.getParameter( "orgnCd"         ) ); // 소속코드
     String userId         = f_get_parm( request.getParameter( "userId"         ) ); // 사용자ID
+    String amount_qty     = f_get_parm( request.getParameter( "good_mny_qty"   ) ); // 충전금액
     /* ============================================================================== */
     /* =   02. 지불 요청 정보 설정 END
     /* ============================================================================== */
@@ -373,6 +374,7 @@
                 System.out.println("WEB_SMS >>> 충전결제 >>> use_pay_method : " + use_pay_method);
                 System.out.println("WEB_SMS >>> 충전결제 >>> app_time : " + app_time);
                 System.out.println("WEB_SMS >>> 충전결제 >>> amount : " + amount);
+                System.out.println("WEB_SMS >>> 충전결제 >>> amount_qty : " + amount_qty);
                 System.out.println("WEB_SMS >>> 충전결제 >>> successYn : Y");
                 System.out.println("WEB_SMS >>> 충전결제 >>> tno : " + tno);
                 System.out.println("WEB_SMS >>> 충전결제 >>> ordr_idxx : " + ordr_idxx);
@@ -380,7 +382,7 @@
                 System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
 
                 // DB 호출
-                goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "', '" + orgnCd + "', '" + userId + "');";
+                goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', '" + amount_qty + "', 'Y', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "', '" + orgnCd + "', '" + userId + "');";
 
                 // 07-1-1-1. 복합결제(신용카드+포인트)
                 if ( pnt_issue.equals( "SCSK" ) || pnt_issue.equals( "SCWB" ) )
@@ -424,6 +426,7 @@
             System.out.println("WEB_SMS >>> 충전결제 >>> use_pay_method : " + use_pay_method);
             System.out.println("WEB_SMS >>> 충전결제 >>> app_time : " + app_time);
             System.out.println("WEB_SMS >>> 충전결제 >>> amount : " + amount);
+            System.out.println("WEB_SMS >>> 충전결제 >>> amount_qty : " + amount_qty);
             System.out.println("WEB_SMS >>> 충전결제 >>> successYn : Y");
             System.out.println("WEB_SMS >>> 충전결제 >>> tno : " + tno);
             System.out.println("WEB_SMS >>> 충전결제 >>> ordr_idxx : " + ordr_idxx);
@@ -431,7 +434,7 @@
             System.out.println("WEB_SMS >>> 충전결제 >>> res_msg : " + res_msg);
 
             // DB 호출
-            goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "', '" + orgnCd + "', '" + userId + "');";
+            goCharge = "pp_fun_smsChargeSave('" + use_pay_method + "', '" + app_time + "', '" + amount + "', '" + amount_qty + "', 'N', '" + tno + "', '" + ordr_idxx + "', '" + res_cd + "', '" + res_msg + "', '" + orgnCd + "', '" + userId + "');";
         }
 
         System.out.println("WEB_SMS >>> 충전결제 >>> DB insert >>> end");
@@ -512,10 +515,10 @@
     <%=goCharge%>
 
     // SMS충전결제 결과 팝업
-    parent.goChargeResult('<%=use_pay_method%>', '<%=app_time%>', '<%=amount%>', '<%=tno%>', '<%=res_cd%>', '<%=res_msg%>');
+    parent.goChargeResult('<%=use_pay_method%>', '<%=app_time%>', '<%=amount%>', '<%=amount_qty%>', '<%=tno%>', '<%=res_cd%>', '<%=res_msg%>');
 
     // 결제내역 저장
-    function pp_fun_smsChargeSave(use_pay_method, app_time, amount, successYn, tno, ordr_idxx, res_cd, res_msg, orgnCd, userId)
+    function pp_fun_smsChargeSave(use_pay_method, app_time, amount, amount_qty, successYn, tno, ordr_idxx, res_cd, res_msg, orgnCd, userId)
     {
         var params = {};
         if(use_pay_method == "100000000000") {
@@ -523,7 +526,8 @@
         }
         params.chargeDate = app_time.substring(0,8); // 승인시간
         params.chargeTime = app_time.substring(8,14); // 승인시간
-        params.chargeAmt = amount; // KCP 실제 거래 금액
+        params.chargeTot = amount; // 결제금액(KCP 실제 거래 금액)
+        params.chargeAmt = amount_qty; // 충전금액
         params.successYn = successYn; // 결제성공여부
         params.controlno = tno; // KCP 거래번호
         params.approvalnum = ordr_idxx; // 주문번호

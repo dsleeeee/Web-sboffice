@@ -84,6 +84,9 @@ public class SmsChargeHistVO extends PageVO {
     /** 충전금액 */
     private String chargeAmt;
 
+    /** 결제금액(KCP 실제 거래 금액) */
+    private String chargeTot;
+
     /** 기초충전금액 */
     private String baseChargeAmt;
 
@@ -182,6 +185,10 @@ public class SmsChargeHistVO extends PageVO {
     public String getChargeAmt() { return chargeAmt; }
 
     public void setChargeAmt(String chargeAmt) { this.chargeAmt = chargeAmt; }
+
+    public String getChargeTot() { return chargeTot; }
+
+    public void setChargeTot(String chargeTot) { this.chargeTot = chargeTot; }
 
     public String getBaseChargeAmt() { return baseChargeAmt; }
 

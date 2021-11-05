@@ -80,8 +80,10 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         smsChargeHistVO.setResultcode(smsChargeVO.getResultcode());
         smsChargeHistVO.setResultmessage(smsChargeVO.getResultmessage());
         smsChargeHistVO.setBaseChargeAmt(smsBaseAmt); // 기초충전금액
+        smsChargeHistVO.setChargeTot(smsChargeVO.getChargeTot()); // 결제금액(KCP 실제 거래 금액)
 
-        LOGGER.info("충전결제 >>> 충전할 충전금액 : " + smsChargeVO.getChargeAmt());
+        LOGGER.info("충전결제 >>> 결제금액 : " + smsChargeHistVO.getChargeTot());
+        LOGGER.info("충전결제 >>> 충전할 충전금액 : " + smsChargeHistVO.getChargeAmt());
 
         procCnt = smsChargeHistMapper.getSmsChargeRegistSaveInsert(smsChargeHistVO);
 

@@ -33,7 +33,7 @@
                 TAX_SALE_AMT,	-- 과세금액
                 VAT_AMT,		-- 부가세금액
                 NO_TAX_SALE_AMT,-- 면세금액
-                PURE_SALE_AMT,	-- 순판매금액
+                NET_SALE_AMT AS PURE_SALE_AMT,	-- 순판매금액
                 EXPECT_PAY_AMT,	-- 받을금액
                 RECV_PAY_AMT,	-- 받은금액
                 RTN_PAY_AMT,	-- 거스름액
