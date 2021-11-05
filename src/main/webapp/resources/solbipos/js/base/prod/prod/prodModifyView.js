@@ -311,7 +311,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                     if($scope.getMode() == "I"){
 
-                        if(kitchenprintLink ==="0" && $scope.prodModifyInfo.setProdFg ==="1"){
+                        /* 1. kitchenprintLink 값은 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '0 : 자동생성' 인 경우, 
+                              본사/매장 환경코드 [1110 상품생성시주방프린터연결여부]의 값을 조회함('0 : 자동생성' 또는 '1 : 생성안함' 값이 들어오게 됨)
+                           2. 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '1 : 생성안함' 인 경우 kitchenprintLink에 값이 없으므로,
+                              상품등록팝업 닫힘으로 처리함.
+                        */
+                        if(kitchenprintLink === null || kitchenprintLink === "" || kitchenprintLink === undefined){
+                            $scope.prodModifyLayer.hide();
+
+                        }else if(kitchenprintLink ==="0" && $scope.prodModifyInfo.setProdFg ==="1"){
                             $scope.prodModifyLayer.hide();
 
                         }else{

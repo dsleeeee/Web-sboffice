@@ -28,8 +28,8 @@
              , SUM(M.APPR_AMT) AS APPR_AMT
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , 1 AS SALE_FG
@@ -70,7 +70,7 @@
         UNION ALL
                 SELECT STORE_CD
                      , -1 AS SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , APPR_AMT
                   FROM TB_SL_SALE_PAY_MPAY
                  WHERE SALE_AMT<0
@@ -141,8 +141,8 @@
              , SUM(M.APPR_AMT) AS APPR_AMT
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , 1 AS SALE_FG
@@ -183,7 +183,7 @@
         UNION ALL
                 SELECT STORE_CD
                      , -1 AS SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , APPR_AMT
                   FROM TB_SL_SALE_PAY_MPAY
                  WHERE SALE_AMT<0

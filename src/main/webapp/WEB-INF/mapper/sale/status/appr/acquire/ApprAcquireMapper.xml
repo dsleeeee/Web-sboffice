@@ -34,9 +34,9 @@
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.SALE_AMT),0) AS SALE_AMT_A
              , DECODE(M.SALE_FG,1,SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.SALE_AMT),0) AS SALE_AMT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.SALE_AMT)),0) AS SALE_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , ACQUIRE_CD
@@ -82,9 +82,9 @@
                      , ACQUIRE_CD
                      , ACQUIRE_NM
                      , SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , SALE_AMT
-                     , APPR_AMT
+                     , (SALE_FG * APPR_AMT) AS APPR_AMT
                   FROM TB_SL_SALE_PAY_CARD
                  WHERE SALE_FG='-1'
                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -161,8 +161,8 @@
              , SUM(M.SALE_AMT) AS APPR_AMT
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.SALE_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.SALE_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.SALE_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT TSSPM.STORE_CD
                      , A.VAN_CD MCOUPN_CD
@@ -209,7 +209,7 @@
                      , A.VAN_CD MCOUPN_CD
                      , A.VAN_NM MCOUPN_NM
                      , TSSPM.SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , TSSPM.SALE_AMT
                   FROM TB_SL_SALE_PAY_MCOUPN TSSPM
                      , (SELECT VAN_NM, VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = '04') A
@@ -261,11 +261,11 @@
     </select>
 
 
-    <!-- 모바일쿠폰 매입현왕 - 리스트 조회 -->
+    <!-- 모바일페이 매입현황 - 리스트 조회 -->
     <!--
         TABLE    :
         PARAM    : apprAcquireVO
-        COMMENTS : 카드매입사별 탭 - 모바일쿠폰 리스트를 조회한다.
+        COMMENTS : 카드매입사별 탭 - 모바일페이 리스트를 조회한다.
     -->
     <select id="getApprAcquireMpayList" parameterType="apprAcquireVO" resultType="DefaultMap">
       <include refid="CmmSQL.PagingTemplateHeader"/>
@@ -289,8 +289,8 @@
              , SUM(M.APPR_AMT) AS APPR_AMT
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT TSSPM.STORE_CD
                      , A.VAN_CD MPAY_CD
@@ -337,7 +337,7 @@
                      , A.VAN_CD MPAY_CD
                      , A.VAN_NM MPAY_NM
                      , -1 AS SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , TSSPM.APPR_AMT
                   FROM TB_SL_SALE_PAY_MPAY TSSPM
                      , (SELECT VAN_NM, VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = '03') A
@@ -419,9 +419,9 @@
              , DECODE(M.SALE_YN,'Y',SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.DC_AMT),0) AS DC_AMT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_YN,'N',SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.DC_AMT),0) AS DC_AMT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.DC_AMT)),0) AS DC_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , ACQUIRE_CD
@@ -461,9 +461,9 @@
                      , ACQUIRE_CD
                      , ACQUIRE_NM
                      , SALE_YN
-                     , 1 AS CNT
-                     , DC_AMT
-                     , APPR_AMT
+                     , -1 AS CNT
+                     , (-1 * DC_AMT) AS DC_AMT
+                     , (-1 * APPR_AMT) AS APPR_AMT
                   FROM TB_NS_NONSALE_PAY_CARD
                  WHERE SALE_YN = 'N'
                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -534,9 +534,9 @@
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.SALE_AMT),0) AS SALE_AMT_A
              , DECODE(M.SALE_FG,1,SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.SALE_AMT),0) AS SALE_AMT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.SALE_AMT)),0) AS SALE_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , ACQUIRE_CD
@@ -582,9 +582,9 @@
                      , ACQUIRE_CD
                      , ACQUIRE_NM
                      , SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , SALE_AMT
-                     , APPR_AMT
+                     , (SALE_FG * APPR_AMT) AS APPR_AMT
                   FROM TB_SL_SALE_PAY_CARD
                  WHERE SALE_FG='-1'
                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -658,8 +658,8 @@
              , SUM(M.SALE_AMT) AS APPR_AMT
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.SALE_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.SALE_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.SALE_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT TSSPM.STORE_CD
                      , A.VAN_CD MCOUPN_CD
@@ -706,7 +706,7 @@
                      , A.VAN_CD MCOUPN_CD
                      , A.VAN_NM MCOUPN_NM
                      , TSSPM.SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , TSSPM.SALE_AMT
                   FROM TB_SL_SALE_PAY_MCOUPN TSSPM
                      , (SELECT VAN_NM, VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = '04') A
@@ -757,11 +757,11 @@
     </select>
 
 
-    <!-- 모바일쿠폰 매입현왕 - 엑셀 리스트 조회 -->
+    <!-- 모바일페이 매입현황 - 엑셀 리스트 조회 -->
     <!--
         TABLE    :
         PARAM    : apprAcquireVO
-        COMMENTS : 카드매입사별 탭 - 모바일쿠폰 엑셀 리스트를 조회한다.
+        COMMENTS : 카드매입사별 탭 - 모바일페이 엑셀 리스트를 조회한다.
     -->
     <select id="getApprAcquireMpayExcelList" parameterType="apprAcquireVO" resultType="DefaultMap">
        <![CDATA[
@@ -783,8 +783,8 @@
              , SUM(M.APPR_AMT) AS APPR_AMT
              , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_FG,1,SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_FG,-1,SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT TSSPM.STORE_CD
                      , A.VAN_CD MPAY_CD
@@ -831,7 +831,7 @@
                      , A.VAN_CD MPAY_CD
                      , A.VAN_NM MPAY_NM
                      , -1 AS SALE_FG
-                     , 1 AS CNT
+                     , -1 AS CNT
                      , TSSPM.APPR_AMT
                   FROM TB_SL_SALE_PAY_MPAY TSSPM
                      , (SELECT VAN_NM, VAN_CD FROM TB_CM_VAN_CMPNY WHERE VAN_FG = '03') A
@@ -910,9 +910,9 @@
              , DECODE(M.SALE_YN,'Y',SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.DC_AMT),0) AS DC_AMT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_YN,'N',SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.DC_AMT),0) AS DC_AMT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.DC_AMT)),0) AS DC_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , ACQUIRE_CD
@@ -952,9 +952,9 @@
                      , ACQUIRE_CD
                      , ACQUIRE_NM
                      , SALE_YN
-                     , 1 AS CNT
-                     , DC_AMT
-                     , APPR_AMT
+                     , -1 AS CNT
+                     , (-1 * DC_AMT) AS DC_AMT
+                     , (-1 * APPR_AMT) AS APPR_AMT
                   FROM TB_NS_NONSALE_PAY_CARD
                  WHERE SALE_YN = 'N'
                    AND HQ_OFFICE_CD = #{hqOfficeCd}

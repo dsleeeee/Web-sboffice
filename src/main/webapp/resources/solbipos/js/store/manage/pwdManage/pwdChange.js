@@ -36,11 +36,16 @@ app.controller('pwdChangeCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$apply(function() {
       $scope.pwdChange = data;
 
-      // 매장 직원의 경우에만 포스 비밀번호 변경 가능
-      if($scope.pwdChange.empOrgnFg === 'H' ) {
-        $scope.layerPwdChgFgCombo.isReadOnly = true;
-      } else if($scope.pwdChange.empOrgnFg === 'S' ) {
+      // 입력값 초기화
+      $scope.layerPwdChgFgCombo.selectedIndex = 0;
+      $scope.pwdChange.newPassword = "";
+      $scope.pwdChange.confirmPassword = "";
+
+      // 매장 ID만 WEB/포스 비번 변경 가능, 나머지 권한은 WEB 비번만 변경가능
+      if($scope.pwdChange.empOrgnFg === 'S' ) {
         $scope.layerPwdChgFgCombo.isReadOnly = false;
+      }else{
+        $scope.layerPwdChgFgCombo.isReadOnly = true;
       }
     });
     event.preventDefault();
@@ -50,12 +55,12 @@ app.controller('pwdChangeCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.changePwdChgFg = function(s, e){
     if(s.selectedValue === 'WEB') {
       $('#layerNewPassword, #layerConfirmPassword').attr('maxlength','16');
-      $('#layerNewPassword, #layerConfirmPassword').removeAttr('keyup');
+      /*$('#layerNewPassword, #layerConfirmPassword').removeAttr('keyup');*/
     } else {
       $('#layerNewPassword, #layerConfirmPassword').attr('maxlength','4');
-      $('#layerNewPassword, #layerConfirmPassword').on('keyup', function() {
+      /*$('#layerNewPassword, #layerConfirmPassword').on('keyup', function() {
         $(this).val($(this).val().replace(/[^0-9]/g,''));
-      });
+      });*/
     }
     $('#layerNewPassword').val('');
     $('#layerConfirmPassword').val('');
@@ -63,6 +68,28 @@ app.controller('pwdChangeCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 비밀번호 변경
   $scope.modifyPwd = function(){
+
+    // 새 비밀번호를 입력하세요.
+    if($("#layerNewPassword").val() === ""){
+      $scope._popMsg(messages["pwdManage.layer.newPassword"] + messages["cmm.require.text"]);
+      return;
+    }
+
+    // 새 비밀번호 확인을 입력하세요.
+    if($("#layerConfirmPassword").val() === ""){
+      $scope._popMsg(messages["pwdManage.layer.confirmPassword"] + messages["cmm.require.text"]);
+      return;
+    }
+
+    // 포스(POS) 비밀번호는 숫자 4자리만 허용됩니다.
+    if($scope.pwdChange.pwdChgFg === "POS"){
+      var msg = messages["pwdManage.layer.msg"];
+      var numChkregexp = /[^0-9]/g;
+      if(numChkregexp.test( $scope.pwdChange.newPassword)) {
+        $scope._popMsg(msg);
+        return false;
+      }
+    }
 
     var params = $scope.pwdChange;
 

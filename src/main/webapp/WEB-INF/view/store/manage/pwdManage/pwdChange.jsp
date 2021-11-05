@@ -55,7 +55,7 @@
           <tr>
             <th><s:message code="pwdManage.layer.newPassword" /></th>
             <td>
-              <input id="layerNewPassword" type="password" ng-model="pwdChange.newPassword" maxlength="16"/>
+              <input id="layerNewPassword" type="password" ng-model="pwdChange.newPassword" maxlength="16" onkeyup="this.value=this.value.replace(/[^A-Za-z0-9]/g,'');"/>
               <span id="newPasswordError" class="errorMsg" style="display: none"></span>
             </td>
           </tr>
@@ -63,7 +63,7 @@
           <tr>
             <th><s:message code="pwdManage.layer.confirmPassword" /></th>
             <td>
-              <input id="layerConfirmPassword" type="password" ng-model="pwdChange.confirmPassword" maxlength="16" />
+              <input id="layerConfirmPassword" type="password" ng-model="pwdChange.confirmPassword" maxlength="16" onkeyup="this.value=this.value.replace(/[^A-Za-z0-9]/g,'');"/>
               <span id="confirmPasswordError" class="errorMsg" style="display: none"></span>
             </td>
           </tr>
@@ -84,4 +84,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20181211.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20181211.03" charset="utf-8"></script>

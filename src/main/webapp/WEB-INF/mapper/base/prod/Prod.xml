@@ -456,7 +456,7 @@
                 SELECT
                 HQ_OFFICE_CD,
                 PROD_CD,
-                IMG_URL || IMG_FILE_NM AS IMG_URL
+                IMG_URL || '/' || IMG_FILE_NM AS IMG_URL
                 FROM TB_HQ_PRODUCT_IMAGE
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 AND IMG_FG = '001'
@@ -567,7 +567,7 @@
                 SELECT
                 STORE_CD,
                 PROD_CD,
-                IMG_URL || IMG_FILE_NM AS IMG_URL
+                IMG_URL || '/' || IMG_FILE_NM AS IMG_URL
                 FROM TB_MS_PRODUCT_IMAGE
                 WHERE STORE_CD = #{storeCd}
                 AND IMG_FG = '001'

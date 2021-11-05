@@ -33,7 +33,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/apprSale.js?ver=20210824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/apprSale.js?ver=20210824.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 승인현황 --%>

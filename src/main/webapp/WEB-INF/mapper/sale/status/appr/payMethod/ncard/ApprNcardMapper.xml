@@ -30,9 +30,9 @@
              , DECODE(M.SALE_YN,'Y',SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.DC_AMT),0) AS DC_AMT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_YN,'N',SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.DC_AMT),0) AS DC_AMT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.DC_AMT)),0) AS DC_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , SALE_YN
@@ -68,9 +68,9 @@
         UNION ALL
                 SELECT STORE_CD
                      , SALE_YN
-                     , 1 AS CNT
-                     , DC_AMT
-                     , APPR_AMT
+                     , -1 AS CNT
+                     , (-1 * DC_AMT) AS DC_AMT
+                     , (-1 * APPR_AMT) AS APPR_AMT
                   FROM TB_NS_NONSALE_PAY_CARD
                  WHERE SALE_YN = 'N'
                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -136,9 +136,9 @@
              , DECODE(M.SALE_YN,'Y',SUM(M.CNT),0) AS CNT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.DC_AMT),0) AS DC_AMT_A
              , DECODE(M.SALE_YN,'Y',SUM(M.APPR_AMT),0) AS APPR_AMT_A
-             , DECODE(M.SALE_YN,'N',SUM(M.CNT),0) AS CNT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.DC_AMT),0) AS DC_AMT_B
-             , DECODE(M.SALE_YN,'N',SUM(M.APPR_AMT),0) AS APPR_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.CNT)),0) AS CNT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.DC_AMT)),0) AS DC_AMT_B
+             , DECODE(M.SALE_YN,'N',ABS(SUM(M.APPR_AMT)),0) AS APPR_AMT_B
           FROM (
                 SELECT STORE_CD
                      , SALE_YN
@@ -174,9 +174,9 @@
         UNION ALL
                 SELECT STORE_CD
                      , SALE_YN
-                     , 1 AS CNT
-                     , DC_AMT
-                     , APPR_AMT
+                     , -1 AS CNT
+                     , (-1 * DC_AMT) AS DC_AMT
+                     , (-1 * APPR_AMT) AS APPR_AMT
                   FROM TB_NS_NONSALE_PAY_CARD
                  WHERE SALE_YN = 'N'
                    AND HQ_OFFICE_CD = #{hqOfficeCd}

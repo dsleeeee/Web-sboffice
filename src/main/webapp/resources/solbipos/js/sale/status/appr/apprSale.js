@@ -60,7 +60,7 @@ app.controller('apprSaleCtrl', ['$scope', function ($scope) {
         $("#apprAcquireCardView").hide();
         $("#apprAcquireMpayView").hide();
         $("#apprAcquireMcouponView").hide();
-        $("#apprAcquireeNcardView").hide();
+        $("#apprAcquireNcardView").hide();
     };
     
     //매입현황 하위 탭
@@ -82,7 +82,7 @@ app.controller('apprSaleCtrl', ['$scope', function ($scope) {
         $("#apprAcquireCardView").show();
         $("#apprAcquireMpayView").hide();
         $("#apprAcquireMcouponView").hide();
-        $("#apprAcquireeNcardView").hide();
+        $("#apprAcquireNcardView").hide();
 
     };
     
@@ -110,11 +110,11 @@ app.controller('apprSaleCtrl', ['$scope', function ($scope) {
     $scope.apprAcquireTabRefresh = function(){
     	var scope = agrid.getScope("apprAcquireCardCtrl");
         scope.flex.refresh();
-        scope = agrid.getScope("apprMpayCtrl");
+        scope = agrid.getScope("apprAcquireMpayCtrl");
         scope.flex.refresh();
         scope = agrid.getScope("apprAcquireMcouponCtrl");
         scope.flex.refresh();
-        scope = agrid.getScope("apprNcardCtrl");
+        scope = agrid.getScope("apprAcquireNcardCtrl");
         scope.flex.refresh();
     }
     
