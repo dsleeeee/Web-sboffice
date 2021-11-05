@@ -168,8 +168,6 @@ public class MarketingSmsSendController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        marketingSmsSendVO.setSmsSendSeq(request.getParameter("smsSendSeq"));
-
         DefaultMap<String> result = marketingSmsSendService.getSmsSendInsert1000Count(marketingSmsSendVO, sessionInfoVO);
 
         DefaultMap<Object> resultMap = new DefaultMap<Object>();

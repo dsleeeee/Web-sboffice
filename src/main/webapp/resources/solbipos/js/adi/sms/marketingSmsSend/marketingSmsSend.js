@@ -71,10 +71,9 @@ function smsSendloadingBarChk(smsSendSeq, smsSendListCnt){
             url: "/adi/sms/marketingSmsSend/marketingSmsSend/getSmsSendInsert1000Count.sb",
             type: "POST",
             data: params,
-            processData: false,
-            contentType: false,
+            dataType: "json",
             cache: false,
-            // async:false,
+            async: false,
             success: function(result) {
                 // alert(result.status);
                 // alert(result.data);
