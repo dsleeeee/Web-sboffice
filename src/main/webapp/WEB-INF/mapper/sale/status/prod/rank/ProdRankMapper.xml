@@ -107,8 +107,14 @@
                          BY tsdp.PROD_CD, tmp.PROD_NM
 
                ) A
+        <if test='orderType != null and orderType == "1"'>
             ORDER
-               BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
+            BY A.TOT_SALE_QTY DESC, A.PROD_CD ASC
+        </if>
+        <if test='orderType != null and orderType == "2"'>
+            ORDER
+            BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
+        </if>
     </select>
 
     <!-- 상품매출순위탭 - 엑셀 조회 -->
