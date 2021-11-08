@@ -330,29 +330,9 @@
                         SBPENC.D(tmm.TEL_NO) AS TEL_NO,
                         SBPENC.D(tmm.ADDR) AS ADDR,
                         SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
-                        tmmp.LAST_SALE_DATE
-                        FROM TB_PS_DLVR_MEMBER tmm,
-                        <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
-                            TB_MB_MEMBER_POINT_STORE tmmps,
-                        </if>
-                        TB_MB_MEMBER_POINT tmmp
+                        tmm.LAST_SALE_DATE
+                        FROM TB_PS_DLVR_MEMBER tmm
                         WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
-                        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
-                        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
-                        <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
-                            AND tmmps.MEMBR_ORGN_CD (+) = tmm.REG_STORE_CD
-                            AND tmmps.CHG_MEMBR_ORGN_CD (+)= tmm.REG_STORE_CD
-                            AND tmmps.MEMBR_NO (+)= tmm.MEMBR_NO
-                            <if test='visitStoreMembr == "true"'>
-                                AND tmmps.CHG_MEMBR_ORGN_CD = #{storeCd}
-                            </if>
-                            <if test='regUseStoreCd != null and !regUseStoreCd.equals("")'>
-                                AND tmmps.CHG_MEMBR_ORGN_CD IN
-                                <foreach collection="regUseStoreCds" item="item" open="(" separator="," close=")">
-                                    #{item}
-                                </foreach>
-                            </if>
-                        </if>
                         <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
                             <if test='storeMembr == "true"'>
                                 AND tmm.REG_STORE_CD = #{storeCd}
@@ -404,7 +384,7 @@
                             </if>
                             <!-- 최종방문일 -->
                             <if test='periodType.getCode() == "last"'>
-                                AND tmmp.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
+                                AND tmm.LAST_SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
                             </if>
                         </if>
                         <if test='anvType != null and anvType.toString() != ""'>
@@ -417,28 +397,6 @@
                         </if>
                         <if test="useYn != null and useYn != ''">
                             AND tmm.USE_YN = #{useYn}
-                        </if>
-                        <if test='startSaveSale != null and startSaveSale != "" and endSaveSale != null and endSaveSale != ""'>
-                            <if test='memberSaleFg == "0"'>
-                                AND tmmp.POINT_ACC_CNT BETWEEN #{startSaveSale} AND #{endSaveSale}
-                            </if>
-                            <if test='memberSaleFg == "1"'>
-                                AND tmmp.TOT_SALE_AMT BETWEEN #{startSaveSale} AND #{endSaveSale}
-                            </if>
-                        </if>
-                        <if test='startAvablPoint != null and startAvablPoint != "" and endAvablPoint != null and endAvablPoint != ""'>
-                            <if test='memberPointFg == "0"'>
-                                AND tmmp.TOT_SAVE_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
-                            </if>
-                            <if test='memberPointFg == "1"'>
-                                AND tmmp.TOT_USE_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
-                            </if>
-                            <if test='memberPointFg == "2"'>
-                                AND tmmp.TOT_ADJ_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
-                            </if>
-                            <if test='memberPointFg == "3"'>
-                                AND tmmp.AVABL_POINT BETWEEN #{startAvablPoint} AND #{endAvablPoint}
-                            </if>
                         </if>
                         <if test='shortNo != null and shortNo != ""'>
                             AND tmm.SHORT_NO = #{shortNo}
@@ -454,8 +412,7 @@
                         </if>
                         <if test="marketingSmsGubun != null and marketingSmsGubun != ''">
                             <![CDATA[
-                                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
-                                AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                AND tmm.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                             ]]>
                         </if>
                     )
