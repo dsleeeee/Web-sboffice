@@ -766,7 +766,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     innerHtml += "<table>";
                     innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ list[i].title +"\" readonly/></td></tr>";
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
-                    innerHtml += "<tr><td><textarea style=\"width:100%; height:90px; overflow-x:hidden; background-color: #EAF7FF\" onclick=\"marketingSmsSendMsgShow(\'"+ list[i].title + "\', \'"+ list[i].message + "\')\" readonly>" + list[i].message + "</textarea></td></tr>";
+                    innerHtml += "<tr><td><textarea style=\"width:100%; height:90px; overflow-x:hidden; background-color: #EAF7FF\" onclick=\"marketingSmsSendMsgShow(\'"+ list[i].title + "\', \'"+ list[i].message.replaceAll("\n","") + "\')\" readonly>" + list[i].message + "</textarea></td></tr>";
                     innerHtml += "</table>";
                     innerHtml += "</div>";
                 }
