@@ -35,28 +35,31 @@ app.controller('dayVorderCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("dayVorderCtrl", function (event, data) {
-    $scope.storeCd  = data.storeCd;
-    $scope.saleDate = data.saleDate;
-    $scope.posNo    = nvl(data.posNo, '');
-    $scope.billNo   = nvl(data.billNo, '');
-
     $scope.wjDayVorderLayer.show(true);
-
-    $scope.searchdayVorderList();
-
+    $scope.searchdayVorderList(data);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
 
   // 스마트오더 내역 리스트 조회
-  $scope.searchdayVorderList = function () {
+  $scope.searchdayVorderList = function (data) {
+    console.log('구분 : ' + data.gubun);
+    console.log('날짜 : ' + data.saleDate);
     // 파라미터
     var params       = {};
-    params.storeCd   = $scope.storeCd;
-    params.saleDate  = $scope.saleDate;
-    params.posNo     = $scope.posNo;
-    params.billNo    = $scope.billNo;
+    // 기간별매출 > 일자별 탭 > 일별종합 탭
+    if(data.gubun == "day") {
+      params.saleDate = data.saleDate;
+    }
+    // 기간별매출 > 월별 탭 > 월별종합 탭
+    if(data.gubun == "month") {
+      params.yearMonth = data.yearMonth;
+    }
+    params.storeCd   = data.storeCd;
+    params.gubun  = data.gubun;
+    params.posNo     = nvl(data.posNo, '');
+    params.billNo    = nvl(data.billNo, '');
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/cmmSalePopup/dayPayInfo/daySmartorder/list.sb", params);

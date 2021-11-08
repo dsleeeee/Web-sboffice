@@ -39,4 +39,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayVorder.js?ver=20210811.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayVorder.js?ver=20210811.02" charset="utf-8"></script>
