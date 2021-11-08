@@ -142,6 +142,15 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
                 if (col.isReadOnly) {
                     wijmo.addClass(cell, 'wj-custom-readonly');
                 }
+
+                // 오른쪽 정렬
+                if (col.binding === "baseChargeAmt" || col.binding === "chargeAmt" || col.binding === "vatAmt" || col.binding === "chargeTot") {
+                    wijmo.setCss(cell.children[0], {
+                        display      : 'table-cell',
+                        verticalAlign: 'middle',
+                        textAlign    : 'right'
+                    });
+                }
             }
         }
         // <-- //그리드 합치기 -->
