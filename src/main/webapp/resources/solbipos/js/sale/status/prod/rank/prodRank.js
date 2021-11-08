@@ -58,6 +58,7 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		params.storeCd   = $("#prodRankSelectStoreCd").val();
 		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+		params.orderType = $scope.orderTypeCombo.selectedValue; // 정렬기준
 		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 
 		if(params.startDate > params.endDate){
@@ -129,7 +130,7 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
             $scope.storeCd = data.storeCd;
 			$scope.startDate = data.startDate;
 			$scope.endDate = data.endDate;
-			//$scope.orderType = data.orderType;
+			$scope.orderType = data.orderType;
 		}
 	    $scope.prodRankBarChartList(data);
 	    // 기능수행 종료 : 반드시 추가
@@ -143,7 +144,7 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
         params.storeCd = data.storeCd;
         params.startDate = data.startDate;
         params.endDate = data.endDate;
-        //params.orderType = data.orderType;
+        params.orderType = data.orderType;
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/prod/rank/getProdRankChartList.sb", params);
