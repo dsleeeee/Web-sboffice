@@ -130,8 +130,8 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="smsSendHist.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="smsSendHist.orgnCd"/>" binding="smsSendOrgnCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="smsSendHist.orgnNm"/>" binding="smsSendOrgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsSendHist.orgnCd"/>" binding="smsSendOrgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsSendHist.orgnNm"/>" binding="smsSendOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsSendHist.smsSendCount"/>" binding="smsSendCount" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsSendHist.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsSendHist.subject"/>" binding="subject" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
