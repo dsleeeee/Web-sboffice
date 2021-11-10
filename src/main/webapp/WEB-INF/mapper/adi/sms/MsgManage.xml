@@ -154,7 +154,7 @@
         WHERE 1=1
         AND hst.OGN_CD = #{orgnCd}
         AND hst.MSG_GRP_CD = #{msgGrpCd}
-        ORDER BY hst.SEQ_NO
+        ORDER BY TO_NUMBER(hst.SEQ_NO)
     </select>
 
     <!-- SEQ_NO(자동채번) -->
