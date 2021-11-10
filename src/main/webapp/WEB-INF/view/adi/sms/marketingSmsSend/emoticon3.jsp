@@ -92,7 +92,7 @@
         }
 
         // 이모티콘 탭 변경
-        function emoChange(value)
+        function marketingSmsSendEmoChange(value)
         {
             if(value == "0") {
                 // 이모티콘
@@ -286,13 +286,13 @@
             </div>
             <div class="emoWrap02">
                 <div class="tab02_sub">
-                    <a href="#" onclick="emoChange('0')" id="marketingSmsSendTab0" style="color:#ff6600;">웃음</a>
-                    <a href="#" onclick="emoChange('1')" id="marketingSmsSendTab1">사랑</a>
-                    <a href="#" onclick="emoChange('2')" id="marketingSmsSendTab2">놀람</a>
-                    <a href="#" onclick="emoChange('3')" id="marketingSmsSendTab3">슬픔</a>
-                    <a href="#" onclick="emoChange('4')" id="marketingSmsSendTab4">피곤</a>
-                    <a href="#" onclick="emoChange('5')" id="marketingSmsSendTab5">화남</a>
-                    <a href="#" onclick="emoChange('6')" id="marketingSmsSendTab6">기타</a>
+                    <a href="#" onclick="marketingSmsSendEmoChange('0')" id="marketingSmsSendTab0" style="color:#ff6600;">웃음</a>
+                    <a href="#" onclick="marketingSmsSendEmoChange('1')" id="marketingSmsSendTab1">사랑</a>
+                    <a href="#" onclick="marketingSmsSendEmoChange('2')" id="marketingSmsSendTab2">놀람</a>
+                    <a href="#" onclick="marketingSmsSendEmoChange('3')" id="marketingSmsSendTab3">슬픔</a>
+                    <a href="#" onclick="marketingSmsSendEmoChange('4')" id="marketingSmsSendTab4">피곤</a>
+                    <a href="#" onclick="marketingSmsSendEmoChange('5')" id="marketingSmsSendTab5">화남</a>
+                    <a href="#" onclick="marketingSmsSendEmoChange('6')" id="marketingSmsSendTab6">기타</a>
                 </div>
                 <span id="marketingSmsSendEmos0" style="display:inline">
                     <span><a href="#" onclick="addMsgEmo3('n.n');">n.n</a></span>

@@ -130,8 +130,6 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     @Override
     public DefaultMap<String> getSmsSendInsert1000Count(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
-        marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-
         return marketingSmsSendMapper.getSmsSendInsert1000Count(marketingSmsSendVO);
     }
 }

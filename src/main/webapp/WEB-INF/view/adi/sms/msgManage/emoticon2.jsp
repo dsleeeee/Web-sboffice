@@ -92,7 +92,7 @@
         }
 
         // 이모티콘 탭 변경
-        function emoChange(value)
+        function msgManageEmoChange(value)
         {
             if(value == "0") {
                 // 이모티콘
@@ -286,13 +286,13 @@
             </div>
             <div class="emoWrap02">
                 <div class="tab02_sub">
-                    <a href="#" onclick="emoChange('0')" id="msgManageTab0" style="color:#ff6600;">웃음</a>
-                    <a href="#" onclick="emoChange('1')" id="msgManageTab1">사랑</a>
-                    <a href="#" onclick="emoChange('2')" id="msgManageTab2">놀람</a>
-                    <a href="#" onclick="emoChange('3')" id="msgManageTab3">슬픔</a>
-                    <a href="#" onclick="emoChange('4')" id="msgManageTab4">피곤</a>
-                    <a href="#" onclick="emoChange('5')" id="msgManageTab5">화남</a>
-                    <a href="#" onclick="emoChange('6')" id="msgManageTab6">기타</a>
+                    <a href="#" onclick="msgManageEmoChange('0')" id="msgManageTab0" style="color:#ff6600;">웃음</a>
+                    <a href="#" onclick="msgManageEmoChange('1')" id="msgManageTab1">사랑</a>
+                    <a href="#" onclick="msgManageEmoChange('2')" id="msgManageTab2">놀람</a>
+                    <a href="#" onclick="msgManageEmoChange('3')" id="msgManageTab3">슬픔</a>
+                    <a href="#" onclick="msgManageEmoChange('4')" id="msgManageTab4">피곤</a>
+                    <a href="#" onclick="msgManageEmoChange('5')" id="msgManageTab5">화남</a>
+                    <a href="#" onclick="msgManageEmoChange('6')" id="msgManageTab6">기타</a>
                 </div>
                 <span id="msgManageEmos0" style="display:inline">
                     <span><a href="#" onclick="addMsgEmo2('n.n');">n.n</a></span>

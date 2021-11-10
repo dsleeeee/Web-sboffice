@@ -10,16 +10,16 @@
 
 <div id="marketingSmsSendView" style="display: none;">
 
-    <div class="contents" id ="divSmsSendPageAuth" style="display: none;">
-        <div class="elseCon">
-            <p class="lgTxt">죄송합니다.<br />발신번호가 등록되지 않았습니다.</p>
-            <p class="smTxt mt20">
-                발신번호를 사전 등록하셔야 합니다.<br />
-                해당 페이지에 접근할 수 없습니다.<br />
-                ${sessionScope.sessionInfo.currentMenu.resrceCd}
-            </p>
-        </div>
-    </div>
+    <%--<div class="contents" id ="divSmsSendPageAuth" style="display: none;">--%>
+        <%--<div class="elseCon">--%>
+            <%--<p class="lgTxt">죄송합니다.<br />발신번호가 등록되지 않았습니다.</p>--%>
+            <%--<p class="smTxt mt20">--%>
+                <%--발신번호를 사전 등록하셔야 합니다.<br />--%>
+                <%--해당 페이지에 접근할 수 없습니다.<br />--%>
+                <%--${sessionScope.sessionInfo.currentMenu.resrceCd}--%>
+            <%--</p>--%>
+        <%--</div>--%>
+    <%--</div>--%>
 
     <div class="subCon" id ="divSmsSendPage" ng-controller="marketingSmsSendCtrl">
         <%-- 조회조건 --%>
@@ -727,7 +727,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211108.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>
