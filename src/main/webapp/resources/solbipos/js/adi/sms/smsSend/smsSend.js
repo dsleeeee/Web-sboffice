@@ -397,8 +397,77 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         var fileCount = 0;
         // MMS 첨부파일 체크
         if(msgType == "3") {
-            // 첨부파일 체크
-            fileCount = $scope.chkSmsFile();
+            // 첨부파일1
+            if (!isNull($("#fileSms1")[0].files[0])) {
+                // 크기제한 체크
+                var maxSize = 300 * 1024;
+                var fileSize = $("#fileSms1")[0].files[0].size;
+                if (fileSize > maxSize) {
+                    $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
+                    return;
+                }
+                // 파일명 형식 체크
+                var imgFullNm = $("#fileSms1").val().substring($("#fileSms1").val().lastIndexOf('\\') + 1);
+                if(1 > imgFullNm.lastIndexOf('.')){
+                    $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
+                    return;
+                }
+                // 확장자 체크
+                var reg = /(.*?)\.(jpg|JPG)$/;
+                if(! $("#fileSms1").val().match(reg)) {
+                    $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
+                    return;
+                }
+                fileCount = fileCount + 1;
+            }
+
+            // 첨부파일2
+            if (!isNull($("#fileSms2")[0].files[0])) {
+                // 크기제한 체크
+                var maxSize = 300 * 1024;
+                var fileSize = $("#fileSms2")[0].files[0].size;
+                if (fileSize > maxSize) {
+                    $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
+                    return;
+                }
+                // 파일명 형식 체크
+                var imgFullNm = $("#fileSms2").val().substring($("#fileSms2").val().lastIndexOf('\\') + 1);
+                if(1 > imgFullNm.lastIndexOf('.')){
+                    $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
+                    return;
+                }
+                // 확장자 체크
+                var reg = /(.*?)\.(jpg|JPG)$/;
+                if(! $("#fileSms2").val().match(reg)) {
+                    $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
+                    return;
+                }
+                fileCount = fileCount + 1;
+            }
+
+            // 첨부파일3
+            if (!isNull($("#fileSms3")[0].files[0])) {
+                // 크기제한 체크
+                var maxSize = 300 * 1024;
+                var fileSize = $("#fileSms3")[0].files[0].size;
+                if (fileSize > maxSize) {
+                    $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
+                    return;
+                }
+                // 파일명 형식 체크
+                var imgFullNm = $("#fileSms3").val().substring($("#fileSms3").val().lastIndexOf('\\') + 1);
+                if(1 > imgFullNm.lastIndexOf('.')){
+                    $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
+                    return;
+                }
+                // 확장자 체크
+                var reg = /(.*?)\.(jpg|JPG)$/;
+                if(! $("#fileSms3").val().match(reg)) {
+                    $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
+                    return;
+                }
+                fileCount = fileCount + 1;
+            }
         }
 
         // 전송수량(체크된 수신자)
@@ -651,95 +720,6 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         if(value.files[0]) {
             $("#lblMsgType").text("MMS");
         }
-    };
-
-    // 첨부파일 체크
-    $scope.chkSmsFile = function () {
-        // 첨부파일 개수
-        var fileCount = 0;
-
-        // 첨부파일1
-        if (!isNull($("#fileSms1")[0].files[0])) {
-            // 크기제한 체크
-            var maxSize = 300 * 1024;
-            var fileSize = $("#fileSms1")[0].files[0].size;
-            if (fileSize > maxSize) {
-                $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
-                return;
-            }
-
-            // 파일명 형식 체크
-            var imgFullNm = $("#fileSms1").val().substring($("#fileSms1").val().lastIndexOf('\\') + 1);
-            if(1 > imgFullNm.lastIndexOf('.')){
-                $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
-                return;
-            }
-
-            // 확장자 체크
-            var reg = /(.*?)\.(jpg|JPG)$/;
-            if(! $("#fileSms1").val().match(reg)) {
-                $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
-                return;
-            }
-
-            fileCount = fileCount + 1;
-        }
-
-        // 첨부파일2
-        if (!isNull($("#fileSms2")[0].files[0])) {
-            // 크기제한 체크
-            var maxSize = 300 * 1024;
-            var fileSize = $("#fileSms2")[0].files[0].size;
-            if (fileSize > maxSize) {
-                $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
-                return;
-            }
-
-            // 파일명 형식 체크
-            var imgFullNm = $("#fileSms2").val().substring($("#fileSms2").val().lastIndexOf('\\') + 1);
-            if(1 > imgFullNm.lastIndexOf('.')){
-                $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
-                return;
-            }
-
-            // 확장자 체크
-            var reg = /(.*?)\.(jpg|JPG)$/;
-            if(! $("#fileSms2").val().match(reg)) {
-                $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
-                return;
-            }
-
-            fileCount = fileCount + 1;
-        }
-
-        // 첨부파일3
-        if (!isNull($("#fileSms3")[0].files[0])) {
-            // 크기제한 체크
-            var maxSize = 300 * 1024;
-            var fileSize = $("#fileSms3")[0].files[0].size;
-            if (fileSize > maxSize) {
-                $scope._popMsg(messages["smsSend.fileSizeChk.300.msg"]); // 첨부파일은 300KB 이내로 등록 가능합니다.
-                return;
-            }
-
-            // 파일명 형식 체크
-            var imgFullNm = $("#fileSms3").val().substring($("#fileSms3").val().lastIndexOf('\\') + 1);
-            if(1 > imgFullNm.lastIndexOf('.')){
-                $scope._popMsg(messages["smsSend.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
-                return;
-            }
-
-            // 확장자 체크
-            var reg = /(.*?)\.(jpg|JPG)$/;
-            if(! $("#fileSms3").val().match(reg)) {
-                $scope._popMsg(messages["smsSend.fileExtensionChk.msg"]); // 확장자가 .jpg .JPG 인 파일만 등록가능합니다.
-                return;
-            }
-
-            fileCount = fileCount + 1;
-        }
-
-        return fileCount
     };
 
     // 첨부파일 초기화
