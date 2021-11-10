@@ -272,6 +272,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // BBQ 매장코드 초기화
     $("#hdBbqStoreCd").val("");
+
+    $scope.envHqOfficeCdCombo.selectedIndex = 0;
   };
 
   /*********************************************************
@@ -1259,11 +1261,49 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#storeCd").val("");
         $("#storeCdChkFg").val("");
         $("#storeNm").val("");
+        $("#bizStoreNm").val("");
         $("#ownerNm").val("");
+        $("#userId").val("");
+        $("#userIdChkFg").val("");
+        $("#userPwd").val("");
+        $("#userPwdConf").val("");
+        $scope.areaCdCombo.selectedIndex = 0;
+        $("#installPosCnt").val("");
+        $("#bizNo1").val("");
+        $("#bizNo2").val("");
+        $("#bizNo3").val("");
+        $("#telNo").val("");
+        $("#postNo").val("");
+        $("#addr").val("");
+        $("#addrDtl").val("");
+        $("#manageVanNm").val("");
+        $("#manageVanCd").val("");
+        $("#agencyNm").val("");
+        $("#agencyCd").val("");
+
         $scope.store.storeCd = "";
         $scope.store.storeCdChkFg = "";
         $scope.store.storeNm = "";
+        $scope.store.bizStoreNm = "";
         $scope.store.ownerNm = "";
+        $scope.store.userId = "";
+        $scope.store.userIdChkFg = "";
+        $scope.store.userPwd = "";
+        $scope.store.userPwdConf = "";
+        $scope.store.areaCd = "";
+        $scope.store.directManageYn = "";
+        $scope.store.installPosCnt = "";
+        $scope.store.bizNo1 = "";
+        $scope.store.bizNo2 = "";
+        $scope.store.bizNo3 = "";
+        $scope.store.telNo = "";
+        $scope.store.postNo = "";
+        $scope.store.addr = "";
+        $scope.store.addrDtl = "";
+        $scope.store.vanNm = "";
+        $scope.store.vanCd = "";
+        $scope.store.agencyNm = "";
+        $scope.store.agencyCd = "";
 
         if(!$.isEmptyObject(erpStoreScope.getErpStore())) {
 
@@ -1274,9 +1314,48 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           }
 
           $("#storeNm").val(erpStoreScope.getErpStore().storeNm);
+          $("#bizStoreNm").val(erpStoreScope.getErpStore().bizStoreNm);
           $("#ownerNm").val(erpStoreScope.getErpStore().ownerNm);
+          $("#userId").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
+          $("#userPwd").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
+          $("#userPwdConf").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
+          $scope.areaCdCombo.selectedValue = erpStoreScope.getErpStore().areaCd;
+          $("#installPosCnt").val(erpStoreScope.getErpStore().posCnt);
+          $("#bizNo1").val(erpStoreScope.getErpStore().bizNo.substring(0, 3));
+          $("#bizNo2").val(erpStoreScope.getErpStore().bizNo.substring(3, 5));
+          $("#bizNo3").val(erpStoreScope.getErpStore().bizNo.substring(5, 10));
+          $("#telNo").val(erpStoreScope.getErpStore().telNo);
+          $("#postNo").val(erpStoreScope.getErpStore().postNo);
+          $("#addr").val(erpStoreScope.getErpStore().addr);
+          $("#addrDtl").val(erpStoreScope.getErpStore().addrDtl);
+          $("#manageVanNm").val(erpStoreScope.getErpStore().vanNm);
+          $("#manageVanCd").val(erpStoreScope.getErpStore().vanCd);
+          $("#agencyNm").val(erpStoreScope.getErpStore().agencyNm);
+          $("#agencyCd").val(erpStoreScope.getErpStore().agencyCd);
+
           $scope.store.storeNm = erpStoreScope.getErpStore().storeNm;
+          $scope.store.bizStoreNm = erpStoreScope.getErpStore().bizStoreNm;
           $scope.store.ownerNm = erpStoreScope.getErpStore().ownerNm;
+          $scope.store.userId = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase();
+          $scope.store.userPwd = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+          $scope.store.userPwdConf = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+          $scope.store.areaCd = erpStoreScope.getErpStore().areaCd;
+          $scope.store.directManageYn = erpStoreScope.getErpStore().directManageYn;
+          $scope.store.installPosCnt = erpStoreScope.getErpStore().posCnt;
+          $scope.store.bizNo1 = erpStoreScope.getErpStore().bizNo.substring(0, 3);
+          $scope.store.bizNo2 = erpStoreScope.getErpStore().bizNo.substring(3, 5);
+          $scope.store.bizNo3 = erpStoreScope.getErpStore().bizNo.substring(5, 10);
+          $scope.store.telNo = erpStoreScope.getErpStore().telNo;
+          $scope.store.postNo = erpStoreScope.getErpStore().postNo;
+          $scope.store.addr = erpStoreScope.getErpStore().addr;
+          $scope.store.addrDtl = erpStoreScope.getErpStore().addrDtl;
+          $scope.store.vanNm = erpStoreScope.getErpStore().vanNm;
+          $scope.store.vanCd = erpStoreScope.getErpStore().vanCd;
+          $scope.store.agencyNm = erpStoreScope.getErpStore().agencyNm;
+          $scope.store.agencyCd = erpStoreScope.getErpStore().agencyCd;
+
+          // 매장환경복사에서 본사선택 콤보박스 자동셋팅
+          $scope.envHqOfficeCdCombo.selectedValue = $("#hqOfficeCd").val();
 
           // Bbq 매장코드 갖고있기
           $("#hdBbqStoreCd").val(erpStoreScope.getErpStore().bbqStoreCd);

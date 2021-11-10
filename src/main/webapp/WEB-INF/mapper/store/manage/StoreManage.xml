@@ -5407,36 +5407,59 @@
 
     <!-- ERP 연동 매장 조회 -->
     <!--
-        TABLE    : TB_MS_BBQ_STORE
+        TABLE    : IFB_MS_BBQ_STORE
         PARAM    : storeManageVO
         COMMENTS : ERP 연동 매장을 조회한다.
     -->
     <select id="getErpStore" parameterType="storeManageVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getErpStore */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT BBQ_STORE_CD,
-                STORE_NM,
-                OWNER_NM,
-                CASE WHEN STORE_FG = '1' AND NXPOS_STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END AS REG_YN
+        SELECT A.BBQ_STORE_CD,
+                A.STORE_NM,
+                A.BIZ_STORE_NM,
+                A.OWNER_NM,
+                A.AREA_CD,
+                A.DIRECT_MANAGE_YN,
+                A.POS_CNT,
+                A.BIZ_NO,
+                A.TEL_NO,
+                A.POST_NO,
+                A.ADDR,
+                A.ADDR_DTL,
+                B.VAN_NM,
+                A.VAN_CD,
+                C.AGENCY_NM,
+                A.AGENCY_CD,
+                CASE WHEN A.STORE_FG = '1' AND A.NXPOS_STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END AS REG_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_MS_BBQ_STORE
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          FROM IFB_MS_BBQ_STORE A,
+                TB_CM_VAN_CMPNY B,
+                (
+                    SELECT AGENCY_CD,
+                            AGENCY_NM
+                      FROM TB_CM_AGENCY
+                     WHERE P_AGENCY_CD IS NOT NULL
+                ) C
+         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND B.VAN_FG (+)= '01'
+           AND B.VAN_CD (+)= A.VAN_CD
+           AND C.AGENCY_CD (+)= A.AGENCY_CD
         <if test='srchStoreCd != null and srchStoreCd != ""'>
-            AND BBQ_STORE_CD LIKE '%'|| #{srchStoreCd} ||'%'
+            AND A.BBQ_STORE_CD LIKE '%'|| #{srchStoreCd} ||'%'
         </if>
         <if test='srchStoreNm != null and srchStoreNm != ""'>
-            AND STORE_NM LIKE '%'|| #{srchStoreNm} ||'%'
+            AND A.STORE_NM LIKE '%'|| #{srchStoreNm} ||'%'
         </if>
         <if test='bizNo != null and bizNo != ""'>
-            AND BIZ_NO LIKE '%'|| #{bizNo} ||'%'
+            AND A.BIZ_NO LIKE '%'|| #{bizNo} ||'%'
         </if>
         <if test='regYn != null and regYn == "N"'>
-            AND (STORE_FG != '1' OR STORE_FG IS NULL)
-            AND NXPOS_STORE_CD IS NULL
+            AND (A.STORE_FG != '1' OR A.STORE_FG IS NULL)
+            AND A.NXPOS_STORE_CD IS NULL
         </if>
         <if test='regYn != null and regYn == "Y"'>
-            AND STORE_FG = '1'
-            AND NXPOS_STORE_CD IS NOT NULL
+            AND A.STORE_FG = '1'
+            AND A.NXPOS_STORE_CD IS NOT NULL
         </if>
         ORDER
            BY BBQ_STORE_CD ASC
@@ -5445,13 +5468,13 @@
 
     <!-- ERP 연동 매장에 NXPOS_STORE_CD 값 Update -->
     <!--
-        TABLE    : TB_MS_BBQ_STORE
+        TABLE    : IFB_MS_BBQ_STORE
         PARAM    : storeManageVO
         COMMENTS : ERP 연동 매장에 NXPOS_STORE_CD 값을 Update 한다.
     -->
     <update id="updateErpStore" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.updateErpStore */
-        UPDATE TB_MS_BBQ_STORE
+        UPDATE IFB_MS_BBQ_STORE
            SET STORE_FG = '1',
                 NXPOS_STORE_CD = #{storeCd},
                 MOD_DT = #{modDt},
@@ -5462,14 +5485,14 @@
 
     <!-- 선택한 ERP 연동 매장이 미등록 매장이 맞는지 확인 -->
     <!--
-        TABLE    : TB_MS_BBQ_STORE
+        TABLE    : IFB_MS_BBQ_STORE
         PARAM    : storeManageVO
         COMMENTS :선택한 ERP 연동 매장이 미등록 매장이 맞는지 확인한다.
     -->
     <select id="getErpStoreUnRegConfm" parameterType="storeManageVO" resultType="int">
         /* USE : StoreManageMapper.getErpStoreUnRegConfm */
         SELECT COUNT(*)
-          FROM TB_MS_BBQ_STORE
+          FROM IFB_MS_BBQ_STORE
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND BBQ_STORE_CD = #{bbqStoreCd}
            AND (STORE_FG != '1' OR STORE_FG IS NULL)

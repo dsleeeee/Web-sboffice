@@ -86,8 +86,21 @@
                             item-formatter="_itemFormatter">
                             <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="storeManage.storeCd"/>" binding="bbqStoreCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeManage.storeNm"/>" binding="storeNm" width="180" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.storeNm"/>" binding="storeNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.bizStoreNm"/>" binding="bizStoreNm" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.onwerNm"/>" binding="ownerNm" width="100"  align="center"  is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.weatherArea"/>" binding="areaCd" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.directManage"/>" binding="directManageYn" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.installPosCnt"/>" binding="posCnt" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.bizNo"/>" binding="bizNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.telNo"/>" binding="telNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.postNo"/>" binding="postNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.addr"/>" binding="addr" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.addrDtl"/>" binding="addrDtl" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.vanCd"/>" binding="vanNm" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.vanCd"/>" binding="vanCd" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyNm" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyCd" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.regYn"/>" binding="regYn" width="100" align="center" data-map="regYnDataMap"is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
