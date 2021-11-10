@@ -81,7 +81,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         var msgOneAmt = $("#lblSmsReserveMsgOneAmt").text();
 
         if(parseInt(reserveDate) < parseInt(getCurDateTime())) {
-            $scope._popMsg(messages["sendStatus.reserveTimeAlert"]); // 예약시간은 현재시간 이후로 가능합니다.
+            $scope._popMsg(messages["smsReserve.reserveTimeAlert"]); // 예약시간은 현재시간 이후로 가능합니다.
             return false;
         }
 
