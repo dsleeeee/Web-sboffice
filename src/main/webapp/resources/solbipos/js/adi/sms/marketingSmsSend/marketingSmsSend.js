@@ -68,6 +68,7 @@ function smsSendloadingBarChk(smsSendSeq, smsSendListCnt){
     var params = {};
     params.smsSendSeq = smsSendSeq;
     // params.smsSendListCnt = smsSendListCnt; // 전송할 총건수
+    params.orgnCd = orgnCd;
 
     if (sendingCnt <= smsSendListCnt) {
         var scope = agrid.getScope('marketingSmsSendCtrl');
@@ -86,6 +87,8 @@ function smsSendloadingBarChk(smsSendSeq, smsSendListCnt){
                     sendingCnt = result.data.result.sendCount; // 현재 전송테이블에 저장된 건수
 
                     if(sendingCnt == smsSendListCnt) {
+                        sendingCnt = sendingCnt +1; // 전송다했으니 이제 그만
+
                         scope._popMsg("저장되었습니다.");
                         // 로딩바 hide
                         scope.$broadcast('loadingPopupInactive');
