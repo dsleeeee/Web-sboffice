@@ -60,7 +60,7 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         // 현재 잔여금액
         String smsBaseAmt = smsChargeMapper.getSmsBaseAmtSelect(smsChargeVO);
 
-        LOGGER.info("충전결제 >>> 현재 잔여금액 : " + smsBaseAmt);
+        LOGGER.info("WEB_SMS >>> 충전결제 >>> 현재 잔여금액 : " + smsBaseAmt);
 
         // SmsChargeHistVO
         SmsChargeHistVO smsChargeHistVO = new SmsChargeHistVO();
@@ -82,8 +82,8 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         smsChargeHistVO.setBaseChargeAmt(smsBaseAmt); // 기초충전금액
         smsChargeHistVO.setChargeTot(smsChargeVO.getChargeTot()); // 결제금액(KCP 실제 거래 금액)
 
-        LOGGER.info("충전결제 >>> 결제금액 : " + smsChargeHistVO.getChargeTot());
-        LOGGER.info("충전결제 >>> 충전할 충전금액 : " + smsChargeHistVO.getChargeAmt());
+        LOGGER.info("WEB_SMS >>> 충전결제 >>> 결제금액 : " + smsChargeHistVO.getChargeTot());
+        LOGGER.info("WEB_SMS >>> 충전결제 >>> 충전할 충전금액 : " + smsChargeHistVO.getChargeAmt());
 
         procCnt = smsChargeHistMapper.getSmsChargeRegistSaveInsert(smsChargeHistVO);
 
@@ -91,7 +91,7 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         int smsAmt = Integer.parseInt(smsChargeHistVO.getBaseChargeAmt()) + Integer.parseInt(smsChargeHistVO.getChargeAmt());
         smsChargeHistVO.setSmsAmt(String.valueOf(smsAmt));
 
-        LOGGER.info("충전결제 >>> 수정될 잔여금액 : " + smsBaseAmt);
+        LOGGER.info("WEB_SMS >>> 충전결제 >>> 수정될 잔여금액 : " + smsBaseAmt);
 
         // 잔여금액 저장 insert
         procCnt = smsChargeHistMapper.getSmsQtySaveInsert(smsChargeHistVO);
@@ -114,12 +114,12 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         // 현재 잔여금액
         String smsBaseAmt = smsChargeMapper.getSmsBaseAmtSelect(smsChargeVO);
 
-        LOGGER.info("결제취소 >>> 현재 잔여금액 : " + smsBaseAmt);
+        LOGGER.info("WEB_SMS >>> 결제취소 >>> 현재 잔여금액 : " + smsBaseAmt);
 
         // 충전금액
         String smsChargeAmt = smsChargeMapper.getSmsChargeAmtSelect(smsChargeVO);
 
-        LOGGER.info("결제취소 >>> 충전했던 충전금액 : " + smsChargeAmt);
+        LOGGER.info("WEB_SMS >>> 결제취소 >>> 충전했던 충전금액 : " + smsChargeAmt);
 
         // SmsChargeHistVO
         SmsChargeHistVO smsChargeHistVO = new SmsChargeHistVO();
@@ -134,7 +134,7 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         int smsAmt = Integer.parseInt(smsBaseAmt) - Integer.parseInt(smsChargeAmt);
         smsChargeHistVO.setSmsAmt(String.valueOf(smsAmt));
 
-        LOGGER.info("결제취소 >>> 수정될 잔여금액 : " + smsBaseAmt);
+        LOGGER.info("WEB_SMS >>> 결제취소 >>> 수정될 잔여금액 : " + smsBaseAmt);
 
         // 잔여금액 저장 insert
         procCnt = smsChargeHistMapper.getSmsQtySaveInsert(smsChargeHistVO);

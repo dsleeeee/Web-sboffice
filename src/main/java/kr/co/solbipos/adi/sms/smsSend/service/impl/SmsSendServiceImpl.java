@@ -98,7 +98,7 @@ public class SmsSendServiceImpl implements SmsSendService {
             smsSendSeq = smsSendVOs[0].getSmsSendSeq();
         }
 
-        LOGGER.info("SMS전송 >>> 전송이력시퀀스 : " + smsSendSeq);
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력시퀀스 : " + smsSendSeq);
 
         for(SmsSendVO smsSendVO : smsSendVOs) {
 
@@ -152,13 +152,13 @@ public class SmsSendServiceImpl implements SmsSendService {
                 // 전송건수
                 smsSendVO.setSmsSendCount("0");
 
-                LOGGER.info("SMS전송 >>> 전송이력 저장");
+                LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력 저장");
 
                 // 전송이력 저장
                 procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
             }
 
-            LOGGER.info("SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
 
             // SMS
             if(smsSendVO.getMsgType().equals("1")) {
@@ -174,8 +174,8 @@ public class SmsSendServiceImpl implements SmsSendService {
             // 잔여금액 - 사용금액
             smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - Integer.parseInt(smsSendVO.getMsgOneAmt()) ));
 
-            LOGGER.info("SMS전송 >>> 현재 잔여금액 : " + smsAmt);
-            LOGGER.info("SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 현재 잔여금액 : " + smsAmt);
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
 
             // 잔여금액 저장 update
             procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
@@ -240,18 +240,18 @@ public class SmsSendServiceImpl implements SmsSendService {
         // 전송이력시퀀스
         smsSendVO.setSmsSendSeq(smsSendVO.getSmsSendSeq());
 
-        LOGGER.info("SMS전송 >>> 전송이력시퀀스 : " + smsSendVO.getSmsSendSeq());
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력시퀀스 : " + smsSendVO.getSmsSendSeq());
 
         // 전송건수
         smsSendVO.setSmsSendCount("0");
 
-        LOGGER.info("SMS전송 >>> 전송이력 저장");
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력 저장");
 
         // 전송이력 저장
         smsSendVO.setPhoneNumber("00000000000");
         procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
 
-        LOGGER.info("SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
 
         // SMS
         if(smsSendVO.getMsgType().equals("1")) {
@@ -267,8 +267,8 @@ public class SmsSendServiceImpl implements SmsSendService {
         // 잔여금액 - 사용금액
         smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - (Integer.parseInt(smsSendVO.getMsgOneAmt()) * Integer.parseInt(smsSendVO.getSmsSendListCnt())) ));
 
-        LOGGER.info("SMS전송 >>> 현재 잔여금액 : " + smsAmt);
-        LOGGER.info("SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 현재 잔여금액 : " + smsAmt);
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
 
         // 잔여금액 저장 update
         procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
@@ -299,7 +299,7 @@ public class SmsSendServiceImpl implements SmsSendService {
             // 파일서버 대응 경로 지정 (운영) (파일 저장용)
             String path = BaseEnv.FILE_UPLOAD_DIR + path_folder;
 
-            LOGGER.info("SMS전송 >>> MSS 파일 저장 >>> 파일 저장 경로 : " + path);
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> MSS 파일 저장 >>> 파일 저장 경로 : " + path);
 
             // 저장 경로 설정 (디비 저장용)
             String path_table = path_folder;
@@ -393,7 +393,7 @@ public class SmsSendServiceImpl implements SmsSendService {
                 }
             }
 
-            LOGGER.info("SMS전송 >>> MSS 파일 저장 >>> 저장할 CONTENT_DATA 컬럼값 : " + contentData);
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> MSS 파일 저장 >>> 저장할 CONTENT_DATA 컬럼값 : " + contentData);
 
         }catch(Exception e){
 
