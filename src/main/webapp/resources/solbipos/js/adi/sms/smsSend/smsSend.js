@@ -151,8 +151,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
                 } else {
                     // 화면
-                    $("#divSmsSendPage").css("display", "none");
-                    $("#divSmsSendPageAuth").css("display", "");
+                    // $("#divSmsSendPage").css("display", "none");
+                    // $("#divSmsSendPageAuth").css("display", "");
                 }
             }
         });
@@ -171,8 +171,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
 
                 // 화면
-                $("#divSmsSendPage").css("display", "none");
-                $("#divSmsSendPageAuth").css("display", "");
+                // $("#divSmsSendPage").css("display", "none");
+                // $("#divSmsSendPageAuth").css("display", "");
             }
         });
     };
@@ -186,6 +186,9 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             $scope.storeNmList = storeNmList;
 
             $("#lblStoreNmInfo").text("(광고)" +  storeNmList.storeNm);
+
+            // 바이트
+            $scope.showByte();
         });
     };
 
@@ -237,10 +240,21 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 바이트
     $scope.showByte = function() {
-        $("#lblTxtByte").text($("#messageContent").val().getByteLength());
+        var storeNmInfoByte = $("#lblStoreNmInfo").text().getByteLength();
+        var contentByte = $("#messageContent").val().getByteLength();
+        var memoInfoByte = $("#lblMemoInfo").text().getByteLength();
+        var totByte = 0;
+
+        if ($("#lblPageGubun").text() == "Y") {
+            totByte = parseInt(storeNmInfoByte) + parseInt(contentByte) + parseInt(memoInfoByte);
+        } else {
+            totByte = parseInt(contentByte);
+        }
+
+        $("#lblTxtByte").text(totByte);
 
         if($("#lblMsgType").text() != "MMS") {
-            if($("#messageContent").val().getByteLength() > 90) {
+            if(totByte > 90) {
                 $("#lblMsgType").text("LMS");
             } else {
                 $("#lblMsgType").text("SMS");
@@ -288,6 +302,24 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         if(gridYn == "N") {
             s_alert.pop(messages["cmm.not.select"]);
             return;
+        }
+
+        if($scope.telNoCombo == "") {
+            $scope._popMsg(messages["smsSend.telNoAlert"]); // 사전등록된 발신번호가 없습니다. <br/> [발신번호 추가] 버튼으로 발신번호 사전등록하여 주십시오.
+            return;
+        }
+
+        if($("#messageContent").val() == "") {
+            $scope._popMsg(messages["smsSend.messageContentAlert"]); // 메세지를 입력해주세요.
+            return false;
+        }
+
+        if($("#srchTitle").val() != "") {
+            // 최대길이 체크
+            if(nvl($("#srchTitle").val(), '').getByteLengthForOracle() > 40) {
+                $scope._popMsg(messages["smsSend.titleLengthChk"]); // 제목 길이가 너무 깁니다.
+                return false;
+            }
         }
 
         // 메세지타입 1:SMS 2:LMS 3:MMS
@@ -378,7 +410,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
-        var msg = messages["smsSend.smsSendConfirm"]  + " " + smsSendQty + messages["smsSend.smsSendConfirm2"];
+        var msg = $("#lblMsgType").text() + messages["smsSend.smsSendConfirm"]  + " " + smsSendQty + messages["smsSend.smsSendConfirm2"];
         if (confirm(msg)) {
             // 전송가능 시간 체크(09~21시)
             var date = new Date();
@@ -442,7 +474,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch() });
+        $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch(); });
     };
 
     // 재조회

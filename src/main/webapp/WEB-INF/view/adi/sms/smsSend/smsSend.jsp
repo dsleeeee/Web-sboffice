@@ -6,20 +6,20 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<%--<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />--%>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <wj-popup control="wjSmsSendLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:970px;height:740px;" fade-in="false" fade-out="false">
 
-    <div class="contents" id ="divSmsSendPageAuth" style="display: none;">
-        <div class="elseCon">
-            <p class="lgTxt">죄송합니다.<br />발신번호가 등록되지 않았습니다.</p>
-            <p class="smTxt mt20">
-                발신번호를 사전 등록하셔야 합니다.<br />
-                해당 페이지에 접근할 수 없습니다.<br />
-                ${sessionScope.sessionInfo.currentMenu.resrceCd}
-            </p>
-        </div>
-    </div>
+    <%--<div class="contents" id ="divSmsSendPageAuth" style="display: none;">--%>
+        <%--<div class="elseCon">--%>
+            <%--<p class="lgTxt">죄송합니다.<br />발신번호가 등록되지 않았습니다.</p>--%>
+            <%--<p class="smTxt mt20">--%>
+                <%--발신번호를 사전 등록하셔야 합니다.<br />--%>
+                <%--해당 페이지에 접근할 수 없습니다.<br />--%>
+                <%--${sessionScope.sessionInfo.currentMenu.resrceCd}--%>
+            <%--</p>--%>
+        <%--</div>--%>
+    <%--</div>--%>
 
     <div id ="divSmsSendPage" ng-controller="smsSendCtrl">
         <%-- header --%>
@@ -285,11 +285,11 @@
     </div>
 </wj-popup>
 
-<%--<script type="text/javascript">--%>
-    <%--var orgnCd = "${orgnCd}";--%>
-<%--</script>--%>
+<script type="text/javascript">
+    var orgnCd = "${orgnCd}";
+</script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20211104.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20211108.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">
