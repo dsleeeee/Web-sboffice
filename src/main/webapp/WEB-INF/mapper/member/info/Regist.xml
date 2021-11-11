@@ -268,8 +268,7 @@
         </if>
         <if test="marketingSmsGubun != null and marketingSmsGubun != ''">
             <![CDATA[
-                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
-                AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tmmp.LAST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
             ]]>
         </if>
         ORDER BY tmm.MEMBR_NO
@@ -502,8 +501,7 @@
         </if>
         <if test="marketingSmsGubun != null and marketingSmsGubun != ''">
             <![CDATA[
-                AND tmmp.FIRST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
-                AND tmmp.LAST_SALE_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND tmmp.LAST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
             ]]>
         </if>
         ORDER BY tmm.MEMBR_NO
