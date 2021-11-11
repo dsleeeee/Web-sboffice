@@ -39,14 +39,14 @@
         </div>
         <table class="searchTbl">
             <colgroup>
-                <col class="w12"/>
+                <col class="w15"/>
                 <col class="w13"/>
                 <col class="w12"/>
-                <col class="w13"/>
                 <col class="w12"/>
-                <col class="w13"/>
                 <col class="w12"/>
-                <col class="w13"/>
+                <col class="w12"/>
+                <col class="w12"/>
+                <col class="w12"/>
             </colgroup>
             <tbody>
             <tr>
@@ -150,25 +150,27 @@
                     <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
                 </td>
                 <%-- 회원명 --%>
-                <th>
+                <th style="display: none;">
                     <s:message code="marketingSmsSend.membrNm"/>
                 </th>
-                <td>
+                <td style="display: none;">
                     <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
                 </td>
+                <th></th>
+                <td></td>
             </tr>
             </tbody>
         </table>
         <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
             <colgroup>
-                <col class="w12"/>
+                <col class="w15"/>
                 <col class="w13"/>
                 <col class="w12"/>
-                <col class="w13"/>
                 <col class="w12"/>
-                <col class="w13"/>
                 <col class="w12"/>
-                <col class="w13"/>
+                <col class="w12"/>
+                <col class="w12"/>
+                <col class="w12"/>
             </colgroup>
             <tbody>
             <%-- 매장 선택 --%>
@@ -544,7 +546,8 @@
             <%-- 수신자목록 --%>
             <div class="w70 fl pd10 bl" style="height:340px; width:calc(100% - 250px);">
                 <div class="w100">
-                    <div class="w70 fl">
+                    <%--<div class="w70 fl">--%>
+                    <div class="w100 fl mb10">
                         <table>
                             <tr>
                                 <td class="s14">
@@ -571,12 +574,12 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="w30 fl">
-                        <div class="updownSet oh mb5">
+                    <%--<div class="w30 fl">--%>
+                        <%--<div class="updownSet oh mb5">--%>
                             <%--<button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>--%>
                             <%--<button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
-                        </div>
-                    </div>
+                        <%--</div>--%>
+                    <%--</div>--%>
                 </div>
                 <%-- 그리드 --%>
                 <div class="w100 mt10 mb10">
@@ -727,7 +730,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211108.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211110.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>

@@ -6,6 +6,8 @@ import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.enums.AnvType;
 import kr.co.solbipos.membr.info.regist.service.enums.PeriodType;
 
+import java.util.Arrays;
+
 /**
  * @Class Name : MarketingSmsSendVO.java
  * @Description : 부가서비스 > SMS관리 > 마케팅용 SMS전송
@@ -437,4 +439,42 @@ public class MarketingSmsSendVO extends PageVO {
     public String getSmsSendSeq() { return smsSendSeq; }
 
     public void setSmsSendSeq(String smsSendSeq) { this.smsSendSeq = smsSendSeq; }
+
+    @Override
+    public String toString() {
+        return "MarketingSmsSendVO [orgnFg=" + orgnFg
+                + ", storeCd=" + storeCd
+                + ", membrNo=" + membrNo
+                + ", membrNm=" + membrNm
+                + ", membrEngNm=" + membrEngNm
+                + ", membrClassCd=" + membrClassCd
+                + ", membrCardNo=" + membrCardNo
+                + ", storeMembr=" + storeMembr
+                + ", visitStoreMembr=" + visitStoreMembr
+                + ", regStoreCd=" + regStoreCd
+                + ", regStoreCds=" + Arrays.toString(regStoreCds)
+                + ", addr=" + addr
+                + ", gendrFg=" + gendrFg
+                + ", emailAddr=" + emailAddr
+                + ", shortNo=" + shortNo
+                + ", telNo=" + telNo
+                + ", weddingYn=" + weddingYn
+                + ", emailRecvYn=" + emailRecvYn
+                + ", smsRecvYn=" + smsRecvYn
+                + ", useYn=" + useYn
+                + ", anvType=" + anvType
+                + ", anvStartDate=" + anvStartDate
+                + ", anvEndDate=" + anvEndDate
+                + ", periodType=" + periodType
+                + ", periodStartDate=" + periodStartDate
+                + ", periodEndDate=" + periodEndDate
+                + ", startSaveSale=" + startSaveSale
+                + ", endSaveSale=" + endSaveSale
+                + ", startAvablPoint=" + startAvablPoint
+                + ", endAvablPoint=" + endAvablPoint
+                + ", cstCardUseFg=" + cstCardUseFg
+                + ", memberSaleFg=" + memberSaleFg
+                + ", memberPointFg=" + memberPointFg
+                + "]";
+    }
 }

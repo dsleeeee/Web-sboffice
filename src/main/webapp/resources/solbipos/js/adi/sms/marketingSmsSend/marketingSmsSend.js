@@ -165,6 +165,16 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
 
+    $scope.$watch('newMemberYn', function (val) {
+        if(val === true){
+            $scope.membrNm = "";
+            $scope.membrEngNm = "";
+            $scope.membrNo = "";
+            $("#memberNm").val("");
+            $("#memberNo").val("");
+        }
+    });
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 링크 효과
@@ -222,10 +232,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     $scope.searchSaveMarketingSmsSend = function(){
         var params = {};
+        params.periodType = $scope.periodType;
         params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
         params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
+        params.anvType = $scope.anvType;
+        if(params.anvType == "") { params.anvType = null; }
         params.anvStartDate = dateToDaystring($scope.anvStartDate).replaceAll('-', '');
         params.anvEndDate = dateToDaystring($scope.anvEndDate).replaceAll('-', '');
+        params.membrClassCd = $scope.membrClassCd;
         params.membrNo = $("#memberNo").val();
         params.membrNm = $("#memberNm").val();
         params.regStoreCd = $("#regStoreCd").val();
@@ -234,6 +248,24 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         params.membrCardNo = $("#membrCardNo").val();
         params.emailAddr = $("#emailAddr").val();
         params.useYn = 'Y';
+        params.addr = $scope.addr;
+        params.cstCardUseFg = $scope.cstCardUseFg;
+        params.cstCardUseFg = $scope.cstCardUseFg;
+        params.shortNo = $scope.shortNo;
+        params.memberSaleFg = $scope.memberSaleFg;
+        params.startSaveSale = $scope.startSaveSale;
+        params.endSaveSale = $scope.endSaveSale;
+        params.memberPointFg = $scope.memberPointFg;
+        params.startAvablPoint = $scope.startAvablPoint;
+        params.endAvablPoint = $scope.endAvablPoint;
+        params.emailRecvYn = $scope.emailRecvYn;
+        if(params.emailRecvYn == "") { params.emailRecvYn = null; }
+        params.smsRecvYn = $scope.smsRecvYn;
+        if(params.smsRecvYn == "") { params.smsRecvYn = null; }
+        params.gendrFg = $scope.gendrFg;
+        params.weddingYn = $scope.weddingYn;
+        if(params.weddingYn == "") { params.weddingYn = null; }
+        params.membrEngNm = $scope.membrEngNm;
         params.marketingSmsGubun = $scope.marketingSmsGubun;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
