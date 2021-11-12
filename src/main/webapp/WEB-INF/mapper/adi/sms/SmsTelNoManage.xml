@@ -85,7 +85,7 @@
             MOD_ID = #{modId}
         WHERE 1=1
             AND CERT_ID = #{certId}
-            AND OGN_CD = #{orgnCd}
+--             AND OGN_CD = #{orgnCd}
     </update>
 
     <!-- 발신번호관리 저장 -->
