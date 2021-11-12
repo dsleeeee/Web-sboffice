@@ -977,6 +977,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     $scope.changeSmsImage = function (value) {
         if(value.files[0]) {
             $("#lblMarketingSmsSendMsgType").text("MMS");
+
+        // 첨부파일 취소시
+        } else {
+            // 일단 SMS으로 셋팅하고 다시 바이트 수 체크해서 셋팅
+            $("#lblMarketingSmsSendMsgType").text("SMS");
+            // 바이트
+            $scope.showByte();
         }
     };
 
