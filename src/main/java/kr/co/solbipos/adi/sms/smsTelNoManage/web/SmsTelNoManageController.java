@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.kcp.CT_CLI;
-import kr.co.solbipos.adi.sms.smsSendTab.web.SmsSendTabController;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageService;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO;
@@ -17,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -43,6 +47,20 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @Controller
 @RequestMapping("/adi/sms/smsTelNoManage")
 public class SmsTelNoManageController {
+
+    //        SITE_CD = "S6186";
+//        WEB_SITEID = "";
+//        ENC_KEY = "E66DCEB95BFBD45DF9DFAEEBCB092B5DC2EB3BF0";
+//        // https로만 결과값 전송이 가능한데 개발서버는 http라 테스트 불가능
+////        RET_URL = "https://192.168.0.85:10001/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+//        RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+//        GW_URL = "https://testcert.kcp.co.kr/kcp_cert/cert_view.jsp";
+
+    private final String SITE_CD      = "AGSVU";
+    private final String WEB_SITEID   = "J21101407426";
+    private final String ENC_KEY      = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
+    private final String RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+    private final String GW_URL       = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
     private final SessionService sessionService;
     private final SmsTelNoManageService smsTelNoManageService;
@@ -125,7 +143,7 @@ public class SmsTelNoManageController {
      * @since   2021.10.14
      */
     @RequestMapping(value = "/smsTelNoManage/getSmsTelNoRegisterRequest.sb", method = RequestMethod.POST)
-    public String getSmsTelNoRegisterRequest(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public void getSmsTelNoRegisterRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
@@ -155,50 +173,63 @@ public class SmsTelNoManageController {
         String result = "";
         if( resCd.equals( "0000" ) ){
 
+            // 로컬이나 개발은 테스트버전으로 연결되도록
+            ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequestUri();
+            String url = builder.build().toUri().toString();
+
             // dn_hash 검증
             // KCP 가 리턴해 드리는 dn_hash 와 사이트 코드, 요청번호 , 인증번호를 검증하여
             // 해당 데이터의 위변조를 방지합니다
-            if(!cc.checkValidHash(SmsSendTabController.ENC_KEY, dnHash, (siteCd + ordrIdxx + certNo))){
+            if(!cc.checkValidHash(ENC_KEY, dnHash, (siteCd + ordrIdxx + certNo))){
                 // 검증실패
                 result = "-2";
+
             }
 
-            // 인증데이터 복호화 함수
-            // 해당 함수는 암호화된 enc_cert_data2 를
-            // site_cd 와 cert_no 를 가지고 복화화 하는 함수 입니다.
-            // 정상적으로 복호화 된경우에만 인증데이터를 가져올수 있습니다.
-            cc.decryptEncCert( SmsSendTabController.ENC_KEY, siteCd, certNo, encCertData2 );
+            if(encCertData2 != null){
+                // 인증데이터 복호화 함수
+                // 해당 함수는 암호화된 enc_cert_data2 를
+                // site_cd 와 cert_no 를 가지고 복화화 하는 함수 입니다.
+                // 정상적으로 복호화 된경우에만 인증데이터를 가져올수 있습니다.
+                cc.decryptEncCert( ENC_KEY, siteCd, certNo, encCertData2 );
 
-            System.out.println("-------- 복호화 결과 --------");
-            System.out.println("phone_no : " + cc.getKeyValue("phone_no"));
-            System.out.println("comm_id : " + cc.getKeyValue("comm_id"));
-            System.out.println("user_name : " + cc.getKeyValue("user_name"));
-            System.out.println("birth_day : " + cc.getKeyValue("birth_day"));
-            System.out.println("sex_code : " + cc.getKeyValue("sex_code"));
-            System.out.println("local_code : " + cc.getKeyValue("local_code"));
-            System.out.println("ci : " + cc.getKeyValue("ci"));
-            System.out.println("di : " + cc.getKeyValue("di"));
-            System.out.println("ci_url : " + URLDecoder.decode(cc.getKeyValue("ci_url")));
-            System.out.println("di_url : " + URLDecoder.decode(cc.getKeyValue("di_url")));
-            System.out.println("web_siteid : " + cc.getKeyValue("web_siteid"));
+                System.out.println("-------- 복호화 결과 --------");
+                System.out.println("phone_no : " + cc.getKeyValue("phone_no"));
+                System.out.println("comm_id : " + cc.getKeyValue("comm_id"));
+                System.out.println("user_name : " + cc.getKeyValue("user_name"));
+                System.out.println("birth_day : " + cc.getKeyValue("birth_day"));
+                System.out.println("sex_code : " + cc.getKeyValue("sex_code"));
+                System.out.println("local_code : " + cc.getKeyValue("local_code"));
+                System.out.println("ci : " + cc.getKeyValue("ci"));
+                System.out.println("di : " + cc.getKeyValue("di"));
+                System.out.println("ci_url : " + URLDecoder.decode(cc.getKeyValue("ci_url")));
+                System.out.println("di_url : " + URLDecoder.decode(cc.getKeyValue("di_url")));
+                System.out.println("web_siteid : " + cc.getKeyValue("web_siteid"));
 
+                System.out.println("---------------------------");
+            }
             SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
             smsTelNoManageVO.setCertId(ordrIdxx);
             smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
 
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
            if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == -1){
                // 기등록번호
-               result = "-1";
+               out.println("<script>alert('기존에 등록된 전화번호입니다.'); window.close();</script>");
+               out.flush();
            } else {
                // 정상등록
-               result = "0";
+               out.println("<script>alert('정상등록되었습니다.'); window.close();</script>");
+               out.flush();
            }
         } else {
-            result = resCd;
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");
+            out.flush();
         }
-        model.addAttribute("result", result);
 
-        return "adi/sms/smsSend/smsTelNoRequest";
     }
 
     /**
@@ -222,5 +253,57 @@ public class SmsTelNoManageController {
         int result = smsTelNoManageService.getSmsTelNoManageSaveUpdate(smsTelNoManageVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 값 가져감
+     *
+     * @param smsTelNoManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.11.12
+     */
+    @RequestMapping(value = "/smsTelNoManage/getVal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVal(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        String ORDR_IDXX = new SimpleDateFormat("yyyyMMddHHmmssSSSSSSS").format(new Date());
+
+        CT_CLI       cc      = new CT_CLI();
+
+        String UP_HASH       = "";
+        UP_HASH = cc.makeHashData( ENC_KEY, SITE_CD   +
+                ORDR_IDXX +
+                ""   +
+                ""   +
+                "00" +
+                "00" +
+                "00" +
+                ""   +
+                ""
+        );
+
+        DefaultMap<String> result = null;
+        result.put("site_cd", SITE_CD);
+        result.put("web_siteid", WEB_SITEID);
+        result.put("gw_url", RET_URL);
+        result.put("Ret_URL", GW_URL);
+        result.put("ordr_idxx", ORDR_IDXX);
+        result.put("up_hash", UP_HASH);
+
+        System.out.println(result);
+        List<String> result2 = null;
+        result2.add(0,SITE_CD);
+        result2.add(1,WEB_SITEID);
+        result2.add(2,RET_URL);
+        result2.add(3,GW_URL);
+        result2.add(4,ORDR_IDXX);
+        result2.add(5,UP_HASH);
+        System.out.println(result2);
+        return returnJson(Status.OK, result2);
     }
 }

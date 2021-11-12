@@ -933,6 +933,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // 발신번호추가
     $scope.telNoAdd = function() {
         $scope.wjSmsTelNoRegisterLayer.show(true);
+        // var scope = agrid.getScope("smsTelNoRegisterCtrl");
+        // scope.getVal();
         event.preventDefault();
     };
 

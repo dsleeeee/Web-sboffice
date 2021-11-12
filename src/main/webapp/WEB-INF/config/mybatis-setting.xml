@@ -699,6 +699,9 @@
     <!-- 주문현황 -->
     <typeAlias alias="orderStatusVO" type="kr.co.solbipos.sale.orderStatus.orderStatus.service.OrderStatusVO"/>
 
+    <!-- 중량별 -->
+    <typeAlias alias="weightVO" type="kr.co.solbipos.sale.status.weight.weight.service.WeightVO"/>
+
     <!-- 매출관리 > 매출분석 > 매장별배출분석 -->
     <typeAlias alias="storeRankVO" 	type="kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO"/>
     <typeAlias alias="storeFgVO" 	type="kr.co.solbipos.sale.anals.store.fg.service.StoreFgVO"/>

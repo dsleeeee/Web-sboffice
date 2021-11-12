@@ -78,10 +78,12 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
 
         // 중복체크
-        if(smsTelNoManageMapper.getSmsTelNoManageChk(smsTelNoManageVO) == 1){
-            cnt = -1;
-        } else {
+        if(smsTelNoManageMapper.getSmsTelNoManageChk(smsTelNoManageVO) == 0){
+            // 기존에 등록된 번호가 아니면 update
             cnt = smsTelNoManageMapper.getSmsTelNoManageUpdate(smsTelNoManageVO);
+        } else {
+            // 기존에 등록된 번호면 -1
+            cnt = -1;
         }
 
         return cnt;
