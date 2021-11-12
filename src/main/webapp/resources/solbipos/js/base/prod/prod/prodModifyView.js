@@ -229,6 +229,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(messages["prod.prodCd"]+messages["cmm.require.text"]);
             return false;
         } else {
+
+            // 상품코드 앞뒤 공백 및 엔터값 제거
+            $scope.prodModifyInfo.prodCd = $scope.prodModifyInfo.prodCd.trim().removeEnter();
+            $("#prodCd").val($scope.prodModifyInfo.prodCd.trim().removeEnter());
+
             // 최대길이 체크
             if($scope.prodModifyInfo.prodCd.length > 13) {
                 $scope._popMsg(messages["prod.prodCdLengthChk.msg"]); // 상품코드 길이가 너무 깁니다.
@@ -284,6 +289,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 상품저장
     $scope.saveProdSave = function() {
         var params = $scope.prodModifyInfo;
+        params.prodNm = params.prodNm.trim().removeEnter();
         params.prodNoEnv = $("#prodCdInputType").val();
         params.saveMode = $("#saveMode").val();
         params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가

@@ -139,6 +139,15 @@ String.prototype.startsWith = function(prefix) {
   else return false;
 }
 /**
+ * String.removeEnter()
+ * - 엔터값 제거
+ */
+String.prototype.removeEnter = function() {
+  var value = this.replace(/\n/g,"");
+  value = value.replace(/\r/g, "");
+  return value;
+}
+/**
  * Array.search(value)
  * - array search value return index(없으면 -1)
  *

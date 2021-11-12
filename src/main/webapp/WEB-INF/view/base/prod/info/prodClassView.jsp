@@ -352,6 +352,10 @@
           s_alert.pop("<s:message code='info.prodClassNm'/><s:message code='cmm.regexp' arguments='15'/>");
           return;
         }
+
+        // 분류명 앞뒤 공백 및 엔터값 제거
+        view.itemsAdded[i].prodClassNm = view.itemsAdded[i].prodClassNm.trim().removeEnter();
+
         paramArr.push(view.itemsAdded[i]);
       }
 
@@ -373,6 +377,10 @@
           s_alert.pop("<s:message code='info.prodClassNm'/><s:message code='cmm.regexp' arguments='15'/>");
           return;
         }
+
+        // 분류명 앞뒤 공백 및 엔터값 제거
+        view.itemsEdited[i].prodClassNm = view.itemsEdited[i].prodClassNm.trim().removeEnter();
+
         paramArr.push(view.itemsEdited[i]);
       }
 

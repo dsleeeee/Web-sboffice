@@ -265,6 +265,27 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
 
         $scope.flex.collectionView.commitEdit();
 
+        // 분류코드, 분류명 앞뒤 공백 및 엔터값 제거
+        if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if($scope.flex.collectionView.itemsAdded[i].prodClassCd !== null && $scope.flex.collectionView.itemsAdded[i].prodClassCd !== '') {
+                    $scope.flex.collectionView.itemsAdded[i].prodClassCd = $scope.flex.collectionView.itemsAdded[i].prodClassCd.trim().removeEnter();
+                }
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            if($scope.flex.collectionView.itemsAdded[i].prodClassNm !== null && $scope.flex.collectionView.itemsAdded[i].prodClassNm !== '') {
+                $scope.flex.collectionView.itemsAdded[i].prodClassNm = $scope.flex.collectionView.itemsAdded[i].prodClassNm.trim().removeEnter();
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].prodClassNm !== null && $scope.flex.collectionView.itemsEdited[i].prodClassNm !== '') {
+                $scope.flex.collectionView.itemsEdited[i].prodClassNm = $scope.flex.collectionView.itemsEdited[i].prodClassNm.trim().removeEnter();
+            }
+        }
+
         var strProdClassCd = ""; // 상품분류코드 중복체크를 위함.
 
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
@@ -401,10 +422,10 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
 
                 if(item.newRowYn === "Y") {
                     if(orgnFg === "HQ" && prodClassCdInputType !== '' && item.prodClassCd !== "자동채번"){
-                     obj.prodClassCd = item.prodClassCd;
+                     obj.prodClassCd = item.prodClassCd.trim().removeEnter();
                     }
                     obj.status = "I";
-                    obj.prodClassNm = item.prodClassNm;
+                    obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                     obj.pProdClassCd = "00000";
                     params.push(obj);
                 }
@@ -421,7 +442,7 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                         if(item.prodClassCd > 80000) {
                             obj.status = "U";
                             obj.prodClassCd = item.prodClassCd;
-                            obj.prodClassNm = item.prodClassNm;
+                            obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                             obj.pProdClassCd = "00000";
                             params.push(obj);
                         }
@@ -432,7 +453,7 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                     if (item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         obj.status = "U";
                         obj.prodClassCd = item.prodClassCd;
-                        obj.prodClassNm = item.prodClassNm;
+                        obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                         obj.pProdClassCd = "00000";
                         params.push(obj);
                     }
@@ -719,6 +740,27 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
 
         $scope.flex.collectionView.commitEdit();
 
+        // 분류코드, 분류명 앞뒤 공백 및 엔터값 제거
+        if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if($scope.flex.collectionView.itemsAdded[i].prodClassCd !== null && $scope.flex.collectionView.itemsAdded[i].prodClassCd !== '') {
+                    $scope.flex.collectionView.itemsAdded[i].prodClassCd = $scope.flex.collectionView.itemsAdded[i].prodClassCd.trim().removeEnter();
+                }
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            if($scope.flex.collectionView.itemsAdded[i].prodClassNm !== null && $scope.flex.collectionView.itemsAdded[i].prodClassNm !== '') {
+                $scope.flex.collectionView.itemsAdded[i].prodClassNm = $scope.flex.collectionView.itemsAdded[i].prodClassNm.trim().removeEnter();
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].prodClassNm !== null && $scope.flex.collectionView.itemsEdited[i].prodClassNm !== '') {
+                $scope.flex.collectionView.itemsEdited[i].prodClassNm = $scope.flex.collectionView.itemsEdited[i].prodClassNm.trim().removeEnter();
+            }
+        }
+
         var strProdClassCd = ""; // 상품분류코드 중복체크를 위함.
 
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
@@ -855,10 +897,10 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
 
                 if(item.newRowYn === "Y") {
                     if(orgnFg === "HQ" && prodClassCdInputType !== '' && item.prodClassCd !== "자동채번"){
-                        obj.prodClassCd = item.prodClassCd;
+                        obj.prodClassCd = item.prodClassCd.trim().removeEnter();
                     }
                     obj.status = "I";
-                    obj.prodClassNm = item.prodClassNm;
+                    obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                     obj.pProdClassCd = $("#hdLevel1").val();
                     params.push(obj);
                 }
@@ -875,7 +917,7 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                         if(item.prodClassCd > 80000) {
                             obj.status = "U";
                             obj.prodClassCd = item.prodClassCd;
-                            obj.prodClassNm = item.prodClassNm;
+                            obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                             obj.pProdClassCd = "00000";
                             params.push(obj);
                         }
@@ -886,7 +928,7 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                     if (item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         obj.status = "U";
                         obj.prodClassCd = item.prodClassCd;
-                        obj.prodClassNm = item.prodClassNm;
+                        obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                         obj.pProdClassCd = "00000";
                         params.push(obj);
                     }
@@ -1141,6 +1183,27 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
 
         $scope.flex.collectionView.commitEdit();
 
+        // 분류코드, 분류명 앞뒤 공백 및 엔터값 제거
+        if(orgnFg === "HQ" && prodClassCdInputType !== ''){
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if($scope.flex.collectionView.itemsAdded[i].prodClassCd !== null && $scope.flex.collectionView.itemsAdded[i].prodClassCd !== '') {
+                    $scope.flex.collectionView.itemsAdded[i].prodClassCd = $scope.flex.collectionView.itemsAdded[i].prodClassCd.trim().removeEnter();
+                }
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            if($scope.flex.collectionView.itemsAdded[i].prodClassNm !== null && $scope.flex.collectionView.itemsAdded[i].prodClassNm !== '') {
+                $scope.flex.collectionView.itemsAdded[i].prodClassNm = $scope.flex.collectionView.itemsAdded[i].prodClassNm.trim().removeEnter();
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].prodClassNm !== null && $scope.flex.collectionView.itemsEdited[i].prodClassNm !== '') {
+                $scope.flex.collectionView.itemsEdited[i].prodClassNm = $scope.flex.collectionView.itemsEdited[i].prodClassNm.trim().removeEnter();
+            }
+        }
+
         var strProdClassCd = ""; // 상품분류코드 중복체크를 위함.
 
         for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
@@ -1277,10 +1340,10 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
 
                 if(item.newRowYn === "Y") {
                     if(orgnFg === "HQ" && prodClassCdInputType !== '' && item.prodClassCd !== "자동채번"){
-                        obj.prodClassCd = item.prodClassCd;
+                        obj.prodClassCd = item.prodClassCd.trim().removeEnter();
                     }
                     obj.status = "I";
-                    obj.prodClassNm = item.prodClassNm;
+                    obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                     obj.pProdClassCd = $("#hdLevel2").val();
                     params.push(obj);
                 }
@@ -1297,7 +1360,7 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
                         if(item.prodClassCd > 80000) {
                             obj.status = "U";
                             obj.prodClassCd = item.prodClassCd;
-                            obj.prodClassNm = item.prodClassNm;
+                            obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                             obj.pProdClassCd = "00000";
                             params.push(obj);
                         }
@@ -1308,7 +1371,7 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
                     if (item.prodClassCd !== "자동채번" && item.prodClassCd !== ""){
                         obj.status = "U";
                         obj.prodClassCd = item.prodClassCd;
-                        obj.prodClassNm = item.prodClassNm;
+                        obj.prodClassNm = item.prodClassNm.trim().removeEnter();
                         obj.pProdClassCd = "00000";
                         params.push(obj);
                     }
