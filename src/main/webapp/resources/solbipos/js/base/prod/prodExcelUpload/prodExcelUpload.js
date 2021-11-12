@@ -239,6 +239,19 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
+        // 상품명 앞뒤 공백 및 엔터값 제거
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if(prodNoEnvFg === "MANUAL") {
+                if ($scope.flex.collectionView.items[i].prodCd !== "" && $scope.flex.collectionView.items[i].prodCd !== null) {
+                    $scope.flex.collectionView.items[i].prodCd = $scope.flex.collectionView.items[i].prodCd.trim().removeEnter();
+                }
+            }
+
+            if($scope.flex.collectionView.items[i].prodNm !== "" && $scope.flex.collectionView.items[i].prodNm !== null) {
+                $scope.flex.collectionView.items[i].prodNm = $scope.flex.collectionView.items[i].prodNm.trim().removeEnter();
+            }
+        }
+
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -431,7 +444,9 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                 if($scope.isChecked === true) {
                     for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                         if(i !== j) {
-                            if($scope.flex.collectionView.items[j].prodNm === $scope.flex.collectionView.items[i].prodNm) { result = messages["prodExcelUpload.prodNmChk"]; } // 상품명이 중복됩니다.
+                            if($scope.flex.collectionView.items[j].prodNm !== "" && $scope.flex.collectionView.items[j].prodNm !== null){
+                                if($scope.flex.collectionView.items[j].prodNm === $scope.flex.collectionView.items[i].prodNm) { result = messages["prodExcelUpload.prodNmChk"]; } // 상품명이 중복됩니다.
+                            }
                         }
                     }
                 }
@@ -444,8 +459,8 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                     result = messages["prodExcelUpload.prodCdBlank"]; // 상품코드를 입력하세요.
                 } else {
                     // 숫자/영문만 입력
-                    //var numChkexp = /[^A-Za-z0-9]/g;
-                    //if (numChkexp.test($scope.flex.collectionView.items[i].prodCd)) { result = messages["prodExcelUpload.prodCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
+                    // var numChkexp = /[^A-Za-z0-9]/g;
+                    // if (numChkexp.test($scope.flex.collectionView.items[i].prodCd)) { result = messages["prodExcelUpload.prodCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
 
                     // 최대길이 체크
                     if (nvl($scope.flex.collectionView.items[i].prodCd, '').getByteLengthForOracle() > 13) { result = messages["prodExcelUpload.prodCdLengthChk"]; } // 상품코드 길이가 너무 깁니다.
@@ -453,7 +468,9 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                     // 상품코드 중복체크
                     for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                         if (i !== j) {
-                            if ($scope.flex.collectionView.items[j].prodCd === $scope.flex.collectionView.items[i].prodCd) { result = messages["prodExcelUpload.prodCdChk"]; } // 상품코드가 중복됩니다.
+                            if($scope.flex.collectionView.items[j].prodCd !== "" && $scope.flex.collectionView.items[j].prodCd !== null) {
+                                if ($scope.flex.collectionView.items[j].prodCd === $scope.flex.collectionView.items[i].prodCd) { result = messages["prodExcelUpload.prodCdChk"]; } // 상품코드가 중복됩니다.
+                            }
                         }
                     }
                 }

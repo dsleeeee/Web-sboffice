@@ -724,7 +724,7 @@
                 WHEN MATCHED THEN
                 UPDATE
                 SET
-                PROD_NM = #{prodNm},
+                PROD_NM = TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
                 HQ_BRAND_CD = #{hqBrandCd},
                 PROD_CLASS_CD  = #{prodClassCd},
                 CORNR_CD = #{cornrCd},
@@ -803,8 +803,8 @@
                 MAP_PROD_CD
                 ) VALUES (
                 #{hqOfficeCd},
-                #{prodCd},
-                #{prodNm},
+                TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
                 #{hqBrandCd},
                 #{prodClassCd},
                 '00',
@@ -855,7 +855,7 @@
                 WHEN MATCHED THEN
                 UPDATE
                 SET
-                PROD_NM = #{prodNm},
+                PROD_NM = TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
                 HQ_BRAND_CD = #{hqBrandCd},
                 PROD_CLASS_CD  = #{prodClassCd},
                 CORNR_CD = #{cornrCd},
@@ -935,8 +935,8 @@
                 MAP_PROD_CD
                 ) VALUES (
                 #{storeCd},
-                #{prodCd},
-                #{prodNm},
+                TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
                 #{hqBrandCd},
                 #{prodClassCd},
                 '00',

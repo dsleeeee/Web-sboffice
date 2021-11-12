@@ -130,8 +130,8 @@
     <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
       #{storeCd},
     </if>
-      #{prodClassCd},
-      #{prodClassNm},
+      TRIM(REPLACE(REPLACE(#{prodClassCd}, CHR(10), NULL), CHR(13), NULL)),
+      TRIM(REPLACE(REPLACE(#{prodClassNm}, CHR(10), NULL), CHR(13), NULL)),
       #{pProdClassCd},
       #{clsLevelCd},
       #{regDt},
@@ -153,7 +153,7 @@
     USING (
           SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
                  #{prodClassCd} AS PROD_CLASS_CD,
-                 #{prodClassNm} AS PROD_CLASS_NM,
+                 TRIM(REPLACE(REPLACE(#{prodClassNm}, CHR(10), NULL), CHR(13), NULL)) AS PROD_CLASS_NM,
                  #{pProdClassCd} AS P_PROD_CLASS_CD,
                  #{regDt} AS REG_DT,
                  #{regId} AS REG_ID,
@@ -217,7 +217,7 @@
     USING (
           SELECT #{storeCd} AS STORE_CD,
                  #{prodClassCd} AS PROD_CLASS_CD,
-                 #{prodClassNm} AS PROD_CLASS_NM,
+                 TRIM(REPLACE(REPLACE(#{prodClassNm}, CHR(10), NULL), CHR(13), NULL)) AS PROD_CLASS_NM,
                  #{pProdClassCd} AS P_PROD_CLASS_CD,
                  #{regDt} AS REG_DT,
                  #{regId} AS REG_ID,
