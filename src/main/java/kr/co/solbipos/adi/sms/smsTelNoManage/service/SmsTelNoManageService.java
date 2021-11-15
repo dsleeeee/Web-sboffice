@@ -28,6 +28,9 @@ public interface SmsTelNoManageService {
     /** 발신번호관리 - 발신번호 등록 요청 저장 */
     int getSmsTelNoManageSave(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 발신번호관리 - 기존에 등록 된 번호인지 확인 */
+    int getSmsTelNoManageChk(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
+
     /** 발신번호관리 - 발신번호 등록 요청 저장 */
     int getSmsTelNoManageUpdate(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
 

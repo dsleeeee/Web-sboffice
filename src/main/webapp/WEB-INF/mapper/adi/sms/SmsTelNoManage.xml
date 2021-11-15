@@ -67,6 +67,7 @@
         SELECT  COUNT(*)
         FROM    HCS_CRTLG_T
         WHERE   SBPENC.D(RES_RECV_NUMBER) = #{telNo}
+        AND     OGN_CD = #{orgnCd}
     </select>
 
     <!-- 발신번호관리 수정 -->
@@ -85,7 +86,6 @@
             MOD_ID = #{modId}
         WHERE 1=1
             AND CERT_ID = #{certId}
---             AND OGN_CD = #{orgnCd}
     </update>
 
     <!-- 발신번호관리 저장 -->

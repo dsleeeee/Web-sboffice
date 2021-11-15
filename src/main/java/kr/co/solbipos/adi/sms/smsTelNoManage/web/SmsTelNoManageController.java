@@ -214,14 +214,17 @@ public class SmsTelNoManageController {
 
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
-           if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == -1){
+           if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) != 0){
                // 기등록번호
                out.println("<script>alert('기존에 등록된 전화번호입니다.'); window.close();</script>");
                out.flush();
            } else {
-               // 정상등록
-               out.println("<script>alert('정상등록되었습니다.'); window.close();</script>");
-               out.flush();
+               if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == 1){
+
+                   // 정상등록
+                   out.println("<script>alert('정상등록되었습니다.'); window.close();</script>");
+                   out.flush();
+               }
            }
         } else {
             response.setContentType("text/html; charset=UTF-8");
