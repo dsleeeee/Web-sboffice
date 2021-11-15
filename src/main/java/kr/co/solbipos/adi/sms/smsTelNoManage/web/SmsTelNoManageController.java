@@ -214,7 +214,7 @@ public class SmsTelNoManageController {
 
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
-           if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) != 0){
+           if(smsTelNoManageService.getSmsTelNoManageChk(smsTelNoManageVO, sessionInfoVO) != 0){
                // 기등록번호
                out.println("<script>alert('기존에 등록된 전화번호입니다.'); window.close();</script>");
                out.flush();

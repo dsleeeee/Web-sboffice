@@ -77,6 +77,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         System.out.println("JH : 정보 : " + smsTelNoManageVO.getOrgnCd());
 
         cnt = smsTelNoManageMapper.getSmsTelNoManageChk(smsTelNoManageVO);
+        System.out.println("JH : getSmsTelNoManageChk 결과" + cnt);
         return cnt;
     }
 
@@ -95,6 +96,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         System.out.println("JH : 수정자 : " + smsTelNoManageVO.getModId());
         System.out.println("JH : 요청번호 : " + smsTelNoManageVO.getCertId());
         cnt = smsTelNoManageMapper.getSmsTelNoManageUpdate(smsTelNoManageVO);
+        System.out.println("JH : getSmsTelNoManageUpdate 결과" + cnt);
         return cnt;
     }
 
