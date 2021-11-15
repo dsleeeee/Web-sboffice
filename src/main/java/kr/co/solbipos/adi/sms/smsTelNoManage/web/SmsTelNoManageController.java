@@ -56,11 +56,11 @@ public class SmsTelNoManageController {
 //        RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
 //        GW_URL = "https://testcert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
-    private final String SITE_CD      = "AGSVU";
-    private final String WEB_SITEID   = "J21101407426";
-    private final String ENC_KEY      = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
-    private final String RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
-    private final String GW_URL       = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
+    String SITE_CD      = "AGSVU";
+    String WEB_SITEID   = "J21101407426";
+    String ENC_KEY      = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
+    String RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+    String GW_URL       = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
     private final SessionService sessionService;
     private final SmsTelNoManageService smsTelNoManageService;
@@ -258,20 +258,23 @@ public class SmsTelNoManageController {
     /**
      * 값 가져감
      *
-     * @param smsTelNoManageVOs
-     * @param request
-     * @param response
-     * @param model
+     * @param
+     * @param
+     * @param
+     * @param
      * @return  Object
      * @author  권지현
      * @since   2021.11.12
      */
     @RequestMapping(value = "/smsTelNoManage/getVal.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getVal(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
-                                              HttpServletResponse response, Model model) {
+    public Result getVal(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request) {
+
+        System.out.println("컨트롤러 진입");
 
         String ORDR_IDXX = new SimpleDateFormat("yyyyMMddHHmmssSSSSSSS").format(new Date());
+
+        System.out.println("주문번호 " + ORDR_IDXX);
 
         CT_CLI       cc      = new CT_CLI();
 
@@ -287,23 +290,28 @@ public class SmsTelNoManageController {
                 ""
         );
 
-        DefaultMap<String> result = null;
+        System.out.println("주문번호 " + UP_HASH);
+
+        DefaultMap<String> result = new DefaultMap<>();
         result.put("site_cd", SITE_CD);
         result.put("web_siteid", WEB_SITEID);
-        result.put("gw_url", RET_URL);
-        result.put("Ret_URL", GW_URL);
+        result.put("gw_url", GW_URL);
+        result.put("Ret_URL", RET_URL);
         result.put("ordr_idxx", ORDR_IDXX);
         result.put("up_hash", UP_HASH);
 
-        System.out.println(result);
-        List<String> result2 = null;
-        result2.add(0,SITE_CD);
-        result2.add(1,WEB_SITEID);
-        result2.add(2,RET_URL);
-        result2.add(3,GW_URL);
-        result2.add(4,ORDR_IDXX);
-        result2.add(5,UP_HASH);
-        System.out.println(result2);
-        return returnJson(Status.OK, result2);
+        System.out.println("결과1 " + result);
+
+//        List<String> result2 = new java.awt.List()
+//        result2.add(0,SITE_CD);
+//        result2.add(1,WEB_SITEID);
+//        result2.add(2,RET_URL);
+//        result2.add(3,GW_URL);
+//        result2.add(4,ORDR_IDXX);
+//        result2.add(5,UP_HASH);
+//
+//        System.out.println("결과2 " + result2);
+
+        return returnJson(Status.OK, result);
     }
 }

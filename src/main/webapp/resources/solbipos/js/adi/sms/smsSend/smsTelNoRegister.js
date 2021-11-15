@@ -85,9 +85,15 @@ app.controller('smsTelNoRegisterCtrl', ['$scope', '$http', function ($scope, $ht
         // 발신번호 등록됬는지 확인
         // $scope._inquirySub("/adi/sms/smsTelNoManage/smsTelNoManage/getVal.sb", null, function (response){});
 
-        $scope._postJSONQuery.withPopUp("/adi/sms/smsTelNoManage/smsTelNoManage/getVal.sb", null,
-            function (response) {
-                console.log(response);
+        $.postJSON("/adi/sms/smsTelNoManage/smsTelNoManage/getVal.sb", null, function(result) {
+            var data = result.data;
+            console.log(data);
+                $("#site_cd").val(data.siteCd);
+                $("#web_siteid").val(data.webSiteid);
+                $("#gw_url").val(data.gwUrl);
+                $("#Ret_URL").val(data.retUrl);
+                $("#ordr_idxx").val(data.ordrIdxx);
+                $("#up_hash").val(data.upHash);
             }
         );
     };
