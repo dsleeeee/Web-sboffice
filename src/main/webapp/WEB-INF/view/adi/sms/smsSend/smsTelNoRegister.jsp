@@ -54,7 +54,7 @@
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="smsTelNoRegister.info"/>
-            <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
+            <a href="#" id="btn_close" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
         <div class="subCon">
@@ -103,8 +103,8 @@
 
     // 인증요청
     function telNoRequest(){
-        $("#wjSmsTelNoRegisterLayer").hide();
-
+        // $("#wjSmsTelNoRegisterLayer").hide();
+        document.getElementById('btn_close').click();
         var auth_form = document.form_auth;
 
             var return_gubun;
@@ -128,22 +128,28 @@
                 'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
                 'cert_enc_use_ext=Y'
             ;
-
-            var params = {};
-            params.certId = $("#ordr_idxx").val();
-
+            console.log("JH");
+            console.log("site_cd : " + $("#site_cd").val());
+            console.log("web_siteid : " + $("#web_siteid").val());
+            console.log("gw_url : " + $("#gw_url").val());
+            console.log("Ret_URL : " + $("#Ret_URL").val());
+            console.log("ordr_idxx : " + $("#ordr_idxx").val());
+            console.log("up_hash : " + $("#up_hash").val());
+            console.log("url : " + url);
             // 저장기능 수행
             var params = {};
             params.certId = $("#ordr_idxx").val();
 
             $.postJSONArray("/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoManageSave.sb", params, function (result) {
-                    console.log("결과" + result);
+                    console.log("JH : 결과");
+                    console.log(result);
 
             // var AUTH_POP = window.open(url, 'auth_popup', winopts + position);
             var AUTH_POP = window.open(url, 'auth_popup', winopts + position);
                 },
                 function (result) {
-                    s_alert.pop("결과msg" + result.message);
+                    s_alert.pop("JH : 결과msg" + result.message);
+                    s_alert.pop(result.message);
                 });
 
 

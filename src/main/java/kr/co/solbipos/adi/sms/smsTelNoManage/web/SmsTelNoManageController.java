@@ -147,16 +147,16 @@ public class SmsTelNoManageController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        System.out.println("결과 : " + request.getQueryString());
-        System.out.println("site_cd : " + request.getParameter("site_cd"));
-        System.out.println("ordr_idxx : " + request.getParameter("ordr_idxx"));
-        System.out.println("res_cd : " + request.getParameter("res_cd"));
-        System.out.println("res_msg : " + request.getParameter("res_msg"));
-        System.out.println("req_tx : " + request.getParameter("req_tx"));
-        System.out.println("cert_no : " + request.getParameter("cert_no"));
-        System.out.println("enc_cert_data2 : " + request.getParameter("enc_cert_data2"));
-        System.out.println("up_hash : " + request.getParameter("up_hash"));
-        System.out.println("dn_hash : " + request.getParameter("dn_hash"));
+        System.out.println("JH : 결과 : " + request.getQueryString());
+        System.out.println("JH : site_cd : " + request.getParameter("site_cd"));
+        System.out.println("JH : ordr_idxx : " + request.getParameter("ordr_idxx"));
+        System.out.println("JH : res_cd : " + request.getParameter("res_cd"));
+        System.out.println("JH : res_msg : " + request.getParameter("res_msg"));
+        System.out.println("JH : req_tx : " + request.getParameter("req_tx"));
+        System.out.println("JH : cert_no : " + request.getParameter("cert_no"));
+        System.out.println("JH : enc_cert_data2 : " + request.getParameter("enc_cert_data2"));
+        System.out.println("JH : up_hash : " + request.getParameter("up_hash"));
+        System.out.println("JH : dn_hash : " + request.getParameter("dn_hash"));
 
         String siteCd = request.getParameter("site_cd");
         String ordrIdxx = request.getParameter("ordr_idxx");
@@ -193,18 +193,18 @@ public class SmsTelNoManageController {
                 // 정상적으로 복호화 된경우에만 인증데이터를 가져올수 있습니다.
                 cc.decryptEncCert( ENC_KEY, siteCd, certNo, encCertData2 );
 
-                System.out.println("-------- 복호화 결과 --------");
-                System.out.println("phone_no : " + cc.getKeyValue("phone_no"));
-                System.out.println("comm_id : " + cc.getKeyValue("comm_id"));
-                System.out.println("user_name : " + cc.getKeyValue("user_name"));
-                System.out.println("birth_day : " + cc.getKeyValue("birth_day"));
-                System.out.println("sex_code : " + cc.getKeyValue("sex_code"));
-                System.out.println("local_code : " + cc.getKeyValue("local_code"));
-                System.out.println("ci : " + cc.getKeyValue("ci"));
-                System.out.println("di : " + cc.getKeyValue("di"));
-                System.out.println("ci_url : " + URLDecoder.decode(cc.getKeyValue("ci_url")));
-                System.out.println("di_url : " + URLDecoder.decode(cc.getKeyValue("di_url")));
-                System.out.println("web_siteid : " + cc.getKeyValue("web_siteid"));
+                System.out.println("JH : -------- 복호화 결과 --------");
+                System.out.println("JH : phone_no : " + cc.getKeyValue("phone_no"));
+                System.out.println("JH : comm_id : " + cc.getKeyValue("comm_id"));
+                System.out.println("JH : user_name : " + cc.getKeyValue("user_name"));
+                System.out.println("JH : birth_day : " + cc.getKeyValue("birth_day"));
+                System.out.println("JH : sex_code : " + cc.getKeyValue("sex_code"));
+                System.out.println("JH : local_code : " + cc.getKeyValue("local_code"));
+                System.out.println("JH : ci : " + cc.getKeyValue("ci"));
+                System.out.println("JH : di : " + cc.getKeyValue("di"));
+                System.out.println("JH : ci_url : " + URLDecoder.decode(cc.getKeyValue("ci_url")));
+                System.out.println("JH : di_url : " + URLDecoder.decode(cc.getKeyValue("di_url")));
+                System.out.println("JH : web_siteid : " + cc.getKeyValue("web_siteid"));
 
                 System.out.println("---------------------------");
             }
@@ -232,7 +232,6 @@ public class SmsTelNoManageController {
             out.println("<script>alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");
             out.flush();
         }
-
     }
 
     /**

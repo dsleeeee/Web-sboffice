@@ -73,8 +73,8 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
 
         smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
-        System.out.println("본인인증 chk 인덱스스");
-        System.out.println("정보 : " + smsTelNoManageVO.getOrgnCd());
+        System.out.println("JH : 본인인증 chk 인덱스스");
+        System.out.println("JH : 정보 : " + smsTelNoManageVO.getOrgnCd());
 
         cnt = smsTelNoManageMapper.getSmsTelNoManageChk(smsTelNoManageVO);
         return cnt;
@@ -89,11 +89,11 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         smsTelNoManageVO.setModDt(currentDt);
         smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
 
-        System.out.println("본인인증 update 인덱스스");
-        System.out.println("전화번호 : " + smsTelNoManageVO.getTelNo());
-        System.out.println("수정날짜 : " + smsTelNoManageVO.getModDt());
-        System.out.println("수정자 : " + smsTelNoManageVO.getModId());
-        System.out.println("요청번호 : " + smsTelNoManageVO.getCertId());
+        System.out.println("JH : 본인인증 update 인덱스스");
+        System.out.println("JH : 전화번호 : " + smsTelNoManageVO.getTelNo());
+        System.out.println("JH : 수정날짜 : " + smsTelNoManageVO.getModDt());
+        System.out.println("JH : 수정자 : " + smsTelNoManageVO.getModId());
+        System.out.println("JH : 요청번호 : " + smsTelNoManageVO.getCertId());
         cnt = smsTelNoManageMapper.getSmsTelNoManageUpdate(smsTelNoManageVO);
         return cnt;
     }
