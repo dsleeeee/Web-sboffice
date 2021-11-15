@@ -33,13 +33,28 @@
                 <th>
                     <s:message code="cmm.search.date" />
                 </th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"> <input id="startDate" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
                         <span class="txtIn"> <input id="endDate" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
+                <c:if test="${orgnFg == 'HQ'}">
+                    <%-- 매장코드 --%>
+                    <th><s:message code="weight.store"/></th>
+                    <td>
+                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                            <jsp:param name="targetId" value="weightStore"/>
+                        </jsp:include>
+                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                    </td>
+                </c:if>
+                <c:if test="${orgnFg != 'HQ'}">
+                    <th></th>
+                    <td></td>
+                </c:if>
             </tr>
             <tr>
                 <%-- 상품코드 --%>
@@ -48,17 +63,6 @@
                 <%-- 상품명 --%>
                 <th><s:message code="weight.prodNm"/></th>
                 <td><input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/></td>
-            </tr>
-            <tr <c:if test="${orgnFg == 'STORE'}">style="display: none;"</c:if> >
-                <%-- 매장코드 --%>
-                <th><s:message code="weight.store"/></th>
-                <td colspan="3">
-                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                        <jsp:param name="targetId" value="weightStore"/>
-                    </jsp:include>
-                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-                </td>
             </tr>
         </tbody>
     </table>
@@ -83,6 +87,10 @@
                     is-read-only="true">
 
                     <!-- define columns -->
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <wj-flex-grid-column header="<s:message code="weight.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="weight.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="weight.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="weight.posNo"/>" binding="posNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="weight.billNo"/>" binding="billNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -110,7 +118,7 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/weight/weight.js?ver=20211115.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/weight/weight.js?ver=20211115.02" charset="utf-8"></script>
 
 <%-- 매장 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/store.jsp">

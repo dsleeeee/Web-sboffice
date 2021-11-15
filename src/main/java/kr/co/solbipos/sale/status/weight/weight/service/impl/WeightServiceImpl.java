@@ -4,9 +4,6 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.sale.status.rtnStatus.day.service.RtnStatusDayService;
-import kr.co.solbipos.sale.status.rtnStatus.day.service.RtnStatusDayVO;
-import kr.co.solbipos.sale.status.rtnStatus.day.service.impl.RtnStatusDayMapper;
 import kr.co.solbipos.sale.status.weight.weight.service.WeightService;
 import kr.co.solbipos.sale.status.weight.weight.service.WeightVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +41,16 @@ public class WeightServiceImpl implements WeightService {
     @Override
     public List<DefaultMap<String>> getWeightList(WeightVO weightVO, SessionInfoVO sessionInfoVO) {
 
+        weightVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        weightVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
     	if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
-    		weightVO.setStoreCd(sessionInfoVO.getStoreCd());
+            weightVO.setStoreCd(sessionInfoVO.getStoreCd());
 		}
 
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        }
         return weightMapper.getWeightList(weightVO);
     }
 

@@ -53,13 +53,6 @@ app.controller('weightCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             return false;
         }
 
-        if(gvOrgnFg == 'H'){
-            if (isEmptyObject( $("#weightStoreCd").val())){
-                $scope._popMsg(messages["cmm.require.selectStore"]);
-                return false;
-            }
-        }
-
         $scope.searchWeight();
         event.preventDefault();
     });

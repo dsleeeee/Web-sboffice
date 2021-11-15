@@ -28,6 +28,9 @@ public class WeightVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
 
+    /** 다중매장코드 array */
+    private String arrStoreCd[];
+
     /**
      * 소속구분
      * M : 시스템
@@ -124,5 +127,13 @@ public class WeightVO extends PageVO {
 
     public void setProdNm(String prodNm) {
         this.prodNm = prodNm;
+    }
+
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
     }
 }
