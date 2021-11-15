@@ -48,7 +48,7 @@ app.controller('weightCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         var diffDay = (endDt.getTime() - startDt.getTime()) / (1000 * 60 * 60 * 24); // 시 * 분 * 초 * 밀리세컨
 
         // 조회일자 최대 한달(31일) 제한
-        if (diffDay > 31) {
+        if (diffDay >= 31) {
             $scope._popMsg(messages['weight.date.error']);
             return false;
         }
