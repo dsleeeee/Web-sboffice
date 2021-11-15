@@ -64,7 +64,7 @@
 		<if test='prodNm != null and prodNm !=""'>
 			AND A.PROD_NM = #{prodNm}
 		</if>
-		ORDER BY B.SALE_DATE, B.POS_NO, B.BILL_NO
+		ORDER BY A.STORE_CD, B.SALE_DATE, B.POS_NO, B.BILL_NO
 	</select>
 
 </mapper>
