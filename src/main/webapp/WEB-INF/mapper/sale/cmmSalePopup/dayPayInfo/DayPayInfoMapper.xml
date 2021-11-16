@@ -826,7 +826,7 @@
             </foreach>
         </if>
         <![CDATA[
-        AND     tcn.NMCODE_GRP_CD         =   '111'
+        AND     tcn.NMCODE_GRP_CD         IN ('111', '802')
         AND     tcn.NMCODE_CD             =   tsspt.TEMPORARY_PAY_CD
         GROUP
         BY      tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM
