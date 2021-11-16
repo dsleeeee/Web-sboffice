@@ -105,4 +105,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCorner.js?ver=20200121.22" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCorner.js?ver=20211115.01" charset="utf-8"></script>

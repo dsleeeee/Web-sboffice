@@ -191,11 +191,19 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
         // 선택한 테이블만 visible
         else
         {
+            var totCornerIndex = "";
             for (var i = 0; i < cornerColArray.length; i++) {
                 if (cornerColArray[i].value === $("#dayofweekCornerStoreCd").val()) {
-                    start = (i * 2) + 4;
-                    end = (i * 2) + 5;
+                    totCornerIndex = totCornerIndex + i + ','; // 해당 본사에 모든 매장별코너 리스트에서 선택한 매장의 코너들이 몇번째가 인덱스인지 체크
                 }
+            }
+
+            totCornerIndex = totCornerIndex.substring(0, totCornerIndex.length-1);
+            var arrCornerIndex = totCornerIndex.split(",");
+
+            for (var i = 0; i < cornerColArray.length; i++) {
+                start = 4 + (parseInt(arrCornerIndex[0]) * 2);
+                end = 5 + (parseInt(arrCornerIndex[arrCornerIndex.length-1]) * 2);
             }
 
             for (var i = 4; i < columnsCnt; i++) {
