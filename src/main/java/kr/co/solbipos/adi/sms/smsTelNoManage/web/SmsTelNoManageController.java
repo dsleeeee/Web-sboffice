@@ -146,6 +146,7 @@ public class SmsTelNoManageController {
     public void getSmsTelNoRegisterRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
 
         System.out.println("JH : 결과 : " + request.getQueryString());
         System.out.println("JH : site_cd : " + request.getParameter("site_cd"));
@@ -208,9 +209,9 @@ public class SmsTelNoManageController {
 
                 System.out.println("---------------------------");
             }
-            SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
             smsTelNoManageVO.setCertId(ordrIdxx);
             smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
+            smsTelNoManageVO.setResCd(resCd);
 
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
@@ -227,6 +228,12 @@ public class SmsTelNoManageController {
                }
            }
         } else {
+            // 실패코드 저장
+            smsTelNoManageVO.setCertId(ordrIdxx);
+            smsTelNoManageVO.setTelNo("");
+            smsTelNoManageVO.setResCd(resCd);
+            smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO);
+            
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
             out.println("<script>alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");

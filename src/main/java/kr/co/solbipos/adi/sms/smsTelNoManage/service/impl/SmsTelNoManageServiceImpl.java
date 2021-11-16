@@ -68,29 +68,35 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
     /** 발신번호관리 - 기존에 등록 된 번호인지 확인 */
     @Override
     public int getSmsTelNoManageChk(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
-        int cnt = 0;
-        String currentDt = currentDateTimeString();
 
+        System.out.println("JH : getSmsTelNoManageChk 진입");
         smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
-        System.out.println("JH : 본인인증 chk 인덱스스");
-        System.out.println("JH : 정보 : " + smsTelNoManageVO.getOrgnCd());
+        int cnt = 0;
 
+        System.out.println("JH : 전화번호 : " + smsTelNoManageVO.getTelNo());
+        System.out.println("JH : 소속코드 : " + smsTelNoManageVO.getOrgnCd());
         cnt = smsTelNoManageMapper.getSmsTelNoManageChk(smsTelNoManageVO);
         System.out.println("JH : getSmsTelNoManageChk 결과" + cnt);
+
         return cnt;
     }
 
     /** 발신번호관리 - 발신번호 등록 요청 저장 */
     @Override
     public int getSmsTelNoManageUpdate(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
+
         int cnt = 0;
+
+        System.out.println("JH : getSmsTelNoManageUpdate 진입");
         String currentDt = currentDateTimeString();
 
+        smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
         smsTelNoManageVO.setModDt(currentDt);
         smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
 
         System.out.println("JH : 본인인증 update 인덱스스");
+        System.out.println("JH : 소속코드 : " + smsTelNoManageVO.getOrgnCd());
         System.out.println("JH : 전화번호 : " + smsTelNoManageVO.getTelNo());
         System.out.println("JH : 수정날짜 : " + smsTelNoManageVO.getModDt());
         System.out.println("JH : 수정자 : " + smsTelNoManageVO.getModId());
