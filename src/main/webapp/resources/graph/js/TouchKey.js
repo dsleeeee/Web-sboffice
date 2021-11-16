@@ -693,9 +693,16 @@ Sidebar.prototype.makeDragSource = function () {
           graph.touchKeyInfo.width, graph.touchKeyInfo.height,
           "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=01;rounded=0;"
         );
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["01"].off, new Array(btn));
-        graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
-        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
+
+        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
+        }else{
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["01"].off, new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
+        }
 
         // 버튼에 품목명 추가
         var prodTag = graph.insertVertex(btn, null,
@@ -704,9 +711,16 @@ Sidebar.prototype.makeDragSource = function () {
           0, 0,
           "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=02;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;"
         );
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["02"].size, new Array(prodTag));
+
+        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $('#hdCopyFont02').val().split("/")[0], new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $('#hdCopyFont02').val().split("/")[1], new Array(prodTag));
+        }else{
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["02"].size, new Array(prodTag));
+        }
 
         // 버튼에 금액 추가
         var priceTag = graph.insertVertex(btn, null,
@@ -715,9 +729,16 @@ Sidebar.prototype.makeDragSource = function () {
           0, 0,
           "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=03;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align:right;"
         );
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["03"].size, new Array(priceTag));
+
+        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $('#hdCopyFont03').val().split("/")[0], new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $('#hdCopyFont03').val().split("/")[1], new Array(priceTag));
+        }else{
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["03"].size, new Array(priceTag));
+        }
 
         // 하위 셀의 사이즈 자동조정
         graph.updateCellSize(prodTag, false);
@@ -1761,6 +1782,54 @@ Format.prototype.initElements = function () {
         });
       }
     });
+  });
+
+  // 터치키스타일 복사 버튼
+  addClickHandler(document.getElementById('btnTouchKeyStyleCopy'), function () {
+    var prodArea = format.touchkey.prodArea;
+    var cell = prodArea.getSelectionCells()[0];
+    if (cell) {
+      var initFillColor; // 채우기
+      var style02, initFontColor02, initFontSize02; // 폰트(터치키) - 상품명 사이즈와 컬러
+      var style03, initFontColor03, initFontSize03; // 폰트(터치키) - 금액 사이즈와 컬러
+
+      style02 = graph.getCellStyle(cell.children[0]);
+      initFillColor = style02['fillColor'];
+      initFontColor02 = style02['fontColor'];
+      initFontSize02 = style02['fontSize'];
+
+      style03 = graph.getCellStyle(cell.children[1]);
+      initFontColor03 = style03['fontColor'];
+      initFontSize03 = style03['fontSize'];
+
+      // 복사한 터치키스타일 보여주고 hidden에 Setting
+      document.getElementById("pickCopyFillColor").value = initFillColor;
+      document.getElementById("pickCopyFont02").value = initFontColor02;
+      document.getElementById("pickCopyFont03").value = initFontColor03;
+      $("#lblCopyFont02").text(" " + initFontSize02 + "pt");
+      $("#lblCopyFont03").text(" " + initFontSize03 + "pt");
+
+      $("#hdCopyFillColor").val(initFillColor);
+      $("#hdCopyFont02").val(initFontColor02 + "/" + initFontSize02);
+      $("#hdCopyFont03").val(initFontColor03 + "/" + initFontSize03);
+
+      $("#divTouchKeyStyleCopy").css("display", "");
+    }
+  });
+
+  // 터치키스타일 적용 버튼
+  addClickHandler(document.getElementById('btnTouchKeyStyleApply'), function () {
+
+    // 적용 버튼 toggle
+    if($("#hdTouchKeyStyleApply").val() === "N"){
+      $("#hdTouchKeyStyleApply").val("Y"); // 적용 버튼 활성화
+      $("#btnTouchKeyStyleApply").css('background-color', '#1e88e5');
+      $("#btnTouchKeyStyleApply").css('color', '#ffffff');
+    }else{
+      $("#hdTouchKeyStyleApply").val("N"); // 적용 버튼 비활성화
+      $("#btnTouchKeyStyleApply").css('background-color', '#ebf5ff');
+      $("#btnTouchKeyStyleApply").css('color', '#337dde');
+    }
   });
 
   // 버튼구분 콤보 DropBoxDataMap

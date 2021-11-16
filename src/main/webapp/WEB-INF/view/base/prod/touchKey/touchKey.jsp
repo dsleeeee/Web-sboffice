@@ -200,18 +200,18 @@
       <div id="divProdNavWrap" class="prodNavWrap">
         <div id="keyStyle" class="oh keyStyleWrap hideNav">
           <div id="colorStyleWrap" class="mb5">
-            <span class="s12 fl lh30 bk mt5"><s:message code="touchKey.fill"/></span>
+            <span class="s12 fl lh15 bk mt5"><s:message code="touchKey.fill"/></span>
             <div class="sb-select txtIn w100">
               <%-- 채우기 --%>
               <div id="fillColor"></div>
             </div>
           </div>
           <div id="fontStyleWrap">
-            <span class="s12 fl lh30 bk"><s:message code="touchKey.cellType"/></span>
+            <span class="s12 fl lh15 bk"><s:message code="touchKey.cellType"/></span>
             <div class="sb-select txtIn fl w100 mb5">
               <div id="cellTypeCombo"></div>
             </div>
-            <span class="s12 fl lh30 bk"><s:message code="touchKey.font"/></span>
+            <span class="s12 fl lh15 bk"><s:message code="touchKey.font"/></span>
             <div class="sb-select txtIn fl w100 mb5">
               <%-- 폰트컬러 --%>
               <div id="fontColor"></div>
@@ -219,6 +219,20 @@
             <div class="sb-select txtIn fl w100 mb5">
               <%-- 폰트사이즈 --%>
               <div id="fontSize"></div>
+            </div>
+          </div>
+          <div id="touchKeyStyleCopyWrap">
+            <span class="s12 fl lh20 bk"><s:message code="touchKey.touchKeyStyleCopy"/></span>
+              <button class="btn_skyblue fl mr5" id="btnTouchKeyStyleCopy"><s:message code="cmm.copy" /></button>
+              <button class="btn_skyblue" id="btnTouchKeyStyleApply"><s:message code="cmm.apply" /></button>
+            <div class="mt5" id="divTouchKeyStyleCopy" style="display: none;">
+              <span class="s12 fl lh15 bk">채우기 <input type="color" style="width:18px; height:18px;" id="pickCopyFillColor"></span></br>
+              <span class="s12 fl lh15 bk">상품명 <input type="color" style="width:18px; height:18px;" id="pickCopyFont02"><label id="lblCopyFont02"></label></span></br>
+              <span class="s12 fl lh15 bk">금&nbsp;&nbsp; 액 <input type="color" style="width:18px; height:18px;" id="pickCopyFont03"><label id="lblCopyFont03"></label></span>
+              <input type="hidden" id="hdCopyFillColor" />
+              <input type="hidden" id="hdCopyFont02" />
+              <input type="hidden" id="hdCopyFont03" />
+              <input type="hidden" id="hdTouchKeyStyleApply" value="N"/>
             </div>
           </div>
         </div>
@@ -341,7 +355,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.007"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.008"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
