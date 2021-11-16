@@ -40,4 +40,7 @@ public interface SmsTelNoManageMapper {
 
     /** 발신번호관리 저장 */
     int getSmsTelNoManageSaveUpdate(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** HCS_CRTLG_T.OGN_CD 값 가져옴 */
+    String getOrdrIdxx(SmsTelNoManageVO smsTelNoManageVO);
 }

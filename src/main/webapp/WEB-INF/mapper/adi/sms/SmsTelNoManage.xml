@@ -68,6 +68,7 @@
         FROM    HCS_SENDM_T
         WHERE   SBPENC.D(TEL_NO) = #{telNo}
         AND     OGN_CD = #{orgnCd}
+        AND     USE_YN = 'Y'
     </select>
 
     <!-- 발신번호관리 수정 -->
@@ -90,7 +91,7 @@
         AND OGN_CD = #{orgnCd}
     </update>
 
-    <!-- 발신번호관리 저장 -->
+    <!-- 발신번호관리 저장(사용X) -->
     <!--
         TABLE    :
         COMMENTS :
@@ -107,4 +108,17 @@
           AND OGN_CD = #{orgnCd}
           AND TEL_NO = SBPENC.E(#{telNo})
     </update>
+
+
+    <!-- HCS_CRTLG_T.OGN_CD 값 가져옴 -->
+    <!--
+        TABLE    : HCS_CRTLG_T
+        COMMENTS :
+    -->
+    <select id="getOrdrIdxx"  parameterType="SmsTelNoManageVO" resultType="String">
+        /* SmsTelNoManageMapper.getOrdrIdxx */
+        SELECT  OGN_CD
+        FROM    HCS_CRTLG_T
+        WHERE   CERT_ID = #{certId}
+    </select>
 </mapper>

@@ -171,6 +171,11 @@ public class SmsTelNoManageController {
 
         CT_CLI cc = new CT_CLI();
 
+        smsTelNoManageVO.setCertId(ordrIdxx);
+        smsTelNoManageVO.setResCd(resCd);
+
+        smsTelNoManageVO.setOrgnCd(smsTelNoManageService.getOrdrIdxx(smsTelNoManageVO));
+
         String result = "";
         if( resCd.equals( "0000" ) ){
 
@@ -209,9 +214,8 @@ public class SmsTelNoManageController {
 
                 System.out.println("---------------------------");
             }
-            smsTelNoManageVO.setCertId(ordrIdxx);
+
             smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
-            smsTelNoManageVO.setResCd(resCd);
 
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
@@ -225,13 +229,16 @@ public class SmsTelNoManageController {
                    // 정상등록
                    out.println("<script>alert('정상등록되었습니다.'); window.close();</script>");
                    out.flush();
+               } else {
+
+                   // 인증성공 + DB저장실패
+                   out.println("<script>alert('본인인증에 성공했으나 저장에 문제가 있습니다. 고객센터로 문의해주세요.'); window.close();</script>");
+                   out.flush();
                }
            }
         } else {
             // 실패코드 저장
-            smsTelNoManageVO.setCertId(ordrIdxx);
             smsTelNoManageVO.setTelNo("");
-            smsTelNoManageVO.setResCd(resCd);
             smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO);
             
             response.setContentType("text/html; charset=UTF-8");
