@@ -85,11 +85,16 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // 세션 객체가 없는 경우
         if ( sessionInfoVO == null ) {
             isSessionValid = false;
+            System.out.println("session status null 1");
         } else {
             // 세션 객체는 있지만 필수값들이 없는 경우
             if ( sessionInfoVO.getUserId() == null && sessionInfoVO.getMenuData() == null ) {
                 isSessionValid = false;
+                System.out.println("session status 2: " + sessionInfoVO.getUserId());
+                System.out.println("session status 3: " + sessionInfoVO.getMenuData());
             }
+            System.out.println("session status 4: " + sessionInfoVO.getUserId());
+            System.out.println("session status 5: " + sessionInfoVO.getMenuData());
         }
 
         //
