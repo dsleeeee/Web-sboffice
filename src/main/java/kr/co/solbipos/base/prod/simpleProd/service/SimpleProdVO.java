@@ -148,6 +148,8 @@ public class SimpleProdVO extends PageVO {
     /** 브랜드코드 */
     private String hqBrandCd;
 
+    /** 비고 */
+    private String remark;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -362,4 +364,10 @@ public class SimpleProdVO extends PageVO {
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
     }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) { this.remark = remark; }
 }
