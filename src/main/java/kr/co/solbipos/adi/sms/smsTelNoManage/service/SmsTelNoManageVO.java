@@ -36,9 +36,13 @@ public class SmsTelNoManageVO extends PageVO {
     /** 결과코드 */
     private String resCd;
 
-    public String getOrgnCd(String orgnCd) { return this.orgnCd; }
+    public String getOrgnCd() {
+        return orgnCd;
+    }
 
-    public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
+    public void setOrgnCd(String orgnCd) {
+        this.orgnCd = orgnCd;
+    }
 
     public String getTelNo() {
         return telNo;
@@ -48,9 +52,13 @@ public class SmsTelNoManageVO extends PageVO {
         this.telNo = telNo;
     }
 
-    public String getUseSeq() { return useSeq; }
+    public String getUseSeq() {
+        return useSeq;
+    }
 
-    public void setUseSeq(String useSeq) { this.useSeq = useSeq; }
+    public void setUseSeq(String useSeq) {
+        this.useSeq = useSeq;
+    }
 
     public String getCertId() {
         return certId;
@@ -66,9 +74,5 @@ public class SmsTelNoManageVO extends PageVO {
 
     public void setResCd(String resCd) {
         this.resCd = resCd;
-    }
-
-    public String getOrgnCd() {
-        return orgnCd;
     }
 }
