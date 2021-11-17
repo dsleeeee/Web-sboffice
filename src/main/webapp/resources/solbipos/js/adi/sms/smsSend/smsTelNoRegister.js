@@ -94,6 +94,7 @@ app.controller('smsTelNoRegisterCtrl', ['$scope', '$http', function ($scope, $ht
                 $("#Ret_URL").val(data.retUrl);
                 $("#ordr_idxx").val(data.ordrIdxx);
                 $("#up_hash").val(data.upHash);
+                $("#sessionId").val(data.sessionId);
             }
         );
     };

@@ -174,7 +174,7 @@ public class SmsTelNoManageController {
         smsTelNoManageVO.setCertId(ordrIdxx);
         smsTelNoManageVO.setResCd(resCd);
 
-        smsTelNoManageVO.setOrgnCd(smsTelNoManageService.getOrdrIdxx(smsTelNoManageVO));
+//        smsTelNoManageVO.setOrgnCd(smsTelNoManageService.getOrdrIdxx(smsTelNoManageVO));
 
         String result = "";
         if( resCd.equals( "0000" ) ){
@@ -286,6 +286,8 @@ public class SmsTelNoManageController {
     @ResponseBody
     public Result getVal(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         System.out.println("컨트롤러 진입");
 
         String ORDR_IDXX = new SimpleDateFormat("yyyyMMddHHmmssSSSSSSS").format(new Date());
@@ -315,6 +317,10 @@ public class SmsTelNoManageController {
         result.put("Ret_URL", RET_URL);
         result.put("ordr_idxx", ORDR_IDXX);
         result.put("up_hash", UP_HASH);
+
+        System.out.println("세션 ID " + sessionInfoVO.getSessionId());
+
+        result.put("sessionId", sessionInfoVO.getSessionId());
 
         System.out.println("결과1 " + result);
 

@@ -86,6 +86,7 @@
                     <input type="hidden" class="sb-input w70" id="Ret_URL"  />
                     <input type="hidden" class="sb-input w70" id="ordr_idxx" />
                     <input type="hidden" class="sb-input w70" id="up_hash"  />
+                    <input type="hidden" class="sb-input w70" id="sessionId"  />
                 <%-- 인증요청 --%>
 <%--                <button id="request" class="btn_skyblue ml5 fr" ng-click="telNoRequest()">--%>
                                         <button id="request" class="btn_skyblue ml5 fr" onclick="return telNoRequest();close();">
@@ -124,7 +125,7 @@
                 'req_tx=cert' + '&' +                                   // 요청의 종류를 구분하는 변수
                 'cert_method=01' + '&' +                                // 01-휴대폰인증 02-공인인증(추후제공)
                 'up_hash=' + $("#up_hash").val() + '&' +                // 요청 hash data
-                'Ret_URL=' + $("#Ret_URL").val() + '&' +                // 본인인증 결과 리턴페이지
+                'Ret_URL=' + $("#Ret_URL").val() + '?sid=' + $("#sessionId").val() + '&' +                // 본인인증 결과 리턴페이지
                 'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
                 'cert_enc_use_ext=Y'
             ;
@@ -135,6 +136,7 @@
             console.log("Ret_URL : " + $("#Ret_URL").val());
             console.log("ordr_idxx : " + $("#ordr_idxx").val());
             console.log("up_hash : " + $("#up_hash").val());
+            console.log("sessionID : " + $("#sessionId").val());
             console.log("url : " + url);
             // 저장기능 수행
             var params = {};
@@ -142,10 +144,19 @@
 
             $.postJSONArray("/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoManageSave.sb", params, function (result) {
                     console.log("JH : 결과");
-                    console.log(result);
+                    // window.dialogArguments.window.parentsPopWIndow = window;
+                    // window.dialogArguments.window.parentsPopWIndow = window;
+                    // if (window.dialogArguments != null){
+                    //     console.log('믱');
+                    //
+                    // } else {
+                    //     console.log("뫙");
+                    // }
+                    var AUTH_POP =  window.open(url, 'auth_popup', winopts + position);
 
-            // var AUTH_POP = window.open(url, 'auth_popup', winopts + position);
-            var AUTH_POP = window.open(url, 'auth_popup', winopts + position);
+                    // var AUTH_POP =  Window.open(url, 'auth_popup', winopts + position);
+                    // var AUTH_POP = window.open(url, 'auth_popup', winopts + position);
+                    console.log('1111');
                 },
                 function (result) {
                     s_alert.pop("JH : 결과msg" + result.message);
@@ -153,8 +164,6 @@
                 });
 
 
-        // auth_form.target = "auth_popup"; // !!주의 고정값 ( 리턴받을때 사용되는 타겟명입니다.)
-        // auth_form.action = "./kcpcert_proc_req.jsp"; // 인증창 호출 및 결과값 리턴 페이지 주소
 
     };
 
