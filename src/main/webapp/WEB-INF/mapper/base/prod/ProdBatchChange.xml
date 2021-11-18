@@ -158,7 +158,7 @@
                 SALE_PROD_YN = #{saleProdYn},
                 POINT_SAVE_YN = #{pointSaveYn},
                 PRC_CTRL_FG = #{prcCtrlFg},
-                MAP_PROD_CD = #{mapProdCd},
+                MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -173,7 +173,7 @@
                 SALE_PROD_YN = #{saleProdYn},
                 POINT_SAVE_YN = #{pointSaveYn},
                 PRC_CTRL_FG = #{prcCtrlFg},
-                MAP_PROD_CD = #{mapProdCd},
+                MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -196,7 +196,7 @@
             SALE_PROD_YN = #{saleProdYn},
             POINT_SAVE_YN = #{pointSaveYn},
             PRC_CTRL_FG = #{prcCtrlFg},
-            MAP_PROD_CD = #{mapProdCd},
+            MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
             WHERE 1=1

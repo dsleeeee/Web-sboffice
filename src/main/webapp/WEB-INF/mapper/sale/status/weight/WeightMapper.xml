@@ -10,32 +10,32 @@
 -->
 <mapper namespace="kr.co.solbipos.sale.status.weight.weight.service.impl.WeightMapper">
 
-    <!-- 중량별 -->
-    <!--
+	<!-- 중량별 -->
+	<!--
         TABLE    : TB_MS_PRODUCT, TB_SL_SALE_DTL, TB_MS_PRODUCT_BARCD
         PARAM    : weightVO
         COMMENTS : 중량별 매출을 조회한다.
     -->
 	<select id="getWeightList" parameterType="weightVO" resultType="DefaultMap">
-        /* USE : WeightMapper.getWeightList */
+		/* USE : WeightMapper.getWeightList */
 		SELECT 	A.STORE_CD,
-		       	D.STORE_NM,
-		  		TO_CHAR(TO_DATE(B.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-				B.POS_NO,
-				B.BILL_NO,
-				A.PROD_CD,
-				A.PROD_NM,
-				C.BARCD_CD,
-				B.SALE_QTY,
-				B.SALE_UPRC,
-				B.SALE_SCALE_WT,
-				B.SALE_AMT,
-				B.DC_AMT,
-				B.REAL_SALE_AMT
+		D.STORE_NM,
+		TO_CHAR(TO_DATE(B.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+		B.POS_NO,
+		B.BILL_NO,
+		A.PROD_CD,
+		A.PROD_NM,
+		C.BARCD_CD,
+		B.SALE_QTY,
+		B.SALE_UPRC,
+		B.SALE_SCALE_WT,
+		B.SALE_AMT,
+		B.DC_AMT,
+		B.REAL_SALE_AMT
 		FROM	TB_MS_PRODUCT A,
-				TB_SL_SALE_DTL B,
-				TB_MS_PRODUCT_BARCD C,
-		  		TB_MS_STORE D
+		TB_SL_SALE_DTL B,
+		TB_MS_PRODUCT_BARCD C,
+		TB_MS_STORE D
 		WHERE 	1=1
 		AND 	D.HQ_OFFICE_CD = #{hqOfficeCd}
 		<choose>

@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.kcp.CT_CLI;
-import kr.co.solbipos.adi.sms.smsSendTab.web.SmsSendTabController;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageService;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO;
@@ -17,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -43,6 +47,20 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @Controller
 @RequestMapping("/adi/sms/smsTelNoManage")
 public class SmsTelNoManageController {
+
+    //        SITE_CD = "S6186";
+//        WEB_SITEID = "";
+//        ENC_KEY = "E66DCEB95BFBD45DF9DFAEEBCB092B5DC2EB3BF0";
+//        // https로만 결과값 전송이 가능한데 개발서버는 http라 테스트 불가능
+////        RET_URL = "https://192.168.0.85:10001/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+//        RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+//        GW_URL = "https://testcert.kcp.co.kr/kcp_cert/cert_view.jsp";
+
+    String SITE_CD      = "AGSVU";
+    String WEB_SITEID   = "J21101407426";
+    String ENC_KEY      = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
+    String RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+    String GW_URL       = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
     private final SessionService sessionService;
     private final SmsTelNoManageService smsTelNoManageService;
@@ -83,7 +101,7 @@ public class SmsTelNoManageController {
     @RequestMapping(value = "/smsTelNoManage/getSmsTelNoManageList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSmsTelNoManageList(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
-                                    HttpServletResponse response, Model model) {
+                                        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -106,7 +124,7 @@ public class SmsTelNoManageController {
     @RequestMapping(value = "/smsTelNoManage/getSmsTelNoManageSave.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSmsTelNoManageSave(@RequestBody SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
+                                        HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = smsTelNoManageService.getSmsTelNoManageSave(smsTelNoManageVO, sessionInfoVO);
@@ -125,20 +143,21 @@ public class SmsTelNoManageController {
      * @since   2021.10.14
      */
     @RequestMapping(value = "/smsTelNoManage/getSmsTelNoRegisterRequest.sb", method = RequestMethod.POST)
-    public String getSmsTelNoRegisterRequest(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public void getSmsTelNoRegisterRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
 
-        System.out.println("결과 : " + request.getQueryString());
-        System.out.println("site_cd : " + request.getParameter("site_cd"));
-        System.out.println("ordr_idxx : " + request.getParameter("ordr_idxx"));
-        System.out.println("res_cd : " + request.getParameter("res_cd"));
-        System.out.println("res_msg : " + request.getParameter("res_msg"));
-        System.out.println("req_tx : " + request.getParameter("req_tx"));
-        System.out.println("cert_no : " + request.getParameter("cert_no"));
-        System.out.println("enc_cert_data2 : " + request.getParameter("enc_cert_data2"));
-        System.out.println("up_hash : " + request.getParameter("up_hash"));
-        System.out.println("dn_hash : " + request.getParameter("dn_hash"));
+        System.out.println("JH : 결과 : " + request.getQueryString());
+        System.out.println("JH : site_cd : " + request.getParameter("site_cd"));
+        System.out.println("JH : ordr_idxx : " + request.getParameter("ordr_idxx"));
+        System.out.println("JH : res_cd : " + request.getParameter("res_cd"));
+        System.out.println("JH : res_msg : " + request.getParameter("res_msg"));
+        System.out.println("JH : req_tx : " + request.getParameter("req_tx"));
+        System.out.println("JH : cert_no : " + request.getParameter("cert_no"));
+        System.out.println("JH : enc_cert_data2 : " + request.getParameter("enc_cert_data2"));
+        System.out.println("JH : up_hash : " + request.getParameter("up_hash"));
+        System.out.println("JH : dn_hash : " + request.getParameter("dn_hash"));
 
         String siteCd = request.getParameter("site_cd");
         String ordrIdxx = request.getParameter("ordr_idxx");
@@ -152,53 +171,81 @@ public class SmsTelNoManageController {
 
         CT_CLI cc = new CT_CLI();
 
+        smsTelNoManageVO.setCertId(ordrIdxx);
+        smsTelNoManageVO.setResCd(resCd);
+
+//        smsTelNoManageVO.setOrgnCd(smsTelNoManageService.getOrdrIdxx(smsTelNoManageVO));
+
         String result = "";
         if( resCd.equals( "0000" ) ){
+
+            // 로컬이나 개발은 테스트버전으로 연결되도록
+            ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequestUri();
+            String url = builder.build().toUri().toString();
 
             // dn_hash 검증
             // KCP 가 리턴해 드리는 dn_hash 와 사이트 코드, 요청번호 , 인증번호를 검증하여
             // 해당 데이터의 위변조를 방지합니다
-            if(!cc.checkValidHash(SmsSendTabController.ENC_KEY, dnHash, (siteCd + ordrIdxx + certNo))){
+            if(!cc.checkValidHash(ENC_KEY, dnHash, (siteCd + ordrIdxx + certNo))){
                 // 검증실패
                 result = "-2";
+
             }
 
-            // 인증데이터 복호화 함수
-            // 해당 함수는 암호화된 enc_cert_data2 를
-            // site_cd 와 cert_no 를 가지고 복화화 하는 함수 입니다.
-            // 정상적으로 복호화 된경우에만 인증데이터를 가져올수 있습니다.
-            cc.decryptEncCert( SmsSendTabController.ENC_KEY, siteCd, certNo, encCertData2 );
+            if(encCertData2 != null){
+                // 인증데이터 복호화 함수
+                // 해당 함수는 암호화된 enc_cert_data2 를
+                // site_cd 와 cert_no 를 가지고 복화화 하는 함수 입니다.
+                // 정상적으로 복호화 된경우에만 인증데이터를 가져올수 있습니다.
+                cc.decryptEncCert( ENC_KEY, siteCd, certNo, encCertData2 );
 
-            System.out.println("-------- 복호화 결과 --------");
-            System.out.println("phone_no : " + cc.getKeyValue("phone_no"));
-            System.out.println("comm_id : " + cc.getKeyValue("comm_id"));
-            System.out.println("user_name : " + cc.getKeyValue("user_name"));
-            System.out.println("birth_day : " + cc.getKeyValue("birth_day"));
-            System.out.println("sex_code : " + cc.getKeyValue("sex_code"));
-            System.out.println("local_code : " + cc.getKeyValue("local_code"));
-            System.out.println("ci : " + cc.getKeyValue("ci"));
-            System.out.println("di : " + cc.getKeyValue("di"));
-            System.out.println("ci_url : " + URLDecoder.decode(cc.getKeyValue("ci_url")));
-            System.out.println("di_url : " + URLDecoder.decode(cc.getKeyValue("di_url")));
-            System.out.println("web_siteid : " + cc.getKeyValue("web_siteid"));
+                System.out.println("JH : -------- 복호화 결과 --------");
+                System.out.println("JH : phone_no : " + cc.getKeyValue("phone_no"));
+                System.out.println("JH : comm_id : " + cc.getKeyValue("comm_id"));
+                System.out.println("JH : user_name : " + cc.getKeyValue("user_name"));
+                System.out.println("JH : birth_day : " + cc.getKeyValue("birth_day"));
+                System.out.println("JH : sex_code : " + cc.getKeyValue("sex_code"));
+                System.out.println("JH : local_code : " + cc.getKeyValue("local_code"));
+                System.out.println("JH : ci : " + cc.getKeyValue("ci"));
+                System.out.println("JH : di : " + cc.getKeyValue("di"));
+                System.out.println("JH : ci_url : " + URLDecoder.decode(cc.getKeyValue("ci_url")));
+                System.out.println("JH : di_url : " + URLDecoder.decode(cc.getKeyValue("di_url")));
+                System.out.println("JH : web_siteid : " + cc.getKeyValue("web_siteid"));
 
-            SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
-            smsTelNoManageVO.setCertId(ordrIdxx);
+                System.out.println("---------------------------");
+            }
+
             smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
 
-           if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == -1){
-               // 기등록번호
-               result = "-1";
-           } else {
-               // 정상등록
-               result = "0";
-           }
-        } else {
-            result = resCd;
-        }
-        model.addAttribute("result", result);
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            if(smsTelNoManageService.getSmsTelNoManageChk(smsTelNoManageVO, sessionInfoVO) != 0){
+                // 기등록번호
+                out.println("<script>alert('기존에 등록된 전화번호입니다.'); window.close();</script>");
+                out.flush();
+            } else {
+                if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == 1){
 
-        return "adi/sms/smsSend/smsTelNoRequest";
+                    // 정상등록
+                    out.println("<script>alert('정상등록되었습니다.'); window.close();</script>");
+                    out.flush();
+                } else {
+
+                    // 인증성공 + DB저장실패
+                    out.println("<script>alert('본인인증에 성공했으나 저장에 문제가 있습니다. 고객센터로 문의해주세요.'); window.close();</script>");
+                    out.flush();
+                }
+            }
+        } else {
+            // 실패코드 저장
+            smsTelNoManageVO.setTelNo("");
+            smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO);
+
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");
+            out.flush();
+        }
     }
 
     /**
@@ -215,11 +262,77 @@ public class SmsTelNoManageController {
     @RequestMapping(value = "/smsTelNoManage/getSmsTelNoManageSaveUpdate.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSmsTelNoManageSaveUpdate(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
-                                           HttpServletResponse response, Model model) {
+                                              HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = smsTelNoManageService.getSmsTelNoManageSaveUpdate(smsTelNoManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 값 가져감
+     *
+     * @param
+     * @param
+     * @param
+     * @param
+     * @return  Object
+     * @author  권지현
+     * @since   2021.11.12
+     */
+    @RequestMapping(value = "/smsTelNoManage/getVal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVal(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        System.out.println("컨트롤러 진입");
+
+        String ORDR_IDXX = new SimpleDateFormat("yyyyMMddHHmmssSSSSSSS").format(new Date());
+
+        System.out.println("주문번호 " + ORDR_IDXX);
+
+        CT_CLI       cc      = new CT_CLI();
+
+        String UP_HASH       = "";
+        UP_HASH = cc.makeHashData( ENC_KEY, SITE_CD   +
+                ORDR_IDXX +
+                ""   +
+                ""   +
+                "00" +
+                "00" +
+                "00" +
+                ""   +
+                ""
+        );
+
+        System.out.println("주문번호 " + UP_HASH);
+
+        DefaultMap<String> result = new DefaultMap<>();
+        result.put("site_cd", SITE_CD);
+        result.put("web_siteid", WEB_SITEID);
+        result.put("gw_url", GW_URL);
+        result.put("Ret_URL", RET_URL);
+        result.put("ordr_idxx", ORDR_IDXX);
+        result.put("up_hash", UP_HASH);
+
+        System.out.println("세션 ID " + sessionInfoVO.getSessionId());
+
+        result.put("sessionId", sessionInfoVO.getSessionId());
+
+        System.out.println("결과1 " + result);
+
+//        List<String> result2 = new java.awt.List()
+//        result2.add(0,SITE_CD);
+//        result2.add(1,WEB_SITEID);
+//        result2.add(2,RET_URL);
+//        result2.add(3,GW_URL);
+//        result2.add(4,ORDR_IDXX);
+//        result2.add(5,UP_HASH);
+//
+//        System.out.println("결과2 " + result2);
 
         return returnJson(Status.OK, result);
     }

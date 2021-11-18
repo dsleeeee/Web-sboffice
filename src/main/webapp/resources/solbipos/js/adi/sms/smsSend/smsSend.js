@@ -147,6 +147,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 if (confirm(messages["smsSend.telNoConfirm"])) {
                     // 발신번호 사전등록 팝업
                     $scope.wjSmsTelNoRegisterLayer.show(true);
+                    var scope = agrid.getScope("smsTelNoRegisterCtrl");
+                    scope.getVal();
                     event.preventDefault();
 
                 } else {
@@ -681,6 +683,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // 발신번호추가
     $scope.telNoAdd = function() {
         $scope.wjSmsTelNoRegisterLayer.show(true);
+        var scope = agrid.getScope("smsTelNoRegisterCtrl");
+        scope.getVal();
         event.preventDefault();
     };
 

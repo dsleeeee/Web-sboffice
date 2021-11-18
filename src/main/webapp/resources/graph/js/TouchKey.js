@@ -153,13 +153,13 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       var params = {};
       params.tukeyGrpCd = $scope.touchKeyGrp;
       $.postJSON("/base/prod/touchKey/touchKey/noTouchKey.sb", params, function(result) {
-        if(result.data.list.length != 0){ // 터치키미적용상품이 없으면 팝업창을 안띄움
-          $scope._broadcast('showPopUpNoTouchKey', $scope.touchKeyGrp);
-        }
-      },
-      function(result){
-        s_alert.pop(result.message);
-      });
+            if(result.data.list.length != 0){ // 터치키미적용상품이 없으면 팝업창을 안띄움
+              $scope._broadcast('showPopUpNoTouchKey', $scope.touchKeyGrp);
+            }
+          },
+          function(result){
+            s_alert.pop(result.message);
+          });
     }
 
     // 기능수행 종료 : 반드시 추가
@@ -178,13 +178,13 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
         params.prodClassCd = prodClassCd;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-          function(response){
-            var prodClassInfo = {};
-            prodClassInfo.prodClassCd = prodClassCd;
-            prodClassInfo.prodClassCdNm = response.data.data;
-            $scope.setProdClassInfo(prodClassInfo);
-            $scope._broadcast('touchKeyCtrl');
-          }
+            function(response){
+              var prodClassInfo = {};
+              prodClassInfo.prodClassCd = prodClassCd;
+              prodClassInfo.prodClassCdNm = response.data.data;
+              $scope.setProdClassInfo(prodClassInfo);
+              $scope._broadcast('touchKeyCtrl');
+            }
         );
       }
     });
@@ -250,75 +250,75 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
         scopeLayer.$apply(function(){
           //scopeLayer._popConfirm("신규 그룹으로 터치키를 생성하시겟습니까?", function() {
 
-            // 저장 파라미터 설정
-            var params = {};
-            params.copyTukeyGrpCd = scopeLayer.copyTouchKeyGrp;
-            // 가상로그인 대응
-            if (document.getElementsByName('sessionId')[0]) {
-              params.sid = document.getElementsByName('sessionId')[0].value;
-            }
+          // 저장 파라미터 설정
+          var params = {};
+          params.copyTukeyGrpCd = scopeLayer.copyTouchKeyGrp;
+          // 가상로그인 대응
+          if (document.getElementsByName('sessionId')[0]) {
+            params.sid = document.getElementsByName('sessionId')[0].value;
+          }
 
-            // 저장수행
-            $scope._postJSONSave.withPopUp("/base/prod/touchKey/touchKey/copyTouchKeyGrp.sb", params, function (response) {
+          // 저장수행
+          $scope._postJSONSave.withPopUp("/base/prod/touchKey/touchKey/copyTouchKeyGrp.sb", params, function (response) {
 
-              // 메시지
-              $scope._popMsg(messages["cmm.saveSucc"]);
+            // 메시지
+            $scope._popMsg(messages["cmm.saveSucc"]);
 
-              var scope = agrid.getScope("touchKeyCtrl");
+            var scope = agrid.getScope("touchKeyCtrl");
 
-              // 새로 저장한 그룹코드 값으로 selectBox 셋팅
-              setTimeout(function () {
-                scope.touchKeyGrp = response.data.data;
-                scope.touchKeyGrpCombo.selectedValue = response.data.data;
+            // 새로 저장한 그룹코드 값으로 selectBox 셋팅
+            setTimeout(function () {
+              scope.touchKeyGrp = response.data.data;
+              scope.touchKeyGrpCombo.selectedValue = response.data.data;
 
-                // 터치키 재조회
-                document.getElementById('btnSrchTouchKey').click();
+              // 터치키 재조회
+              document.getElementById('btnSrchTouchKey').click();
 
-              }, 50);
+            }, 50);
 
-              // 터치키 그룹 코드 재조회
-              $.ajax({
-                type: 'POST',
-                async: false,
-                cache: false,
-                dataType: 'json',
-                data: params,
-                url: '/base/prod/touchKey/touchKey/getTouchKeyGrp.sb',
-                success: function(data){
+            // 터치키 그룹 코드 재조회
+            $.ajax({
+              type: 'POST',
+              async: false,
+              cache: false,
+              dataType: 'json',
+              data: params,
+              url: '/base/prod/touchKey/touchKey/getTouchKeyGrp.sb',
+              success: function(data){
 
-                  var list = data.data.list;
-                  var comboArray = [];
-                  var comboData  = {};
+                var list = data.data.list;
+                var comboArray = [];
+                var comboData  = {};
 
-                  for (var i = 0; i < list.length; i++) {
-                    comboData       = {};
-                    comboData.name  = list[i].name;
-                    comboData.value = list[i].value;
-                    comboArray.push(comboData);
-                  }
-
-                  touchKeyGrpData = comboArray;
-                  scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
-                  scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
-                  scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
+                for (var i = 0; i < list.length; i++) {
+                  comboData       = {};
+                  comboData.name  = list[i].name;
+                  comboData.value = list[i].value;
+                  comboArray.push(comboData);
                 }
-              });
 
-              // 터치키 그룹이 있으므로, 보여주기
-              $("#btnSrchTouchKey").css("display", "");
-              $("#btnNewGrp").css("display", "");
-              //$("#btnCancleNewGrp").css("display", "");
-              $("#touchKeyGrpCombo").attr("disabled", false);
-              $("#touchKeyGrpCombo").css('background-color', '#FFFFFF');
-              $("#btnApplyStore").css("display", "");
-              $("#trTouchKeyGrp").css("display", "");
-              $("#trApplyStore").css("display", "");
-
-              // 터치키 저장 기본 수정 Flag로 셋팅
-              $("#hdNewGrp").val("N");
-
+                touchKeyGrpData = comboArray;
+                scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
+                scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
+                scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
+              }
             });
-        //});
+
+            // 터치키 그룹이 있으므로, 보여주기
+            $("#btnSrchTouchKey").css("display", "");
+            $("#btnNewGrp").css("display", "");
+            //$("#btnCancleNewGrp").css("display", "");
+            $("#touchKeyGrpCombo").attr("disabled", false);
+            $("#touchKeyGrpCombo").css('background-color', '#FFFFFF');
+            $("#btnApplyStore").css("display", "");
+            $("#trTouchKeyGrp").css("display", "");
+            $("#trApplyStore").css("display", "");
+
+            // 터치키 저장 기본 수정 Flag로 셋팅
+            $("#hdNewGrp").val("N");
+
+          });
+          //});
         });
       }
     });
@@ -405,26 +405,26 @@ $(document).ready(function() {
       // be used if we know that all keys are defined in the language specific file)
       mxResources.loadDefaultBundle = false;
       var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage)
-        || mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
+          || mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
 
       // Fixes possible asynchronous requests
       mxUtils.getAll(
-        [bundle, STYLE_PATH + '/touchKey.xml'],
-        function (xhr) {
-          // Adds bundle text to resources
-          mxResources.parse(xhr[0].getText());
+          [bundle, STYLE_PATH + '/touchKey.xml'],
+          function (xhr) {
+            // Adds bundle text to resources
+            mxResources.parse(xhr[0].getText());
 
-          // Configures the default graph theme
-          var themes = {};
-          themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
+            // Configures the default graph theme
+            var themes = {};
+            themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
-          // Main
-          var touchKey = new Touchkey(themes);
-          touchKeyGraph = touchKey;
-        },
-        function () {
-          document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
-        });
+            // Main
+            var touchKey = new Touchkey(themes);
+            touchKeyGraph = touchKey;
+          },
+          function () {
+            document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
+          });
     }
   })();
 
@@ -463,7 +463,7 @@ Touchkey = function (themes) {
   $(document).click(function (event) {
     // 터치키분류, 상품영역, 우측 기능키영역등 특정 영역 제외
     if(!$(event.target).closest('#classWrap').length && !$(event.target).closest('#prodWrap').length
-      && !$(event.target).closest('#fontStyleWrap') && !$(event.target).closest('#colorStyleWrap') ) {
+        && !$(event.target).closest('#fontStyleWrap') && !$(event.target).closest('#colorStyleWrap') ) {
       // 그래프영역 선택 초기화
       cGraph.getSelectionModel().clear();
       pGraph.getSelectionModel().clear();
@@ -688,36 +688,66 @@ Sidebar.prototype.makeDragSource = function () {
       try {
         // 버튼
         var btn = graph.insertVertex(parent, null,
-          null,
-          pos.x, pos.y,
-          graph.touchKeyInfo.width, graph.touchKeyInfo.height,
-          "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=01;rounded=0;"
+            null,
+            pos.x, pos.y,
+            graph.touchKeyInfo.width, graph.touchKeyInfo.height,
+            "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=01;rounded=0;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["01"].off, new Array(btn));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
         graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
 
+        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
+        }else{
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["01"].off, new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
+        }
+
         // 버튼에 품목명 추가
         var prodTag = graph.insertVertex(btn, null,
-          item.prodNm,
-          5, 5,
-          0, 0,
-          "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=02;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;"
+            item.prodNm,
+            5, 5,
+            0, 0,
+            "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=02;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
         graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["02"].size, new Array(prodTag));
 
+        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $('#hdCopyFont02').val().split("/")[0], new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $('#hdCopyFont02').val().split("/")[1], new Array(prodTag));
+        }else{
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["02"].size, new Array(prodTag));
+        }
+
         // 버튼에 금액 추가
         var priceTag = graph.insertVertex(btn, null,
-          addComma(item.saleUprc),
-          5, graph.touchKeyInfo.y / 2 + 10,
-          0, 0,
-          "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=03;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align:right;"
+            addComma(item.saleUprc),
+            5, graph.touchKeyInfo.y / 2 + 10,
+            0, 0,
+            "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=03;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align:right;"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
         graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["03"].size, new Array(priceTag));
+
+        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $('#hdCopyFont03').val().split("/")[0], new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $('#hdCopyFont03').val().split("/")[1], new Array(priceTag));
+        }else{
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["03"].size, new Array(priceTag));
+        }
 
         // 하위 셀의 사이즈 자동조정
         graph.updateCellSize(prodTag, false);
@@ -773,8 +803,8 @@ function Graph(container, themes) {
 
   var loadStylesheet = function (graph) {
     var node = (graph.themes != null) ? graph.themes[graph.defaultThemeName] :
-      (!mxStyleRegistry.dynamicLoading) ? null :
-        mxUtils.load(STYLE_PATH + '/touchKey.xml').getDocumentElement();
+        (!mxStyleRegistry.dynamicLoading) ? null :
+            mxUtils.load(STYLE_PATH + '/touchKey.xml').getDocumentElement();
 
     if (node != null) {
       var dec = new mxCodec(node.ownerDocument);
@@ -1763,6 +1793,54 @@ Format.prototype.initElements = function () {
     });
   });
 
+  // 터치키스타일 복사 버튼
+  addClickHandler(document.getElementById('btnTouchKeyStyleCopy'), function () {
+    var prodArea = format.touchkey.prodArea;
+    var cell = prodArea.getSelectionCells()[0];
+    if (cell) {
+      var initFillColor; // 채우기
+      var style02, initFontColor02, initFontSize02; // 폰트(터치키) - 상품명 사이즈와 컬러
+      var style03, initFontColor03, initFontSize03; // 폰트(터치키) - 금액 사이즈와 컬러
+
+      style02 = graph.getCellStyle(cell.children[0]);
+      initFillColor = style02['fillColor'];
+      initFontColor02 = style02['fontColor'];
+      initFontSize02 = style02['fontSize'];
+
+      style03 = graph.getCellStyle(cell.children[1]);
+      initFontColor03 = style03['fontColor'];
+      initFontSize03 = style03['fontSize'];
+
+      // 복사한 터치키스타일 보여주고 hidden에 Setting
+      document.getElementById("pickCopyFillColor").value = initFillColor;
+      document.getElementById("pickCopyFont02").value = initFontColor02;
+      document.getElementById("pickCopyFont03").value = initFontColor03;
+      $("#lblCopyFont02").text(" " + initFontSize02 + "pt");
+      $("#lblCopyFont03").text(" " + initFontSize03 + "pt");
+
+      $("#hdCopyFillColor").val(initFillColor);
+      $("#hdCopyFont02").val(initFontColor02 + "/" + initFontSize02);
+      $("#hdCopyFont03").val(initFontColor03 + "/" + initFontSize03);
+
+      $("#divTouchKeyStyleCopy").css("display", "");
+    }
+  });
+
+  // 터치키스타일 적용 버튼
+  addClickHandler(document.getElementById('btnTouchKeyStyleApply'), function () {
+
+    // 적용 버튼 toggle
+    if($("#hdTouchKeyStyleApply").val() === "N"){
+      $("#hdTouchKeyStyleApply").val("Y"); // 적용 버튼 활성화
+      $("#btnTouchKeyStyleApply").css('background-color', '#1e88e5');
+      $("#btnTouchKeyStyleApply").css('color', '#ffffff');
+    }else{
+      $("#hdTouchKeyStyleApply").val("N"); // 적용 버튼 비활성화
+      $("#btnTouchKeyStyleApply").css('background-color', '#ebf5ff');
+      $("#btnTouchKeyStyleApply").css('color', '#337dde');
+    }
+  });
+
   // 버튼구분 콤보 DropBoxDataMap
   var cellTypeComboData = [
     {"name":"상품명","value":"02"},
@@ -1814,9 +1892,9 @@ Format.prototype.initElements = function () {
           var rgb = s.value;
           rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
           s.value = (rgb && rgb.length === 4) ? "#" +
-            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+              ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+              ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+              ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
         }
         var cell = s.graph.getSelectionCells()[0];
         // 하위속성 존재시 하위속성 색상도 같이 변경
@@ -1841,9 +1919,9 @@ Format.prototype.initElements = function () {
           var rgb = s.value;
           rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
           s.value = (rgb && rgb.length === 4) ? "#" +
-            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+              ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+              ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+              ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
         }
         var cellType = graph.cellTypeCombo.selectedValue;
         var cell = s.graph.getSelectionCells()[0];
@@ -2337,7 +2415,7 @@ Format.prototype.save = function () {
         params += "&sid=" + document.getElementsByName('sessionId')[0].value;
       }
       new mxXmlRequest(TOUCHKEY_SAVE_URL, params).send(onload, onerror);
-  }
+    }
     else {
       scope.$apply(function(){
         scope.$broadcast('loadingPopupInactive');
@@ -2438,15 +2516,15 @@ Graph.prototype.initClassArea = function (prodArea) {
     // 터치키분류 ID 중복방지를 위해 체크
     var grpId = graph.classPrefix + graph.nextGrpId;
     for(var i=0; i<9999; i++){
-        if( graph.model.getCell(grpId) )
-        {
-              graph.nextGrpId++;
-              grpId = graph.classPrefix + graph.nextGrpId;
-        }
-        else
-        {
-            break;
-        }
+      if( graph.model.getCell(grpId) )
+      {
+        graph.nextGrpId++;
+        grpId = graph.classPrefix + graph.nextGrpId;
+      }
+      else
+      {
+        break;
+      }
     }
 
     // 상품영역과 id 공유를 위해 classCd 커스텀태그로 별도 관리 : 20180920 노현수
@@ -2462,11 +2540,11 @@ Graph.prototype.initClassArea = function (prodArea) {
       try {
 
         var btn = graph.insertVertex(parent,
-          grpId,
-          mxResources.get('className'),
-          x, y,
-          graph.touchKeyInfo.width, graph.touchKeyInfo.height,
-          "classCd=" + classCd + ";rounded=0;styleCd=" + styleCd + ";"
+            grpId,
+            mxResources.get('className'),
+            x, y,
+            graph.touchKeyInfo.width, graph.touchKeyInfo.height,
+            "classCd=" + classCd + ";rounded=0;styleCd=" + styleCd + ";"
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles.off, new Array(btn));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles.off, new Array(btn));
@@ -2526,8 +2604,8 @@ Graph.prototype.initClassArea = function (prodArea) {
         //상품영역 스크롤했던 것 초기화
         prodArea.initProdPaging();
       }
-        document.getElementById('keyStyle').classList.remove("hideNav");
-        document.getElementById('keyStyleAd').classList.remove("hideNav");
+      document.getElementById('keyStyle').classList.remove("hideNav");
+      document.getElementById('keyStyleAd').classList.remove("hideNav");
     },
     mouseMove: function (sender, me) {
     },
@@ -2561,7 +2639,7 @@ Graph.prototype.initClassArea = function (prodArea) {
   /**
    * 페이징 버튼
    */
-    //페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
+      //페이지 이동 위치 셀의크기 * 페이지에 컬럼 수
   var scrollWidth = graph.touchKeyInfo.x * graph.COL_PER_PAGE;
   var pageNoWrap = document.getElementById('classPageNoText');
   var classWrap = document.getElementById('classWrap');
@@ -2595,7 +2673,7 @@ Graph.prototype.initClassArea = function (prodArea) {
       graph.selectCellForEvent(firstCell);
       layer = prodArea.model.getCell(firstCell.getId());
       prodArea.switchLayer(layer);
-    // 그외 페이지에서는 x,y 좌표 계산하여 찾기
+      // 그외 페이지에서는 x,y 좌표 계산하여 찾기
     } else {
       // 터치키분류 Row 수 만큼 검색
       for (var r = 0; r < window.MAX_CLASS_ROW; r++) {
@@ -2718,12 +2796,12 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
       // 클릭 영역에 셀이 있는 경우에만...
       if (me.state !== null) {
         // 버튼속성 뷰 활성화
-          document.getElementById('keyStyle').classList.remove("hideNav");
-          document.getElementById('keyStyleAd').classList.remove("hideNav");
+        document.getElementById('keyStyle').classList.remove("hideNav");
+        document.getElementById('keyStyleAd').classList.remove("hideNav");
       } else {
         graph.getSelectionModel().clear();
-          document.getElementById('keyStyle').classList.add("hideNav");
-          document.getElementById('keyStyleAd').classList.add("hideNav");
+        document.getElementById('keyStyle').classList.add("hideNav");
+        document.getElementById('keyStyleAd').classList.add("hideNav");
       }
     },
     mouseMove: function (sender, me) {
@@ -2812,3 +2890,4 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
   mxConstants.HIGHLIGHT_OPACITY = 30;
   mxConstants.HIGHLIGHT_SIZE = 8;
 })();
+

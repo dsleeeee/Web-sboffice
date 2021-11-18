@@ -205,6 +205,12 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 $scope.flex.collectionView.itemsEdited[i].status = "U";
+
+                // 매핑상품코드 앞뒤 공백 및 엔터값 제거
+                if($scope.flex.collectionView.itemsEdited[i].mapProdCd !== "" && $scope.flex.collectionView.itemsEdited[i].mapProdCd !== null){
+                    $scope.flex.collectionView.itemsEdited[i].mapProdCd = $scope.flex.collectionView.itemsEdited[i].mapProdCd.trim().removeEnter();
+                }
+
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
 
