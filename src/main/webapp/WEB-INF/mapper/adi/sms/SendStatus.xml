@@ -435,4 +435,80 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+
+
+    <!-- 공통 화면 상단 SMS전송(당일) 표시 - [125 SMS전송현황표시]에 등록된 본사 하위 매장인지 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCmmMainTopStoreCount" parameterType="SendStatusVO" resultType="DefaultMap">
+        /* SendStatusMapper.getCmmMainTopStoreCount */
+        SELECT
+        COUNT(tcn.NMCODE_ITEM_1) AS STORE_CNT
+        FROM TB_CM_NMCODE tcn,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tcn.NMCODE_GRP_CD = '125'
+        AND tms.STORE_CD = #{orgnCd}
+        AND tms.HQ_OFFICE_CD (+)= tcn.NMCODE_ITEM_1
+    </select>
+
+    <!-- 공통 화면 상단 SMS전송(당일) 표시 - 오늘 SMS전송 건수 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCmmMainTopSmsSendCount" parameterType="SendStatusVO" resultType="DefaultMap">
+        /* SendStatusMapper.getCmmMainTopSmsSendCount */
+        SELECT
+        SUM(TOT_WAIT_QTY) + SUM(TOT_SEND_QTY) + SUM(TOT_FAIL_QTY) AS TOT_QTY,
+        SUM(TOT_WAIT_QTY) AS TOT_WAIT_QTY,
+        SUM(TOT_SEND_QTY) AS TOT_SEND_QTY,
+        SUM(TOT_FAIL_QTY) AS TOT_FAIL_QTY
+        FROM
+        (
+            (
+                SELECT
+                NVL(hdt.TOT_WAIT_QTY, 0) AS TOT_WAIT_QTY,
+                NVL(hdt.TOT_SUCCESS_QTY + hdt.TOT_FAIL_QTY, 0) AS TOT_SEND_QTY,
+                0 AS TOT_FAIL_QTY
+                FROM HCS_DDSMS_T hdt
+                WHERE 1=1
+                AND hdt.OGN_CD = #{orgnCd}
+                AND hdt.SMS_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+            )
+            UNION ALL
+            (
+                SELECT
+                (CASE WHEN ssser.READY_FG = '0' THEN (SELECT COUNT(*) FROM SDK_SMS_SEND_ENC_MEMBER_READY WHERE SMS_SEND_SEQ = ssser.SMS_SEND_SEQ) ELSE 0 END) AS TOT_WAIT_QTY,
+                0 AS TOT_SEND_QTY,
+                (CASE WHEN ssser.READY_FG = '2' THEN (SELECT COUNT(*) FROM SDK_SMS_SEND_ENC_MEMBER_READY WHERE SMS_SEND_SEQ = ssser.SMS_SEND_SEQ) ELSE 0 END) AS TOT_FAIL_QTY
+                FROM SDK_SMS_SEND_ENC_READY ssser
+                WHERE 1=1
+                AND ssser.USER_ID = #{orgnCd}
+                AND SUBSTR(ssser.SEND_DATE, 0, 8) = TO_CHAR(SYSDATE, 'yyyyMMdd')
+            )
+            UNION ALL
+            (
+                SELECT
+                (CASE WHEN ssser.READY_FG = '0' THEN (SELECT COUNT(*) FROM SDK_SMS_SEND_ENC_MEMBER_READY WHERE SMS_SEND_SEQ = ssser.SMS_SEND_SEQ) ELSE 0 END) AS TOT_WAIT_QTY,
+                0 AS TOT_SEND_QTY,
+                (CASE WHEN ssser.READY_FG = '2' THEN (SELECT COUNT(*) FROM SDK_SMS_SEND_ENC_MEMBER_READY WHERE SMS_SEND_SEQ = ssser.SMS_SEND_SEQ) ELSE 0 END) AS TOT_FAIL_QTY
+                FROM SDK_MMS_SEND_ENC_READY ssser
+                WHERE 1=1
+                AND ssser.USER_ID = #{orgnCd}
+                AND SUBSTR(ssser.SEND_DATE, 0, 8) = TO_CHAR(SYSDATE, 'yyyyMMdd')
+            )
+            UNION ALL
+            (
+                SELECT
+                0 AS TOT_WAIT_QTY,
+                0 AS TOT_SEND_QTY,
+                0 AS TOT_FAIL_QTY
+                FROM dual
+            )
+        )
+    </select>
+
 </mapper>

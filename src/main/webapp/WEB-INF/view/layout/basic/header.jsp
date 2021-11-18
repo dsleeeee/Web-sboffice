@@ -7,6 +7,8 @@
 <c:set var="fixedMenuData" value="${sessionScope.sessionInfo.fixedMenuData}" />
 <c:set var="historyMenuSize" value="${fn:length(historyMenuData)}" />
 <c:set var="sessionId" value="${param.sid}" />
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <%-- 사용자정보영역 --%>
 <div class="topBar">
@@ -19,6 +21,17 @@
      <span>
        <em>[${sessionScope.sessionInfo.orgnCd}]</em>
        <em>${sessionScope.sessionInfo.orgnNm}</em>
+     </span>
+     <%-- SMS전송 --%>
+     <span id="spSmsTodayCntChange" style="display: none;">
+        <em>&nbsp; { SMS전송(당일) -></em>
+        <em>대기 :</em>
+        <em><label id="lblSmsWaitCnt"></label></em>
+        <em>, 전송 :</em>
+        <em><label id="lblSmsSendCnt"></label></em>
+        <em>, 실패 :</em>
+        <em><label id="lblSmsFailCnt"></label></em>
+        <em>}</em>
      </span>
   </div>
   <div class="userInfo">
@@ -104,5 +117,10 @@
 </div>
 <%--//고정메뉴--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=2018100401" charset="utf-8"></script>
+<script type="text/javascript">
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20211117.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>
