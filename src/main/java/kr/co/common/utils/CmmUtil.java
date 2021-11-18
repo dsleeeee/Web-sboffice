@@ -140,6 +140,36 @@ public class CmmUtil {
 
     /**
      *
+     * 아이디 유효성 체크(숫자만 입력도 가능, 현재는 BBQ 전용)
+     *
+     * @param value
+     * @return String
+     * @comment
+     * @author 노현수
+     * @since 2018. 06. 08.
+     */
+    public static EmpResult checkUserId2(String value) {
+
+        int len = value.length();
+
+        boolean flag = Pattern.matches(".*[ㄱ-ㅎ|ㅏ-ㅣ|가-힝]+.*$", value);
+        boolean flag3 = Pattern.matches("[a-zA-Z0-9]*", value);
+
+        // 2021.11.17 BBQ는 매장코드가 숫자로만 되어있어서, 매장코드를 웹 사용자 아이디로 그대로 사용하기 위해 숫자로만 이뤄진 웹 사용자 아이디도 생성 가능하도록 변경.
+
+        if( len > 12 || len < 8 ) {
+            return EmpResult.USER_ID_LENGHTH_REGEXP;
+        } else if( flag == true ) {
+            return EmpResult.USER_ID_CANNOT_USE_HANGEUL;
+        } else if( flag3 == false ) {
+            return EmpResult.USER_ID_ONLY_ENG_NUM_CHAR;
+        }
+
+        return EmpResult.SUCCESS;
+    }
+
+    /**
+     *
      * 비밀번호 유효성 체크
      *
      * @param value

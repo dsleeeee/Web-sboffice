@@ -1296,8 +1296,18 @@ public class StoreManageServiceImpl implements StoreManageService{
     /** 웹 사용자 아이디 체크 */
     public EmpResult chkUserId(StoreManageVO storeManageVO){
 
-        if(CmmUtil.checkUserId(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
+        // 매장코드 수동입력 이면서, 8자 이상사용인 경우 웹 사용자 아이디 입력 체크함.
+        // BBQ는 웹 사용자 아이디 생성시 숫자로만 생성도 가능하지만 그 외는 영문자 필수로 넣어야함.
+        // BBQ와 그외 매장을 구분해서 아이디 체크를 해야함.
+
+        // BBQ 외
+        /*if(CmmUtil.checkUserId(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
             return CmmUtil.checkUserId(storeManageVO.getUserId());
+        }*/
+
+        // BBQ
+        if(CmmUtil.checkUserId2(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
+            return CmmUtil.checkUserId2(storeManageVO.getUserId());
         }
 
         // 웹사용자아이디 중복체크
