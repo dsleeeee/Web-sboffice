@@ -829,6 +829,8 @@
     <typeAlias alias="mobileStoreRtnStatusVO" type="kr.co.solbipos.mobile.sale.status.storeRtnStatus.service.MobileStoreRtnStatusVO"/>
     <!-- (모바일) 모바일 매장매출 > 주문현황 -->
     <typeAlias alias="mobileOrderStatusVO" type="kr.co.solbipos.mobile.sale.status.orderStatus.service.MobileOrderStatusVO"/>
+    <!-- (모바일) 모바일 매장매출 > 최종교환권번호 -->
+    <typeAlias alias="mobileVoucherNoVO" type="kr.co.solbipos.mobile.sale.status.voucherNo.service.MobileVoucherNoVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>
