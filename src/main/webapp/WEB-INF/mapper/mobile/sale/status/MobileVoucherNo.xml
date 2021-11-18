@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileVoucherNo.xml
+    (모바일) 매출현황 > 최종교환권번호
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2021.11.16     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.voucherNo.service.impl.MobileVoucherNoMapper">
+
+    <!-- 최종교환권번호 조회 -->
+    <!--
+        TABLE    : TB_PS_EXACTCALC
+        COMMENTS : 최종교환권번호 조회
+    -->
+    <select id="getVoucherNo"  parameterType="mobileVoucherNoVO" resultType="String">
+        /* MobileVoucherNoMapper.getVoucherNo */
+       SELECT MAX(CHG_TICKET_NO)  CHG_TICKET_NO
+         FROM (
+                SELECT NVL(MAX(SALE_DATE), TO_CHAR(SYSDATE,'YYYYMMDD')) SALE_DATE
+                  FROM TB_PS_EXACTCALC
+                 WHERE STORE_CD = #{storeCd}
+                   AND REG_SEQ = '00'
+                   AND CLOSE_FG = '1'
+               ) A,
+               TB_SL_SALE_DTL B
+        WHERE B.STORE_CD = #{storeCd}
+          AND B.SALE_DATE = A.SALE_DATE
+    </select>
+
+</mapper>

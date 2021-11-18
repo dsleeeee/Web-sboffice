@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    WeightMapper.xml
+    중량별 매출조회 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.11.08     신규생성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.weight.weight.service.impl.WeightMapper">
+
+    <!-- 중량별 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_SALE_DTL, TB_MS_PRODUCT_BARCD
+        PARAM    : weightVO
+        COMMENTS : 중량별 매출을 조회한다.
+    -->
+	<select id="getWeightList" parameterType="weightVO" resultType="DefaultMap">
+        /* USE : WeightMapper.getWeightList */
+		SELECT 	A.STORE_CD,
+		       	D.STORE_NM,
+		  		TO_CHAR(TO_DATE(B.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+				B.POS_NO,
+				B.BILL_NO,
+				A.PROD_CD,
+				A.PROD_NM,
+				C.BARCD_CD,
+				B.SALE_QTY,
+				B.SALE_UPRC,
+				B.SALE_SCALE_WT,
+				B.SALE_AMT,
+				B.DC_AMT,
+				B.REAL_SALE_AMT
+		FROM	TB_MS_PRODUCT A,
+				TB_SL_SALE_DTL B,
+				TB_MS_PRODUCT_BARCD C,
+		  		TB_MS_STORE D
+		WHERE 	1=1
+		AND 	D.HQ_OFFICE_CD = #{hqOfficeCd}
+		<choose>
+			<when test='orgnFg != null and orgnFg == "S"'>
+				AND A.STORE_CD = #{storeCd}
+			</when>
+			<when test='orgnFg != null and orgnFg == "H"'>
+				<if test='storeCd != null and storeCd != ""'>
+					AND A.STORE_CD IN
+					<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+						#{item}
+					</foreach>
+				</if>
+			</when>
+		</choose>
+		AND 	A.PROD_TYPE_FG = '3'
+		AND		B.STORE_CD = A.STORE_CD
+		AND		B.PROD_CD = A.PROD_CD
+		AND		B.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		AND		C.STORE_CD (+) = A.STORE_CD
+		AND		C.PROD_CD (+) = A.PROD_CD
+		AND 	D.STORE_CD = A.STORE_CD
+		<if test='prodCd != null and prodCd !=""'>
+			AND A.PROD_CD = #{prodCd}
+		</if>
+		<if test='prodNm != null and prodNm !=""'>
+			AND A.PROD_NM = #{prodNm}
+		</if>
+		ORDER BY A.STORE_CD, B.SALE_DATE, B.POS_NO, B.BILL_NO
+	</select>
+
+</mapper>
