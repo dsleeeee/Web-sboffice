@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%-- 본사 사원 신규등록 & 수정 팝업 --%>
 <wj-popup control="hqEmpRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:700px;">
@@ -214,6 +215,19 @@
               </div>
             </td>
           </tr>
+          <tr id="trUserHqBrandYn" style="display: none;">
+              <%-- 관리브랜드 --%>
+              <th>
+                  <s:message code="hqEmp.userHqBrand"/>
+              </th>
+              <td>
+                  <input type="text" class="sb-input w70" id="srchHqBrandNm" ng-model="hqEmpRegistInfo.hqBrandNm" ng-click="popUpHqBrandCd()" style="float: left;"
+                         placeholder="<s:message code="hqEmp.userHqBrand" /> 선택" readonly/>
+                  <input type="hidden" id="_hqBrandCd" name="hqBrandCd" ng-model="hqEmpRegistInfo.hqBrandCd" disabled />
+              </td>
+              <th></th>
+              <td></td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -231,5 +245,11 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=2018112103" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20211122.03" charset="utf-8"></script>
+
+<%-- 관리브랜드 조회 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 

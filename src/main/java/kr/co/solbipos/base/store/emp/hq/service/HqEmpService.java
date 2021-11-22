@@ -61,4 +61,6 @@ public interface HqEmpService {
     /** 메뉴 권한 삭제 */
     int removeAuth(HqEmpMenuVO[] hqEmpMenu, SessionInfoVO sessionInfoVO);
 
+    /** 미적용 관리브랜드 조회 팝업 - 조회 */
+    List<DefaultMap<String>> getSearchNoUserHqBrandList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 }

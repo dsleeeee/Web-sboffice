@@ -80,6 +80,17 @@
             <th></th>
             <td></td>
           </tr>
+          <tr id="trUserHqBrandYnDtl" style="display: none;">
+            <%-- 관리브랜드 --%>
+            <th>
+              <s:message code="hqEmp.userHqBrand"/>
+            </th>
+            <td>
+              {{hqEmp.hqBrandNm}}
+            </td>
+            <th></th>
+            <td></td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -97,4 +108,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20181121.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20211122.01" charset="utf-8"></script>

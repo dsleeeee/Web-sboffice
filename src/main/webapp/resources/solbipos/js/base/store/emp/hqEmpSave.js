@@ -53,6 +53,13 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.hqEmpRegistInfo;
   };
 
+  // 브랜드사용여부 가 1일때만
+  if(userHqBrandYn == "1") {
+    $("#trUserHqBrandYn").css("display", "")
+  } else {
+    $("#trUserHqBrandYn").css("display", "none")
+  }
+
   // 해당 scope 호출
   $scope.$on("hqEmpRegistCtrl", function(event, data) {
 
@@ -149,6 +156,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params      = $scope.hqEmpRegistInfo;
     params.pwdChgFg = false; // 비밀번호 변경여부
+    params.chkHqBrandCd = $scope.hqEmpRegistInfo.hqBrandCd;
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/hq/regist.sb", params, function(response){
 
@@ -182,6 +190,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     var params = $scope.hqEmpRegistInfo;
+    params.chkHqBrandCd = $scope.hqEmpRegistInfo.hqBrandCd;
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/hq/save.sb", params, function(response){
 
@@ -224,5 +233,24 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     return;
   };
 
+  // 관리브랜드 팝업
+  $scope.popUpHqBrandCd = function() {
+    var params = $scope.hqEmpRegistInfo;
+    $scope.setHqEmpRegistInfo(params);
+
+    $scope.wjSearchUserHqBrandLayer.show(true);
+    event.preventDefault();
+  };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+
+    // 관리브랜드 조회 팝업 핸들러 추가
+    $scope.wjSearchUserHqBrandLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('searchNoUserHqBrandTotalCtrl', $scope.getHqEmpRegistInfo());
+      }, 50)
+    });
+  });
 
 }]);

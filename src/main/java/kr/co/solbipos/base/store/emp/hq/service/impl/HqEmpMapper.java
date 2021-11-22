@@ -90,4 +90,12 @@ public interface HqEmpMapper {
     /** 권한 전체 삭제 */
     int removeAuthAll(HqEmpMenuVO hqEmpMenus);
 
+    /** 미적용 관리브랜드 조회 팝업 - 조회 */
+    List<DefaultMap<String>> getSearchNoUserHqBrandList(HqEmpVO hqEmpVO);
+
+    /** 관리브랜드 삭제 */
+    int getUserHqBrandSaveUpdate(HqEmpVO hqEmpVO);
+
+    /** 관리브랜드 저장 */
+    int getUserHqBrandSaveInsert(HqEmpVO hqEmpVO);
 }

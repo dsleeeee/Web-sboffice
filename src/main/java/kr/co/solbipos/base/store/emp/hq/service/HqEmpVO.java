@@ -80,6 +80,15 @@ public class HqEmpVO extends PageVO {
     /** 전체기간 체크 */
     private boolean chkDt;
 
+    /** 브랜드코드 */
+    private String hqBrandCd;
+
+    /** 본사브랜드코드 */
+    private String chkHqBrandCd;
+
+    /** 본사코드 */
+    private String[] hqBrandCdList;
+
     /**
      * @return the hqOfficeCd
      */
@@ -363,4 +372,18 @@ public class HqEmpVO extends PageVO {
     public void setChkDt(boolean chkDt) {
         this.chkDt = chkDt;
     }
+
+    public String getHqBrandCd() { return hqBrandCd; }
+
+    public void setHqBrandCd(String hqBrandCd) { this.hqBrandCd = hqBrandCd; }
+
+    public String getChkHqBrandCd() { return chkHqBrandCd; }
+
+    public void setChkHqBrandCd(String chkHqBrandCd) { this.chkHqBrandCd = chkHqBrandCd; }
+
+    public String[] getHqBrandCdList() {
+        return hqBrandCdList;
+    }
+
+    public void setHqBrandCdList(String[] hqBrandCdList) { this.hqBrandCdList = hqBrandCdList; }
 }

@@ -184,6 +184,10 @@
         <wj-flex-grid-column header="<s:message code="hqEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqEmp.mpNo"/>" binding="mpNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+
+        <%--조회시 필요--%>
+        <wj-flex-grid-column header="<s:message code="hqEmp.hqBrandCd"/>" binding="hqBrandCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.hqBrandNm"/>" binding="hqBrandNm" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -201,6 +205,9 @@
   var serviceFg  = ${ccu.getCommCode("007")};
   var webUseYn   = ${ccu.getCommCode("067")};
   var smsRecvYn  = ${ccu.getCommCode("072")};
+
+  <%-- 브랜드사용여부 --%>
+  var userHqBrandYn = '${userHqBrandYn}';
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112102" charset="utf-8"></script>

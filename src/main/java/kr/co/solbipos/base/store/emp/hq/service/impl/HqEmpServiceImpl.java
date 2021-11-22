@@ -116,6 +116,19 @@ public class HqEmpServiceImpl implements HqEmpService {
                 }
             }
         }
+
+        // 관리브랜드
+        if (hqEmpVO.getChkHqBrandCd() != null && !"".equals(hqEmpVO.getChkHqBrandCd())) {
+            // 브랜드코드 array 값 세팅
+            String chkHqBrandCd[] = hqEmpVO.getChkHqBrandCd().split(",");
+            for(int i=0; i < chkHqBrandCd.length; i++) {
+                hqEmpVO.setHqBrandCd(chkHqBrandCd[i]);
+
+                // 관리브랜드 저장
+                hqEmpMapper.getUserHqBrandSaveInsert(hqEmpVO);
+            }
+        }
+
         return EmpResult.SUCCESS;
     }
 
@@ -145,6 +158,20 @@ public class HqEmpServiceImpl implements HqEmpService {
                 if( hqEmpMapper.saveWbUserInfo(hqEmpVO) != 1 ) {
                     return EmpResult.FAIL;
                 }
+            }
+        }
+
+        // 관리브랜드 삭제
+        hqEmpMapper.getUserHqBrandSaveUpdate(hqEmpVO);
+        // 관리브랜드
+        if (hqEmpVO.getChkHqBrandCd() != null && !"".equals(hqEmpVO.getChkHqBrandCd())) {
+            // 브랜드코드 array 값 세팅
+            String chkHqBrandCd[] = hqEmpVO.getChkHqBrandCd().split(",");
+            for(int i=0; i < chkHqBrandCd.length; i++) {
+                hqEmpVO.setHqBrandCd(chkHqBrandCd[i]);
+
+                // 관리브랜드 저장
+                hqEmpMapper.getUserHqBrandSaveInsert(hqEmpVO);
             }
         }
 
@@ -367,6 +394,20 @@ public class HqEmpServiceImpl implements HqEmpService {
         return procCnt;
     }
 
+    /** 미적용 관리브랜드 조회 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchNoUserHqBrandList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
 
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 본사브랜드코드
+        if (hqEmpVO.getChkHqBrandCd() != null && !"".equals(hqEmpVO.getChkHqBrandCd())) {
+            // 본사브랜드코드 array 값 세팅
+            String[] chkVendrCd = hqEmpVO.getChkHqBrandCd().split(",");
+            hqEmpVO.setHqBrandCdList(chkVendrCd);
+        }
+
+        return hqEmpMapper.getSearchNoUserHqBrandList(hqEmpVO);
+    }
 
 }

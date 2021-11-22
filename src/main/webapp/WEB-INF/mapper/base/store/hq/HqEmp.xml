@@ -21,44 +21,60 @@
     <select id="getHqEmpList" parameterType="hqEmpVO" resultType="DefaultMap">
         /* USE : HqEmpMapper.getHqEmpList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT the.EMP_NO,
-               the.EMP_NM,
-               the.USER_ID,
-               the.WEB_USE_YN,
-               the.SERVICE_FG,
-               the.MP_NO,
-               the.SMS_RECV_YN
-               <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_HQ_EMPLOYEE the
-         WHERE the.USE_YN = 'Y'
-           AND the.HQ_OFFICE_CD = #{hqOfficeCd}
-         <if test="chkDt == false">
-           <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-           AND the.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
-           </if>
-         </if>
-         <if test="empNo != null and empNo != ''">
-           AND the.EMP_NO LIKE '%'|| #{empNo} ||'%'
-         </if>
-         <if test="empNm != null and empNm != ''">
-           AND the.EMP_NM LIKE '%'|| #{empNm} ||'%'
-         </if>
-         <if test="userId != null and userId != ''">
-           AND the.USER_ID LIKE '%'|| #{userId} ||'%'
-         </if>
-         <if test="serviceFg != null and serviceFg != ''">
-           AND the.SERVICE_FG = #{serviceFg}
-         </if>
-         <if test="mpNo != null and mpNo != ''">
-           AND the.MP_NO LIKE '%'|| #{mpNo} ||'%'
-         </if>
-         <if test="webUseYn != null and webUseYn.toString() != ''">
-           AND the.WEB_USE_YN = #{webUseYn}
-         </if>
-         <if test="smsRecvYn != null and smsRecvYn != ''">
-           AND the.SMS_RECV_YN = #{smsRecvYn}
-         </if>
-         ORDER BY the.REG_DT DESC
+        SELECT
+        the.EMP_NO,
+        the.EMP_NM,
+        the.USER_ID,
+        the.WEB_USE_YN,
+        the.SERVICE_FG,
+        the.MP_NO,
+        the.SMS_RECV_YN,
+        twub.HQ_BRAND_CD,
+        twub.HQ_BRAND_NM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_EMPLOYEE the,
+        (
+            SELECT
+            twub.USER_ID,
+            LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD,
+            LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
+            FROM TB_WB_USER_BRAND twub,
+            TB_HQ_BRAND thb
+            WHERE 1=1
+            AND thb.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
+            GROUP BY twub.USER_ID
+        ) twub
+        WHERE the.USE_YN = 'Y'
+        AND the.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+              AND the.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            </if>
+        </if>
+        <if test="empNo != null and empNo != ''">
+            AND the.EMP_NO LIKE '%'|| #{empNo} ||'%'
+        </if>
+        <if test="empNm != null and empNm != ''">
+            AND the.EMP_NM LIKE '%'|| #{empNm} ||'%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND the.USER_ID LIKE '%'|| #{userId} ||'%'
+        </if>
+        <if test="serviceFg != null and serviceFg != ''">
+            AND the.SERVICE_FG = #{serviceFg}
+        </if>
+        <if test="mpNo != null and mpNo != ''">
+            AND the.MP_NO LIKE '%'|| #{mpNo} ||'%'
+        </if>
+        <if test="webUseYn != null and webUseYn.toString() != ''">
+            AND the.WEB_USE_YN = #{webUseYn}
+        </if>
+        <if test="smsRecvYn != null and smsRecvYn != ''">
+            AND the.SMS_RECV_YN = #{smsRecvYn}
+        </if>
+        AND twub.USER_ID (+)= the.USER_ID
+        ORDER BY the.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -71,19 +87,35 @@
     -->
     <select id="getHqEmpDtlInfo" parameterType="hqEmpVO" resultType="DefaultMap">
         /* USE : HqEmpMapper.getHqEmpDtlInfo */
-        SELECT the.EMP_NO,
-               the.EMP_NM,
-               the.SMS_RECV_YN,
-               (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='072' AND tcn.NMCODE_CD = the.SMS_RECV_YN ) AS SMS_RECV_YN_NM,
-               the.USER_ID,
-               the.WEB_USE_YN,
-               (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='067' AND tcn.NMCODE_CD = the.WEB_USE_YN ) AS WEB_USE_YN_NM,
-               the.SERVICE_FG,
-               (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='007' AND tcn.NMCODE_CD = the.SERVICE_FG ) AS SERVICE_FG_NM,
-               the.MP_NO
-          FROM TB_HQ_EMPLOYEE the
-         WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND the.EMP_NO = #{empNo}
+        SELECT
+        the.EMP_NO,
+        the.EMP_NM,
+        the.SMS_RECV_YN,
+        (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='072' AND tcn.NMCODE_CD = the.SMS_RECV_YN ) AS SMS_RECV_YN_NM,
+        the.USER_ID,
+        the.WEB_USE_YN,
+        (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='067' AND tcn.NMCODE_CD = the.WEB_USE_YN ) AS WEB_USE_YN_NM,
+        the.SERVICE_FG,
+        (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='007' AND tcn.NMCODE_CD = the.SERVICE_FG ) AS SERVICE_FG_NM,
+        the.MP_NO,
+        twub.HQ_BRAND_CD,
+        twub.HQ_BRAND_NM
+        FROM TB_HQ_EMPLOYEE the,
+        (
+            SELECT
+            twub.USER_ID,
+            LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD,
+            LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
+            FROM TB_WB_USER_BRAND twub,
+            TB_HQ_BRAND thb
+            WHERE 1=1
+            AND thb.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
+            GROUP BY twub.USER_ID
+        ) twub
+        WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND the.EMP_NO = #{empNo}
+        AND twub.USER_ID (+)= the.USER_ID
     </select>
 
     <!-- 본사 사원 웹 사용자 조회 -->
@@ -613,5 +645,64 @@
                              AND twu.USER_ID = the.USER_ID)
            AND RESRCE_CD = #{resrceCd}
     </delete>
+
+    <!-- 미적용 관리브랜드 조회 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSearchNoUserHqBrandList" parameterType="hqEmpVO" resultType="DefaultMap">
+        /* HqEmpMapper.getSearchNoUserHqBrandList */
+        SELECT
+        thb.HQ_BRAND_CD,
+        thb.HQ_BRAND_NM
+        FROM TB_HQ_BRAND thb
+        WHERE 1=1
+        AND thb.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='chkHqBrandCd != null and chkHqBrandCd != ""'>
+            AND thb.HQ_BRAND_CD NOT IN
+            <foreach collection="hqBrandCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY thb.HQ_BRAND_CD
+    </select>
+
+    <!-- 관리브랜드 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getUserHqBrandSaveUpdate" parameterType="hqEmpVO">
+        /* HqEmpMapper.getUserHqBrandSaveUpdate */
+        DELETE TB_WB_USER_BRAND
+        WHERE 1=1
+        AND USER_ID = #{userId}
+    </delete>
+
+    <!-- 관리브랜드 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getUserHqBrandSaveInsert" parameterType="hqEmpVO">
+        /* HqEmpMapper.getUserHqBrandSaveInsert */
+        INSERT INTO TB_WB_USER_BRAND
+        (
+            USER_ID,
+            HQ_BRAND_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{userId},
+            #{hqBrandCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
 
 </mapper>

@@ -23,6 +23,13 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 선택된 사원
   $scope.selectedHqEmp;
 
+  // 브랜드사용여부 가 1일때만
+  if(userHqBrandYn == "1") {
+    $("#trUserHqBrandYnDtl").css("display", "")
+  } else {
+    $("#trUserHqBrandYnDtl").css("display", "none")
+  }
+
   // _broadcast
   $scope.$on("hqEmpDetailCtrl", function(event, data) {
     $scope.selectedHqEmp = data;

@@ -4,6 +4,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpService;
@@ -51,12 +54,14 @@ public class HqEmpController {
 
     private final SessionService sessionService;
     private final HqEmpService hqEmpService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public HqEmpController(SessionService sessionService, HqEmpService hqEmpService) {
+    public HqEmpController(SessionService sessionService, HqEmpService hqEmpService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.hqEmpService = hqEmpService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -66,6 +71,13 @@ public class HqEmpController {
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String view(Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 브랜드사용여부
+        String userHqBrandYn = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"));
+        model.addAttribute("userHqBrandYn", userHqBrandYn);
+
         return "base/store/emp/hqEmp";
     }
 
@@ -315,4 +327,26 @@ public class HqEmpController {
         return returnJson(Status.OK, cnt);
     }
 
+    /**
+     * 미적용 관리브랜드 조회 팝업 - 조회
+     *
+     * @param hqEmpVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 11. 22.
+     */
+    @RequestMapping(value = "/getSearchNoUserHqBrandList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchNoUserHqBrandList(HqEmpVO hqEmpVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = hqEmpService.getSearchNoUserHqBrandList(hqEmpVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, hqEmpVO);
+    }
 }
