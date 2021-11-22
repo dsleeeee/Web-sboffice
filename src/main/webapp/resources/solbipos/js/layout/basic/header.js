@@ -150,7 +150,7 @@ function smsTodayCntChange(time){
                   // 대기,전송,실패 수량이 있는 경우만
                   if(result.data.result.totQty > 0) {
                       hiddenYn = true;
-                      $("#spSmsTodayCntChange").css("display", "");
+                      $(".smsTodayLayer").toggle();
                       $("#lblSmsWaitCnt").text(result.data.result.totWaitQty);
                       $("#lblSmsSendCnt").text(result.data.result.totSendQty);
                       $("#lblSmsFailCnt").text(result.data.result.totFailQty);
@@ -165,7 +165,7 @@ function smsTodayCntChange(time){
       // 표시 후 3초 뒤 숨김
       if(time == closeTime) {
           hiddenYn = false;
-          $("#spSmsTodayCntChange").css("display", "none");
+          $(".smsTodayLayer").toggle();
       }
   }
 }

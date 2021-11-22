@@ -22,18 +22,15 @@
        <em>[${sessionScope.sessionInfo.orgnCd}]</em>
        <em>${sessionScope.sessionInfo.orgnNm}</em>
      </span>
-     <%-- SMS전송 --%>
-     <span id="spSmsTodayCntChange" style="display: none;">
-        <em>&nbsp; { SMS전송(당일) -></em>
-        <em>대기 :</em>
-        <em><label id="lblSmsWaitCnt"></label></em>
-        <em>, 전송 :</em>
-        <em><label id="lblSmsSendCnt"></label></em>
-        <em>, 실패 :</em>
-        <em><label id="lblSmsFailCnt"></label></em>
-        <em>}</em>
-     </span>
   </div>
+
+  <%-- SMS전송 --%>
+  <div class="smsTodayLayer" style="display: none;">
+    <p>
+      <span>SMS(당일) -> 대기 : <label id="lblSmsWaitCnt"></label> , 전송 : <label id="lblSmsSendCnt"></label> , 실패 : <label id="lblSmsFailCnt"></label></span>
+    </p>
+  </div>
+
   <div class="userInfo">
     <%--새로운 공지 있는경우 span추가--%>
     <%--<a href="#" class="userNotice">--%>
@@ -122,5 +119,5 @@
   var orgnCd = "${orgnCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20211117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20211118.02" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>

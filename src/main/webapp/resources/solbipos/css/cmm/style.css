@@ -497,6 +497,15 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .userLayer li:nth-child(2) {background:url(../img/ic_userlayer_pw.png) 30px center no-repeat;}
 .userLayer li:nth-child(3) {background:url(../img/ic_userlayer_logout.png) 30px center no-repeat;}
 
+.smsTodayLayer {background:#f3f3f3; border-radius:5px; box-shadow:0 0 5px 0 RGBA(0,0,0,0.7); position:absolute; top:6px; left:30%; width:370px; display:block;
+    backface-visibility: visible!important;
+    animation-name: flip;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+.smsTodayLayer p {background:#f3f3f3; padding:5px 5px 0px 5px; border-radius:5px;}
+.smsTodayLayer p span {display:block; font-size:0.875em; line-height:2em; color:#222; text-align:center;}
+
 @keyframes flip {
     from {
         -webkit-transform: perspective(400px) rotate3d(0,1,0,90deg);
