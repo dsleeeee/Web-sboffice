@@ -124,12 +124,15 @@ app.controller('searchNoProdVendrCtrl', ['$scope', '$http', function ($scope, $h
     $scope.$on("searchNoProdVendrTotalCtrl", function(event, data) {
         if(data.prodCd === "" || data.prodCd === undefined || data.prodCd === null) {
             $("#lblTitle").text(" [신규]");
+            $("#lblChkVendrCd").text("");
+            $("#lblChkVendrNm").text("");
+            $("#lblProdCd").text("");
         } else {
             $("#lblTitle").text(" [" + data.prodCd + "]");
+            $("#lblChkVendrCd").text(data.vendrCd);
+            $("#lblChkVendrNm").text(data.vendrNm);
+            $("#lblProdCd").text(data.prodCd);
         }
-        $("#lblChkVendrCd").text(data.vendrCd);
-        $("#lblChkVendrNm").text(data.vendrNm);
-        $("#lblProdCd").text(data.prodCd);
 
         // 미적용 상품 거래처
         var storeScope = agrid.getScope('searchNoProdVendrCtrl');

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSearchProdVendrLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;height:500px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSearchProdVendrLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:460px;" fade-in="false" fade-out="false">
 
     <div class="wj-dialog wj-dialog-columns">
         <%-- header --%>
@@ -24,7 +24,7 @@
                 <div class="w50 fl" ng-controller="searchProdVendrCtrl">
                     <div class="wj-TblWrap mr10" style="height:370px; overflow-y: hidden;">
                         <div class="oh" style="height: 30px;"></div>
-                        <div class="oh mt20">
+                        <div class="oh mt10">
                             <%-- 적용 상품 거래처 --%>
                             <span class="s14 bk fl lh25 mr10" >
                                 <s:message code="prod.searchProdVendr.prodVendr"/>
@@ -47,8 +47,8 @@
 
                                     <!-- define columns -->
                                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrCd"/>" binding="vendrCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrNm"/>" binding="vendrNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrCd"/>" binding="vendrCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrNm"/>" binding="vendrNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
 
                                 </wj-flex-grid>
                             </div>
@@ -64,7 +64,7 @@
                                 <s:message code="cmm.apply" />
                             </button>
                         </div>
-                        <div class="oh mt20">
+                        <div class="oh mt10">
                             <%-- 미적용 상품 거래처 --%>
                              <span class="s14 bk fl lh25 mr10" >
                                 <s:message code="prod.searchProdVendr.noProdVendr"/>
@@ -87,8 +87,8 @@
 
                                     <!-- define columns -->
                                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrCd"/>" binding="vendrCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrNm"/>" binding="vendrNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrCd"/>" binding="vendrCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="prod.searchProdVendr.vendrNm"/>" binding="vendrNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
 
                                 </wj-flex-grid>
                             </div>
@@ -103,4 +103,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchProdVendr.js?ver=20201224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchProdVendr.js?ver=20201224.03" charset="utf-8"></script>
