@@ -473,4 +473,22 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         return storeTypeMapper.getStoreGroupCombo(storeTypeVO);
     }
 
+    /** 매장타입관리 - 매장타입변경이력조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreTypeChgHist(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
+
+        storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeTypeMapper.getStoreTypeChgHist(storeTypeVO);
+    }
+
+    /** 매장타입관리 - 메뉴그룹변경이력조회 */
+    @Override
+    public List<DefaultMap<Object>> getMenuGroupChgHist(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
+
+        storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeTypeMapper.getMenuGroupChgHist(storeTypeVO);
+    }
+
 }

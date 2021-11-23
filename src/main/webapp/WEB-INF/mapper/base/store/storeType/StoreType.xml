@@ -1009,4 +1009,92 @@
         }
     </select>
 
+    <!-- 매장타입관리 - 매장타입변경이력조회 -->
+    <!--
+        TABLE    : TB_LG_HQ_STORE_TYPE_LOG
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입변경이력을 조회한다.
+    -->
+    <select id="getStoreTypeChgHist" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreTypeChgHist */
+        SELECT TO_CHAR(TO_DATE(A.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                A.PROC_FG,
+                A.STORE_TYPE_CD,
+                A.STORE_TYPE_NM,
+                A.B_STORE_TYPE_NM,
+                A.REMARK,
+                A.B_REMARK,
+                A.OPTION01,
+                A.B_OPTION01,
+                A.USE_YN,
+                A.B_USE_YN,
+                A.REG_DT,
+                A.B_REG_DT,
+                A.REG_ID,
+                A.B_REG_ID,
+                A.MOD_DT,
+                A.B_MOD_DT,
+                A.MOD_ID,
+                A.B_MOD_ID
+          FROM TB_LG_HQ_STORE_TYPE_LOG A
+         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND A.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+           AND A.STORE_TYPE_CD LIKE '%' || #{storeTypeCd} || '%'
+        </if>
+        <if test="storeTypeNm != null and storeTypeNm != ''">
+           AND A.STORE_TYPE_NM LIKE '%' || #{storeTypeNm} || '%'
+        </if>
+        <if test="procFg != null and procFg != ''">
+           AND A.PROC_FG = #{procFg}
+        </if>
+         ORDER
+            BY A.PROC_DT DESC
+    </select>
+
+    <!-- 매장타입관리 - 메뉴그룹변경이력조회 -->
+    <!--
+        TABLE    :
+        PARAM    : storeTypeVO
+        COMMENTS : 메뉴그룹변경이력조회 조회한다.
+    -->
+    <select id="getMenuGroupChgHist" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getMenuGroupChgHist */
+        SELECT TO_CHAR(TO_DATE(A.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
+                A.PROC_FG,
+                A.STORE_GROUP_CD,
+                B.STORE_GROUP_NM,
+                A.REMARK,
+                A.B_REMARK,
+                A.OPTION01,
+                A.B_OPTION01,
+                A.USE_YN,
+                A.B_USE_YN,
+                A.REG_DT,
+                A.B_REG_DT,
+                A.REG_ID,
+                A.B_REG_ID,
+                A.MOD_DT,
+                A.B_MOD_DT,
+                A.MOD_ID,
+                A.B_MOD_ID
+          FROM TB_LG_HQ_STORE_PROD_GROUP_LOG A,
+                TB_HQ_STORE_PROD_GROUP B
+         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND A.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+           AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+           AND A.STORE_GROUP_CD = B.STORE_GROUP_CD
+        <if test="storeGroupCd != null and storeGroupCd != ''">
+            AND A.STORE_GROUP_CD LIKE '%' || #{storeGroupCd} || '%'
+        </if>
+        <if test="storeGroupNm != null and storeGroupNm != ''">
+            AND B.STORE_GROUP_NM LIKE '%' || #{storeGroupNm} || '%'
+        </if>
+        <if test="procFg != null and procFg != ''">
+            AND A.PROC_FG = #{procFg}
+        </if>
+        ORDER
+            BY A.PROC_DT DESC
+    </select>
+
 </mapper>

@@ -693,12 +693,9 @@ Sidebar.prototype.makeDragSource = function () {
             graph.touchKeyInfo.width, graph.touchKeyInfo.height,
             "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=01;rounded=0;"
         );
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["01"].off, new Array(btn));
-        graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
-        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
 
         if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
-          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(btn));
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), new Array(btn));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
           graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
         }else{
@@ -714,14 +711,11 @@ Sidebar.prototype.makeDragSource = function () {
             0, 0,
             "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=02;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;"
         );
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["02"].size, new Array(prodTag));
 
         if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
-          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(prodTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $('#hdCopyFont02').val().split("/")[0], new Array(prodTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $('#hdCopyFont02').val().split("/")[1], new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont02").val().split("/")[0], new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont02").val().split("/")[1], new Array(prodTag));
         }else{
           graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
@@ -735,14 +729,11 @@ Sidebar.prototype.makeDragSource = function () {
             0, 0,
             "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=03;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align:right;"
         );
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
-        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["03"].size, new Array(priceTag));
 
         if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
-          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $('#hdCopyFillColor').val(), new Array(priceTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $('#hdCopyFont03').val().split("/")[0], new Array(priceTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $('#hdCopyFont03').val().split("/")[1], new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont03").val().split("/")[0], new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont03").val().split("/")[1], new Array(priceTag));
         }else{
           graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
@@ -2794,10 +2785,29 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
         graph.classArea.cellEditor.stopEditing(true);
       }
       // 클릭 영역에 셀이 있는 경우에만...
-      if (me.state !== null) {
+      if (me.state !== undefined) {
         // 버튼속성 뷰 활성화
         document.getElementById('keyStyle').classList.remove("hideNav");
         document.getElementById('keyStyleAd').classList.remove("hideNav");
+
+        // 선택한 셀 값 파악
+        var cells = graph.getSelectionCells();
+        var cell = graph.getSelectionCells()[0];
+
+        // 선택한 셀이 있으면 스타일 적용
+        if (cell.children) {
+          // '적용'버튼 활성화시 복사한 스타일로 적용
+          if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+            // 배경
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), cells);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), cell.children);
+            // 상품명, 금액
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont02").val().split("/")[0], new Array(cell.children[0]));
+            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont02").val().split("/")[1], new Array(cell.children[0]));
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont03").val().split("/")[0], new Array(cell.children[1]));
+            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont03").val().split("/")[1], new Array(cell.children[1]));
+          }
+        }
       } else {
         graph.getSelectionModel().clear();
         document.getElementById('keyStyle').classList.add("hideNav");

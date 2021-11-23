@@ -82,4 +82,10 @@ public interface StoreTypeService {
     /** 매장타입관리 - 메뉴그룹조회(콤보박스용) */
     List<DefaultMap<Object>> getStoreGroupCombo(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장타입관리 - 매장타입변경이력조회 */
+    List<DefaultMap<Object>> getStoreTypeChgHist(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장타입관리 - 메뉴그룹변경이력조회 */
+    List<DefaultMap<Object>> getMenuGroupChgHist(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
+
 }
