@@ -119,4 +119,10 @@ public interface StoreTypeMapper {
     /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 시 본사 상품 > 매장 등록 > 가격 처리 PKG 호출 */
     String insertHqProductSalePriceToStore(StoreTypeVO storeTypeVO);
 
+    /** 매장타입관리 - 매장타입변경이력조회 */
+    List<DefaultMap<Object>> getStoreTypeChgHist(StoreTypeVO storeTypeVO);
+
+    /** 매장타입관리 - 메뉴그룹변경이력조회 */
+    List<DefaultMap<Object>> getMenuGroupChgHist(StoreTypeVO storeTypeVO);
+
 }

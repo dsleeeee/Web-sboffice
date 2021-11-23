@@ -70,6 +70,8 @@ public class StoreTypeVO extends PageVO {
     private String packSaleUprc;
     /** 프로시져 실행 결과 */
     private String result;
+    /** 입력구분 */
+    private String procFg;
 
 
     public String getOrgnFg() {
@@ -302,5 +304,13 @@ public class StoreTypeVO extends PageVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getProcFg() {
+        return procFg;
+    }
+
+    public void setProcFg(String procFg) {
+        this.procFg = procFg;
     }
 }

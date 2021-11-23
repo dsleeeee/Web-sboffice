@@ -512,4 +512,48 @@ public class StoreTypeController {
         return ReturnUtil.returnListJson(Status.OK, result, storeTypeVO);
     }
 
+    /**
+     * 매장타입관리 - 매장타입변경이력조회
+     * @param storeTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 11. 19.
+     */
+    @RequestMapping(value = "/storeType/getStoreTypeChgHist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreTypeChgHist(StoreTypeVO storeTypeVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeTypeService.getStoreTypeChgHist(storeTypeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 매장타입관리 - 메뉴그룹변경이력조회
+     * @param storeTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2021. 11. 19.
+     */
+    @RequestMapping(value = "/storeType/getMenuGroupChgHist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMenuGroupChgHist(StoreTypeVO storeTypeVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeTypeService.getMenuGroupChgHist(storeTypeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
 }
