@@ -1199,6 +1199,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
      // 중복체크
      var params    = {};
      params.userId = $("#userId").val();
+     params.erpLinkHq = erpLinkHq; // erp 연동 매장 여부 파악
      $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/chkUserId.sb", params, function(response){
 
        var result = response.data.data;

@@ -148,6 +148,9 @@ public class StoreManageVO extends PageVO {
     /** BBQ 매장코드 */
     private String bbqStoreCd;
 
+    /** ERP를 연동 본사 여부  */
+    private String erpLinkHq;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -771,5 +774,13 @@ public class StoreManageVO extends PageVO {
 
     public void setBbqStoreCd(String bbqStoreCd) {
         this.bbqStoreCd = bbqStoreCd;
+    }
+
+    public String getErpLinkHq() {
+        return erpLinkHq;
+    }
+
+    public void setErpLinkHq(String erpLinkHq) {
+        this.erpLinkHq = erpLinkHq;
     }
 }

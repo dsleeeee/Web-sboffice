@@ -1297,17 +1297,18 @@ public class StoreManageServiceImpl implements StoreManageService{
     public EmpResult chkUserId(StoreManageVO storeManageVO){
 
         // 매장코드 수동입력 이면서, 8자 이상사용인 경우 웹 사용자 아이디 입력 체크함.
-        // BBQ는 웹 사용자 아이디 생성시 숫자로만 생성도 가능하지만 그 외는 영문자 필수로 넣어야함.
-        // BBQ와 그외 매장을 구분해서 아이디 체크를 해야함.
+        // BBQ매장은 웹 사용자 아이디 생성시 숫자로만 생성도 가능하지만 그 외 매장은 영문자 필수로 넣어야함.
+        // 따라서, BBQ 매장과 그 외 매장을 구분해서 아이디 체크를 해야함.
+        // 공통코드 [123]ERP매장연동(BBQ)을 기준으로 아이디 체크 구분.
 
-        // BBQ 외
-        /*if(CmmUtil.checkUserId(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
-            return CmmUtil.checkUserId(storeManageVO.getUserId());
-        }*/
-
-        // BBQ
-        if(CmmUtil.checkUserId2(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
-            return CmmUtil.checkUserId2(storeManageVO.getUserId());
+        if(storeManageVO.getErpLinkHq() != null && !"".equals(storeManageVO.getErpLinkHq())){
+            if(CmmUtil.checkUserId2(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
+                return CmmUtil.checkUserId2(storeManageVO.getUserId());
+            }
+        }else{
+            if(CmmUtil.checkUserId(storeManageVO.getUserId()) != EmpResult.SUCCESS) {
+                return CmmUtil.checkUserId(storeManageVO.getUserId());
+            }
         }
 
         // 웹사용자아이디 중복체크
