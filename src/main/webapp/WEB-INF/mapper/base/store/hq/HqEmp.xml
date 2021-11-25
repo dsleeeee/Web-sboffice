@@ -659,6 +659,7 @@
         FROM TB_HQ_BRAND thb
         WHERE 1=1
         AND thb.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thb.USE_YN = 'Y'
         <if test='chkHqBrandCd != null and chkHqBrandCd != ""'>
             AND thb.HQ_BRAND_CD NOT IN
             <foreach collection="hqBrandCdList" item="item" open="("  separator="," close=")" >
