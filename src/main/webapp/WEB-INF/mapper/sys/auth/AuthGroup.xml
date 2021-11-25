@@ -181,13 +181,13 @@
                 AND B.USE_YN = 'Y'
               UNION ALL
              SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
+               FROM TB_WB_AUTHOR_EXCEPT_V01 A
               WHERE A.USER_ID = #{userId}
                 AND A.INCLD_EXCLD_FG = 'I'
                 AND A.USE_YN = 'Y'
               MINUS
              SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
+               FROM TB_WB_AUTHOR_EXCEPT_V01 A
               WHERE A.USER_ID = #{userId}
                 AND A.INCLD_EXCLD_FG = 'E'
                 AND A.USE_YN = 'Y'
@@ -236,13 +236,13 @@
                 AND B.USE_YN = 'Y'
               UNION ALL
              SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
+               FROM TB_WB_AUTHOR_EXCEPT_V01 A
               WHERE A.USER_ID = #{userId}
                 AND A.INCLD_EXCLD_FG = 'I'
                 AND A.USE_YN = 'Y'
               MINUS
              SELECT A.RESRCE_CD
-               FROM TB_WB_AUTHOR_EXCEPT A
+               FROM TB_WB_AUTHOR_EXCEPT_V01 A
               WHERE A.USER_ID = #{userId}
                 AND A.INCLD_EXCLD_FG = 'E'
                 AND A.USE_YN = 'Y'

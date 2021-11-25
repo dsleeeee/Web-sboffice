@@ -114,7 +114,7 @@
 
     <!-- 가상로그인 권한 체크 -->
     <!--
-        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
         PARAM    : virtualLoginVO
         COMMENTS : 가상로그인 수행시 해당 권한을 체크한다.
     -->
@@ -145,7 +145,7 @@
                 SELECT
                     twae.RESRCE_CD
                 FROM
-                    TB_WB_AUTHOR_EXCEPT twae
+                    TB_WB_AUTHOR_EXCEPT_V01 twae
                 WHERE
                     twae.USER_ID = #{0}
                     AND twae.RESRCE_CD = '000085'
@@ -156,7 +156,7 @@
 
     <!-- 가상로그인 권한 체크 -->
     <!--
-        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        TABLE    : TB_WB_RESRCE_INFO, TB_WB_AUTHOR_GRP_RESRCE, TB_WB_USER_INFO
         PARAM    : virtualLoginVO
         COMMENTS : 가상로그인 수행시 해당 권한을 체크한다.
     -->

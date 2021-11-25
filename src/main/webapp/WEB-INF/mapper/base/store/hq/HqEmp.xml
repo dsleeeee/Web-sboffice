@@ -369,7 +369,7 @@
 
     <!-- 사용 메뉴 조회 -->
     <!--
-        TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
         PARAM    : hqEmpVO
         COMMENTS : 사용 메뉴를 조회한다.
     -->
@@ -410,7 +410,7 @@
           SELECT twa.RESRCE_CD
             FROM TB_HQ_EMPLOYEE the,
                  TB_WB_USER_INFO twu,
-                 TB_WB_AUTHOR_EXCEPT twa
+                 TB_WB_AUTHOR_EXCEPT_V01 twa
            WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
              AND the.EMP_NO = '0000'
              AND twu.USER_ID = the.USER_ID
@@ -421,7 +421,7 @@
           SELECT twa.RESRCE_CD
             FROM TB_HQ_EMPLOYEE the,
                  TB_WB_USER_INFO twu,
-                 TB_WB_AUTHOR_EXCEPT twa
+                 TB_WB_AUTHOR_EXCEPT_V01 twa
            WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
              AND the.EMP_NO = #{empNo}
              AND twu.USER_ID = the.USER_ID
@@ -434,7 +434,7 @@
 
     <!-- 미사용 메뉴 조회 -->
     <!--
-        TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
         PARAM    : hqEmpVO
         COMMENTS : 미사용 메뉴를 조회한다.
     -->
@@ -465,7 +465,7 @@
           SELECT twa.RESRCE_CD
             FROM TB_HQ_EMPLOYEE the,
                  TB_WB_USER_INFO twu,
-                 TB_WB_AUTHOR_EXCEPT twa
+                 TB_WB_AUTHOR_EXCEPT_V01 twa
            WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
              AND the.EMP_NO = #{empNo}
              AND twu.USER_ID = the.USER_ID
@@ -542,7 +542,7 @@
 
     <!-- 권한예외 복사 시, 복사기준본사의 권한예외 값 조회 -->
     <!--
-        TABLE    : TB_WB_AUTHOR_EXCEPT
+        TABLE    : TB_WB_AUTHOR_EXCEPT_V01
         PARAM    : hqEmpMenuVO
         COMMENTS : 권한예외 복사 시, 복사기준본사의 권한예외 값을 조회한다.
     -->
@@ -552,7 +552,7 @@
                 RESRCE_CD,
                 INCLD_EXCLD_FG,
                 USE_YN
-          FROM TB_WB_AUTHOR_EXCEPT
+          FROM TB_WB_AUTHOR_EXCEPT_V01
          WHERE USER_ID = (SELECT twu.USER_ID
                              FROM TB_HQ_EMPLOYEE the,
                                    TB_WB_USER_INFO twu
@@ -612,13 +612,13 @@
 
     <!-- 메뉴권한 확인-->
     <!--
-        TABLE    : TB_WB_AUTHOR_EXCEPT
+        TABLE    : TB_WB_AUTHOR_EXCEPT_V01
         COMMENTS : 메뉴권한을 확인한다.
     -->
     <select id="isAuth" parameterType="DefaultMap" resultType="Integer">
         /* USE : HqEmpMapper.isAuth */
         SELECT COUNT(RESRCE_CD) AS CNT
-          FROM TB_WB_AUTHOR_EXCEPT
+          FROM TB_WB_AUTHOR_EXCEPT_V01
          WHERE USER_ID = (SELECT twu.USER_ID
                             FROM TB_HQ_EMPLOYEE the,
                                  TB_WB_USER_INFO twu
