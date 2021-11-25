@@ -116,6 +116,7 @@ app.controller('searchNoUserHqBrandCtrl', ['$scope', '$http', function ($scope, 
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 사용여부
     };
 
     // 호출시 searchNoUserHqBrandCtrl 로 안쓰고 searchNoUserHqBrandTotalCtrl 로 따로 쓴 이유
