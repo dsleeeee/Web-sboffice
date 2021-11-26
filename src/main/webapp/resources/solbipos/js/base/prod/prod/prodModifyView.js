@@ -62,6 +62,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.clearProdImage();
         // 등록/수정 모드 파악
         $scope.chkSaveMode(data);
+        // 발주상품구분
+        $scope._setComboData("_poProdFg", prodFgComboData2);
 
         // 수정 모드 시
         if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== "") {

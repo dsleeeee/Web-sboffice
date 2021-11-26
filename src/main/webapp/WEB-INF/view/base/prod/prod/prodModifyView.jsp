@@ -546,7 +546,7 @@
                 <div class="sb-select">
                   <wj-combo-box id="_poProdFg" name="poProdFg"
                     ng-model="prodModifyInfo.poProdFg"
-                    items-source="_getComboData('poProdFgComboData')"
+                    items-source="_getComboData('_poProdFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
@@ -731,6 +731,13 @@
   var gubun = "${param.gubun}";
   var kitchenprintLink = "${param.kitchenprintLink}";
 
+  var prodFgComboData2 = ${ccu.getCommCodeExcpAll("092")}; <%-- 주문상품구분 --%>
+  if(orgnFg === "STORE"){
+    prodFgComboData2.shift();
+    prodFgComboData2.shift();
+    prodFgComboData2.shift();
+  }
+
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
       $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
@@ -738,7 +745,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20211103.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20211103.05" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
