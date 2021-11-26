@@ -87,6 +87,11 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
             } else if ($scope.boardDetailFs.fullSizeYn === "N") {
                 $scope.boardDetailFs.fullSizeYn = false;
             }
+            if($scope.boardDetailFs.popupYn === "Y") {
+                $scope.boardDetailFs.popupYn = true;
+            } else if ($scope.boardDetailFs.popupYn === "N") {
+                $scope.boardDetailFs.popupYn = false;
+            }
             if($scope.boardDetailFs.targetFg === "1") {
                 $scope.boardDetailFs.targetFg = "전체";
             } else if($scope.boardDetailFs.targetFg === "2") {

@@ -109,6 +109,10 @@
                                     <input type="checkbox" id="fullSizeYn" name="fullSizeYnChk" ng-model="fullSizeYn">
                                     <label for="fullSizeYn"><s:message code='boardInfo.fullSizeYn' /></label>
                                </span>
+                                <span class="chk ml10">
+                                    <input type="checkbox" id="popupYn" name="popupYnChk" ng-model="popupYn">
+                                    <label for="popupYn"><s:message code='boardInfo.popupYn' /></label>
+                                </span>
                             </div>
                         </td>
                         <%-- 알림여부 --%>
@@ -262,4 +266,4 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210924.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20210924.11" charset="utf-8"></script>

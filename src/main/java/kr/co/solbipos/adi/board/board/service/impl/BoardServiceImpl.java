@@ -430,4 +430,15 @@ public class BoardServiceImpl implements BoardService {
 
         return result;
     }
+
+    /** 팝업 공고 조회 */
+    @Override
+    public List<DefaultMap<String>> getPopUpBoardList(SessionInfoVO sessionInfoVO) {
+        BoardVO boardVO = new BoardVO();
+        boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        boardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        boardVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return boardMapper.getPopUpBoardList(boardVO);
+    }
 }

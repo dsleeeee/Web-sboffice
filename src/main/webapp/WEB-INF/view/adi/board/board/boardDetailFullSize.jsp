@@ -56,13 +56,17 @@
                 <tr>
                     <%-- 화면 사이즈 --%>
                     <th>
-                        <s:message code="boardDetail.viewSize"/>
+                        <s:message code="boardDetail.option"/>
                     </th>
                     <td>
                         <div class="sb-select">
                                 <span class="chk ml10">
                                     <input type="checkbox" id="fullSizeYnBoardDetailFs" name="fullSizeYnChkFs" ng-model="boardDetailFs.fullSizeYn" disabled="true">
                                     <label for="fullSizeYnBoardDetailFs"><s:message code='boardDetail.fullSizeYn'/></label>
+                                </span>
+                                <span class="chk ml10">
+                                    <input type="checkbox" id="popupYnBoardDetailFs" name="popupYnChk" ng-model="boardDetailFs.popupYn" disabled="true" >
+                                    <label for="popupYnBoardDetailFs"><s:message code='boardDetail.popupYn' /></label>
                                 </span>
                         </div>
                     </td>
@@ -165,4 +169,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetailFullSize.js?ver=20210930.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetailFullSize.js?ver=20210930.07" charset="utf-8"></script>

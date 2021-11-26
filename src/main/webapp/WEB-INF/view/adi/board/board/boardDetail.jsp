@@ -52,13 +52,17 @@
                 <tr>
                     <%-- 화면 사이즈 --%>
                     <th>
-                        <s:message code="boardDetail.viewSize"/>
+                        <s:message code="boardDetail.option"/>
                     </th>
                     <td>
                         <div class="sb-select">
                             <span class="chk ml10">
                                 <input type="checkbox" id="fullSizeYnBoardDetail" name="fullSizeYnChk" ng-model="boardDetail.fullSizeYn" disabled="true" >
                                 <label for="fullSizeYnBoardDetail"><s:message code='boardDetail.fullSizeYn' /></label>
+                            </span>
+                            <span class="chk ml10">
+                                <input type="checkbox" id="popupYnBoardDetail" name="popupYnChk" ng-model="boardDetail.popupYn" disabled="true" >
+                                <label for="popupYnBoardDetail"><s:message code='boardDetail.popupYn' /></label>
                             </span>
                         </div>
                     </td>
@@ -145,7 +149,7 @@
 
             <div class="btnSet tc">
                 <%-- 열람자목록 --%>
-                <span><a href="#" class="btn_blue" ng-click="readingHist()"><s:message code="boardDetail.readingHist" /></a></span>
+                <span id="readingHistButton"><a href="#" class="btn_blue" ng-click="readingHist()"><s:message code="boardDetail.readingHist" /></a></span>
                 <%-- 삭제 --%>
                 <span id="delButton"><a href="#" class="btn_blue" ng-click="del()"><s:message code="boardDetail.del" /></a></span>
                 <%-- 수정 --%>
@@ -164,4 +168,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.14" charset="utf-8"></script>

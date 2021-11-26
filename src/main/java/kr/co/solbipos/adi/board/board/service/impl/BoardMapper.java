@@ -2,6 +2,7 @@ package kr.co.solbipos.adi.board.board.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -131,4 +132,7 @@ public interface BoardMapper {
     /** 게시글 내 이미지 파일 임시경로 서버경로로 치환 */
     int saveBoardInfoContent(BoardVO boardVO);
 
+
+    /** 팝업 공고 조회 */
+    List<DefaultMap<String>> getPopUpBoardList(BoardVO boardVO);
 }

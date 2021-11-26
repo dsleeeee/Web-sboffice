@@ -58,4 +58,8 @@ public interface BoardService {
 
     /** 첨부파일에 임시경로 UPDATE 후 게시글 이미지 서버경로로 치환 */
     int setServerPathFile(BoardVO[] boardVOs, SessionInfoVO sessionInfoVO);
+
+
+    /** 팝업 공고 조회 */
+    List<DefaultMap<String>> getPopUpBoardList(SessionInfoVO sessionInfoVO);
 }

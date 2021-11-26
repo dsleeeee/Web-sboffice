@@ -183,7 +183,8 @@
         twbm.ANSWER_FG,
         twbi.REMARK,
         twbi.EMERGENCY_YN,
-        twbi.FULL_SIZE_YN
+        twbi.FULL_SIZE_YN,
+        twbi.POPUP_YN
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_BOARD_MASTER twbm,
         (
@@ -205,6 +206,48 @@
         AND twbps.BOARD_CD (+)= twbi.BOARD_CD
         AND twbps.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
     </select>
+
+
+    <select id="getPopUpBoardList" parameterType="BoardVO" resultMap="BoardListMap">
+        /* ContentMapper.getPopUpBoardList */
+        SELECT
+        twbi.TITLE,
+        twbi.CONTENT
+        FROM TB_WB_BOARD_INFO twbi,
+        TB_WB_USER_INFO_DTL_V01 twuidv01
+        WHERE 1=1
+        AND twbi.BOARD_CD = '01'
+        AND twbi.USE_YN = 'Y'
+        AND twbi.POPUP_YN = 'Y'
+        <if test='orgnFg == "H"'>
+            AND twuidv01.ORGN_FG IN ('H')
+            AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='orgnFg == "S"'>
+            AND (
+                    (
+                        twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND twbi.APPR_FG = '2'
+                        AND (
+                            ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')) )
+                            OR (twbi.TARGET_FG = '1')
+                        )
+                    )
+                    OR
+                    (
+                        twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
+                    )
+                )
+        </if>
+        AND twuidv01.USER_ID (+)= twbi.USER_ID
+        <![CDATA[
+           AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+           AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ]]>
+        ORDER BY 1
+        ,   twbi.MOD_DT DESC
+    </select>
+
 
     <!-- 게시판 조회수 조회 -->
     <!--
@@ -322,7 +365,8 @@
             USER_NM,
             REMARK,
             EMERGENCY_YN,
-            FULL_SIZE_YN
+            FULL_SIZE_YN,
+            POPUP_YN
         ) VALUES (
             #{boardCd},
             #{startDate},
@@ -344,7 +388,8 @@
             #{userNm},
             #{remark},
             #{emergencyYn},
-            #{fullSizeYn}
+            #{fullSizeYn},
+            #{popupYn}
         )
     </insert>
 
@@ -370,7 +415,8 @@
         MOD_ID = #{modId},
         REMARK = #{remark},
         EMERGENCY_YN = #{emergencyYn},
-        FULL_SIZE_YN = #{fullSizeYn}
+        FULL_SIZE_YN = #{fullSizeYn},
+        POPUP_YN = #{popupYn}
         WHERE 1=1
         AND BOARD_CD = #{boardCd}
         AND BOARD_SEQ_NO = #{boardSeqNo}

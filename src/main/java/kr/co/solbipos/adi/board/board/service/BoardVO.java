@@ -126,6 +126,9 @@ public class BoardVO extends PageVO {
     /** FULL SIZE 표시 */
     private String fullSizeYn;
 
+    /** 팝업여부(WEB) */
+    private String popupYn;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -288,5 +291,13 @@ public class BoardVO extends PageVO {
 
     public void setFullSizeYn(String fullSizeYn) {
         this.fullSizeYn = fullSizeYn;
+    }
+
+    public String getPopupYn() {
+        return popupYn;
+    }
+
+    public void setPopupYn(String popupYn) {
+        this.popupYn = popupYn;
     }
 }

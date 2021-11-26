@@ -3,6 +3,7 @@ package kr.co.solbipos.application.main.content.web;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.main.ContentService;
 import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.adi.board.board.service.BoardService;
 import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -45,12 +46,14 @@ public class ContentController {
 
     private final ContentService contentService;
     private final SessionService sessionService;
+    private final BoardService boardService;
 
     /** Constructor Injection */
     @Autowired
-    public ContentController(ContentService contentService, SessionService sessionService) {
+    public ContentController(ContentService contentService, SessionService sessionService, BoardService boardService) {
         this.contentService = contentService;
         this.sessionService = sessionService;
+        this.boardService = boardService;
     }
 
     /**
@@ -280,6 +283,10 @@ public class ContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
+        /** 팝업 공고 조회 */
+        List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
+        model.addAttribute("boardList", boardList);
+
         return "application/main/hedofcMain"; // 그래프
 //        return "application/main/hedofcMain_test"; // 이미지
     }
@@ -366,6 +373,10 @@ public class ContentController {
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
         }
+
+        /** 팝업 공고 조회 */
+        List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
+        model.addAttribute("boardList", boardList);
 
         return "application/main/mrhstMain"; // 그래프
 //        return "application/main/mrhstMain_test"; // 이미지

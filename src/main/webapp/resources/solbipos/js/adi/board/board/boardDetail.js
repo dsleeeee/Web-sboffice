@@ -57,9 +57,11 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#divComment").html("");
 
         if(userId !== data.userId) {
+            $("#readingHistButton").hide();
             $("#delButton").hide();
             $("#modifyButton").hide();
         } else if (userId === data.userId) {
+            $("#readingHistButton").show();
             $("#delButton").show();
             $("#modifyButton").show();
         }
@@ -87,6 +89,11 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.boardDetail.fullSizeYn = true;
             } else if ($scope.boardDetail.fullSizeYn === "N") {
                 $scope.boardDetail.fullSizeYn = false;
+            }
+            if($scope.boardDetail.popupYn === "Y") {
+                $scope.boardDetail.popupYn = true;
+            } else if ($scope.boardDetail.popupYn === "N") {
+                $scope.boardDetail.popupYn = false;
             }
             if($scope.boardDetail.targetFg === "1") {
                 $scope.boardDetail.targetFg = "전체";

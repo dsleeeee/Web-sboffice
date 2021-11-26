@@ -186,6 +186,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             } else if ($scope.boardInfo.fullSizeYn === "N") {
                 $scope.fullSizeYn = false;
             }
+            if($scope.boardInfo.popupYn === "Y") {
+                $scope.popupYn = true;
+            } else if ($scope.boardInfo.popupYn === "N") {
+                $scope.popupYn = false;
+            }
             $scope.targetFg = $scope.boardInfo.targetFg;
             $("#boardInfoStoreCd").val($scope.boardInfo.partOrgnCd);
             $("#boardInfoStoreNm").val($scope.boardInfo.partOrgnNm);
@@ -234,6 +239,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope.userNm = userNm;
         $scope.apprFg = "1";
         $scope.fullSizeYn = false;
+        $scope.popupYn = false;
         $scope.targetFg = "1";
         $scope.noticeYn = false;
         $scope.emergencyYn = false;
@@ -304,6 +310,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             params.fullSizeYn = "Y";
         } else if ($scope.fullSizeYn === false) {
             params.fullSizeYn = "N";
+        }
+        if($scope.popupYn === true) {
+            params.popupYn = "Y";
+        } else if ($scope.popupYn === false) {
+            params.popupYn = "N";
         }
         params.targetFg = $scope.targetFg;
         if($scope.noticeYn === true) {
