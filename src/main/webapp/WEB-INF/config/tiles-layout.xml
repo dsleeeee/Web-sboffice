@@ -126,6 +126,14 @@
         <put-attribute name="body" value="/WEB-INF/view/application/pos/posSmsSend/{1}.jsp"/>
         <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
     </definition>
+
+    <!-- 모바일용 다이렉트 웹 설정 -->
+    <definition name="mobile/sale/status/voucherNo/mobileDirectVoucherNo" extends="posEmptyLayout">
+        <put-attribute name="body" value="/WEB-INF/view/mobile/sale/status/voucherNo/mobileDirectVoucherNo.jsp"/>
+        <put-attribute name="resource" value="/WEB-INF/view/layout/resource.jsp"/>
+    </definition>
+    <!-- 모바일용 다이렉트 웹 설정 끝 -->
+
     <!-- POS 화면용 웹 설정 끝 -->
 
     <!-- 에러화면 -->

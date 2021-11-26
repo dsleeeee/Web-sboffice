@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileDirect.xml
+    (모바일) QR > 원하는 페이지 오픈
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2021.11.26     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.application.direct.service.impl.MobileDirectMapper">
+
+    <!-- 관리자 - 총 매장수(전체, 오픈, 폐점, 중지, 데모) -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getAccess" parameterType="mobileDirectVO" resultType="String">
+        /* MobileDirectMapper.getAccess */
+--         SELECT  SBPENC.D(ACCESS_CD) AS ACCESS_CD
+        SELECT  SBPENC.D(RESULT_CD)
+        FROM    TB_WB_EX_ACCESS
+        WHERE   ACCESS_CD = #{accessCd}
+        AND     USE_YN = 'Y'
+    </select>
+
+</mapper>
