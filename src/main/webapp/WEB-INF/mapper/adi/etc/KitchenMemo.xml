@@ -45,9 +45,16 @@
   -->
   <select id="getKitchnMemoCd" parameterType="kitchenMemoVO" resultType="String">
     /* KitchenMemoMapper.getKitchnMemoCd */
-    SELECT LPAD( NVL(MAX(KITCHN_MEMO_CD), 0) + 1, 3, '0') AS KITCHN_MEMO_CD
-      FROM TB_MS_KITCHEN_MEMO
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+      <if test="regFg != null and regFg.toString() == 'HQ'">
+        SELECT LPAD( NVL(MAX(KITCHN_MEMO_CD), 0) + 1, 3, '0') AS KITCHN_MEMO_CD
+          FROM TB_MS_KITCHEN_MEMO
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+      </if>
+      <if test="regFg != null and regFg.toString() == 'STORE'">
+          SELECT LPAD( NVL(MAX(KITCHN_MEMO_CD), 0) + 1, 3, '0') AS KITCHN_MEMO_CD
+          FROM TB_MS_KITCHEN_MEMO
+          WHERE STORE_CD = #{storeCd}
+      </if>
   </select>
 
   <!-- 주방메모 등록 -->
