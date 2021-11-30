@@ -100,6 +100,9 @@ public class SalePriceVO extends PageVO {
     /** 프로시져 실행 결과 */
     private String result;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     /**
      * @return the hqOfficeCd
      */
@@ -417,5 +420,13 @@ public class SalePriceVO extends PageVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

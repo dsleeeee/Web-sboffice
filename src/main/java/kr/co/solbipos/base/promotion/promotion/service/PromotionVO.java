@@ -140,6 +140,9 @@ public class PromotionVO extends PageVO {
     /** 브랜드코드 */
     private String hqBrandCd;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -586,5 +589,13 @@ public class PromotionVO extends PageVO {
 
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

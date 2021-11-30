@@ -441,6 +441,17 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 }
             }
 
+            // 브랜드 등록여부 체크
+            if (prodExcelUploadVO.getHqBrandCd() != null && !"".equals(prodExcelUploadVO.getHqBrandCd())) {
+                simpleProdVO.setUserId(sessionInfoVO.getUserId());
+                simpleProdVO.setHqBrandCd(prodExcelUploadVO.getHqBrandCd());
+
+                int hqBrandCdChk = simpleProdMapper.getHqBrandCdChk(simpleProdVO);
+                if (hqBrandCdChk < 1) {
+                    prodExcelUploadVO.setResult("브랜드를 다시 선택해주세요.");
+                }
+            }
+
 
             // ProdVO
             ProdVO prodVO = new ProdVO();

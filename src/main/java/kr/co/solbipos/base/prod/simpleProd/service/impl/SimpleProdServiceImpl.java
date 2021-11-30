@@ -196,6 +196,16 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 }
             }
 
+            // 브랜드 등록여부 체크
+            if (simpleProdVO.getHqBrandCd() != null && !"".equals(simpleProdVO.getHqBrandCd())) {
+                simpleProdVO.setUserId(sessionInfoVO.getUserId());
+
+                int hqBrandCdChk = simpleProdMapper.getHqBrandCdChk(simpleProdVO);
+                if (hqBrandCdChk < 1) {
+                    simpleProdVO.setResult("브랜드를 다시 선택해주세요.");
+                }
+            }
+
 
             // ProdVO
             ProdVO prodVO = new ProdVO();

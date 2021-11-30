@@ -44,6 +44,9 @@ public class HqSalePriceHistoryVO extends PageVO {
     /** 상품분류코드 */
     private String prodClassCd;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -110,5 +113,13 @@ public class HqSalePriceHistoryVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

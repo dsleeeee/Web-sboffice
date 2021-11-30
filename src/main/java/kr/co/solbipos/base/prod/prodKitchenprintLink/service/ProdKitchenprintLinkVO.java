@@ -70,6 +70,9 @@ public class ProdKitchenprintLinkVO extends PageVO {
     /** 시스템폐점일자 */
     private String sysClosureDate;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     public String getSysClosureDate() {
         return sysClosureDate;
     }
@@ -204,5 +207,13 @@ public class ProdKitchenprintLinkVO extends PageVO {
 
     public void setPprterNm(String pprterNm) {
         this.pprterNm = pprterNm;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

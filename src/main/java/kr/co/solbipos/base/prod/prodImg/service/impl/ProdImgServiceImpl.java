@@ -52,6 +52,7 @@ public class ProdImgServiceImpl implements ProdImgService {
         prodImgVO.setOrgnFg(orgnFg);
         prodImgVO.setHqOfficeCd(hqOfficeCd);
         prodImgVO.setStoreCd(storeCd);
+        prodImgVO.setUserId(sessionInfoVO.getUserId());
 
         return prodImgMapper.getProdList(prodImgVO);
     }

@@ -63,6 +63,11 @@
                                     CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tlmpspl.STORE_CD
                                     )
         </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND 	tmp.STORE_CD = tlmpspl.STORE_CD
         AND 	tmp.PROD_CD = tlmpspl.PROD_CD
         AND 	tms.STORE_CD = tlmpspl.STORE_CD
@@ -120,11 +125,17 @@
                                     CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tlmpspl.STORE_CD
                                     )
         </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND 	tmp.STORE_CD = tlmpspl.STORE_CD
         AND 	tmp.PROD_CD = tlmpspl.PROD_CD
         AND 	tms.STORE_CD = tlmpspl.STORE_CD
         ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
     </select>
+
     <!-- 본사판매가변경이력 > 본사판매가변경이력 조회 -->
     <!--
         TABLE    : TB_LG_HQ_PRODUCT_SALE_PRICE_LOG, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS
@@ -168,6 +179,11 @@
                                     CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
                                     )
         </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND 	thp.HQ_OFFICE_CD = tlhpspl.HQ_OFFICE_CD
         AND 	thp.PROD_CD = tlhpspl.PROD_CD
         ORDER BY tlhpspl.PROD_CD, tlhpspl.PROC_DT
@@ -215,8 +231,14 @@
             CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
             )
         </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND 	thp.HQ_OFFICE_CD = tlhpspl.HQ_OFFICE_CD
         AND 	thp.PROD_CD = tlhpspl.PROD_CD
         ORDER BY tlhpspl.PROD_CD, tlhpspl.PROC_DT
     </select>
+
 </mapper>

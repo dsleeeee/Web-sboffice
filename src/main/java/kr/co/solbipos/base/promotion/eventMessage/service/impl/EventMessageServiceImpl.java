@@ -149,6 +149,8 @@ public class EventMessageServiceImpl implements EventMessageService {
             eventMessageVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        eventMessageVO.setUserId(sessionInfoVO.getUserId());
+
         return eventMessageMapper.getProdList(eventMessageVO);
     }
 

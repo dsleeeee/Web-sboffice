@@ -70,6 +70,8 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
         prodBarcdVO.setHqOfficeCd(hqOfficeCd);
         prodBarcdVO.setStoreCd(storeCd);
 
+        prodBarcdVO.setUserId(sessionInfoVO.getUserId());
+
         return prodBarcdMapper.getProdList(prodBarcdVO);
     }
 
@@ -93,6 +95,8 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setUseYn(null);
             prodBarcdVO.setHqBrandNm(null);
         }
+
+        prodBarcdVO.setUserId(sessionInfoVO.getUserId());
 
         return prodBarcdMapper.getProdExcelList(prodBarcdVO);
     }

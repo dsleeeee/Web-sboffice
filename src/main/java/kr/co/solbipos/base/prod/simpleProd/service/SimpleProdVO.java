@@ -151,6 +151,9 @@ public class SimpleProdVO extends PageVO {
     /** 비고 */
     private String remark;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -370,4 +373,12 @@ public class SimpleProdVO extends PageVO {
     }
 
     public void setRemark(String remark) { this.remark = remark; }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

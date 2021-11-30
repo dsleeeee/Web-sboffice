@@ -111,6 +111,7 @@ public class FoodAllergyServiceImpl implements FoodAllergyService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             foodAllergyVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        foodAllergyVO.setUserId(sessionInfoVO.getUserId());
 
         return foodAllergyMapper.getFoodAllergyDetailList(foodAllergyVO);
     }
@@ -124,6 +125,7 @@ public class FoodAllergyServiceImpl implements FoodAllergyService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             foodAllergyVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        foodAllergyVO.setUserId(sessionInfoVO.getUserId());
 
         return foodAllergyMapper.getFoodAllergyProdList(foodAllergyVO);
     }
