@@ -234,6 +234,9 @@ public class ProdVO extends PageVO {
     /** 매장상품제한구분 여부 */
     private String storeProdUseFg;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1106,5 +1109,13 @@ public class ProdVO extends PageVO {
 
     public void setStoreProdUseFg(String storeProdUseFg) {
         this.storeProdUseFg = storeProdUseFg;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

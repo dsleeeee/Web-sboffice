@@ -54,16 +54,21 @@ public class StoreSalePriceServiceImpl implements StoreSalePriceService {
         if(!StringUtil.getOrBlank(storeSalePriceVO.getStoreCd()).equals("")) {
             storeSalePriceVO.setArrStoreCd(storeSalePriceVO.getStoreCd().split(","));
         }
+        storeSalePriceVO.setUserId(sessionInfoVO.getUserId());
+
         return storeSalePriceMapper.getSalePriceList(storeSalePriceVO);
     }
 
     /** 엑셀다운로드 */
     @Override
     public List<DefaultMap<String>> getSalePriceExcelList(StoreSalePriceVO storeSalePriceVO, SessionInfoVO sessionInfoVO) {
+
         storeSalePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(storeSalePriceVO.getStoreCd()).equals("")) {
             storeSalePriceVO.setArrStoreCd(storeSalePriceVO.getStoreCd().split(","));
         }
+        storeSalePriceVO.setUserId(sessionInfoVO.getUserId());
+
         return storeSalePriceMapper.getSalePriceExcelList(storeSalePriceVO);
     }
 }

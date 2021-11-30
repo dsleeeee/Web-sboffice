@@ -64,6 +64,9 @@ public class StoreSalePriceVO extends PageVO {
     /** 프로시져 실행 결과 */
     private String result;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     /**
      * @return the hqOfficeCd
      */
@@ -171,5 +174,13 @@ public class StoreSalePriceVO extends PageVO {
 
     public void setPackSaleUprc(Boolean packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

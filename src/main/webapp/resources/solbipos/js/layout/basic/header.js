@@ -151,9 +151,9 @@ function smsTodayCntChange(time){
                   if(result.data.result.totQty > 0) {
                       hiddenYn = true;
                       $(".smsTodayLayer").toggle();
-                      $("#lblSmsWaitCnt").text(result.data.result.totWaitQty);
-                      $("#lblSmsSendCnt").text(result.data.result.totSendQty);
-                      $("#lblSmsFailCnt").text(result.data.result.totFailQty);
+                      $("#lblSmsWaitCnt").text(result.data.result.totWaitQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                      $("#lblSmsSendCnt").text(result.data.result.totSendQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                      $("#lblSmsFailCnt").text(result.data.result.totFailQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                   }
               }
           }

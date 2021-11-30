@@ -684,7 +684,13 @@
                            TB_HQ_PRODUCT_CLASS thpc
                      WHERE thp.HQ_OFFICE_CD = THPC.HQ_OFFICE_CD
                        AND thp.PROD_CLASS_CD = THPC.PROD_CLASS_CD
-                       AND THP.HQ_OFFICE_CD = #{hqOfficeCd}) p
+                       AND THP.HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND (
+                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                         OR
+                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                       )
+                ) p
                 ON thcp.HQ_OFFICE_CD = p.HQ_OFFICE_CD
                AND thcp.PROD_CD = p.prod_cd
              WHERE thcp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -722,7 +728,12 @@
             <if test='prodNm != null and prodNm != ""'>
                 AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
             </if>
-               AND thcp.PROD_CD IS NULL
+            AND thcp.PROD_CD IS NULL
+            AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
         </if>
     </select>
 

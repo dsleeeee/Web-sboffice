@@ -211,6 +211,9 @@ public class ProdBarcdVO extends PageVO {
     /** 검증 순서 */
     private int seq;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1027,5 +1030,13 @@ public class ProdBarcdVO extends PageVO {
 
     public void setSeq(int seq) {
         this.seq = seq;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

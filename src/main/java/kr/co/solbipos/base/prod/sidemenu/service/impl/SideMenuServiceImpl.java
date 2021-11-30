@@ -351,6 +351,7 @@ public class SideMenuServiceImpl implements SideMenuService {
         sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        sideMenuSelProdVO.setUserId(sessionInfoVO.getUserId());
 
         if(sideMenuSelProdVO.getSideEnvstVal() != ""){
             // 매장상품제한구분 환경변수 값(환경변수 1100 사용)
@@ -381,6 +382,7 @@ public class SideMenuServiceImpl implements SideMenuService {
         sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        sideMenuSelProdVO.setUserId(sessionInfoVO.getUserId());
 
         return sideMenuMapper.getMenuProdList(sideMenuSelProdVO);
     }

@@ -282,6 +282,11 @@
             <if test='prodNm != null and prodNm != "" and prodNm.toString() != "선택"'>
                  AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
             </if>
+            AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
           </when>
           <!-- 가맹점 -->
           <when test='orgnFg != null and orgnFg == "S"'>
@@ -308,6 +313,11 @@
               <if test='prodNm != null and prodNm != "" and prodNm.toString() != "선택"'>
                  AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
               </if>
+              AND (
+                      ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                      OR
+                      ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                  )
           </when>
         </choose>
     </select>

@@ -277,6 +277,11 @@
                 ) thpc_p,
                 TB_HQ_PRODUCT_SALE_PRICE_V01 v01 --view
                 WHERE 1=1
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 AND thpap.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpap.PROD_CD = thp.PROD_CD
                 AND thpc_p.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
@@ -312,6 +317,11 @@
                 ) tmpc_p,
                 TB_MS_PRODUCT_SALE_PRICE_V01 v01 --view
                 WHERE 1=1
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 AND tmpap.STORE_CD = tmp.STORE_CD
                 AND tmpap.PROD_CD = tmp.PROD_CD
                 AND tmpc_p.STORE_CD = tmp.STORE_CD
@@ -390,6 +400,11 @@
                     AND thpap.PROD_CD = thp.PROD_CD
                     AND thpap.RECIPES_CD = #{recipesCd}
                 )
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY thpc_p.PATH_NM
             </when>
             <!-- 매장 -->
@@ -440,6 +455,11 @@
                     AND tmpap.PROD_CD = tmp.PROD_CD
                     AND tmpap.RECIPES_CD = #{recipesCd}
                 )
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY tmpc_p.PATH_NM
             </when>
         </choose>

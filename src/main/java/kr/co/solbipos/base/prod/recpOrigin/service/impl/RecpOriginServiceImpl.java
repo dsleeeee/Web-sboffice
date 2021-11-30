@@ -112,6 +112,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        recpOriginVO.setUserId(sessionInfoVO.getUserId());
 
         return recpOriginMapper.getRecpOriginDetailList(recpOriginVO);
     }
@@ -125,6 +126,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        recpOriginVO.setUserId(sessionInfoVO.getUserId());
 
         return recpOriginMapper.getRecpProdList(recpOriginVO);
     }
@@ -174,6 +176,7 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        recpOriginVO.setUserId(sessionInfoVO.getUserId());
 
         return recpOriginMapper.getProdRecpOriginList(recpOriginVO);
     }

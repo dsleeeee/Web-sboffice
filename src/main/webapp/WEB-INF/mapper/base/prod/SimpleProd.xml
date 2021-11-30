@@ -420,4 +420,19 @@
         </choose>
     </insert>
 
+    <!-- 브랜드 등록여부 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getHqBrandCdChk"  parameterType="SimpleProdVO" resultType="Integer">
+        /* SimpleProdMapper.getHqBrandCdChk */
+        SELECT
+        COUNT(1) AS CNT
+        FROM TB_WB_USER_BRAND twub
+        WHERE 1=1
+        AND twub.USER_ID = #{userId}
+        AND twub.HQ_BRAND_CD = #{hqBrandCd}
+    </select>
+
 </mapper>

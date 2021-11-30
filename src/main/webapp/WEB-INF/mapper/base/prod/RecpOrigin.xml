@@ -302,6 +302,11 @@
                 <![CDATA[
                     AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY thprp.PROD_CD
             </when>
             <!-- 매장 -->
@@ -337,6 +342,11 @@
                 <![CDATA[
                     AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY tmprp.PROD_CD
             </when>
         </choose>
@@ -395,6 +405,11 @@
                 <![CDATA[
                     AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 AND NOT EXISTS
                 (
                     SELECT 1
@@ -445,6 +460,11 @@
                 <![CDATA[
                     AND v01.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ]]>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 AND NOT EXISTS
                 (
                     SELECT 1
@@ -654,6 +674,11 @@
                     <if test="useYn != null and useYn != ''">
                         AND thp.USE_YN = #{useYn}
                     </if>
+                    AND (
+                            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                            OR
+                            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                        )
                     AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
                     AND thpb.PROD_CD (+)= thp.PROD_CD
                     ORDER BY thp.PROD_CD
@@ -745,6 +770,11 @@
                     <if test="useYn != null and useYn != ''">
                         AND tmp.USE_YN = #{useYn}
                     </if>
+                    AND (
+                            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                            OR
+                            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                        )
                     AND tmpb.STORE_CD (+)= tmp.STORE_CD
                     AND tmpb.PROD_CD (+)= tmp.PROD_CD
                     ORDER BY tmp.PROD_CD

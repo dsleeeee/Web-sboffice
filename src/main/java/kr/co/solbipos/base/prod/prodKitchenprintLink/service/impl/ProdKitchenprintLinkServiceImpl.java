@@ -46,8 +46,8 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
     public List<DefaultMap<String>> getProdList(@RequestBody ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
 
         String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
-
         prodKitchenprintLinkVO.setHqOfficeCd(hqOfficeCd);
+        prodKitchenprintLinkVO.setUserId(sessionInfoVO.getUserId());
 
         return prodKitchenprintLinkMapper.getProdList(prodKitchenprintLinkVO);
     }

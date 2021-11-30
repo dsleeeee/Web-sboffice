@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSearchUserHqBrandLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:460px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSearchUserHqBrandLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:720px;height:460px;" fade-in="false" fade-out="false">
 
     <div class="wj-dialog wj-dialog-columns">
         <%-- header --%>
@@ -87,8 +87,8 @@
                                     <!-- define columns -->
                                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="hqEmp.searchUserHqBrand.hqBrandCd"/>" binding="hqBrandCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="hqEmp.searchUserHqBrand.hqBrandNm"/>" binding="hqBrandNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-
+                                    <wj-flex-grid-column header="<s:message code="hqEmp.searchUserHqBrand.hqBrandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="hqEmp.searchUserHqBrand.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                                 </wj-flex-grid>
                             </div>
                         </div>
@@ -102,4 +102,9 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/searchUserHqBrand.js?ver=20211122.07" charset="utf-8"></script>
+<script type="text/javascript">
+    <%-- 사용여부 --%>
+    var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/searchUserHqBrand.js?ver=20211123.01" charset="utf-8"></script>

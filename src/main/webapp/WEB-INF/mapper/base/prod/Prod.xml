@@ -105,6 +105,11 @@
                 <if test="hqBrandNm != null and hqBrandNm != ''">
                     AND thb.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
                 </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY thp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -194,6 +199,11 @@
                 <if test="hqBrandNm != null and hqBrandNm != ''">
                     AND tmb.MS_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
                 </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY tmp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -286,6 +296,11 @@
                 <if test="hqBrandNm != null and hqBrandNm != ''">
                     AND thb.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
                 </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY thp.PROD_CD ASC
             </when>
             <!-- 가맹점 -->
@@ -362,6 +377,11 @@
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
                 </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY tmp.PROD_CD ASC
             </when>
         </choose>
@@ -2417,6 +2437,11 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND thps.PROD_CD IS NOT NULL
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         ORDER BY tmp.PROD_CD ASC
     </select>
 
@@ -2428,7 +2453,8 @@
     -->
     <select id="getStoreProdNoRegList" parameterType="prodVO" resultType="DefaultMap">
         /* USE : ProdMapper.getStoreProdNoRegList */
-        SELECT thp.PROD_CD,
+        SELECT
+        thp.PROD_CD,
         thp.PROD_NM,
         thpsp.SALE_UPRC AS HQ_SALE_UPRC,
         tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
@@ -2542,6 +2568,11 @@
         <if test='prodNm != null and prodNm.toString() != ""'>
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         ORDER BY thp.PROD_CD ASC
     </select>
 
@@ -3587,23 +3618,33 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT HQ_BRAND_CD AS VALUE,
-                        HQ_BRAND_NM AS NAME
-                  FROM TB_HQ_BRAND
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND USE_YN = 'Y'
-                 ORDER
-                    BY HQ_BRAND_CD
+                SELECT
+                HQ_BRAND_CD AS VALUE,
+                HQ_BRAND_NM AS NAME
+                FROM TB_HQ_BRAND
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND USE_YN = 'Y'
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY HQ_BRAND_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT MS_BRAND_CD AS VALUE,
-                        MS_BRAND_NM AS NAME
-                  FROM TB_MS_BRAND
-                 WHERE STORE_CD = #{storeCd}
-                   AND USE_YN = 'Y'
-                 ORDER
-                    BY MS_BRAND_CD
+                SELECT
+                MS_BRAND_CD AS VALUE,
+                MS_BRAND_NM AS NAME
+                FROM TB_MS_BRAND
+                WHERE STORE_CD = #{storeCd}
+                AND USE_YN = 'Y'
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY MS_BRAND_CD
             </when>
         </choose>
     </select>

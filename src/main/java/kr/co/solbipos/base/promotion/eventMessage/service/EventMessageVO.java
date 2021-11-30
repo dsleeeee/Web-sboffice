@@ -77,6 +77,9 @@ public class EventMessageVO extends PageVO {
     /** 조건수량 */
     private String prodQty;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -267,5 +270,13 @@ public class EventMessageVO extends PageVO {
 
     public void setProdQty(String prodQty) {
         this.prodQty = prodQty;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

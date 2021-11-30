@@ -126,6 +126,7 @@ public class SalePriceServiceImpl implements SalePriceService {
     public List<DefaultMap<String>> getStoreSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        salePriceVO.setUserId(sessionInfoVO.getUserId());
 
         return salePriceMapper.getStoreSalePriceList(salePriceVO);
     }
@@ -135,6 +136,7 @@ public class SalePriceServiceImpl implements SalePriceService {
     public List<DefaultMap<String>> getHqSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        salePriceVO.setUserId(sessionInfoVO.getUserId());
 
         return salePriceMapper.getHqSalePriceList(salePriceVO);
     }

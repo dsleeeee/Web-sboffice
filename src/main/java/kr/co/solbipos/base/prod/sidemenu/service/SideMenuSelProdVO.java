@@ -61,6 +61,9 @@ public class SideMenuSelProdVO extends PageVO {
     /** 고정상품구분 */
     private String fixProdFg;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     /**
      * @return the hqOfficeCd
      */
@@ -244,5 +247,13 @@ public class SideMenuSelProdVO extends PageVO {
 
     public void setFixProdFg(String fixProdFg) {
         this.fixProdFg = fixProdFg;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

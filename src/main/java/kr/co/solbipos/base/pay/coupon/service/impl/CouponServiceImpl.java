@@ -288,6 +288,8 @@ public class CouponServiceImpl implements CouponService {
 
         List<DefaultMap<String>> resultProdList = null;
 
+        couponProdVO.setUserId(sessionInfoVO.getUserId());
+
         // 본사
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

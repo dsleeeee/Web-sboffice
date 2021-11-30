@@ -104,6 +104,8 @@ public class ProdServiceImpl implements ProdService {
 //            }
 //        }
 
+        prodVO.setUserId(sessionInfoVO.getUserId());
+
         return prodMapper.getProdList(prodVO);
     }
 
@@ -148,6 +150,8 @@ public class ProdServiceImpl implements ProdService {
 //                else                     prodVO.setSalePrcFg("2");
 //            }
 //        }
+
+        prodVO.setUserId(sessionInfoVO.getUserId());
 
         return prodMapper.getProdExcelList(prodVO);
     }
@@ -798,6 +802,8 @@ public class ProdServiceImpl implements ProdService {
     @Override
     public List<DefaultMap<String>> getStoreProdBatchList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
+        prodVO.setUserId(sessionInfoVO.getUserId());
+
         if(prodVO.getProdRegFg() == UseYn.Y){
             return prodMapper.getStoreProdRegList(prodVO);
         }else{
@@ -1180,6 +1186,7 @@ public class ProdServiceImpl implements ProdService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prodVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        prodVO.setUserId(sessionInfoVO.getUserId());
 
         return prodMapper.getBrandList(prodVO);
     }

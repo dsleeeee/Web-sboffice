@@ -36,7 +36,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendTab/smsSendTab.js?ver=20210915.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendTab/smsSendTab.js?ver=20211124.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <c:if test="${orgnFg == 'HQ' or orgnFg == 'STORE'}">

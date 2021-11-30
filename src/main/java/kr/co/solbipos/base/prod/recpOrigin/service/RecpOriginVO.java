@@ -81,6 +81,9 @@ public class RecpOriginVO extends PageVO {
     /** 브랜드코드 */
     private String hqBrandCdCombo;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -160,4 +163,12 @@ public class RecpOriginVO extends PageVO {
     public String getHqBrandCdCombo() { return hqBrandCdCombo; }
 
     public void setHqBrandCdCombo(String hqBrandCdCombo) { this.hqBrandCdCombo = hqBrandCdCombo; }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

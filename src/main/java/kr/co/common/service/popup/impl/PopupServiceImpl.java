@@ -142,6 +142,8 @@ public class PopupServiceImpl implements PopupService{
         prodVO.setHqOfficeCd(hqOfficeCd);
         prodVO.setStoreCd(storeCd);
 
+        prodVO.setUserId(sessionInfoVO.getUserId());
+
         return popupMapper.getProductList(prodVO);
     }
 

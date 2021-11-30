@@ -66,6 +66,8 @@ public class DlvrProdServiceImpl implements DlvrProdService {
         }
         dlvrProdVO.setPivotDlvrCol(pivotDlvrCol);
 
+        dlvrProdVO.setUserId(sessionInfoVO.getUserId());
+
         return dlvrProdMapper.getProdList(dlvrProdVO);
     }
 

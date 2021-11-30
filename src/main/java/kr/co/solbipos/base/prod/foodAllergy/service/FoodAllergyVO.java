@@ -58,6 +58,9 @@ public class FoodAllergyVO extends PageVO {
     /** 알레르기명 */
     private String allergieNm;
 
+    /** 사용자 아이디 */
+    private String userId;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -109,4 +112,12 @@ public class FoodAllergyVO extends PageVO {
     public String getAllergieNm() { return allergieNm; }
 
     public void setAllergieNm(String allergieNm) { this.allergieNm = allergieNm; }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

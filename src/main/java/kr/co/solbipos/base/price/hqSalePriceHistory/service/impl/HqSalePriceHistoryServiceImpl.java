@@ -52,30 +52,41 @@ public class HqSalePriceHistoryServiceImpl implements HqSalePriceHistoryService 
         if(!StringUtil.getOrBlank(hqSalePriceHistoryVO.getStoreCd()).equals("")) {
             hqSalePriceHistoryVO.setArrStoreCd(hqSalePriceHistoryVO.getStoreCd().split(","));
         }
+        hqSalePriceHistoryVO.setUserId(sessionInfoVO.getUserId());
+
         return hqSalePriceHistoryMapper.getStoreSalePriceHistoryList(hqSalePriceHistoryVO);
     }
 
     /** 매장판매가변경이력 - 엑셀다운로드 */
     @Override
     public List<DefaultMap<String>> getStoreSalePriceHistoryExcelList(HqSalePriceHistoryVO hqSalePriceHistoryVO, SessionInfoVO sessionInfoVO) {
+
         hqSalePriceHistoryVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(hqSalePriceHistoryVO.getStoreCd()).equals("")) {
             hqSalePriceHistoryVO.setArrStoreCd(hqSalePriceHistoryVO.getStoreCd().split(","));
         }
+        hqSalePriceHistoryVO.setUserId(sessionInfoVO.getUserId());
+
         return hqSalePriceHistoryMapper.getStoreSalePriceHistoryExcelList(hqSalePriceHistoryVO);
     }
 
     /** 본사판매가변경이력 - 조회 */
     @Override
     public List<DefaultMap<String>> getHqSalePriceHistoryList(HqSalePriceHistoryVO hqSalePriceHistoryVO, SessionInfoVO sessionInfoVO) {
+
         hqSalePriceHistoryVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqSalePriceHistoryVO.setUserId(sessionInfoVO.getUserId());
+
         return hqSalePriceHistoryMapper.getHqSalePriceHistoryList(hqSalePriceHistoryVO);
     }
 
     /** 본사판매가변경이력 - 엑셀다운로드 */
     @Override
     public List<DefaultMap<String>> getHqSalePriceHistoryExcelList(HqSalePriceHistoryVO hqSalePriceHistoryVO, SessionInfoVO sessionInfoVO) {
+
         hqSalePriceHistoryVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqSalePriceHistoryVO.setUserId(sessionInfoVO.getUserId());
+
         return hqSalePriceHistoryMapper.getHqSalePriceHistoryExcelList(hqSalePriceHistoryVO);
     }
 }

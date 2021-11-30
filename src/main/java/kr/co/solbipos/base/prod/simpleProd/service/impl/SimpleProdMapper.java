@@ -50,4 +50,7 @@ public interface SimpleProdMapper {
 
     /** 거래처 저장 */
     int getVendorProdSaveInsert(SimpleProdVO simpleProdVO);
+
+    /** 브랜드 등록여부 체크 */
+    int getHqBrandCdChk(SimpleProdVO simpleProdVO);
 }

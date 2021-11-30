@@ -165,6 +165,8 @@ public class PromotionServiceImpl implements PromotionService {
             promotionVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        promotionVO.setUserId(sessionInfoVO.getUserId());
+
         return promotionMapper.getProdList(promotionVO);
     }
 
