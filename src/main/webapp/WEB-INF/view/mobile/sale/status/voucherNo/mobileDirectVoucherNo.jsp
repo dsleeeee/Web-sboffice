@@ -18,32 +18,30 @@
     <div class="content-middle" ng-controller="mobileVoucherNoCtrl">
         <div class="oh sb-select dkbr">
             <div class="wj-TblWrapBr" style="height:100%;">
-                <div id="divRank">
-                    <table class='tblType01'>
-                        <colgroup>
-                            <col width='100%' />
-                        </colgroup>
-                        <tbody>
-                            <tr>
-                                <th style='text-align: center; font-size: 2.0em; padding:20px;'>
-                                    <button class="btn_blue" id="btnSearch" ng-click="_broadcast('mobileVoucherNoCtrl')">
-                                        <s:message code="mobile.cmm.search"/>
-                                    </button>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th style='text-align: center; font-size: 3.0em; padding: 20px;'>
-                                    <s:message code="mobile.voucherNo"/>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td style='text-align: center; padding:30px; font-size: 11.5em;'>
-                                    <label id="lblVoucherNo"></label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class='tblType01'>
+                    <colgroup>
+                        <col width='100%' />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th style='text-align: center; font-size: 2.0em; padding-top: 20px; padding-bottom: 20px;'>
+                            <button class="btn_blue" id="btnSearch" ng-click="_broadcast('mobileVoucherNoCtrl')">
+                                <s:message code="mobile.cmm.search"/>
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style='text-align: center; font-size: 3.0em; padding-top: 20px; padding-bottom: 20px;'>
+                            <s:message code="mobile.voucherNo"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center; padding-top:30px; padding-bottom:30px; font-size: 11.5em;'>
+                            <label id="lblVoucherNo"></label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -53,4 +51,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/voucherNo/mobileVoucherNo.js?ver=20211117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/voucherNo/mobileVoucherNo.js?ver=20211130.01" charset="utf-8"></script>

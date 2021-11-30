@@ -24,8 +24,8 @@ app.controller('mobileVoucherNoCtrl', ['$scope', '$http', function ($scope, $htt
     // <-- 검색 호출 -->
     $scope.$on("mobileVoucherNoCtrl", function(event, data) {
 
-        // 최종교환권번호 조회
-        $scope.getVoucherNo();
+        // 다시 화면 리로드 하여, 세션 연결 후 조회되도록 처리
+        location.reload(true);
         event.preventDefault();
     });
     
