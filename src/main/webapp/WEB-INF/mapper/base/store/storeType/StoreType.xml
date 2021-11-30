@@ -437,6 +437,11 @@
            AND thspgd.USE_YN = 'Y'
            AND thp.HQ_OFFICE_CD = thspgd.HQ_OFFICE_CD
            AND thp.PROD_CD = thspgd.PROD_CD
+           AND (
+                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                 OR
+                  ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+               )
         ORDER
            BY thspgd.PROD_CD ASC
     </select>
@@ -570,6 +575,11 @@
             </when>
             <otherwise></otherwise>
         </choose>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         ORDER
            BY thp.PROD_CD ASC
     </select>

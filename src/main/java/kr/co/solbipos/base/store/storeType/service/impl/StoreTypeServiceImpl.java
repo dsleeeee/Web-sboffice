@@ -333,6 +333,7 @@ public class StoreTypeServiceImpl implements StoreTypeService {
     public List<DefaultMap<Object>> getProdMapping(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
 
         storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeTypeVO.setUserId(sessionInfoVO.getUserId());
 
         return storeTypeMapper.getProdMapping(storeTypeVO);
     }
@@ -342,6 +343,7 @@ public class StoreTypeServiceImpl implements StoreTypeService {
     public List<DefaultMap<Object>> getProdList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
 
         storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeTypeVO.setUserId(sessionInfoVO.getUserId());
 
         return storeTypeMapper.getProdList(storeTypeVO);
     }

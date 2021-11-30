@@ -73,6 +73,8 @@ public class StoreTypeVO extends PageVO {
     /** 입력구분 */
     private String procFg;
 
+    /** 사용자 아이디 */
+    private String userId;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -312,5 +314,13 @@ public class StoreTypeVO extends PageVO {
 
     public void setProcFg(String procFg) {
         this.procFg = procFg;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

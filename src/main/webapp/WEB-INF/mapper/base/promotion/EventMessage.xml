@@ -438,10 +438,10 @@
                                         )thspgd
                                  WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
                                    AND (
-                                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                                     OR
-                                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-                                   )
+                                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                                         OR
+                                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                                       )
                                    AND thb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
                                    AND thb.HQ_BRAND_CD (+)= thp.HQ_BRAND_CD
                                    AND thspgd.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
@@ -509,10 +509,10 @@
                                         )thspgd
                                  WHERE tmp.STORE_CD = #{storeCd}
                                    AND (
-                                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                                     OR
-                                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-                                   )
+                                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                                         OR
+                                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                                       )
                                    AND tmb.STORE_CD (+)= tmp.STORE_CD
                                    AND tmb.MS_BRAND_CD (+)= tmp.HQ_BRAND_CD
                                    AND thspgd.PROD_CD (+)= tmp.PROD_CD
