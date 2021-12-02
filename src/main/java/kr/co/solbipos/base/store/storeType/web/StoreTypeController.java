@@ -585,9 +585,9 @@ public class StoreTypeController {
             InetAddress local;
             local = InetAddress.getLocalHost();
             StoreTypeVO storeTypeVO = new StoreTypeVO();
-            String propFile = "../conf/webSchedule.properties"; // properties 파일 위치
+            String propFile = "../conf/webSchedule.properties"; // 서버 내 properties 파일 위치
 
-            System.out.println("IP CHECK : " + local.getHostAddress()); // 서버 ip
+            System.out.println("IP CHECK : " + local.getHostAddress() + " [" + currentDateTimeString() + "]"); // 서버 ip
 
             // 개발 또는 운영서버에서만 Scheduler가 동작하도록 하기 위해
             if("192.168.0.85".equals(local.getHostAddress()) ||
@@ -598,7 +598,7 @@ public class StoreTypeController {
                 FileInputStream fis = new FileInputStream(propFile);
                 props.load(new java.io.BufferedInputStream(fis));
 
-                System.out.println("SCHEDULE_USE_YN : " + props.getProperty("schedule.use_yn")) ;
+                System.out.println("SCHEDULE_USE_YN : " + props.getProperty("schedule.use_yn") + " [" + currentDateTimeString() + "]") ;
 
                 if(props.getProperty("schedule.use_yn") != null && "Y".equals(props.getProperty("schedule.use_yn"))) {
                     System.out.println("START storeTypeApplyScheduler ===============================================================================================================");
