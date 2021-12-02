@@ -13,6 +13,16 @@
  */
 var app = agrid.getApp();
 
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+    var timeVal = i.toString();
+    if(i>=0 && i<=9){
+        timeVal = "0" + timeVal;
+    }
+    Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
 // 매장타입관리 - 매장타입 매장적용 팝업
 app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
@@ -23,6 +33,18 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
     $scope._setComboData("srchPopStoreGroup", storeGroupList);
     $scope._setComboData("srchPopSysStatFg", sysStatFg);
 
+    // 적용일시
+    var applyDay = wcombo.genDateVal("#applyDay", gvStartDate);
+    $scope._setComboData("applyDayHhCombo", Hh);
+
+    // 적용일시 셋팅
+    $scope.isCheckedApplyDay = false;
+    $("input:checkbox[id='chkApplyDay']").prop("checked", false);
+    $("#applyDay").attr("disabled", true);
+    $("#applyDay").css('background-color', '#F0F0F0');
+    $("#applyDayHh").attr("disabled", true);
+    $("#applyDayHh").css('background-color', '#F0F0F0');
+    
     $scope.initGrid = function (s, e) {
 
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
@@ -92,6 +114,11 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
                 var obj = {};
                 obj.storeCd = item.storeCd;
                 obj.commentRemark = "TB_HQ_STORE_TYPE_APP 에 직접 등록";
+                obj.applyProcFg = "0"; // 미처리
+
+                if ($("#chkApplyDay").is(":checked")) {
+                    obj.applyDt = wijmo.Globalize.format(applyDay.value, 'yyyyMMdd') + $scope.applyDayHh + "0000";
+                }
 
                 if(storeTypeApplyEnvstVal === "1") { // 매장타입판매가설정(1107) 미사용시, 기본 applyFg = 0
 
@@ -131,8 +158,32 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
         $("#srchPopStoreNm").val("");
         $scope.srchPopSysStatFgCombo.selectedIndex = 0;
 
-        $("input:checkbox[id='chkSaleUprcApply']").prop("checked", false);
+        // 적용일시
+        $scope.isCheckedApplyDay = false;
+        $("input:checkbox[id='chkApplyDay']").prop("checked", false);
+        $("#applyDay").attr("disabled", true);
+        $("#applyDay").css('background-color', '#F0F0F0');
+        $("#applyDayHh").attr("disabled", true);
+        $("#applyDayHh").css('background-color', '#F0F0F0');
 
+        // 판매가 같이적용
+        $("inpt:checkbox[id='chkSaleUprcApply']").prop("checked", false);
+
+    };
+
+    // 적용일시 입력 사용/미사용 체크박스
+    $scope.isChkApplyDay = function () {
+        if($scope.isCheckedApplyDay){
+            $("#applyDay").attr("disabled", false);
+            $("#applyDay").css('background-color', '#FFFFFF');
+            $("#applyDayHh").attr("disabled", false);
+            $("#applyDayHh").css('background-color', '#FFFFFF');
+        }else{
+            $("#applyDay").attr("disabled", true);
+            $("#applyDay").css('background-color', '#F0F0F0');
+            $("#applyDayHh").attr("disabled", true);
+            $("#applyDayHh").css('background-color', '#F0F0F0');
+        }
     };
 
 }]);

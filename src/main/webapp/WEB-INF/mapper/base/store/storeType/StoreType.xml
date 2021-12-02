@@ -786,13 +786,14 @@
         USING (
               SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
                       #{storeCd} AS STORE_CD,
-                      #{regDt} AS APPLY_DT,
+                      #{applyDt} AS APPLY_DT,
                       #{applyFg} AS APPLY_FG,
                       #{commentRemark} AS REMARK,
                       #{regDt} AS REG_DT,
                       #{regId} AS REG_ID,
                       #{modDt} AS MOD_DT,
-                      #{modId} AS MOD_ID
+                      #{modId} AS MOD_ID,
+                      #{applyProcFg} AS APPLY_PROC_FG
                 FROM DUAL
               ) ORG
            ON
@@ -806,7 +807,8 @@
                      A.APPLY_FG = ORG.APPLY_FG,
                      A.REMARK = ORG.REMARK,
                      A.MOD_DT = ORG.MOD_DT,
-                     A.MOD_ID = ORG.MOD_ID
+                     A.MOD_ID = ORG.MOD_ID,
+                     A.APPLY_PROC_FG = ORG.APPLY_PROC_FG
          WHEN NOT MATCHED THEN
               INSERT
               (
@@ -818,7 +820,8 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.APPLY_PROC_FG
               )
               VALUES
               (
@@ -830,7 +833,8 @@
                 ORG.REG_DT,
                 ORG.REG_ID,
                 ORG.MOD_DT,
-                ORG.MOD_ID
+                ORG.MOD_ID,
+                ORG.APPLY_PROC_FG
               )
   </update>
 
@@ -1014,6 +1018,21 @@
             #{hqOfficeCd},
             #{storeCd},
             #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 매장타입관리 - 매장타입적용관리 테이블 조회하여 본사상품 > 매장등록 PKG 호출 (스케쥴러에서 사용, PKG_HQ_STORE_TYPE_APP_ALL -> PKG_HQ_STORE_TYPE_APP 호출) -->
+    <!--
+        PARAM    : storeTypeVO
+        COMMENTS : 매장타입적용관리 테이블을 조회하여 본사상품 > 조회된 매장에 등록한다.
+    -->
+    <select id="insertHqProductToStoreAll" statementType="CALLABLE"  parameterType="storeTypeVO" resultType="String">
+        /* USE : StoreTypeMapper.insertHqProductToStoreAll   */
+        {
+            CALL PKG_HQ_STORE_TYPE_APP_ALL.SP_HQ_STORE_TYPE_APP_ALL_IU
+          (
             #{result, mode=OUT, jdbcType=VARCHAR}
           )
         }

@@ -76,8 +76,11 @@ public interface StoreTypeService {
     /** 매장타입관리 - 매장타입조회(콤보박스용) */
     List<DefaultMap<Object>> getStoreTypeCombo(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
 
-    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 */
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용(매장타입적용관리 테이블에 등록) */
     int saveStoreTypeApplyStore(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO);
+
+    /** 매장타입관리 - 매장타입적용관리 테이블 조회하여 본사상품 > 매장등록 PKG 호출 (스케쥴러에서 사용, PKG_HQ_STORE_TYPE_APP_ALL -> PKG_HQ_STORE_TYPE_APP 호출) */
+    String insertHqProductToStoreAll(StoreTypeVO storeTypeVO);
 
     /** 매장타입관리 - 메뉴그룹조회(콤보박스용) */
     List<DefaultMap<Object>> getStoreGroupCombo(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);

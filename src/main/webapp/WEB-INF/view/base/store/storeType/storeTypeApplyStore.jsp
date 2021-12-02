@@ -112,14 +112,53 @@
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
-                <!-- 판매가 같이적용 선택 -->
-                    <div class="btnSet">
-                    <c:if test="${storeTypeApplyEnvstVal == '1'}">
-                        <div style="float: left;"><input type="checkbox" id="chkSaleUprcApply"/></div>
-                        <div class="ml5" style="float: left; font-size: 15px;"><s:message code="storeType.saleUprcApply" /></div>
-                    </c:if>
-                    <span><button class="btn_blue ml10" id="btnStoreTypeApply" ng-click="storeTypeApply()"><s:message code="cmm.apply"/></button></span>
-                </div>
+            </div>
+            <table class="tblType01">
+                <colgroup>
+                    <col class="w30"/>
+                    <col class="w70"/>
+                </colgroup>
+                <tbody>
+                <%-- 적용일시 --%>
+                <tr>
+                    <th>
+                        <div style="float: left;"><input type="checkbox" id="chkApplyDay" ng-model="isCheckedApplyDay" ng-change="isChkApplyDay()" /></div>
+                        <div style="padding-top: 3px; padding-left: 25px;"><s:message code="storeType.applyDay"/></div>
+                    </th>
+                    <td>
+                        <div class="sb-select fl" style="padding-right: 10px;">
+                            <span class="txtIn"><input id="applyDay" class="w120px"></span>
+                        </div>
+                        <div class="sb-select fl" style="width:65px;">
+                            <wj-combo-box
+                                    id="applyDayHh"
+                                    ng-model="applyDayHh"
+                                    items-source="_getComboData('applyDayHhCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="applyDayHhCombo"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                        <div class="fl pd5" style="padding-right: 15px;">
+                            <label>시 </label>
+                        </div>
+                    </td>
+                </tr>
+                <c:if test="${storeTypeApplyEnvstVal == '1'}">
+                    <tr>
+                        <th><s:message code="storeType.saleUprcApply"/></th>
+                        <td>
+                            <div style="float: left;"><input type="checkbox" id="chkSaleUprcApply"/></div>
+                            <div style="padding-top: 3px; padding-left: 25px;"><s:message code="storeType.saleUprcApply" /></div>
+                        </td>
+                    </tr>
+                </c:if>
+                </tbody>
+            </table>
+            <div class="btnSet2">
+                <button class="btn_blue" id="btnStoreTypeApply" ng-click="storeTypeApply()"><s:message code="cmm.apply"/></button>
             </div>
         </div>
     </div>
@@ -136,4 +175,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20210702.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20211202.01" charset="utf-8"></script>
