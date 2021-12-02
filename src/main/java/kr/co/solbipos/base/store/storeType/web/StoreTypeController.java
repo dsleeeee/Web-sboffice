@@ -11,6 +11,10 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.net.InetAddress;
 import java.util.List;
+import java.util.Properties;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
@@ -58,6 +66,13 @@ public class StoreTypeController {
         this.storeTypeService = storeTypeService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
+
+    @Bean
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler();
+    }
+
+    private HttpServletRequest request;
 
     /**
      * 페이지 이동
@@ -469,7 +484,7 @@ public class StoreTypeController {
     }
 
     /**
-     * 매장타입관리 - 매장타입 매장적용 팝업 매장적용
+     * 매장타입관리 - 매장타입 매장적용 팝업 매장적용(매장타입적용관리 테이블에 등록)
      * @param storeTypeVOs
      * @param request
      * @param response
@@ -554,6 +569,53 @@ public class StoreTypeController {
         List<DefaultMap<Object>> result = storeTypeService.getMenuGroupChgHist(storeTypeVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 매장타입 매장적용 스케쥴러
+     * 매장타입관리 - 매장타입적용관리 테이블 조회하여 본사상품 > 매장등록 PKG 호출 (PKG_HQ_STORE_TYPE_APP_ALL -> PKG_HQ_STORE_TYPE_APP 호출)
+     * @author  이다솜
+     * @since   2021. 11. 19.
+     */
+    @Scheduled(cron = "0 */10 * * * *")	// 10분마다
+    public void storeTypeApplyScheduler() {
+
+        try{
+
+            InetAddress local;
+            local = InetAddress.getLocalHost();
+            StoreTypeVO storeTypeVO = new StoreTypeVO();
+            String propFile = "../conf/webSchedule.properties"; // properties 파일 위치
+
+            System.out.println("IP CHECK : " + local.getHostAddress()); // 서버 ip
+
+            // 개발 또는 운영서버에서만 Scheduler가 동작하도록 하기 위해
+            if("192.168.0.85".equals(local.getHostAddress()) ||
+                "210.122.81.19".equals(local.getHostAddress())){
+
+                // properties 파일 읽기
+                Properties props = new Properties();
+                FileInputStream fis = new FileInputStream(propFile);
+                props.load(new java.io.BufferedInputStream(fis));
+
+                System.out.println("SCHEDULE_USE_YN : " + props.getProperty("schedule.use_yn")) ;
+
+                if(props.getProperty("schedule.use_yn") != null && "Y".equals(props.getProperty("schedule.use_yn"))) {
+                    System.out.println("START storeTypeApplyScheduler ===============================================================================================================");
+                    System.out.println("시작시간 : " + currentDateTimeString());
+
+                    // PKG 실행
+                    storeTypeService.insertHqProductToStoreAll(storeTypeVO);
+
+                    System.out.println("종료시간 : " + currentDateTimeString());
+                    System.out.println("실행결과 : " + storeTypeVO.getResult());
+                    System.out.println("END storeTypeApplyScheduler ==================================================================================================================");
+                }
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

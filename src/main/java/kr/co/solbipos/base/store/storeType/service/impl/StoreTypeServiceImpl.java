@@ -427,7 +427,7 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         return storeTypeMapper.getStoreTypeCombo(storeTypeVO);
     }
 
-    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용 */
+    /** 매장타입관리 - 매장타입 매장적용 팝업 매장적용(매장타입적용관리 테이블에 등록) */
     @Override
     public int saveStoreTypeApplyStore(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO) {
 
@@ -444,17 +444,12 @@ public class StoreTypeServiceImpl implements StoreTypeService {
             storeTypeVO.setModDt(dt);
             storeTypeVO.setModId(sessionInfoVO.getUserId());
 
+            if(storeTypeVO.getApplyDt() == null || "".equals(storeTypeVO.getApplyDt())){
+                storeTypeVO.setApplyDt(dt);
+            }
+
             result += storeTypeMapper.saveStoreTypeApplyStore(storeTypeVO);
 
-            //  본사상품 > 매장등록 PKG 호출
-            storeTypeMapper.insertHqProductToStore(storeTypeVO);
-
-            // 판매가 같이 적용 체크 시
-            /*if("1".equals(storeTypeVO.getApplyFg())){
-
-                // 본사 상품 > 매장 등록 > 가격 처리 PKG 호출
-                storeTypeMapper.insertHqProductSalePriceToStore(storeTypeVO);
-            }*/
         }
 
         if (result == storeTypeVOs.length) {
@@ -462,6 +457,12 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+    }
+
+    /** 매장타입관리 - 매장타입적용관리 테이블 조회하여 본사상품 > 매장등록 PKG 호출 (스케쥴러에서 사용, PKG_HQ_STORE_TYPE_APP_ALL -> PKG_HQ_STORE_TYPE_APP 호출) */
+    @Override
+    public String insertHqProductToStoreAll(StoreTypeVO storeTypeVO) {
+        return storeTypeMapper.insertHqProductToStoreAll(storeTypeVO);
     }
 
     /** 매장타입관리 - 메뉴그룹조회(콤보박스용) */
