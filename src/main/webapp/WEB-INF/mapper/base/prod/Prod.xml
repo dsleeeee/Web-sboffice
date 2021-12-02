@@ -3639,11 +3639,6 @@
                 FROM TB_MS_BRAND
                 WHERE STORE_CD = #{storeCd}
                 AND USE_YN = 'Y'
-                AND (
-                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                        OR
-                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-                    )
                 ORDER BY MS_BRAND_CD
             </when>
         </choose>
