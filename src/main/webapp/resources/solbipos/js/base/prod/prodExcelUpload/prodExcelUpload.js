@@ -94,7 +94,11 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.packSaleUprc = "900";
         params.vendrCd = vendrComboList[0].name;
         params.splyUprc = "1000";
-        params.poProdFg = "1";
+        if(orgnFg === "HQ"){
+            params.poProdFg = "1";
+        } else {
+            params.poProdFg = "4";
+        }
         params.poUnitFg = "1";
         params.poUnitQty = "1";
         params.poMinQty = "1";

@@ -1,5 +1,7 @@
 package kr.co.solbipos.mobile.application.direct.web;
 
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.message.MessageService;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
@@ -111,7 +115,7 @@ public class MobileDirectController {
             System.out.println(sessionInfoVO.getStoreCd());
 
             // 최종교환권 번호
-            if(arrAccessCd[1].equals("mobileVoucherNo")){
+            if (arrAccessCd[1].equals("mobileVoucherNo")) {
 
                 url = "/mobile/sale/status/mobileVoucherNo/view.sb";
                 returnUrl = "mobile/sale/status/voucherNo/mobileDirectVoucherNo";
@@ -130,6 +134,41 @@ public class MobileDirectController {
             }
         }
         return returnUrl;
+    }
+
+
+    /**
+     * 세션 생성
+     *
+     * @param sessionInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2021.12.02
+     */
+    @RequestMapping(value = "getSessionInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSessionInfo(MobileDirectVO mobileDirectVO, SessionInfoVO sessionInfoVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        // 매장코드,구분URL,USER_ID
+        String[] arrAccessCd = mobileDirectService.getAccess(mobileDirectVO, sessionInfoVO).split(",");
+        System.out.println("값값 arrAccessCd : " + arrAccessCd[0] + " / " + arrAccessCd[1] + " / " + arrAccessCd[2]);
+
+        sessionInfoVO.setLoginIp(getClientIp(request));
+        sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
+        sessionInfoVO.setHwAuthKey("000");
+        sessionInfoVO.setUserId(arrAccessCd[2]);
+        sessionInfoVO.setStoreCd(arrAccessCd[0]);
+
+        // 로그인 시도
+        SessionInfoVO posSi = authService.posLogin(sessionInfoVO);
+
+        // 세션 생성
+        sessionService.setSessionInfo(sessionInfoVO);
+
+        return returnJson(Status.OK);
     }
 
 }

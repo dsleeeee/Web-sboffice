@@ -1601,6 +1601,31 @@ Format.prototype.initElements = function () {
     });
   });
 
+  // 초기화 버튼
+  addClickHandler(document.getElementById('btnInti'), function () {
+
+    var scope = agrid.getScope("touchKeyCtrl");
+    var classArea = format.touchkey.classArea;
+    var prodArea = format.touchkey.prodArea;
+
+    scope.$apply(function(){
+      scope._popConfirm("터치키를 초기화 하시겠습니까?", function() {
+
+        // 터치키 저장 시 새 그룹으로 생성해 저장하겠다는 Flag
+        $("#hdNewGrp").val("N");
+
+        format.selectStyle.selectedValue = '01';
+        format.setBtnStyle();
+
+        // 아무것도 없는 빈 XML 터치키 셋팅
+        format.setGraphXml(classArea, null);
+        format.setGraphXml(prodArea, null);
+        scope._broadcast('touchKeyCtrl');
+
+      });
+    });
+  });
+
   // 조회버튼
   addClickHandler(document.getElementById('btnSrchTouchKey'), function () {
 
