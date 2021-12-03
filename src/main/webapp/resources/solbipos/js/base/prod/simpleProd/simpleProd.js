@@ -104,7 +104,11 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.packSaleUprc = "";
         params.vendrCd = "";
         params.prodTypeFg = "1";
-        params.poProdFg = "1";
+        if(orgnFg === "HQ"){
+            params.poProdFg = "1";
+        } else {
+            params.poProdFg = "4";
+        }
         params.splyUprc = "0";
         params.costUprc = "0";
         params.vatFg = "1";

@@ -54,6 +54,11 @@
                 <button class="btn_skyblue fl ml20" id="btnNoTouchKey" style="margin-left : 4px;" ng-click="$broadcast('showPopUpNoTouchKey')">
                     <s:message code="touchKey.noTouchKey" />
                 </button>
+                <%-- 초기화 --%>
+                <button class="btn_skyblue fl ml5" id="btnInti">
+                    <s:message code="cmm.init"/>
+                </button>
+
                 <%-- 신규생성 취소 --%>
                 <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
                 <%-- 터치키 신규 등록인지 수정인지 여부 파악을 위해--%>
@@ -355,7 +360,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.009"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.010"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
