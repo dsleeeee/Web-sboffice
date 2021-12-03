@@ -27,8 +27,6 @@ app.controller('mobileVoucherNoCtrl', ['$scope', '$http', function ($scope, $htt
     // <-- 검색 호출 -->
     $scope.$on("mobileVoucherNoCtrl", function(event, data) {
 
-        $scope._postJSONQuery.withOutPopUp( "/mobile/direct/getSessionInfo.sb", params, function (result) {});
-        
         // 최종교환권번호 조회
         $scope.getVoucherNo();
 
@@ -52,6 +50,8 @@ app.controller('mobileVoucherNoCtrl', ['$scope', '$http', function ($scope, $htt
                 break;
             }
         }
+
+        $scope._postJSONQuery.withOutPopUp( "/mobile/direct/getSessionInfo.sb", params, function (result) {});
 
         $scope._postJSONQuery.withOutPopUp("/mobile/sale/status/mobileVoucherNo/getVoucherNo.sb", params, function (result) {
 
