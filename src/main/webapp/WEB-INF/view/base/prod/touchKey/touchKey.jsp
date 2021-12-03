@@ -54,6 +54,11 @@
                 <button class="btn_skyblue fl ml20" id="btnNoTouchKey" style="margin-left : 4px;" ng-click="$broadcast('showPopUpNoTouchKey')">
                     <s:message code="touchKey.noTouchKey" />
                 </button>
+                <%-- 초기화 --%>
+                <button class="btn_skyblue fl ml5" id="btnInti">
+                    <s:message code="cmm.init"/>
+                </button>
+
                 <%-- 신규생성 취소 --%>
                 <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
                 <%-- 터치키 신규 등록인지 수정인지 여부 파악을 위해--%>
