@@ -586,6 +586,7 @@ public class StoreTypeController {
             local = InetAddress.getLocalHost();
             StoreTypeVO storeTypeVO = new StoreTypeVO();
             String propFile = "../conf/webSchedule.properties"; // 서버 내 properties 파일 위치
+            String stTime = ""; // 시작시간
 
             System.out.println("IP CHECK : " + local.getHostAddress() + " [" + currentDateTimeString() + "]"); // 서버 ip
 
@@ -601,15 +602,15 @@ public class StoreTypeController {
                 System.out.println("SCHEDULE_USE_YN : " + props.getProperty("schedule.use_yn") + " [" + currentDateTimeString() + "]") ;
 
                 if(props.getProperty("schedule.use_yn") != null && "Y".equals(props.getProperty("schedule.use_yn"))) {
-                    System.out.println("START storeTypeApplyScheduler ===============================================================================================================");
-                    System.out.println("시작시간 : " + currentDateTimeString());
+                    stTime = currentDateTimeString();
+                    System.out.println("START storeTypeApplyScheduler [START_TIME : " + stTime + "] =========================================================================================");
 
                     // PKG 실행
                     storeTypeService.insertHqProductToStoreAll(storeTypeVO);
 
-                    System.out.println("종료시간 : " + currentDateTimeString());
                     System.out.println("실행결과 : " + storeTypeVO.getResult());
-                    System.out.println("END storeTypeApplyScheduler ==================================================================================================================");
+                    System.out.println("END storeTypeApplyScheduler  [END_TIME : " + currentDateTimeString() + " / START_TIME : " + stTime + "] ==================================================");
+
                 }
             }
 
