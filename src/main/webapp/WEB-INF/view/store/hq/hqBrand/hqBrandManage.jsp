@@ -127,4 +127,4 @@
   var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/hq/hqBrand/hqBrandManage.js?ver=20210727.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/hq/hqBrand/hqBrandManage.js?ver=20211206.01" charset="utf-8"></script>
