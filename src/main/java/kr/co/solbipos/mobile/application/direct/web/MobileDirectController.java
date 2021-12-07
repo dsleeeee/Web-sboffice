@@ -6,6 +6,7 @@ import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusService;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -51,22 +52,16 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class MobileDirectController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private final SessionService sessionService;
-    private final MobileDirectService mobileDirectService;
-
+    @Autowired
+    SessionService sessionService;
     @Autowired
     AuthService authService;
     @Autowired
     MessageService messageService;
     @Autowired
     CmmMenuService cmmMenuService;
-
-    /** Constructor Injection */
     @Autowired
-    public MobileDirectController(SessionService sessionService, MobileDirectService mobileDirectService) {
-        this.sessionService = sessionService;
-        this.mobileDirectService = mobileDirectService;
-    }
+    MobileDirectService mobileDirectService;
 
     /**
      * 로그인 후 URL페이지로 이동
