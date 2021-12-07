@@ -104,7 +104,7 @@ public class MobileDirectController {
             SessionInfoVO posSi = authService.posLogin(sessionInfoVO);
 
             // 세션 생성
-            sessionService.setSessionInfo(sessionInfoVO);
+            sessionService.setSessionInfo(request, response, posSi);
 
             System.out.println("--- 세션 생성 됨 ---");
             System.out.println(sessionInfoVO.getStoreCd());
