@@ -27,8 +27,24 @@ app.controller('mobileVoucherNoCtrl', ['$scope', '$http', function ($scope, $htt
     // <-- 검색 호출 -->
     $scope.$on("mobileVoucherNoCtrl", function(event, data) {
 
+        // 초기화
+        resNo = "";
+
         // 최종교환권번호 조회
         $scope.getVoucherNo();
+
+        // 2초 내에 조회한 최종교환권번호가 없으면 화면 새로고침
+        setTimeout(function() {
+
+            console.log("result : " + resNo);
+
+            if(resNo === null || resNo === ""){
+                // 다시 화면 리로드 하여, 세션 연결 후 조회되도록 처리
+                location.reload(true);
+            }else{
+                console.log("get VoucherNo : " + resNo);
+            }
+        }, 2000);
 
         event.preventDefault();
     });
@@ -36,24 +52,10 @@ app.controller('mobileVoucherNoCtrl', ['$scope', '$http', function ($scope, $htt
 
     // 최종교환권번호 조회
     $scope.getVoucherNo = function () {
+
         var params = {};
-        var url = unescape(location.href);
-        //파라미터만 자르고, 다시 &그분자를 잘라서 배열에 넣는다.
-        var paramArr = (url.substring(url.indexOf("?")+1,url.length)).split("&");
 
-        for(var i = 0 ; i < paramArr.length ; i++){
-            var temp = paramArr[i].split("="); //파라미터 변수명을 담음
-
-            if(temp[0].toUpperCase() == "ACCESS_CD"){
-                // 변수명과 일치할 경우 데이터 삽입
-                params.accessCd = paramArr[i].split("=")[1];
-                break;
-            }
-        }
-
-        $scope._postJSONQuery.withOutPopUp( "/mobile/direct/getSessionInfo.sb", params, function (result) {});
-
-        $scope._postJSONQuery.withOutPopUp("/mobile/sale/status/mobileVoucherNo/getVoucherNo.sb", params, function (result) {
+        $scope._postJSONQuery.withOutPopUp( "/mobile/sale/status/mobileVoucherNo/getVoucherNo.sb", params, function(result) {
 
                 if (result.data.status === "OK") {
 
