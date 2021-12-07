@@ -419,6 +419,7 @@
             ) B
             WHERE 1=1
             AND B.RNUM = 1
+            AND B.TEL_NO LIKE '010%'
         )
     </insert>
 

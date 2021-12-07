@@ -89,12 +89,14 @@
         SELECT LPAD(NVL(MAX(HQ_BRAND_CD), 0) +1, 7, '0') AS HQ_BRAND_CD
           FROM TB_HQ_BRAND
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND HQ_BRAND_CD BETWEEN '0000000' AND '7999999'
     </if>
     <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
         SELECT LPAD(NVL(MAX(MS_BRAND_CD), 799999999) +1, 9, '0') AS HQ_BRAND_CD
           FROM TB_MS_BRAND
          WHERE STORE_CD = #{storeCd}
-           AND MS_BRAND_CD > 799999999
+--            AND MS_BRAND_CD > 799999999
+          AND MS_BRAND_CD BETWEEN '800000000' AND '999999999'
     </if>
   </select>
 
