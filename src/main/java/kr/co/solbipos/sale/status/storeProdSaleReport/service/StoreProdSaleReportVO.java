@@ -4,7 +4,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @Class Name : StoreProdSaleReportVO.java
- * @Description : 매출관리 > 매출현황 > 기간별 매장-상품 매출 다운로드(고봉민)
+ * @Description : 매출관리 > 매출현황2 > 기간별 매장-상품 매출 다운로드(고봉민)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -65,6 +65,12 @@ public class StoreProdSaleReportVO extends PageVO {
 
     /** 지역명 */
     private String areaNm;
+
+    /** 매장상태 */
+    private String sysStatFg;
+
+    /** 사업자번호 */
+    private String bizNo;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -127,4 +133,12 @@ public class StoreProdSaleReportVO extends PageVO {
     public String getAreaNm() { return areaNm; }
 
     public void setAreaNm(String areaNm) { this.areaNm = areaNm; }
+
+    public String getSysStatFg() { return sysStatFg; }
+
+    public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
+
+    public String getBizNo() { return bizNo; }
+
+    public void setBizNo(String bizNo) { this.bizNo = bizNo; }
 }

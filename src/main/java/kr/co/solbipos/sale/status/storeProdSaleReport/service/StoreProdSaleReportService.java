@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @Class Name : StoreProdSaleReportService.java
- * @Description : 매출관리 > 매출현황 > 기간별 매장-상품 매출 다운로드(고봉민)
+ * @Description : 매출관리 > 매출현황2 > 기간별 매장-상품 매출 다운로드(고봉민)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

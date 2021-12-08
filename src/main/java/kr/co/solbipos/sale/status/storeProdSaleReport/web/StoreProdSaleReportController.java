@@ -28,6 +28,21 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
+/**
+ * @Class Name : StoreProdSaleReportController.java
+ * @Description : 매출관리 > 매출현황2 > 기간별 매장-상품 매출 다운로드(고봉민)
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2021.12.01  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 WEB개발팀 김설아
+ * @since 2021.12.01
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Controller
 @RequestMapping("/sale/status/storeProdSaleReport")
 public class StoreProdSaleReportController {

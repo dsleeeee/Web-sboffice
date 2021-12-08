@@ -47,7 +47,7 @@
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="branchArea.branchCd"/>" binding="branchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="branchArea.branchCd"/>" binding="branchCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="branchArea.branchNm"/>" binding="branchNm" width="120" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
@@ -83,7 +83,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="branchArea.areaCd"/>" binding="areaCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="branchArea.areaCd"/>" binding="areaCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="branchArea.areaNm"/>" binding="areaNm" width="120" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
