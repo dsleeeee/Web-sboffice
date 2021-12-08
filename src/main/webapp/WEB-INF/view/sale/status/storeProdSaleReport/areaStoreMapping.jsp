@@ -43,9 +43,9 @@
                                     item-formatter="_itemFormatter">
 
                                 <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchCd"/>" binding="branchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchCd"/>" binding="branchCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchNm"/>" binding="branchNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaCd"/>" binding="areaCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaCd"/>" binding="areaCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaNm"/>" binding="areaNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
@@ -79,7 +79,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
 
                         <%--삭제시 필요--%>
@@ -144,7 +144,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
