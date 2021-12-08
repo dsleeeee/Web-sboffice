@@ -14,7 +14,7 @@
 </style>
 
 <meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1.0">
-<body ng-app="rootApp" ng-controller="rootCtrl">
+<div ng-app="rootApp" ng-controller="rootCtrl">
     <div class="content-middle" ng-controller="mobileVoucherNoCtrl">
         <div class="oh sb-select dkbr">
             <div class="wj-TblWrapBr" style="height:100%;">
@@ -45,7 +45,7 @@
             </div>
         </div>
     </div>
-</body>
+</div>
 
 <script type="text/javascript">
     var userId = "${userId}";
