@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreProdSaleReport.xml
+    기간별 매장-상품 매출 다운로드(고봉민)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.12.01     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.storeProdSaleReport.service.impl.StoreProdSaleReportMapper">
+
+    <!-- 기간별 매장-상품 매출 다운로드 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreProdSaleReportList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getStoreProdSaleReportList */
+        SELECT
+        SUBSTR(thsr.FROM_SALE_DATE, 0, 6) AS SALE_MONTH,
+        '전체매장통합파일' AS PROC_GUBUN,
+        thsr.PROC_DT,
+        (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = thsr.REG_ID) AS USER_NM,
+        thsr.PROC_FG,
+        '다운로드' AS DOWNLOAD,
+        thsr.FROM_SALE_DATE,
+        thsr.TO_SALE_DATE,
+        thsr.FILE_NAME
+        FROM TB_HQ_SALE_REPORT thsr
+        WHERE 1=1
+        AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
+        <![CDATA[
+            AND thsr.FROM_SALE_DATE >= #{startMonth}||'01'
+            AND thsr.TO_SALE_DATE <= #{endMonth}||'31'
+        ]]>
+        AND thsr.REPORT_TYPE = '01'
+        ORDER BY thsr.FROM_SALE_DATE DESC
+    </select>
+
+    <!-- 기간별 매장-상품 매출 다운로드 탭 - 자료생성 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getStoreProdSaleReportSaveInsert" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getStoreProdSaleReportSaveInsert */
+        INSERT INTO TB_HQ_SALE_REPORT
+        (
+            HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            REQ_DATE,
+            REQ_TIME,
+            REPORT_TYPE,
+            FROM_SALE_DATE,
+            TO_SALE_DATE,
+            PROC_FG,
+            PROC_MSG,
+            PROC_DT,
+            FILE_NAME,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            '0000000',
+            #{reqDate},
+            #{reqTime},
+            '01',
+            #{dataCreateMonth}||'01',
+            #{dataCreateMonth}||'31',
+            '0',
+            '',
+            '',
+            '',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 기간별 매장-상품 매출 다운로드 탭 - 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getStoreProdSaleReportDel" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getStoreProdSaleReportDel */
+        DELETE TB_HQ_SALE_REPORT
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND FROM_SALE_DATE = #{fromSaleDate}
+        AND TO_SALE_DATE = #{toSaleDate}
+        AND REPORT_TYPE = '01'
+    </delete>
+
+    <!-- 기간별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreProdSaleReportChk" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getStoreProdSaleReportChk */
+        SELECT
+        COUNT(thsr.REPORT_TYPE) AS CNT
+        FROM TB_HQ_SALE_REPORT thsr
+        WHERE 1=1
+        AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'
+        AND thsr.TO_SALE_DATE = #{dataCreateMonth}||'31'
+        AND thsr.REPORT_TYPE = '01'
+    </select>
+
+    <!-- 지사-지역관리 탭 - 지사 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getBranchAreaList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getBranchAreaList */
+        SELECT
+        thn.NMCODE_CD AS BRANCH_CD,
+        thn.NMCODE_NM AS BRANCH_NM
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = 'N001'
+        AND thn.PARENT_CD = 'N001'
+    </select>
+
+    <!-- 지사코드(자동채번) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getBranchAreaBranchCd" parameterType="StoreProdSaleReportVO" resultType="String">
+        /* StoreProdSaleReportMapper.getBranchAreaBranchCd */
+        SELECT
+        LPAD(NVL(MAX(thn.NMCODE_CD), 0) + 1, 4, '0')
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = 'N001'
+        AND thn.PARENT_CD = 'N001'
+    </select>
+
+    <!-- 지사-지역관리 탭 - 지사 저장 Insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getBranchAreaSaveInsert" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getBranchAreaSaveInsert */
+        INSERT INTO TB_HQ_NMCODE
+        (
+            HQ_OFFICE_CD,
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            PARENT_CD,
+            NMCODE_NM,
+            NMCODE_ITEM_1,
+            NMCODE_ITEM_2,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            'N001',
+            #{branchCd},
+            'N001',
+            #{branchNm},
+            '',
+            '',
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 지사-지역관리 탭 - 지사 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getBranchAreaSaveUpdate" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getBranchAreaSaveUpdate */
+        UPDATE TB_HQ_NMCODE
+        SET
+        NMCODE_NM = #{branchNm},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND NMCODE_GRP_CD = 'N001'
+        AND PARENT_CD = 'N001'
+        AND NMCODE_CD = #{branchCd}
+    </insert>
+
+    <!-- 지사-지역관리 탭 - 지사 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getBranchAreaSaveDelete" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getBranchAreaSaveDelete */
+        DELETE TB_HQ_NMCODE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND NMCODE_GRP_CD = 'N001'
+        AND PARENT_CD = 'N001'
+        AND NMCODE_CD = #{branchCd}
+    </delete>
+
+    <!-- 지사-지역관리 탭 - 지사 delete 시, 지역 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getBranchAreaDetailSaveDeleteAll" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getBranchAreaDetailSaveDeleteAll */
+        DELETE TB_HQ_NMCODE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND NMCODE_GRP_CD = 'N001'
+        AND PARENT_CD = #{branchCd}
+    </delete>
+
+    <!-- 지사-지역관리 탭 - 지역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getBranchAreaDetailList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getBranchAreaDetailList */
+        SELECT
+        thn.NMCODE_CD AS AREA_CD,
+        thn.NMCODE_NM AS AREA_NM
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = 'N001'
+        AND thn.PARENT_CD = #{branchCd}
+    </select>
+
+    <!-- 지역코드(자동채번) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getBranchAreaAreaCd" parameterType="StoreProdSaleReportVO" resultType="String">
+        /* StoreProdSaleReportMapper.getBranchAreaAreaCd */
+        SELECT
+        LPAD(NVL(MAX(thn.NMCODE_CD), 0) + 1, 4, '0')
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = 'N001'
+        AND thn.PARENT_CD = #{branchCd}
+    </select>
+
+    <!-- 지사-지역관리 탭 - 지역 저장 Insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getBranchAreaDetailSaveInsert" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getBranchAreaDetailSaveInsert */
+        INSERT INTO TB_HQ_NMCODE
+        (
+            HQ_OFFICE_CD,
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            PARENT_CD,
+            NMCODE_NM,
+            NMCODE_ITEM_1,
+            NMCODE_ITEM_2,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            'N001',
+            #{areaCd},
+            #{branchCd},
+            #{areaNm},
+            '',
+            '',
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 지사-지역관리 탭 - 지역 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getBranchAreaDetailSaveUpdate" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getBranchAreaDetailSaveUpdate */
+        UPDATE TB_HQ_NMCODE
+        SET
+        NMCODE_NM = #{areaNm},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND NMCODE_GRP_CD = 'N001'
+        AND PARENT_CD = #{branchCd}
+        AND NMCODE_CD = #{areaCd}
+    </insert>
+
+    <!-- 지사-지역관리 탭 - 지역 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getBranchAreaDetailSaveDelete" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getBranchAreaDetailSaveDelete */
+        DELETE TB_HQ_NMCODE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND NMCODE_GRP_CD = 'N001'
+        AND PARENT_CD = #{branchCd}
+        AND NMCODE_CD = #{areaCd}
+    </delete>
+
+    <!-- 지역-매장관리 탭 - 지역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAreaStoreMappingList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getAreaStoreMappingList */
+        SELECT
+        thn.PARENT_CD AS BRANCH_CD,
+        A.BRANCH_NM,
+        thn.NMCODE_CD AS AREA_CD,
+        thn.NMCODE_NM AS AREA_NM
+        FROM TB_HQ_NMCODE thn,
+        (
+            SELECT
+            thn.NMCODE_CD AS BRANCH_CD,
+            thn.NMCODE_NM AS BRANCH_NM
+            FROM TB_HQ_NMCODE thn
+            WHERE 1=1
+            AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thn.NMCODE_GRP_CD = 'N001'
+            AND thn.PARENT_CD = 'N001'
+        ) A
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = 'N001'
+        AND thn.PARENT_CD = A.BRANCH_CD
+        ORDER BY thn.PARENT_CD, thn.NMCODE_CD
+    </select>
+
+    <!-- 지역-매장관리 탭 - 지역-매장 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAreaStoreMappingDetailList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getAreaStoreMappingDetailList */
+        SELECT
+        thas.BRANCH_CD,
+        thas.AREA_CD,
+        thas.STORE_CD,
+        tms.STORE_NM
+        FROM TB_HQ_AREA_STORE thas,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND thas.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thas.BRANCH_CD = #{branchCd}
+        AND thas.AREA_CD = #{areaCd}
+        AND tms.STORE_CD (+)= thas.STORE_CD
+        ORDER BY thas.HQ_OFFICE_CD, thas.STORE_CD
+    </select>
+
+    <!-- 지역-매장관리 탭 - 매장 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAreaStoreMappingStoreList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getAreaStoreMappingStoreList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM
+        FROM TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tms.STORE_CD NOT IN (
+                                    SELECT thas.STORE_CD
+                                    FROM TB_HQ_AREA_STORE thas
+                                    WHERE 1=1
+                                    AND thas.BRANCH_CD = #{branchCd}
+                                    AND thas.AREA_CD = #{areaCd}
+                                )
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 지사-지역관리 탭 - 지역-매장 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getAreaStoreMappingDetailSaveDelete" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getAreaStoreMappingDetailSaveDelete */
+        DELETE TB_HQ_AREA_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+        AND BRANCH_CD = #{branchCd}
+        AND AREA_CD = #{areaCd}
+    </delete>
+
+    <!-- 지사-지역관리 탭 - 지역-매장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getAreaStoreMappingStoreSaveInsert" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getAreaStoreMappingStoreSaveInsert */
+        INSERT INTO TB_HQ_AREA_STORE
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            BRANCH_CD,
+            AREA_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{branchCd},
+            #{areaCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+</mapper>
