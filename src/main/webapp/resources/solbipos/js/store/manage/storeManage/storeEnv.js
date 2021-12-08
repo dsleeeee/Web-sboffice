@@ -91,11 +91,20 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
+  // 조회버튼 클릭 시 검색어를 포함한 설정값 조회
+  $scope.srchEnvst = function(){
+    $("#envGroupTab li a").each(function(index, item){
+      if($(item).attr("class") === "on") {
+        var cmmEnvScope = agrid.getScope('cmmEnvCtrl');
+        cmmEnvScope.changeEnvGroup($(item).attr("envstFg"));
+      }
+    });
+  }
+
   /*********************************************************
    *  환경변수 그리기 [환경변수 타입 (P:포스환경변수, S:그 외)]
    * *******************************************************/
   $scope.setEnvContents = function(envType, list){
-
 
     // console.log(list)
     console.log(envstGrp)

@@ -106,6 +106,10 @@ app.controller('funcKeyCtrl', ['$scope', '$http', 'saveInfo', function ($scope, 
     }
   });
 
+  $scope.changeTabSrch = function (){
+    $("#srchConfig").val('');
+  };
+
   /*********************************************************
    * 매장환경 탭 변경
    * *******************************************************/

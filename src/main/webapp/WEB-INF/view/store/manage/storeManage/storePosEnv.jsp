@@ -51,7 +51,7 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20181107.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20181107.11" charset="utf-8"></script>
 
 <%-- 테이블 그룹설정 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/setTableGroup.jsp">

@@ -19,6 +19,10 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
+  $scope.changeTabSrch = function (){
+    $("#srchConfig").val('');
+  };
+
   /*********************************************************
    * 매장환경 분류 탭 변경
    * *******************************************************/
@@ -88,6 +92,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
     params.storeCd    = storeScope.getSelectedStore().storeCd;
     params.envstFg    = envGroupCd;
+    params.envst = $("#srchConfig").val();
 
     $scope.$broadcast('loadingPopupActive');
 
