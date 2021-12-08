@@ -194,9 +194,12 @@ app.controller('areaStoreMappingStoreCtrl', ['$scope', '$http', function ($scope
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('areaStoreMappingStoreCtrl', $scope, $http, false));
 
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("sysStatFgCombo", sysStatFgComboData); // 매장상태구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFgComboData, 'value', 'name'); // 매장상태구분
     };
 
     // <-- 검색 호출 -->

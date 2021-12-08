@@ -23,7 +23,7 @@
         </div>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
+        <div class="wj-TblWrap mt20 mb20 w30 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:450px;">
                 <div class="updownSet oh mb10">
                     <span class="fl bk lh30">
@@ -44,9 +44,9 @@
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchCd"/>" binding="branchCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchNm"/>" binding="branchNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchNm"/>" binding="branchNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaCd"/>" binding="areaCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaNm"/>" binding="areaNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaNm"/>" binding="areaNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
     <%--center--%>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w30 fr" ng-controller="areaStoreMappingStoreCtrl">
+    <div class="wj-TblWrap mt20 mb20 w40 fr" ng-controller="areaStoreMappingStoreCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:450px; overflow-y: hidden;">
             <table class="tblType01">
                 <colgroup>
@@ -108,20 +108,48 @@
                     <th>
                         <s:message code="areaStoreMapping.storeCd" />
                     </th>
-                    <td colspan="2">
+                    <td>
                         <input type="text" class="sb-input w100" ng-model="storeCd" />
                     </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
                     <%-- 매장명 --%>
                     <th>
                         <s:message code="areaStoreMapping.storeNm" />
                     </th>
-                    <td colspan="2">
+                    <td>
                         <input type="text" class="sb-input w100" ng-model="storeNm" />
                     </td>
+                </tr>
+                <tr>
+                    <%-- 사업자번호 --%>
+                    <th>
+                        <s:message code="areaStoreMapping.bizNo" />
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" ng-model="bizNo" />
+                    </td>
+                    <%-- 매장상태구분 --%>
+                    <th>
+                        <s:message code="areaStoreMapping.sysStatFg" />
+                    </th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchSysStatFgCombo"
+                                    ng-model="sysStatFg"
+                                    items-source="_getComboData('sysStatFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchSysStatFgCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                         <%-- 조회 --%>
                         <button class="btn_skyblue fr" id="btnSearch" ng-click="search()"><s:message code="cmm.search" /></button>
@@ -146,6 +174,8 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="areaStoreMapping.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="areaStoreMapping.bizNo"/>" binding="bizNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="areaStoreMapping.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -155,4 +185,9 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/areaStoreMapping.js?ver=20211207.01" charset="utf-8"></script>
+<script type="text/javascript">
+    <%-- 매장상태구분 --%>
+    var sysStatFgComboData = ${ccu.getCommCode("005")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/areaStoreMapping.js?ver=20211207.02" charset="utf-8"></script>
