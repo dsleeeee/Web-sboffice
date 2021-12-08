@@ -34,12 +34,19 @@
                 <th>
                     <s:message code="sendStatus.regDt"/>
                 </th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"><input id="startDate" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
                         <span class="txtIn"><input id="endDate" name="endDate" class="w110px" /></span>
                     </div>
+                </td>
+                <%-- 보내는이 전화번호(발신번호) --%>
+                <th>
+                    <s:message code="sendStatus.sPhoneNumber"/>
+                </th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSsPhoneNumber" ng-model="ssPhoneNumber" />
                 </td>
             </tr>
             <tr>

@@ -60,6 +60,9 @@ public class SendStatusVO extends PageVO {
     /** 메세지타입 */
     private String msgType;
 
+    /** 송신자 전화번호 */
+    private String ssPhoneNumber;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -107,4 +110,8 @@ public class SendStatusVO extends PageVO {
     public String getMsgType() { return msgType; }
 
     public void setMsgType(String msgType) { this.msgType = msgType; }
+
+    public String getSsPhoneNumber() { return ssPhoneNumber; }
+
+    public void setSsPhoneNumber(String ssPhoneNumber) { this.ssPhoneNumber = ssPhoneNumber; }
 }

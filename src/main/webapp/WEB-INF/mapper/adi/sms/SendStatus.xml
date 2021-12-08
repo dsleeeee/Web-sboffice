@@ -100,6 +100,9 @@
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
                 )
                 UNION ALL
                 (
@@ -136,6 +139,9 @@
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
+                    </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
                     </if>
                 )
                 UNION ALL
@@ -179,6 +185,9 @@
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
                 )
                 UNION ALL
                 (
@@ -220,6 +229,9 @@
                     </if>
                     <if test="rrOrgnCd != null and rrOrgnCd != ''">
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
+                    </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
                     </if>
                 )
             )
