@@ -54,7 +54,8 @@ public class StorePosEnvVO extends CmmVO {
     private UseYn useYn;
     /** 포스 복사시, 타겟 포스 */
     private String targetPosNo;
-    
+    /** 검색 */
+    private String envst;
     
     /**
      * @return the storeCd
@@ -248,5 +249,12 @@ public class StorePosEnvVO extends CmmVO {
     public void setTargetPosNo(String targetPosNo) {
         this.targetPosNo = targetPosNo;
     }
-    
+
+    public String getEnvst() {
+        return envst;
+    }
+
+    public void setEnvst(String envst) {
+        this.envst = envst;
+    }
 }

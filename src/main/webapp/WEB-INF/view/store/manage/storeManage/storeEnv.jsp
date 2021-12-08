@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="storeEnvLayer" show-trigger="Click" hide-trigger="Click" style="width:800px;height:600px;">
+<wj-popup control="storeEnvLayer" show-trigger="Click" hide-trigger="Click" style="width:800px;height:650px;">
   <div class="wj-dialog wj-dialog-columns title" >
 
     <%-- header --%>
@@ -26,6 +26,13 @@
           <%-- 메뉴권한 --%>
           <li><a id="storeAuth" href="#" ng-click="changeAuthTab();"><s:message code="storeManage.auth" /></a></li>
         </ul>
+
+          <div class="mt20">
+              <input type="text" class="sb-input w200px" id="srchConfig"/>
+              <%-- 조회버튼 --%>
+              <button type="button" class="btn_skyblue ml5" ng-click="srchEnvst();">
+                  <s:message code="cmm.search"/></button>
+          </div>
       </div>
 
       <%-- 매장환경, 외식환경, 유통환경 --%>

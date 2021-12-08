@@ -86,4 +86,4 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=2018110701" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=2018110702" charset="utf-8"></script>

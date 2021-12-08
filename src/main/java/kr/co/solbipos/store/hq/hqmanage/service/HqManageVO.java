@@ -94,6 +94,8 @@ public class HqManageVO extends PageVO {
     private String posUserPwd;
     /** 권한 그룹 코드 */
     private String authGrpCd;
+    /** 검색어 */
+    private String envst;
 
 
     public String getOrgnFg() {
@@ -459,5 +461,13 @@ public class HqManageVO extends PageVO {
 
     public void setAuthGrpCd(String authGrpCd) {
         this.authGrpCd = authGrpCd;
+    }
+
+    public String getEnvst() {
+        return envst;
+    }
+
+    public void setEnvst(String envst) {
+        this.envst = envst;
     }
 }

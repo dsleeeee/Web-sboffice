@@ -37,6 +37,10 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
+  $scope.changeTabSrch = function (){
+    $("#srchConfig").val('');
+  };
+
   /*********************************************************
    * 매장환경 분류 탭 변경
    * *******************************************************/
@@ -142,7 +146,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd    = storeScope.getSelectedStore().storeCd;
     params.posNo      = $scope.getSelectedPosNo();
     params.envstFg    = "03"; // 포스환경
-
+    params.envst = $("#srchConfig").val();
     $scope.$broadcast('loadingPopupActive');
     $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getPosConfigList.sb', params, function(response){
       if (!$.isEmptyObject(response.data)) {

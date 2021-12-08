@@ -41,6 +41,10 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     event.preventDefault();
   });
 
+  $scope.changeTabSrch = function (){
+    $("#srchConfig").val('');
+  };
+
   /*********************************************************
    * 환경변수 탭 변경
    * *******************************************************/

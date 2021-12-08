@@ -50,6 +50,8 @@ public class StoreEnvVO extends CmmVO {
     private UseYn useYn;
     /** 기능키 관련 프로시져 실행 결과 */
     private String result;
+    /** 검색 */
+    private String envst;
 
 
     /**
@@ -217,4 +219,11 @@ public class StoreEnvVO extends CmmVO {
      */
     public void setResult(String result) { this.result = result; }
 
+    public String getEnvst() {
+        return envst;
+    }
+
+    public void setEnvst(String envst) {
+        this.envst = envst;
+    }
 }

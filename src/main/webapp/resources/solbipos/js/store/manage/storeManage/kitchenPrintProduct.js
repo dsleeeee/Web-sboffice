@@ -66,11 +66,14 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
     event.preventDefault();
   });
 
+  $scope.changeTabSrch = function (){
+    $("#srchConfig").val('');
+  };
+
   /*********************************************************
    * 환경변수 탭 변경
    * *******************************************************/
   $scope.changeEnvGroup = function(envGroupCd){
-
     // 탭 변경
     $("#envGroupTab li a").each(function(index, item){
       if($(this).attr("envstFg") === envGroupCd) {
