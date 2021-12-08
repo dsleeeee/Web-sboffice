@@ -154,7 +154,7 @@ public class StoreProdSaleReportController {
      */
     @RequestMapping(value = "/storeProdSaleReport/getStoreProdSaleReportChk.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getMobileDaySaleTotalList(StoreProdSaleReportVO storeProdSaleReportVO, HttpServletRequest request,
+    public Result getStoreProdSaleReportChk(StoreProdSaleReportVO storeProdSaleReportVO, HttpServletRequest request,
                                             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);

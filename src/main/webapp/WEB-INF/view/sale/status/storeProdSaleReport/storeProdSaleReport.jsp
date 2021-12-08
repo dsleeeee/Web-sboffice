@@ -43,8 +43,6 @@
                 </td>
             </tr>
             </tbody>
-            <tbody id="fileContent">
-            </tbody>
         </table>
 
         <div class="mt10 oh sb-select dkbr">

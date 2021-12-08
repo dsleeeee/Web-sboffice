@@ -161,7 +161,7 @@
                 <button class="btn_skyblue" id="btnAreaStoreMappingStoreSave" ng-click="save()"><s:message code='cmm.save' /></button>
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:290px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:260px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
