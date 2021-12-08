@@ -979,6 +979,10 @@
                                  AND tcd.ENVST_CD (+)= tce.ENVST_CD
                             ) tcd
            			 WHERE tcd.DTL_USE_YN = 'Y'
+                    <if test='envst != null and envst != ""'>
+                        AND tcd.ENVST_CD LIKE '%'|| #{envst} ||'%'
+                        OR 	tcd.ENVST_NM LIKE '%'|| #{envst} ||'%'
+                    </if>
                 ) tcd,
                 (
                    SELECT tce.ENVST_GRP_CD,

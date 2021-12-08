@@ -23,6 +23,11 @@
         <%-- 환경설정 컨텐츠 --%>
         <form id="envForm" name="envForm">
           <div class="oh mt20 mb15">
+            <input type="text" class="sb-input w200px" id="srchConfig"/>
+            <%-- 조회버튼 --%>
+            <button type="button" class="btn_skyblue ml5" id="btnEnvst" onclick="getConfigList()">
+              <s:message code="cmm.search"/></button>
+
             <span class="fr"><a href="#" class="btn_grayS2" id="btnDefault"><s:message code="hqManage.setting.default.env" /></a></span>
           </div>
           <div class="mt20 sc" style="height:450px;border:0px;" id="contents"></div>
@@ -66,6 +71,8 @@ function getConfigList(){
   } else {
     param.hqOfficeCd = hqOfficeCd;
   }
+  param.envst = $("#srchConfig").val();
+
   var envstGrpCd = ${ccu.getCommCodeExcpAll("004")};
 
   $.postJSON("/store/hq/hqManage/config/getConfiglist.sb", param, function(result) {
@@ -356,6 +363,8 @@ function showEnvSet(){
 
 <%-- 환경설정 화면 닫기 --%>
 $("#envLayer .btn_close").click(function(){
+
+  $("#srchConfig").val('');
   hideEnvSet();
 });
 
