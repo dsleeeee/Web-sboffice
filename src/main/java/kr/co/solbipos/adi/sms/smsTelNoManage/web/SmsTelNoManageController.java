@@ -249,7 +249,7 @@ public class SmsTelNoManageController {
     }
 
     /**
-     * 발신번호관리 저장
+     * 발신번호관리 - 저장
      *
      * @param smsTelNoManageVOs
      * @param request
@@ -333,6 +333,52 @@ public class SmsTelNoManageController {
 //        result2.add(5,UP_HASH);
 //
 //        System.out.println("결과2 " + result2);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 발신번호차단 탭 - 조회
+     *
+     * @param smsTelNoManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 12. 08.
+     */
+    @RequestMapping(value = "/smsTelNoStop/getSmsTelNoStopList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsTelNoStopList(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsTelNoManageService.getSmsTelNoStopList(smsTelNoManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsTelNoManageVO);
+    }
+
+    /**
+     * 발신번호차단 탭 - 저장
+     *
+     * @param smsTelNoManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2021. 12. 08.
+     */
+    @RequestMapping(value = "/smsTelNoStop/getSmsTelNoStopSaveUpdate.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsTelNoStopSaveUpdate(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsTelNoManageService.getSmsTelNoStopSaveUpdate(smsTelNoManageVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

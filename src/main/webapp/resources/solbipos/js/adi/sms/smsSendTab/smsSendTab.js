@@ -17,20 +17,41 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
         if(orgnFg == "HQ" || orgnFg == "STORE") {
+            $("#marketingSmsSendTab").addClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
+
             $("#marketingSmsSendView").show();
             $("#sendStatusView").hide();
             $("#msgManageView").hide();
             $("#smsTelNoManageView").hide();
-        } else {
-            $("#marketingSmsSendTab").removeClass("on");
+            // $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "MASTER") {
+            // $("#marketingSmsSendTab").removeClass("on");
             $("#sendStatusTab").addClass("on");
             $("#msgManageTab").removeClass("on");
             $("#smsTelNoManageTab").removeClass("on");
+            $("#smsTelNoStopTab").removeClass("on");
 
-            $("#marketingSmsSendView").hide();
+            // $("#marketingSmsSendView").show();
             $("#sendStatusView").show();
             $("#msgManageView").hide();
             $("#smsTelNoManageView").hide();
+            $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "AGENCY") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").addClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
+
+            // $("#marketingSmsSendView").show();
+            $("#sendStatusView").show();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
+            // $("#smsTelNoStopView").hide();
         }
     };
 
@@ -40,11 +61,13 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
         $("#sendStatusTab").removeClass("on");
         $("#msgManageTab").removeClass("on");
         $("#smsTelNoManageTab").removeClass("on");
+        // $("#smsTelNoStopTab").removeClass("on");
 
         $("#marketingSmsSendView").show();
         $("#sendStatusView").hide();
         $("#msgManageView").hide();
         $("#smsTelNoManageView").hide();
+        // $("#smsTelNoStopView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("marketingSmsSendCtrl");
@@ -53,15 +76,43 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
 
     // 문자전송현황 탭 보이기
     $scope.sendStatusShow = function () {
-        $("#marketingSmsSendTab").removeClass("on");
-        $("#sendStatusTab").addClass("on");
-        $("#msgManageTab").removeClass("on");
-        $("#smsTelNoManageTab").removeClass("on");
+        if(orgnFg == "HQ" || orgnFg == "STORE") {
+            $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").addClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
 
-        $("#marketingSmsSendView").hide();
-        $("#sendStatusView").show();
-        $("#msgManageView").hide();
-        $("#smsTelNoManageView").hide();
+            $("#marketingSmsSendView").hide();
+            $("#sendStatusView").show();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
+            // $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "MASTER") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").addClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            $("#smsTelNoStopTab").removeClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").show();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
+            $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "AGENCY") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").addClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").show();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
+            // $("#smsTelNoStopView").hide();
+        }
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sendStatusCtrl");
@@ -70,15 +121,43 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
 
     // 메세지관리 탭 보이기
     $scope.msgManageShow = function () {
-        $("#marketingSmsSendTab").removeClass("on");
-        $("#sendStatusTab").removeClass("on");
-        $("#msgManageTab").addClass("on");
-        $("#smsTelNoManageTab").removeClass("on");
+        if(orgnFg == "HQ" || orgnFg == "STORE") {
+            $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").addClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
 
-        $("#marketingSmsSendView").hide();
-        $("#sendStatusView").hide();
-        $("#msgManageView").show();
-        $("#smsTelNoManageView").hide();
+            $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").show();
+            $("#smsTelNoManageView").hide();
+            // $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "MASTER") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").addClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            $("#smsTelNoStopTab").removeClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").show();
+            $("#smsTelNoManageView").hide();
+            $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "AGENCY") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").addClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").show();
+            $("#smsTelNoManageView").hide();
+            // $("#smsTelNoStopView").hide();
+        }
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("msgManageCtrl");
@@ -87,18 +166,91 @@ app.controller('smsSendTabCtrl', ['$scope', function ($scope) {
 
     // 발신번호관리 탭 보이기
     $scope.smsTelNoManageShow = function () {
-        $("#marketingSmsSendTab").removeClass("on");
-        $("#sendStatusTab").removeClass("on");
-        $("#msgManageTab").removeClass("on");
-        $("#smsTelNoManageTab").addClass("on");
+        if(orgnFg == "HQ" || orgnFg == "STORE") {
+            $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").addClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
 
-        $("#marketingSmsSendView").hide();
-        $("#sendStatusView").hide();
-        $("#msgManageView").hide();
-        $("#smsTelNoManageView").show();
+            $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").show();
+            // $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "MASTER") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").addClass("on");
+            $("#smsTelNoStopTab").removeClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").show();
+            $("#smsTelNoStopView").hide();
+        } else if(orgnFg == "AGENCY") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").addClass("on");
+            // $("#smsTelNoStopTab").removeClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").show();
+            // $("#smsTelNoStopView").hide();
+        }
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("smsTelNoManageCtrl");
+        scope.flex.refresh();
+    };
+
+    // 발신번호차단 탭 보이기
+    $scope.smsTelNoStopShow = function () {
+        if(orgnFg == "HQ" || orgnFg == "STORE") {
+            $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").addClass("on");
+
+            $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
+            // $("#smsTelNoStopView").show();
+        } else if(orgnFg == "MASTER") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            $("#smsTelNoStopTab").addClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
+            $("#smsTelNoStopView").show();
+        } else if(orgnFg == "AGENCY") {
+            // $("#marketingSmsSendTab").removeClass("on");
+            $("#sendStatusTab").removeClass("on");
+            $("#msgManageTab").removeClass("on");
+            $("#smsTelNoManageTab").removeClass("on");
+            // $("#smsTelNoStopTab").addClass("on");
+
+            // $("#marketingSmsSendView").hide();
+            $("#sendStatusView").hide();
+            $("#msgManageView").hide();
+            $("#smsTelNoManageView").hide();
+            // $("#smsTelNoStopView").show();
+        }
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("smsTelNoStopCtrl");
         scope.flex.refresh();
     };
 }]);

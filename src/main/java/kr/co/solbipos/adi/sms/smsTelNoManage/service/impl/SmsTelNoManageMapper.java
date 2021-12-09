@@ -38,9 +38,15 @@ public interface SmsTelNoManageMapper {
     /** 발신번호관리 - 발신번호 등록  */
     int getSmsTelNoManageUpdate(SmsTelNoManageVO smsTelNoManageVO);
 
-    /** 발신번호관리 저장 */
+    /** 발신번호관리 - 저장 */
     int getSmsTelNoManageSaveUpdate(SmsTelNoManageVO smsTelNoManageVO);
 
     /** HCS_CRTLG_T.OGN_CD 값 가져옴 */
     String getOrdrIdxx(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 발신번호차단 탭 - 조회 */
+    List<DefaultMap<Object>> getSmsTelNoStopList(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 발신번호차단 탭 - 저장 */
+    int getSmsTelNoStopSaveUpdate(SmsTelNoManageVO smsTelNoManageVO);
 }

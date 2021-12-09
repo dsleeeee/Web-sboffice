@@ -34,10 +34,15 @@ public interface SmsTelNoManageService {
     /** 발신번호관리 - 발신번호 등록 요청 저장 */
     int getSmsTelNoManageUpdate(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
 
-    /** 발신번호관리 저장 */
+    /** 발신번호관리 - 저장 */
     int getSmsTelNoManageSaveUpdate(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
 
     /** HCS_CRTLG_T.OGN_CD 값 가져옴 */
     String getOrdrIdxx(SmsTelNoManageVO smsTelNoManageVO);
 
+    /** 발신번호차단 탭 - 조회 */
+    List<DefaultMap<Object>> getSmsTelNoStopList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 발신번호차단 탭 - 저장 */
+    int getSmsTelNoStopSaveUpdate(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
 }

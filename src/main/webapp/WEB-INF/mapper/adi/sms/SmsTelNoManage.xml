@@ -91,7 +91,7 @@
         AND OGN_CD = #{orgnCd}
     </update>
 
-    <!-- 발신번호관리 저장(사용X) -->
+    <!-- 발신번호관리 - 저장 -->
     <!--
         TABLE    :
         COMMENTS :
@@ -109,7 +109,6 @@
           AND TEL_NO = SBPENC.E(#{telNo})
     </update>
 
-
     <!-- HCS_CRTLG_T.OGN_CD 값 가져옴 -->
     <!--
         TABLE    : HCS_CRTLG_T
@@ -121,4 +120,57 @@
         FROM    HCS_CRTLG_T
         WHERE   CERT_ID = #{certId}
     </select>
+
+    <!-- 발신번호차단 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSmsTelNoStopList"  parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getSmsTelNoStopList */
+        SELECT
+        hst.OGN_CD AS ORGN_CD,
+        twuidv01.ORGN_NM,
+        SBPENC.D(hst.TEL_NO) AS TEL_NO,
+        hst.USE_YN
+        FROM HCS_SENDM_T hst,
+        (
+            SELECT
+            DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD
+            FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        <!-- 검색조건 소속구분 -->
+        <if test='srchOrgnFg != null and srchOrgnFg != ""'>
+            <![CDATA[
+                AND twuidv01.ORGN_FG = #{srchOrgnFg}
+            ]]>
+        </if>
+        AND twuidv01.ORGN_CD = hst.OGN_CD
+        ORDER BY hst.OGN_CD, hst.USE_SEQ
+    </select>
+
+    <!-- 발신번호차단 탭 - 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getSmsTelNoStopSaveUpdate" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.getSmsTelNoStopSaveUpdate */
+        UPDATE
+        HCS_SENDM_T
+        SET
+        USE_YN = #{useYn},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND TEL_NO = SBPENC.E(#{telNo})
+    </update>
+
 </mapper>

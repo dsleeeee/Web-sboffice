@@ -28,6 +28,12 @@
             <li>
                 <a id="smsTelNoManageTab" href="#" ng-click="smsTelNoManageShow()"><s:message code="smsSendTab.smsTelNoManage"/></a>
             </li>
+            <c:if test="${orgnFg == 'MASTER'}">
+                <%-- 발신번호차단 탭 --%>
+                <li>
+                    <a id="smsTelNoStopTab" href="#" ng-click="smsTelNoStopShow()"><s:message code="smsSendTab.smsTelNoStop"/></a>
+                </li>
+            </c:if>
         </ul>
     </div>
 </div>
@@ -36,7 +42,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendTab/smsSendTab.js?ver=20211124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendTab/smsSendTab.js?ver=20211208.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <c:if test="${orgnFg == 'HQ' or orgnFg == 'STORE'}">
@@ -64,4 +70,12 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<c:if test="${orgnFg == 'MASTER'}">
+    <%-- 발신번호차단 레이어 --%>
+    <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsTelNoStop.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+</c:if>
 <%-- 탭페이지 레이어 끝 --%>

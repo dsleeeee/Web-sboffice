@@ -106,7 +106,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         return cnt;
     }
 
-    /** 발신번호관리 저장 */
+    /** 발신번호관리 - 저장 */
     @Override
     public int getSmsTelNoManageSaveUpdate(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO) {
 
@@ -133,5 +133,35 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         String ordrIdxx = smsTelNoManageMapper.getOrdrIdxx(smsTelNoManageVO);
         System.out.println("JH : HCS_CRTLG_T.OGN_CD값 : " + ordrIdxx);
         return ordrIdxx;
+    }
+
+    /** 발신번호차단 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSmsTelNoStopList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
+
+        smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return smsTelNoManageMapper.getSmsTelNoStopList(smsTelNoManageVO);
+    }
+
+    /** 발신번호차단 탭 - 저장 */
+    @Override
+    public int getSmsTelNoStopSaveUpdate(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        String currentDt = currentDateTimeString();
+
+        for(SmsTelNoManageVO smsTelNoManageVO : smsTelNoManageVOs) {
+
+            smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+            smsTelNoManageVO.setModDt(currentDt);
+            smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt = smsTelNoManageMapper.getSmsTelNoStopSaveUpdate(smsTelNoManageVO);
+        }
+
+        return procCnt;
     }
 }

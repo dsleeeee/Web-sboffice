@@ -36,6 +36,12 @@ public class SmsTelNoManageVO extends PageVO {
     /** 결과코드 */
     private String resCd;
 
+    /** 사용여부 */
+    private String useYn;
+
+    /** 소속구분 */
+    private String srchOrgnFg;
+
     public String getOrgnCd() {
         return orgnCd;
     }
@@ -75,4 +81,12 @@ public class SmsTelNoManageVO extends PageVO {
     public void setResCd(String resCd) {
         this.resCd = resCd;
     }
+
+    public String getUseYn() { return useYn; }
+
+    public void setUseYn(String useYn) { this.useYn = useYn; }
+
+    public String getSrchOrgnFg() { return srchOrgnFg; }
+
+    public void setSrchOrgnFg(String srchOrgnFg) { this.srchOrgnFg = srchOrgnFg; }
 }
