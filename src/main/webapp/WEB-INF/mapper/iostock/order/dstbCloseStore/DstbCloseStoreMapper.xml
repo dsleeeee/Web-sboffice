@@ -344,6 +344,7 @@
         <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
+        AND     tmp.PO_PROD_FG        IN ('1', '3')
         AND     tsssc.STORAGE_CD  (+) =    '999'
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
@@ -369,7 +370,7 @@
         </if>
         <if test="prodClassCd != null and prodClassCd != ''">
 
-<!--             AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD 
+<!--             AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
                                         FROM    DUAL
                                         UNION
                                         SELECT  tmpc.PROD_CLASS_CD
@@ -390,7 +391,7 @@
 									  CONNECT BY
 									      PRIOR tmpc.PROD_CLASS_CD = tmpc.P_PROD_CLASS_CD  AND tmpc.STORE_CD = #{storeCd}
 			)
-			                                      
+
         </if>
         <if test='option1 == "S"'>
             <![CDATA[

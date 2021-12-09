@@ -272,6 +272,8 @@
         FROM    TB_HQ_PRODUCT thp
         ,       TB_HQ_PRODUCT_BARCD thpb
         WHERE   thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thp.USE_YN = 'Y'
+        AND     thp.PO_PROD_FG IN ('1', '3')
         AND     thpb.HQ_OFFICE_CD(+)=   thp.HQ_OFFICE_CD
         AND     thpb.PROD_CD     (+)=   thp.PROD_CD
         AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD    =   #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1)
@@ -408,6 +410,8 @@
         WHERE   tms.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tmp.STORE_CD            =   tms.STORE_CD
         AND     tmp.PROD_CD             =   #{prodCd}
+        AND     tmp.USE_YN              =   'Y'
+        AND     tmp.PO_PROD_FG          IN ('1', '3')
         AND     tphsd.STORE_CD      (+) =   tmp.STORE_CD
         AND     tphsd.PROD_CD       (+) =   tmp.PROD_CD
         AND     tshsc.PROD_CD       (+) =   tmp.PROD_CD

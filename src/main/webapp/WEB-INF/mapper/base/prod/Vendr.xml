@@ -539,7 +539,7 @@
         WHERE 1=1
         AND tmp.STORE_CD = #{storeCd}
         AND tmp.USE_YN = 'Y'
-        AND tmp.PO_PROD_FG IN ('1', '2')
+        AND tmp.PO_PROD_FG = '4'
         <if test="prodCd != null and prodCd != ''">
             AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'-- 상품코드
         </if>

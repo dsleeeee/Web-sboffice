@@ -149,7 +149,9 @@
         ,        TB_MS_PRODUCT tmpin
         ,        TB_MS_STORE_ENVST tmsein
         WHERE    tmpout.STORE_CD  =   #{outStoreCd}
+        AND      tmpout.PO_PROD_FG    IN ('1', '3')
         AND      tmpin.STORE_CD   =   #{inStoreCd}
+        AND      tmpin.PO_PROD_FG     IN ('1', '3')
         AND      tmpin.PROD_CD    =   tmpout.PROD_CD
         AND      tmseout.STORE_CD =   tmpout.STORE_CD
         AND      tmseout.ENVST_CD =   '0011'

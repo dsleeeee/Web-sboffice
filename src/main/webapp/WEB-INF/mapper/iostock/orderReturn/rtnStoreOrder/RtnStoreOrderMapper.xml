@@ -697,6 +697,7 @@
 				        <![CDATA[
 				        WHERE   tmp.STORE_CD          =   #{storeCd}
 				        AND     tmp.USE_YN            =   'Y'
+                        AND     tmp.PO_PROD_FG        IN  ('1','3')
 				        AND     tsssc.STORE_CD        =   #{storeCd}
 				        AND     tsssc.STORAGE_CD      =   '999'
 	                    AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
@@ -704,7 +705,6 @@
 	                    AND     tshsc.PROD_CD     (+) =   tmp.PROD_CD
 				        AND     tphso.REQ_DATE    (+) =   #{reqDate}
 				        AND     tphsod.REQ_DATE   (+) =   #{reqDate}
-
 				        AND     tphso.STORE_CD    (+) =   tmp.STORE_CD
 				        AND     tphso.PROD_CD     (+) =   tmp.PROD_CD
 				        AND     tphso.SLIP_FG     (+) =   1
@@ -749,7 +749,6 @@
 				            AND optionTb.PROD_CD  = tmp.PROD_CD
 				        </if>
 		        )A
-
       ORDER
       BY      A.PROD_CD
 
