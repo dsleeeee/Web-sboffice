@@ -222,7 +222,7 @@
                  #{regDt} AS REG_DT,
                  #{regId} AS REG_ID,
                  #{modDt} AS MOD_DT,
-                 #{modId} AS MOD_IDrnwl
+                 #{modId} AS MOD_ID
             FROM DUAL
           ) thpc
        ON
