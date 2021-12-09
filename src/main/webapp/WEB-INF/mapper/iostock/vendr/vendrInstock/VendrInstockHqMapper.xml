@@ -258,6 +258,7 @@
 				        AND     thp.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
 				        AND     thp.PROD_CD           =   thvp.PROD_CD
 				        AND     thp.USE_YN            =   'Y'
+                        AND     thp.PO_PROD_FG        IN  ('1','2')
 				        AND     tphvid.HQ_OFFICE_CD(+)=   thvp.HQ_OFFICE_CD
 				        AND     tphvid.SLIP_NO    (+) =   #{slipNo}
 				        AND     tphvid.PROD_CD    (+) =   thp.PROD_CD

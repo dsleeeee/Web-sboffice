@@ -462,6 +462,7 @@
                 AND     tmp.STORE_CD        =   tmvp.STORE_CD
                 AND     tmp.PROD_CD         =   tmvp.PROD_CD
                 AND     tmp.USE_YN          =   'Y'
+                AND     tmp.PO_PROD_FG      =   '4'
                 AND		tsssc.STORAGE_CD (+)	=	'999'
                 AND     tsssc.STORE_CD  (+) =   tmp.STORE_CD
                 AND     tsssc.PROD_CD   (+) =   tmp.PROD_CD

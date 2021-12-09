@@ -242,6 +242,7 @@
 				        AND     tmp.STORE_CD        =   tmvp.STORE_CD
 				        AND     tmp.PROD_CD         =   tmvp.PROD_CD
 				        AND     tmp.USE_YN          =   'Y'
+                        AND     tmp.PO_PROD_FG      =   '4'
 				        AND     tpsvid.STORE_CD (+) =   tmvp.STORE_CD
 				        AND     tpsvid.SLIP_NO  (+) =   #{slipNo}
 				        AND     tpsvid.PROD_CD  (+) =   tmp.PROD_CD
