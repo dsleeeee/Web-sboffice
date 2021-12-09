@@ -154,8 +154,6 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
 
         for(SmsTelNoManageVO smsTelNoManageVO : smsTelNoManageVOs) {
 
-            smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-
             smsTelNoManageVO.setModDt(currentDt);
             smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
 

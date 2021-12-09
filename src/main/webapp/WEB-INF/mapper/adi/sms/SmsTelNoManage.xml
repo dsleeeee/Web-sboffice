@@ -160,12 +160,6 @@
             GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
         ) twuidv01
         WHERE 1=1
-        <!-- 검색조건 소속구분 -->
-        <if test='srchOrgnFg != null and srchOrgnFg != ""'>
-            <![CDATA[
-                AND twuidv01.ORGN_FG = #{srchOrgnFg}
-            ]]>
-        </if>
         AND twuidv01.ORGN_CD = hst.OGN_CD
         ORDER BY hst.OGN_CD, hst.USE_SEQ
     </select>

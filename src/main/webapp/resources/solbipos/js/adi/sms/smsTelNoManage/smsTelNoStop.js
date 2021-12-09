@@ -21,9 +21,6 @@ app.controller('smsTelNoStopCtrl', ['$scope', '$http', function ($scope, $http) 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('smsTelNoStopCtrl', $scope, $http, false));
 
-    // 조회조건 콤보박스 데이터 Set
-    $scope._getComboDataQuery('002', 'srchOrgnFgCombo', 'A'); // 소속구분
-
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 사용여부

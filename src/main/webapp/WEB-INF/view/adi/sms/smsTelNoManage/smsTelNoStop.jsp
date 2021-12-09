@@ -21,38 +21,6 @@
                 </button>
             </div>
         </div>
-            <table class="searchTbl">
-                <colgroup>
-                    <col class="w15" />
-                    <col class="w35" />
-                    <col class="w15" />
-                    <col class="w35" />
-                </colgroup>
-                <tbody>
-                <tr>
-                    <%-- 소속구분 --%>
-                    <th>
-                        <s:message code="smsTelNoStop.orgnFg" />
-                    </th>
-                    <td>
-                        <div class="sb-select">
-                            <wj-combo-box
-                                    id="srchOrgnFgCombo"
-                                    ng-model="srchOrgnFg"
-                                    items-source="_getComboData('srchOrgnFgCombo')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    initialized="_initComboBox(s)"
-                                    control="srchOrgnFgCombo">
-                            </wj-combo-box>
-                        </div>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
 
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
@@ -87,4 +55,4 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20211208.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20211208.05" charset="utf-8"></script>
