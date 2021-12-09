@@ -218,7 +218,7 @@
             #{result},
             #{prodCd},
             #{prodNm},
-            #{hqBrandCd},
+            NVL(#{hqBrandCd}, '0000000'),
             #{prodClassCd},
             '', --CORNR_CD
             '', --ORGPLCE_CD

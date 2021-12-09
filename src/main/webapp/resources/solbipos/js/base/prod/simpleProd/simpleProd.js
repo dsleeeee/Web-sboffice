@@ -228,6 +228,8 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             // 상품분류코드
             $scope.flex.collectionView.items[i].prodClassCd = $scope.prodClassCd;
 
+            // 브랜드사용여부
+            $scope.flex.collectionView.items[i].brandUseFg = $scope.brandUseFg;
 
             // <-- 검증 -->
             var result = "";

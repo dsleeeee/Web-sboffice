@@ -285,6 +285,9 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                     Math.floor(value) === value;
             };
 
+            // 브랜드사용여부
+            $scope.flex.collectionView.items[i].brandUseFg = $scope.brandUseFg;
+
             // <-- 검증 -->
             var result = "";
 

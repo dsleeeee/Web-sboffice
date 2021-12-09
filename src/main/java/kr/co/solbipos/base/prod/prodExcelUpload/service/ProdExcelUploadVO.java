@@ -154,6 +154,8 @@ public class ProdExcelUploadVO extends PageVO {
     /** 브랜드코드 */
     private String hqBrandCd;
 
+    /** 브랜드사용여부 */
+    private String brandUseFg;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -377,5 +379,13 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
+    }
+
+    public String getBrandUseFg() {
+        return brandUseFg;
+    }
+
+    public void setBrandUseFg(String brandUseFg) {
+        this.brandUseFg = brandUseFg;
     }
 }

@@ -154,6 +154,9 @@ public class SimpleProdVO extends PageVO {
     /** 사용자 아이디 */
     private String userId;
 
+    /** 브랜드사용여부 */
+    private String brandUseFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -380,5 +383,13 @@ public class SimpleProdVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getBrandUseFg() {
+        return brandUseFg;
+    }
+
+    public void setBrandUseFg(String brandUseFg) {
+        this.brandUseFg = brandUseFg;
     }
 }

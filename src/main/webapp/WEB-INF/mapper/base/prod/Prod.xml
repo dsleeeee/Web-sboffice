@@ -745,7 +745,7 @@
                 UPDATE
                 SET
                 PROD_NM = TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
-                HQ_BRAND_CD = #{hqBrandCd},
+                HQ_BRAND_CD = NVL(#{hqBrandCd}, '0000000'),
                 PROD_CLASS_CD  = #{prodClassCd},
                 CORNR_CD = #{cornrCd},
                 ORGPLCE_CD = #{orgplceCd},
@@ -825,7 +825,7 @@
                 #{hqOfficeCd},
                 TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
                 TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
-                #{hqBrandCd},
+                NVL(#{hqBrandCd}, '0000000'),
                 #{prodClassCd},
                 '00',
                 #{orgplceCd},
@@ -876,7 +876,7 @@
                 UPDATE
                 SET
                 PROD_NM = TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
-                HQ_BRAND_CD = #{hqBrandCd},
+                HQ_BRAND_CD = NVL(#{hqBrandCd}, '0000000'),
                 PROD_CLASS_CD  = #{prodClassCd},
                 CORNR_CD = #{cornrCd},
                 ORGPLCE_CD = #{orgplceCd},
@@ -957,7 +957,7 @@
                 #{storeCd},
                 TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
                 TRIM(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL)),
-                #{hqBrandCd},
+                NVL(#{hqBrandCd}, '0000000'),
                 #{prodClassCd},
                 '00',
                 #{orgplceCd},
