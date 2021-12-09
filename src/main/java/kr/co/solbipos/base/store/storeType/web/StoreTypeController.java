@@ -592,7 +592,7 @@ public class StoreTypeController {
 
             // 개발 또는 운영서버에서만 Scheduler가 동작하도록 하기 위해
             if("192.168.0.85".equals(local.getHostAddress()) ||
-                "210.122.81.19".equals(local.getHostAddress())){
+                "192.168.13.184".equals(local.getHostAddress())){
 
                 // properties 파일 읽기
                 Properties props = new Properties();
