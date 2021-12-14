@@ -76,6 +76,18 @@ public class KioskKeyMapVO extends PageVO {
     private String envstVal;
     /** 키맵매장적용여부 */
     private String chkTuClsTypeStore;
+    /** 추천메뉴코드 */
+    private String recmdCd;
+    /** 추천메뉴타입 */
+    private String recmdType;
+    /** 표시형태 */
+    private String dispType;
+    /** 등록구분 */
+    private String regFg;
+    /** 단일메뉴코드 */
+    private String recmdProdCd;
+    /** 추천메뉴표시순서 */
+    private String index;
 
 
     public String getOrgnFg() {
@@ -332,5 +344,53 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setChkTuClsTypeStore(String chkTuClsTypeStore) {
         this.chkTuClsTypeStore = chkTuClsTypeStore;
+    }
+
+    public String getRecmdCd() {
+        return recmdCd;
+    }
+
+    public void setRecmdCd(String recmdCd) {
+        this.recmdCd = recmdCd;
+    }
+
+    public String getRecmdType() {
+        return recmdType;
+    }
+
+    public void setRecmdType(String recmdType) {
+        this.recmdType = recmdType;
+    }
+
+    public String getDispType() {
+        return dispType;
+    }
+
+    public void setDispType(String dispType) {
+        this.dispType = dispType;
+    }
+
+    public String getRegFg() {
+        return regFg;
+    }
+
+    public void setRegFg(String regFg) {
+        this.regFg = regFg;
+    }
+
+    public String getRecmdProdCd() {
+        return recmdProdCd;
+    }
+
+    public void setRecmdProdCd(String recmdProdCd) {
+        this.recmdProdCd = recmdProdCd;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 }

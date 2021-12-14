@@ -104,4 +104,27 @@ public interface KioskKeyMapMapper {
     /** 키오스크 매장적용(매장/포장) - 키오스크 환경설정 값 가져오기 */
     String getKioskEnv(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크 추천메뉴 - 추천메뉴코드 가져오기 */
+    List<DefaultMap<Object>> getRecmd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴코드 자동채번 */
+    String getRecmdCd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴코드 저장 */
+    int saveRecmd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천상품 조회 */
+    List<DefaultMap<Object>> getRecmdProd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천상품으로 등록할 상품 조회 */
+    List<DefaultMap<Object>> getRecmdProdList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴 순번 */
+    String getIndex(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴 삭제 */
+    int deleteRecmdProd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴 저장 */
+    int addRecmdProd(KioskKeyMapVO kioskKeyMapVO);
 }
