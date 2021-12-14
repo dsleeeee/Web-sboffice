@@ -63,6 +63,12 @@ public interface PromotionService {
 
     /** 프로모션 혜택상품 선택팝업 상품추가/수정/삭제 */
     int savePromotionPresent(PromotionVO[] promotionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 종류 조회(콤보박스용) */
+    List<DefaultMap<String>> getPromotionTypeList();
+
+    /** 프로모션 종류 변경에 따른 필수값 저장 */
+    String savePromotionDefaultSet(PromotionVO promotionVO, SessionInfoVO sessionInfoVO);
 }
 
 

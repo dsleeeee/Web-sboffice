@@ -139,9 +139,10 @@ public class PromotionVO extends PageVO {
     private String storeGroupCd;
     /** 브랜드코드 */
     private String hqBrandCd;
-
     /** 사용자 아이디 */
     private String userId;
+    /** 프로모션 종류 */
+    private String promoType;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -597,5 +598,13 @@ public class PromotionVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPromoType() {
+        return promoType;
+    }
+
+    public void setPromoType(String promoType) {
+        this.promoType = promoType;
     }
 }

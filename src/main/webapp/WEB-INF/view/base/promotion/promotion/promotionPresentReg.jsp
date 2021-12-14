@@ -116,4 +116,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionPresentReg.js?ver=20210423.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionPresentReg.js?ver=20210423.05" charset="utf-8"></script>

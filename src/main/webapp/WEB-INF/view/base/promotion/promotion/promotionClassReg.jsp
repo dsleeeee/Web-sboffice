@@ -51,7 +51,8 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            id="wjGridPromotionClassReg">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -63,7 +64,10 @@
                 <%--//위즈모 테이블--%>
             </div>
         </div>
+
+        <%--구매대상 선택값 --%>
+        <input type="hidden" id="hdSelectProdDs2" />
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionClassReg.js?ver=20210423.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionClassReg.js?ver=20210423.04" charset="utf-8"></script>

@@ -103,6 +103,8 @@ public class PromotionController {
         // 메뉴그룹조회(콤보박스용)
         model.addAttribute("storeGroupList", convertToJson(storeTypeService.getStoreGroupCombo(storeTypeVO, sessionInfoVO)));
 
+        // 프로모션 종류 조회(콤보박스용)
+        model.addAttribute("promotionTypeList", convertToJson(promotionService.getPromotionTypeList()));
 
         return "base/promotion/promotion/promotion";
     }
@@ -406,5 +408,27 @@ public class PromotionController {
         int result = promotionService.savePromotionPresent(promotionVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 프로모션 종류 변경에 따른 필수값 저장
+     * @param promotionVO
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.12.10
+     * @return
+     */
+    @RequestMapping(value = "/savePromotionDefaultSet.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result savePromotionDefaultSet(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = promotionService.savePromotionDefaultSet(promotionVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }
