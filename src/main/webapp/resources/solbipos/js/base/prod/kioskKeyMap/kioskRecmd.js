@@ -123,8 +123,10 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 기능사용자 데이터 set
         if($("#recmdProdPopupCd").val() === null || $("#recmdProdPopupCd").val() === ""){
             $scope.flex.collectionView.items[data].recmdProdCd = "선택";
+            $scope.flex.collectionView.items[data].prodNm = "";
         }else{
             $scope.flex.collectionView.items[data].recmdProdCd = $("#recmdProdPopupCd").val();
+            $scope.flex.collectionView.items[data].prodNm = "";
         }
 
         // 저장시, 수정되어야 하기 때문에 해당 그룹은 edit 처리
