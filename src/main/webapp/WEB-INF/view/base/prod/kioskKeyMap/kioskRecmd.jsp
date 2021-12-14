@@ -38,9 +38,10 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdCd"/>" binding="recmdCd" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdType"/>" binding="recmdType" width="200" data-map="recmdTypeDataMap" align="center" ch></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdProdCd"/>" binding="recmdProdCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdCd"/>" binding="recmdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdType"/>" binding="recmdType" width="120" data-map="recmdTypeDataMap" align="center" ch></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdProdCd"/>" binding="recmdProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.dispType"/>" binding="dispType" width="100" data-map="dispTypeDataMap" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.useYn"/>" binding="useYn" width="100" data-map="useYnDataMap" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>

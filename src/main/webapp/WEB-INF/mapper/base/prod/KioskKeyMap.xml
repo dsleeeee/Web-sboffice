@@ -1356,9 +1356,15 @@
                         WHEN RECMD_TYPE = '1' AND PROD_CD IS NULL THEN '선택'
                         ELSE PROD_CD
                         END AS RECMD_PROD_CD,
+                        CASE WHEN PROD_CD IS NOT NULL THEN (SELECT  PROD_NM
+                                                            FROM    TB_HQ_PRODUCT thp
+                                                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                                            AND     thp.PROD_CD = thkr.PROD_CD)
+                        ELSE ''
+                        END AS PROD_NM,
                         DISP_TYPE,
                         USE_YN
-                FROM    TB_HQ_KIOSK_RECMD
+                FROM    TB_HQ_KIOSK_RECMD thkr
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 ORDER BY RECMD_CD
             </when>
@@ -1370,9 +1376,15 @@
                         WHEN RECMD_TYPE = '1' AND PROD_CD IS NULL THEN '선택'
                         ELSE PROD_CD
                         END AS RECMD_PROD_CD,
+                        CASE WHEN PROD_CD IS NOT NULL THEN (SELECT  PROD_NM
+                                                            FROM    TB_MS_PRODUCT tmp
+                                                            WHERE   STORE_CD = #{storeCd}
+                                                            AND     tmp.PROD_CD = tmkr.PROD_CD)
+                        ELSE ''
+                        END AS PROD_NM,
                         DISP_TYPE,
                         USE_YN
-                FROM    TB_MS_KIOSK_RECMD
+                FROM    TB_MS_KIOSK_RECMD tmkr
                 WHERE   STORE_CD = #{storeCd}
                 ORDER BY RECMD_CD
             </when>
