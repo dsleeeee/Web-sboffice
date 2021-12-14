@@ -43,4 +43,13 @@ public interface MarketingSmsSendMapper {
 
     /** 마케팅용 SMS전송 - 1000건 이상 전송시 전송테이블에 몇건 Insert 됬는지 조회 */
     DefaultMap<String> getSmsSendInsert1000Count(MarketingSmsSendVO marketingSmsSendVO);
+
+    /** 마케팅용 SMS전송 - 본인인증 여부 조회 */
+    int getVerifyChk(MarketingSmsSendVO marketingSmsSendVO);
+
+    /** 마케팅용 SMS전송 - 본인인증 요청 저장 */
+    int saveVerify(MarketingSmsSendVO marketingSmsSendVO);
+
+    /** 마케팅용 SMS전송 - 본인인증 결과 저장 */
+    int updateVerify(MarketingSmsSendVO marketingSmsSendVO);
 }

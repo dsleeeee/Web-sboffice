@@ -395,4 +395,138 @@ public class KioskKeyMapController {
 
         return returnJson(Status.OK, sEnvstVal);
     }
+
+
+    /**
+     * 키오스크 추천메뉴 - 추천메뉴코드 가져오기
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2021.12.08
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getRecmd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRecmd(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getRecmd(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 키오스크 추천메뉴 - 추천메뉴코드 저장
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2021.12.09
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveRecmd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveRecmd(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveRecmd(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 추천메뉴 - 추천상품 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2021.12.09
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getRecmdProd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRecmdProd(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getRecmdProd(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 키오스크 추천메뉴 - 추천상품으로 등록할 상품
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2021.12.09
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getRecmdProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRecmdProdList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getRecmdProdList(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
+
+    /**
+     * 키오스크 추천메뉴 - 추천메뉴 저장(하위 왼쪽그리드)
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2021.12.09
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveRecmdProd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveRecmdProd(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+        kioskKeyMapVO.setRecmdCd(kioskKeyMapVOs[0].getRecmdCd());
+
+        kioskKeyMapService.deleteRecmdProd(kioskKeyMapVO, sessionInfoVO);
+
+        int result = kioskKeyMapService.saveRecmdProd(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 추천메뉴 - 상품 > 추천메뉴 저장(하위 오른쪽 그리드)
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2021.12.09
+     */
+    @RequestMapping(value = "/kioskKeyMap/addRecmdProd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addRecmdProd(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.addRecmdProd(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

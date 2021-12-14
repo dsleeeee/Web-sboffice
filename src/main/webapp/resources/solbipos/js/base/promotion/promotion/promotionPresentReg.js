@@ -97,7 +97,7 @@ app.controller('promotionPresentRegCtrl', ['$scope', '$http', function ($scope, 
 
             var item = $scope.flex.collectionView.itemsEdited[i];
 
-            if (item.gChk === true && (item.prodQty === null || item.prodQty === "" || item.prodQty === "0" )) {
+            if (item.gChk === true && (item.prodQty === null || item.prodQty === "" || item.prodQty === "0" || item.prodQty === 0)) {
                 $scope._popMsg(messages["promotion.chk.prodQty"]); // 선택한 상품의 조건수량을 반드시 입력하세요.
                 return false;
             }

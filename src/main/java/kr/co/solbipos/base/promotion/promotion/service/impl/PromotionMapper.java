@@ -97,4 +97,16 @@ public interface PromotionMapper {
 
     /** 프로모션 혜택상품 삭제 */
     int deletePromotionPresent(PromotionVO promotionVO);
+
+    /** 프로모션 종류 조회(콤보박스용) */
+    List<DefaultMap<String>> getPromotionTypeList();
+
+    /** 프로모션 종류 변경 (마스터) */
+    int updatePromotionDefaultSet(PromotionVO promotionVO);
+
+    /** 프로모션 종류 변경에 따른 적용조건 필수값 저장 */
+    int updatePromotionCondiDefaultSet(PromotionVO promotionVO);
+
+    /** 프로모션 종류 변경에 따른 적용혜택 필수값 저장 */
+    int updatePromotionBeneDefaultSet(PromotionVO promotionVO);
 }

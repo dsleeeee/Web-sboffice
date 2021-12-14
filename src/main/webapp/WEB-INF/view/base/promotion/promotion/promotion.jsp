@@ -150,8 +150,21 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <th></th>
-                <td></td>
+                <%-- 프로모션 종류 --%>
+                <th><s:message code="promotion.promotionType" /></th>
+                <td>
+                    <div class="sb-select w40" style="float: left; padding-right: 10px;">
+                        <wj-combo-box
+                                id="promotionType"
+                                items-source="_getComboData('promotionType')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="promotionTypeCombo"
+                                selected-index-changed="setPromotionRegDetail(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -354,11 +367,10 @@
                 <tbody>
                 <tr id="trProdTop" style="border-top: 1px solid #CCCCCC;">
                     <th colspan="4">
-                        <div style="float: left;"><input type="checkbox" id="chkProd" ng-model="isCheckedProd" ng-change="isChkProd()"/></div>
-                        <div style="padding-top: 3px; padding-left: 20px; font-size:13px;"><s:message code="promotion.prod" /></div>
+                        <s:message code="promotion.prod" />
                     </th>
                 </tr>
-                <tr id="trSelectProdDs" style="display: none;">
+                <tr>
                     <%-- 적용상품의 구매대상 --%>
                     <th><s:message code="promotion.selectProdDs" /></th>
                     <td>
@@ -371,40 +383,6 @@
                                     selected-value-path="value"
                                     is-editable="false"
                                     control="selectProdDsCombo"
-                                    selected-index-changed="setSelectProdCrossFg(s)">
-                            </wj-combo-box>
-                        </div>
-                    </td>
-                    <%-- 적용상품의 상품등록구분 --%>
-                    <th><s:message code="promotion.prodRegFg" /></th>
-                    <td>
-                        <div class="sb-select w100">
-                            <wj-combo-box
-                                    id="prodSelectExceptFg"
-                                    ng-model="prodSelectExceptFg"
-                                    items-source="_getComboData('prodSelectExceptFg')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    control="prodSelectExceptFgCombo"
-                                    selected-index-changed="setProdRegBtn(s)">
-                            </wj-combo-box>
-                        </div>
-                    </td>
-                </tr>
-                <tr id="trSelectProdCrossFg" style="display: none;">
-                    <%-- 적용상품의 교차선택구분 --%>
-                    <th><s:message code="promotion.selectProdCrossFg" /></th>
-                    <td>
-                        <div class="sb-select w100">
-                            <wj-combo-box
-                                    id="selectProdCrossFg"
-                                    ng-model="selectProdCrossFg"
-                                    items-source="_getComboData('selectProdCrossFg')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    control="selectProdCrossFgCombo"
                                     selected-index-changed="setSelectProdCnt(s)">
                             </wj-combo-box>
                         </div>
@@ -415,7 +393,7 @@
                         <input type="text" class="sb-input w100" id="selectProdCnt" ng-model="selectProdCnt" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                     </td>
                 </tr>
-                <tr id="trSelectProdGrid" style="display: none;">
+                <tr>
                     <td colspan="4" style="border-left: 1px solid #CCCCCC;" ng-controller="promotionSelectProdGridCtrl">
                         <div class="updownSet mt5 mb5" style="font-size: 15px;">
                             <%-- 상품추가 --%>
@@ -435,7 +413,8 @@
                                     sticky-headers="true"
                                     selection-mode="Row"
                                     items-source="data"
-                                    item-formatter="_itemFormatter">
+                                    item-formatter="_itemFormatter"
+                                    id="wjGridSelectProd">
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -500,7 +479,8 @@
                                     sticky-headers="true"
                                     selection-mode="Row"
                                     items-source="data"
-                                    item-formatter="_itemFormatter">
+                                    item-formatter="_itemFormatter"
+                                    id="wjGridSelectStore">
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -551,8 +531,8 @@
                     </tr>
                     <tr id="trApplyDcDs" style="display: none;">
                         <%-- 할인구분 --%>
-                        <th><s:message code="promotion.applyDcDs" /></th>
-                        <td>
+                        <th><label id="lblApplyDcDs"><s:message code="promotion.applyDcDs" /></label></th>
+                        <td id="tdApplyDcDs">
                             <div class="sb-select w100">
                                 <wj-combo-box
                                         id="applyDcDs"
@@ -567,7 +547,7 @@
                             </div>
                         </td>
                         <%-- 할인율 --%>
-                        <th><label id="lblDcSet"></label></th>
+                        <th id="thDcSet"><label id="lblDcSet"></label></th>
                         <td>
                             <input type="text" class="sb-input w100" id="dcSet" ng-model="dcSet" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
@@ -596,7 +576,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <%-- 혜택상품 증정구분 --%>
+                        <%-- 혜택상품 구분 --%>
                         <th><s:message code="promotion.presentDs" /></th>
                         <td>
                             <div class="sb-select w100">
@@ -608,37 +588,17 @@
                                         selected-value-path="value"
                                         is-editable="false"
                                         control="presentDsCombo"
-                                        selected-index-changed="setSelectCrossFg(s)">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr id="trSelectCrossFg">
-                        <%-- 혜택상품 교차선택구분 --%>
-                        <th><s:message code="promotion.selectCrossFg" /></th>
-                        <td>
-                            <div class="sb-select w100">
-                                <wj-combo-box
-                                        id="selectCrossFg"
-                                        ng-model="selectCrossFg"
-                                        items-source="_getComboData('selectCrossFg')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        control="selectCrossFgCombo"
                                         selected-index-changed="setSelectGiftCnt(s)">
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <%-- 혜택상품 수량 --%>
-                        <th><label id="lblSelectGiftCnt"></label></th>
+                        <%-- 혜택상품 상품수 --%>
+                        <th id="thSelectGiftCnt"><s:message code="promotion.selectGiftNCnt" /></th>
                         <td>
                             <input type="text" class="sb-input w100" id="selectGiftCnt" ng-model="selectGiftCnt" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
                     </tr>
-                    <tr id="trSelectPresentGrid">
+                    <tr>
                         <td colspan="4" style="border-left: 1px solid #CCCCCC" ng-controller="promotionSelectPresentGridCtrl">
                             <div class="updownSet mt5 mb5" style="font-size: 15px;">
                                 <%-- 혜택상품 상품추가 --%>
@@ -656,7 +616,8 @@
                                         sticky-headers="true"
                                         selection-mode="Row"
                                         items-source="data"
-                                        item-formatter="_itemFormatter">
+                                        item-formatter="_itemFormatter"
+                                        id="wjGridSelectPresent">
 
                                     <!-- define columns -->
                                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -695,9 +656,11 @@
     var storeTypeList = ${storeTypeList};
     // 메뉴그룹
     var storeGroupList = ${storeGroupList};
+    // 프로모션 종류
+    var promotionTypeList  = ${promotionTypeList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20210512.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20211214.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

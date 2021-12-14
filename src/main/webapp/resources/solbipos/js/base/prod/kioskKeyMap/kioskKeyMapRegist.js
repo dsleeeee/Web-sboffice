@@ -395,6 +395,14 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         }
     };
 
+    // 추천메뉴
+    $scope.tuRecmd = function(){
+
+        $scope.kioskRecmdLayer.show(true);
+        var recmdScope = agrid.getScope('kioskRecmdCtrl');
+        recmdScope.btnSearchRecmd();
+    };
+
     // 매장권한) POS번호 선택 시, 키맵그룹 dropdown 조회
     $scope.setTuClsType = function (s) {
 

@@ -453,4 +453,68 @@
         )
     </select>
 
+    <!-- 마케팅용 SMS전송 - 본인인증 여부 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 본인인증을 하였는지 체크, 본인인증을 한 번호인지 체크
+    -->
+    <select id="getVerifyChk" parameterType="MarketingSmsSendVO" resultType="Integer">
+        /* MarketingSmsSendMapper.getVerifyChk */
+        SELECT  COUNT(*)
+        FROM    HCS_SENDM_VF_T
+        WHERE   OGN_CD = #{orgnCd}
+        <if test="telNo != null and telNo != ''">
+            AND SBPENC.D(TEL_NO) = #{telNo}
+        </if>
+        AND     USE_YN = 'Y'
+    </select>
+
+    <!-- 본인인증 요청 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS : 본인인증 요청 저장
+    -->
+    <insert id="saveVerify" parameterType="MarketingSmsSendVO">
+        /* MarketingSmsSendMapper.saveVerify */
+        INSERT INTO HCS_CRTLG_VF_T
+        (
+            CERT_ID,
+            OGN_CD,
+            PROC_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{certId},
+            #{orgnCd},
+            '0',
+            #{modDt},
+            #{modId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 본인인증 결과 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS : 본인인증 결과 저장
+    -->
+    <update id="updateVerify" parameterType="MarketingSmsSendVO">
+        /* MarketingSmsSendMapper.updateVerify */
+        UPDATE
+            HCS_CRTLG_VF_T
+        SET
+            PROC_FG = '1',
+            RES_RECV_NUMBER = SBPENC.E(#{telNo}),
+            RES_RESULT_CD = #{resCd},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE 1=1
+          AND CERT_ID = #{certId}
+          AND OGN_CD = #{orgnCd}
+    </update>
 </mapper>

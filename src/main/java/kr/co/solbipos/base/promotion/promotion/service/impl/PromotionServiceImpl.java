@@ -88,12 +88,13 @@ public class PromotionServiceImpl implements PromotionService {
             promotionCd = promotionVO.getPromotionCd();
 
             // 수정모드 시, 적용상품 체크 여부에 따른 적용상품 리스트 데이터 삭제
-            if("N".equals(promotionVO.getProdCdYn())){
+            // 적용상품 체크 제거(모든 프로모션 종류에서 상품 필요 20211209)
+            /*if("N".equals(promotionVO.getProdCdYn())){
                 promotionMapper.deletePromotionProdAll(promotionVO);
-            }
+            }*/
 
             // 수정모드 시, 혜택유형 선택에 따른 혜택상품 리스트 데이터 삭제
-            if("1".equals(promotionVO.getTypeCd()) || "2".equals(promotionVO.getTypeCd())){
+            if("1".equals(promotionVO.getTypeCd()) || "2".equals(promotionVO.getTypeCd()) || "5".equals(promotionVO.getTypeCd())){
                 result = promotionMapper.deletePromotionPresentAll(promotionVO);
             }
 
@@ -423,5 +424,60 @@ public class PromotionServiceImpl implements PromotionService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
+    }
+
+    /**
+     * 프로모션 종류 조회(콤보박스용)
+     */
+    @Override
+    public List<DefaultMap<String>> getPromotionTypeList() {
+        return promotionMapper.getPromotionTypeList();
+    }
+
+    /** 프로모션 종류 변경에 따른 필수값 저장 */
+    @Override
+    public String savePromotionDefaultSet(PromotionVO promotionVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        promotionVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        promotionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        promotionVO.setModDt(currentDt);
+        promotionVO.setModId(sessionInfoVO.getUserId());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            promotionVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        String promotionCd = promotionVO.getPromotionCd();
+
+        // 프로모션 코드가 있는 경우, 저장
+        if(!"".equals(promotionCd) && promotionCd != null){
+
+            // 수정모드 시, 혜택유형 선택에 따른 혜택상품 리스트 데이터 삭제
+            if("1".equals(promotionVO.getTypeCd()) || "2".equals(promotionVO.getTypeCd()) || "5".equals(promotionVO.getTypeCd())){
+                result = promotionMapper.deletePromotionPresentAll(promotionVO);
+            }
+
+            // 프로모션 종류 변경 (마스터)
+            result = promotionMapper.updatePromotionDefaultSet(promotionVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 프로모션 종류 변경에 따른 적용조건 필수값 저장
+            result = promotionMapper.updatePromotionCondiDefaultSet(promotionVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 프로모션 종류 변경에 따른 적용혜택 필수값 저장
+            result = promotionMapper.updatePromotionBeneDefaultSet(promotionVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }
+
+        if(result > 0){
+            return promotionCd;
+        }else{
+            return "";
+        }
     }
 }

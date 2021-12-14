@@ -123,7 +123,8 @@
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
-                                      #{modId} AS MOD_ID
+                                      #{modId} AS MOD_ID,
+                                      #{promoType} AS PROMO_TYPE
                                 FROM DUAL
                             ) B
                         ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -133,7 +134,8 @@
                            A.MEMO = B.MEMO,
                            A.USE_YN = B.USE_YN,
                            A.MOD_ID = B.MOD_ID,
-                           A.MOD_DT = B.MOD_DT
+                           A.MOD_DT = B.MOD_DT,
+                           A.PROMO_TYPE = B.PROMO_TYPE
                      WHEN NOT MATCHED THEN
                    INSERT
                     (      A.HQ_OFFICE_CD,
@@ -146,7 +148,8 @@
                            A.REG_DT,
                            A.REG_ID,
                            A.MOD_DT,
-                           A.MOD_ID
+                           A.MOD_ID,
+                           A.PROMO_TYPE
                     )
                     VALUES
                     (      B.HQ_OFFICE_CD,
@@ -159,7 +162,8 @@
                            B.REG_DT,
                            B.REG_ID,
                            B.MOD_DT,
-                           B.MOD_ID
+                           B.MOD_ID,
+                           B.PROMO_TYPE
                     )
             </when>
             <!-- 매장 -->
@@ -174,7 +178,8 @@
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
-                                      #{modId} AS MOD_ID
+                                      #{modId} AS MOD_ID,
+                                      #{promoType} AS PROMO_TYPE
                                  FROM DUAL
                             ) B
                         ON (A.STORE_CD = B.STORE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -185,7 +190,8 @@
                             A.USE_YN = B.USE_YN,
                             A.REG_FG = B.REG_FG,
                             A.MOD_ID = B.MOD_ID,
-                            A.MOD_DT = B.MOD_DT
+                            A.MOD_DT = B.MOD_DT,
+                            A.PROMO_TYPE = B.PROMO_TYPE
                       WHEN NOT MATCHED THEN
                     INSERT
                     (       A.STORE_CD,
@@ -199,7 +205,8 @@
                             A.REG_DT,
                             A.REG_ID,
                             A.MOD_DT,
-                            A.MOD_ID
+                            A.MOD_ID,
+                            A.PROMO_TYPE
                     )
                     VALUES
                     (       B.STORE_CD,
@@ -213,7 +220,8 @@
                             B.REG_DT,
                             B.REG_ID,
                             B.MOD_DT,
-                            B.MOD_ID
+                            B.MOD_ID,
+                            B.PROMO_TYPE
                     )
             </when>
         </choose>
@@ -252,11 +260,11 @@
                                       #{minSaleAmt} AS MIN_SALE_AMT,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
-                                      #{selectProdCrossFg} AS SELECT_CROSS_FG,
+                                      <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
                                       #{selectProdCnt} AS SELECT_PROD_CNT,
                                       <!-- #{storeUseYn} AS STORE_USE_YN, -->
                                       <!-- #{sideProdFg} AS SIDE_PROD_FG, -->
-                                      #{prodSelectExceptFg} AS PROD_SELECT_EXCEPT_FG,
+                                      <!-- #{prodSelectExceptFg} AS PROD_SELECT_EXCEPT_FG, -->
                                       #{storeSelectExceptFg} AS STORE_SELECT_EXCEPT_FG,
                                       #{dlv1Yn} AS DLV1_YN,
                                       #{dlv2Yn} AS DLV2_YN,
@@ -289,11 +297,11 @@
                            A.MIN_SALE_AMT = B.MIN_SALE_AMT,
                            A.PROD_CD_YN = B.PROD_CD_YN,
                            A.SELECT_PROD_DS = B.SELECT_PROD_DS,
-                           A.SELECT_CROSS_FG = B.SELECT_CROSS_FG,
+                           <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
                            A.SELECT_PROD_CNT = B.SELECT_PROD_CNT,
                            <!-- A.STORE_USE_YN = B.STORE_USE_YN -->
                            <!-- A.SIDE_PROD_FG = B.SIDE_PROD_FG -->
-                           A.PROD_SELECT_EXCEPT_FG = B.PROD_SELECT_EXCEPT_FG,
+                           <!-- A.PROD_SELECT_EXCEPT_FG = B.PROD_SELECT_EXCEPT_FG, -->
                            A.STORE_SELECT_EXCEPT_FG = B.STORE_SELECT_EXCEPT_FG,
                            A.DLV1_YN = B.DLV1_YN,
                            A.DLV2_YN = B.DLV2_YN,
@@ -323,11 +331,11 @@
                            A.MIN_SALE_AMT,
                            A.PROD_CD_YN,
                            A.SELECT_PROD_DS,
-                           A.SELECT_CROSS_FG,
+                           <!-- A.SELECT_CROSS_FG, -->
                            A.SELECT_PROD_CNT,
                            <!-- A.STORE_USE_YN, -->
                            <!-- A.SIDE_PROD_FG, -->
-                           A.PROD_SELECT_EXCEPT_FG,
+                           <!-- A.PROD_SELECT_EXCEPT_FG, -->
                            A.STORE_SELECT_EXCEPT_FG,
                            A.DLV1_YN,
                            A.DLV2_YN,
@@ -359,11 +367,11 @@
                            B.MIN_SALE_AMT,
                            B.PROD_CD_YN,
                            B.SELECT_PROD_DS,
-                           B.SELECT_CROSS_FG,
+                           <!-- B.SELECT_CROSS_FG, -->
                            B.SELECT_PROD_CNT,
                            <!-- B.STORE_USE_YN, -->
                            <!-- B.SIDE_PROD_FG, -->
-                           B.PROD_SELECT_EXCEPT_FG,
+                           <!-- B.PROD_SELECT_EXCEPT_FG, -->
                            B.STORE_SELECT_EXCEPT_FG,
                            B.DLV1_YN,
                            B.DLV2_YN,
@@ -398,11 +406,11 @@
                                       #{minSaleAmt} AS MIN_SALE_AMT,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
-                                      #{selectProdCrossFg} AS SELECT_CROSS_FG,
+                                      <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
                                       #{selectProdCnt} AS SELECT_PROD_CNT,
                                       <!-- #{storeUseYn} AS STORE_USE_YN, -->
                                       <!-- #{sideProdFg} AS SIDE_PROD_FG, -->
-                                      #{prodSelectExceptFg} AS PROD_SELECT_EXCEPT_FG,
+                                      <!-- #{prodSelectExceptFg} AS PROD_SELECT_EXCEPT_FG, -->
                                       #{dlv1Yn} AS DLV1_YN,
                                       #{dlv2Yn} AS DLV2_YN,
                                       #{dlv3Yn} AS DLV3_YN,
@@ -434,11 +442,11 @@
                             A.MIN_SALE_AMT = B.MIN_SALE_AMT,
                             A.PROD_CD_YN = B.PROD_CD_YN,
                             A.SELECT_PROD_DS = B.SELECT_PROD_DS,
-                            A.SELECT_CROSS_FG = B.SELECT_CROSS_FG,
+                            <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
                             A.SELECT_PROD_CNT = B.SELECT_PROD_CNT,
                             <!-- A.STORE_USE_YN = B.STORE_USE_YN -->
                             <!-- A.SIDE_PROD_FG = B.SIDE_PROD_FG -->
-                            A.PROD_SELECT_EXCEPT_FG = B.PROD_SELECT_EXCEPT_FG,
+                            <!-- A.PROD_SELECT_EXCEPT_FG = B.PROD_SELECT_EXCEPT_FG, -->
                             A.DLV1_YN = B.DLV1_YN,
                             A.DLV2_YN = B.DLV2_YN,
                             A.DLV3_YN = B.DLV3_YN,
@@ -467,11 +475,11 @@
                             A.MIN_SALE_AMT,
                             A.PROD_CD_YN,
                             A.SELECT_PROD_DS,
-                            A.SELECT_CROSS_FG,
+                            <!-- A.SELECT_CROSS_FG, -->
                             A.SELECT_PROD_CNT,
                             <!-- A.STORE_USE_YN, -->
                             <!-- A.SIDE_PROD_FG, -->
-                            A.PROD_SELECT_EXCEPT_FG,
+                            <!-- A.PROD_SELECT_EXCEPT_FG, -->
                             A.DLV1_YN,
                             A.DLV2_YN,
                             A.DLV3_YN,
@@ -502,11 +510,11 @@
                             B.MIN_SALE_AMT,
                             B.PROD_CD_YN,
                             B.SELECT_PROD_DS,
-                            B.SELECT_CROSS_FG,
+                            <!-- B.SELECT_CROSS_FG, -->
                             B.SELECT_PROD_CNT,
                             <!-- B.STORE_USE_YN, -->
                             <!-- B.SIDE_PROD_FG, -->
-                            B.PROD_SELECT_EXCEPT_FG,
+                            <!-- B.PROD_SELECT_EXCEPT_FG, -->
                             B.DLV1_YN,
                             B.DLV2_YN,
                             B.DLV3_YN,
@@ -730,6 +738,7 @@
                         thph.MEMO,
                         thph.USE_YN,
                         SUBSTR(thph.REG_DT, 1, 8) AS REG_DT,
+                        thph.PROMO_TYPE,
                         thpc.DATE_YN,
                         thpc.START_YMD,
                         thpc.END_YMD,
@@ -784,6 +793,7 @@
                         tmph.USE_YN,
                         tmph.REG_FG,
                         SUBSTR(tmph.REG_DT, 1, 8) AS REG_DT,
+                        tmph.PROMO_TYPE,
                         tmpc.DATE_YN,
                         tmpc.START_YMD,
                         tmpc.END_YMD,
@@ -1745,4 +1755,118 @@
         </choose>
     </delete>
 
+    <!-- 프로모션 종류 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 종류를 조회한다.
+    -->
+    <select id="getPromotionTypeList" resultType="DefaultMap">
+        /* USE : PromotionMapper.getPromotionTypeList */
+          SELECT tcn.NMCODE_CD AS VALUE,
+                  tcn.NMCODE_NM AS NAME
+            FROM TB_CM_NMCODE tcn
+           WHERE tcn.NMCODE_GRP_CD = '127'
+             AND tcn.NMCODE_ITEM_2 = 'Y'
+           ORDER
+              BY tcn.NMCODE_CD
+    </select>
+
+    <!-- 프로모션 종류 변경(마스터) -->
+    <!--
+        TABLE    : TB_HQ_PROMO_H, TB_MS_PROMO_H
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 종류를 변경한다.
+    -->
+    <update id="updatePromotionDefaultSet" parameterType="promotionVO">
+        /* USE : PromotionMapper.updatePromotionDefaultSet */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PROMO_H
+                    SET PROMO_TYPE = #{promoType},
+                         MOD_DT = #{modDt},
+                         MOD_ID = #{modId}
+                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PROMO_H
+                    SET PROMO_TYPE = #{promoType},
+                         MOD_DT = #{modDt},
+                         MOD_ID = #{modId}
+                  WHERE STORE_CD = #{storeCd}
+                    AND PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 프로모션 종류 변경에 따른 적용조건 필수값 저장 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_CONDI, TB_MS_PROMO_CONDI
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 종류 변경시 각 종류별 적용조건 필수값을 저장한다.
+    -->
+    <update id="updatePromotionCondiDefaultSet" parameterType="promotionVO">
+        /* USE : PromotionMapper.updatePromotionCondiDefaultSet */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PROMO_CONDI
+                    SET SELECT_PROD_DS = #{selectProdDs},
+                         MOD_DT = #{modDt},
+                         MOD_ID = #{modId}
+                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PROMO_CONDI
+                    SET SELECT_PROD_DS = #{selectProdDs},
+                         MOD_DT = #{modDt},
+                         MOD_ID = #{modId}
+                  WHERE STORE_CD = #{storeCd}
+                    AND PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 프로모션 종류 변경에 따른 적용혜택 필수값 저장 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_BENE, TB_MS_PROMO_BENE
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 종류 변경시 각 종류별 적용혜택 필수값을 저장한다.
+    -->
+    <update id="updatePromotionBeneDefaultSet" parameterType="promotionVO">
+        /* USE : PromotionMapper.updatePromotionBeneDefaultSet */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PROMO_BENE
+                    SET TYPE_CD = #{typeCd},
+                         APPLY_DC_DS = #{applyDcDs},
+                         DC_SET = #{dcSet},
+                         PRESENT_DS = #{presentDs},
+                         SELECT_GIFT_CNT = #{selectGiftCnt},
+                         MOD_DT = #{modDt},
+                         MOD_ID = #{modId}
+                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PROMO_BENE
+                    SET TYPE_CD = #{typeCd},
+                        APPLY_DC_DS = #{applyDcDs},
+                        DC_SET = #{dcSet},
+                        PRESENT_DS = #{presentDs},
+                        SELECT_GIFT_CNT = #{selectGiftCnt},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+    </update>
 </mapper>

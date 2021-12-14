@@ -68,6 +68,10 @@
                             <s:message code="kioskKeyMap.tuClsTypeStore" />
                         </button>
                     </c:if>
+                    <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
+                        <s:message code="kioskKeyMap.tuRecmd" />
+                    </button>
+
                     <button class="btn_skyblue fr mt5 mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
                     <button class="btn_skyblue fr mt5 mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
 
@@ -182,29 +186,10 @@
                         <th><s:message code="kioskKeyMap.regDate" /></th><%--등록일자--%>
                         <td colspan="3">
                             <div class="sb-select">
-                                <span class="txtIn w110px">
-                                  <wj-input-date
-                                          id="srchTimeStartDate"
-                                          value="startDate"
-                                          ng-model="startDate"
-                                          control="startDateCombo"
-                                          min="2000-01-01"
-                                          max="2099-12-31"
-                                          initialized="_initDateBox(s)">
-                                  </wj-input-date>
-                                </span>
+                                <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w110px"></span>
                                 <span class="rg">~</span>
-                                <span class="txtIn w110px">
-                                  <wj-input-date
-                                          id="srchTimeEndDate"
-                                          value="endDate"
-                                          ng-model="endDate"
-                                          control="endDateCombo"
-                                          min="2000-01-01"
-                                          max="2099-12-31"
-                                          initialized="_initDateBox(s)">
-                                  </wj-input-date>
-                                </span>
+                                <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w110px"></span>
+                                <%--전체기간--%>
                                 <span class="chk ml10">
                                   <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
                                   <label for="chkDt">
@@ -348,7 +333,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.16" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -364,5 +349,9 @@
 
 <%-- 키맵적용(매장/포장) 팝업(매장용) --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapEnvStore.jsp">
+</c:import>
+
+<%-- 추천메뉴 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskRecmd.jsp">
 </c:import>
 
