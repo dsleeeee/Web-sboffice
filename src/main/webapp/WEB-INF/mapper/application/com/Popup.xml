@@ -290,7 +290,7 @@
           </when>
           <!-- 가맹점 -->
           <when test='orgnFg != null and orgnFg == "S"'>
-              SELECT tmp.HQ_OFFICE_CD,
+              SELECT tmp.STORE_CD,
                      tmp.PROD_CLASS_CD,
                      tmp.PROD_CD,
                      tmp.PROD_NM
