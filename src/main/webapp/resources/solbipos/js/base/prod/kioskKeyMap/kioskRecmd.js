@@ -57,8 +57,10 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (col.binding === "recmdType") {
                     if(item.recmdType === "0") {
                         item.recmdProdCd = "선택불가";
+                        item.prodNm = "";
                     } else if(item.recmdType === "1" && item.recmdProdCd === "선택불가") {
                         item.recmdProdCd = "선택";
+                        item.prodNm = "";
                     }
                 }
 
