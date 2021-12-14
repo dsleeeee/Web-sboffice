@@ -215,6 +215,7 @@ public class SmsTelNoManageController {
                 System.out.println("JH : web_siteid : " + cc.getKeyValue("web_siteid"));
 
                 System.out.println("---------------------------");
+                smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
             }
 
             if(smsTelNoManageService.getSmsTelNoManageChk(smsTelNoManageVO, sessionInfoVO) != 0){
@@ -230,20 +231,22 @@ public class SmsTelNoManageController {
                 } else {
 
                     // 인증성공 + DB저장실패
-                    out.println("<script>window.resizeTo(800,500);alert('본인인증에 성공했으나 저장에 문제가 있습니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
+                    out.println("<script>window.resizeTo(800,500);alert('본인인증에 성공했으나 저장에 문제가 있습니다. 고객센터로 문의해주세요.'); window.close();</script>");
                     out.flush();
                 }
             }
         } else {
+            // 실패코드 저장
+            smsTelNoManageVO.setTelNo("");
             smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO);
 
-            out.println("<script>window.resizeTo(800,500);alert('본인인증 에러가 발생하였습니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
+            out.println("<script>window.resizeTo(800,500);alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");
             out.flush();
         }
     }
 
     /**
-     * 발신번호관리 - 저장
+     * 발신번호관리 저장
      *
      * @param smsTelNoManageVOs
      * @param request
@@ -317,52 +320,6 @@ public class SmsTelNoManageController {
         result.put("sessionId", sessionInfoVO.getSessionId());
 
         System.out.println("결과1 " + result);
-
-        return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 발신번호차단 탭 - 조회
-     *
-     * @param smsTelNoManageVO
-     * @param request
-     * @param response
-     * @param model
-     * @return  Object
-     * @author  김설아
-     * @since   2021. 12. 08.
-     */
-    @RequestMapping(value = "/smsTelNoStop/getSmsTelNoStopList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getSmsTelNoStopList(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
-                                        HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<Object>> result = smsTelNoManageService.getSmsTelNoStopList(smsTelNoManageVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, result, smsTelNoManageVO);
-    }
-
-    /**
-     * 발신번호차단 탭 - 저장
-     *
-     * @param smsTelNoManageVOs
-     * @param request
-     * @param response
-     * @param model
-     * @return  Object
-     * @author  김설아
-     * @since   2021. 12. 08.
-     */
-    @RequestMapping(value = "/smsTelNoStop/getSmsTelNoStopSaveUpdate.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getSmsTelNoStopSaveUpdate(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
-                                              HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = smsTelNoManageService.getSmsTelNoStopSaveUpdate(smsTelNoManageVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
