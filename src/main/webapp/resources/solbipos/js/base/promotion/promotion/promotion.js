@@ -84,8 +84,8 @@ var applyDcDsData = [
 
 // 혜택상품 - 구분
 var presentDsFgData = [
-    {"name":"전체증정","value":"1"},
-    {"name":"선택증정","value":"2"}
+    {"name":"전체","value":"1"},
+    {"name":"선택","value":"2"}
 ];
 
 // 상품코드/분류 구분
@@ -759,10 +759,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     return false;
                 }
             }
-            // 할인금액은 1원단위를 입력할 수 없습니다.
+            // 할인금액은(는) 1원단위를 입력할 수 없습니다.
             if($scope.applyDcDsCombo.selectedValue === "2") {
                 if(Number($("#dcSet").val()) % 10 > 0){
-                    $scope._popMsg(messages["promotion.chk.dcSetAmt"]);
+                    $scope._popMsg(messages["promotion.dcSetAmt"] + messages["promotion.chk.dcSetAmt"]);
                     return false;
                 }
             }
@@ -774,14 +774,14 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 }
             }*/
         }else if($scope.typeCdCombo.selectedValue === "5"){ // 특별가(=세트가) 별도 체크
-            // 적용혜택의 할인금액을(를) 입력하세요.
+            // 적용혜택의 특별가(을)를 입력하세요.
             if($("#dcSet").val() === "" || $("#dcSet").val() === "") {
-                $scope._popMsg(messages["promotion.bene"] + "의 " + messages["promotion.dcSetAmt"] +  messages["cmm.require.text"]);
+                $scope._popMsg(messages["promotion.bene"] + "의 " + messages["promotion.specialPrice"] +  messages["cmm.require.text"]);
                 return false;
             }
-            // 할인금액은 1원단위를 입력할 수 없습니다.
+            // 특별가은(는) 1원단위를 입력할 수 없습니다.
             if(Number($("#dcSet").val()) % 10 > 0){
-                $scope._popMsg(messages["promotion.chk.dcSetAmt"]);
+                $scope._popMsg(messages["promotion.specialPrice"] + messages["promotion.chk.dcSetAmt"]);
                 return false;
             }
         }
@@ -1122,9 +1122,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $scope._setComboData("selectProdDs", selectProdDsFgData.slice(0, 1));
             $scope._setComboData("typeCd", typeCdFgData.slice(4, 5));
 
-            // 할인구분 제목 -> 할인금액으로 변경
+            // 할인구분 제목 -> 특별가로 변경
             // 할인구분 selectBox와 할인금액 제목을 숨김
-            $("#lblApplyDcDs").text(messages["promotion.dcSetAmt"]);
+            $("#lblApplyDcDs").text(messages["promotion.specialPrice"]);
             $("#tdApplyDcDs").css("display", "none");
             $("#thDcSet").css("display", "none");
         }
