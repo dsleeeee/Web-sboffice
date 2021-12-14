@@ -67,4 +67,25 @@ public interface KioskKeyMapService {
     /** 키오스크 매장적용(매장/포장) - 키오스크 환경설정 값 가져오기 */
     String getKioskEnv(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
+    /** 키오스크 추천메뉴 - 추천메뉴코드 가져오기 */
+    List<DefaultMap<Object>> getRecmd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴코드 저장 */
+    int saveRecmd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 추천메뉴 - 추천상품 조회 */
+    List<DefaultMap<Object>> getRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 추천메뉴 - 추천상품으로 등록할 상품 조회 */
+    List<DefaultMap<Object>> getRecmdProdList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴 저장(하위 왼쪽 그리드) */
+    int saveRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴 기존메뉴 삭제 */
+    int deleteRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴 저장(하위 오른쪽 그리드) */
+    int addRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
 }

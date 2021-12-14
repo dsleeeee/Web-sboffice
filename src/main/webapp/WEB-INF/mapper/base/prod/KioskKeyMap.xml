@@ -1337,4 +1337,449 @@
         </when>
         </choose>
     </select>
+
+
+    <!--  키오스크 추천메뉴 - 추천메뉴코드 가져오기  -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_RECMD, TB_MS_KIOSK_RECMD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천메뉴를 가져온다.
+    -->
+    <select id="getRecmd" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getRecmd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  RECMD_CD,
+                        RECMD_TYPE,
+                        CASE WHEN RECMD_TYPE = '0' THEN '선택불가'
+                        WHEN RECMD_TYPE = '1' AND PROD_CD IS NULL THEN '선택'
+                        ELSE PROD_CD
+                        END AS RECMD_PROD_CD,
+                        DISP_TYPE,
+                        USE_YN
+                FROM    TB_HQ_KIOSK_RECMD
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                ORDER BY RECMD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  RECMD_CD,
+                        RECMD_TYPE,
+                        CASE WHEN RECMD_TYPE = '0' THEN '선택불가'
+                        WHEN RECMD_TYPE = '1' AND PROD_CD IS NULL THEN '선택'
+                        ELSE PROD_CD
+                        END AS RECMD_PROD_CD,
+                        DISP_TYPE,
+                        USE_YN
+                FROM    TB_MS_KIOSK_RECMD
+                WHERE   STORE_CD = #{storeCd}
+                ORDER BY RECMD_CD
+            </when>
+        </choose>
+    </select>
+
+    <!--  키오스크 추천메뉴 - 추천메뉴코드 자동채번  -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_RECMD, TB_MS_KIOSK_RECMD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천메뉴 자동채번
+    -->
+    <select id="getRecmdCd" parameterType="kioskKeyMapVO" resultType="String">
+        /* USE : KioskKeyMapMapper.getRecmdCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  LPAD((NVL(MAX(RECMD_CD), 0) + 1), 4, '0')
+                FROM    TB_HQ_KIOSK_RECMD
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  LPAD((NVL(MAX(RECMD_CD), 0) + 1), 4, '0')
+                FROM    TB_MS_KIOSK_RECMD
+                WHERE   STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크 추천메뉴 - 추천메뉴코드 저장 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천메뉴 저장
+    -->
+    <insert id="saveRecmd" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.saveRecmd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_KIOSK_RECMD
+                USING DUAL ON
+                (
+                HQ_OFFICE_CD = #{hqOfficeCd} AND RECMD_CD = #{recmdCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET RECMD_TYPE = #{recmdType},
+                PROD_CD = #{recmdProdCd},
+                DISP_TYPE = #{dispType},
+                USE_YN = #{useYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                HQ_OFFICE_CD,
+                RECMD_CD,
+                RECMD_TYPE,
+                PROD_CD,
+                DISP_TYPE,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                )
+                VALUES
+                (
+                #{hqOfficeCd},
+                #{recmdCd},
+                #{recmdType},
+                #{recmdProdCd},
+                #{dispType},
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_KIOSK_RECMD
+                USING DUAL ON
+                (
+                STORE_CD = #{storeCd} AND RECMD_CD = #{recmdCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET RECMD_TYPE = #{recmdType},
+                PROD_CD = #{recmdProdCd},
+                DISP_TYPE = #{dispType},
+                USE_YN = #{useYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                STORE_CD,
+                RECMD_CD,
+                RECMD_TYPE,
+                PROD_CD,
+                DISP_TYPE,
+                USE_YN,
+                REG_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                )
+                VALUES
+                (
+                #{storeCd},
+                #{recmdCd},
+                #{recmdType},
+                #{recmdProdCd},
+                #{dispType},
+                #{useYn},
+                #{regFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!--  키오스크 추천메뉴 - 추천상품 조회  -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_RECMD, TB_MS_KIOSK_RECMD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천상품을 가져온다.
+    -->
+    <select id="getRecmdProd" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getRecmdProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  thkrp.INDEX_NO,
+                        thkrp.RECMD_PROD_CD,
+                        thp.PROD_NM
+                FROM    TB_HQ_KIOSK_RECMD_PROD thkrp,
+                        TB_HQ_PRODUCT thp
+                WHERE   thkrp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thkrp.RECMD_CD = #{recmdCd}
+                AND		thp.HQ_OFFICE_CD = thkrp.HQ_OFFICE_CD
+                AND		thp.PROD_CD = thkrp.RECMD_PROD_CD
+                ORDER BY INDEX_NO
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  tmkrp.INDEX_NO,
+                        tmkrp.RECMD_PROD_CD,
+                        tmp.PROD_NM
+                FROM    TB_MS_KIOSK_RECMD_PROD tmkrp,
+                        TB_MS_PRODUCT tmp
+                WHERE   tmkrp.STORE_CD = #{storeCd}
+                AND     tmkrp.RECMD_CD = #{recmdCd}
+                AND		tmp.STORE_CD = tmkrp.STORE_CD
+                AND		tmp.PROD_CD = tmkrp.RECMD_PROD_CD
+                ORDER BY INDEX_NO
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크 추천메뉴 - 추천상품 조회  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_KIOSK_RECMD_PROD
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_MS_KIOSK_RECMD_PROD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 추천상품으로 등록할 상품을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getRecmdProdList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getRecmdProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT thp.PROD_CD AS RECMD_PROD_CD,
+                thp.PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_HQ_PRODUCT thp
+                INNER JOIN TB_HQ_OFFICE tho ON tho.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                LEFT OUTER JOIN (
+                SELECT RECMD_PROD_CD, HQ_OFFICE_CD
+                FROM TB_HQ_KIOSK_RECMD_PROD
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND RECMD_CD = #{recmdCd}
+                ) thkk ON thp.HQ_OFFICE_CD = thkk.HQ_OFFICE_CD
+                AND thp.PROD_CD = thkk.RECMD_PROD_CD
+                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT PROD_CLASS_CD
+                    FROM TB_HQ_PRODUCT_CLASS
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    ) --상품분류
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                    SELECT 1
+                    FROM TB_HQ_PRODUCT_BARCD
+                    WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND PROD_CD = thp.PROD_CD
+                    AND BARCD_CD = #{barCd}
+                    ) --바코드
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="prodTypeFg != null and prodTypeFg != ''">
+                    AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                AND thkk.RECMD_PROD_CD IS NULL
+                ORDER BY thp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmp.PROD_CD AS RECMD_PROD_CD,
+                tmp.PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_PRODUCT tmp
+                INNER JOIN TB_MS_STORE tms ON tms.STORE_CD  = tmp.STORE_CD
+                LEFT OUTER JOIN (
+                SELECT RECMD_PROD_CD, STORE_CD
+                FROM TB_MS_KIOSK_RECMD_PROD
+                WHERE STORE_CD = #{storeCd}
+                AND RECMD_CD = #{recmdCd}
+                ) tmkk ON tmp.STORE_CD = tmkk.STORE_CD
+                AND tmp.PROD_CD = tmkk.RECMD_PROD_CD
+                WHERE tmp.STORE_CD = #{storeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                    SELECT PROD_CLASS_CD
+                    FROM TB_MS_PRODUCT_CLASS
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND STORE_CD = #{storeCd}
+                    ) --상품분류
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                    SELECT 1
+                    FROM TB_MS_PRODUCT_BARCD
+                    WHERE STORE_CD = tmp.STORE_CD
+                    AND PROD_CD = tmp.PROD_CD
+                    AND BARCD_CD = #{barCd}
+                    ) --바코드
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="prodTypeFg != null and prodTypeFg != ''">
+                    AND tmp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                AND tmkk.RECMD_PROD_CD IS NULL
+                ORDER BY tmp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!--  키오스크 추천메뉴 - 추천메뉴 순번  -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_RECMD_PROD, TB_MS_KIOSK_RECMD_PROD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천메뉴 순번
+    -->
+    <select id="getIndex" parameterType="kioskKeyMapVO" resultType="String">
+        /* USE : KioskKeyMapMapper.getIndex */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  (NVL(MAX(INDEX_NO), 0) + 1 )
+                FROM    TB_HQ_KIOSK_RECMD_PROD
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     RECMD_CD = #{recmdCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  (NVL(MAX(INDEX_NO), 0) + 1 )
+                FROM    TB_MS_KIOSK_RECMD_PROD
+                WHERE   STORE_CD = #{storeCd}
+                AND     RECMD_CD = #{recmdCd}
+            </when>
+        </choose>
+    </select>
+
+    <!--  키오스크 추천메뉴 - 추천메뉴 삭제  -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_RECMD_PROD, TB_MS_KIOSK_RECMD_PROD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천메뉴 삭제
+    -->
+    <delete id="deleteRecmdProd" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteRecmdProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM    TB_HQ_KIOSK_RECMD_PROD
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     RECMD_CD = #{recmdCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM    TB_MS_KIOSK_RECMD_PROD
+                WHERE   STORE_CD = #{storeCd}
+                AND     RECMD_CD = #{recmdCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 키오스크 추천메뉴 - 추천메뉴 저장 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천메뉴 저장
+    -->
+    <insert id="addRecmdProd" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.addRecmdProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_KIOSK_RECMD_PROD
+                (
+                HQ_OFFICE_CD,
+                RECMD_CD,
+                RECMD_PROD_CD,
+                INDEX_NO,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                )
+                VALUES
+                (
+                #{hqOfficeCd},
+                #{recmdCd},
+                #{recmdProdCd},
+                #{index},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_KIOSK_RECMD_PROD
+                (
+                STORE_CD,
+                RECMD_CD,
+                RECMD_PROD_CD,
+                INDEX_NO,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                )
+                VALUES
+                (
+                #{storeCd},
+                #{recmdCd},
+                #{recmdProdCd},
+                #{index},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
 </mapper>

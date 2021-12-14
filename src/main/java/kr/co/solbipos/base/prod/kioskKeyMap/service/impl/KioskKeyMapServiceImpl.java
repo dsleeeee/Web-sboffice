@@ -448,4 +448,159 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         return kioskKeyMapMapper.getKioskEnv(kioskKeyMapVO);
     }
 
+    /** 키오스크 추천메뉴 - 추천메뉴코드 가져오기 */
+    @Override
+    public List<DefaultMap<Object>> getRecmd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return kioskKeyMapMapper.getRecmd(kioskKeyMapVO);
+    }
+
+    @Override
+    public int saveRecmd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 매장 키오스크 포스 환경설정값 일괄 저장
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+                kioskKeyMapVO.setRegFg("S");
+            }
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            if(kioskKeyMapVO.getRecmdProdCd().equals("선택불가") || kioskKeyMapVO.getRecmdProdCd().equals("선택")){
+                kioskKeyMapVO.setRecmdProdCd(null);
+            }
+
+            if(kioskKeyMapVO.getStatus() == GridDataFg.INSERT){
+
+                kioskKeyMapVO.setRegDt(currentDt);
+                kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+                // 자동채번
+                String recmdCd = kioskKeyMapMapper.getRecmdCd(kioskKeyMapVO);
+
+                kioskKeyMapVO.setRecmdCd(recmdCd);
+
+
+                result = kioskKeyMapMapper.saveRecmd(kioskKeyMapVO);
+            }
+            if(kioskKeyMapVO.getStatus() == GridDataFg.UPDATE){
+
+                result = kioskKeyMapMapper.saveRecmd(kioskKeyMapVO);
+            }
+
+        }
+
+        return result;
+    }
+
+    /** 키오스크 추천메뉴 - 추천상품 조회 */
+    @Override
+    public List<DefaultMap<Object>> getRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return kioskKeyMapMapper.getRecmdProd(kioskKeyMapVO);
+    }
+
+    /** 키오스크 추천메뉴 - 추천상품으로 등록할 상품 조회 */
+    @Override
+    public List<DefaultMap<Object>> getRecmdProdList(@RequestBody KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return kioskKeyMapMapper.getRecmdProdList(kioskKeyMapVO);
+    }
+
+    @Override
+    public int saveRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 추천메뉴 일괄저장
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+                kioskKeyMapVO.setRegFg("S");
+            }
+            kioskKeyMapVO.setRegDt(currentDt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setIndex(kioskKeyMapMapper.getIndex(kioskKeyMapVO));
+
+            result = kioskKeyMapMapper.addRecmdProd(kioskKeyMapVO);
+
+        }
+
+        return result;
+    }
+
+    @Override
+    public int deleteRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        if (kioskKeyMapMapper.getIndex(kioskKeyMapVO) != "1") {
+            result = kioskKeyMapMapper.deleteRecmdProd(kioskKeyMapVO);
+        }
+
+        return result;
+    }
+
+
+    /** 키오스크 추천메뉴 - 추천메뉴 저장 */
+    @Override
+    public int addRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 추천메뉴 저장
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+                kioskKeyMapVO.setRegFg("S");
+            }
+            kioskKeyMapVO.setRegDt(currentDt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            kioskKeyMapVO.setIndex(kioskKeyMapMapper.getIndex(kioskKeyMapVO));
+
+            result = kioskKeyMapMapper.addRecmdProd(kioskKeyMapVO);
+        }
+
+        return result;
+    }
+
 }
