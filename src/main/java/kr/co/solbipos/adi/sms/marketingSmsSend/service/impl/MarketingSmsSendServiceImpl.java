@@ -140,11 +140,18 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         return marketingSmsSendMapper.getVerifyChk(marketingSmsSendVO);
     }
 
+    /** 본인인증 요청 저장 */
     @Override
     public int saveVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
-        return 0;
+
+        String currentDt = currentDateTimeString();
+        marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        marketingSmsSendVO.setModDt(currentDt);
+        marketingSmsSendVO.setModId(sessionInfoVO.getUserId());
+        return marketingSmsSendMapper.saveVerify(marketingSmsSendVO);
     }
 
+    /** 본인인증 요청 결과 update */
     @Override
     public int updateVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
