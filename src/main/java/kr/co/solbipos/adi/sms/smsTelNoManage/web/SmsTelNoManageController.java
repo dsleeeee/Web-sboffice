@@ -48,19 +48,22 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @RequestMapping("/adi/sms/smsTelNoManage")
 public class SmsTelNoManageController {
 
-    //        SITE_CD = "S6186";
+//        https로만 결과값 전송이 가능한데 개발서버는 http라 테스트 불가능
+//        SITE_CD = "S6186";
 //        WEB_SITEID = "";
 //        ENC_KEY = "E66DCEB95BFBD45DF9DFAEEBCB092B5DC2EB3BF0";
-//        // https로만 결과값 전송이 가능한데 개발서버는 http라 테스트 불가능
-////        RET_URL = "https://192.168.0.85:10001/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+//        RET_URL = "https://192.168.0.85:10001/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
 //        RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
 //        GW_URL = "https://testcert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
-    String SITE_CD      = "AGSVU";
-    String WEB_SITEID   = "J21101407426";
-    String ENC_KEY      = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
-    String RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
-    String GW_URL       = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
+    public static final  String SITE_CD         = "AGSVU";
+    public static final  String WEB_SITEID      = "J21101407426";
+    public static final  String ENC_KEY         = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
+    // 발신번호 결과 URL
+    public static final  String RET_URL         = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
+    // 본인인증 결과 URL
+    public static final  String VERIFY_RET_URL  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify.sb";
+    public static final  String GW_URL          = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
     private final SessionService sessionService;
     private final SmsTelNoManageService smsTelNoManageService;
@@ -173,15 +176,13 @@ public class SmsTelNoManageController {
 
         smsTelNoManageVO.setCertId(ordrIdxx);
         smsTelNoManageVO.setResCd(resCd);
+        smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
 
-//        smsTelNoManageVO.setOrgnCd(smsTelNoManageService.getOrdrIdxx(smsTelNoManageVO));
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
 
         String result = "";
         if( resCd.equals( "0000" ) ){
-
-            // 로컬이나 개발은 테스트버전으로 연결되도록
-            ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequestUri();
-            String url = builder.build().toUri().toString();
 
             // dn_hash 검증
             // KCP 가 리턴해 드리는 dn_hash 와 사이트 코드, 요청번호 , 인증번호를 검증하여
@@ -189,7 +190,8 @@ public class SmsTelNoManageController {
             if(!cc.checkValidHash(ENC_KEY, dnHash, (siteCd + ordrIdxx + certNo))){
                 // 검증실패
                 result = "-2";
-
+                out.println("<script>window.resizeTo(800,500);alert('검증에 실패하였습니다.<br>위변조된 데이터로 의심됩니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
+                out.flush();
             }
 
             if(encCertData2 != null){
@@ -215,35 +217,27 @@ public class SmsTelNoManageController {
                 System.out.println("---------------------------");
             }
 
-            smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
-
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
             if(smsTelNoManageService.getSmsTelNoManageChk(smsTelNoManageVO, sessionInfoVO) != 0){
                 // 기등록번호
-                out.println("<script>alert('기존에 등록된 전화번호입니다.'); window.close();</script>");
+                out.println("<script>window.resizeTo(800,500);alert('기존에 등록된 전화번호입니다.'); window.close();</script>");
                 out.flush();
             } else {
                 if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == 1){
 
                     // 정상등록
-                    out.println("<script>alert('정상등록되었습니다.'); window.opener.location.reload(); window.close();</script>");
+                    out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); window.opener.location.reload(); </script>");
                     out.flush();
                 } else {
 
                     // 인증성공 + DB저장실패
-                    out.println("<script>alert('본인인증에 성공했으나 저장에 문제가 있습니다. 고객센터로 문의해주세요.'); window.close();</script>");
+                    out.println("<script>window.resizeTo(800,500);alert('본인인증에 성공했으나 저장에 문제가 있습니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
                     out.flush();
                 }
             }
         } else {
-            // 실패코드 저장
-            smsTelNoManageVO.setTelNo("");
             smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO);
 
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println("<script>alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");
+            out.println("<script>window.resizeTo(800,500);alert('본인인증 에러가 발생하였습니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
             out.flush();
         }
     }
@@ -323,16 +317,6 @@ public class SmsTelNoManageController {
         result.put("sessionId", sessionInfoVO.getSessionId());
 
         System.out.println("결과1 " + result);
-
-//        List<String> result2 = new java.awt.List()
-//        result2.add(0,SITE_CD);
-//        result2.add(1,WEB_SITEID);
-//        result2.add(2,RET_URL);
-//        result2.add(3,GW_URL);
-//        result2.add(4,ORDR_IDXX);
-//        result2.add(5,UP_HASH);
-//
-//        System.out.println("결과2 " + result2);
 
         return returnJson(Status.OK, result);
     }

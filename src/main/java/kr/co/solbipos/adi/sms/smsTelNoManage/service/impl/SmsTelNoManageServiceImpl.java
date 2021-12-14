@@ -127,11 +127,4 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         return procCnt;
     }
 
-    /** HCS_CRTLG_T.OGN_CD 값 가져옴 */
-    @Override
-    public String getOrdrIdxx(SmsTelNoManageVO smsTelNoManageVO) {
-        String ordrIdxx = smsTelNoManageMapper.getOrdrIdxx(smsTelNoManageVO);
-        System.out.println("JH : HCS_CRTLG_T.OGN_CD값 : " + ordrIdxx);
-        return ordrIdxx;
-    }
 }

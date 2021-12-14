@@ -31,6 +31,10 @@
                 <button class="btn_blue mr3 fr" id="btnSearch" ng-click="_broadcast('marketingSmsSendCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
+                <%-- 본인인증 --%>
+                <button class="btn_blue mr5 fl" id="btnVerify" ng-click="verify()">
+                    <s:message code="marketingSmsSend.verify" />
+                </button>
                 <%-- 확장조회 --%>
                 <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
                     <s:message code="cmm.search.addShow" />
@@ -730,7 +734,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211110.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211110.04" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>

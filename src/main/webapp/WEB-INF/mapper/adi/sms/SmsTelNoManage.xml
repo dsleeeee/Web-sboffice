@@ -109,16 +109,4 @@
           AND TEL_NO = SBPENC.E(#{telNo})
     </update>
 
-
-    <!-- HCS_CRTLG_T.OGN_CD 값 가져옴 -->
-    <!--
-        TABLE    : HCS_CRTLG_T
-        COMMENTS :
-    -->
-    <select id="getOrdrIdxx"  parameterType="SmsTelNoManageVO" resultType="String">
-        /* SmsTelNoManageMapper.getOrdrIdxx */
-        SELECT  OGN_CD
-        FROM    HCS_CRTLG_T
-        WHERE   CERT_ID = #{certId}
-    </select>
 </mapper>

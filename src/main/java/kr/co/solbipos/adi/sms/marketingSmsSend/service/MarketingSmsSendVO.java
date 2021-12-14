@@ -146,6 +146,12 @@ public class MarketingSmsSendVO extends PageVO {
     /** 전송이력시퀀스 */
     private String smsSendSeq;
 
+    /** 관리요청번호 */
+    private String certId;
+
+    /** 결과코드 */
+    private String resCd;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -439,6 +445,22 @@ public class MarketingSmsSendVO extends PageVO {
     public String getSmsSendSeq() { return smsSendSeq; }
 
     public void setSmsSendSeq(String smsSendSeq) { this.smsSendSeq = smsSendSeq; }
+
+    public String getCertId() {
+        return certId;
+    }
+
+    public void setCertId(String certId) {
+        this.certId = certId;
+    }
+
+    public String getResCd() {
+        return resCd;
+    }
+
+    public void setResCd(String resCd) {
+        this.resCd = resCd;
+    }
 
     @Override
     public String toString() {

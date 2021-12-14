@@ -132,4 +132,39 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
 
         return marketingSmsSendMapper.getSmsSendInsert1000Count(marketingSmsSendVO);
     }
+
+    /** 마케팅용 SMS전송 - 본인인증 여부 조회 */
+    @Override
+    public int getVerifyChk(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+        marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        return marketingSmsSendMapper.getVerifyChk(marketingSmsSendVO);
+    }
+
+    @Override
+    public int saveVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+        return 0;
+    }
+
+    @Override
+    public int updateVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+
+        int cnt = 0;
+
+        System.out.println("JH : getSmsTelNoManageUpdate 진입");
+        String currentDt = currentDateTimeString();
+
+        marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        marketingSmsSendVO.setModDt(currentDt);
+        marketingSmsSendVO.setModId(sessionInfoVO.getUserId());
+
+        System.out.println("JH : 본인인증 update 인덱스스");
+        System.out.println("JH : 소속코드 : " + marketingSmsSendVO.getOrgnCd());
+        System.out.println("JH : 전화번호 : " + marketingSmsSendVO.getTelNo());
+        System.out.println("JH : 수정날짜 : " + marketingSmsSendVO.getModDt());
+        System.out.println("JH : 수정자 : " + marketingSmsSendVO.getModId());
+        System.out.println("JH : 요청번호 : " + marketingSmsSendVO.getCertId());
+        cnt = marketingSmsSendMapper.updateVerify(marketingSmsSendVO);
+        System.out.println("JH : updateVerify 결과" + cnt);
+        return cnt;
+    }
 }
