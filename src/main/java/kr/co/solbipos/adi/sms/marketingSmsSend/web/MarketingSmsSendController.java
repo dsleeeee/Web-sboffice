@@ -201,7 +201,7 @@ public class MarketingSmsSendController {
     @RequestMapping(value = "/marketingSmsSend/getVerifyChk.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVerifyChk(MarketingSmsSendVO marketingSmsSendVO, HttpServletRequest request,
-                                       HttpServletResponse response, Model model) {
+                               HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -278,7 +278,7 @@ public class MarketingSmsSendController {
     @RequestMapping(value = "/marketingSmsSend/saveVerify.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveVerify(@RequestBody MarketingSmsSendVO marketingSmsSendVO, HttpServletRequest request,
-                                        HttpServletResponse response, Model model) {
+                             HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = marketingSmsSendService.saveVerify(marketingSmsSendVO, sessionInfoVO);
@@ -327,7 +327,6 @@ public class MarketingSmsSendController {
 
         marketingSmsSendVO.setCertId(ordrIdxx);
         marketingSmsSendVO.setResCd(resCd);
-        marketingSmsSendVO.setTelNo(cc.getKeyValue("phone_no"));
 
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -366,6 +365,7 @@ public class MarketingSmsSendController {
                 System.out.println("JH : web_siteid : " + cc.getKeyValue("web_siteid"));
 
                 System.out.println("---------------------------");
+                marketingSmsSendVO.setTelNo(cc.getKeyValue("phone_no"));
             }
 
             if(marketingSmsSendService.getVerifyChk(marketingSmsSendVO, sessionInfoVO) != 0){
@@ -381,14 +381,16 @@ public class MarketingSmsSendController {
                 } else {
 
                     // 인증성공 + DB저장실패
-                    out.println("<script>window.resizeTo(800,500);alert('본인인증에 성공했으나 저장에 문제가 있습니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
+                    out.println("<script>window.resizeTo(800,500);alert('본인인증에 성공했으나 저장에 문제가 있습니다. 고객센터로 문의해주세요.'); window.close();</script>");
                     out.flush();
                 }
             }
         } else {
+            // 실패코드 저장
+            marketingSmsSendVO.setTelNo("");
             marketingSmsSendService.updateVerify(marketingSmsSendVO, sessionInfoVO);
 
-            out.println("<script>window.resizeTo(800,500);alert('본인인증 에러가 발생하였습니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
+            out.println("<script>window.resizeTo(800,500);alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");
             out.flush();
         }
     }
