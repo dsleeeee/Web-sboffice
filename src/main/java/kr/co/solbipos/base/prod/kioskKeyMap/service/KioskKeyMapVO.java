@@ -20,6 +20,8 @@ public class KioskKeyMapVO extends PageVO {
     private String storeCd;
     /** POS 번호 */
     private String posNo;
+    /** 복사원본 POS 번호 */
+    private String orgPosNo;
     /** 카테고리코드 */
     private String tuClsCd;
     /** 카테고리명 */
@@ -82,6 +84,8 @@ public class KioskKeyMapVO extends PageVO {
     private String recmdType;
     /** 표시형태 */
     private String dispType;
+    /** 추가타입 */
+    private String addType;
     /** 등록구분 */
     private String regFg;
     /** 단일메뉴코드 */
@@ -120,6 +124,14 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setPosNo(String posNo) {
         this.posNo = posNo;
+    }
+
+    public String getOrgPosNo() {
+        return orgPosNo;
+    }
+
+    public void setOrgPosNo(String orgPosNo) {
+        this.orgPosNo = orgPosNo;
     }
 
     public String getTuClsCd() {
@@ -368,6 +380,14 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setDispType(String dispType) {
         this.dispType = dispType;
+    }
+
+    public String getAddType() {
+        return addType;
+    }
+
+    public void setAddType(String addType) {
+        this.addType = addType;
     }
 
     public String getRegFg() {

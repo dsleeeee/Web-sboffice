@@ -29,6 +29,11 @@ var dispType = [
     {"name": "3*3", "value": "2"}
 ];
 
+var addType = [
+    {"name": "메뉴교체", "value": "0"},
+    {"name": "메뉴추가", "value": "1"}
+];
+
 // 추천메뉴코드(위 그리드)
 app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
@@ -39,7 +44,8 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         // 그리드에서 사용하는 dataMap 초기화
         $scope.recmdTypeDataMap  = new wijmo.grid.DataMap(recmdType, 'value', 'name');
-        $scope.dispTypeDataMap  = new wijmo.grid.DataMap(dispType, 'value', 'name');
+        $scope.dispTypeDataMap  = new wijmo.grid.DataMap(dispType, 'value', 'name');;
+        $scope.addTypeDataMap  = new wijmo.grid.DataMap(addType, 'value', 'name');
         $scope.useYnDataMap  = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
         // ReadOnly 효과설정
@@ -56,6 +62,7 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                 if (col.binding === "recmdType") {
                     if(item.recmdType === "0") {
+                        item.addType = "1";
                         item.recmdProdCd = "선택불가";
                         item.prodNm = "";
                     } else if(item.recmdType === "1" && item.recmdProdCd === "선택불가") {
@@ -94,6 +101,9 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if(col.binding === "recmdProdCd") {
 
                     if(selectedRow.recmdType === '1') {
+                        if(selectedRow.recmdProdCd !== "선택"){
+                            $("#recmdProdPopupCd").val(selectedRow.recmdProdCd);
+                        }
                         var popup = $scope.wjrecmdProdPopupLayerS;
                         popup.shown.addHandler(function (s) {
                             // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
@@ -157,13 +167,26 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 파라미터 설정
         var params = {};
         params.recmdCd = '자동채번';
-        params.recmdType = '0';
-        params.recmdProdCd = '';
+        params.recmdType = '1';
+        params.addType = '0';
+        params.recmdProdCd = '선택';
         params.dispType = '1';
         params.useYn = 'Y';
         // 추가기능 수행 : 파라미터
         $scope._addRow(params, 2);
     };
+
+    // <-- 그리드 행 삭제 -->
+    $scope.delRow = function(){
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+            var item = $scope.flex.collectionView.items[i];
+
+            if(item.gChk) {
+                $scope.flex.collectionView.removeAt(i);
+            }
+        }
+    };
+    // <-- //그리드 행 삭제 -->
 
     // 저장
     $scope.save = function() {
@@ -176,9 +199,8 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if(typeChk > 0){
                         $scope._popMsg(messages['kioskKeyMap.recmdTypeChk']);
                         return false;
-                    } else {
-                        typeChk ++;
                     }
+                    typeChk ++;
                 }
             }
 
@@ -192,6 +214,10 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
             for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
                 $scope.flex.collectionView.itemsEdited[u].status = "U";
                 params.push($scope.flex.collectionView.itemsEdited[u]);
+            }
+            for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+                $scope.flex.collectionView.itemsRemoved[d].status = "D";
+                params.push($scope.flex.collectionView.itemsRemoved[d]);
             }
 
             $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveRecmd.sb', params, function() {

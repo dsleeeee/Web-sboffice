@@ -49,8 +49,11 @@ public interface KioskKeyMapService {
     /** 키오스크 키맵 신규그룹추가 */
     int createKioskTuClsType(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
-    /** 키오스크 키맵 그룹복제 */
+    /** 키오스크 키맵 그룹복제(신규생성) */
     int copyKioskTuClsType(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 키맵 그룹복제(delete insert) */
+    int copyStoreKioskTuClsType(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
     /** 키오스크 키맵매장적용 - 매장리스트 조회 */
     List<DefaultMap<String>> getStoreList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
