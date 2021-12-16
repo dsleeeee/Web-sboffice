@@ -59,9 +59,16 @@
                         <s:message code="kioskKeyMap.tuClsTypeAdd" />
                     </button>
                     <c:if test="${kioskKeyMapGrpFg == '1'}">
-                        <button class="btn_skyblue" id="btnTuClsTypeCopy" ng-click="tuClsTypeCopy()">
-                            <s:message code="kioskKeyMap.tuClsTypeCopy" />
-                        </button>
+                        <c:if test="${orgnFg == 'HQ'}">
+                            <button class="btn_skyblue" id="btnTuClsTypeCopyHq" ng-click="tuClsTypeCopy()">
+                                <s:message code="kioskKeyMap.tuClsTypeCopy" />
+                            </button>
+                        </c:if>
+                        <c:if test="${orgnFg == 'STORE'}">
+                            <button class="btn_skyblue" id="btnTuClsTypeCopyStore" ng-click="tuClsTypeCopy()">
+                                <s:message code="kioskKeyMap.tuClsTypeCopy" />
+                            </button>
+                        </c:if>
                     </c:if>
                     <c:if test="${orgnFg == 'HQ'}">
                         <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
@@ -333,7 +340,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.17" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -355,3 +362,6 @@
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskRecmd.jsp">
 </c:import>
 
+<%-- 그룹복제 팝업(매장용) --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapCopyStore.jsp">
+</c:import>

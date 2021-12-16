@@ -297,12 +297,41 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
         kioskKeyMapVO.setTuClsType(kioskKeyMapMapper.getKiosTuClsTypeCode(kioskKeyMapVO));
 
-        // 기존 키맵그룹으로 새 키맵그룹 등록(복제)
+        // 기존 키맵그룹으로 새 키맵그룹 등록(현재 포스로 복제)
         result = kioskKeyMapMapper.copyKioskCategory(kioskKeyMapVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-        // 기존 키맵그룹에 맵핑된 상품이 있으면 상품도 새 키맵그룹에 등록(복제)
+        // 기존 키맵그룹에 맵핑된 상품이 있으면 상품도 새 키맵그룹에 등록(현재 포스로 복제)
         result = kioskKeyMapMapper.copyKioskKeyMap(kioskKeyMapVO);
+        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
+    }
+
+    @Override
+    public int copyStoreKioskTuClsType(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        kioskKeyMapVO.setRegDt(currentDt);
+        kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+        kioskKeyMapVO.setModDt(currentDt);
+        kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+        // 기존 키맵 삭제
+        result = kioskKeyMapMapper.deletePosStoreKioskCategory(kioskKeyMapVO);
+        result = kioskKeyMapMapper.deletePosStoreTuClsType(kioskKeyMapVO);
+
+        // 선택한 키맵 저장
+        // 기존 키맵그룹으로 새 키맵그룹 등록(다른 포스로 복제)
+        result = kioskKeyMapMapper.copyPosKioskCategory(kioskKeyMapVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 기존 키맵그룹에 맵핑된 상품이 있으면 상품도 새 키맵그룹에 등록(다른 포스로 복제)
+        result = kioskKeyMapMapper.copyPosKioskKeyMap(kioskKeyMapVO);
         if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;
@@ -491,12 +520,16 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
                 kioskKeyMapVO.setRecmdCd(recmdCd);
 
+                result = kioskKeyMapMapper.saveRecmd(kioskKeyMapVO);
+            } else if(kioskKeyMapVO.getStatus() == GridDataFg.UPDATE){
 
                 result = kioskKeyMapMapper.saveRecmd(kioskKeyMapVO);
-            }
-            if(kioskKeyMapVO.getStatus() == GridDataFg.UPDATE){
 
-                result = kioskKeyMapMapper.saveRecmd(kioskKeyMapVO);
+            } else if(kioskKeyMapVO.getStatus() == GridDataFg.DELETE){
+
+                result = kioskKeyMapMapper.deleteRecmd(kioskKeyMapVO);
+                result = kioskKeyMapMapper.deleteRecmdProd(kioskKeyMapVO);
+
             }
 
         }

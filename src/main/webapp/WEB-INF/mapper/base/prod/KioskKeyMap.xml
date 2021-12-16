@@ -1019,6 +1019,106 @@
         </choose>
     </insert>
 
+    <!-- 키오스크 키맵 그룹복제(다른 포스로 복제) - 기존 카테고리(분류) 복사 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 기존 기존 카테고리(분류)를 복사한다. ( 매장 )
+    -->
+    <insert id="copyPosKioskCategory" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.copyPosKioskCategory */
+        INSERT INTO TB_MS_KIOSK_CLS
+        (
+        STORE_CD,
+        POS_NO,
+        TU_CLS_TYPE,
+        TU_CLS_CD,
+        TU_CLS_NM,
+        TU_PAGE,
+        X,
+        Y,
+        WIDTH,
+        HEIGHT,
+        INDEX_NO,
+        CLS_FG,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+        )
+        SELECT STORE_CD,
+        #{posNo},
+        TU_CLS_TYPE,
+        TU_CLS_CD,
+        TU_CLS_NM,
+        TU_PAGE,
+        X,
+        Y,
+        WIDTH,
+        HEIGHT,
+        INDEX_NO,
+        CLS_FG,
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+        FROM TB_MS_KIOSK_CLS
+        WHERE STORE_CD = #{storeCd}
+        AND POS_NO = #{orgPosNo}
+        AND TU_CLS_TYPE = #{orgTuClsType}
+    </insert>
+
+    <!-- 키오스크 키맵 그룹복제(다른 포스로 복제) - 기존 키맵그룹에 엮여있는 상품 복사 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키맵그룹 복제 시, 기존 키맵그룹에 엮여있는 상품들도 복사한다. ( 매장 )
+    -->
+    <insert id="copyPosKioskKeyMap" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.copyPosKioskKeyMap */
+        INSERT INTO TB_MS_KIOSK_KEY
+        (
+        STORE_CD,
+        POS_NO,
+        TU_CLS_TYPE,
+        TU_CLS_CD,
+        TU_KEY_CD,
+        PROD_CD,
+        TU_PAGE,
+        X,
+        Y,
+        WIDTH,
+        HEIGHT,
+        INDEX_NO,
+        CLS_FG,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+        )
+        SELECT STORE_CD,
+        #{posNo},
+        TU_CLS_TYPE,
+        TU_CLS_CD,
+        TU_KEY_CD,
+        PROD_CD,
+        TU_PAGE,
+        X,
+        Y,
+        WIDTH,
+        HEIGHT,
+        INDEX_NO,
+        CLS_FG,
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+        FROM TB_MS_KIOSK_KEY
+        WHERE STORE_CD = #{storeCd}
+        AND POS_NO = #{orgPosNo}
+        AND TU_CLS_TYPE = #{orgTuClsType}
+    </insert>
+
     <!-- 키오스크 키맵매장적용 - 매장리스트 조회 -->
     <!--
           TABLE    : TB_MS_STORE
@@ -1072,11 +1172,39 @@
     <delete id="deleteKioskKeyMapByTuClsCd" parameterType="kioskKeyMapVO" >
         /* USE : KioskKeyMapMapper.deleteKioskKeyMapByTuClsCd */
         DELETE TB_MS_KIOSK_KEY
-         WHERE STORE_CD = #{storeCd}
+        WHERE STORE_CD = #{storeCd}
         <if test="posNo != null and posNo != ''">
             AND POS_NO = #{posNo}
         </if>
-           AND TU_CLS_TYPE = #{tuClsType}
+        AND TU_CLS_TYPE = #{tuClsType}
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장별 키맵그룹을 삭제한다.
+    -->
+    <delete id="deletePosStoreKioskCategory" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deletePosStoreKioskCategory */
+        DELETE  TB_MS_KIOSK_CLS
+        WHERE   STORE_CD = #{storeCd}
+        AND     POS_NO = #{posNo}
+        AND     TU_CLS_TYPE = #{orgTuClsType}
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장별 키맵그룹을 삭제한다.
+    -->
+    <delete id="deletePosStoreTuClsType" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deletePosStoreTuClsType */
+        DELETE  TB_MS_KIOSK_KEY
+        WHERE   STORE_CD = #{storeCd}
+        AND     POS_NO = #{posNo}
+        AND     TU_CLS_TYPE = #{orgTuClsType}
     </delete>
 
     <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장 -->
@@ -1363,6 +1491,7 @@
                         ELSE ''
                         END AS PROD_NM,
                         DISP_TYPE,
+                        ADD_TYPE,
                         USE_YN
                 FROM    TB_HQ_KIOSK_RECMD thkr
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1383,6 +1512,7 @@
                         ELSE ''
                         END AS PROD_NM,
                         DISP_TYPE,
+                        ADD_TYPE,
                         USE_YN
                 FROM    TB_MS_KIOSK_RECMD tmkr
                 WHERE   STORE_CD = #{storeCd}
@@ -1417,7 +1547,7 @@
 
     <!-- 키오스크 추천메뉴 - 추천메뉴코드 저장 -->
     <!--
-        TABLE    : TB_MS_POS_ENVST
+        TABLE    : TB_HQ_KIOSK_RECMD, TB_MS_KIOSK_RECMD
         PARAM    : kioskKeyMapVO
         COMMENTS : 키오스크 추천메뉴 저장
     -->
@@ -1436,6 +1566,7 @@
                 SET RECMD_TYPE = #{recmdType},
                 PROD_CD = #{recmdProdCd},
                 DISP_TYPE = #{dispType},
+                ADD_TYPE = #{addType},
                 USE_YN = #{useYn},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
@@ -1447,6 +1578,7 @@
                 RECMD_TYPE,
                 PROD_CD,
                 DISP_TYPE,
+                ADD_TYPE,
                 USE_YN,
                 REG_DT,
                 REG_ID,
@@ -1460,6 +1592,7 @@
                 #{recmdType},
                 #{recmdProdCd},
                 #{dispType},
+                #{addType},
                 #{useYn},
                 #{regDt},
                 #{regId},
@@ -1479,6 +1612,7 @@
                 SET RECMD_TYPE = #{recmdType},
                 PROD_CD = #{recmdProdCd},
                 DISP_TYPE = #{dispType},
+                ADD_TYPE = #{addType},
                 USE_YN = #{useYn},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
@@ -1490,6 +1624,7 @@
                 RECMD_TYPE,
                 PROD_CD,
                 DISP_TYPE,
+                ADD_TYPE,
                 USE_YN,
                 REG_FG,
                 REG_DT,
@@ -1504,6 +1639,7 @@
                 #{recmdType},
                 #{recmdProdCd},
                 #{dispType},
+                #{addType},
                 #{useYn},
                 #{regFg},
                 #{regDt},
@@ -1514,6 +1650,32 @@
             </when>
         </choose>
     </insert>
+
+    <!-- 키오스크 추천메뉴 - 추천메뉴코드 삭제 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_RECMD, TB_MS_KIOSK_RECMD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 추천메뉴코드 삭제
+    -->
+    <delete id="deleteRecmd" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteRecmd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM    TB_HQ_KIOSK_RECMD
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     RECMD_CD = #{recmdCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM    TB_MS_KIOSK_RECMD
+                WHERE   STORE_CD = #{storeCd}
+                AND     RECMD_CD = #{recmdCd}
+            </when>
+        </choose>
+    </delete>
 
     <!--  키오스크 추천메뉴 - 추천상품 조회  -->
     <!--

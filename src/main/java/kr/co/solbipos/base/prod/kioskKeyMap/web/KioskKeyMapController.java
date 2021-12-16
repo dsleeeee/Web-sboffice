@@ -268,7 +268,7 @@ public class KioskKeyMapController {
     }
 
     /**
-     * 키오스크 키맵 그룹복제
+     * 키오스크 키맵 그룹복제(신규생성)
      *
      * @param kioskKeyMapVO
      * @param request
@@ -285,6 +285,28 @@ public class KioskKeyMapController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = kioskKeyMapService.copyKioskTuClsType(kioskKeyMapVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 키맵 그룹복제(delete insert)
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  권지현
+     * @since   2021.12.15
+     */
+    @RequestMapping(value = "/kioskKeyMap/copyStoreKioskTuClsType.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyStoreKioskTuClsType(@RequestBody KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.copyStoreKioskTuClsType(kioskKeyMapVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

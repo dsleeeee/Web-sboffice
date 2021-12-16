@@ -24,6 +24,7 @@
                 <%-- 버튼영역 --%>
                 <div class="tr mb5">
                     <button class="btn_skyblue" id="btnAdd" ng-click="addRow()" ><s:message code="cmm.add" /></button>
+                    <button class="btn_skyblue" id="btnDelete" ng-click="delRow()" ><s:message code="cmm.delete" /></button>
                     <button class="btn_skyblue" id="btnSave" ng-click="save()"><s:message code="cmm.save" /></button>
                 </div>
                 <%--위즈모 테이블--%>
@@ -38,12 +39,14 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdCd"/>" binding="recmdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdType"/>" binding="recmdType" width="120" data-map="recmdTypeDataMap" align="center" ch></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.addType"/>" binding="addType" width="120" data-map="addTypeDataMap" align="center" ch></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.recmdProdCd"/>" binding="recmdProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.dispType"/>" binding="dispType" width="100" data-map="dispTypeDataMap" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.useYn"/>" binding="useYn" width="100" data-map="useYnDataMap" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.dispType"/>" binding="dispType" width="80" data-map="dispTypeDataMap" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.useYn"/>" binding="useYn" width="80" data-map="useYnDataMap" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -237,7 +240,7 @@
 <script type="text/javascript">
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20211208.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20211208.02" charset="utf-8"></script>
 
 
 <%-- 상품선택 모듈 멀티 선택 사용시 include --%>

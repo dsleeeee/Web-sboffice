@@ -366,20 +366,27 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
             return;
         }
 
-        // '01' 그룹을 복사하여 새 그룹을 생성하시겠습니까?
-        $scope._popConfirm( "'" + $scope.tuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.tuClsTypeCopy.msg"], function() {
+        if(orgnFg === "HQ"){
 
-            // 파라미터 설정
-            var params = {};
-            if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
-            params.tuClsType = $scope.tuClsTypeCombo.selectedValue;
+            // '01' 그룹을 복사하여 새 그룹을 생성하시겠습니까?
+            $scope._popConfirm( "'" + $scope.tuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.tuClsTypeCopy.msg"], function() {
 
-            $scope._postJSONSave.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/copyKioskTuClsType.sb", params, function (response) {
+                // 파라미터 설정
+                var params = {};
+                if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
+                params.tuClsType = $scope.tuClsTypeCombo.selectedValue;
 
-                // 키맵그룹 dropdown 재조회
-                $scope.setTuClsDropdownList("L");
+                $scope._postJSONSave.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/copyKioskTuClsType.sb", params, function (response) {
+
+                    // 키맵그룹 dropdown 재조회
+                    $scope.setTuClsDropdownList("L");
+                });
             });
-        });
+        } else if (orgnFg === "STORE"){
+            $scope.kioskKeyMapCopyStoreLayer.show(true);
+            $scope._broadcast('kioskKeyMapCopyStoreCtrl');
+        }
+
     };
 
     // 키맵매장적용

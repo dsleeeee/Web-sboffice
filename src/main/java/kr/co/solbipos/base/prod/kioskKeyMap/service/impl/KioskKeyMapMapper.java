@@ -77,6 +77,18 @@ public interface KioskKeyMapMapper {
     /** 키오스크 키맵 그룹복제 - 기존 키맵그룹에 엮여있는 상품 복사 */
     int copyKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크 키맵 그룹복제전 기존 그룹 삭제(다른 포스로 복제) - 기존 카테고리(분류) 삭제 */
+    int deletePosStoreKioskCategory(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제전 기존 그룹 삭제(다른 포스로 복제) - 기존 카테고리(분류) 삭제 */
+    int deletePosStoreTuClsType(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제(다른 포스로 복제) - 기존 카테고리(분류) 복사 */
+    int copyPosKioskCategory(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제(다른 포스로 복제) - 기존 키맵그룹에 엮여있는 상품 복사 */
+    int copyPosKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
+
     /** 키오스크 키맵매장적용 - 매장리스트 조회 */
     List<DefaultMap<String>> getStoreList(KioskKeyMapVO kioskKeyMapVO);
 
@@ -112,6 +124,9 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 추천메뉴 - 추천메뉴코드 저장 */
     int saveRecmd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 - 추천메뉴코드 삭제 */
+    int deleteRecmd(KioskKeyMapVO kioskKeyMapVO);
 
     /** 키오스크 추천메뉴 - 추천상품 조회 */
     List<DefaultMap<Object>> getRecmdProd(KioskKeyMapVO kioskKeyMapVO);
