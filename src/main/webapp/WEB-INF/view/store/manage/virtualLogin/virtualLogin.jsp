@@ -15,7 +15,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch"  ng-click="_pageView('gridCtrl',1)">
+      <button id="nxBtnSearch" class="btn_blue fr"  ng-click="_pageView('gridCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -32,24 +32,24 @@
         <%-- 본사코드 --%>
         <th><s:message code="virtualLogin.hqOfficeCd" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" />
+          <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" onkeyup="fnNxBtnSearch();" />
         </td>
         <%-- 본사명 --%>
         <th><s:message code="virtualLogin.hqOfficeNm" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" />
+          <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch();" />
         </td>
       </tr>
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="virtualLogin.storeCd" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" />
+          <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();" />
         </td>
         <%-- 매장명 --%>
         <th><s:message code="virtualLogin.storeNm" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
+          <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();" />
         </td>
       </tr>
       <tr>

@@ -36,24 +36,24 @@
         <tr>
           <%-- 본사코드 --%>
           <th><s:message code="storeManage.hqOfficeCd" /></th>
-            <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="hqOfficeCd"/></td>
+            <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="hqOfficeCd" onkeyup="fnNxBtnSearch();"/></td>
           <%-- 본사명 --%>
           <th><s:message code="storeManage.hqOfficeNm" /></th>
-          <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm"/></td>
+          <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch();"/></td>
         </tr>
       </c:if>
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="storeManage.storeCd" /></th>
-        <td><input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd"/></td>
+        <td><input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd" onkeyup="fnNxBtnSearch();"/></td>
         <%-- 매장명 --%>
         <th><s:message code="storeManage.storeNm" /></th>
-        <td><input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm"/></td>
+        <td><input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/></td>
       </tr>
       <tr>
         <%-- 사업자번호 --%>
         <th><s:message code="storeManage.bizNo" /></th>
-        <td><input type="text" id="srchBizNo" class="sb-input w100" maxlength="10" ng-model="bizNo" placeholder="<s:message code='storeManage.bizNo.comment' />"/></td>
+        <td><input type="text" id="srchBizNo" class="sb-input w100" maxlength="10" ng-model="bizNo" placeholder="<s:message code='storeManage.bizNo.comment' />" onkeyup="fnNxBtnSearch();"/></td>
         <%-- 용도 --%>
         <th><s:message code="storeManage.clsFg" /></th>
         <td>

@@ -370,7 +370,7 @@ function getCurDateTime(seperator_day)
     }
     catch(e)
     {
-        //alert('udfMainFrm.js : '+e);
+        //alert('common.js : '+e);
     }
 }
 // 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )
@@ -378,3 +378,26 @@ $(document).on('click', 'a[href="#"]', function (e) {
   e.preventDefault();
   return false;
 });
+
+function fnNxBtnSearch()
+{
+    try
+    {
+        if(event.keyCode == 13)
+        {
+            if($('#nxBtnSearch').length > 0)
+            {
+                $('#nxBtnSearch').click();
+            }
+            else if($('#btnSearch').length > 0)
+            {
+                $('#btnSearch').click();
+            }
+        }
+        return false;
+    }
+    catch(e)
+    {
+        //alert('common.js : '+e);
+    }
+}

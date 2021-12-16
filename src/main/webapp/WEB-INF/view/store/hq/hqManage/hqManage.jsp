@@ -29,19 +29,19 @@
         <%--본사코드 --%>
         <th><s:message code="hqManage.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="srchHqOfficeCd" class="sb-input w100"/>
+          <input type="text" id="srchHqOfficeCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 본사명 --%>
         <th><s:message code="hqManage.hqOfficeNm" /></th>
         <td>
-          <input type="text" id="srchHqOfficeNm" class="sb-input w100"/>
+          <input type="text" id="srchHqOfficeNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>
         <%--사업자번호 --%>
         <th><s:message code="hqManage.bizNo" /></th>
         <td>
-          <input type="text" id="srchBizNo" class="sb-input w100"/>
+          <input type="text" id="srchBizNo" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 용도 --%>
         <th><s:message code="hqManage.clsFg" /></th>
