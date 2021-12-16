@@ -55,10 +55,9 @@
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="dataCreate()">
                 <s:message code="storeProdSaleReport.dataCreate" />
             </button>
+            <%-- 자료생성 날짜 --%>
             <div class="sb-select dkbr ml5 fr">
-                <div class="sb-select">
-                    <span class="txtIn"><input id="dataCreateMonth" name="dataCreateMonth" class="w100px" /></span>
-                </div>
+                <span class="txtIn"><input id="dataCreateMonth" name="dataCreateMonth" class="w100px" /></span>
             </div>
         </div>
 
