@@ -26,7 +26,7 @@ public interface DaySaleReportService {
     List<DefaultMap<Object>> getDaySaleReportList(DaySaleReportVO daySaleReportVO, SessionInfoVO sessionInfoVO);
 
     /** 일별매출내역 다운로드 - 자료생성 저장 */
-    int getDaySaleReportSave(DaySaleReportVO daySaleReportVO, SessionInfoVO sessionInfoVO);
+    int getDaySaleReportSave(DaySaleReportVO[] daySaleReportVOs, SessionInfoVO sessionInfoVO);
 
     /** 일별매출내역 다운로드 - 삭제 */
     int getDaySaleReportDel(DaySaleReportVO[] daySaleReportVOs, SessionInfoVO sessionInfoVO);

@@ -24,6 +24,15 @@ public class DaySaleReportVO extends PageVO {
     /** 본사코드 */
     private String hqOfficeCd;
 
+    /** 조회매장 */
+    private String storeCd;
+
+    /** 조회매장 */
+    private String storeCds;
+
+    /** 매장코드 */
+    private String[] storeCdList;
+
     /** 조회월 */
     private String startMonth;
 
@@ -53,6 +62,22 @@ public class DaySaleReportVO extends PageVO {
     }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
+
+    public String getStoreCd() { return storeCd; }
+
+    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+
+    public String getStoreCds() { return storeCds; }
+
+    public void setStoreCds(String storeCds) { this.storeCds = storeCds; }
+
+    public String[] getStoreCdList() {
+        return storeCdList;
+    }
+
+    public void setStoreCdList(String[] storeCdList) {
+        this.storeCdList = storeCdList;
+    }
 
     public String getStartMonth() { return startMonth; }
 
