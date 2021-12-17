@@ -9,11 +9,11 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon" ng-controller="prodBatchChangeCtrl">
+<div id="prodBatchChangeVeiw" name="prodBatchChangeVeiw" class="subCon" ng-controller="prodBatchChangeCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
-        <a href="#" class="open fl">${menuNm}</a>
+    <div class="searchBar">
+        <a href="#" class="open fl"><s:message code="prodBatchChange.prodBatchChange" /> (<s:message code="prodBatchChange.tab1" />)</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" ng-click="_pageView('prodBatchChangeCtrl',1)">
@@ -171,7 +171,7 @@
                 initialized="_initComboBox(s)">
         </wj-combo-box>
         <%-- 저장 --%>
-        <button class="btn_skyblue ml5 fr" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
+        <button class="btn_blue ml5 fr" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
         <%-- 프랜 매장일때만 --%>
         <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
             <%-- 상품등록구분이 '본사'인 상품은 수정할 수 없습니다. --%>

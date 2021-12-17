@@ -61,7 +61,7 @@ public class ProdBatchChangeServiceImpl implements ProdBatchChangeService {
         return prodBatchChangeMapper.getProdBatchChangeList(prodBatchChangeVO);
     }
 
-    /** 상품정보일괄변경 저장 */
+    /** 상품정보일괄변경 저장(판매상품여부, 포인트적립여부, 매핑상품코드, 가격관리구분) */
     @Override
     public int getProdBatchChangeSave(ProdBatchChangeVO[] prodBatchChangeVOs, SessionInfoVO sessionInfoVO) {
 
@@ -95,6 +95,38 @@ public class ProdBatchChangeServiceImpl implements ProdBatchChangeService {
                      // 상품정보 매장에 UPDATE
                      procCnt = prodBatchChangeMapper.getProdBatchChangeSaveStoreUpdate(prodBatchChangeVO);
                  }
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 상품정보일괄변경 저장(브랜드, 상품분류) */
+    @Override
+    public int getProdBatchChange2Save(ProdBatchChangeVO[] prodBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(ProdBatchChangeVO prodBatchChangeVO : prodBatchChangeVOs) {
+
+            prodBatchChangeVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                prodBatchChangeVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            prodBatchChangeVO.setModDt(currentDt);
+            prodBatchChangeVO.setModId(sessionInfoVO.getUserId());
+
+            if(prodBatchChangeVO.getStatus() == GridDataFg.UPDATE) {
+                procCnt = prodBatchChangeMapper.getProdBatchChange2SaveUpdate(prodBatchChangeVO);
+
+                // 본사인 경우 매장에 수정정보 내려줌
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    // 상품정보 매장에 UPDATE
+                    procCnt = prodBatchChangeMapper.getProdBatchChange2SaveStoreUpdate(prodBatchChangeVO);
+                }
             }
         }
 

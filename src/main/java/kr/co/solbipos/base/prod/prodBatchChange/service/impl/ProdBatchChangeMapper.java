@@ -29,9 +29,15 @@ public interface ProdBatchChangeMapper {
     /** 상품정보일괄변경 조회 */
     List<DefaultMap<Object>> getProdBatchChangeList(ProdBatchChangeVO prodBatchChangeVO);
 
-    /** 상품정보일괄변경 저장 update */
+    /** 상품정보일괄변경 저장 update(판매상품여부, 포인트적립여부, 매핑상품코드, 가격관리구분) */
     int getProdBatchChangeSaveUpdate(ProdBatchChangeVO prodBatchChangeVO);
 
-    /** 상품정보일괄변경 저장 매장에 update */
+    /** 상품정보일괄변경 저장 매장에 update(판매상품여부, 포인트적립여부, 매핑상품코드, 가격관리구분) */
     int getProdBatchChangeSaveStoreUpdate(ProdBatchChangeVO prodBatchChangeVO);
+
+    /** 상품정보일괄변경 저장 update(브랜드, 상품분류) */
+    int getProdBatchChange2SaveUpdate(ProdBatchChangeVO prodBatchChangeVO);
+
+    /** 상품정보일괄변경 저장 매장에 update(브랜드, 상품분류) */
+    int getProdBatchChange2SaveStoreUpdate(ProdBatchChangeVO prodBatchChangeVO);
 }

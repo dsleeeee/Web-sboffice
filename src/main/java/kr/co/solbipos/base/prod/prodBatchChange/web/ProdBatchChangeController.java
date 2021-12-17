@@ -4,10 +4,15 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prodBatchChange.service.ProdBatchChangeService;
 import kr.co.solbipos.base.prod.prodBatchChange.service.ProdBatchChangeVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 @Controller
 @RequestMapping("/base/prod/prodBatchChange")
@@ -28,14 +34,18 @@ public class ProdBatchChangeController {
 
     private final SessionService sessionService;
     private final ProdBatchChangeService prodBatchChangeService;
+    private final StoreTypeService storeTypeService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public ProdBatchChangeController(SessionService sessionService, ProdBatchChangeService prodBatchChangeService) {
+    public ProdBatchChangeController(SessionService sessionService, ProdBatchChangeService prodBatchChangeService, StoreTypeService storeTypeService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.prodBatchChangeService = prodBatchChangeService;
+        this.storeTypeService = storeTypeService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -48,7 +58,20 @@ public class ProdBatchChangeController {
     @RequestMapping(value = "/prodBatchChange/list.sb", method = RequestMethod.GET)
     public String prodBatchChangeView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        return "base/prod/prodBatchChange/prodBatchChange";
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // (상품관리)브랜드사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        }else{
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+        }
+
+        // 브랜드조회(콤보박스용)
+        StoreTypeVO storeTypeVO = new StoreTypeVO();
+        model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
+
+        return "base/prod/prodBatchChange/prodBatchChangeTab";
     }
 
     /**
@@ -75,7 +98,7 @@ public class ProdBatchChangeController {
     }
 
     /**
-     * 상품정보일괄변경 저장
+     * 상품정보일괄변경 저장(판매상품여부, 포인트적립여부, 매핑상품코드, 가격관리구분)
      *
      * @param prodBatchChangeVOs
      * @param request
@@ -93,6 +116,29 @@ public class ProdBatchChangeController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = prodBatchChangeService.getProdBatchChangeSave(prodBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상품정보일괄변경 저장(브랜드, 상품분류)
+     *
+     * @param prodBatchChangeVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021. 12. 17.
+     */
+    @RequestMapping(value = "/prodBatchChange/getProdBatchChange2Save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdBatchChange2Save(@RequestBody ProdBatchChangeVO[] prodBatchChangeVOs, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodBatchChangeService.getProdBatchChange2Save(prodBatchChangeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

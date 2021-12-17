@@ -25,6 +25,9 @@ public interface ProdBatchChangeService {
     /** 상품정보일괄변경 조회 */
     List<DefaultMap<Object>> getProdBatchChangeList(ProdBatchChangeVO prodBatchChangeVO, SessionInfoVO sessionInfoVO);
 
-    /** 상품정보일괄변경 저장 */
+    /** 상품정보일괄변경 저장(판매상품여부, 포인트적립여부, 매핑상품코드, 가격관리구분) */
     int getProdBatchChangeSave(ProdBatchChangeVO[] prodBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품정보일괄변경 저장(브랜드, 상품분류) */
+    int getProdBatchChange2Save(ProdBatchChangeVO[] prodBatchChangeVOs, SessionInfoVO sessionInfoVO);
 }
