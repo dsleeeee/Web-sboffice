@@ -176,16 +176,18 @@
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.regFg"/>" binding="regFg" data-map="regFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
 
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodClassCd"/>" binding="pathNm" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodClassCode"/>" binding="prodClassCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.barCd"/>" binding="barCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-
                 <%-- 브랜드를 사용하는 본사/매장인 경우만 변경 가능 --%>
                 <c:if test="${orgnFg == 'HQ' and brandUseFg == '1'}">
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.brand"/>" binding="hqBrandCd" data-map="brandDataMap" width="150" align="center"></wj-flex-grid-column>
                 </c:if>
+
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodClassCd"/>" binding="pathNm" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodClassCode"/>" binding="prodClassCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.barCd"/>" binding="barCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+
+
 
             </wj-flex-grid>
         </div>
