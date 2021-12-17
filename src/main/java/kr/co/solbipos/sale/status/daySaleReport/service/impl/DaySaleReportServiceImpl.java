@@ -55,23 +55,25 @@ public class DaySaleReportServiceImpl implements DaySaleReportService {
 
     /** 일별매출내역 다운로드 - 자료생성 저장 */
     @Override
-    public int getDaySaleReportSave(DaySaleReportVO daySaleReportVO, SessionInfoVO sessionInfoVO) {
+    public int getDaySaleReportSave(DaySaleReportVO[] daySaleReportVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         String currentDt = currentDateTimeString();
         String currentDate = currentDateString();
         String currentTime = currentTimeString();
 
-        daySaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        daySaleReportVO.setReqDate(currentDate);
-        daySaleReportVO.setReqTime(currentTime);
+        for(DaySaleReportVO daySaleReportVO : daySaleReportVOs) {
+            daySaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            daySaleReportVO.setReqDate(currentDate);
+            daySaleReportVO.setReqTime(currentTime);
 
-        daySaleReportVO.setRegDt(currentDt);
-        daySaleReportVO.setRegId(sessionInfoVO.getUserId());
-        daySaleReportVO.setModDt(currentDt);
-        daySaleReportVO.setModId(sessionInfoVO.getUserId());
+            daySaleReportVO.setRegDt(currentDt);
+            daySaleReportVO.setRegId(sessionInfoVO.getUserId());
+            daySaleReportVO.setModDt(currentDt);
+            daySaleReportVO.setModId(sessionInfoVO.getUserId());
 
-        procCnt = daySaleReportMapper.getDaySaleReportSaveInsert(daySaleReportVO);
+            procCnt = daySaleReportMapper.getDaySaleReportSaveInsert(daySaleReportVO);
+        }
 
         return procCnt;
     }
@@ -105,6 +107,10 @@ public class DaySaleReportServiceImpl implements DaySaleReportService {
     public DefaultMap<String> getDaySaleReportChk(DaySaleReportVO daySaleReportVO, SessionInfoVO sessionInfoVO) {
 
         daySaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장 array 값 세팅
+        String[] storeCds = daySaleReportVO.getStoreCds().split(",");
+        daySaleReportVO.setStoreCdList(storeCds);
 
         return daySaleReportMapper.getDaySaleReportChk(daySaleReportVO);
     }

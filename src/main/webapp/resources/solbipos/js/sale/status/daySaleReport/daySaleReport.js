@@ -108,11 +108,24 @@ app.controller('daySaleReportCtrl', ['$scope', '$http', function ($scope, $http)
     };
     // <-- //검색 호출 -->
 
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.daySaleReportStoreShow = function () {
+        $scope._broadcast('daySaleReportStoreCtrl');
+    };
+
     // <-- 자료생성 -->
     $scope.dataCreate = function(){
+        if ($("#daySaleReportStoreCd").val() == "") {
+            s_alert.pop(messages["cmm.require.selectStore"]);
+            return;
+        }
+
         // 자료생성 요청건 존재여부 확인
         var params = {};
         params.dataCreateMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+        params.storeCds = $("#daySaleReportStoreCd").val();
 
         $scope._postJSONQuery.withOutPopUp( "/sale/status/daySaleReport/daySaleReport/getDaySaleReportChk.sb", params, function(response){
             var daySaleReport = response.data.data.result;
@@ -120,7 +133,8 @@ app.controller('daySaleReportCtrl', ['$scope', '$http', function ($scope, $http)
 
             if($scope.daySaleReport.cnt > 0) {
                 var month = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
-                var msg = month + " " + messages["daySaleReport.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
+                var storeCds = $("#daySaleReportStoreCd").val();
+                var msg = month + " " + messages["daySaleReport.saleMonthAlert"] + "<br/> (선택된 매장 : " + storeCds + ")"; // 자료가 존재합니다. 삭제 후 진행해주세요.
                 $scope._popMsg(msg);
                 return;
             } else {
@@ -132,8 +146,19 @@ app.controller('daySaleReportCtrl', ['$scope', '$http', function ($scope, $http)
     $scope.save = function(){
         // 자료생성을 하시겠습니까?
         $scope._popConfirm(messages["daySaleReport.dataCreateSaveConfirm"], function() {
-            var params = {};
-            params.dataCreateMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+            // 선택한 매장
+            var storeCds = $("#daySaleReportStoreCd").val();
+            var arrStoreCol = storeCds.split(',');
+
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < arrStoreCol.length; i++) {
+                var items = {};
+                items.dataCreateMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+                items.storeCd = arrStoreCol[i];
+
+                params.push(items);
+            }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/sale/status/daySaleReport/daySaleReport/getDaySaleReportSave.sb", params, function(){

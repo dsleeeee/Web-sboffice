@@ -19,24 +19,29 @@
     <select id="getDaySaleReportList"  parameterType="DaySaleReportVO" resultType="DefaultMap">
         /* DaySaleReportMapper.getDaySaleReportList */
         SELECT
-        SUBSTR(thsr.FROM_SALE_DATE, 0, 6) AS SALE_MONTH,
+        SUBSTR(tmsr.FROM_SALE_DATE, 0, 6) AS SALE_MONTH,
+        tmsr.STORE_CD,
+        tms.STORE_NM,
         '전체매장통합파일' AS PROC_GUBUN,
-        thsr.PROC_DT,
-        (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = thsr.REG_ID) AS USER_NM,
-        thsr.PROC_FG,
+        tmsr.PROC_DT,
+        (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = tmsr.REG_ID) AS USER_NM,
+        tmsr.PROC_FG,
         '다운로드' AS DOWNLOAD,
-        thsr.FROM_SALE_DATE,
-        thsr.TO_SALE_DATE,
-        thsr.FILE_NAME
-        FROM TB_HQ_SALE_REPORT thsr
+        tmsr.FROM_SALE_DATE,
+        tmsr.TO_SALE_DATE,
+        tmsr.FILE_NAME
+        FROM TB_MS_SALE_REPORT tmsr,
+        TB_MS_STORE tms
         WHERE 1=1
-        AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tmsr.HQ_OFFICE_CD = #{hqOfficeCd}
         <![CDATA[
-            AND thsr.FROM_SALE_DATE >= #{startMonth}||'01'
-            AND thsr.TO_SALE_DATE <= #{endMonth}||'31'
+            AND tmsr.FROM_SALE_DATE >= #{startMonth}||'01'
+            AND tmsr.TO_SALE_DATE <= #{endMonth}||'31'
         ]]>
-        AND thsr.REPORT_TYPE = '02'
-        ORDER BY thsr.FROM_SALE_DATE DESC
+        AND tmsr.REPORT_TYPE = '02'
+        AND tms.HQ_OFFICE_CD = tmsr.HQ_OFFICE_CD
+        AND tms.STORE_CD = tmsr.STORE_CD
+        ORDER BY tmsr.FROM_SALE_DATE DESC, tmsr.STORE_CD
     </select>
 
     <!-- 일별매출내역 다운로드 - 자료생성 저장 insert -->
@@ -46,10 +51,10 @@
     -->
     <insert id="getDaySaleReportSaveInsert" parameterType="DaySaleReportVO">
         /* DaySaleReportMapper.getDaySaleReportSaveInsert */
-        INSERT INTO TB_HQ_SALE_REPORT
+        INSERT INTO TB_MS_SALE_REPORT
         (
             HQ_OFFICE_CD,
-            HQ_BRAND_CD,
+            STORE_CD,
             REQ_DATE,
             REQ_TIME,
             REPORT_TYPE,
@@ -65,7 +70,7 @@
             MOD_ID
         ) VALUES (
             #{hqOfficeCd},
-            '0000000',
+            #{storeCd},
             #{reqDate},
             #{reqTime},
             '02',
@@ -89,9 +94,10 @@
     -->
     <delete id="getDaySaleReportDel" parameterType="DaySaleReportVO">
         /* DaySaleReportMapper.getDaySaleReportDel */
-        DELETE TB_HQ_SALE_REPORT
+        DELETE TB_MS_SALE_REPORT
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
         AND FROM_SALE_DATE = #{fromSaleDate}
         AND TO_SALE_DATE = #{toSaleDate}
         AND REPORT_TYPE = '02'
@@ -105,13 +111,19 @@
     <select id="getDaySaleReportChk" parameterType="DaySaleReportVO" resultType="DefaultMap">
         /* DaySaleReportMapper.getDaySaleReportChk */
         SELECT
-        COUNT(thsr.REPORT_TYPE) AS CNT
-        FROM TB_HQ_SALE_REPORT thsr
+        COUNT(tmsr.REPORT_TYPE) AS CNT
+        FROM TB_MS_SALE_REPORT tmsr
         WHERE 1=1
-        AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND thsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'
-        AND thsr.TO_SALE_DATE = #{dataCreateMonth}||'31'
-        AND thsr.REPORT_TYPE = '02'
+        AND tmsr.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tmsr.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tmsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'
+        AND tmsr.TO_SALE_DATE = #{dataCreateMonth}||'31'
+        AND tmsr.REPORT_TYPE = '02'
     </select>
 
 </mapper>
