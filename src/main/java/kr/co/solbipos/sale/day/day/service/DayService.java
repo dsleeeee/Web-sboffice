@@ -2,7 +2,6 @@ package kr.co.solbipos.sale.day.day.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO;
 
 import java.util.List;
 
@@ -64,4 +63,7 @@ public interface DayService {
 
     /** 포스별 - 포스별매출조회 */
     List<DefaultMap<Object>> getDayPosList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 사원카드별탭 - 사원카드별 매출조회 */
+    List<DefaultMap<Object>> getDayEmpCardList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 }

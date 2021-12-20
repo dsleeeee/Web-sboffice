@@ -112,6 +112,10 @@ public class DayVO extends PageVO {
     private String startTime;
     /** 검색 종료 시간 */
     private String endTime;
+    /** 매장코드 */
+    private String[] storeCdList;
+    /** 조회매장 */
+    private String storeCds;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -509,5 +513,21 @@ public class DayVO extends PageVO {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String[] getStoreCdList() {
+        return storeCdList;
+    }
+
+    public void setStoreCdList(String[] storeCdList) {
+        this.storeCdList = storeCdList;
+    }
+
+    public String getStoreCds() {
+        return storeCds;
+    }
+
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
     }
 }
