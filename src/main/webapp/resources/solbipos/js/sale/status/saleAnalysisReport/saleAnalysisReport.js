@@ -33,6 +33,11 @@ app.controller('saleAnalysisReportCtrl', ['$scope', '$http', '$timeout', functio
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        // add the new GroupRow to the grid's 'columnFooters' panel
+        s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        // add a sigma to the header to show that this is a summary row
+        s.bottomLeftCells.setCellData(0, 0, '합계');
+
         // <-- 그리드 헤더2줄 -->
         // 헤더머지
         s.allowMerging = 2;
@@ -108,6 +113,21 @@ app.controller('saleAnalysisReportCtrl', ['$scope', '$http', '$timeout', functio
     });
 
     $scope.searchSaleAnalysisReport = function(){
+        var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
+        var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
+        var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+        // 조회일자 최대 1년(6개월) 제한
+        if (diffMonth > 6) {
+            $scope._popMsg(messages['cmm.dateOver.6month.error']);
+            return false;
+        }
+
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
@@ -120,6 +140,9 @@ app.controller('saleAnalysisReportCtrl', ['$scope', '$http', '$timeout', functio
             if(response.data.data.result != null) {
                 var storeCds = $scope.saleAnalysisReport.storeCd;
                 $scope.searchSaleAnalysisReportList(params, storeCds);
+            } else {
+                // 조회 데이터가 없습니다 출력하려고
+                $scope.searchSaleAnalysisReportListNo(params);
             }
         });
     };
@@ -173,6 +196,12 @@ app.controller('saleAnalysisReportCtrl', ['$scope', '$http', '$timeout', functio
                 }
             }
             // <-- //그리드 visible -->
+        }, false);
+    };
+
+    // 조회 데이터가 없습니다 출력하려고
+    $scope.searchSaleAnalysisReportListNo = function(params){
+        $scope._inquiryMain("/sale/status/saleAnalysisReport/saleAnalysisReport/getSaleAnalysisReportList.sb", params, function() {
         }, false);
     };
     // <-- //검색 호출 -->
