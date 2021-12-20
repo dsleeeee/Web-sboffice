@@ -45,6 +45,7 @@
     </table>
 
     <div class="mt10 oh sb-select dkbr">
+        <p class="tl s14 mt5 lh15 red">점유율(%)은 상품의 매장 점유율입니다.</p>
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
     </div>
@@ -60,26 +61,26 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    frozen-columns="2"
+                    frozen-columns="8"
                     id="wjGridSaleAnalysisReportList">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.prodCd"/>" binding="prodCd" width="95" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totServiceQty"/>" binding="totServiceQty" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totQtyRate"/>" binding="totQtyRate" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totSaleQty"/>" binding="totSaleQty" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totServiceQty"/>" binding="totServiceQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totQtyRate"/>" binding="totQtyRate" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <%-- 매장 컬럼 생성--%>
                 <c:forEach var="storeCol" items="${storeColList}">
-                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.saleQty"/>" binding="store${storeCol.storeCd}SaleQty" width="80" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.serviceQty"/>" binding="store${storeCol.storeCd}ServiceQty" width="80" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.saleAmt"/>" binding="store${storeCol.storeCd}SaleAmt" width="80" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.dcAmt"/>" binding="store${storeCol.storeCd}DcAmt" width="80" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.realSaleAmt"/>" binding="store${storeCol.storeCd}RealSaleAmt" width="80" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.qtyRate"/>" binding="store${storeCol.storeCd}QtyRate" width="85" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.saleQty"/>" binding="store${storeCol.storeCd}SaleQty" width="70" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.serviceQty"/>" binding="store${storeCol.storeCd}ServiceQty" width="70" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.saleAmt"/>" binding="store${storeCol.storeCd}SaleAmt" width="70" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.dcAmt"/>" binding="store${storeCol.storeCd}DcAmt" width="70" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.realSaleAmt"/>" binding="store${storeCol.storeCd}RealSaleAmt" width="70" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleAnalysisReport.qtyRate"/>" binding="store${storeCol.storeCd}QtyRate" width="85" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 </c:forEach>
             </wj-flex-grid>
         </div>
@@ -102,4 +103,4 @@
     var arrStoreCol = storeCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleAnalysisReport/saleAnalysisReport.js?ver=20211215.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleAnalysisReport/saleAnalysisReport.js?ver=20211216.01" charset="utf-8"></script>

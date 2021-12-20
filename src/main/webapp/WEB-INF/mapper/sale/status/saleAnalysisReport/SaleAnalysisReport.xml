@@ -52,9 +52,7 @@
         <foreach collection="arrStoreCol" item="item" separator="+">
             NVL(STORE_${item}_REAL_SALE_AMT, 0)
         </foreach> AS TOT_REAL_SALE_AMT,
-        <foreach collection="arrStoreCol" item="item" separator="+">
-            NVL(STORE_${item}_QTY_RATE, 0)
-        </foreach> AS TOT_QTY_RATE,
+        100 AS TOT_QTY_RATE,
         <foreach collection="arrStoreCol" item="item" separator=",">
             NVL(STORE_${item}_SALE_QTY, 0) AS STORE_${item}_SALE_QTY
         </foreach> ,

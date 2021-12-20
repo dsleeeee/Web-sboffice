@@ -160,7 +160,7 @@ app.controller('mobileTimeMonthSaleCtrl', ['$scope', '$http', function ($scope, 
             return false;
         }
         // 조회일자 최대 1년(12개월) 제한
-        if (diffMonth > 13) {
+        if (diffMonth > 12) {
             $scope._popMsg(messages['mobile.cmm.dateOver.1year.error']);
             return false;
         }
