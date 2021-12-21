@@ -40,6 +40,8 @@ public class SideMenuSelProdVO extends PageVO {
     private Integer dispSeq;
     /** 사용여부 */
     private String useYn;
+    /** 상품분류코드 */
+    private String prodClassCd;
 
     /**
      * 소속구분<br>
@@ -255,5 +257,13 @@ public class SideMenuSelProdVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
     }
 }

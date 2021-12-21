@@ -25,6 +25,17 @@
           <th><s:message code="sideMenu.selectMenu.prodNm"/></th>
           <td><input type="text" id="srchProdNm" ng-model="prodNm" /></td>
         </tr>
+        <tr>
+          <th><s:message code="sideMenu.selectMenu.prodClassNm"/></th>
+          <td>
+            <input type="text" class="sb-input w50" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;" placeholder="<s:message code="cmm.all"/>" readonly/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+          </td>
+          <td>
+            <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+          </td>
+          <td></td>
+        </tr>
         </tbody>
       </table>
       <%-- 조회 --%>
@@ -90,4 +101,4 @@
   var gvListScaleBoxData = ${ccu.getListScale()};
   var gubun = "${param.gubun}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=2018112104" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=2018112106" charset="utf-8"></script>
