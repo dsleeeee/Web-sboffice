@@ -21,6 +21,7 @@
         return false;
       });
       $("#_alertTent").show();
+      $("#_alertTent").attr("tabindex", -1).focus();
       pop.show();
     },
 
