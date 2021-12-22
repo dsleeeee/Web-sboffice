@@ -44,8 +44,5 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=2018112003" charset="utf-8"></script>
 
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-</c:import>
 
 
