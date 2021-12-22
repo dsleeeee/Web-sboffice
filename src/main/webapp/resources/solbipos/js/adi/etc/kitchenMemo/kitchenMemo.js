@@ -134,12 +134,18 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
       if($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm !== ""){
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);
+      } else {
+        $scope._popMsg(messages["kitchenMemo.kitchnMemoNm"] + messages["kitchenMemo.inputEnv"]);
+        return false;
       }
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       if($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm !== ""){
         $scope.flex.collectionView.itemsAdded[i].status = "I";
         params.push($scope.flex.collectionView.itemsAdded[i]);
+      } else {
+        $scope._popMsg(messages["kitchenMemo.kitchnMemoNm"] + messages["kitchenMemo.inputEnv"]);
+        return false;
       }
     }
 
