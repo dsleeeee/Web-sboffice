@@ -49,11 +49,14 @@
         SELECT LPAD( NVL(MAX(KITCHN_MEMO_CD), 0) + 1, 3, '0') AS KITCHN_MEMO_CD
           FROM TB_MS_KITCHEN_MEMO
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND KITCHN_MEMO_CD BETWEEN '001' AND '499'
       </if>
       <if test="regFg != null and regFg.toString() == 'STORE'">
-          SELECT LPAD( NVL(MAX(KITCHN_MEMO_CD), 0) + 1, 3, '0') AS KITCHN_MEMO_CD
+          SELECT LPAD( NVL(MAX(KITCHN_MEMO_CD), 499) + 1, 3, '0') AS KITCHN_MEMO_CD
           FROM TB_MS_KITCHEN_MEMO
-          WHERE STORE_CD = #{storeCd}
+          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            AND STORE_CD = #{storeCd}
+            AND KITCHN_MEMO_CD BETWEEN '500' AND '999'
       </if>
   </select>
 
@@ -99,14 +102,28 @@
   -->
   <update id="updateKitchenMemo" parameterType="kitchenMemoVO">
     /* KitchenMemoMapper.updateKitchenMemo */
-    UPDATE TB_MS_KITCHEN_MEMO
-       SET KITCHN_MEMO_NM = #{kitchnMemoNm},
-           MEMO_FG = #{memoFg, jdbcType=VARCHAR},
-           USE_YN = #{useYn, jdbcType=VARCHAR},
-           MOD_DT = #{modDt},
-           MOD_ID = #{modId}
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-       AND KITCHN_MEMO_CD = #{kitchnMemoCd}
+      <if test="regFg != null and regFg.toString() == 'HQ'">
+        UPDATE TB_MS_KITCHEN_MEMO
+           SET KITCHN_MEMO_NM = #{kitchnMemoNm},
+               MEMO_FG = #{memoFg, jdbcType=VARCHAR},
+               USE_YN = #{useYn, jdbcType=VARCHAR},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_CD IS NULL
+           AND KITCHN_MEMO_CD = #{kitchnMemoCd}
+      </if>
+      <if test="regFg != null and regFg.toString() == 'STORE'">
+          UPDATE TB_MS_KITCHEN_MEMO
+             SET KITCHN_MEMO_NM = #{kitchnMemoNm},
+                 MEMO_FG = #{memoFg, jdbcType=VARCHAR},
+                 USE_YN = #{useYn, jdbcType=VARCHAR},
+                 MOD_DT = #{modDt},
+                 MOD_ID = #{modId}
+           WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+             AND STORE_CD = #{storeCd}
+             AND KITCHN_MEMO_CD = #{kitchnMemoCd}
+      </if>
   </update>
 
   <!-- 주방메모 삭제 -->
@@ -116,9 +133,18 @@
   -->
   <delete id="deleteKitchenMemo" parameterType="kitchenMemoVO">
     /* KitchenMemoMapper.deleteKitchenMemo */
-    DELETE TB_MS_KITCHEN_MEMO
-     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-       AND KITCHN_MEMO_CD = #{kitchnMemoCd}
+      <if test="regFg != null and regFg.toString() == 'HQ'">
+        DELETE TB_MS_KITCHEN_MEMO
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_CD IS NULL
+           AND KITCHN_MEMO_CD = #{kitchnMemoCd}
+      </if>
+      <if test="regFg != null and regFg.toString() == 'STORE'">
+          DELETE TB_MS_KITCHEN_MEMO
+           WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+             AND STORE_CD = #{storeCd}
+             AND KITCHN_MEMO_CD = #{kitchnMemoCd}
+      </if>
   </delete>
 
 </mapper>
