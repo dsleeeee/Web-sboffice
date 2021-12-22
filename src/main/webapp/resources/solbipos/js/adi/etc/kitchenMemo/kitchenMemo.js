@@ -131,12 +131,16 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터 설정
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
+      if($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm !== ""){
+        $scope.flex.collectionView.itemsEdited[i].status = "U";
+        params.push($scope.flex.collectionView.itemsEdited[i]);
+      }
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
-      params.push($scope.flex.collectionView.itemsAdded[i]);
+      if($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm !== ""){
+        $scope.flex.collectionView.itemsAdded[i].status = "I";
+        params.push($scope.flex.collectionView.itemsAdded[i]);
+      }
     }
 
     for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
