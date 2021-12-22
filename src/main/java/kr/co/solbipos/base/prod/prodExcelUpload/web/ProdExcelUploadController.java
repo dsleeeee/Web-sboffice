@@ -20,6 +20,8 @@ import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -140,6 +142,12 @@ public class ProdExcelUploadController {
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+        // 발주 단위 구분 조회
+        prodVO.setNmcodeGrpCd("093");
+        List poUnitFgDataList = prodService.getPoUnitFgData(prodVO, sessionInfoVO);
+        String poUnitFgData = cmmCodeUtil.assmblObj(poUnitFgDataList, "name", "value", UseYn.N);
+        model.addAttribute("poUnitFgData", poUnitFgData);
 
         return "base/prod/prodExcelUpload/prodExcelUpload";
     }

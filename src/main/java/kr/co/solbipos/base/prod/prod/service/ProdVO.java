@@ -237,6 +237,9 @@ public class ProdVO extends PageVO {
     /** 사용자 아이디 */
     private String userId;
 
+    /** 명칭코드그룹코드 */
+    private String nmcodeGrpCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1117,5 +1120,13 @@ public class ProdVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
     }
 }

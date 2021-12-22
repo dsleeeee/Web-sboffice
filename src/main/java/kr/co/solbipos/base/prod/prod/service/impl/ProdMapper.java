@@ -234,4 +234,7 @@ public interface ProdMapper {
 
     /** 선택메뉴 조회 팝업 */
     List<DefaultMap<String>> getSearchSdselGrpList(ProdVO prodVO);
+
+    /** 발주 단위 구분 조회 */
+    List<DefaultMap<String>> getPoUnitFgData(ProdVO prodVO);
 }

@@ -3987,4 +3987,20 @@
         </choose>
     </select>
 
+    <!-- 발주 단위 구분 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : prodVO
+        COMMENTS : 발주 단위 구분 조회한다.
+    -->
+    <select id="getPoUnitFgData" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getPoUnitFgData */
+        SELECT  thn.NMCODE_CD AS value
+        ,       thn.NMCODE_NM AS name
+        FROM    TB_HQ_NMCODE thn
+        WHERE   thn.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ORDER BY thn.NMCODE_CD
+    </select>
+
 </mapper>

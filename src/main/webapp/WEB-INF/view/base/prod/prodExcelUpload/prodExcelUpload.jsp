@@ -215,7 +215,7 @@
         poProdFgData.shift();
     }
     <%-- 발주단위 구분 --%>
-    <%--var poUnitFgData = ${ccu.getCommCodeExcpAll("093")};--%>
+    var poUnitFgData = ${poUnitFgData};
     <%-- 과세여부 구분 --%>
     var vatFgData = ${ccu.getCommCodeExcpAll("039")};
     <%-- 재고관리여부 구분 --%>
@@ -232,7 +232,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20211118.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20211118.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

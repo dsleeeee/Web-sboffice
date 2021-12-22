@@ -1285,4 +1285,15 @@ public class ProdServiceImpl implements ProdService {
 
         return prodMapper.getSearchSdselGrpList(prodVO);
     }
+
+    /** 발주 단위 구분 조회 */
+    @Override
+    public List<DefaultMap<String>> getPoUnitFgData(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return prodMapper.getPoUnitFgData(prodVO);
+    }
 }
