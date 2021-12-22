@@ -389,6 +389,86 @@ function fnNxBtnSearch()
             {
                 $('#nxBtnSearch').click();
             }
+            else if($('#nxBtnSearch1').length > 0)
+            {
+                $('#nxBtnSearch1').click();
+            }
+            else if($('#nxBtnSearch2').length > 0)
+            {
+                $('#nxBtnSearch2').click();
+            }
+            else if($('#nxBtnSearch3').length > 0)
+            {
+                $('#nxBtnSearch3').click();
+            }
+            else if($('#nxBtnSearch4').length > 0)
+            {
+                $('#nxBtnSearch4').click();
+            }
+            else if($('#nxBtnSearch5').length > 0)
+            {
+                $('#nxBtnSearch5').click();
+            }
+            else if($('#nxBtnSearch6').length > 0)
+            {
+                $('#nxBtnSearch6').click();
+            }
+            else if($('#nxBtnSearch7').length > 0)
+            {
+                $('#nxBtnSearch7').click();
+            }
+            else if($('#nxBtnSearch8').length > 0)
+            {
+                $('#nxBtnSearch8').click();
+            }
+            else if($('#nxBtnSearch9').length > 0)
+            {
+                $('#nxBtnSearch9').click();
+            }
+            else if($('#nxBtnSearch10').length > 0)
+            {
+                $('#nxBtnSearch10').click();
+            }
+            else if($('#nxBtnSearch11').length > 0)
+            {
+                $('#nxBtnSearch11').click();
+            }
+            else if($('#nxBtnSearch12').length > 0)
+            {
+                $('#nxBtnSearch12').click();
+            }
+            else if($('#nxBtnSearch13').length > 0)
+            {
+                $('#nxBtnSearch13').click();
+            }
+            else if($('#nxBtnSearch14').length > 0)
+            {
+                $('#nxBtnSearch14').click();
+            }
+            else if($('#nxBtnSearch15').length > 0)
+            {
+                $('#nxBtnSearch15').click();
+            }
+            else if($('#nxBtnSearch16').length > 0)
+            {
+                $('#nxBtnSearch16').click();
+            }
+            else if($('#nxBtnSearch17').length > 0)
+            {
+                $('#nxBtnSearch17').click();
+            }
+            else if($('#nxBtnSearch18').length > 0)
+            {
+                $('#nxBtnSearch18').click();
+            }
+            else if($('#nxBtnSearch19').length > 0)
+            {
+                $('#nxBtnSearch19').click();
+            }
+            else if($('#nxBtnSearch20').length > 0)
+            {
+                $('#nxBtnSearch20').click();
+            }
             else if($('#btnSearch').length > 0)
             {
                 $('#btnSearch').click();
