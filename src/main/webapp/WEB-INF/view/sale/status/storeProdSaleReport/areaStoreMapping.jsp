@@ -43,10 +43,12 @@
                                     item-formatter="_itemFormatter">
 
                                 <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchCd"/>" binding="branchCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchNm"/>" binding="branchNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaCd"/>" binding="areaCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="areaStoreMapping.areaNm"/>" binding="areaNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+
+                                <%--조회시 필요--%>
+                                <wj-flex-grid-column header="<s:message code="areaStoreMapping.branchCd"/>" binding="branchCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -59,16 +61,18 @@
     <%--center--%>
     <div class="wj-TblWrap mt20 mb20 w30 fl" ng-controller="areaStoreMappingDetailCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:450px; overflow-y: hidden;">
-            <div class="updownSet oh mb10">
+            <div class="updownSet oh">
                 <span class="fl bk lh30">
                     <s:message code="areaStoreMapping.store"/>
                     <label id="lblAreaCd"></label>
                     <label id="lblAreaNm"></label>
                 </span>
+            </div>
+            <div class="updownSet oh mb10">
                 <button class="btn_skyblue" id="btnAreaStoreMappingDetailDel" ng-click="del()"><s:message code='cmm.del' /></button>
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:340px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"

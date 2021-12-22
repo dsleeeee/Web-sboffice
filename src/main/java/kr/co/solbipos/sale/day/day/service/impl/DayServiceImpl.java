@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service("dayService")
 public class DayServiceImpl implements DayService {
@@ -424,5 +423,21 @@ public class DayServiceImpl implements DayService {
         }
 
         return selectList;
+    }
+
+    /** 사원카드별탭 - 사원카드별 매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayEmpCardList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = dayVO.getStoreCds().split(",");
+        dayVO.setStoreCdList(storeCds);
+
+        return dayMapper.getDayEmpCardList(dayVO);
     }
 }

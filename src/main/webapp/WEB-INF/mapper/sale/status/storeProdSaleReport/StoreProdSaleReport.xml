@@ -407,8 +407,7 @@
                                     SELECT thas.STORE_CD
                                     FROM TB_HQ_AREA_STORE thas
                                     WHERE 1=1
-                                    AND thas.BRANCH_CD = #{branchCd}
-                                    AND thas.AREA_CD = #{areaCd}
+                                    AND thas.HQ_OFFICE_CD = #{hqOfficeCd}
                                 )
         <if test="storeCd != null and storeCd != ''">
             AND tms.STORE_CD LIKE '%'|| #{storeCd} ||'%'

@@ -98,7 +98,7 @@ public class DaySaleReportController {
     /**
      * 일별매출내역 다운로드 - 자료생성 저장
      *
-     * @param daySaleReportVO
+     * @param daySaleReportVOs
      * @param request
      * @param response
      * @param model
@@ -108,12 +108,12 @@ public class DaySaleReportController {
      */
     @RequestMapping(value = "/daySaleReport/getDaySaleReportSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDaySaleReportSave(@RequestBody DaySaleReportVO daySaleReportVO, HttpServletRequest request,
+    public Result getDaySaleReportSave(@RequestBody DaySaleReportVO[] daySaleReportVOs, HttpServletRequest request,
                                              HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = daySaleReportService.getDaySaleReportSave(daySaleReportVO, sessionInfoVO);
+        int result = daySaleReportService.getDaySaleReportSave(daySaleReportVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

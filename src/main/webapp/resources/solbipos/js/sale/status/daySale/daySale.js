@@ -23,6 +23,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").hide();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
     };
 
 
@@ -36,6 +37,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").removeClass("on");
         $("#dayTableTab").removeClass("on");
         $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").show();
         $("#dayDcView").hide();
@@ -45,6 +47,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").hide();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayTotalCtrl");
@@ -62,6 +65,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").removeClass("on");
         $("#dayTableTab").removeClass("on");
         $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").hide();
         $("#dayDcView").show();
@@ -71,6 +75,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").hide();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayDcCtrl");
@@ -88,6 +93,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").removeClass("on");
         $("#dayTableTab").removeClass("on");
         $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
@@ -97,6 +103,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").hide();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayTaxCtrl");
@@ -114,6 +121,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").removeClass("on");
         $("#dayTableTab").removeClass("on");
         $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
@@ -123,6 +131,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").hide();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayTimeCtrl");
@@ -140,6 +149,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").removeClass("on");
         $("#dayTableTab").removeClass("on");
         $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
@@ -149,6 +159,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").hide();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayProdClassCtrl");
@@ -166,6 +177,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").addClass("on");
         $("#dayTableTab").removeClass("on");
         $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
@@ -175,6 +187,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").show();
         $("#dayTableView").hide();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayCornerCtrl");
@@ -191,6 +204,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").removeClass("on");
         $("#dayTableTab").addClass("on");
         $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
@@ -200,6 +214,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").show();
         $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayTableCtrl");
@@ -216,6 +231,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerTab").removeClass("on");
         $("#dayTableTab").removeClass("on");
         $("#dayPosTab").addClass("on");
+        $("#dayEmpCardTab").removeClass("on");
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
@@ -225,9 +241,37 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
         $("#dayCornerView").hide();
         $("#dayTableView").hide();
         $("#dayPosView").show();
+        $("#dayEmpCardView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayPosCtrl");
+        scope.flex.refresh();
+    };
+
+    // 사원카드별 탭 보이기
+    $scope.empCardShow = function () {
+        $("#dayTotalTab").removeClass("on");
+        $("#dayDcTab").removeClass("on");
+        $("#dayTaxTab").removeClass("on");
+        $("#dayTimeTab").removeClass("on");
+        $("#dayProdClassTab").removeClass("on");
+        $("#dayCornerTab").removeClass("on");
+        $("#dayTableTab").removeClass("on");
+        $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").addClass("on");
+
+        $("#dayTotalView").hide();
+        $("#dayDcView").hide();
+        $("#dayTaxView").hide();
+        $("#dayTimeView").hide();
+        $("#dayProdClassView").hide();
+        $("#dayCornerView").hide();
+        $("#dayTableView").hide();
+        $("#dayPosView").hide();
+        $("#dayEmpCardView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("dayEmpCardCtrl");
         scope.flex.refresh();
     };
 

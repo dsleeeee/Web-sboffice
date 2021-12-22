@@ -44,7 +44,7 @@
         </tbody>
     </table>
 
-    <div class="mt10 oh sb-select dkbr">
+    <div class="mt10 oh">
         <p class="tl s14 mt5 lh15 red">전체매장 자료생성 요청시 생성까지 최대 90분정도 소요됩니다.</p>
         <%-- 삭제 --%>
         <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="del()">
@@ -54,10 +54,25 @@
         <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="dataCreate()">
             <s:message code="daySaleReport.dataCreate" />
         </button>
+        <%-- 자료생성 날짜 --%>
         <div class="sb-select dkbr ml5 fr">
-            <div class="sb-select">
-                <span class="txtIn"><input id="dataCreateMonth" name="dataCreateMonth" class="w100px" /></span>
-            </div>
+            <span class="txtIn"><input id="dataCreateMonth" name="dataCreateMonth" class="w100px" /></span>
+        </div>
+        <%-- 매장 --%>
+        <div class="ml5 fr">
+            <%-- 매장선택 모듈 싱글 선택 사용시 include
+               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                            closeFunc - 팝업 닫기시 호출할 함수
+            --%>
+            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                <jsp:param name="targetId" value="daySaleReportStore"/>
+            </jsp:include>
+            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+        </div>
+        <div class="sb-select dkbr ml5 fr">
+            <p class="tl s14 mt5 lh15">매장 :</p>
         </div>
     </div>
 
@@ -76,6 +91,8 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleReport.saleMonth"/>" binding="saleMonth" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="daySaleReport.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="daySaleReport.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleReport.procGubun"/>" binding="procGubun" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleReport.procDt"/>" binding="procDt" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleReport.userNm"/>" binding="userNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -106,4 +123,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySaleReport/daySaleReport.js?ver=20211207.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySaleReport/daySaleReport.js?ver=20211208.01" charset="utf-8"></script>

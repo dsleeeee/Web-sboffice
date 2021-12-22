@@ -42,6 +42,7 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
     $("#lblsdselClassCd").text(data);
     var params = {};
     params.sdselClassCd = $("#lblsdselClassCd").text();
+    params.prodClassCd = $scope.prodClassCd;
     if(typeof gubun !== "undefined"){
       params.sideEnvstVal = gubun;
     }
@@ -60,10 +61,40 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
       }
     }
     if ( idx < 1 ) {
-      $scope._popMsg('상품을 선택해주세요.');
-      return false;
+        $scope.itemChecked = false;
+        $scope._popMsg('상품을 선택해주세요.');
+        return false;
+    }else{
+        $scope.itemChecked = true;
     }
   }
+
+  // 상품분류정보 팝업
+  $scope.popUpProdClass = function() {
+    var popUp = $scope.prodClassPopUpLayer;
+    popUp.show(true, function (s) {
+      // 선택 버튼 눌렀을때만
+      if (s.dialogResult === "wj-hide-apply") {
+        var scope = agrid.getScope('prodClassPopUpCtrl');
+        var prodClassCd = scope.getSelectedClass();
+        var params = {};
+        params.prodClassCd = prodClassCd;
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function(response){
+              $scope.prodClassCd = prodClassCd;
+              $scope.prodClassCdNm = response.data.data;
+            }
+        );
+      }
+    });
+  };
+
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+    $scope.prodClassCd = "";
+    $scope.prodClassCdNm = "";
+  };
 
 }]);
 

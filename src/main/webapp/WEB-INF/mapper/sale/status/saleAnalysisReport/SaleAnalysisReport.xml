@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleAnalysisReport.xml
+    중분류(매출분석) 다운로드(정직유부)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2021.12.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.saleAnalysisReport.service.impl.SaleAnalysisReportMapper">
+
+    <!-- 중분류(매출분석) 다운로드 - 매장 컬럼 리스트 조회-->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStorerColList"  parameterType="saleAnalysisReportVO" resultType="DefaultMap">
+        /* SaleAnalysisReportMapper.getStorerColList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM
+        FROM TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 중분류(매출분석) 다운로드 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleAnalysisReportList"  parameterType="saleAnalysisReportVO" resultType="DefaultMap">
+        /* SaleAnalysisReportMapper.getSaleAnalysisReportList */
+        SELECT
+        PROD_CD,
+        PROD_NM,
+        <foreach collection="arrStoreCol" item="item" separator="+">
+            NVL(STORE_${item}_SALE_QTY, 0)
+        </foreach> AS TOT_SALE_QTY,
+        <foreach collection="arrStoreCol" item="item" separator="+">
+            NVL(STORE_${item}_SERVICE_QTY, 0)
+        </foreach> AS TOT_SERVICE_QTY,
+        <foreach collection="arrStoreCol" item="item" separator="+">
+            NVL(STORE_${item}_SALE_AMT, 0)
+        </foreach> AS TOT_SALE_AMT,
+        <foreach collection="arrStoreCol" item="item" separator="+">
+            NVL(STORE_${item}_DC_AMT, 0)
+        </foreach> AS TOT_DC_AMT,
+        <foreach collection="arrStoreCol" item="item" separator="+">
+            NVL(STORE_${item}_REAL_SALE_AMT, 0)
+        </foreach> AS TOT_REAL_SALE_AMT,
+        100 AS TOT_QTY_RATE,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            NVL(STORE_${item}_SALE_QTY, 0) AS STORE_${item}_SALE_QTY
+        </foreach> ,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            NVL(STORE_${item}_SERVICE_QTY, 0) AS STORE_${item}_SERVICE_QTY
+        </foreach> ,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            NVL(STORE_${item}_SALE_AMT, 0) AS STORE_${item}_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            NVL(STORE_${item}_DC_AMT, 0) AS STORE_${item}_DC_AMT
+        </foreach> ,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            NVL(STORE_${item}_REAL_SALE_AMT, 0) AS STORE_${item}_REAL_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            NVL(STORE_${item}_QTY_RATE, 0) AS STORE_${item}_QTY_RATE
+        </foreach>
+--         NVL(STORE_A000001_SALE_QTY, 0) AS STORE_A000001_SALE_QTY,
+--         NVL(STORE_A000001_SERVICE_QTY, 0) AS STORE_A000001_SERVICE_QTY,
+--         NVL(STORE_A000001_SALE_AMT, 0) AS STORE_A000001_SALE_AMT,
+--         NVL(STORE_A000001_DC_AMT, 0) AS STORE_A000001_DC_AMT,
+--         NVL(STORE_A000001_REAL_SALE_AMT, 0) AS STORE_A000001_REAL_SALE_AMT,
+--         NVL(STORE_A000001_QTY_RATE, 0) AS STORE_A000001_QTY_RATE
+        FROM
+        (
+            SELECT
+            A.PROD_CD,
+            A.PROD_NM,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                A.STORE_${item}_SALE_QTY AS STORE_${item}_SALE_QTY
+            </foreach> ,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                A.STORE_${item}_SERVICE_QTY AS STORE_${item}_SERVICE_QTY
+            </foreach> ,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                A.STORE_${item}_SALE_AMT AS STORE_${item}_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                A.STORE_${item}_DC_AMT AS STORE_${item}_DC_AMT
+            </foreach> ,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                A.STORE_${item}_REAL_SALE_AMT AS STORE_${item}_REAL_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                DECODE(B.TOT_SALE_QTY, 0, 0, NVL(ROUND(A.STORE_${item}_SALE_QTY / B.TOT_SALE_QTY * 100, 2), 0)) AS STORE_${item}_QTY_RATE
+            </foreach>
+--             A.STORE_A000001_SALE_QTY AS STORE_A000001_SALE_QTY,
+--             A.STORE_A000001_SERVICE_QTY AS STORE_A000001_SERVICE_QTY,
+--             A.STORE_A000001_SALE_AMT AS STORE_A000001_SALE_AMT,
+--             A.STORE_A000001_DC_AMT AS STORE_A000001_DC_AMT,
+--             A.STORE_A000001_REAL_SALE_AMT AS STORE_A000001_REAL_SALE_AMT,
+--             DECODE(B.TOT_SALE_QTY, 0, 0, NVL(ROUND(A.STORE_A000001_SALE_QTY / B.TOT_SALE_QTY * 100, 2), 0)) AS STORE_A000001_QTY_RATE
+            FROM
+            (
+                SELECT
+                PROD_CD,
+                PROD_NM,
+                <foreach collection="arrStoreCol" item="item" separator=",">
+                    SUM(STORE_${item}_SALE_QTY) AS STORE_${item}_SALE_QTY
+                </foreach> ,
+                <foreach collection="arrStoreCol" item="item" separator=",">
+                    SUM(STORE_${item}_SERVICE_QTY) AS STORE_${item}_SERVICE_QTY
+                </foreach> ,
+                <foreach collection="arrStoreCol" item="item" separator=",">
+                    SUM(STORE_${item}_SALE_AMT) AS STORE_${item}_SALE_AMT
+                </foreach> ,
+                <foreach collection="arrStoreCol" item="item" separator=",">
+                    SUM(STORE_${item}_DC_AMT) AS STORE_${item}_DC_AMT
+                </foreach> ,
+                <foreach collection="arrStoreCol" item="item" separator=",">
+                    SUM(STORE_${item}_REAL_SALE_AMT) AS STORE_${item}_REAL_SALE_AMT
+                </foreach>
+--                 SUM(STORE_A000001_SALE_QTY) AS STORE_A000001_SALE_QTY,
+--                 SUM(STORE_A000001_SERVICE_QTY) AS STORE_A000001_SERVICE_QTY,
+--                 SUM(STORE_A000001_SALE_AMT) AS STORE_A000001_SALE_AMT,
+--                 SUM(STORE_A000001_DC_AMT) AS STORE_A000001_DC_AMT,
+--                 SUM(STORE_A000001_REAL_SALE_AMT) AS STORE_A000001_REAL_SALE_AMT
+                FROM
+                (
+                    SELECT
+                    tsdp.STORE_CD,
+                    tsdp.PROD_CD,
+                    tmp.PROD_NM,
+                    SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
+                    0 AS SERVICE_QTY,
+                    SUM(tsdp.TOT_SALE_AMT) AS SALE_AMT,
+                    SUM(tsdp.TOT_DC_AMT) AS DC_AMT,
+                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    FROM TB_SL_DAILY_PROD tsdp,
+                    TB_MS_PRODUCT tmp
+                    WHERE 1=1
+                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsdp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+                    AND tmp.STORE_CD = tsdp.STORE_CD
+                    AND tmp.PROD_CD = tsdp.PROD_CD
+                    GROUP BY tsdp.STORE_CD, tsdp.PROD_CD, tmp.PROD_NM
+                )
+                PIVOT
+                (
+                    SUM(SALE_QTY) AS SALE_QTY,
+                    SUM(SERVICE_QTY) AS SERVICE_QTY,
+                    SUM(SALE_AMT) AS SALE_AMT,
+                    SUM(DC_AMT) AS DC_AMT,
+                    SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    FOR STORE_CD
+                    IN (${pivotStoreCol})
+--                     IN ('A000001' AS STORE_A000001,
+--                     'A000005' AS STORE_A000005)
+                )
+                GROUP BY PROD_CD, PROD_NM
+                ORDER BY PROD_CD
+            ) A,
+            (
+                SELECT
+                tsdp.PROD_CD,
+                SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY
+                FROM TB_SL_DAILY_PROD tsdp
+                WHERE 1=1
+                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+                GROUP BY tsdp.PROD_CD
+                ORDER BY tsdp.PROD_CD
+            ) B
+            WHERE 1=1
+            AND B.PROD_CD = A.PROD_CD
+        )
+        ORDER BY PROD_CD
+    </select>
+
+    <!-- 중분류(매출분석) 다운로드 - 조회된 매장 리스트 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleAnalysisReportStoreList"  parameterType="saleAnalysisReportVO" resultType="DefaultMap">
+        /* SaleAnalysisReportMapper.getSaleAnalysisReportStoreList */
+        SELECT
+        LISTAGG(A.STORE_CD, ',') WITHIN GROUP (ORDER BY A.STORE_CD) AS STORE_CD
+        FROM
+        (
+            SELECT
+            tsdp.STORE_CD
+            FROM TB_SL_DAILY_PROD tsdp
+            WHERE 1=1
+            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+            GROUP BY tsdp.STORE_CD
+            ORDER BY tsdp.STORE_CD
+        ) A
+    </select>
+
+</mapper>

@@ -81,7 +81,7 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         memberVO.setMembrNo(membrNo);                           //회원번호
         //TODO 2018.08.14 안동관. 현재는 회원분류코드를 하드코딩으로 넣고 있으나 나중에는 화면에서 받아서 처리해야함.
         memberVO.setMembrClassCd(membrClass);                   //회원분류코드
-        memberVO.setMembrCardNo(memberVO.getTelNo());           //회원카드번호
+        memberVO.setMembrCardNo("");                            //회원카드번호 --> 휴대폰번호 넣지 않음(2021.12.16)
         memberVO.setRegStoreCd(sessionInfoVO.getOrgnCd());      //등록매장코드
         memberVO.setLunarYn("Y");                               //음력여부 Y:음력 N:양력
         memberVO.setShortNo(memberVO.getTelNo().substring(memberVO.getTelNo().length()-4, memberVO.getTelNo().length()));

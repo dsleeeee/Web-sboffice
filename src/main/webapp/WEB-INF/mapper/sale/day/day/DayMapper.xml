@@ -1449,4 +1449,131 @@
 <!--        ORDER BY SALE_DATE-->
 <!--    </select>-->
 
+
+    <!--  사원카드별탭 - 사원카드별 매출조회-->
+    <!--
+        TABLE    : TB_SL_SALE_DTL
+        COMMENTS : [매출]상세
+    -->
+    <select id="getDayEmpCardList"  parameterType="DayVO" resultType="DefaultMap">
+        /* DayMapper.getDayEmpCardList */
+        SELECT TO_CHAR(TO_DATE(B.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        , 		TO_CHAR(TO_DATE(B.SALE_DATE, 'YYYYMMDD') -1, 'D') AS YOIL_NUM
+        ,		TO_CHAR(TO_DATE(B.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       B.OFFICE_NM
+        ,       B.OFFICE_DEPT_NM
+        ,       B.OFFICE_EMP_NO
+        ,       B.OFFICE_EMP_NM
+        ,		C.PROD_NM
+        ,		SUM(DECODE(A.SALE_AMT, 0, 0, ROUND(C.PAY_AMT*B.SALE_AMT/A.SALE_AMT, 0))) AS SALE_AMT
+          FROM (
+                    SELECT  STORE_CD
+                    ,        SALE_DATE
+                    ,        POS_NO
+                    ,        BILL_NO
+                    ,        SUM(SALE_AMT) AS SALE_AMT
+                       FROM TB_SL_SALE_PAY_EMP_CARD
+                      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                      GROUP
+                         BY STORE_CD
+                    ,       SALE_DATE
+                    ,       POS_NO
+                    ,       BILL_NO
+                ) A,
+                (
+                    SELECT STORE_CD
+                    ,       SALE_DATE
+                    ,       POS_NO
+                    ,       BILL_NO
+                    ,       OFFICE_NM
+                    ,       OFFICE_DEPT_NM
+                    ,       OFFICE_EMP_NO
+                    ,       OFFICE_EMP_NM
+                    ,       SUM(SALE_AMT) AS SALE_AMT
+                      FROM TB_SL_SALE_PAY_EMP_CARD
+                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    <if test='storeCds != null and storeCds != ""'>
+                       AND STORE_CD IN
+                       <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                           #{item}
+                       </foreach>
+                    </if>
+                    GROUP
+                       BY STORE_CD
+                    ,     SALE_DATE
+                    ,     POS_NO
+                    ,     BILL_NO
+                    ,     OFFICE_NM
+                    ,     OFFICE_DEPT_NM
+                    ,     OFFICE_EMP_NO
+                    ,     OFFICE_EMP_NM
+                ) B,
+                (
+                    SELECT A.STORE_CD
+                    ,       A.SALE_DATE
+                    ,       A.POS_NO
+                    ,       A.BILL_NO
+                    ,       A.PROD_CD
+                    ,       B.PROD_NM
+                    ,       A.PAY_AMT
+                      FROM	(
+                                SELECT STORE_CD
+                                ,       SALE_DATE
+                                ,       POS_NO
+                                ,       BILL_NO
+                                ,       PROD_CD
+                                ,       SUM(PAY_AMT) AS PAY_AMT
+                                  FROM TB_SL_SALE_DTL_PAY
+                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                   AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                <if test='storeCds != null and storeCds != ""'>
+                                   AND STORE_CD IN
+                                   <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                       #{item}
+                                   </foreach>
+                                </if>
+                                   AND 	PAY_CD = '17'
+                                 GROUP
+                                    BY STORE_CD
+                                 ,     SALE_DATE
+                                 ,     POS_NO
+                                 ,     BILL_NO
+                                 ,     PROD_CD
+                            ) A,
+                            TB_MS_PRODUCT B
+                     WHERE B.STORE_CD = A.STORE_CD
+                       AND B.PROD_CD  = A.PROD_CD
+                ) C
+         WHERE B.STORE_CD = A.STORE_CD
+           AND B.SALE_DATE = A.SALE_DATE
+           AND B.POS_NO = A.POS_NO
+           AND B.BILL_NO = A.BILL_NO
+           AND C.STORE_CD = A.STORE_CD
+           AND C.SALE_DATE = A.SALE_DATE
+           AND C.POS_NO = A.POS_NO
+           AND C.BILL_NO = A.BILL_NO
+         GROUP
+            BY B.SALE_DATE
+         ,     B.OFFICE_NM
+         ,     B.OFFICE_DEPT_NM
+         ,     B.OFFICE_EMP_NO
+         ,     B.OFFICE_EMP_NM
+         ,     C.PROD_NM
+        ORDER
+           BY B.SALE_DATE
+        ,     B.OFFICE_NM
+        ,     B.OFFICE_DEPT_NM
+        ,     B.OFFICE_EMP_NO
+        ,     B.OFFICE_EMP_NM
+        ,     C.PROD_NM
+    </select>
+
 </mapper>

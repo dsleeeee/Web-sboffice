@@ -360,4 +360,27 @@ public class DayController {
 
         return ReturnUtil.returnListJson(Status.OK, result, dayVO);
     }
+
+    /**
+     * 사원카드별 - 사원카드별 매출조회
+     *
+     * @param dayVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021.12.20
+     */
+    @RequestMapping(value = "/day/getDayEmpCardList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayEmpCardList(DayVO dayVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayService.getDayEmpCardList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayVO);
+    }
 }

@@ -66,4 +66,7 @@ public interface DayMapper {
 
     /** 포스별 - 포스별매출조회 */
     List<DefaultMap<Object>> getDayPosList(DayVO dayVO);
+
+    /** 사원카드별탭 - 사원카드별 매출조회 */
+    List<DefaultMap<Object>> getDayEmpCardList(DayVO dayVO);
 }

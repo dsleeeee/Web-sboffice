@@ -1104,6 +1104,15 @@
                         OR
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                     )
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND thp.PROD_CLASS_CD IN (
+                                                    SELECT  PROD_CLASS_CD
+                                                      FROM  TB_HQ_PRODUCT_CLASS
+                                                     WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </if>
                 ORDER BY
                     thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -1148,6 +1157,15 @@
                             OR
                             ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                         )
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                    SELECT PROD_CLASS_CD
+                                                      FROM TB_MS_PRODUCT_CLASS
+                                                     WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                               CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
                 ORDER BY
                     tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
