@@ -103,4 +103,4 @@
     var arrStoreCol = storeCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleAnalysisReport/saleAnalysisReport.js?ver=20211216.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleAnalysisReport/saleAnalysisReport.js?ver=20211216.02" charset="utf-8"></script>
