@@ -80,6 +80,7 @@
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.procDt"/>" binding="procDt" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.userNm"/>" binding="userNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.procFg"/>" binding="procFg" data-map="procFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeProdSaleReport.procMsg"/>" binding="procMsg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.download"/>" binding="download" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%--삭제시 필요--%>
