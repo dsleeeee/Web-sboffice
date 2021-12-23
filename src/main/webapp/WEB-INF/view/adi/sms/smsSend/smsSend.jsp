@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<wj-popup control="wjSmsSendLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:970px;height:740px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSmsSendLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:830px;height:730px;" fade-in="false" fade-out="false">
 
     <%--<div class="contents" id ="divSmsSendPageAuth" style="display: none;">--%>
         <%--<div class="elseCon">--%>
@@ -30,11 +30,11 @@
         <%-- body --%>
         <div class="subCon">
             <%-- 좌측 --%>
-            <div class="wj-TblWrapBr w55 fl">
+            <div class="wj-TblWrapBr w50 fl" style="width:435px;">
                 <%-- (광고), (무료수신거부) display 여부 : pageGubun값이 Y일때만 보여줌 --%>
                 <label id="lblPageGubun" style="display: none;"></label>
                 <%-- 제목 --%>
-                <div class="w50 fl pd10" style="height:340px;">
+                <div class="w50 fl pd10" style="height:340px; width:210px;">
                     <table>
                         <colgroup>
                             <col class="w100" />
@@ -117,7 +117,7 @@
                 </div>
 
                 <%-- 자동변환 --%>
-                <div class="w50 fl pd10 bl" style="height:340px;">
+                <div class="w50 fl pd10 bl" style="height:340px; width:calc(100% - 210px);">
                     <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                         <table>
                             <%--<tr>--%>
@@ -165,7 +165,7 @@
                 </f:form>
 
                 <%-- 문구 --%>
-                <div class="w100 fl pd10 bt" style="height:220px;">
+                <div class="w100 fl pd10 bt" style="height:210px;">
                     <div id ="divMsgGrpPage">
                         <%--subTab--%>
                         <div class="tabType1">
@@ -177,7 +177,7 @@
                                     </li>
                                 </c:forEach>
                             </ul>
-                            <div style="height:170px; overflow-x: hidden; overflow-y: auto;">
+                            <div style="height:160px; overflow-x: hidden; overflow-y: auto;">
                                 <div id="divMsgComment"></div>
                             </div>
                         </div>
@@ -195,9 +195,9 @@
             <%-- //좌측 --%>
 
             <%-- 우측 --%>
-            <div class="wj-TblWrapBr w45 fl">
+            <div class="wj-TblWrapBr w50 fl" style="width:calc(100% - 435px);">
                 <%-- 수신자목록 --%>
-                <div class="w100 fl pd10" style="height:650px;">
+                <div class="w100 fl pd10" style="height:640px;">
                     <table>
                         <tr>
                             <td class="s14">
@@ -242,7 +242,7 @@
 
                                     <!-- define columns -->
                                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="smsSend.telNo"/>" binding="telNo" width="300" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="smsSend.telNo"/>" binding="telNo" width="240" align="center"></wj-flex-grid-column>
 
                                     <%--저장시 필요--%>
                                     <wj-flex-grid-column header="<s:message code="smsSend.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>

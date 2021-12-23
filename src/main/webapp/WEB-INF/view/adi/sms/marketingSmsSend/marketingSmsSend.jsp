@@ -466,7 +466,7 @@
         <%-- 상단 --%>
         <div class="wj-TblWrapBr w100 fl">
             <%-- 제목 --%>
-            <div class="w30 fl pd10" style="height:340px; width:250px;">
+            <div class="w30 fl pd10" style="height:340px; width:220px;">
                 <table>
                     <colgroup>
                         <col class="w100" />
@@ -548,7 +548,7 @@
                 </table>
             </div>
             <%-- 수신자목록 --%>
-            <div class="w70 fl pd10 bl" style="height:340px; width:calc(100% - 250px);">
+            <div class="w70 fl pd10 bl" style="height:340px; width:calc(100% - 220px);">
                 <div class="w100">
                     <%--<div class="w70 fl">--%>
                     <div class="w100 fl mb10">
@@ -620,7 +620,7 @@
         <%-- 하단 --%>
         <div class="wj-TblWrapBr w100 fl">
             <%-- 자동변환 --%>
-            <div class="w30 fl pd10" style="height:400px; width:250px;">
+            <div class="w30 fl pd10" style="height:420px; width:220px;">
                 <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                     <table>
                         <%-- 첨부파일 --%>
@@ -663,7 +663,7 @@
                 </div>
             </div>
             <%-- 문구 --%>
-            <div class="w70 fl pd10 bl" style="height:400px; width:calc(100% - 250px);">
+            <div class="w70 fl pd10 bl" style="height:420px; width:calc(100% - 220px);">
                 <div id ="divMsgGrpPage">
                     <%--subTab--%>
                     <div class="tabType1">
@@ -675,7 +675,7 @@
                                 </li>
                             </c:forEach>
                         </ul>
-                        <div style="height:340px; overflow-x: hidden; overflow-y: auto;">
+                        <div style="height:360px; overflow-x: hidden; overflow-y: auto;">
                             <div id="divMarketingSmsSendMsgComment"></div>
                         </div>
                     </div>
@@ -734,7 +734,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211110.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211112.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>
