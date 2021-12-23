@@ -26,6 +26,7 @@
         tmsr.PROC_DT,
         (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = tmsr.REG_ID) AS USER_NM,
         tmsr.PROC_FG,
+        tmsr.PROC_MSG,
         '다운로드' AS DOWNLOAD,
         tmsr.FROM_SALE_DATE,
         tmsr.TO_SALE_DATE,
