@@ -620,7 +620,7 @@
         <%-- 하단 --%>
         <div class="wj-TblWrapBr w100 fl">
             <%-- 자동변환 --%>
-            <div class="w30 fl pd10" style="height:420px; width:220px;">
+            <div class="w30 fl pd10" style="height:430px; width:220px;">
                 <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                     <table>
                         <%-- 첨부파일 --%>
@@ -663,7 +663,7 @@
                 </div>
             </div>
             <%-- 문구 --%>
-            <div class="w70 fl pd10 bl" style="height:420px; width:calc(100% - 220px);">
+            <div class="w70 fl pd10 bl" style="height:430px; width:calc(100% - 220px);">
                 <div id ="divMsgGrpPage">
                     <%--subTab--%>
                     <div class="tabType1">
@@ -675,7 +675,7 @@
                                 </li>
                             </c:forEach>
                         </ul>
-                        <div style="height:360px; overflow-x: hidden; overflow-y: auto;">
+                        <div style="height:370px; overflow-x: hidden; overflow-y: auto;">
                             <div id="divMarketingSmsSendMsgComment"></div>
                         </div>
                     </div>
