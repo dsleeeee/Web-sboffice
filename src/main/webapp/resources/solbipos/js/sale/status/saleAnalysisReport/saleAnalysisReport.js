@@ -122,9 +122,9 @@ app.controller('saleAnalysisReportCtrl', ['$scope', '$http', '$timeout', functio
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 1년(6개월) 제한
-        if (diffMonth > 6) {
-            $scope._popMsg(messages['cmm.dateOver.6month.error']);
+        // 조회일자 최대 1개월 제한
+        if (diffMonth > 1) {
+            $scope._popMsg(messages['cmm.dateOver.1month.error']);
             return false;
         }
 
