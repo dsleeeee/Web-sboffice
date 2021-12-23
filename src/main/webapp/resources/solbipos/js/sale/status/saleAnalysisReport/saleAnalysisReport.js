@@ -202,6 +202,32 @@ app.controller('saleAnalysisReportCtrl', ['$scope', '$http', '$timeout', functio
     // 조회 데이터가 없습니다 출력하려고
     $scope.searchSaleAnalysisReportListNo = function(params){
         $scope._inquiryMain("/sale/status/saleAnalysisReport/saleAnalysisReport/getSaleAnalysisReportList.sb", params, function() {
+            searchCnt = searchCnt + 1;
+
+            // <-- 그리드 visible -->
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridSaleAnalysisReportList");
+            var columns = grid.columns;
+
+            // storeColList 에 storeCd 배열로 담기
+            var storeColArray = [];
+            for (var i = 0; i < storeColList.length; i++) {
+                comboData = {};
+                comboData.value = storeColList[i].storeCd;
+                storeColArray.push(comboData);
+            }
+
+            if(searchCnt > 1) {
+                // 컬럼 총갯수
+                var columnsCnt = 8 + (storeColArray.length * 6);
+                // 전부 visible
+                for (var i = 8; i < columnsCnt; i++) {
+                    if(columns[i].visible === true) {
+                        columns[i].visible = false;
+                    }
+                }
+            }
+            // <-- //그리드 visible -->
         }, false);
     };
     // <-- //검색 호출 -->

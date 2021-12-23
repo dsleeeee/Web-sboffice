@@ -1,5 +1,6 @@
 package kr.co.solbipos.application.session.user.service.impl;
 
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
@@ -15,6 +16,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.application.session.user.enums.PwFindResult;
 import kr.co.solbipos.application.session.user.service.*;
+import kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO;
+import kr.co.solbipos.adi.sms.smsSend.service.impl.SmsSendMapper;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +57,8 @@ public class UserServiceImpl implements UserService {
     MessageService messageService;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    SmsSendMapper smsSendMapper;
 
     @SuppressWarnings( "unused" )
     @Override
@@ -297,6 +302,72 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateUserPwd(sessionInfoVO);
     }
 
+    /** SMS 전송 저장 */
+    @Override
+    public int getSmsSendSave(OtpAuthVO otpAuthVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        SmsSendVO smsSendVO = new SmsSendVO();
+
+        smsSendVO.setRegDt(currentDt);
+        smsSendVO.setRegId("sysAdmin");
+        smsSendVO.setModDt(currentDt);
+        smsSendVO.setModId("sysAdmin");
+
+        smsSendVO.setOrgnCd("00001");
+
+        // 송신자
+        smsSendVO.setSsOrgnCd("00001");
+        smsSendVO.setSsOrgnFg("M");
+        smsSendVO.setSsUserId("sysAdmin");
+
+        // 수신자
+        smsSendVO.setRrOrgnCd("");
+        smsSendVO.setRrOrgnFg("");
+        smsSendVO.setRrUserId(otpAuthVO.getUserId());
+
+        // 송신주체 소속코드
+        smsSendVO.setSmsOgnCd("00001");
+
+        // 회원관리주체 소속코드
+        smsSendVO.setCstOgnCd("*");
+
+        // 전송일시
+        smsSendVO.setSendDate(currentDt);
+
+        // 전송이력시퀀스
+        SessionInfoVO sessionInfoVO = new SessionInfoVO();
+        String smsSendSeq = smsSendMapper.getSmsSendSeq(sessionInfoVO);
+        smsSendVO.setSmsSendSeq(smsSendSeq);
+
+        smsSendVO.setReserveYn("0");
+        smsSendVO.setMsgType("1");
+        smsSendVO.setTitle("NXPOS 인증번호");
+        smsSendVO.setContent("인증번호는 " + otpAuthVO.getAuthNo() + " 입니다.");
+        smsSendVO.setCallback("16445195");
+        smsSendVO.setPhoneNumber(otpAuthVO.getRecvMpNo().replaceAll("-",""));
+        smsSendVO.setCstNo("");
+
+        // 전송건수
+        smsSendVO.setSmsSendCount("0");
+        // 전송이력 저장
+        procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
+
+        // SMS
+        procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
+
+        // 현재 잔여금액
+        String smsAmt = smsSendMapper.getSmsAmtSelect(smsSendVO);
+        // SMS 건당금액
+        DefaultMap<Object> result = smsSendMapper.getSmsAmtList(smsSendVO);
+        String smsOneAmt = result.getStr("smsOneAmt");
+        // 잔여금액 - 사용금액
+        smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - Integer.parseInt(smsOneAmt) ));
+
+        // 잔여금액 저장 update
+        procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
+
+        return procCnt;
+    }
 }
-
-

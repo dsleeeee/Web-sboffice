@@ -99,4 +99,7 @@ public interface UserService {
      * @return
      */
     int updateUserPwd(SessionInfoVO sessionInfoVO);
+
+    /** SMS 전송 저장 */
+    int getSmsSendSave(OtpAuthVO otpAuthVO);
 }
