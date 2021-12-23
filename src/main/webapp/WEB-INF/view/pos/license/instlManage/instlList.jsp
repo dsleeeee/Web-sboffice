@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="instl.instalList" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('instlListCtrl')">
+                <button class="btn_blue fr" ng-click="_broadcast('instlListCtrl')" id="nxBtnSearch3">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -34,7 +34,7 @@
                     <th>
                         <s:message code="instl.operation.date" />
                     </th>
-                    <td>
+                    <td colspan="3">
                         <div class="sb-select">
                             <span class="txtIn w110px">
                                 <wj-input-date
@@ -72,14 +72,14 @@
                         <s:message code="instl.agency.agencyCd" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="il_srchAgencyCd" ng-model="agencyCd" />
+                        <input type="text" class="sb-input w100" id="il_srchAgencyCd" ng-model="agencyCd" onkeyup="fnNxBtnSearch('3');"/>
                     </td>
                     <%-- 업체명 --%>
                     <th>
                         <s:message code="instl.agency.agencyNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="il_srchAgencyNm" ng-model="agencyNm" />
+                        <input type="text" class="sb-input w100" id="il_srchAgencyNm" ng-model="agencyNm" onkeyup="fnNxBtnSearch('3');"/>
                     </td>
                 </tr>
             </tbody>

@@ -30,15 +30,15 @@
         <tr <%--<c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>--%>>
             <%-- 업체코드 --%>
             <th><s:message code="instlAgency.agencyCd" /></th>
-            <td><input type="text" id="srchAgencyCd" class="sb-input w100"/></td>
+            <td><input type="text" id="srchAgencyCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/></td>
             <%-- 업체명 --%>
             <th><s:message code="instlAgency.agencyNm" /></th>
-            <td><input type="text" id="srchAgencyNm" class="sb-input w100"/></td>
+            <td><input type="text" id="srchAgencyNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/></td>
         </tr>
         <tr>
             <%-- 사업자번호 --%>
             <th><s:message code="instlAgency.bizNo" /></th>
-            <td><input type="text" id="srchBizNo" class="sb-input w100" maxlength="15"/></td>
+            <td><input type="text" id="srchBizNo" class="sb-input w100" maxlength="15" onkeyup="fnNxBtnSearch();"/></td>
             <th></th>
             <td></td>
             <%-- 업체구분

@@ -13,7 +13,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" ng-click="_broadcast('representCtrl')">
+      <button class="btn_blue fr" ng-click="_broadcast('representCtrl')" id="nxBtnSearch">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -30,12 +30,12 @@
         <%-- 코드 --%>
         <th><s:message code="systemCd.nmcodeCd" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchNmcodeCd" ng-model="nmcodeCd" />
+          <input type="text" class="sb-input w100" id="srchNmcodeCd" ng-model="nmcodeCd" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 코드명 --%>
         <th><s:message code="systemCd.nmcodeNm" /></th>
         <td>
-            <input type="text" class="sb-input w100" id="srchNmcodeNm" ng-model="nmcodeNm" />
+            <input type="text" class="sb-input w100" id="srchNmcodeNm" ng-model="nmcodeNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr><tr>
         <%-- 사용대상 --%>

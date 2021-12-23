@@ -13,7 +13,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" id="searchBtn" ng-click="_pageView('logSendCtrl', 1)">
+            <button class="btn_blue fr" id="nxBtnSearch" ng-click="_pageView('logSendCtrl', 1)">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -31,24 +31,24 @@
             <%-- 본사코드 --%>
             <th><s:message code="cmm.hedofc.cd" /></th>
             <td>
-                <input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" class="sb-input w100" size="50" ng-value="">
+                <input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" class="sb-input w100" size="50" ng-value="" onkeyup="fnNxBtnSearch();">
             </td>
             <%-- 본사명 --%>
             <th><s:message code="cmm.hedofc.nm" /></th>
             <td>
-                <input type="text" id="srchHqOfficeNm" ng-model="hqOfficeNm" class="sb-input w100" size="50" ng-value="">
+                <input type="text" id="srchHqOfficeNm" ng-model="hqOfficeNm" class="sb-input w100" size="50" ng-value="" onkeyup="fnNxBtnSearch();">
             </td>
         </tr>
         <tr>
             <%-- 매장 코드 --%>
             <th><s:message code="cmm.mrhst.cd" /></th>
             <td>
-                <input type="text" id="srchStoreCd" ng-model="storeCd" class="sb-input w100" size="50" ng-value="">
+                <input type="text" id="srchStoreCd" ng-model="storeCd" class="sb-input w100" size="50" ng-value="" onkeyup="fnNxBtnSearch();">
             </td>
             <%-- 매장명 --%>
             <th><s:message code="cmm.mrhst.nm" /></th>
             <td>
-                <input type="text" id="srchStoreNm" ng-model="storeNm" class="sb-input w100" size="50" ng-value="">
+                <input type="text" id="srchStoreNm" ng-model="storeNm" class="sb-input w100" size="50" ng-value="" onkeyup="fnNxBtnSearch();">
             </td>
         </tr>
         <tr>

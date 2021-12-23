@@ -15,7 +15,7 @@
         <a href="#" class="open fl"><s:message code="storeStatus.van" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('statusVanCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('statusVanCtrl',1)" id="nxBtnSearch3">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -34,14 +34,14 @@
                     <s:message code="statusVan.srchVanCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchVanCd" ng-model="vanCd" />
+                    <input type="text" class="sb-input w100" id="srchVanCd" ng-model="vanCd" onkeyup="fnNxBtnSearch('3');"/>
                 </td>
                 <%-- VAN사명 --%>
                 <th>
                     <s:message code="statusVan.srchVanNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchVanNm" ng-model="vanNm" />
+                    <input type="text" class="sb-input w100" id="srchVanNm" ng-model="vanNm" onkeyup="fnNxBtnSearch('3');"/>
                 </td>
             </tr>
             <tr>

@@ -15,7 +15,7 @@
         <a href="#" class="open fl"> <s:message code="instl.agency.status" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('agencyListCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('agencyListCtrl',1)" id="nxBtnSearch2">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -47,14 +47,14 @@
                     <s:message code="instl.agency.agencyCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="al_srchAgencyCd" ng-model="agencyCd" />
+                    <input type="text" class="sb-input w100" id="al_srchAgencyCd" ng-model="agencyCd" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
                 <%-- 업체명 --%>
                 <th>
                     <s:message code="instl.agency.agencyNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="al_srchAgencyNm" ng-model="agencyNm" />
+                    <input type="text" class="sb-input w100" id="al_srchAgencyNm" ng-model="agencyNm" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
             </tr>
             <tr <c:if test="${orgnFg == 'MASTER'}">style="display: none;"</c:if>>
