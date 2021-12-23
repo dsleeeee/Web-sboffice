@@ -379,99 +379,105 @@ $(document).on('click', 'a[href="#"]', function (e) {
   return false;
 });
 
-function fnNxBtnSearch()
+function fnNxBtnSearch(nxBtnSearchNumber)
 {
     try
     {
         if(event.keyCode == 13)
         {
-            if($('#nxBtnSearch').length > 0)
+            if(typeof nxBtnSearchNumber == "undefined" || nxBtnSearchNumber == null || nxBtnSearchNumber == "")
             {
-                $('#nxBtnSearch').click();
+                if($('#nxBtnSearch').length > 0)
+                {
+                    $('#nxBtnSearch').click();
+                }
+                else if($('#btnSearch').length > 0)
+                {
+                    $('#btnSearch').click();
+                }
             }
-            else if($('#nxBtnSearch1').length > 0)
+            else
             {
-                $('#nxBtnSearch1').click();
-            }
-            else if($('#nxBtnSearch2').length > 0)
-            {
-                $('#nxBtnSearch2').click();
-            }
-            else if($('#nxBtnSearch3').length > 0)
-            {
-                $('#nxBtnSearch3').click();
-            }
-            else if($('#nxBtnSearch4').length > 0)
-            {
-                $('#nxBtnSearch4').click();
-            }
-            else if($('#nxBtnSearch5').length > 0)
-            {
-                $('#nxBtnSearch5').click();
-            }
-            else if($('#nxBtnSearch6').length > 0)
-            {
-                $('#nxBtnSearch6').click();
-            }
-            else if($('#nxBtnSearch7').length > 0)
-            {
-                $('#nxBtnSearch7').click();
-            }
-            else if($('#nxBtnSearch8').length > 0)
-            {
-                $('#nxBtnSearch8').click();
-            }
-            else if($('#nxBtnSearch9').length > 0)
-            {
-                $('#nxBtnSearch9').click();
-            }
-            else if($('#nxBtnSearch10').length > 0)
-            {
-                $('#nxBtnSearch10').click();
-            }
-            else if($('#nxBtnSearch11').length > 0)
-            {
-                $('#nxBtnSearch11').click();
-            }
-            else if($('#nxBtnSearch12').length > 0)
-            {
-                $('#nxBtnSearch12').click();
-            }
-            else if($('#nxBtnSearch13').length > 0)
-            {
-                $('#nxBtnSearch13').click();
-            }
-            else if($('#nxBtnSearch14').length > 0)
-            {
-                $('#nxBtnSearch14').click();
-            }
-            else if($('#nxBtnSearch15').length > 0)
-            {
-                $('#nxBtnSearch15').click();
-            }
-            else if($('#nxBtnSearch16').length > 0)
-            {
-                $('#nxBtnSearch16').click();
-            }
-            else if($('#nxBtnSearch17').length > 0)
-            {
-                $('#nxBtnSearch17').click();
-            }
-            else if($('#nxBtnSearch18').length > 0)
-            {
-                $('#nxBtnSearch18').click();
-            }
-            else if($('#nxBtnSearch19').length > 0)
-            {
-                $('#nxBtnSearch19').click();
-            }
-            else if($('#nxBtnSearch20').length > 0)
-            {
-                $('#nxBtnSearch20').click();
-            }
-            else if($('#btnSearch').length > 0)
-            {
-                $('#btnSearch').click();
+                if(nxBtnSearchNumber == "1")
+                {
+                    $('#nxBtnSearch1').click();
+                }
+                else if(nxBtnSearchNumber == "2")
+                {
+                    $('#nxBtnSearch2').click();
+                }
+                else if(nxBtnSearchNumber == "3")
+                {
+                    $('#nxBtnSearch3').click();
+                }
+                else if(nxBtnSearchNumber == "4")
+                {
+                    $('#nxBtnSearch4').click();
+                }
+                else if(nxBtnSearchNumber == "5")
+                {
+                    $('#nxBtnSearch5').click();
+                }
+                else if(nxBtnSearchNumber == "6")
+                {
+                    $('#nxBtnSearch6').click();
+                }
+                else if(nxBtnSearchNumber == "7")
+                {
+                    $('#nxBtnSearch7').click();
+                }
+                else if(nxBtnSearchNumber == "8")
+                {
+                    $('#nxBtnSearch8').click();
+                }
+                else if(nxBtnSearchNumber == "9")
+                {
+                    $('#nxBtnSearch9').click();
+                }
+                else if(nxBtnSearchNumber == "10")
+                {
+                    $('#nxBtnSearch10').click();
+                }
+                else if(nxBtnSearchNumber == "11")
+                {
+                    $('#nxBtnSearch11').click();
+                }
+                else if(nxBtnSearchNumber == "12")
+                {
+                    $('#nxBtnSearch12').click();
+                }
+                else if(nxBtnSearchNumber == "13")
+                {
+                    $('#nxBtnSearch13').click();
+                }
+                else if(nxBtnSearchNumber == "14")
+                {
+                    $('#nxBtnSearch14').click();
+                }
+                else if(nxBtnSearchNumber == "15")
+                {
+                    $('#nxBtnSearch15').click();
+                }
+                else if(nxBtnSearchNumber == "16")
+                {
+                    $('#nxBtnSearch16').click();
+                }
+                else if(nxBtnSearchNumber == "17")
+                {
+                    $('#nxBtnSearch17').click();
+                }
+                else if(nxBtnSearchNumber == "18")
+                {
+                    $('#nxBtnSearch18').click();
+                }
+                else if(nxBtnSearchNumber == "19")
+                {
+                    $('#nxBtnSearch19').click();
+                }
+                else if(nxBtnSearchNumber == "20")
+                {
+                    $('#nxBtnSearch20').click();
+                }
             }
         }
         return false;
