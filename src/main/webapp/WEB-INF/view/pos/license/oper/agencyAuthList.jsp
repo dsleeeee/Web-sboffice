@@ -15,7 +15,7 @@
         <a href="#" class="open fl"> <s:message code="oper.agencyAuthList" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('agencyAuthListCtrl',1)">
+            <button class="btn_blue fr" ng-click="_broadcast('agencyAuthListCtrl',1)" id="nxBtnSearch2">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -35,9 +35,9 @@
                 </th>
                 <td>
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
+                        <span class="txtIn"> <input id="startDate" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
+                        <span class="txtIn"> <input id="endDate" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
                 <%-- 관리밴사 --%>
@@ -55,14 +55,14 @@
                     <s:message code="oper.agencyCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCdAuth" />
+                    <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCdAuth" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
                 <%-- 업체명 --%>
                 <th>
                     <s:message code="oper.agencyNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNmAuth" />
+                    <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNmAuth" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
             </tr>
             <tr <c:if test="${orgnFg == 'MASTER'}">style="display: none;"</c:if>>

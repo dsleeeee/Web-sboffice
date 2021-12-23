@@ -15,7 +15,7 @@
         <a href="#" class="open fl"><s:message code="statusAgency.info" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('statusAgencyCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('statusAgencyCtrl',1)" id="nxBtnSearch2">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -34,14 +34,14 @@
                     <s:message code="statusAgency.srchAgencyCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyCd" />
+                    <input type="text" class="sb-input w100" id="srchAgencyCd" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
                 <%-- 업체명 --%>
                 <th>
                     <s:message code="statusAgency.srchAgencyNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyNm" />
+                    <input type="text" class="sb-input w100" id="srchAgencyNm" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
             </tr>
             <tr>

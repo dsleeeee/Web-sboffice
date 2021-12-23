@@ -124,7 +124,7 @@
         </if>
         <if test='userNm != null and userNm != ""'>
             <![CDATA[
-                AND tce..USER_NM LIKE '%'||#{userNm}||'%'
+                AND tce.USER_NM LIKE '%'||#{userNm}||'%'
             ]]>
         </if>
         <choose>

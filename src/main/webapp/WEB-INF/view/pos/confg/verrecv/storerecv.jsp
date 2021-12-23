@@ -17,7 +17,7 @@
   </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" onclick="getStoreList()">
+      <button class="btn_blue fr" id="nxBtnSearch2" onclick="getStoreList()">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -34,24 +34,24 @@
         <%-- 본사코드 --%>
         <th><s:message code="verRecv.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="hqOfficeCd" name="hqOfficeCd" ng-model="hqOfficeCd" class="sb-input w100" size="50" <c:if test="${orgnFg == 'HQ'}"> value="A0001"</c:if>>
+          <input type="text" id="hqOfficeCd" name="hqOfficeCd" ng-model="hqOfficeCd" class="sb-input w100" size="50" <c:if test="${orgnFg == 'HQ'}"> value="A0001"</c:if> onkeyup="fnNxBtnSearch('2');">
         </td>
         <%-- 본사명 --%>
         <th><s:message code="verRecv.hqOfficeNm" /></th>
         <td>
-          <input type="text" id="hqOfficeNm" name="hqOfficeNm" ng-model="hqOfficeNm" class="sb-input w100" size="50">
+          <input type="text" id="hqOfficeNm" name="hqOfficeNm" ng-model="hqOfficeNm" class="sb-input w100" size="50" onkeyup="fnNxBtnSearch('2');">
         </td>
       </tr>
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="verRecv.storeCd" /></th>
         <td>
-          <input type="text" id="storeCd" name="storeCd" ng-model="storeCd" class="sb-input w100" size="50">
+          <input type="text" id="storeCd" name="storeCd" ng-model="storeCd" class="sb-input w100" size="50" onkeyup="fnNxBtnSearch('2');">
         </td>
         <%-- 매장명 --%>
         <th><s:message code="verRecv.storeNm" /></th>
         <td>
-          <input type="text" id="storeNm" name="storeNm" ng-model="storeNm" class="sb-input w100" size="50">
+          <input type="text" id="storeNm" name="storeNm" ng-model="storeNm" class="sb-input w100" size="50" onkeyup="fnNxBtnSearch('2');">
         </td>
       </tr>
     </tbody>

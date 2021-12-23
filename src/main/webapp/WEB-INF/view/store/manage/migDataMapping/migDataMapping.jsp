@@ -16,7 +16,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('migDataMappingCtrl',1)">
+            <button class="btn_blue fr" ng-click="_broadcast('migDataMappingCtrl',1)" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -48,14 +48,14 @@
                     <s:message code="migDataMapping.srchOkposStoreCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOkposStoreCd" ng-model="okposStoreCd" />
+                    <input type="text" class="sb-input w100" id="srchOkposStoreCd" ng-model="okposStoreCd" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- OKPOS-KCP 매장명 --%>
                 <th>
                     <s:message code="migDataMapping.srchOkposStoreNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOkposStoreNm" ng-model="okposStoreNm" />
+                    <input type="text" class="sb-input w100" id="srchOkposStoreNm" ng-model="okposStoreNm" onkeyup="fnNxBtnSearch();"/>
                 </td>
             </tr>
         </tbody>

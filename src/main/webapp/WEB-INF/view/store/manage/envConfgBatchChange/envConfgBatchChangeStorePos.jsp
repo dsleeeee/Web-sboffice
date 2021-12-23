@@ -16,7 +16,7 @@
         <a href="#" class="open fl"><s:message code="envConfgBatchChange.storePos"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('envConfgBatchChangeStorePosCtrl',1)">
+            <button class="btn_blue fr" ng-click="_broadcast('envConfgBatchChangeStorePosCtrl',1)" id="nxBtnSearch3">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -66,14 +66,14 @@
                 <s:message code="envConfgBatchChange.storePos.hqOfficeCd" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" />
+                <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" onkeyup="fnNxBtnSearch('3');"/>
             </td>
             <%-- 본사명 --%>
             <th>
                 <s:message code="envConfgBatchChange.storePos.hqOfficeNm" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" />
+                <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch('3');"/>
             </td>
         </tr>
         <tr>
@@ -82,14 +82,14 @@
                 <s:message code="envConfgBatchChange.storePos.storeCd" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" />
+                <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch('3');"/>
             </td>
             <%-- 매장명 --%>
             <th>
                 <s:message code="envConfgBatchChange.storePos.storeNm" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
+                <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch('3');"/>
             </td>
         </tr>
         </tbody>

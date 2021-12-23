@@ -15,7 +15,7 @@
         <a href="#" class="open fl"><s:message code="instl.install.request" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('instlRequestListCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('instlRequestListCtrl',1)" id="nxBtnSearch1">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -32,18 +32,18 @@
         <tr>
             <%-- 매장코드 --%>
             <th><s:message code="instl.storeCd" /></th>
-            <td><input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd"/></td>
+            <td><input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd" onkeyup="fnNxBtnSearch('1');"/></td>
             <%-- 매장명 --%>
             <th><s:message code="instl.storeNm" /></th>
-            <td><input type="text" id="srchStoreNm" class="sb-input w100"ng-model="storeNm"/></td>
+            <td><input type="text" id="srchStoreNm" class="sb-input w100"ng-model="storeNm" onkeyup="fnNxBtnSearch('1');"/></td>
         </tr>
         <tr>
             <%-- 대리점코드 --%>
             <th><s:message code="instl.agencyCd" /></th>
-            <td><input type="text" id="srchAgencyCd" class="sb-input w100" ng-model="agencyCd"/></td>
+            <td><input type="text" id="srchAgencyCd" class="sb-input w100" ng-model="agencyCd" onkeyup="fnNxBtnSearch('1');"/></td>
             <%-- 대리점명 --%>
             <th><s:message code="instl.agencyNm" /></th>
-            <td><input type="text" id="srchAgencyNm" class="sb-input w100" ng-model="agencyNm"/></td>
+            <td><input type="text" id="srchAgencyNm" class="sb-input w100" ng-model="agencyNm" onkeyup="fnNxBtnSearch('1');"/></td>
         </tr>
         <tr>
             <%-- 설치구분 --%>

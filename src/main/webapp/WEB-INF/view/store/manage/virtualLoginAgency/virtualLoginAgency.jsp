@@ -15,7 +15,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('virtualLoginAgencyCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('virtualLoginAgencyCtrl',1)" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -34,14 +34,14 @@
                     <s:message code="virtualLoginAgency.agencyCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCd" />
+                    <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCd" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 대리점명 --%>
                 <th>
                     <s:message code="virtualLoginAgency.agencyNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" />
+                    <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" onkeyup="fnNxBtnSearch();"/>
                 </td>
             </tr>
             <tr>
@@ -50,7 +50,7 @@
                     <s:message code="virtualLoginAgency.userId" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchUserId" ng-model="userId" />
+                    <input type="text" class="sb-input w100" id="srchUserId" ng-model="userId" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <th>
                 </th>

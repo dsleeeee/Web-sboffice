@@ -51,48 +51,48 @@
         <%-- 총판/대리점 코드 --%>
         <th><s:message code="pwdManage.agencyCd" /></th>
         <td>
-          <input type="text" id="srchAgencyCd" class="sb-input w100" ng-model="srchAgencyCd" maxlength="5"/>
+          <input type="text" id="srchAgencyCd" class="sb-input w100" ng-model="srchAgencyCd" maxlength="5" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 총판/대리점명 --%>
         <th><s:message code="pwdManage.agencyNm" /></th>
         <td>
-          <input type="text" id="srchAgencyNm" class="sb-input w100" ng-model="agencyNm" maxlength="50"/>
+          <input type="text" id="srchAgencyNm" class="sb-input w100" ng-model="agencyNm" maxlength="50" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr ng-show="userOrgnFg != 'H' && userOrgnFg != 'S'">
         <%-- 본사코드 --%>
         <th><s:message code="pwdManage.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="srchHqOfficeCd"/>
+          <input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="srchHqOfficeCd" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 본사명 --%>
         <th><s:message code="pwdManage.hqOfficeNm" /></th>
         <td>
-          <input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm"/>
+          <input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr ng-show="userOrgnFg != 'S'">
         <%-- 매장코드 --%>
         <th><s:message code="pwdManage.storeCd" /></th>
         <td>
-          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="srchStoreCd" />
+          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="srchStoreCd" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 매장명 --%>
         <th><s:message code="pwdManage.storeNm" /></th>
         <td>
-          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" />
+          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>
         <%-- 사용자ID --%>
         <th><s:message code="pwdManage.userId" /></th>
         <td>
-          <input type="text" id="srchUserId" class="sb-input w100" ng-model="userId" maxlength="20"/>
+          <input type="text" id="srchUserId" class="sb-input w100" ng-model="userId" maxlength="20" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 사용자명 --%>
         <th><s:message code="pwdManage.userNm" /></th>
         <td>
-          <input type="text" id="srchUserNm" class="sb-input w100" ng-model="userNm" maxlength="50"/>
+          <input type="text" id="srchUserNm" class="sb-input w100" ng-model="userNm" maxlength="50" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
     </tbody>

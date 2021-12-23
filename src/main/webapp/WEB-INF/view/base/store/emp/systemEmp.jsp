@@ -69,19 +69,19 @@
         <%--사원번호 --%>
         <th><s:message code="systemEmp.empNo" /></th>
         <td>
-          <input type="text" id="srchEmpNo" name="srchEmpNo" ng-model="empNo" class="sb-input w100" maxlength="4" />
+          <input type="text" id="srchEmpNo" name="srchEmpNo" ng-model="empNo" class="sb-input w100" maxlength="4" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 사원명 --%>
         <th><s:message code="systemEmp.empNm" /></th>
         <td>
-          <input type="text" id="srchEmpNm" name="srchEmpNm" ng-model="empNm" class="sb-input w100" maxlength="15" />
+          <input type="text" id="srchEmpNm" name="srchEmpNm" ng-model="empNm" class="sb-input w100" maxlength="15" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>
         <%--사원ID --%>
         <th><s:message code="systemEmp.userId" /></th>
         <td>
-          <input type="text" id="srchUserId" name="srchUserId" ng-model="userId" class="sb-input w100" maxlength="16" />
+          <input type="text" id="srchUserId" name="srchUserId" ng-model="userId" class="sb-input w100" maxlength="16" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 재직여부 --%>
         <th><s:message code="systemEmp.serviceFg" /></th>
@@ -103,7 +103,7 @@
         <%--휴대폰번호 --%>
         <th><s:message code="systemEmp.mpNo" /></th>
         <td>
-          <input type="text" id="srchMpNo" name="srchMpNo" ng-model="mpNo" class="sb-input w100" maxlength="15" />
+          <input type="text" id="srchMpNo" name="srchMpNo" ng-model="mpNo" class="sb-input w100" maxlength="15" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 웹사용여부 --%>
         <th><s:message code="systemEmp.webUseYn" /></th>
@@ -144,12 +144,12 @@
         <%-- 관리업체 코드 --%>
         <th><s:message code="systemEmp.agencyCd" /></th>
         <td>
-          <input type="text" id="srchAgencyCd" name="srchAgencyCd" ng-model="agencyCd" class="sb-input w100" maxlength="5" />
+          <input type="text" id="srchAgencyCd" name="srchAgencyCd" ng-model="agencyCd" class="sb-input w100" maxlength="5" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 관리업체 명 --%>
         <th><s:message code="systemEmp.agencyNm" /></th>
         <td>
-          <input type="text" id="srchAgencyNm" name="srchAgencyNm" ng-model="agencyNm" class="sb-input w100" maxlength="15" />
+          <input type="text" id="srchAgencyNm" name="srchAgencyNm" ng-model="agencyNm" class="sb-input w100" maxlength="15" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>

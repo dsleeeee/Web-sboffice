@@ -11,7 +11,7 @@
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="storeStatus.apprList"/></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('statusApprListCtrl', 1)">
+        <button class="btn_blue fr mt5 mr10" id="nxBtnSearch5" ng-click="_pageView('statusApprListCtrl', 1)">
             <s:message code="cmm.search"/>
         </button>
     </div>
@@ -40,14 +40,14 @@
                     <s:message code="storeStatus.bizNo"/>
                 </th>
                 <td>
-                    <input type="text" id="srchApprBizNo" class="sb-input w100" maxlength="15" ng-model="bizNo"/>
+                    <input type="text" id="srchApprBizNo" class="sb-input w100" maxlength="15" ng-model="bizNo" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
                 <%-- 매장명 --%>
                 <th>
                     <s:message code="storeStatus.storeNm"/>
                 </th>
                 <td>
-                    <input type="text" id="srchApprStoreNm" class="sb-input w100" ng-model="storeNm"/>
+                    <input type="text" id="srchApprStoreNm" class="sb-input w100" ng-model="storeNm" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
             </tr>
             <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
@@ -56,7 +56,7 @@
                     <s:message code="storeStatus.agencyNm"/>
                 </th>
                 <td>
-                    <input type="text" id="srchApprAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm"/>
+                    <input type="text" id="srchApprAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
                 <th></th>
                 <td></td>

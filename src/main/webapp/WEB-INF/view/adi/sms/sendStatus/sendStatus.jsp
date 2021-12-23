@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="sendStatus.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('sendStatusCtrl',1)">
+                <button class="btn_blue fr" ng-click="_pageView('sendStatusCtrl',1)" id="nxBtnSearch1">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -46,7 +46,7 @@
                     <s:message code="sendStatus.sPhoneNumber"/>
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchSsPhoneNumber" ng-model="ssPhoneNumber" />
+                    <input type="text" class="sb-input w100" id="srchSsPhoneNumber" ng-model="ssPhoneNumber" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
             <tr>
@@ -55,14 +55,14 @@
                     <s:message code="sendStatus.sOrgnCd"/>
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchSsOrgnCd" ng-model="ssOrgnCd" />
+                    <input type="text" class="sb-input w100" id="srchSsOrgnCd" ng-model="ssOrgnCd" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
                 <%-- 보내는이 소속명 --%>
                 <th>
                     <s:message code="sendStatus.sOrgnNm"/>
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchSsOrgnNm" ng-model="ssOrgnNm" />
+                    <input type="text" class="sb-input w100" id="srchSsOrgnNm" ng-model="ssOrgnNm" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
             <tr>
@@ -71,14 +71,14 @@
                     <s:message code="sendStatus.rOrgnCd"/>
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchRrOrgnCd" ng-model="rrOrgnCd" />
+                    <input type="text" class="sb-input w100" id="srchRrOrgnCd" ng-model="rrOrgnCd" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
                 <%-- 받는이 소속명 --%>
                 <th>
                     <s:message code="sendStatus.rOrgnNm"/>
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchRrOrgnNm" ng-model="rrOrgnNm" />
+                    <input type="text" class="sb-input w100" id="srchRrOrgnNm" ng-model="rrOrgnNm" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
             </tbody>

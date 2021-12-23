@@ -17,7 +17,7 @@
     </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" onclick="getVersionList()">
+      <button class="btn_blue fr" id="nxBtnSearch3" onclick="getVersionList()">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -36,12 +36,12 @@
           <%-- 버전일련번호 --%>
           <th><s:message code="verRecv.verSerNo" /></th>
           <td>
-            <input type="text" id="verSerNo" name="verSerNo" ng-model="verSerNo" class="sb-input w100" size="50">
+            <input type="text" id="verSerNo" name="verSerNo" ng-model="verSerNo" class="sb-input w100" size="50" onkeyup="fnNxBtnSearch('3');">
           </td>
           <%-- 버전적용명 --%>
           <th><s:message code="verRecv.verSerNm" /></th>
           <td>
-            <input type="text" id="verSerNm" name="verSerNm" ng-mode="verSerNm" class="sb-input w100" size="50">
+            <input type="text" id="verSerNm" name="verSerNm" ng-mode="verSerNm" class="sb-input w100" size="50" onkeyup="fnNxBtnSearch('3');">
           </td>
         </tr>
         <tr>
