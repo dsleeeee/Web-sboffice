@@ -11,6 +11,8 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuManageVO;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO;
@@ -49,12 +51,14 @@ public class StoreSideMenuController {
     private final CmmEnvUtil cmmEnvUtil;
     private final TouchKeyService touchkeyService;
     private final ProdService prodService;
+    private final SideMenuService sideMenuService;
 
-    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService, ProdService prodService) {
+    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService, ProdService prodService, SideMenuService sideMenuService) {
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.touchkeyService = touchkeyService;
         this.prodService = prodService;
+        this.sideMenuService = sideMenuService;
     }
 
 
@@ -121,6 +125,11 @@ public class StoreSideMenuController {
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+        // 속성, 선택메뉴조회(콤보박스용)
+        SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
+        model.addAttribute("sdattrClassList", convertToJson(sideMenuService.getSideMenuAttrClassCombo(sideMenuManageVO, sessionInfoVO)));
+        model.addAttribute("sdselGrpList", convertToJson(sideMenuService.getSideMenuSdselGrpCdCombo(sideMenuManageVO, sessionInfoVO)));
 
 
         /** 판매터치키등록  */

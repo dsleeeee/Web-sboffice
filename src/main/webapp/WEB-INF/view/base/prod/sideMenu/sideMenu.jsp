@@ -9,7 +9,7 @@
 
 <div class="subCon" ng-controller="sideMenuCtrl" id="sideMenuView">
 
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl"><s:message code="storeSideMenu.sideMenu" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -26,7 +26,9 @@
       <%-- 속성 --%>
       <li><a id="sideMenuAttr" href="#" class="on" ng-click="changeTab('A');"><s:message code="sideMenu.tab.attr" /></a></li>
       <%-- 선택메뉴 --%>
-      <li><a id="sideMenuSelectMenu" href="#" ng-click="changeTab('M');"><s:message code="sideMenu.tab.selectMenu" /></a></li>
+      <li><a id="sideMenuSelectMenu" href="#" ng-click="changeTab('S');"><s:message code="sideMenu.tab.selectMenu" /></a></li>
+      <%-- 사이드메뉴관리 --%>
+      <li><a id="sideMenuManage" href="#" ng-click="changeTab('M');"><s:message code="sideMenu.tab.manage" /></a></li>
     </ul>
   </div>
 
@@ -36,13 +38,16 @@
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuSelectMenu.jsp">
   </c:import>
 
+  <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuManage.jsp">
+  </c:import>
+
 </div>
 <%--<script>--%>
 <%--  var prodEnvstVal = "${prodEnvstVal}";--%>
 <%--</script>--%>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=2018112003" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20211224.02" charset="utf-8"></script>
 
 
 

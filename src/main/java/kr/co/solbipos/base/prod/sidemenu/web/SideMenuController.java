@@ -4,11 +4,14 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : SideMenuController.java
@@ -45,13 +49,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 public class SideMenuController {
 
     private final SideMenuService sideMenuService;
+    private final StoreTypeService storeTypeService;
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuController(SideMenuService sideMenuService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
+    public SideMenuController(SideMenuService sideMenuService, StoreTypeService storeTypeService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.sideMenuService = sideMenuService;
+        this.storeTypeService = storeTypeService;
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -75,6 +81,22 @@ public class SideMenuController {
 //        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
 
 //        model.addAttribute("prodEnvstVal", prodEnvstVal);
+
+        // (상품관리)브랜드사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        }else{
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+        }
+
+        // 브랜드조회(콤보박스용)
+        StoreTypeVO storeTypeVO = new StoreTypeVO();
+        model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
+
+        // 속성, 선택메뉴조회(콤보박스용)
+        SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
+        model.addAttribute("sdattrClassList", convertToJson(sideMenuService.getSideMenuAttrClassCombo(sideMenuManageVO, sessionInfoVO)));
+        model.addAttribute("sdselGrpList", convertToJson(sideMenuService.getSideMenuSdselGrpCdCombo(sideMenuManageVO, sessionInfoVO)));
 
         return "base/prod/sideMenu/sideMenu";
     }
@@ -323,6 +345,52 @@ public class SideMenuController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         int result = sideMenuService.saveMenuProdList(sideMenuSelProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 사이드메뉴-사이드메뉴관리탭 상품 목록 조회
+     *
+     * @param sideMenuManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021. 12. 21.
+     */
+    @RequestMapping(value = "/menuProd/getSideMenuManageProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuManageProdList(SideMenuManageVO sideMenuManageVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.getSideMenuManageProdList(sideMenuManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuManageVO);
+    }
+
+    /**
+     * 사이드메뉴-사이드메뉴관리탭 상품정보일괄변경 저장(사이드메뉴여부, 속성, 선택메뉴)
+     *
+     * @param sideMenuManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021. 12. 21.
+     */
+    @RequestMapping(value = "/menuProd/saveSideMenuManageProdBatch.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSideMenuManageProdBatch(@RequestBody SideMenuManageVO[] sideMenuManageVOs, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuService.saveSideMenuManageProdBatch(sideMenuManageVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

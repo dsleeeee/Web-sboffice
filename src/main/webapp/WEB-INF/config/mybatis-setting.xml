@@ -269,6 +269,7 @@
     <typeAlias alias="sideMenuSelGroupVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelGroupVO"/>
     <typeAlias alias="sideMenuSelClassVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelClassVO"/>
     <typeAlias alias="sideMenuSelProdVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO"/>
+    <typeAlias alias="sideMenuManageVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuManageVO"/>
     <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO" />
     <typeAlias alias="prodKitchenprintLinkVO" type="kr.co.solbipos.base.prod.prodKitchenprintLink.service.ProdKitchenprintLinkVO"/>
     <!-- 기초관리 > 상품관리 > 원산지관리 -->

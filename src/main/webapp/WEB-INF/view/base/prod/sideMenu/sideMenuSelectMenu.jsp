@@ -6,7 +6,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-  <div id="selectMenuArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isMenuTab">
+  <div id="selectMenuArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isSelectMenuTab">
     <div class="w40 fl">
     <div>
       <%--위즈모 테이블--%>
