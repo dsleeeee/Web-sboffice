@@ -1542,6 +1542,294 @@
       </choose>
     </select>
 
+    <!-- 사이드메뉴-사이드메뉴관리탭 상품 목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_BARCD,TB_HQ_PRODUCT_SDATTR_CLASS,TB_HQ_PRODUCT_SDSEL_GROUP
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD,TB_MS_PRODUCT_SDATTR_CLASS,TB_MS_PRODUCT_SDSEL_GROUP
+        COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드, [본사]속성, [본사]선택그룹
+                   [매장]상품, [매장]상품_분류, [매장]상품_바코드, [매장]속성, [매장]선택그룹
+    -->
+    <select id="getSideMenuManageProdList"  parameterType="sideMenuManageVO" resultType="DefaultMap">
+        /* SideMenuMapper.getSideMenuManageProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT thp.PROD_CD,
+                        thp.PROD_NM,
+                        FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                        thp.PROD_CLASS_CD,
+                        thp.HQ_BRAND_CD,
+                        thb.HQ_BRAND_NM,
+                        thp.SALE_PROD_YN,
+                        thp.ORGPLCE_CD,
+                        thp.STOCK_PROD_YN,
+                        thp.VAT_FG,
+                        thp.SIDE_PROD_YN,
+                        thp.SDATTR_CLASS_CD,
+                        thpsc.SDATTR_CLASS_NM,
+                        thp.SDSEL_GRP_CD,
+                        thpsg.SDSEL_GRP_NM,
+                        thp.USE_YN,
+                        thp.PO_PROD_FG,
+                        thp.PROD_TIP_YN
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_HQ_PRODUCT thp,
+                        TB_HQ_PRODUCT_CLASS thpc,
+                        TB_HQ_BRAND thb,
+                        TB_HQ_PRODUCT_SDATTR_CLASS thpsc,
+                        TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                 WHERE 1=1
+                   AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT PROD_CLASS_CD
+                                                  FROM TB_HQ_PRODUCT_CLASS
+                                                 WHERE 1=1
+                                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </if>
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND thp.HQ_BRAND_CD = #{hqBrandCd}
+                </if>
+                <if test="sideProdYn != null and sideProdYn != ''">
+                    AND thp.SIDE_PROD_YN = #{sideProdYn}
+                </if>
+                <if test="sdattrClassCd != null and sdattrClassCd != ''">
+                    AND thp.SDATTR_CLASS_CD = #{sdattrClassCd}
+                </if>
+                <if test="sdselGrpCd != null and sdselGrpCd != ''">
+                    AND thp.SDSEL_GRP_CD = #{sdselGrpCd}
+                </if>
+                    AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+                    AND thb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD (+)= thp.HQ_BRAND_CD
+                    AND thpsc.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                    AND thpsc.SDATTR_CLASS_CD (+)= thp.SDATTR_CLASS_CD
+                    AND thpsg.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                    AND thpsg.SDSEL_GRP_CD (+)= thp.SDSEL_GRP_CD
+                  ORDER
+                     BY thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT tmp.PROD_CD,
+                        tmp.PROD_NM,
+                        FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                        tmp.PROD_CLASS_CD,
+                        tmp.HQ_BRAND_CD,
+                        tmb.MS_BRAND_NM,
+                        tmp.SALE_PROD_YN,
+                        tmp.ORGPLCE_CD,
+                        tmp.STOCK_PROD_YN,
+                        tmp.VAT_FG,
+                        tmp.SIDE_PROD_YN,
+                        tmp.SDATTR_CLASS_CD,
+                        tmpsc.SDATTR_CLASS_NM,
+                        tmp.SDSEL_GRP_CD,
+                        tmpsg.SDSEL_GRP_NM,
+                        tmp.USE_YN,
+                        tmp.PO_PROD_FG,
+                        tmp.PROD_TIP_YN,
+                        tmp.REG_FG
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                  FROM TB_MS_PRODUCT tmp,
+                        TB_MS_PRODUCT_CLASS tmpc,
+                        TB_MS_BRAND tmb,
+                        TB_MS_PRODUCT_SDATTR_CLASS tmpsc,
+                        TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                  WHERE 1=1
+                    AND tmp.STORE_CD = #{storeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT PROD_CLASS_CD
+                                                  FROM TB_MS_PRODUCT_CLASS
+                                                 WHERE 1=1
+                                                   AND STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND tmp.HQ_BRAND_CD = #{hqBrandCd}
+                </if>
+                <if test="sideProdYn != null and sideProdYn != ''">
+                    AND tmp.SIDE_PROD_YN = #{sideProdYn}
+                </if>
+                <if test="sdattrClassCd != null and sdattrClassCd != ''">
+                    AND tmp.SDATTR_CLASS_CD = #{sdattrClassCd}
+                </if>
+                <if test="sdselGrpCd != null and sdselGrpCd != ''">
+                    AND tmp.SDSEL_GRP_CD = #{sdselGrpCd}
+                </if>
+                    AND tmpc.STORE_CD = tmp.STORE_CD
+                    AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+                    AND tmb.STORE_CD (+)= tmp.STORE_CD
+                    AND tmb.MS_BRAND_CD (+)= tmp.HQ_BRAND_CD
+                    AND tmpsc.STORE_CD (+)= tmp.STORE_CD
+                    AND tmpsc.SDATTR_CLASS_CD (+)= tmp.SDATTR_CLASS_CD
+                    AND tmpsg.STORE_CD (+)= tmp.STORE_CD
+                    AND tmpsg.SDSEL_GRP_CD (+)= tmp.SDSEL_GRP_CD
+                 ORDER
+                     BY tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 사이드메뉴-사이드메뉴관리탭 상품정보일괄변경 저장(사이드메뉴여부, 속성, 선택메뉴) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        COMMENTS : [본사]상품, [매장]상품
+    -->
+    <update id="saveSideMenuManageProdBatch" parameterType="sideMenuManageVO">
+        /* SideMenuMapper.saveSideMenuManageProdBatch */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT
+                   SET SIDE_PROD_YN = #{sideProdYn},
+                        SDATTR_CLASS_CD = #{sdattrClassCd},
+                        SDSEL_GRP_CD = #{sdselGrpCd},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE 1=1
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT
+                   SET SIDE_PROD_YN = #{sideProdYn},
+                        SDATTR_CLASS_CD = #{sdattrClassCd},
+                        SDSEL_GRP_CD = #{sdselGrpCd},
+                        MOD_DT = #{modDt},
+                        MOD_ID = #{modId}
+                 WHERE 1=1
+                   AND STORE_CD = #{storeCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 사이드메뉴-사이드메뉴관리탭 상품정보일괄변경 저장 매장에 update(사이드메뉴여부, 속성, 선택메뉴) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        COMMENTS : [매장]상품
+    -->
+    <update id="saveSideMenuManageProdBatchStoreUpdate" parameterType="sideMenuManageVO">
+        /* SideMenuMapper.saveSideMenuManageProdBatchStoreUpdate */
+            UPDATE TB_MS_PRODUCT
+               SET SIDE_PROD_YN = #{sideProdYn},
+                    SDATTR_CLASS_CD = #{sdattrClassCd},
+                    SDSEL_GRP_CD = #{sdselGrpCd},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+             WHERE 1=1
+               AND STORE_CD IN (
+                                  SELECT STORE_CD
+                                    FROM TB_MS_STORE tms
+                                   WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                            )
+               AND PROD_CD = #{prodCd}
+    </update>
+
+    <!-- 사이드메뉴-사이드메뉴관리탭 속성 콤보박스 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    :
+        COMMENTS : 사이드메뉴-사이드메뉴관리탭 속성 콤보박스 조회
+    -->
+    <select id="getSideMenuAttrClassCombo" parameterType="sideMenuManageVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getSideMenuAttrClassCombo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT '' AS VALUE,
+                        '전체' AS NAME
+                  FROM DUAL
+                 UNION
+                SELECT thpsc.SDATTR_CLASS_CD AS VALUE,
+                        thpsc.SDATTR_CLASS_NM AS NAME
+                  FROM TB_HQ_PRODUCT_SDATTR_CLASS thpsc
+                 WHERE thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thpsc.USE_YN = 'Y'
+                ORDER
+                  BY VALUE NULLS FIRST, VALUE ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT '' AS VALUE,
+                        '전체' AS NAME
+                  FROM DUAL
+                 UNION
+                SELECT tmpsc.SDATTR_CLASS_CD AS VALUE,
+                        tmpsc.SDATTR_CLASS_NM AS NAME
+                  FROM TB_MS_PRODUCT_SDATTR_CLASS tmpsc
+                 WHERE tmpsc.STORE_CD = #{storeCd}
+                   AND tmpsc.USE_YN = 'Y'
+                 ORDER
+                    BY VALUE NULLS FIRST, VALUE ASC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 사이드메뉴-사이드메뉴관리탭 선택메뉴 콤보박스  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    :
+        COMMENTS : 사이드메뉴-사이드메뉴관리탭 선택메뉴 콤보박스 조회
+    -->
+    <select id="getSideMenuSdselGrpCdCombo" parameterType="sideMenuManageVO" resultType="DefaultMap">
+        /* USE : SideMenuMapper.getSideMenuSdselGrpCdCombo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT '' AS VALUE,
+                        '전체' AS NAME
+                  FROM DUAL
+                 UNION
+                SELECT thpsg.SDSEL_GRP_CD AS VALUE,
+                        thpsg.SDSEL_GRP_NM AS NAME
+                  FROM TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                 WHERE thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND thpsg.USE_YN = 'Y'
+                 ORDER
+                    BY VALUE NULLS FIRST, VALUE ASC
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT '' AS VALUE,
+                        '전체' AS NAME
+                  FROM DUAL
+                 UNION
+                SELECT tmpsg.SDSEL_GRP_CD AS VALUE,
+                        tmpsg.SDSEL_GRP_NM AS NAME
+                  FROM TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                 WHERE tmpsg.STORE_CD = #{storeCd}
+                   AND tmpsg.USE_YN = 'Y'
+                 ORDER
+                    BY VALUE NULLS FIRST, VALUE ASC
+            </when>
+        </choose>
+    </select>
 </mapper>
 
 

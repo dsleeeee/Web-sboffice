@@ -22,49 +22,78 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   // 속성 탭
   $scope.isAttrTab = false;
   // 선택메뉴 탭
-  $scope.isMenuTab = true;
+  $scope.isSelectMenuTab = true;
+  // 사이드메뉴관리 탭
+  $scope.isManageTab = true;
   // 탭변경
   $scope.changeTab = function(type){
     // 속성 탭
     if ( type === 'A' ) {
       $("#sideMenuAttr").addClass("on");
       $("#sideMenuSelectMenu").removeClass("on");
+      $("#sideMenuManage").removeClass("on");
       $scope.isAttrTab = false;
-      $scope.isMenuTab = true;
+      $scope.isSelectMenuTab = true;
+      $scope.isManageTab = true;
       // 속성 조회
       $scope._broadcast("sideMenuAttrClassCtrl");
     // 선택메뉴 탭
-    } else if ( type === 'M' ) {
+    } else if ( type === 'S' ) {
       $("#sideMenuAttr").removeClass("on");
       $("#sideMenuSelectMenu").addClass("on");
+      $("#sideMenuManage").removeClass("on");
       $scope.isAttrTab = true;
-      $scope.isMenuTab = false;
+      $scope.isSelectMenuTab = false;
+      $scope.isManageTab = true;
       // 선택그룹 조회
       $scope._broadcast("sideMenuSelectGroupCtrl");
       // 그리드 refresh
       setTimeout(function () {
         $scope._broadcast("selectMenuRefresh");
       }, 10);
+    // 사이드메뉴관리 탭
+    } else if ( type === 'M' ) {
+      $("#sideMenuAttr").removeClass("on");
+      $("#sideMenuSelectMenu").removeClass("on");
+      $("#sideMenuManage").addClass("on");
+      $scope.isAttrTab = true;
+      $scope.isSelectMenuTab = true;
+      $scope.isManageTab = false;
+      // 사이드메뉴관리 조회
+      $scope._broadcast("sideMenuManageCtrl");
     }
   };
   // 탭 조회
   $scope.queryTab = function() {
-    if ( $scope.isMenuTab ) {
+
+
+    if (!$scope.isAttrTab) {
+
       $("#sideMenuAttrTitle").html("");
       var attrScope = agrid.getScope('sideMenuAttrAttrCtrl');
-      attrScope._gridDataInit();   // 그리드 초기화
-      // 속성 조회
+      attrScope._gridDataInit();   // 속성 그리드 초기화
+
+      // 속성분류 조회
       $scope._broadcast("sideMenuAttrClassCtrl");
-    } else {
+
+    } else if (!$scope.isSelectMenuTab) {
+
       $("#sideSelectGroupTitle").html("");
       var attrScope = agrid.getScope('sideMenuSelectClassCtrl');
-      attrScope._gridDataInit();   // 그리드 초기화
+      attrScope._gridDataInit();   // 선택분류 그리드 초기화
 
       $("#sideClassTitle").html("");
       var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
-      prodScope._gridDataInit();   // 그리드 초기화
+      prodScope._gridDataInit();   // 선택상품 그리드 초기화
+
       // 선택그룹 조회
       $scope._broadcast("sideMenuSelectGroupCtrl");
+
+    } else if (!$scope.isManageTab) {
+
+      // 리스트 재조회
+      var manageScope = agrid.getScope('sideMenuManageCtrl');
+      manageScope.searchSideMenuManage();
     }
   };
 

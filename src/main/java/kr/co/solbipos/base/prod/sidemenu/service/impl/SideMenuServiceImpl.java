@@ -456,4 +456,75 @@ public class SideMenuServiceImpl implements SideMenuService {
 //            if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 //        }
     }
+
+    /** 사이드메뉴-사이드메뉴관리탭 상품 목록 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSideMenuManageProdList(SideMenuManageVO sideMenuManageVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            sideMenuManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return sideMenuMapper.getSideMenuManageProdList(sideMenuManageVO);
+    }
+
+    /** 사이드메뉴-사이드메뉴관리탭 상품정보일괄변경 저장(사이드메뉴여부, 속성, 선택메뉴) */
+    @Override
+    public int saveSideMenuManageProdBatch(SideMenuManageVO[] sideMenuManageVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuManageVO sideMenuManageVO : sideMenuManageVOs) {
+
+            sideMenuManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                sideMenuManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            sideMenuManageVO.setModDt(currentDt);
+            sideMenuManageVO.setModId(sessionInfoVO.getUserId());
+
+            if(sideMenuManageVO.getStatus() == GridDataFg.UPDATE) {
+                procCnt = sideMenuMapper.saveSideMenuManageProdBatch(sideMenuManageVO);
+
+                // 본사인 경우 매장에 수정정보 내려줌
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    // 상품정보 매장에 UPDATE
+                    procCnt = sideMenuMapper.saveSideMenuManageProdBatchStoreUpdate(sideMenuManageVO);
+                }
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 사이드메뉴-사이드메뉴관리탭 속성 콤보박스 */
+    @Override
+    public List<DefaultMap<String>> getSideMenuAttrClassCombo(SideMenuManageVO sideMenuManageVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            sideMenuManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return sideMenuMapper.getSideMenuAttrClassCombo(sideMenuManageVO);
+    }
+
+    /** 사이드메뉴-사이드메뉴관리탭 선택메뉴 콤보박스 */
+    @Override
+    public List<DefaultMap<String>> getSideMenuSdselGrpCdCombo(SideMenuManageVO sideMenuManageVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            sideMenuManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return sideMenuMapper.getSideMenuSdselGrpCdCombo(sideMenuManageVO);
+    }
 }

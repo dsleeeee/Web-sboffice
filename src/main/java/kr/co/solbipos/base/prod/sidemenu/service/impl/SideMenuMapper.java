@@ -155,4 +155,19 @@ public interface SideMenuMapper {
 //    /** 사이드메뉴-선택메뉴탭- 선택분류 삭제시 선택그룹에 해당하는 분류 개수 체크 */
 //    int getSideMenuSelGrpClassCnt(SideMenuSelGroupVO sideMenuSelGroupVO);
 
+    /** 사이드메뉴-사이드메뉴관리탭 상품 목록 조회 */
+    List<DefaultMap<Object>> getSideMenuManageProdList(SideMenuManageVO sideMenuManageVO);
+
+    /** 사이드메뉴-사이드메뉴관리탭 상품정보일괄변경 저장(사이드메뉴여부, 속성, 선택메뉴) */
+    int saveSideMenuManageProdBatch(SideMenuManageVO sideMenuManageVO);
+
+    /** 사이드메뉴-사이드메뉴관리탭 상품정보일괄변경 저장 매장에 update(사이드메뉴여부, 속성, 선택메뉴) */
+    int saveSideMenuManageProdBatchStoreUpdate(SideMenuManageVO sideMenuManageVO);
+
+    /** 사이드메뉴-사이드메뉴관리탭 속성 콤보박스 */
+    List<DefaultMap<String>> getSideMenuAttrClassCombo(SideMenuManageVO sideMenuManageVO);
+
+    /** 사이드메뉴-사이드메뉴관리탭 선택메뉴 콤보박스 */
+    List<DefaultMap<String>> getSideMenuSdselGrpCdCombo(SideMenuManageVO sideMenuManageVO);
+
 }
