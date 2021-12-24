@@ -110,31 +110,31 @@ app.controller('storeProdSaleReportCtrl', ['$scope', '$http', function ($scope, 
 
     // <-- 자료생성 -->
     $scope.dataCreate = function(){
+        var createMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+        var createMonthLastDate = new Date(createMonth.substring(0, 4), createMonth.substring(4, 6), 0).getDate();
+
         // 자료생성 요청건 존재여부 확인
         var params = {};
-        params.dataCreateMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+        params.dataCreateMonth = createMonth;
+        params.dataCreateMonthLastDate = createMonthLastDate;
 
         $scope._postJSONQuery.withOutPopUp( "/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportChk.sb", params, function(response){
             var storeProdSaleReport = response.data.data.result;
             $scope.storeProdSaleReport = storeProdSaleReport;
 
             if($scope.storeProdSaleReport.cnt > 0) {
-                var month = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
-                var msg = month + " " + messages["storeProdSaleReport.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
+                var msg = createMonth + " " + messages["storeProdSaleReport.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
                 $scope._popMsg(msg);
                 return;
             } else {
-                $scope.save();
+                $scope.save(params);
             }
         });
     };
 
-    $scope.save = function(){
+    $scope.save = function(params){
         // 자료생성을 하시겠습니까?
         $scope._popConfirm(messages["storeProdSaleReport.dataCreateSaveConfirm"], function() {
-            var params = {};
-            params.dataCreateMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
-
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportSave.sb", params, function(){
                 $scope.allSearch();

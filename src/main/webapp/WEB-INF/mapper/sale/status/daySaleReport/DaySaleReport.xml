@@ -76,7 +76,7 @@
             #{reqTime},
             '02',
             #{dataCreateMonth}||'01',
-            #{dataCreateMonth}||'31',
+            #{dataCreateMonth}||#{dataCreateMonthLastDate},
             '0',
             '',
             '',
@@ -123,7 +123,7 @@
             </foreach>
         </if>
         AND tmsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'
-        AND tmsr.TO_SALE_DATE = #{dataCreateMonth}||'31'
+        AND tmsr.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}
         AND tmsr.REPORT_TYPE = '02'
     </select>
 

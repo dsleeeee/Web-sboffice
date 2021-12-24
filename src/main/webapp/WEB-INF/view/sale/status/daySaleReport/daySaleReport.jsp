@@ -124,4 +124,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySaleReport/daySaleReport.js?ver=20211208.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySaleReport/daySaleReport.js?ver=20211223.01" charset="utf-8"></script>

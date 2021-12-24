@@ -108,4 +108,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/storeProdSaleReport.js?ver=20211207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/storeProdSaleReport.js?ver=20211223.01" charset="utf-8"></script>

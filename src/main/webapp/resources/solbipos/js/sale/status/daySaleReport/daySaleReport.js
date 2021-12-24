@@ -122,9 +122,13 @@ app.controller('daySaleReportCtrl', ['$scope', '$http', function ($scope, $http)
             return;
         }
 
+        var createMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+        var createMonthLastDate = new Date(createMonth.substring(0, 4), createMonth.substring(4, 6), 0).getDate();
+
         // 자료생성 요청건 존재여부 확인
         var params = {};
-        params.dataCreateMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+        params.dataCreateMonth = createMonth;
+        params.dataCreateMonthLastDate = createMonthLastDate;
         params.storeCds = $("#daySaleReportStoreCd").val();
 
         $scope._postJSONQuery.withOutPopUp( "/sale/status/daySaleReport/daySaleReport/getDaySaleReportChk.sb", params, function(response){
@@ -132,29 +136,28 @@ app.controller('daySaleReportCtrl', ['$scope', '$http', function ($scope, $http)
             $scope.daySaleReport = daySaleReport;
 
             if($scope.daySaleReport.cnt > 0) {
-                var month = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
                 var storeCds = $("#daySaleReportStoreCd").val();
-                var msg = month + " " + messages["daySaleReport.saleMonthAlert"] + "<br/> (선택된 매장 : " + storeCds + ")"; // 자료가 존재합니다. 삭제 후 진행해주세요.
+                var msg = createMonth + " " + messages["daySaleReport.saleMonthAlert"] + "<br/> (선택된 매장 : " + storeCds + ")"; // 자료가 존재합니다. 삭제 후 진행해주세요.
                 $scope._popMsg(msg);
                 return;
             } else {
-                $scope.save();
+                $scope.save(params);
             }
         });
     };
 
-    $scope.save = function(){
+    $scope.save = function(data){
         // 자료생성을 하시겠습니까?
         $scope._popConfirm(messages["daySaleReport.dataCreateSaveConfirm"], function() {
             // 선택한 매장
-            var storeCds = $("#daySaleReportStoreCd").val();
-            var arrStoreCol = storeCds.split(',');
+            var arrStoreCol = data.storeCds.split(',');
 
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < arrStoreCol.length; i++) {
                 var items = {};
-                items.dataCreateMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+                items.dataCreateMonth = data.dataCreateMonth;
+                items.dataCreateMonthLastDate = data.dataCreateMonthLastDate;
                 items.storeCd = arrStoreCol[i];
 
                 params.push(items);

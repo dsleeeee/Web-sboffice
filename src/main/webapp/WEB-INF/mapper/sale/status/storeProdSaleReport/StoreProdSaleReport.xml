@@ -71,7 +71,7 @@
             #{reqTime},
             '01',
             #{dataCreateMonth}||'01',
-            #{dataCreateMonth}||'31',
+            #{dataCreateMonth}||#{dataCreateMonthLastDate},
             '0',
             '',
             '',
@@ -111,7 +111,7 @@
         WHERE 1=1
         AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
         AND thsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'
-        AND thsr.TO_SALE_DATE = #{dataCreateMonth}||'31'
+        AND thsr.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}
         AND thsr.REPORT_TYPE = '01'
     </select>
 

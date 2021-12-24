@@ -42,6 +42,9 @@ public class DaySaleReportVO extends PageVO {
     /** 자료생성 월 */
     private String dataCreateMonth;
 
+    /** 자료생성 월의 마지막날 */
+    private String dataCreateMonthLastDate;
+
     /** 요청일자 */
     private String reqDate;
 
@@ -90,6 +93,10 @@ public class DaySaleReportVO extends PageVO {
     public String getDataCreateMonth() { return dataCreateMonth; }
 
     public void setDataCreateMonth(String dataCreateMonth) { this.dataCreateMonth = dataCreateMonth; }
+
+    public String getDataCreateMonthLastDate() { return dataCreateMonthLastDate; }
+
+    public void setDataCreateMonthLastDate(String dataCreateMonthLastDate) { this.dataCreateMonthLastDate = dataCreateMonthLastDate; }
 
     public String getReqDate() { return reqDate; }
 
