@@ -357,10 +357,10 @@ public class UserServiceImpl implements UserService {
         // SMS
         procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
 
-        // 현재 잔여금액
-        String smsAmt = smsSendMapper.getSmsAmtSelect(smsSendVO);
-        // SMS 건당금액
         DefaultMap<Object> result = smsSendMapper.getSmsAmtList(smsSendVO);
+        // 현재 잔여금액
+        String smsAmt = result.getStr("smsAmt");
+        // SMS 건당금액
         String smsOneAmt = result.getStr("smsOneAmt");
         // 잔여금액 - 사용금액
         smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - Integer.parseInt(smsOneAmt) ));
