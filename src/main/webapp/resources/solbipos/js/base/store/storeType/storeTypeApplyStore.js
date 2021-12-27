@@ -114,13 +114,15 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
                 var obj = {};
                 obj.storeCd = item.storeCd;
                 obj.commentRemark = "TB_HQ_STORE_TYPE_APP 에 직접 등록";
-                obj.applyProcFg = "0"; // 미처리
 
                 if ($("#chkApplyDay").is(":checked")) {
                     obj.applyDt = wijmo.Globalize.format(applyDay.value, 'yyyyMMdd') + $scope.applyDayHh + "0000";
+                    obj.applyProcFg = "0"; // 미처리(스케쥴러처리)
+                }else{
+                    obj.applyProcFg = "5"; // 미처리(즉시처리)
                 }
 
-                if(storeTypeApplyEnvstVal === "1") { // 매장타입판매가설정(1107) 미사용시, 기본 applyFg = 0
+                /*if(storeTypeApplyEnvstVal === "1") { // 매장타입판매가설정(1107) 미사용시, 기본 applyFg = 0
 
                     if ($("#chkSaleUprcApply").is(":checked")) {
                         obj.applyFg = "1";
@@ -129,7 +131,9 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
                     }
                 }else{
                     obj.applyFg = "0";
-                }
+                }*/
+
+                obj.applyFg = "1"; // 매장타입판매가설정(1107) 기본 사용(applyFg = 1)으로 처리 - 2021.12.27
 
                 params.push(obj);
             }
