@@ -26,18 +26,18 @@
                 <tr>
                     <th><s:message code="promotion.classCd" /></th>
                     <td>
-                        <input type="text" id="srchClassCd"/>
+                        <input type="text" id="srchClassCd" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                     <th><s:message code="promotion.classNm" /></th>
                     <td>
-                        <input type="text" id="srchClassNm"/>
+                        <input type="text" id="srchClassNm" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <%-- 버튼영역 --%>
             <div class="mt10 tr">
-                <button class="btn_skyblue" id="btnSearchClass" ng-click="btnSearchClass()"><s:message code="cmm.search" /></button>
+                <button class="btn_skyblue" id="nxBtnSearch2" ng-click="btnSearchClass()"><s:message code="cmm.search" /></button>
                 <button class="btn_skyblue ml5 fr" id="btnInsertClass" ng-click="btnInsertClass()"><s:message code="cmm.add"/></button>
             </div>
             <%-- 그리드 영역 --%>

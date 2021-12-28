@@ -54,11 +54,11 @@
                     <tr>
                         <th><s:message code="promotion.prodCd" /></th>
                         <td>
-                            <input type="text" id="srchPresentCd"/>
+                            <input type="text" id="srchPresentCd" onkeyup="fnNxBtnSearch('4');"/>
                         </td>
                         <th><s:message code="promotion.prodNm" /></th>
                         <td>
-                            <input type="text" id="srchPresentNm"/>
+                            <input type="text" id="srchPresentNm" onkeyup="fnNxBtnSearch('4');"/>
                         </td>
                     </tr>
                     <tr>
@@ -83,7 +83,7 @@
                 </table>
                 <%-- 버튼영역 --%>
                 <div class="mt10 tr">
-                    <button class="btn_skyblue" id="btnSearchPresent" ng-click="btnSearchPresent()"><s:message code="cmm.search" /></button>
+                    <button class="btn_skyblue" id="nxBtnSearch4" ng-click="btnSearchPresent()"><s:message code="cmm.search" /></button>
                     <button class="btn_skyblue ml5 fr" id="btnInsertPresent" ng-click="btnInsertPresent()"><s:message code="cmm.add"/></button>
                 </div>
                 <%-- 그리드 영역 --%>
