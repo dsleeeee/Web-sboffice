@@ -344,7 +344,7 @@ public class UserServiceImpl implements UserService {
         smsSendVO.setReserveYn("0");
         smsSendVO.setMsgType("1");
         smsSendVO.setTitle("NXPOS 인증번호");
-        smsSendVO.setContent("인증번호는 " + otpAuthVO.getAuthNo() + " 입니다.");
+        smsSendVO.setContent("인증번호는 [" + otpAuthVO.getAuthNo() + "] 입니다.");
         smsSendVO.setCallback("16445195");
         smsSendVO.setPhoneNumber(otpAuthVO.getRecvMpNo().replaceAll("-",""));
         smsSendVO.setCstNo("");
