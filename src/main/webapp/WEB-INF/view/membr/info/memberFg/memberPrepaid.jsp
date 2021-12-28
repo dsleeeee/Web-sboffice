@@ -14,7 +14,7 @@
     <a href="#" class="open fl"><s:message code="memberFg.prepaid" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberPrepaidCtrl', 1)">
+      <button class="btn_blue fr" id="nxBtnSearch1" ng-click="_pageView('memberPrepaidCtrl', 1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -31,12 +31,12 @@
       <%-- 회원번호 --%>
       <th><s:message code="memberFg.memberNo" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="memberNo" ng-model="membrNo" />
+        <input type="text" class="sb-input w100" id="memberNo" ng-model="membrNo" onkeyup="fnNxBtnSearch('1');"/>
       </td>
       <%-- 회원명 --%>
       <th><s:message code="memberFg.memberNm" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="memberNm" ng-model="membrNm" />
+        <input type="text" class="sb-input w100" id="memberNm" ng-model="membrNm" onkeyup="fnNxBtnSearch('1');"/>
       </td>
     </tr>
     <tr>
@@ -58,7 +58,7 @@
       </td>
       <th><s:message code="memberFg.telNo" /></th>
       <td>
-        <input type="text" id="telNo" class="sb-input w100" ng-model="telNo" maxlength="15"/>
+        <input type="text" id="telNo" class="sb-input w100" ng-model="telNo" maxlength="15" onkeyup="fnNxBtnSearch('1');"/>
       </td>
     </tr>
     <c:if test="${orgnFg == 'HQ'}">

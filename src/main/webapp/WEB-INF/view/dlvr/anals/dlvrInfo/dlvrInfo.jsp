@@ -15,7 +15,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('dlvrInfoCtrl')">
+            <button class="btn_blue fr" ng-click="_broadcast('dlvrInfoCtrl')" id="nxBtnSearch">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -44,7 +44,7 @@
                 <s:message code="dlvrInfo.dlvr.name"/>
             </th>
             <td>
-                <input type="text" id="dlvrNm" class="sb-input w100" ng-model="dlvrNm" maxlength="15"/>
+                <input type="text" id="dlvrNm" class="sb-input w100" ng-model="dlvrNm" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
@@ -52,7 +52,7 @@
                 <s:message code="dlvrInfo.collect.name"/>
             </th>
             <td>
-                <input type="text" id="collectNm" class="sb-input w100" ng-model="collectNm" maxlength="15"/>
+                <input type="text" id="collectNm" class="sb-input w100" ng-model="collectNm" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
             <th></th>
             <td></td>

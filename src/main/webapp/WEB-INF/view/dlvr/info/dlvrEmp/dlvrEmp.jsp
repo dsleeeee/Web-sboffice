@@ -10,7 +10,7 @@
         <a href="#" class="open fl"><s:message code="dlvrEmp.dlvrEmp"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('dlvrEmpCtrl', 1)">
+            <button class="btn_blue fr" ng-click="_pageView('dlvrEmpCtrl', 1)" id="nxBtnSearch">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -48,14 +48,14 @@
                 <s:message code="dlvrEmp.empNo"/>
             </th>
             <td>
-                <input type="text" id="srchDlvrEmpNo" class="sb-input w100"/>
+                <input type="text" id="srchDlvrEmpNo" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 배달사원명 --%>
             <th>
                 <s:message code="dlvrEmp.empNm"/>
             </th>
             <td>
-                <input type="text" id="srchDlvrEmpNm" class="sb-input w100"/>
+                <input type="text" id="srchDlvrEmpNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
@@ -64,7 +64,7 @@
                 <s:message code="dlvrEmp.hpNo"/>
             </th>
             <td>
-                <input type="text" id="srchHpNo" class="sb-input w100"/>
+                <input type="text" id="srchHpNo" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- SMS 수신여부 --%>
             <th>

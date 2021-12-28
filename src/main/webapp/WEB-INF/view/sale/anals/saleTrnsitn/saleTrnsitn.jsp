@@ -16,7 +16,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('saleTrnsitnCtrlSrch')">
+            <button class="btn_blue fr" ng-click="_broadcast('saleTrnsitnCtrlSrch')" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -32,9 +32,9 @@
         <tbody>
 			<tr>
 				<th><s:message code="prod.prodCd" /></th>		<%-- 상품코드 --%>
-				<td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCdModel" /></td>
+				<td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCdModel" onkeyup="fnNxBtnSearch();"/></td>
 				<th><s:message code="prod.prodNm" /></th>		<%-- 상품명 --%>
-				<td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNmModel" /></td>
+				<td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNmModel" onkeyup="fnNxBtnSearch();"/></td>
 			</tr>
 			<tr>
 		        <th><s:message code="prod.prodClass" /></th>	<%-- 분류조회 --%>

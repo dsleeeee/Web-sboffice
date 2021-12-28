@@ -47,6 +47,7 @@
 <%-- 탭페이지 레이어 시작 --%>
 <c:if test="${orgnFg == 'HQ' or orgnFg == 'STORE'}">
     <%-- 마케팅용 SMS전송 레이어 --%>
+    <%-- 조회버튼 ID 2 : 서비스화면부터 하다보니 그렇게 됨 --%>
     <c:import url="/WEB-INF/view/adi/sms/marketingSmsSend/marketingSmsSend.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
@@ -54,6 +55,7 @@
 </c:if>
 
 <%-- 문자전송현황 레이어 --%>
+<%-- 조회버튼 ID 1 : 서비스화면부터 하다보니 그렇게 됨 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/sendStatus.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

@@ -67,10 +67,10 @@
         <tr>
             <%-- 상품명 --%>
             <th><s:message code="frnchsStoreProd.prodNm" /></th>
-            <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" ng-model="prodNmModel"/></td>
+            <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" ng-model="prodNmModel" onkeyup="fnNxBtnSearch();"/></td>
             <%-- 상품코드 --%>
             <th><s:message code="frnchsStoreProd.prodCd" /></th>
-            <td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13" ng-model="prodCdModel"/></td>
+            <td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13" ng-model="prodCdModel" onkeyup="fnNxBtnSearch();"/></td>
         </tr>
         </tbody>
     </table>

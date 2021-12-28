@@ -17,7 +17,7 @@
             <a href="#" class="open fl"><s:message code="recpOriginTab.recpOrigin"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue mr3" id="btnSearch" ng-click="_pageView('recpOriginCtrl',1)">
+                <button class="btn_blue mr3" id="nxBtnSearch2" ng-click="_pageView('recpOriginCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -35,12 +35,12 @@
                     <%-- 재료명 --%>
                     <th><s:message code="recpOrigin.recipesNm" /></th>
                     <td>
-                        <input type="text" class="sb-input w100" ng-model="recipesNm" />
+                        <input type="text" class="sb-input w100" ng-model="recipesNm" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                     <%-- 원산지명 --%>
                     <th><s:message code="recpOrigin.orgplceNm" /></th>
                     <td>
-                        <input type="text" class="sb-input w100" ng-model="orgplceNm" />
+                        <input type="text" class="sb-input w100" ng-model="orgplceNm" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
             </tbody>

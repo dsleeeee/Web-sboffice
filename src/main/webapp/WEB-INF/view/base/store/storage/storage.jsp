@@ -33,12 +33,12 @@
         <%-- 창고코드 --%>
         <th><s:message code="storageManage.storageCd" /></th>
         <td>
-          <input type="text" id="srchStorageCd" class="sb-input w100" ng-model="storageCd" maxlength="3"/>
+          <input type="text" id="srchStorageCd" class="sb-input w100" ng-model="storageCd" maxlength="3" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 창고명 --%>
         <th><s:message code="storageManage.storageNm" /></th>
         <td>
-          <input type="text" id="srchStorageNm" class="sb-input w100" ng-model="storageNm" maxlength="30"/>
+          <input type="text" id="srchStorageNm" class="sb-input w100" ng-model="storageNm" maxlength="30" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>

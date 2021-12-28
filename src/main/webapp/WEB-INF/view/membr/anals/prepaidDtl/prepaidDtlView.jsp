@@ -15,7 +15,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" ng-click="_pageView('prepaidDtlCtrl',1)">
+      <button class="btn_blue fr" ng-click="_pageView('prepaidDtlCtrl',1)" id="nxBtnSearch">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -64,12 +64,12 @@
       <%-- 회원번호 --%>
       <th><s:message code="prepaidDtl.membrNo" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="membrNo" />
+        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="membrNo" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 회원명 --%>
       <th><s:message code="prepaidDtl.membrNm" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" />
+        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     </tbody>

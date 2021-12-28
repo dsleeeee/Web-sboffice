@@ -16,7 +16,7 @@
         <a href="#" class="open fl"><s:message code="prodBatchChange.prodBatchChange"/> (<s:message code="prodBatchChange.tab2"/>)</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('prodBatchChange2Ctrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('prodBatchChange2Ctrl',1)" id="nxBtnSearch2">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -35,14 +35,14 @@
                 <s:message code="prodBatchChange.prodCd"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="prodCd"/>
+                <input type="text" class="sb-input w100" ng-model="prodCd" onkeyup="fnNxBtnSearch('2');"/>
             </td>
             <%-- 상품명 --%>
             <th>
                 <s:message code="prodBatchChange.prodNm"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="prodNm"/>
+                <input type="text" class="sb-input w100" ng-model="prodNm" onkeyup="fnNxBtnSearch('2');"/>
             </td>
         </tr>
         <tr>
@@ -60,7 +60,7 @@
                 <s:message code="prodBatchChange.barCd"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="barCd"/>
+                <input type="text" class="sb-input w100" ng-model="barCd" onkeyup="fnNxBtnSearch('2');"/>
             </td>
         </tr>
         <c:if test="${orgnFg == 'HQ' and brandUseFg == '1'}"><%-- 브랜드를 사용하는 본사/매장인 경우만 변경 가능 --%>

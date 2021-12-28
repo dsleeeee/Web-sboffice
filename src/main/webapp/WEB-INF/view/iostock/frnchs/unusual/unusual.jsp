@@ -51,7 +51,7 @@
       <%-- 전표번호 --%>
       <th><s:message code="unusualStockInfo.slipNo"/></th>
       <td>
-        <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNoModel" class="sb-input w100" maxlength="10"/>
+        <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNoModel" class="sb-input w100" maxlength="10" onkeyup="fnNxBtnSearch();"/>
       </td>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <input type="hidden" id="unusualSelectStoreCd" value="" />

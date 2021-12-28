@@ -11,7 +11,7 @@
     <a href="#" class="open fl"><s:message code="hqSalePriceHistory.hqSalePriceHistory" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('hqSalePriceHistoryCtrl', 1)">
+      <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('hqSalePriceHistoryCtrl', 1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -48,14 +48,14 @@
         <s:message code="hqSalePriceHistory.prodCd" />
       </th>
       <td>
-        <input type="text" class="sb-input w100" id="hqProdCd" ng-model="prodCd" />
+        <input type="text" class="sb-input w100" id="hqProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('2');"/>
       </td>
       <%-- 상품명 --%>
       <th>
         <s:message code="hqSalePriceHistory.prodNm" />
       </th>
       <td>
-        <input type="text" class="sb-input w100" id="hqProdNm" ng-model="prodNm" />
+        <input type="text" class="sb-input w100" id="hqProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('2');"/>
       </td>
     </tr>
    </tbody>

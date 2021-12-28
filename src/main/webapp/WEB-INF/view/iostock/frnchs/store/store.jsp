@@ -73,7 +73,7 @@
             <%-- 매장명 --%>
             <th><s:message code="frnchsStore.storeNm" /></th>
             <td>
-                <input type="text" id="storeNm" class="sb-input w100" maxlength="100" />
+                <input type="text" id="storeNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         </tbody>

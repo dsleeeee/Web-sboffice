@@ -36,7 +36,7 @@
         <%-- 발주번호 --%>
         <th><s:message code="orderStockInfo.slipNo"/></th>
         <td>
-          <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8"/>
+          <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 거래처 --%>
         <th><s:message code="orderStockInfo.vendr"/></th>

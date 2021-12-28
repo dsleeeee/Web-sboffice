@@ -20,7 +20,7 @@
                 <button class="btn_blue" id="btnRegist" ng-click="openOriginReg()">
                     <s:message code="prodRecpOrigin.originReg" />
                 </button>
-                <button class="btn_blue mr3" id="btnSearch" ng-click="_pageView('prodRecpOriginCtrl',1)">
+                <button class="btn_blue mr3" id="nxBtnSearch1"  ng-click="_pageView('prodRecpOriginCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -75,14 +75,14 @@
                     <s:message code="prodRecpOrigin.prodCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+                    <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
                 <%-- 상품명 --%>
                 <th>
                     <s:message code="prodRecpOrigin.prodNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+                    <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
             <tr>
@@ -101,7 +101,7 @@
                     <s:message code="prodRecpOrigin.barCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+                    <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
             <tr>

@@ -68,12 +68,12 @@
             <%-- 상품코드 --%>
             <th><s:message code="dlvrProd.prodCd" /></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+                <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 상품명 --%>
             <th><s:message code="dlvrProd.prodNm" /></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+                <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
@@ -88,7 +88,7 @@
             <%-- 바코드 --%>
             <th><s:message code="dlvrProd.barCd" /></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+                <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>

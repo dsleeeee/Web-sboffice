@@ -13,7 +13,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="prodsale.class"/></a>
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodClassCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="nxBtnSearch1" ng-click="_broadcast('prodClassCtrl')">
     		<s:message code="cmm.search"/>
     	</button>
 	</div>
@@ -50,10 +50,10 @@
 		<tr>
             <%-- 상품코드 --%>
             <th><s:message code="prodcalss.prodCd" /></th>
-            <td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13"/></td>
+            <td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/></td>
             <%-- 상품명 --%>
             <th><s:message code="prodcalss.prodNm" /></th>
-            <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100"/></td>
+            <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/></td>
       	</tr>
         <tr>
         	<%-- 분류조회 --%>
