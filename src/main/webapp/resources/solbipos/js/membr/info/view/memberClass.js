@@ -333,6 +333,7 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.userUseYn = false;
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        payCd.unshift({name: "현금영수", value: "00"});
         $scope.payCdDataMap = new wijmo.grid.DataMap(payCd, 'value', 'name');
         if (gvHqOfficeCd === '00000') { // 단독매장
             $scope.userUseYn = true;

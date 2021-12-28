@@ -55,11 +55,11 @@
                 <tr>
                     <th><s:message code="storeType.storeCd" /></th>
                     <td>
-                        <input type="text" id="srchPopStoreCd"/>
+                        <input type="text" id="srchPopStoreCd" onkeyup="fnNxBtnSearch();"/>
                     </td>
                     <th><s:message code="storeType.storeNm" /></th>
                     <td>
-                        <input type="text" id="srchPopStoreNm"/>
+                        <input type="text" id="srchPopStoreNm" onkeyup="fnNxBtnSearch();"/>
                     </td>
                 </tr>
                 <tr>
@@ -84,7 +84,7 @@
             </table>
             <%-- 버튼영역 --%>
             <div class="mt10 tr">
-                <button class="btn_blue" id="btnSearchPopStore" ng-click="searchPopStore()"><s:message code="cmm.search" /></button>
+                <button class="btn_blue" id="nxBtnSearch" ng-click="searchPopStore()"><s:message code="cmm.search" /></button>
             </div>
             <%-- 그리드 영역 --%>
             <div class="w100 mt10 mb20">
