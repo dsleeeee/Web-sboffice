@@ -53,12 +53,12 @@
         <%-- 입고번호 --%>
         <th><s:message code="slipStockInfo.inSlipNo"/></th>
         <td>
-          <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8"/>
+          <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 발주번호 --%>
         <th><s:message code="slipStockInfo.orderSlipNo"/></th>
         <td>
-          <input type="text" id="srchOrderSlipNo" name="srchOrderSlipNo" ng-model="orderSlipNo" class="sb-input w100" maxlength="8"/>
+          <input type="text" id="srchOrderSlipNo" name="srchOrderSlipNo" ng-model="orderSlipNo" class="sb-input w100" maxlength="8" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>
@@ -85,12 +85,12 @@
         <%-- 상품코드 --%>
         <th><s:message code="slipStockInfo.prodCd"/></th>
         <td>
-          <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+          <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 상품명 --%>
         <th><s:message code="slipStockInfo.prodNm"/></th>
         <td>
-          <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="16"/>
+          <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="16" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       </tbody>

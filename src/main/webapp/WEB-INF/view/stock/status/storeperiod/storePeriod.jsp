@@ -50,14 +50,14 @@
 			<th><s:message code="storePeriod.prodCd" /></th>
 			<td>
 				<span class="txtIn w150px">
-	                <input type="text" id="srchProdCd" class="sb-input w100" maxlength="100" />
+	                <input type="text" id="srchProdCd" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch();"/>
 	            </span>
 			</td>
 			<%-- 상품명 --%>
 			<th><s:message code="storePeriod.prodNm" /></th>
 			<td>
 				<span class="txtIn w150px">
-	                <input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" />
+	                <input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch();"/>
 	            </span>
 			</td>
 		</tr>
@@ -66,7 +66,7 @@
 			<th><s:message code="storePeriod.barcdCd" /></th>
 			<td>
 				<span class="txtIn w150px">
-	                <input type="text" id="srchBarcdCd" class="sb-input w100" maxlength="100" />
+	                <input type="text" id="srchBarcdCd" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch();"/>
 	            </span>
 			</td>
 

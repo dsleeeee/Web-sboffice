@@ -16,7 +16,7 @@
         <a href="#" class="open fl"><s:message code="prodBatchChange.prodBatchChange" /> (<s:message code="prodBatchChange.tab1" />)</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('prodBatchChangeCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('prodBatchChangeCtrl',1)" id="nxBtnSearch1">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -35,14 +35,14 @@
                 <s:message code="prodBatchChange.prodCd" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+                <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('1');"/>
             </td>
             <%-- 상품명 --%>
             <th>
                 <s:message code="prodBatchChange.prodNm" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+                <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('1');"/>
             </td>
         </tr>
         <tr>
@@ -61,7 +61,7 @@
                 <s:message code="prodBatchChange.barCd" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+                <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch('1');"/>
             </td>
         </tr>
         <tr>
@@ -106,7 +106,7 @@
                 <s:message code="prodBatchChange.mapProdCd" />
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchMapProdCd" ng-model="mapProdCd" />
+                <input type="text" class="sb-input w100" id="srchMapProdCd" ng-model="mapProdCd" onkeyup="fnNxBtnSearch('1');"/>
             </td>
             <%-- 본사일때만 --%>
             <c:if test="${orgnFg eq 'HQ'}">

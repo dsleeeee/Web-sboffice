@@ -13,7 +13,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('membrRecomendrCtrl')">
+            <button class="btn_blue fr" ng-click="_broadcast('membrRecomendrCtrl')" id="nxBtnSearch">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -45,14 +45,14 @@
                 <s:message code="recomendr.empNo"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchEmpNo" ng-model="empNo"/>
+                <input type="text" class="sb-input w100" id="srchEmpNo" ng-model="empNo" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 사원명 --%>
             <th>
                 <s:message code="recomendr.empNm"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchEmpNm" ng-model="empNm"/>
+                <input type="text" class="sb-input w100" id="srchEmpNm" ng-model="empNm" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
@@ -61,14 +61,14 @@
                 <s:message code="recomendr.membrNo"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchMembrNo" ng-model="membrNo"/>
+                <input type="text" class="sb-input w100" id="srchMembrNo" ng-model="membrNo" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 회원명 --%>
             <th>
                 <s:message code="recomendr.membrNm"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm"/>
+                <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>

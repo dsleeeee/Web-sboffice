@@ -104,8 +104,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             $("#trMemoInfo").css("display", "none");
         }
 
-        // 발신번호 유무 체크
-        $scope.tellNumChk();
+        // 본인인증 여부 체크
+        $scope.verifyChk();
 
         // 관리자/총판/본사/매장 명칭
         $scope.storeNmInfo();
@@ -129,6 +129,94 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             // 메세지그룹 탭
             $scope.msgGrpShow("01");
         }
+    };
+
+    // 본인인증 여부 체크
+    $scope.verifyChk = function() {
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+
+            if (response.data.data.list === 0) {
+
+                $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
+                    // 본인인증 팝업창 띄우기
+                    $scope.verify();
+
+                });
+            } else {
+
+                // 발신번호 유무 체크
+                $scope.tellNumChk();
+            }
+        });
+    };
+
+    // 본인인증
+    $scope.verify = function(){
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+
+            if (response.data.data.list !== 0) {
+                $scope._popMsg(messages["marketingSmsSend.verifyChk"]);
+                return false;
+            } else {
+
+
+                $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal.sb", null, function(result) {
+                    var data = result.data;
+                    console.log(data);
+
+                    var auth_form = document.form_auth;
+
+                    var return_gubun;
+                    var width = 410;
+                    var height = 500;
+
+                    var leftpos = screen.width / 2 - (width / 2);
+                    var toppos = screen.height / 2 - (height / 2);
+
+                    var winopts = "width=" + width + ", height=" + height + ", toolbar=no,status=no,statusbar=no,menubar=no,scrollbars=no,resizable=no";
+                    var position = ",left=" + leftpos + ", top=" + toppos;
+
+                    var url = data.gwUrl + '?' +                        // KCP 인증창
+                        'site_cd=' + data.siteCd + '&' +                // 상점코드
+                        'ordr_idxx=' + data.ordrIdxx + '&' +            // 상점관리요청번호
+                        'req_tx=cert' + '&' +                                   // 요청의 종류를 구분하는 변수
+                        'cert_method=01' + '&' +                                // 01-휴대폰인증 02-공인인증(추후제공)
+                        'up_hash=' + data.upHash + '&' +                // 요청 hash data
+                        'Ret_URL=' + data.retUrl + '?sid=' + data.sessionId + '&' +                // 본인인증 결과 리턴페이지
+                        'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
+                        'cert_enc_use_ext=Y'
+                    ;
+
+                    console.log("JH");
+                    console.log("site_cd : " + data.siteCd);
+                    console.log("web_siteid : " + data.webSiteid);
+                    console.log("gw_url : " + data.gwUrl);
+                    console.log("Ret_URL : " + data.retUrl);
+                    console.log("ordr_idxx : " + data.ordrIdxx);
+                    console.log("up_hash : " + data.upHash);
+                    console.log("sessionID : " + data.sessionId);
+                    console.log("url : " + url);
+
+                    // 저장기능 수행
+                    var params = {};
+                    params.certId = data.ordrIdxx;
+
+                    $.postJSONArray("/adi/sms/marketingSmsSend/marketingSmsSend/saveVerify.sb", params, function (result) {
+                            console.log("JH : 결과");
+                            var AUTH_POP =  window.open(url, 'auth_popup', winopts + position);
+                            console.log('1111');
+                        },
+                        function (result) {
+                            s_alert.pop("JH : 결과msg" + result.message);
+                            s_alert.pop(result.message);
+                        });
+                });
+            }
+        });
     };
 
     // 발신번호 유무 체크
@@ -300,96 +388,98 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // <-- 전송, 예약 -->
     // 전송, 예약
     $scope.smsSendReserve = function(reserveYn) {
-        // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
-        if(gridYn == "N") {
-            s_alert.pop(messages["cmm.not.select"]);
-            return;
-        }
+        if($scope.verifyChk()) {
+            // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+            if (gridYn == "N") {
+                s_alert.pop(messages["cmm.not.select"]);
+                return;
+            }
 
-        if($scope.telNoCombo == "") {
-            $scope._popMsg(messages["smsSend.telNoAlert"]); // 사전등록된 발신번호가 없습니다. <br/> [발신번호 추가] 버튼으로 발신번호 사전등록하여 주십시오.
-            return;
-        }
+            if ($scope.telNoCombo == "") {
+                $scope._popMsg(messages["smsSend.telNoAlert"]); // 사전등록된 발신번호가 없습니다. <br/> [발신번호 추가] 버튼으로 발신번호 사전등록하여 주십시오.
+                return;
+            }
 
-        if($("#messageContent").val() == "") {
-            $scope._popMsg(messages["smsSend.messageContentAlert"]); // 메세지를 입력해주세요.
-            return false;
-        }
-
-        if($("#srchTitle").val() != "") {
-            // 최대길이 체크
-            if(nvl($("#srchTitle").val(), '').getByteLengthForOracle() > 40) {
-                $scope._popMsg(messages["smsSend.titleLengthChk"]); // 제목 길이가 너무 깁니다.
+            if ($("#messageContent").val() == "") {
+                $scope._popMsg(messages["smsSend.messageContentAlert"]); // 메세지를 입력해주세요.
                 return false;
             }
-        }
 
-        // 메세지타입 1:SMS 2:LMS 3:MMS
-        var msgType = "1";
-        var msgTypeGubun = $("#lblMsgType").text();
-        var txtByte = $("#lblTxtByte").text();
-        var msgOneAmt = $("#lblSmsOneAmt").text(); // SMS건당금액
-        if(msgTypeGubun == "LMS") {
-            msgType = "2";
-            msgOneAmt = $("#lblLmsOneAmt").text(); // LMS건당금액
-            if(parseInt(txtByte) > 2000) {
-                $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
-                return;
-            }
-        } else if(msgTypeGubun == "MMS") {
-            msgType = "3";
-            msgOneAmt = $("#lblMmsOneAmt").text(); // MMS건당금액
-            if(parseInt(txtByte) > 2000) {
-                $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
-                return;
-            }
-        }
-
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                params.push($scope.flex.collectionView.items[i]);
-            }
-        }
-        if(params.length <= 0) {
-            s_alert.pop(messages["cmm.not.select"]);
-            return;
-        }
-
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                if ($scope.flex.collectionView.items[i].telNo === "") {
-                    $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
+            if ($("#srchTitle").val() != "") {
+                // 최대길이 체크
+                if (nvl($("#srchTitle").val(), '').getByteLengthForOracle() > 40) {
+                    $scope._popMsg(messages["smsSend.titleLengthChk"]); // 제목 길이가 너무 깁니다.
                     return false;
                 }
             }
-        }
 
-        // 잔여금액
-        var smsAmt = $("#lblSmsAmt").text();
-        if(parseInt(smsAmt) < 1) {
-            $scope._popMsg(messages["smsSend.smsAmtAlert"]); // 전송가능한 금액이 없습니다.
-            return;
-        }
-        if(parseInt(smsAmt) < (parseInt(params.length) * parseInt(msgOneAmt))) {
-            $scope._popMsg(messages["smsSend.smsAmtOverAlert"] + (parseInt(params.length) * parseInt(msgOneAmt)) + messages["smsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
-            return;
-        }
+            // 메세지타입 1:SMS 2:LMS 3:MMS
+            var msgType = "1";
+            var msgTypeGubun = $("#lblMsgType").text();
+            var txtByte = $("#lblTxtByte").text();
+            var msgOneAmt = $("#lblSmsOneAmt").text(); // SMS건당금액
+            if (msgTypeGubun == "LMS") {
+                msgType = "2";
+                msgOneAmt = $("#lblLmsOneAmt").text(); // LMS건당금액
+                if (parseInt(txtByte) > 2000) {
+                    $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                    return;
+                }
+            } else if (msgTypeGubun == "MMS") {
+                msgType = "3";
+                msgOneAmt = $("#lblMmsOneAmt").text(); // MMS건당금액
+                if (parseInt(txtByte) > 2000) {
+                    $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                    return;
+                }
+            }
 
-        // 0:전송, 1:예약
-        if(reserveYn == "1") {
-            var param = {};
-            param.reserveYn = reserveYn;
-            param.gubun = "smsSend";
-            param.msgType = msgType;
-            param.msgOneAmt = msgOneAmt;
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    params.push($scope.flex.collectionView.items[i]);
+                }
+            }
+            if (params.length <= 0) {
+                s_alert.pop(messages["cmm.not.select"]);
+                return;
+            }
 
-            $scope.setSelectedSmsSend(param);
-            $scope.wjSmsReserveLayer.show(true);
-            event.preventDefault();
-        } else {
-            // 전송 저장
-            $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt);
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    if ($scope.flex.collectionView.items[i].telNo === "") {
+                        $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
+                        return false;
+                    }
+                }
+            }
+
+            // 잔여금액
+            var smsAmt = $("#lblSmsAmt").text();
+            if (parseInt(smsAmt) < 1) {
+                $scope._popMsg(messages["smsSend.smsAmtAlert"]); // 전송가능한 금액이 없습니다.
+                return;
+            }
+            if (parseInt(smsAmt) < (parseInt(params.length) * parseInt(msgOneAmt))) {
+                $scope._popMsg(messages["smsSend.smsAmtOverAlert"] + (parseInt(params.length) * parseInt(msgOneAmt)) + messages["smsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
+                return;
+            }
+
+            // 0:전송, 1:예약
+            if (reserveYn == "1") {
+                var param = {};
+                param.reserveYn = reserveYn;
+                param.gubun = "smsSend";
+                param.msgType = msgType;
+                param.msgOneAmt = msgOneAmt;
+
+                $scope.setSelectedSmsSend(param);
+                $scope.wjSmsReserveLayer.show(true);
+                event.preventDefault();
+            } else {
+                // 전송 저장
+                $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt);
+            }
         }
     };
 
@@ -682,10 +772,24 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 발신번호추가
     $scope.telNoAdd = function() {
-        $scope.wjSmsTelNoRegisterLayer.show(true);
-        var scope = agrid.getScope("smsTelNoRegisterCtrl");
-        scope.getVal();
-        event.preventDefault();
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+
+            if (response.data.data.list === 0) {
+
+                $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function () {
+                    // 본인인증 팝업창 띄우기
+                    $scope.verify();
+
+                });
+            } else {
+                $scope.wjSmsTelNoRegisterLayer.show(true);
+                var scope = agrid.getScope("smsTelNoRegisterCtrl");
+                scope.getVal();
+                event.preventDefault();
+            }
+        });
     };
 
     // 수신자추가

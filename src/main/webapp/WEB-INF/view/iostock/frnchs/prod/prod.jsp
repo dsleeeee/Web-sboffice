@@ -45,14 +45,14 @@
       <%-- 상품코드 --%>
       <th><s:message code="prodStockInfo.prodCd"/></th>
       <td>
-        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
+        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     <tr>
       <%-- 상품명 --%>
       <th><s:message code="prodStockInfo.prodNm"/></th>
       <td>
-        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="16"/>
+        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="16" onkeyup="fnNxBtnSearch();"/>
       </td>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <input type="hidden" id="prodSelectStoreCd" value="" />

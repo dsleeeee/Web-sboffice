@@ -79,12 +79,12 @@
             <%-- 회원번호 --%>
             <th><s:message code="regist.membr.no"/></th>
             <td>
-                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10"/>
+                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 회원명 --%>
             <th><s:message code="regist.membr.nm"/></th>
             <td>
-                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15"/>
+                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
@@ -100,14 +100,14 @@
             <%-- 사용매장 --%>
             <th><s:message code="regist.use.store.cd"/></th>
             <td>
-                <input type="text" id="storeCd" class="sb-input w100" ng-model="storeCd" maxlength="15"/>
+                <input type="text" id="storeCd" class="sb-input w100" ng-model="storeCd" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
             <%-- 회원카드번호 --%>
             <th><s:message code="regist.membr.card.no"/></th>
             <td>
-                <input type="text" id="membrCardNo" class="sb-input w100" ng-model="membrCardNo" maxlength="15"/>
+                <input type="text" id="membrCardNo" class="sb-input w100" ng-model="membrCardNo" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 카드사용구분 --%>
             <th><s:message code="regist.membr.card.yn"/></th>
@@ -147,7 +147,7 @@
             <%-- E-Mail --%>
             <th>E-Mail</th>
             <td>
-                <input type="text" id="emailAddr" class="sb-input w100" ng-model="emailAddr" maxlength="15"/>
+                <input type="text" id="emailAddr" class="sb-input w100" ng-model="emailAddr" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
@@ -170,7 +170,7 @@
             <%-- 핸드폰번호 --%>
             <th><s:message code="regist.tel"/></th>
             <td>
-                <input type="text" id="phoneNo" class="sb-input w100" ng-model="phoneNo" maxlength="15"/>
+                <input type="text" id="phoneNo" class="sb-input w100" ng-model="phoneNo" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
@@ -277,11 +277,11 @@
             <td>
                 <div class="sb-select">
                     <span class="txtIn w110px">
-                        <input type="text" id="startSaveSale" class="sb-input w100" ng-model="startSaveSale" maxlength="15"/>
+                        <input type="text" id="startSaveSale" class="sb-input w100" ng-model="startSaveSale" maxlength="15" onkeyup="fnNxBtnSearch();"/>
                     </span>
                     <span class="rg">~</span>
                     <span class="txtIn w110px">
-                        <input type="text" id="endSaveSale" class="sb-input w100" ng-model="endSaveSale" maxlength="15"/>
+                        <input type="text" id="endSaveSale" class="sb-input w100" ng-model="endSaveSale" maxlength="15" onkeyup="fnNxBtnSearch();"/>
                     </span>
                 </div>
             </td>
@@ -290,11 +290,11 @@
             <td>
                 <div class="sb-select">
                     <span class="txtIn w110px">
-                        <input type="text" id="startAvablPoint" class="sb-input w100" ng-model="startAvablPoint" maxlength="15"/>
+                        <input type="text" id="startAvablPoint" class="sb-input w100" ng-model="startAvablPoint" maxlength="15" onkeyup="fnNxBtnSearch();"/>
                     </span>
                     <span class="rg">~</span>
                     <span class="txtIn w110px">
-                        <input type="text" id="endAvablPoint" class="sb-input w100" ng-model="endAvablPoint" maxlength="15"/>
+                        <input type="text" id="endAvablPoint" class="sb-input w100" ng-model="endAvablPoint" maxlength="15" onkeyup="fnNxBtnSearch();"/>
                     </span>
                 </div>
             </td>
@@ -303,7 +303,7 @@
             <%-- 회원단축번호 --%>
             <th><s:message code="regist.membr.stortNo"/></th>
             <td>
-                <input type="text" id="shortNo" class="sb-input w100" ng-model="shortNo" maxlength="15"/>
+                <input type="text" id="shortNo" class="sb-input w100" ng-model="shortNo" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 결혼여부 --%>
             <th><s:message code="regist.wedding"/></th>

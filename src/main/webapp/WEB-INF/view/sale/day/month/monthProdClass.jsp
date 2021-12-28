@@ -14,7 +14,7 @@
         <a href="#" class="open fl"> <s:message code="month.prodClassSale" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('monthProdClassCtrl',1)">
+            <button class="btn_blue fr" ng-click="_broadcast('monthProdClassCtrl',1)" id="nxBtnSearch5">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -86,7 +86,7 @@
                     <s:message code="month.prodCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchMonthProdClassProdCd" ng-model="prodCd" />
+                    <input type="text" class="sb-input w100" id="srchMonthProdClassProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
             </tr>
             <tr>
@@ -95,14 +95,14 @@
                     <s:message code="month.prodNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchMonthProdClassProdNm" ng-model="prodNm" />
+                    <input type="text" class="sb-input w100" id="srchMonthProdClassProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
                 <%-- 바코드 --%>
                 <th>
                     <s:message code="month.barCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchMonthProdClassBarCd" ng-model="barCd" />
+                    <input type="text" class="sb-input w100" id="srchMonthProdClassBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
             </tr>
             <tr>

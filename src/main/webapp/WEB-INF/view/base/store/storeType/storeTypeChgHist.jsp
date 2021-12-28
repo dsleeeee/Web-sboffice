@@ -14,7 +14,7 @@
             <a href="#" class="open fl"><s:message code="storeType.storeTypeChgHist" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('storeTypeChgHistCtrl', 1)">
+                <button class="btn_blue fr" id="nxBtnSearch3" ng-click="_pageView('storeTypeChgHistCtrl', 1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -30,31 +30,13 @@
             <%-- 변경 일자 --%>
             <tr>
                 <th><s:message code="storeType.chgDate" /></th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"><input id="stchStartDate" name="stchStartDate" class="w110px"/></span>
                         <span class="rg">~</span>
                         <span class="txtIn"><input id="stchEndDate" name="stchEndDate" class="w110px"/></span>
                     </div>
                 </td>
-            </tr>
-            <tr>
-                <%-- 매장타입코드 --%>
-                <th>
-                    <s:message code="storeType.code" />
-                </th>
-                <td>
-                    <input type="text" class="sb-input w100" id="stchStoreTypeCd" ng-model="stchStoreTypeCd" />
-                </td>
-                <%-- 매장타입명 --%>
-                <th>
-                    <s:message code="storeType.typeNm" />
-                </th>
-                <td>
-                    <input type="text" class="sb-input w100" id="stchStoreTypeNm" ng-model="stchStoreTypeNm" />
-                </td>
-            </tr>
-            <tr>
                 <th><s:message code="storeType.procFg" /></th>
                 <td>
                     <div class="sb-select">
@@ -72,8 +54,21 @@
                         </span>
                     </div>
                 </td>
-                <th></th>
+            </tr>
+            <tr>
+                <%-- 매장타입코드 --%>
+                <th>
+                    <s:message code="storeType.code" />
+                </th>
                 <td>
+                    <input type="text" class="sb-input w100" id="stchStoreTypeCd" ng-model="stchStoreTypeCd" onkeyup="fnNxBtnSearch('3');"/>
+                </td>
+                <%-- 매장타입명 --%>
+                <th>
+                    <s:message code="storeType.typeNm" />
+                </th>
+                <td>
+                    <input type="text" class="sb-input w100" id="stchStoreTypeNm" ng-model="stchStoreTypeNm" onkeyup="fnNxBtnSearch('3');"/>
                 </td>
             </tr>
             </tbody>

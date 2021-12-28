@@ -113,12 +113,12 @@
             <%-- 회원번호 --%>
             <th><s:message code="regist.membr.no"/></th>
             <td>
-                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
+                <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 회원명(한글) --%>
             <th><s:message code="regist.membr.nm"/></th>
             <td>
-                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
+                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         </tbody>
@@ -466,7 +466,7 @@
             <s:message code="regist.memberPointAdjust"/>
         </button>
         <%-- SMS전송 --%>
-        <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()" style="display: none;">
+        <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">
             <s:message code="regist.smsSend"/>
         </button>
     </div>

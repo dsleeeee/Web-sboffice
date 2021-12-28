@@ -65,19 +65,19 @@
         <%--사원번호 --%>
         <th><s:message code="hqEmp.empNo" /></th>
         <td>
-          <input type="text" id="srchEmpNo" name="srchEmpNo" ng-model="empNo" class="sb-input w100" maxlength="4" />
+          <input type="text" id="srchEmpNo" name="srchEmpNo" ng-model="empNo" class="sb-input w100" maxlength="4" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 사원명 --%>
         <th><s:message code="hqEmp.empNm" /></th>
         <td>
-          <input type="text" id="srchEmpNm" name="srchEmpNm" ng-model="empNm" class="sb-input w100" maxlength="15" />
+          <input type="text" id="srchEmpNm" name="srchEmpNm" ng-model="empNm" class="sb-input w100" maxlength="15" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>
         <%--사원ID --%>
         <th><s:message code="hqEmp.userId" /></th>
         <td>
-          <input type="text" id="srchUserId" name="srchUserId" ng-model="userId" class="sb-input w100" maxlength="16" />
+          <input type="text" id="srchUserId" name="srchUserId" ng-model="userId" class="sb-input w100" maxlength="16" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 재직여부 --%>
         <th><s:message code="hqEmp.serviceFg" /></th>
@@ -99,7 +99,7 @@
         <%--휴대폰번호 --%>
         <th><s:message code="hqEmp.mpNo" /></th>
         <td>
-          <input type="text" id="srchMpNo" name="srchMpNo" ng-model="mpNo" class="sb-input w100" maxlength="15" />
+          <input type="text" id="srchMpNo" name="srchMpNo" ng-model="mpNo" class="sb-input w100" maxlength="15" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 웹사용여부 --%>
         <th><s:message code="hqEmp.webUseYn" /></th>

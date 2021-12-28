@@ -146,7 +146,7 @@
                         </div>
                     </td>
                 </tr>
-                <c:if test="${storeTypeApplyEnvstVal == '1'}">
+                <%--<c:if test="${storeTypeApplyEnvstVal == '1'}">
                     <tr>
                         <th><s:message code="storeType.saleUprcApply"/></th>
                         <td>
@@ -154,7 +154,7 @@
                             <div style="padding-top: 3px; padding-left: 25px;"><s:message code="storeType.saleUprcApply" /></div>
                         </td>
                     </tr>
-                </c:if>
+                </c:if>--%>
                 </tbody>
             </table>
             <div class="btnSet2">
@@ -175,4 +175,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20211202.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20211202.04" charset="utf-8"></script>

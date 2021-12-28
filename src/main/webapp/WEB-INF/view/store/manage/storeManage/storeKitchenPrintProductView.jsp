@@ -24,7 +24,7 @@
       <%-- 상품명 --%>
       <th><s:message code="storeManage.prodNm"/></th>
       <td>
-        <input type="text" id="srchProdNm" name="srchProdNm" class="sb-input w60" maxlength="13"/>
+        <input type="text" id="srchProdNm" name="srchProdNm" class="sb-input w60" maxlength="13" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     </tbody>

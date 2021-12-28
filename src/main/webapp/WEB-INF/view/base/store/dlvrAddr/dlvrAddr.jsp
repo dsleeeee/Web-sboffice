@@ -17,7 +17,7 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('dlvrAddrCtrl',1)">
+                <button class="btn_blue fr" ng-click="_broadcast('dlvrAddrCtrl',1)" id="nxBtnSearch">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -33,7 +33,7 @@
                 <%-- 배달권역명 --%>
                 <th><s:message code="dlvrAddr.dlvrAddrNm"/></th>
                 <td>
-                    <input type="text" id="srchAddrNm" ng-model="addrNm" class="sb-input w60"/><br/>
+                    <input type="text" id="srchAddrNm" ng-model="addrNm" class="sb-input w60" onkeyup="fnNxBtnSearch();"/><br/>
                     <span>법정 시/구/동 명을 입력 후 조회 버튼을 눌러주세요</span>
                     <br/>
                     <br/>

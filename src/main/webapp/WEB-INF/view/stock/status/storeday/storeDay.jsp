@@ -51,16 +51,16 @@
       <tr>
         <%-- 상품코드 --%>
         <th><s:message code="storeDay.prodCd"/></th>
-        <td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="srchProdCd"/></td>
+        <td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="srchProdCd" onkeyup="fnNxBtnSearch();"/></td>
 
         <%-- 상품명 --%>
         <th><s:message code="storeDay.prodNm"/></th>
-        <td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="srchProdNm"/></td>
+        <td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="srchProdNm" onkeyup="fnNxBtnSearch();"/></td>
       </tr>
       <tr>
         <%-- 바코드 --%>
         <th><s:message code="storeDay.barcdCd"/></th>
-        <td><input type="text" class="sb-input w100" id="srchBarcdCd" ng-model="srchBarcdCd"/></td>
+        <td><input type="text" class="sb-input w100" id="srchBarcdCd" ng-model="srchBarcdCd" onkeyup="fnNxBtnSearch();"/></td>
 
         <%-- 상품분류 --%>
         <th><s:message code="storeDay.prodClass"/></th>

@@ -70,12 +70,12 @@
       <%-- 상품코드 --%>
       <th><s:message code="prod.prodCd" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 상품명 --%>
       <th><s:message code="prod.prodNm" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     <tr>
@@ -90,7 +90,7 @@
       <%-- 바코드 --%>
       <th><s:message code="prod.barCd" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+        <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     <tr>
@@ -110,10 +110,6 @@
           </wj-combo-box>
         </div>
       </td>
-      <th></th>
-      <td></td>
-    </tr>
-    <tr>
       <%-- 매장상태 --%>
       <th><s:message code="prodKitchenprintLink.sysStatFg" /></th>
       <td>
@@ -132,7 +128,8 @@
           </wj-combo-box>
         </div>
       </td>
-
+    </tr>
+    <tr>
       <th><s:message code="prodKitchenprintLink.store"/></th>
       <td>
         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>

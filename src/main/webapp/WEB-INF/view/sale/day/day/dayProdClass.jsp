@@ -12,7 +12,7 @@
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="day.prodClass"/></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dayProdClassCtrl')">
+        <button class="btn_blue fr mt5 mr10" id="nxBtnSearch5" ng-click="_broadcast('dayProdClassCtrl')">
             <s:message code="cmm.search"/>
         </button>
     </div>
@@ -76,17 +76,17 @@
             </td>
             <th><s:message code="day.prodClass.prodCd"/></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdClassProdCd" ng-model="prodCd" />
+                <input type="text" class="sb-input w100" id="srchProdClassProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('5');"/>
             </td>
         </tr>
         <tr>
             <th><s:message code="day.prodClass.prodNm"/></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdClassProdNm" ng-model="prodNm" />
+                <input type="text" class="sb-input w100" id="srchProdClassProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('5');"/>
             </td>
             <th><s:message code="day.prodClass.barCd"/></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdClassBarCd" ng-model="barCd" />
+                <input type="text" class="sb-input w100" id="srchProdClassBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch('5');"/>
             </td>
         </tr>
         <tr>

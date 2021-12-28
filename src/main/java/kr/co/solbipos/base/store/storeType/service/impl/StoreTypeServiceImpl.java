@@ -454,6 +454,14 @@ public class StoreTypeServiceImpl implements StoreTypeService {
 
         }
 
+        // 적용일시가 없는 경우, 매장타입적용 즉시실행
+        StoreTypeVO storeTypeVO2 = new StoreTypeVO();
+        storeTypeVO2 = storeTypeVOs[0];
+
+        if(storeTypeVO2.getApplyProcFg() != null && "5".equals(storeTypeVO2.getApplyProcFg())){
+            storeTypeMapper.insertHqProductToStoreAll2(storeTypeVO2);
+        }
+
         if (result == storeTypeVOs.length) {
             return result;
         } else {

@@ -39,7 +39,7 @@
       <%-- 전표번호 --%>
       <th><s:message code="vendrOrder.slipNo"/></th>
       <td>
-        <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8"/>
+        <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 진행 --%>
       <th><s:message code="vendrOrder.procFg"/></th>

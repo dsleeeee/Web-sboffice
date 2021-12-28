@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="smsSendHist.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('smsSendHistCtrl',1)">
+                <button class="btn_blue fr" ng-click="_pageView('smsSendHistCtrl',1)" id="nxBtnSearch1">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -49,14 +49,14 @@
                         <s:message code="smsSendHist.subject" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchSubject" ng-model="subject" />
+                        <input type="text" class="sb-input w100" id="srchSubject" ng-model="subject" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                     <%-- 메세지 --%>
                     <th>
                         <s:message code="smsSendHist.msgContent" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchMsgContent" ng-model="msgContent" />
+                        <input type="text" class="sb-input w100" id="srchMsgContent" ng-model="msgContent" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                 </tr>
                 <tr>

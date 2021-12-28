@@ -14,7 +14,7 @@
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="abc.abc" /></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnAbcSearch" ng-click="_broadcast('abcCtrlSrch')">
+        <button class="btn_blue fr mt5 mr10" id="nxBtnSearch" ng-click="_broadcast('abcCtrlSrch')">
             <s:message code="cmm.search" />
         </button>
     </div>
@@ -61,9 +61,9 @@
                 <%-- 누적판매비율 --%>
                 <th><s:message code="abc.totSaleRate" /></th>
                 <td colspan="3">
-                    <span class="txtIn" style="width:20%;">A등급<input id="abcGradeA" class="sb-input" value="70" style="width:40%;">%</span>
-                    <span class="txtIn" style="width:20%;">B등급<input id="abcGradeB" class="sb-input" value="90" style="width:40%;">%</span>
-                    <span class="txtIn" style="width:20%;">C등급<input id="abcGradeC" class="sb-input" value="100" style="width:45%;">%</span>
+                    <span class="txtIn" style="width:20%;">A등급<input id="abcGradeA" class="sb-input" value="70" style="width:40%;" onkeyup="fnNxBtnSearch();">%</span>
+                    <span class="txtIn" style="width:20%;">B등급<input id="abcGradeB" class="sb-input" value="90" style="width:40%;" onkeyup="fnNxBtnSearch();">%</span>
+                    <span class="txtIn" style="width:20%;">C등급<input id="abcGradeC" class="sb-input" value="100" style="width:45%;" onkeyup="fnNxBtnSearch();">%</span>
                     <span class="txtIn" style="width:20%;">그외 Z등급</span>
                 </td>
             </tr>

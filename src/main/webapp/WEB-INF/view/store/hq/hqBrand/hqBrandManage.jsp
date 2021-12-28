@@ -38,14 +38,14 @@
         <th><s:message code="hqBrand.hqBrandCd" /></th>
         <td>
           <div class="sb-select">
-            <input type="text" class="sb-input w100" id="srchHqBrandCd" ng-model="hqBrandCd" />
+            <input type="text" class="sb-input w100" id="srchHqBrandCd" ng-model="hqBrandCd" onkeyup="fnNxBtnSearch();"/>
           </div>
         </td>
         <%-- 브랜드명 --%>
         <th><s:message code="hqBrand.hqBrandNm" /></th>
         <td>
           <div class="sb-select">
-            <input type="text" class="sb-input w100" id="srchHqBrandNm" ng-model="hqBrandNm" />
+            <input type="text" class="sb-input w100" id="srchHqBrandNm" ng-model="hqBrandNm" onkeyup="fnNxBtnSearch();"/>
           </div>
         </td>
       </tr>

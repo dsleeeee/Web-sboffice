@@ -26,7 +26,7 @@
                 <%-- 그룹명 --%>
                 <th><s:message code="multistoreGroup.groupNm" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="multistoreNm"/>
+                    <input type="text" class="sb-input w100" ng-model="multistoreNm" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 사용여부 --%>
                 <th><s:message code="multistoreGroup.useYn" /></th>

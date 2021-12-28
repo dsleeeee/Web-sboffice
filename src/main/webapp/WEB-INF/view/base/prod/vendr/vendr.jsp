@@ -13,7 +13,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('vendrCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('vendrCtrl',1)" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -29,10 +29,10 @@
             <tr>
                 <%-- 거래처코드 --%>
                 <th><s:message code="vendr.vendrCd" /></th>
-                <td><input type="text"  class="sb-input w100" id="vendrCd" ng-model="vendrCd" /></td>
+                <td><input type="text"  class="sb-input w100" id="vendrCd" ng-model="vendrCd" onkeyup="fnNxBtnSearch();"/></td>
                 <%-- 거래처명 --%>
                 <th><s:message code="vendr.vendrNm" /></th>
-                <td><input type="text"  class="sb-input w100" id="vendrNm" ng-model="vendrNm" /></td>
+                <td><input type="text"  class="sb-input w100" id="vendrNm" ng-model="vendrNm" onkeyup="fnNxBtnSearch();"/></td>
             </tr>
             <tr>
                 <%-- 거래처구분 --%>
