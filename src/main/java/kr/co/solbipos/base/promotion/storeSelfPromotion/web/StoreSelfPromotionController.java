@@ -7,11 +7,9 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
+import kr.co.solbipos.base.promotion.promotion.service.PromotionService;
 import kr.co.solbipos.base.promotion.storeSelfPromotion.service.StoreSelfPromotionService;
 import kr.co.solbipos.base.promotion.storeSelfPromotion.service.StoreSelfPromotionVO;
-import kr.co.solbipos.sale.dlvr.orderChannel.service.OrderChannelVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,7 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : StoreSelfPromotionController.java
@@ -51,13 +50,15 @@ public class StoreSelfPromotionController {
 
     private final SessionService sessionService;
     private final StoreSelfPromotionService storeSelfPromotionService;
+    private final PromotionService promotionService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreSelfPromotionController(SessionService sessionService, StoreSelfPromotionService storeSelfPromotionService, CmmEnvUtil cmmEnvUtil) {
+    public StoreSelfPromotionController(SessionService sessionService, StoreSelfPromotionService storeSelfPromotionService, PromotionService promotionService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.storeSelfPromotionService = storeSelfPromotionService;
+        this.promotionService = promotionService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -71,6 +72,15 @@ public class StoreSelfPromotionController {
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 프로모션 특이사항 환경변수 값(본사의 환경변수 1095 사용)
+        String promotionEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1095"));
+        model.addAttribute("promotionEnvstVal", promotionEnvstVal);
+
+        // 프로모션 종류 조회(콤보박스용)
+        model.addAttribute("promotionTypeList", convertToJson(promotionService.getPromotionTypeList()));
 
         return "base/promotion/storeSelfPromotion/storeSelfPromotion";
     }

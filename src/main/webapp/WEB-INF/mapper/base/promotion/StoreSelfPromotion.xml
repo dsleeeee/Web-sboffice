@@ -91,6 +91,7 @@
               tmph.USE_YN,
               tmph.REG_FG,
               SUBSTR(tmph.REG_DT, 1, 8) AS REG_DT,
+              tmph.PROMO_TYPE,
               tmpc.DATE_YN,
               tmpc.START_YMD,
               tmpc.END_YMD,
