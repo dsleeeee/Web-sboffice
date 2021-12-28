@@ -22,7 +22,7 @@
         SUBSTR(tmsr.FROM_SALE_DATE, 0, 6) AS SALE_MONTH,
         tmsr.STORE_CD,
         tms.STORE_NM,
-        '전체매장통합파일' AS PROC_GUBUN,
+--         '전체매장통합파일' AS PROC_GUBUN,
         tmsr.PROC_DT,
         (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = tmsr.REG_ID) AS USER_NM,
         tmsr.PROC_FG,
