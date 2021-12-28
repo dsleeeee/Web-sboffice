@@ -388,98 +388,98 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // <-- 전송, 예약 -->
     // 전송, 예약
     $scope.smsSendReserve = function(reserveYn) {
-        if($scope.verifyChk()) {
-            // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
-            if (gridYn == "N") {
-                s_alert.pop(messages["cmm.not.select"]);
-                return;
-            }
+        $scope.verifyChk();
 
-            if ($scope.telNoCombo == "") {
-                $scope._popMsg(messages["smsSend.telNoAlert"]); // 사전등록된 발신번호가 없습니다. <br/> [발신번호 추가] 버튼으로 발신번호 사전등록하여 주십시오.
-                return;
-            }
+        // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+        if (gridYn == "N") {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
 
-            if ($("#messageContent").val() == "") {
-                $scope._popMsg(messages["smsSend.messageContentAlert"]); // 메세지를 입력해주세요.
+        if ($scope.telNoCombo == "") {
+            $scope._popMsg(messages["smsSend.telNoAlert"]); // 사전등록된 발신번호가 없습니다. <br/> [발신번호 추가] 버튼으로 발신번호 사전등록하여 주십시오.
+            return;
+        }
+
+        if ($("#messageContent").val() == "") {
+            $scope._popMsg(messages["smsSend.messageContentAlert"]); // 메세지를 입력해주세요.
+            return false;
+        }
+
+        if ($("#srchTitle").val() != "") {
+            // 최대길이 체크
+            if (nvl($("#srchTitle").val(), '').getByteLengthForOracle() > 40) {
+                $scope._popMsg(messages["smsSend.titleLengthChk"]); // 제목 길이가 너무 깁니다.
                 return false;
             }
+        }
 
-            if ($("#srchTitle").val() != "") {
-                // 최대길이 체크
-                if (nvl($("#srchTitle").val(), '').getByteLengthForOracle() > 40) {
-                    $scope._popMsg(messages["smsSend.titleLengthChk"]); // 제목 길이가 너무 깁니다.
+        // 메세지타입 1:SMS 2:LMS 3:MMS
+        var msgType = "1";
+        var msgTypeGubun = $("#lblMsgType").text();
+        var txtByte = $("#lblTxtByte").text();
+        var msgOneAmt = $("#lblSmsOneAmt").text(); // SMS건당금액
+        if (msgTypeGubun == "LMS") {
+            msgType = "2";
+            msgOneAmt = $("#lblLmsOneAmt").text(); // LMS건당금액
+            if (parseInt(txtByte) > 2000) {
+                $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                return;
+            }
+        } else if (msgTypeGubun == "MMS") {
+            msgType = "3";
+            msgOneAmt = $("#lblMmsOneAmt").text(); // MMS건당금액
+            if (parseInt(txtByte) > 2000) {
+                $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
+                return;
+            }
+        }
+
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+        if (params.length <= 0) {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                if ($scope.flex.collectionView.items[i].telNo === "") {
+                    $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
                     return false;
                 }
             }
+        }
 
-            // 메세지타입 1:SMS 2:LMS 3:MMS
-            var msgType = "1";
-            var msgTypeGubun = $("#lblMsgType").text();
-            var txtByte = $("#lblTxtByte").text();
-            var msgOneAmt = $("#lblSmsOneAmt").text(); // SMS건당금액
-            if (msgTypeGubun == "LMS") {
-                msgType = "2";
-                msgOneAmt = $("#lblLmsOneAmt").text(); // LMS건당금액
-                if (parseInt(txtByte) > 2000) {
-                    $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
-                    return;
-                }
-            } else if (msgTypeGubun == "MMS") {
-                msgType = "3";
-                msgOneAmt = $("#lblMmsOneAmt").text(); // MMS건당금액
-                if (parseInt(txtByte) > 2000) {
-                    $scope._popMsg(messages["smsSend.txtByteOverAlert"]); // 2000 바이트 이상 전송이 불가합니다.
-                    return;
-                }
-            }
+        // 잔여금액
+        var smsAmt = $("#lblSmsAmt").text();
+        if (parseInt(smsAmt) < 1) {
+            $scope._popMsg(messages["smsSend.smsAmtAlert"]); // 전송가능한 금액이 없습니다.
+            return;
+        }
+        if (parseInt(smsAmt) < (parseInt(params.length) * parseInt(msgOneAmt))) {
+            $scope._popMsg(messages["smsSend.smsAmtOverAlert"] + (parseInt(params.length) * parseInt(msgOneAmt)) + messages["smsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
+            return;
+        }
 
-            var params = new Array();
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                if ($scope.flex.collectionView.items[i].gChk) {
-                    params.push($scope.flex.collectionView.items[i]);
-                }
-            }
-            if (params.length <= 0) {
-                s_alert.pop(messages["cmm.not.select"]);
-                return;
-            }
+        // 0:전송, 1:예약
+        if (reserveYn == "1") {
+            var param = {};
+            param.reserveYn = reserveYn;
+            param.gubun = "smsSend";
+            param.msgType = msgType;
+            param.msgOneAmt = msgOneAmt;
 
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                if ($scope.flex.collectionView.items[i].gChk) {
-                    if ($scope.flex.collectionView.items[i].telNo === "") {
-                        $scope._popMsg(messages["smsSend.telNoBlank"]); // 수신번호를 입력해주세요.
-                        return false;
-                    }
-                }
-            }
-
-            // 잔여금액
-            var smsAmt = $("#lblSmsAmt").text();
-            if (parseInt(smsAmt) < 1) {
-                $scope._popMsg(messages["smsSend.smsAmtAlert"]); // 전송가능한 금액이 없습니다.
-                return;
-            }
-            if (parseInt(smsAmt) < (parseInt(params.length) * parseInt(msgOneAmt))) {
-                $scope._popMsg(messages["smsSend.smsAmtOverAlert"] + (parseInt(params.length) * parseInt(msgOneAmt)) + messages["smsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
-                return;
-            }
-
-            // 0:전송, 1:예약
-            if (reserveYn == "1") {
-                var param = {};
-                param.reserveYn = reserveYn;
-                param.gubun = "smsSend";
-                param.msgType = msgType;
-                param.msgOneAmt = msgOneAmt;
-
-                $scope.setSelectedSmsSend(param);
-                $scope.wjSmsReserveLayer.show(true);
-                event.preventDefault();
-            } else {
-                // 전송 저장
-                $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt);
-            }
+            $scope.setSelectedSmsSend(param);
+            $scope.wjSmsReserveLayer.show(true);
+            event.preventDefault();
+        } else {
+            // 전송 저장
+            $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt);
         }
     };
 
