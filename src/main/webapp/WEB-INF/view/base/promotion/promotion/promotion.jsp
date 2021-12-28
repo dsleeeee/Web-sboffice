@@ -39,7 +39,7 @@
                 <%-- 프로모션명 --%>
                 <th><s:message code="promotion.promotionNm" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="promotionNm"/>
+                    <input type="text" class="sb-input w100" ng-model="promotionNm" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 사용여부 --%>
                 <th><s:message code="promotion.useYn" /></th>

@@ -13,7 +13,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="prodsale.fayfg"/></a>
     		<%-- 조회 --%>
-    		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('prodPayFgCtrl',1)">
+    		<button class="btn_blue fr mt5 mr10" id="nxBtnSearch3" ng-click="_pageView('prodPayFgCtrl',1)">
     			<s:message code="cmm.search"/>
     		</button>
 		</div>
@@ -50,10 +50,10 @@
 			<tr>
 	        <%-- 상품코드 --%>
 	        <th><s:message code="prodcalss.prodCd" /></th>
-	        <td><input type="text" id="srchPayFgProdCd" class="sb-input w100" maxlength="13"/></td>
+	        <td><input type="text" id="srchPayFgProdCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('3');"/></td>
 	        <%-- 상품명 --%>
 	        <th><s:message code="prodcalss.prodNm" /></th>
-	        <td><input type="text" id="srchPayFgProdNm" class="sb-input w100" maxlength="100"/></td>
+	        <td><input type="text" id="srchPayFgProdNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('3');"/></td>
 	      	</tr>
       		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	        <tr>

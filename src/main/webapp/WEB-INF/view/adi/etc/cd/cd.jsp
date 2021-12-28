@@ -14,7 +14,13 @@
 <div class="subCon">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" ng-click="_broadcast('representCtrl')" id="nxBtnSearch">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -28,12 +34,12 @@
         <%-- 코드 --%>
         <th><s:message code="cd.nmcodeCd" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchNmcodeCd" ng-model="nmcodeCd" />
+          <input type="text" class="sb-input w100" id="srchNmcodeCd" ng-model="nmcodeCd" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 코드명 --%>
         <th><s:message code="cd.nmcodeNm" /></th>
         <td>
-            <input type="text" class="sb-input w100" id="srchNmcodeNm" ng-model="nmcodeNm" />
+            <input type="text" class="sb-input w100" id="srchNmcodeNm" ng-model="nmcodeNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr style='display:none;'>
@@ -59,10 +65,6 @@
     </tbody>
   </table>
 
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh">
-      <button class="btn_blue fr" ng-click="_broadcast('representCtrl')"><s:message code="cmm.search" /></button>
-  </div>
 
   <input type="hidden" id="s_nmcodeCd" name="s_nmcodeCd" value="" />
   <input type="hidden" id="s_nmcodeItem1" name="s_nmcodeItem1" value="" />

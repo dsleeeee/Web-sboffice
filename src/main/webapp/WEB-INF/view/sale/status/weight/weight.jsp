@@ -15,7 +15,7 @@
         <a href="#" class="open fl"> <s:message code="weight.weightSale" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('weightCtrl',1)">
+            <button class="btn_blue fr" ng-click="_broadcast('weightCtrl',1)" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -59,10 +59,10 @@
             <tr>
                 <%-- 상품코드 --%>
                 <th><s:message code="weight.prodCd"/></th>
-                <td><input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="50"/></td>
+                <td><input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="50" onkeyup="fnNxBtnSearch();"/></td>
                 <%-- 상품명 --%>
                 <th><s:message code="weight.prodNm"/></th>
-                <td><input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/></td>
+                <td><input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50" onkeyup="fnNxBtnSearch();"/></td>
             </tr>
         </tbody>
     </table>

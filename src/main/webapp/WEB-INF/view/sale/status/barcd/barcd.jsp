@@ -12,7 +12,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="barcd.barcd"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnBarcdSearch" ng-click="_broadcast('barcdMainCtrlSrch')">
+      <button class="btn_blue fr mt5 mr10" id="nxBtnSearch" ng-click="_broadcast('barcdMainCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -80,13 +80,13 @@
         <%-- 바코드 --%>
         <th><s:message code="rtnStatus.barcdCd"/></th>
         <td>
-            <input type="text" class="sb-input w100" id="searchBarCd" ng-model="searchBarCd" ng-keydown="searchBarCdKeyEvt($event)"/>
+            <input type="text" class="sb-input w100" id="searchBarCd" ng-model="searchBarCd" ng-keydown="searchBarCdKeyEvt($event)" onkeyup="fnNxBtnSearch();"/>
         </td>
 
         <%-- 상품명 --%>
         <th><s:message code="prodSaleDtl.prodNm"/></th>
         <td>
-            <input type="text" class="sb-input w100" id="searchProdNm" ng-model="searchProdNm"/>
+            <input type="text" class="sb-input w100" id="searchProdNm" ng-model="searchProdNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       </tbody>

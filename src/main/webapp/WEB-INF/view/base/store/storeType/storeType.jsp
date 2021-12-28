@@ -15,7 +15,7 @@
             <c:if test="${storeTypeAutoEnvstVal == '0'}">
                 <button class="btn_blue fr mt5 mr10" id="btnApplyStore" ng-click="applyStore()"><s:message code="storeType.applyStore"/></button>
             </c:if>
-            <button class="btn_blue fr mt5 mr5" id="btnSearchStoreType" ng-click="_pageView('storeTypeCtrl', 1)"><s:message code="cmm.search"/></button>
+            <button class="btn_blue fr mt5 mr5" id="nxBtnSearch1" ng-click="_pageView('storeTypeCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
         <%-- 조회조건 --%>
         <table class="searchTbl">
@@ -30,7 +30,7 @@
                 <%-- 매장타입명 --%>
                 <th><s:message code="storeType.storeTypeNm" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="storeTypeNm"/>
+                    <input type="text" class="sb-input w100" ng-model="storeTypeNm" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
                 <%-- 사용여부 --%>
                 <th><s:message code="storeType.useYn" /></th>

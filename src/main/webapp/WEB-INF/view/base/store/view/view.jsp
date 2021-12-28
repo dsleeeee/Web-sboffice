@@ -32,7 +32,7 @@
         <%-- 매장코드 --%>
         <th><s:message code="storeView.storeCd" /></th>
         <td>
-          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd"/>
+          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd" onkeyup="fnNxBtnSearch();"/>
           <%--
           <div class="sb-select">
             <div id="sStoreCd"></div>
@@ -42,7 +42,7 @@
         <%-- 매장명 --%>
         <th><s:message code="storeView.storeNm" /></th>
         <td>
-          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm"/>
+          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/>
           <%--
           <div class="sb-select">
             <div id="sStoreNm"></div>

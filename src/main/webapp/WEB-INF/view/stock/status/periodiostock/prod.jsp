@@ -37,19 +37,19 @@
 			<%-- 상품코드 --%>
 			<th><s:message code="periodIostock.prodCd" /></th>
 			<td>
-				<input type="text" id="srchProdCd" class="sb-input w100" maxlength="100" />
+				<input type="text" id="srchProdCd" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch();"/>
 			</td>
 			<%-- 상품명 --%>
 			<th><s:message code="periodIostock.prodNm" /></th>
 			<td>
-				<input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" />
+				<input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch();"/>
 			</td>
 		</tr>
 		<tr>
 			<%-- 바코드 --%>
 			<th><s:message code="periodIostock.barcdCd" /></th>
 			<td>
-				<input type="text" id="srchBarcdCd" class="sb-input w100" maxlength="100" />
+				<input type="text" id="srchBarcdCd" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch();"/>
 			</td>
 			<%-- 분류 --%>
             <th><s:message code="periodIostock.prodClass" /></th>

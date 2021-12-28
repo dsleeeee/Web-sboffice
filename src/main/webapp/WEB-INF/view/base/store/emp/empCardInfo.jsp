@@ -29,36 +29,36 @@
             <%-- 카드번호 --%>
             <th><s:message code="empCardInfo.empCardNo"/></th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="employeeCardNo"/>
+                <input type="text" class="sb-input w100" ng-model="employeeCardNo" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 사원번호 --%>
             <th><s:message code="empCardInfo.empNo"/></th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="employeeNo"/>
+                <input type="text" class="sb-input w100" ng-model="employeeNo" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
             <%-- 사원이름 --%>
             <th><s:message code="empCardInfo.empNm"/></th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="employeeNm"/>
+                <input type="text" class="sb-input w100" ng-model="employeeNm" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 소속명 --%>
             <th><s:message code="empCardInfo.divNm"/></th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="divNm"/>
+                <input type="text" class="sb-input w100" ng-model="divNm" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr>
             <%-- 부서명 --%>
             <th><s:message code="empCardInfo.deptNm"/></th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="deptNm"/>
+                <input type="text" class="sb-input w100" ng-model="deptNm" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 직위명 --%>
             <th><s:message code="empCardInfo.positionNm"/></th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="positionNm"/>
+                <input type="text" class="sb-input w100" ng-model="positionNm" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         </tbody>

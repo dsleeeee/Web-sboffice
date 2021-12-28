@@ -36,7 +36,7 @@
             <%-- 출력문구 --%>
             <th><s:message code="eventMessage.printMessage" /></th>
             <td>
-                <input type="text" class="sb-input w100" ng-model="printMessage1"/>
+                <input type="text" class="sb-input w100" ng-model="printMessage1" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 사용여부 --%>
             <th><s:message code="eventMessage.useYn" /></th>

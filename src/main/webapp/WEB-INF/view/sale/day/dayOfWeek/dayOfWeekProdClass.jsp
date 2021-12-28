@@ -14,7 +14,7 @@
         <a href="#" class="open fl"> <s:message code="dayofweek.prodClassSale" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('dayOfWeekProdClassCtrl',1)">
+            <button class="btn_blue fr" ng-click="_broadcast('dayOfWeekProdClassCtrl',1)" id="nxBtnSearch5">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -88,7 +88,7 @@
                     <s:message code="dayofweek.prodCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchDayOfWeekProdClassProdCd" ng-model="prodCd" />
+                    <input type="text" class="sb-input w100" id="srchDayOfWeekProdClassProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
             </tr>
             <tr>
@@ -97,14 +97,14 @@
                     <s:message code="dayofweek.prodNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchDayOfWeekProdClassProdNm" ng-model="prodNm" />
+                    <input type="text" class="sb-input w100" id="srchDayOfWeekProdClassProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
                 <%-- 바코드 --%>
                 <th>
                     <s:message code="dayofweek.barCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchDayOfWeekProdClassBarCd" ng-model="barCd" />
+                    <input type="text" class="sb-input w100" id="srchDayOfWeekProdClassBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch('5');"/>
                 </td>
             </tr>
             <tr>

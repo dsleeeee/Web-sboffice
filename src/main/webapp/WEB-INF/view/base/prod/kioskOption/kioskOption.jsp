@@ -16,7 +16,7 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('kioskOptionCtrl',1)">
+                <button class="btn_blue fr" ng-click="_broadcast('kioskOptionCtrl',1)" id="nxBtnSearch">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -72,14 +72,14 @@
                         <s:message code="kioskOption.prodCd" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+                        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"
                     </td>
                     <%-- 상품명 --%>
                     <th>
                         <s:message code="kioskOption.prodNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+                        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
                     </td>
                 </tr>
                 <tr>
@@ -98,7 +98,7 @@
                         <s:message code="kioskOption.barCd" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+                        <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch();"/>
                     </td>
                 </tr>
                 <tr>

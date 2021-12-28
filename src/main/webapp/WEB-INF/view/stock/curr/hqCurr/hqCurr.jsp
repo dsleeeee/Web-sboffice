@@ -27,19 +27,19 @@
       <%-- 상품코드 --%>
       <th><s:message code="hqCurr.prodCd"/></th>
       <td>
-        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
+        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 상품명 --%>
       <th><s:message code="hqCurr.prodNm"/></th>
       <td>
-        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="50"/>
+        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="50" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     <tr>
       <%-- 바코드 --%>
       <th><s:message code="hqCurr.barcdNm"/></th>
       <td>
-        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCdModel" class="sb-input w100" maxlength="40"/>
+        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCdModel" class="sb-input w100" maxlength="40" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 단위구분 --%>
       <th><s:message code="hqCurr.unitFg"/></th>

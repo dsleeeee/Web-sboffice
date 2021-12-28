@@ -14,7 +14,7 @@
             <a href="#" class="open fl"><s:message code="storeType.menuGroupChgHist" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('menuGroupChgHistCtrl', 1)">
+                <button class="btn_blue fr" id="nxBtnSearch4" ng-click="_pageView('menuGroupChgHistCtrl', 1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -30,31 +30,13 @@
             <%-- 변경 일자 --%>
             <tr>
                 <th><s:message code="storeType.chgDate" /></th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"><input id="mgchStartDate" name="mgchStartDate" class="w110px"/></span>
                         <span class="rg">~</span>
                         <span class="txtIn"><input id="mgchEndDate" name="mgchEndDate" class="w110px"/></span>
                     </div>
                 </td>
-            </tr>
-            <tr>
-                <%-- 메뉴그룹코드 --%>
-                <th>
-                    <s:message code="storeType.code" />
-                </th>
-                <td>
-                    <input type="text" class="sb-input w100" id="mgchMenuGroupCd" ng-model="mgchMenuGroupCd" />
-                </td>
-                <%-- 메뉴그룹명 --%>
-                <th>
-                    <s:message code="storeType.menuGroupNm" />
-                </th>
-                <td>
-                    <input type="text" class="sb-input w100" id="mgchMenuGroupNm" ng-model="mgchMenuGroupNm" />
-                </td>
-            </tr>
-            <tr>
                 <th><s:message code="storeType.procFg" /></th>
                 <td>
                     <div class="sb-select">
@@ -72,8 +54,21 @@
                         </span>
                     </div>
                 </td>
-                <th></th>
+            </tr>
+            <tr>
+                <%-- 메뉴그룹코드 --%>
+                <th>
+                    <s:message code="storeType.code" />
+                </th>
                 <td>
+                    <input type="text" class="sb-input w100" id="mgchMenuGroupCd" ng-model="mgchMenuGroupCd" onkeyup="fnNxBtnSearch('4');"/>
+                </td>
+                <%-- 메뉴그룹명 --%>
+                <th>
+                    <s:message code="storeType.menuGroupNm" />
+                </th>
+                <td>
+                    <input type="text" class="sb-input w100" id="mgchMenuGroupNm" ng-model="mgchMenuGroupNm" onkeyup="fnNxBtnSearch('4');"/>
                 </td>
             </tr>
             </tbody>

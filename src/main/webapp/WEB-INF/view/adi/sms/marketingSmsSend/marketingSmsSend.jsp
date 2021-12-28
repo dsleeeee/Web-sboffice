@@ -28,7 +28,7 @@
             <a href="#" class="open fl"><s:message code="marketingSmsSend.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue mr3 fr" id="btnSearch" ng-click="_broadcast('marketingSmsSendCtrl',1)">
+                <button class="btn_blue mr3 fr" id="nxBtnSearch2" ng-click="_broadcast('marketingSmsSendCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
                 <%-- 본인인증 --%>
@@ -144,21 +144,21 @@
                     <s:message code="marketingSmsSend.addr"/>
                 </th>
                 <td colspan="3">
-                    <input type="text" id="addr" class="sb-input w100" ng-model="addr"/>
+                    <input type="text" id="addr" class="sb-input w100" ng-model="addr" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
                 <%-- 회원번호 --%>
                 <th>
                     <s:message code="marketingSmsSend.membrNo"/>
                 </th>
                 <td>
-                    <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true"/>
+                    <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10" ng-disabled="newMemberYn === true" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
                 <%-- 회원명 --%>
                 <th style="display: none;">
                     <s:message code="marketingSmsSend.membrNm"/>
                 </th>
                 <td style="display: none;">
-                    <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true"/>
+                    <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" ng-disabled="newMemberYn === true" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
                 <th></th>
                 <td></td>
@@ -734,7 +734,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20211112.02" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>

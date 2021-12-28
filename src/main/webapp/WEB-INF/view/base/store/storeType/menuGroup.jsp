@@ -12,7 +12,7 @@
         <%-- 제목 및 조회버튼  --%>
         <div class="searchBar">
             <a href="#" class="open fl"><s:message code="storeType.menuGroupManage" /></a>
-            <button class="btn_blue fr mt5 mr10" id="btnSrchMenuGroup" ng-click="_pageView('menuGroupCtrl', 1)"><s:message code="cmm.search"/></button>
+            <button class="btn_blue fr mt5 mr10" id="nxBtnSearch2" ng-click="_pageView('menuGroupCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
         <%-- 조회조건 --%>
         <table class="searchTbl">
@@ -27,7 +27,7 @@
                 <%-- 메뉴그룹명 --%>
                 <th><s:message code="storeType.menuGroupNm" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="storeGroupNm"/>
+                    <input type="text" class="sb-input w100" ng-model="storeGroupNm" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
                 <%-- 사용여부 --%>
                 <th><s:message code="storeType.useYn" /></th>

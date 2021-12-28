@@ -46,12 +46,12 @@
       <%-- 전표번호 --%>
       <th><s:message code="vendrInstock.slipNo"/></th>
       <td>
-        <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8"/>
+        <input type="text" id="srchSlipNo" name="srchSlipNo" ng-model="slipNo" class="sb-input w100" maxlength="8" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 발주전표번호 --%>
       <th><s:message code="vendrInstock.orderSlipNo"/></th>
       <td>
-        <input type="text" id="srchOrderSlipNo" name="srchOrderSlipNo" ng-model="orderSlipNo" class="sb-input w100" maxlength="8"/>
+        <input type="text" id="srchOrderSlipNo" name="srchOrderSlipNo" ng-model="orderSlipNo" class="sb-input w100" maxlength="8" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     <tr>

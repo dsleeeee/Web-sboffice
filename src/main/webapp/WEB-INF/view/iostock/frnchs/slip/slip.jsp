@@ -11,7 +11,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     
     <%-- 조회 --%>
-    <button class="btn_blue fr mt5 mr10" id="btnSlipSearch" ng-click="_broadcast('slipMainCtrlSrch')">
+    <button class="btn_blue fr mt5 mr10" id="nxBtnSearch" ng-click="_broadcast('slipMainCtrlSrch')">
       <s:message code="cmm.search"/>
     </button>
   </div>
@@ -116,12 +116,12 @@
       <%-- 상품코드 --%>
       <th><s:message code="slipStockInfo.prodCd"/></th>
       <td>
-        <input type="text" id="srchSlipProdCd" name="srchSlipProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
+        <input type="text" id="srchSlipProdCd" name="srchSlipProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 상품명 --%>
       <th><s:message code="slipStockInfo.prodNm"/></th>
       <td>
-        <input type="text" id="srchSlipProdNm" name="srchSlipProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="16"/>
+        <input type="text" id="srchSlipProdNm" name="srchSlipProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="16" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     </tbody>

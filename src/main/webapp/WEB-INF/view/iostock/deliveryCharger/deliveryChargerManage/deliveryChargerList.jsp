@@ -27,19 +27,19 @@
       <%-- 기사코드 --%>
       <th><s:message code="deliveryCharger.dlvrCd"/></th>
       <td>
-        <input type="text" id="srchDlvrCd" name="srchDlvrCd" ng-model="dlvrCd" class="sb-input w100" maxlength="4"/>
+        <input type="text" id="srchDlvrCd" name="srchDlvrCd" ng-model="dlvrCd" class="sb-input w100" maxlength="4" onkeyup="fnNxBtnSearch();"/>
       </td>
       <%-- 기사명 --%>
       <th><s:message code="deliveryCharger.dlvrNm"/></th>
       <td>
-        <input type="text" id="srchDlvrNm" name="srchDlvrNm" ng-model="dlvrNm" class="sb-input w100" maxlength="12"/>
+        <input type="text" id="srchDlvrNm" name="srchDlvrNm" ng-model="dlvrNm" class="sb-input w100" maxlength="12" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     <tr>
       <%-- 차량번호 --%>
       <th><s:message code="deliveryCharger.carNo"/></th>
       <td>
-        <input type="text" id="srchCarNo" name="srchCarNo" ng-model="carNo" class="sb-input w100" maxlength="14"/>
+        <input type="text" id="srchCarNo" name="srchCarNo" ng-model="carNo" class="sb-input w100" maxlength="14" onkeyup="fnNxBtnSearch();"/>
       </td>
       <th></th>
       <td></td>

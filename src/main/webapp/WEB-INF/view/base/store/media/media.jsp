@@ -53,19 +53,19 @@
           <%-- 원본파일명 --%>
         <th><s:message code="media.fileNm" /></th>
         <td>
-          <input type="text" id="fileOrgNm" class="sb-input w100" ng-model="fileOrgNm"/>
+          <input type="text" id="fileOrgNm" class="sb-input w100" ng-model="fileOrgNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>
         <%-- 버전일련번호 --%>
         <th><s:message code="media.verSerNo" /></th>
         <td>
-          <input type="text" id="srchVerSerNo" class="sb-input w100" ng-model="verSerNo"/>
+          <input type="text" id="srchVerSerNo" class="sb-input w100" ng-model="verSerNo" onkeyup="fnNxBtnSearch();"/>
         </td>
         <%-- 버전적용명 --%>
         <th><s:message code="media.verSerNm" /></th>
         <td>
-          <input type="text" id="srchVerSerNm" class="sb-input w100" ng-model="verSerNm"/>
+          <input type="text" id="srchVerSerNm" class="sb-input w100" ng-model="verSerNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
       <tr>

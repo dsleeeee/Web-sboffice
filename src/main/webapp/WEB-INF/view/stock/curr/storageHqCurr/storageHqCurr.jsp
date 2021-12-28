@@ -13,7 +13,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnStorageHqCurrSearch" ng-click="_broadcast('storageHqCurrCtrlSrch')">
+      <button class="btn_blue fr mt5 mr10" id="nxBtnSearch" ng-click="_broadcast('storageHqCurrCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -29,19 +29,19 @@
 	      <%-- 상품코드 --%>
 	      <th><s:message code="storeCurr.prodCd"/></th>
 	      <td>
-	        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
+	        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch();"/>
 	      </td>
 	      <%-- 상품명 --%>
 	      <th><s:message code="storeCurr.prodNm"/></th>
 	      <td>
-	        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="50"/>
+	        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="50" onkeyup="fnNxBtnSearch();"/>
 	      </td>
       </tr>
       <tr>
 	      <%-- 바코드 --%>
 	      <th><s:message code="storeCurr.barcdNm"/></th>
 	      <td>
-	        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCdModel" class="sb-input w100" maxlength="40"/>
+	        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCdModel" class="sb-input w100" maxlength="40" onkeyup="fnNxBtnSearch();"/>
 	      </td>
 	      <%-- 단위구분 --%>
 	      <th><s:message code="storeCurr.unitFg"/></th>

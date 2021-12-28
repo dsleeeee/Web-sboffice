@@ -34,12 +34,12 @@
                 <%-- 회원번호 --%>
                 <th><s:message code="dlvr.membr.no"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="membrNo" id="membrNo"/>
+                    <input type="text" class="sb-input w100" ng-model="membrNo" id="membrNo" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 회원명  --%>
                 <th><s:message code="dlvr.membr.name"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="membrNm" id="membrNm"/>
+                    <input type="text" class="sb-input w100" ng-model="membrNm" id="membrNm" onkeyup="fnNxBtnSearch();"/>
                 </td>
             </tr>
             <tr>
@@ -94,7 +94,7 @@
                 <%-- 상세주소  --%>
                 <th><s:message code="dlvr.membr.areaDetail"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="addrDtl" id="areaDetail"/>
+                    <input type="text" class="sb-input w100" ng-model="addrDtl" id="areaDetail" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 배달지사용  --%>
                 <th><s:message code="dlvr.membr.areaUseYn"/></th>
@@ -117,7 +117,7 @@
                 <%-- 전화  --%>
                 <th><s:message code="dlvr.membr.phone"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" ng-model="telNo" id="telNo"/>
+                    <input type="text" class="sb-input w100" ng-model="telNo" id="telNo" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 전화사용  --%>
                 <th><s:message code="dlvr.membr.phoneUseYn"/></th>

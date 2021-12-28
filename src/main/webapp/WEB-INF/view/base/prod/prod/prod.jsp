@@ -19,7 +19,7 @@
         <a href="#" class="open fl"><s:message code="storeSideMenu.prod" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodCtrl',1)">
+            <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('prodCtrl',1)">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -42,11 +42,11 @@
                 <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w120px"></span>
                     <%--전체기간--%>
                     <span class="chk ml10">
-              <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
-              <label for="chkDt">
-                <s:message code="cmm.all.day" />
-              </label>
-            </span>
+                      <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
+                      <label for="chkDt">
+                        <s:message code="cmm.all.day" />
+                      </label>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -54,12 +54,12 @@
             <%-- 상품코드 --%>
             <th><s:message code="prod.prodCd" /></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+                <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('2');"/>
             </td>
             <%-- 상품명 --%>
             <th><s:message code="prod.prodNm" /></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+                <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('2');"/>
             </td>
         </tr>
         <tr>
@@ -74,7 +74,7 @@
             <%-- 바코드 --%>
             <th><s:message code="prod.barCd" /></th>
             <td>
-                <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+                <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch('2');"/>
             </td>
         </tr>
         <tr>
@@ -98,9 +98,9 @@
             <%-- 브랜드 --%>
             <c:if test="${brandUseFg == '1'}">
                 <th><s:message code="prod.brandNm" /></th>
-                <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" /></td>
+                <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" onkeyup="fnNxBtnSearch('2');"/></td>
             </c:if>
-            <c:if test="${brandUseFg != '0'}">
+            <c:if test="${brandUseFg == '0'}">
                 <th></th>
                 <td></td>
             </c:if>

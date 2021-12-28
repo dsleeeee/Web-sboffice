@@ -15,7 +15,7 @@
     <a href="#" class="open fl"><s:message code="salePrice.storeSalePrice" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('storeSalePriceCtrl', 1)">
+      <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('storeSalePriceCtrl', 1)">
         <s:message code="cmm.search" />
       </button>
       <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
@@ -61,14 +61,14 @@
         <s:message code="salePrice.prodCd" />
       </th>
       <td>
-        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('2');"/>
       </td>
       <%-- 상품명 --%>
       <th>
         <s:message code="salePrice.prodNm" />
       </th>
       <td>
-        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('2');"/>
       </td>
     </tr>
     <c:if test="${subPriceFg == '1'}">

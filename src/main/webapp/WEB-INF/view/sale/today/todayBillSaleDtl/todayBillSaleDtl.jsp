@@ -11,7 +11,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="todayBillSaleDtl.billSale"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayBillSaleDtlCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="nxBtnSearch3" ng-click="_broadcast('todayBillSaleDtlCtrl')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -73,26 +73,26 @@
         <%-- 영수증번호 --%>
         <th><s:message code="todayBillSaleDtl.billNo"/></th>
         <td>
-          <input type="text" id="srchBillNo" name="srchBillNo" ng-model="billNo" class="sb-input w100" maxlength="4"/>
+          <input type="text" id="srchBillNo" name="srchBillNo" ng-model="billNo" class="sb-input w100" maxlength="4" onkeyup="fnNxBtnSearch('3');"/>
         </td>
       </tr>
       <tr>
         <%-- 상품코드 --%>
         <th><s:message code="todayBillSaleDtl.prodCd"/></th>
         <td>
-          <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+          <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('3');"/>
         </td>
         <%-- 상품명 --%>
         <th><s:message code="todayBillSaleDtl.prodNm"/></th>
         <td>
-          <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+          <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50" onkeyup="fnNxBtnSearch('3');"/>
         </td>
       </tr>
       <tr>
         <%-- 바코드 --%>
         <th><s:message code="todayBillSaleDtl.barcdCd"/></th>
         <td>
-          <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
+          <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40" onkeyup="fnNxBtnSearch('3');"/>
         </td>
         <th></th>
         <td></td>

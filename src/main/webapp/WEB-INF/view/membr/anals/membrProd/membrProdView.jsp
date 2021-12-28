@@ -15,7 +15,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('membrProdCtrl')">
+            <button class="btn_blue fr" ng-click="_broadcast('membrProdCtrl')" id="nxBtnSearch">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -47,7 +47,7 @@
                 <s:message code="membrProd.srchMembrNm"/>
             </th>
             <td>
-                <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm"/>
+                <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" onkeyup="fnNxBtnSearch();"/>
             </td>
             <td></td>
             <td></td>
