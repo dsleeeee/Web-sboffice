@@ -466,7 +466,7 @@
             <s:message code="regist.memberPointAdjust"/>
         </button>
         <%-- SMS전송 --%>
-        <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">
+        <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()" style="display: none;">
             <s:message code="regist.smsSend"/>
         </button>
     </div>
