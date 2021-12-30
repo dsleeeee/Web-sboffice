@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
@@ -435,10 +436,25 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<DefaultMap<String>> getPopUpBoardList(SessionInfoVO sessionInfoVO) {
         BoardVO boardVO = new BoardVO();
-        boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        boardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        boardVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        return boardMapper.getPopUpBoardList(boardVO);
+        List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
+        boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        if(sessionInfoVO.getOrgnFg().getCode().equals(OrgnFg.AGENCY)){
+
+            boardVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+            boardVO.setUserId(sessionInfoVO.getUserId());
+
+            result = boardMapper.getPopUpBoardList2(boardVO);
+
+        } else {
+            boardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            boardVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+            result = boardMapper.getPopUpBoardList(boardVO);
+        }
+
+        return result;
     }
 }

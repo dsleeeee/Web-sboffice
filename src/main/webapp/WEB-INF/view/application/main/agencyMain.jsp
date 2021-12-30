@@ -165,23 +165,49 @@
     <!--//메인컨텐츠-->
 
     <!--팝업-->
+<%--    <div ng-controller="agencyMainPopupCtrl">--%>
+<%--        <div id="divDimmed" class="fullDimmed" style="display: none;"></div>--%>
+<%--        <div id="divPopup" class="layer" style="display: none;">--%>
+<%--            <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">--%>
+<%--                <!--layerContent-->--%>
+<%--                <div class="title" style="width:560px;">--%>
+<%--                    <a href="#" class="btn_close" ng-click="close()"></a>--%>
+<%--                    <div class="con">--%>
+<%--                        <img src="/resource/solbipos/css/img/popUp/20211001.png" style="width:100%" alt="2021년 특별할인 판매 안내문" />--%>
+<%--                    </div>--%>
+<%--                    <div class="btnSet">--%>
+<%--                        <span><a href="#" class="btn_blue" id="btnCloseToday" ng-click="closeToday()">오늘하루 열지않기</a></span>--%>
+<%--                        <span><a href="#" class="btn_blue" id="btnClose" ng-click="close()"><s:message code="cmm.close" /></a></span>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--    </div>--%>
+    <!--팝업-->
+
+    <!--팝업-->
     <div ng-controller="agencyMainPopupCtrl">
-        <div id="divDimmed" class="fullDimmed" style="display: none;"></div>
-        <div id="divPopup" class="layer" style="display: none;">
-            <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
-                <!--layerContent-->
-                <div class="title" style="width:560px;">
-                    <a href="#" class="btn_close" ng-click="close()"></a>
-                    <div class="con">
-                        <img src="/resource/solbipos/css/img/popUp/20211001.png" style="width:100%" alt="2021년 특별할인 판매 안내문" />
-                    </div>
-                    <div class="btnSet">
-                        <span><a href="#" class="btn_blue" id="btnCloseToday" ng-click="closeToday()">오늘하루 열지않기</a></span>
-                        <span><a href="#" class="btn_blue" id="btnClose" ng-click="close()"><s:message code="cmm.close" /></a></span>
+        <c:forEach var="board" items="${boardList}" varStatus="status">
+            <div id="divDimmed${status.index}" class="fullDimmed" style="display: none;"></div>
+            <div id="divPopup${status.index}" class="layer" style="display: none;">
+                <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
+                    <!--layerContent-->
+                    <div class="title" style="width:560px;">
+                        <p class="tit" id="popTitle${status.index}">
+                                ${board.title}</p>
+                        <a href="#" class="btn_close"></a>
+                        <div class="con">
+                            <div id="boardContent${status.index}"></div>
+                                ${board.content}
+                        </div>
+                        <div class="btnSet">
+                            <span><a href="#" class="btn_blue" id="btnCloseToday${status.index}">오늘하루 열지않기</a></span>
+                            <span><a href="#" class="btn_blue" id="btnClose${status.index}" ><s:message code="cmm.close" /></a></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </c:forEach>
     </div>
     <!--팝업-->
 
@@ -347,24 +373,24 @@
 
         angular.extend(this, new RootController('agencyMainPopupCtrl', $scope, $http, true));
 
-        // 팝업 게시 기간
-        var startDate = '20211001';
-        var endDate = '20211031';
-
-        // 오늘 날짜
-        var date = new Date();
-        var year = new String(date.getFullYear());
-        var month = new String(date.getMonth()+1);
-        var day = new String(date.getDate());
-
-        // 한자리수일 경우 0을 채워준다.
-        if(month.length == 1){
-            month = "0" + month;
-        }
-        if(day.length == 1){
-            day = "0" + day;
-        }
-        var now = year + "" + month + "" + day;
+        // // 팝업 게시 기간
+        // var startDate = '20211001';
+        // var endDate = '20211031';
+        //
+        // // 오늘 날짜
+        // var date = new Date();
+        // var year = new String(date.getFullYear());
+        // var month = new String(date.getMonth()+1);
+        // var day = new String(date.getDate());
+        //
+        // // 한자리수일 경우 0을 채워준다.
+        // if(month.length == 1){
+        //     month = "0" + month;
+        // }
+        // if(day.length == 1){
+        //     day = "0" + day;
+        // }
+        // var now = year + "" + month + "" + day;
 
         // 1. 쿠키 만들기
         function setCookie(name, value, expiredays) {
@@ -396,27 +422,49 @@
         //alert(getCookie("notToday"));
 
         // 날짜 비교하여 팝업 띄우기
-        if(Number(now) >= Number(startDate)){
-            if(Number(endDate) >= Number(now)){
-                if(getCookie("notToday")!="Y") {
-                    $("#divDimmed").css('display', 'block');
-                    $("#divPopup").css('display', 'block');
-                }
-            }
+        // if(Number(now) >= Number(startDate)){
+        //     if(Number(endDate) >= Number(now)){
+        //         if(getCookie("notToday")!="Y") {
+        //             $("#divDimmed").css('display', 'block');
+        //             $("#divPopup").css('display', 'block');
+        //         }
+        //     }
+        // }
+        <c:forEach var="board" items="${boardList}" varStatus="status">
+        // 쿠키체크 후 팝업 띄우기
+        if(getCookie("notPopup${status.index}")!="Y") {
+            $("#divDimmed${status.index}").css('display', 'block');
+            $("#divPopup${status.index}").css('display', 'block');
         }
 
-        // 오늘하루 열지않기
-        $scope.closeToday = function(){
-            setCookie('notToday','Y', 1);
-            $("#divDimmed").css('display', 'none');
-            $("#divPopup").css('display', 'none');
-        }
+        $("#btnCloseToday${status.index}").click(function(){
+            setCookie('notPopup${status.index}','Y', 1);
+            $("#divDimmed${status.index}").css('display', 'none');
+            $("#divPopup${status.index}").css('display', 'none');
+        });
 
-        // 닫기
-        $scope.close = function(){
-            $("#divDimmed").css('display', 'none');
-            $("#divPopup").css('display', 'none');
-        }
+        $("#btnClose${status.index}").click(function(){
+            $("#divDimmed${status.index}").css('display', 'none');
+            $("#divPopup${status.index}").css('display', 'none');
+        });
+        $(".btn_close").click(function(){
+            $("#divDimmed${status.index}").css('display', 'none');
+            $("#divPopup${status.index}").css('display', 'none');
+        });
+        </c:forEach>
+
+        // // 오늘하루 열지않기
+        // $scope.closeToday = function(){
+        //     setCookie('notToday','Y', 1);
+        //     $("#divDimmed").css('display', 'none');
+        //     $("#divPopup").css('display', 'none');
+        // }
+        //
+        // // 닫기
+        // $scope.close = function(){
+        //     $("#divDimmed").css('display', 'none');
+        //     $("#divPopup").css('display', 'none');
+        // }
 
     }]);
 </script>

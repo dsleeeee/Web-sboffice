@@ -185,6 +185,11 @@ public class ContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
+        /** 팝업 공고 조회 */
+        List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
+        model.addAttribute("boardList", boardList);
+
+
         return "application/main/agencyMain";
     }
 
