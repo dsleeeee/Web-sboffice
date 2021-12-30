@@ -30,6 +30,9 @@ public class BoardVO extends PageVO {
      */
     private String orgnFg;
 
+    /** 소속코드 */
+    private String orgnCd;
+
     /** 게시판코드 */
     private String boardCd;
 
@@ -132,6 +135,14 @@ public class BoardVO extends PageVO {
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+
+    public String getOrgnCd() {
+        return orgnCd;
+    }
+
+    public void setOrgnCd(String orgnCd) {
+        this.orgnCd = orgnCd;
+    }
 
     public String getBoardCd() { return boardCd; }
 

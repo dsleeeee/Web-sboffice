@@ -135,4 +135,7 @@ public interface BoardMapper {
 
     /** 팝업 공고 조회 */
     List<DefaultMap<String>> getPopUpBoardList(BoardVO boardVO);
+
+    /** 팝업 공고 조회 */
+    List<DefaultMap<String>> getPopUpBoardList2(BoardVO boardVO);
 }

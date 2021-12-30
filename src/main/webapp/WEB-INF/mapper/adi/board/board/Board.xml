@@ -207,7 +207,11 @@
         AND twbps.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
     </select>
 
-
+    <!-- 팝업 게시판 조회(본사/매장) -->
+    <!--
+        TABLE    : TB_WB_BOARD_READNG_HIST
+        COMMENTS : 게시판 조회
+    -->
     <select id="getPopUpBoardList" parameterType="BoardVO" resultMap="BoardListMap">
         /* ContentMapper.getPopUpBoardList */
         SELECT
@@ -248,6 +252,34 @@
         ,   twbi.MOD_DT DESC
     </select>
 
+    <!-- 팝업 게시판 조회(대리점) -->
+    <!--
+        TABLE    : TB_WB_BOARD_READNG_HIST
+        COMMENTS : 게시판 조회
+    -->
+    <select id="getPopUpBoardList2" parameterType="BoardVO" resultMap="BoardListMap">
+        /* ContentMapper.getPopUpBoardList2 */
+        SELECT
+        twbi.TITLE,
+        twbi.CONTENT
+        FROM TB_WB_BOARD_INFO twbi,
+        TB_WB_USER_INFO_DTL_V01 twuidv01,
+        TB_WB_USER_INFO_DTL_V01 twuidv011
+        WHERE 1=1
+        AND twbi.BOARD_CD = '01'
+        AND twbi.USE_YN = 'Y'
+        AND twbi.POPUP_YN =  'Y'
+        AND twuidv01.ORGN_FG2 IN ('A')
+        AND twuidv011.USER_ID = #{userId}
+        AND twuidv011.ORGN_FG2 IN ('C', 'P')
+          AND twuidv01.USER_ID (+)= twbi.USER_ID
+        <![CDATA[
+           AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+           AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ]]>
+        ORDER BY 1
+        ,   twbi.MOD_DT DESC
+    </select>
 
     <!-- 게시판 조회수 조회 -->
     <!--
