@@ -441,7 +441,7 @@ public class BoardServiceImpl implements BoardService {
 
         boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-        if(sessionInfoVO.getOrgnFg().getCode().equals(OrgnFg.AGENCY)){
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
 
             boardVO.setOrgnCd(sessionInfoVO.getOrgnCd());
             boardVO.setUserId(sessionInfoVO.getUserId());
