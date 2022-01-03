@@ -44,9 +44,6 @@ public interface SmsSendMapper {
     int getSmsSendReserve1000SaveInsert(SmsSendVO smsSendVO);
     int getSmsSendReserve1000SaveInsertLMS(SmsSendVO smsSendVO);
 
-    /** 잔여금액 조회 */
-    String getSmsAmtSelect(SmsSendVO smsSendVO);
-
     /** 잔여금액 저장 update */
     int getSmsAmtSaveUpdate(SmsSendVO smsSendVO);
 
