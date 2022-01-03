@@ -329,7 +329,7 @@
         UPDATE
         CET_SMSPT_T
         SET
-        SMS_AMT = (SELECT (SMS_AMT + (SELECT NMCODE_ITEM_2 FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '222' AND NMCODE_CD = #{msgType})) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}),
+        SMS_AMT = (SELECT (SMS_AMT + (FN_GET_SMS_UPRC(DECODE(#{msgType}, 1, 'SMS', 2, 'LMS', 'MMS'), #{orgnCd}))) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}), -- TB_CM_NMCODE.NMCODE_GRP_CD = '222'
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1
