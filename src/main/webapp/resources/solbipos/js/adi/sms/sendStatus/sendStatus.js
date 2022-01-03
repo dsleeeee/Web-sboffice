@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 메세지타입
+var msgTypeDataMapData = [
+    {"name":"SMS","value":"1"},
+    {"name":"LMS","value":"2"},
+    {"name":"MMS","value":"3"}
+];
 // 결과
 var sendStatusFgData = [
     {"name":"발송대기","value":"0"},
@@ -38,6 +44,7 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
+        $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
 
         // 그리드 링크 효과
@@ -91,6 +98,7 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
         dataItem.sPhoneNumber = messages["sendStatus.send"];
         dataItem.rOgnNm = messages["sendStatus.receive"];
         dataItem.rPhoneNumber = messages["sendStatus.receive"];
+        dataItem.msgType = messages["sendStatus.msgType"];
         dataItem.sendDate = messages["sendStatus.sendDate"];
         dataItem.readDate = messages["sendStatus.readDate"];
         dataItem.sendStatus = messages["sendStatus.sendStatus"];
