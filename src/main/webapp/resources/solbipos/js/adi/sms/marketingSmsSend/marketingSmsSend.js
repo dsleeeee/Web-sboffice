@@ -157,14 +157,6 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         {value: "3", name: messages["marketingSmsSend.membrPoint.ava"] + messages["marketingSmsSend.membrPoint"]}
     ];
 
-    $("#lblMarketingSmsSendStoreNmInfo").text("(광고)" +  "");
-    $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-936-2859");
-    $("#lblMarketingSmsSendTxtByte").text("0");
-    $("#lblMarketingSmsSendMsgType").text("SMS");
-    $("#lblMarketingSmsSendSmsAmt").text("0");
-
-    var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
-
     $scope.$watch('newMemberYn', function (val) {
         if(val === true){
             $scope.membrNm = "";
@@ -174,6 +166,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             $("#memberNo").val("");
         }
     });
+
+    $("#lblMarketingSmsSendStoreNmInfo").text("(광고)" +  "");
+    $("#lblMarketingSmsSendMemoInfo").text("(무료수신거부)" +  "080-936-2859");
+    $("#lblMarketingSmsSendTxtByte").text("0");
+    $("#lblMarketingSmsSendMsgType").text("SMS");
+    $("#lblMarketingSmsSendSmsAmt").text("0");
+
+    var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -225,6 +225,9 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // <-- 검색 호출 -->
     $scope.$on("marketingSmsSendCtrl", function(event, data) {
         $("#lblMarketingSmsSendSmsSendSeq").text("");
+
+        // 잔여금액
+        $scope.restSmsAmt();
 
         $scope.searchSaveMarketingSmsSend();
         event.preventDefault();
@@ -341,18 +344,79 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
 
         $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-
             if (response.data.data.list === 0) {
-
                 $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
                     // 본인인증 팝업창 띄우기
                     $scope.verify();
-
                 });
             } else {
-
                 // 발신번호 유무 체크
                 $scope.tellNumChk();
+            }
+        });
+    };
+
+    // 본인인증
+    $scope.verify = function(){
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+            if (response.data.data.list !== 0) {
+                $scope._popMsg(messages["marketingSmsSend.verifyChk"]);
+                return false;
+
+            } else {
+                $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal.sb", null, function(result) {
+                    var data = result.data;
+                    console.log(data);
+
+                    var auth_form = document.form_auth;
+
+                    var return_gubun;
+                    var width = 410;
+                    var height = 500;
+
+                    var leftpos = screen.width / 2 - (width / 2);
+                    var toppos = screen.height / 2 - (height / 2);
+
+                    var winopts = "width=" + width + ", height=" + height + ", toolbar=no,status=no,statusbar=no,menubar=no,scrollbars=no,resizable=no";
+                    var position = ",left=" + leftpos + ", top=" + toppos;
+
+                    var url = data.gwUrl + '?' +                        // KCP 인증창
+                        'site_cd=' + data.siteCd + '&' +                // 상점코드
+                        'ordr_idxx=' + data.ordrIdxx + '&' +            // 상점관리요청번호
+                        'req_tx=cert' + '&' +                                   // 요청의 종류를 구분하는 변수
+                        'cert_method=01' + '&' +                                // 01-휴대폰인증 02-공인인증(추후제공)
+                        'up_hash=' + data.upHash + '&' +                // 요청 hash data
+                        'Ret_URL=' + data.retUrl + '?sid=' + data.sessionId + '&' +                // 본인인증 결과 리턴페이지
+                        'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
+                        'cert_enc_use_ext=Y'
+                    ;
+
+                    console.log("JH");
+                    console.log("site_cd : " + data.siteCd);
+                    console.log("web_siteid : " + data.webSiteid);
+                    console.log("gw_url : " + data.gwUrl);
+                    console.log("Ret_URL : " + data.retUrl);
+                    console.log("ordr_idxx : " + data.ordrIdxx);
+                    console.log("up_hash : " + data.upHash);
+                    console.log("sessionID : " + data.sessionId);
+                    console.log("url : " + url);
+
+                    // 저장기능 수행
+                    var params = {};
+                    params.certId = data.ordrIdxx;
+
+                    $.postJSONArray("/adi/sms/marketingSmsSend/marketingSmsSend/saveVerify.sb", params, function (result) {
+                            console.log("JH : 결과");
+                            var AUTH_POP =  window.open(url, 'auth_popup', winopts + position);
+                            console.log('1111');
+                        },
+                        function (result) {
+                            s_alert.pop("JH : 결과msg" + result.message);
+                            s_alert.pop(result.message);
+                        });
+                });
             }
         });
     };
@@ -500,21 +564,18 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // <-- 전송, 예약 -->
     // 전송, 예약
     $scope.smsSendReserve = function(reserveYn) {
+        // 잔여금액
+        $scope.restSmsAmt();
 
         var params = {};
 
         $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-
             if (response.data.data.list === 0) {
-
                 $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
                     // 본인인증 팝업창 띄우기
                     $scope.verify();
-
                 });
             } else {
-
-
                 // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
                 if (gridYn == "N") {
                     s_alert.pop(messages["cmm.not.select"]);
@@ -568,9 +629,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 }
 
                 // 조회한 회원수
-                var smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
+                var smsSendListCnt;
+
                 // 1000건 이상
-                if (parseInt(smsSendListCnt) >= 1000) {
+                if (parseInt($("#lblMarketingSmsSendListCnt").text()) >= 1000) {
+                    // 조회한 회원수
+                    smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
+
                     if (parseInt(smsAmt) < (parseInt(smsSendListCnt) * parseInt(msgOneAmt))) {
                         $scope._popMsg(messages["marketingSmsSend.smsAmtOverAlert"] + (parseInt(smsSendListCnt) * parseInt(msgOneAmt)) + messages["marketingSmsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
                         return;
@@ -597,8 +662,11 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                         }
                     }
 
-                    if (parseInt(smsAmt) < (parseInt(params.length) * parseInt(msgOneAmt))) {
-                        $scope._popMsg(messages["marketingSmsSend.smsAmtOverAlert"] + (parseInt(params.length) * parseInt(msgOneAmt)) + messages["marketingSmsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
+                    // 조회한 회원수
+                    smsSendListCnt = params.length;
+
+                    if (parseInt(smsAmt) < (parseInt(smsSendListCnt) * parseInt(msgOneAmt))) {
+                        $scope._popMsg(messages["marketingSmsSend.smsAmtOverAlert"] + (parseInt(smsSendListCnt) * parseInt(msgOneAmt)) + messages["marketingSmsSend.smsAmtOverAlert2"]); // 전송시 필요한 잔여금액이 부족합니다. 000원의 잔여금액이 필요합니다.
                         return;
                     }
                 }
@@ -610,6 +678,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     param.gubun = "marketingSmsSend";
                     param.msgType = msgType;
                     param.msgOneAmt = msgOneAmt;
+                    param.smsSendListCnt = smsSendListCnt;
 
                     // SMS전송 팝업
                     var smsSendScope = agrid.getScope('smsSendCtrl');
@@ -618,14 +687,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     event.preventDefault();
                 } else {
                     // 전송 저장
-                    $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt);
+                    $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt, smsSendListCnt);
                 }
             }
         });
     };
 
     // 전송 저장
-    $scope.smsSendSave = function(reserveYn, reserveDate, msgType, msgOneAmt) {
+    $scope.smsSendSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt) {
         // 첨부파일 개수
         var fileCount = 0;
         // MMS 첨부파일 체크
@@ -703,24 +772,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             }
         }
 
-        // 전송수량(체크된 수신자)
-        var smsSendQty = 0;
-        // 조회한 회원수
-        var smsSendListCnt = $("#lblMarketingSmsSendListCnt").text();
-
-        // 1000건 이상
-        if(parseInt(smsSendListCnt) >= 1000) {
-            smsSendQty = smsSendListCnt;
-        } else {
-            for (var i = 0; i < $scope.flexMarketingSmsSend.collectionView.items.length; i++) {
-                if($scope.flexMarketingSmsSend.collectionView.items[i].gChk) {
-                    smsSendQty = smsSendQty + 1;
-                }
-            }
-        }
-
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
-        var msg = $("#lblMarketingSmsSendMsgType").text() + messages["marketingSmsSend.smsSendConfirm"]  + " " + smsSendQty + messages["marketingSmsSend.smsSendConfirm2"];
+        var msg = $("#lblMarketingSmsSendMsgType").text() + messages["marketingSmsSend.smsSendConfirm"]  + " " + smsSendListCnt + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
             // 전송가능 시간 체크(09~21시)
             var date = new Date();
@@ -733,19 +786,19 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             // MMS
            if(msgType == "3") {
                // 첨부파일 저장
-               $scope.smsSendFileSave(reserveYn, reserveDate, msgType, msgOneAmt, fileCount);
+               $scope.smsSendFileSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount);
            // SMS, LMS
            } else {
                // 전송 저장 save
-               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, 0, "");
+               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, 0, "");
            }
         }
     };
 
     // 전송 저장 save
-    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, msgOneAmt, fileCount, contentData) {
+    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, contentData) {
         // 1000건 이상
-        if(parseInt($("#lblMarketingSmsSendListCnt").text()) >= 1000) {
+        if(parseInt(smsSendListCnt) >= 1000) {
             // 파라미터 설정
             var params = {};
             // 내용
@@ -772,7 +825,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             params.contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
             params.pageGubun = "marketingSmsSend"; // 페이지구분
             params.smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스
-            params.smsSendListCnt = $("#lblMarketingSmsSendListCnt").text(); // 조회한 회원수
+            params.smsSendListCnt = smsSendListCnt; // 조회한 회원수
             params.msgOneAmt = msgOneAmt; // 메세지별 건당금액
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -813,6 +866,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     $scope.flexMarketingSmsSend.collectionView.items[i].contentData = contentData; // 전송할 컨텐츠(파일명^컨텐츠타입^컨텐츠서브타입)
                     $scope.flexMarketingSmsSend.collectionView.items[i].pageGubun = "marketingSmsSend"; // 페이지구분
                     $scope.flexMarketingSmsSend.collectionView.items[i].smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스(SMS전송 팝업 : 전송시 채번 / 마케팅용 SMS전송 : 회원조회시 채번)
+                    $scope.flexMarketingSmsSend.collectionView.items[i].smsSendListCnt = smsSendListCnt; // 조회한 회원수
                     $scope.flexMarketingSmsSend.collectionView.items[i].msgOneAmt = msgOneAmt; // 메세지별 건당금액
 
                     params.push($scope.flexMarketingSmsSend.collectionView.items[i]);
@@ -848,7 +902,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 첨부파일 저장
-    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, msgOneAmt, fileCount) {
+    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount) {
         var formData = new FormData($("#marketingSmsSendSmsForm")[0]);
         // formData.append("orgnCd", orgnCd);
         formData.append("pageGubun", "marketingSmsSendFileSms");
@@ -875,7 +929,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     contentData = contentData.substring(0, contentData.length-1);
 
                     // 전송 저장 save
-                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, fileCount, contentData);
+                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, contentData);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -975,21 +1029,16 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
 
         $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-
             if (response.data.data.list === 0) {
-
                 $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
                     // 본인인증 팝업창 띄우기
                     $scope.verify();
-
                 });
             } else {
-                
                 $scope.wjSmsTelNoRegisterLayer.show(true);
                 var scope = agrid.getScope("smsTelNoRegisterCtrl");
                 scope.getVal();
                 event.preventDefault();
-
             }
         });
     };
@@ -1029,73 +1078,6 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         } else {
             $("#tblSearchAddShow").hide();
         }
-    };
-
-    // 본인인증
-    $scope.verify = function(){
-        var params = {};
-
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-
-            if (response.data.data.list !== 0) {
-                $scope._popMsg(messages["marketingSmsSend.verifyChk"]);
-                return false;
-            } else {
-
-
-                $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal.sb", null, function(result) {
-                    var data = result.data;
-                    console.log(data);
-
-                    var auth_form = document.form_auth;
-
-                    var return_gubun;
-                    var width = 410;
-                    var height = 500;
-
-                    var leftpos = screen.width / 2 - (width / 2);
-                    var toppos = screen.height / 2 - (height / 2);
-
-                    var winopts = "width=" + width + ", height=" + height + ", toolbar=no,status=no,statusbar=no,menubar=no,scrollbars=no,resizable=no";
-                    var position = ",left=" + leftpos + ", top=" + toppos;
-
-                    var url = data.gwUrl + '?' +                        // KCP 인증창
-                        'site_cd=' + data.siteCd + '&' +                // 상점코드
-                        'ordr_idxx=' + data.ordrIdxx + '&' +            // 상점관리요청번호
-                        'req_tx=cert' + '&' +                                   // 요청의 종류를 구분하는 변수
-                        'cert_method=01' + '&' +                                // 01-휴대폰인증 02-공인인증(추후제공)
-                        'up_hash=' + data.upHash + '&' +                // 요청 hash data
-                        'Ret_URL=' + data.retUrl + '?sid=' + data.sessionId + '&' +                // 본인인증 결과 리턴페이지
-                        'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
-                        'cert_enc_use_ext=Y'
-                    ;
-
-                    console.log("JH");
-                    console.log("site_cd : " + data.siteCd);
-                    console.log("web_siteid : " + data.webSiteid);
-                    console.log("gw_url : " + data.gwUrl);
-                    console.log("Ret_URL : " + data.retUrl);
-                    console.log("ordr_idxx : " + data.ordrIdxx);
-                    console.log("up_hash : " + data.upHash);
-                    console.log("sessionID : " + data.sessionId);
-                    console.log("url : " + url);
-
-                    // 저장기능 수행
-                    var params = {};
-                    params.certId = data.ordrIdxx;
-
-                    $.postJSONArray("/adi/sms/marketingSmsSend/marketingSmsSend/saveVerify.sb", params, function (result) {
-                            console.log("JH : 결과");
-                            var AUTH_POP =  window.open(url, 'auth_popup', winopts + position);
-                            console.log('1111');
-                        },
-                        function (result) {
-                            s_alert.pop("JH : 결과msg" + result.message);
-                            s_alert.pop(result.message);
-                        });
-                });
-            }
-        });
     };
 
     // 첨부파일

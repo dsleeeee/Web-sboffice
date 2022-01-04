@@ -65,14 +65,14 @@
                     id="wjGridSaleAnalysisReportList">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.prodCd"/>" binding="prodCd" width="95" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totSaleQty"/>" binding="totSaleQty" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totServiceQty"/>" binding="totServiceQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totQtyRate"/>" binding="totQtyRate" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleAnalysisReport.totQtyRate"/>" binding="totQtyRate" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <%-- 매장 컬럼 생성--%>
                 <c:forEach var="storeCol" items="${storeColList}">
                     <wj-flex-grid-column header="<s:message code="saleAnalysisReport.saleQty"/>" binding="store${storeCol.storeCd}SaleQty" width="70" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>

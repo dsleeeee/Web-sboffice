@@ -97,90 +97,101 @@ public class SmsSendServiceImpl implements SmsSendService {
         } else {
             smsSendSeq = smsSendVOs[0].getSmsSendSeq();
         }
-
         LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력시퀀스 : " + smsSendSeq);
 
-        for(SmsSendVO smsSendVO : smsSendVOs) {
+        SmsSendVO smsSendChkVO = new SmsSendVO();
+        smsSendChkVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendChkVO.setModDt(currentDt);
+        smsSendChkVO.setModId(sessionInfoVO.getUserId());
+        DefaultMap<Object> result = smsSendMapper.getSmsAmtList(smsSendChkVO);
+        // 현재 잔여금액
+        String smsAmt = result.getStr("smsAmt");
+        // 현재 사용금액
+        String useSmsAmt = String.valueOf( Integer.parseInt(smsSendVOs[0].getMsgOneAmt()) * Integer.parseInt(smsSendVOs[0].getSmsSendListCnt()) );
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 현재 잔여금액 : " + smsAmt);
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 현재 사용금액 : " + useSmsAmt);
 
-            smsSendVO.setRegDt(currentDt);
-            smsSendVO.setRegId(sessionInfoVO.getUserId());
-            smsSendVO.setModDt(currentDt);
-            smsSendVO.setModId(sessionInfoVO.getUserId());
-
-            smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-
-            // 송신자
-            smsSendVO.setSsOrgnCd(sessionInfoVO.getOrgnCd());
-            smsSendVO.setSsOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            smsSendVO.setSsUserId(sessionInfoVO.getUserId());
-
-            // 수신자
-            if(smsSendVO.getRrOrgnFg().equals("C")) {
-                smsSendVO.setRrOrgnCd(sessionInfoVO.getOrgnCd());
-            } else {
-                smsSendVO.setRrOrgnCd(smsSendVO.getRrOrgnCd());
-            }
-            smsSendVO.setRrOrgnFg(smsSendVO.getRrOrgnFg());
-            smsSendVO.setRrUserId(smsSendVO.getRrUserId());
-
-            // 송신주체 소속코드
-            smsSendVO.setSmsOgnCd(sessionInfoVO.getOrgnCd());
-
-            // 회원관리주체 소속코드
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ || sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                if(sessionInfoVO.getHqOfficeCd().equals("00000")){
-                    smsSendVO.setCstOgnCd(sessionInfoVO.getStoreCd());
-                } else {
-                    smsSendVO.setCstOgnCd(sessionInfoVO.getHqOfficeCd());
-                }
-            } else {
-                smsSendVO.setCstOgnCd("*");
-            }
-
-            // 전송일시
-            if(smsSendVO.getReserveYn().equals("1")) { // 예약
-                smsSendVO.setSendDate(smsSendVO.getSendDate());
-            } else { // 즉시
-                smsSendVO.setSendDate(currentDt);
-            }
-
-            // 전송이력시퀀스
-            smsSendVO.setSmsSendSeq(smsSendSeq);
-
-            // 전송이력 저장
-            if(rowCount == 1) {
-                // 전송건수
-                smsSendVO.setSmsSendCount("0");
-
-                LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력 저장");
-
-                // 전송이력 저장
-                procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
-            }
-
-            LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
-
-            // SMS
-            if(smsSendVO.getMsgType().equals("1")) {
-                procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
-
-            // LMS, MMS
-            } else if(smsSendVO.getMsgType().equals("2") || smsSendVO.getMsgType().equals("3")) {
-                procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC
-            }
-
-            // 현재 잔여금액
-            String smsAmt = smsSendMapper.getSmsAmtSelect(smsSendVO);
+        // SMS잔여금액 > SMS사용금액 체크
+        if((Long.parseLong(smsAmt) - Long.parseLong(useSmsAmt)) > 0) {
             // 잔여금액 - 사용금액
-            smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - Integer.parseInt(smsSendVO.getMsgOneAmt()) ));
-
-            LOGGER.info("WEB_SMS >>> SMS전송 >>> 현재 잔여금액 : " + smsAmt);
-            LOGGER.info("WEB_SMS >>> SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
+            smsSendChkVO.setSmsAmt(String.valueOf( Long.parseLong(smsAmt) -  Long.parseLong(useSmsAmt) ));
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 수정될 잔여금액 : " + smsSendChkVO.getSmsAmt());
 
             // 잔여금액 저장 update
-            procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
+            procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendChkVO);
 
-            rowCount = rowCount + 1; // 홀수,짝수
+            // SMS전송
+            for(SmsSendVO smsSendVO : smsSendVOs) {
+
+                smsSendVO.setRegDt(currentDt);
+                smsSendVO.setRegId(sessionInfoVO.getUserId());
+                smsSendVO.setModDt(currentDt);
+                smsSendVO.setModId(sessionInfoVO.getUserId());
+
+                smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+                // 송신자
+                smsSendVO.setSsOrgnCd(sessionInfoVO.getOrgnCd());
+                smsSendVO.setSsOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                smsSendVO.setSsUserId(sessionInfoVO.getUserId());
+
+                // 수신자
+                if(smsSendVO.getRrOrgnFg().equals("C")) {
+                    smsSendVO.setRrOrgnCd(sessionInfoVO.getOrgnCd());
+                } else {
+                    smsSendVO.setRrOrgnCd(smsSendVO.getRrOrgnCd());
+                }
+                smsSendVO.setRrOrgnFg(smsSendVO.getRrOrgnFg());
+                smsSendVO.setRrUserId(smsSendVO.getRrUserId());
+
+                // 송신주체 소속코드
+                smsSendVO.setSmsOgnCd(sessionInfoVO.getOrgnCd());
+
+                // 회원관리주체 소속코드
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ || sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    if(sessionInfoVO.getHqOfficeCd().equals("00000")){
+                        smsSendVO.setCstOgnCd(sessionInfoVO.getStoreCd());
+                    } else {
+                        smsSendVO.setCstOgnCd(sessionInfoVO.getHqOfficeCd());
+                    }
+                } else {
+                    smsSendVO.setCstOgnCd("*");
+                }
+
+                // 전송일시
+                if(smsSendVO.getReserveYn().equals("1")) { // 예약
+                    smsSendVO.setSendDate(smsSendVO.getSendDate());
+                } else { // 즉시
+                    smsSendVO.setSendDate(currentDt);
+                }
+
+                // 전송이력시퀀스
+                smsSendVO.setSmsSendSeq(smsSendSeq);
+
+                // 전송이력 저장
+                if(rowCount == 1) {
+                    // 전송건수
+                    smsSendVO.setSmsSendCount("0");
+
+                    // 전송이력 저장
+                    LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력 저장");
+                    procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
+                }
+
+                LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
+                LOGGER.info("WEB_SMS >>> SMS전송 >>> SMS전송 저장");
+
+                // SMS
+                if(smsSendVO.getMsgType().equals("1")) {
+                    procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
+
+                // LMS, MMS
+                } else if(smsSendVO.getMsgType().equals("2") || smsSendVO.getMsgType().equals("3")) {
+                    procCnt = smsSendMapper.getSmsSendReserveSaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC
+                }
+
+                rowCount = rowCount + 1; // 홀수,짝수
+            }
         }
 
         return procCnt;
@@ -192,8 +203,6 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         int procCnt = 0;
         String currentDt = currentDateTimeString();
-
-        int rowCount = 1; // 홀수,짝수
 
         smsSendVO.setRegDt(currentDt);
         smsSendVO.setRegId(sessionInfoVO.getUserId());
@@ -239,39 +248,45 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         // 전송이력시퀀스
         smsSendVO.setSmsSendSeq(smsSendVO.getSmsSendSeq());
-
         LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력시퀀스 : " + smsSendVO.getSmsSendSeq());
 
         // 전송건수
         smsSendVO.setSmsSendCount("0");
 
-        LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력 저장");
-
-        // 전송이력 저장
-        smsSendVO.setPhoneNumber("00000000000");
-        procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
-
-        LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
-
-        // SMS
-        if(smsSendVO.getMsgType().equals("1")) {
-            procCnt = smsSendMapper.getSmsSendReserve1000SaveInsert(smsSendVO); // SDK_SMS_SEND_ENC_READY
-
-        // LMS, MMS
-        } else if(smsSendVO.getMsgType().equals("2") || smsSendVO.getMsgType().equals("3")) {
-            procCnt = smsSendMapper.getSmsSendReserve1000SaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC_READY
-        }
-
+        DefaultMap<Object> result = smsSendMapper.getSmsAmtList(smsSendVO);
         // 현재 잔여금액
-        String smsAmt = smsSendMapper.getSmsAmtSelect(smsSendVO);
-        // 잔여금액 - 사용금액
-        smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - (Integer.parseInt(smsSendVO.getMsgOneAmt()) * Integer.parseInt(smsSendVO.getSmsSendListCnt())) ));
-
+        String smsAmt = result.getStr("smsAmt");
+        // 현재 사용금액
+        String useSmsAmt = String.valueOf( Integer.parseInt(smsSendVO.getMsgOneAmt()) * Integer.parseInt(smsSendVO.getSmsSendListCnt()) );
         LOGGER.info("WEB_SMS >>> SMS전송 >>> 현재 잔여금액 : " + smsAmt);
-        LOGGER.info("WEB_SMS >>> SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
+        LOGGER.info("WEB_SMS >>> SMS전송 >>> 현재 사용금액 : " + useSmsAmt);
 
-        // 잔여금액 저장 update
-        procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
+        // SMS잔여금액 > SMS사용금액 체크
+        if((Long.parseLong(smsAmt) - Long.parseLong(useSmsAmt)) > 0) {
+            // 잔여금액 - 사용금액
+            smsSendVO.setSmsAmt(String.valueOf( Long.parseLong(smsAmt) -  Long.parseLong(useSmsAmt) ));
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
+
+            // 잔여금액 저장 update
+            procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
+
+            // 전송이력 저장
+            smsSendVO.setPhoneNumber("00000000000");
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 전송이력 저장");
+            procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
+
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> SMS전송 저장");
+
+            // SMS
+            if(smsSendVO.getMsgType().equals("1")) {
+                procCnt = smsSendMapper.getSmsSendReserve1000SaveInsert(smsSendVO); // SDK_SMS_SEND_ENC_READY
+
+            // LMS, MMS
+            } else if(smsSendVO.getMsgType().equals("2") || smsSendVO.getMsgType().equals("3")) {
+                procCnt = smsSendMapper.getSmsSendReserve1000SaveInsertLMS(smsSendVO); // SDK_MMS_SEND_ENC_READY
+            }
+        }
 
         return procCnt;
     }

@@ -305,6 +305,7 @@ public class UserServiceImpl implements UserService {
     /** SMS 전송 저장 */
     @Override
     public int getSmsSendSave(OtpAuthVO otpAuthVO) {
+
         int procCnt = 0;
         String currentDt = currentDateTimeString();
 
@@ -340,6 +341,7 @@ public class UserServiceImpl implements UserService {
         SessionInfoVO sessionInfoVO = new SessionInfoVO();
         String smsSendSeq = smsSendMapper.getSmsSendSeq(sessionInfoVO);
         smsSendVO.setSmsSendSeq(smsSendSeq);
+        System.out.println("WEB_SMS >>> SMS전송 >>> 전송이력시퀀스 : " + smsSendVO.getSmsSendSeq());
 
         smsSendVO.setReserveYn("0");
         smsSendVO.setMsgType("1");
@@ -351,22 +353,32 @@ public class UserServiceImpl implements UserService {
 
         // 전송건수
         smsSendVO.setSmsSendCount("0");
-        // 전송이력 저장
-        procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
-
-        // SMS
-        procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
 
         DefaultMap<Object> result = smsSendMapper.getSmsAmtList(smsSendVO);
         // 현재 잔여금액
         String smsAmt = result.getStr("smsAmt");
         // SMS 건당금액
         String smsOneAmt = result.getStr("smsOneAmt");
-        // 잔여금액 - 사용금액
-        smsSendVO.setSmsAmt(String.valueOf( Integer.parseInt(smsAmt) - Integer.parseInt(smsOneAmt) ));
+        System.out.println("WEB_SMS >>> SMS전송 >>> 현재 잔여금액 : " + smsAmt);
+        System.out.println("WEB_SMS >>> SMS전송 >>> 현재 사용금액 : " + smsOneAmt);
 
-        // 잔여금액 저장 update
-        procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
+        // SMS잔여금액 > SMS사용금액 체크
+        if(Long.parseLong(smsAmt) > Long.parseLong(smsOneAmt)) {
+            // 잔여금액 - 사용금액
+            smsSendVO.setSmsAmt(String.valueOf( Long.parseLong(smsAmt) - Long.parseLong(smsOneAmt) ));
+            System.out.println("WEB_SMS >>> SMS전송 >>> 수정될 잔여금액 : " + smsSendVO.getSmsAmt());
+
+            // 잔여금액 저장 update
+            procCnt = smsSendMapper.getSmsAmtSaveUpdate(smsSendVO);
+
+            // 전송이력 저장
+            System.out.println("WEB_SMS >>> SMS전송 >>> 전송이력 저장");
+            procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
+
+            // SMS
+            System.out.println("WEB_SMS >>> SMS전송 >>> SMS전송 저장");
+            procCnt = smsSendMapper.getSmsSendReserveSaveInsert(smsSendVO); // SDK_SMS_SEND_ENC
+        }
 
         return procCnt;
     }

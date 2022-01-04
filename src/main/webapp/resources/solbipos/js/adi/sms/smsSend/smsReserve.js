@@ -67,6 +67,8 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#lblSmsReserveGubun").text(data.gubun);
         $("#lblSmsReserveMsgType").text(data.msgType);
         $("#lblSmsReserveMsgOneAmt").text(data.msgOneAmt);
+        $("#lblSmsReserveSmsSendListCnt").text(data.smsSendListCnt);
+
         event.preventDefault();
     });
     // <-- //검색 호출 -->
@@ -79,6 +81,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         var gubun = $("#lblSmsReserveGubun").text();
         var msgType = $("#lblSmsReserveMsgType").text();
         var msgOneAmt = $("#lblSmsReserveMsgOneAmt").text();
+        var smsSendListCnt = $("#lblSmsReserveSmsSendListCnt").text();
 
         if(parseInt(reserveDate) < parseInt(getCurDateTime())) {
             $scope._popMsg(messages["smsReserve.reserveTimeAlert"]); // 예약시간은 현재시간 이후로 가능합니다.
@@ -94,7 +97,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
             // 마케팅용 SMS전송
             var smsReserveScope = agrid.getScope('marketingSmsSendCtrl');
         }
-        smsReserveScope.smsSendSave(reserveYn, reserveDate, msgType, msgOneAmt);
+        smsReserveScope.smsSendSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt);
 
         // 팝업 닫기
         $scope.close();
@@ -106,6 +109,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#lblSmsReserveGubun").text("");
         $("#lblSmsReserveMsgType").text("");
         $("#lblSmsReserveMsgOneAmt").text("");
+        $("#lblSmsReserveSmsSendListCnt").text("");
 
         $scope.wjSmsReserveLayer.hide();
         event.preventDefault();

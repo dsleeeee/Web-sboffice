@@ -49,6 +49,7 @@
 --                ELSE null END
 --         ) AS R_USER_NM,
         hmt.PHONE_NUMBER AS R_PHONE_NUMBER,
+        hmt.MSG_TYPE,
         hmt.RESERVE_YN,
         hmt.SEND_DATE,
         hmt.READ_DATE,
@@ -81,6 +82,7 @@
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
                     SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
+                    1 AS MSG_TYPE,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     A.SEND_PROC_TIME AS READ_DATE,
@@ -121,6 +123,7 @@
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
                     SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
+                    (CASE WHEN A.CONTENT_COUNT = '0' THEN 2 ELSE 3 END) AS MSG_TYPE,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     A.SEND_PROC_TIME AS READ_DATE,
@@ -161,6 +164,7 @@
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
                     SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    1 AS MSG_TYPE,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
@@ -206,6 +210,7 @@
                     A.RESERVED6 AS R_USER_ID,
                     A.RESERVED3 AS CST_NO,
                     SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    (CASE WHEN A.CONTENT_COUNT = '0' THEN 2 ELSE 3 END) AS MSG_TYPE,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
@@ -329,7 +334,7 @@
         UPDATE
         CET_SMSPT_T
         SET
-        SMS_AMT = (SELECT (SMS_AMT + (SELECT NMCODE_ITEM_2 FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '222' AND NMCODE_CD = #{msgType})) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}),
+        SMS_AMT = (SELECT (SMS_AMT + (FN_GET_SMS_UPRC(DECODE(#{msgType}, 1, 'SMS', 2, 'LMS', 'MMS'), #{orgnCd}))) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}), -- TB_CM_NMCODE.NMCODE_GRP_CD = '222'
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1
