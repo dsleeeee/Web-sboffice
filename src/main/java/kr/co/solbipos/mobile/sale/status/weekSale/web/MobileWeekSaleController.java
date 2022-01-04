@@ -33,7 +33,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
  * @ ----------  ---------   -------------------------------
  * @ 2021.05.14  김설아      최초생성
  *
- * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @author 솔비포스 개발본부 WEB개발팀 김설아
  * @since 2021.05.14
  * @version 1.0
  *
