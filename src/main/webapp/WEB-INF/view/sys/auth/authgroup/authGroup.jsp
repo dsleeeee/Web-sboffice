@@ -32,7 +32,7 @@
         <th><s:message code="authGroup.authGrpNm" /></th>
         <td>
           <div class="sb-select w100">
-            <div id="grpNm" class="sb-input"></div>
+            <div id="grpNm" class="sb-input" onkeyup="fnNxBtnSearch();"></div>
           </div>
         </td>
         <%-- 사용여부 --%>

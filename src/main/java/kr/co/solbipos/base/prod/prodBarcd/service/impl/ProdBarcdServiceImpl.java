@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -78,14 +79,12 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
     /** 상품목록 조회(엑셀다운로드용) */
     @Override
     public List<DefaultMap<String>> getProdExcelList(@RequestBody ProdBarcdVO prodBarcdVO, SessionInfoVO sessionInfoVO) {
-        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
-        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
-        String storeCd = sessionInfoVO.getStoreCd();
 
         // 소속구분 설정
-        prodBarcdVO.setOrgnFg(orgnFg);
-        prodBarcdVO.setHqOfficeCd(hqOfficeCd);
-        prodBarcdVO.setStoreCd(storeCd);
+        prodBarcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodBarcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodBarcdVO.setStoreCd(sessionInfoVO.getStoreCd());
+
 
         if (prodBarcdVO.getExcelGubun().equals("T")) { // 전체 엑셀다운로드시(T) 조회조건 날림
             prodBarcdVO.setProdCd(null);
@@ -94,6 +93,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setBarCd(null);
             prodBarcdVO.setUseYn(null);
             prodBarcdVO.setHqBrandNm(null);
+            prodBarcdVO.setBarcdYn(null);
         }
 
         prodBarcdVO.setUserId(sessionInfoVO.getUserId());
@@ -211,8 +211,9 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
     /** 검증결과 저장 */
     @Override
     public int getExcelUploadCheckSave(ProdBarcdVO[] prodBarcdVOs, SessionInfoVO sessionInfoVO) {
+
         int result = 0;
-        int i = 0;
+        int i = 1;
         String currentDt = currentDateTimeString();
 
         for (ProdBarcdVO prodBarcdVO : prodBarcdVOs) {
@@ -229,7 +230,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setSeq(i);
 
             List<DefaultMap<String>> list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
-
+                System.out.println(prodBarcdVO.getProdCd() + "  :  seq: " + prodBarcdVO.getSeq() + " / list : " + list);
             if (prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
                 prodBarcdVO.setResult("바코드 길이가 40byte를 넘습니다.");
             } else if (list.size() != 0) {
@@ -243,6 +244,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             }
 
             result = prodBarcdMapper.getExcelUploadCheckSave(prodBarcdVO);
+            i++;
         }
         return result;
     }
@@ -261,6 +263,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
     /** 바코드 저장 */
     @Override
     public int saveBarcdExcel(ProdBarcdVO[] prodBarcdVOs, SessionInfoVO sessionInfoVO) {
+
         int result = 0;
         int storeResult = 0;
         String currentDt = currentDateTimeString();
@@ -275,26 +278,31 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setModDt(currentDt);
             prodBarcdVO.setModId(sessionInfoVO.getUserId());
 
-            List<DefaultMap<String>> list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
+            List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
 
-            if (prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
-                prodBarcdVO.setResult("바코드 길이가 40byte를 넘습니다.");
-            } else if (list.size() != 0) {
-                if (StringUtil.getOrBlank(list.get(0).get("cntProd")).equals("0")) {
-                    prodBarcdVO.setResult("해당 상품이 존재하지 않습니다.");
-                } else if (!StringUtil.getOrBlank(list.get(0).get("cntBar")).equals("0")) {
-                    prodBarcdVO.setResult("중복된 바코드가 있습니다.");
-                }
-            } else {
-                prodBarcdVO.setResult("검증성공");
-            }
+            if(prodBarcdVO.getBarCd() != null) {
+                list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
 
-            if(prodBarcdVO.getResult().equals("검증성공")){
-                result += prodBarcdMapper.saveBarcdExcel(prodBarcdVO);
-                // 본사일때 매장바코드도 수정
-                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    storeResult = prodBarcdMapper.saveProdBarcdStore(prodBarcdVO);
+                if (prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
+                    prodBarcdVO.setResult("바코드 길이가 40byte를 넘습니다.");
+                } else if (list.size() != 0) {
+                    if (StringUtil.getOrBlank(list.get(0).get("cntProd")).equals("0")) {
+                         prodBarcdVO.setResult("해당 상품이 존재하지 않습니다.");
+                    } else if (!StringUtil.getOrBlank(list.get(0).get("cntBar")).equals("0")) {
+                        prodBarcdVO.setResult("중복된 바코드가 있습니다.");
+                    }
+                } else {
+                    prodBarcdVO.setResult("검증성공");
                 }
+
+                if (prodBarcdVO.getResult().equals("검증성공")) {
+                    result += prodBarcdMapper.saveBarcdExcel(prodBarcdVO);
+                    // 본사일때 매장바코드도 수정
+                    if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                        storeResult = prodBarcdMapper.saveProdBarcdStore(prodBarcdVO);
+                    }
+                }
+
             }
         }
         return result;

@@ -245,6 +245,12 @@
                 <if test="barCd != null and barCd != ''">
                     AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
+                <if test='barcdYn != null and barcdYn == "Y"'> -- 바코드 사용유무(유)
+                    AND thpb.BARCD_CD IS NOT NULL
+                </if>
+                <if test='barcdYn != null and barcdYn == "N"'> -- 바코드 사용유무(무)
+                    AND thpb.BARCD_CD IS NULL
+                </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
                                                 SELECT
@@ -318,6 +324,12 @@
                 </if>
                 <if test="barCd != null and barCd != ''">
                     AND tmpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+                </if>
+                <if test='barcdYn != null and barcdYn == "Y"'> -- 바코드 사용유무(유)
+                    AND tmpb.BARCD_CD IS NOT NULL
+                </if>
+                <if test='barcdYn != null and barcdYn == "N"'> -- 바코드 사용유무(무)
+                    AND tmpb.BARCD_CD IS NULL
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
@@ -998,20 +1010,38 @@
     </insert>
 
     <select id="getExcelList" parameterType="prodBarcdVO" resultType="DefaultMap">
-        SELECT  RESULT,
-                PROD_CD,
-                PROD_NM,
-                BARCD_OLD,
-                BARCD_NEW AS BAR_CD
-        FROM    TB_TMP_EXCEL_BARCD
-        WHERE   SESSION_ID = #{regId}
-        AND     HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-            AND STORE_CD = #{storeCd}
-            ]]>
-        </if>
-        ORDER BY PROD_CD
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            SELECT  tteb.RESULT,
+                    tteb.PROD_CD,
+                    tteb.BARCD_NEW AS BAR_CD,
+                    thp.PROD_NM,
+                ( SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = tteb.PROD_CD) AS BARCD_OLD
+            FROM    TB_TMP_EXCEL_BARCD tteb,
+                    TB_HQ_PRODUCT thp
+            WHERE   tteb.SESSION_ID = #{regId}
+            AND     tteb.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tteb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+            AND     tteb.PROD_CD = tmp.PROD_CD
+            ORDER BY PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  tteb.RESULT,
+                        tteb.PROD_CD,
+                        tteb.BARCD_NEW AS BAR_CD,
+                        tmp.PROD_NM,
+                        ( SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = tteb.PROD_CD) AS BARCD_OLD
+                FROM    TB_TMP_EXCEL_BARCD tteb,
+                        TB_MS_PRODUCT tmp
+                WHERE   tteb.SESSION_ID = #{regId}
+                AND     tteb.STORE_CD = #{storeCd}
+                AND     tteb.STORE_CD = tmp.STORE_CD
+                AND     tteb.PROD_CD = tmp.PROD_CD
+                ORDER BY PROD_CD
+            </when>
+        </choose>
     </select>
 
     <!-- 바코드 엑셀등록시 검증 -->
@@ -1037,7 +1067,16 @@
                         WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     tmpb.STORE_CD = tms.STORE_CD
                         AND     tmpb.BARCD_CD =#{barCd}
-                        AND 	tmpb.PROD_CD != #{prodCd}	) BAR,
+                        AND 	tmpb.PROD_CD != #{prodCd}
+                    <if test="seq != null and seq != ''">
+                        UNION ALL
+                        SELECT  COUNT(*) AS CNT_BAR
+                        FROM    TB_TMP_EXCEL_BARCD
+                        WHERE   SESSION_ID = #{regId}
+                        AND     BARCD_NEW =#{barCd}
+                        AND 	PROD_CD != #{prodCd}
+                    </if>
+                    ) BAR,
                     (	SELECT 	COUNT(*) AS CNT_PROD
                         FROM	TB_HQ_PRODUCT thp
                         WHERE 	HQ_OFFICE_CD	= #{hqOfficeCd}
@@ -1058,7 +1097,16 @@
                         FROM    TB_MS_PRODUCT_BARCD
                         WHERE   STORE_CD = #{storeCd}
                         AND     BARCD_CD = #{barCd}
-                        AND 	PROD_CD != #{prodCd}	) BAR,
+                        AND 	PROD_CD != #{prodCd}
+                    <if test="seq != null and seq != ''">
+                        UNION ALL
+                        SELECT  COUNT(*) AS CNT_BAR
+                        FROM    TB_TMP_EXCEL_BARCD
+                        WHERE   SESSION_ID = #{regId}
+                        AND     BARCD_NEW =#{barCd}
+                        AND 	PROD_CD != #{prodCd}
+                    </if>
+                    ) BAR,
                     (	SELECT 	COUNT(*) AS CNT_PROD	/* 상품이 존재하는지 CNT : 1이어야함 */
                         FROM 	TB_MS_PRODUCT tmp
                         WHERE	STORE_CD = #{storeCd}
@@ -1073,7 +1121,16 @@
                         FROM    TB_MS_PRODUCT_BARCD
                         WHERE   STORE_CD = #{storeCd}
                         AND     BARCD_CD = #{barCd}
-                        AND 	PROD_CD != #{prodCd}	) BAR,
+                        AND 	PROD_CD != #{prodCd}
+                    <if test="seq != null and seq != ''">
+                        UNION ALL
+                        SELECT  COUNT(*) AS CNT_BAR
+                        FROM    TB_TMP_EXCEL_BARCD
+                        WHERE   SESSION_ID = #{regId}
+                        AND     BARCD_NEW =#{barCd}
+                        AND 	PROD_CD != #{prodCd}
+                    </if>
+                    ) BAR,
                 (	SELECT 	COUNT(*) AS CNT_PROD		/* 상품이 존재하는지 CNT : 1이어야함 */
                     FROM 	TB_MS_PRODUCT tmp
                     WHERE	STORE_CD = #{storeCd}
