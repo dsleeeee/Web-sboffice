@@ -146,4 +146,20 @@ public interface StoreManageService {
     /** ERP 연동 매장 조회 */
     List<DefaultMap<String>> getErpStore(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장 메인포스 제외, 나머지 포스는 서브포스로 변경 */
+    int updateToSubPos(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장포스목록 조회 */
+    List<DefaultMap<String>> getEnvPosList(StoreManageVO storeManageVO);
+
+    /** 매장포스 중 메인포스로 사용할 포스 조회 */
+    String getUseMainPos(StoreManageVO storeManageVO);
+
+    /** 매장포스 환경설정값 변경 */
+    int updatePosEnvVal(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장의 환경설정값 조회 */
+    String getStoreEnvVal(StoreManageVO storeManageVO);
+
+
 }
