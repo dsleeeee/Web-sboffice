@@ -591,7 +591,7 @@
                     AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                     AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                     AND     thp.PROD_CD = thpb.PROD_CD
-                    AND     thpb.BARCD_CD = #{barCd}
+                    AND     thpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                     <if test='prodCd != null and prodCd.toString() != ""'>
                         AND thpb.PROD_CD != #{prodCd}
                     </if>
@@ -605,7 +605,7 @@
                     AND     tmpb.STORE_CD = tms.STORE_CD
                     AND     tmp.STORE_CD = tms.STORE_CD
                     AND     tmp.PROD_CD = tmpb.PROD_CD
-                    AND     tmpb.BARCD_CD =#{barCd}
+                    AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                     <if test='prodCd != null and prodCd.toString() != ""'>
                         AND tmpb.PROD_CD != #{prodCd}
                     </if>
@@ -624,7 +624,7 @@
                     AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                     AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                     AND     thp.PROD_CD = thpb.PROD_CD
-                    AND     thpb.BARCD_CD = #{barCd}
+                    AND     thpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                     <if test='prodCd != null and prodCd.toString() != ""'>
                         AND thpb.PROD_CD != #{prodCd}
                     </if>
@@ -638,7 +638,7 @@
                     AND     tmp.STORE_CD = tmpb.STORE_CD
                     AND     tms.STORE_CD = tmpb.STORE_CD
                     AND     tmp.PROD_CD = tmpb.PROD_CD
-                    AND     tmpb.BARCD_CD = #{barCd}
+                    AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                     <if test='prodCd != null and prodCd.toString() != ""'>
                         AND tmpb.PROD_CD != #{prodCd}
                     </if>
@@ -652,7 +652,7 @@
                 AND     tmp.STORE_CD = tmpb.STORE_CD
                 AND     tms.STORE_CD = tmpb.STORE_CD
                 AND     tmp.PROD_CD = tmpb.PROD_CD
-                AND     tmpb.BARCD_CD = #{barCd}
+                AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 <if test='prodCd != null and prodCd.toString() != ""'>
                     AND tmpb.PROD_CD != #{prodCd}
                 </if>
@@ -682,7 +682,7 @@
                 AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                 AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                 AND     thp.PROD_CD = thpb.PROD_CD
-                AND     thpb.BARCD_CD = #{barCd}
+                AND     thpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 <if test='prodCd != null and prodCd.toString() != ""'>
                     AND thpb.PROD_CD != #{prodCd}
                 </if>
@@ -696,7 +696,7 @@
                 AND     tmpb.STORE_CD = tms.STORE_CD
                 AND     tmp.STORE_CD = tms.STORE_CD
                 AND     tmp.PROD_CD = tmpb.PROD_CD
-                AND     tmpb.BARCD_CD =#{barCd}
+                AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 <if test='prodCd != null and prodCd.toString() != ""'>
                     AND tmpb.PROD_CD != #{prodCd}
                 </if>
@@ -715,7 +715,7 @@
                 AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                 AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
                 AND     thp.PROD_CD = thpb.PROD_CD
-                AND     thpb.BARCD_CD = #{barCd}
+                AND     thpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 <if test='prodCd != null and prodCd.toString() != ""'>
                     AND thpb.PROD_CD != #{prodCd}
                 </if>
@@ -729,7 +729,7 @@
                 AND     tmp.STORE_CD = tmpb.STORE_CD
                 AND     tms.STORE_CD = tmpb.STORE_CD
                 AND     tmp.PROD_CD = tmpb.PROD_CD
-                AND     tmpb.BARCD_CD = #{barCd}
+                AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 <if test='prodCd != null and prodCd.toString() != ""'>
                     AND tmpb.PROD_CD != #{prodCd}
                 </if>
@@ -743,7 +743,7 @@
                 AND     tmp.STORE_CD = tmpb.STORE_CD
                 AND     tms.STORE_CD = tmpb.STORE_CD
                 AND     tmp.PROD_CD = tmpb.PROD_CD
-                AND     tmpb.BARCD_CD = #{barCd}
+                AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 <if test='prodCd != null and prodCd.toString() != ""'>
                     AND tmpb.PROD_CD != #{prodCd}
                 </if>
@@ -769,7 +769,7 @@
                 )
                 WHEN MATCHED THEN
                 UPDATE
-                SET BARCD_CD = #{barCd}
+                SET BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , BARCD_NM = #{prodNm}
                 , MOD_DT = #{modDt}
                 , MOD_ID = #{modId}
@@ -787,7 +787,7 @@
                 VALUES (
                 #{hqOfficeCd}
                 , #{prodCd}
-                , #{barCd}
+                , REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , #{prodNm}
                 , '1'
                 , #{regDt}
@@ -804,7 +804,7 @@
                 )
                 WHEN MATCHED THEN
                 UPDATE
-                SET BARCD_CD = #{barCd}
+                SET BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , BARCD_NM = #{prodNm}
                 , MOD_DT = #{modDt}
                 , MOD_ID = #{modId}
@@ -822,7 +822,7 @@
                 VALUES (
                 #{storeCd}
                 , #{prodCd}
-                , #{barCd}
+                , REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , #{prodNm}
                 , '1'
                 , #{regDt}
@@ -1004,7 +1004,7 @@
             #{prodCd},
             #{prodNm},
             #{barcdOld},
-            #{barCd},
+            REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', ''),
             #{result}
         )
     </insert>
@@ -1059,21 +1059,21 @@
                 FROM (  SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_HQ_PRODUCT_BARCD
                         WHERE   HQ_OFFICE_CD 	= #{hqOfficeCd}
-                        AND     BARCD_CD 		= #{barCd}
+                        AND     BARCD_CD 		= REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD 		!= #{prodCd}
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_MS_PRODUCT_BARCD tmpb, TB_MS_STORE tms
                         WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     tmpb.STORE_CD = tms.STORE_CD
-                        AND     tmpb.BARCD_CD =#{barCd}
+                        AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	tmpb.PROD_CD != #{prodCd}
                     <if test="seq != null and seq != ''">
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_TMP_EXCEL_BARCD
                         WHERE   SESSION_ID = #{regId}
-                        AND     BARCD_NEW =#{barCd}
+                        AND     BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                     </if>
                     ) BAR,
@@ -1090,20 +1090,20 @@
                 FROM(	SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_HQ_PRODUCT_BARCD
                         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND     BARCD_CD = #{barCd}
+                        AND     BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                         UNION
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_MS_PRODUCT_BARCD
                         WHERE   STORE_CD = #{storeCd}
-                        AND     BARCD_CD = #{barCd}
+                        AND     BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                     <if test="seq != null and seq != ''">
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_TMP_EXCEL_BARCD
                         WHERE   SESSION_ID = #{regId}
-                        AND     BARCD_NEW =#{barCd}
+                        AND     BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                     </if>
                     ) BAR,
@@ -1120,14 +1120,14 @@
                 FROM(	SELECT 	COUNT(*) AS CNT_BAR			/* 바코드 중복 CNT : 0이어야함 */
                         FROM    TB_MS_PRODUCT_BARCD
                         WHERE   STORE_CD = #{storeCd}
-                        AND     BARCD_CD = #{barCd}
+                        AND     BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                     <if test="seq != null and seq != ''">
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_TMP_EXCEL_BARCD
                         WHERE   SESSION_ID = #{regId}
-                        AND     BARCD_NEW =#{barCd}
+                        AND     BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                     </if>
                     ) BAR,
@@ -1159,7 +1159,7 @@
                 )
                 WHEN MATCHED THEN
                 UPDATE
-                SET BARCD_CD = #{barCd}
+                SET BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , BARCD_NM = #{prodNm}
                 , MOD_DT = #{modDt}
                 , MOD_ID = #{modId}
@@ -1177,7 +1177,7 @@
                 VALUES (
                 #{hqOfficeCd}
                 , #{prodCd}
-                , #{barCd}
+                , REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , #{prodNm}
                 , '1'
                 , #{regDt}
@@ -1194,7 +1194,7 @@
                 )
                 WHEN MATCHED THEN
                 UPDATE
-                SET BARCD_CD = #{barCd}
+                SET BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , BARCD_NM = #{prodNm}
                 , MOD_DT = #{modDt}
                 , MOD_ID = #{modId}
@@ -1212,7 +1212,7 @@
                 VALUES (
                 #{storeCd}
                 , #{prodCd}
-                , #{barCd}
+                , REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                 , #{prodNm}
                 , '1'
                 , #{regDt}
@@ -1264,7 +1264,7 @@
             USING   (
                 SELECT  STORE_CD    AS  STORE_CD
                      ,  #{prodCd}   AS  PROD_CD
-                     ,  #{barCd}    AS  BARCD_CD
+                     , REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')    AS  BARCD_CD
                      ,  #{prodNm}   AS  BARCD_NM
                      ,  '1'         AS  UNIT_QTY
                      ,  #{regDt}    AS  REG_DT
