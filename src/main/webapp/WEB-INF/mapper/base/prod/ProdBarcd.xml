@@ -1023,7 +1023,7 @@
             WHERE   tteb.SESSION_ID = #{regId}
             AND     tteb.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tteb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-            AND     tteb.PROD_CD = tmp.PROD_CD
+            AND     tteb.PROD_CD = thp.PROD_CD
             ORDER BY PROD_CD
             </when>
             <!-- 매장 -->
