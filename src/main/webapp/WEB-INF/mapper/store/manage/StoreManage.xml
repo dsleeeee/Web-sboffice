@@ -5581,7 +5581,7 @@
     -->
     <select id="getStoreEnvVal" parameterType="storeManageVO" resultType="String">
         /* StoreManageMapper.getStoreEnvVal */
-        SELECT NVL(MAX(ENVST_VAL),'0') AS ENVST_VAL
+        SELECT ENVST_VAL
           FROM TB_MS_STORE_ENVST
          WHERE STORE_CD = #{storeCd}
            AND ENVST_CD = #{envstCd}

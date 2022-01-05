@@ -142,7 +142,6 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // DB구성요소[1221] 값 조회
     $scope.getEnv1221();
-
     // 메인포스 조회
     $scope.getMainPosList();
   };
@@ -206,28 +205,30 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var env4021 = $("#env4021").val(); // 포스-메인여부
 
-    // DB구성방법 [1221:통합DB]환경 사용시 메인포스가 반드시 존재해야 합니다.
-    if(vEnv1221 === "0") {
-      if(env4021 === "2") {
-        if(mainPosList.length === 0){ // 메인포스가 없을 때
-          $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
-          return false;
-        }else{
-          if(mainPosList.length === 1){ // 메인포스가 1개 일때
-            if(mainPosNo === $scope.getSelectedPosNo()) {
-              $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
-              return false;
+    if(vEnv1221 !=="" && vEnv1221 !== null && vEnv1221 !== undefined) {
+      // DB구성방법 [1221:통합DB]환경 사용시 메인포스가 반드시 존재해야 합니다.
+      if (vEnv1221 === "0") {
+        if (env4021 === "2") {
+          if (mainPosList.length === 0) { // 메인포스가 없을 때
+            $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
+            return false;
+          } else {
+            if (mainPosList.length === 1) { // 메인포스가 1개 일때
+              if (mainPosNo === $scope.getSelectedPosNo()) {
+                $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
+                return false;
+              }
             }
           }
         }
       }
-    }
 
-    // DB구성방법 [1221:개별DB]환경은 서브포스를 사용할 수 없습니다.
-    if(vEnv1221 === "1") {
-      if(env4021 === "2") {
-        $scope._popMsg(messages["storeManage.notUse.subPos.msg"]);
-        return false;
+      // DB구성방법 [1221:개별DB]환경은 서브포스를 사용할 수 없습니다.
+      if (vEnv1221 === "1") {
+        if (env4021 === "2") {
+          $scope._popMsg(messages["storeManage.notUse.subPos.msg"]);
+          return false;
+        }
       }
     }
 
@@ -316,10 +317,20 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
 
         // 나머지는 모두 서브포스로 강제 업데이트
-        if(vEnv1221 === "0") {
-          if (env4021 === "1") {
-            $scope.updateToSubPos();
+        if(vEnv1221 !=="" && vEnv1221 !== null && vEnv1221 !== undefined) {
+          if (vEnv1221 === "0") {
+            if (env4021 === "1") {
+              $scope.updateToSubPos();
+            }
           }
+        }
+
+        if(vEnv1221 ==="" || vEnv1221 === null || vEnv1221 === undefined || !(vEnv1221 === "0" && env4021 === "1")){
+          console.log("(재조회) DB구성요소:" + vEnv1221 + " 포스-메인여부:" + env4021);
+          // DB구성요소[1221] 값 재조회
+          $scope.getEnv1221();
+          // 메인포스 재조회
+          $scope.getMainPosList();
         }
 
         $scope.$broadcast('loadingPopupInactive');
@@ -343,7 +354,13 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.envstCd = "4021";
     params.posNo = $scope.getSelectedPosNo();
 
-    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updateToSubPos.sb", params, function () {});
+    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updateToSubPos.sb", params, function () {
+
+      // DB구성요소[1221] 값 재조회
+      $scope.getEnv1221();
+      // 메인포스 재조회
+      $scope.getMainPosList();
+    });
   };
 
   // DB구성요소[1221] 값 조회
