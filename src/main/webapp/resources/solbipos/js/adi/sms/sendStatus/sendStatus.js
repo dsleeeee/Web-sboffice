@@ -25,6 +25,12 @@ var sendStatusFgData = [
     {"name":"발송완료","value":"3"},
     {"name":"발송실패","value":"-1"}
 ];
+// 예약여부
+var reserveYnDataMapData = [
+    {"name":"전체","value":""},
+    {"name":"예약","value":"1"},
+    {"name":"즉시","value":"0"}
+];
 
 /**
  *  문자전송현황 조회 그리드 생성
@@ -40,6 +46,9 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#startDate", gvStartDate);
     var endDate = wcombo.genDateVal("#endDate", gvEndDate);
+
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("reserveYnCombo", reserveYnDataMapData); // 예약여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

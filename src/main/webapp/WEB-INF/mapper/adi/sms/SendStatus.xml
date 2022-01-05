@@ -105,6 +105,9 @@
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
                         AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
                     </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
                 )
                 UNION ALL
                 (
@@ -145,6 +148,9 @@
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
                         AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
                     </if>
                 )
                 UNION ALL
@@ -192,6 +198,9 @@
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
                         AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
                     </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
                 )
                 UNION ALL
                 (
@@ -237,6 +246,9 @@
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
                         AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
                     </if>
                 )
             )

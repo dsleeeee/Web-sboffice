@@ -81,6 +81,28 @@
                     <input type="text" class="sb-input w100" id="srchRrOrgnNm" ng-model="rrOrgnNm" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
+            <tr>
+                <%-- 예약여부 --%>
+                <th>
+                    <s:message code="sendStatus.reserveYn" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchReserveYnCombo"
+                                ng-model="reserveYn"
+                                items-source="_getComboData('reserveYnCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="reserveYnCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
             </tbody>
         </table>
 
@@ -168,7 +190,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20210806.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20220105.01" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">
