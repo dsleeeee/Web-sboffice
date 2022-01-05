@@ -150,6 +150,10 @@
                 is-editable="false"
                 initialized="_initComboBox(s)">
         </wj-combo-box>
+            <%-- 전체상품엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
+            <%-- 조회조건내역엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadCondition()" ><s:message code="cmm.excel.downCondition"/></button>
             <%-- 상품엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
             <%-- 엑셀업로드 --%>
@@ -230,7 +234,7 @@
     var useYn = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.06" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prodBarcd/prodDetailView.jsp">
