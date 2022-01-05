@@ -151,6 +151,12 @@ public class StoreManageVO extends PageVO {
     /** ERP를 연동 본사 여부  */
     private String erpLinkHq;
 
+    /** 환경설정코드 */
+    private String envstCd;
+
+    /** 환경설정값 */
+    private String envstVal;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -782,5 +788,21 @@ public class StoreManageVO extends PageVO {
 
     public void setErpLinkHq(String erpLinkHq) {
         this.erpLinkHq = erpLinkHq;
+    }
+
+    public String getEnvstCd() {
+        return envstCd;
+    }
+
+    public void setEnvstCd(String envstCd) {
+        this.envstCd = envstCd;
+    }
+
+    public String getEnvstVal() {
+        return envstVal;
+    }
+
+    public void setEnvstVal(String envstVal) {
+        this.envstVal = envstVal;
     }
 }

@@ -1334,4 +1334,46 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return mapper.getErpStore(storeManageVO);
     }
+
+    /** 매장 메인포스 제외, 나머지 포스는 서브포스로 변경 */
+    @Override
+    public int updateToSubPos(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        storePosEnvVO.setModDt(dt);
+        storePosEnvVO.setModId(sessionInfoVO.getUserId());
+
+        return mapper.updateToSubPos(storePosEnvVO);
+    }
+
+    /** 매장포스목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getEnvPosList(StoreManageVO storeManageVO) {
+        return mapper.getEnvPosList(storeManageVO);
+    }
+
+    /** 매장포스 중 메인포스로 사용할 포스 조회 */
+    @Override
+    public String getUseMainPos(StoreManageVO storeManageVO){
+        return mapper.getUseMainPos(storeManageVO);
+    }
+
+    /** 매장포스 환경설정값 변경 */
+    @Override
+    public int updatePosEnvVal(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        storePosEnvVO.setModDt(dt);
+        storePosEnvVO.setModId(sessionInfoVO.getUserId());
+
+        return mapper.updatePosEnvVal(storePosEnvVO);
+    }
+
+    /** 매장의 환경설정값 조회 */
+    @Override
+    public String getStoreEnvVal(StoreManageVO storeManageVO){
+        return mapper.getStoreEnvVal(storeManageVO);
+    }
 }

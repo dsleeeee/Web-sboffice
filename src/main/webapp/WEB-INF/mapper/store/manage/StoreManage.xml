@@ -4082,12 +4082,12 @@
     <!--
         TABLE    : TB_MS_POS_ENVST
         PARAM    : storePosEnvVO
-        COMMENTS : 포스가 메인서버로 변경되면, 나머지 포스는 서브포스로 변경한다.
+        COMMENTS : 매장 메인포스 제외, 나머지 포스는 서브포스로 변경한다.
     -->
     <update id="updateToSubPos" parameterType="storePosEnvVO">
         /* USE : StoreManageMapper.updateToSubPos */
         UPDATE TB_MS_POS_ENVST
-           SET ENVST_VAL = '0',
+           SET ENVST_VAL = '2',
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
@@ -5510,4 +5510,82 @@
            AND (STORE_FG != '1' OR STORE_FG IS NULL)
            AND NXPOS_STORE_CD IS NULL
     </select>
+
+    <!-- 매장포스목록 조회 -->
+    <!--
+        TABLE    : TB_MS_POS, TB_MS_POS_ENVST
+        PARAM    : storeManageVO
+        COMMENTS : 환경설정값에 해당하는 매장포스목록을 조회한다.
+    -->
+    <select id="getEnvPosList" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.getEnvPosList */
+        SELECT tmp.POS_NO
+          FROM TB_MS_POS_ENVST tmpe,
+                TB_MS_POS tmp
+         WHERE tmpe.STORE_CD = tmp.STORE_CD
+           AND tmpe.POS_NO = tmp.POS_NO
+           AND tmpe.ENVST_CD = #{envstCd}
+           AND tmpe.ENVST_VAL = #{envstVal}
+           AND tmp.STORE_CD = #{storeCd}
+		   AND tmp.USE_YN = 'Y'
+    </select>
+
+    <!-- 매장포스 중 메인포스로 사용할 포스 조회 -->
+    <!--
+        TABLE    : TB_MS_POS, TB_MS_POS_ENVST
+        PARAM    : storeManageVO
+        COMMENTS : 매장포스 중 메인포스로 사용할 포스 하나를 조회한다.
+    -->
+    <select id="getUseMainPos" parameterType="storeManageVO" resultType="String">
+        /* USE : StoreManageMapper.getUseMainPos */
+        SELECT POS_NO
+          FROM (
+                    SELECT tmp.POS_NO
+                      FROM TB_MS_POS_ENVST tmpe,
+                            TB_MS_POS tmp
+                     WHERE tmpe.STORE_CD = tmp.STORE_CD
+                       AND tmpe.POS_NO = tmp.POS_NO
+                       AND tmpe.ENVST_CD = '4019'
+                       AND tmpe.ENVST_VAL IN ('1', '3')  <!-- 결제전용, 결제+주문 포스만 메인포스로 사용가능 -->
+                       AND tmp.STORE_CD = #{storeCd}
+                       AND tmp.USE_YN = 'Y'
+                     ORDER
+                        BY tmp.POS_NO
+                )
+         WHERE ROWNUM <![CDATA[<]]> 2
+    </select>
+
+    <!-- 매장포스 환경설정값 변경 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    : storePosEnvVO
+        COMMENTS : 매장포스 환경설정값을 변경한다.
+    -->
+    <update id="updatePosEnvVal" parameterType="storePosEnvVO">
+        /* USE : StoreManageMapper.updatePosEnvVal */
+        UPDATE TB_MS_POS_ENVST
+            SET ENVST_VAL = #{envstVal},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND ENVST_CD = #{envstCd}
+        <if test='posNo != null and posNo != ""'>
+           AND POS_NO = #{posNo}
+        </if>
+    </update>
+
+    <!-- 매장의 환경설정값 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_ENVST
+        COMMENTS : 매장의 환경설정값을 조회한다.
+    -->
+    <select id="getStoreEnvVal" parameterType="storeManageVO" resultType="String">
+        /* StoreManageMapper.getStoreEnvVal */
+        SELECT NVL(MAX(ENVST_VAL),'0') AS ENVST_VAL
+          FROM TB_MS_STORE_ENVST
+         WHERE STORE_CD = #{storeCd}
+           AND ENVST_CD = #{envstCd}
+           AND USE_YN = 'Y'
+    </select>
+
 </mapper>

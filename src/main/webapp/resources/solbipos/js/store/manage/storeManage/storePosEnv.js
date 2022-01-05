@@ -9,6 +9,13 @@
  *
  * **************************************************************/
 
+// DB구성방법
+var vEnv1221 = "";
+
+// 메인포스 번호
+var mainPosList;
+var mainPosNo = "";
+
 app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상위 객체 상속 : T/F 는 picker
@@ -132,6 +139,12 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.setSelectedPosNo(selected);
       $scope.searchPosEnv();
     }
+
+    // DB구성요소[1221] 값 조회
+    $scope.getEnv1221();
+
+    // 메인포스 조회
+    $scope.getMainPosList();
   };
 
   /*********************************************************
@@ -187,6 +200,33 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     if(env1015 == "03") {
       if(env4020 != "0") {
         $scope._popMsg(messages["storeManage.only.select.postPay"]);
+        return false;
+      }
+    }
+
+    var env4021 = $("#env4021").val(); // 포스-메인여부
+
+    // DB구성방법 [1221:통합DB]환경 사용시 메인포스가 반드시 존재해야 합니다.
+    if(vEnv1221 === "0") {
+      if(env4021 === "2") {
+        if(mainPosList.length === 0){ // 메인포스가 없을 때
+          $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
+          return false;
+        }else{
+          if(mainPosList.length === 1){ // 메인포스가 1개 일때
+            if(mainPosNo === $scope.getSelectedPosNo()) {
+              $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
+              return false;
+            }
+          }
+        }
+      }
+    }
+
+    // DB구성방법 [1221:개별DB]환경은 서브포스를 사용할 수 없습니다.
+    if(vEnv1221 === "1") {
+      if(env4021 === "2") {
+        $scope._popMsg(messages["storeManage.notUse.subPos.msg"]);
         return false;
       }
     }
@@ -274,6 +314,14 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
 
       $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
+
+        // 나머지는 모두 서브포스로 강제 업데이트
+        if(vEnv1221 === "0") {
+          if (env4021 === "1") {
+            $scope.updateToSubPos();
+          }
+        }
+
         $scope.$broadcast('loadingPopupInactive');
         $scope._popMsg(messages["cmm.saveSucc"]);
         // 재조회 - 포스명칭 selectBox까지 초기화되어, 그부분 없이 바로 포스 환경설정 값 조회 (2020.04.03_이다솜)
@@ -285,6 +333,68 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   };
 
+  // 서브포스로 변경
+  $scope.updateToSubPos = function(){
+
+    var storeScope    = agrid.getScope('storeManageCtrl');
+    var params = {};
+
+    params.storeCd = storeScope.getSelectedStore().storeCd;
+    params.envstCd = "4021";
+    params.posNo = $scope.getSelectedPosNo();
+
+    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updateToSubPos.sb", params, function () {});
+  };
+
+  // DB구성요소[1221] 값 조회
+  $scope.getEnv1221 = function(){
+
+    // 초기화
+    vEnv1221 = "";
+
+    var storeScope    = agrid.getScope('storeManageCtrl');
+    var params = {};
+    params.storeCd = storeScope.getSelectedStore().storeCd;
+    params.envstCd = "1221";
+
+    $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/getStoreEnvVal.sb", params, function(result) {
+      if (result.data.status === "OK") {
+        vEnv1221 = result.data.data;
+      }
+      console.log("vEnv1221 : " + vEnv1221);
+    });
+
+  };
+
+  // 사용중인 메인포스 번호 가져오기
+  $scope.getMainPosList = function(){
+
+    // 초기화
+    mainPosList = null;
+    mainPosNo =  "";
+
+    var storeScope    = agrid.getScope('storeManageCtrl');
+    var params = {};
+    params.storeCd = storeScope.getSelectedStore().storeCd;
+    params.envstCd = "4021";
+    params.envstVal = "1";
+
+    $scope._postJSONQuery.withOutPopUp("/store/manage/storeManage/storeManage/getEnvPosList.sb", params, function(result){
+
+      // 메인포스로 사용하는 포스번호 가져오기
+      mainPosList = result.data.data.mainPosList;
+
+      if(mainPosList !== null && mainPosList !== "" && mainPosList.length > 0){
+        for(var i=0; i<mainPosList.length; i++){
+          mainPosNo += "," +  mainPosList[i].posNo;
+        }
+        mainPosNo = mainPosNo.substring(1, mainPosNo.length);
+      }
+
+      console.log("mainPosNo : " + mainPosNo);
+    });
+  };
+  
 
   /*********************************************************
    * 테이블 그룹설정

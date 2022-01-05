@@ -219,6 +219,10 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
 
       $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/saveStoreConfig.sb", params, function () {
+
+        // DB구성방법[1221]에 따라 매장포스들 포스-메인여부[4021] 환경설정값 수정
+        $scope.updateToPos($("#env1221").val());
+
         $scope.$broadcast('loadingPopupInactive');
         $scope._popMsg(messages["cmm.saveSucc"]);
 
@@ -230,5 +234,61 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   };
 
-}]);
+  // DB구성방법[1221]에 따라 매장포스들 포스-메인여부[4021] 환경설정값 수정
+  $scope.updateToPos = function (env1221) {
 
+    var storeScope = agrid.getScope('storeManageCtrl');
+    var params = {};
+    params.storeCd = storeScope.getSelectedStore().storeCd;
+    params.envstCd = "4021";
+    params.envstVal = "1";
+
+    $scope._postJSONQuery.withOutPopUp("/store/manage/storeManage/storeManage/getEnvPosList.sb", params, function(result){
+
+      // 메인포스로 사용하는 포스번호 가져오기
+      var mainPosList = result.data.data.mainPosList;
+
+      if(env1221 === "0"){ // DB구성방법[1221]이 통합DB 일 때
+
+        if(mainPosList.length !== 1){ // 메인포스 1대가 아닌경우
+
+          var mainUsePosNo = "";
+          var params2 = {};
+          params2.storeCd = storeScope.getSelectedStore().storeCd;
+
+          // 메인으로 사용할 포스번호 조회
+          $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/getUseMainPos.sb", params, function(result) {
+
+              if (result.data.status === "OK") {
+                mainUsePosNo = result.data.data;
+
+                if(mainUsePosNo !== "" && mainUsePosNo !== null && mainUsePosNo !== undefined){
+                  params2.storeCd = storeScope.getSelectedStore().storeCd;
+                  params2.posNo = mainUsePosNo;
+                  params2.envstCd = "4021";
+                  params2.envstVal = "1";
+
+                  // 메인포스 저장
+                  $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updatePosEnvVal.sb", params2, function () {
+
+                    // 나머지 서브포스로 저장
+                    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updateToSubPos.sb", params2, function () {});
+
+                  });
+                }
+              }
+            });
+        }
+      }else{ // DB구성방법[1221]이 개별DB 일 때
+        var params3 = {};
+        params3.storeCd = storeScope.getSelectedStore().storeCd;
+        params3.envstCd = "4021";
+        params3.envstVal = "1";
+
+        // 모두 메인포스로 저장
+        $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updatePosEnvVal.sb", params3, function () {});
+      }
+    });
+  }
+
+}]);

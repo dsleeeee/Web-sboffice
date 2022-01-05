@@ -859,4 +859,114 @@ public class StoreManageController {
 
         return returnListJson(Status.OK, list, storeManageVO);
     }
+
+    /**
+     * 매장 메인포스 제외, 나머지 포스는 서브포스로 변경
+     * @param storePosEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2021.12.31
+     */
+    @RequestMapping(value = "storeManage/updateToSubPos.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateToSubPos(@RequestBody StorePosEnvVO storePosEnvVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.updateToSubPos(storePosEnvVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장포스목록 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2021.12.31
+     */
+    @RequestMapping(value = "storeManage/getEnvPosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEnvPosList(StoreManageVO storeManageVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        // 포스-메인여부 조회
+        resultMap.put("mainPosList", service.getEnvPosList(storeManageVO));
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 매장포스 중 메인포스로 사용할 포스 조회
+     *
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021.12.31
+     */
+    @RequestMapping(value = "storeManage/getUseMainPos.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getUseMainPos(StoreManageVO storeManageVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        String result = service.getUseMainPos(storeManageVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장포스 환경설정값 변경
+     * @param storePosEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2021.12.31
+     */
+    @RequestMapping(value = "storeManage/updatePosEnvVal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updatePosEnvVal(@RequestBody StorePosEnvVO storePosEnvVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.updatePosEnvVal(storePosEnvVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장의 환경설정값 조회
+     *
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2021.12.31
+     */
+    @RequestMapping(value = "storeManage/getStoreEnvVal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreEnvVal(StoreManageVO storeManageVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        String result = service.getStoreEnvVal(storeManageVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }
