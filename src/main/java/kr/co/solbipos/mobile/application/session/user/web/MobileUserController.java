@@ -1,9 +1,11 @@
 package kr.co.solbipos.mobile.application.session.user.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.exception.JsonException;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
@@ -74,6 +76,8 @@ public class MobileUserController {
     MessageService messageService;
     @Autowired
     SessionService sessionService;
+    @Autowired
+    CmmCodeService cmmCodeService;
 
     /**
      * 인증번호 발송
@@ -134,11 +138,29 @@ public class MobileUserController {
         // 신규 OTP 생성 리턴
         userService.insertOtpAuth(otpAuthVO);
 
+
         /**
          *
          * TODO : OTP 문자 발송 로직 들어가야됨
          *
          */
+        /** 문자 발송 로직 */
+        List<DefaultMap<String>> codeList = null;
+        // 코드조회
+        codeList = cmmCodeService.selectCmmCodeList("128");
+
+        System.out.println("WEB_SMS >>> 비밀번호찾기 인증번호 SMS전송 >>> 128 코드값 : " + codeList.get(0).getStr("nmcodeItem1"));
+        System.out.println("WEB_SMS >>> 비밀번호찾기 인증번호 SMS전송 >>> 아이디 : " + otpAuthVO.getUserId());
+        System.out.println("WEB_SMS >>> 비밀번호찾기 인증번호 SMS전송 >>> 핸드폰번호 : " + otpAuthVO.getRecvMpNo());
+        System.out.println("WEB_SMS >>> 비밀번호찾기 인증번호 SMS전송 >>> 인증번호 : " + otpAuthVO.getAuthNo());
+
+        if(("Y").equals(codeList.get(0).getStr("nmcodeItem1"))) {
+            // SMS전송
+            userService.getSmsSendSave(otpAuthVO);
+        }
+        /** //문자 발송 로직 */
+
+
         return returnJson(Status.OK, "msg", messageService.get("login.pw.find.send.ok"));
     }
 

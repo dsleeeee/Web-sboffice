@@ -1025,7 +1025,6 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .pageNum2 ul li a {font-size:0.875em; display:block; line-height:25px; border-radius:4px;}
 .pageNum2 ul li a:hover {background:#dedede;}
 .pageNum2 ul li a.on {background:#bfbfbf; color:#fff;}
-
 .pageNum2 ul li.btn_previous, .pageNum2 ul li.btn_next {width:29px; height:25px; position:relative; margin:0 8px;}
 .pageNum2 ul li.btn_previous a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; width:29px; height:25px; display:inline-block; position:absolute; left:0px; top:0px;}
 .pageNum2 ul li.btn_previous a:hover {background:url(../img/ic_pagenum_hover.png) #ccc center center no-repeat;}

@@ -827,24 +827,27 @@
     <typeAlias alias="mobileOrderChannelSaleVO" type="kr.co.solbipos.mobile.sale.status.orderChannelSale.service.MobileOrderChannelSaleVO"/>
     <!-- (모바일) 매출현황 > 반품현황 -->
     <typeAlias alias="mobileRtnStatusVO" type="kr.co.solbipos.mobile.sale.status.rtnStatus.service.MobileRtnStatusVO"/>
+    <!-- (모바일) 매장매출 > 일별매출 -->
+    <typeAlias alias="mobileStoreDaySaleVO" type="kr.co.solbipos.mobile.sale.status.storeDaySale.service.MobileStoreDaySaleVO"/>
+    <!-- (모바일) 매장매출 > 월별매출 -->
+    <typeAlias alias="mobileStoreMonthSaleVO" type="kr.co.solbipos.mobile.sale.status.storeMonthSale.service.MobileStoreMonthSaleVO"/>
+    <!-- (모바일) 매장매출 > 상품별매출 -->
+    <typeAlias alias="mobileStoreProdSaleVO" type="kr.co.solbipos.mobile.sale.status.storeProdSale.service.MobileStoreProdSaleVO"/>
+    <!-- (모바일) 매장매출 > 반품현황 -->
+    <typeAlias alias="mobileStoreRtnStatusVO" type="kr.co.solbipos.mobile.sale.status.storeRtnStatus.service.MobileStoreRtnStatusVO"/>
+    <!-- (모바일) 매장매출 > 주문현황 -->
+    <typeAlias alias="mobileOrderStatusVO" type="kr.co.solbipos.mobile.sale.status.orderStatus.service.MobileOrderStatusVO"/>
+    <!-- (모바일) 매장매출 > 최종교환권번호 -->
+    <typeAlias alias="mobileVoucherNoVO" type="kr.co.solbipos.mobile.sale.status.voucherNo.service.MobileVoucherNoVO"/>
+    <!-- (모바일) QR > 원하는 페이지 오픈 -->
+    <typeAlias alias="mobileDirectVO" type="kr.co.solbipos.mobile.application.direct.service.MobileDirectVO"/>
+
     <!-- (모바일) 부가서비스 > 근태현황 -->
     <typeAlias alias="mobileDclzManageVO" type="kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageVO"/>
     <!-- (모바일) 부가서비스 > 예약현황 -->
     <typeAlias alias="mobileResveInfoVO" type="kr.co.solbipos.mobile.adi.resve.resveInfo.service.MobileResveInfoVO"/>
-    <!-- (모바일) 모바일 매장매출 > 일별매출 -->
-    <typeAlias alias="mobileStoreDaySaleVO" type="kr.co.solbipos.mobile.sale.status.storeDaySale.service.MobileStoreDaySaleVO"/>
-    <!-- (모바일) 모바일 매장매출 > 월별매출 -->
-    <typeAlias alias="mobileStoreMonthSaleVO" type="kr.co.solbipos.mobile.sale.status.storeMonthSale.service.MobileStoreMonthSaleVO"/>
-    <!-- (모바일) 모바일 매장매출 > 상품별매출 -->
-    <typeAlias alias="mobileStoreProdSaleVO" type="kr.co.solbipos.mobile.sale.status.storeProdSale.service.MobileStoreProdSaleVO"/>
-    <!-- (모바일) 모바일 매장매출 > 반품현황 -->
-    <typeAlias alias="mobileStoreRtnStatusVO" type="kr.co.solbipos.mobile.sale.status.storeRtnStatus.service.MobileStoreRtnStatusVO"/>
-    <!-- (모바일) 모바일 매장매출 > 주문현황 -->
-    <typeAlias alias="mobileOrderStatusVO" type="kr.co.solbipos.mobile.sale.status.orderStatus.service.MobileOrderStatusVO"/>
-    <!-- (모바일) 모바일 매장매출 > 최종교환권번호 -->
-    <typeAlias alias="mobileVoucherNoVO" type="kr.co.solbipos.mobile.sale.status.voucherNo.service.MobileVoucherNoVO"/>
-    <!-- (모바일) QR > 원하는 페이지 오픈 -->
-    <typeAlias alias="mobileDirectVO" type="kr.co.solbipos.mobile.application.direct.service.MobileDirectVO"/>
+    <!-- (모바일) 부가서비스 > 문자전송현황 -->
+    <typeAlias alias="mobileSendStatusVO" type="kr.co.solbipos.mobile.adi.sms.sendStatus.service.MobileSendStatusVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>

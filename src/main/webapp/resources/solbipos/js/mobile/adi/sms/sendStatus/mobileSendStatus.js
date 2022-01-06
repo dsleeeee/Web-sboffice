@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : sendStatus.js
- * 설  명 : 문자전송현황 JavaScript
+ * 파일명 : mobileSendStatus.js
+ * 설  명 : (모바일) 부가서비스 > 문자전송현황 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.06.18     김설아      1.0
+ * 2022.01.04     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -35,10 +35,10 @@ var reserveYnDataMapData = [
 /**
  *  문자전송현황 조회 그리드 생성
  */
-app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mobileSendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sendStatusCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('mobileSendStatusCtrl', $scope, $http, false));
 
     // comboBox 초기화
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -87,7 +87,7 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
                 if ( col.binding === "msgContent") {
                     var selectedRow = s.rows[ht.row].dataItem;
                     $scope.setSelectedSendStatus(selectedRow);
-                    $scope.wjMessageDtlLayer.show(true);
+                    $scope.wjMobileMessageDtlLayer.show(true);
                     event.preventDefault();
                 }
             }
@@ -100,20 +100,20 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.gChk = messages["cmm.chk"];
-        dataItem.regDt = messages["sendStatus.regDt"];
-        dataItem.sOgnNm = messages["sendStatus.send"];
-        dataItem.sUserNm = messages["sendStatus.send"];
-        dataItem.sPhoneNumber = messages["sendStatus.send"];
-        dataItem.rOgnNm = messages["sendStatus.receive"];
-        dataItem.rPhoneNumber = messages["sendStatus.receive"];
-        dataItem.msgType = messages["sendStatus.msgType"];
-        dataItem.sendDate = messages["sendStatus.sendDate"];
-        dataItem.readDate = messages["sendStatus.readDate"];
-        dataItem.sendStatus = messages["sendStatus.sendStatus"];
-        dataItem.resultNm = messages["sendStatus.resultNm"];
-        dataItem.company = messages["sendStatus.company"];
-        dataItem.msgContent = messages["sendStatus.msgContent"];
+        dataItem.gChk = messages["mobile.cmm.chk"];
+        dataItem.regDt = messages["mobile.sendStatus.regDt"];
+        dataItem.sOgnNm = messages["mobile.sendStatus.send"];
+        dataItem.sUserNm = messages["mobile.sendStatus.send"];
+        dataItem.sPhoneNumber = messages["mobile.sendStatus.send"];
+        dataItem.rOgnNm = messages["mobile.sendStatus.receive"];
+        dataItem.rPhoneNumber = messages["mobile.sendStatus.receive"];
+        dataItem.msgType = messages["mobile.sendStatus.msgType"];
+        dataItem.sendDate = messages["mobile.sendStatus.sendDate"];
+        dataItem.readDate = messages["mobile.sendStatus.readDate"];
+        dataItem.sendStatus = messages["mobile.sendStatus.sendStatus"];
+        dataItem.resultNm = messages["mobile.sendStatus.resultNm"];
+        dataItem.company = messages["mobile.sendStatus.company"];
+        dataItem.msgContent = messages["mobile.sendStatus.msgContent"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -158,18 +158,22 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("sendStatusCtrl", function(event, data) {
-        $scope.searchSendStatus();
+    $scope.$on("mobileSendStatusCtrl", function(event, data) {
+        $scope.searchMobileSendStatus();
         event.preventDefault();
     });
 
-    $scope.searchSendStatus = function() {
+    $scope.searchMobileSendStatus = function() {
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
         params.listScale = $scope.listScale;
+        params.reserveYn = $scope.reserveYnCombo.selectedValue;
 
-        $scope._inquiryMain("/adi/sms/sendStatus/sendStatus/getSendStatusList.sb", params, function() {}, false);
+        $scope._inquirySub("/adi/sms/sendStatus/sendStatus/getSendStatusList.sb", params, function() {
+            // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
+            gridShowMsgNoData("mobileSendStatus", $scope.flexMobileSendStatus, "N");
+        }, false);
     };
     // <-- //검색 호출 -->
 
@@ -177,9 +181,9 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.reserveCancel = function() {
         // 파라미터 설정
         var paramsChk = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                paramsChk.push($scope.flex.collectionView.items[i]);
+        for (var i = 0; i < $scope.flexMobileSendStatus.collectionView.items.length; i++) {
+            if($scope.flexMobileSendStatus.collectionView.items[i].gChk) {
+                paramsChk.push($scope.flexMobileSendStatus.collectionView.items[i]);
             }
         }
 
@@ -190,32 +194,32 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 파라미터 설정
         var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                if($scope.flex.collectionView.items[i].reserveYn != "1"
-                    || $scope.flex.collectionView.items[i].sendStatus == "3"
-                    || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 8)) <= parseInt(getToday())) ) {
+        for (var i = 0; i < $scope.flexMobileSendStatus.collectionView.items.length; i++) {
+            if($scope.flexMobileSendStatus.collectionView.items[i].gChk) {
+                if($scope.flexMobileSendStatus.collectionView.items[i].reserveYn != "1"
+                    || $scope.flexMobileSendStatus.collectionView.items[i].sendStatus == "3"
+                    || ($scope.flexMobileSendStatus.collectionView.items[i].sendDate != "" && parseInt($scope.flexMobileSendStatus.collectionView.items[i].sendDate.substring(0, 8)) <= parseInt(getToday())) ) {
 
-                    $scope._popMsg(messages["sendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
+                    $scope._popMsg(messages["mobile.sendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
                     return false;
                 }
 
-                params.push($scope.flex.collectionView.items[i]);
+                params.push($scope.flexMobileSendStatus.collectionView.items[i]);
             }
         }
 
         // 예약 문자를 취소하시겠습니까?
-        if (confirm(messages["sendStatus.reserveCancelConfirm"])) {
+        if (confirm(messages["mobile.sendStatus.reserveCancelConfirm"])) {
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/sms/sendStatus/sendStatus/getSendStatusReserveCancelSave.sb", params, function(){ $scope.searchSendStatus() });
         }
     };
 
     // SMS전송
-    $scope.smsSendPop = function () {
-        $scope.wjSmsSendLayer.show(true);
-        event.preventDefault();
-    };
+    // $scope.smsSendPop = function () {
+    //     $scope.wjSmsSendLayer.show(true);
+    //     event.preventDefault();
+    // };
 
     // 선택
     $scope.selectedSendStatus;
@@ -230,17 +234,17 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.element(document).ready(function () {
 
         // 메세지 팝업 핸들러 추가
-        $scope.wjMessageDtlLayer.shown.addHandler(function (s) {
+        $scope.wjMobileMessageDtlLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('messageDtlCtrl', $scope.getSelectedSendStatus());
+                $scope._broadcast('mobileMessageDtlCtrl', $scope.getSelectedSendStatus());
             }, 50)
         });
 
         // SMS전송 팝업 핸들러 추가
-        $scope.wjSmsSendLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('smsSendCtrl', null);
-            }, 50)
-        });
+        // $scope.wjSmsSendLayer.shown.addHandler(function (s) {
+        //     setTimeout(function() {
+        //         $scope._broadcast('smsSendCtrl', null);
+        //     }, 50)
+        // });
     });
 }]);

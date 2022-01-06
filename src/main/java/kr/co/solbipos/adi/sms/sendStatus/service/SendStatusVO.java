@@ -63,6 +63,9 @@ public class SendStatusVO extends PageVO {
     /** 송신자 전화번호 */
     private String ssPhoneNumber;
 
+    /** 예약여부 */
+    private String reserveYn;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -114,4 +117,8 @@ public class SendStatusVO extends PageVO {
     public String getSsPhoneNumber() { return ssPhoneNumber; }
 
     public void setSsPhoneNumber(String ssPhoneNumber) { this.ssPhoneNumber = ssPhoneNumber; }
+
+    public String getReserveYn() { return reserveYn; }
+
+    public void setReserveYn(String reserveYn) { this.reserveYn = reserveYn; }
 }

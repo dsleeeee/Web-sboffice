@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileSendStatus.xml
+    (모바일) 부가서비스 > 문자전송현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.01.04     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.adi.sms.sendStatus.service.impl.MobileSendStatusMapper">
+
+</mapper>
