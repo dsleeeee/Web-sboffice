@@ -64,18 +64,48 @@
 			         AND TPE.REG_SEQ = TPEF.REG_SEQ
 			       ),0) AS FUND_AMT
 			--    , NVL(SUM(TPEF.FUND_AMT),0)       AS FUND_AMT
-			------------------------------
-			    , NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
-			          FROM TB_PS_EXACTCALC_CASH TPEC --현금
-			         WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
-			         AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
-			         AND TPE.STORE_CD = TPEC.STORE_CD
-			         AND TPE.SALE_DATE = TPEC.SALE_DATE
-			         AND TPE.POS_NO = TPEC.POS_NO
-			         AND TPE.REG_SEQ = TPEC.REG_SEQ
-					 AND TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
-			       ),0) AS CASH_EXACT_AMT
-			--    , NVL(SUM(TPEC.CASH_EXACT_AMT),0)AS CASH_EXACT_AMT
+			------------------------------     -- 기존 현금 금액 - 현금영수 금액
+				, NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
+					 FROM TB_PS_EXACTCALC_CASH TPEC --현금
+					WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
+					AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
+					AND TPE.STORE_CD = TPEC.STORE_CD
+					AND TPE.SALE_DATE = TPEC.SALE_DATE
+					AND TPE.POS_NO = TPEC.POS_NO
+					AND TPE.REG_SEQ = TPEC.REG_SEQ
+					AND TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
+				)
+			 	-
+				(SELECT	SUM(CASE WHEN TSSPC.APPR_PROC_FG IN ('1','2','4') THEN TSSPC.SALE_AMT ELSE 0 END)<!-- 현금영수증 -->
+				FROM	TB_SL_SALE_PAY_CASH TSSPC
+				WHERE	TPE.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
+				AND		TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
+				AND		TPE.STORE_CD = TSSPC.STORE_CD
+				AND		TPE.SALE_DATE = TSSPC.SALE_DATE
+				AND		TPE.POS_NO = TSSPC.POS_NO
+				), 0) AS CASH_EXACT_AMT
+		--    , NVL(SUM(TPEC.CASH_EXACT_AMT),0)AS CASH_EXACT_AMT
+			------------------------------ -- 기존 현금 금액이 없으면 현금영수 금액도 0원으로 출력
+				, CASE WHEN NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
+					FROM TB_PS_EXACTCALC_CASH TPEC --현금
+					WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
+					AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
+					AND TPE.STORE_CD = TPEC.STORE_CD
+					AND TPE.SALE_DATE = TPEC.SALE_DATE
+					AND TPE.POS_NO = TPEC.POS_NO
+					AND TPE.REG_SEQ = TPEC.REG_SEQ
+					AND TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
+					), 0) = 0 THEN 0
+				    ELSE
+				    (NVL((SELECT SUM(CASE WHEN TSSPC.APPR_PROC_FG IN ('1','2','4') THEN TSSPC.SALE_AMT ELSE 0 END)
+				    FROM TB_SL_SALE_PAY_CASH TSSPC
+				    WHERE TPE.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
+					AND TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
+					AND TPE.STORE_CD = TSSPC.STORE_CD
+					AND TPE.SALE_DATE = TSSPC.SALE_DATE
+					AND TPE.POS_NO = TSSPC.POS_NO
+					),0))
+				    END AS CASH_BILL_SALE_AMT
 			------------------------------
 			    , NVL((SELECT SUM(DECODE(TPEI.ACCNT_FG,'1',TPEI.ACCNT_AMT, 0))
 			          FROM TB_PS_EXACTCALC_IOMONEY TPEI --시재
@@ -84,7 +114,6 @@
 			         AND TPE.STORE_CD = TPEI.STORE_CD
 			         AND TPE.SALE_DATE = TPEI.SALE_DATE
 			         AND TPE.POS_NO = TPEI.POS_NO
-			         AND TPE.REG_SEQ = TPEI.REG_SEQ
 			       ),0) AS ACCNT_IN_AMT
 			    , NVL((SELECT SUM(DECODE(TPEI.ACCNT_FG,'2',TPEI.ACCNT_AMT, 0))
 			          FROM TB_PS_EXACTCALC_IOMONEY TPEI --시재
@@ -252,7 +281,8 @@
 		     , A.RTN_BILL_CNT
 		     , A.RTN_BILL_AMT
 		     , B.PAY_AMT_CARD
-		     , B.PAY_AMT_CASH
+		     , CASE WHEN B.PAY_AMT_CASH = 0 THEN 0 ELSE B.PAY_AMT_CASH - H.PAY_AMT_CASH_BILL END AS PAY_AMT_CASH  -- 기존현금금액 - 현금영수금액
+		     , CASE WHEN B.PAY_AMT_CASH = 0 THEN 0 ELSE H.PAY_AMT_CASH_BILL END AS PAY_AMT_CASH_BILL   -- 기존현금금액이 없으면 현금영수금액도 0원으로 출력(현금영수금액을 구하는 테이블은 정산 테이블이 아니라서 정산전에도 금액이 보임)
 		     , B.PAY_AMT_PAYCO
 		     , B.PAY_AMT_VPOINT
 		     , B.PAY_AMT_VCOUPN
@@ -499,7 +529,16 @@
 	              , TPE.SALE_DATE
 	              , TPE.POS_NO
 	       )G
-       
+			,(
+			-- 현금,현금영수증 분리
+			SELECT	NVL(MAX(SUM(CASE WHEN APPR_PROC_FG IN ('1','2','4') THEN SALE_AMT ELSE 0 END)), 0) AS PAY_AMT_CASH_BILL -- 현금영수증
+			FROM    TB_SL_SALE_PAY_CASH
+			WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+		  	AND 	STORE_CD = #{storeCd}
+		  	AND 	SALE_DATE = REPLACE(#{saleDate},'-','')
+		  	AND 	POS_NO = #{posNo}
+			GROUP BY STORE_CD, SALE_DATE, POS_NO
+			) H
     </select>
     
     <select id="getPosExcclcExcelList" parameterType="posExcclcVO" resultType="DefaultMap">

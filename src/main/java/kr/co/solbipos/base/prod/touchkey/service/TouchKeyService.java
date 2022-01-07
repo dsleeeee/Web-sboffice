@@ -60,4 +60,7 @@ public interface TouchKeyService {
 
     /** 터치키그룹 복사 */
     Result copyTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+    
+    /** 터치키 초기화 */
+    int deleteTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 }

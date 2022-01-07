@@ -56,18 +56,26 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
         if( col.binding === "prodCd") {
           wijmo.addClass(e.cell, 'wijLink');
         }
 
         // 검증결과
         if (col.binding === "result") {
-          var item = s.rows[e.row].dataItem;
 
           // 값이 있으면 링크 효과
           if (item[("result")] !== '검증성공') {
             wijmo.addClass(e.cell, 'wij_gridText-red');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
+          }
+        }
+        // 프차매장 본사애서 등록한 상품은 수정 못 하도록
+        if(col.binding === "barCd"){
+          if(item.regFg === "H" && orgnFg === "STORE" && hqOfficeCd !== '00000'){
+
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+            wijmo.setAttribute(e.cell, 'aria-readonly', true);
           }
         }
       }
@@ -181,7 +189,7 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       $scope.flex.collectionView.itemsRemoved[i].status = "D";
       params.push($scope.flex.collectionView.itemsRemoved[i]);
     }
-
+    console.log(params);
     if (params.length > 0) {
       $.postJSONArray("/base/prod/prodBarcd/chkBarCds.sb", params, function(result) {
             $scope._save("/base/prod/prodBarcd/saveBarcd.sb", params,

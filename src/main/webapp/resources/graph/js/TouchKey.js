@@ -1604,9 +1604,15 @@ Format.prototype.initElements = function () {
   // 초기화 버튼
   addClickHandler(document.getElementById('btnInti'), function () {
 
+    var sid = "";
+
     var scope = agrid.getScope("touchKeyCtrl");
     var classArea = format.touchkey.classArea;
     var prodArea = format.touchkey.prodArea;
+
+    if(document.getElementsByName('sessionId')[0]){
+      sid = document.getElementsByName('sessionId')[0].value;
+    }
 
     scope.$apply(function(){
       scope._popConfirm("터치키를 초기화 하시겠습니까?", function() {
@@ -1618,9 +1624,28 @@ Format.prototype.initElements = function () {
         format.setBtnStyle();
 
         // 아무것도 없는 빈 XML 터치키 셋팅
-        format.setGraphXml(classArea, null);
-        format.setGraphXml(prodArea, null);
-        scope._broadcast('touchKeyCtrl');
+        // format.setGraphXml(classArea, null);
+        // format.setGraphXml(prodArea, null);
+        // scope._broadcast('touchKeyCtrl');
+
+        $.ajax({
+          type: "POST",
+          url: "/base/prod/touchKey/touchKey/deleteTouchKey.sb?sid=" + sid,
+          data: params,
+          dataType: "json",
+          processData: false,
+          contentType: false,
+          cache: false,
+          success: function(result){
+            if (result.status === "OK") {
+              alert("초기화 되었습니다.");
+
+              location.reload(true);
+            } else {
+              alert("초기화하는데 실패하였습니다.");
+            }
+          }
+        });
 
       });
     });

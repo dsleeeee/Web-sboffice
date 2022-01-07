@@ -795,4 +795,29 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     }
 
+    @Override
+    public int deleteTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();
+        touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        keyMapper.deleteTouchKeyClass(touchKeyClassVO);
+
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyVO.setTukeyGrpCd(null);
+        keyMapper.deleteTouchKey(touchKeyVO);
+
+        DefaultMap<String> param = new DefaultMap<String>();
+        param.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+        param.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
+        param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
+        keyMapper.deleteTouchKeyConfgXml(param);
+        return result;
+    }
+
 }

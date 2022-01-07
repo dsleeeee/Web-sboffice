@@ -8,6 +8,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -15,6 +16,8 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
+import kr.co.solbipos.base.prod.prodBarcd.service.ProdBarcdVO;
+import kr.co.solbipos.base.prod.prodBarcd.service.impl.ProdBarcdMapper;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
 import org.apache.commons.io.FilenameUtils;
@@ -27,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
@@ -318,12 +322,15 @@ public class ProdServiceImpl implements ProdService {
                     // 상품분류 매장에 INSERT
                     prodMapper.insertClsHqToStore(prodVO);
 
+//                    }
+
                 } else {
                     // 상품정보 매장에 UPDATE
                     procResult = prodMapper.updateHqProdToStoreProd(prodVO);
 
                     // 상품분류 매장에 UPDATE
                     prodMapper.updateClsHqToStore(prodVO);
+
                 }
 
                 //매장 상품 바코드 저장(바코드정보가 있을 경우만)
@@ -790,10 +797,30 @@ public class ProdServiceImpl implements ProdService {
     /** 바코드 중복체크 */
     public List<DefaultMap<String>> chkBarCd(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
+        List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+            result = prodMapper.chkBarCd(prodVO);
+        } else if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+
+            List<DefaultMap<String>> list = null;
+            // 본사 바코드 등록 시 중복된 바코드 체크
+            list = prodMapper.chkBarCdHq(prodVO);
+            if (list.size() != 0) {
+                // 중복된 바코드가 있음
+                if(StringUtil.getOrBlank(list.get(0).get("hqCnt")).equals("0") && StringUtil.getOrBlank(list.get(0).get("msCnt")).equals("1")){
+                    // 중복된 바코드가 매장테이블에만 있을 경우 매장 데이터 삭제 후 저장
+                    prodVO.setModDt(currentDateTimeString());
+                    prodVO.setModId(sessionInfoVO.getUserId());
+                    prodMapper.deleteProdBarcdStoreHq(prodVO);
+                } else {
+                    // 그외 바코드 중복 메시지 창 띄움
+                    result = prodMapper.chkBarCd(prodVO);
+                }
+            }
         }
         return prodMapper.chkBarCd(prodVO);
     }

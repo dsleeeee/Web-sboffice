@@ -112,6 +112,9 @@ public interface ProdMapper {
     /** 바코드 중복체크*/
     List<DefaultMap<String>> chkBarCd(ProdVO prodVO);
 
+    /** 바코드 중복체크(본사)*/
+    List<DefaultMap<String>> chkBarCdHq(ProdVO prodVO);
+
     /** 상품 바코드 존재 여부 확인 */
     int getProdBarCdCnt(ProdVO prodVO);
 
@@ -126,6 +129,9 @@ public interface ProdMapper {
 
     /** 바코드가 공백일경우 기존 바코드 정보 삭제(매장것도 삭제) */
     int deleteProdBarcdStore(ProdVO prodVO);
+
+    /** 바코드가 공백일경우 기존 바코드 정보 삭제(매장것도 삭제) */
+    int deleteProdBarcdStoreHq(ProdVO prodVO);
 
     /** 매장 상품의 바코드 등록 프로시저 */
     int saveProdBarcdStore(ProdVO prodVO);

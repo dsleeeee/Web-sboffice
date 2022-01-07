@@ -140,17 +140,33 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
     /** 바코드 중복체크 */
     public List<DefaultMap<String>> chkBarCds(ProdBarcdVO[] prodBarcdVOs, SessionInfoVO sessionInfoVO) {
 
-        List<DefaultMap<String>> result = null;
+        List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
         for(ProdBarcdVO prodBarcdVO : prodBarcdVOs) {
+
             prodBarcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             prodBarcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                 prodBarcdVO.setStoreCd(sessionInfoVO.getStoreCd());
-            }
-            result = prodBarcdMapper.chkBarCds(prodBarcdVO);
+                result = prodBarcdMapper.chkBarCds(prodBarcdVO);
+            } else if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
 
-            if(result.size() != 0) {
-                return result;
+                List<DefaultMap<String>> list = null;
+                // 본사 바코드 등록 시 중복된 바코드 체크
+                list = prodBarcdMapper.chkBarCdsHq(prodBarcdVO);
+                if (list.size() != 0) {
+                    // 중복된 바코드가 있음
+                    if(StringUtil.getOrBlank(list.get(0).get("hqCnt")).equals("0") && StringUtil.getOrBlank(list.get(0).get("msCnt")).equals("1")){
+                        // 중복된 바코드가 매장테이블에만 있을 경우 매장 데이터 삭제 후 저장
+                        prodBarcdVO.setModDt(currentDateTimeString());
+                        prodBarcdVO.setModId(sessionInfoVO.getUserId());
+                        prodBarcdMapper.deleteProdBarcdStoreHq(prodBarcdVO);
+                    } else {
+                        // 그외 바코드 중복 메시지 창 띄움
+                        result = prodBarcdMapper.chkBarCds(prodBarcdVO);
+                    }
+                }
             }
         }
         return result;
@@ -229,21 +245,24 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setModId(sessionInfoVO.getUserId());
             prodBarcdVO.setSeq(i);
 
-            List<DefaultMap<String>> list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
-                System.out.println(prodBarcdVO.getProdCd() + "  :  seq: " + prodBarcdVO.getSeq() + " / list : " + list);
-            if (prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
-                prodBarcdVO.setResult("바코드 길이가 40byte를 넘습니다.");
-            } else if (list.size() != 0) {
-                if (StringUtil.getOrBlank(list.get(0).get("cntProd")).equals("0")) {
-                    prodBarcdVO.setResult("해당 상품이 존재하지 않습니다.");
-                } else if (!StringUtil.getOrBlank(list.get(0).get("cntBar")).equals("0")) {
-                    prodBarcdVO.setResult("중복된 바코드가 있습니다.");
-                }
-            } else {
-                prodBarcdVO.setResult("검증성공");
-            }
+            if(prodBarcdVO.getProdCd() != null && prodBarcdVO.getProdCd().length() >= 1 ){
 
-            result = prodBarcdMapper.getExcelUploadCheckSave(prodBarcdVO);
+                List<DefaultMap<String>> list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
+
+                if (prodBarcdVO.getBarCd() != null && prodBarcdVO.getBarCd().length() >= 1 && prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
+                    prodBarcdVO.setResult("바코드 길이가 40byte를 넘습니다.");
+                } else if (list.size() != 0) {
+                    if (StringUtil.getOrBlank(list.get(0).get("cntProd")).equals("0")) {
+                        prodBarcdVO.setResult("해당 상품이 존재하지 않습니다.");
+                    } else if (!StringUtil.getOrBlank(list.get(0).get("cntBar")).equals("0")) {
+                        prodBarcdVO.setResult("중복된 바코드가 있습니다.");
+                    }
+                } else {
+                    prodBarcdVO.setResult("검증성공");
+                }
+
+                result = prodBarcdMapper.getExcelUploadCheckSave(prodBarcdVO);
+            }
             i++;
         }
         return result;

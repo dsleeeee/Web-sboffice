@@ -433,9 +433,17 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
           if (col.binding === ("pay" + payColList[i].payCd)) {
             // var item = s.rows[e.row].dataItem;
 
-            // 값이 있으면 링크
-            if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
-              $scope._broadcast(payColList[i].payMethod.toLowerCase().replaceAll('_','') + 'Ctrl', params);
+            // 021:현금영수증은 따로 처리
+            if(payColList[i].payCd !== "021"){
+              // 값이 있으면 링크
+              if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
+                $scope._broadcast(payColList[i].payMethod.toLowerCase().replaceAll('_','') + 'Ctrl', params);
+              }
+            } else if (payColList[i].payCd === "021") {
+              // 값이 있으면 링크(현금영수증은 현금 팝업 이용)
+              if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
+                $scope._broadcast(payColList[i-1].payMethod.toLowerCase().replaceAll('_','') + 'Ctrl', params);
+              }
             }
           }
         }
