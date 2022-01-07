@@ -444,3 +444,7 @@
 <%-- ERP 연동 매장 셋팅 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/erpStoreSet.jsp">
 </c:import>
+
+<%-- 매장환경설정코드 설명 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/envRemarkPop.jsp">
+</c:import>
