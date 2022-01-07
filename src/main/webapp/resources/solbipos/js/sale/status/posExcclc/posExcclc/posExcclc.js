@@ -90,6 +90,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     dataItem.realSaleAmt	= messages["posExcclc.sale"];
     dataItem.totFundAmt		= messages["posExcclc.posFundAmt"];
     dataItem.cashExactAmt	= messages["posExcclc.cashSaleAmt"];
+    dataItem.cashBillSaleAmt	= messages["posExcclc.cashBillSaleAmt"];
     dataItem.accntInAmt		= messages["posExcclc.inOut"];
     dataItem.accntOutAmt	= messages["posExcclc.inOut"];
     dataItem.cashTicketAmt	= messages["posExcclc.cashTicketAmt"];
@@ -349,6 +350,7 @@ app.controller('posExcclcExcelCtrl', ['$scope', '$http', '$timeout', function ($
 	    dataItem.realSaleAmt	= messages["posExcclc.sale"];
 	    dataItem.totFundAmt		= messages["posExcclc.posFundAmt"];
 	    dataItem.cashExactAmt	= messages["posExcclc.cashSaleAmt"];
+        dataItem.cashBillSaleAmt	= messages["posExcclc.cashBillSaleAmt"];
 	    dataItem.accntInAmt		= messages["posExcclc.inOut"];
 	    dataItem.accntOutAmt	= messages["posExcclc.inOut"];
 	    dataItem.cashTicketAmt	= messages["posExcclc.cashTicketAmt"];

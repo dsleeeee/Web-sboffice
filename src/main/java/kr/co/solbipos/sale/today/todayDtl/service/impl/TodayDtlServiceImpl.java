@@ -84,15 +84,22 @@ public class TodayDtlServiceImpl implements TodayDtlService {
 
     /** 결제수단, 할인구분 컬럼 세팅  */
     public TodayDtlVO setCol(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO) {
+        /** PAY_CD = 02 현금,현금영수증 분리 */
         // 결제수단 array 값 세팅
-        todayDtlVO.setArrPayCol(todayDtlVO.getPayCol().split(","));
+//        todayDtlVO.setArrPayCol(todayDtlVO.getPayCol().split(","));
+        String payCol= "";
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
         String pivotPayCol = "";
         String arrPayCol[] = todayDtlVO.getPayCol().split(",");
         for(int i=0; i < arrPayCol.length; i++) {
-            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+            // 현금,현금영수증 제외
+            if(! (("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i])) ) {
+                pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+                payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+            }
         }
         todayDtlVO.setPivotPayCol(pivotPayCol);
+        todayDtlVO.setArrPayCol(payCol.split(","));
 
 
         // 할인구분 array 값 세팅

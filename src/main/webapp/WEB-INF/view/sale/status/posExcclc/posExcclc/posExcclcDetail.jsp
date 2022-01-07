@@ -118,6 +118,10 @@
 							</th>
 							<td id="rPayAmtCash"></td>
 							<th>
+								<div class="impWrap"><s:message code="posExcclc.payAmtCashBill"/></div>
+							</th>
+							<td id="rPayAmtCashBill"></td>
+							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtCard"/></div>
 							</th>
 							<td id="rPayAmtCard"></td>
@@ -125,12 +129,12 @@
 								<div class="impWrap"><s:message code="posExcclc.payAmtPayco"/></div>
 							</th>
 							<td id="rPayAmtPayco"></td>
+						</tr>
+						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtVpoint"/></div>
 							</th>
 							<td id="rPayAmtVpoint"></td>
-						</tr>
-						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtVcoupn"/></div>
 							</th>
@@ -143,12 +147,12 @@
 								<div class="impWrap"><s:message code="posExcclc.payAmtMpay"/></div>
 							</th>
 							<td id="rPayAmtMpay"></td>
+						</tr>
+						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtMcoupn"/></div>
 							</th>
 							<td id="rPayAmtMcoupn"></td>
-						</tr>
-						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtMembr"/></div>
 							</th>
@@ -161,12 +165,12 @@
 								<div class="impWrap"><s:message code="posExcclc.payAmtPostpaid"/></div>
 							</th>
 							<td id="rPayAmtPostpaid"></td>
+						</tr>
+						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtCoupn"/></div>
 							</th>
 							<td id="rPayAmtCoupn"></td>
-						</tr>
-						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtGift"/></div>
 							</th>
@@ -179,12 +183,12 @@
 								<div class="impWrap"><s:message code="posExcclc.payAmtPartner"/></div>
 							</th>
 							<td id="rPayAmtPartner"></td>
+						</tr>
+						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtOkcsb"/></div>
 							</th>
 							<td id="rPayAmtOkcsb"></td>
-						</tr>
-						<tr>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtEmpCard"/></div>
 							</th>
@@ -197,10 +201,6 @@
 								<div class="impWrap"><s:message code="posExcclc.paySmartOrderAmt"/></div>
 							</th>
 							<td id="rPayAmtPrev"></td>
-							<th>
-								<div class="impWrap"></div>
-							</th>
-							<td></td>
 						</tr>
 
 
@@ -561,25 +561,26 @@
 		    $("#rCancelAmt").text(numComma(data.rtnBillAmt));
 
 		    $("#rPayAmtCash").text(numComma(data.payAmtCash));
+		    $("#rPayAmtCashBill").text(numComma(data.payAmtCashBill));
 		    $("#rPayAmtCard").text(numComma(data.payAmtCard));
 		    $("#rPayAmtPayco").text(numComma(data.payAmtPayco));
-		    $("#rPayAmtVpoint").text(numComma(data.payAmtVpoint));
 
+		    $("#rPayAmtVpoint").text(numComma(data.payAmtVpoint));
 		    $("#rPayAmtVcoupn").text(numComma(data.payAmtVcoupn));
 		    $("#rPayAmtVcharge").text(numComma(data.payAmtVcharge));
 		    $("#rPayAmtMpay").text(numComma(data.payAmtMpay));
-		    $("#rPayAmtMcoupn").text(numComma(data.payAmtMcoupn));
 
+		    $("#rPayAmtMcoupn").text(numComma(data.payAmtMcoupn));
 		    $("#rPayAmtMembr").text(numComma(data.payAmtMembr));
 		    $("#rPayAmtPrepaid").text(numComma(data.payAmtPrepaid));
 		    $("#rPayAmtPostpaid").text(numComma(data.payAmtPostpaid));
-		    $("#rPayAmtCoupn").text(numComma(data.payAmtCoupn));
 
+		    $("#rPayAmtCoupn").text(numComma(data.payAmtCoupn));
 		    $("#rPayAmtGift").text(numComma(data.payAmtGift));
 		    $("#rPayAmtFstmp").text(numComma(data.payAmtFstmp));
 		    $("#rPayAmtPartner").text(numComma(data.payAmtPartner));
-		    $("#rPayAmtOkcsb").text(numComma(data.payAmtOkcsb));
 
+		    $("#rPayAmtOkcsb").text(numComma(data.payAmtOkcsb));
 		    $("#rPayAmtEmpCard").text(numComma(data.payAmtEmpCard));
 		    $("#rPayAmtEmpTemporary").text(numComma(data.payAmtEmpTemporary));
 		    $("#rPayAmtPrev").text(numComma(data.payAmtPrev));
