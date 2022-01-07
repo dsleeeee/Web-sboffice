@@ -50,8 +50,8 @@
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20211224.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-</c:import>
-
-
+<c:if test="${param.gubun ne 'sideMenu'}">
+  <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+  </c:import>
+</c:if>
 
