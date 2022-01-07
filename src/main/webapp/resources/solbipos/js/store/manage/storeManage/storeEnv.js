@@ -150,8 +150,14 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
           if (b_env === "" || b_env !== list[j].envstCd) {
             if (storeEnvCnt === 0 || storeEnvCnt % 2 === 0) storeEnvHtml += '<tr>';
 
-            storeEnvHtml += '  <th class=\"tc\">' + list[j].envstCd + (list[j].existFg === "N" ? " <em class=\"imp\">*</em> " : "") + '</th>';
-            storeEnvHtml += '  <td>' + list[j].envstNm + '</td>';
+            if(list[j].remark !== null && list[j].remark !== "" && list[j].remark !== undefined){
+              storeEnvHtml += '  <th class=\"tc\" style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\',\'' + envType + '\')\">' + list[j].envstCd + (list[j].existFg === "N" ? " <em class=\"imp\">*</em> " : "") + '</a></th>';
+              storeEnvHtml += '  <td style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\',\'' + envType + '\')\">' + list[j].envstNm + '</a></td>';
+            }else{
+              storeEnvHtml += '  <th class=\"tc\">' + list[j].envstCd + (list[j].existFg === "N" ? " <em class=\"imp\">*</em> " : "") + '</th>';
+              storeEnvHtml += '  <td>' + list[j].envstNm + '</td>';
+            }
+
             storeEnvHtml += '  <td>';
 
             // 매장환경, 외식환경, 유통환경 환경변수 그리기
@@ -162,16 +168,17 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
                 storeEnvHtml += '    <select name=\"envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-select w100\" />';
               }
 
-              storeEnvHtml += '    <input type=\"hidden\" name=\"status\"      value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"envstCd\"     value=\"' + list[j].envstCd + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"envstNm\"     value=\"' + list[j].envstNm + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"envstGrpCd\"  value=\"' + list[j].envstGrpCd + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"defltYn\"     value=\"' + list[j].defltYn + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"targtFg\"     value=\"' + list[j].targtFg + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValCd\"  value=\"' + list[j].hqEnvstValCd + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValNm\"  value=\"' + list[j].hqEnvstValNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"status\"        id=\"status' + list[j].envstCd + '\"        value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"envstCd\"       id=\"envstCd' + list[j].envstCd + '\"       value=\"' + list[j].envstCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"envstNm\"       id=\"envstNm' + list[j].envstCd + '\"       value=\"' + list[j].envstNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"envstGrpCd\"    id=\"envstGrpCd' + list[j].envstCd + '\"   value=\"' + list[j].envstGrpCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"defltYn\"       id=\"defltYn' + list[j].envstCd + '\"       value=\"' + list[j].defltYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"dirctInYn\"     id=\"dirctInYn' + list[j].envstCd + '\"     value=\"' + list[j].dirctInYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"targtFg\"       id=\"targtFg' + list[j].envstCd + '\"        value=\"' + list[j].targtFg + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"oldEnvstVal\"   id=\"oldEnvstVal' + list[j].envstCd + '\"   value=\"' + list[j].selEnvstVal + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValCd\"  id=\"hqEnvstValCd' + list[j].envstCd + '\"  value=\"' + list[j].hqEnvstValCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValNm\"  id=\"hqEnvstValNm' + list[j].envstCd + '\"  value=\"' + list[j].hqEnvstValNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"remark\"         id=\"remark' + list[j].envstCd + '\"         value=\"' + list[j].remark + '\">';
               storeEnvHtml += '  </td>';
             } else if(envType === "P") { // 포스환경 환경변수 그리기
               if (list[j].dirctInYn === "Y") { // 직접입력
@@ -180,16 +187,17 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
                 storeEnvHtml += '    <select name=\"pos_envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-select w100\" />';
               }
 
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_status\"      value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstCd\"     value=\"' + list[j].envstCd + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstNm\"     value=\"' + list[j].envstNm + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstGrpCd\"  value=\"' + list[j].envstGrpCd + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_defltYn\"     value=\"' + list[j].defltYn + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_targtFg\"     value=\"' + list[j].targtFg + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValCd\"  value=\"' + list[j].hqEnvstValCd + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValNm\"  value=\"' + list[j].hqEnvstValNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_status\"        id=\"pos_status' + list[j].envstCd + '\"         value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstCd\"       id=\"pos_envstCd' + list[j].envstCd + '\"        value=\"' + list[j].envstCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstNm\"       id=\"pos_envstNm' + list[j].envstCd + '\"        value=\"' + list[j].envstNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstGrpCd\"    id=\"pos_envstGrpCd' + list[j].envstCd + '\"    value=\"' + list[j].envstGrpCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_defltYn\"        id=\"pos_defltYn' + list[j].envstCd + '\"       value=\"' + list[j].defltYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_dirctInYn\"      id=\"pos_dirctInYn' + list[j].envstCd + '\"     value=\"' + list[j].dirctInYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_targtFg\"        id=\"pos_targtFg' + list[j].envstCd + '\"        value=\"' + list[j].targtFg + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_oldEnvstVal\"   id=\"pos_oldEnvstVal' + list[j].envstCd + '\"    value=\"' + list[j].selEnvstVal + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValCd\"  id=\"pos_hqEnvstValCd' + list[j].envstCd + '\"   value=\"' + list[j].hqEnvstValCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValNm\"  id=\"pos_hqEnvstValNm' + list[j].envstCd + '\"   value=\"' + list[j].hqEnvstValNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_remark\"         id=\"pos_remark' + list[j].envstCd + '\"          value=\"' + list[j].remark + '\">';
               storeEnvHtml += '  </td>';
             }
             //--------------------------------------------------------
@@ -306,6 +314,19 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
   //   $scope.setDefault();
   // });
 
+  // 매장환경설정 비고설명 팝업
+  $scope.envRemarkPop = function (envstCd, envType) {
+
+    var params    = {};
+    params.envstCd = $("#" + (envType === "P" ? "pos_" : "") + "envstCd" + envstCd).val();
+    params.envstNm = $("#" + (envType === "P" ? "pos_" : "") + "envstNm" + envstCd).val();
+    params.remark = $("#" + (envType === "P" ? "pos_" : "") + "remark" + envstCd).val();
+
+    $scope.envRemarkPopLayer.show(true);
+    $scope._broadcast('envRemarkPopCtrl', params);
+    event.preventDefault();
+  }
+
 }]);
 
 /*********************************************************
@@ -321,3 +342,8 @@ var fldGrp = function(idx) {
   }
 };
 
+// 매장환경설정 비고설명 팝업
+function envRemarkPop(envstCd, envType) {
+  var scope = agrid.getScope('storeEnvCtrl');
+  scope.envRemarkPop(envstCd, envType);
+}
