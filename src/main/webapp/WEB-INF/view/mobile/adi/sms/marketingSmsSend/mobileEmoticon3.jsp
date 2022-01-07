@@ -38,10 +38,10 @@
                 border: 1px solid #CDCDCD;
                 color: #000000;
                 font-family: dotum;
-                height: 145px;
+                height: 150px;
                 line-height: 1.25em;
                 padding: 6px 0 0 2px;
-                width: 200px;
+                width: 190px;
             }
 
             a:link {
@@ -57,9 +57,9 @@
                     border: 1px solid #CDCDCD;
                     color: #000000;
                     font-family: dotum;
-                    height: 145px;
+                    height: 150px;
                     margin: 5px 0 0 0;
-                    width: 200px;
+                    width: 190px;
                 } .tab02_sub {
                       background: #F3F3F3 none repeat scroll 0 0;
                       font-family: dotum;
@@ -68,7 +68,7 @@
                       margin: 0 0 5px;
                       padding: 5px 0 0;
                   } .tab02_sub a {
-                        margin: 0 0 0 5px;
+                        margin: 0 0 0 4px;
                         color: #666666;
                     } .emoWrap02 span {
                           display: block;
