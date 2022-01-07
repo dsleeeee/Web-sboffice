@@ -162,6 +162,12 @@
             <button class="btn_skyblue ml5 fr" ng-click="sampleDownload()" ><s:message code="barcd.sampleDownload"/></button>
     </div>
     <div class="mt5 oh sb-select dkbr">
+        <c:if test="${orgnFg == 'STORE'}">
+            <c:if test="${hqOfficeCd ne '00000'}">
+            <span class="s12 lh20 fl mb5">프랜차이즈 매장은 매장에서 등록한 상품의 바코드만 수정 가능합니다.(본사 상품은 본사에서만 수정 가능)<br>
+                [양식다운로드] 시 수정 가능한 상품의 양식만 다운로드 됩니다.</span>
+            </c:if>
+        </c:if>
         <%-- 저장 --%>
         <button class="btn_skyblue ml5 fr" ng-click="save()" ><s:message code="cmm.save"/></button>
         <%-- 삭제 --%>
@@ -190,6 +196,7 @@
                 <wj-flex-grid-column header="<s:message code="barcd.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.barcdOld"/>" binding="barcdOld" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.barcdNew"/>" binding="barCd" width="*" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="barcd.regFg"/>" binding="regFg" width="*" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -232,9 +239,11 @@
 
 <script>
     var useYn = ${ccu.getCommCode("067")};
+    var orgnFg = '${orgnFg}';
+    var hqOfficeCd = '${hqOfficeCd}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.07" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prodBarcd/prodDetailView.jsp">

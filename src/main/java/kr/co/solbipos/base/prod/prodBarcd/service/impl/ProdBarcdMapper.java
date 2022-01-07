@@ -53,6 +53,15 @@ public interface ProdBarcdMapper {
     /** 바코드 중복체크*/
     List<DefaultMap<String>> chkBarCds(ProdBarcdVO prodBarcdVO);
 
+    /** 바코드 중복체크(본사)*/
+    List<DefaultMap<String>> chkBarCdsHq(ProdBarcdVO prodBarcdVO);
+
+    /**
+     * 바코드 삭제(프차본사에서 삭제시 하위매장에것도 삭제)
+     * @param prodBarcdVO
+     * @return List
+     */
+    int deleteProdBarcdStoreHq(ProdBarcdVO prodBarcdVO);
     /**
      * 연결상품 조회
      * @param prodBarcdVO

@@ -109,7 +109,8 @@
                 SELECT
                 tmp.PROD_CD,
                 tmp.PROD_NM,
-                tmpb.BARCD_CD AS BARCD_OLD
+                tmpb.BARCD_CD AS BARCD_OLD,
+                tmp.REG_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                 TB_MS_PRODUCT tmp
@@ -349,6 +350,9 @@
                         OR
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                     )
+                <if test="hqOfficeCd != '00000'"> -- 프차매장
+                   AND tmp.REG_FG = 'S'
+                </if>
                 ORDER BY tmp.PROD_CD ASC
             </when>
         </choose>
@@ -673,34 +677,34 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT  '[' || CD || ']' || NM || '에 [' || PROD_CD || ']' || PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
                 FROM (
-                SELECT  thpb.HQ_OFFICE_CD AS CD,
-                tho.HQ_OFFICE_NM AS NM,
-                thpb.PROD_CD,
-                thp.PROD_NM
-                FROM    TB_HQ_PRODUCT_BARCD thpb,   TB_HQ_PRODUCT thp,  TB_HQ_OFFICE tho
-                WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
-                AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
-                AND     thp.PROD_CD = thpb.PROD_CD
-                AND     thpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
-                <if test='prodCd != null and prodCd.toString() != ""'>
-                    AND thpb.PROD_CD != #{prodCd}
-                </if>
-                UNION ALL
-                SELECT  tms.STORE_CD AS CD,
-                tms.STORE_NM AS NM,
-                tmpb.PROD_CD,
-                tmp.PROD_NM
-                FROM    TB_MS_PRODUCT_BARCD tmpb,   TB_MS_PRODUCT tmp,  TB_MS_STORE tms
-                WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     tmpb.STORE_CD = tms.STORE_CD
-                AND     tmp.STORE_CD = tms.STORE_CD
-                AND     tmp.PROD_CD = tmpb.PROD_CD
-                AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
-                <if test='prodCd != null and prodCd.toString() != ""'>
-                    AND tmpb.PROD_CD != #{prodCd}
-                </if>
-                )
+                    SELECT  thpb.HQ_OFFICE_CD AS CD,
+                            tho.HQ_OFFICE_NM AS NM,
+                            thpb.PROD_CD,
+                            thp.PROD_NM
+                    FROM    TB_HQ_PRODUCT_BARCD thpb,   TB_HQ_PRODUCT thp,  TB_HQ_OFFICE tho
+                    WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                    AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                    AND     thp.PROD_CD = thpb.PROD_CD
+                    AND     thpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
+                    <if test='prodCd != null and prodCd.toString() != ""'>
+                        AND thpb.PROD_CD != #{prodCd}
+                    </if>
+                    UNION ALL
+                    SELECT  tms.STORE_CD AS CD,
+                            tms.STORE_NM AS NM,
+                            tmpb.PROD_CD,
+                            tmp.PROD_NM
+                    FROM    TB_MS_PRODUCT_BARCD tmpb,   TB_MS_PRODUCT tmp,  TB_MS_STORE tms
+                    WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tmpb.STORE_CD = tms.STORE_CD
+                    AND     tmp.STORE_CD = tms.STORE_CD
+                    AND     tmp.PROD_CD = tmpb.PROD_CD
+                    AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
+                    <if test='prodCd != null and prodCd.toString() != ""'>
+                        AND tmpb.PROD_CD != #{prodCd}
+                    </if>
+                    )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
@@ -749,6 +753,42 @@
                 </if>
             </when>
         </choose>
+    </select>
+
+    <!-- 바코드 중복체크(본사) -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD, TB_MS_STORE
+          PARAM    : prodBarcdVO
+          COMMENTS : 바코드 입력 시 중복되는 바코드가 있는지 체크 (중복체크)
+    -->
+    <select id="chkBarCdsHq" parameterType="prodBarcdVO" resultType="DefaultMap">
+        /* USE : prodBarcdMapper.chkBarCdsHq */
+                SELECT  A.CNT AS HQ_CNT,
+                        B.CNT AS MS_CNT
+                FROM (
+                        SELECT  COUNT(*) AS CNT
+                        FROM    TB_HQ_PRODUCT_BARCD thpb,   TB_HQ_PRODUCT thp,  TB_HQ_OFFICE tho
+                        WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     tho.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                        AND     thp.HQ_OFFICE_CD = thpb.HQ_OFFICE_CD
+                        AND     thp.PROD_CD = thpb.PROD_CD
+                        AND     thpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
+                        <if test='prodCd != null and prodCd.toString() != ""'>
+                            AND thpb.PROD_CD != #{prodCd}
+                        </if>
+                    ) A,
+                     (
+                        SELECT  COUNT(*) AS CNT
+                        FROM    TB_MS_PRODUCT_BARCD tmpb,   TB_MS_PRODUCT tmp,  TB_MS_STORE tms
+                        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     tmpb.STORE_CD = tms.STORE_CD
+                        AND     tmp.STORE_CD = tms.STORE_CD
+                        AND     tmp.PROD_CD = tmpb.PROD_CD
+                        AND     tmpb.BARCD_CD = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
+                        <if test='prodCd != null and prodCd.toString() != ""'>
+                            AND tmpb.PROD_CD != #{prodCd}
+                        </if>
+                    ) B
     </select>
 
     <!-- 본사/매장 상품 등록시, 본사/매장 상품의 바코드 등록-->
@@ -861,14 +901,14 @@
                 AND tmpb.STORE_CD  = thpb.STORE_CD )
             WHEN MATCHED THEN
                 UPDATE
-                    SET tmpb.BARCD_CD = thpb.BARCD_CD
+                    SET tmpb.PROD_CD = thpb.PROD_CD
                         , tmpb.BARCD_NM = thpb.BARCD_NM
                         , tmpb.UNIT_QTY = thpb.UNIT_QTY
                         , tmpb.MOD_DT = #{modDt}
                         , tmpb.MOD_ID = #{modId}
             WHEN NOT MATCHED THEN
                 INSERT (
-                        tmpb.STORE_CD
+                      tmpb.STORE_CD
                     , tmpb.PROD_CD
                     , tmpb.BARCD_CD
                     , tmpb.BARCD_NM
@@ -877,16 +917,16 @@
                     , tmpb.REG_ID
                     , tmpb.MOD_DT
                     , tmpb.MOD_ID   )
-                    VALUES (
-                               thpb.STORE_CD
-                           , thpb.PROD_CD
-                           , thpb.BARCD_CD
-                           , thpb.BARCD_NM
-                           , thpb.UNIT_QTY
-                           , #{regDt}
-                           , #{regId}
-                           , #{modDt}
-                           , #{modId}      )
+                VALUES (
+                      thpb.STORE_CD
+                    , thpb.PROD_CD
+                    , thpb.BARCD_CD
+                    , thpb.BARCD_NM
+                    , thpb.UNIT_QTY
+                    , #{regDt}
+                    , #{regId}
+                    , #{modDt}
+                    , #{modId}      )
     </insert>
 
     <!-- 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제-->
@@ -1032,13 +1072,17 @@
                         tteb.PROD_CD,
                         tteb.BARCD_NEW AS BAR_CD,
                         tmp.PROD_NM,
-                        ( SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = tteb.PROD_CD) AS BARCD_OLD
+                        ( SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = tteb.PROD_CD) AS BARCD_OLD,
+                        tmp.REG_FG
                 FROM    TB_TMP_EXCEL_BARCD tteb,
                         TB_MS_PRODUCT tmp
                 WHERE   tteb.SESSION_ID = #{regId}
                 AND     tteb.STORE_CD = #{storeCd}
                 AND     tteb.STORE_CD = tmp.STORE_CD
                 AND     tteb.PROD_CD = tmp.PROD_CD
+                <if test="hqOfficeCd != '00000'"> -- 프차매장
+                    AND tmp.REG_FG = 'S'
+                </if>
                 ORDER BY PROD_CD
             </when>
         </choose>
@@ -1101,10 +1145,12 @@
                     <if test="seq != null and seq != ''">
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
-                        FROM    TB_TMP_EXCEL_BARCD
-                        WHERE   SESSION_ID = #{regId}
-                        AND     BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
-                        AND 	PROD_CD != #{prodCd}
+                        FROM    TB_TMP_EXCEL_BARCD tteb, TB_MS_PRODUCT tmp
+                        WHERE   tteb.SESSION_ID = #{regId}
+                        AND     tteb.BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
+                        AND 	tteb.PROD_CD != #{prodCd}
+                        AND     tteb.PROD_CD = tmp.PROD_CD
+                        AND     tmp.REG_FG = 'S'
                     </if>
                     ) BAR,
                     (	SELECT 	COUNT(*) AS CNT_PROD	/* 상품이 존재하는지 CNT : 1이어야함 */
@@ -1223,14 +1269,41 @@
         </choose>
     </insert>
 
+    <!-- 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제-->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD
+          PARAM    : prodBarcdVO
+          COMMENTS : 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제(본사의 하위 매장)
+    -->
+    <delete id="deleteProdBarcdStoreHq" parameterType="prodBarcdVO">
+        /* USE : prodBarcdMapper.deleteProdBarcdStoreHq */
+        MERGE INTO TB_MS_PRODUCT_BARCD A
+            USING   (
+                SELECT  B.STORE_CD  AS  STORE_CD
+                     ,  #{barCd}   AS  BARCD_CD
+                FROM  TB_MS_STORE B
+                WHERE   B.HQ_OFFICE_CD  =   #{hqOfficeCd}
+            ) B
+            ON  (
+                    A.STORE_CD      =   B.STORE_CD
+                    AND A.BARCD_CD   =   B.BARCD_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET MOD_DT = #{modDt}
+                    ,   MOD_ID = #{modId}
+                DELETE
+                WHERE   STORE_CD    = B.STORE_CD
+                  AND   BARCD_CD    = B.BARCD_CD
+    </delete>
 
     <!-- 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제-->
     <!--
           TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD
-          PARAM    : prodVO
+          PARAM    : prodBarcdVO
           COMMENTS : 본사/매장 상품 등록시, 본사/매장 상품의 바코드 삭제(본사의 하위 매장)
     -->
-    <delete id="deleteProdBarcdStore" parameterType="prodVO">
+    <delete id="deleteProdBarcdStore" parameterType="prodBarcdVO">
         /* USE : prodBarcdMapper.deleteProdBarcdStore */
         MERGE INTO TB_MS_PRODUCT_BARCD A
             USING   (
@@ -1246,25 +1319,25 @@
             WHEN MATCHED THEN
                 UPDATE
                     SET MOD_DT = #{modDt}
-                        , MOD_ID = #{modId}
-        DELETE
-        WHERE   STORE_CD    = B.STORE_CD
-          AND     PROD_CD     = B.PROD_CD
+                    ,   MOD_ID = #{modId}
+                DELETE
+                WHERE   STORE_CD    = B.STORE_CD
+                  AND   PROD_CD     = B.PROD_CD
     </delete>
 
     <!-- 매장 상품 등록시, 매장 상품의 바코드 등록 프로시저 호출-->
     <!--
           TABLE    : TB_MS_PRODUCT_BARCD
-          PARAM    : prodVO
+          PARAM    : prodBarcdVO
           COMMENTS : 매장 상품 등록시, 매장 상품의 바코드 등록한다.
     -->
-    <insert id="saveProdBarcdStore" parameterType="prodVO">
+    <insert id="saveProdBarcdStore" parameterType="prodBarcdVO">
         /* USE : prodBarcdMapper.saveProdBarcdStore */
         MERGE INTO TB_MS_PRODUCT_BARCD A
             USING   (
                 SELECT  STORE_CD    AS  STORE_CD
                      ,  #{prodCd}   AS  PROD_CD
-                     , REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')    AS  BARCD_CD
+                     ,  REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')   AS  BARCD_CD
                      ,  #{prodNm}   AS  BARCD_NM
                      ,  '1'         AS  UNIT_QTY
                      ,  #{regDt}    AS  REG_DT
@@ -1275,8 +1348,8 @@
                 WHERE   STORE_CD IN (   SELECT  B.STORE_CD
                                         FROM    TB_MS_STORE B
                                         WHERE   B.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                    )
-                AND     PROD_CD = #{prodCd}
+                )
+                  AND     PROD_CD = #{prodCd}
             ) B
             ON  (
                     A.STORE_CD  =   B.STORE_CD
@@ -1290,29 +1363,25 @@
                         ,       A.MOD_DT        =   B.MOD_DT
                         ,       A.MOD_ID        =   B.MOD_ID
             WHEN NOT MATCHED THEN
-                INSERT
-                    (
-                     A.STORE_CD
-                        ,       A.PROD_CD
-                        ,       A.BARCD_CD
-                        ,       A.BARCD_NM
-                        ,       A.UNIT_QTY
-                        ,       A.REG_DT
-                        ,       A.REG_ID
-                        ,       A.MOD_DT
-                        ,       A.MOD_ID
+                INSERT (    A.STORE_CD
+                        ,   A.PROD_CD
+                        ,   A.BARCD_CD
+                        ,   A.BARCD_NM
+                        ,   A.UNIT_QTY
+                        ,   A.REG_DT
+                        ,   A.REG_ID
+                        ,   A.MOD_DT
+                        ,   A.MOD_ID
                         )
-                    VALUES
-                    (
-                            B.STORE_CD
-                    ,       B.PROD_CD
-                    ,       B.BARCD_CD
-                    ,       B.BARCD_NM
-                    ,       B.UNIT_QTY
-                    ,       B.REG_DT
-                    ,       B.REG_ID
-                    ,       B.MOD_DT
-                    ,       B.MOD_ID
+                VALUES (    B.STORE_CD
+                        ,   B.PROD_CD
+                        ,   B.BARCD_CD
+                        ,   B.BARCD_NM
+                        ,   B.UNIT_QTY
+                        ,   B.REG_DT
+                        ,   B.REG_ID
+                        ,   B.MOD_DT
+                        ,   B.MOD_ID
                     )
     </insert>
 </mapper>
