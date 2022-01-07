@@ -263,23 +263,25 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
                 mainUsePosNo = result.data.data;
 
                 if(mainUsePosNo !== "" && mainUsePosNo !== null && mainUsePosNo !== undefined){
-                  params2.storeCd = storeScope.getSelectedStore().storeCd;
-                  params2.posNo = mainUsePosNo;
-                  params2.envstCd = "4021";
-                  params2.envstVal = "1";
+                   params2.storeCd = storeScope.getSelectedStore().storeCd;
+                   params2.posNo = mainUsePosNo;
+                   params2.envstCd = "4021";
+                   params2.envstVal = "1";
 
-                  // 메인포스 저장
-                  $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updatePosEnvVal.sb", params2, function () {
+                   // 메인포스 저장
+                   $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updatePosEnvVal.sb", params2, function () {
 
-                    // 나머지 서브포스로 저장
-                    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updateToSubPos.sb", params2, function () {});
+                   // 나머지 서브포스로 저장
+                   $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updateToSubPos.sb", params2, function () {});
 
                   });
                 }
               }
             });
         }
-      }else{ // DB구성방법[1221]이 개별DB 일 때
+      }
+
+      if(env1221 === "1"){// DB구성방법[1221]이 개별DB 일 때
         var params3 = {};
         params3.storeCd = storeScope.getSelectedStore().storeCd;
         params3.envstCd = "4021";
