@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSmsReserveLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:460px;height:130px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSmsReserveLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:460px;height:120px;" fade-in="false" fade-out="false">
     <div ng-controller="smsReserveCtrl">
 
         <%-- header --%>
@@ -21,7 +21,9 @@
                 <tbody>
                 <tr>
                     <%-- 예약시간 --%>
-                    <th><s:message code="smsReserve.date"/></th>
+                    <th>
+                        <s:message code="smsReserve.date"/>
+                    </th>
                     <td>
                         <div class="sb-select">
                             <span class="txtIn"><input id="startDateSmsReserve" name="startDate" class="w110px" /></span>
