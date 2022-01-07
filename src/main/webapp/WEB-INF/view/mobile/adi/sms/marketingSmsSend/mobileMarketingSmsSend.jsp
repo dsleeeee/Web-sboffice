@@ -43,10 +43,10 @@
         </div>
         <table class="searchTbl">
             <colgroup>
-                <col class="w15"/>
-                <col class="w25"/>
-                <col class="w15"/>
-                <col class="w25"/>
+                <col class="w20"/>
+                <col class="w30"/>
+                <col class="w20"/>
+                <col class="w30"/>
             </colgroup>
             <tbody>
             <tr>
@@ -462,237 +462,245 @@
         </table>
 
         <div class="mt10 mb10 oh sb-select dkbr">
-            <p class="tl s14 mt5 lh15 red">* 본인인증/발신번호/SMS충전 은 웹화면에서 진행하여 주십시오.</p>
+            <p class="tl s14 mt5 lh15 red">본인인증/발신번호/SMS충전은 웹화면에서 진행해주세요</p>
         </div>
 
-        <%-- 상단 --%>
-        <div class="wj-TblWrapBr w100 fl">
-            <%-- 제목 --%>
-            <div class="w30 fl pd10" style="height:340px; width:220px;">
-                <table>
-                    <colgroup>
-                        <col class="w100" />
-                    </colgroup>
-                    <tbody>
-                    <tr>
-                        <%-- 제목 --%>
-                        <td>
-                            <input type="text" class="sb-input-msg w100" id="marketingSmsSendTitle" ng-model="title" />
-                        </td>
-                    </tr>
-                    <tr style="height: 10px"></tr>
-                    <tr>
-                        <td class="s14">
-                            <label id="lblMarketingSmsSendStoreNmInfo"></label>
-                        </td>
-                    </tr>
-                    <tr style="height: 10px"></tr>
-                    <tr>
-                        <%-- 메세지내용 --%>
-                        <td>
-                            <textarea id="marketingSmsSendMessageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:140px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
-                        </td>
-                    </tr>
-                    <tr style="height: 10px"></tr>
-                    <tr>
-                        <td class="s14">
-                            <label id="lblMarketingSmsSendMemoInfo"></label>
-                        </td>
-                    </tr>
-                    <tr style="height: 10px"></tr>
-                    <tr>
-                        <td class="s14">
-                            <label id="lblMarketingSmsSendTxtByte"></label>
-                            <s:message code="mobile.marketingSmsSend.byte" />
-                            <label id="lblMarketingSmsSendMsgType"></label>
-                        </td>
-                    </tr>
-                    <tr style="height: 10px"></tr>
-                    <tr>
-                        <td>
-                            <%-- 전송자 --%>
-                            <div class="sb-select dkbr fl s14">
-                                <s:message code="mobile.marketingSmsSend.sendName" />
+        <div style="width: 900px; overflow-y: auto; overflow-x: auto;">
+            <%-- 상단 --%>
+            <div class="wj-TblWrapBr w100 fl">
+                <%-- 제목 --%>
+                <div class="w30 fl pd10" style="height:335px; width:210px;">
+                    <table>
+                        <colgroup>
+                            <col class="w100" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <%-- 제목 --%>
+                            <td>
+                                <input type="text" class="sb-input-msg w100" id="marketingSmsSendTitle" ng-model="title" />
+                            </td>
+                        </tr>
+                        <tr style="height: 10px"></tr>
+                        <tr>
+                            <td class="s14">
+                                <label id="lblMarketingSmsSendStoreNmInfo"></label>
+                            </td>
+                        </tr>
+                        <tr style="height: 10px"></tr>
+                        <tr>
+                            <%-- 메세지내용 --%>
+                            <td>
+                                <textarea id="marketingSmsSendMessageContent" name="messageContent" ng-model="messageContent" style="width:100%; height:140px; overflow-x:hidden; background-color: #EAF7FF" ng-keyup="showByte()"></textarea>
+                            </td>
+                        </tr>
+                        <tr style="height: 10px"></tr>
+                        <tr>
+                            <td class="s14">
+                                <label id="lblMarketingSmsSendMemoInfo"></label>
+                            </td>
+                        </tr>
+                        <tr style="height: 10px"></tr>
+                        <tr>
+                            <td class="s14">
+                                <label id="lblMarketingSmsSendTxtByte"></label>
+                                <s:message code="mobile.marketingSmsSend.byte" />
+                                <label id="lblMarketingSmsSendMsgType"></label>
+                            </td>
+                        </tr>
+                        <tr style="height: 10px"></tr>
+                        <tr>
+                            <td>
+                                <%-- 전송자 --%>
+                                <div class="sb-select dkbr fl s14">
+                                    <s:message code="mobile.marketingSmsSend.sendName" />
+                                </div>
+                                <%-- 전송자번호 --%>
+                                <div class="sb-select dkbr ml5 fl">
+                                    <wj-combo-box
+                                            class="w130px fl"
+                                            id="srchTelNoCombo"
+                                            ng-model="telNoCombo"
+                                            items-source="_getComboData('telNoCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="height: 10px"></tr>
+                        <tr>
+                            <td>
+                                <%-- 전송 --%>
+                                <button class="btn_skyblue fl" id="btnSmsSend" ng-click="smsSendReserve('0')">
+                                    <s:message code="mobile.marketingSmsSend.send" />
+                                </button>
+                                <%-- 예약 --%>
+                                <button class="btn_skyblue ml5 fl" id="btnSmsReserve" ng-click="smsSendReserve('1')">
+                                    <s:message code="mobile.marketingSmsSend.reserve" />
+                                </button>
+                                <%-- 발신번호추가 --%>
+                                <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
+                                    <s:message code="mobile.marketingSmsSend.telNoAdd" />
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <%-- 수신자목록 --%>
+                <div class="w70 fl pd10 bl" style="height:335px; width:calc(100% - 210px);">
+                    <div class="w100">
+                        <%--<div class="w70 fl">--%>
+                        <div class="w100 fl mb10">
+                            <table>
+                                <tr>
+                                    <td class="s14">
+                                        <%-- 잔여금액 --%>
+                                        <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
+                                        <span><s:message code="mobile.marketingSmsSend.smsAmt" /></span>
+                                        <span class="mr5"><label id="lblMarketingSmsSendSmsAmt"></label></span>
+                                        <%-- 받는사람 --%>
+                                        <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
+                                        <span><s:message code="mobile.marketingSmsSend.receiveName" /></span>
+
+                                        <%-- SMS건당금액 --%>
+                                        <span style="display: none;"><label id="lblMarketingSmsSendSmsOneAmt"/></span>
+                                        <%-- LMS건당금액 --%>
+                                        <span style="display: none;"><label id="lblMarketingSmsSendLmsOneAmt"/></span>
+                                        <%-- MMS건당금액 --%>
+                                        <span style="display: none;"><label id="lblMarketingSmsSendMmsOneAmt"/></span>
+
+                                        <%-- 조회건수 --%>
+                                        <span style="display: none;"><label id="lblMarketingSmsSendListCnt"/></span>
+                                        <%-- 전송이력시퀀스 --%>
+                                        <span style="display: none;"><label id="lblMarketingSmsSendSmsSendSeq"/></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <%--<div class="w30 fl">--%>
+                            <%--<div class="updownSet oh mb5">--%>
+                                <%--<button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>--%>
+                                <%--<button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
+                    </div>
+                    <%-- 그리드 --%>
+                    <div class="w100 mt10 mb10">
+                        <div class="wj-gridWrap" style="height:290px; overflow-y: hidden; overflow-x: hidden;">
+                            <div class="row" id="marketingSmsSendGrid" style="display: block;">
+                                <wj-flex-grid
+                                        autoGenerateColumns.="false"
+                                        control="flexMarketingSmsSend"
+                                        initialized="initGrid(s,e)"
+                                        sticky-headers="true"
+                                        selection-mode="Row"
+                                        items-source="data"
+                                        item-formatter="_itemFormatter">
+
+                                    <!-- define columns -->
+                                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.telNo"/>" binding="telNo" width="100" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.addr"/>" binding="addr" width="80" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.lastSaleDate"/>" binding="lastSaleDate" width="80" align="center" format="date"></wj-flex-grid-column>
+
+                                    <%--저장시 필요--%>
+                                    <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.rOgnFg"/>" binding="rOgnFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                </wj-flex-grid>
                             </div>
-                            <%-- 전송자번호 --%>
-                            <div class="sb-select dkbr ml5 fl">
-                                <wj-combo-box
-                                        class="w130px fl"
-                                        id="srchTelNoCombo"
-                                        ng-model="telNoCombo"
-                                        items-source="_getComboData('telNoCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr style="height: 10px"></tr>
-                    <tr>
-                        <td>
-                            <%-- 전송 --%>
-                            <button class="btn_skyblue fl" id="btnSmsSend" ng-click="smsSendReserve('0')">
-                                <s:message code="mobile.marketingSmsSend.send" />
-                            </button>
-                            <%-- 예약 --%>
-                            <button class="btn_skyblue ml5 fl" id="btnSmsReserve" ng-click="smsSendReserve('1')">
-                                <s:message code="mobile.marketingSmsSend.reserve" />
-                            </button>
-                            <%-- 발신번호추가 --%>
-                            <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
-                                <s:message code="mobile.marketingSmsSend.telNoAdd" />
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                            <div class="gridMsg" id="marketingSmsSendGridMsg" style="line-height: 100px; display: none;"><label id="lblMarketingSmsSendGridMsg"/></div>
+                        </div>
+                    </div>
+                    <%-- //그리드 --%>
+                </div>
             </div>
-            <%-- 수신자목록 --%>
-            <div class="w70 fl pd10 bl" style="height:340px; width:calc(100% - 220px);">
-                <div class="w100">
-                    <%--<div class="w70 fl">--%>
-                    <div class="w100 fl mb10">
+            <%-- //상단 --%>
+
+            <%-- 하단 --%>
+            <div class="wj-TblWrapBr w100 fl">
+                <%-- 자동변환 --%>
+                <div class="w30 fl pd10" style="height:430px; width:210px;">
+                    <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
                         <table>
+                            <%-- 첨부파일 --%>
+                            <f:form id="marketingSmsSendSmsForm" name="marketingSmsSendSmsForm" method="post" enctype="multipart/form-data">
+                                <tr>
+                                    <td>
+                                        <input class="form-control" type="file" id="marketingSmsSendFileSms1" name="marketingSmsSendFileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input class="form-control" type="file" id="marketingSmsSendFileSms2" name="marketingSmsSendFileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input class="form-control" type="file" id="marketingSmsSendFileSms3" name="marketingSmsSendFileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
+                                    </td>
+                                </tr>
+                            </f:form>
+                            <%--<tr>--%>
+                                <%--<td>--%>
+                                    <%--&lt;%&ndash; 자동변환 &ndash;%&gt;--%>
+                                    <%--<span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>--%>
+                                    <%--&lt;%&ndash; 이름 &ndash;%&gt;--%>
+                                    <%--<span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>--%>
+                                    <%--&lt;%&ndash; 추가사항 &ndash;%&gt;--%>
+                                    <%--<span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>--%>
+                                <%--</td>--%>
+                            <%--</tr>--%>
+                            <tr style="height: 10px"></tr>
                             <tr>
-                                <td class="s14">
-                                    <%-- 잔여금액 --%>
-                                    <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
-                                    <span><s:message code="mobile.marketingSmsSend.smsAmt" /></span>
-                                    <span class="mr5"><label id="lblMarketingSmsSendSmsAmt"></label></span>
-                                    <%-- 받는사람 --%>
-                                    <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
-                                    <span><s:message code="mobile.marketingSmsSend.receiveName" /></span>
-
-                                    <%-- SMS건당금액 --%>
-                                    <span style="display: none;"><label id="lblMarketingSmsSendSmsOneAmt"/></span>
-                                    <%-- LMS건당금액 --%>
-                                    <span style="display: none;"><label id="lblMarketingSmsSendLmsOneAmt"/></span>
-                                    <%-- MMS건당금액 --%>
-                                    <span style="display: none;"><label id="lblMarketingSmsSendMmsOneAmt"/></span>
-
-                                    <%-- 조회건수 --%>
-                                    <span style="display: none;"><label id="lblMarketingSmsSendListCnt"/></span>
-                                    <%-- 전송이력시퀀스 --%>
-                                    <span style="display: none;"><label id="lblMarketingSmsSendSmsSendSeq"/></span>
+                                <td>
+                                    <%-- 이모티콘 --%>
+                                    <c:import url="/WEB-INF/view/mobile/adi/sms/marketingSmsSend/mobileEmoticon3.jsp">
+                                    </c:import>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <%--<div class="w30 fl">--%>
-                        <%--<div class="updownSet oh mb5">--%>
-                            <%--<button class="btn_skyblue" id="btnAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>--%>
-                            <%--<button class="btn_skyblue" id="btnDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
                 </div>
-                <%-- 그리드 --%>
-                <div class="w100 mt10 mb10">
-                    <div class="wj-gridWrap" style="height:280px; overflow-y: hidden; overflow-x: hidden;">
-                        <div class="row" id="marketingSmsSendGrid" style="display: block;">
-                            <wj-flex-grid
-                                    autoGenerateColumns.="false"
-                                    control="flexMarketingSmsSend"
-                                    initialized="initGrid(s,e)"
-                                    sticky-headers="true"
-                                    selection-mode="Row"
-                                    items-source="data"
-                                    item-formatter="_itemFormatter">
-
-                                <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.telNo"/>" binding="telNo" width="100" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.addr"/>" binding="addr" width="80" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.lastSaleDate"/>" binding="lastSaleDate" width="80" align="center" format="date"></wj-flex-grid-column>
-
-                                <%--저장시 필요--%>
-                                <wj-flex-grid-column header="<s:message code="mobile.marketingSmsSend.rOgnFg"/>" binding="rOgnFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                            </wj-flex-grid>
+                <%-- 문구 --%>
+                <div class="w70 fl pd10 bl" style="height:430px; width:calc(100% - 210px);">
+                    <div id ="divMsgGrpPage">
+                        <%--subTab--%>
+                        <div class="tabType1">
+                            <ul>
+                                <%-- 메세지그룹 탭 --%>
+                                <c:forEach var="msgGrpAddCol" items="${msgGrpAddColList}">
+                                    <li>
+                                        <a id="msgGrpAddTab${msgGrpAddCol.msgGrpCd}" href="#" ng-click="msgGrpShow('${msgGrpAddCol.msgGrpCd}')">${msgGrpAddCol.msgGrpNm}</a>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            <div style="height:370px; overflow-x: hidden; overflow-y: auto;">
+                                <div id="divMarketingSmsSendMsgComment"></div>
+                            </div>
                         </div>
-                        <!-- 조회 결과가 없을 때, msg 띄우기 -->
-                        <div class="gridMsg" id="marketingSmsSendGridMsg" style="line-height: 100px; display: none;"><label id="lblMarketingSmsSendGridMsg"/></div>
                     </div>
-                </div>
-                <%-- //그리드 --%>
-            </div>
-        </div>
-        <%-- //상단 --%>
-
-        <%-- 하단 --%>
-        <div class="wj-TblWrapBr w100 fl">
-            <%-- 자동변환 --%>
-            <div class="w30 fl pd10" style="height:430px; width:220px;">
-                <div class="w100" style="overflow-x: auto; overflow-y: hidden;">
-                    <table>
-                        <%-- 첨부파일 --%>
-                        <f:form id="marketingSmsSendSmsForm" name="marketingSmsSendSmsForm" method="post" enctype="multipart/form-data">
-                            <tr>
-                                <td>
-                                    <input class="form-control" type="file" id="marketingSmsSendFileSms1" name="marketingSmsSendFileSms1" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input class="form-control" type="file" id="marketingSmsSendFileSms2" name="marketingSmsSendFileSms2" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input class="form-control" type="file" id="marketingSmsSendFileSms3" name="marketingSmsSendFileSms3" accept=".jpg" onchange="angular.element(this).scope().changeSmsImage(this)"/>
-                                </td>
-                            </tr>
-                        </f:form>
-                        <%--<tr>--%>
-                            <%--<td>--%>
-                                <%--&lt;%&ndash; 자동변환 &ndash;%&gt;--%>
-                                <%--<span><img src="/resource/solbipos/css/img/sms/auto_str.jpg"></span>--%>
-                                <%--&lt;%&ndash; 이름 &ndash;%&gt;--%>
-                                <%--<span><a href="#" ng-click="addMsg('#이름#')"><img src="/resource/solbipos/css/img/sms/btn_add_name.jpg"></a></span>--%>
-                                <%--&lt;%&ndash; 추가사항 &ndash;%&gt;--%>
-                                <%--<span><a href="#" ng-click="addMsg('#추가사항#')"><img src="/resource/solbipos/css/img/sms/btn_add_str.jpg"></a></span>--%>
-                            <%--</td>--%>
-                        <%--</tr>--%>
-                        <tr style="height: 10px"></tr>
-                        <tr>
-                            <td>
-                                <%-- 이모티콘 --%>
-                                <c:import url="/WEB-INF/view/mobile/adi/sms/marketingSmsSend/mobileEmoticon3.jsp">
-                                </c:import>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <%-- 문구 --%>
-            <div class="w70 fl pd10 bl" style="height:430px; width:calc(100% - 220px);">
-                <div id ="divMsgGrpPage">
-                    <%--subTab--%>
-                    <div class="tabType1">
-                        <ul>
-                            <%-- 메세지그룹 탭 --%>
-                            <c:forEach var="msgGrpAddCol" items="${msgGrpAddColList}">
-                                <li>
-                                    <a id="msgGrpAddTab${msgGrpAddCol.msgGrpCd}" href="#" ng-click="msgGrpShow('${msgGrpAddCol.msgGrpCd}')">${msgGrpAddCol.msgGrpNm}</a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                        <div style="height:370px; overflow-x: hidden; overflow-y: auto;">
-                            <div id="divMarketingSmsSendMsgComment"></div>
+                    <div id ="divMsgGrpPageAuth" style="display: none;">
+                        <div class="updownSet oh mb10 mt60">
+                            <span class="fl bk lh30">등록된 메세지그룹이 없습니다.</span>
+                        </div>
+                        <div class="updownSet oh mb10">
+                            <span class="fl bk lh30">'부가서비스 > SMS관리 > 메세지관리' 등록바랍니다.</span>
                         </div>
                     </div>
                 </div>
-                <div id ="divMsgGrpPageAuth" style="display: none;">
-                    <div class="updownSet oh mb10 mt60">
-                        <span class="fl bk lh30">등록된 메세지그룹이 없습니다.</span>
-                    </div>
-                    <div class="updownSet oh mb10">
-                        <span class="fl bk lh30">'부가서비스 > SMS관리 > 메세지관리' 등록바랍니다.</span>
-                    </div>
-                </div>
+            </div>
+            <%-- //하단 --%>
+
+            <div id="scrollbarcheck">
+                <font color = "white">
+                    scrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheckscrollbarcheck
+                </font>
             </div>
         </div>
-        <%-- //하단 --%>
 
         <!-- 팝업 -->
         <%-- 광고문자 발송에 대한 의무사항 안내 --%>

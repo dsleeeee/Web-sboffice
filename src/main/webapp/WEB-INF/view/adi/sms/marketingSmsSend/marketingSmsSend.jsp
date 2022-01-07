@@ -466,7 +466,7 @@
         <%-- 상단 --%>
         <div class="wj-TblWrapBr w100 fl">
             <%-- 제목 --%>
-            <div class="w30 fl pd10" style="height:340px; width:220px;">
+            <div class="w30 fl pd10" style="height:335px; width:220px;">
                 <table>
                     <colgroup>
                         <col class="w100" />
@@ -548,7 +548,7 @@
                 </table>
             </div>
             <%-- 수신자목록 --%>
-            <div class="w70 fl pd10 bl" style="height:340px; width:calc(100% - 220px);">
+            <div class="w70 fl pd10 bl" style="height:335px; width:calc(100% - 220px);">
                 <div class="w100">
                     <%--<div class="w70 fl">--%>
                     <div class="w100 fl mb10">
@@ -587,7 +587,7 @@
                 </div>
                 <%-- 그리드 --%>
                 <div class="w100 mt10 mb10">
-                    <div class="wj-gridWrap" style="height:280px; overflow-y: hidden; overflow-x: hidden;">
+                    <div class="wj-gridWrap" style="height:290px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row" id="marketingSmsSendGrid" style="display: block;">
                             <wj-flex-grid
                                     autoGenerateColumns.="false"
