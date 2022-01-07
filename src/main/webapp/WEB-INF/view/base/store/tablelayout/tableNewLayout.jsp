@@ -90,7 +90,7 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20210219.001" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20210219.002" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20210516.001" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
@@ -109,6 +109,7 @@
 				    	<button class="btn_skyblue fl ml5" id="btnTblAddLayer"><%-- <s:message code="cmm.add" /> --%>테이블추가</button>
 				    	  <label for="btnSingleTableAddLayer" class="btnTableAdd"><input type="checkbox" class="wj-cell-check" id="btnSingleTableAddLayer">단건등록</label>
 	                  <button class="btn_skyblue fl ml5" id="btnSaveLayout"><s:message code="cmm.save" /></button>
+					  <button class="btn_skyblue fl ml5" id="btnInitLayout2">모두삭제</button>
 	              </div>
 	          </div>
 	         </div>
@@ -529,7 +530,7 @@
                         <div class="prev1" id="previewTblAttr" >
                             <%--점 패턴 background classname : "patternBg"--%>
                             <%--510 * 510 pixel 입니다.--%>
-                        </div>
+                        </div>TB_MS_TABLE_GROUP
                     </div>
                     <%--//미리보기--%>
 

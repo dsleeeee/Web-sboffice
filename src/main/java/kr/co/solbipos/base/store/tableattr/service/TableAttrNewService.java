@@ -67,5 +67,6 @@ public interface TableAttrNewService {
      */
     Result setTableNumAttr(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO, String xmlGraph, String xmlPreview);
 
-
+    /** 테이블 기존 데이터 삭제 후 매장생성시로 초기화 */
+    int initLayout(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO);
 }

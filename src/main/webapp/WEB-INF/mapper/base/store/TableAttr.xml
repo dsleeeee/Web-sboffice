@@ -312,4 +312,16 @@
         #{regId}
     )
   </update>
+
+    <delete id="deleteTabGroup" parameterType="tableAttrVO">
+        /* TableAttrMapper.deleteTabGroup */
+        DELETE  TB_MS_TABLE_GROUP
+        WHERE   STORE_CD = #{storeCd}
+    </delete>
+
+    <delete id="deleteTabConfg" parameterType="tableAttrVO">
+        /* TableAttrMapper.deleteTabConfg */
+        DELETE  TB_WB_STORE_TABLE_CONFG_XML
+        WHERE   STORE_CD = #{storeCd}
+    </delete>
 </mapper>

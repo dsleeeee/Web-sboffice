@@ -110,6 +110,8 @@ public class TableLayoutNewController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        System.out.println("컨트롤러 조회 : " + sessionInfoVO.getStoreCd());
+
         LOGGER.debug(sessionInfoVO.toString());
         String xml = tableLayoutService.selectTableLayoutByStore(sessionInfoVO);
         LOGGER.debug(xml);
@@ -305,5 +307,25 @@ public class TableLayoutNewController {
     	LOGGER.debug("contentType : "+file.getContentType());
 
         return new ResponseEntity<String>(tableLayoutService.uploadFile(uploadPath, sessionInfoVO.getStoreCd(), file.getOriginalFilename(), file.getBytes()), HttpStatus.OK);
+    }
+
+    /**
+     * 테이블 기존 데이터 삭제 후 매장생성시로 초기화
+     *
+     * @param request HttpServletRequest
+     * @param session HttpSession
+     * @param model Model
+     * @return
+     */
+    @RequestMapping(value = "/initLayout.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result initLayout(HttpServletRequest request, HttpSession session, Model model, TableAttrVO tableAttrVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        LOGGER.debug(sessionInfoVO.toString());
+        tableAttrNewService.initLayout(sessionInfoVO, tableAttrVO);
+
+        return new Result(Status.OK);
     }
 }

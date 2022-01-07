@@ -17,6 +17,8 @@ import kr.co.solbipos.base.common.enums.ConfgFg;
 import kr.co.solbipos.base.store.tableattr.enums.*;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrNewService;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
+import kr.co.solbipos.store.manage.storemanage.service.TableGroupVO;
+import kr.co.solbipos.store.manage.storemanage.service.impl.StoreManageMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +60,11 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
     MessageService messageService;
     @Autowired
     private TableAttrMapper mapper;
+    private final StoreManageMapper storeManageMapper;
+
+    public TableAttrNewServiceImpl(StoreManageMapper storeManageMapper) {
+        this.storeManageMapper = storeManageMapper;
+    }
 
     @Override
     public List<TableAttrVO> selectTableAttrDefault() {
@@ -201,6 +208,39 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
             }
         }
         return new Result(Status.OK);
+    }
+
+
+    /** 테이블 기존 데이터 삭제 후 매장생성시로 초기화 */
+    @Override
+    public int initLayout(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO) {
+
+        String currentDt = currentDateTimeString();
+        tableAttrVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        System.out.println("테이블 삭제 : " + tableAttrVO.getStoreCd());
+
+        // 기존 데이터 삭제(TB_MS_TABLE_GROUP)
+        mapper.deleteTabGroup(tableAttrVO);
+
+        System.out.println("테이블 삭제 : TB_MS_TABLE_GROUP" + tableAttrVO.getStoreCd());
+
+        // 기존 데이터 삭제(TB_WB_STORE_TABLE_CONFG_XML)
+        mapper.deleteTabConfg(tableAttrVO);
+
+        System.out.println("테이블 삭제 : TB_WB_STORE_TABLE_CONFG_XML" + tableAttrVO.getStoreCd());
+
+        // 기본 테이블 그룹 생성
+        TableGroupVO tableGroupVO = new TableGroupVO();
+        tableGroupVO.setStoreCd(sessionInfoVO.getStoreCd());
+        tableGroupVO.setRegDt(currentDt);
+        tableGroupVO.setRegId(sessionInfoVO.getUserId());
+        tableGroupVO.setModDt(currentDt);
+        tableGroupVO.setModId(sessionInfoVO.getUserId());
+
+        System.out.println("테이블 생성 : " + tableGroupVO.getStoreCd());
+        // 매장생성 시 넣는 데이터
+        return storeManageMapper.insertTabGroup(tableGroupVO);
     }
 
     /**

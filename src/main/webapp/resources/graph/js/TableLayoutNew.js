@@ -1124,6 +1124,11 @@ FormatLayout.prototype.initElements = function() {
         format.open(false);
     });
 
+    // 초기화 버튼2
+    addClickHandler(document.getElementById('btnInitLayout2'), function() {
+        format.initLayout(false);
+    });
+
     // 저장 버튼
     addClickHandler(document.getElementById('btnSaveLayout'), function() {
         format.save();
@@ -1708,6 +1713,46 @@ FormatLayout.prototype.open = function(isLoad) {
     );
 
 };
+
+/**
+ * 최초 구성으로 초기화
+*/
+FormatLayout.prototype.initLayout = function(isLoad) {
+    var params = {};
+
+    var sid = "";
+
+    var floor = this;
+    var graph = this.graph;
+    var main = this.main;
+
+
+    if(document.getElementsByName('sessionId')[0]){
+        sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+    if (confirm("최초 매장생성시 구성으로 돌아갑니다. 초기화 하시겠습니까?")) {
+        $.ajax({
+            type: "POST",
+            url: "/base/store/tableLayout/tableNewLayout/initLayout.sb?sid=" + sid,
+            data: params,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result){
+                if (result.status === "OK") {
+                    alert("초기화 되었습니다.");
+
+                    location.reload(true);
+                } else {
+                    alert("최초 구성으로 초기화하는데 실패하였습니다.");
+                }
+            }
+        });
+
+    }
+}
 /**
  * Sets the XML node for the current diagram.
  */
