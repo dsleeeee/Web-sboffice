@@ -846,6 +846,8 @@
     <typeAlias alias="mobileDclzManageVO" type="kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageVO"/>
     <!-- (모바일) 부가서비스 > 예약현황 -->
     <typeAlias alias="mobileResveInfoVO" type="kr.co.solbipos.mobile.adi.resve.resveInfo.service.MobileResveInfoVO"/>
+    <!-- (모바일) 부가서비스 > 마케팅용 SMS전송 -->
+    <typeAlias alias="mobileMarketingSmsSendVO" type="kr.co.solbipos.mobile.adi.sms.marketingSmsSend.service.MobileMarketingSmsSendVO"/>
     <!-- (모바일) 부가서비스 > 문자전송현황 -->
     <typeAlias alias="mobileSendStatusVO" type="kr.co.solbipos.mobile.adi.sms.sendStatus.service.MobileSendStatusVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
