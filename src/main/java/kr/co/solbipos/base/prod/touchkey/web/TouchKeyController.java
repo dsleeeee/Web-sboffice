@@ -120,6 +120,22 @@ public class TouchKeyController {
     }
 
     /**
+     * 터치키 초기화
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/deleteTouchKey.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteTouchKey(TouchKeyVO touchKeyVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        touchkeyService.deleteTouchKey(touchKeyVO, sessionInfoVO);
+    return returnJson(Status.OK);
+    }
+
+    /**
      * 터치키 분류 페이지별 스타일 코드 조회
      *
      * @param request HttpServletRequest

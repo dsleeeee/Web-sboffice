@@ -529,7 +529,9 @@
                 WHERE
                     twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND twhcx.CONFG_FG = #{confgFg}
-                    AND twhcx.GRP_CD = #{tukeyGrpCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -539,7 +541,9 @@
                 WHERE
                     twscx.STORE_CD = #{storeCd}
                     AND twscx.CONFG_FG = #{confgFg}
-                    AND twscx.GRP_CD = #{tukeyGrpCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
             </when>
         </choose>
     </delete>
@@ -722,7 +726,9 @@
                     TB_HQ_TOUCH_KEY_CLASS
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
                     AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -731,7 +737,9 @@
                     TB_MS_TOUCH_KEY_CLASS
                 WHERE
                     STORE_CD = #{storeCd}
-                    AND TUKEY_GRP_CD  = #{tukeyGrpCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
             </when>
         </choose>
     </delete>
@@ -966,7 +974,9 @@
                     TB_HQ_TOUCH_KEY
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
-                AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -975,7 +985,9 @@
                     TB_MS_TOUCH_KEY
                 WHERE
                     STORE_CD = #{storeCd}
-                AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
             </when>
         </choose>
 
