@@ -1742,7 +1742,7 @@ FormatLayout.prototype.initLayout = function(isLoad) {
             cache: false,
             success: function(result){
                 if (result.status === "OK") {
-                    alert("초기화 되었습니다.");
+                    alert("최초 구성으로 초기화 되었습니다.");
 
                     location.reload(true);
                 } else {

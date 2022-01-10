@@ -324,4 +324,71 @@
         DELETE  TB_WB_STORE_TABLE_CONFG_XML
         WHERE   STORE_CD = #{storeCd}
     </delete>
+
+    <delete id="deleteTab" parameterType="tableAttrVO">
+        /* TableAttrMapper.deleteTab */
+        DELETE  TB_MS_TABLE
+        WHERE   STORE_CD = #{storeCd}
+    </delete>
+
+    <delete id="deleteTabAttr" parameterType="tableAttrVO">
+        /* TableAttrMapper.deleteTabAttr */
+        DELETE  TB_MS_TABLE_ATTR
+        WHERE   STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 테이블 속성 -->
+    <!--
+        TABLE    : TB_MS_TABLE_ATTR
+        PARAM    : tableAttrVO
+        COMMENTS : 테이블 속성 기본을 저장한다.
+    -->
+    <insert id="insertTabAttr" parameterType="tableAttrVO" >
+        /* USE : TableAttrMapper.insertTabAttr */
+        INSERT INTO TB_MS_TABLE_ATTR
+        (
+            STORE_CD,
+            TBL_TYPE_FG,
+            ATTR_CD,
+            ATTR_NM,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            TEXTALIGN_FG,
+            IMG_NM,
+            FONT_NM,
+            FONT_SIZE,
+            FONT_STYLE_FG,
+            FONT_COLOR,
+            USE_YN,
+            VIEW_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT #{storeCd},
+               TBL_TYPE_FG,
+               ATTR_CD,
+               ATTR_NM,
+               X,
+               Y,
+               WIDTH,
+               HEIGHT,
+               TEXTALIGN_FG,
+               IMG_NM,
+               FONT_NM,
+               FONT_SIZE,
+               FONT_STYLE_FG,
+               FONT_COLOR,
+               USE_YN,
+               VIEW_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+        FROM    TB_MS_TABLE_ATTR
+        WHERE   STORE_CD = '0000000'
+    </insert>
 </mapper>
