@@ -830,10 +830,25 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
         // 첨부파일 취소시
         } else {
-            // 일단 SMS으로 셋팅하고 다시 바이트 수 체크해서 셋팅
-            $("#lblMsgType").text("SMS");
-            // 바이트
-            $scope.showByte();
+            var fileCount = 0;
+            // 첨부파일1
+            if (!isNull($("#fileSms1")[0].files[0])) {
+                fileCount = fileCount + 1;
+            }
+            // 첨부파일2
+            if (!isNull($("#fileSms2")[0].files[0])) {
+                fileCount = fileCount + 1;
+            }
+            // 첨부파일3
+            if (!isNull($("#fileSms3")[0].files[0])) {
+                fileCount = fileCount + 1;
+            }
+            if(fileCount == 0) {
+                // 일단 SMS으로 셋팅하고 다시 바이트 수 체크해서 셋팅
+                $("#lblMsgType").text("SMS");
+                // 바이트
+                $scope.showByte();
+            }
         }
     };
 
