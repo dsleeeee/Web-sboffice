@@ -84,11 +84,15 @@ public interface TableAttrMapper {
     int mergeStoreTableNumAttr(TableAttrVO tableAttrVO);
 
     /**
-     * 테이블 그룹 삭제제
+     * 테이블 그룹 삭제
     * @param tableAttrVO
      * @return
      */
     int deleteTabGroup(TableAttrVO tableAttrVO);
     int deleteTabConfg(TableAttrVO tableAttrVO);
+    int deleteTab(TableAttrVO tableAttrVO);
+    int deleteTabAttr(TableAttrVO tableAttrVO);
+    //  테이블 기본속성
+    int insertTabAttr(TableAttrVO tableAttrVO);
 
 }
