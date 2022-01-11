@@ -245,11 +245,11 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setModId(sessionInfoVO.getUserId());
             prodBarcdVO.setSeq(i);
 
-            if(prodBarcdVO.getProdCd() != null && prodBarcdVO.getProdCd().length() >= 1 ){
+            if(prodBarcdVO.getProdCd() != null && prodBarcdVO.getProdCd().length() >= 1 && prodBarcdVO.getBarCd() != null && prodBarcdVO.getBarCd().length() >= 1){
 
                 List<DefaultMap<String>> list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
 
-                if (prodBarcdVO.getBarCd() != null && prodBarcdVO.getBarCd().length() >= 1 && prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
+                if (prodBarcdVO.getBarCd().length() >= 1 && prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
                     prodBarcdVO.setResult("바코드 길이가 40byte를 넘습니다.");
                 } else if (list.size() != 0) {
                     if (StringUtil.getOrBlank(list.get(0).get("cntProd")).equals("0")) {
