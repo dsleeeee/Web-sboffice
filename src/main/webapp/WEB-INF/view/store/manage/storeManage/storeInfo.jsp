@@ -107,16 +107,8 @@
               <%-- 시스템 오픈일자 / 포스개점일자 --%>
               <th><s:message code="storeManage.posOpenDate" /></th>
               <td>
-                <div class="sb-select" >
-                  <wj-input-date
-                    value="sysOpenDate"
-                    ng-model="store.sysOpenDate"
-                    control="sysOpenDateCombo"
-                    format="yyyy/MM/dd"
-                    min="2000-01-01"
-                    max="2099-12-31"
-                    initialized="_initDateBox(s)">
-                  </wj-input-date>
+                <div class="sb-select">
+                    <span class="txtIn"><input id="sysOpenDate" ng-model="store.sysOpenDate" style="width: 245px;"></span>
                 </div>
               </td>
               <%-- 매장상태구분 --%>
@@ -415,7 +407,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20211123.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20211123.02" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

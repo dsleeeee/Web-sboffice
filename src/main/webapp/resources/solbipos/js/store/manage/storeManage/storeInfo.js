@@ -26,6 +26,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("envHqOfficeCd", hqList);
   }
 
+  // 시스템 오픈일자 / 포스개점일자
+  var sysOpenDate = wcombo.genDateVal("#sysOpenDate", gvStartDate);
+
   // 사업자번호 중복체크 여부
   $scope.isBizChk = false;
   // readonly 값 체크 (조회인 경우 readonly : true)
@@ -204,13 +207,16 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.bizStoreNm ="";
     $scope.store.ownerNm ="";
 
-    $scope.sysOpenDateCombo.isReadOnly  = false;
-    $scope.store.sysOpenDate.value      = new Date();
+    // 시스템 오픈일자 / 포스개점일자
+    $("#sysOpenDate").attr("disabled", false);
+    $("#sysOpenDate").css('background-color', '#FFFFFF');
+    sysOpenDate.value = getCurDate('-');
+
     $scope.sysStatFgCombo.isReadOnly    = false;
     $scope.sysStatFgCombo.selectedIndex = 0;
     $scope.clsFgCombo.isReadOnly        = false;
     $scope.clsFgCombo.selectedIndex     = 0;
-    $scope.areaCdCombo.selectedIndex    = 0;
+    $scope.areaCdCombo.selectedIndex    = 1; // 기본값: 서울특별시
     //$scope.store.installPosCnt.isReadOnly = false;
     //$("#installPosCnt").attr("disabled", false);
     $("#installPosCnt").css('background-color', '#FFFFFF');
@@ -303,7 +309,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.store.hqOfficeNm             = storeDetailInfo.hqOfficeNm;
       $scope.store.installPosCnt          = installPosCnt;
       $scope.store.beforeBizNo            = storeDetailInfo.bizNo;
-      $scope.store.sysOpenDate.value      = storeDetailInfo.sysOpenDate;
+
+      // 시스템 오픈일자 / 포스개점일자
+      $("#sysOpenDate").attr("disabled", true);
+      $("#sysOpenDate").css('background-color', '#F0F0F0');
+      sysOpenDate.value = new Date(getFormatDate(storeDetailInfo.sysOpenDate, "-"));
 
       $scope.areaCdCombo.selectedValue    = storeDetailInfo.areaCd;
       $scope.clsFgCombo.selectedValue     = storeDetailInfo.clsFg;
@@ -312,7 +322,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.directManageYn               = storeDetailInfo.directManageYn;
 
       $scope.readOnlyStatus                  = true;
-      $scope.sysOpenDateCombo.isReadOnly     = true;
       //$scope.store.installPosCnt.isReadOnly = true;
       //$("#installPosCnt").attr("disabled", true);
       $("#installPosCnt").css('background-color', '#F0F0F0');
@@ -631,7 +640,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     if(!$scope.valueCheck()) return false;
 
     var params         = $scope.store;
-    params.sysOpenDate = dateToDaystring($scope.store.sysOpenDate);
+    params.sysOpenDate = wijmo.Globalize.format(sysOpenDate.value, 'yyyyMMdd');
     params.postNo = $("#postNo").val();
     params.addr = $("#addr").val();
     params.addrdtl = $("#addrDtl").val();
@@ -1257,56 +1266,56 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       var erpStoreScope = agrid.getScope('erpStoreSetCtrl');
       erpStoreScope.$apply(function(){
         erpStoreScope._gridDataInit();
-        
-        // 기존 값 초기화
-        $("#storeCd").val("");
-        $("#storeCdChkFg").val("");
-        $("#storeNm").val("");
-        $("#bizStoreNm").val("");
-        $("#ownerNm").val("");
-        $("#userId").val("");
-        $("#userIdChkFg").val("");
-        $("#userPwd").val("");
-        $("#userPwdConf").val("");
-        $scope.areaCdCombo.selectedIndex = 0;
-        $("#installPosCnt").val("");
-        $("#bizNo1").val("");
-        $("#bizNo2").val("");
-        $("#bizNo3").val("");
-        $("#telNo").val("");
-        $("#postNo").val("");
-        $("#addr").val("");
-        $("#addrDtl").val("");
-        $("#manageVanNm").val("");
-        $("#manageVanCd").val("");
-        $("#agencyNm").val("");
-        $("#agencyCd").val("");
-
-        $scope.store.storeCd = "";
-        $scope.store.storeCdChkFg = "";
-        $scope.store.storeNm = "";
-        $scope.store.bizStoreNm = "";
-        $scope.store.ownerNm = "";
-        $scope.store.userId = "";
-        $scope.store.userIdChkFg = "";
-        $scope.store.userPwd = "";
-        $scope.store.userPwdConf = "";
-        $scope.store.areaCd = "";
-        $scope.store.directManageYn = "";
-        $scope.store.installPosCnt = "";
-        $scope.store.bizNo1 = "";
-        $scope.store.bizNo2 = "";
-        $scope.store.bizNo3 = "";
-        $scope.store.telNo = "";
-        $scope.store.postNo = "";
-        $scope.store.addr = "";
-        $scope.store.addrDtl = "";
-        $scope.store.vanNm = "";
-        $scope.store.vanCd = "";
-        $scope.store.agencyNm = "";
-        $scope.store.agencyCd = "";
 
         if(!$.isEmptyObject(erpStoreScope.getErpStore())) {
+
+          // 기존 값 초기화
+          $("#storeCd").val("");
+          $("#storeCdChkFg").val("");
+          $("#storeNm").val("");
+          $("#bizStoreNm").val("");
+          $("#ownerNm").val("");
+          $("#userId").val("");
+          $("#userIdChkFg").val("");
+          $("#userPwd").val("");
+          $("#userPwdConf").val("");
+          $scope.areaCdCombo.selectedIndex = 1; // 기본값: 서울특별시
+          $("#installPosCnt").val("");
+          $("#bizNo1").val("");
+          $("#bizNo2").val("");
+          $("#bizNo3").val("");
+          $("#telNo").val("");
+          $("#postNo").val("");
+          $("#addr").val("");
+          $("#addrDtl").val("");
+          $("#manageVanNm").val("");
+          $("#manageVanCd").val("");
+          $("#agencyNm").val("");
+          $("#agencyCd").val("");
+
+          $scope.store.storeCd = "";
+          $scope.store.storeCdChkFg = "";
+          $scope.store.storeNm = "";
+          $scope.store.bizStoreNm = "";
+          $scope.store.ownerNm = "";
+          $scope.store.userId = "";
+          $scope.store.userIdChkFg = "";
+          $scope.store.userPwd = "";
+          $scope.store.userPwdConf = "";
+          $scope.store.areaCd = "";
+          $scope.store.directManageYn = "";
+          $scope.store.installPosCnt = "";
+          $scope.store.bizNo1 = "";
+          $scope.store.bizNo2 = "";
+          $scope.store.bizNo3 = "";
+          $scope.store.telNo = "";
+          $scope.store.postNo = "";
+          $scope.store.addr = "";
+          $scope.store.addrDtl = "";
+          $scope.store.vanNm = "";
+          $scope.store.vanCd = "";
+          $scope.store.agencyNm = "";
+          $scope.store.agencyCd = "";
 
           // ERP 연동 매장 정보 셋팅
           if($scope.store.storeCdInputType === "1") {

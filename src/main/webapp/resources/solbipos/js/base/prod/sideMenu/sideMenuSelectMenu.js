@@ -78,38 +78,40 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === 'sdselGrpCd' && selectedRow.status !== 'I') {
-          $("#sideSelectGroupTitle").html(" [" + selectedRow.sdselGrpCd+ "]" + selectedRow.sdselGrpNm );
-          $("#sideClassTitle").html("");
-          if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselGrpCd <= 799999) {
-            $("#btnUpSelClass").hide();
-            $("#btnDownSelClass").hide();
-            $("#btnAddSelClass").hide();
-            $("#btnDelSelClass").hide();
-            $("#btnSaveSelClass").hide();
+        if ( col.binding === 'sdselGrpCd') {
+          if (selectedRow.sdselGrpCd !== '' && selectedRow.sdselGrpCd !== undefined && selectedRow.sdselGrpCd !== '자동채번') {
+            $("#sideSelectGroupTitle").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
+            $("#sideClassTitle").html("");
+            if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselGrpCd <= 799999) {
+              $("#btnUpSelClass").hide();
+              $("#btnDownSelClass").hide();
+              $("#btnAddSelClass").hide();
+              $("#btnDelSelClass").hide();
+              $("#btnSaveSelClass").hide();
 
-            $("#btnUpSelProd").hide();
-            $("#btnDownSelProd").hide();
-            $("#btnAddSelProd").hide();
-            $("#btnDelSelProd").hide();
-            $("#btnSaveSelProd").hide();
-          } else {
-            $("#btnUpSelClass").show();
-            $("#btnDownSelClass").show();
-            $("#btnAddSelClass").show();
-            $("#btnDelSelClass").show();
-            $("#btnSaveSelClass").show();
+              $("#btnUpSelProd").hide();
+              $("#btnDownSelProd").hide();
+              $("#btnAddSelProd").hide();
+              $("#btnDelSelProd").hide();
+              $("#btnSaveSelProd").hide();
+            } else {
+              $("#btnUpSelClass").show();
+              $("#btnDownSelClass").show();
+              $("#btnAddSelClass").show();
+              $("#btnDelSelClass").show();
+              $("#btnSaveSelClass").show();
 
-            $("#btnUpSelProd").show();
-            $("#btnDownSelProd").show();
-            $("#btnAddSelProd").show();
-            $("#btnDelSelProd").show();
-            $("#btnSaveSelProd").show();
+              $("#btnUpSelProd").hide();
+              $("#btnDownSelProd").hide();
+              $("#btnAddSelProd").hide();
+              $("#btnDelSelProd").hide();
+              $("#btnSaveSelProd").hide();
+            }
+            $scope.setSelectedSdselGrpCd(selectedRow.sdselGrpCd);
+            $scope._broadcast('sideMenuSelectClassCtrl', selectedRow.sdselGrpCd);
+            var prodGrid = agrid.getScope('sideMenuSelectProdCtrl');
+            prodGrid._gridDataInit();
           }
-          $scope.setSelectedSdselGrpCd(selectedRow.sdselGrpCd);
-          $scope._broadcast('sideMenuSelectClassCtrl', selectedRow.sdselGrpCd);
-          var prodGrid = agrid.getScope('sideMenuSelectProdCtrl');
-          prodGrid._gridDataInit();
         }
       }
     });
@@ -120,6 +122,22 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/sideMenu/menuGrp/list.sb', params);
+
+    // 초기 버튼 셋팅
+    // 선택분류 버튼
+    $("#btnUpSelClass").hide();
+    $("#btnDownSelClass").hide();
+    $("#btnAddSelClass").hide();
+    $("#btnDelSelClass").hide();
+    $("#btnSaveSelClass").hide();
+
+    // 선택상품버튼
+    $("#btnUpSelProd").hide();
+    $("#btnDownSelProd").hide();
+    $("#btnAddSelProd").hide();
+    $("#btnDelSelProd").hide();
+    $("#btnSaveSelProd").hide();
+    
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -143,17 +161,21 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
         var item = $scope.flex.collectionView.items[i];
         if (item.gChk) {
-          if((orgnFg == "HQ") || (orgnFg == "STORE" && hqOfficeCd == '00000') || (orgnFg == "STORE" && hqOfficeCd !="00000" && item.sdselGrpCd > 799999)) {
-            if (item.cnt == 0) {
-              $scope.flex.collectionView.removeAt(i);
+          if(item.sdselGrpCd === "자동채번" || item.sdselGrpCd  === null || item.sdselGrpCd  === undefined || item.sdselGrpCd  === ""){
+            $scope.flex.collectionView.removeAt(i);
+          }else {
+            if ((orgnFg == "HQ") || (orgnFg == "STORE" && hqOfficeCd == '00000') || (orgnFg == "STORE" && hqOfficeCd != "00000" && item.sdselGrpCd > 799999)) {
+              if (item.cnt === 0 || item.cnt === null || item.cnt === undefined || item.cnt === "") {
+                $scope.flex.collectionView.removeAt(i);
+              } else {
+                $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
+                return false;
+              }
             } else {
-              $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
+              $scope._popMsg(messages["sideMenu.selectMenu.edited"]);
+              $scope._broadcast('sideMenuAttrClassCtrl');
               return false;
             }
-          } else  {
-            $scope._popMsg(messages["sideMenu.selectMenu.edited"]);
-            $scope._broadcast('sideMenuAttrClassCtrl');
-            return false;
           }
         }
       }
@@ -223,6 +245,13 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
           return false;
         }
         if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].sdselGrpNm)) {
+
+          // addRow가 제대로 안된 데이터 다시 파악하여 필수값 채워주기
+          if($scope.flex.collectionView.itemsAdded[i].gChk === undefined){
+            $scope.flex.collectionView.itemsAdded[i].gChk = true;
+            $scope.flex.collectionView.itemsAdded[i].sdselGrpCd = '자동채번';
+          }
+
           $scope.flex.collectionView.itemsAdded[i].status = 'I';
           params.push($scope.flex.collectionView.itemsAdded[i]);
         } else {
@@ -338,13 +367,22 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === 'sdselClassCd' && selectedRow.status !== 'I') {
-          $("#sideClassTitle").html(" [" + selectedRow.sdselClassCd+ "]" + selectedRow.sdselClassNm );
+        if(col.binding === 'sdselClassCd') {
+          if(selectedRow.sdselClassCd !== '' && selectedRow.sdselClassCd !== undefined && selectedRow.sdselClassCd !== '자동채번') {
+            $("#sideClassTitle").html(" [" + selectedRow.sdselClassCd + "]" + selectedRow.sdselClassNm);
 
-          var params = {};
-          params.sdselClassCd = selectedRow.sdselClassCd;
-          params.sdselQty = selectedRow.sdselQty;
-          $scope._broadcast('sideMenuSelectProdCtrl', params);
+            // 선택상품버튼
+            $("#btnUpSelProd").show();
+            $("#btnDownSelProd").show();
+            $("#btnAddSelProd").show();
+            $("#btnDelSelProd").show();
+            $("#btnSaveSelProd").show();
+
+            var params = {};
+            params.sdselClassCd = selectedRow.sdselClassCd;
+            params.sdselQty = selectedRow.sdselQty;
+            $scope._broadcast('sideMenuSelectProdCtrl', params);
+          }
         }
       }
     });
@@ -387,11 +425,15 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
         var item = $scope.flex.collectionView.items[i];
         if (item.gChk) {
-          if (item.cnt == 0) {
+          if(item.sdselClassCd === "자동채번" || item.sdselClassCd  === null || item.sdselClassCd  === undefined || item.sdselClassCd  === ""){
             $scope.flex.collectionView.removeAt(i);
-          } else {
-            $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
-            return false;
+          }else {
+            if (item.cnt === 0 || item.cnt === null || item.cnt === undefined || item.cnt === "") {
+              $scope.flex.collectionView.removeAt(i);
+            } else {
+              $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
+              return false;
+            }
           }
         }
       }
@@ -459,7 +501,20 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           return false;
         }
         if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].sdselClassNm)) {
-          $scope.flex.collectionView.itemsAdded[i].status = 'I';
+          
+          // addRow가 제대로 안된 데이터 다시 파악하여 필수값 채워주기
+          if($scope.flex.collectionView.itemsAdded[i].gChk === undefined){
+            $scope.flex.collectionView.itemsAdded[i].sdselGrpCd =  $scope.getSdselGrpCd();
+            $scope.flex.collectionView.itemsAdded[i].gChk = true;
+            $scope.flex.collectionView.itemsAdded[i].sdselClassCd = '자동채번';
+            if($scope.flex.collectionView.itemsAdded[i].sdselQty === null ||
+                $scope.flex.collectionView.itemsAdded[i].sdselQty === undefined ||
+                $scope.flex.collectionView.itemsAdded[i].sdselQty === ""){
+              $scope.flex.collectionView.itemsAdded[i].sdselQty = 0;
+            }
+          }
+
+          $scope.flex.collectionView.itemsAdded[i].status = "I";
           params.push($scope.flex.collectionView.itemsAdded[i]);
         } else {
           $scope._popMsg(messages["cmm.max50Chk"]);
@@ -678,7 +733,14 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
       // 삭제기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
-        $scope._broadcast('sideMenuSelectProdCtrl', $scope.getSdselClassCd());
+
+        // 선택상품 리스트 재조회
+        var params = {};
+        params.sdselClassCd = $scope.getSdselClassCd();
+        params.sdselQty = $scope.sdselQty;
+        $scope._broadcast('sideMenuSelectProdCtrl', params);
+        
+        // 선택분류 리스트 재조회
         var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
         var sdselGrpCd = grpGrid.getSelectedSdselGrpCd();
         $scope._broadcast('sideMenuSelectClassCtrl', sdselGrpCd);

@@ -61,8 +61,16 @@ app.controller('erpStoreSetCtrl', ['$scope', '$http', function ($scope, $http) {
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "bbqStoreCd") {
                     if (selectedRow.regYn === 'N') {
+                        
+                        // 선택값 셋팅
                         $scope.setErpStore(selectedRow);
-                        $scope.close();
+
+                        // 팝업 닫기 전 초기화
+                        $("#erpStoreCd").val("");
+                        $("#erpStoreNm").val("");
+                        $("#erpBizNo").val("");
+                        $scope.erpRegYnCombo.selectedIndex = 2;
+
                         $scope.erpStoreSetLayer.hide();
                     }
                 }
@@ -93,6 +101,10 @@ app.controller('erpStoreSetCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 팝업 닫기 전 초기화
     $scope.close = function () {
+        
+        // 선택값 셋팅
+        $scope.setErpStore(null);
+
         $("#erpStoreCd").val("");
         $("#erpStoreNm").val("");
         $("#erpBizNo").val("");
