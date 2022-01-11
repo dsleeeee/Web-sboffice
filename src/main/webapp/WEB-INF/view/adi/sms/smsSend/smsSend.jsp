@@ -265,10 +265,10 @@
                 <div id="divPopup" class="layer" style="display: none;">
                     <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
                         <!--layerContent-->
-                        <div class="title" style="width:770px;">
+                        <div class="title" style="width:700px;">
                             <a href="#" class="btn_close" ng-click="close()"></a>
                             <div class="con">
-                                <img src="/resource/solbipos/css/img/sms/sms_advertisement.jpg" style="width:100%" alt="광고문자 발송에 대한 의무사항 안내" />
+                                <img src="/resource/solbipos/css/img/sms/sms_advertisement2.jpg" style="width:100%" alt="광고문자 발송에 대한 의무사항 안내" />
                             </div>
                             <div class="btnSet">
                                 <span><a href="#" class="btn_blue" id="btnCloseToday" ng-click="closeToday()">오늘하루 열지않기</a></span>

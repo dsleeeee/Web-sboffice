@@ -803,7 +803,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .subCon {padding:5px 5px 8px;}
 .subCon2 {padding:20px 20px 0;} /*테이블속성, 테이블관리,  판매터치키 페이지를 위해 하단 padding 삭제*/
 .subCon2:after {display:block; clear:both; content:''}
-.subCon4 {padding:10px 10px 8px;}
+.subCon4 {padding:10px 10px 8px;} /*모바일용 팝업을 위해 padding 축소*/
 
 .elseCon {text-align:center; padding-top:280px; position:relative;}
 .elseCon:before {content:'!';font-size:6em; color:#fff; font-weight:bold; font-family:georgia, times, serif; width:100px; height:100px; background:#ddd; border-radius:100%; position:absolute; top:150px; left:50%; margin-left:-50px;}
@@ -1002,19 +1002,6 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .pageNum2 ul li.btn_next a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; width:29px; height:25px; display:inline-block; position:absolute; left:0px; top:0px; transform:rotate(180deg);}
 .pageNum2 ul li.btn_next a:hover {background:url(../img/ic_pagenum_hover.png) #ccc center center no-repeat;}
 .pageNum2 ul li.btn_previous a span, .pageNum2 ul li.btn_next a span {font-size:0px;}
-
-.pageNum3 {position:relative; width:100%; text-align:center;}
-.pageNum3 ul {height:20px; text-align:center; display:inline-block; overflow:hidden;}
-.pageNum3 ul li {display:inline-block; width:24px; height:20px; float:left; margin:0 2px; font-size:0.875em;}
-.pageNum3 ul li a {font-size:0.875em; display:block; line-height:20px; border-radius:4px;}
-.pageNum3 ul li a:hover {background:#dedede;}
-.pageNum3 ul li a.on {background:#1e88e5; color:#fff;}
-.pageNum3 ul li.btn_previous, .pageNum3 ul li.btn_next {width:24px; height:20px; position:relative; margin:0 8px;}
-.pageNum3 ul li.btn_previous a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; width:24px; height:20px; display:inline-block; position:absolute; left:0px; top:0px;}
-.pageNum3 ul li.btn_previous a:hover {background:url(../img/ic_pagenum_hover.png) #ccc center center no-repeat;}
-.pageNum3 ul li.btn_next a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; width:24px; height:20px; display:inline-block; position:absolute; left:0px; top:0px; transform:rotate(180deg);}
-.pageNum3 ul li.btn_next a:hover {background:url(../img/ic_pagenum_hover.png) #ccc center center no-repeat;}
-.pageNum3 ul li.btn_previous a span, .pageNum3 ul li.btn_next a span {font-size:0px;}
 
 .h2_tit {font-size:1em; color:#222; margin-bottom:20px;}
 .h2_tit2 {font-size:1em; color:#222; margin-bottom:10px;}
@@ -1307,7 +1294,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .noTitle {border-radius:4px; background:#fff; padding:40px 30px; z-index:500; position:relative; box-shadow: 0 0 20px 0px #222;}
 .noTitle p {line-height:1.5em; letter-spacing:-0.05em;}
 
-.title {border-radius:4px; background:#fff; padding:0 0 40px 0; z-index:500; position:relative; box-shadow: 0 0 20px 0px #222;}
+.title {border-radius:4px; background:#fff; padding:0 0 15px 0; z-index:500; position:relative; box-shadow: 0 0 20px 0px #222;}
 
 .tit {height:35px; border-bottom:1px solid #dbdbdb; line-height:35px; padding:0 10px; color:#222;}
 
@@ -1319,10 +1306,10 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .title .btn_close:before {content:''; position:absolute; top:10px; right:5px; width:18px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(45deg); transition:all 0.3s;}
 .title .btn_close:after {content:''; position:absolute; top:10px; right:5px; width:18px; height:3px; background:#aeaeae; border-radius:20%; transform:rotate(-45deg); transition:all 0.3s;}
 
-.con {padding:20px 30px 0;}
+.con {padding:10px 10px 0;}
 
 .noTitle .btnSet {padding-top:60px; display:table; margin:0 auto;}
-.title .btnSet {padding-top:40px; display:table; margin:0 auto;}
+.title .btnSet {padding-top:10px; display:table; margin:0 auto;}
 .btnSet a {color:#fff; display:inline-block; padding:10px 30px; border-radius:4px; margin:0 5px; transition:all 0.3s;}
 .btnSet a:hover {transition:all 0.3s;}
 .btn_blue {background:#1e88e5;} .btn_blue:hover {background:#174291;}
