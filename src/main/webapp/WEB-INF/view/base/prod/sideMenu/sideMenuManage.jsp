@@ -6,8 +6,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-<div id="selectMenuArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isManageTab">
-    <div class="wj-dialog wj-dialog-columns" ng-controller="sideMenuManageCtrl">
+<div id="selectMenuArea" class="subCon" ng-hide="isManageTab" ng-controller="sideMenuManageCtrl">
 
         <table class="searchTbl" style="border-top:1px solid #ddd">
             <colgroup>
@@ -203,7 +202,7 @@
 
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
-            <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
+            <div class="wj-gridWrap" style="height:280px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -252,8 +251,6 @@
             </ul>
         </div>
         <%--//페이지 리스트--%>
-
-    </div>
 </div>
 
 <script>
