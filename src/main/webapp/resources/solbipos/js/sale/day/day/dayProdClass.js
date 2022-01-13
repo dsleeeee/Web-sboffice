@@ -187,7 +187,7 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
         event.preventDefault();
     });
 
-    // 분류 표시 레젤 SelectBox 선택 시
+    // 분류 표시 레벨 SelectBox 선택 시
     $scope.setProdClass = function(s){
 
         // 파라미터
@@ -216,7 +216,45 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
     // 상품분류별 리스트 조회
     $scope.searchDayProdClassList = function () {
 
+        var grid = wijmo.Control.getControl("#wjDayProdClassList");
+        var columns = grid.columns;
+        var arr = $("#hdProdClassNm").val().split(",");
+
+        // 기존에 조회된 컬럼 제거
+        if(columns.length > 4) {
+            var removeItem = [];
+            for (var j = 4; j < columns.length; j++) {
+                removeItem[j-4] = columns[j].binding;
+            }
+            for (var q = 0; q < removeItem.length; q++) {
+                columns.remove(removeItem[q]);
+            }
+        }
+
+        // 분류별 실매출, 수량 컬럼 생성
+        if(arr.length > 0 && $("#hdProdClassNm").val() !== "") {
+            for (var i = 1; i <= arr.length; i++) {
+                columns.push(new wijmo.grid.Column({ header: messages["day.prodClass.realSaleAmt"], binding : 'pay' + i + 'RealSaleAmt'}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.prodClass.saleQty"], binding : 'pay' + i + 'SaleQty'}));
+            }
+
+            // 분류별 실매출, 수량 컬럼 헤더머지
+            var dataItem         = {};
+            dataItem.saleDate    = messages["day.prodClass.saleDate"];
+            dataItem.yoil        = messages["day.prodClass.yoil"];
+            dataItem.totRealSaleAmt  = messages["day.prodClass.totRealSaleAmt"];
+            dataItem.totSaleQty    = messages["day.prodClass.totSaleQty"];
+
+            for (var i = 1; i <= arr.length; i++) {
+                dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
+                dataItem['pay' + i + "SaleQty"] = arr[i-1];
+            }
+            grid.columnHeaders.rows[0].dataItem = dataItem
+        }
+
+
         $scope.searchedStoreCd = $("#dayProdClassSelectStoreCd").val();
+
         // 파라미터
         var params= {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -225,41 +263,9 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.strProdClassCd = $("#hdProdClassCd").val();
         //params.prodClassCd = "";
 
-        $scope._inquiryMain("/sale/day/day/dayProdClass/list.sb", params, function() {
+        // 상품분류별 매출 조회
+        $scope._inquiryMain("/sale/day/day/dayProdClass/list.sb", params, function() {});
 
-            var grid = wijmo.Control.getControl("#wjDayProdClassList");
-            var columns = grid.columns;
-            var arr = $("#hdProdClassNm").val().split(",");
-
-            if($("#hdProdClassNm").val() != "") {
-                var start = 4;
-                var end = (arr.length * 2) + 3;
-
-                // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
-                for (var i = 4; i <= 199; i++) {
-                    if (i >= start && i <= end) {
-                        columns[i].visible = true;
-                    } else {
-                        columns[i].visible = false;
-                    }
-                }
-            }
-
-            //리스트 컬럼에 분류명 셋팅
-            var dataItem         = {};
-            dataItem.saleDate    = messages["day.prodClass.saleDate"];
-            dataItem.yoil        = messages["day.prodClass.yoil"];
-            dataItem.totRealSaleAmt  = messages["day.prodClass.totRealSaleAmt"];
-            dataItem.totSaleQty    = messages["day.prodClass.totSaleQty"];
-
-            // 결제수단 헤더머지 컬럼 생성
-            for (var i = 1; i <= arr.length; i++) {
-                dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
-                dataItem['pay' + i + "SaleQty"] = arr[i-1];
-            }
-            grid.columnHeaders.rows[0].dataItem = dataItem
-
-        }, false);
     };
 
     // 매장선택 모듈 팝업 사용시 정의

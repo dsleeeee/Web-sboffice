@@ -127,11 +127,6 @@
                 <wj-flex-grid-column header="<s:message code="day.prodClass.yoil"/>" binding="yoil" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.totSaleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <%-- 컬럼 생성--%>
-                <c:forEach var="i" begin="1" end="200" step="1">
-                    <wj-flex-grid-column header="<s:message code="day.prodClass.realSaleAmt"/>" binding="pay${i}RealSaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="day.prodClass.saleQty"/>" binding="pay${i}SaleQty" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
-                </c:forEach>
 
             </wj-flex-grid>
 
@@ -147,4 +142,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20210118.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20220113.02" charset="utf-8"></script>

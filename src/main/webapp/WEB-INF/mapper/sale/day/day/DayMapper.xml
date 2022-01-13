@@ -92,7 +92,7 @@
                 AND tmc.STORE_CD = #{storeCd}
             ]]>
         </if>
-        AND tms.STORE_CD (+)= tmc.STORE_CD
+        AND tmc.STORE_CD = tms.STORE_CD
         GROUP BY tmc.STORE_CD, tmc.CORNR_CD, tmc.CORNR_NM, tms.STORE_NM
         ORDER BY tmc.STORE_CD, tmc.CORNR_CD
     </select>
@@ -140,7 +140,7 @@
                 AND tmp.STORE_CD = #{storeCd}
             ]]>
         </if>
-        AND tms.STORE_CD (+)= tmp.STORE_CD
+        AND tms.STORE_CD = tmp.STORE_CD
         ORDER BY tmp.STORE_CD, tmp.POS_NO
     </select>
 
