@@ -56,7 +56,8 @@
 <script>
 var prter = [
   {"name":"주방프린터","value":"0"},
-  {"name":"라벨프린터","value":"1"}
+  {"name":"라벨프린터","value":"1"},
+  {"name":"KDS"       ,"value":"2"}
 ];
 var prterKind   = ${cnv.getEnvCodeExcpAll("4030")};
 var prterLabelKind  = ${ccu.getCommCodeExcpAll("113")};
