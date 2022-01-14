@@ -175,6 +175,40 @@ app.controller('monthTableCtrl', ['$scope', '$http', '$timeout', function ($scop
     });
 
     $scope.searchMonthTable = function() {
+
+        var grid = wijmo.Control.getControl("#wjGridMonthTableList");
+        var columns = grid.columns;
+        var arr = tableColList;
+
+        // 기존에 조회된 컬럼 제거
+        if(columns.length > 4) {
+            var removeItem = [];
+            for (var j = 4; j < columns.length; j++) {
+                removeItem[j-4] = columns[j].binding;
+            }
+            for (var q = 0; q < removeItem.length; q++) {
+                columns.remove(removeItem[q]);
+            }
+        }
+
+        // 외식테이블별 실매출, 회전수, 고객수 컬럼 생성
+        if(arr.length > 0) {
+
+            // 검색조건 외식테이블코드가 있는경우 해당 테이블만 표시
+            if($scope.monthTableCd !== "" && $scope.monthTableCd !== null && $scope.monthTableCd !== undefined){
+                columns.push(new wijmo.grid.Column({ header: messages["month.realSaleAmt"], binding : 'tbl' + $scope.monthTableCd + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["month.tblCnt"], binding : 'tbl' + $scope.monthTableCd + 'TblCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["month.totGuestCnt"], binding : 'tbl' + $scope.monthTableCd + 'GuestCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+            }else{ // 전체 테이블 표시
+                for (var i = 0; i < arr.length; i++) {
+                    columns.push(new wijmo.grid.Column({ header: messages["month.realSaleAmt"], binding : 'tbl' + arr[i].tblCd + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                    columns.push(new wijmo.grid.Column({ header: messages["month.tblCnt"], binding : 'tbl' + arr[i].tblCd + 'TblCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                    columns.push(new wijmo.grid.Column({ header: messages["month.totGuestCnt"], binding : 'tbl' + arr[i].tblCd + 'GuestCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                }
+            }
+        }
+
+        // 외식테이블별 매출 조회
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
@@ -183,51 +217,6 @@ app.controller('monthTableCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         $scope._inquiryMain("/sale/day/month/month/getMonthTableList.sb", params, function() {}, false);
 
-        // <-- 그리드 visible -->
-        // 선택한 테이블에 따른 리스트 항목 visible
-        var grid = wijmo.Control.getControl("#wjGridMonthTableList");
-        var columns = grid.columns;
-        var start = 0;
-        var end = 0;
-
-        // tableCol 배열로 담기
-        var table = tableCol.split(',');
-        var tableColArray = [];
-        for (var i = 0; i < table.length; i++) {
-            comboData = {};
-            comboData.value = table[i];
-            tableColArray.push(comboData);
-        }
-
-        // 컬럼 총갯수
-        var columnsCnt = 4 + (tableColArray.length * 3);
-
-        // 전체선택시 전부 visible
-        if($scope.monthTableCd === null)
-        {
-            for (var i = 4; i <= columnsCnt; i++) {
-                columns[i].visible = true;
-            }
-        }
-        // 선택한 테이블만 visible
-        else
-        {
-            for (var i = 0; i < tableColArray.length; i++) {
-                if (tableColArray[i].value === $scope.monthTableCd) {
-                    start = (i * 3) + 4;
-                    end = (i * 3) + 6;
-                }
-            }
-
-            for (var i = 4; i < columnsCnt; i++) {
-                if (i >= start && i <= end) {
-                    columns[i].visible = true;
-                } else {
-                    columns[i].visible = false;
-                }
-            }
-        }
-        // <-- //그리드 visible -->
     };
     // <-- //검색 호출 -->
 

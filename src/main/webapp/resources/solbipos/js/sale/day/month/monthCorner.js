@@ -195,7 +195,7 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
         var storeCornerCd = "";
 
         // 매장권한 로그인 시
-        if(orgnFg != null && orgnFg == 'STORE') {
+        if(orgnFg !== null && orgnFg === 'STORE') {
 
             // 본인 매장것만 조회
             $("#monthCornerStoreCd").val(storeCd);
@@ -205,10 +205,10 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
         }
 
         // 본사권한 로그인 시
-        if(orgnFg != null && orgnFg == 'HQ') {
+        if(orgnFg !== null && orgnFg === 'HQ') {
 
             // 매장코드 값 필수
-            if ($("#monthCornerStoreCd").val() == "") {
+            if ($("#monthCornerStoreCd").val() === "") {
                 s_alert.pop("매장을 선택해주세요.");
                 return;
             }
@@ -220,9 +220,33 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
                 }
             }
 
-            storeCornerCd = storeCornerCd.substring(1, storeCornerCd.length)
+            storeCornerCd = (storeCornerCd !== "" ? storeCornerCd.substring(1, storeCornerCd.length) : "");
         }
 
+        var grid = wijmo.Control.getControl("#wjGridMonthCornerList");
+        var columns = grid.columns;
+        var arr = storeCornerCd.split(",");
+
+        // 기존에 조회된 컬럼 제거
+        if(columns.length > 4) {
+            var removeItem = [];
+            for (var j = 4; j < columns.length; j++) {
+                removeItem[j-4] = columns[j].binding;
+            }
+            for (var q = 0; q < removeItem.length; q++) {
+                columns.remove(removeItem[q]);
+            }
+        }
+
+        // 코너별 실매출, 수량 컬럼 생성
+        if(arr.length > 0 && storeCornerCd !== "") {
+            for (var i = 0; i < arr.length; i++) {
+                columns.push(new wijmo.grid.Column({ header: messages["month.realSaleAmt"], binding : 'cornr' + arr[i] + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["month.saleQty"], binding : 'cornr' + arr[i] + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+            }
+        }
+        
+        // 코너별 매출 조회
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
@@ -231,58 +255,6 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         $scope._inquiryMain("/sale/day/month/month/getMonthCornerList.sb", params, function() {}, false);
 
-        // <-- 그리드 visible -->
-        // 선택한 테이블에 따른 리스트 항목 visible
-        var grid = wijmo.Control.getControl("#wjGridMonthCornerList");
-        var columns = grid.columns;
-        var start = 0;
-        var end = 3;
-
-        // cornerColList 에 storeCd 배열로 담기
-        var cornerColArray = [];
-        for (var i = 0; i < cornerColList.length; i++) {
-            comboData = {};
-            comboData.value = cornerColList[i].storeCd;
-            cornerColArray.push(comboData);
-        }
-
-        // 컬럼 총갯수
-        var columnsCnt = 4 + (cornerColArray.length * 2);
-
-        // 전체선택시 전부 visible
-        if($("#monthCornerStoreCd").val() === "")
-        {
-            for (var i = 4; i <= columnsCnt; i++) {
-                columns[i].visible = true;
-            }
-        }
-        // 선택한 테이블만 visible
-        else
-        {
-            var totCornerIndex = "";
-            for (var i = 0; i < cornerColArray.length; i++) {
-                if (cornerColArray[i].value === $("#monthCornerStoreCd").val()) {
-                    totCornerIndex = totCornerIndex + i + ','; // 해당 본사에 모든 매장별코너 리스트에서 선택한 매장의 코너들이 몇번째가 인덱스인지 체크
-                }
-            }
-
-            totCornerIndex = totCornerIndex.substring(0, totCornerIndex.length-1);
-            var arrCornerIndex = totCornerIndex.split(",");
-
-            for (var i = 0; i < cornerColArray.length; i++) {
-                start = 4 + (parseInt(arrCornerIndex[0]) * 2);
-                end = 5 + (parseInt(arrCornerIndex[arrCornerIndex.length-1]) * 2);
-            }
-
-            for (var i = 4; i < columnsCnt; i++) {
-                if (i >= start && i <= end) {
-                    columns[i].visible = true;
-                } else {
-                    columns[i].visible = false;
-                }
-            }
-        }
-        // <-- //그리드 visible -->
     };
     // <-- //검색 호출 -->
 

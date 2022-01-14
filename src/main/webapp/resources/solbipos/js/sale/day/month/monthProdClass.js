@@ -196,47 +196,52 @@ app.controller('monthProdClassCtrl', ['$scope', '$http', '$timeout', function ($
     });
 
     $scope.searchMonthProdClass = function() {
+
+        var grid = wijmo.Control.getControl("#wjMonthProdClassList");
+        var columns = grid.columns;
+        var arr = $("#hdMonthProdClassNm").val().split(",");
+
+        // 기존에 조회된 컬럼 제거
+        if(columns.length > 4) {
+            var removeItem = [];
+            for (var j = 4; j < columns.length; j++) {
+                removeItem[j-4] = columns[j].binding;
+            }
+            for (var q = 0; q < removeItem.length; q++) {
+                columns.remove(removeItem[q]);
+            }
+        }
+        
+        // 분류별 실매출, 수량 컬럼 생성
+        if(arr.length > 0 && $("#hdMonthProdClassNm").val() !== "") {
+            for (var i = 1; i <= arr.length; i++) {
+                columns.push(new wijmo.grid.Column({ header: messages["month.realSaleAmt"], binding : 'pay' + i + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["month.saleQty"], binding : 'pay' + i + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+            }
+
+            // 분류별 실매출, 수량 컬럼 헤더머지
+            var dataItem         = {};
+            dataItem.yearMonth    = messages["month.yearMonth"];
+            dataItem.storeCnt        = messages["month.storeCnt"];
+            dataItem.totRealSaleAmt  = messages["month.totRealSaleAmt"];
+            dataItem.totSaleQty    = messages["month.totSaleQty"];
+
+            for (var i = 1; i <= arr.length; i++) {
+                dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
+                dataItem['pay' + i + "SaleQty"] = arr[i-1];
+            }
+            grid.columnHeaders.rows[0].dataItem = dataItem
+        }
+
+        // 상품분류별 매출 조회
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.storeCds = $("#monthProdClassStoreCd").val();
         params.strProdClassCd = $("#hdMonthProdClassCd").val();
 
-        $scope._inquiryMain("/sale/day/month/month/getMonthProdClassList.sb", params, function() {
+        $scope._inquiryMain("/sale/day/month/month/getMonthProdClassList.sb", params, function() {});
 
-            var grid = wijmo.Control.getControl("#wjMonthProdClassList");
-            var columns = grid.columns;
-            var arr = $("#hdMonthProdClassNm").val().split(",");
-
-            if($("#hdMonthProdClassNm").val() != "") {
-                var start = 4;
-                var end = (arr.length * 2) + 3;
-
-                // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
-                for (var i = 4; i <= 199; i++) {
-                    if (i >= start && i <= end) {
-                        columns[i].visible = true;
-                    } else {
-                        columns[i].visible = false;
-                    }
-                }
-            }
-
-            //리스트 컬럼에 분류명 셋팅
-            var dataItem = {};
-            dataItem.yearMonth = messages["month.yearMonth"];
-            dataItem.storeCnt = messages["month.storeCnt"];
-            dataItem.totRealSaleAmt  = messages["month.totRealSaleAmt"];
-            dataItem.totSaleQty    = messages["month.totSaleQty"];
-
-            // 헤더머지 컬럼 생성
-            for (var i = 1; i <= arr.length; i++) {
-                dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
-                dataItem['pay' + i + "SaleQty"] = arr[i-1];
-            }
-            grid.columnHeaders.rows[0].dataItem = dataItem
-
-        }, false);
     };
     // <-- //검색 호출 -->
 

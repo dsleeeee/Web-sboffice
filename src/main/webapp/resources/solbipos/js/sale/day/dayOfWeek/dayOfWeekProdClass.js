@@ -113,47 +113,52 @@ app.controller('dayOfWeekProdClassCtrl', ['$scope', '$http', '$timeout', functio
     });
 
     $scope.searchDayOfWeekProdClass = function() {
-        var params = {};
-        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
-        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-        params.storeCds = $("#dayOfWeekProdClassStoreCd").val();
-        params.strProdClassCd = $("#hdDayOfWeekProdClassCd").val();
 
-        $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekProdClassList.sb", params, function() {
+        var grid = wijmo.Control.getControl("#wjDayOfWeekProdClassList");
+        var columns = grid.columns;
+        var arr = $("#hdDayOfWeekProdClassNm").val().split(",");
 
-            var grid = wijmo.Control.getControl("#wjDayOfWeekProdClassList");
-            var columns = grid.columns;
-            var arr = $("#hdDayOfWeekProdClassNm").val().split(",");
+        // 기존에 조회된 컬럼 제거
+        if(columns.length > 4) {
+            var removeItem = [];
+            for (var j = 4; j < columns.length; j++) {
+                removeItem[j-4] = columns[j].binding;
+            }
+            for (var q = 0; q < removeItem.length; q++) {
+                columns.remove(removeItem[q]);
+            }
+        }
 
-            if($("#hdDayOfWeekProdClassNm").val() != "") {
-                var start = 4;
-                var end = (arr.length * 2) + 3;
-
-                // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
-                for(var i = 4; i <= 199; i++){
-                    if(i >= start && i <= end){
-                        columns[i].visible = true;
-                    }else{
-                        columns[i].visible = false;
-                    }
-                }
+        // 분류별 실매출, 수량 컬럼 생성
+        if(arr.length > 0 && $("#hdDayOfWeekProdClassNm").val() !== "") {
+            for (var i = 1; i <= arr.length; i++) {
+                columns.push(new wijmo.grid.Column({ header: messages["dayofweek.realSaleAmt"], binding : 'pay' + i + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["dayofweek.saleQty"], binding : 'pay' + i + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
             }
 
-            //리스트 컬럼에 분류명 셋팅
-            var dataItem = {};
-            dataItem.yoil = messages["dayofweek.yoil"];
-            dataItem.storeCnt = messages["dayofweek.storeCnt"];
+            // 분류별 실매출, 수량 컬럼 헤더머지
+            var dataItem         = {};
+            dataItem.yoil        = messages["dayofweek.yoil"];
+            dataItem.storeCnt    = messages["dayofweek.storeCnt"];
             dataItem.totRealSaleAmt  = messages["dayofweek.totRealSaleAmt"];
             dataItem.totSaleQty    = messages["dayofweek.totSaleQty"];
 
-            // 헤더머지 컬럼 생성
             for (var i = 1; i <= arr.length; i++) {
                 dataItem['pay' + i + "RealSaleAmt"] = arr[i-1];
                 dataItem['pay' + i + "SaleQty"] = arr[i-1];
             }
             grid.columnHeaders.rows[0].dataItem = dataItem
+        }
 
-        }, false);
+        // 상품분류별 매출 조회
+        var params = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        params.storeCds = $("#dayOfWeekProdClassStoreCd").val();
+        params.strProdClassCd = $("#hdDayOfWeekProdClassCd").val();
+
+        $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekProdClassList.sb", params, function() {});
+
     };
     // <-- //검색 호출 -->
 

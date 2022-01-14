@@ -180,7 +180,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 
         for(int i=0; i<  dayOfWeekVO.getArrProdClassCd().length; i++) {
             strAmt += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_REAL_SALE_AMT, 0)";
-            strQty += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_QTY, 0)";
+            strQty += (strQty.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_QTY, 0)";
             pivotProdClassCol1 += (pivotProdClassCol1.equals("") ? "" : ", ") + "tba.PAY" + (i+1) + "_REAL_SALE_AMT, tba.PAY" + (i+1) + "_SALE_QTY";
             pivotProdClassCol2 += (pivotProdClassCol2.equals("") ? "" : ", ") + "NVL(SUM(PAY" + (i+1) + "_REAL_SALE_AMT), 0) AS PAY" + (i+1) + "_REAL_SALE_AMT, NVL(SUM(PAY" + (i+1) + "_SALE_QTY), 0) AS PAY" + (i+1) + "_SALE_QTY";
             pivotProdClassCol3 += (pivotProdClassCol3.equals("") ? "" : ", ") + "'" + dayOfWeekVO.getArrProdClassCd()[i]  + "' AS PAY" + (i+1);

@@ -234,8 +234,8 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
         // 분류별 실매출, 수량 컬럼 생성
         if(arr.length > 0 && $("#hdProdClassNm").val() !== "") {
             for (var i = 1; i <= arr.length; i++) {
-                columns.push(new wijmo.grid.Column({ header: messages["day.prodClass.realSaleAmt"], binding : 'pay' + i + 'RealSaleAmt'}));
-                columns.push(new wijmo.grid.Column({ header: messages["day.prodClass.saleQty"], binding : 'pay' + i + 'SaleQty'}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.prodClass.realSaleAmt"], binding : 'pay' + i + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.prodClass.saleQty"], binding : 'pay' + i + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
             }
 
             // 분류별 실매출, 수량 컬럼 헤더머지
@@ -255,7 +255,7 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         $scope.searchedStoreCd = $("#dayProdClassSelectStoreCd").val();
 
-        // 파라미터
+        // 상품분류별 매출 조회
         var params= {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
@@ -263,7 +263,6 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.strProdClassCd = $("#hdProdClassCd").val();
         //params.prodClassCd = "";
 
-        // 상품분류별 매출 조회
         $scope._inquiryMain("/sale/day/day/dayProdClass/list.sb", params, function() {});
 
     };

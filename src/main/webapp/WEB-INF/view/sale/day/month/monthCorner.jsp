@@ -80,11 +80,6 @@
                     <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <%-- 코너 컬럼 생성--%>
-                    <c:forEach var="cornerCol" items="${cornerColList}">
-                        <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="cornr${cornerCol.storeCornrCd}RealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.saleQty"/>" binding="cornr${cornerCol.storeCornrCd}SaleQty" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    </c:forEach>
 
                 </wj-flex-grid>
 
@@ -105,4 +100,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthCorner.js?ver=20211115.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthCorner.js?ver=20220114.02" charset="utf-8"></script>

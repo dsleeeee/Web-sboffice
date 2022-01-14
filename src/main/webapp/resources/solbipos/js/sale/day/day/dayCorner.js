@@ -238,8 +238,8 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
         // 코너별 실매출, 수량 컬럼 생성
         if(arr.length > 0 && storeCornerCd !== "") {
             for (var i = 0; i < arr.length; i++) {
-                columns.push(new wijmo.grid.Column({ header: messages["day.corner.realSaleAmt"], binding : 'cornr' + arr[i] + 'RealSaleAmt'}));
-                columns.push(new wijmo.grid.Column({ header: messages["day.corner.saleQty"], binding : 'cornr' + arr[i] + 'SaleQty'}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.corner.realSaleAmt"], binding : 'cornr' + arr[i] + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.corner.saleQty"], binding : 'cornr' + arr[i] + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
             }
         }
         

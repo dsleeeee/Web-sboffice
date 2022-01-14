@@ -87,12 +87,6 @@
                     <wj-flex-grid-column header="<s:message code="month.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.totTblCnt"/>" binding="totTblCnt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="month.table.totGuestCnt"/>" binding="totGuestCnt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <%-- 외식테이블 컬럼 생성--%>
-                    <c:forEach var="tableCol" items="${tableColList}">
-                        <wj-flex-grid-column header="<s:message code="month.realSaleAmt"/>" binding="tbl${tableCol.tblCd}RealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.tblCnt"/>" binding="tbl${tableCol.tblCd}TblCnt" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="month.totGuestCnt"/>" binding="tbl${tableCol.tblCd}GuestCnt" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    </c:forEach>
 
                 </wj-flex-grid>
 
@@ -112,4 +106,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTable.js?ver=20200108.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTable.js?ver=20220114.02" charset="utf-8"></script>

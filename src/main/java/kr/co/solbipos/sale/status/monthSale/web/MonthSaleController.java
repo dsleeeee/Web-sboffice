@@ -3,6 +3,7 @@ package kr.co.solbipos.sale.status.monthSale.web;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.day.day.service.DayVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ public class MonthSaleController {
 
         DayVO dayVO = new DayVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
 
         // 결제수단 조회
         List<DefaultMap<String>> payColList = dayService.getPayColList(dayVO, sessionInfoVO);
@@ -69,22 +69,23 @@ public class MonthSaleController {
         }
         model.addAttribute("cornerColList", cornerColList);
         model.addAttribute("cornerCol", cornerCol);
-//        System.out.println("cornerColList : "+cornerColList);
-//        System.out.println("cornerCol : "+cornerCol);
 
 
-        // 외식테이블 조회
-        List<DefaultMap<String>> tableColList = dayService.getTableColList(dayVO, sessionInfoVO);
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 외식테이블 조회
+            List<DefaultMap<String>> tableColList = dayService.getTableColList(dayVO, sessionInfoVO);
 
-        // 외식테이블구분 코드를 , 로 연결하는 문자열 생성
-        String tableCol = "";
-        for(int i=0; i < tableColList.size(); i++) {
-            tableCol += (tableCol.equals("") ? "" : ",") + tableColList.get(i).getStr("tblCd");
+            // 외식테이블구분 코드를 , 로 연결하는 문자열 생성
+            String tableCol = "";
+            for(int i=0; i < tableColList.size(); i++) {
+                tableCol += (tableCol.equals("") ? "" : ",") + tableColList.get(i).getStr("tblCd");
+            }
+            model.addAttribute("tableColList", tableColList);
+            model.addAttribute("tableCol", tableCol);
+        }else{
+            model.addAttribute("tableColList", "");
+            model.addAttribute("tableCol", "");
         }
-        model.addAttribute("tableColList", tableColList);
-        model.addAttribute("tableCol", tableCol);
-//        System.out.println("tableColList : "+tableColList);
-//        System.out.println("tableCol : "+tableCol);
 
 
         // 포스 조회
@@ -97,8 +98,7 @@ public class MonthSaleController {
         }
         model.addAttribute("posColList", posColList);
         model.addAttribute("posCol", posCol);
-//        System.out.println("posColList : "+posColList);
-//        System.out.println("posCol : "+posCol);
+
 
         // 상분분류별 탭 - 분류레벨 최대값 조회
         model.addAttribute("maxLevel", dayService.getDayProdClassMaxLevel(dayVO, sessionInfoVO));

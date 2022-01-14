@@ -247,10 +247,10 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         // 포스별 총매출, 총할인, 실매출, 수량 컬럼 생성
         if(arr.length > 0 && storePosCd !== "") {
             for (var i = 0; i < arr.length; i++) {
-                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.saleAmt"], binding : 'pos' + arr[i] + 'SaleAmt'}));
-                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.dcAmt"], binding : 'pos' + arr[i] + 'DcAmt'}));
-                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.realSaleAmt"], binding : 'pos' + arr[i] + 'RealSaleAmt'}));
-                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.saleQty"], binding : 'pos' + arr[i] + 'SaleQty'}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.saleAmt"], binding : 'pos' + arr[i] + 'SaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.dcAmt"], binding : 'pos' + arr[i] + 'DcAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.realSaleAmt"], binding : 'pos' + arr[i] + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.dayPos.saleQty"], binding : 'pos' + arr[i] + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
             }
         }
 

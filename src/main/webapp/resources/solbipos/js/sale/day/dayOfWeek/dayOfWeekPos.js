@@ -129,6 +129,65 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
     });
 
     $scope.searchDayOfWeekPos = function() {
+
+        //조회할 POS Key값 셋팅을 위해
+        var storePosCd = "";
+
+        // 매장권한 로그인 시
+        if(orgnFg !== null && orgnFg === 'STORE') {
+
+            // 본인 매장것만 조회
+            $("#dayofweekPosStoreCd").val(storeCd);
+
+            // 매장권한의 경우, 이미 자기의 포스 값을 가져왔음.
+            storePosCd = posCol;
+        }
+
+        // 본사권한 로그인 시
+        if(orgnFg !== null && orgnFg === 'HQ') {
+
+            // 매장코드 값 필수
+            if ($("#dayofweekPosStoreCd").val() === "") {
+                s_alert.pop("매장을 선택해주세요.");
+                return;
+            }
+
+            // 해당 본사의 전체 포스에서 조회할 매장의 포스만 추려내기
+            for (var i = 0; i < posColList.length; i++) {
+                if($("#dayofweekPosStoreCd").val().indexOf(posColList[i].storeCd) > -1){
+                    storePosCd += "," + arrPosCol[i];
+                }
+            }
+
+            storePosCd = (storePosCd !== "" ? storePosCd.substring(1, storePosCd.length) : "");
+        }
+
+        var grid = wijmo.Control.getControl("#wjGridDayOfWeekPosList");
+        var columns = grid.columns;
+        var arr = storePosCd.split(",");
+
+        // 기존에 조회된 컬럼 제거
+        if(columns.length > 5) {
+            var removeItem = [];
+            for (var j = 5; j < columns.length; j++) {
+                removeItem[j-5] = columns[j].binding;
+            }
+            for (var q = 0; q < removeItem.length; q++) {
+                columns.remove(removeItem[q]);
+            }
+        }
+
+        // 포스별 총매출, 총할인, 실매출, 수량 컬럼 생성
+        if(arr.length > 0 && storePosCd !== "") {
+            for (var i = 0; i < arr.length; i++) {
+                columns.push(new wijmo.grid.Column({ header: messages["dayofweek.saleAmt"], binding : 'pos' + arr[i] + 'SaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["dayofweek.dcAmt"], binding : 'pos' + arr[i] + 'DcAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["dayofweek.realSaleAmt"], binding : 'pos' + arr[i] + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["dayofweek.saleQty"], binding : 'pos' + arr[i] + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+            }
+        }
+
+        // 포스별 매출 조회
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
@@ -137,65 +196,6 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekPosList.sb", params, function() {}, false);
 
-        // <-- 그리드 visible -->
-        // 선택한 테이블에 따른 리스트 항목 visible
-        var grid = wijmo.Control.getControl("#wjGridDayOfWeekPosList");
-        var columns = grid.columns;
-
-        // posColList 에 storeCd 배열로 담기
-        var posColArray = [];
-        for (var i = 0; i < posColList.length; i++) {
-            comboData = {};
-            comboData.value = posColList[i].storeCd;
-            posColArray.push(comboData);
-        }
-
-        // 컬럼 총갯수
-        var columnsCnt = 6 + (posColArray.length * 4);
-
-        // 전체선택시 전부 visible
-        if($("#dayofweekPosStoreCd").val() === "")
-        {
-            for (var i = 6; i < columnsCnt; i++) {
-                if(columns[i].visible === false) {
-                    columns[i].visible = true;
-                }
-            }
-        }
-        // 선택한 테이블만 visible
-        else
-        {
-            // 선택한 storeCd
-            var storeColList = $("#dayofweekPosStoreCd").val().split(',');
-
-            // storeColList 에 storeCd 배열로 담기
-            var storeColArray = [];
-            for (var i = 0; i < storeColList.length; i++) {
-                comboData = {};
-                comboData.value = storeColList[i];
-                storeColArray.push(comboData);
-            }
-
-            for (var i = 0; i < posColArray.length; i++) {
-                for (var j = 0; j < storeColArray.length; j++) {
-                    if (posColArray[i].value === storeColArray[j].value) {
-                        for (var k = 0; k < 4; k++) {
-                            if(columns[(i * 4) + 6 + k].visible === false) {
-                                columns[(i * 4) + 6 + k].visible = true;
-                            }
-                        }
-                        break;
-                    } else {
-                        for (var k = 0; k < 4; k++) {
-                            if(columns[(i * 4) + 6 + k].visible === true) {
-                                columns[(i * 4) + 6 + k].visible = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        // <-- //그리드 visible -->
     };
     // <-- //검색 호출 -->
 

@@ -195,19 +195,19 @@ app.controller('dayTableCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
             // 검색조건 외식테이블코드가 있는경우 해당 테이블만 표시
             if($scope.dayTableCd !== "" && $scope.dayTableCd !== null && $scope.dayTableCd !== undefined){
-                columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.realSaleAmt"], binding : 'tbl' + $scope.dayTableCd + 'RealSaleAmt'}));
-                columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.tblCnt"], binding : 'tbl' + $scope.dayTableCd + 'TblCnt'}));
-                columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.guestCnt"], binding : 'tbl' + $scope.dayTableCd + 'GuestCnt'}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.realSaleAmt"], binding : 'tbl' + $scope.dayTableCd + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.tblCnt"], binding : 'tbl' + $scope.dayTableCd + 'TblCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.guestCnt"], binding : 'tbl' + $scope.dayTableCd + 'GuestCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
             }else{ // 전체 테이블 표시
                 for (var i = 0; i < arr.length; i++) {
-                    columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.realSaleAmt"], binding : 'tbl' + arr[i].tblCd + 'RealSaleAmt'}));
-                    columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.tblCnt"], binding : 'tbl' + arr[i].tblCd + 'TblCnt'}));
-                    columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.guestCnt"], binding : 'tbl' + arr[i].tblCd + 'GuestCnt'}));
+                    columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.realSaleAmt"], binding : 'tbl' + arr[i].tblCd + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                    columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.tblCnt"], binding : 'tbl' + arr[i].tblCd + 'TblCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                    columns.push(new wijmo.grid.Column({ header: messages["day.dayTable.guestCnt"], binding : 'tbl' + arr[i].tblCd + 'GuestCnt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
                 }
             }
         }
         
-        // 테이블별 매출 조회
+        // 외식테이블별 매출 조회
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
