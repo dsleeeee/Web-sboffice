@@ -168,6 +168,9 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
                     }
                 }
             }
+            if(result.size() != 0) {
+                return result;
+            }
         }
         return result;
     }
@@ -299,7 +302,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
 
             List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
 
-            if(prodBarcdVO.getBarCd() != null) {
+            if(prodBarcdVO.getBarCd() != null && prodBarcdVO.getBarCd().length() > 0) {
                 list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
 
                 if (prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
