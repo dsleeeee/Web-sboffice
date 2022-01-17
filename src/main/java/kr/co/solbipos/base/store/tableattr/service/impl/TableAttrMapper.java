@@ -93,6 +93,7 @@ public interface TableAttrMapper {
     int deleteTab(TableAttrVO tableAttrVO);
     int deleteTabAttr(TableAttrVO tableAttrVO);
     //  테이블 기본속성
+    int insertTab(TableAttrVO tableAttrVO);
     int insertTabAttr(TableAttrVO tableAttrVO);
-
+    int insertTabConfg(TableAttrVO tableAttrVO);
 }
