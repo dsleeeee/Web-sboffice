@@ -552,6 +552,13 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
                         return false;
                     }
 
+                    // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
+                    Number.isInteger = Number.isInteger || function(value) {
+                        return typeof value === "number" &&
+                            isFinite(value) &&
+                            Math.floor(value) === value;
+                    };
+
                     // 변경판매가 - 소수점 입력 불가
                     if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){
                         $scope._popMsg(messages["salePriceManage.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
