@@ -176,7 +176,6 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
 
   // 저장
   $scope.save = function(){
-    console.log("눌리따");
     // 원래 웹 사용여부 'N'이었는데, 사용여부 'Y'로 변경한 경우
     if(($scope.storeEmpRegistInfo.originalWebUserId == '' || $scope.storeEmpRegistInfo.originalWebUserId == undefined)
         && $scope.storeEmpRegistInfo.webUseYn === 'Y') {

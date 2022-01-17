@@ -147,6 +147,7 @@
                      popover-enable="empForm.mpNo.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
+                     maxlength="15"
                      uib-popover="<s:message code="hqEmp.mpNo" />은(는) 필수 입력항목 입니다."/>
             </td>
             <%-- SMS수신여부 --%>
