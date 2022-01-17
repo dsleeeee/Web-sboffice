@@ -18,6 +18,10 @@ var useYnComboData = [
   {"name": "사용", "value": "Y"},
   {"name": "미사용", "value": "N"}
 ];
+var mainSaleFgComboData = [
+  {"name": "사용", "value": "0"},
+  {"name": "미사용", "value": "1"}
+];
 
 /**
  * 본사사원 등록 및 수정
@@ -30,6 +34,8 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData('hqEmpWebUseYnComboData', useYnComboData);
   // 사용여부
   $scope._setComboData('hqEmpUseYnFgComboData', useYnComboData);
+  // 사용여부
+  $scope._setComboData('hqEmpMainSaleFgComboData', mainSaleFgComboData);
   // SMS수신여부
   $scope._getComboDataQuery('072', 'hqEmpSmsRecvYnComboData');
   // 판매상품여부 콤보박스
@@ -73,6 +79,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmpRegistInfo.serviceFg  = '1';
       $scope.hqEmpRegistInfo.useYn      = 'Y';
       $scope.newEmpYn                   = true;
+      $scope.hqEmpRegistInfo.mainSaleFg = '0';
 
     } else {
 

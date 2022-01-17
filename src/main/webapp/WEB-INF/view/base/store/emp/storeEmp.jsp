@@ -79,10 +79,6 @@
         <td>
           <input type="text" id="srchUserId" name="srchUserId" ng-model="userId" class="sb-input w100" maxlength="16" onkeyup="fnNxBtnSearch();"/>
         </td>
-        <th></th>
-        <td></td>
-      </tr>
-      <tr>
         <%-- 재직여부 --%>
         <th><s:message code="storeEmp.serviceFg" /></th>
         <td>
@@ -98,13 +94,13 @@
             </wj-combo-box>
           </div>
         </td>
+      </tr>
+      <tr>
         <%-- 휴대폰번호 --%>
         <th><s:message code="storeEmp.mpNo" /></th>
         <td>
           <input type="text" id="srchMpNo" name="srchMpNo" ng-model="mpNo" class="sb-input w100" maxlength="15" onkeyup="fnNxBtnSearch();"/>
         </td>
-      </tr>
-      <tr>
         <%-- 웹사용여부 --%>
         <th><s:message code="storeEmp.webUseYn" /></th>
         <td>
@@ -120,6 +116,8 @@
             </wj-combo-box>
           </div>
         </td>
+      </tr>
+      <tr>
         <%-- SMS수신여부 --%>
         <th><s:message code="storeEmp.smsRecvYn" /></th>
         <td>
@@ -128,6 +126,21 @@
                     id="srchSmsRecvYn"
                     ng-model="smsRecvYn"
                     items-source="_getComboData('smsRecvYnComboData')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
+          <%-- 메인화면매출표시 --%>
+        <th><s:message code="storeEmp.mainSaleFg" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchMainSaleFg"
+                    ng-model="mainSaleFg"
+                    items-source="_getComboData('srchMainSaleFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
@@ -182,6 +195,8 @@
         <wj-flex-grid-column header="<s:message code="storeEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeEmp.mpNo"/>" binding="mpNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.mainSaleFg"/>" binding="mainSaleFg" data-map="mainSaleFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -201,7 +216,7 @@
   var smsRecvYn  = ${ccu.getCommCode("072")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=2018082901.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=2018082901.02" charset="utf-8"></script>
 
 <%-- 매장사원 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/emp/storeEmpDetail.jsp">

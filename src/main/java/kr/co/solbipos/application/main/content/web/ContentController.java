@@ -268,17 +268,24 @@ public class ContentController {
 //        List<DefaultMap<String>> saleProdMonthList = contentService.getSaleProdMonthList(sessionInfoVO);
 //        model.addAttribute("saleProdMonthList", saleProdMonthList);
 
-        /** 매출 상위 가맹점 오늘 */
-        List<DefaultMap<String>> saleStoreDayList = contentService.getSaleStoreDayList(sessionInfoVO);
-        model.addAttribute("saleStoreDayList", saleStoreDayList);
 
-        /** 매출 상위 가맹점 1주일 */
-        List<DefaultMap<String>> saleStoreWeekList = contentService.getSaleStoreWeekList(sessionInfoVO);
-        model.addAttribute("saleStoreWeekList", saleStoreWeekList);
+        /** 메인화면매출표시 */
+        String mainSaleFg = contentService.getMainSaleFg(sessionInfoVO);
+        model.addAttribute("mainSaleFg", mainSaleFg);
 
-        /** 매출 상위 가맹점 1개월 */
-        List<DefaultMap<String>> saleStoreMonthList = contentService.getSaleStoreMonthList(sessionInfoVO);
-        model.addAttribute("saleStoreMonthList", saleStoreMonthList);
+        if(mainSaleFg.equals("0")) {
+            /** 매출 상위 가맹점 오늘 */
+            List<DefaultMap<String>> saleStoreDayList = contentService.getSaleStoreDayList(sessionInfoVO);
+            model.addAttribute("saleStoreDayList", saleStoreDayList);
+
+            /** 매출 상위 가맹점 1주일 */
+            List<DefaultMap<String>> saleStoreWeekList = contentService.getSaleStoreWeekList(sessionInfoVO);
+            model.addAttribute("saleStoreWeekList", saleStoreWeekList);
+
+            /** 매출 상위 가맹점 1개월 */
+            List<DefaultMap<String>> saleStoreMonthList = contentService.getSaleStoreMonthList(sessionInfoVO);
+            model.addAttribute("saleStoreMonthList", saleStoreMonthList);
+        }
 
         /** 날씨 */
 
@@ -292,7 +299,7 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
-        return "application/main/hedofcMain"; // 그래프
+       return "application/main/hedofcMain"; // 그래프
 //        return "application/main/hedofcMain_test"; // 이미지
     }
 
@@ -335,13 +342,20 @@ public class ContentController {
         List<Map<String,String>> dateSelList2 = contentService.getDateSelList(MainSrchFg.TYPE2);
         model.addAttribute("dateSelList2", dateSelList2);
 
-        /** 오늘의 매출건수 */
-        List<DefaultMap<String>> daySaleCntList = contentService.getDaySaleCntList(sessionInfoVO);
-        model.addAttribute("daySaleCntList", daySaleCntList);
 
-        /** 오늘의 매출금액 */
-        List<DefaultMap<String>> daySaleAmtList = contentService.getDaySaleAmtList(sessionInfoVO);
-        model.addAttribute("daySaleAmtList", daySaleAmtList);
+        /** 메인화면매출표시 */
+        String mainSaleFg = contentService.getMainSaleFg(sessionInfoVO);
+        model.addAttribute("mainSaleFg", mainSaleFg);
+
+        if(mainSaleFg.equals("0")) {
+            /** 오늘의 매출건수 */
+            List<DefaultMap<String>> daySaleCntList = contentService.getDaySaleCntList(sessionInfoVO);
+            model.addAttribute("daySaleCntList", daySaleCntList);
+
+            /** 오늘의 매출금액 */
+            List<DefaultMap<String>> daySaleAmtList = contentService.getDaySaleAmtList(sessionInfoVO);
+            model.addAttribute("daySaleAmtList", daySaleAmtList);
+        }
 
         /** 공지사항 */
         List<DefaultMap<String>> noticeList = contentService.getNoticeList(sessionInfoVO);

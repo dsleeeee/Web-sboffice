@@ -322,4 +322,10 @@ public class ContentServiceImpl implements ContentService {
     public List<DefaultMap<String>> getDaySaleAmtList(SessionInfoVO sessionInfoVO) {
         return contentMapper.getDaySaleAmtList(sessionInfoVO);
     }
+
+    /** 메인화면매출표시 */
+    @Override
+    public String getMainSaleFg(SessionInfoVO sessionInfoVO) {
+        return contentMapper.getMainSaleFg(sessionInfoVO);
+    }
 }

@@ -133,8 +133,21 @@
             </wj-combo-box>
           </div>
         </td>
-        <th></th>
-        <td></td>
+          <%-- 메인화면매출표시 --%>
+          <th><s:message code="hqEmp.mainSaleFg" /></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchMainSaleFg"
+                      ng-model="mainSaleFg"
+                      items-source="_getComboData('srchMainSaleFg')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+          </td>
       </tr>
     </tbody>
   </table>
@@ -184,6 +197,8 @@
         <wj-flex-grid-column header="<s:message code="hqEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqEmp.mpNo"/>" binding="mpNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.mainSaleFg"/>" binding="mainSaleFg" data-map="mainSaleFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
 
         <%--조회시 필요--%>
         <wj-flex-grid-column header="<s:message code="hqEmp.hqBrandCd"/>" binding="hqBrandCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -210,7 +225,7 @@
   var userHqBrandYn = '${userHqBrandYn}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112102" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112103" charset="utf-8"></script>
 
 <%-- 사원기초정보 상세 Tab 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">

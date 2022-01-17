@@ -77,4 +77,7 @@ public interface ContentService {
 
     /** 오늘의 매출금액 */
     List<DefaultMap<String>> getDaySaleAmtList(SessionInfoVO sessionInfoVO);
+
+    /** 메인화면매출표시 */
+    String getMainSaleFg(SessionInfoVO sessionInfoVO);
 }

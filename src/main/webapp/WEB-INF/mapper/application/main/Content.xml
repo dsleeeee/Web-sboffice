@@ -1412,4 +1412,28 @@
         ]]>
     </select>
 
+    <!-- 메인화면매출표시 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE, TB_MS_EMPLOYEE
+        COMMENTS :
+    -->
+    <select id="getMainSaleFg" parameterType="sessionInfoVO" resultType="String">
+        /* ContentMapper.getMainSaleFg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString == "HQ"'>
+                SELECT  NVL(MAIN_SALE_FG, 0) AS MAIN_SALE_FG
+                FROM    TB_HQ_EMPLOYEE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     USER_ID = #{userId}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg.toString == "STORE"'>
+                SELECT  NVL(MAIN_SALE_FG, 0) AS MAIN_SALE_FG
+                FROM    TB_MS_EMPLOYEE
+                WHERE   STORE_CD = #{storeCd}
+                AND     USER_ID = #{userId}
+            </when>
+        </choose>
+    </select>
 </mapper>

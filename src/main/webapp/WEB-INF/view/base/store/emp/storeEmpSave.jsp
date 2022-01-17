@@ -216,6 +216,29 @@
                 </div>
               </td>
             </tr>
+            <tr>
+              <%-- 메인화면매출표시 --%>
+              <th>
+                <div class="impWrap"><s:message code="storeEmp.mainSaleFg" /></div>
+              </th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box id="_mainSaleFg" name="mainSaleFg"
+                                ng-model="storeEmpRegistInfo.mainSaleFg"
+                                items-source="_getComboData('storeEmpMainSaleFgComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                required
+                                popover-enable="empForm.mainSaleFg.$invalid"
+                                popover-placement="bottom-left"
+                                popover-trigger="'mouseenter'"
+                                uib-popover="<s:message code="storeEmp.mainSaleFg" />은(는) 필수 입력항목 입니다.">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -233,5 +256,5 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpSave.js?ver=20181121.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpSave.js?ver=20181121.03" charset="utf-8"></script>
 

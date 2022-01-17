@@ -19,6 +19,11 @@ var useYnComboData = [
   {"name": "미사용", "value": "N"}
 ];
 
+var mainSaleFgComboData = [
+  {"name": "사용", "value": "0"},
+  {"name": "미사용", "value": "1"}
+];
+
 /**
  * 매장사원 등록 및 수정
  */
@@ -30,6 +35,8 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
   $scope._setComboData('storeEmpWebUseYnComboData', useYnComboData);
   // 사용여부
   $scope._setComboData('storeEmpUseYnFgComboData', useYnComboData);
+  // 메인화면매출표시
+  $scope._setComboData('storeEmpMainSaleFgComboData', mainSaleFgComboData);
   // SMS수신여부
   $scope._getComboDataQuery('072', 'storeEmpSmsRecvYnComboData');
   // 판매상품여부 콤보박스
@@ -65,6 +72,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
       $scope.storeEmpRegistInfo.smsRecvYn  = 'N';
       $scope.storeEmpRegistInfo.serviceFg  = '1';
       $scope.storeEmpRegistInfo.useYn      = 'Y';
+      $scope.storeEmpRegistInfo.mainSaleFg = '0';
       $scope.newEmpYn                   = true;
 
     } else {
@@ -168,7 +176,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
 
   // 저장
   $scope.save = function(){
-
+    console.log("눌리따");
     // 원래 웹 사용여부 'N'이었는데, 사용여부 'Y'로 변경한 경우
     if(($scope.storeEmpRegistInfo.originalWebUserId == '' || $scope.storeEmpRegistInfo.originalWebUserId == undefined)
         && $scope.storeEmpRegistInfo.webUseYn === 'Y') {
