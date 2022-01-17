@@ -40,12 +40,25 @@ app.controller('storeEmpDetailCtrl', ['$scope', '$http', function ($scope, $http
       var data                = response.data.data;
       $scope.storeEmp         = data;
       $scope.storeEmp.empInfo = ' [' + data.empNo + ']' + data.empNm;
+
+      if($scope.storeEmp.useYn === "Y") {
+        $scope.storeEmp.useYn = "사용";
+      } else {
+        $scope.storeEmp.useYn = "미사용";
+      }
+      if($scope.storeEmp.mainSaleFg === "0") {
+        $scope.storeEmp.mainSaleFg = "사용";
+      } else {
+        $scope.storeEmp.mainSaleFg = "미사용";
+      }
     });
   };
 
   // 수정버튼 클릭
   $scope.modify = function(){
-    $scope.storeEmpRegistLayer.show(true);
+    $scope.storeEmpRegistLayer.show(true, function(){
+      $scope.getStoreEmpList($scope.selectedStoreEmp);
+    });
   };
 
   // 탭변경
@@ -61,6 +74,9 @@ app.controller('storeEmpDetailCtrl', ['$scope', '$http', function ($scope, $http
   // 닫기버튼 클릭
   $scope.close = function(){
     $scope.storeEmpDetailLayer.hide();
+
+    var scope = agrid.getScope('storeEmpCtrl');
+    scope.getStoreEmpList();
   };
 
 }]);

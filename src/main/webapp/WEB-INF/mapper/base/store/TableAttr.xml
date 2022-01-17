@@ -337,6 +337,53 @@
         WHERE   STORE_CD = #{storeCd}
     </delete>
 
+    <!-- 테이블 -->
+    <!--
+        TABLE    : TB_MS_TABLE
+        PARAM    : tableAttrVO
+        COMMENTS : 테이블 기본을 저장한다.
+    -->
+    <insert id="insertTab" parameterType="tableAttrVO" >
+        /* USE : TableAttrMapper.insertTab */
+        INSERT INTO TB_MS_TABLE
+        (
+            STORE_CD,
+            TBL_CD,
+            TBL_NM,
+            TBL_GRP_CD,
+            TBL_SEAT_CNT,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            TBL_TYPE_FG,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            IMG_NM
+        )
+        SELECT #{storeCd},
+               TBL_CD,
+               TBL_NM,
+               TBL_GRP_CD,
+               TBL_SEAT_CNT,
+               X,
+               Y,
+               WIDTH,
+               HEIGHT,
+               TBL_TYPE_FG,
+               USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId},
+               IMG_NM
+        FROM    TB_MS_TABLE
+        WHERE   STORE_CD = '0000000'
+    </insert>
+
     <!-- 테이블 속성 -->
     <!--
         TABLE    : TB_MS_TABLE_ATTR
@@ -389,6 +436,39 @@
                #{modDt},
                #{modId}
         FROM    TB_MS_TABLE_ATTR
+        WHERE   STORE_CD = '0000000'
+    </insert>
+
+    <!-- 기본값 저장 -->
+    <!--
+        TABLE    : TB_WB_STORE_TABLE_CONFG_XML
+        PARAM    : tableAttrVO
+        COMMENTS : 테이블 기본을 저장한다.
+    -->
+    <insert id="insertTabConfg" parameterType="tableAttrVO" >
+        /* USE : TableAttrMapper.insertTabConfg */
+        INSERT INTO TB_WB_STORE_TABLE_CONFG_XML
+        (
+            STORE_CD,
+            CONFG_FG,
+            CONFG_SUB_FG,
+            XML,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT #{storeCd},
+               CONFG_FG,
+               CONFG_SUB_FG,
+               XML,
+               USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+        FROM    TB_WB_STORE_TABLE_CONFG_XML
         WHERE   STORE_CD = '0000000'
     </insert>
 </mapper>

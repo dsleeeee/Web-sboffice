@@ -14,7 +14,17 @@
  */
 var app = agrid.getApp();
 
+var mainSaleFg = [
+  {"name": "전체", "value": ""},
+  {"name": "사용", "value": "0"},
+  {"name": "미사용", "value": "1"}
+];
 
+var useYn = [
+  {"name":"전체","value":""},
+  {"name":"사용","value":"Y"},
+  {"name":"미사용","value":"N"}
+];
 /**
  * 매장 사원 정보관리
  */
@@ -32,6 +42,8 @@ app.controller('storeEmpCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('067', 'webUseYnComboData', 'A');
   // SMS 수신여부
   $scope._getComboDataQuery('072', 'smsRecvYnComboData', 'A');
+  // 메인화면매출표시
+  $scope._setComboData("srchMainSaleFg", mainSaleFg);
 
   $scope.selectedStoreEmp;
 
@@ -46,6 +58,8 @@ app.controller('storeEmpCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.serviceFgDataMap = new wijmo.grid.DataMap(serviceFg, 'value', 'name');
     $scope.webUseYnDataMap  = new wijmo.grid.DataMap(webUseYn, 'value', 'name');
     $scope.smsRecvYnDataMap = new wijmo.grid.DataMap(smsRecvYn, 'value', 'name');
+    $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
+    $scope.mainSaleFgDataMap = new wijmo.grid.DataMap(mainSaleFg, 'value', 'name');
 
     console.log('smsRecvYn', smsRecvYn);
     console.log('$scope.smsRecvYnDataMap', $scope.smsRecvYnDataMap);

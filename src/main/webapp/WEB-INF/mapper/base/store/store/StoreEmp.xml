@@ -35,7 +35,9 @@
                tme.MP_NO,
                tme.SERVICE_FG,
                tcn_service_fg.NMCODE_NM AS SERVICE_FG_NM,
-               tme.SMS_RECV_YN
+               tme.SMS_RECV_YN,
+               tme.USE_YN,
+               NVL(tme.MAIN_SALE_FG, 0) AS MAIN_SALE_FG
                <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_EMPLOYEE tme
           LEFT OUTER JOIN TB_CM_NMCODE tcn_service_fg ON
@@ -69,6 +71,13 @@
             <if test='smsRecvYn != null and smsRecvYn != ""'>
             AND tme.SMS_RECV_YN = #{smsRecvYn}
             </if>
+            <if test='mainSaleFg != null and mainSaleFg == "0"'>
+                AND (tme.MAIN_SALE_FG = #{mainSaleFg}
+                  OR tme.MAIN_SALE_FG IS NULL)
+            </if>
+            <if test='mainSaleFg != null and mainSaleFg == "1"'>
+                AND tme.MAIN_SALE_FG = #{mainSaleFg}
+            </if>
             <if test="chkDt == false">
                 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
             AND tme.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959' --조회(등록)일자
@@ -98,7 +107,9 @@
                tme.SERVICE_FG,
                tcn_service_fg.NMCODE_NM AS SERVICE_FG_NM,
                tme.SMS_RECV_YN,
-               tcn_sms_recv_yn.NMCODE_NM AS SMS_RECV_YN_NM
+               tcn_sms_recv_yn.NMCODE_NM AS SMS_RECV_YN_NM,
+               tme.USE_YN,
+               NVL(tme.MAIN_SALE_FG, '0') AS MAIN_SALE_FG
           FROM TB_MS_EMPLOYEE tme
           LEFT OUTER JOIN TB_CM_NMCODE tcn_service_fg ON
             tme.SERVICE_FG = tcn_service_fg.NMCODE_CD
@@ -160,6 +171,8 @@
             tme.MP_NO,
             tme.SERVICE_FG,
             tme.SMS_RECV_YN,
+            tme.USE_YN,
+            tme.MAIN_SALE_FG,
             tme.REG_ID,
             tme.REG_DT,
             tme.MOD_ID,
@@ -176,6 +189,8 @@
             #{mpNo},
             #{serviceFg},
             #{smsRecvYn},
+            #{useYn},
+            #{mainSaleFg},
             #{regId},
             #{regDt},
             #{regId},
@@ -249,6 +264,8 @@
                tme.MP_NO = #{mpNo},
                tme.SERVICE_FG = #{serviceFg},
                tme.SMS_RECV_YN = #{smsRecvYn},
+               tme.USE_YN = #{useYn},
+               tme.MAIN_SALE_FG = #{mainSaleFg},
                tme.MOD_ID = #{regId},
                tme.MOD_DT = #{regDt}
          WHERE tme.STORE_CD = #{storeCd}

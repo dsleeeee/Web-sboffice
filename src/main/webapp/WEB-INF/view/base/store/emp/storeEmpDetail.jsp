@@ -77,8 +77,18 @@
               <div class="impWrap"><s:message code="storeEmp.serviceFg" /></div>
             </th>
             <td>{{storeEmp.serviceFgNm}}</td>
-            <th></th>
-            <td></td>
+            <%-- 사용여부 --%>
+            <th>
+              <div class="impWrap"><s:message code="storeEmp.useYn" /></div>
+            </th>
+            <td>{{storeEmp.useYn}}</td>
+          </tr>
+          <tr>
+            <%-- 메인화면매출표시 --%>
+            <th>
+              <div class="impWrap"><s:message code="storeEmp.mainSaleFg" /></div>
+            </th>
+            <td>{{storeEmp.mainSaleFg}}</td>
           </tr>
           </tbody>
         </table>
@@ -97,4 +107,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpDetail.js?ver=20181121.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpDetail.js?ver=20181121.05" charset="utf-8"></script>

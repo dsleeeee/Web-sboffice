@@ -675,7 +675,7 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  '[' || CD || ']' || NM || '에 [' || PROD_CD || ']' || PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
+                SELECT '바코드 [' || REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '') || ']가 [' || CD || ']' || NM || '에 [' || PROD_CD || ']' || PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
                 FROM (
                     SELECT  thpb.HQ_OFFICE_CD AS CD,
                             tho.HQ_OFFICE_NM AS NM,
@@ -708,7 +708,7 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
-                SELECT '[' || CD || ']' || NM || '에 [' || PROD_CD || ']' || PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
+                SELECT '바코드 [' || REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '') || ']가 [' || CD || ']' || NM || '에 [' || PROD_CD || ']' || PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
                 FROM (
                 SELECT  thpb.HQ_OFFICE_CD AS CD,
                 tho.HQ_OFFICE_NM AS NM,
@@ -741,7 +741,7 @@
             </when>
             <!--  단독매장 -->
             <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd == "00000"'>
-                SELECT '[' || tmpb.STORE_CD || ']' || tms.STORE_NM || '에 [' || tmpb.PROD_CD || ']' || tmp.PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
+                SELECT '바코드 [' || REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '') || ']가 [' || tmpb.PROD_CD || ']' || tmp.PROD_NM || ' 상품의 바코드와 중복되어 저장 할 수 없습니다.'
                 FROM    TB_MS_PRODUCT_BARCD tmpb, TB_MS_PRODUCT tmp, TB_MS_STORE tms
                 WHERE   tmpb.STORE_CD = #{storeCd}
                 AND     tmp.STORE_CD = tmpb.STORE_CD

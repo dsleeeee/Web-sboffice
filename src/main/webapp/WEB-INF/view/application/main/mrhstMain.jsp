@@ -35,6 +35,7 @@
         <%--</div>--%>
         <!--//오늘의 매출금액-->
 
+<c:if test="${mainSaleFg == '0'}">
         <div class="w35 fl br bb stat_sky2_2" style="height: 230px;">
             <h2 class="bb">오늘의 매출건수<span id="totalSaleCnt"></span></h2>
             <h2 class="pdt10">오늘의 매출금액<span id="totalSaleAmt"></span></h2>
@@ -44,7 +45,7 @@
                 <p><span>기타</span><span id="etcSaleAmt"></span></p>
             </div>
         </div>
-
+</c:if>
         <!--공지사항-->
         <div class="w65 fl bb notice2" style="overflow-y: auto;">
             <h2>공지사항
@@ -64,6 +65,8 @@
         <!--//공지사항-->
 
         <!--매출현황-->
+
+<c:if test="${mainSaleFg == '0'}">
         <div class="w100 fl bb graph1">
             <h2>
                 매출현황
@@ -204,7 +207,7 @@
             </div>
         </div>
         <!--//매출 상위 상품-->
-
+</c:if>
         <!--날씨-->
         <%--<div class="w30 fl bb weather">--%>
            <%--<div class="today"> --%>
@@ -274,6 +277,9 @@
 <script type="text/javascript">
     // 공지사항 more 페이지 이동시 권한체크
     var board_auth = "${board_auth}";
+
+    // 메인화면매출표시
+    var mainSaleFg = "${mainSaleFg}";
 
     // 오늘의 매출건수
     var daySaleCntList = [];

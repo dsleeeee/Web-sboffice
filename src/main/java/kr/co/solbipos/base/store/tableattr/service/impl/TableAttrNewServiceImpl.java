@@ -244,7 +244,9 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
         tableAttrVO.setModId(sessionInfoVO.getUserId());
 
         //  테이블 기본속성
+        mapper.insertTab(tableAttrVO);
         mapper.insertTabAttr(tableAttrVO);
+        mapper.insertTabConfg(tableAttrVO);
         // 매장생성 시 넣는 데이터
         return storeManageMapper.insertTabGroup(tableGroupVO);
     }

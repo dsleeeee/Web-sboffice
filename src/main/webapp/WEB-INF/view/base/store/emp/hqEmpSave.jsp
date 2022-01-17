@@ -215,6 +215,28 @@
               </div>
             </td>
           </tr>
+          <tr>
+            <%-- 메인화면매출표시 --%>
+            <th>
+              <s:message code="hqEmp.mainSaleFg"/></th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box id="_mainSaleFg" name="mainSaleFg"
+                              ng-model="hqEmpRegistInfo.mainSaleFg"
+                              items-source="_getComboData('hqEmpMainSaleFgComboData')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)"
+                              required
+                              popover-enable="empForm.mainSaleFg.$invalid"
+                              popover-placement="bottom-left"
+                              popover-trigger="'mouseenter'"
+                              uib-popover="<s:message code="hqEmp.mainSaleFg" />은(는) 필수 입력항목 입니다.">
+                </wj-combo-box>
+              </div>
+            </td>
+          </tr>
           <tr id="trUserHqBrandYn" style="display: none;">
               <%-- 관리브랜드 --%>
               <th>
@@ -245,7 +267,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20211122.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20211122.04" charset="utf-8"></script>
 
 <%-- 관리브랜드 조회 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">

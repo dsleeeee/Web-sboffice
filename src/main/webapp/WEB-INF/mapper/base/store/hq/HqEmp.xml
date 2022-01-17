@@ -30,7 +30,9 @@
         the.MP_NO,
         the.SMS_RECV_YN,
         twub.HQ_BRAND_CD,
-        twub.HQ_BRAND_NM
+        twub.HQ_BRAND_NM,
+        the.USE_YN,
+        NVL(the.MAIN_SALE_FG, 0) AS MAIN_SALE_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_EMPLOYEE the,
         (
@@ -45,8 +47,8 @@
             AND thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
             GROUP BY twub.USER_ID
         ) twub
-        WHERE the.USE_YN = 'Y'
-        AND the.HQ_OFFICE_CD = #{hqOfficeCd}
+--         WHERE the.USE_YN = 'Y'
+        WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="chkDt == false">
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
               AND the.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
@@ -72,6 +74,13 @@
         </if>
         <if test="smsRecvYn != null and smsRecvYn != ''">
             AND the.SMS_RECV_YN = #{smsRecvYn}
+        </if>
+        <if test='mainSaleFg != null and mainSaleFg == "0"'>
+            AND (the.MAIN_SALE_FG = #{mainSaleFg}
+              OR the.MAIN_SALE_FG IS NULL)
+        </if>
+        <if test='mainSaleFg != null and mainSaleFg == "1"'>
+            AND the.MAIN_SALE_FG = #{mainSaleFg}
         </if>
         AND twub.USER_ID (+)= the.USER_ID
         ORDER BY the.REG_DT DESC
@@ -99,7 +108,9 @@
         (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='007' AND tcn.NMCODE_CD = the.SERVICE_FG ) AS SERVICE_FG_NM,
         the.MP_NO,
         twub.HQ_BRAND_CD,
-        twub.HQ_BRAND_NM
+        twub.HQ_BRAND_NM,
+        the.USE_YN,
+        NVL(the.MAIN_SALE_FG, '0') AS MAIN_SALE_FG
         FROM TB_HQ_EMPLOYEE the,
         (
             SELECT
@@ -164,6 +175,7 @@
             SERVICE_FG,
             SMS_RECV_YN,
             USE_YN,
+            MAIN_SALE_FG,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -181,6 +193,7 @@
             #{serviceFg},
             #{smsRecvYn},
             #{useYn},
+            #{mainSaleFg},
             #{regDt},
             #{regId},
             #{modDt},
@@ -253,6 +266,8 @@
                the.MP_NO = #{mpNo},
                the.SERVICE_FG = #{serviceFg},
                the.SMS_RECV_YN = #{smsRecvYn},
+               the.USE_YN = #{useYn},
+               the.MAIN_SALE_FG = #{mainSaleFg},
                the.MOD_DT = #{modDt},
                the.MOD_ID = #{modId}
          WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}

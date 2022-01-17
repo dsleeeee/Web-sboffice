@@ -61,7 +61,7 @@
             <%--<h2>주간 폐점매장<span>1</span></h2>--%>
         <%--</div>--%>
         <!--//주간 폐점매장-->
-
+    <c:if test="${mainSaleFg == '0'}">
         <!--매출현황-->
         <div class="w100 fl bb graph1">
             <h2>
@@ -372,7 +372,7 @@
         <!--//날씨-->
     </div>
     <!--//메인컨텐츠-->
-
+    </c:if>
     <!--팝업-->
     <div ng-controller="hedofcMainPopupCtrl">
         <c:forEach var="board" items="${boardList}" varStatus="status">
@@ -403,6 +403,9 @@
 <script type="text/javascript">
     // 공지사항 more 페이지 이동시 권한체크
     var board_auth = "${board_auth}";
+
+    // 메인화면매출표시
+    var mainSaleFg = "${mainSaleFg}";
 
     // 총 매장수
     var storeCntList = [];

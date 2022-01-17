@@ -89,6 +89,9 @@ public class HqEmpVO extends PageVO {
     /** 본사코드 */
     private String[] hqBrandCdList;
 
+    /** 메인화면매출표시 */
+    private String mainSaleFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -386,4 +389,12 @@ public class HqEmpVO extends PageVO {
     }
 
     public void setHqBrandCdList(String[] hqBrandCdList) { this.hqBrandCdList = hqBrandCdList; }
+
+    public String getMainSaleFg() {
+        return mainSaleFg;
+    }
+
+    public void setMainSaleFg(String mainSaleFg) {
+        this.mainSaleFg = mainSaleFg;
+    }
 }

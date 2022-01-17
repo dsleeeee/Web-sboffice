@@ -45,6 +45,17 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       var data             = response.data.data;
       $scope.hqEmp         = data;
       $scope.hqEmp.empInfo = ' [' + data.empNo + ']' + data.empNm;
+
+      if($scope.hqEmp.useYn === "Y") {
+        $scope.hqEmp.useYn = "사용";
+      } else {
+        $scope.hqEmp.useYn = "미사용";
+      }
+      if($scope.hqEmp.mainSaleFg === "0") {
+        $scope.hqEmp.mainSaleFg = "사용";
+      } else {
+        $scope.hqEmp.mainSaleFg = "미사용";
+      }
     });
   };
 
@@ -52,6 +63,7 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.modify = function(){
 
     $scope.hqEmpRegistLayer.show(true, function(){
+      $scope.getHqEmpList($scope.selectedHqEmp);
       var scope = agrid.getScope('hqEmpRegistCtrl');
       $scope.getHqEmpList($scope.selectedHqEmp);
     });
