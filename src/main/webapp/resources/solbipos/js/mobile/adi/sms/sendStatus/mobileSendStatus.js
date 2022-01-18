@@ -198,7 +198,7 @@ app.controller('mobileSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
             if($scope.flexMobileSendStatus.collectionView.items[i].gChk) {
                 if($scope.flexMobileSendStatus.collectionView.items[i].reserveYn != "1"
                     || $scope.flexMobileSendStatus.collectionView.items[i].sendStatus == "3"
-                    || ($scope.flexMobileSendStatus.collectionView.items[i].sendDate != "" && parseInt($scope.flexMobileSendStatus.collectionView.items[i].sendDate.substring(0, 8)) <= parseInt(getToday())) ) {
+                    || ($scope.flexMobileSendStatus.collectionView.items[i].sendDate != "" && parseInt($scope.flexMobileSendStatus.collectionView.items[i].sendDate.substring(0, 8)) >= parseInt(getCurDateTime())) ) {
 
                     $scope._popMsg(messages["mobile.sendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
                     return false;

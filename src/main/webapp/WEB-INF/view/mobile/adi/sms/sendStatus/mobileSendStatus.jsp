@@ -145,7 +145,7 @@
     <%--</c:forEach>--%>
 <%--</script>--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/sendStatus/mobileSendStatus.js?ver=20220104.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/sendStatus/mobileSendStatus.js?ver=20220104.02" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/adi/sms/sendStatus/mobileMessageDtl.jsp">
