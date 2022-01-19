@@ -57,6 +57,7 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
         dataItem.shopMigFg      = messages["oper.storeInfo"];
         dataItem.regDate        = messages["oper.storeInfo"];
         dataItem.sysOpenDate    = messages["oper.storeInfo"];
+        dataItem.agencyCd       = messages["oper.storeInfo"];
         dataItem.agencyNm       = messages["oper.storeInfo"];
         dataItem.posCnt         = messages["oper.storeInfo"];
         dataItem.billCnt        = messages["oper.dateTot"];
