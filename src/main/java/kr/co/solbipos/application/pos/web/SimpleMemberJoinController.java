@@ -422,6 +422,9 @@ public class SimpleMemberJoinController {
 
                 MarketingSmsSendVO marketingSmsSendVO = new MarketingSmsSendVO();
 
+                model.addAttribute("startDate", sessionInfoVO.getStartDate());
+                model.addAttribute("endDate", sessionInfoVO.getEndDate());
+
                 // 마케팅용 SMS전송 - 메세지그룹 조회
                 List<DefaultMap<String>> msgGrpAddColList = marketingSmsSendService.getMsgGrpColList(marketingSmsSendVO, sessionInfoVO);
                 model.addAttribute("msgGrpAddColList", msgGrpAddColList);

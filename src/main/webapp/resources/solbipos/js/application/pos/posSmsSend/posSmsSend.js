@@ -16,22 +16,15 @@ var app = agrid.getApp();
 app.controller('posSmsSendCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
-        if(orgnFg == "HQ" || orgnFg == "STORE") {
-            $("#marketingSmsSendView").show();
-            $("#sendStatusView").hide();
-            $("#msgManageView").hide();
-            $("#smsTelNoManageView").hide();
-        } else {
-            $("#marketingSmsSendTab").removeClass("on");
-            $("#sendStatusTab").addClass("on");
-            $("#msgManageTab").removeClass("on");
-            $("#smsTelNoManageTab").removeClass("on");
+        $("#marketingSmsSendTab").addClass("on");
+        $("#sendStatusTab").removeClass("on");
+        $("#msgManageTab").removeClass("on");
+        $("#smsTelNoManageTab").removeClass("on");
 
-            $("#marketingSmsSendView").hide();
-            $("#sendStatusView").show();
-            $("#msgManageView").hide();
-            $("#smsTelNoManageView").hide();
-        }
+        $("#marketingSmsSendView").show();
+        $("#sendStatusView").hide();
+        $("#msgManageView").hide();
+        $("#smsTelNoManageView").hide();
     };
 
     // 마케팅용 SMS전송 탭 보이기
