@@ -187,6 +187,7 @@
                     <wj-flex-grid-column header="<s:message code="oper.shopMigFg"/>     " binding="shopMigFg"       width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.regDate"/>       " binding="regDate"         width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>   " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.agencyCd"/>      " binding="agencyCd"        width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.agency"/>        " binding="agencyNm"        width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posCnt"/>        " binding="posCnt"          width=" 60" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.billCnt"/>       " binding="billCnt"         width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
