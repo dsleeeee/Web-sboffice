@@ -75,7 +75,7 @@
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="storeType.code"/>" binding="storeTypeCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storeType.typeNm"/>" binding="storeTypeNm" width="150"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="65"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="65" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="remark" width="150"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
@@ -214,7 +214,7 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.grpCd"/>" binding="storeGroupCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.grpNm"/>" binding="storeGroupNm" width="180" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="65" data-map="useYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="65" data-map="useYnDataMap" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -282,7 +282,7 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.grpCd"/>" binding="storeGroupCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeType.grpNm"/>" binding="storeGroupNm" width="180" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="65" data-map="useYnDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="65" data-map="useYnDataMap" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

@@ -78,7 +78,7 @@
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="storeType.code"/>" binding="storeGroupCd" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storeType.menuGroupNm"/>" binding="storeGroupNm" width="100"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="62"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="62" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="remark" width="100"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
