@@ -526,10 +526,10 @@
                         AND tssd.PROD_CD LIKE '%'|| #{prodCd} ||'%'
                     </if>
                     <if test="prodNm != null and prodNm != ''">
-                        AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                        AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                     </if>
                     <if test="barCd != null and barCd != ''">
-                        AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                        AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                     </if>
                     <if test="prodClassCd != null and prodClassCd != ''">
                         AND tmp.PROD_CLASS_CD = #{prodClassCd}
@@ -635,10 +635,10 @@
                         AND tsmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
                     </if>
                     <if test="prodNm != null and prodNm != ''">
-                        AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                        AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                     </if>
                     <if test="barCd != null and barCd != ''">
-                        AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                        AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                     </if>
                     <if test="prodClassCd != null and prodClassCd != ''">
                         AND tmp.PROD_CLASS_CD = #{prodClassCd}
