@@ -28,6 +28,8 @@
         SELECT   tca.AGENCY_CD
                 , tca.AGENCY_NM
                 , tca.P_AGENCY_CD
+                , (CASE WHEN tca.P_AGENCY_CD = '00000' THEN  '-' ELSE (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tca.AGENCY_GRP) END) AS P_AGENCY_NM
+                , (CASE WHEN tca.P_AGENCY_CD = '00000' THEN  '총판' ELSE '대리점' END) AS AGENCY_TYPE
                 , tca.BIZ_NO
                 , ('[' || tca.AGENCY_GRP || '] ' || (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tca.AGENCY_GRP)) AS AGENCY_GRP
           FROM
@@ -43,20 +45,14 @@
            ) tca
            WHERE 1=1
         <choose>
-            <!-- 시스템 -->
-            <when test='(orgnFg != null and orgnFg == "M")'>
-                <![CDATA[
-                AND tca.P_AGENCY_CD = '00000'
-                ]]>
-            </when>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "A"'>
                 <![CDATA[
-                AND tca.P_AGENCY_CD = #{agencyCd}
+                AND (tca.P_AGENCY_CD = #{agencyCd}
+                OR  tca.AGENCY_CD = #{agencyCd})
                 ]]>
             </when>
         </choose>
-
         <if test='srchAgencyCd != null and srchAgencyCd != ""'>
             <![CDATA[
             AND tca.AGENCY_CD LIKE '%'||#{srchAgencyCd}||'%'

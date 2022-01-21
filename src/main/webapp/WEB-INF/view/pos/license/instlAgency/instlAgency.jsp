@@ -60,6 +60,10 @@
         <!-- Left List -->
         <div class="w25 fl" style="overflow-x: visible">
             <div class="wj-TblWrapBr mr10 pd20" style="height:650px;">
+                <div class="mt20 oh sb-select dkbr">
+                <%-- 상품엑셀다운로드 --%>
+                <button class="btn_skyblue ml5 fr" id="excelDownload" ><s:message code="cmm.excel.down"/></button>
+                </div>
                 <div class="sb-select dkbr mb10 oh">
                     <div class="fr">
                     </div>
@@ -120,10 +124,12 @@
         <%-- 설치업체 목록 header --%>
         var agencyData =
             [
-                {binding:"agencyCd", header:"<s:message code='instlAgency.agencyCd' />", width:'*', align: 'center', isRequired: true, isReadOnly:true},
+                {binding:"agencyCd", header:"<s:message code='instlAgency.agencyCd' />", width:65, align: 'center', isRequired: true, isReadOnly:true},
                 {binding:"agencyNm", header:"<s:message code='instlAgency.agencyNm' />", isReadOnly: true},
+                {binding:"agencyType", header:"<s:message code='instlAgency.agencyType' />", width:65, align: 'center', isReadOnly: true},
                 {binding:"pAgencyCd", header:"", isReadOnly: true, visible: false},
-                {binding:"agencyGrp", header:"<s:message code='instlAgency.agencyNm' />", isReadOnly: true, visible: false}
+                {binding:"pAgencyCd", header:"<s:message code='instlAgency.pAgencyCd' />", width:85, align: 'center', isReadOnly: true},
+                {binding:"pAgencyNm", header:"<s:message code='instlAgency.pAgencyNm' />", width:100, isReadOnly: true}
             ];
 
         var agencyGrid = wgrid.genGrid("#agencyGrid", agencyData);
@@ -144,6 +150,30 @@
         <%-- 조회 버튼 클릭 --%>
         $("#btnSearch").click(function(){
             search();
+        });
+
+        <%-- 엑셀다운로드 --%>
+        $("#excelDownload").click(function(){
+
+            if (agencyGrid.rows.length <= 0) {
+                s_alert.pop(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+            // $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            // $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(agencyGrid, {
+                    includeColumnHeaders: true,
+                    includeCellStyles: true,
+                    includeColumns: function (column) {
+                        return column.visible;
+                    }
+                },
+                    messages["loginStatus.loginStatus"] + '_' + getCurDateTime() +'.xlsx', function () {
+                        // $timeout(function () {
+                            // $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                        // }, 10);
+                    });
+            // }, 10);
         });
 
         <%-- 설치업체 목록 조회 --%>
@@ -167,11 +197,9 @@
                         return;
                     }
 
-                    agencyGrid.itemsSource = new wijmo.collections.CollectionView(list, {
-                        groupDescriptions : ['agencyGrp']
-                    });
-
-                    agencyGrid.collapseGroupsToLevel(1);
+                    agencyGrid.itemsSource = new wijmo.collections.CollectionView(list);
+                    //
+                    // agencyGrid.collapseGroupsToLevel(2);
 
                     <%-- 그리드 선택 이벤트 --%>
                     agencyGrid.addEventListener(agencyGrid.hostElement, 'mousedown', function(e) {
