@@ -174,7 +174,6 @@
                     $("#emr_userPwdHd").val(dtlData.empPwd);
                     $("#emr_webUseYn").val(dtlData.webUseYn);
                     $("#emr_mapEmpNo").val(dtlData.mapEmpNo);
-                    $("#emr_adminFg").val(dtlData.adminFg);
                     $("#emr_mpNo").val(dtlData.mpNo);
                     $("#emr_useYn").val(dtlData.useYn);
                     $("#emr_smsRecvYn").val(dtlData.smsRecvYn);
@@ -198,10 +197,14 @@
             $("#trUserId").css("display", "");
 
             // 총판/대리점 권한인 경우 관리자 구분 고정
-            if(orgnFg === "AGENCY") {
-                $("#emr_adminFg").css('background-color', '#F0F0F0');
-                $("#emr_adminFg").attr("disabled", true);
+            if($("#ai_agencyType").val() === "dist"){
+                $("#emr_adminFg").val("P"); // 관리자 구분 : 총판 권한
+            }else if($("#ai_agencyType").val() === "agency"){
+                $("#emr_adminFg").val("C"); // 관리자 구분 : 대리점 권한
             }
+
+            $("#emr_adminFg").css('background-color', '#F0F0F0');
+            $("#emr_adminFg").attr("disabled", true);
 
         }else{ // 등록 모드 시
 
@@ -232,16 +235,14 @@
             $("#emr_remark").val("");
 
             // 총판/대리점 권한인 경우 관리자 구분 고정
-            if(orgnFg === "AGENCY") {
-                if($("#emr_pAgencyCd").val() === "00000"){
-                    $("#emr_adminFg").val("P"); // 관리자 구분 : 총판 권한
-                }else if($("#emr_pAgencyCd").val() !== "00000"){
-                    $("#emr_adminFg").val("C"); // 관리자 구분 : 대리점 권한
-                }
-
-                $("#emr_adminFg").css('background-color', '#F0F0F0');
-                $("#emr_adminFg").attr("disabled", true);
+            if($("#ai_agencyType").val() === "dist"){
+                $("#emr_adminFg").val("P"); // 관리자 구분 : 총판 권한
+            }else if($("#ai_agencyType").val() === "agency"){
+                $("#emr_adminFg").val("C"); // 관리자 구분 : 대리점 권한
             }
+
+            $("#emr_adminFg").css('background-color', '#F0F0F0');
+            $("#emr_adminFg").attr("disabled", true);
         }
 
     }
