@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+
 <wj-popup control="kioskRecmdLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;height:800px;">
     <div>
         <%-- header --%>
@@ -23,6 +25,9 @@
             <div class="wj-TblWrapBr pd10" style="height:200px; overflow-y: hidden;" ng-controller="kioskRecmdCtrl">
                 <%-- 버튼영역 --%>
                 <div class="tr mb5">
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <button class="btn_skyblue" id="btnRecmdStoreReg" ng-click="recmdStoreReg()" ><s:message code="kioskKeyMap.recmdStoreReg" /></button>
+                    </c:if>
                     <button class="btn_skyblue" id="btnAdd" ng-click="addRow()" ><s:message code="cmm.add" /></button>
                     <button class="btn_skyblue" id="btnDelete" ng-click="delRow()" ><s:message code="cmm.delete" /></button>
                     <button class="btn_skyblue" id="btnSave" ng-click="save()"><s:message code="cmm.save" /></button>
@@ -240,7 +245,7 @@
 <script type="text/javascript">
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20211208.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20220120.01" charset="utf-8"></script>
 
 
 <%-- 상품선택 모듈 멀티 선택 사용시 include --%>

@@ -551,4 +551,26 @@ public class KioskKeyMapController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 키오스크 추천메뉴 매장적용
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2022. 01. 18.
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveRecmdStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveRecmdStore(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveRecmdStore(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

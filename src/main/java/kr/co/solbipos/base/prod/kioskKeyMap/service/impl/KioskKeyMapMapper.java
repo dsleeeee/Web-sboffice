@@ -142,4 +142,16 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 추천메뉴 - 추천메뉴 저장 */
     int addRecmdProd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 매장적용 - 매장에서 사용중인 기존 메뉴추천정보 삭제 */
+    int deleteStoreRecmd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 매장적용 - 매장에서 사용중인 기존 메뉴추천리스트 삭제 */
+    int deleteStoreRecmdProd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 매장적용 - 본사에서 사용중인 메뉴추천정보 매장등록 */
+    int insertStoreHqRecmd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 추천메뉴 매장적용 - 본사에서 사용중인 메뉴추천리스트 매장등록 */
+    int insertStoreHqRecmdProd(KioskKeyMapVO kioskKeyMapVO);
 }

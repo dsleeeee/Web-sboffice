@@ -389,4 +389,16 @@ public interface StoreManageMapper {
 
     /** 매장의 환경설정값 조회 */
     String getStoreEnvVal(StoreManageVO storeManageVO);
+
+    /** 재료 및 원산지 정보 복사  */
+    int insertStoreHqProductRecpOrigin(StoreManageVO storeManageVO);
+
+    /** 상품-원산지 매핑정보 복사  */
+    int insertStoreHqProductRecpProd(StoreManageVO storeManageVO);
+
+    /** 재료 및 알레르기 정보 복사  */
+    int insertStoreHqProductAlgiInfo(StoreManageVO storeManageVO);
+
+    /** 상품-알레르기 매핑정보 복사  */
+    int insertStoreHqProductAlgiProd(StoreManageVO storeManageVO);
 }

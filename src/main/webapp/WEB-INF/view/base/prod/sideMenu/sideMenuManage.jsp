@@ -210,7 +210,8 @@
                         sticky-headers="true"
                         selection-mode="Row"
                         items-source="data"
-                        item-formatter="_itemFormatter">
+                        item-formatter="_itemFormatter"
+                        id="wjGridSelectMenuArea">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -279,4 +280,4 @@
     }
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20211224.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20220124.02" charset="utf-8"></script>

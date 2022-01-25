@@ -23,26 +23,10 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
 
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-
-                // 체크박스
-                if (col.binding === "gChk") {
-                    var item = s.rows[e.row].dataItem;
-
-                    // 값이 있으면 링크 효과
-                    if (item[("posNo")] === null) {
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                        item[("gChk")] = false; // 전체 체크시 오류
-
-                        // Attribute 의 변경사항을 적용.
-                        e.cell.outerHTML = e.cell.outerHTML;
-                    }
-                }
-            }
+        // 그리드 header 클릭시 정렬 이벤트 막기
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            s.allowSorting = false;
         });
     };
 
@@ -84,6 +68,7 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
 
             var grid = wijmo.Control.getControl("#wjGridList");
             var columns = grid.columns;
+            var rows = grid.rows;
 
             // 환경설정 코드에 따라 보이는 컬럼이 다름
             if($("#hdEnvstCd").val() === "4068") {
@@ -93,6 +78,16 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
                 columns[5].visible = false;
                 columns[6].visible = true;
             }
+
+            // 키오스크포스가 없는 매장은 선택 불가
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                if(item.posNo === null || item.posNo === undefined || item.posNo === ""){
+                    item.gChk = false;
+                    rows[i].isReadOnly = true;
+                }
+            }
+
         });
     };
 

@@ -5588,4 +5588,228 @@
            AND USE_YN = 'Y'
     </select>
 
+    <!-- 재료 및 원산지 정보 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_RECP_ORIGIN
+        PARAM    : storeManageVO
+        COMMENTS : 본사의 재료 및 원산지 정보를 복사한다
+    -->
+    <insert id="insertStoreHqProductRecpOrigin" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductRecpOrigin */
+        MERGE INTO TB_MS_PRODUCT_RECP_ORIGIN A
+        USING
+        (
+            SELECT #{storeCd} AS STORE_CD,
+					RECIPES_CD,
+					RECIPES_NM,
+					ORGPLCE_NM,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID
+              FROM TB_HQ_PRODUCT_RECP_ORIGIN
+             WHERE 1=1
+               AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.RECIPES_CD = B.RECIPES_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                RECIPES_NM = B.RECIPES_NM,
+                ORGPLCE_NM = B.ORGPLCE_NM,
+                MOD_DT = B.MOD_DT,
+                MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.RECIPES_CD,
+                A.RECIPES_NM,
+                A.ORGPLCE_NM,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.RECIPES_CD,
+                B.RECIPES_NM,
+                B.ORGPLCE_NM,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 상품-원산지 매핑정보 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_RECP_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 본사 상품-원산지 매핑정보를 복사한다
+    -->
+    <insert id="insertStoreHqProductRecpProd" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductRecpProd */
+        MERGE INTO TB_MS_PRODUCT_RECP_PROD A
+        USING
+        (
+            SELECT #{storeCd} AS STORE_CD,
+                    RECIPES_CD,
+                    PROD_CD,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID,
+                    RECP_SEQ
+            FROM TB_HQ_PRODUCT_RECP_PROD
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.RECIPES_CD = B.RECIPES_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                MOD_DT = B.MOD_DT,
+                MOD_ID = B.MOD_ID,
+                RECP_SEQ = B.RECP_SEQ
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.RECIPES_CD,
+                A.PROD_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.RECP_SEQ
+            ) VALUES (
+                B.STORE_CD,
+                B.RECIPES_CD,
+                B.PROD_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.RECP_SEQ
+            )
+    </insert>
+
+    <!-- 재료 및 알레르기 정보 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_ALGI_INFO
+        PARAM    : storeManageVO
+        COMMENTS : 본사의 재료 및 알레르기 정보를 복사한다
+    -->
+    <insert id="insertStoreHqProductAlgiInfo" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductAlgiInfo */
+        MERGE INTO TB_MS_PRODUCT_ALGI_INFO A
+        USING
+        (
+            SELECT #{storeCd} AS STORE_CD,
+				    RECIPES_CD,
+					RECIPES_NM,
+					ALLERGIE_NM,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID
+              FROM TB_HQ_PRODUCT_ALGI_INFO
+             WHERE 1=1
+               AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.RECIPES_CD = B.RECIPES_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                RECIPES_NM = B.RECIPES_NM,
+                ALLERGIE_NM = B.ALLERGIE_NM,
+                MOD_DT = B.MOD_DT,
+                MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.RECIPES_CD,
+                A.RECIPES_NM,
+                A.ALLERGIE_NM,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.RECIPES_CD,
+                B.RECIPES_NM,
+                B.ALLERGIE_NM,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 상품-알레르기 매핑정보 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_ALGI_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 본사 상품-알레르기 매핑정보를 복사한다
+    -->
+    <insert id="insertStoreHqProductAlgiProd" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductAlgiProd */
+        MERGE INTO TB_MS_PRODUCT_ALGI_PROD A
+        USING
+        (
+            SELECT #{storeCd} AS STORE_CD,
+                    RECIPES_CD,
+                    PROD_CD,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID,
+                    RECP_SEQ
+            FROM TB_HQ_PRODUCT_ALGI_PROD
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.RECIPES_CD = B.RECIPES_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                MOD_DT = B.MOD_DT,
+                MOD_ID = B.MOD_ID,
+                RECP_SEQ = B.RECP_SEQ
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.RECIPES_CD,
+                A.PROD_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.RECP_SEQ
+            ) VALUES (
+                B.STORE_CD,
+                B.RECIPES_CD,
+                B.PROD_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.RECP_SEQ
+            )
+    </insert>
+
 </mapper>

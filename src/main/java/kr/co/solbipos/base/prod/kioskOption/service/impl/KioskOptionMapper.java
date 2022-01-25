@@ -43,8 +43,14 @@ public interface KioskOptionMapper {
     List<DefaultMap<Object>> getKioskOptionProdList(KioskOptionVO kioskOptionVO);
 
     /** 키오스크옵션 상품등록 팝업 - 표기순번 조회 */
-    DefaultMap<String> getKioskOptionProdDispSeq(KioskOptionVO KioskOptionVO);
+    DefaultMap<String> getKioskOptionProdDispSeq(KioskOptionVO kioskOptionVO);
 
     /** 키오스크옵션 상품등록 팝업 - 키오스크옵션 저장 */
-    int getKioskOptionProdSave(KioskOptionVO KioskOptionVO);
+    int getKioskOptionProdSave(KioskOptionVO kioskOptionVO);
+
+    /** 키오스크옵션 매장적용 - 매장에서 사용중인 기존 옵션상품 삭제 */
+    int deleteStoreOptionProd(KioskOptionVO kioskOptionVO);
+
+    /** 키오스크옵션 매장적용 - 본사에서 사용중인 옵션상품 매장등록 */
+    int insertStoreOptionProd(KioskOptionVO kioskOptionVO);
 }

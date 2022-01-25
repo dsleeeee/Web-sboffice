@@ -171,6 +171,12 @@
                 <button class="btn_skyblue" id="btnProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
                 <%-- 삭제 --%>
                 <button class="btn_skyblue" id="btnProdDel" ng-click="del()"><s:message code='cmm.del' /></button>
+
+                <c:if test="${orgnFg == 'HQ'}">
+                    <%-- 옵션상품 매장적용 --%>
+                    <button class="btn_skyblue" id="btnOptionProdStore" ng-click="optionProdStore()"><s:message code='kioskOption.optionProdStore' /></button>
+                </c:if>
+
             </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
@@ -199,7 +205,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOption.js?ver=20210326.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOption.js?ver=20220120.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -207,6 +213,12 @@
 
 <%-- 키오스크옵션 상품등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskOption/kioskOptionProd.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 키오스크옵션 옵션상품 매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskOption/kioskOptionProdStore.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -636,4 +636,37 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         return result;
     }
 
+    /** 키오스크 추천메뉴 매장적용 */
+    @Override
+    public int saveRecmdStore(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setRegDt(currentDt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장에서 사용중인 기존 메뉴추천정보 삭제
+            kioskKeyMapMapper.deleteStoreRecmd(kioskKeyMapVO);
+
+            // 매장에서 사용중인 기존 메뉴추천리스트 삭제
+            kioskKeyMapMapper.deleteStoreRecmdProd(kioskKeyMapVO);
+
+            // 본사에서 사용중인 메뉴추천정보 매장등록
+            result = kioskKeyMapMapper.insertStoreHqRecmd(kioskKeyMapVO);
+            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 본사에서 사용중인 메뉴추천리스트 매장등록
+            result = kioskKeyMapMapper.insertStoreHqRecmdProd(kioskKeyMapVO);
+            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }
+
+        return result;
+    }
+
 }

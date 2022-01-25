@@ -344,6 +344,20 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             procCnt += mapper.insertTabGroup(tableGroupVO);
 
+            // 프랜차이즈매장: 본사에 등록된 원산지, 알러지 정보 생성
+            if(!storeManageVO.getHqOfficeCd().equals("00000")) {
+
+                /** 본사 재료 및 원산지 정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqProductRecpOrigin(storeManageVO);
+                /** 본사 상품-원산지 매핑정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqProductRecpProd(storeManageVO);
+
+                /** 본사 재료 및 알레르기 정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqProductAlgiInfo(storeManageVO);
+                /** 본사 상품-알레르기 매핑정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqProductAlgiProd(storeManageVO);
+            }
+
             // 매장환경 복사 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
             String[] copyEnv = storeManageVO.getCopyChkVal().split("\\|");

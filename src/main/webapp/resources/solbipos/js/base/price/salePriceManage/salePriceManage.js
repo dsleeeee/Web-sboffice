@@ -97,31 +97,11 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
             s.collectionView.commitEdit();
         });
 
-        // 매장일때만
-        if(hqOfficeCd != "00000") {
-            // 그리드 링크 효과
-            s.formatItem.addHandler(function (s, e) {
-                if (e.panel === s.cells) {
-                    var col = s.columns[e.col];
-
-                    // 체크박스
-                    if (col.binding === "gChk" || col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
-                        var item = s.rows[e.row].dataItem;
-
-                        // 값이 있으면 링크 효과
-                        if (item[("prcCtrlFg")] === 'H') {
-                            wijmo.addClass(e.cell, 'wj-custom-readonly');
-                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                            item[("gChk")] = false; // 전체 체크시 오류
-
-                            // Attribute 의 변경사항을 적용.
-                            e.cell.outerHTML = e.cell.outerHTML;
-                        }
-                    }
-                }
-            });
-        }
-
+        // 그리드 header 클릭시 정렬 이벤트 막기
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            s.allowSorting = false;
+        });
 
         // 헤더머지
         s.allowMerging = 2;
@@ -234,7 +214,24 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
 
-        $scope._inquirySub('/base/price/salePriceManage/salePriceManage/getSalePriceManageList.sb', params, function() {}, false);
+        $scope._inquirySub('/base/price/salePriceManage/salePriceManage/getSalePriceManageList.sb', params, function() {
+
+            // 프랜차이즈매장은 본사에서 등록한 상품 선택 불가
+            if(orgnFg == "STORE" && hqOfficeCd != "00000") {
+
+                var grid = wijmo.Control.getControl("#wjGridSalePriceManage");
+                var rows = grid.rows;
+
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if (item.prcCtrlFg === "H") {
+                        item.gChk = false;
+                        rows[i].isReadOnly = true;
+                    }
+                }
+            }
+
+        }, false);
     };
     // <-- //검색 호출 -->
 

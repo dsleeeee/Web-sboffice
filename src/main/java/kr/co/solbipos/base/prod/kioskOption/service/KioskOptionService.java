@@ -42,4 +42,7 @@ public interface KioskOptionService {
 
     /** 키오스크옵션 상품등록 팝업 - 키오스크옵션 저장 */
     int getKioskOptionProdSave(KioskOptionVO[] kioskOptionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크옵션 옵션상품 매장적용 */
+    int saveStoreOptionProd(KioskOptionVO[] kioskOptionVOs, SessionInfoVO sessionInfoVO);
 }

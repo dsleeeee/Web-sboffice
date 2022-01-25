@@ -1,7 +1,9 @@
 package kr.co.solbipos.base.prod.kioskOption.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.utils.spring.StringUtil;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -10,7 +12,6 @@ import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
 
@@ -35,14 +36,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class KioskOptionServiceImpl implements KioskOptionService {
     private final KioskOptionMapper kioskOptionMapper;
+    private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public KioskOptionServiceImpl(KioskOptionMapper kioskOptionMapper, CmmEnvUtil cmmEnvUtil) {
+    public KioskOptionServiceImpl(KioskOptionMapper kioskOptionMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.kioskOptionMapper = kioskOptionMapper;
+        this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -178,5 +181,31 @@ public class KioskOptionServiceImpl implements KioskOptionService {
         }
 
         return procCnt;
+    }
+
+    /** 키오스크옵션 옵션상품 매장적용 */
+    @Override
+    public int saveStoreOptionProd(KioskOptionVO[] kioskOptionVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( KioskOptionVO kioskOptionVO : kioskOptionVOs) {
+
+            kioskOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskOptionVO.setRegDt(currentDt);
+            kioskOptionVO.setRegId(sessionInfoVO.getUserId());
+            kioskOptionVO.setModDt(currentDt);
+            kioskOptionVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장에서 사용중인 기존 옵션상품 삭제
+            kioskOptionMapper.deleteStoreOptionProd(kioskOptionVO);
+
+            // 본사에서 사용중인 옵션상품 매장등록
+            result = kioskOptionMapper.insertStoreOptionProd(kioskOptionVO);
+            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }
+
+        return result;
     }
 }

@@ -320,4 +320,11 @@ app.controller('kioskOptionDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.allSearch = function () {
         $scope.searchKioskOptionDetail();
     };
+    
+    // 옵션상품 매장적용 팝업
+    $scope.optionProdStore = function () {
+        $scope.kioskOptionProdStoreLayer.show(true);
+        $scope._broadcast('kioskOptionProdStoreCtrl');
+        event.preventDefault();
+    }
 }]);

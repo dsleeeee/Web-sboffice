@@ -414,19 +414,6 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
 
-                // 체크박스
-                if (col.binding === "gChk" || col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
-                    // 이미 등록된 상품이면 체크박스와 가격입력 막기
-                    if (item[("regYn")] === 'Y') {
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                        item[("gChk")] = false; // 전체 체크시 오류
-
-                        // Attribute 의 변경사항을 적용.
-                        e.cell.outerHTML = e.cell.outerHTML;
-                    }
-                }
-
                 // 판매가 변경시 다른 컬럼값도 변경
                 if (col.binding === "saleUprc") {
                     var scope = agrid.getScope('menuGroupCtrl');
