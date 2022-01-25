@@ -69,28 +69,13 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                         e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
-
-                // 프랜차이즈 매장은 본사에서 등록한 분류 수정불가
-                if (orgnFg == "STORE") {
-                    if (hqOfficeCd != "00000") {
-                        if (col.binding === "gChk" || col.binding === 'prodClassNm') {
-                            if (item.prodClassCd < 80001) {
-                                wijmo.addClass(e.cell, 'wj-custom-readonly');
-                                wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                                item[("gChk")] = false; // 전체 체크시 오류
-
-                                // Attribute 의 변경사항을 적용.
-                                e.cell.outerHTML = e.cell.outerHTML;
-                            }
-                        }
-                    }
-                }
             }
         });
 
         // 카테고리 코드 클릭 시, 키맵과 상품 조회
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
             var ht = s.hitTest(e);
+            s.allowSorting = false;
             if (ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
@@ -137,7 +122,23 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.clsLevelCd = "1";
 
-        $scope._inquirySub("/base/prod/info/class/getProdClass.sb", params, function() {}, false);
+        $scope._inquirySub("/base/prod/info/class/getProdClass.sb", params, function() {
+
+            // 프랜차이즈 매장은 본사에서 등록한 분류 수정불가
+            if(orgnFg == "STORE" && hqOfficeCd != "00000") {
+
+                var grid = wijmo.Control.getControl("#wjGridProdClassLevel1");
+                var rows = grid.rows;
+
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if(item.prodClassCd < 80001){
+                        item.gChk = false;
+                        rows[i].isReadOnly = true;
+                    }
+                }
+            }
+        }, false);
     };
 
     // 대분류 추가
@@ -542,28 +543,13 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                         e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
-
-                // 프랜차이즈 매장은 본사에서 등록한 분류 수정불가
-                if (orgnFg == "STORE") {
-                    if (hqOfficeCd != "00000") {
-                        if (col.binding === "gChk" || col.binding === 'prodClassNm') {
-                            if (item.prodClassCd < 80001) {
-                                wijmo.addClass(e.cell, 'wj-custom-readonly');
-                                wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                                item[("gChk")] = false; // 전체 체크시 오류
-
-                                // Attribute 의 변경사항을 적용.
-                                e.cell.outerHTML = e.cell.outerHTML;
-                            }
-                        }
-                    }
-                }
             }
         });
 
         // 카테고리 코드 클릭 시, 키맵과 상품 조회
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
             var ht = s.hitTest(e);
+            s.allowSorting = false;
             if (ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
@@ -599,7 +585,23 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
         params.clsLevelCd = "2";
         params.pProdClassCd = $("#hdLevel1").val();
 
-        $scope._inquirySub("/base/prod/info/class/getProdClass.sb", params, function() {}, false);
+        $scope._inquirySub("/base/prod/info/class/getProdClass.sb", params, function() {
+
+            // 프랜차이즈 매장은 본사에서 등록한 분류 수정불가
+            if(orgnFg == "STORE" && hqOfficeCd != "00000") {
+
+                var grid = wijmo.Control.getControl("#wjGridProdClassLevel2");
+                var rows = grid.rows;
+
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if(item.prodClassCd < 80001){
+                        item.gChk = false;
+                        rows[i].isReadOnly = true;
+                    }
+                }
+            }
+        }, false);
     };
 
     // 중분류 추가
@@ -1001,23 +1003,13 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
                         e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
-
-                // 프랜차이즈 매장은 본사에서 등록한 분류 수정불가
-                if (orgnFg == "STORE") {
-                    if (hqOfficeCd != "00000") {
-                        if (col.binding === "gChk" || col.binding === 'prodClassNm') {
-                            if (item.prodClassCd < 80001) {
-                                wijmo.addClass(e.cell, 'wj-custom-readonly');
-                                wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                                item[("gChk")] = false; // 전체 체크시 오류
-
-                                // Attribute 의 변경사항을 적용.
-                                e.cell.outerHTML = e.cell.outerHTML;
-                            }
-                        }
-                    }
-                }
             }
+        });
+
+        // 그리드 header 클릭시 정렬 이벤트 막기
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            s.allowSorting = false;
         });
     };
 
@@ -1035,7 +1027,23 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
         params.clsLevelCd = "3";
         params.pProdClassCd = $("#hdLevel2").val();
 
-        $scope._inquirySub("/base/prod/info/class/getProdClass.sb", params, function() {}, false);
+        $scope._inquirySub("/base/prod/info/class/getProdClass.sb", params, function() {
+
+            // 프랜차이즈 매장은 본사에서 등록한 분류 수정불가
+            if(orgnFg == "STORE" && hqOfficeCd != "00000") {
+
+                var grid = wijmo.Control.getControl("#wjGridProdClassLevel3");
+                var rows = grid.rows;
+
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if(item.prodClassCd < 80001){
+                        item.gChk = false;
+                        rows[i].isReadOnly = true;
+                    }
+                }
+            }
+        }, false);
     };
 
     // 소분류 추가

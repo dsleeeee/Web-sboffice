@@ -67,35 +67,17 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
         $scope.saleProdYnDataMap = new wijmo.grid.DataMap(saleProdYnData, 'value', 'name'); // 판매상품여부
         $scope.pointSaveYnDataMap = new wijmo.grid.DataMap(pointSaveYnData, 'value', 'name'); // 포인트적립여부
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
         $scope.regFgDataMap = new wijmo.grid.DataMap(regFgData, 'value', 'name'); // 상품등록구분
 
-        // 프랜 매장일때만
-        if(orgnFg == "STORE" && hqOfficeCd != "00000") {
-            // 그리드 링크 효과
-            s.formatItem.addHandler(function (s, e) {
-                if (e.panel === s.cells) {
-                    var col = s.columns[e.col];
-
-                    // 체크박스
-                    if (col.binding === "gChk" || col.binding === "saleProdYn" || col.binding === "pointSaveYn" || col.binding === "prcCtrlFg" || col.binding === "mapProdCd") {
-                        var item = s.rows[e.row].dataItem;
-
-                        // 값이 있으면 링크 효과
-                        if (item[("regFg")] === 'H') {
-                            wijmo.addClass(e.cell, 'wj-custom-readonly');
-                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                            item[("gChk")] = false; // 전체 체크시 오류
-
-                            // Attribute 의 변경사항을 적용.
-                            e.cell.outerHTML = e.cell.outerHTML;
-                        }
-                    }
-                }
-            });
-        }
+        // 그리드 header 클릭시 정렬 이벤트 막기
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            s.allowSorting = false;
+        });
     };
 
     // <-- 검색 호출 -->
@@ -108,7 +90,24 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
         var params = {};
         params.listScale = $scope.listScaleCombo.text;
 
-        $scope._inquiryMain("/base/prod/prodBatchChange/prodBatchChange/getProdBatchChangeList.sb", params, function() {}, false);
+        $scope._inquiryMain("/base/prod/prodBatchChange/prodBatchChange/getProdBatchChangeList.sb", params, function() {
+
+            // 프랜차이즈매장은 본사에서 등록한 상품 선택 불가
+            if(orgnFg == "STORE" && hqOfficeCd != "00000") {
+
+                var grid = wijmo.Control.getControl("#wjGridProdBatchChange");
+                var rows = grid.rows;
+
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if (item.regFg === "H") {
+                        item.gChk = false;
+                        rows[i].isReadOnly = true;
+                    }
+                }
+            }
+
+        }, false);
     };
     // <-- //검색 호출 -->
 
@@ -190,7 +189,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
         $scope._popConfirm(messages["cmm.choo.save"], function() {
             // 프랜 매장일때만
             if(orgnFg == "STORE" && hqOfficeCd != "00000") {
-                for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                     if($scope.flex.collectionView.items[i].gChk) {
                         // REG_FG 상품등록구분 S인 상품만 수정가능
                         if ($scope.flex.collectionView.items[i].regFg === "H") {
@@ -203,15 +202,17 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
 
             // 파라미터 설정
             var params = new Array();
-            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-                $scope.flex.collectionView.itemsEdited[i].status = "U";
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].status = "U";
 
-                // 매핑상품코드 앞뒤 공백 및 엔터값 제거
-                if($scope.flex.collectionView.itemsEdited[i].mapProdCd !== "" && $scope.flex.collectionView.itemsEdited[i].mapProdCd !== null){
-                    $scope.flex.collectionView.itemsEdited[i].mapProdCd = $scope.flex.collectionView.itemsEdited[i].mapProdCd.trim().removeEnter();
+                    // 매핑상품코드 앞뒤 공백 및 엔터값 제거
+                    if ($scope.flex.collectionView.items[i].mapProdCd !== "" && $scope.flex.collectionView.items[i].mapProdCd !== null) {
+                        $scope.flex.collectionView.items[i].mapProdCd = $scope.flex.collectionView.items[i].mapProdCd.trim().removeEnter();
+                    }
+
+                    params.push($scope.flex.collectionView.items[i]);
                 }
-
-                params.push($scope.flex.collectionView.itemsEdited[i]);
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수

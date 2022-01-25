@@ -11,10 +11,10 @@ import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -211,6 +211,28 @@ public class KioskOptionController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = kioskOptionService.getKioskOptionProdSave(kioskOptionVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크옵션 옵션상품 매장적용
+     *
+     * @param kioskOptionVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2022. 01. 19.
+     */
+    @RequestMapping(value = "/kioskOption/saveStoreOptionProd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreOptionProd(@RequestBody KioskOptionVO[] kioskOptionVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskOptionService.saveStoreOptionProd(kioskOptionVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

@@ -85,28 +85,11 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
       s.collectionView.commitEdit();
     });
 
-    // 그리드 링크 효과
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-
-        // 체크박스
-        if (col.binding === "gChk" || col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
-          var item = s.rows[e.row].dataItem;
-            if(coercionFg === "0") {
-                // 값이 있으면 링크 효과
-                if (item[("prcCtrlFg")] === 'S') {
-                    wijmo.addClass(e.cell, 'wj-custom-readonly');
-                    wijmo.setAttribute(e.cell, 'aria-readonly', true);
-                    item[("gChk")] = false; // 전체 체크시 오류
-
-                    // Attribute 의 변경사항을 적용.
-                    e.cell.outerHTML = e.cell.outerHTML;
-                }
-            }
-        }
-      }
-    });
+      // 그리드 header 클릭시 정렬 이벤트 막기
+      s.addEventListener(s.hostElement, 'mousedown', function (e) {
+          var ht = s.hitTest(e);
+          s.allowSorting = false;
+      });
 
       // 헤더머지
       s.allowMerging = 2;
@@ -295,11 +278,25 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
 
       // 조회한 값으로 마진금액, 마진율 계산
       for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-
         $scope.calcAmt($scope.flex.collectionView.items[i]);
-
         $scope.flex.collectionView.commitEdit();
       }
+
+        // 가격관리구분에 의해 본사는 매장의 상품가격 수정 불가(매장판매가관리본사강제수정 가능인 경우는 수정가능)
+        if(coercionFg === "0") {
+            var grid = wijmo.Control.getControl("#wjGridProdSalePriceArea");
+            var rows = grid.rows;
+
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                if (item.prcCtrlFg === "S") {
+                    item.gChk = false;
+                    rows[i].isReadOnly = true;
+                }
+            }
+        }
+
+
     }, false);
   };
 

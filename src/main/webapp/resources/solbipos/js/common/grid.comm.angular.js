@@ -329,11 +329,12 @@ function RootController(ctrlName, $scope, $http, isPicker) {
                 cb.addEventListener('click', function (e) {
                     flex.beginUpdate();
                     for (var i = 0; i < flex.rows.length; i++) {
-                        var cell = flex.cells.getCellElement(i, c);
+                        //var cell = flex.cells.getCellElement(i, c);
                         // TODO : 활성화 및 readOnly 아닌 경우에만 체크되도록
                         // if (!cell.children[0].disabled) {
-                        flex.setCellData(i, c, cb.checked);
-                        // }
+                        if(!flex.rows[i].isReadOnly) {
+                            flex.setCellData(i, c, cb.checked);
+                        }
                     }
                     flex.endUpdate();
                 });

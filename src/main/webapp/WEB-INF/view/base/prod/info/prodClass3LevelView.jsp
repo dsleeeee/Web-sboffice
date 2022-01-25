@@ -65,7 +65,8 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            id="wjGridProdClassLevel1">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
@@ -111,7 +112,8 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            id="wjGridProdClassLevel2">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
@@ -156,7 +158,8 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            id="wjGridProdClassLevel3">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
@@ -185,4 +188,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/info/prodClass3LevelView.js?ver=20211101.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/info/prodClass3LevelView.js?ver=20220124.02" charset="utf-8"></script>

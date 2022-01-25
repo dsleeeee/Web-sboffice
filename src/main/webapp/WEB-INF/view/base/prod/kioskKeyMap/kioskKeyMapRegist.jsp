@@ -8,7 +8,7 @@
 
 <div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;">
     <div ng-controller="kioskKeyMapRegistCtrl">
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="kioskKeyMap.kioskKeyMapRegist" /></a>
             <%-- 조회 --%>
             <button class="btn_blue fr mt5 mr10" id="btnSearchCls" ng-click="_pageView('kioskKeyMapRegistCtrl', 1)"><s:message code="cmm.search"/></button>
@@ -364,4 +364,8 @@
 
 <%-- 그룹복제 팝업(매장용) --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapCopyStore.jsp">
+</c:import>
+
+<%-- 추천메뉴매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskRecmdStoreRegist.jsp">
 </c:import>
