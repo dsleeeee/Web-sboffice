@@ -243,7 +243,8 @@
               sticky-headers="true"
               selection-mode="Row"
               items-source="data"
-              item-formatter="_itemFormatter">
+              item-formatter="_itemFormatter"
+              id="wjGridProdSalePriceArea">
 
         <%--본사마진금액, 본사마진율, 매장마진금액, 매장마진율 visible false 처리 / 추후에 수불 화면 개발 시 재 오픈 : 2019-08-07 이다솜 --%>
         <!-- define columns -->
@@ -312,4 +313,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20210526.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20220124.02" charset="utf-8"></script>

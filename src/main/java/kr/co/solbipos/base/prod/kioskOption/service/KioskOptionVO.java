@@ -69,6 +69,9 @@ public class KioskOptionVO extends PageVO {
     /** 표기순번 */
     private int dispSeq;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -143,5 +146,13 @@ public class KioskOptionVO extends PageVO {
 
     public void setDispSeq(int dispSeq) {
         this.dispSeq = dispSeq;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
     }
 }

@@ -482,4 +482,52 @@
         </choose>
     </insert>
 
+    <!-- 키오스크옵션 매장적용 - 매장에서 사용중인 기존 옵션상품 삭제 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION
+        PARAM    : kioskOptionVO
+        COMMENTS : 매장에서 사용중인 기존 옵션상품을 삭제한다.
+    -->
+    <delete id="deleteStoreOptionProd" parameterType="kioskOptionVO" >
+        /* USE : KioskOptionMapper.deleteStoreOptionProd */
+        DELETE
+          FROM TB_MS_PRODUCT_OPTION
+         WHERE STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 키오스크옵션 매장적용 - 본사에서 사용중인 옵션상품 매장등록 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION, TB_HQ_PRODUCT_OPTION
+        PARAM    : kioskOptionVO
+        COMMENTS : 본사에서 사용중인 옵션상품을 매장에 등록한다.
+    -->
+    <insert id="insertStoreOptionProd" parameterType="kioskOptionVO">
+        /* USE : KioskOptionMapper.insertStoreOptionProd */
+                INSERT INTO TB_MS_PRODUCT_OPTION
+                  (
+                        STORE_CD,
+                        PROD_CD,
+                        OPTION_PROD_CD,
+                        OPTION_FG,
+                        DISP_SEQ,
+                        REMARK,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                  )
+                    SELECT #{storeCd},
+                            PROD_CD,
+                            OPTION_PROD_CD,
+                            OPTION_FG,
+                            DISP_SEQ,
+                            REMARK,
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                     FROM TB_HQ_PRODUCT_OPTION thpo
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+
+    </insert>
 </mapper>

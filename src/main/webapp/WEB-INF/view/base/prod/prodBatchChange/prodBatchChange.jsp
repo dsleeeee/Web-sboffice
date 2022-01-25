@@ -292,7 +292,8 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    id="wjGridProdBatchChange">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -336,7 +337,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20210531.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20220124.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

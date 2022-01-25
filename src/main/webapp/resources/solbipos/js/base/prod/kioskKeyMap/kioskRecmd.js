@@ -266,6 +266,13 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
         var recmdProdListCtrlPager = document.getElementById('recmdProdListCtrlPager');
         recmdProdListCtrlPager.style.visibility='hidden'
     };
+    
+    // 추천메뉴매장적용 팝업
+    $scope.recmdStoreReg = function () {
+        $scope.kioskRecmdStoreRegLayer.show(true);
+        $scope._broadcast('kioskRecmdStoreRegCtrl');
+        event.preventDefault();
+    }
 
 }]);
 

@@ -1956,4 +1956,101 @@
         </choose>
     </insert>
 
+    <!-- 키오스크 추천메뉴 매장적용 - 매장에서 사용중인 기존 메뉴추천정보 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_RECMD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장별 메뉴추천정보를 삭제한다.
+    -->
+    <delete id="deleteStoreRecmd" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteStoreRecmd */
+        DELETE
+          FROM TB_MS_KIOSK_RECMD
+         WHERE STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 키오스크 추천메뉴 매장적용 - 매장에서 사용중인 기존 메뉴추천리스트 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_RECMD_PROD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장별 메뉴추천리스트를 삭제한다.
+    -->
+    <delete id="deleteStoreRecmdProd" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteStoreRecmdProd */
+        DELETE
+          FROM TB_MS_KIOSK_RECMD_PROD
+         WHERE STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 키오스크 추천메뉴 매장적용 - 본사에서 사용중인 메뉴추천정보 매장등록 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_RECMD, TB_HQ_KIOSK_RECMD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사에서 사용중인 메뉴추천정보를 매장에 등록한다.
+    -->
+    <insert id="insertStoreHqRecmd" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.insertStoreHqRecmd */
+                INSERT INTO TB_MS_KIOSK_RECMD
+                  (
+                        STORE_CD,
+                        RECMD_CD,
+                        RECMD_TYPE,
+                        PROD_CD,
+                        DISP_TYPE,
+                        REG_FG,
+                        ADD_TYPE,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                  )
+                    SELECT #{storeCd},
+                            RECMD_CD,
+                            RECMD_TYPE,
+                            PROD_CD,
+                            DISP_TYPE,
+                            'H',
+                            ADD_TYPE,
+                            USE_YN,
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                     FROM TB_HQ_KIOSK_RECMD thkr
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+
+    </insert>
+
+    <!-- 키오스크 추천메뉴 매장적용 - 본사에서 사용중인 메뉴추천리스트 매장등록 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_RECMD_PROD, TB_HQ_KIOSK_RECMD_PROD
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사에서 사용중인 메뉴추천리스트를 매장에 등록한다.
+    -->
+    <insert id="insertStoreHqRecmdProd" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.insertStoreHqRecmdProd */
+                INSERT INTO TB_MS_KIOSK_RECMD_PROD
+                  (
+                        STORE_CD,
+                        RECMD_CD,
+                        RECMD_PROD_CD,
+                        INDEX_NO,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                  )
+                    SELECT #{storeCd},
+                            RECMD_CD,
+                            RECMD_PROD_CD,
+                            INDEX_NO,
+                            #{regDt},
+                            #{regId},
+                            #{modDt},
+                            #{modId}
+                     FROM TB_HQ_KIOSK_RECMD_PROD thkrp
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+
+    </insert>
 </mapper>

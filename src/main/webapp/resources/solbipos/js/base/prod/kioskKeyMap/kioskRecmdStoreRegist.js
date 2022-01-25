@@ -1,22 +1,21 @@
 /****************************************************************
  *
- * 파일명 : kioskKeyMapStoreReg.js
- * 설  명 : 키오스크 키맵매장적용 팝업 JavaScript
+ * 파일명 : kioskRecmdStoreReg.js
+ * 설  명 : 키오스크 추천메뉴 매장적용 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.06.07     이다솜      1.0
+ * 2022.01.18     이다솜      1.0
  *
  * **************************************************************/
 
 var app = agrid.getApp();
 
-app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('kioskRecmdStoreRegCtrl', ['$scope', '$http', function ($scope, $http) {
 
-    angular.extend(this, new RootController('kioskKeyMapStoreRegCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('kioskRecmdStoreRegCtrl', $scope, $http, false));
 
-    $scope._setComboData("srchSysStatFg", sysStatFg);
-    $scope._setComboData("applyTuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
+    $scope._setComboData("srchRecmdSysStatFg", sysStatFg);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -31,26 +30,25 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', function ($scope, 
     };
 
     // 팝업 오픈 시, 매장리스트 조회
-    $scope.$on("kioskKeyMapStoreRegCtrl", function(event, data) {
+    $scope.$on("kioskRecmdStoreRegCtrl", function(event, data) {
 
         // 매장조회
-        $scope.searchStore();
+        $scope.searchRecmdStore();
         event.preventDefault();
-
     });
-
+    
     // 매장조회
-    $scope.searchStore = function () {
+    $scope.searchRecmdStore = function () {
 
         var params = {};
-        params.storeCd = $("#srchStoreCd").val();
-        params.storeNm = $("#srchStoreNm").val();
-        params.sysStatFg = $scope.srchSysStatFgCombo.selectedValue;
+        params.storeCd = $("#srchRecmdStoreCd").val();
+        params.storeNm = $("#srchRecmdStoreNm").val();
+        params.sysStatFg = $scope.srchRecmdSysStatFgCombo.selectedValue;
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreList.sb", params, function () {
 
             // 키오스크포스가 없는 매장은 선택 불가
-            var grid = wijmo.Control.getControl("#wjGridKioskKeyMapStoreReg");
+            var grid = wijmo.Control.getControl("#wjGridKioskRecmdStoreReg");
             var rows = grid.rows;
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -64,14 +62,14 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', function ($scope, 
     };
 
     // 조회
-    $scope.btnSearchStore = function(){
+    $scope.btnRecmdSearchStore = function(){
 
         // 매장조회
-        $scope.searchStore();
+        $scope.searchRecmdStore();
     };
-
+    
     // 적용
-    $scope.btnInsertStore = function () {
+    $scope.btnRecmdApplyStore = function(){
 
         // 파라미터 설정
         var params = new Array();
@@ -83,49 +81,40 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', function ($scope, 
             if(item.gChk === true) chkCount++;
         }
 
-        // 키맵그룹이 없습니다.
-        if ($scope.applyTuClsTypeCombo.selectedValue === "" || $scope.applyTuClsTypeCombo.selectedValue === null) {
-            s_alert.pop(messages["kioskKeyMap.require.applyTuClsType.msg"]);
-            return;
-        }
-
         if(chkCount === 0){
             $scope._popMsg(messages["kioskKeymap.store"] + messages["kioskKeymap.chk.item"]); // 매장을(를) 선택하세요.
             return false;
         }
 
-        // '01' 키맵그룹을 매장에 적용하시겠습니까?
-        $scope._popConfirm("'" + $scope.applyTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreReg.msg"], function() {
+        // 추천메뉴정보를 매장에 적용하시겠습니까?
+        $scope._popConfirm(messages["kioskKeyMap.recmdStoreReg.msg"], function() {
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 
                 var item = $scope.flex.collectionView.items[i];
-
                 if (item.gChk === true && item.kioskPosCnt > 0) {
                     var obj = {};
                     obj.storeCd = item.storeCd;
-                    obj.tuClsType = $scope.applyTuClsTypeCombo.selectedValue;
 
                     params.push(obj);
                 }
             }
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMapStore.sb", params, function () {
 
-                $scope.kioskKeyMapStoreRegLayer.hide(true);
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/kioskKeyMap/kioskKeyMap/saveRecmdStore.sb", params, function () {
+
+                $scope.kioskRecmdStoreRegLayer.hide(true);
 
             });
         });
-
     };
 
     // 닫기
     $scope.close = function () {
 
-        $("#srchStoreCd").val("");
-        $("#srchStoreNm").val("");
-        $scope.srchSysStatFgCombo.selectedIndex = 0;
-        $scope.applyTuClsTypeCombo.selectedIndex = 0;
+        $("#srchRecmdStoreCd").val("");
+        $("#srchRecmdStoreNm").val("");
+        $scope.srchRecmdSysStatFgCombo.selectedIndex = 0;
     }
 
 }]);
