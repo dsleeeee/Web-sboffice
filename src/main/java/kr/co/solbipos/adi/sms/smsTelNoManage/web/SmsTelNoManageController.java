@@ -226,8 +226,8 @@ public class SmsTelNoManageController {
                 if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == 1){
 
                     // 정상등록
-//                    out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); window.opener.location.reload(); </script>");
-                    out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); window.location.reload(); </script>");
+                    out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); window.opener.location.reload(); </script>");
+//                    out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); window.location.reload(); </script>");
                     out.flush();
                 } else {
 
