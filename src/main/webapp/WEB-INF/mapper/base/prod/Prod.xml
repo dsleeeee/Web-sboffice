@@ -683,6 +683,7 @@
                 FROM TB_HQ_PRODUCT
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 AND PROD_CD BETWEEN '0000000000001' AND '8000000000000'
+                AND LENGTH(PROD_CD) = 13
             </when>
             <!-- 가맹점 (매장 등록 상품의 경우 상품코드가 '9'로 시작) -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -694,6 +695,7 @@
                     FROM TB_MS_PRODUCT
                     WHERE STORE_CD = #{storeCd}
                     AND PROD_CD BETWEEN '8000000000001' AND '9999999999999'
+                    AND LENGTH(PROD_CD) = 13
                 </if>
                 <!-- 단독매장이 아닐 경우 -->
                 <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
@@ -704,6 +706,7 @@
                     WHERE STORE_CD = #{storeCd}
                     --                     AND PROD_CD LIKE '9%'
                     AND PROD_CD BETWEEN '8000000000001' AND '9999999999999'
+                    AND LENGTH(PROD_CD) = 13
                 </if>
             </when>
         </choose>
