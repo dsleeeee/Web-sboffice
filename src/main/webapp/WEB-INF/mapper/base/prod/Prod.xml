@@ -679,34 +679,20 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
-                FROM TB_HQ_PRODUCT
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND PROD_CD BETWEEN '0000000000001' AND '8000000000000'
-                AND LENGTH(PROD_CD) = 13
+                SELECT  FN_GET_PROD_CD_MAX(#{hqOfficeCd}, '')
+                FROM    DUAL
             </when>
             <!-- 가맹점 (매장 등록 상품의 경우 상품코드가 '9'로 시작) -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <!-- 단독매장 -->
                 <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
-                    SELECT
---                     LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
-                    NVL(MAX(TO_NUMBER(PROD_CD)), 8000000000000) + 1 AS PROD_CD
-                    FROM TB_MS_PRODUCT
-                    WHERE STORE_CD = #{storeCd}
-                    AND PROD_CD BETWEEN '8000000000001' AND '9999999999999'
-                    AND LENGTH(PROD_CD) = 13
+                    SELECT  FN_GET_PROD_CD_MAX(#{storeCd}, '')
+                    FROM    DUAL
                 </if>
                 <!-- 단독매장이 아닐 경우 -->
                 <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
-                    SELECT
---                     '9' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(PROD_CD, 2, 13))),0) + 1, 12, '0') AS PROD_CD
-                    NVL(MAX(TO_NUMBER(PROD_CD)), 8000000000000) + 1 AS PROD_CD
-                    FROM TB_MS_PRODUCT
-                    WHERE STORE_CD = #{storeCd}
-                    --                     AND PROD_CD LIKE '9%'
-                    AND PROD_CD BETWEEN '8000000000001' AND '9999999999999'
-                    AND LENGTH(PROD_CD) = 13
+                    SELECT  FN_GET_PROD_CD_MAX(#{storeCd}, '')
+                    FROM    DUAL
                 </if>
             </when>
         </choose>
