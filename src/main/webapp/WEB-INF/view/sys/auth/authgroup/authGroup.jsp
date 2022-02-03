@@ -122,6 +122,7 @@
     ];
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     grid.isReadOnly  = false;
+    grid.imeEnabled = true;
     var grpNm        = wcombo.genInput("#grpNm");
     var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("067")});
     var availCombo   = wcombo.genCommonBox("#availCombo", ${availAuthGrp});

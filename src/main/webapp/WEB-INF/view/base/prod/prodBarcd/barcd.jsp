@@ -188,7 +188,8 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    ime-enabled="true">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.result"/>" binding="result" width="80" is-read-only="true" align="center" visible = "false"></wj-flex-grid-column>
@@ -225,7 +226,8 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    ime-enabled="true">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="barcd.prodCd"/>" binding="prodCd" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>

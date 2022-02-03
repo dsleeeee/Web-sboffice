@@ -202,7 +202,8 @@
               selection-mode="Row"
               items-source="data"
               item-formatter="_itemFormatter"
-              beginning-edit="changeVendorFg(s,e)">
+              beginning-edit="changeVendorFg(s,e)"
+              ime-enabled="true">
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" width="*" visible="false"></wj-flex-grid-column>
@@ -226,7 +227,8 @@
               selection-mode="Row"
               items-source="data"
               item-formatter="_itemFormatter"
-              beginning-edit="changeVendorFg(s,e)">
+              beginning-edit="changeVendorFg(s,e)"
+              ime-enabled="true">
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>

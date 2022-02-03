@@ -97,7 +97,8 @@
             selection-mode="Row"
             items-source="data"
             is-editable="false"
-            item-formatter="_itemFormatter">
+            item-formatter="_itemFormatter"
+            ime-enabled="true">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
@@ -146,7 +147,8 @@
           selection-mode="Row"
           items-source="data"
           item-formatter="_itemFormatter"
-          sorted-column="toggleFreeze(false)">
+          sorted-column="toggleFreeze(false)"
+          ime-enabled="true">
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cd.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>

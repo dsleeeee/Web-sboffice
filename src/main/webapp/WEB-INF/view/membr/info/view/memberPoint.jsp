@@ -112,7 +112,8 @@
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
-                    initialized="_initComboBox(s)">
+                    initialized="_initComboBox(s)"
+                    ime-enabled="true">
             </wj-combo-box>
         </div>
         <%--조회--%>
@@ -146,7 +147,8 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    frozen-columns="2">
+                    frozen-columns="2"
+                    ime-enabled="true">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="memberPoint.tit.searchResult"/>" binding="memberResult" width="250" is-read-only="true" align="center"></wj-flex-grid-column>

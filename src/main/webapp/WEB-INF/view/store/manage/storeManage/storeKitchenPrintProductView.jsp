@@ -46,7 +46,8 @@
                   selection-mode="Row"
                   items-source="data"
                   item-formatter="_itemFormatter"
-                  is-read-only="true">
+                  is-read-only="true"
+                  ime-enabled="true">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="no" width="40" visible="false"></wj-flex-grid-column>

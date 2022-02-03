@@ -93,7 +93,8 @@
               sticky-headers="true"
               selection-mode="Row"
               items-source="data"
-              item-formatter="_itemFormatter">
+              item-formatter="_itemFormatter"
+              ime-enabled="true">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="hqBrand.hqOfficeCd"/>" binding="hqOfficeCd" width="0" visible="false"></wj-flex-grid-column>

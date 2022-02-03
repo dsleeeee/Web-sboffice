@@ -414,6 +414,7 @@
                                     selection-mode="Row"
                                     items-source="data"
                                     item-formatter="_itemFormatter"
+                                    ime-enabled="true"
                                     id="wjGridSelectProd">
 
                                 <!-- define columns -->
@@ -617,6 +618,7 @@
                                         selection-mode="Row"
                                         items-source="data"
                                         item-formatter="_itemFormatter"
+                                        ime-enabled="true"
                                         id="wjGridSelectPresent">
 
                                     <!-- define columns -->

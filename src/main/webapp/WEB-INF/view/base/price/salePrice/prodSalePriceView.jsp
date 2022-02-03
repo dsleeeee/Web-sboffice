@@ -244,6 +244,7 @@
               selection-mode="Row"
               items-source="data"
               item-formatter="_itemFormatter"
+              ime-enabled="true"
               id="wjGridProdSalePriceArea">
 
         <%--본사마진금액, 본사마진율, 매장마진금액, 매장마진율 visible false 처리 / 추후에 수불 화면 개발 시 재 오픈 : 2019-08-07 이다솜 --%>
