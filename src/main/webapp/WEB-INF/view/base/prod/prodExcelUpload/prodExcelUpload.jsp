@@ -65,7 +65,8 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    ime-enabled="true">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.brandNm"/>" binding="hqBrandCd" data-map="brandDataMap" width="85" align="center" <c:if test="${brandUseFg == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
@@ -140,6 +141,7 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
+                    ime-enabled="true"
                     frozen-columns="2">
 
                     <!-- define columns -->

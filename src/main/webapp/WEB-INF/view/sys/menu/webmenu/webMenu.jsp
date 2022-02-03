@@ -200,6 +200,7 @@
 
     grid2.rowHeaders.columns.splice(0, 1);
     grid2.isReadOnly      = false;
+    grid2.imeEnabled = true;
 
     <%-- 리소스 트리 선택 이벤트 --%>
     function selectItem(selectedItem) {

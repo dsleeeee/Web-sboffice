@@ -66,6 +66,7 @@
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter"
+                            ime-enabled="true"
                             id="wjGridProdClassLevel1">
 
                         <!-- define columns -->
@@ -113,6 +114,7 @@
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter"
+                            ime-enabled="true"
                             id="wjGridProdClassLevel2">
 
                         <!-- define columns -->
@@ -159,6 +161,7 @@
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter"
+                            ime-enabled="true"
                             id="wjGridProdClassLevel3">
 
                         <!-- define columns -->

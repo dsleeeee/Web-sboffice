@@ -162,7 +162,8 @@
                                     sticky-headers="true"
                                     selection-mode="Row"
                                     items-source="data"
-                                    item-formatter="_itemFormatter">
+                                    item-formatter="_itemFormatter"
+                                    ime-enabled="true">
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="prodRecpOrigin.pathNm"/>" binding="pathNm" width="120" is-read-only="true"></wj-flex-grid-column>

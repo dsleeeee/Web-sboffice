@@ -143,6 +143,7 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
+                    ime-enabled="true"
                     id="wjGridEnvConfgBatchChangeStoreList">
 
                 <!-- define columns -->

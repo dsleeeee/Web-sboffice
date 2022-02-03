@@ -65,7 +65,8 @@
                 selection-mode="Row"
                 items-source="data1"
                 item-formatter="_itemFormatter"
-                is-read-only="false">
+                is-read-only="false"
+                ime-enabled="true">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="dayMembrDetail.membrClassCd"/>" binding="comboClass" data-map="memberClassList"
                                      width="145" is-read-only="false" align="center"></wj-flex-grid-column><%-- 콤보리스트 회원등급분류 --%>
@@ -132,7 +133,8 @@
                 selection-mode="Row"
                 items-source="data"
                 item-formatter="_itemFormatter"
-                frozen-columns="2">
+                frozen-columns="2"
+                ime-enabled="true">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" 
                                      width="40" is-read-only="false" align="center"></wj-flex-grid-column>

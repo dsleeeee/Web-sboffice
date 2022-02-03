@@ -36,7 +36,8 @@
                         sticky-headers="true"
                         selection-mode="Row"
                         items-source="data"
-                        item-formatter="_itemFormatter">
+                        item-formatter="_itemFormatter"
+                        ime-enabled="true">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.orgnCd"/>" binding="orgnCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>

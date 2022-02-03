@@ -54,7 +54,8 @@
                   sticky-headers="true"
                   selection-mode="Row"
                   items-source="data"
-                  item-formatter="_itemFormatter">
+                  item-formatter="_itemFormatter"
+                  ime-enabled="true">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
@@ -111,7 +112,8 @@
                 sticky-headers="true"
                 selection-mode="Row"
                 items-source="data"
-                item-formatter="_itemFormatter">
+                item-formatter="_itemFormatter"
+                ime-enabled="true">
 
           <!-- define columns -->
 <%--          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>

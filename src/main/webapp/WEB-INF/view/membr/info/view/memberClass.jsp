@@ -261,7 +261,8 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            ime-enabled="true">
                     <%--                            frozen-columns="2"--%>
                     <%--                            sorted-column="toggleFreeze(false)"--%>
                         <!-- define columns -->

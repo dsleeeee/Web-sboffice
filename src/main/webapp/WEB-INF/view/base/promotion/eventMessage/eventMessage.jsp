@@ -284,6 +284,7 @@
                                     sticky-headers="true"
                                     selection-mode="Row"
                                     items-source="data"
+                                    ime-enabled="true"
                                     item-formatter="_itemFormatter">
 
                                 <!-- define columns -->

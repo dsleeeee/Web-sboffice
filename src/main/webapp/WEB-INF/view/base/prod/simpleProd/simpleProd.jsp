@@ -79,7 +79,8 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    ime-enabled="true">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="simpleProd.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
