@@ -13,9 +13,6 @@
  */
 var app = agrid.getApp();
 
-/**********************************************************************
- *  회원정보 그리드
- **********************************************************************/
 app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('verRegistCtrl', $scope, $http, true));
@@ -91,26 +88,29 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       if($("#file").val() === null || $("#file").val() === undefined || $("#file").val() === "") {
         $scope._popMsg(messages["media.file"] + " " + messages["cmm.require.text"]);
         return;
-      } else {
-        var type = '(.*?)\\.(' + $scope.getFileType().replace(",","|").replace(".","") + ')$';
-        // 확장자 체크
-        var reg = new RegExp(type);
-        if(!$("#file").val().match(reg)) {
-          $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
-          return;
-        }
       }
+      // else {
+      //   var type = '(.*?)\\.(' + $scope.getFileType().replace(",","|").replace(".","") + ')$';
+      //   console.log(type);
+      //   // 확장자 체크
+      //   var reg = new RegExp(type);
+      //   if(!$("#file").val().match(reg)) {
+      //     $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
+      //     return;
+      //   }
+      // }
     } else{ // 수정
       if($("#file").val() === null || $("#file").val() === undefined || $("#file").val() === "") {
-      } else {
-        var type = '(.*?)\\.(' + $scope.getFileType().replace(",","|").replace(".","") + ')$';
-        // 확장자 체크
-        var reg = new RegExp(type);
-        if(!$("#file").val().match(reg)) {
-          $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
-          return;
-        }
       }
+      // else {
+      //   var type = '(.*?)\\.(' + $scope.getFileType().replace(",","|").replace(".","") + ')$';
+      //   // 확장자 체크
+      //   var reg = new RegExp(type);
+      //   if(!$("#file").val().match(reg)) {
+      //     $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
+      //     return;
+      //   }
+      // }
     }
     $scope.chkRegist();
   }

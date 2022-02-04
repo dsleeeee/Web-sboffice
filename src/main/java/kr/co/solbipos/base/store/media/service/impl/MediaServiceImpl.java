@@ -248,7 +248,7 @@ public class MediaServiceImpl implements MediaService {
             mediaVO.setFileType((String)multi.getParameter("fileType"));
 
             String type = mediaMapper.getFileType(mediaVO);     // 확장자|확장자|확장자 를
-            String[] typeList = type.split("\\|");         // |기준으로 잘라서 배열에 넣음
+            String[] typeList = type.split(",");         // |기준으로 잘라서 배열에 넣음
 
             for(int i = 0; i < typeList.length; i++){          // 잘린 확장자 확인
                 if(fileExt.equals(typeList[i].replace(".","")))
