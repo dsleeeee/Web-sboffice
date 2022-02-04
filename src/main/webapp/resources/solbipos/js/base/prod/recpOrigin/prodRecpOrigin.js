@@ -146,6 +146,17 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
 
         }, false);
     };
+
+    $scope.searchProdRecpOrigin2 = function(){
+
+        var params = {};
+        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+        params.chkDt = $scope.isChecked;
+        params.useYn = $scope.useYn;
+        params.recpOriginUseYn = $scope.recpOriginUseYn;
+        $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginList.sb", params, function() {});
+        }
     // <-- //검색 호출 -->
 
     // 상품분류정보 팝업
@@ -376,6 +387,8 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
             var scope = agrid.getScope("prodRecpOriginRegCtrl");
             scope._broadcast('prodRecpOriginRegCtrl', $scope.selectedProd);
         });
+        var scope = agrid.getScope('prodRecpOriginCtrl');
+        scope.searchProdRecpOrigin2();
     };
     // <-- //그리드 행 삭제 -->
 
@@ -455,6 +468,8 @@ app.controller('prodRecpOriginDetailCtrl', ['$scope', '$http', function ($scope,
             var scope = agrid.getScope("prodRecpOriginRegCtrl");
             scope._broadcast('prodRecpOriginRegCtrl', $scope.selectedProd);
         });
+        var scope = agrid.getScope('prodRecpOriginCtrl');
+        scope.searchProdRecpOrigin2();
     };
     // <-- //저장 -->
 
@@ -542,6 +557,8 @@ app.controller('prodRecpOriginRegCtrl', ['$scope', '$http', function ($scope, $h
             // 미등록 재료 조회
             $scope.searchProdRecpOriginReg();
 
+            var scope = agrid.getScope('prodRecpOriginCtrl');
+            scope.searchProdRecpOrigin2();
         });
     };
 
