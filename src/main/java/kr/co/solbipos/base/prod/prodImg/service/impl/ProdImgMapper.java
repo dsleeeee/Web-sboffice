@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.prodImg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
+import kr.co.solbipos.sale.status.prod.day.service.impl.ProdDayMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -52,5 +53,21 @@ public interface ProdImgMapper {
 
     /** 상품이미지관리 - 본사상품이미지 매장적용 */
     int prodImgToStore(ProdImgVO prodImgVO);
+
+    /**  상품이미지관리 - 상품목록조회 */
+    String getProdImgNm(ProdImgVO prodImgVO);
+
+    /** 상품 이미지 저장시 파일여부 체크 */
+    String getProdOrgImgChk(ProdImgVO prodImgVO);
+
+    /** 상품이미지관리 - 상품이미지 등록여부 조회 */
+    int prodImgChk(ProdImgVO prodImgVO);
+
+    /** 상품이미지관리 - 상품이미지 복사 */
+    int prodImgCopy(ProdImgVO prodImgVO);
+    int prodImgCopyAll(ProdImgVO prodImgVO);
+
+    /** 상품이미지관리 - 상품이미지 전체 삭제 */
+    int prodImgDeleteAll(ProdImgVO prodImgVO);
 
 }

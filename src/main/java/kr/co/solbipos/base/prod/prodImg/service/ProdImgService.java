@@ -41,4 +41,10 @@ public interface ProdImgService {
 
     /** 상품이미지관리 - 본사상품이미지 매장적용 */
     int prodImgToStore(ProdImgVO[] prodImgVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품이미지관리 - 상품이미지 복사 */
+    int prodImgCopy(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품이미지관리 - 상품이미지 전체 삭제 */
+    int prodImgDeleteAll(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO);
 }

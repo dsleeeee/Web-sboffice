@@ -491,4 +491,284 @@
                        #{item}
                    </foreach>
     </insert>
+
+    <!-- 이미지 복사 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+          PARAM    : prodImgVO
+          COMMENTS : 이미지 복사
+    -->
+    <insert id="prodImgCopy" parameterType="prodImgVO">
+        /* USE : ProdImgMapper.prodImgCopy */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_IMAGE
+                USING (
+                    SELECT  REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                            IMG_FILE_NM
+                    FROM    TB_HQ_PRODUCT_IMAGE
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     PROD_CD = #{prodCd}
+                    AND     IMG_FG = #{orgImgFg}
+                ) thpi
+                ON (
+                        HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND PROD_CD         = #{prodCd}
+                    AND IMG_FG          = #{imgFg}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET IMG_URL     = thpi.IMG_URL
+                ,   IMG_FILE_NM = thpi.IMG_FILE_NM
+                ,   MOD_DT      = #{modDt}
+                ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT (
+                    HQ_OFFICE_CD
+                ,   PROD_CD
+                ,   IMG_FG
+                ,   IMG_URL
+                ,   IMG_FILE_NM
+                ,   IMG_CHG_DT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                VALUES (
+                    #{hqOfficeCd}
+                ,   #{prodCd}
+                ,   #{imgFg}
+                ,   thpi.IMG_URL
+                ,   thpi.IMG_FILE_NM
+                ,   #{imgChgDt}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_IMAGE
+                USING (
+                    SELECT  REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                            IMG_FILE_NM
+                    FROM    TB_MS_PRODUCT_IMAGE
+                    WHERE   STORE_CD = #{storeCd}
+                    AND     PROD_CD = #{prodCd}
+                    AND     IMG_FG = #{orgImgFg}
+                ) thpi
+                ON (
+                        STORE_CD    = #{storeCd}
+                    AND PROD_CD = #{prodCd}
+                    AND IMG_FG  = #{imgFg}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET IMG_URL     = thpi.IMG_URL
+                ,   IMG_FILE_NM = thpi.IMG_FILE_NM
+                ,   MOD_DT      = #{modDt}
+                ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT  (
+                    STORE_CD
+                ,   PROD_CD
+                ,   IMG_FG
+                ,   IMG_URL
+                ,   IMG_FILE_NM
+                ,   IMG_CHG_DT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                VALUES (
+                    #{storeCd}
+                ,   #{prodCd}
+                ,   #{imgFg}
+                ,   thpi.IMG_URL
+                ,   thpi.IMG_FILE_NM
+                ,   #{imgChgDt}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+
+    <!-- 이미지 전체 복사 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+          PARAM    : prodImgVO
+          COMMENTS : 이미지 전체 복사
+    -->
+    <insert id="prodImgCopyAll" parameterType="prodImgVO">
+        /* USE : ProdImgMapper.prodImgCopyAll */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_IMAGE thpi1
+                USING (
+                SELECT  HQ_OFFICE_CD,
+                        PROD_CD,
+                        REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                        IMG_FILE_NM
+                FROM    TB_HQ_PRODUCT_IMAGE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     IMG_FG = #{orgImgFg}
+                ) thpi2
+                ON (
+                    thpi1.HQ_OFFICE_CD    = thpi2.HQ_OFFICE_CD
+                AND thpi1.PROD_CD         = thpi2.PROD_CD
+                AND thpi1.IMG_FG          = #{imgFg}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET IMG_URL     = thpi2.IMG_URL
+                ,   IMG_FILE_NM = thpi2.IMG_FILE_NM
+                ,   MOD_DT      = #{modDt}
+                ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT (
+                    HQ_OFFICE_CD
+                ,   PROD_CD
+                ,   IMG_FG
+                ,   IMG_URL
+                ,   IMG_FILE_NM
+                ,   IMG_CHG_DT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                VALUES (
+                    thpi2.HQ_OFFICE_CD
+                ,   thpi2.PROD_CD
+                ,   #{imgFg}
+                ,   thpi2.IMG_URL
+                ,   thpi2.IMG_FILE_NM
+                ,   #{imgChgDt}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_IMAGE tmpi1
+                USING (
+                SELECT  STORE_CD,
+                        PROD_CD,
+                        REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                        IMG_FILE_NM
+                FROM    TB_MS_PRODUCT_IMAGE
+                WHERE   STORE_CD = #{storeCd}
+                AND     IMG_FG = #{orgImgFg}
+                ) tmpi2
+                ON (
+                    tmpi1.STORE_CD = tmpi2.STORE_CD
+                AND tmpi1.PROD_CD = tmpi2.PROD_CD
+                AND tmpi1.IMG_FG  = #{imgFg}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET IMG_URL     = tmpi2.IMG_URL
+                ,   IMG_FILE_NM = tmpi2.IMG_FILE_NM
+                ,   MOD_DT      = #{modDt}
+                ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT  (
+                    STORE_CD
+                ,   PROD_CD
+                ,   IMG_FG
+                ,   IMG_URL
+                ,   IMG_FILE_NM
+                ,   IMG_CHG_DT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                VALUES (
+                    tmpi2.STORE_CD
+                ,   tmpi2.PROD_CD
+                ,   #{imgFg}
+                ,   tmpi2.IMG_URL
+                ,   tmpi2.IMG_FILE_NM
+                ,   #{imgChgDt}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 상품이미지관리 - 상품이미지삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        PARAM    : prodImgVO
+        COMMENTS : 상품의 이미지를 삭제한다. ( 본사/매장 )
+    -->
+    <delete id="prodImgDeleteAll" parameterType="prodImgVO">
+        /* ProdImgMapper.prodImgDeleteAll */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_PRODUCT_IMAGE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </delete>
+
+
+    <!-- 상품이미지관리 - 전체복사 기존 이미지 정보 리스트 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+          PARAM    : prodImgVO
+          COMMENTS : 이미지매장적용 전체복사 기존 이미지 정보 리스트
+    -->
+    <select id="getProdImgNm" parameterType="prodImgVO" resultType="String">
+        /* ProdImgMapper.getProdImgNm */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_HQ_PRODUCT_IMAGE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     IMG_FG = #{orgImgFg}
+                AND     PROD_CD  = #{prodCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_MS_PRODUCT_IMAGE
+                WHERE   STORE_CD = #{storeCd}
+                AND     IMG_FG = #{orgImgFg}
+                AND     PROD_CD  = #{prodCd}
+            </when>
+        </choose>
+    </select>
 </mapper>

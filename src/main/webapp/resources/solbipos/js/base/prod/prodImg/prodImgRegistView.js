@@ -92,6 +92,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 상품이미지 영역 숨기기
         $("#imgTbl").css("display", "none");
+        $("#btnCopy").css("display", "none");
 
         //상품코드, 이름 초기화
         $("#prodInfo").text("");
@@ -126,11 +127,36 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.srchEndDate.isReadOnly = $scope.isChecked;
     };
 
+    // 상품이미지 복사
+    $scope.copy = function (data){
+        if($scope.password == "SB20220126"){
+            $scope.prodImgCopyLayer.show();
+            $scope._broadcast('prodImgCopyCtrl', data);
+        }
+    }
+    // 상품이미지 전체삭제
+    $scope.deleteAll = function (data){
+        if($scope.password == "SB20220126"){
+            $scope.prodImgDeleteLayer.show();
+        }
+    }
+    $scope.btnshow = function (){
+
+        if($scope.password == "SB20220126"){
+            $("#btn1").show();
+            $("#btn2").show();
+        } else {
+            $("#btn1").hide();
+            $("#btn2").hide();
+        }
+    }
+
     // 상품 이미지 조회
     $scope.getProdImg = function(prodCd, prodNm){
 
         // 상품을 클릭하면 상품이미지등록이 보이도록
         $("#imgTbl").css("display", "");
+        $("#btnCopy").css("display", "");
 
         //상품코드, 이름 셋팅
         $("#prodInfo").text("[" + prodCd + "] " + prodNm);

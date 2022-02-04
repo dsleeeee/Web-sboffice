@@ -282,4 +282,123 @@ public class ProdImgServiceImpl implements ProdImgService {
         return result;
     }
 
+    /** 상품이미지관리 - 이미지 복사 */
+    @Override
+    public int prodImgCopy(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        String dt = currentDateTimeString();
+
+        prodImgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodImgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodImgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        prodImgVO.setImgChgDt(dt);
+        prodImgVO.setRegDt(dt);
+        prodImgVO.setRegId(sessionInfoVO.getUserId());
+        prodImgVO.setModDt(dt);
+        prodImgVO.setModId(sessionInfoVO.getUserId());
+
+        // 저장 경로 설정
+        String path_folder = "";
+
+        // 접속권한에 따른 등록자정보 및 경로 셋팅
+        // 첨부파일 업로드 시, sessionInfoVO에 있는 orgnFg 값을 제대로 읽어오지 못하는 현상때문에 해당 방식 사용.
+        if(String.valueOf(prodImgVO.getOrgnFg()).equals("H")) {
+            path_folder = prodImgVO.getHqOfficeCd();
+
+        } else if(String.valueOf(prodImgVO.getOrgnFg()).equals("S")) {
+            path_folder = prodImgVO.getStoreCd();
+        }
+
+        String pre_path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/";
+        String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/" + prodImgVO.getImgFg() + "/";
+        String orgPath = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/" + prodImgVO.getOrgImgFg() + "/";
+
+        // 개발시 로컬 경로
+//        String pre_path = "D:\\prod_img\\" + path_folder + "/";
+//        String path = "D:\\prod_img\\" + path_folder + "/" + prodImgVO.getImgFg() + "/";
+//        String orgPath = "D:\\prod_img\\" + path_folder + "/" + prodImgVO.getOrgImgFg() + "/";
+
+        // 서버 저장 위치에 해당 폴더가 존재하는지 확인 후 없으면 폴더 생성
+        // 부모-자식 폴더 동시에 생성 불가하기 때문에 pre_path 폴더 생성 후 path 폴더 생성
+        File pre_dir = new File(pre_path);
+        if(!pre_dir.isDirectory()){
+            pre_dir.mkdir();
+        }
+        File dir = new File(path);
+        if(!dir.isDirectory()){
+            dir.mkdir();
+        }
+        File org_dir = new File(orgPath);
+        if(!org_dir.isDirectory()){
+            org_dir.mkdir();
+        }
+
+        if(prodImgVO.getGubun().equals("A")){   // 전체복사
+            // 서버 파일 업로드
+            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -f " + orgPath + "* " + path);
+            try {
+                Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + "* " + path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            result = prodImgMapper.prodImgCopyAll(prodImgVO);
+        } else if(prodImgVO.getGubun().equals("I")) {   // 단일복사
+            String orgFileNm = prodImgMapper.getProdImgNm(prodImgVO);
+
+            if(orgFileNm != null){
+
+                System.out.println("단일복사 명령어 : " + "/usr/bin/cp -f " + orgPath + orgFileNm + " " + path);
+
+                // 서버 파일 업로드
+                try {
+                    Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + orgFileNm + " " + path);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            result = prodImgMapper.prodImgCopy(prodImgVO);
+        }
+
+        return result;
+    }
+
+    @Override
+    public int prodImgDeleteAll(ProdImgVO prodImgVO, SessionInfoVO sessionInfoVO) {
+
+        prodImgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodImgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodImgVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        // 저장 경로 설정
+        String path_folder = "";
+
+        // 접속권한에 따른 등록자정보 및 경로 셋팅
+        // 첨부파일 업로드 시, sessionInfoVO에 있는 orgnFg 값을 제대로 읽어오지 못하는 현상때문에 해당 방식 사용.
+        if(String.valueOf(prodImgVO.getOrgnFg()).equals("H")) {
+            path_folder = prodImgVO.getHqOfficeCd();
+
+        } else if(String.valueOf(prodImgVO.getOrgnFg()).equals("S")) {
+            path_folder = prodImgVO.getStoreCd();
+        }
+
+        // 서버 저장 경로 (imgFg -> 001: 기본이미지, 002: KIOSK이미지, 003: DID이미지)
+        // 서버용 - 개발/운영 서버에 반영할 진짜 경로!!!!!!
+        String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/" + prodImgVO.getImgFg() + "/";
+
+        // 개발시 로컬 경로
+//        String path = "D:\\prod_img\\" + path_folder + "/" + prodImgVO.getImgFg() + "/";
+
+        System.out.println("전체삭제 명령어 : " + "/usr/bin/rm -rf " + path);
+
+        try {
+            Runtime.getRuntime().exec("/usr/bin/rm -rf " + path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return prodImgMapper.prodImgDeleteAll(prodImgVO);
+    }
 }

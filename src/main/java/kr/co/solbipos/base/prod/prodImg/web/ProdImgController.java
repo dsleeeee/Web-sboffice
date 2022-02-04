@@ -198,5 +198,45 @@ public class ProdImgController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 상품이미지관리 -  상품이미지 복사
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2022.01.13
+     * @return
+     */
+    @RequestMapping(value = "/prodImg/prodImgCopy.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result prodImgCopy(ProdImgVO prodImgVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = prodImgService.prodImgCopy(prodImgVO, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
+    /**
+     * 상품이미지관리 -  상품이미지 복사
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 권지현
+     * @since 2022.01.13
+     * @return
+     */
+    @RequestMapping(value = "/prodImg/prodImgDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result prodImgDeleteAll(ProdImgVO prodImgVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = prodImgService.prodImgDeleteAll(prodImgVO, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
 
 }

@@ -32,12 +32,16 @@ public class ProdImgVO extends PageVO {
     private String barCd;
     /** 사용여부 */
     private String useYn;
+    /** 이미지 구분(복사원본) */
+    private String orgImgFg;
     /** 이미지 구분 */
     private String imgFg;
     /** 이미지 URL */
     private String imgUrl;
     /** 이미지 파일명 */
     private String imgFileNm;
+    /** 이미지 파일명 */
+    private String orgImgFileNm;
     /** 이미지 변경일시 */
     private String imgChgDt;
     /** 비고 */
@@ -52,7 +56,8 @@ public class ProdImgVO extends PageVO {
     private String sysStatFg;
     /** 이미지구분 array */
     private String arrImgFg[];
-
+    /** 복사구분 */
+    private String gubun;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -158,6 +163,14 @@ public class ProdImgVO extends PageVO {
         this.imgFileNm = imgFileNm;
     }
 
+    public String getOrgImgFileNm() {
+        return orgImgFileNm;
+    }
+
+    public void setOrgImgFileNm(String orgImgFileNm) {
+        this.orgImgFileNm = orgImgFileNm;
+    }
+
     public String getImgChgDt() {
         return imgChgDt;
     }
@@ -212,5 +225,21 @@ public class ProdImgVO extends PageVO {
 
     public void setArrImgFg(String[] arrImgFg) {
         this.arrImgFg = arrImgFg;
+    }
+
+    public String getOrgImgFg() {
+        return orgImgFg;
+    }
+
+    public void setOrgImgFg(String orgImgFg) {
+        this.orgImgFg = orgImgFg;
+    }
+
+    public String getGubun() {
+        return gubun;
+    }
+
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
     }
 }
