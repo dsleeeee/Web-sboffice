@@ -48,7 +48,7 @@
 						END AS SEL_TYPE_FG,
 						tmp.PROD_NM,
 						CASE tsdp.SEL_TYPE_FG
-							WHEN 'S' THEN 'ㅤㅤ - ▶ ' || tmps.PROD_NM
+							WHEN 'S' THEN 'ㅤ- ▶ ' || tmps.PROD_NM
 						ELSE tmps.PROD_NM
 						END AS SIDE_PROD_NM,
 						tmpb.BARCD_CD,
@@ -129,7 +129,7 @@
 		END AS SEL_TYPE_FG,
 		tmp.PROD_NM,
 		CASE tsdp.SEL_TYPE_FG
-		WHEN 'S' THEN 'ㅤㅤ - ▶ ' || tmps.PROD_NM
+		WHEN 'S' THEN 'ㅤ- ▶ ' || tmps.PROD_NM
 		ELSE tmps.PROD_NM
 		END AS SIDE_PROD_NM,
 		tmpb.BARCD_CD,
