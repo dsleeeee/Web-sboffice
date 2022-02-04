@@ -110,6 +110,7 @@
 				    	  <label for="btnSingleTableAddLayer" class="btnTableAdd"><input type="checkbox" class="wj-cell-check" id="btnSingleTableAddLayer">단건등록</label>
 	                  <button class="btn_skyblue fl ml5" id="btnSaveLayout"><s:message code="cmm.save" /></button>
 					  <button class="btn_skyblue fl ml5" id="btnInitLayout2">전체삭제</button>
+					  <button class="btn_skyblue fl ml5" id="btnDelLayout">테이블 삭제</button>
 	              </div>
 	          </div>
 	         </div>

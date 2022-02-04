@@ -1124,9 +1124,33 @@ FormatLayout.prototype.initElements = function() {
         format.open(false);
     });
 
-    // 초기화 버튼2
+    // 전체삭제 버튼
     addClickHandler(document.getElementById('btnInitLayout2'), function() {
         format.initLayout(false);
+    });
+
+    // 삭제 버튼
+    addClickHandler(document.getElementById('btnDelLayout'), function() {
+        graph.escape();
+        var cells = graph.getDeletableCells(graph.getSelectionCells());
+
+        if (cells != null && cells.length > 0) {
+            var parents = graph.model.getParents(cells);
+            graph.removeCells(cells);
+
+            // Selects parents for easier editing of groups
+            if (parents != null) {
+                var select = [];
+                for (var i = 0; i < parents.length; i++) {
+                    if (graph.model.contains(parents[i]) && graph.model.isVertex(parents[i])) {
+                        select.push(parents[i]);
+                    }
+                }
+                graph.setSelectionCells(select);
+            }
+        } else {
+            alert("삭제 할 테이블을 선택해주세요.");
+        }
     });
 
     // 저장 버튼
