@@ -8,7 +8,7 @@
   <div class="layer_inner">
     <div class="title w80">
       <p id="popTitle" class="tit"></p>
-      <a href="#" class="btn_close"></a>
+      <a href="#" class="btn_close" id="envClose"></a>
       <div class="con">
         <div class="tabType1">
           <ul>
@@ -39,6 +39,19 @@
       </div>
     </div>
   </div>
+
+  <div id="divDimmed" class="fullDimmed" style="display: none;"></div>
+  <div id="divPopup" class="layer" style="display: none;">
+
+    <div class="layer_inner" >
+      <div class="title w500px">
+        <p id="envTitle" class="tit"></p>
+        <a href="#" class="btn_close" id="envRemarkClose"></a>
+        <div class="con" id="envRemark">
+        </div>
+      </div>
+    </div>
+    </div>
 </div>
 
 <script>
@@ -113,8 +126,14 @@ function getConfigList(){
 
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
 
-            envHtml += "      <th>" + list[j].envstCd + (list[j].existFg === "N" ? "<em><span style=\"color:#ff0000;\">*</span></em> " : "") + '</th>';
-            envHtml += "      <td>" + list[j].envstNm + "</td>";
+            if(list[j].remark !== null && list[j].remark !== "" && list[j].remark !== undefined){
+              console.log(list[j].envstCd + " : " + list[j].remark);
+              envHtml += '  <th style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\')\">' + list[j].envstCd + (list[j].existFg === "N" ? " <em class=\"imp\">*</em> " : "") + '</a></th>';
+              envHtml += '  <td style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\')\">' + list[j].envstNm + '</a></td>';
+            } else {
+              envHtml += "      <th>" + list[j].envstCd + (list[j].existFg === "N" ? "<em><span style=\"color:#ff0000;\">*</span></em> " : "") + '</th>';
+              envHtml += "      <td>" + list[j].envstNm + "</td>";
+            }
             envHtml += "      <td>";
 
             if(list[j].dirctInYn == "Y"){
@@ -123,14 +142,15 @@ function getConfigList(){
               envHtml += "        <select class='sb-select' name='envstValCd' id='env" + list[j].envstCd + "' />";
             }
 
-            envHtml += "        <input type='hidden' name='status'    value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";
-            envHtml += "        <input type='hidden' name='envstCd'   value='"+ list[j].envstCd +"'>";
-            envHtml += "        <input type='hidden' name='envstNm'   value='"+ list[j].envstNm +"'>";
-            envHtml += "        <input type='hidden' name='envstGrpCd'value='"+ list[j].envstGrpCd +"'>";
-            envHtml += "        <input type='hidden' name='defltYn'   value='"+ list[j].defltYn +"'>";
-            envHtml += "        <input type='hidden' name='dirctInYn' value='"+ list[j].dirctInYn +"'>";
-            envHtml += "        <input type='hidden' name='oldEnvstVal' value='"+ list[j].selEnvstVal +"'>";
-            envHtml += "        <input type='hidden' name='targtFg'   value='"+ list[j].targtFg +"'>";
+            envHtml += "        <input type='hidden' name='status'      id='status"+ list[j].envstCd      + "' value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";
+            envHtml += "        <input type='hidden' name='envstCd'     id='envstCd"+ list[j].envstCd     + "' value='"+ list[j].envstCd +"'>";
+            envHtml += "        <input type='hidden' name='envstNm'     id='envstNm"+ list[j].envstCd     + "' value='"+ list[j].envstNm +"'>";
+            envHtml += "        <input type='hidden' name='envstGrpCd'  id='envstGrpCd"+ list[j].envstCd  + "' value='"+ list[j].envstGrpCd +"'>";
+            envHtml += "        <input type='hidden' name='defltYn'     id='defltYn"+ list[j].envstCd     + "' value='"+ list[j].defltYn +"'>";
+            envHtml += "        <input type='hidden' name='dirctInYn'   id='dirctInYn"+ list[j].envstCd   + "' value='"+ list[j].dirctInYn +"'>";
+            envHtml += "        <input type='hidden' name='oldEnvstVal' id='oldEnvstVal"+ list[j].envstCd + "' value='"+ list[j].selEnvstVal +"'>";
+            envHtml += "        <input type='hidden' name='targtFg'     id='targtFg"+ list[j].envstCd     + "' value='"+ list[j].targtFg +"'>";
+            envHtml += "        <input type='hidden' name='remark'      id='remark"+ list[j].envstCd      + "' value='"+ list[j].remark +"'>";
             envHtml += "      </td>";
 
             envSub = list[j].envstCd;
@@ -222,6 +242,24 @@ function getConfigList(){
       s_alert.pop(msg);
     }
   });
+}
+
+// 매장환경설정 비고설명 팝업
+function envRemarkPop(envstCd) {
+
+  var params    = {};
+  params.envstCd = $("#" + "envstCd" + envstCd).val();
+  params.envstNm = $("#" + "envstNm" + envstCd).val();
+  params.remark = $("#" + "remark" + envstCd).val();
+
+  // 선택한 환경설정코드 및 명칭 셋팅
+  $("#envTitle").text("[" + params.envstCd + "] " + params.envstNm);
+  // 환경설정 설명
+  $("#envRemark").html(params.remark);
+
+  $("#divDimmed").css('display', '');
+  $("#divPopup").css('display', '');
+
 }
 
 <%-- 저장 버튼 클릭 --%>
@@ -362,10 +400,17 @@ function showEnvSet(){
 }
 
 <%-- 환경설정 화면 닫기 --%>
-$("#envLayer .btn_close").click(function(){
+$("#envLayer #envClose").click(function(){
 
   $("#srchConfig").val('');
   hideEnvSet();
+});
+
+// 설명 팝업 닫기
+$("#envLayer #divPopup #envRemarkClose").click(function(){
+
+  $("#divDimmed").hide();
+  $("#divPopup").hide();
 });
 
 function hideEnvSet(){
