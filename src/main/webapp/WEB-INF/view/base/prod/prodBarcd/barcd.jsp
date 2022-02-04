@@ -189,7 +189,8 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    ime-enabled="true">
+                    ime-enabled="true"
+                    id="wjGridProdBarcd">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.result"/>" binding="result" width="80" is-read-only="true" align="center" visible = "false"></wj-flex-grid-column>
@@ -245,7 +246,7 @@
     var hqOfficeCd = '${hqOfficeCd}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.08" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prodBarcd/prodDetailView.jsp">

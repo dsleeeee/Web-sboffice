@@ -128,7 +128,20 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain("/base/prod/prodBarcd/list.sb", params);
+    $scope._inquiryMain("/base/prod/prodBarcd/list.sb", params, function (){
+
+      var grid = wijmo.Control.getControl("#wjGridProdBarcd");
+      var rows = grid.rows;
+
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        var item = $scope.flex.collectionView.items[i];
+
+        if(item.regFg === "H" && orgnFg === "STORE" && hqOfficeCd !== '00000'){
+          item.gChk = false;
+          rows[i].isReadOnly = true;
+        }
+      }
+    });
   };
 
   // 엑셀업로드 조회
