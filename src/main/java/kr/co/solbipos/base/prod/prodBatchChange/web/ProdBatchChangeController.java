@@ -61,11 +61,11 @@ public class ProdBatchChangeController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // (상품관리)브랜드사용여부
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
-        }else{
-            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
-        }
+//        }else{
+//            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+//        }
 
         // 브랜드조회(콤보박스용)
         StoreTypeVO storeTypeVO = new StoreTypeVO();

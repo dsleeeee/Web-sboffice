@@ -108,11 +108,11 @@ public class StoreSideMenuController {
         }
 
         // (상품관리)브랜드사용여부
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
-        }else{
-            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
-        }
+//        }else{
+//            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+//        }
 
         // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
         if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) { // 본사는 해당옵션의 제약X

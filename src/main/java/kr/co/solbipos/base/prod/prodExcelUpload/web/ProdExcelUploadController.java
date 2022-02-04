@@ -133,11 +133,11 @@ public class ProdExcelUploadController {
         }
 
         // (상품관리)브랜드사용여부
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
-        }else{
-            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
-        }
+//        }else{
+//            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+//        }
 
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
