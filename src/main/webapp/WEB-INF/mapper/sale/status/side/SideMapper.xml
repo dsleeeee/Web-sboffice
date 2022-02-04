@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    SideMapper.xml
+    상품별(사이드) 매출조회 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.01.21     신규생성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.side.service.impl.SideMapper">
+
+	<!-- 분류상품별 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : sideVO
+        COMMENTS : 분류상품별 매출을 조회한다.
+    -->
+	<select id="sideProdClass" parameterType="sideVO" resultType="DefaultMap">
+		/* USE : SideMapper.sideProdClass */
+		<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT
+				PATH,
+				PATH_NM,
+				PROD_CD,
+				PROD_NM,
+				SIDE_PROD_CD,
+				SIDE_PROD_NM,
+				SEL_TYPE_FG,
+				BARCD_CD,
+				SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+				SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+				SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+				SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+				<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM
+				(
+				SELECT	FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH, --CD_STR
+						FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+						tsdp.PROD_CD,
+						CASE tsdp.SEL_TYPE_FG
+							WHEN 'S' THEN tsdp.SIDE_PROD_CD
+						END AS SIDE_PROD_CD,
+						CASE tsdp.SEL_TYPE_FG
+							WHEN 'P' THEN '사이드모상품'
+							WHEN 'S' THEN '사이드상품'
+							WHEN 'N' THEN '일반판매상품'
+						END AS SEL_TYPE_FG,
+						tmp.PROD_NM,
+						CASE tsdp.SEL_TYPE_FG
+							WHEN 'S' THEN 'ㅤㅤ - ▶ ' || tmps.PROD_NM
+						ELSE tmps.PROD_NM
+						END AS SIDE_PROD_NM,
+						tmpb.BARCD_CD,
+						SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+						SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+						SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+						SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+				FROM 	TB_SL_DAILY_PROD_SDSEL tsdp,
+						TB_MS_PRODUCT tmp,
+						TB_MS_PRODUCT tmps,
+						TB_MS_PRODUCT_BARCD tmpb
+				WHERE 	1=1
+				AND 	tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+				<if test='storeCd != null and storeCd != ""'>
+					AND tsdp.STORE_CD IN
+					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+				<if test="prodCd != null and prodCd != ''">
+					AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+				</if>
+				<if test="prodNm != null and prodNm != ''">
+					AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+				</if>
+				AND 	tmp.STORE_CD = tsdp.STORE_CD
+				AND 	tmp.PROD_CD = tsdp.PROD_CD
+				AND 	tmps.STORE_CD = tsdp.STORE_CD
+				AND 	tmps.PROD_CD = tsdp.SIDE_PROD_CD
+				AND 	tmpb.STORE_CD (+)= tmps.STORE_CD
+				AND 	tmpb.PROD_CD (+)= tmps.PROD_CD
+				GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SIDE_PROD_CD, tmps.PROD_NM, tsdp.SEL_TYPE_FG
+				)
+				WHERE 1=1
+				<if test="prodClassCd != null and prodClassCd != ''">
+					AND PATH LIKE '%'|| #{prodClassCd} ||'%'
+				</if>
+				GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM, SIDE_PROD_CD, SIDE_PROD_NM, SEL_TYPE_FG
+				ORDER BY PROD_CD, SEL_TYPE_FG
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+	</select>
+
+
+	<!-- 분류상품별_엑셀다운로드 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : sideVO
+        COMMENTS : 분류상품별 매출을 조회한다.
+    -->
+	<select id="sideProdClassExcel" parameterType="sideVO" resultType="DefaultMap">
+		/* USE : SideMapper.sideProdClassExcel */
+		SELECT
+		PATH,
+		PATH_NM,
+		PROD_CD,
+		PROD_NM,
+		SIDE_PROD_CD,
+		SIDE_PROD_NM,
+		SEL_TYPE_FG,
+		BARCD_CD,
+		SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+		SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+		FROM
+		(
+		SELECT	FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH, --CD_STR
+		FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+		tsdp.PROD_CD,
+		CASE tsdp.SEL_TYPE_FG
+		WHEN 'S' THEN tsdp.SIDE_PROD_CD
+		END AS SIDE_PROD_CD,
+		CASE tsdp.SEL_TYPE_FG
+		WHEN 'P' THEN '사이드모상품'
+		WHEN 'S' THEN '사이드상품'
+		WHEN 'N' THEN '일반판매상품'
+		END AS SEL_TYPE_FG,
+		tmp.PROD_NM,
+		CASE tsdp.SEL_TYPE_FG
+		WHEN 'S' THEN 'ㅤㅤ - ▶ ' || tmps.PROD_NM
+		ELSE tmps.PROD_NM
+		END AS SIDE_PROD_NM,
+		tmpb.BARCD_CD,
+		SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+		SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+		SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+		SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+		FROM 	TB_SL_DAILY_PROD_SDSEL tsdp,
+		TB_MS_PRODUCT tmp,
+		TB_MS_PRODUCT tmps,
+		TB_MS_PRODUCT_BARCD tmpb
+		WHERE 	1=1
+		AND 	tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND tsdp.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		<if test="prodCd != null and prodCd != ''">
+			AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+		</if>
+		<if test="prodNm != null and prodNm != ''">
+			AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+		</if>
+		AND 	tmp.STORE_CD = tsdp.STORE_CD
+		AND 	tmp.PROD_CD = tsdp.PROD_CD
+		AND 	tmps.STORE_CD = tsdp.STORE_CD
+		AND 	tmps.PROD_CD = tsdp.SIDE_PROD_CD
+		AND 	tmpb.STORE_CD (+)= tmps.STORE_CD
+		AND 	tmpb.PROD_CD (+)= tmps.PROD_CD
+		GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SIDE_PROD_CD, tmps.PROD_NM, tsdp.SEL_TYPE_FG
+		)
+		WHERE 1=1
+		<if test="prodClassCd != null and prodClassCd != ''">
+			AND PATH LIKE '%'|| #{prodClassCd} ||'%'
+		</if>
+		GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM, SIDE_PROD_CD, SIDE_PROD_NM, SEL_TYPE_FG
+		ORDER BY PROD_CD, SEL_TYPE_FG
+	</select>
+
+</mapper>
