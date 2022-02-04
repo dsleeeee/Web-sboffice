@@ -145,7 +145,8 @@ public class TerminalManageController {
         List<DefaultMap<String>> posList = null;
         List<DefaultMap<String>> cornerList = null;
 
-        TerminalEnvFg envstVal = TerminalEnvFg.getEnum(service.getTerminalEnv(storeEnvVO));
+//        TerminalEnvFg envstVal = TerminalEnvFg.getEnum(service.getTerminalEnv(storeEnvVO));
+        TerminalEnvFg envstVal = TerminalEnvFg.getEnum("3");
 
         // 포스 목록 조회
         StorePosVO storePosVO = new StorePosVO();

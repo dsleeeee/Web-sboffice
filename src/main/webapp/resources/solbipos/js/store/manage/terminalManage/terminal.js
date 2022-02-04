@@ -167,7 +167,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.posFgArr = [];
     $scope.cornerFgArr = [];
 
-    $scope.posFgArr.push({value:"", name:"POS 선택"});
+    // $scope.posFgArr.push({value:"", name:"POS 선택"});
     $scope.cornerFgArr.push({value:"", name:"코너 선택"})
   };
 
