@@ -81,6 +81,9 @@
                 <if test="prodNm != null and prodNm != ''">
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND thp.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
+                </if>
                 ORDER BY thpc.PROD_CLASS_CD, thp.PROD_CD
             </when>
             <!-- 매장 -->
@@ -136,6 +139,9 @@
                 </if>
                 <if test="prodNm != null and prodNm != ''">
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND tmp.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
                 </if>
                 ORDER BY tmpc.PROD_CLASS_CD, tmp.PROD_CD
             </when>
@@ -406,30 +412,30 @@
                         )
                 WHEN MATCHED THEN
                 UPDATE
-                SET     A.XML       =   #{xml:CLOB}
-                ,       A.USE_YN    =   #{useYn}
+                SET     A.USE_YN    =   #{useYn}
                 ,       A.MOD_DT    =   #{regDt}
                 ,       A.MOD_ID    =   #{regId}
+                ,       A.XML       =   #{xml:CLOB}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
                         A.HQ_OFFICE_CD
                 ,       A.CONFG_FG
-                ,       A.XML
                 ,       A.USE_YN
                 ,       A.REG_DT
                 ,       A.REG_ID
                 ,       A.GRP_CD
+                ,       A.XML
                 )
                 VALUES
                 (
                         #{hqOfficeCd}
                 ,       #{confgFg}
-                ,       #{xml:CLOB}
                 ,       #{useYn}
                 ,       #{regDt}
                 ,       #{regId}
                 ,       #{tukeyGrpCd}
+                ,       #{xml:CLOB}
                 )
             </when>
             <!-- 매장 -->
@@ -443,30 +449,30 @@
                         )
                 WHEN MATCHED THEN
                 UPDATE
-                SET     A.XML       =   #{xml:CLOB}
-                ,       A.USE_YN    =   #{useYn}
+                SET     A.USE_YN    =   #{useYn}
                 ,       A.MOD_DT    =   #{regDt}
                 ,       A.MOD_ID    =   #{regId}
+                ,       A.XML       =   #{xml:CLOB}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
                         A.STORE_CD
                 ,       A.CONFG_FG
-                ,       A.XML
                 ,       A.USE_YN
                 ,       A.REG_DT
                 ,       A.REG_ID
                 ,       A.GRP_CD
+                ,       A.XML
                 )
                 VALUES
                 (
                         #{storeCd}
                 ,       #{confgFg}
-                ,       #{xml:CLOB}
                 ,       #{useYn}
                 ,       #{regDt}
                 ,       #{regId}
                 ,       #{tukeyGrpCd}
+                ,       #{xml:CLOB}
                 )
             </when>
         </choose>
@@ -1048,6 +1054,9 @@
                         thp.SALE_PROD_YN = 'N'     -- 상품 '판매상품여부'  - '미판매상품' 인 경우
                         OR  thp.USE_YN   = 'N'     -- 상품 '사용여부'      - '미사용' 인 경우
                        )
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND thp.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
+                </if>
                  ORDER BY TUKEY_CLASS_CD
             </when>
             <!-- 매장 -->
@@ -1096,6 +1105,9 @@
                         tmp.SALE_PROD_YN = 'N'     -- 상품 '판매상품여부'  - '미판매상품' 인 경우
                         OR  tmp.USE_YN   = 'N'     -- 상품 '사용여부'      - '미사용' 인 경우
                        )
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND tmp.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
+                </if>
                  ORDER BY TUKEY_CLASS_CD
             </when>
         </choose>

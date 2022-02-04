@@ -116,8 +116,13 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
   // 버튼사용여부 필터 콤보
   $scope._setComboData("touchKeyFilterCombo", touchKeyFilterData);
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("srchBrandCombo", brandList);
   $scope.setTouchKeyFilter = function(s) {
     $scope.updateFilter('touchKeyUsed', s.selectedValue);
+  };
+  $scope.selectedBrand = function(s) {
+    $scope._broadcast('touchKeyCtrl');
   };
   // 상품목록 그리드 조회
   $scope.$on("touchKeyCtrl", function(event, data) {
@@ -125,6 +130,8 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.prodClassCd = $scope.getProdClassInfo().prodClassCd;
     params.prodNm = $scope.getProdClassInfo().prodNm;
+    params.hqBrandCd = $scope.hqBrandCd;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub("/base/prod/touchKey/touchKey/list.sb", params, function() {
       // 조회내용 없을 경우 팝업메시지 별도 처리
@@ -152,6 +159,8 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     if($scope.touchKeyGrp != null && $scope.touchKeyGrp != "" && $("#touchKeyView").is(":visible")){
       var params = {};
       params.tukeyGrpCd = $scope.touchKeyGrp;
+      params.hqBrandCd = $scope.hqBrandCd;
+
       $.postJSON("/base/prod/touchKey/touchKey/noTouchKey.sb", params, function(result) {
             if(result.data.list.length != 0){ // 터치키미적용상품이 없으면 팝업창을 안띄움
               $scope._broadcast('showPopUpNoTouchKey', $scope.touchKeyGrp);

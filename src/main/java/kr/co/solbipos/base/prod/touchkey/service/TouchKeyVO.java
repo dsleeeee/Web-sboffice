@@ -92,6 +92,9 @@ public class TouchKeyVO extends CmmVO {
     /** 복사기준 터치키 그룹코드 */
     private String copyTukeyGrpCd;
 
+    /** 브랜드 코드 */
+    private String hqBrandCd;
+
     /**
      * @return the orgnFg
      */
@@ -413,5 +416,13 @@ public class TouchKeyVO extends CmmVO {
 
     public void setCopyTukeyGrpCd(String copyTukeyGrpCd) {
         this.copyTukeyGrpCd = copyTukeyGrpCd;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
     }
 }

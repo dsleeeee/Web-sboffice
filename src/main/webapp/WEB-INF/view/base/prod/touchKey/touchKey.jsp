@@ -8,6 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="touchKeyEnvstVal" value="${touchKeyEnvstVal}" />
 <c:set var="touchKeyGrp" value="${touchKeyGrp}" />
+<c:set var="brandUseFg" value="${brandUseFg}" />
 
 <%--서브컨텐츠--%>
 <div class="subCon" ng-controller="touchKeyCtrl" id="touchKeyView">
@@ -99,6 +100,24 @@
                         </wj-combo-box>
                     </div>
                 </div>
+                <%-- 브랜드 --%>
+                <c:if test="${brandUseFg == '1'}">
+                <div class="updownSet">
+                    <span class="fl bk lh30 s14 ml5"><s:message code="touchKey.brand" /> :</span>
+                    <div class="sb-select dkbr fl w85px ml5">
+                        <wj-combo-box
+                                id="srchBrandCombo"
+                                ng-model="hqBrandCd"
+                                items-source="_getComboData('srchBrandCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                selected-index-changed="selectedBrand(s)">
+                        </wj-combo-box>
+                    </div>
+                </div>
+                </c:if>
                 <div class="updownSet mt5">
                     <%--<span class="fl bk lh30 s14 ml5"><s:message code="touchKey.class"/> :</span>--%>
                     <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input fl w70 ml5" style="font-size: 13px;"
@@ -115,7 +134,12 @@
                 </div>
             </div>
             <%--위즈모 테이블--%>
-            <div class="cfgWrap2" style="height:461px;">
+            <c:if test="${brandUseFg == '0'}">
+                <div class="cfgWrap2" style="height:461px;">
+            </c:if>
+            <c:if test="${brandUseFg == '1'}">
+                <div class="cfgWrap2" style="height:446px;">
+            </c:if>
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -129,11 +153,11 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="touchKey.grid.touchKeyUsed"/>"
-                                         binding="touchKeyUsed" width="50"></wj-flex-grid-column>
+                                         binding="touchKeyUsed" width="38"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodNm"/>" binding="prodNm" width="200"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.grid.prodCd"/>" binding="prodCd"
                                          width="100" visible="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodNm"/>" binding="prodNm"
-                                         width="200"></wj-flex-grid-column>
+
                     <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClass"/>"
                                          binding="prodClassCd"
                                          visible="false"></wj-flex-grid-column>
@@ -280,6 +304,8 @@
 <%--//서브컨텐츠--%>
 
 <script>
+    // 브랜드
+    var brandList = ${brandList};
     var touchKeyGrpData = ${touchKeyGrp};
 
     // 기존 터치키 그룹이 있을 떄/ 없을 때 버튼, selectBox 설정
@@ -360,7 +386,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.011"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20210428.012"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

@@ -11,10 +11,13 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,15 +63,17 @@ public class TouchKeyController {
 
     private final SessionService sessionService;
     private final TouchKeyService touchkeyService;
+    private final StoreTypeService storeTypeService;
     private final CmmEnvUtil cmmEnvUtil;
     private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
     public TouchKeyController(SessionService sessionService,
-        TouchKeyService touchkeyService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
+                              TouchKeyService touchkeyService, StoreTypeService storeTypeService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.touchkeyService = touchkeyService;
+        this.storeTypeService = storeTypeService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.cmmCodeUtil = cmmCodeUtil;
     }
@@ -115,6 +120,17 @@ public class TouchKeyController {
         // 터치키 그룹 가져오기
         List<DefaultMap<String>> touchKeyGrpList = touchkeyService.getTouchKeyGrp(params, sessionInfoVO);
         model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
+
+        // (상품관리)브랜드사용여부
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+//        }else{
+//            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
+//        }
+
+        // 브랜드조회(콤보박스용)
+        StoreTypeVO storeTypeVO = new StoreTypeVO();
+        model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
 
         return "base/prod/touchKey/touchKey";
     }
