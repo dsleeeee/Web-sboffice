@@ -139,7 +139,8 @@
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="false"
-            item-formatter="_itemFormatter">
+            item-formatter="_itemFormatter"
+            ime-enabled="true">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.slipNo"/>" 	binding="slipNo" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>

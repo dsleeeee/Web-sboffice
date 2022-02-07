@@ -34,7 +34,8 @@
                             initialized="initGrid(s,e)"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            ime-enabled="true">
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="vendrOrder.pop.code1"/>" binding="nmcodeCd" width="100" is-read-only="false" align="center" max-length="1"></wj-flex-grid-column>
