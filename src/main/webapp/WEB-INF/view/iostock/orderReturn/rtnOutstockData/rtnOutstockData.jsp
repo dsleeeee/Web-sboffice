@@ -66,7 +66,8 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter">
+        item-formatter="_itemFormatter"
+        ime-enabled="true">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 					binding="gChk" 		width="40" 	align="center" 	is-read-only="false"></wj-flex-grid-column>

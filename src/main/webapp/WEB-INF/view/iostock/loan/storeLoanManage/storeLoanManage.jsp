@@ -96,7 +96,8 @@
                 items-source="data"
                 item-formatter="_itemFormatter"
                 frozen-columns="2"
-                sorted-column="toggleFreeze(false)">
+                sorted-column="toggleFreeze(false)"
+                ime-enabled="true">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 			binding="gChk" 		width="30" 	align="center"></wj-flex-grid-column>

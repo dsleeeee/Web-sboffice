@@ -40,7 +40,8 @@
             initialized="initGrid(s,e)"
             is-read-only="false"
             item-formatter="_itemFormatter"
-            frozen-columns		="3">
+            frozen-columns="3"
+            ime-enabled="true">
 
             <!-- define columns -->
         <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                      	binding="gChk"             	width="40"  align="center" ></wj-flex-grid-column>--%>

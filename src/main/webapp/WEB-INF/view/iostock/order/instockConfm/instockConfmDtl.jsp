@@ -119,7 +119,8 @@
             initialized			="initGrid(s,e)"
             is-read-only		="false"
             item-formatter		="_itemFormatter"
-            frozen-columns		="7">	<%-- allowMerging		="Cells" --%>
+            frozen-columns		="7"
+            ime-enabled="true">	<%-- allowMerging		="Cells" --%>
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.slipNo"      />" binding="slipNo"        width="0"   align="center"  is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>

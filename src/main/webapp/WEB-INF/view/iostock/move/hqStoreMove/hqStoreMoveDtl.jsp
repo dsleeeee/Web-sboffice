@@ -151,7 +151,8 @@
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="false"
-            item-formatter="_itemFormatter">
+            item-formatter="_itemFormatter"
+            ime-enabled="true">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="hqStoreMove.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>

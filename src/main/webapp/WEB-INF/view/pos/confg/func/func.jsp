@@ -30,8 +30,7 @@
                   selection-mode="Row"
                   initialized="initGrid(s,e)"
                   items-source="data"
-                  item-formatter="_itemFormatter"
-                  ime-enabled="true">
+                  item-formatter="_itemFormatter">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="func.funFgCd"/>" binding="nmcodeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -79,7 +78,8 @@
                   selection-mode="Row"
                   initialized="initGrid(s,e)"
                   items-source="data"
-                  item-formatter="_itemFormatter">
+                  item-formatter="_itemFormatter"
+                  ime-enabled="true">
 
           </wj-flex-grid>
         </div>

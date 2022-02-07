@@ -31,7 +31,8 @@
         initialized="initGrid(s,e)"
         is-read-only="false"
         item-formatter="_itemFormatter"
-        frozen-columns		="2">
+        frozen-columns="2"
+        ime-enabled="true">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
