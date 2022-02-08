@@ -39,7 +39,7 @@ public class SessionInfoVO extends CmmVO {
     private String userId;
     /** 사용자 비밀번호 */
     @NotBlank(groups = {Login.class}, message = "{login.userPasswd}{cmm.require.text}")
-    @Size(groups = {Login.class}, min = 4, max = 25, message = "{cmm.size.max}")
+    @Size(groups = {Login.class}, min = 4, max = 100, message = "{cmm.size.max}")
     private String userPwd;
     /** 사용자 이름 */
     private String userNm;
@@ -165,7 +165,7 @@ public class SessionInfoVO extends CmmVO {
     private String loginAutoSerial;
 
 
-	
+
 	/**
      * @return the sessionId
      */
@@ -633,7 +633,7 @@ public class SessionInfoVO extends CmmVO {
     public void setpAgencyCd(String pAgencyCd) {
         this.pAgencyCd = pAgencyCd;
     }
-    
+
     public String getAreaFg() {
 		return areaFg;
 	}

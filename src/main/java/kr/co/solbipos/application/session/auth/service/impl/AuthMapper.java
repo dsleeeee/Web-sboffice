@@ -59,4 +59,12 @@ public interface AuthMapper {
      * @return
      */
     String selectStoreHwAuthKeyCheck(SessionInfoVO sessionInfoVO);
+
+    /**
+     * POS 자동 로그인 접속 관리 체크
+     *
+     * @param sessionInfoVO
+     * @return
+     */
+    String selectAccessManagementCheck(SessionInfoVO sessionInfoVO);
 }

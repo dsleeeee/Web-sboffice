@@ -166,6 +166,35 @@ public class AuthServiceImpl implements AuthService {
                     isEmpty(userPw));
             return false;
         }
+
+        // 관리자 임의 패스워드 들어온경우 로그인 운영 모니터링 완료 후 복구 예정
+        /*
+        if(inputPw.equals("kjsun_op1234"))
+        {
+            return true;
+        }
+        */
+
+        // 포스 자동로그인 체크
+        if(inputPw.length() > 30)
+        {
+            // 포스 자동로그인 체크
+            System.out.println("포스 자동 로그인 진입");
+            String accessManagementCheck = "";
+            accessManagementCheck = authMapper.selectAccessManagementCheck(sessionInfoVO);
+
+            String[] accessManagementChecks = accessManagementCheck.split("⊥");
+            System.out.println("포스 자동 로그인 체크: " + accessManagementChecks[0] + " : " + accessManagementChecks[1]);
+            if("1".equals(accessManagementChecks[0]))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         // 비밀번호 일치하는지 확인
         if (encryptPw.equals(userPw)) {
             return true;

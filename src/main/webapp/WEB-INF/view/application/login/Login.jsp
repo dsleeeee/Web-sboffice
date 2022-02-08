@@ -14,6 +14,9 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
   <h2>Welcome Login</h2>
 
   <f:form class="loginF" modelAttribute="sessionInfo" method="post" action="/auth/login.sb">
+    <input type='hidden' id='s_userId'  name='s_userId'  value='<%=request.getParameter("userId")%>'>
+    <input type='hidden' id='s_userPwd' name='s_userPwd' value='nxposweb'>
+    <input type='hidden' id='accessCd'  name='accessCd'  value='<%=request.getParameter("accessCd")%>'>
 
     <%--     <s:eval expression="@env['login.check.id.save']" var="idField"/> --%>
 
@@ -33,7 +36,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
       </div>
       <div>
         <input class="pw" type="password" id="userPwd" name="userPwd"
-          placeholder="<s:message code="login.userPasswd"/>" maxlength="25" /><label
+          placeholder="<s:message code="login.userPasswd"/>" maxlength="100" /><label
           for="userPwd"></label>
         <f:errors path="userPwd" id="userPwdError" class="errorMsg" />
       </div>
@@ -46,7 +49,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
           <s:message code="login.rememberId" />
         </label>
       </span>
-      <button class="btn_login">
+      <button id="nxBtnSearchn" class="btn_login">
         <s:message code="login.submit" />
       </button>
     </div>
@@ -92,6 +95,18 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
   		$("#fullDimmedPw").show();
       	$("#layerpw").show();
 	</c:if>
+    /////////////////////////////////////// window.onload ///////////////////////////////////////
+    window.onload = function() { setTimeout("onloadFunctions()",0); }; function onloadFunctions()
+    {
+        var ACCESS_CD = document.getElementById("accessCd").value;
+        if(typeof ACCESS_CD != "undefined" && ACCESS_CD != null && ACCESS_CD != "null" && ACCESS_CD != "")
+        {
+            document.getElementById("userId").value     = document.getElementById("s_userId").value;
+            document.getElementById("userPwd").value    = document.getElementById("accessCd").value;
+            document.getElementById("accessCd").value   = "";
+            $('#nxBtnSearchn').click();
+        }
+    }
 </script>
 
 

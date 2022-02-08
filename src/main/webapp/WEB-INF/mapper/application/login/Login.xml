@@ -192,6 +192,11 @@
             AND tmp.HW_AUTH_KEY = #{hwAuthKey}
     </select>
 
+    <select id="selectAccessManagementCheck" parameterType="sessionInfoVO" resultType="String">
+      /* AuthMapper.selectAccessManagementCheck */
+        SELECT  FN_GET_TB_MS_ACCESS_MANAGMENT_CHECK(#{userId}, #{userPwd})
+        FROM    DUAL
+    </select>
 
     <update id="updateLoginInfo" parameterType="sessionInfoVO">
         /* AuthMapper.updateLoginInfo */
