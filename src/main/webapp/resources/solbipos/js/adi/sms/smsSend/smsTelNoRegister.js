@@ -59,4 +59,21 @@ app.controller('smsTelNoRegisterCtrl', ['$scope', '$http', function ($scope, $ht
             }
         );
     };
+
+    // 일반번호 인증요청
+    $scope.smsGeneralNoRequest = function() {
+        $scope.wjSmsGeneralNoRegisterLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 일반번호 인증요청 팝업 핸들러 추가
+        $scope.wjSmsGeneralNoRegisterLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('smsGeneralNoRegisterCtrl', null);
+            }, 50)
+        });
+    });
 }]);
