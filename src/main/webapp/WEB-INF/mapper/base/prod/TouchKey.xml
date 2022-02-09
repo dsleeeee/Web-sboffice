@@ -536,7 +536,7 @@
                     twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND twhcx.CONFG_FG = #{confgFg}
                 <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
-                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND twhcx.GRP_CD = #{tukeyGrpCd}
                 </if>
             </when>
             <!-- 매장 -->
@@ -548,7 +548,7 @@
                     twscx.STORE_CD = #{storeCd}
                     AND twscx.CONFG_FG = #{confgFg}
                 <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
-                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND twscx.GRP_CD = #{tukeyGrpCd}
                 </if>
             </when>
         </choose>
