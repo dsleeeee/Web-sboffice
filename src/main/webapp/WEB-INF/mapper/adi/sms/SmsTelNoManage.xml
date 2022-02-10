@@ -182,4 +182,121 @@
         AND TEL_NO = SBPENC.E(#{telNo})
     </update>
 
+    <!-- 일반번호 인증요청 처리 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSmsGeneralNoManageList"  parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getSmsGeneralNoManageList */
+        SELECT
+        tcasn.ORGN_CD,
+        twuidv01.ORGN_NM,
+        twuidv01.ORGN_FG,
+        tcasn.ADD_FG,
+        (CASE WHEN tcasn.ADD_FG = '1' THEN '다운로드' ELSE null END) AS DOWNLOAD,
+        tcasn.ADD_PROC_FG,
+        SBPENC.D(tcasn.TEL_NO) AS TEL_NO,
+        tcasn.RETURN_REMARK,
+        tcasn.REMARK,
+        tcasn.CERT_ID,
+        tcasn.USER_ID,
+        tcasn.FILE_NM AS FILE_NAME,
+        tcasn.ADD_PROC_FG AS BACK_ADD_PROC_FG,
+        SBPENC.D(tcasn.TEL_NO) AS BACK_TEL_NO,
+        tcasn.RETURN_REMARK AS BACK_RETURN_REMARK,
+        tcasn.REMARK AS BACK_REMARK
+        FROM TB_CM_ADD_SMS_NO tcasn,
+        TB_WB_USER_INFO_DTL_V01 twuidv01
+        WHERE 1=1
+        <if test="orgnCd != null and orgnCd != ''">
+            AND tcasn.ORGN_CD LIKE '%'||#{orgnCd}||'%'
+        </if>
+        <if test="orgnNm != null and orgnNm != ''">
+            AND twuidv01.ORGN_NM LIKE '%'||#{orgnNm}||'%'
+        </if>
+        <if test="addProcFg != null and addProcFg != ''">
+            AND tcasn.ADD_PROC_FG = #{addProcFg}
+        </if>
+        AND twuidv01.ORGN_CD = tcasn.ORGN_CD
+        AND twuidv01.USER_ID = tcasn.USER_ID
+        ORDER BY tcasn.ORGN_CD, tcasn.USER_ID, tcasn.CERT_ID
+    </select>
+
+    <!-- 일반번호 인증요청 처리 팝업 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getSmsGeneralNoManageSaveUpdate" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.getSmsGeneralNoManageSaveUpdate */
+        UPDATE
+        TB_CM_ADD_SMS_NO
+        SET
+        ADD_PROC_FG = #{addProcFg},
+        TEL_NO = SBPENC.E(#{telNo}),
+        RETURN_REMARK = #{returnRemark},
+        REMARK = #{remark},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND ORGN_CD = #{orgnCd}
+        AND USER_ID = #{userId}
+        AND CERT_ID = #{certId}
+    </update>
+
+    <!-- 일반번호 인증요청 처리 팝업 - 발신번호 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getGeneralNoSmsNoSaveDelete" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.getGeneralNoSmsNoSaveDelete */
+        DELETE
+        HCS_SENDM_T
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND SBPENC.D(TEL_NO) = #{backTelNo}
+    </delete>
+
+    <!-- 일반번호 인증요청 처리 팝업 - 발신번호 등록 요청 저장(발신번호 등록전 상태로) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSmsGeneralNoSmsNoSaveInsert" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.getSmsGeneralNoSmsNoSaveInsert */
+        MERGE INTO HCS_CRTLG_T
+        USING DUAL
+        ON  (
+                CERT_ID = #{certId} AND OGN_CD = #{orgnCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROC_FG = '0',
+            RES_RESULT_CD = '',
+            RES_RECV_NUMBER = '',
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                CERT_ID,
+                OGN_CD,
+                PROC_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{certId},
+                #{orgnCd},
+                '0',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
 </mapper>

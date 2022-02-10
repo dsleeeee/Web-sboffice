@@ -58,4 +58,21 @@ app.controller('smsTelNoStopCtrl', ['$scope', '$http', function ($scope, $http) 
     $scope.allSearch = function () {
         $scope.searchSmsTelNoStop();
     };
+
+    // 일반번호 인증요청 처리
+    $scope.smsGeneralNoManage = function() {
+        $scope.wjSmsGeneralNoManageLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 일반번호 인증요청 처리 팝업 핸들러 추가
+        $scope.wjSmsGeneralNoManageLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('smsGeneralNoManageCtrl', null);
+            }, 50)
+        });
+    });
 }]);

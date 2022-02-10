@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.kcp.CT_CLI;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -12,6 +13,7 @@ import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,9 +22,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -367,6 +369,118 @@ public class SmsTelNoManageController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = smsTelNoManageService.getSmsTelNoStopSaveUpdate(smsTelNoManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 일반번호 인증요청 처리 팝업 - 조회
+     *
+     * @param smsTelNoManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 01. 27.
+     */
+    @RequestMapping(value = "/smsGeneralNoManage/getSmsGeneralNoManageList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsGeneralNoManageList(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsTelNoManageService.getSmsGeneralNoManageList(smsTelNoManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsTelNoManageVO);
+    }
+
+    /**
+     * 일반번호 인증요청 처리 팝업 - 첨부파일 다운로드
+     *
+     * @param smsTelNoManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 02. 07.
+     */
+    @RequestMapping(value="/smsGeneralNoManage/getSmsGeneralNoManageDownload.sb")
+    @ResponseBody
+    public void getSmsGeneralNoManageDownload(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) throws Exception {
+
+//        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\addSmsNo\\", smsTelNoManageVO.getFileName());
+        File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/addSmsNo/", smsTelNoManageVO.getFileName());
+
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+
+        //User-Agent : 어떤 운영체제로  어떤 브라우저를 서버( 홈페이지 )에 접근하는지 확인함
+        String header = request.getHeader("User-Agent");
+        String fileName;
+        if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
+            //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩
+            fileName = URLEncoder.encode(smsTelNoManageVO.getFileName(), "UTF-8");
+        } else {
+            //나머지 브라우저에서 인코딩
+            fileName = new String(smsTelNoManageVO.getFileName().getBytes("UTF-8"), "iso-8859-1");
+        }
+
+        //형식을 모르는 파일첨부용 contentType
+        response.setContentType("application/octet-stream");
+        //다운로드와 다운로드될 파일이름
+        response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
+        //파일복사
+        FileCopyUtils.copy(in, response.getOutputStream());
+        in.close();
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
+    }
+
+    /**
+     * 일반번호 인증요청 처리 팝업 - 저장
+     *
+     * @param smsTelNoManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 02. 07.
+     */
+    @RequestMapping(value = "/smsGeneralNoManage/getSmsGeneralNoManageSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsGeneralNoManageSave(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsTelNoManageService.getSmsGeneralNoManageSave(smsTelNoManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 일반번호 인증요청 처리 팝업 - 발신번호 중복체크
+     *
+     * @param smsTelNoManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 02. 07.
+     */
+    @RequestMapping(value = "/smsGeneralNoManage/getSmsGeneralNoManageCount.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsGeneralNoManageCount(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsTelNoManageService.getSmsGeneralNoManageCount(smsTelNoManageVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

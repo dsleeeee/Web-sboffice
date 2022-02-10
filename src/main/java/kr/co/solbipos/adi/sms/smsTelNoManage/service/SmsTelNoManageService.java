@@ -45,4 +45,13 @@ public interface SmsTelNoManageService {
 
     /** 발신번호차단 탭 - 저장 */
     int getSmsTelNoStopSaveUpdate(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
+
+    /** 일반번호 인증요청 처리 팝업 - 조회 */
+    List<DefaultMap<Object>> getSmsGeneralNoManageList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 일반번호 인증요청 처리 팝업 - 저장 */
+    int getSmsGeneralNoManageSave(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
+
+    /** 일반번호 인증요청 처리 팝업 - 발신번호 중복체크 */
+    int getSmsGeneralNoManageCount(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
 }

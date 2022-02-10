@@ -24,6 +24,9 @@ public class SmsTelNoManageVO extends PageVO {
     /** 소속코드 */
     private String orgnCd;
 
+    /** 소속명 */
+    private String orgnNm;
+
     /** 전화번호 */
     private String telNo;
 
@@ -39,47 +42,80 @@ public class SmsTelNoManageVO extends PageVO {
     /** 사용여부 */
     private String useYn;
 
-    public String getOrgnCd() {
-        return orgnCd;
-    }
+    /** 처리구분 */
+    private String addProcFg;
 
-    public void setOrgnCd(String orgnCd) {
-        this.orgnCd = orgnCd;
-    }
+    /** 파일명 */
+    private String fileName;
 
-    public String getTelNo() {
-        return telNo;
-    }
+    /** 비고 */
+    private String remark;
 
-    public void setTelNo(String telNo) {
-        this.telNo = telNo;
-    }
+    /** 사용자ID */
+    private String userId;
 
-    public String getUseSeq() {
-        return useSeq;
-    }
+    /** 반려사유 */
+    private String returnRemark;
 
-    public void setUseSeq(String useSeq) {
-        this.useSeq = useSeq;
-    }
+    /** 수정전 전화번호 */
+    private String backTelNo;
 
-    public String getCertId() {
-        return certId;
-    }
+    /** 수정전 처리구분 */
+    private String backAddProcFg;
 
-    public void setCertId(String certId) {
-        this.certId = certId;
-    }
+    public String getOrgnCd() { return orgnCd; }
 
-    public String getResCd() {
-        return resCd;
-    }
+    public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
 
-    public void setResCd(String resCd) {
-        this.resCd = resCd;
-    }
+    public String getOrgnNm() { return orgnNm; }
+
+    public void setOrgnNm(String orgnNm) { this.orgnNm = orgnNm; }
+
+    public String getTelNo() { return telNo; }
+
+    public void setTelNo(String telNo) { this.telNo = telNo; }
+
+    public String getUseSeq() { return useSeq; }
+
+    public void setUseSeq(String useSeq) { this.useSeq = useSeq; }
+
+    public String getCertId() { return certId; }
+
+    public void setCertId(String certId) { this.certId = certId; }
+
+    public String getResCd() { return resCd; }
+
+    public void setResCd(String resCd) { this.resCd = resCd; }
 
     public String getUseYn() { return useYn; }
 
     public void setUseYn(String useYn) { this.useYn = useYn; }
+
+    public String getAddProcFg() { return addProcFg; }
+
+    public void setAddProcFg(String addProcFg) { this.addProcFg = addProcFg; }
+
+    public String getFileName() { return fileName; }
+
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getRemark() { return remark; }
+
+    public void setRemark(String remark) { this.remark = remark; }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public String getReturnRemark() { return returnRemark; }
+
+    public void setReturnRemark(String returnRemark) { this.returnRemark = returnRemark; }
+
+    public String getBackTelNo() { return backTelNo; }
+
+    public void setBackTelNo(String backTelNo) { this.backTelNo = backTelNo; }
+
+    public String getBackAddProcFg() { return backAddProcFg; }
+
+    public void setBackAddProcFg(String backAddProcFg) { this.backAddProcFg = backAddProcFg; }
 }
