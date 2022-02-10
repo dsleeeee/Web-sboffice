@@ -138,9 +138,7 @@ app.controller('smsGeneralNoManageCtrl', ['$scope', '$http', function ($scope, $
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-                if($scope.flex.collectionView.itemsEdited[i].telNo === "" || $scope.flex.collectionView.itemsEdited[i].telNo === null) {
-                    $scope.flex.collectionView.itemsEdited[i].telNo = $scope.flex.collectionView.itemsEdited[i].telNo.replaceAll("-", "");
-                }
+                $scope.flex.collectionView.itemsEdited[i].telNo = $scope.flex.collectionView.itemsEdited[i].telNo.replaceAll("-", "");
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
 
