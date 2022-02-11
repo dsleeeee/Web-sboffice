@@ -337,9 +337,9 @@ public class ProdImgServiceImpl implements ProdImgService {
 
         if(prodImgVO.getGubun().equals("A")){   // 전체복사
             // 서버 파일 업로드
-            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -f " + orgPath + "* " + path);
+            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -R " + orgPath + "* " + path);
             try {
-                Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + "* " + path);
+                Runtime.getRuntime().exec("/usr/bin/cp -R " + orgPath + "* " + path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
