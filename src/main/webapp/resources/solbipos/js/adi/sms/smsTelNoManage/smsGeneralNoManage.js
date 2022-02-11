@@ -123,7 +123,15 @@ app.controller('smsGeneralNoManageCtrl', ['$scope', '$http', function ($scope, $
             if($scope.flex.collectionView.itemsEdited[i].telNo === "" || $scope.flex.collectionView.itemsEdited[i].telNo === null) {
                 $scope._popMsg(messages["smsGeneralNoManage.telNoBlank"]); // 일반번호를 입력해주세요.
                 return false;
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].telNo)) {
+                    $scope._popMsg(messages["smsGeneralNoManage.telNoInChk"]); // 일반번호 숫자만 입력해주세요.
+                    return false;
+                }
             }
+
 
             // 처리구분 반려시
             if($scope.flex.collectionView.itemsEdited[i].addProcFg === "3") {
