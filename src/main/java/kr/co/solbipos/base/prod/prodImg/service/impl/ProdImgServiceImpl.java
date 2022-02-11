@@ -343,7 +343,32 @@ public class ProdImgServiceImpl implements ProdImgService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            result = prodImgMapper.prodImgCopyAll(prodImgVO);
+        } else if(prodImgVO.getGubun().equals("AP")){   // 전체복사 확장자 지정
+            // 서버 파일 업로드
+            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -f " + orgPath + "*.png " + path);
+            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -f " + orgPath + "*.PNG " + path);
+            try {
+                Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + "*.png " + path);
+                Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + "*.PNG " + path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            result = prodImgMapper.prodImgCopyAll(prodImgVO);
+        } else if(prodImgVO.getGubun().equals("AF")){   // 전체복사 for문
 
+            List<DefaultMap<String>> orgFileNm = prodImgMapper.getProdImgList(prodImgVO);
+
+            for(int i = 0; i < orgFileNm.size(); i++){
+                System.out.println("복사 할 파일 : " + orgFileNm.get(i).get("orgImgFileNm"));
+                // 서버 파일 업로드
+                System.out.println("전체복사 명령어 : " + "/usr/bin/cp -f " + orgPath + orgFileNm.get(i).get("orgImgFileNm") + " " + path);
+                try {
+                    Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + orgFileNm.get(i).get("orgImgFileNm") + " " + path);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             result = prodImgMapper.prodImgCopyAll(prodImgVO);
         } else if(prodImgVO.getGubun().equals("I")) {   // 단일복사
             String orgFileNm = prodImgMapper.getProdImgNm(prodImgVO);

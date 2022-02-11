@@ -70,4 +70,7 @@ public interface ProdImgMapper {
     /** 상품이미지관리 - 상품이미지 전체 삭제 */
     int prodImgDeleteAll(ProdImgVO prodImgVO);
 
+    /**  상품이미지관리 - 상품 이미지 조회 */
+    List<DefaultMap<String>> getProdImgList(ProdImgVO prodImgVO);
+
 }
