@@ -652,4 +652,45 @@
         )
     </insert>
 
+    <!-- 일반번호 인증요청 팝업 - 저장 insert -->
+    <!--
+        TABLE    : TB_CM_ADD_SMS_NO
+        COMMENTS : [공통]일반번호 인증요청 관리
+    -->
+    <insert id="getSmsGeneralNoRegisterSaveInsert" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsGeneralNoRegisterSaveInsert */
+        INSERT INTO TB_CM_ADD_SMS_NO
+        (
+            ORGN_CD,
+            USER_ID,
+            CERT_ID,
+            ADD_PROC_FG,
+            ADD_FG,
+            FILE_URL,
+            FILE_NM,
+            RETURN_REMARK,
+            REMARK,
+            TEL_NO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{orgnCd},
+            #{userId},
+            #{certId},
+            '0',
+            #{addFg},
+            #{fileUrl},
+            #{fileNm},
+            '',
+            '',
+            '',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
 </mapper>

@@ -438,4 +438,85 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         return smsSendMapper.getAddresseeAddList(smsSendVO);
     }
+
+    /** 일반번호 인증요청 팝업 - 저장 */
+    @Override
+    public int getSmsGeneralNoRegisterSave(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        smsSendVO.setRegDt(currentDt);
+        smsSendVO.setRegId(sessionInfoVO.getUserId());
+        smsSendVO.setModDt(currentDt);
+        smsSendVO.setModId(sessionInfoVO.getUserId());
+
+        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendVO.setUserId(sessionInfoVO.getUserId());
+
+        procCnt = smsSendMapper.getSmsGeneralNoRegisterSaveInsert(smsSendVO);
+
+        return procCnt;
+    }
+
+    /** 일반번호 인증요청 팝업 - 첨부파일 저장 */
+    @Override
+    public String getSmsGeneralNoFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+
+        boolean isSuccess = true;
+
+        // 저장할 컨텐츠(파일경로^파일명)
+        String contentData = "";
+
+        try{
+
+            // 저장 경로 설정 (개발시 로컬)
+//            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\addSmsNo\\";
+
+            // 파일서버 대응 경로 지정 (운영) (파일 저장용)
+            String path = BaseEnv.FILE_UPLOAD_DIR + "board/addSmsNo/";
+
+            // 저장 경로 설정 (디비 저장용)
+            String path_table = "board/addSmsNo/";
+
+            // 업로드 되는 파일명
+            String newFileName = "";
+            // 원본 파일명
+            String orgFileName = "";
+
+            // 경로에 폴도가 있는지 체크
+            File dir = new File(path);
+            if(!dir.isDirectory()){
+                dir.mkdir();
+            }
+
+            // 첨부파일
+            List<MultipartFile> fileList = multi.getFiles("fileTel");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 파일 저장하는 부분
+                    try {
+                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    contentData = path_table + "^" + newFileName + "." + fileExt;
+                }
+            }
+
+        }catch(Exception e){
+
+            isSuccess = false;
+        }
+
+        return contentData;
+    }
 }

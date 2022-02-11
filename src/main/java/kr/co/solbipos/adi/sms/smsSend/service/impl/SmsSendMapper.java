@@ -55,4 +55,7 @@ public interface SmsSendMapper {
 
     /** 전송이력 저장 insert */
     int getSmsSendSeqSaveInsert(SmsSendVO smsSendVO);
+
+    /** 일반번호 인증요청 팝업 - 저장 insert */
+    int getSmsGeneralNoRegisterSaveInsert(SmsSendVO smsSendVO);
 }

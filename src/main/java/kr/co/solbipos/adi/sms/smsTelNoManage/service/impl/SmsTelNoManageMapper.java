@@ -49,4 +49,16 @@ public interface SmsTelNoManageMapper {
 
     /** 발신번호차단 탭 - 저장 */
     int getSmsTelNoStopSaveUpdate(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 일반번호 인증요청 처리 팝업 - 조회 */
+    List<DefaultMap<Object>> getSmsGeneralNoManageList(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 일반번호 인증요청 처리 팝업 - 저장 update */
+    int getSmsGeneralNoManageSaveUpdate(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 일반번호 인증요청 처리 팝업 - 발신번호 삭제 */
+    int getGeneralNoSmsNoSaveDelete(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 일반번호 인증요청 처리 팝업 - 발신번호 등록 요청 저장(발신번호 등록전 상태로) */
+    int getSmsGeneralNoSmsNoSaveInsert(SmsTelNoManageVO smsTelNoManageVO);
 }

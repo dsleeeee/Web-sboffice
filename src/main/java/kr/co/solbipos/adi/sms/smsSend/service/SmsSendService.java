@@ -43,4 +43,10 @@ public interface SmsSendService {
 
     /** 수신자추가 팝업 - 조회 */
     List<DefaultMap<Object>> getAddresseeAddList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 일반번호 인증요청 팝업 - 저장 */
+    int getSmsGeneralNoRegisterSave(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 일반번호 인증요청 팝업 - 첨부파일 저장 */
+    String getSmsGeneralNoFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO);
 }

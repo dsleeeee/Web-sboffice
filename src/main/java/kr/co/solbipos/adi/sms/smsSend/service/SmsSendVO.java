@@ -141,6 +141,18 @@ public class SmsSendVO extends PageVO {
     /** 메세지별 건당금액 */
     private String msgOneAmt;
 
+    /** 자료생성구분 */
+    private String addFg;
+
+    /** 파일경로 */
+    private String fileUrl;
+
+    /** 파일명 */
+    private String fileNm;
+
+    /** 관리요청번호 */
+    private String certId;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -149,13 +161,9 @@ public class SmsSendVO extends PageVO {
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
 
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
-    }
+    public String getHqOfficeCd() { return hqOfficeCd; }
 
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
-    }
+    public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
 
     public String getStoreCd() { return storeCd; }
 
@@ -245,89 +253,49 @@ public class SmsSendVO extends PageVO {
 
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
-    public String getContentCount() {
-        return contentCount;
-    }
+    public String getContentCount() { return contentCount; }
 
-    public void setContentCount(String contentCount) {
-        this.contentCount = contentCount;
-    }
+    public void setContentCount(String contentCount) { this.contentCount = contentCount; }
 
-    public String getContentData() {
-        return contentData;
-    }
+    public String getContentData() { return contentData; }
 
-    public void setContentData(String contentData) {
-        this.contentData = contentData;
-    }
+    public void setContentData(String contentData) { this.contentData = contentData; }
 
-    public String getEmpNo() {
-        return empNo;
-    }
+    public String getEmpNo() { return empNo; }
 
-    public void setEmpNo(String empNo) {
-        this.empNo = empNo;
-    }
+    public void setEmpNo(String empNo) { this.empNo = empNo; }
 
-    public String getEmpNm() {
-        return empNm;
-    }
+    public String getEmpNm() { return empNm; }
 
-    public void setEmpNm(String empNm) {
-        this.empNm = empNm;
-    }
+    public void setEmpNm(String empNm) { this.empNm = empNm; }
 
-    public String getMpNo() {
-        return mpNo;
-    }
+    public String getMpNo() { return mpNo; }
 
-    public void setMpNo(String mpNo) {
-        this.mpNo = mpNo;
-    }
+    public void setMpNo(String mpNo) { this.mpNo = mpNo; }
 
-    public String getSmsRecvYn() {
-        return smsRecvYn;
-    }
+    public String getSmsRecvYn() { return smsRecvYn; }
 
-    public void setSmsRecvYn(String smsRecvYn) {
-        this.smsRecvYn = smsRecvYn;
-    }
+    public void setSmsRecvYn(String smsRecvYn) { this.smsRecvYn = smsRecvYn; }
 
-    public String getServiceFg() {
-        return serviceFg;
-    }
+    public String getServiceFg() { return serviceFg; }
 
-    public void setServiceFg(String serviceFg) {
-        this.serviceFg = serviceFg;
-    }
+    public void setServiceFg(String serviceFg) { this.serviceFg = serviceFg; }
 
-    public String getPageGubun() {
-        return pageGubun;
-    }
+    public String getPageGubun() { return pageGubun; }
 
-    public void setPageGubun(String pageGubun) {
-        this.pageGubun = pageGubun;
-    }
+    public void setPageGubun(String pageGubun) { this.pageGubun = pageGubun; }
 
     public String getSrchOrgnFg() { return srchOrgnFg; }
 
     public void setSrchOrgnFg(String srchOrgnFg) { this.srchOrgnFg = srchOrgnFg; }
 
-    public String getSmsSendSeq() {
-        return smsSendSeq;
-    }
+    public String getSmsSendSeq() { return smsSendSeq; }
 
-    public void setSmsSendSeq(String smsSendSeq) {
-        this.smsSendSeq = smsSendSeq;
-    }
+    public void setSmsSendSeq(String smsSendSeq) { this.smsSendSeq = smsSendSeq; }
 
-    public String getSmsSendCount() {
-        return smsSendCount;
-    }
+    public String getSmsSendCount() { return smsSendCount; }
 
-    public void setSmsSendCount(String smsSendCount) {
-        this.smsSendCount = smsSendCount;
-    }
+    public void setSmsSendCount(String smsSendCount) { this.smsSendCount = smsSendCount; }
 
     public String getSmsSendListCnt() { return smsSendListCnt; }
 
@@ -336,4 +304,20 @@ public class SmsSendVO extends PageVO {
     public String getMsgOneAmt() { return msgOneAmt; }
 
     public void setMsgOneAmt(String msgOneAmt) { this.msgOneAmt = msgOneAmt; }
+
+    public String getAddFg() { return addFg; }
+
+    public void setAddFg(String addFg) { this.addFg = addFg; }
+
+    public String getFileUrl() { return fileUrl; }
+
+    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
+
+    public String getFileNm() { return fileNm; }
+
+    public void setFileNm(String fileNm) { this.fileNm = fileNm; }
+
+    public String getCertId() { return certId; }
+
+    public void setCertId(String certId) { this.certId = certId; }
 }

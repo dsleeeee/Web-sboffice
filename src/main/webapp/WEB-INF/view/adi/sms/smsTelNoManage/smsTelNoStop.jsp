@@ -26,7 +26,11 @@
         <div class="w100 mt10 mb20">
             <div class="updownSet oh mb10">
                 <%-- 저장 --%>
-                <button class="btn_skyblue" id="btnTelNoStopSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                <button class="btn_skyblue ml5 fr" id="btnTelNoStopSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                <%-- 일반번호 인증요청 처리 --%>
+                <button id="request" class="btn_skyblue ml5 fr" ng-click="smsGeneralNoManage()">
+                    <s:message code="smsTelNoStop.smsGeneralNoManage" />
+                </button>
             </div>
             <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
@@ -56,4 +60,10 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20211208.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20220201.01" charset="utf-8"></script>
+
+<%-- 일반번호 인증요청 처리 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsGeneralNoManage.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

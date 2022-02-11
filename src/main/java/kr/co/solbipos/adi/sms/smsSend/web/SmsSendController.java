@@ -234,4 +234,45 @@ public class SmsSendController {
         List<DefaultMap<Object>> result = smsSendService.getAddresseeAddList(smsSendVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, result, smsSendVO);
     }
+
+    /**
+     * 일반번호 인증요청 팝업 - 저장
+     *
+     * @param smsSendVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 01. 26.
+     */
+    @RequestMapping(value = "/smsGeneralNoRegister/getSmsGeneralNoRegisterSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsGeneralNoRegisterSave(@RequestBody SmsSendVO smsSendVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsSendService.getSmsGeneralNoRegisterSave(smsSendVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 일반번호 인증요청 팝업 - 첨부파일 저장
+     *
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 01. 26.
+     */
+    @RequestMapping(value = "/smsGeneralNoRegister/getSmsGeneralNoFileSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsGeneralNoFileSave(MultipartHttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = smsSendService.getSmsGeneralNoFileSave(request, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
