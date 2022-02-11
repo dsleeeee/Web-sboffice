@@ -101,9 +101,10 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
         var ACCESS_CD = document.getElementById("accessCd").value;
         if(typeof ACCESS_CD != "undefined" && ACCESS_CD != null && ACCESS_CD != "null" && ACCESS_CD != "")
         {
-            document.getElementById("userId").value     = document.getElementById("s_userId").value;
-            document.getElementById("userPwd").value    = document.getElementById("accessCd").value;
-            document.getElementById("accessCd").value   = "";
+            document.getElementById("userPwd").style.display    = 'none';
+            document.getElementById("userId").value             = document.getElementById("s_userId").value;
+            document.getElementById("userPwd").value            = document.getElementById("accessCd").value;
+            document.getElementById("accessCd").value           = "";
             $('#nxBtnSearchn').click();
         }
     }
