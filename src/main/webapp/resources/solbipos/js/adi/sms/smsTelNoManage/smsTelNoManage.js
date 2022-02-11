@@ -24,6 +24,27 @@ app.controller('smsTelNoManageCtrl', ['$scope', '$http', function ($scope, $http
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 사용여부
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 체크박스
+                if (col.binding === "gChk") {
+                    var item = s.rows[e.row].dataItem;
+                    // 값이 있으면 링크 효과
+                    if (item[("useSeq")] === 99999) {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                        item[("gChk")] = false; // 전체 체크시 오류
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+                }
+            }
+        });
     };
 
     // <-- 검색 호출 -->
@@ -85,10 +106,11 @@ app.controller('smsTelNoManageCtrl', ['$scope', '$http', function ($scope, $http
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                $scope.flex.collectionView.items[i].telNo = $scope.flex.collectionView.items[i].telNo.replaceAll("-", "");
-                $scope.flex.collectionView.items[i].useSeq = dispSeq;
-                params.push($scope.flex.collectionView.items[i]);
-                dispSeq++;
+                if($scope.flex.collectionView.items[i].useSeq !== "99999") {
+                    $scope.flex.collectionView.items[i].useSeq = dispSeq;
+                    params.push($scope.flex.collectionView.items[i]);
+                    dispSeq++;
+                }
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수

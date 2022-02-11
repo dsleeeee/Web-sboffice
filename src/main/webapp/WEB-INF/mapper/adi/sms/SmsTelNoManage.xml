@@ -18,14 +18,44 @@
     -->
     <select id="getSmsTelNoManageList"  parameterType="SmsTelNoManageVO" resultType="DefaultMap">
         /* SmsTelNoManageMapper.getSmsTelNoManageList */
-        SELECT
-        SBPENC.D(hst.TEL_NO) AS TEL_NO,
-        hst.USE_YN,
-        hst.USE_SEQ
-        FROM HCS_SENDM_T hst
-        WHERE 1=1
-        AND hst.OGN_CD = #{orgnCd}
-        ORDER BY hst.USE_SEQ
+        SELECT *
+        FROM
+        (
+            SELECT
+            SBPENC.D(hst.TEL_NO) AS TEL_NO,
+            hst.USE_YN,
+            hst.USE_SEQ
+            FROM HCS_SENDM_T hst
+            WHERE 1=1
+            AND hst.OGN_CD = #{orgnCd}
+            ORDER BY hst.USE_SEQ
+        )
+        UNION ALL
+        (
+            SELECT
+            TEL_NO,
+            ADD_PROC_FG || RETURN_REMARK AS USE_YN,
+            99999 AS USE_SEQ
+            FROM
+            (
+                SELECT
+                SBPENC.D(tcasn.TEL_NO) AS TEL_NO,
+                (CASE WHEN tcasn.ADD_PROC_FG = '0' THEN '[접수]'
+                        WHEN tcasn.ADD_PROC_FG = '1' THEN '[처리중]'
+                        WHEN tcasn.ADD_PROC_FG = '2' THEN '[완료]'
+                        WHEN tcasn.ADD_PROC_FG = '3' THEN '[반려]'
+                        ELSE null END
+                ) AS ADD_PROC_FG,
+                (CASE WHEN tcasn.ADD_PROC_FG = '3' THEN tcasn.RETURN_REMARK
+                        ELSE null END
+                ) AS RETURN_REMARK
+                FROM TB_CM_ADD_SMS_NO tcasn
+                WHERE 1=1
+                AND tcasn.ORGN_CD = #{orgnCd}
+                AND tcasn.ADD_PROC_FG != '2'
+                ORDER BY tcasn.CERT_ID
+            )
+        )
     </select>
 
     <!-- 발신번호관리 - 발신번호 등록 요청 저장 -->
