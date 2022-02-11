@@ -771,4 +771,30 @@
             </when>
         </choose>
     </select>
+
+    <!-- 상품이미지관리 - 전체복사 기존 이미지 정보 리스트 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+          PARAM    : prodImgVO
+          COMMENTS : 이미지매장적용 전체복사 기존 이미지 정보 리스트
+    -->
+    <select id="getProdImgList" parameterType="prodImgVO" resultType="DefaultMap">
+        /* ProdImgMapper.getProdImgList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_HQ_PRODUCT_IMAGE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     IMG_FG = #{orgImgFg}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_MS_PRODUCT_IMAGE
+                WHERE   STORE_CD = #{storeCd}
+                AND     IMG_FG = #{orgImgFg}
+            </when>
+        </choose>
+    </select>
 </mapper>

@@ -98,6 +98,8 @@
                 <div id="btn1" style="display:none">
                 <button class="btn_skyblue fl mr5" ng-click="deleteAll()" ><s:message code="prodImg.deleteAll"/></button>
                 <button class="btn_skyblue fl mr5" ng-click="copy('A')" ><s:message code="prodImg.copyAll"/></button>
+                <button class="btn_skyblue fl mr5" ng-click="copy('AP')" >.pmg</button>
+                <button class="btn_skyblue fl mr5" ng-click="copy('AF')" >for문</button>
                 <p class="s12 fl">등록된 이미지만 복사됩니다.</p>
                 </div>
                 <input type="text" class="w70px" id="password" ng-model="password" ng-keydown="btnshow()"/>
