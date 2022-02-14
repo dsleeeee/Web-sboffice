@@ -336,27 +336,7 @@ public class ProdImgServiceImpl implements ProdImgService {
         }
 
         if(prodImgVO.getGubun().equals("A")){   // 전체복사
-            // 서버 파일 업로드
-            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -R " + orgPath + "* " + path);
-            try {
-                Runtime.getRuntime().exec("/usr/bin/cp -R " + orgPath + "* " + path);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            result = prodImgMapper.prodImgCopyAll(prodImgVO);
-        } else if(prodImgVO.getGubun().equals("AP")){   // 전체복사 확장자 지정
-            // 서버 파일 업로드
-            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -f " + orgPath + "*.png " + path);
-            System.out.println("전체복사 명령어 : " + "/usr/bin/cp -f " + orgPath + "*.PNG " + path);
-            try {
-                Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + "*.png " + path);
-                Runtime.getRuntime().exec("/usr/bin/cp -f " + orgPath + "*.PNG " + path);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            result = prodImgMapper.prodImgCopyAll(prodImgVO);
-        } else if(prodImgVO.getGubun().equals("AF")){   // 전체복사 for문
-
+            // 등록된 이미지 리스트 가져옴
             List<DefaultMap<String>> orgFileNm = prodImgMapper.getProdImgList(prodImgVO);
 
             for(int i = 0; i < orgFileNm.size(); i++){

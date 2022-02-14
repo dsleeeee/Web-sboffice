@@ -140,16 +140,6 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.prodImgDeleteLayer.show();
         }
     }
-    $scope.btnshow = function (){
-
-        if($scope.password == "SB20220126"){
-            $("#btn1").show();
-            $("#btn2").show();
-        } else {
-            $("#btn1").hide();
-            $("#btn2").hide();
-        }
-    }
 
     // 상품 이미지 조회
     $scope.getProdImg = function(prodCd, prodNm){

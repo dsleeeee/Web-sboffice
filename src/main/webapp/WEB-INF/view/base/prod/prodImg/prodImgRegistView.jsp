@@ -94,15 +94,9 @@
                 </div>
             </td>
             <td colspan="2" >
-
-                <div id="btn1" style="display:none">
                 <button class="btn_skyblue fl mr5" ng-click="deleteAll()" ><s:message code="prodImg.deleteAll"/></button>
                 <button class="btn_skyblue fl mr5" ng-click="copy('A')" ><s:message code="prodImg.copyAll"/></button>
-                <button class="btn_skyblue fl mr5" ng-click="copy('AP')" >.pmg</button>
-                <button class="btn_skyblue fl mr5" ng-click="copy('AF')" >for문</button>
                 <p class="s12 fl">등록된 이미지만 복사됩니다.</p>
-                </div>
-                <input type="text" class="w70px" id="password" ng-model="password" ng-keydown="btnshow()"/>
             </td>
         </tr>
         </tbody>
@@ -151,9 +145,8 @@
             <input type="hidden" id="hdProdCd"/>
             <input type="hidden" id="hdProdNm"/>
 
-            <div id="btn2" style="display:none">
             <button id="btnCopy" style="display: none;" class="btn_skyblue ml5 fr" ng-click="copy('I')" ><s:message code="prodImg.copy"/></button>
-            </div>
+
             <table class='tblType01 mt20' id="imgTbl" style="display: none;">
                 <colgroup>
                     <col class="w33" />
@@ -254,7 +247,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20210414.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20210414.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
