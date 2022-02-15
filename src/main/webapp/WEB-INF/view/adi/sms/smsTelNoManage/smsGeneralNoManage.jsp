@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<wj-popup id="wjSmsGeneralNoManageLayer" control="wjSmsGeneralNoManageLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:820px;height:500px;" fade-in="false" fade-out="false">
+<wj-popup id="wjSmsGeneralNoManageLayer" control="wjSmsGeneralNoManageLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:850px;height:500px;" fade-in="false" fade-out="false">
     <div ng-controller="smsGeneralNoManageCtrl">
 
         <%-- header --%>
@@ -90,8 +90,8 @@
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.download"/>" binding="download" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.addProcFg"/>" binding="addProcFg" data-map="addProcFgDataMap" width="70" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.telNo"/>" binding="telNo" width="90" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.returnRemark"/>" binding="returnRemark" width="80" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.remark"/>" binding="remark" width="80" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.returnRemark"/>" binding="returnRemark" width="95" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.remark"/>" binding="remark" width="95" align="center"></wj-flex-grid-column>
 
                         <%--저장시 필요--%>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage.certId"/>" binding="certId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -129,4 +129,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage.js?ver=20220202.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage.js?ver=20220203.01" charset="utf-8"></script>
