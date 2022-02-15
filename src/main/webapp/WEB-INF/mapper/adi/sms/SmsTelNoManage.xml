@@ -250,7 +250,7 @@
         </if>
         AND twuidv01.ORGN_CD = tcasn.ORGN_CD
         AND twuidv01.USER_ID = tcasn.USER_ID
-        ORDER BY tcasn.ORGN_CD, tcasn.USER_ID, tcasn.CERT_ID
+        ORDER BY tcasn.REG_DT DESC
     </select>
 
     <!-- 일반번호 인증요청 처리 팝업 - 저장 update -->
