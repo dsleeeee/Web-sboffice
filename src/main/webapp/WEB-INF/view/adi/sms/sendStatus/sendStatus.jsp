@@ -119,13 +119,13 @@
                     initialized="initComboBox(s)">
             </wj-combo-box>
             <%--// 페이지 스케일  --%>
-            <%-- SMS전송 --%>
-            <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">
-                <s:message code="sendStatus.smsSend"/>
-            </button>
             <%-- 예약취소 --%>
             <button class="btn_skyblue ml5 fr" id="btnCancelRepresent" ng-click="reserveCancel()">
                 <s:message code="sendStatus.reserveCancel" />
+            </button>
+            <%-- SMS전송 --%>
+            <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">
+                <s:message code="sendStatus.smsSend"/>
             </button>
         </div>
 

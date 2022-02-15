@@ -125,6 +125,8 @@ app.controller('smsGeneralNoRegisterCtrl', ['$scope', '$http', function ($scope,
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsGeneralNoRegister/getSmsGeneralNoRegisterSave.sb", params, function(){
+            $scope._popMsg(messages["smsGeneralNoRegister.smsGeneralNoAlert"]); // 인증 요청하신 내역은 "부가서비스 > SMS관리 > SMS전송 > 발신번호관리 탭"에서 확인 가능합니다.
+
             // 팝업 닫기
             $scope.close();
         });
