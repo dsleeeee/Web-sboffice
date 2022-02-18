@@ -70,10 +70,10 @@
 				</if>
 				AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 				<if test="prodCd != null and prodCd != ''">
-					AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+					AND tsdp.SIDE_PROD_CD LIKE '%'|| #{prodCd} ||'%'
 				</if>
 				<if test="prodNm != null and prodNm != ''">
-					AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+					AND tmps.PROD_NM LIKE '%'|| #{prodNm} ||'%'
 				</if>
 				AND 	tmp.STORE_CD = tsdp.STORE_CD
 				AND 	tmp.PROD_CD = tsdp.PROD_CD
@@ -151,10 +151,10 @@
 		</if>
 		AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 		<if test="prodCd != null and prodCd != ''">
-			AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+			AND tsdp.SIDE_PROD_CD LIKE '%'|| #{prodCd} ||'%'
 		</if>
 		<if test="prodNm != null and prodNm != ''">
-			AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+			AND tmps.PROD_NM LIKE '%'|| #{prodNm} ||'%'
 		</if>
 		AND 	tmp.STORE_CD = tsdp.STORE_CD
 		AND 	tmp.PROD_CD = tsdp.PROD_CD
