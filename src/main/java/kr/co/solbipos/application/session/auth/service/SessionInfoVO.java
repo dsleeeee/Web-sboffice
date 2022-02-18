@@ -148,6 +148,8 @@ public class SessionInfoVO extends CmmVO {
     private String vUserId;
     /** 가상로그인정보 */
     private List<VirtualLoginInfoVO> vLogindIds;
+    /** 로고이미지등록 여부*/
+    private String logoImg;
 
     /** POS 로그인을 위한 하드웨어인증키 */
     private String hwAuthKey;
@@ -614,6 +616,14 @@ public class SessionInfoVO extends CmmVO {
      */
     public void setvLogindIds(List<VirtualLoginInfoVO> vLogindIds) {
         this.vLogindIds = vLogindIds;
+    }
+
+    public String getLogoImg() {
+        return logoImg;
+    }
+
+    public void setLogoImg(String logoImg) {
+        this.logoImg = logoImg;
     }
 
     /**
