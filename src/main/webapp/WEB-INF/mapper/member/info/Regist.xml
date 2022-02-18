@@ -1705,4 +1705,922 @@
         AND tmmph.CHG_SEQ = #{chgSeq}
     </select>
 
+    <!-- 회원 삭제 팝업 - 강제삭제 체크용 비밀번호 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : 회원 강제삭제를 위한 체크용 비밀번호를 조회한다.
+    -->
+    <select id="getForcedDeleteChkPwd" resultType="String">
+        /* RegistMapper.getForcedDeleteChkPwd */
+        SELECT NMCODE_NM
+          FROM TB_CM_NMCODE tcn
+         WHERE NMCODE_GRP_CD = '224'
+           AND NMCODE_CD = '01'
+    </select>
+
+    <!-- 회원 삭제 팝업 - 회원 삭제 가능여부 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 회원 삭제 가능여부를 조회한다.
+    -->
+    <select id="getMemberDeleteYnChk" parameterType="registVO" resultType="Integer">
+        /* RegistMapper.getMemberDeleteYnChk */
+        SELECT COUNT(1)
+          FROM (     SELECT A.MEMBR_ORGN_CD,
+                              A.MEMBR_NO,
+                              B.REG_F_SALE_DATE
+                        FROM TB_MB_MEMBER A,
+                              TB_MB_MEMBER_POINT B
+                       WHERE 1=1
+                         AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                         AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                         AND B.MEMBR_NO (+)= A.MEMBR_NO
+	            ) tmmp,
+                (     SELECT MEMBR_NO,
+                              SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                        FROM TB_MB_MEMBER_PAID_BALANCE
+                       WHERE 1=1
+                         AND HQ_OFFICE_CD = #{hqOfficeCd}
+                          <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                              AND STORE_CD = #{storeCd}
+                            </if>
+                          </if>
+                       GROUP
+                          BY MEMBR_NO
+                ) tmmpb
+         WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+           AND tmmp.MEMBR_NO = #{membrNo}
+           AND tmmp.REG_F_SALE_DATE IS NULL
+           AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+    </select>
+
+    <!-- 회원 삭제 팝업 - 회원 정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : 회원 정보 영구삭제
+    -->
+    <delete id="deleteMember" parameterType="registVO">
+        /* USE : RegistMapper.deleteMember */
+        DELETE TB_MB_MEMBER
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 회원 카드정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CARD
+        COMMENTS : 회원 카드정보 영구삭제
+    -->
+    <delete id="deleteMemberCard" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberCard */
+        DELETE TB_MB_MEMBER_CARD
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 회원 포인트 변경내역 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_HIST
+        COMMENTS : 회원 포인트 변경내역 영구삭제
+    -->
+    <delete id="deleteMemberPointHist" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPointHist */
+        DELETE TB_MB_MEMBER_POINT_HIST
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 회원 포인트 정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT
+        COMMENTS : 회원 포인트 정보 영구삭제
+    -->
+    <delete id="deleteMemberPoint" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPoint */
+        DELETE TB_MB_MEMBER_POINT
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 회원 포인트 정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_STORE
+        COMMENTS : 회원 포인트 정보 영구삭제
+    -->
+    <delete id="deleteMemberPointStore" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPointStore */
+        DELETE TB_MB_MEMBER_POINT_STORE
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 회원 후불원장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID
+        COMMENTS : 회원 후불원장 영구삭제
+    -->
+    <delete id="deleteMemberPostpaid" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPostpaid */
+        DELETE TB_MB_MEMBER_POSTPAID
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND STORE_CD = #{storeCd}
+            </if>
+        </if>
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 후불회원 등록매장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE
+        COMMENTS : 후불회원 등록매장 영구삭제
+    -->
+    <delete id="deleteMemberPostpaidStore" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPostpaidStore */
+        DELETE TB_MB_MEMBER_POSTPAID_STORE
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 회원 선불원장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID
+        COMMENTS : 회원 선불원장 영구삭제
+    -->
+    <delete id="deleteMemberPrepaid" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPrepaid */
+        DELETE TB_MB_MEMBER_PREPAID
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND STORE_CD = #{storeCd}
+            </if>
+        </if>
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 선불회원 등록매장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID_STORE
+        COMMENTS : 선불회원 등록매장 영구삭제
+    -->
+    <delete id="deleteMemberPrepaidStore" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPrepaidStore */
+        DELETE TB_MB_MEMBER_PREPAID_STORE
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 선/후불 잔액 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 선/후불 잔액 영구삭제
+    -->
+    <delete id="deleteMemberPaidBalance" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberPaidBalance */
+        DELETE TB_MB_MEMBER_PAID_BALANCE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND STORE_CD = #{storeCd}
+            </if>
+        </if>
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 중 삭제불가회원 '미사용'으로 수정 -->
+    <!--
+        TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 중 삭제불가회원 '미사용'으로 수정
+    -->
+    <update id="updateAllMemberUseYn" parameterType="registVO">
+        /* USE : RegistMapper.updateAllMemberUseYn */
+        MERGE INTO TB_MB_MEMBER A
+		  USING (
+		            SELECT tmmp.MEMBR_ORGN_CD,
+							tmmp.MEMBR_NO
+			           FROM (
+			           			SELECT A.MEMBR_ORGN_CD,
+			                            A.MEMBR_NO,
+			                            B.REG_F_SALE_DATE
+			                      FROM TB_MB_MEMBER A,
+			                            TB_MB_MEMBER_POINT B
+			                     WHERE 1=1
+			                       AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+			                       AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+			                       AND B.MEMBR_NO (+)= A.MEMBR_NO
+				            ) tmmp,
+			                (
+			                   SELECT MEMBR_NO,
+			                           SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+			                     FROM TB_MB_MEMBER_PAID_BALANCE
+                                WHERE 1=1
+                                  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+			                    GROUP
+			                       BY MEMBR_NO
+			                ) tmmpb
+         			  WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+         				AND (tmmp.REG_F_SALE_DATE IS NOT NULL OR NVL(tmmpb.PREPAID_AMT, 0) > 0)
+				  ) B
+			  ON (
+					A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                	AND A.MEMBR_NO = B.MEMBR_NO
+                  )
+            WHEN MATCHED THEN
+            UPDATE
+               SET A.USE_YN = 'N',
+                   A.MOD_DT = #{modDt},
+                   A.MOD_ID = #{modId}
+    </update>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 정보 영구삭제
+    -->
+    <delete id="deleteAllMember" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMember */
+        MERGE INTO TB_MB_MEMBER A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                 GROUP
+                                    BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                ) B
+            ON (
+                  A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                  AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 카드정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CARD, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 카드정보 영구삭제
+    -->
+    <delete id="deleteAllMemberCard" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberCard */
+        MERGE INTO TB_MB_MEMBER_CARD A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                GROUP
+                                   BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                ) B
+            ON (
+                  A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                  AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 포인트 변경내역 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_HIST, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 포인트 변경내역 영구삭제
+    -->
+    <delete id="deleteAllMemberPointHist" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPointHist */
+        MERGE INTO TB_MB_MEMBER_POINT_HIST A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                 GROUP
+                                    BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                ) B
+            ON (
+                  A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                  AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 포인트 정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 포인트 정보 영구삭제
+    -->
+    <delete id="deleteAllMemberPoint" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPoint */
+        MERGE INTO TB_MB_MEMBER_POINT A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                 GROUP
+                                    BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                ) B
+            ON (
+                  A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                  AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 포인트 정보 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT_STORE, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 포인트 정보 영구삭제
+    -->
+    <delete id="deleteAllMemberPointStore" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPointStore */
+        MERGE INTO TB_MB_MEMBER_POINT_STORE A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                 GROUP
+                                    BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                ) B
+            ON (
+                  A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                  AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 후불원장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 후불원장 영구삭제
+    -->
+    <delete id="deleteAllMemberPostpaid" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPostpaid */
+        MERGE INTO TB_MB_MEMBER_POSTPAID A
+          USING (
+                    SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                #{storeCd} AS STORE_CD,
+                            </if>
+                        </if>
+                            tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                GROUP
+                                   BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                 ) B
+             ON (
+                   A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                        AND A.STORE_CD = B.STORE_CD
+                    </if>
+                </if>
+                   AND A.MEMBR_NO = B.MEMBR_NO
+                 )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+           AND A.STORE_CD = B.STORE_CD
+          </if>
+        </if>
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 후불회원 등록매장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID_STORE, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 후불회원 등록매장 영구삭제
+    -->
+    <delete id="deleteAllMemberPostpaidStore" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPostpaidStore */
+        MERGE INTO TB_MB_MEMBER_POSTPAID_STORE A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                 GROUP
+                                    BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                 ) B
+             ON (
+                    A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                    AND A.MEMBR_NO = B.MEMBR_NO
+                 )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 선불원장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 선불원장 영구삭제
+    -->
+    <delete id="deleteAllMemberPrepaid" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPrepaid */
+        MERGE INTO TB_MB_MEMBER_PREPAID A
+          USING (
+                    SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                          <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                              <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                #{storeCd} AS STORE_CD,
+                              </if>
+                          </if>
+                            tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                 GROUP
+                                    BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                   <if test='forcedDeleteYn == "N"'>
+                       AND tmmp.REG_F_SALE_DATE IS NULL
+                       AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                   </if>
+               ) B
+           ON (
+                  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                        AND A.STORE_CD = B.STORE_CD
+                    </if>
+                </if>
+                 AND A.MEMBR_NO = B.MEMBR_NO
+               )
+         WHEN MATCHED THEN
+       UPDATE
+          SET A.MOD_DT = #{modDt},
+               A.MOD_ID = #{modId}
+       DELETE
+        WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND A.STORE_CD = B.STORE_CD
+            </if>
+        </if>
+          AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 선불회원 등록매장 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID_STORE, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 선불회원 등록매장 영구삭제
+    -->
+    <delete id="deleteAllMemberPrepaidStore" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPrepaidStore */
+        MERGE INTO TB_MB_MEMBER_PREPAID_STORE A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                GROUP
+                                   BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                ) B
+            ON (
+                    A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                    AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 선/후불 잔액 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 선/후불 잔액 영구삭제
+    -->
+    <delete id="deleteAllMemberPaidBalance" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberPaidBalance */
+        MERGE INTO TB_MB_MEMBER_PAID_BALANCE A
+          USING (
+                    SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                #{storeCd} AS STORE_CD,
+                            </if>
+                        </if>
+                            tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.REG_F_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                 GROUP
+                                    BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                    </if>
+                ) B
+            ON (
+                    A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                 <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                     <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                         AND A.STORE_CD = B.STORE_CD
+                     </if>
+                 </if>
+                    AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND A.STORE_CD = B.STORE_CD
+            </if>
+        </if>
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
 </mapper>

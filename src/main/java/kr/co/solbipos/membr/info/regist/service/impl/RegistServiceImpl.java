@@ -951,4 +951,145 @@ public class RegistServiceImpl implements RegistService {
 
         return resultMap;
     }
+
+    /** 회원 삭제 팝업 - 강제삭제 체크용 비밀번호 조회 */
+    @Override
+    public String getForcedDeleteChkPwd() {
+        return mapper.getForcedDeleteChkPwd();
+    }
+
+    /** 선택회원삭제 */
+    @Override
+    public int selectMemberDelete(RegistVO[] registVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        String delMemberNo = ""; // 삭제할 회원번호
+
+        for (RegistVO registVO : registVOs) {
+
+            registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                registVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+            registVO.setModDt(currentDt);
+            registVO.setModId(sessionInfoVO.getUserId());
+
+            int delYn = 0; // 삭제가능여부 파악
+
+            // 강제삭제 체크 시
+            if("Y".equals(registVO.getForcedDeleteYn())) {
+                // 삭제가능여부 무조건 가능
+                delYn = 1;
+            }else{
+                // 삭제가능여부 파악
+                delYn = mapper.getMemberDeleteYnChk(registVO);
+            }
+
+            if(delYn > 0){
+                // 영구삭제가능
+                // 한번에 삭제하기 위해 arr에 담을준비
+                delMemberNo += (delMemberNo.equals("") ? "" : ",") + registVO.getMembrNo();
+
+            }else{
+                // 영구삭제불가('미사용' 처리)
+                result += mapper.deleteMemberInfo(registVO);
+            }
+        }
+
+        // 선택회원 영구삭제
+        if(!StringUtil.getOrBlank(delMemberNo).equals("")) {
+
+            RegistVO registVO2 = new RegistVO();
+
+            registVO2.setOrgnFg(sessionInfoVO.getOrgnFg());
+            registVO2.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                registVO2.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            registVO2.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+            registVO2.setArrMembrNo(delMemberNo.split(","));
+
+            // 회원 카드정보 영구삭제
+            mapper.deleteMemberCard(registVO2);
+            // 회원 포인트 변경내역 영구삭제
+            mapper.deleteMemberPointHist(registVO2);
+            // 회원 포인트 정보 영구삭제
+            mapper.deleteMemberPoint(registVO2);
+            // 회원 포인트 정보 영구삭제
+            mapper.deleteMemberPointStore(registVO2);
+            // 회원 후불원장 영구삭제
+            mapper.deleteMemberPostpaid(registVO2);
+            // 후불회원 등록매장 영구삭제
+            mapper.deleteMemberPostpaidStore(registVO2);
+            // 회원 선불원장 영구삭제
+            mapper.deleteMemberPrepaid(registVO2);
+            // 선불회원 등록매장 영구삭제
+            mapper.deleteMemberPrepaidStore(registVO2);
+            // 선/후불 잔액 영구삭제
+            mapper.deleteMemberPaidBalance(registVO2);
+            // 회원 정보 영구 삭제
+            mapper.deleteMember(registVO2);
+
+            result += registVO2.getArrMembrNo().length;
+        }
+
+        if ( result == registVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 전체회원삭제 */
+    @Override
+    public int allMemberDelete(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        int registCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        registVO.setModDt(currentDt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        // 강제삭제가 아닐때
+        if("N".equals(registVO.getForcedDeleteYn())) {
+
+            // 전체회원 중 삭제불가회원 '미사용'으로 수정
+            mapper.updateAllMemberUseYn(registVO);
+        }
+
+        // 삭제불가회원을 제외한 전체회원 영구삭제
+        // 강제삭제시 전체회원 영구삭제
+
+        // 전체회원 회원 카드정보 영구삭제
+        mapper.deleteAllMemberCard(registVO);
+        // 전체회원 회원 포인트 변경내역 영구삭제
+        mapper.deleteAllMemberPointHist(registVO);
+        // 전체회원 회원 포인트 정보 영구삭제
+        mapper.deleteAllMemberPoint(registVO);
+        // 전체회원 회원 포인트 정보 영구삭제
+        mapper.deleteAllMemberPointStore(registVO);
+        // 전체회원 회원 후불원장 영구삭제
+        mapper.deleteAllMemberPostpaid(registVO);
+        // 전체회원 후불회원 등록매장 영구삭제
+        mapper.deleteAllMemberPostpaidStore(registVO);
+        // 전체회원 회원 선불원장 영구삭제
+        mapper.deleteAllMemberPrepaid(registVO);
+        // 전체회원 선불회원 등록매장 영구삭제
+        mapper.deleteAllMemberPrepaidStore(registVO);
+        // 전체회원 선/후불 잔액 영구삭제
+        mapper.deleteAllMemberPaidBalance(registVO);
+        // 전체회원 회원 정보 영구 삭제
+        mapper.deleteAllMember(registVO);
+
+        return registCnt;
+    }
 }

@@ -224,6 +224,12 @@ public class RegistVO extends PageVO {
     /** 엑셀 다운로드 구분 */
     private String excelGubun;
 
+    /** 강제삭제여부 */
+    private String forcedDeleteYn;
+
+    /** 회원번호 array */
+    private String arrMembrNo[];
+
     /**
      * @return the orgnFg
      */
@@ -1273,6 +1279,22 @@ public class RegistVO extends PageVO {
 
     public void setExcelGubun(String excelGubun) {
         this.excelGubun = excelGubun;
+    }
+
+    public String getForcedDeleteYn() {
+        return forcedDeleteYn;
+    }
+
+    public void setForcedDeleteYn(String forcedDeleteYn) {
+        this.forcedDeleteYn = forcedDeleteYn;
+    }
+
+    public String[] getArrMembrNo() {
+        return arrMembrNo;
+    }
+
+    public void setArrMembrNo(String[] arrMembrNo) {
+        this.arrMembrNo = arrMembrNo;
     }
 
     @Override

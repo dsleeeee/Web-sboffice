@@ -124,6 +124,8 @@ public class RegistController {
         List<DefaultMap<String>> msgGrpColList = sendStatusService.getMsgGrpColList(sendStatusVO, sessionInfoVO);
         model.addAttribute("msgGrpColList", msgGrpColList);
 
+        // 회원 강제삭제를 위한 강제삭제 체크용 비밀번호 조회
+        model.addAttribute("forcedDeleteChkPwd", registService.getForcedDeleteChkPwd());
 
         return "membr/info/view/memberInfo";
     }
@@ -897,6 +899,52 @@ public class RegistController {
         resultMap.put("result", result);
 
         return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 선택회원삭제
+     *
+     * @param registVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2022. 02. 11.
+     */
+    @RequestMapping(value = "base/selectMemberDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectMemberDelete(@RequestBody RegistVO[] registVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = registService.selectMemberDelete(registVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 전체회원삭제
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2022. 02. 11.
+     */
+    @RequestMapping(value = "base/allMemberDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result allMemberDelete(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = registService.allMemberDelete(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 
 }

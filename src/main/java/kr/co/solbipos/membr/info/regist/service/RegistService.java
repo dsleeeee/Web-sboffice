@@ -191,4 +191,13 @@ public interface RegistService {
 
     /** 회원 포인트 조정 팝업 - 조회 */
     DefaultMap<String> getMemberPointAdjustList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원 삭제 팝업 - 강제삭제 체크용 비밀번호 조회 */
+    String getForcedDeleteChkPwd();
+
+    /** 선택회원삭제 */
+    int selectMemberDelete(RegistVO[] registVOs, SessionInfoVO sessionInfoVO);
+
+    /** 전체회원삭제 */
+    int allMemberDelete(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }
