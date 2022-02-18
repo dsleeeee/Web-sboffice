@@ -115,6 +115,9 @@ public class ContentController {
         List<DefaultMap<String>> weekPosInstTopList = contentService.getWeekPosInstTopList(sessionInfoVO);
         model.addAttribute("weekPosInstTopList", weekPosInstTopList);
 
+        /** 팝업 공고 조회 */
+        List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
+        model.addAttribute("boardList", boardList);
 
 //        String pUserPwd = EncUtil.setEncSHA256("ckp" + "0000");  // 포스 패스워드
 

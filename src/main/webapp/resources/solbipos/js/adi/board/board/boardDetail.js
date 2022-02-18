@@ -95,10 +95,22 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             } else if ($scope.boardDetail.popupYn === "N") {
                 $scope.boardDetail.popupYn = false;
             }
-            if($scope.boardDetail.targetFg === "1") {
+            if($scope.boardDetail.targetFg === "123") {
+                $scope.boardDetail.targetFg = "관리자/총판/대리점";
+            } else if($scope.boardDetail.targetFg === "23") {
+                $scope.boardDetail.targetFg = "총판/대리점";
+            } else if($scope.boardDetail.targetFg === "45") {
+                $scope.boardDetail.targetFg = "본사/매장";
+            } else if($scope.boardDetail.targetFg === "3") {
+                $scope.boardDetail.targetFg = "대리점";
+            } else if($scope.boardDetail.targetFg === "4") {
+                $scope.boardDetail.targetFg = "본사";
+            } else if($scope.boardDetail.targetFg === "5") {
+                $scope.boardDetail.targetFg = "매장";
+            } else if($scope.boardDetail.targetFg === "6") {
+                $scope.boardDetail.targetFg = "특정대상";
+            }else {
                 $scope.boardDetail.targetFg = "전체";
-            } else if($scope.boardDetail.targetFg === "2") {
-                $scope.boardDetail.targetFg = $scope.boardDetail.partOrgnNm;
             }
             if($scope.boardDetail.noticeYn === "Y") {
                 $scope.boardDetail.noticeYn = true;

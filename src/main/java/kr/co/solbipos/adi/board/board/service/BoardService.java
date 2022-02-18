@@ -62,4 +62,7 @@ public interface BoardService {
 
     /** 팝업 공고 조회 */
     List<DefaultMap<String>> getPopUpBoardList(SessionInfoVO sessionInfoVO);
+
+    /** 본사/매장 목록 조회 */
+    List<DefaultMap<String>> selectHqStoreList(BoardVO boardVO , SessionInfoVO sessionInfoVO);
 }

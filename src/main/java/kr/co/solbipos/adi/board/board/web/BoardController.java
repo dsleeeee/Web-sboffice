@@ -401,4 +401,26 @@ System.out.println("kjs: reFileNM : " + reFileNM);
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 본사매장 목록 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   boardVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.02.07
+     */
+    @RequestMapping(value = "/board/selectHqStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectHqStoreList(BoardVO boardVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = boardService.selectHqStoreList(boardVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, boardVO);
+    }
 }

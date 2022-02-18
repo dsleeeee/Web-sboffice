@@ -29,10 +29,52 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S: 매장)
     $scope.orgnFg = gvOrgnFg;
 
+    var partOrgnCd;
+    var partOrgnNm;
+
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("apprFg", apprFgData); //승인구분
     // 본사권한으로 로그인 한 경우, 매장선택 가능.
     // if($scope.orgnFg === 'H') {
+    if($scope.orgnFg === 'M') {
+        // 관리자
+        var targetFgData = [
+            {"name": "관리자/총판/대리점", "value": "123"},
+            {"name": "전체", "value": "12345"},
+            {"name": "본사/매장", "value": "45"},
+            {"name": "특정대상(본사/매장)", "value": "6"}
+        ]
+    } else if($scope.orgnFg === 'A') {
+        if(pAgencyCd === "00000") {
+            // 총판
+            var targetFgData = [
+                {"name": "총판/대리점", "value": "23"},
+                {"name": "전체", "value": "2345"},
+                {"name": "본사/매장", "value": "45"},
+                {"name": "특정대상(본사/매장)", "value": "6"}
+            ]
+        } else {
+            // 대리점
+            var targetFgData = [
+                {"name": "대리점", "value": "3"},
+                {"name": "전체", "value": "345"},
+                {"name": "본사/매장", "value": "45"},
+                {"name": "특정대상(본사/매장)", "value": "6"}
+            ]
+        }
+    } else if($scope.orgnFg === 'H') {
+        // 본사
+        var targetFgData = [
+            {"name": "전체", "value": "45"},
+            {"name": "매장", "value": "5"},
+            {"name": "특정대상", "value": "6"}
+        ]
+    } else if($scope.orgnFg === 'S') {
+        // 매장
+        var targetFgData = [
+            {"name": "매장", "value": "5"}
+        ]
+    }
         $scope._setComboData("targetFg", targetFgData); // 공개대상
     // } else {
     //     $scope._setComboData("targetFg", targetFgData1); // 공개대상
@@ -159,6 +201,9 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope.setSelectedBoardInfo(data);
             $scope.searchBoardInfo(); //수정
             $scope.searchBoardDetailAtch(); // 첨부파일 조회
+            setTimeout(function() {
+                $scope.setTargetFg();
+            }, 500);
         } else {
             $scope.newForm();  //신규
         }
@@ -192,8 +237,10 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                 $scope.popupYn = false;
             }
             $scope.targetFg = $scope.boardInfo.targetFg;
-            $("#boardInfoStoreCd").val($scope.boardInfo.partOrgnCd);
-            $("#boardInfoStoreNm").val($scope.boardInfo.partOrgnNm);
+            if($scope.targetFg === "6"){
+                partOrgnCd = $scope.boardInfo.partOrgnCd;
+                partOrgnNm = $scope.boardInfo.partOrgnNm;
+            }
             if($scope.boardInfo.noticeYn === "Y") {
                 $scope.noticeYn = true;
             } else if ($scope.boardInfo.noticeYn === "N") {
@@ -240,7 +287,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope.apprFg = "1";
         $scope.fullSizeYn = false;
         $scope.popupYn = false;
-        $scope.targetFg = "1";
+        if($scope.orgnFg != 'S'){
+            $scope.targetFgCombo.selectedIndex = 0;
+            partOrgnCd = "";
+            partOrgnNm = "선택";
+        }
         $scope.noticeYn = false;
         $scope.emergencyYn = false;
         $scope.smsYn = false;
@@ -297,6 +348,16 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                     return false;
                 }
             }
+        }
+
+        // 공개대상이 특정대상인데 대상을 선택하지 않은 경우
+        if($scope.targetFg === "6" && $scope.orgnFg != "S"){
+            if($("#boardInfoStoreCd").val() === undefined || $("#boardInfoStoreCd").val() === "" || $("#boardInfoStoreCd").val() === null){
+                $scope._popMsg(messages["boardInfo.targetFg.msg"]);
+                return false;
+            }
+        } else if($scope.orgnFg === "S"){
+            $scope.targetFg = "5";
         }
 
         var params = {};
@@ -634,6 +695,14 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         } else {
             $("#emergency").css("display", "");
             $scope.emergency = true;
+        }
+    };
+
+    $scope.setTargetFg = function (){
+        console.log(partOrgnCd + " " + partOrgnNm);
+        if($scope.targetFg === "6"){
+            $("#boardInfoStoreCd").val(partOrgnCd);
+            $("#boardInfoStoreNm").val(partOrgnNm);
         }
     };
 

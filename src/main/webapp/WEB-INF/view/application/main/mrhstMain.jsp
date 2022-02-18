@@ -257,7 +257,6 @@
                     <div class="title" style="width:560px;">
                         <p class="tit" id="popTitle${status.index}">
                                 ${board.title}</p>
-                        <a href="#" class="btn_close"></a>
                         <div class="con">
                             <div id="boardContent${status.index}"></div>
                                 ${board.content}

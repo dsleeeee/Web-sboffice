@@ -168,4 +168,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.14" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.15" charset="utf-8"></script>

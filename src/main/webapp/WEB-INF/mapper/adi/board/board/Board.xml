@@ -95,49 +95,127 @@
                 <when test='orgnFg != null and orgnFg != ""'>
                     <!-- 본사 -->
                     <if test='orgnFg == "H"'>
-                        <![CDATA[
-                            AND twuidv01.ORGN_FG IN ('H')
-                            AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
-                        ]]>
+        <![CDATA[
+              AND(
+                    (       -- 본인이 작성한 글
+                            twuidv01.ORGN_FG = 'H'
+                        AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                OR  (       -- 게시대상으로 설정된 글
+                            twbi.APPR_FG = '2'
+                        AND twbi.TARGET_FG = '6'
+                        AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{hqOfficeCd} AND USE_YN = 'Y')
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
+                    )
+                OR  (       -- 관리자가 등록한 글
+                            twbi.APPR_FG = '2'
+                        AND twuidv01.ORGN_FG = 'M'
+                        AND twbi.TARGET_FG LIKE '%4%'
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
+                    )
+                OR  (       -- 총판/대리점이 등록한 글
+                            twbi.APPR_FG = '2'
+                        AND twuidv01.ORGN_FG = 'A'
+                        AND twbi.TARGET_FG LIKE '%4%'
+                        AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
+                    )
+                )
+        ]]>
                     </if>
                     <!-- 매장 -->
                     <if test='orgnFg == "S"'>
-                        <![CDATA[
-                            AND (
-                                    (
-                                        twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
-                                        AND twbi.APPR_FG = '2'
-                                        AND (
-                                                ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')) )
-                                                OR (twbi.TARGET_FG = '1')
-                                            )
-                                    )
-                                    OR
-                                    (
-                                        twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
-                                    )
-                                )
-                        ]]>
+        <![CDATA[
+            AND (
+                    (       -- 본인이 작성한 글
+                            twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
+                    )
+                OR  (       -- 게시대상으로 설정된 글
+                            twbi.APPR_FG = '2'
+                        AND twbi.TARGET_FG = '6'
+                        AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
+                    )
+                OR  (       -- 관리자가 등록한 글
+                            twbi.APPR_FG = '2'
+                        AND twuidv01.ORGN_FG = 'M'
+                        AND twbi.TARGET_FG LIKE '%5%'
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
+                    )
+                OR  (       -- 총판/대리점이 등록한 글
+                            twbi.APPR_FG = '2'
+                        AND twuidv01.ORGN_FG = 'A'
+                        AND twbi.TARGET_FG LIKE '%5%'
+                        AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
+                    )
+                OR  (       -- 본사가 등록한 글
+                            twbi.APPR_FG = '2'
+                        AND twuidv01.ORGN_FG = 'H'
+                        AND twbi.TARGET_FG LIKE '%5%'
+                        AND twuidv01.HQ_OFFICE_CD = (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
+                    )
+                )
+        ]]>
                     </if>
                     <!-- 시스템 -->
                     <if test='orgnFg == "M"'>
-                        <![CDATA[
-                            AND twuidv01.ORGN_FG IN ('M','A')
-                            AND (
-                                    (twbi.APPR_FG = '2')
-                                    OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
-                                    OR (twbi.APPR_FG = '3' AND twbi.USER_ID = #{userId})
-                                )
-                        ]]>
+                AND twuidv01.ORGN_FG = 'M'
+                AND (
+                        (twbi.APPR_FG = '2')
+                        OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
+                        OR (twbi.APPR_FG = '3' AND twbi.USER_ID = #{userId})
+                    )
                     </if>
                     <!-- 대리점 -->
                     <if test='orgnFg == "A"'>
-                        <![CDATA[
-                             AND twuidv01.ORGN_FG IN ('M','A')
-                            AND twbi.APPR_FG = '2'
+                <![CDATA[
+                AND (
+                        (       -- 본인이 작성한 글
+                                twuidv01.ORGN_FG = 'A'
+                            AND twuidv01.ORGN_CD = #{orgnGrpCd}
+                        )
+                    OR (       -- 게시대상으로 설정된 글
+                                twbi.TARGET_FG = '6'
+                            AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{orgnGrpCd} AND USE_YN = 'Y')
                             AND twbi.START_DATE <= #{date}
                             AND twbi.END_DATE >= #{date}
-                        ]]>
+                        )
+                    OR  (       -- 관리자가 등록한 글
+                                twbi.APPR_FG = '2'
+                            AND twuidv01.ORGN_FG = 'M'
+                            AND twbi.TARGET_FG LIKE '%' || CASE WHEN (SELECT P_AGENCY_CD
+                                                                        FROM TB_CM_AGENCY
+                                                                        WHERE AGENCY_CD = #{orgnGrpCd}) = '00000'
+                                                                        THEN '2'
+                                                                        ELSE '3'
+                                                                        END || '%'
+                            AND twbi.START_DATE <= #{date}
+                            AND twbi.END_DATE >= #{date}
+                        )
+                     OR (       -- 총판/대리점이 등록한 글
+                                twuidv01.ORGN_FG = 'A'
+                            AND twuidv01.ORGN_CD != #{orgnGrpCd}
+                            AND twbi.APPR_FG = '2'
+                            AND twbi.TARGET_FG LIKE '%' || CASE WHEN (SELECT P_AGENCY_CD
+                                                                        FROM TB_CM_AGENCY
+                                                                        WHERE AGENCY_CD = #{orgnGrpCd}) = '00000'
+                                                                        THEN '2'
+                                                                        ELSE '3'
+                                                                        END || '%'
+                            AND twbi.START_DATE <= #{date}
+                            AND twbi.END_DATE >= #{date}
+                        )
+                    )
+                ]]>
                     </if>
                 </when>
             </choose>
@@ -192,11 +270,20 @@
             twbps.BOARD_CD,
             twbps.BOARD_SEQ_NO,
             LISTAGG(twbps.PART_ORGN_CD, ',') WITHIN GROUP (ORDER BY twbps.PART_ORGN_CD) AS PART_ORGN_CD,
-            LISTAGG(tms.STORE_NM, ',') WITHIN GROUP (ORDER BY tms.STORE_NM) AS PART_ORGN_NM
+            LISTAGG(info.NM, ',') WITHIN GROUP (ORDER BY info.NM) AS PART_ORGN_NM
             FROM TB_WB_BOARD_PART_STORE twbps,
-            TB_MS_STORE tms
+            (
+                SELECT	tms.STORE_CD AS CD, TMS.STORE_NM AS NM
+                FROM 	TB_MS_STORE tms
+                WHERE 	tms.STORE_CD IN (SELECT PART_ORGN_CD FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND BOARD_SEQ_NO = #{boardSeqNo})
+                UNION ALL
+                SELECT	tho.HQ_OFFICE_CD AS CD, tho.HQ_OFFICE_NM AS NM
+                FROM 	TB_HQ_OFFICE tho
+                WHERE 	tho.HQ_OFFICE_CD IN (SELECT PART_ORGN_CD FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND BOARD_SEQ_NO = #{boardSeqNo})
+            ) info
             WHERE 1=1
-            AND tms.STORE_CD (+)= twbps.PART_ORGN_CD
+            AND info.CD (+)= twbps.PART_ORGN_CD
+            AND twbps.USE_YN = 'Y'
             GROUP BY twbps.BOARD_CD, twbps.BOARD_SEQ_NO
         ) twbps
         WHERE 1=1
@@ -214,42 +301,59 @@
     -->
     <select id="getPopUpBoardList" parameterType="BoardVO" resultMap="BoardListMap">
         /* ContentMapper.getPopUpBoardList */
-        SELECT
-        twbi.TITLE,
-        twbi.CONTENT
-        FROM TB_WB_BOARD_INFO twbi,
-        TB_WB_USER_INFO_DTL_V01 twuidv01
-        WHERE 1=1
-        AND twbi.BOARD_CD = '01'
-        AND twbi.USE_YN = 'Y'
-        AND twbi.POPUP_YN = 'Y'
+        SELECT  twbi.TITLE,
+                twbi.CONTENT
+        FROM    TB_WB_BOARD_INFO twbi,
+                TB_WB_USER_INFO_DTL_V01 twuidv01
+        WHERE   twbi.BOARD_CD = '01'
+        AND     twbi.USE_YN = 'Y'
+        AND     twbi.POPUP_YN = 'Y'
         <if test='orgnFg == "H"'>
-            AND twuidv01.ORGN_FG IN ('H')
-            AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
-        </if>
-        <if test='orgnFg == "S"'>
-            AND (
-                    (
-                        twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND twbi.APPR_FG = '2'
-                        AND (
-                            ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')) )
-                            OR (twbi.TARGET_FG = '1')
-                        )
+              AND(
+                    (       -- 게시대상으로 설정된 글
+                            twbi.TARGET_FG = '6'
+                        AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{hqOfficeCd} AND USE_YN = 'Y')
                     )
-                    OR
-                    (
-                        twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
+                OR  (       -- 관리자가 등록한 글
+                            twuidv01.ORGN_FG = 'M'
+                        AND twbi.TARGET_FG LIKE '%4%'
+                    )
+                OR  (       -- 총판/대리점이 등록한 글
+                            twuidv01.ORGN_FG = 'A'
+                        AND twbi.TARGET_FG LIKE '%4%'
+                        AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                     )
                 )
         </if>
-        AND twuidv01.USER_ID (+)= twbi.USER_ID
-        <![CDATA[
-           AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-           AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ]]>
-        ORDER BY 1
-        ,   twbi.MOD_DT DESC
+        <if test='orgnFg == "S"'>
+            AND (
+                    (       -- 게시대상으로 설정된 글
+                            twbi.TARGET_FG = '6'
+                        AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')
+                    )
+                OR  (       -- 관리자가 등록한 글
+                            twuidv01.ORGN_FG = 'M'
+                        AND twbi.TARGET_FG LIKE '%5%'
+                    )
+                OR  (       -- 총판/대리점이 등록한 글
+                            twuidv01.ORGN_FG = 'A'
+                        AND twbi.TARGET_FG LIKE '%5%'
+                        AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
+                    )
+                OR  (       -- 본사가 등록한 글
+                            twuidv01.ORGN_FG = 'H'
+                        AND twbi.TARGET_FG LIKE '%5%'
+                        AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                )
+        </if>
+        AND     twbi.APPR_FG = '2'
+        AND     twuidv01.USER_ID (+)= twbi.USER_ID
+    <![CDATA[
+        AND     twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        AND     twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+    ]]>
+        ORDER BY 1, twbi.MOD_DT DESC
     </select>
 
     <!-- 팝업 게시판 조회(대리점) -->
@@ -257,28 +361,61 @@
         TABLE    : TB_WB_BOARD_READNG_HIST
         COMMENTS : 게시판 조회
     -->
-    <select id="getPopUpBoardList2" parameterType="BoardVO" resultMap="BoardListMap">
-        /* ContentMapper.getPopUpBoardList2 */
-        SELECT
-        twbi.TITLE,
-        twbi.CONTENT
-        FROM TB_WB_BOARD_INFO twbi,
-        TB_WB_USER_INFO_DTL_V01 twuidv01,
-        TB_WB_USER_INFO_DTL_V01 twuidv011
-        WHERE 1=1
-        AND twbi.BOARD_CD = '01'
-        AND twbi.USE_YN = 'Y'
-        AND twbi.POPUP_YN =  'Y'
-        AND twuidv01.ORGN_FG2 IN ('A')
-        AND twuidv011.USER_ID = #{userId}
-        AND twuidv011.ORGN_FG2 IN ('C', 'P')
-          AND twuidv01.USER_ID (+)= twbi.USER_ID
-        <![CDATA[
-           AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-           AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ]]>
-        ORDER BY 1
-        ,   twbi.MOD_DT DESC
+    <select id="getAgencyPopUpBoardList" parameterType="BoardVO" resultMap="BoardListMap">
+        /* ContentMapper.getAgencyPopUpBoardList */
+        SELECT  twbi.TITLE,
+                twbi.CONTENT
+        FROM    TB_WB_BOARD_INFO twbi
+        WHERE   twbi.BOARD_CD = '01'
+        AND     twbi.USE_YN = 'Y'
+        AND     twbi.POPUP_YN =  'Y'
+          AND (
+                    (       -- 게시대상으로 설정된 글
+                            twbi.TARGET_FG = '6'
+                        AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{orgnGrpCd} AND USE_YN = 'Y')
+                    )
+                OR  (       -- 게시대상이 총판/대리점인 경우
+                            twbi.TARGET_FG LIKE '%' || CASE WHEN (SELECT P_AGENCY_CD
+                                                                    FROM TB_CM_AGENCY
+                                                                   WHERE AGENCY_CD = #{orgnGrpCd}) = '00000'
+                                                       THEN '2'
+                                                       ELSE '3'
+                                                       END || '%'
+                    )
+            )
+    <![CDATA[
+        -- 본인이 작성한 글 제외
+        AND     twbi.USER_ID != #{userId}
+        AND     twbi.APPR_FG = '2'
+        AND     twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        AND     twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+    ]]>
+        ORDER BY 1, twbi.MOD_DT DESC
+    </select>
+
+
+    <!-- 팝업 게시판 조회(관리자) -->
+    <!--
+        TABLE    : TB_WB_BOARD_READNG_HIST
+        COMMENTS : 게시판 조회
+    -->
+    <select id="getSystemPopUpBoardList" parameterType="BoardVO" resultMap="BoardListMap">
+        /* ContentMapper.getSystemPopUpBoardList */
+        SELECT  twbi.TITLE,
+                twbi.CONTENT
+        FROM    TB_WB_BOARD_INFO twbi
+        WHERE   twbi.BOARD_CD = '01'
+        AND     twbi.USE_YN = 'Y'
+        AND     twbi.POPUP_YN = 'Y'
+        AND     twbi.TARGET_FG LIKE '%1%'
+        -- 본인이 작성한 글 제외
+        AND     twbi.USER_ID != #{userId}
+        AND     twbi.APPR_FG = '2'
+    <![CDATA[
+       AND      twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+       AND      twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+    ]]>
+        ORDER BY 1, twbi.MOD_DT DESC
     </select>
 
     <!-- 게시판 조회수 조회 -->
@@ -950,4 +1087,50 @@
            AND BOARD_SEQ_NO = #{boardSeqNo}
            AND USE_YN = 'Y'
     </update>
+
+    <!-- 본사매장선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : BoardVO
+        COMMENTS : 본사매장선택 리스트를 조회한다.
+    -->
+    <select id="selectHqStoreList" parameterType="BoardVO" resultType="DefaultMap">
+        /* USE : BoardMapper.selecthqstorelist */
+        <if test='orgnFg != "H"'>
+            SELECT 	HQ_OFFICE_CD AS CD,
+                    HQ_OFFICE_NM AS NM,
+                    '본사' AS GUBUN
+            FROM	TB_HQ_OFFICE tho
+            WHERE   1=1
+            <if test='storeCd != null and storeCd != ""'>
+                AND tho.HQ_OFFICE_CD LIKE '%'||#{storeCd}||'%'
+            </if>
+            <if test='storeNm != null and storeNm != ""'>
+                AND tho.HQ_OFFICE_NM LIKE '%'||#{storeNm}||'%'
+            </if>
+            <if test='orgnFg == "A"'>
+                AND tho.AGENCY_CD = #{orgnGrpCd}
+            </if>
+            UNION ALL
+        </if>
+        SELECT 	STORE_CD AS CD,
+                STORE_NM AS NM,
+                '매장' AS GUBUN
+        FROM 	TB_MS_STORE tms
+        WHERE   1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='orgnFg == "A"'>
+            AND tms.AGENCY_CD = #{orgnGrpCd}
+        </if>
+        <if test='orgnFg == "H"'>
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        ORDER BY GUBUN DESC, CD ASC
+    </select>
+
 </mapper>

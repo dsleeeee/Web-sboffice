@@ -297,8 +297,7 @@
         twbi.BOARD_SEQ_NO,
         twbi.TITLE,
         TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
-        FROM TB_WB_BOARD_INFO twbi,
-        TB_WB_USER_INFO_DTL_V01 twuidv01
+        FROM TB_WB_BOARD_INFO twbi
         WHERE 1=1
         AND twbi.BOARD_CD = '01'
         AND twbi.USE_YN = 'Y'
@@ -308,7 +307,6 @@
             AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
-        AND twuidv01.ORGN_FG IN ('M','A')
         AND twbi.BOARD_SEQ_NO NOT IN (
                                         SELECT
                                         BOARD_SEQ_NO
@@ -318,7 +316,7 @@
                                         AND USER_ID = #{userId}
                                         GROUP BY BOARD_SEQ_NO
                                     )
-        AND twuidv01.USER_ID (+)= twbi.USER_ID
+        AND twbi.TARGET_FG LIKE '%1%'
         ORDER BY twbi.REG_DT DESC
     </select>
 
@@ -334,8 +332,7 @@
         twbi.BOARD_SEQ_NO,
         twbi.TITLE,
         TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS NOTICE_DATE
-        FROM TB_WB_BOARD_INFO twbi,
-        TB_WB_USER_INFO_DTL_V01 twuidv01
+        FROM TB_WB_BOARD_INFO twbi
         WHERE 1=1
         AND twbi.BOARD_CD = '01'
         AND twbi.USE_YN = 'Y'
@@ -345,7 +342,7 @@
             AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
-        AND twuidv01.ORGN_FG IN ('M','A')
+          -- 읽은 공지 제외
         AND twbi.BOARD_SEQ_NO NOT IN (
                                         SELECT
                                         BOARD_SEQ_NO
@@ -355,7 +352,17 @@
                                         AND USER_ID = #{userId}
                                         GROUP BY BOARD_SEQ_NO
                                     )
-        AND twuidv01.USER_ID (+)= twbi.USER_ID
+            -- 게시대상이 총판/대리점인 경우
+        AND twbi.TARGET_FG LIKE '%' || CASE WHEN (SELECT P_AGENCY_CD
+                                                  FROM TB_CM_AGENCY
+                                                  WHERE AGENCY_CD = #{orgnGrpCd}) = '00000'
+                                        THEN '2'
+                                        ELSE '3'
+                                        END || '%'
+        OR (       -- 게시대상으로 설정된 글
+            twbi.TARGET_FG = '6'
+            AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{orgnGrpCd} AND USE_YN = 'Y')
+         )
         ORDER BY twbi.REG_DT DESC
     </select>
 
@@ -382,8 +389,6 @@
             AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
-        AND twuidv01.ORGN_FG IN ('H')
-        AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
         AND twbi.BOARD_SEQ_NO NOT IN (
                                         SELECT
                                         BOARD_SEQ_NO
@@ -393,6 +398,22 @@
                                         AND USER_ID = #{userId}
                                         GROUP BY BOARD_SEQ_NO
                                     )
+
+        AND(
+              (       -- 게시대상으로 설정된 글
+                      twbi.TARGET_FG = '6'
+                      AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{hqOfficeCd} AND USE_YN = 'Y')
+                  )
+              OR  (       -- 관리자가 등록한 글
+                      twuidv01.ORGN_FG = 'M'
+                      AND twbi.TARGET_FG LIKE '%4%'
+                  )
+              OR  (       -- 총판/대리점이 등록한 글
+                      twuidv01.ORGN_FG = 'A'
+                      AND twbi.TARGET_FG LIKE '%4%'
+                      AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                  )
+          )
         AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY twbi.REG_DT DESC
     </select>
@@ -417,18 +438,25 @@
         AND twbi.NOTICE_YN = 'Y'
         AND twbi.APPR_FG = '2'
         AND (
-                (
-                twuidv01.ORGN_FG = 'H' AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND (
-                        ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')) )
-                        OR (twbi.TARGET_FG = '1')
-                    )
-            )
-            OR
-            (
-                twuidv01.ORGN_FG = 'S' AND twuidv01.STORE_CD = #{storeCd}
-            )
-        )
+              (       -- 게시대상으로 설정된 글
+                      twbi.TARGET_FG = '6'
+                      AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = '01' AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')
+                  )
+              OR  (       -- 관리자가 등록한 글
+                      twuidv01.ORGN_FG = 'M'
+                      AND twbi.TARGET_FG LIKE '%5%'
+                  )
+              OR  (       -- 총판/대리점이 등록한 글
+                      twuidv01.ORGN_FG = 'A'
+                      AND twbi.TARGET_FG LIKE '%5%'
+                      AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
+                  )
+              OR  (       -- 본사가 등록한 글
+                      twuidv01.ORGN_FG = 'H'
+                      AND twbi.TARGET_FG LIKE '%5%'
+                      AND twuidv01.HQ_OFFICE_CD = #{hqOfficeCd}
+                  )
+          )
         <![CDATA[
             AND twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')

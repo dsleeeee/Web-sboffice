@@ -251,6 +251,38 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
         return storeManageMapper.insertTabGroup(tableGroupVO);
     }
 
+    @Override
+    public int delAttr(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO) {
+        String currentDt = currentDateTimeString();
+        tableAttrVO.setStoreCd(sessionInfoVO.getStoreCd());
+        tableAttrVO.setGubun("delAttr");
+
+        // 기존 데이터 삭제(TB_WB_STORE_TABLE_CONFG_XML)
+        mapper.deleteTabConfg(tableAttrVO);
+
+        // 기존 데이터 삭제(TB_MS_TABLE_ATTR)
+        mapper.deleteTabAttr(tableAttrVO);
+
+        // 기본 테이블 그룹 생성
+        TableGroupVO tableGroupVO = new TableGroupVO();
+        tableGroupVO.setStoreCd(sessionInfoVO.getStoreCd());
+        tableGroupVO.setRegDt(currentDt);
+        tableGroupVO.setRegId(sessionInfoVO.getUserId());
+        tableGroupVO.setModDt(currentDt);
+        tableGroupVO.setModId(sessionInfoVO.getUserId());
+
+        tableAttrVO.setRegDt(currentDt);
+        tableAttrVO.setRegId(sessionInfoVO.getUserId());
+        tableAttrVO.setModDt(currentDt);
+        tableAttrVO.setModId(sessionInfoVO.getUserId());
+
+
+        //  테이블 기본속성
+        // 매장생성 시 넣는 데이터
+        mapper.insertTabAttr(tableAttrVO);
+        return mapper.insertTabConfg(tableAttrVO);
+    }
+
     /**
      * XML 파싱하여 테이블 속성 항목 추출
      * @param xml 파싱대상XML

@@ -6,15 +6,16 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="logoImg" value="${sessionScope.sessionInfo.logoImg}" />
 
   <%--로고영역--%>
   <%--메인페이지 좌측 메뉴리스트 상단 SOLBIPOS 로고--%>
   <%--가상로그인 후 로고 클릭시 세션없어짐 2021.02.16 김설아--%>
   <h1><a href="/main.sb?sid=${sessionId}" class="on">
-<c:if test="${orgnFg != 'HQ' and orgnFg != 'STORE'}">
+<c:if test="${(orgnFg != 'HQ' and orgnFg != 'STORE') or logoImg != 'Y'}">
   <span><img src="/resource/solbipos/css/img/TwoColor_logo.png" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
 </c:if>
-<c:if test="${orgnFg == 'HQ' or orgnFg == 'STORE'}">
+<c:if test="${(orgnFg == 'HQ' or orgnFg == 'STORE') and logoImg == 'Y'}">
   <span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" /></span></a></h1><%-- 활성화 : class="on" --%>
 </c:if>
       <%--//로고영역--%>

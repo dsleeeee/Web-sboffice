@@ -19,6 +19,7 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -79,6 +80,22 @@ public class SessionServiceImpl implements SessionService {
         sessionInfoVO.setBkmkMenuData(cmmMenuService.getBkmkMenuList(sessionInfoVO));
         // 고정 메뉴 리스트 Set
         sessionInfoVO.setFixedMenuData(cmmMenuService.getFixedMenuList(sessionInfoVO));
+
+        // 로고이미지 구분(파일여부 체크)
+        String path = BaseEnv.FILE_UPLOAD_DIR + "logo_img/";
+//        String path = "D:\\" + "logo_img/";
+
+        File file1 = new File(path + sessionInfoVO.getHqOfficeCd() + ".PNG");
+        File file2 = new File(path + sessionInfoVO.getHqOfficeCd() + ".JPG");
+
+        boolean isExists1 = file1.exists();
+        boolean isExists2 = file2.exists();
+
+        if(isExists1 ||isExists2) {
+            sessionInfoVO.setLogoImg("Y");
+        } else {
+            sessionInfoVO.setLogoImg("N");
+        }
 
         // 본사는 소속된 가맹점을 세션에 저장
         if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
