@@ -493,7 +493,7 @@
                 <wj-flex-grid-column header="<s:message code="regist.brthd"/>" binding="birthday" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                <%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd" visible="false"></wj-flex-grid-column>--%>
+                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd" visible="false"></wj-flex-grid-column>
                 <%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -567,7 +567,7 @@
                 <wj-flex-grid-column header="<s:message code="regist.brthd"/>" binding="birthday" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                <%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd" visible="false"></wj-flex-grid-column>--%>
+                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd" visible="false"></wj-flex-grid-column>
                 <%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -658,7 +658,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220216.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220218.01" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
