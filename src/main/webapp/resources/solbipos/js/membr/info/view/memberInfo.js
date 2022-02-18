@@ -493,6 +493,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 var obj = {};
+                obj.regStoreCd = $scope.flex.collectionView.items[i].regStoreCd;
                 obj.membrNo = $scope.flex.collectionView.items[i].membrNo;
                 params.push(obj);
             }

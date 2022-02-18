@@ -1733,11 +1733,12 @@
                               TB_MB_MEMBER_POINT B
                        WHERE 1=1
                          AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                         AND A.MEMBR_NO = #{membrNo}
                          AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
                          AND B.MEMBR_NO (+)= A.MEMBR_NO
 	            ) tmmp,
                 (     SELECT MEMBR_NO,
-                              SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                              COUNT(1) AS CNT
                         FROM TB_MB_MEMBER_PAID_BALANCE
                        WHERE 1=1
                          AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1746,13 +1747,14 @@
                               AND STORE_CD = #{storeCd}
                             </if>
                           </if>
+                          AND MEMBR_NO = #{membrNo}
                        GROUP
                           BY MEMBR_NO
                 ) tmmpb
          WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
            AND tmmp.MEMBR_NO = #{membrNo}
            AND tmmp.REG_F_SALE_DATE IS NULL
-           AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+           AND NVL(tmmpb.CNT, 0) = 0
     </select>
 
     <!-- 회원 삭제 팝업 - 회원 정보 영구삭제 -->
@@ -1949,7 +1951,7 @@
 				            ) tmmp,
 			                (
 			                   SELECT MEMBR_NO,
-			                           SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                       COUNT(1) AS CNT
 			                     FROM TB_MB_MEMBER_PAID_BALANCE
                                 WHERE 1=1
                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1962,7 +1964,7 @@
 			                       BY MEMBR_NO
 			                ) tmmpb
          			  WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
-         				AND (tmmp.REG_F_SALE_DATE IS NOT NULL OR NVL(tmmpb.PREPAID_AMT, 0) > 0)
+         				AND (tmmp.REG_F_SALE_DATE IS NOT NULL OR NVL(tmmpb.CNT, 0) > 0)
 				  ) B
 			  ON (
 					A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
@@ -2004,7 +2006,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2019,7 +2021,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
             ON (
@@ -2064,7 +2066,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2079,7 +2081,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
             ON (
@@ -2124,7 +2126,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2139,7 +2141,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
             ON (
@@ -2184,7 +2186,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2199,7 +2201,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
             ON (
@@ -2244,7 +2246,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2259,7 +2261,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
             ON (
@@ -2310,7 +2312,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2325,7 +2327,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                  ) B
              ON (
@@ -2380,7 +2382,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2395,7 +2397,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                  ) B
              ON (
@@ -2446,7 +2448,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2461,7 +2463,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                    <if test='forcedDeleteYn == "N"'>
                        AND tmmp.REG_F_SALE_DATE IS NULL
-                       AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                       AND NVL(tmmpb.CNT, 0) = 0
                    </if>
                ) B
            ON (
@@ -2516,7 +2518,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2531,7 +2533,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
             ON (
@@ -2582,7 +2584,7 @@
                             ) tmmp,
                             (
                                 SELECT MEMBR_NO,
-                                        SUM(NVL(PREPAID_AMT, 0)) AS PREPAID_AMT
+                                        COUNT(1) AS CNT
                                   FROM TB_MB_MEMBER_PAID_BALANCE
                                  WHERE 1=1
                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2597,7 +2599,7 @@
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
                         AND tmmp.REG_F_SALE_DATE IS NULL
-                        AND NVL(tmmpb.PREPAID_AMT, 0) <![CDATA[<= ]]> 0
+                        AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
             ON (

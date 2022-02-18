@@ -968,6 +968,15 @@ public class RegistServiceImpl implements RegistService {
 
         for (RegistVO registVO : registVOs) {
 
+            // 프랜차이즈 매장권한인 경우, 등록매장이 본인매장인 경우민 식제가능
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                if (!"00000".equals(sessionInfoVO.getHqOfficeCd())){
+                    if (!sessionInfoVO.getStoreCd().equals(registVO.getRegStoreCd())) {
+                        continue;
+                    }
+                }
+            }
+
             registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
             registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
@@ -1036,18 +1045,14 @@ public class RegistServiceImpl implements RegistService {
             result += registVO2.getArrMembrNo().length;
         }
 
-        if ( result == registVOs.length) {
-            return result;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        return result;
     }
 
     /** 전체회원삭제 */
     @Override
     public int allMemberDelete(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
-        int registCnt = 0;
+        int result = 0;
         String currentDt = currentDateTimeString();
 
         registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
@@ -1090,6 +1095,6 @@ public class RegistServiceImpl implements RegistService {
         // 전체회원 회원 정보 영구 삭제
         mapper.deleteAllMember(registVO);
 
-        return registCnt;
+        return result;
     }
 }
