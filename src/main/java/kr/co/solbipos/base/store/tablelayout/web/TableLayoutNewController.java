@@ -110,8 +110,6 @@ public class TableLayoutNewController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        System.out.println("컨트롤러 조회 : " + sessionInfoVO.getStoreCd());
-
         LOGGER.debug(sessionInfoVO.toString());
         String xml = tableLayoutService.selectTableLayoutByStore(sessionInfoVO);
         LOGGER.debug(xml);
@@ -325,6 +323,27 @@ public class TableLayoutNewController {
 
         LOGGER.debug(sessionInfoVO.toString());
         tableAttrNewService.initLayout(sessionInfoVO, tableAttrVO);
+
+        return new Result(Status.OK);
+    }
+
+
+    /**
+     * 테이블 속성 삭제 후 매장생성시로 초기화
+     *
+     * @param request HttpServletRequest
+     * @param session HttpSession
+     * @param model Model
+     * @return
+     */
+    @RequestMapping(value = "/delAttr.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delAttr(HttpServletRequest request, HttpSession session, Model model, TableAttrVO tableAttrVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        LOGGER.debug(sessionInfoVO.toString());
+        tableAttrNewService.delAttr(sessionInfoVO, tableAttrVO);
 
         return new Result(Status.OK);
     }

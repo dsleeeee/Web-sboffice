@@ -418,6 +418,7 @@
                     <%--설정--%>
                     <div class="ml10" style="width:500px; padding:38px 30px 35px; background-color:#f4f4f4">
                         <div class="btn_int tc" id="format">
+							<button class="btn_gray" id="btnDelAttr"><s:message code="tableAttr.attrDel" /></button>
                             <button class="btn_blue" style="display: none;" id="btnChangeAttr"><s:message code="cmm.init" /></button>
                             <button class="btn_gray" id="btnInitAttr"><s:message code="cmm.init" /></button>
                             <button class="btn_blue" style="display: none;" id="btnSaveAttr" ><s:message code="cmm.save" /></button>

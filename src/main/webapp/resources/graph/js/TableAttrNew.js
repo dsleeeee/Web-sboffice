@@ -944,6 +944,36 @@ FormatAttr.prototype.initElements = function() {
 	var model = graph.getModel();
     var format = this;
 
+    // 전체삭제 버튼
+    addClickHandler(document.getElementById('btnDelAttr'), function() {
+
+        var sid = "";
+
+        if(document.getElementsByName('sessionId')[0]){
+            sid = document.getElementsByName('sessionId')[0].value;
+        }
+
+        if (confirm("최초 매장생성시 구성으로 돌아갑니다. 초기화 하시겠습니까?")) {
+            $.ajax({
+                type: "POST",
+                url: "/base/store/tableLayout/tableNewLayout/delAttr.sb?sid=" + sid,
+                data: params,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(result){
+                    if (result.status === "OK") {
+                        alert("테이블 속성을 모두 삭제되었습니다.");
+                        format.open(true);
+                    } else {
+                        alert("테이블 속성을 모두 삭제하는데 실패하였습니다.");
+                    }
+                }
+            });
+        }
+    });
+
     //초기화 버튼
     addClickHandler(document.getElementById('btnInitAttr'), function() {
         format.open(false);

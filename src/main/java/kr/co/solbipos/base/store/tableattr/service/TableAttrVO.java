@@ -74,6 +74,7 @@ public class TableAttrVO extends CmmVO {
     private String xmlGraph;
 	private String xmlPreview;
 	private String sid;
+	private String gubun;
 
     public String getSid() {
 		return sid;
@@ -327,4 +328,11 @@ public class TableAttrVO extends CmmVO {
 		this.arrTblCd = arrTblCd;
 	}
 
+    public String getGubun() {
+        return gubun;
+    }
+
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
+    }
 }
