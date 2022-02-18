@@ -5,6 +5,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="userNm" value="${sessionScope.sessionInfo.userNm}" />
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:820px;" fade-in="false" fade-out="false">
     <div ng-controller="boardInfoCtrl">
@@ -63,7 +64,7 @@
                             </div>
                         </td>
                     </tr>
-                    <c:if test="${orgnFg == 'HQ'}">
+                    <c:if test="${orgnFg != 'STORE'}">
                         <tr>
                             <%-- 공개대상 --%>
                             <th>
@@ -78,22 +79,17 @@
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        initialized="_initComboBox(s)">
+                                        initialized="_initComboBox(s)"
+                                        control="targetFgCombo"
+                                        selected-index-changed="setTargetFg(s)">
                                     </wj-combo-box>
                                 </div>
                             </td>
                             <td colspan="2">
-                                <div ng-if="targetFg == '2'">
-                                    <%-- 매장선택 모듈 싱글 선택 사용시 include
-                                        param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                                     displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                                     modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                                     closeFunc - 팝업 닫기시 호출할 함수
-                                    --%>
-                                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                                <div ng-if="targetFg == '6'">
+                                    <jsp:include page="/WEB-INF/view/adi/board/board/boardHqStore.jsp" flush="true">
                                         <jsp:param name="targetId" value="boardInfoStore"/>
                                     </jsp:include>
-                                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                                 </div>
                             </td>
                         </tr>
@@ -239,8 +235,9 @@
 </wj-popup>
 
 <script type="text/javascript">
+    var pAgencyCd = "${pAgencyCd}";
     <%-- 공개대상 --%>
-    var targetFgData = ${ccu.getCommCodeExcpAll("106")};
+    <%--var targetFgData = ${ccu.getCommCodeExcpAll("106")};--%>
     /*var targetFgData = [
         {"name":"전체","value":"1"},
         {"name":"특정매장","value":"2"}

@@ -171,6 +171,30 @@
     </div>
     <!--//메인컨텐츠-->
 
+    <!--팝업-->
+    <div>
+        <c:forEach var="board" items="${boardList}" varStatus="status">
+            <div id="divDimmed${status.index}" class="fullDimmed" style="display: none;"></div>
+            <div id="divPopup${status.index}" class="layer" style="display: none;">
+                <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
+                    <!--layerContent-->
+                    <div class="title" style="width:560px;">
+                        <p class="tit" id="popTitle${status.index}">
+                                ${board.title}</p>
+                        <div class="con">
+                            <div id="boardContent${status.index}"></div>
+                                ${board.content}
+                        </div>
+                        <div class="btnSet">
+                            <span><a href="#" class="btn_blue" id="btnCloseToday${status.index}">오늘하루 열지않기</a></span>
+                            <span><a href="#" class="btn_blue" id="btnClose${status.index}" ><s:message code="cmm.close" /></a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+    <!--팝업-->
 </div>
 
 <script type="text/javascript">
@@ -326,6 +350,57 @@
         chart2.endUpdate();
     });
     <%-- // wijmo flexChart --%>
+
+
+    // 1. 쿠키 만들기
+    function setCookie(name, value, expiredays) {
+        var today = new Date();
+        today.setDate(today.getDate() + expiredays);
+        document.cookie = name + '=' + escape(value) + '; path=/; expires=' + today.toGMTString() + ';'
+    }
+
+    //2. 쿠키 가져오기
+    function getCookie(name){
+        var cName = name + "=";
+        var x = 0;
+        while ( x <= document.cookie.length )
+        {
+            var y = (x+cName.length);
+            if ( document.cookie.substring( x, y ) == cName )
+            {
+                if ( (endOfCookie=document.cookie.indexOf( ";", y )) == -1 )
+                    endOfCookie = document.cookie.length;
+                return unescape( document.cookie.substring( y, endOfCookie ) );
+            }
+            x = document.cookie.indexOf( " ", x ) + 1;
+            if ( x == 0 )
+                break;
+        }
+        return "";
+    }
+
+    <c:forEach var="board" items="${boardList}" varStatus="status">
+    // 쿠키체크 후 팝업 띄우기
+    if(getCookie("notPopup${status.index}")!="Y") {
+        $("#divDimmed${status.index}").css('display', 'block');
+        $("#divPopup${status.index}").css('display', 'block');
+    }
+
+    $("#btnCloseToday${status.index}").click(function(){
+        setCookie('notPopup${status.index}','Y', 1);
+        $("#divDimmed${status.index}").css('display', 'none');
+        $("#divPopup${status.index}").css('display', 'none');
+    });
+
+    $("#btnClose${status.index}").click(function(){
+        $("#divDimmed${status.index}").css('display', 'none');
+        $("#divPopup${status.index}").css('display', 'none');
+    });
+    $(".btn_close").click(function(){
+        $("#divDimmed${status.index}").css('display', 'none');
+        $("#divPopup${status.index}").css('display', 'none');
+    });
+    </c:forEach>
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/application/main/systemMain.js?ver=20210218.06" charset="utf-8"></script>

@@ -92,10 +92,23 @@ app.controller('boardDetailFullSizeCtrl', ['$scope', '$http', function ($scope, 
             } else if ($scope.boardDetailFs.popupYn === "N") {
                 $scope.boardDetailFs.popupYn = false;
             }
-            if($scope.boardDetailFs.targetFg === "1") {
+
+            if($scope.boardDetailFs.targetFg === "123") {
+                $scope.boardDetailFs.targetFg = "관리자/총판/대리점";
+            } else if($scope.boardDetailFs.targetFg === "23") {
+                $scope.boardDetailFs.targetFg = "총판/대리점";
+            } else if($scope.boardDetailFs.targetFg === "45") {
+                $scope.boardDetailFs.targetFg = "본사/매장";
+            } else if($scope.boardDetailFs.targetFg === "3") {
+                $scope.boardDetailFs.targetFg = "대리점";
+            } else if($scope.boardDetailFs.targetFg === "4") {
+                $scope.boardDetailFs.targetFg = "본사";
+            } else if($scope.boardDetailFs.targetFg === "5") {
+                $scope.boardDetailFs.targetFg = "매장";
+            } else if($scope.boardDetailFs.targetFg === "6") {
+                $scope.boardDetailFs.targetFg = "특정대상";
+            }else {
                 $scope.boardDetailFs.targetFg = "전체";
-            } else if($scope.boardDetailFs.targetFg === "2") {
-                $scope.boardDetailFs.targetFg = $scope.boardDetailFs.partOrgnNm;
             }
             if($scope.boardDetailFs.noticeYn === "Y") {
                 $scope.boardDetailFs.noticeYn = true;

@@ -133,9 +133,15 @@ public interface BoardMapper {
     int saveBoardInfoContent(BoardVO boardVO);
 
 
-    /** 팝업 공고 조회 */
+    /** 팝업 공고 조회(본사/매장) */
     List<DefaultMap<String>> getPopUpBoardList(BoardVO boardVO);
 
-    /** 팝업 공고 조회 */
-    List<DefaultMap<String>> getPopUpBoardList2(BoardVO boardVO);
+    /** 팝업 공고 조회(총판/대리점) */
+    List<DefaultMap<String>> getAgencyPopUpBoardList(BoardVO boardVO);
+
+    /** 팝업 공고 조회(관리자) */
+    List<DefaultMap<String>> getSystemPopUpBoardList(BoardVO boardVO);
+
+    /** 본사/매장목록 조회 */
+    List<DefaultMap<String>> selectHqStoreList(BoardVO boardVO);
 }

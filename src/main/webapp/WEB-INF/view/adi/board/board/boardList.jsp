@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div class="subCon" ng-controller="boardListCtrl">
 
@@ -86,7 +87,7 @@
         <%--// 페이지 스케일  --%>
 
         <%-- 신규등록 --%>
-        <div <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
+        <div>
             <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addInfo()">
                 <s:message code="board.newInfo" />
             </button>
@@ -110,8 +111,8 @@
                 <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewCnt"/>" binding="viewCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewYn"/>" binding="viewYn" data-map="viewYnDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
-                <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="board.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${orgnFg != 'STORE'}">
+                    <wj-flex-grid-column header="<s:message code="board.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="board.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.agencyNm"/>" binding="agencyNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -141,11 +142,23 @@
 
 <script type="text/javascript">
     <%-- 공개대상 --%>
-    var targetFgData = ${ccu.getCommCodeExcpAll("106")};
+    <%--var targetFgData = ${ccu.getCommCodeExcpAll("106")};--%>
    /* var targetFgData = [
         {"name":"전체","value":"1"},
         {"name":"특정매장","value":"2"}
     ];*/
+    var targetFgData = [
+            {"name": "관리자/총판/대리점", "value": "123"},
+            {"name": "전체", "value": "12345"},
+            {"name": "총판/대리점", "value": "23"},
+            {"name": "전체", "value": "2345"},
+            {"name": "대리점", "value": "3"},
+            {"name": "전체", "value": "345"},
+            {"name": "본사", "value": "4"},
+            {"name": "본사/매장", "value": "45"},
+            {"name": "매장", "value": "5"},
+            {"name": "특정대상(본사/매장)", "value": "6"}
+        ];
     <%-- 승인구분 --%>
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
     /*var apprFgData = [
@@ -158,7 +171,7 @@
     var rootUrl = "${rootUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.07" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

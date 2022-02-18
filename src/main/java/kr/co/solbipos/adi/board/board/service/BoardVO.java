@@ -87,6 +87,9 @@ public class BoardVO extends PageVO {
     /** 조회매장 */
     private String storeCd;
 
+    /** 조회매장 */
+    private String storeNm;
+
     /** 파일 경로 */
     private String filePath;
 
@@ -131,6 +134,13 @@ public class BoardVO extends PageVO {
 
     /** 팝업여부(WEB) */
     private String popupYn;
+
+    /**
+     * 소속 그룹 코드
+     * 프렌차이즈인 경우 본사코드, 단독매장인 경우 자기자신의 매장코드, 시스템 or 대리점인 경우 AGENCY_CD
+     */
+    private String orgnGrpCd;
+
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -228,6 +238,14 @@ public class BoardVO extends PageVO {
 
     public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
 
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
     public String getFilePath() { return filePath; }
 
     public void setFilePath(String filePath) { this.filePath = filePath; }
@@ -310,5 +328,13 @@ public class BoardVO extends PageVO {
 
     public void setPopupYn(String popupYn) {
         this.popupYn = popupYn;
+    }
+
+    public String getOrgnGrpCd() {
+        return orgnGrpCd;
+    }
+
+    public void setOrgnGrpCd(String orgnGrpCd) {
+        this.orgnGrpCd = orgnGrpCd;
     }
 }

@@ -73,6 +73,8 @@ public class BoardServiceImpl implements BoardService {
         String currentDate = currentDateString();
         boardVO.setDate(currentDate);
 
+        boardVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
+
         return boardMapper.getBoardList(boardVO);
     }
 
@@ -136,8 +138,7 @@ public class BoardServiceImpl implements BoardService {
             procCnt = boardMapper.getBoardInfoSaveInsert(boardVO);
 
             // 공개대상
-            if(String.valueOf(2).equals(boardVO.getTargetFg())) {
-
+            if(boardVO.getTargetFg().equals("6")) {
                 // 매장 array 값 세팅
                 String[] storeCds = boardVO.getStoreCds().split(",");
                 for(int i=0; i<storeCds.length; i++) {
@@ -155,7 +156,7 @@ public class BoardServiceImpl implements BoardService {
             boardMapper.getBoardPartStoreSaveDelete(boardVO);
 
             // 공개대상
-            if(String.valueOf(2).equals(boardVO.getTargetFg())) {
+            if(boardVO.getTargetFg().equals("6")) {
 
                 // 매장 array 값 세팅
                 String[] storeCds = boardVO.getStoreCds().split(",");
@@ -441,12 +442,19 @@ public class BoardServiceImpl implements BoardService {
 
         boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
-
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.MASTER)){
             boardVO.setOrgnCd(sessionInfoVO.getOrgnCd());
             boardVO.setUserId(sessionInfoVO.getUserId());
 
-            result = boardMapper.getPopUpBoardList2(boardVO);
+            result = boardMapper.getSystemPopUpBoardList(boardVO);
+
+        } else if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
+
+            boardVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+            boardVO.setUserId(sessionInfoVO.getUserId());
+            boardVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
+
+            result = boardMapper.getAgencyPopUpBoardList(boardVO);
 
         } else {
             boardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -456,5 +464,14 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<DefaultMap<String>> selectHqStoreList(BoardVO boardVO, SessionInfoVO sessionInfoVO){
+        boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        boardVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
+        boardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return boardMapper.selectHqStoreList(boardVO);
     }
 }

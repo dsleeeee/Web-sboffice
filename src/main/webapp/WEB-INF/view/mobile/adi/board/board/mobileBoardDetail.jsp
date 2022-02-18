@@ -147,4 +147,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/board/board/mobileBoardDetail.js?ver=20210531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/board/board/mobileBoardDetail.js?ver=20210531.02" charset="utf-8"></script>
