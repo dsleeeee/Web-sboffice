@@ -275,6 +275,44 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                     verticalAlign: 'middle',
                     textAlign: 'center'
                 });
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex   = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt             = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb           = cell.firstChild;
+                        cb.checked       = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if(!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
             }
             // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
             else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
@@ -445,6 +483,12 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     // 회원 삭제
     $scope.deleteMember = function () {
+
+        if($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["regist.membr.none.msg"]); // 삭제할 회원이 없습니다.
+            return false;
+        }
+
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if ($scope.flex.collectionView.items[i].gChk) {
@@ -454,10 +498,9 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             }
         }
 
-        // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/membr/info/view/base/remove.sb", params, function () {
-            $scope.getMemberList()
-        });
+        $scope._broadcast('memberDeleteCtrl',  params);
+        $scope.wjMemberDeleteLayer.show(true);
+        event.preventDefault();
     };
 
     // <-- 엑셀다운로드 호출 -->
@@ -681,6 +724,44 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                     verticalAlign: 'middle',
                     textAlign: 'center'
                 });
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex   = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt             = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb           = cell.firstChild;
+                        cb.checked       = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if(!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
             }
             // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
             else if (panel.cellType === wijmo.grid.CellType.RowHeader) {

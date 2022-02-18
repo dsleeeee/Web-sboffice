@@ -237,4 +237,74 @@ public interface RegistMapper {
 
     /** 회원 포인트 조정 팝업 - 조회 */
     DefaultMap<String> getMemberPointAdjustList(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 강제삭제 체크용 비밀번호 조회 */
+    String getForcedDeleteChkPwd();
+
+    /** 회원 삭제 팝업 - 회원 삭제 가능여부 조회 */
+   int getMemberDeleteYnChk(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 회원정보 영구삭제 */
+    int deleteMember(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 회원카드정보 영구삭제 */
+    int deleteMemberCard(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 회원 포인트 변경내역 영구삭제 */
+    int deleteMemberPointHist(RegistVO registVO);
+
+    /** 회원 삭제 팝업 -  회원 포인트 정보 영구삭제 */
+    int deleteMemberPoint(RegistVO registVO);
+
+    /** 회원 삭제 팝업 -  회원 포인트 정보 영구삭제 */
+    int deleteMemberPointStore(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 회원 후불원장 영구삭제 */
+    int deleteMemberPostpaid(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 후불회원 등록매장 영구삭제 */
+    int deleteMemberPostpaidStore(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 회원 선불원장 영구삭제  */
+    int deleteMemberPrepaid(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 선불회원 등록매장 영구삭제 */
+    int deleteMemberPrepaidStore(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 선/후불 잔액 영구삭제 */
+    int deleteMemberPaidBalance(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 중 삭제불가회원 '미사용'으로 수정 */
+    int updateAllMemberUseYn(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 회원정보 영구삭제 */
+    int deleteAllMember(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 회원카드정보 영구삭제 */
+    int deleteAllMemberCard(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 회원 포인트 변경내역 영구삭제 */
+    int deleteAllMemberPointHist(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 회원 포인트 정보 영구삭제 */
+    int deleteAllMemberPoint(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 회원 포인트 정보 영구삭제 */
+    int deleteAllMemberPointStore(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 회원 후불원장 영구삭제 */
+    int deleteAllMemberPostpaid(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 후불회원 등록매장 영구삭제 */
+    int deleteAllMemberPostpaidStore(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 회원 선불원장 영구삭제  */
+    int deleteAllMemberPrepaid(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 선불회원 등록매장 영구삭제 */
+    int deleteAllMemberPrepaidStore(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 전체회원 선/후불 잔액 영구삭제 */
+    int deleteAllMemberPaidBalance(RegistVO registVO);
+
 }

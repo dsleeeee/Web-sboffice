@@ -448,7 +448,7 @@
         </button>
         <%-- 선택회원 삭제 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="deleteMember()">
-            <s:message code="cmm.delete"/>
+            <s:message code="regist.membr.delete"/>
         </button>
         <%-- 본사(A0001, A0007)만 보이게 --%>
         <c:if test="${ (orgnFg eq 'HQ' and hqOfficeCd eq 'A0001') or (orgnFg eq 'HQ' and hqOfficeCd eq 'A0007') }">
@@ -484,7 +484,7 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.no"/>" binding="membrNo" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="membrClassCd" align="center"  width="80" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -641,6 +641,7 @@
     var regstrStoreList = ${regstrStoreList};
     var memberClassList = ${memberClassList};
     var memberClassSelect = ${memberClassSelect};
+    var forcedDeleteChkPwd = "${forcedDeleteChkPwd}";
 
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
@@ -657,7 +658,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20210812.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220216.01" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
@@ -703,6 +704,12 @@
 
 <%-- SMS전송 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsSend.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원삭제팝업 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberDelete.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
