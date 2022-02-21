@@ -18,14 +18,19 @@
     -->
     <select id="getSmsTelNoComboList"  parameterType="SmsSendVO" resultType="DefaultMap">
         /* SmsSendMapper.getSmsTelNoComboList */
-        SELECT
-        SBPENC.D(hst.TEL_NO) AS VALUE,
-        (SUBSTR(SBPENC.D(hst.TEL_NO), 1, 3) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 4, 4) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 8, 4)) AS NAME
-        FROM HCS_SENDM_T hst
-        WHERE 1=1
-        AND hst.OGN_CD = #{orgnCd}
-        AND hst.USE_YN = 'Y'
-        ORDER BY hst.USE_SEQ
+        <![CDATA[
+            SELECT
+            SBPENC.D(hst.TEL_NO) AS VALUE,
+            (CASE WHEN LENGTH(SBPENC.D(hst.TEL_NO)) >= 8 AND LENGTH(SBPENC.D(hst.TEL_NO)) <= 11 THEN (SUBSTR(SBPENC.D(hst.TEL_NO), 1, 3) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 4, 4) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 8))
+                   WHEN LENGTH(SBPENC.D(hst.TEL_NO)) >= 12 THEN (SUBSTR(SBPENC.D(hst.TEL_NO), 1, 4) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 5, 4) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 9))
+                   ELSE SBPENC.D(hst.TEL_NO) END
+            ) AS NAME
+            FROM HCS_SENDM_T hst
+            WHERE 1=1
+            AND hst.OGN_CD = #{orgnCd}
+            AND hst.USE_YN = 'Y'
+            ORDER BY hst.USE_SEQ
+        ]]>
     </select>
 
     <!-- 관리자/총판/본사/매장 명칭 조회 -->
