@@ -129,16 +129,12 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상품이미지 복사
     $scope.copy = function (data){
-        if($scope.password == "SB20220126"){
-            $scope.prodImgCopyLayer.show();
-            $scope._broadcast('prodImgCopyCtrl', data);
-        }
+        $scope.prodImgCopyLayer.show();
+        $scope._broadcast('prodImgCopyCtrl', data);
     }
     // 상품이미지 전체삭제
     $scope.deleteAll = function (data){
-        if($scope.password == "SB20220126"){
-            $scope.prodImgDeleteLayer.show();
-        }
+        $scope.prodImgDeleteLayer.show();
     }
 
     // 상품 이미지 조회

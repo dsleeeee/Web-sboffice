@@ -85,13 +85,15 @@ public class SessionServiceImpl implements SessionService {
         String path = BaseEnv.FILE_UPLOAD_DIR + "logo_img/";
 //        String path = "D:\\" + "logo_img/";
 
+        File file = new File(path + sessionInfoVO.getHqOfficeCd());
         File file1 = new File(path + sessionInfoVO.getHqOfficeCd() + ".PNG");
         File file2 = new File(path + sessionInfoVO.getHqOfficeCd() + ".JPG");
 
+        boolean isExists = file.exists();
         boolean isExists1 = file1.exists();
         boolean isExists2 = file2.exists();
 
-        if(isExists1 ||isExists2) {
+        if(isExists || isExists1 ||isExists2) {
             sessionInfoVO.setLogoImg("Y");
         } else {
             sessionInfoVO.setLogoImg("N");
