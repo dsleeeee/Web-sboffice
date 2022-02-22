@@ -3815,8 +3815,8 @@
            WHERE tce2.DTL_USE_YN = 'Y'
                      ]]>
            <if test='envst != null and envst != ""'>
-                AND tce2.ENVST_CD LIKE '%'|| #{envst} ||'%'
-                OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%'
+                AND (tce2.ENVST_CD LIKE '%'|| #{envst} ||'%'
+                OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%')
            </if>
         <![CDATA[
                ) tce2,
@@ -3973,8 +3973,8 @@
                   WHERE tce2.DTL_USE_YN = 'Y'
                   ]]>
                   <if test='envst != null and envst != ""'>
-                    AND tce2.ENVST_CD LIKE '%'|| #{envst} ||'%'
-                    OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%'
+                    AND (tce2.ENVST_CD LIKE '%'|| #{envst} ||'%'
+                    OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%')
                   </if>
                   <![CDATA[
                ) tce2,

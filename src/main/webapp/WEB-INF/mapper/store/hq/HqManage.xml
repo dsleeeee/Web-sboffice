@@ -980,8 +980,8 @@
                             ) tcd
            			 WHERE tcd.DTL_USE_YN = 'Y'
                     <if test='envst != null and envst != ""'>
-                        AND tcd.ENVST_CD LIKE '%'|| #{envst} ||'%'
-                        OR 	tcd.ENVST_NM LIKE '%'|| #{envst} ||'%'
+                        AND (tcd.ENVST_CD LIKE '%'|| #{envst} ||'%'
+                        OR 	tcd.ENVST_NM LIKE '%'|| #{envst} ||'%')
                     </if>
                 ) tcd,
                 (
