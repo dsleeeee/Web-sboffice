@@ -7,6 +7,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -21,10 +22,14 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuManageVO;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.application.pos.posBoard.service.PosBoardService; // 게시판
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService; // 마케팅용 SMS전송
@@ -94,6 +99,10 @@ public class SimpleMemberJoinController {
     PosBoardService posBoardService; // 게시판
     @Autowired
     TouchKeyService touchKeyService;
+    @Autowired
+    StoreTypeService storeTypeService;
+    @Autowired
+    SideMenuService sideMenuService;
     @Autowired
     ProdService prodService;
     @Autowired
@@ -251,6 +260,11 @@ public class SimpleMemberJoinController {
                     model.addAttribute("maxClassRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041"));
                 }
 
+                // 속성, 선택메뉴조회(콤보박스용)
+                SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
+                model.addAttribute("sdattrClassList", convertToJson(sideMenuService.getSideMenuAttrClassCombo(sideMenuManageVO, sessionInfoVO)));
+                model.addAttribute("sdselGrpList", convertToJson(sideMenuService.getSideMenuSdselGrpCdCombo(sideMenuManageVO, sessionInfoVO)));
+
                 // 터치키 관련 권한정보 가져오기 : 2019-08-08 이다솜
                 String touchKeyEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0017"));
                 model.addAttribute("touchKeyEnvstVal", touchKeyEnvstVal);
@@ -258,6 +272,13 @@ public class SimpleMemberJoinController {
                 // 터치키 그룹 가져오기
                 List<DefaultMap<String>> touchKeyGrpList = touchKeyService.getTouchKeyGrp(params, sessionInfoVO);
                 model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
+
+                // (상품관리)브랜드사용여부
+                model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+
+                // 브랜드조회(콤보박스용)
+                StoreTypeVO storeTypeVO = new StoreTypeVO();
+                model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
 
                 /**
                  *  상품정보관리
@@ -370,6 +391,13 @@ public class SimpleMemberJoinController {
                 // 터치키 그룹 가져오기
                 List<DefaultMap<String>> touchKeyGrpList = touchKeyService.getTouchKeyGrp(params, sessionInfoVO);
                 model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
+
+                // (상품관리)브랜드사용여부
+                model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+
+                // 브랜드조회(콤보박스용)
+                StoreTypeVO storeTypeVO = new StoreTypeVO();
+                model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
 
                 /** userId 체크 */
                 if(isEmpty(request.getParameter("userId"))) {
