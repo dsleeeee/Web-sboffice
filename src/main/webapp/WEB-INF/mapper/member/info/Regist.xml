@@ -1728,7 +1728,7 @@
         SELECT COUNT(1)
           FROM (     SELECT A.MEMBR_ORGN_CD,
                               A.MEMBR_NO,
-                              B.REG_F_SALE_DATE
+                              B.FIRST_SALE_DATE
                         FROM TB_MB_MEMBER A,
                               TB_MB_MEMBER_POINT B
                        WHERE 1=1
@@ -1753,7 +1753,7 @@
                 ) tmmpb
          WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
            AND tmmp.MEMBR_NO = #{membrNo}
-           AND tmmp.REG_F_SALE_DATE IS NULL
+           AND tmmp.FIRST_SALE_DATE IS NULL
            AND NVL(tmmpb.CNT, 0) = 0
     </select>
 
@@ -1936,7 +1936,7 @@
 			           FROM (
 			           			SELECT A.MEMBR_ORGN_CD,
 			                            A.MEMBR_NO,
-			                            B.REG_F_SALE_DATE
+			                            B.FIRST_SALE_DATE
 			                      FROM TB_MB_MEMBER A,
 			                            TB_MB_MEMBER_POINT B
 			                     WHERE 1=1
@@ -1964,7 +1964,7 @@
 			                       BY MEMBR_NO
 			                ) tmmpb
          			  WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
-         				AND (tmmp.REG_F_SALE_DATE IS NOT NULL OR NVL(tmmpb.CNT, 0) > 0)
+         				AND (tmmp.FIRST_SALE_DATE IS NOT NULL OR NVL(tmmpb.CNT, 0) > 0)
 				  ) B
 			  ON (
 					A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
@@ -1991,7 +1991,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2020,7 +2020,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
@@ -2051,7 +2051,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2080,7 +2080,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
@@ -2111,7 +2111,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2140,7 +2140,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
@@ -2171,7 +2171,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2200,7 +2200,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
@@ -2231,7 +2231,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2260,7 +2260,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
@@ -2297,7 +2297,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2326,7 +2326,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                  ) B
@@ -2367,7 +2367,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2396,7 +2396,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                  ) B
@@ -2433,7 +2433,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2462,7 +2462,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                    <if test='forcedDeleteYn == "N"'>
-                       AND tmmp.REG_F_SALE_DATE IS NULL
+                       AND tmmp.FIRST_SALE_DATE IS NULL
                        AND NVL(tmmpb.CNT, 0) = 0
                    </if>
                ) B
@@ -2503,7 +2503,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2532,7 +2532,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
@@ -2569,7 +2569,7 @@
                       FROM (
                                 SELECT A.MEMBR_ORGN_CD,
                                         A.MEMBR_NO,
-                                        B.REG_F_SALE_DATE
+                                        B.FIRST_SALE_DATE
                                   FROM TB_MB_MEMBER A,
                                         TB_MB_MEMBER_POINT B
                                  WHERE 1=1
@@ -2598,7 +2598,7 @@
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>
-                        AND tmmp.REG_F_SALE_DATE IS NULL
+                        AND tmmp.FIRST_SALE_DATE IS NULL
                         AND NVL(tmmpb.CNT, 0) = 0
                     </if>
                 ) B
