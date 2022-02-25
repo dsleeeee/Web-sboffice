@@ -62,6 +62,10 @@ app.controller('loginStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     params.orgnFg = orgnFg;
     params.pAgencyCd = pAgencyCd;
     params.agencyCd = orgnCd;
+    if(!$scope.isChecked){
+      params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
+      params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+    }
 
     $scope._inquiryMain("/pos/confg/loginStatus/loginStatus/list.sb", params, function() {
     });

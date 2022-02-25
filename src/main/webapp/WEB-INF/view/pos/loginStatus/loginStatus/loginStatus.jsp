@@ -170,4 +170,4 @@
   var orgnCd = "${orgnCd}";
   var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=2019010501.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=2019010501.04" charset="utf-8"></script>
