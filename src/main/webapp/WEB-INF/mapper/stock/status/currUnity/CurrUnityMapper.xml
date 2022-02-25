@@ -149,7 +149,7 @@
     <!-- 본사매장통합현재고 - 본사매장통합현재고 본사 상세 리스트 조회  -->
     <select id="getCurrUnityHqDtlList" parameterType="currUnityVO" resultType="DefaultMap">
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT   A.IO_PROC_DATE
+        SELECT   TO_CHAR(TO_DATE(A.IO_PROC_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IO_PROC_DATE
 		,      CASE
 		      WHEN   A.IO_OCCR_FG   =   '01'   THEN   '본사입고'
 		      WHEN   A.IO_OCCR_FG   =   '02'   THEN   '본사반입'
