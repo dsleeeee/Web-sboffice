@@ -140,7 +140,7 @@
 <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=2018111204" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=2018111205" charset="utf-8"></script>
 
   <%-- 레이어 팝업 --%>
   <c:import url="/WEB-INF/view/sys/bill/template/popUpTemplate.jsp">

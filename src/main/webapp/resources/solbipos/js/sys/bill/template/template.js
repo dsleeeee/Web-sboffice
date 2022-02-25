@@ -125,7 +125,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     }
     for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
       $scope.flex.collectionView.itemsRemoved[d].status = "D";
-      paramArr.push($scope.flex.collectionView.itemsRemoved[d]);
+      params.push($scope.flex.collectionView.itemsRemoved[d]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/bill/template/item/save.sb", params);
