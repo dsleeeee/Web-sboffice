@@ -80,9 +80,9 @@
         <button class="btn_skyblue" id="btnAddRepresent" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelRepresent" style="display: none;">
-          <s:message code="cmm.delete" />
-        </button>
+<%--        <button class="btn_skyblue" id="btnDelRepresent" style="display: none;">--%>
+<%--          <s:message code="cmm.delete" />--%>
+<%--        </button>--%>
         <button class="btn_skyblue" id="btnSaveRepresent" style="display: none;" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
@@ -133,9 +133,9 @@
         <button class="btn_skyblue" id="btnAddDetail" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelDetail" style="display: none;">
-          <s:message code="cmm.delete" />
-        </button>
+<%--        <button class="btn_skyblue" id="btnDelDetail" style="display: none;">--%>
+<%--          <s:message code="cmm.delete" />--%>
+<%--        </button>--%>
         <button class="btn_skyblue" id="btnSaveDetail" style="display: none;" ng-click="save()">
           <s:message code="cmm.save" />
         </button>

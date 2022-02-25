@@ -27,9 +27,9 @@
         <button class="btn_skyblue" id="btnAddVan" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelVan" style="display: none;" ng-click="delete()">
-          <s:message code="cmm.delete" />
-        </button>
+<%--        <button class="btn_skyblue" id="btnDelVan" style="display: none;" ng-click="delete()">--%>
+<%--          <s:message code="cmm.delete" />--%>
+<%--        </button>--%>
         <button class="btn_skyblue" id="btnSaveVan" style="display: none;" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
@@ -73,9 +73,9 @@
         <button class="btn_skyblue" id="btnAddMapng" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelMapng" style="display: none;" ng-click="delete()">
-          <s:message code="cmm.delete" />
-        </button>
+<%--        <button class="btn_skyblue" id="btnDelMapng" style="display: none;" ng-click="delete()">--%>
+<%--          <s:message code="cmm.delete" />--%>
+<%--        </button>--%>
         <button class="btn_skyblue" id="btnSaveMapng" style="display: none;" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
@@ -114,9 +114,9 @@
         <button class="btn_skyblue" id="btnAddCard" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelCard" style="display: none;" ng-click="delete()">
-          <s:message code="cmm.delete" />
-        </button>
+<%--        <button class="btn_skyblue" id="btnDelCard" style="display: none;" ng-click="delete()">--%>
+<%--          <s:message code="cmm.delete" />--%>
+<%--        </button>--%>
         <button class="btn_skyblue" id="btnSaveCard" style="display: none;" ng-click="save()">
           <s:message code="cmm.save" />
         </button>

@@ -28,9 +28,9 @@
           <button class="btn_skyblue" id="btnAddPrint" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelPrint" style="display: none;" ng-click="delete()">
-            <s:message code="cmm.delete" />
-          </button>
+<%--          <button class="btn_skyblue" id="btnDelPrint" style="display: none;" ng-click="delete()">--%>
+<%--            <s:message code="cmm.delete" />--%>
+<%--          </button>--%>
           <button class="btn_skyblue" id="btnSavePrint" style="display: none;" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
@@ -50,7 +50,7 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="kind.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kind.prtClassCd"/>" binding="prtClassCd" width="50"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kind.prtClassCd"/>" binding="prtClassCd" width="50" maxLength="2"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kind.prtClassNm"/>" binding="prtClassNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kind.generalYn"/>" binding="generalYn" format="checkBoxText" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kind.foodYn"/>" binding="foodYn" format="checkBoxText" width="*"></wj-flex-grid-column>
@@ -75,9 +75,9 @@
           <button class="btn_skyblue" id="btnAddMapng" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelMapng" style="display: none;">
-            <s:message code="cmm.delete" />
-          </button>
+<%--          <button class="btn_skyblue" id="btnDelMapng" style="display: none;">--%>
+<%--            <s:message code="cmm.delete" />--%>
+<%--          </button>--%>
           <button class="btn_skyblue" id="btnSaveMapng" style="display: none;" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
