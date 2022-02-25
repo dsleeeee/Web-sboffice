@@ -86,7 +86,8 @@
     <div class="w40 fr">
       <div class="wj-TblWrapBr ml10 pd20" style="height:500px; overflow-y: auto;">
         <div class="updownSet oh mb10">
-          <span class="fl bk lh30"><s:message code="authGroup.resrcInfo"/></span>
+          <span id="groupInfo" class="fl bk lh30 "></span>
+          <span class="fl bk lh30 ml5"><s:message code="authGroup.resrcInfo"/></span>
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 트리  // todo height 조정--%>
@@ -191,7 +192,9 @@
         var col = ht.panel.columns[ht.col];
         if( col.binding == "authGrpCd") {
           var param = {};
+          $("#treeResrce").css("display", "");
           param.authGrpCd = grid.cells.getCellData(ht.row, ht.col, true);
+          $("#groupInfo").html('[' + grid.cells.getCellData(ht.row, ht.col, true) + ']' + grid.cells.getCellData(ht.row, ht.col +1, true));
           if(param.authGrpCd != '') {
             tree.itemsSource = new Array();
             tree.refresh();
@@ -219,6 +222,8 @@
       param.grpNm = grpNm.text;
       param.useYn = useYn.selectedValue;
       wgrid.getGridData("${baseUrl}" + "list.sb", param, grid);
+      $("#groupInfo").html('');
+      $("#treeResrce").css("display", "none");
     }
 
     <%-- 권한 그룹 추가 --%>

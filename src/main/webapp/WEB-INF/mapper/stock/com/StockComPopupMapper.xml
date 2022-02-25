@@ -45,7 +45,7 @@
     <sql id="getDailyIoStockHqInfoList01">
     /* USE : StockComPopupMapper.getDailyIoStockHqInfoList01, 본사입고 */
         SELECT  B.SLIP_NO
-	    ,       B.INSTOCK_DATE
+	    ,       TO_CHAR(TO_DATE(B.INSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS INSTOCK_DATE
 	    ,       B.VENDR_CD
 	    ,       B.VENDR_NM
 	    ,       A.LV1_NM
@@ -1272,7 +1272,7 @@
 
     <select id="getCmmProdCodeHqDtlList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : StockComPopupMapper.getCmmProdCodeHqDtlList */
-		SELECT TPHS.IO_PROC_DATE AS IO_OCCR_DT
+		SELECT TO_CHAR(TO_DATE(TPHS.IO_PROC_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IO_OCCR_DT
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_01 /* 본사입고 금액*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_16 /* 업체반출 수량*/
@@ -1306,7 +1306,7 @@
 
     <select id="getCmmProdCodeStoreDtlList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : StockComPopupMapper.getCmmProdCodeStoreDtlList */
-		SELECT TPSS.IO_PROC_DATE AS IO_OCCR_DT
+		SELECT TO_CHAR(TO_DATE(TPSS.IO_PROC_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IO_OCCR_DT
 			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
@@ -1405,7 +1405,7 @@
     <sql id="getCmmQtyDtlList01">
     	/* USE : StockComPopupMapper.getCmmQtyDtlList01, 본사입고 */
     	SELECT TPHVI.SLIP_NO			/* 전표번호 */
-		     , TPHVI.INSTOCK_DATE       /* 입고일 */
+		     , TO_CHAR(TO_DATE(TPHVI.INSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS INSTOCK_DATE       /* 입고일 */
 		     , TPHVI.VENDR_CD           /* 거래처코드 */
 		     , (SELECT VENDR_NM FROM TB_HQ_VENDOR Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.HQ_BRAND_CD = LPAD(TPHVID.HQ_BRAND_CD,7,'0') AND Z.VENDR_CD = TPHVI.VENDR_CD) AS VENDR_NM /* 거래처명 */
 		     , SUM(TPHVID.IN_TOT_QTY) 	AS IN_TOT_QTY		/* 수량	*/
@@ -1432,7 +1432,7 @@
     <sql id="getCmmQtyDtlList16">
     	/* USE : StockComPopupMapper.getCmmQtyDtlList16, 업체반출 */
     	SELECT TPHVI.SLIP_NO			/* 전표번호 */
-		     , TPHVI.INSTOCK_DATE AS RTN_DATE       /* 반출일 */
+		     , TO_CHAR(TO_DATE(TPHVI.INSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS RTN_DATE       /* 반출일 */
 		     , TPHVI.VENDR_CD           /* 거래처코드 */
 		     , (SELECT VENDR_NM FROM TB_HQ_VENDOR Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.HQ_BRAND_CD = LPAD(TPHVID.HQ_BRAND_CD,7,'0') AND Z.VENDR_CD = TPHVI.VENDR_CD) AS VENDR_NM /* 거래처명 */
 		     , SUM(TPHVID.IN_TOT_QTY)	AS IN_TOT_QTY		/* 수량	*/
@@ -1928,8 +1928,8 @@
         /* USE : StockComPopupMapper.getCmmQtyDtlList11, 매장판매 */
         SELECT  TSDP.STORE_CD
         ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSDP.STORE_CD) AS STORE_NM
-        ,       TSDP.SALE_DATE
-        ,       SUM(TSDP.TOT_SALE_QTY)      AS  IN_TOT_QTY
+        ,       TO_CHAR(TO_DATE(TSDP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+		,       SUM(TSDP.TOT_SALE_QTY)      AS  IN_TOT_QTY
         ,       SUM(TSDP.REAL_SALE_AMT)     AS  IN_TOT
         FROM    TB_SL_DAILY_PROD TSDP
         WHERE   TSDP.STORE_CD   =   #{storeCd}

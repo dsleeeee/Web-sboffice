@@ -9,7 +9,7 @@
 <input type="hidden" id="pageNm" value="storeInfo" />
 <%@ include file="/WEB-INF/view/application/layer/searchAddr.jsp" %>
 
-<wj-popup id="storeInfoLayer" control="storeInfoLayer" show-trigger="Click" hide-trigger="Click" style="width:800px;height:600px;">
+<wj-popup id="storeInfoLayer" control="storeInfoLayer" show-trigger="Click" hide-trigger="Click" style="width:800px;height:600px;display:none;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="storeInfoCtrl">
 
     <%-- header --%>

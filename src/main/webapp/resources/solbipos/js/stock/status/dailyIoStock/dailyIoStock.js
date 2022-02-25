@@ -59,7 +59,7 @@ app.controller('dailyIoStockCtrl', ['$scope', '$http', '$timeout', function ($sc
 			var params    = {};
 			params.orgnFg = $scope.orgnFg;
 			//params.slipFg = selectedRow.slipNo; // 전표구분
-			params.ioOccrDt = selectedRow.ioOccrDt; // 일자
+			params.ioOccrDt = selectedRow.ioOccrDt.replaceAll('-', ''); // 일자
 			params.ioOccrFg = col.binding.substring(colLength, colLength-2);
 			params.ioOccrNm = s.columnHeaders.getCellData(0,ht.col,false);
 			$scope._broadcast('dailyIoStockInfoCtrl', params);

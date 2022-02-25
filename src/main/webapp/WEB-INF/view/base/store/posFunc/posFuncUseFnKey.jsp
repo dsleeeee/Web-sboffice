@@ -60,4 +60,4 @@
         </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseFnKey.js?ver=20201013.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseFnKey.js?ver=20201013.02" charset="utf-8"></script>

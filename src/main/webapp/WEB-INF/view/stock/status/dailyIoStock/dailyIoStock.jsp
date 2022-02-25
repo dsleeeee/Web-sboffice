@@ -229,7 +229,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/dailyIoStock/dailyIoStock.js?ver=20200312.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/dailyIoStock/dailyIoStock.js?ver=20200312.02" charset="utf-8"></script>
 
 <%-- 본사출고정보 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/stock/com/popup/dailyIoStockInfo/dailyIoStockInfo.jsp">
