@@ -109,15 +109,13 @@
         ,		TB_ST_HQ_STOCK_CUR tshsc
         ,       TB_HQ_PRODUCT thp
         ,       TB_HQ_PRODUCT_BARCD thpb
-        ,       (   SELECT	thvp.PROD_CD
-                    ,		LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thv.VENDR_CD) AS VENDR_NM
-                    FROM	TB_HQ_BRAND thb
-                    ,		TB_HQ_VENDOR thv
-                    ,		TB_HQ_VENDOR_PROD thvp
-                    WHERE	thb.HQ_OFFICE_CD    =   #{hqOfficeCd}
-                    AND     thv.HQ_BRAND_CD     =   thb.HQ_BRAND_CD
-                    AND     thvp.HQ_BRAND_CD	=	thv.HQ_BRAND_CD
-                    AND		thvp.VENDR_CD	    =	thv.VENDR_CD
+        ,       (   SELECT   thvp.PROD_CD
+                    ,      LISTAGG((SELECT 	thv.VENDR_NM
+                                    FROM	TB_HQ_VENDOR thv
+                                    WHERE 	thv.HQ_OFFICE_CD  = thvp.HQ_OFFICE_CD
+                                    AND		thv.VENDR_CD  = thvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_HQ_VENDOR_PROD thvp
+                    WHERE   thvp.HQ_OFFICE_CD    =   #{hqOfficeCd}
                     GROUP
                     BY      thvp.PROD_CD
                 ) thv
@@ -268,12 +266,12 @@
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       (   SELECT  tmvp.PROD_CD
-                    ,       LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmv.VENDR_CD) AS VENDR_NM
-                    FROM    TB_MS_VENDOR tmv
-                    ,       TB_MS_VENDOR_PROD tmvp
-                    WHERE   tmv.STORE_CD  =   #{storeCd}
-                    AND     tmvp.STORE_CD =   tmv.STORE_CD
-                    AND     tmvp.VENDR_CD =   tmv.VENDR_CD
+                    ,   LISTAGG((   SELECT 	tmv.VENDR_NM
+                                    FROM	TB_MS_VENDOR tmv
+                                    WHERE 	tmv.STORE_CD  = tmvp.STORE_CD
+                                    AND		tmv.VENDR_CD  = tmvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_MS_VENDOR_PROD tmvp
+                    WHERE   tmvp.STORE_CD    =   #{storeCd}
                     GROUP
                     BY      tmvp.PROD_CD
                 ) tmv
@@ -473,15 +471,13 @@
         ,		TB_ST_HQ_STOCK_CUR tshsc
         ,       TB_HQ_PRODUCT thp
         ,       TB_HQ_PRODUCT_BARCD thpb
-        ,       (   SELECT	thvp.PROD_CD
-                    ,		LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thv.VENDR_CD) AS VENDR_NM
-                    FROM	TB_HQ_BRAND thb
-                    ,		TB_HQ_VENDOR thv
-                    ,		TB_HQ_VENDOR_PROD thvp
-                    WHERE	thb.HQ_OFFICE_CD    =   #{hqOfficeCd}
-                    AND     thv.HQ_BRAND_CD     =   thb.HQ_BRAND_CD
-                    AND     thvp.HQ_BRAND_CD	=	thv.HQ_BRAND_CD
-                    AND		thvp.VENDR_CD	    =	thv.VENDR_CD
+        ,       (   SELECT   thvp.PROD_CD
+                    ,      LISTAGG((SELECT 	thv.VENDR_NM
+                                    FROM	TB_HQ_VENDOR thv
+                                    WHERE 	thv.HQ_OFFICE_CD  = thvp.HQ_OFFICE_CD
+                                    AND		thv.VENDR_CD  = thvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_HQ_VENDOR_PROD thvp
+                    WHERE   thvp.HQ_OFFICE_CD    =   #{hqOfficeCd}
                     GROUP
                     BY      thvp.PROD_CD
                 ) thv
@@ -622,12 +618,12 @@
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       (   SELECT  tmvp.PROD_CD
-                    ,       LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmv.VENDR_CD) AS VENDR_NM
-                    FROM    TB_MS_VENDOR tmv
-                    ,       TB_MS_VENDOR_PROD tmvp
-                    WHERE   tmv.STORE_CD  =   #{storeCd}
-                    AND     tmvp.STORE_CD =   tmv.STORE_CD
-                    AND     tmvp.VENDR_CD =   tmv.VENDR_CD
+                    ,   LISTAGG((   SELECT 	tmv.VENDR_NM
+                                    FROM	TB_MS_VENDOR tmv
+                                    WHERE 	tmv.STORE_CD  = tmvp.STORE_CD
+                                    AND		tmv.VENDR_CD  = tmvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_MS_VENDOR_PROD tmvp
+                    WHERE   tmvp.STORE_CD    =   #{storeCd}
                     GROUP
                     BY      tmvp.PROD_CD
                 ) tmv
