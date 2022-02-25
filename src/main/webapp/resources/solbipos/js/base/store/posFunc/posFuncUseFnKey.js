@@ -21,6 +21,33 @@ app.controller('posFuncUseFnKeyCtrl', ['$scope', '$http', function ($scope, $htt
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        // 그리드 클릭 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var movedRows = 0;
+            var ht = s.hitTest(e);
+
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                if (ht.cellType === wijmo.grid.CellType.Cell) {
+                    var col = ht.panel.columns[ht.col];
+                    var selectedRow = s.rows[ht.row].dataItem;
+                    if (col.binding === "useYn") { // 사용여부
+                        if(selectedRow.useYn){
+                            for (var i = ht.row - 1; i >= 0; i--) {
+                                if (ht.row !== i) {
+                                    movedRows = i + 1;
+                                    var tmpItem = $scope.flex.collectionView.items[movedRows];
+                                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                                    $scope.flex.collectionView.items[i] = tmpItem;
+                                }
+                                $scope.flex.collectionView.commitEdit();
+                                $scope.flex.collectionView.refresh();
+                            }
+                            $scope.flex.select(movedRows, 1);
+                        }
+                    }
+                }
+            }
+        });
     };
 
     $scope.$on("posFuncUseFnKeyCtrl", function(event, data) {
