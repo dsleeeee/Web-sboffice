@@ -47,9 +47,9 @@
         </tr>
         <tr class="brt">
           <%-- 대표자명 --%>
-          <th><s:message code="myInfo.myInfo.ownerNm" /></th>
+          <th><s:message code="myInfo.myInfo.ownerNm"/><em class="imp">*</em></th>
           <td>
-            <input id="ownerNm" name="ownerNm" class="sb-input w100" type="text" value="${myInfo.ownerNm}" maxlength="25">
+            <input id="ownerNm" name="ownerNm" class="sb-input w100" type="text" value="${myInfo.ownerNm}" maxlength="25" />
           </td>
           <%--사업자번호 --%>
           <th><s:message code="hqManage.bizNo" /></th>
@@ -59,12 +59,12 @@
         </tr>
         <tr class="brt">
           <%-- 상호명 --%>
-          <th><s:message code="myInfo.myInfo.bizStoreNm" /></th>
+          <th><s:message code="myInfo.myInfo.bizStoreNm" /><em class="imp">*</em></th>
           <td>
             <input id="bizStoreNm" name="bizStoreNm" class="sb-input w100" type="text" value="${myInfo.bizStoreNm}" maxlength="25">
           </td>
           <%-- 전화번호 --%>
-          <th><s:message code="myInfo.myInfo.telNo" /></th>
+          <th><s:message code="myInfo.myInfo.telNo" /><em class="imp">*</em></th>
           <td>
             <input id="telNo" name="telNo" class="sb-input w100" type="text" value="${myInfo.telNo}" maxlength="15">
           </td>
@@ -99,7 +99,7 @@
         </tr>
         <tr class="brt">
           <%-- 주소 --%>
-          <th><s:message code="myInfo.myInfo.addr" /></th>
+          <th><s:message code="myInfo.myInfo.addr" /><em class="imp">*</em></th>
           <td colspan="3">
             <input type="text" id="postNo" name="postNo" class="sb-input w80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="${myInfo.postNo}" readonly/>
             <a href="#" class="btn_grayS ml5" onclick="searchAddr()">
@@ -388,6 +388,23 @@ var win = window,
 
 // 기초정보 저장
 function saveMyInfo(){
+
+  if($("#ownerNm").val() == ""){
+    s_alert.pop("대표자명을 입력해주세요");
+    return false;
+  }
+  if($("#bizStoreNm").val() == ""){
+    s_alert.pop("상호명을 입력해주세요");
+    return false;
+  }
+  if($("#telNo").val() == ""){
+    s_alert.pop("전화번호를 입력해주세요");
+    return false;
+  }
+  if($("#addrDtl").val() == ""){
+    s_alert.pop("주소를 입력해주세요");
+    return false;
+  }
 
   var url = "/base/store/myInfo/myInfo/save.sb";
   var msg = "";
