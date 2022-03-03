@@ -164,6 +164,11 @@
                                 selected-index-changed="setPromotionRegDetail(s)">
                         </wj-combo-box>
                     </div>
+                    <div>
+                        <button class="btn_skyblue" ng-click="openPromotionExample()">
+                            <s:message code="promotion.example" />
+                        </button>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -341,23 +346,23 @@
                         </td>
                     </tr>
                     <tr>
-                        <%-- 최소구매금액 --%>
+                        <%-- 구매금액 --%>
                         <th>
                             <div style="float: left;"><input type="checkbox" id="chkMinSaleAmt" ng-model="isCheckedMinSaleAmt" ng-change="isChkMinSaleAmt()"/></div>
                             <div style="padding-top: 3px; padding-left: 20px;"><s:message code="promotion.minSaleAmt" /></div>
                         </th>
-                        <td>
+                        <td colspan="3">
                             <div id="divChkMinSaleAmt" style="display: none;">
-                                <input type="text" class="sb-input w100" id="minSaleAmt" ng-model="minSaleAmt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                                <div style="float: left;"><input type="text" class="sb-input w150px" id="minSaleAmt" ng-model="minSaleAmt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
+                                <div style="float: left; padding-top: 5px; padding-left:5px; padding-right:5px;"><label>~</label></div>
+                                <div style="float: left;"><input type="text" class="sb-input w150px" id="maxSaleAmt" ng-model="maxSaleAmt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
                             </div>
                         </td>
-                        <td></td>
-                        <td></td>
                     </tr>
                 </tbody>
             </table>
             <%-- 적용상품 등록 영역 --%>
-            <table class="searchTbl mt10">
+            <table class="searchTbl mt10" id="tblProd">
                 <colgroup>
                     <col class="w20" />
                     <col class="w30" />
@@ -367,10 +372,11 @@
                 <tbody>
                 <tr id="trProdTop" style="border-top: 1px solid #CCCCCC;">
                     <th colspan="4">
-                        <s:message code="promotion.prod" />
+                        <div style="float: left;"><input type="checkbox" id="chkProd" ng-model="isCheckedProd" ng-change="isChkProd()"/></div>
+                        <div style="padding-top: 3px; padding-left: 20px; font-size:13px;"><s:message code="promotion.prod" /></div>
                     </th>
                 </tr>
-                <tr>
+                <tr id="trSelectProdDs" style="display: none;">
                     <%-- 적용상품의 구매대상 --%>
                     <th><s:message code="promotion.selectProdDs" /></th>
                     <td>
@@ -382,18 +388,19 @@
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
+                                    initialized="initComboBox(s)"
                                     control="selectProdDsCombo"
                                     selected-index-changed="setSelectProdCnt(s)">
                             </wj-combo-box>
                         </div>
                     </td>
                     <%-- 적용상품의 수량 --%>
-                    <th><label id="lblSelectProdCnt"></label></th>
-                    <td>
+                    <th id="thSelectProdCnt" style="display: none;"><label id="lblSelectProdCnt"></label></th>
+                    <td id="tdSelectProdCnt" style="display: none;">
                         <input type="text" class="sb-input w100" id="selectProdCnt" ng-model="selectProdCnt" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                     </td>
                 </tr>
-                <tr>
+                <tr id="trSelectProdGrid" style="display: none;">
                     <td colspan="4" style="border-left: 1px solid #CCCCCC;" ng-controller="promotionSelectProdGridCtrl">
                         <div class="updownSet mt5 mb5" style="font-size: 15px;">
                             <%-- 상품추가 --%>
@@ -522,6 +529,7 @@
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
+                                        initialized="initComboBox(s)"
                                         control="typeCdCombo"
                                         selected-index-changed="setApplyDcDs(s)">
                                 </wj-combo-box>
@@ -662,7 +670,7 @@
     var promotionTypeList  = ${promotionTypeList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20211214.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20220303.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">
@@ -678,4 +686,8 @@
 
 <%-- 혜택상품 추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionPresentReg.jsp">
+</c:import>
+
+<%-- 프로모션 예시사례 안내 팝업 --%>
+<c:import url="/WEB-INF/view/base/promotion/promotion/promotionExample.jsp">
 </c:import>

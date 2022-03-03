@@ -2420,3 +2420,11 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 #btnSingleTableAddLayer{margin-right:5px;}
 #btnSingleTableAddLayer:checked+label {background:#fff;}
 
+/* Div Fold & Unfold Bar Style - 20220302 추가 */
+.divBar {position:relative; border:1px solid #93cbfc; height:30px; background:#ebf5ff;}
+.divBar a {display:block; height:100%; line-height:27px; color:#337dde;  padding:0 0 0 10px; font-size:0.8em; position:relative;}
+.divBar a:before {content:''; position:absolute; right:15px; top:7px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.divBar a.open:before {transform:rotate(-90deg);}
+.divBar a.close:before {transform:rotate(90deg);}
+
+

@@ -258,6 +258,7 @@
                                       #{memberTargetDs} AS MEMBER_TARGET_DS,
                                       #{memberClassCd} AS MEMBER_CLASS_CD,
                                       #{minSaleAmt} AS MIN_SALE_AMT,
+                                      #{maxSaleAmt} AS MAX_SALE_AMT,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
                                       <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
@@ -295,6 +296,7 @@
                            A.MEMBER_TARGET_DS = B.MEMBER_TARGET_DS,
                            A.MEMBER_CLASS_CD = B.MEMBER_CLASS_CD,
                            A.MIN_SALE_AMT = B.MIN_SALE_AMT,
+                           A.MAX_SALE_AMT = B.MAX_SALE_AMT,
                            A.PROD_CD_YN = B.PROD_CD_YN,
                            A.SELECT_PROD_DS = B.SELECT_PROD_DS,
                            <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
@@ -329,6 +331,7 @@
                            A.MEMBER_TARGET_DS,
                            A.MEMBER_CLASS_CD,
                            A.MIN_SALE_AMT,
+                           A.MAX_SALE_AMT,
                            A.PROD_CD_YN,
                            A.SELECT_PROD_DS,
                            <!-- A.SELECT_CROSS_FG, -->
@@ -365,6 +368,7 @@
                            B.MEMBER_TARGET_DS,
                            B.MEMBER_CLASS_CD,
                            B.MIN_SALE_AMT,
+                           B.MAX_SALE_AMT,
                            B.PROD_CD_YN,
                            B.SELECT_PROD_DS,
                            <!-- B.SELECT_CROSS_FG, -->
@@ -404,6 +408,7 @@
                                       #{memberTargetDs} AS MEMBER_TARGET_DS,
                                       #{memberClassCd} AS MEMBER_CLASS_CD,
                                       #{minSaleAmt} AS MIN_SALE_AMT,
+                                      #{maxSaleAmt} AS MAX_SALE_AMT,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
                                       <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
@@ -440,6 +445,7 @@
                             A.MEMBER_TARGET_DS = B.MEMBER_TARGET_DS,
                             A.MEMBER_CLASS_CD = B.MEMBER_CLASS_CD,
                             A.MIN_SALE_AMT = B.MIN_SALE_AMT,
+                            A.MAX_SALE_AMT = B.MAX_SALE_AMT,
                             A.PROD_CD_YN = B.PROD_CD_YN,
                             A.SELECT_PROD_DS = B.SELECT_PROD_DS,
                             <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
@@ -473,6 +479,7 @@
                             A.MEMBER_TARGET_DS,
                             A.MEMBER_CLASS_CD,
                             A.MIN_SALE_AMT,
+                            A.MAX_SALE_AMT,
                             A.PROD_CD_YN,
                             A.SELECT_PROD_DS,
                             <!-- A.SELECT_CROSS_FG, -->
@@ -508,6 +515,7 @@
                             B.MEMBER_TARGET_DS,
                             B.MEMBER_CLASS_CD,
                             B.MIN_SALE_AMT,
+                            B.MAX_SALE_AMT,
                             B.PROD_CD_YN,
                             B.SELECT_PROD_DS,
                             <!-- B.SELECT_CROSS_FG, -->
@@ -756,6 +764,7 @@
                         thpc.MEMBER_TARGET_DS,
                         thpc.MEMBER_CLASS_CD,
                         thpc.MIN_SALE_AMT,
+                        thpc.MAX_SALE_AMT,
                         thpc.PROD_CD_YN,
                         thpc.SELECT_PROD_DS,
                         thpc.SELECT_CROSS_FG AS SELECT_PROD_CROSS_FG,
@@ -811,6 +820,7 @@
                         tmpc.MEMBER_TARGET_DS,
                         tmpc.MEMBER_CLASS_CD,
                         tmpc.MIN_SALE_AMT,
+                        tmpc.MAX_SALE_AMT,
                         tmpc.PROD_CD_YN,
                         tmpc.SELECT_PROD_DS,
                         tmpc.SELECT_CROSS_FG AS SELECT_PROD_CROSS_FG,
@@ -1814,7 +1824,9 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 UPDATE TB_HQ_PROMO_CONDI
-                    SET SELECT_PROD_DS = #{selectProdDs},
+                    SET PROD_CD_YN = #{prodCdYn},
+                         SELECT_PROD_DS = #{selectProdDs},
+                         SELECT_PROD_CNT = #{selectProdCnt},
                          MOD_DT = #{modDt},
                          MOD_ID = #{modId}
                   WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1823,7 +1835,9 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 UPDATE TB_MS_PROMO_CONDI
-                    SET SELECT_PROD_DS = #{selectProdDs},
+                    SET PROD_CD_YN = #{prodCdYn},
+                         SELECT_PROD_DS = #{selectProdDs},
+                         SELECT_PROD_CNT = #{selectProdCnt},
                          MOD_DT = #{modDt},
                          MOD_ID = #{modId}
                   WHERE STORE_CD = #{storeCd}
