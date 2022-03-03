@@ -42,6 +42,18 @@ app.controller('promotionPresentRegCtrl', ['$scope', '$http', function ($scope, 
     // 팝업 오픈 시, 혜택상품 리스트 조회
     $scope.$on("promotionPresentRegCtrl", function(event, data) {
 
+        // 혜택상품-구분 선택값에 따라 조건수량 입력여부 결정
+        $("#hdPresentDs1").val(data);
+
+        // 구매대상 선택값이 전체구매, 일부구매(종류+수량)인 경우만 조건수량 입력가능
+        var grid = wijmo.Control.getControl("#wjGridPromotionPresentReg");
+        var columns = grid.columns;
+        if($("#hdPresentDs1").val() === "1") {
+            columns[6].visible = true;
+        }else{
+            columns[6].visible = false;
+        }
+
         // 혜택상품 조회
         $scope.searchPresent();
         event.preventDefault();
@@ -75,10 +87,13 @@ app.controller('promotionPresentRegCtrl', ['$scope', '$http', function ($scope, 
         // 파라미터 설정
         var params = new Array();
 
-        // 조건수량이 수정된 내역이 있는지 체크
-        if ($scope.flex.collectionView.itemsEdited.length <= 0) {
-            $scope._popMsg(messages["cmm.not.modify"]);
-            return false;
+        // 혜택상품-구분 이 전체인 경우만 조건수량 체크
+        if($("#hdPresentDs1").val() === "1") {
+            // 조건수량이 수정된 내역이 있는지 체크
+            if ($scope.flex.collectionView.itemsEdited.length <= 0) {
+                $scope._popMsg(messages["cmm.not.modify"]);
+                return false;
+            }
         }
 
         // 선택한 상품이 있는지 체크
@@ -97,9 +112,12 @@ app.controller('promotionPresentRegCtrl', ['$scope', '$http', function ($scope, 
 
             var item = $scope.flex.collectionView.itemsEdited[i];
 
-            if (item.gChk === true && (item.prodQty === null || item.prodQty === "" || item.prodQty === "0" || item.prodQty === 0)) {
-                $scope._popMsg(messages["promotion.chk.prodQty"]); // 선택한 상품의 조건수량을 반드시 입력하세요.
-                return false;
+            // 혜택상품-구매 선택값이 전체인 경우만 조건수량 체크
+            if($("#hdPresentDs1").val() === "1") {
+                if (item.gChk === true && (item.prodQty === null || item.prodQty === "" || item.prodQty === "0" || item.prodQty === 0)) {
+                    $scope._popMsg(messages["promotion.chk.prodQty"]); // 선택한 상품의 조건수량을 반드시 입력하세요.
+                    return false;
+                }
             }
 
             if(item.gChk === true) {
@@ -107,7 +125,13 @@ app.controller('promotionPresentRegCtrl', ['$scope', '$http', function ($scope, 
                 obj.status = "I";
                 obj.promotionCd = $("#hdPromotionCd").val();
                 obj.prodCd = item.prodCd;
-                obj.giftQty =  item.prodQty;
+
+                // 혜택상품-구매 선택값이 전체인 경우만 조건수량 입력
+                if($("#hdPresentDs1").val() === "1") {
+                    obj.giftQty =  item.prodQty;
+                }else{
+                    obj.giftQty =  1;
+                }
 
                 params.push(obj);
             }

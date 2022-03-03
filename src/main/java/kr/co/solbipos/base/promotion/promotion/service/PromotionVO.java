@@ -79,6 +79,8 @@ public class PromotionVO extends PageVO {
     private String memberClassCd;
     /** 최소 구매 금액 */
     private int minSaleAmt;
+    /** 최대 구매 금액 */
+    private int maxSaleAmt;
     /** 적용 상품 체크 여부 */
     private String prodCdYn;
     /** 적용 상품 구매 대상 */
@@ -350,6 +352,14 @@ public class PromotionVO extends PageVO {
 
     public void setMinSaleAmt(int minSaleAmt) {
         this.minSaleAmt = minSaleAmt;
+    }
+
+    public int getMaxSaleAmt() {
+        return maxSaleAmt;
+    }
+
+    public void setMaxSaleAmt(int maxSaleAmt) {
+        this.maxSaleAmt = maxSaleAmt;
     }
 
     public String getProdCdYn() {

@@ -98,7 +98,8 @@
                                 selection-mode="Row"
                                 items-source="data"
                                 ime-enabled="true"
-                                item-formatter="_itemFormatter">
+                                item-formatter="_itemFormatter"
+                                id="wjGridPromotionPresentReg">
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -114,7 +115,10 @@
                     <%--//위즈모 테이블--%>
                 </div>
             </div>
+
+            <%--혜택상품-구분 선택값 --%>
+            <input type="hidden" id="hdPresentDs1" />
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionPresentReg.js?ver=20210423.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionPresentReg.js?ver=20220303.01" charset="utf-8"></script>
