@@ -271,6 +271,11 @@ app.controller('mobileMarketingSmsSendCtrl', ['$scope', '$http', '$timeout', fun
         params.membrEngNm = $scope.membrEngNm;
         params.marketingSmsGubun = $scope.marketingSmsGubun;
 
+        // 자기매장 회원만 보이게
+        if(orgnFg == "STORE") {
+            params.storeMembr = true;
+        }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withOutPopUp("/adi/sms/marketingSmsSend/marketingSmsSend/getMarketingSmsSendListSave.sb", params, function(response){
             var smsSendSeq = response.data.data;

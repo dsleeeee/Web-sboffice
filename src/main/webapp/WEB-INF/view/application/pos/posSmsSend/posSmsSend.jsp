@@ -3,7 +3,6 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%--<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>--%>
 
 <body ng-app="rootApp" ng-controller="rootCtrl">
     <div class="tabType1" ng-controller="posSmsSendCtrl" ng-init="init()">
@@ -29,11 +28,10 @@
 </body>
 
 <script type="text/javascript">
-    <%--var orgnFg = "${orgnFg}";--%>
-
     var gvListScaleBoxData = ${ccu.getListScale()};
     var gvStartDate = "${startDate}";
     var gvEndDate = "${endDate}";
+    var orgnFg = "${orgnFg}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/application/pos/posSmsSend/posSmsSend.js?ver=20220118.01" charset="utf-8"></script>
