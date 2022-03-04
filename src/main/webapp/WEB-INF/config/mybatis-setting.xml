@@ -294,6 +294,8 @@
     <typeAlias alias="prodBatchChangeVO" type="kr.co.solbipos.base.prod.prodBatchChange.service.ProdBatchChangeVO"/>
     <!-- 기초관리 > 상품관리 > 상품바코드등록 -->
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodBarcd.service.ProdBarcdVO"/>
+    <!-- 기초관리 > 상품관리 > 품절관리 -->
+    <typeAlias alias="soldOutVO" type="kr.co.solbipos.base.prod.soldOut.service.SoldOutVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
@@ -852,6 +854,11 @@
     <typeAlias alias="mobileMarketingSmsSendVO" type="kr.co.solbipos.mobile.adi.sms.marketingSmsSend.service.MobileMarketingSmsSendVO"/>
     <!-- (모바일) 부가서비스 > 문자전송현황 -->
     <typeAlias alias="mobileSendStatusVO" type="kr.co.solbipos.mobile.adi.sms.sendStatus.service.MobileSendStatusVO"/>
+
+    <!-- (모바일) 상품관리 > 품절관리(상품) -->
+    <typeAlias alias="mobileProdSoldOutVO" type="kr.co.solbipos.mobile.prod.prodSoldOut.service.MobileProdSoldOutVO"/>
+    <!-- (모바일) 상품관리 > 품절관리(선택메뉴) -->
+    <typeAlias alias="mobileSideMenuSoldOutVO" type="kr.co.solbipos.mobile.prod.sideMenuSoldOut.service.MobileSideMenuSoldOutVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>

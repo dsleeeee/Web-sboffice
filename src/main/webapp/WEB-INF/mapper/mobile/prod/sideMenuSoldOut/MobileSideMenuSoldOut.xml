@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileSideMenuSoldOut.xml
+    (모바일) 상품관리 > 품절관리(선택메뉴)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.03.04     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.prod.sideMenuSoldOut.service.impl.MobileSideMenuSoldOutMapper">
+    <!-- 선택그룹 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : soldOutVO
+        COMMENTS : 사이드메뉴 선택그룹 목록을 조회한다. ( 매장 )
+    -->
+    <select id="getMobileSideMenuGrpList" parameterType="mobileSideMenuSoldOutVO" resultType="DefaultMap">
+        /* USE : SoldOutMapper.getMenuGrpList */
+        SELECT  tmpsg.MS_BRAND_CD,
+                tmpsg.SDSEL_GRP_CD,
+                tmpsg.SDSEL_GRP_NM,
+                (   SELECT  COUNT(*)
+                    FROM    TB_MS_PRODUCT_SDSEL_CLASS
+                    WHERE   STORE_CD = tmpsg.STORE_CD
+                      AND     SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD
+                      AND     USE_YN  = 'Y'
+                ) AS CNT
+        FROM    TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+        WHERE   tmpsg.STORE_CD = #{storeCd}
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>-- 그룹명
+            AND tmpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+        </if>
+          AND     tmpsg.USE_YN = 'Y'
+        ORDER BY
+            tmpsg.SDSEL_GRP_CD
+    </select>
+
+    <!-- 선택분류 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : soldOutVO
+        COMMENTS : 사이드메뉴 선택분류 목록을 조회한다. ( 매장 )
+    -->
+    <select id="getMobileSideMenuClassList" parameterType="mobileSideMenuSoldOutVO" resultType="DefaultMap">
+        /* USE : SoldOutMapper.getMenuClassList */
+        SELECT  tmpsc.SDSEL_CLASS_CD,
+                tmpsc.SDSEL_CLASS_NM,
+                tmpsc.SDSEL_GRP_CD,
+                tmpsc.DISP_SEQ,
+                tmpsc.SDSEL_QTY,
+                (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
+                (SELECT SUM(ADD_PROD_QTY) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT
+        FROM
+            TB_MS_PRODUCT_SDSEL_CLASS tmpsc
+        WHERE
+            tmpsc.STORE_CD = #{storeCd}
+          AND tmpsc.SDSEL_GRP_CD = #{sdselGrpCd}
+          AND tmpsc.USE_YN = 'Y'
+        ORDER BY
+            tmpsc.DISP_SEQ
+    </select>
+
+    <!-- 선택상품 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : soldOutVO
+        COMMENTS : 사이드메뉴 선택상품 목록을 조회한다. ( 매장 )
+    -->
+    <select id="getMobileSideMenuProdList" parameterType="mobileSideMenuSoldOutVO" resultType="DefaultMap">
+        /* USE : SoldOutMapper.getMenuProdList */
+        SELECT  tmpsc.SDSEL_GRP_CD,
+                tmpsp.SDSEL_CLASS_CD,
+                tmpsp.PROD_CD,
+                tmp.PROD_NM,
+                tmpsp.ADD_PROD_UPRC,
+                tmpsp.ADD_PROD_QTY,
+                tmpsp.DISP_SEQ,
+                NVL(tmpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+                NVL(tmpsp.SOLD_OUT_YN, 'N') AS SOLD_OUT_YN
+        FROM    TB_MS_PRODUCT_SDSEL_PROD tmpsp
+                    LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
+                tmpsp.STORE_CD = tmp.STORE_CD
+                AND tmpsp.PROD_CD = tmp.PROD_CD
+                AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+            OR
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+            INNER JOIN TB_MS_PRODUCT_SDSEL_CLASS tmpsc ON
+            tmpsc.STORE_CD = tmpsp.STORE_CD
+            AND tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD
+        WHERE
+            tmpsp.STORE_CD = #{storeCd}
+          AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+          AND tmpsp.USE_YN = 'Y'
+        ORDER BY
+            tmpsp.DISP_SEQ
+    </select>
+
+
+    <!-- 사이드상품 품절여부 저장 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : soldOutVO
+        COMMENTS : 사이드상품 품절여부 저장한다. ( 매장 )
+    -->
+    <update id="getMobileSideMenuSoldOutSave" parameterType="mobileProdSoldOutVO">
+        /* USE : MobileProdSoldOutMapper.getMobileSideMenuSoldOutSave */
+        UPDATE  TB_MS_PRODUCT_SDSEL_PROD
+        SET     SOLD_OUT_YN = #{soldOutYn}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   STORE_CD    = #{storeCd}
+          AND   PROD_CD     = #{prodCd}
+    </update>
+</mapper>

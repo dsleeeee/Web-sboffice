@@ -119,5 +119,5 @@
 <script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderStatus/mobileOrderStatus.js?ver=20211005.01" charset="utf-8"></script>
 
 <%-- 주문현황 상세 팝업 --%>
-<c:import url="/WEB-INF/view/mobile/sale/com/popup/orderStatusDtl.jsp">
+<c:import url="/WEB-INF/view/mobile/sale/status/orderStatus/mobileOrderStatusDtl.jsp">
 </c:import>
