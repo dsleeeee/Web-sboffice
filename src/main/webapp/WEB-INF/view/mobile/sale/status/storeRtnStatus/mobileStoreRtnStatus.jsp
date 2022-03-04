@@ -84,5 +84,5 @@
 <script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeRtnStatus/mobileStoreRtnStatus.js?ver=20210907.03" charset="utf-8"></script>
 
 <%-- 반품현황 상세 팝업 --%>
-<c:import url="/WEB-INF/view/mobile/sale/com/popup/rtnStatusDtl.jsp">
+<c:import url="/WEB-INF/view/mobile/sale/status/rtnStatus/mobileRtnStatusDtl.jsp">
 </c:import>
