@@ -125,7 +125,7 @@ app.controller('mobileProdSoldOutCtrl', ['$scope', '$http', function ($scope, $h
         $scope._inquirySub("/mobile/prod/prodSoldOut/mobileProdSoldOut/getMobileProdSoldOutList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
             gridShowMsgNoData("mobileProdSoldOut", $scope.flex, "N");
-        }, false);
+        }, true);
     };
 
     // 매장선택 모듈 팝업 사용시 정의
