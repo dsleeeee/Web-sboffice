@@ -230,7 +230,7 @@
     var brandUseFg = '${brandUseFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/prod/prodSoldOut/mobileProdSoldOut.js?ver=20220303.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/prod/prodSoldOut/mobileProdSoldOut.js?ver=20220303.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/com/popup/selectProdClassCd.jsp">
