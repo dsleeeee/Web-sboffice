@@ -201,7 +201,7 @@
             <%-- 우리매장 --%>
             <c:if test="${orgnFg == 'STORE'}">
                 <c:if test="${hqOfficeCd ne '00000'}">
-                    <tr>
+                    <tr style="display: none"> <%-- 자기매장 회원만 보이게 --%>
                         <%-- 우리매장 등록회원 --%>
                         <th>
                             <s:message code="mobile.marketingSmsSend.useStoreMembr"/>
@@ -729,6 +729,7 @@
 
 <script type="text/javascript">
     var orgnCd = "${orgnCd}";
+    var orgnFg = "${orgnFg}";
 
     // SMS전송 - 메세지그룹
     var msgGrpAddColList = [];
@@ -744,7 +745,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/marketingSmsSend/mobileMarketingSmsSend.js?ver=20220110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/marketingSmsSend/mobileMarketingSmsSend.js?ver=20220110.02" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>
