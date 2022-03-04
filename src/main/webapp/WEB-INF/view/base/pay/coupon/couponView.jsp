@@ -134,7 +134,7 @@
           <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcFg"/>" binding="coupnDcFg" data-map="coupnDcFgDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcRate"/>" binding="coupnDcRate" max-length="3"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" max-length="5"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" max-length="7"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg"  data-map="coupnApplyFgDataMap" align="center" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnTargetFg"/>" binding="coupnTargetFg" data-map="coupnTargetFgDataMap" align="center" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" is-read-only="true" align="center"></wj-flex-grid-column>
