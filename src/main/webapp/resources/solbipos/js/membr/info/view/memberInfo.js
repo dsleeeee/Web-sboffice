@@ -408,6 +408,11 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             }
         }
 
+        // 자기매장 회원만 보이게
+        if(orgnFg == "STORE") {
+            params.storeMembr = true;
+        }
+
         $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function () {});
     };
 
@@ -838,6 +843,11 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.memberPointFg = $scope.memberPointFg;
         // params.useYn = $scope.useYn;
         params.useYn = 'Y';
+
+        // 자기매장 회원만 보이게
+        if(orgnFg == "STORE") {
+            params.storeMembr = true;
+        }
 
         $scope._inquiryMain("/membr/info/view/view/getMemberListExcel.sb", params, function() {
             if ($scope.excelFlex.rows.length <= 0) {

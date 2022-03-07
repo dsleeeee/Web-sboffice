@@ -156,7 +156,7 @@
         <%-- 우리매장 --%>
         <c:if test="${orgnFg == 'STORE'}">
             <c:if test="${hqOfficeCd ne '00000'}">
-                <tr>
+                <tr style="display: none"> <%-- 자기매장 회원만 보이게 --%>
                     <th><s:message code="regist.use.store.membr"/></th>
                     <td>
                         <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
@@ -658,7 +658,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220218.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220218.02" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
