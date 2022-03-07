@@ -31,7 +31,7 @@
     var gvListScaleBoxData = ${ccu.getListScale()};
     var gvStartDate = "${startDate}";
     var gvEndDate = "${endDate}";
-    var orgnFg = "${orgnFg}";
+    <%--var orgnFg = "${orgnFg}";--%>
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/application/pos/posSmsSend/posSmsSend.js?ver=20220118.01" charset="utf-8"></script>

@@ -119,6 +119,9 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             marketingSmsSendVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+            // 자기매장 회원만 보이게
+            marketingSmsSendVO.setStoreMembr("true");
         }
 
         procCnt = marketingSmsSendMapper.getMarketingSmsSendListSaveInsert(marketingSmsSendVO);
