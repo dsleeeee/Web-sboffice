@@ -33,31 +33,31 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     // var rShortNoYnList = [{value: "", name: "전체"}, {value: "1", name: messages["chgBatch.membr.short.telNo"]}];
     var rShortNoYnList = [{value: "1", name: messages["chgBatch.membr.short.telNo"]}];
 
-    var rMonthList = [];
-    for (var i = 1; i <= 12; i++) {
-        var month = new Object();
-        if (i < 10) {
-            month.value = '0' + i;
-            month.name = '0' + i;
-        } else {
-            month.value = '' + i;
-            month.name = '' + i;
-        }
-        rMonthList.push(month);
-    }
-
-    var rDayList = [];
-    for (var i = 1; i <= 31; i++) {
-        var day = new Object();
-        if (i < 10) {
-            day.value = '0' + i;
-            day.name = '0' + i;
-        } else {
-            day.value = '' + i;
-            day.name = '' + i;
-        }
-        rDayList.push(day);
-    }
+    // var rMonthList = [];
+    // for (var i = 1; i <= 12; i++) {
+    //     var month = new Object();
+    //     if (i < 10) {
+    //         month.value = '0' + i;
+    //         month.name = '0' + i;
+    //     } else {
+    //         month.value = '' + i;
+    //         month.name = '' + i;
+    //     }
+    //     rMonthList.push(month);
+    // }
+    //
+    // var rDayList = [];
+    // for (var i = 1; i <= 31; i++) {
+    //     var day = new Object();
+    //     if (i < 10) {
+    //         day.value = '0' + i;
+    //         day.name = '0' + i;
+    //     } else {
+    //         day.value = '' + i;
+    //         day.name = '' + i;
+    //     }
+    //     rDayList.push(day);
+    // }
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -71,13 +71,13 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     // memberClass.unshift({name: "전체", value: ""});
     $scope._setComboData("rMemberClassSelect", memberClassSelect);
     $scope._setComboData("rMembrcardYn", rMembrcardList);
-    /*$scope._getComboDataQuery('032', 'anvType', 'A');*/
-    $scope._setComboData("anvType", rAnvTypeList);
+    $scope._getComboDataQuery('032', 'anvType', 'A');
+    // $scope._setComboData("anvType", rAnvTypeList);
     $scope._setComboData("shortNoYn", rShortNoYnList); // 단축번호 적용
-    $scope._setComboData("startMonth", rMonthList);
-    $scope._setComboData("startDay", rDayList);
-    $scope._setComboData("endMonth", rMonthList);
-    $scope._setComboData("endDay", rDayList);
+    // $scope._setComboData("startMonth", rMonthList);
+    // $scope._setComboData("startDay", rDayList);
+    // $scope._setComboData("endMonth", rMonthList);
+    // $scope._setComboData("endDay", rDayList);
     // $scope.memberClassSelect = memberClassList;
     // $scope.memberClassSelect.splice(0,1);
     // $scope._setComboData("rMemberClassSelect", $scope.memberClassSelect);
@@ -255,6 +255,9 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     $scope.regStoreShow = function () {
         $scope._broadcast('regStoreCtrl');
     };
+    $scope.regUseStoreShow = function () {
+        $scope._broadcast('regUseStoreCtrl');
+    };
 
     // 조회 버튼 클릭
     $scope.$on("memberChgBatchCtrl", function (event, data) {
@@ -272,31 +275,60 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
         params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
         params.anvType = $scope.anvType;
-        if ($scope.anvType !== 0) {
-            params.anvStartDate = $scope.startMonth + $scope.startDay;
-            params.anvEndDate = $scope.endMonth + $scope.endDay;
-        }
+        params.anvStartDate = dateToDaystring($scope.anvStartDate).replaceAll('-', '');
+        params.anvEndDate = dateToDaystring($scope.anvEndDate).replaceAll('-', '');
+        // if ($scope.anvType !== 0) {
+        //     params.anvStartDate = $scope.startMonth + $scope.startDay;
+        //     params.anvEndDate = $scope.endMonth + $scope.endDay;
+        // }
         params.startSaveSale = $scope.startSaveSale;
         params.endSaveSale = $scope.endSaveSale;
         params.startAvablPoint = $scope.startAvablPoint;
-        params.endAvablPoint = $scope.endAvablPoint
+        params.endAvablPoint = $scope.endAvablPoint;
         /*params.stortNo = $scope.stortNo;*/
         params.weddingYn = $scope.weddingYn;
         params.memberClass = $scope.memberClass;
-        params.phoneNo = $scope.phoneNo;
+        // params.phoneNo = $scope.phoneNo;
         params.shortNo = $scope.shortNo;
         params.listScale = $scope.listScale;
 
         params.membrNo = $("#memberNo").val();
         params.membrNm = $("#memberNm").val();
+
+        params.storeMembr = $scope.storeMembr;
+        params.visitStoreMembr = $scope.visitStoreMembr;
+
         params.regStoreCd = $("#regStoreCd").val();
         params.telNo = $("#telNo").val();
+        params.regUseStoreCd = $("#regUseStoreCd").val();
         params.membrCardNo = $("#membrCardNo").val();
+        params.cstCardUseFg = $scope.cstCardUseFg;
         params.emailAddr = $("#emailAddr").val();
         params.emailRecvYn = $scope.emailRecvYn;
         params.smsRecvYn = $scope.smsRecvYn;
         params.gendrFg = $scope.gendrFg;
         params.useYn = $scope.useYn;
+
+        if (orgnFg === "HQ") {
+            if (params.regUseStoreCd !== null && params.regUseStoreCd !== '') {
+                $scope.regStoreChk = true
+            } else {
+                $scope.regStoreChk = false
+            }
+        }else {
+            if(hqOfficeCd !== "00000") {
+                if ($scope.visitStoreMembr) {
+                    $scope.regStoreChk = true
+                } else if (!$scope.visitStoreMembr) {
+                    $scope.regStoreChk = false
+                }
+            }
+        }
+
+        // 자기매장 회원만 보이게
+        if(orgnFg == "STORE") {
+            params.storeMembr = true;
+        }
 
         // console.log('params ', params);
         $scope._inquiryMain("/membr/info/chgBatch/chgBatch/getMemberChgBatchList.sb", params, function () {});
@@ -371,6 +403,15 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
             $scope.$broadcast('loadingPopupInactive');
             $scope._popMsg(err.message);
         });
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
     };
 
 }]);

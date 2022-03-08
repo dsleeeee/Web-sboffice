@@ -9,12 +9,18 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
 <div class="subCon" ng-controller="memberChgBatchCtrl">
-    <div class="searchBar flddUnfld">
+
+    <%--<div class="searchBar flddUnfld">--%>
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberChgBatchCtrl', 1)">
                 <s:message code="cmm.search"/>
+            </button>
+            <%-- 확장조회 --%>
+            <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                <s:message code="cmm.search.addShow" />
             </button>
         </div>
     </div>
@@ -87,35 +93,64 @@
                 <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
-        <tr>
-            <%-- 등록매장 --%>
-            <th><s:message code="regist.reg.store.cd"/></th>
-            <td>
-                <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                    <jsp:param name="targetId" value="regStore"/>
-                </jsp:include>
-                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-            </td>
-            <%-- 사용매장 --%>
-            <th><s:message code="regist.use.store.cd"/></th>
-            <td>
-                <input type="text" id="storeCd" class="sb-input w100" ng-model="storeCd" maxlength="15" onkeyup="fnNxBtnSearch();"/>
-            </td>
-        </tr>
+    </table>
+
+    <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
+        <colgroup>
+            <col class="w15"/>
+            <col class="w35"/>
+            <col class="w15"/>
+            <col class="w35"/>
+        </colgroup>
+        <tbody>
+        <c:if test="${orgnFg == 'HQ'}">
+            <tr>
+                <%-- 등록매장 --%>
+                <th><s:message code="regist.reg.store.cd"/></th>
+                <td>
+                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="regStore"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                </td>
+                <%-- 사용매장 --%>
+                <th><s:message code="regist.use.store.cd"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="regUseStore"/>
+                    </jsp:include>
+                </td>
+            </tr>
+        </c:if>
+        <%-- 우리매장 --%>
+        <c:if test="${orgnFg == 'STORE'}">
+            <c:if test="${hqOfficeCd ne '00000'}">
+                <tr style="display: none"> <%-- 자기매장 회원만 보이게 --%>
+                    <th><s:message code="regist.use.store.membr"/></th>
+                    <td>
+                        <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
+                    </td>
+                    <th><s:message code="regist.use.visit.store.membr"/></th>
+                    <td>
+                        <input type="checkbox" id="visitStoreMembr" ng-model="visitStoreMembr"/>
+                    </td>
+                </tr>
+            </c:if>
+        </c:if>
         <tr>
             <%-- 회원카드번호 --%>
             <th><s:message code="regist.membr.card.no"/></th>
             <td>
                 <input type="text" id="membrCardNo" class="sb-input w100" ng-model="membrCardNo" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
-            <%-- 카드사용구분 --%>
+            <%-- 회원카드구분 --%>
             <th><s:message code="regist.membr.card.yn"/></th>
             <td>
                 <div class="sb-select">
                     <wj-combo-box
                             id="rMembrcardYn"
-                            ng-model="member.cardYn"
+                            ng-model="cstCardUseFg"
                             control="rMembrcardYn"
                             items-source="_getComboData('rMembrcardYn')"
                             display-member-path="name"
@@ -167,10 +202,10 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <%-- 핸드폰번호 --%>
+            <%-- 연락처 --%>
             <th><s:message code="regist.tel"/></th>
             <td>
-                <input type="text" id="phoneNo" class="sb-input w100" ng-model="phoneNo" maxlength="15" onkeyup="fnNxBtnSearch();"/>
+                <input type="text" id="telNo" class="sb-input w100" ng-model="telNo" maxlength="15" onkeyup="fnNxBtnSearch(); "/>
             </td>
         </tr>
         <tr>
@@ -190,10 +225,9 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <%-- 기념일 --%>
-            <th><s:message code="regist.brt.wed.day"/></th>
-            <td>
-                <div class="sb-select mb5 w100">
+            <%-- 생일, 결혼기념일 날짜 --%>
+            <th>
+                <div class="sb-select">
                     <wj-combo-box
                             id="anvType"
                             ng-model="anvType"
@@ -205,71 +239,117 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <div ng-if="anvType !== ''" class="sb-select">
-
-                    <span class="txtIn w15">
-                      <div class="sb-select ">
-                        <wj-combo-box
-                                id="startMonth"
-                                ng-model="startMonth"
-                                control="startMonthCombo"
-                                items-source="_getComboData('startMonth')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                      </div>
-                    </span>
-                    <span class="rg">월</span>
-                    <span class="txtIn w15">
-                      <div class="sb-select ">
-                        <wj-combo-box
-                                id="startDay"
-                                ng-model="startDay"
-                                control="startDayCombo"
-                                items-source="_getComboData('startDay')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                      </div>
-                    </span>
-                    <span class="rg">일</span>
+            </th>
+            <td>
+                <div class="sb-select">
+                <span class="txtIn">
+                  <div class="sb-select w110px">
+                    <wj-input-date
+                            value="anvStartDate"
+                            ng-model="anvStartDate"
+                            control="anvStartDateCombo"
+                            format="yyyy/MM/dd"
+                            min="2000-01-01"
+                            max="2099-12-31"
+                            initialized="_initDateBox(s)">
+                    </wj-input-date>
+                  </div>
+                </span>
                     <span class="rg">~</span>
-                    <span class="txtIn w15">
-                      <div class="sb-select ">
-                        <wj-combo-box
-                                id="endMonth"
-                                ng-model="endMonth"
-                                control="endMonthCombo"
-                                items-source="_getComboData('endMonth')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                      </div>
-                    </span>
-                    <span class="rg">월</span>
-                    <span class="txtIn w15">
-                      <div class="sb-select">
-                        <wj-combo-box
-                                id="endDay"
-                                ng-model="endDay"
-                                control="endDayCombo"
-                                items-source="_getComboData('endDay')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                      </div>
-                    </span>
-                    <span class="rg">일</span>
+                    <span class="txtIn">
+                    <div class="sb-select w110px">
+                        <wj-input-date
+                                value="anvEndDate"
+                                ng-model="anvEndDate"
+                                control="anvEndDateCombo"
+                                format="yyyy/MM/dd"
+                                min="2000-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </div>
+                </span>
                 </div>
             </td>
+            <%--&lt;%&ndash; 기념일 &ndash;%&gt;--%>
+            <%--<th><s:message code="regist.brt.wed.day"/></th>--%>
+            <%--<td>--%>
+                <%--<div class="sb-select mb5 w100">--%>
+                    <%--<wj-combo-box--%>
+                            <%--id="anvType"--%>
+                            <%--ng-model="anvType"--%>
+                            <%--control="anvTypeCombo"--%>
+                            <%--items-source="_getComboData('anvType')"--%>
+                            <%--display-member-path="name"--%>
+                            <%--selected-value-path="value"--%>
+                            <%--is-editable="false"--%>
+                            <%--initialized="_initComboBox(s)">--%>
+                    <%--</wj-combo-box>--%>
+                <%--</div>--%>
+                <%--<div ng-if="anvType !== ''" class="sb-select">--%>
+                    <%--<span class="txtIn w15">--%>
+                      <%--<div class="sb-select">--%>
+                        <%--<wj-combo-box--%>
+                                <%--id="startMonth"--%>
+                                <%--ng-model="startMonth"--%>
+                                <%--control="startMonthCombo"--%>
+                                <%--items-source="_getComboData('startMonth')"--%>
+                                <%--display-member-path="name"--%>
+                                <%--selected-value-path="value"--%>
+                                <%--is-editable="false"--%>
+                                <%--initialized="_initComboBox(s)">--%>
+                        <%--</wj-combo-box>--%>
+                      <%--</div>--%>
+                    <%--</span>--%>
+                    <%--<span class="rg">월</span>--%>
+                    <%--<span class="txtIn w15">--%>
+                      <%--<div class="sb-select">--%>
+                        <%--<wj-combo-box--%>
+                                <%--id="startDay"--%>
+                                <%--ng-model="startDay"--%>
+                                <%--control="startDayCombo"--%>
+                                <%--items-source="_getComboData('startDay')"--%>
+                                <%--display-member-path="name"--%>
+                                <%--selected-value-path="value"--%>
+                                <%--is-editable="false"--%>
+                                <%--initialized="_initComboBox(s)">--%>
+                        <%--</wj-combo-box>--%>
+                      <%--</div>--%>
+                    <%--</span>--%>
+                    <%--<span class="rg">일</span>--%>
+                    <%--<span class="rg">~</span>--%>
+                    <%--<span class="txtIn w15">--%>
+                      <%--<div class="sb-select ">--%>
+                        <%--<wj-combo-box--%>
+                                <%--id="endMonth"--%>
+                                <%--ng-model="endMonth"--%>
+                                <%--control="endMonthCombo"--%>
+                                <%--items-source="_getComboData('endMonth')"--%>
+                                <%--display-member-path="name"--%>
+                                <%--selected-value-path="value"--%>
+                                <%--is-editable="false"--%>
+                                <%--initialized="_initComboBox(s)">--%>
+                        <%--</wj-combo-box>--%>
+                      <%--</div>--%>
+                    <%--</span>--%>
+                    <%--<span class="rg">월</span>--%>
+                    <%--<span class="txtIn w15">--%>
+                      <%--<div class="sb-select">--%>
+                        <%--<wj-combo-box--%>
+                                <%--id="endDay"--%>
+                                <%--ng-model="endDay"--%>
+                                <%--control="endDayCombo"--%>
+                                <%--items-source="_getComboData('endDay')"--%>
+                                <%--display-member-path="name"--%>
+                                <%--selected-value-path="value"--%>
+                                <%--is-editable="false"--%>
+                                <%--initialized="_initComboBox(s)">--%>
+                        <%--</wj-combo-box>--%>
+                      <%--</div>--%>
+                    <%--</span>--%>
+                    <%--<span class="rg">일</span>--%>
+                <%--</div>--%>
+            <%--</td>--%>
         </tr>
         <tr>
             <%-- 적립매출횟수 --%>
@@ -516,9 +596,10 @@
     var memberClass = ${memberClassList};
     var memberClassSelect = ${memberClassSelect};
     var regstrStoreList = ${regstrStoreList};
+    var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20201117.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20220307.01" charset="utf-8"></script>
 
 <%-- 회원정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDtl.jsp">

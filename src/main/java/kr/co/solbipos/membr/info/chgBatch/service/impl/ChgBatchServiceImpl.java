@@ -86,14 +86,19 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
         chgBatchVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         chgBatchVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
-
         chgBatchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            chgBatchVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            if (!StringUtil.isEmpties(chgBatchVO.getRegStoreCd())) {
+                chgBatchVO.setRegStoreCds(chgBatchVO.getRegStoreCd().split(","));
+            }
+            if (!StringUtil.isEmpties(chgBatchVO.getRegUseStoreCd())) {
+                chgBatchVO.setRegUseStoreCds(chgBatchVO.getRegUseStoreCd().split(","));
+            }
         }
 
-        if (!StringUtil.isEmpties(chgBatchVO.getRegStoreCd())) {
-            chgBatchVO.setRegStoreCds(chgBatchVO.getRegStoreCd().split(","));
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            chgBatchVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
         LOGGER.info("AnvStartDate ::: {}",chgBatchVO.getAnvStartDate());

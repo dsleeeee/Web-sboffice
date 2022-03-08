@@ -175,6 +175,16 @@ public class ChgBatchVO extends PageVO {
     /** 최종방문일*/
     private String lastSaleDate;
 
+    /** 우리매장 방문회원 */
+    private String visitStoreMembr;
+
+    /** 우리매장 등록회원 */
+    private String storeMembr;
+
+    /** 사용매장(여러건) */
+    private String regUseStoreCd;
+    private String regUseStoreCds[];
+
     public OrgnFg getOrgnFg() {
         return orgnFg;
     }
@@ -573,5 +583,35 @@ public class ChgBatchVO extends PageVO {
 
     public void setLastSaleDate(String lastSaleDate) {
         this.lastSaleDate = lastSaleDate;
+    }
+
+    public String getVisitStoreMembr() {
+        return visitStoreMembr;
+    }
+
+    public void setVisitStoreMembr(String visitStoreMembr) {
+        this.visitStoreMembr = visitStoreMembr;
+    }
+
+    public String getStoreMembr() { return storeMembr; }
+
+    public void setStoreMembr(String storeMembr) {
+        this.storeMembr = storeMembr;
+    }
+
+    public String getRegUseStoreCd() {
+        return regUseStoreCd;
+    }
+
+    public void setRegUseStoreCd(String regUseStoreCd) {
+        this.regUseStoreCd = regUseStoreCd;
+    }
+
+    public String[] getRegUseStoreCds() {
+        return regUseStoreCds;
+    }
+
+    public void setRegUseStoreCds(String[] regUseStoreCds) {
+        this.regUseStoreCds = regUseStoreCds;
     }
 }

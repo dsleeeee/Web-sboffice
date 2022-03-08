@@ -24,7 +24,8 @@
     <select id="getMemberChgBatchList" parameterType="ChgBatchVO" resultType="DefaultMap">
         /* ChgBatchMapper.getMemberChgBatchList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmm.MEMBR_NO,
+        SELECT
+        tmm.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
@@ -60,6 +61,9 @@
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_CLASS tmmc,
         TB_MS_STORE tms,
+        <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
+            TB_MB_MEMBER_POINT_STORE tmmps,
+        </if>
         TB_MB_MEMBER_POINT tmmp
         WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
@@ -73,8 +77,27 @@
         AND tms.STORE_CD = tmm.REG_STORE_CD
         AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
         AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
-        <if test='storeCd != null and storeCd != ""'>
-            AND tmm.REG_STORE_CD = #{storeCd}
+        <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
+            AND tmmps.MEMBR_ORGN_CD (+) = tmm.REG_STORE_CD
+            AND tmmps.CHG_MEMBR_ORGN_CD (+)= tmm.REG_STORE_CD
+            AND tmmps.MEMBR_NO (+)= tmm.MEMBR_NO
+            <if test='visitStoreMembr == "true"'>
+                AND tmmps.CHG_MEMBR_ORGN_CD = #{storeCd}
+            </if>
+            <if test='regUseStoreCd != null and !regUseStoreCd.equals("")'>
+                AND tmmps.CHG_MEMBR_ORGN_CD IN
+                <foreach collection="regUseStoreCds" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <if test='storeMembr == "true"'>
+                AND tmm.REG_STORE_CD = #{storeCd}
+            </if>
+        </if>
+        <if test='cstCardUseFg != null and cstCardUseFg != ""'>
+            AND tmm.CST_CARD_USE_FG = #{cstCardUseFg}
         </if>
         <if test='membrCardNo != null and membrCardNo != ""'>
             AND tmm.MEMBR_CARD_NO LIKE '%'||#{membrCardNo}||'%'
@@ -83,10 +106,10 @@
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
         <if test='membrNm != null and membrNm != ""'>
-            AND SBPENC.D ( tmm.MEMBR_NM  ) LIKE '%'||#{membrNm}||'%'
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
         <if test='telNo != null and telNo != ""'>
-            AND  SBPENC.D(tmm.TEL_NO) LIKE '%'||#{telNo}||'%'
+            AND SBPENC.D(tmm.TEL_NO) LIKE '%'||#{telNo}||'%'
         </if>
         <if test='emailAddr != null and emailAddr.toString() != ""'>
             AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
@@ -127,10 +150,10 @@
         </if>
         <if test='anvType != null and anvType.toString() != ""'>
             <if test='anvType.getCode() == "1"'>
-                AND substr(tmm.BIRTHDAY, 5,4) BETWEEN #{anvStartDate} AND #{anvEndDate}
+                AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
             <if test='anvType.getCode() == "2"'>
-                AND substr(tmm.WEDDINGDAY, 5,4) BETWEEN #{anvStartDate} AND #{anvEndDate}
+                AND tmm.WEDDINGDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
         </if>
         <if test='useYn != null and useYn != ""'>
@@ -138,6 +161,9 @@
         </if>
         <if test='shortNo != null and shortNo != ""'>
             AND tmm.SHORT_NO = #{shortNo}
+        </if>
+        <if test='weddingYn != null and weddingYn.toString() != ""'>
+            AND tmm.WEDDING_YN = #{weddingYn}
         </if>
         ORDER BY tmm.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
