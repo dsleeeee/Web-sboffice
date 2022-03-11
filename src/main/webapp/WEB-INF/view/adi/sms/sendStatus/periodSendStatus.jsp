@@ -71,20 +71,6 @@
             </tbody>
         </table>
 
-        <div class="mt10 oh sb-select dkbr">
-            <%-- 페이지 스케일  --%>
-            <wj-combo-box
-                    class="w100px fl"
-                    id="listScaleBox"
-                    ng-model="periodSendStatusListScale"
-                    items-source="_getComboData('listScaleBox')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
-            </wj-combo-box>
-        </div>
-
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
             <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
@@ -106,22 +92,26 @@
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.waitQty"/>" binding="totWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.successQty"/>" binding="totSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.failQty"/>" binding="totFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="periodSendStatus.saleAmt"/>" binding="totSaleAmt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.sendQty"/>" binding="smsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.waitQty"/>" binding="smsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.successQty"/>" binding="smsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.failQty"/>" binding="smsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="periodSendStatus.saleAmt"/>" binding="smsSaleAmt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.sendQty"/>" binding="lmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.waitQty"/>" binding="lmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.successQty"/>" binding="lmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.failQty"/>" binding="lmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="periodSendStatus.saleAmt"/>" binding="lmsSaleAmt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.sendQty"/>" binding="mmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.waitQty"/>" binding="mmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.successQty"/>" binding="mmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="periodSendStatus.failQty"/>" binding="mmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="periodSendStatus.saleAmt"/>" binding="mmsSaleAmt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/periodSendStatus.js?ver=20211021.011" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/periodSendStatus.js?ver=20220311.01" charset="utf-8"></script>

@@ -50,18 +50,22 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
         dataItem.totWaitQty = messages["periodSendStatus.tot"];
         dataItem.totSuccessQty = messages["periodSendStatus.tot"];
         dataItem.totFailQty = messages["periodSendStatus.tot"];
+        dataItem.totSaleAmt = messages["periodSendStatus.tot"];
         dataItem.smsSendQty = messages["periodSendStatus.sms"];
         dataItem.smsWaitQty = messages["periodSendStatus.sms"];
         dataItem.smsSuccessQty = messages["periodSendStatus.sms"];
         dataItem.smsFailQty = messages["periodSendStatus.sms"];
+        dataItem.smsSaleAmt = messages["periodSendStatus.sms"];
         dataItem.lmsSendQty = messages["periodSendStatus.lms"];
         dataItem.lmsWaitQty = messages["periodSendStatus.lms"];
         dataItem.lmsSuccessQty = messages["periodSendStatus.lms"];
         dataItem.lmsFailQty = messages["periodSendStatus.lms"];
+        dataItem.lmsSaleAmt = messages["periodSendStatus.lms"];
         dataItem.mmsSendQty = messages["periodSendStatus.mms"];
         dataItem.mmsWaitQty = messages["periodSendStatus.mms"];
         dataItem.mmsSuccessQty = messages["periodSendStatus.mms"];
         dataItem.mmsFailQty = messages["periodSendStatus.mms"];
+        dataItem.mmsSaleAmt = messages["periodSendStatus.mms"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
