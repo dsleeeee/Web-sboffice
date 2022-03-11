@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/adi/sms/smsAnalysisTab"/>
 
 <div class="con">
@@ -17,10 +18,12 @@
             <li>
                 <a id="daySendStatusTab" href="#" ng-click="daySendStatusShow()"><s:message code="smsAnalysisTab.daySendStatus"/></a>
             </li>
-            <%-- 기간별 전송현황 탭 --%>
-            <li>
-                <a id="periodSendStatusTab" href="#" ng-click="periodSendStatusShow()"><s:message code="smsAnalysisTab.periodSendStatus"/></a>
-            </li>
+            <c:if test="${orgnFg != 'STORE'}">
+                <%-- 기간별 전송현황 탭 --%>
+                <li>
+                    <a id="periodSendStatusTab" href="#" ng-click="periodSendStatusShow()"><s:message code="smsAnalysisTab.periodSendStatus"/></a>
+                </li>
+            </c:if>
         </ul>
     </div>
 </div>
