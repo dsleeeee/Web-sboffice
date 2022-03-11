@@ -66,6 +66,15 @@ public class SendStatusVO extends PageVO {
     /** 예약여부 */
     private String reserveYn;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+    /** 본사명 */
+    private String hqOfficeNm;
+    /** 매장코드 */
+    private String storeCd;
+    /** 매장명 */
+    private String storeNm;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -121,4 +130,36 @@ public class SendStatusVO extends PageVO {
     public String getReserveYn() { return reserveYn; }
 
     public void setReserveYn(String reserveYn) { this.reserveYn = reserveYn; }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
 }

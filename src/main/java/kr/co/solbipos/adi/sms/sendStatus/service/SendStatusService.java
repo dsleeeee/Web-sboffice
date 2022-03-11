@@ -34,6 +34,8 @@ public interface SendStatusService {
     /** 일자별 전송현황 - 조회 */
     List<DefaultMap<Object>> getDaySendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO);
 
+    /** 기간별 전송현황 - 조회 */
+    List<DefaultMap<Object>> getPeriodSendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO);
 
 
     /** 공통 화면 상단 SMS전송(당일) 표시 - [125 SMS전송현황표시]에 등록된 본사 하위 매장인지 조회 */
