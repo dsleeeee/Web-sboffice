@@ -18,15 +18,18 @@ app.controller('smsAnalysisTabCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#smsSendHistView").show();
         $("#daySendStatusView").hide();
+        $("#periodSendStatusView").hide();
     };
 
     // SMS전송이력 탭 보이기
     $scope.smsSendHistShow = function () {
         $("#smsSendHistTab").addClass("on");
         $("#daySendStatusTab").removeClass("on");
+        $("#periodSendStatusTab").removeClass("on");
 
         $("#smsSendHistView").show();
         $("#daySendStatusView").hide();
+        $("#periodSendStatusView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("smsSendHistCtrl");
@@ -37,12 +40,29 @@ app.controller('smsAnalysisTabCtrl', ['$scope', function ($scope) {
     $scope.daySendStatusShow = function () {
         $("#smsSendHistTab").removeClass("on");
         $("#daySendStatusTab").addClass("on");
+        $("#periodSendStatusTab").removeClass("on");
 
         $("#smsSendHistView").hide();
         $("#daySendStatusView").show();
+        $("#periodSendStatusView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("daySendStatusCtrl");
+        scope.flex.refresh();
+    };
+
+    // 기간별 전송현황 탭 보이기
+    $scope.periodSendStatusShow = function () {
+        $("#smsSendHistTab").removeClass("on");
+        $("#daySendStatusTab").removeClass("on");
+        $("#periodSendStatusTab").addClass("on");
+
+        $("#smsSendHistView").hide();
+        $("#daySendStatusView").hide();
+        $("#periodSendStatusView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("periodSendStatusCtrl");
         scope.flex.refresh();
     };
 }]);

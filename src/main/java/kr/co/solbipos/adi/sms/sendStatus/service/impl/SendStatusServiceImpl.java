@@ -6,6 +6,7 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusService;
 import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,6 +114,17 @@ public class SendStatusServiceImpl implements SendStatusService {
         sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
         return sendStatusMapper.getDaySendStatusList(sendStatusVO);
+    }
+
+    /** 기간별 전송현황 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getPeriodSendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            sendStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+
+        return sendStatusMapper.getPeriodSendStatusList(sendStatusVO);
     }
 
 

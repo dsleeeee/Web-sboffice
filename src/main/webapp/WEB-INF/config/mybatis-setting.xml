@@ -199,6 +199,8 @@
     <typeAlias alias="webLoginVO" type="kr.co.solbipos.sys.stats.webLogin.service.WebLoginVO"/>
     <!-- 시스템관리 > 관리자기능 > POS 시스템 로그 송신-->
     <typeAlias alias="logSendVO" type="kr.co.solbipos.sys.admin.logSend.service.LogSendVO"/>
+    <!-- 시스템관리 > 관리자기능 > 매출점검 -->
+    <typeAlias alias="saleChkVO" type="kr.co.solbipos.sys.admin.saleChk.service.SaleChkVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
     <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--

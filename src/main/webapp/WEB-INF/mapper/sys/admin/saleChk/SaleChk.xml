@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleChk.xml
+    매출점검 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.03.07      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin.saleChk.service.impl.SaleChkMapper">
+
+    <!-- 조회 -->
+    <!--
+      TABLE    : TB_LOG_DAILY_DATA_CHECK
+      PARAM    : saleChkVO
+      COMMENTS : 매장별 포스 목록을 조회한다.
+    -->
+    <select id="getSaleList" parameterType="saleChkVO" resultType="defaultMap">
+        /* SaleChkMapper.getSaleList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.CHECK_NM
+        ,       C.STORE_NM
+        ,       A.STORE_CD
+        ,       B.BILL_DT
+        ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       A.POS_NO
+        ,       A.BILL_NO
+        ,       A.SALE_YN
+        ,       A.REMARK
+        ,       TO_CHAR(TO_DATE(A.PROC_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') AS PROC_DATE
+        ,       TO_CHAR(TO_DATE(A.PROC_TIME, 'HH24MISS'), 'HH:mm:ss') AS PROC_TIME
+        ,       A.RESULT_MSG
+        ,       A.PROC_DT AS PROC_DT2
+        ,       A.PROC_YN AS PROC_YN2
+        ,       A.CHECK_CD AS CHECK_CD2
+        ,       A.CHECK_NM AS CHECK_NM2
+        ,       A.STORE_NM AS STORE_NM2
+        ,       A.HQ_OFFICE_CD AS HQ_OFFICE_CD2
+        ,       A.STORE_CD AS STORE_CD2
+        ,       A.SALE_DATE AS SALE_DATE2
+        ,       A.POS_NO AS POS_NO2
+        ,       A.BILL_NO AS BILL_NO2
+        ,       A.SALE_YN AS SALE_YN2
+        ,       A.REMARK AS REMARK2
+        ,       A.HQ_BRAND_CD AS HQ_BRAND_CD2
+        ,       A.PROC_DATE AS PROC_DATE2
+        ,       A.PROC_TIME AS PROC_TIME2
+        ,       A.RESULT_MSG AS RESULT_MSG2
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_LOG_DAILY_DATA_CHECK A
+        ,       TB_SL_SALE_HDR B
+        ,		TB_MS_STORE C
+        ,		TB_HQ_OFFICE D
+        WHERE	B.STORE_CD(+)   = A.STORE_CD
+        AND 	B.SALE_DATE(+)  = A.SALE_DATE
+        AND		B.POS_NO(+) 	= A.POS_NO
+        AND 	B.BILL_NO(+) 	= A.BILL_NO
+        AND		C.STORE_CD      = A.STORE_CD
+        AND		D.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+        AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
+            AND D.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm !=""'>
+            AND D.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+        </if>
+        <if test='storeCd != null and storeCd !=""'>
+            AND A.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test='storeNm != null and storeNm !=""'>
+            AND C.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        <if test='saleYn != null and saleYn !=""'>    -- 매출구분
+            AND A.SALE_YN = #{saleYn}
+        </if>
+        <if test='checkNm != null and checkNm !=""'>    -- 체크항목
+            AND A.CHECK_NM = #{checkNm}
+        </if>
+        <if test='saleYn != null and saleYn =="1"'>    -- 오류타입1
+            AND A.REMARK LIKE '%NOT FOUND%'
+        </if>
+        <if test='saleYn != null and saleYn =="2"'>    -- 오류타입2
+            AND A.REMARK NOT LIKE '%NOT FOUND%'
+        </if>
+        <if test='resultMsg != null and resultMsg !=""'>    -- 처리메시지
+            AND A.RESULT_MSG LIKE '%' || #{resultMsg} || '%'
+        </if>
+        <if test='procYn != null and procYn !=""'>    -- 처리구분
+            AND A.PROC_YN = #{saleYn}
+        </if>
+        <if test='checkCd != null and checkCd !=""'>    -- 체크항목코드
+            AND A.CHECK_CD = #{checkCd}
+        </if>
+        ORDER
+        BY      A.SALE_DATE DESC
+        ,       A.REMARK DESC
+        ,       A.STORE_CD
+        ,       A.CHECK_CD
+        ,       A.BILL_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- ResultMsg 수정 -->
+    <!--
+        TABLE    : TB_LOG_DAILY_DATA_CHECK
+        PARAM    : saleChkVO
+        COMMENTS : ResultMsg 수정
+    -->
+    <update id="updateResultMsg" parameterType="saleChkVO">
+        /* USE : SaleChkMapper.updateResultMsg */
+        UPDATE  TB_LOG_DAILY_DATA_CHECK
+        SET     RESULT_MSG = #{resultMsg}
+        WHERE   STORE_CD = #{storeCd2}
+        AND     SALE_DATE = #{saleDate2}
+        AND     POS_NO  = #{posNo2}
+        AND     BILL_NO = #{billNo2}
+        AND     CHECK_CD = #{checkCd2}
+    </update>
+
+</mapper>
