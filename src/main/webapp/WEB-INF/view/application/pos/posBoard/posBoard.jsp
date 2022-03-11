@@ -179,7 +179,7 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210414.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posBoard/posBoard.js?ver=20210414.09" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업(포스용) --%>
 <c:import url="/WEB-INF/view/application/pos/posBoard/posBoardDetail.jsp">

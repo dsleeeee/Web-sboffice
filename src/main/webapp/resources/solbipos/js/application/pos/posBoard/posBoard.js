@@ -148,6 +148,18 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
             }, 50)
         });
 
+        // 게시판 상세 팝업 핸들러 추가
+        $scope.wjPosBoardDetailLayer.hidden.addHandler(function (s) {
+            setTimeout(function() {
+                    var params = {};
+                    params.listScale = 10;
+                    params.boardCd = "01"
+                    // 공지팝업 여부(미열람 공지사항 띄움)
+                    var scope = agrid.getScope('posBoardPopupCtrl');
+                    scope.searchPosBoardPopup(params);
+            }, 50)
+        });
+
         // 게시판 상세 FULL SIZE 팝업 핸들러 추가
         $scope.wjPosBoardDetailFullSizeLayer.shown.addHandler(function (s) {
             setTimeout(function() {
@@ -159,6 +171,18 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._broadcast('posBoardDetailFullSizeCtrl', $scope.getSelectedStore());
             }, 50)
         });
+
+        // 게시판 상세 FULL SIZE 팝업 핸들러 추가
+        $scope.wjPosBoardDetailFullSizeLayer.hidden.addHandler(function (s) {
+            setTimeout(function() {
+                var params = {};
+                params.listScale = 10;
+                params.boardCd = "01"
+                // 공지팝업 여부(미열람 공지사항 띄움)
+                var scope = agrid.getScope('posBoardPopupCtrl');
+                scope.searchPosBoardPopup(params);
+            }, 50)
+        });
     });
 
     // 공지팝업 여부(미열람 공지사항 띄움)
@@ -167,10 +191,8 @@ app.controller('posBoardCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if(params.fullSizeYn === "Y"){
             $scope.wjPosBoardDetailFullSizeLayer.show(true);
-            event.preventDefault();
         }else {
             $scope.wjPosBoardDetailLayer.show(true);
-            event.preventDefault();
         }
     };
 
