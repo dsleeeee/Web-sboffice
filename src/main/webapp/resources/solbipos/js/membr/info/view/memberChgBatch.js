@@ -70,7 +70,8 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     memberClass.unshift({name: "선택", value: ""});
     // memberClass.unshift({name: "전체", value: ""});
     $scope._setComboData("rMemberClassSelect", memberClassSelect);
-    $scope._setComboData("rMembrcardYn", rMembrcardList);
+    // $scope._setComboData("rMembrcardYn", rMembrcardList);
+    $scope._getComboDataQuery('299', 'membrCardFg', 'A');
     $scope._getComboDataQuery('032', 'anvType', 'A');
     // $scope._setComboData("anvType", rAnvTypeList);
     $scope._setComboData("shortNoYn", rShortNoYnList); // 단축번호 적용
