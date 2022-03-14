@@ -152,7 +152,7 @@
                             id="rMembrcardYn"
                             ng-model="cstCardUseFg"
                             control="rMembrcardYn"
-                            items-source="_getComboData('rMembrcardYn')"
+                            items-source="_getComboData('membrCardFg')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -599,7 +599,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20220307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20220308.01" charset="utf-8"></script>
 
 <%-- 회원정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDtl.jsp">
