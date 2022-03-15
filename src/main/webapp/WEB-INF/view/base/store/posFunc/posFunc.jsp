@@ -182,8 +182,8 @@
         }
       }
 
-      if($("#srchStoreCd").val().length > 7) {
-        s_alert.pop("<s:message code='posFunc.storeCd'/><s:message code='cmm.regexp' arguments='7'/>");
+      if($("#srchStoreCd").val().length > 12) {
+        s_alert.pop("<s:message code='posFunc.storeCd'/><s:message code='cmm.regexp' arguments='12'/>");
         return;
       }
       if($("#srchStoreNm").val().length > 15) {
