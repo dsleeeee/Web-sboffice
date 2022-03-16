@@ -17,6 +17,8 @@
           <li><a id="storeSalePrice" href="#" ng-click="changeTab('S');"><s:message code="salePrice.storeSalePrice" /></a></li>
           <%-- 본사 판매가 관리 --%>
 <%--          <li><a id="hqSalePrice" href="#" ng-click="changeTab('H');"><s:message code="salePrice.hqSalePrice" /></a></li>--%>
+          <%-- 매장판매가 복사 --%>
+          <li><a id="storeSaleCopy" href="#" ng-click="changeTab('C');"><s:message code="salePrice.storeSaleCopy" /></a></li>
         </ul>
     </div>
 </div>
@@ -29,6 +31,9 @@
   <c:import url="/WEB-INF/view/base/price/salePrice/storeSalePriceView.jsp">
   </c:import>
 
+  <%-- 매장판매가 복사 --%>
+  <c:import url="/WEB-INF/view/base/price/salePrice/storeSaleCopyView.jsp">
+  </c:import>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/salePrice.js?ver=20181220.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/salePrice.js?ver=20181220.02" charset="utf-8"></script>
 

@@ -116,6 +116,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     }
 
     dataItem.guestUprc               = messages["todayDtl.guestUprc"];
+    dataItem.totOffaddAmt           = messages["todayDtl.totOffaddAmt"];
     s.columnHeaders.rows[0].dataItem = dataItem;
 
     s.itemFormatter = function (panel, r, c, cell) {
@@ -499,7 +500,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
     }
     // 할인구분 헤더머지 컬럼 생성
     for (var i = 0; i < arrDcCol.length; i++) {
-      dataItem['dc' + arrDcCol[i]] = messages["todayDtl.dtl.dcInfo"];
+      dataItem['dc' + arrDcCol[i]] = messages["todayDtl.dcInfo"];
     }
 
     // dataItem.firstOrderDt = messages["todayDtl.dtl.firstOrderDt"];
@@ -511,6 +512,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
     }
 
     dataItem.guestUprc               = messages["todayDtl.dtl.guestUprc"];
+    dataItem.totOffaddAmt           = messages["todayDtl.dtl.totOffaddAmt"];
     s.columnHeaders.rows[0].dataItem = dataItem;
 
     s.itemFormatter = function (panel, r, c, cell) {

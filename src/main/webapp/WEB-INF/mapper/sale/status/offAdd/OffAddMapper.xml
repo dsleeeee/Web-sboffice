@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    OffAddMapper.xml
+    오프라인추가매출현황 매출조회 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.03.14     신규생성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.offAdd.service.impl.OffAddMapper">
+
+	<!-- 일별 -->
+	<!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : offAddVO
+        COMMENTS : 일별 오프라인추가매출현황 매출을 조회한다.
+    -->
+	<select id="getOffAddDayList" parameterType="offAddVO" resultType="DefaultMap">
+		/* USE : OffAddMapper.getOffAddDayList */
+		SELECT	TO_CHAR(TO_DATE(SALE_DATE),'YYYY-MM-DD') AS SALE_DATE,
+				NVL(COUNT(DISTINCT STORE_CD), 0) AS STORE_CNT,
+-- 				NVL(COUNT(DISTINCT SALE_DATE), 0) AS SALE_CNT,
+				NVL(SUM(TOT_SALE_AMT), 0) AS TOT_SALE_AMT,
+				NVL(SUM(TOT_DC_AMT), 0) AS TOT_DC_AMT,
+				NVL(SUM(REAL_SALE_AMT), 0) AS REAL_SALE_AMT,
+				NVL(SUM(TOT_OFFADD_AMT), 0) AS TOT_OFFADD_AMT
+		FROM 	TB_SL_SALE_HDR
+		WHERE	HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		GROUP BY SALE_DATE
+		ORDER BY SALE_DATE
+	</select>
+
+	<!-- 일별 상세 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : offAddVO
+        COMMENTS : 일별 오프라인추가매출현황 상세 매출을 조회한다.
+    -->
+	<select id="getOffAddDayDetailList" parameterType="offAddVO" resultType="DefaultMap">
+		/* USE : OffAddMapper.getOffAddDayDetailList */
+		SELECT 	tssd.PROD_CD,
+			  	tmp.PROD_NM,
+			  	SUM(tssd.SALE_QTY) AS SALE_QTY,
+			  	SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+			  	NVL(tssd.ORDER_ADD_FG, '1') AS ORDER_ADD_FG
+		FROM	TB_SL_SALE_DTL tssd,
+				TB_MS_PRODUCT tmp
+		WHERE 	tmp.STORE_CD = tssd.STORE_CD
+	  	AND		tmp.PROD_CD(+) = tssd.PROD_CD
+	  	AND 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND tssd.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+	  	AND		tssd.SALE_DATE = #{saleDate}
+		GROUP BY tssd.PROD_CD, tmp.PROD_NM, tssd.ORDER_ADD_FG
+		ORDER BY tssd.PROD_CD
+	</select>
+
+
+	<!-- 월별 -->
+	<!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : offAddVO
+        COMMENTS : 월별 오프라인추가매출현황 매출을 조회한다.
+    -->
+	<select id="getOffAddMonthList" parameterType="offAddVO" resultType="DefaultMap">
+		/* USE : OffAddMapper.getOffAddMonthList */
+		SELECT	TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm') AS SALE_DATE,
+				NVL(COUNT(DISTINCT STORE_CD), 0) AS STORE_CNT,
+				NVL(COUNT(DISTINCT SALE_DATE), 0) AS SALE_CNT,
+				NVL(SUM(TOT_SALE_AMT), 0) AS TOT_SALE_AMT,
+				NVL(SUM(TOT_DC_AMT), 0) AS TOT_DC_AMT,
+				NVL(SUM(REAL_SALE_AMT), 0) AS REAL_SALE_AMT,
+				NVL(SUM(TOT_OFFADD_AMT), 0) AS TOT_OFFADD_AMT
+		FROM 	TB_SL_SALE_HDR
+		WHERE	HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND 	SALE_DATE BETWEEN #{startDate} || '01' AND #{endDate} || '31'
+		GROUP BY TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm')
+		ORDER BY SALE_DATE DESC
+	</select>
+
+	<!-- 월별 상세 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : offAddVO
+        COMMENTS : 월별 오프라인추가매출현황 상세 매출을 조회한다.
+    -->
+	<select id="getOffAddMonthDetailList" parameterType="offAddVO" resultType="DefaultMap">
+		/* USE : OffAddMapper.getOffAddMonthDetailList */
+		SELECT 	tssd.PROD_CD,
+				tmp.PROD_NM,
+				SUM(tssd.SALE_QTY) AS SALE_QTY,
+				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+				NVL(tssd.ORDER_ADD_FG, '1') AS ORDER_ADD_FG
+		FROM	TB_SL_SALE_DTL tssd,
+				TB_MS_PRODUCT tmp
+		WHERE 	tmp.STORE_CD = tssd.STORE_CD
+		AND		tmp.PROD_CD(+) = tssd.PROD_CD
+		AND 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND tssd.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND		tssd.SALE_DATE LIKE #{saleDate} || '%'
+		GROUP BY tssd.PROD_CD, tmp.PROD_NM, tssd.ORDER_ADD_FG
+		ORDER BY tssd.PROD_CD
+	</select>
+
+
+	<!-- 상품별 -->
+	<!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : offAddVO
+        COMMENTS : 상품별 오프라인추가매출현황 매출을 조회한다.
+    -->
+	<select id="getOffAddProdList" parameterType="offAddVO" resultType="DefaultMap">
+		/* USE : OffAddMapper.getOffAddProdList */
+		<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT  PATH_NM,
+				tsdp.PROD_CD,
+				PROD_NM,
+				ORDER_ADD_FG,
+				BARCD_CD,
+				SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+				SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+				SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+				SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+				SUM(TOT_GA_AMT) AS TOT_GA_AMT,
+				SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
+				SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+				SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+				<foreach collection="arrPayCol" item="item" separator="+">
+					NVL(SUM(PAY${item}), 0)
+				</foreach> AS TOT_PAY_AMT,
+				<foreach collection="arrPayCol" item="item" separator=",">
+					NVL(SUM(PAY${item}), 0) AS PAY${item}
+				</foreach>
+		<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM    (
+				SELECT 	PATH_NM,
+						PROD_CD,
+						PROD_NM,
+						ORDER_ADD_FG,
+						MAX(BARCD_CD) AS BARCD_CD,
+						SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+						SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+						SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+						SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+						SUM(TOT_GA_AMT) AS TOT_GA_AMT,
+						SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
+						SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+						SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+				FROM (
+						SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+								tsdp.PROD_CD,
+								tmp.PROD_NM,
+								NVL(tsdp.ORDER_ADD_FG, 1) AS ORDER_ADD_FG,
+								MAX(tmpb.BARCD_CD) AS BARCD_CD,
+								SUM(tsdp.SALE_QTY) AS TOT_SALE_QTY,
+								SUM(tsdp.SALE_AMT) AS TOT_SALE_AMT,
+								SUM(tsdp.DC_AMT) AS TOT_DC_AMT,
+								SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+								SUM(tsdp.REAL_SALE_AMT - tsdp.VAT_AMT) AS TOT_GA_AMT,
+								SUM(tsdp.VAT_AMT) AS TOT_VAT_AMT,
+								SUM(tsdp.TIP_AMT) AS TOT_TIP_AMT,
+								SUM(tsdp.ETC_AMT) AS TOT_ETC_AMT
+						FROM    TB_SL_SALE_DTL tsdp,
+								TB_MS_PRODUCT tmp,
+								TB_MS_PRODUCT_BARCD tmpb
+						WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+						<if test='storeCd != null and storeCd != ""'>
+							AND tsdp.STORE_CD IN
+							<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+								#{item}
+							</foreach>
+						</if>
+						AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+						<if test="prodCd != null and prodCd != ''">
+							AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+						</if>
+						<if test="prodNm != null and prodNm != ''">
+							AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+						</if>
+						<if test='prodClassCd != null and prodClassCd != ""'>
+							AND tmp.PROD_CLASS_CD IN (
+														SELECT  PROD_CLASS_CD
+														FROM    TB_MS_PRODUCT_CLASS
+														WHERE   STORE_CD = tsdp.STORE_CD
+														START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tsdp.STORE_CD
+														CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tsdp.STORE_CD
+														)
+						</if>
+						<if test='orderAddFg != null and orderAddFg == "1"'>
+							AND (tsdp.ORDER_ADD_FG = #{orderAddFg}
+							OR	tsdp.ORDER_ADD_FG IS NULL)
+						</if>
+						<if test='orderAddFg != null and orderAddFg == "2"'>
+							AND tsdp.ORDER_ADD_FG = #{orderAddFg}
+						</if>
+						AND     tmp.STORE_CD = tsdp.STORE_CD
+						AND     tmp.PROD_CD = tsdp.PROD_CD
+						AND     tmpb.STORE_CD (+)= tmp.STORE_CD
+						AND     tmpb.PROD_CD (+)= tmp.PROD_CD
+						GROUP BY tsdp.PROD_CD, tmp.PROD_NM,tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.ORDER_ADD_FG
+						)
+					GROUP BY PATH_NM, PROD_CD, PROD_NM, ORDER_ADD_FG
+				) tsdp,
+				(
+				SELECT  PROD_CD,
+						<foreach collection="arrPayCol" item="item" separator=",">
+							SUM(PAY${item}) AS PAY${item}
+						</foreach>
+				FROM
+						(
+							SELECT  PROD_CD,
+									PAY_CD,
+									SUM(PAY_AMT) AS PAY_AMT
+							FROM    TB_SL_SALE_DTL_PAY
+							WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+							<if test='storeCd != null and storeCd != ""'>
+								AND STORE_CD IN
+								<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+									#{item}
+								</foreach>
+							</if>
+							AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+							<if test="prodCd != null and prodCd != ''">
+								AND PROD_CD LIKE '%'|| #{prodCd} ||'%'
+							</if>
+						GROUP BY PROD_CD, PAY_CD
+						)
+						PIVOT
+						(
+						SUM(PAY_AMT)
+						FOR PAY_CD
+						IN (${pivotPayCol})
+						)
+						GROUP BY PROD_CD
+						) tsdpp
+		WHERE	tsdpp.PROD_CD = tsdp.PROD_CD
+		GROUP BY tsdp.PROD_CD, PROD_NM, BARCD_CD, PATH_NM, ORDER_ADD_FG
+		ORDER BY tsdp.PROD_CD
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+	</select>
+
+	<!-- 상품별 엑셀 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : offAddVO
+        COMMENTS : 상품별 오프라인추가매출현황 상세 매출을 조회한다.
+    -->
+	<select id="getOffAddProdExcelList" parameterType="offAddVO" resultType="DefaultMap">
+		/* USE : OffAddMapper.getOffAddProdExcelList */
+		SELECT  PATH_NM,
+		tsdp.PROD_CD,
+		PROD_NM,
+		ORDER_ADD_FG,
+		BARCD_CD,
+		SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+		SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+		SUM(TOT_GA_AMT) AS TOT_GA_AMT,
+		SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
+		SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+		SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+		<foreach collection="arrPayCol" item="item" separator="+">
+			NVL(SUM(PAY${item}), 0)
+		</foreach> AS TOT_PAY_AMT,
+		<foreach collection="arrPayCol" item="item" separator=",">
+			NVL(SUM(PAY${item}), 0) AS PAY${item}
+		</foreach>
+		FROM    (
+		SELECT 	PATH_NM,
+		PROD_CD,
+		PROD_NM,
+		ORDER_ADD_FG,
+		MAX(BARCD_CD) AS BARCD_CD,
+		SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+		SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+		SUM(TOT_GA_AMT) AS TOT_GA_AMT,
+		SUM(TOT_VAT_AMT) AS TOT_VAT_AMT,
+		SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+		SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+		FROM (
+		SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+		tsdp.PROD_CD,
+		tmp.PROD_NM,
+		NVL(tsdp.ORDER_ADD_FG, 1) AS ORDER_ADD_FG,
+		MAX(tmpb.BARCD_CD) AS BARCD_CD,
+		SUM(tsdp.SALE_QTY) AS TOT_SALE_QTY,
+		SUM(tsdp.SALE_AMT) AS TOT_SALE_AMT,
+		SUM(tsdp.DC_AMT) AS TOT_DC_AMT,
+		SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+		SUM(tsdp.REAL_SALE_AMT - tsdp.VAT_AMT) AS TOT_GA_AMT,
+		SUM(tsdp.VAT_AMT) AS TOT_VAT_AMT,
+		SUM(tsdp.TIP_AMT) AS TOT_TIP_AMT,
+		SUM(tsdp.ETC_AMT) AS TOT_ETC_AMT
+		FROM    TB_SL_SALE_DTL tsdp,
+		TB_MS_PRODUCT tmp,
+		TB_MS_PRODUCT_BARCD tmpb
+		WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND tsdp.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		<if test="prodCd != null and prodCd != ''">
+			AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+		</if>
+		<if test="prodNm != null and prodNm != ''">
+			AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+		</if>
+		<if test='prodClassCd != null and prodClassCd != ""'>
+			AND tmp.PROD_CLASS_CD IN (
+			SELECT  PROD_CLASS_CD
+			FROM    TB_MS_PRODUCT_CLASS
+			WHERE   STORE_CD = tsdp.STORE_CD
+			START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tsdp.STORE_CD
+			CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tsdp.STORE_CD
+			)
+		</if>
+		<if test='orderAddFg != null and orderAddFg == "1"'>
+			AND (tsdp.ORDER_ADD_FG = #{orderAddFg}
+			OR	tsdp.ORDER_ADD_FG IS NULL)
+		</if>
+		<if test='orderAddFg != null and orderAddFg == "2"'>
+			AND tsdp.ORDER_ADD_FG = #{orderAddFg}
+		</if>
+		AND     tmp.STORE_CD = tsdp.STORE_CD
+		AND     tmp.PROD_CD = tsdp.PROD_CD
+		AND     tmpb.STORE_CD (+)= tmp.STORE_CD
+		AND     tmpb.PROD_CD (+)= tmp.PROD_CD
+		GROUP BY tsdp.PROD_CD, tmp.PROD_NM,tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.ORDER_ADD_FG
+		)
+		GROUP BY PATH_NM, PROD_CD, PROD_NM, ORDER_ADD_FG
+		) tsdp,
+		(
+		SELECT  PROD_CD,
+		<foreach collection="arrPayCol" item="item" separator=",">
+			SUM(PAY${item}) AS PAY${item}
+		</foreach>
+		FROM
+		(
+		SELECT  PROD_CD,
+		PAY_CD,
+		SUM(PAY_AMT) AS PAY_AMT
+		FROM    TB_SL_SALE_DTL_PAY
+		WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+		<if test='storeCd != null and storeCd != ""'>
+			AND STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		<if test="prodCd != null and prodCd != ''">
+			AND PROD_CD LIKE '%'|| #{prodCd} ||'%'
+		</if>
+		GROUP BY PROD_CD, PAY_CD
+		)
+		PIVOT
+		(
+		SUM(PAY_AMT)
+		FOR PAY_CD
+		IN (${pivotPayCol})
+		)
+		GROUP BY PROD_CD
+		) tsdpp
+		WHERE	tsdpp.PROD_CD = tsdp.PROD_CD
+		GROUP BY tsdp.PROD_CD, PROD_NM, BARCD_CD, PATH_NM, ORDER_ADD_FG
+		ORDER BY tsdp.PROD_CD
+	</select>
+
+</mapper>

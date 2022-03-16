@@ -717,8 +717,10 @@
     <!-- 매출관리 > 매출현황2 > 중분류(매출분석) 다운로드(정직유부) -->
     <typeAlias alias="saleAnalysisReportVO" type="kr.co.solbipos.sale.status.saleAnalysisReport.service.SaleAnalysisReportVO"/>
 
-    <!-- 상품별(사이드) -->
+    <!-- 매출관리 > 매출현황2 > 상품별(사이드) -->
     <typeAlias alias="sideVO" type="kr.co.solbipos.sale.status.side.service.SideVO"/>
+    <!-- 매출관리 > 매출현황2 > 오프라인추가매출현황 -->
+    <typeAlias alias="offAddVO" type="kr.co.solbipos.sale.status.offAdd.service.OffAddVO"/>
 
     <!-- 매출관리 > 매출분석 > 매장별배출분석 -->
     <typeAlias alias="storeRankVO" 	type="kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO"/>

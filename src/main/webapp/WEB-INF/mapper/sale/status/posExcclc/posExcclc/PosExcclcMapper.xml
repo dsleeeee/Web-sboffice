@@ -82,7 +82,7 @@
 				AND		TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
 				AND		TPE.STORE_CD = TSSPC.STORE_CD
 				AND		TPE.SALE_DATE = TSSPC.SALE_DATE
-				AND		TPE.POS_NO = TSSPC.POS_NO
+-- 				AND		TPE.POS_NO = TSSPC.POS_NO
 				), 0) AS CASH_EXACT_AMT
 		--    , NVL(SUM(TPEC.CASH_EXACT_AMT),0)AS CASH_EXACT_AMT
 			------------------------------ -- 기존 현금 금액이 없으면 현금영수 금액도 0원으로 출력
@@ -103,7 +103,7 @@
 					AND TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
 					AND TPE.STORE_CD = TSSPC.STORE_CD
 					AND TPE.SALE_DATE = TSSPC.SALE_DATE
-					AND TPE.POS_NO = TSSPC.POS_NO
+-- 					AND TPE.POS_NO = TSSPC.POS_NO
 					),0))
 				    END AS CASH_BILL_SALE_AMT
 			------------------------------
@@ -595,17 +595,49 @@
 			       ),0) AS FUND_AMT
 			--    , NVL(SUM(TPEF.FUND_AMT),0)       AS FUND_AMT
 			------------------------------
-			    , NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
-			          FROM TB_PS_EXACTCALC_CASH TPEC --현금
-			         WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
-			         AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
-			         AND TPE.STORE_CD = TPEC.STORE_CD
-			         AND TPE.SALE_DATE = TPEC.SALE_DATE
-			         AND TPE.POS_NO = TPEC.POS_NO
-			         AND TPE.REG_SEQ = TPEC.REG_SEQ
-			       ),0) AS CASH_EXACT_AMT
-			--    , NVL(SUM(TPEC.CASH_EXACT_AMT),0)AS CASH_EXACT_AMT
-			------------------------------
+			------------------------------		-- 기존 현금 금액 - 현금영수 금액
+				, NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
+						FROM TB_PS_EXACTCALC_CASH TPEC --현금
+						WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
+						AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
+						AND TPE.STORE_CD = TPEC.STORE_CD
+						AND TPE.SALE_DATE = TPEC.SALE_DATE
+						AND TPE.POS_NO = TPEC.POS_NO
+						AND TPE.REG_SEQ = TPEC.REG_SEQ
+						AND TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
+						)
+						-
+						(SELECT	SUM(CASE WHEN TSSPC.APPR_PROC_FG IN ('1','2','4') THEN TSSPC.SALE_AMT ELSE 0 END)<!-- 현금영수증 -->
+						FROM	TB_SL_SALE_PAY_CASH TSSPC
+						WHERE	TPE.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
+						AND		TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
+						AND		TPE.STORE_CD = TSSPC.STORE_CD
+						AND		TPE.SALE_DATE = TSSPC.SALE_DATE
+-- 						AND		TPE.POS_NO = TSSPC.POS_NO
+					), 0) AS CASH_EXACT_AMT
+		--    , NVL(SUM(TPEC.CASH_EXACT_AMT),0)AS CASH_EXACT_AMT
+		------------------------------ -- 기존 현금 금액이 없으면 현금영수 금액도 0원으로 출력
+				, CASE WHEN NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
+									FROM TB_PS_EXACTCALC_CASH TPEC --현금
+									WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
+									AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
+									AND TPE.STORE_CD = TPEC.STORE_CD
+									AND TPE.SALE_DATE = TPEC.SALE_DATE
+									AND TPE.POS_NO = TPEC.POS_NO
+									AND TPE.REG_SEQ = TPEC.REG_SEQ
+									AND TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
+									), 0) = 0 THEN 0
+									ELSE
+									(NVL((SELECT SUM(CASE WHEN TSSPC.APPR_PROC_FG IN ('1','2','4') THEN TSSPC.SALE_AMT ELSE 0 END)
+									FROM TB_SL_SALE_PAY_CASH TSSPC
+									WHERE TPE.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
+									AND TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
+									AND TPE.STORE_CD = TSSPC.STORE_CD
+									AND TPE.SALE_DATE = TSSPC.SALE_DATE
+							-- 		AND TPE.POS_NO = TSSPC.POS_NO
+								),0))
+				END AS CASH_BILL_SALE_AMT
+		------------------------------
 			    , NVL((SELECT SUM(DECODE(TPEI.ACCNT_FG,'1',TPEI.ACCNT_AMT, 0))
 			          FROM TB_PS_EXACTCALC_IOMONEY TPEI --시재
 			         WHERE TPE.HQ_OFFICE_CD = TPEI.HQ_OFFICE_CD

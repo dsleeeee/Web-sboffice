@@ -25,6 +25,8 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.isStoreTab = true;
   // 본사 탭
   $scope.isHqTab = true;
+  // 복사 탭
+  $scope.isCopyTab = true;
   // 탭변경
   $scope.changeTab = function(type){
 
@@ -32,12 +34,15 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#prodSalePrice").addClass("on");
       $("#storeSalePrice").removeClass("on");
       $("#hqSalePrice").removeClass("on");
+      $("#storeSaleCopy").removeClass("on");
       $("#prodSalePriceArea").show();
       $("#storeSalePriceArea").hide();
       $("#hqSalePriceArea").hide();
+      $("#storeSaleCopyArea").hide();
       $scope.isProdTab = false;
       $scope.isStoreTab = true;
       $scope.isHqTab = true;
+      $scope.isCopyTab = true;
       // 속성 조회
       // $scope._broadcast("prodSalePriceCtrl");
 
@@ -49,12 +54,38 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#prodSalePrice").removeClass("on");
       $("#storeSalePrice").addClass("on");
       $("#hqSalePrice").removeClass("on");
+      $("#storeSaleCopy").removeClass("on");
       $("#prodSalePriceArea").hide();
       $("#storeSalePriceArea").show();
       $("#hqSalePriceArea").hide();
+      $("#storeSaleCopyArea").hide();
       $scope.isProdTab = true;
       $scope.isStoreTab = false;
       $scope.isHqTab = true;
+      $scope.isCopyTab = true;
+      // 선택그룹 조회
+      // $scope._broadcast("storeSalePriceCtrl");
+      // // 그리드 refresh
+      // setTimeout(function () {
+      //   $scope._broadcast("selectMenuRefresh");
+      // }, 10);
+    }  else if ( type === 'C' ) {  // 매장판매가복사 탭
+
+      // $scope._popMsg("서비스 준비중입니다.");
+      // return false;
+
+      $("#prodSalePrice").removeClass("on");
+      $("#storeSalePrice").removeClass("on");
+      $("#hqSalePrice").removeClass("on");
+      $("#storeSaleCopy").addClass("on");
+      $("#prodSalePriceArea").hide();
+      $("#storeSalePriceArea").hide();
+      $("#hqSalePriceArea").hide();
+      $("#storeSaleCopyArea").show();
+      $scope.isProdTab = true;
+      $scope.isStoreTab = true;
+      $scope.isHqTab = true;
+      $scope.isCopyTab = false;
       // 선택그룹 조회
       // $scope._broadcast("storeSalePriceCtrl");
       // // 그리드 refresh
