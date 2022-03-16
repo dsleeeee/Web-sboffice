@@ -117,6 +117,7 @@
                   <wj-flex-grid-column header="${guestCol.guestNm}" binding="guest${guestCol.guestCd}" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </c:forEach>
                 <wj-flex-grid-column header="<s:message code="todayDtl.guestUprc"/>" binding="guestUprc" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="todayDtl.totOffaddAmt"/>" binding="totOffaddAmt" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
               </wj-flex-grid>
               <%-- ColumnPicker 사용시 include --%>
@@ -180,6 +181,7 @@
                 <wj-flex-grid-column header="${guestCol.guestNm}" binding="guest${guestCol.guestCd}" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               </c:forEach>
               <wj-flex-grid-column header="<s:message code="todayDtl.dtl.guestUprc"/>" binding="guestUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totOffaddAmt"/>" binding="totOffaddAmt" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
@@ -221,7 +223,7 @@
   var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20210819.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20210819.04" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

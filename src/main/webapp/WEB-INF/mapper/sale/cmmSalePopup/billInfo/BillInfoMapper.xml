@@ -96,6 +96,7 @@
         ,       tssd.SALE_AMT, tssd.DC_AMT, tssd.REAL_SALE_AMT
         ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
         ,       tssd.VAT_AMT
+        ,       NVL(tssd.ORDER_ADD_FG, '1') AS ORDER_ADD_FG
         ,       <foreach collection="arrDcCol" item="item" separator=",">
                     tssdd.DC${item} AS DC${item}
                 </foreach>

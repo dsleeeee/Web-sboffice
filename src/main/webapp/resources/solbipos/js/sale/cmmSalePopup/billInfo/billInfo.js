@@ -12,7 +12,10 @@
  * get application
  */
 var app = agrid.getApp();
-
+var orderAddFgData = [
+  {"name":"오프라인","value":"1"},
+  {"name":"온라인","value":"2"}
+]
 /** 영수증 상세 내역 controller */
 app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
@@ -20,6 +23,8 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    $scope.orderAddFgDataMap = new wijmo.grid.DataMap(orderAddFgData, 'value', 'name');
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -76,6 +81,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
     dataItem.billDtlNo   = messages["billInfo.billDtlNo"];
     dataItem.prodCd      = messages["billInfo.prodCd"];
     dataItem.prodNm      = messages["billInfo.prodNm"];
+    dataItem.orderAddFg   = messages["billInfo.orderAddFg"];
     dataItem.saleQty     = messages["billInfo.saleQty"];
     dataItem.saleUprc    = messages["billInfo.saleUprc"];
     dataItem.saleAmt     = messages["billInfo.saleInfo"];
@@ -370,6 +376,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.orderAddFgDataMap = new wijmo.grid.DataMap(orderAddFgData, 'value', 'name');
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -407,6 +414,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
     dataItem.billDtlNo   = messages["billInfo.billDtlNo"];
     dataItem.prodCd      = messages["billInfo.prodCd"];
     dataItem.prodNm      = messages["billInfo.prodNm"];
+    dataItem.orderAddFg  = messages["billInfo.orderAddFg"];
     dataItem.saleQty     = messages["billInfo.saleQty"];
     dataItem.saleUprc    = messages["billInfo.saleUprc"];
     dataItem.saleAmt     = messages["billInfo.saleInfo"];

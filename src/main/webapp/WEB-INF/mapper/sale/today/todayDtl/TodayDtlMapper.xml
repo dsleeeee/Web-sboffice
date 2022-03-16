@@ -144,6 +144,7 @@
         ,       tsshg.GUEST04
         ,       tsshg.GUEST05
         ,       tsshg.GUEST06
+        ,       tssh.TOT_OFFADD_AMT
         ]]>
         ,       <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(tsshp.PAY${item}, 0)
@@ -158,6 +159,7 @@
         ,       tsspc.PAY021 AS PAY021 -- 현금영수증
         <![CDATA[
         FROM    (   SELECT  tssh.SALE_YN
+                    ,       tssh.TOT_OFFADD_AMT
                     ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
                     ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
                     ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
@@ -179,7 +181,7 @@
                     </if>
         <![CDATA[
                     GROUP
-                    BY      tssh.SALE_YN
+                    BY      tssh.SALE_YN, tssh.TOT_OFFADD_AMT
                 ) tssh
         ,       (   SELECT  SALE_YN
         ]]>
@@ -306,6 +308,7 @@
         ,       tsshg.GUEST04
         ,       tsshg.GUEST05
         ,       tsshg.GUEST06
+        ,       tssh.TOT_OFFADD_AMT
         ]]>
         ,       <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(tsshp.PAY${item}, 0)
