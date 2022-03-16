@@ -123,10 +123,12 @@
             <button class="btn_skyblue ml5 fr" id="btnCancelRepresent" ng-click="reserveCancel()">
                 <s:message code="sendStatus.reserveCancel" />
             </button>
-            <%-- SMS전송 --%>
-            <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">
-                <s:message code="sendStatus.smsSend"/>
-            </button>
+            <c:if test="${orgnFg == 'MASTER'}">
+                <%-- SMS전송 --%>
+                <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">
+                    <s:message code="sendStatus.smsSend"/>
+                </button>
+            </c:if>
         </div>
 
         <%-- 그리드 --%>
