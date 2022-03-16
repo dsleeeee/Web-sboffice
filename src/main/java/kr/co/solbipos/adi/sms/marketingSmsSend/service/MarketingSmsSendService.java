@@ -49,4 +49,7 @@ public interface MarketingSmsSendService {
 
     /** 마케팅용 SMS전송 - 본인인증 결과 저장 */
     int updateVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 마케팅용 SMS전송 - 발신번호 공통코드에 등록되 있는지 확인(특수부가사업자 승인 전 임시사용) */
+    DefaultMap<String> getTelNoNmCodeChk(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 }

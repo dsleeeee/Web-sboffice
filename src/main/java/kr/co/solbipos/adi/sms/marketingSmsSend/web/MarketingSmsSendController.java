@@ -395,4 +395,30 @@ public class MarketingSmsSendController {
             out.flush();
         }
     }
+
+    /**
+     * 마케팅용 SMS전송 - 발신번호 공통코드에 등록되 있는지 확인(특수부가사업자 승인 전 임시사용)
+     *
+     * @param marketingSmsSendVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 03. 16.
+     */
+    @RequestMapping(value = "/marketingSmsSend/getTelNoNmCodeChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTelNoNmCodeChk(MarketingSmsSendVO marketingSmsSendVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = marketingSmsSendService.getTelNoNmCodeChk(marketingSmsSendVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
 }

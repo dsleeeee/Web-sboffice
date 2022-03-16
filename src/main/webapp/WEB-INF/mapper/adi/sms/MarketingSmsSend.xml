@@ -517,4 +517,20 @@
           AND CERT_ID = #{certId}
           AND OGN_CD = #{orgnCd}
     </update>
+
+    <!-- 마케팅용 SMS전송 - 발신번호 공통코드에 등록되 있는지 확인(특수부가사업자 승인 전 임시사용) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTelNoNmCodeChk" parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+        /* MarketingSmsSendMapper.getTelNoNmCodeChk */
+        SELECT
+        COUNT(NMCODE_CD) AS TEL_NO_COUNT
+        FROM TB_CM_NMCODE txn
+        WHERE 1=1
+        AND txn.NMCODE_GRP_CD = '131'
+        AND txn.NMCODE_NM = #{telNo}
+    </select>
+    
 </mapper>
