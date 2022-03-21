@@ -314,7 +314,7 @@
         %>
         <!-- contents -->
         <div id="sample_wrap">
-            <h1>SMS 충전</h1>
+            <h1>SMS/알림톡 충전</h1>
             <!-- 상단 문구 -->
             <div class="sample">
                 <table class="tbl" cellpadding="0" cellspacing="0" align="center">
@@ -326,6 +326,9 @@
                                     <col width="70%"/>
                                     <%--<col width="35%"/>--%>
                                 </colgroup>
+                                <tr height='34'>
+                                    <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> 충전된 금액은 SMS/알림톡에 모두 사용할 수 있습니다.</b></td>
+                                </tr>
                                 <tr height='34'>
                                     <td colspan='3' style='color:#585858; font-size:10pt;'><img src='/resource/solbipos/css/img/sms/list_icon_b.jpg' align='absmiddle'/><b> 충전금액을 선택하시기 바랍니다.</b></td>
                                 </tr>
