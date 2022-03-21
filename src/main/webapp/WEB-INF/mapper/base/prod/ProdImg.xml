@@ -505,7 +505,7 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 MERGE INTO TB_HQ_PRODUCT_IMAGE
                 USING (
-                    SELECT  REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                    SELECT  SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
                             IMG_FILE_NM
                     FROM    TB_HQ_PRODUCT_IMAGE
                     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
@@ -555,7 +555,7 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 MERGE INTO TB_MS_PRODUCT_IMAGE
                 USING (
-                    SELECT  REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                    SELECT  SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
                             IMG_FILE_NM
                     FROM    TB_MS_PRODUCT_IMAGE
                     WHERE   STORE_CD = #{storeCd}
@@ -620,7 +620,7 @@
                 USING (
                 SELECT  HQ_OFFICE_CD,
                         PROD_CD,
-                        REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                        SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
                         IMG_FILE_NM
                 FROM    TB_HQ_PRODUCT_IMAGE
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
@@ -671,7 +671,7 @@
                 USING (
                 SELECT  STORE_CD,
                         PROD_CD,
-                        REPLACE(IMG_URL, #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                        SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
                         IMG_FILE_NM
                 FROM    TB_MS_PRODUCT_IMAGE
                 WHERE   STORE_CD = #{storeCd}
