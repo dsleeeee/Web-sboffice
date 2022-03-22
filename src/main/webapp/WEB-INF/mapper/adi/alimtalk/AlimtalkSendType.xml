@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AlimtalkSendType.xml
+    알림톡 전송유형
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.03.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.impl.AlimtalkSendTypeMapper">
+
+    <!-- 알림톡 전송유형 - 계정정보 체크 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkIdRegisterChk"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkIdRegisterChk */
+        SELECT
+        taa.SENDER_KEY
+        FROM TB_AL_ALIMTALK taa
+        WHERE 1=1
+        AND taa.ORGN_CD = #{orgnCd}
+        AND taa.USE_YN = 'Y'
+    </select>
+
+    <!-- 알림톡 전송유형 - 전송유형 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkSendTypeList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkSendTypeList */
+        SELECT
+        taan.NMCODE_CD AS SEND_TYPE_CD,
+        taan.NMCODE_NM AS SEND_TYPE_NM
+        FROM TB_AL_ALIMTALK_NMCODE taan
+        WHERE 1=1
+        AND taan.NMCODE_GRP_CD = '001'
+        AND taan.NMCODE_LEVEL = '1'
+        AND taan.PARENT_CD = '001'
+        AND taan.USE_YN = 'Y'
+        ORDER BY taan.NMCODE_CD
+    </select>
+
+    <!-- 알림톡 전송유형 - 전송유형 상세 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkSendTypeDetailList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailList */
+        SELECT
+        A.SEND_TYPE_DTL_CD,
+        (SELECT NMCODE_NM FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_LEVEL = '2' AND PARENT_CD = #{sendTypeCd} AND NMCODE_CD = A.SEND_TYPE_DTL_CD AND USE_YN = 'Y') AS SEND_TYPE_DTL_NM,
+        A.USE_YN
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                (
+                    SELECT
+                    taats.SEND_TYPE_DTL_CD,
+                    taats.USE_YN
+                    FROM TB_AL_ALIMTALK_TYPE_SETTING taats
+                    WHERE 1=1
+                    AND taats.ORGN_CD = #{orgnCd}
+                    AND taats.SEND_TYPE_CD = #{sendTypeCd}
+                )
+                UNION ALL
+                (
+                    SELECT
+                    taan.NMCODE_CD AS SEND_TYPE_DTL_CD,
+                    'N' AS USE_YN
+                    FROM TB_AL_ALIMTALK_NMCODE taan
+                    WHERE 1=1
+                    AND taan.NMCODE_GRP_CD = '001'
+                    AND taan.NMCODE_LEVEL = '2'
+                    AND taan.PARENT_CD = #{sendTypeCd}
+                    AND taan.NMCODE_CD NOT IN (
+                                                    SELECT
+                                                    taats.SEND_TYPE_DTL_CD
+                                                    FROM TB_AL_ALIMTALK_TYPE_SETTING taats
+                                                    WHERE 1=1
+                                                    AND taats.ORGN_CD = #{orgnCd}
+                                                    AND taats.SEND_TYPE_CD = #{sendTypeCd}
+                                                )
+                    AND taan.USE_YN = 'Y'
+                )
+            )
+        ) A
+        ORDER BY A.SEND_TYPE_DTL_CD
+    </select>
+
+    <!-- 알림톡 전송유형 - 전송유형 상세 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getAlimtalkSendTypeDetailSaveMerge"  parameterType="AlimtalkSendTypeVO">
+        /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailSaveMerge */
+        MERGE INTO TB_AL_ALIMTALK_TYPE_SETTING
+        USING DUAL
+        ON  (
+                ORGN_CD = #{orgnCd} AND SEND_TYPE_CD = #{sendTypeCd} AND SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            USE_YN = #{useYn},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                ORGN_CD,
+                SEND_TYPE_CD,
+                SEND_TYPE_DTL_CD,
+                SEND_PERIOD_FG,
+                SEND_PERIOD,
+                TEMPLATE_GRP_FG,
+                TEMPLATE_CD,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{orgnCd},
+                #{sendTypeCd},
+                #{sendTypeDtlCd},
+                '',
+                '',
+                '',
+                '',
+                #{useYn},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+    <!-- 알림톡 전송유형 - 템플릿 상세 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkSendTypeDetailTemplate"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplate */
+        SELECT
+        taats.SEND_PERIOD_FG,
+        taats.SEND_PERIOD,
+        taat.TEMPLATE_GRP_FG,
+        taat.TEMPLATE_CD,
+        taat.TEMPLATE_NM,
+        taat.TEMPLATE_CONTENT
+        FROM TB_AL_ALIMTALK_TYPE_SETTING taats,
+        TB_AL_ALIMTALK_TEMPLATE taat
+        WHERE 1=1
+        AND taats.ORGN_CD = #{orgnCd}
+        AND taats.SEND_TYPE_CD = #{sendTypeCd}
+        AND taats.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+        AND taat.ORGN_CD (+)= taats.ORGN_CD
+        AND taat.SEND_TYPE_CD (+)= taats.SEND_TYPE_CD
+        AND taat.SEND_TYPE_DTL_CD (+)= taats.SEND_TYPE_DTL_CD
+        AND taat.TEMPLATE_GRP_FG (+)= taats.TEMPLATE_GRP_FG
+        AND taat.TEMPLATE_CD (+)= taats.TEMPLATE_CD
+    </select>
+
+    <!-- 알림톡 전송유형 - 템플릿 상세 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getAlimtalkSendTypeDetailTemplateSaveMerge"  parameterType="AlimtalkSendTypeVO">
+        /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplateSaveMerge */
+        MERGE INTO TB_AL_ALIMTALK_TYPE_SETTING
+        USING DUAL
+        ON  (
+                ORGN_CD = #{orgnCd} AND SEND_TYPE_CD = #{sendTypeCd} AND SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            SEND_PERIOD_FG = #{sendPeriodFg},
+            SEND_PERIOD = #{sendPeriod},
+            TEMPLATE_GRP_FG = #{templateGrpFg},
+            TEMPLATE_CD = #{templateCd},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                ORGN_CD,
+                SEND_TYPE_CD,
+                SEND_TYPE_DTL_CD,
+                SEND_PERIOD_FG,
+                SEND_PERIOD,
+                TEMPLATE_GRP_FG,
+                TEMPLATE_CD,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{orgnCd},
+                #{sendTypeCd},
+                #{sendTypeDtlCd},
+                #{sendPeriodFg},
+                #{sendPeriod},
+                #{templateGrpFg},
+                #{templateCd},
+                'N',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+    <!-- 템플릿 선택변경 팝업 - 템플릿 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkSendTypeDetailTemplateList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplateList */
+        SELECT
+        taat.TEMPLATE_GRP_FG,
+        taat.TEMPLATE_CD,
+        taat.TEMPLATE_NM,
+        taat.TEMPLATE_CONTENT
+        FROM TB_AL_ALIMTALK_TEMPLATE taat
+        WHERE 1=1
+        AND (
+                (taat.COMMON_FG = 'C')
+                OR
+                (taat.COMMON_FG = 'S' AND taat.ORGN_CD = #{orgnCd})
+            )
+        AND taat.SEND_TYPE_CD = #{sendTypeCd}
+        AND taat.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+        AND taat.APPR_FG = 'TSC03'
+        AND NOT EXISTS
+        (
+            SELECT *
+            FROM TB_AL_ALIMTALK_TYPE_SETTING taats
+            WHERE 1=1
+            AND taats.ORGN_CD = #{orgnCd}
+            <if test="templateGrpFg != null and templateGrpFg != ''">
+                AND taats.TEMPLATE_GRP_FG = #{templateGrpFg}
+            </if>
+            <if test="templateCd != null and templateCd != ''">
+                AND taats.TEMPLATE_CD = #{templateCd}
+            </if>
+            AND taats.TEMPLATE_GRP_FG = taat.TEMPLATE_GRP_FG
+            AND taats.TEMPLATE_CD = taat.TEMPLATE_CD
+        )
+        ORDER BY taat.TEMPLATE_GRP_FG, taat.TEMPLATE_CD
+    </select>
+
+    <!-- 템플릿 계정등록 팝업 - 사업자 카테고리 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCategoryCodeComboList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getCategoryCodeComboList */
+        <choose>
+            <when test='gubun != null and gubun != ""'>
+                <!-- 대분류 -->
+                <if test='gubun == "L"'>
+                    SELECT
+                    taan.NMCODE_CD AS VALUE,
+                    taan.NMCODE_NM AS NAME
+                    FROM TB_AL_ALIMTALK_NMCODE taan
+                    WHERE 1=1
+                    AND taan.NMCODE_GRP_CD = '002'
+                    AND taan.NMCODE_LEVEL = '1'
+                    AND taan.PARENT_CD = '002'
+                    AND taan.USE_YN = 'Y'
+                    ORDER BY taan.NMCODE_CD
+                </if>
+                <!-- 중분류 -->
+                <if test='gubun == "M"'>
+                    SELECT
+                    taan.NMCODE_CD AS VALUE,
+                    taan.NMCODE_NM AS NAME
+                    FROM TB_AL_ALIMTALK_NMCODE taan
+                    WHERE 1=1
+                    AND taan.NMCODE_GRP_CD = '002'
+                    AND taan.NMCODE_LEVEL = '2'
+                    AND taan.PARENT_CD = #{categoryCode}
+                    AND taan.USE_YN = 'Y'
+                    ORDER BY taan.NMCODE_CD
+                </if>
+                <!-- 대분류 -->
+                <if test='gubun == "S"'>
+                    SELECT
+                    taan.NMCODE_CD AS VALUE,
+                    taan.NMCODE_NM AS NAME
+                    FROM TB_AL_ALIMTALK_NMCODE taan
+                    WHERE 1=1
+                    AND taan.NMCODE_GRP_CD = '002'
+                    AND taan.NMCODE_LEVEL = '3'
+                    AND taan.PARENT_CD = #{categoryCode}
+                    AND taan.USE_YN = 'Y'
+                    ORDER BY taan.NMCODE_CD
+                </if>
+            </when>
+        </choose>
+    </select>
+
+</mapper>
