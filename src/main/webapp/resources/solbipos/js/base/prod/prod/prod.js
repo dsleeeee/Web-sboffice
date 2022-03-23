@@ -116,6 +116,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope.initGrid = function (s, e) {
     // 그리드에서 사용하는 dataMap 초기화
     $scope.useYnComboDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name'); // 사용여부
+    $scope.regFgDataMap = new wijmo.grid.DataMap(regOrgnFgComboData, 'value', 'name'); // 상품등록구분
 
     // 그리드 포맷
     s.formatItem.addHandler(function (s, e) {
@@ -169,6 +170,15 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     // 전체기간 체크박스 선택에 따른 날짜선택 초기화
     $scope.srchStartDate.isReadOnly = $scope.isChecked;
     $scope.srchEndDate.isReadOnly = $scope.isChecked;
+
+    // (프랜차이즈 매장만) 그리드 header 클릭시 정렬 이벤트 막기
+    if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
+      s.addEventListener(s.hostElement, 'mousedown', function (e) {
+        var ht = s.hitTest(e);
+        s.allowSorting = false;
+      });
+    }
+
   };
 
   // 전체기간 체크박스 클릭이벤트
@@ -195,7 +205,22 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function(){});
+    $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function(){
+
+      // (프랜차이즈 매장만) 본사에서 등록한 상품은 체크박스 선택 불가(삭제불가)
+      if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
+        var grid = wijmo.Control.getControl("#wjGridProd");
+        var rows = grid.rows;
+
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+          var item = $scope.flex.collectionView.items[i];
+          if (item.regFg === "H") {
+            item.gChk = false;
+            rows[i].isReadOnly = true;
+          }
+        }
+      }
+    });
   };
 
   // 상세정보 팝업
@@ -250,6 +275,37 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         }
       });
     }, 50);*/
+  };
+  
+  // 상품 삭제
+  $scope.delProd = function(){
+
+    if($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["prod.delProdChk.msg"]); // 삭제할 상품이 없습니다.
+      return false;
+    }
+
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if ($scope.flex.collectionView.items[i].gChk) {
+
+        if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
+          if ($scope.flex.collectionView.items[i].regFg === "H") {
+            continue;
+          }
+        }
+
+        var obj = {};
+        obj.prodCd = $scope.flex.collectionView.items[i].prodCd;
+        params.push(obj);
+
+      }
+    }
+
+    $scope._broadcast('prodDeleteCtrl', params);
+    $scope.prodDeleteLayer.show(true);
+    event.preventDefault();
+    
   };
 
   // 매장 리스트 팝업(매장 상품 일괄적용을 위한)

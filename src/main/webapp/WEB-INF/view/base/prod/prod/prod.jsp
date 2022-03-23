@@ -136,6 +136,10 @@
         <button class="btn_skyblue ml5 fr" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
             <s:message code="prod.title.storeProdBatch" />
         </button>
+        <%-- 상품삭제 --%>
+        <button class="btn_skyblue ml5 fr" id="btnDelProd" ng-click="delProd()">
+            <s:message code="prod.title.delProd" />
+        </button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -150,10 +154,11 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    id="wjGridProd">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="true"></wj-flex-grid-column>
                 <c:if test="${brandUseFg == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
@@ -171,13 +176,15 @@
                 <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column><!--// todo 원산지명 조회 필요-->
                 <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="80" data-map="poUnitFgComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="80" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${orgnFg == 'STORE'}">
+                    <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" width="100" is-read-only="true" data-map="regFgDataMap" align="center"></wj-flex-grid-column>
+                </c:if>
 
                 <wj-flex-grid-column header="<s:message code="prod.brandCd"/>" binding="hqBrandCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandN" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sideProdYn"/>" binding="sideProdYn" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -229,6 +236,9 @@
                 <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column><!--// todo 원산지명 조회 필요-->
                 <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="80" data-map="poUnitFgComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="80" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${orgnFg == 'STORE'}">
+                    <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" width="100" is-read-only="true" data-map="regFgDataMap" align="center"></wj-flex-grid-column>
+                </c:if>
 
                 <wj-flex-grid-column header="<s:message code="prod.brandCd"/>" binding="hqBrandCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandN" visible="false"></wj-flex-grid-column>
@@ -261,7 +271,7 @@
     var storeProdUseFg = "${storeProdUseFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20201224.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20220322.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
@@ -291,6 +301,12 @@
 
 <%-- 레이어 팝업 : 매장별 상품 일괄적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/storeProdBatchRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 상품삭제 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodDeleteView.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
