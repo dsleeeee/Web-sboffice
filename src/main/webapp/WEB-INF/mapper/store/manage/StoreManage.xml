@@ -1919,7 +1919,7 @@
     <!--
         TABLE    : TB_MS_PRODUCT_SALE_PRICE
         PARAM    : storeManageVO
-        COMMENTS : 프랜차이즈 매장의 경우 공급가를 복사한다.
+        COMMENTS : 프랜차이즈 매장의 경우 판매가를 복사한다.
     -->
     <insert id="insertStoreSaleUprc" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreSaleUprc */
@@ -1944,9 +1944,8 @@
             TB_MS_PRODUCT tmp
             WHERE 1=1
             AND tmpsp.STORE_CD = #{copyStoreCd}
-            AND tmp.REG_FG = 'S'
-            AND tmp.STORE_CD (+)= tmpsp.STORE_CD
-            AND tmp.PROD_CD (+)= tmpsp.PROD_CD
+            AND tmp.STORE_CD   = #{storeCd}
+            AND tmp.PROD_CD    = tmpsp.PROD_CD
         ) B
         ON  (
                 A.STORE_CD = B.STORE_CD
@@ -2000,7 +1999,7 @@
     <!--
         TABLE    : TB_MS_PRODUCT_SALE_PRICE
         PARAM    : storeManageVO
-        COMMENTS : 프랜차이즈 매장의 경우 공급가를 복사한다.
+        COMMENTS : 프랜차이즈 매장의 경우 판매가를 복사한다.
     -->
     <insert id="insertStoreHqSaleUprc" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreHqSaleUprc */
@@ -2139,90 +2138,6 @@
             SPLY_UPRC = B.SPLY_UPRC,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID
-        WHEN NOT MATCHED THEN
-            INSERT (
-                A.STORE_CD,
-                A.PROD_CD,
-                A.PROD_NM,
-                A.HQ_BRAND_CD,
-                A.PROD_CLASS_CD,
-                A.CORNR_CD,
-                A.ORGPLCE_CD,
-                A.SDATTR_CLASS_CD,
-                A.SDSEL_GRP_CD,
-                A.POINT_SAVE_YN,
-                A.PROD_DC_FG,
-                A.VAT_FG,
-                A.PROD_TIP_YN,
-                A.PROD_PACK_AMT,
-                A.PROD_DLVR_AMT,
-                A.PROD_TYPE_FG,
-                A.SALE_PROD_YN,
-                A.STOCK_PROD_YN,
-                A.SIDE_PROD_YN,
-                A.SET_PROD_FG,
-                A.PRC_CTRL_FG,
-                A.COST_UPRC,
-                A.LAST_COST_UPRC,
-                A.SPLY_UPRC,
-                A.SPLY_UPRC_USE_YN,
-                A.PO_PROD_FG,
-                A.PO_UNIT_FG,
-                A.PO_UNIT_QTY,
-                A.PO_UNIT_ALLOW_FG,
-                A.PO_MIN_QTY,
-                A.SAFE_STOCK_QTY,
-                A.STOCK_UNIT_FG,
-                A.USE_YN,
-                A.REMARK,
-                A.REG_DT,
-                A.REG_ID,
-                A.MOD_DT,
-                A.MOD_ID,
-                A.REG_FG,
-                A.MAP_PROD_CD
-            ) VALUES (
-                B.STORE_CD,
-                B.PROD_CD,
-                B.PROD_NM,
-                B.HQ_BRAND_CD,
-                B.PROD_CLASS_CD,
-                B.CORNR_CD,
-                B.ORGPLCE_CD,
-                B.SDATTR_CLASS_CD,
-                B.SDSEL_GRP_CD,
-                B.POINT_SAVE_YN,
-                B.PROD_DC_FG,
-                B.VAT_FG,
-                B.PROD_TIP_YN,
-                B.PROD_PACK_AMT,
-                B.PROD_DLVR_AMT,
-                B.PROD_TYPE_FG,
-                B.SALE_PROD_YN,
-                B.STOCK_PROD_YN,
-                B.SIDE_PROD_YN,
-                B.SET_PROD_FG,
-                B.PRC_CTRL_FG,
-                B.COST_UPRC,
-                B.LAST_COST_UPRC,
-                B.SPLY_UPRC,
-                B.SPLY_UPRC_USE_YN,
-                B.PO_PROD_FG,
-                B.PO_UNIT_FG,
-                B.PO_UNIT_QTY,
-                B.PO_UNIT_ALLOW_FG,
-                B.PO_MIN_QTY,
-                B.SAFE_STOCK_QTY,
-                B.STOCK_UNIT_FG,
-                B.USE_YN,
-                B.REMARK,
-                B.REG_DT,
-                B.REG_ID,
-                B.MOD_DT,
-                B.MOD_ID,
-                B.REG_FG,
-                B.MAP_PROD_CD
-            )
         <!--<![CDATA[-->
         <!--UPDATE TB_MS_PRODUCT A-->
            <!--SET SPLY_UPRC = (SELECT SPLY_UPRC FROM TB_MS_PRODUCT WHERE STORE_CD = #{copyStoreCd} AND PROD_CD = A.PROD_CD),-->
