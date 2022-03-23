@@ -243,4 +243,173 @@ public interface ProdMapper {
 
     /** 발주 단위 구분 조회 */
     List<DefaultMap<String>> getPoUnitFgData(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 이동전표-본사간 이동내역 상세 */
+    int getPoHqMoveDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 분배출고-매장별분배출고내역 */
+    int getPoHqStoreDistributeCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 주문전표-본사주문내역 상세 */
+    int getPoHqStoreOrderDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 출고전표-매장출고내역 상세 */
+    int getPoHqStoreOutstockDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 거래처-업체입고반출전표 상세 */
+    int getPoHqVendrInstockDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 거래처-업체발주전표 상세 */
+    int getPoHqVendrOrderDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 물량오류-매장입고오류내역 상세 */
+    int getPoStoreInstockErrorDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 이동전표-매장간이동내역 상세 */
+    int getPoStoreMoveDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매대창고간이동내역 상세 */
+    int getPoStoreStandMoveDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 거래처-업체입고반출전표 상세 */
+    int getPoStoreVendrInstockDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 거래처-업체발주전표 상세 */
+    int getPoStoreVendrOrderDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사) 이벤트상품조건 */
+    int getHqEventMsgProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사) 사이드선택상품 */
+    int getHqProductSdselProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사) 세트구성상품 */
+    int getHqProductUnitstProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사) 프로모션 혜택품목 */
+    int getHqPromoBeneProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사) 프로모션 적용상품 */
+    int getHqPromoCondiProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사) 메뉴그룹 상품설정 */
+    int getHqStoreProdGroupDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불) 실사재고 상세 */
+    int getStHqActualInspectionDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불) 재고조정 상세 */
+    int getStHqAdjustDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불) 재고폐기 상세 */
+    int getStHqDisuseDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불) 세트구성해체내역 */
+    int getStHqSetprodCompositionCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불) 세트구성해체내역 상세 */
+    int getStHqSetprodCompositionDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불) 현재고 */
+    int getStHqStockCurCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장) 이벤트상품조건 */
+    int getMsEventMsgProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장) 세트구성상품 */
+    int getMsProductUnitstProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장) 프로모션 혜택품목 */
+    int getMsPromoBeneProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장) 프로모션 적용상품 */
+    int getMsPromoCondiProdCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장수불) 실사재고 상세 */
+    int getStStoreActualInspectionDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장수불) 재고조정 상세 */
+    int getStStoreAdjustDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장수불) 재고폐기 상세 */
+    int getStStoreDisuseDtlCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장수불) 현재고 */
+    int getStStoreStockCurCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품 사용여부 '미사용' 으로 변경 */
+    int updateProdUseYn(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 본사에 속한 매장의 상품도 '미사용' 으로 변경 */
+    int updateStoreProdUseYn(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 쿠폰적용상품 영구삭제 */
+    int deleteProdInfoCouponProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 키오스크 키맵설정 영구삭제 */
+    int deleteProdInfoKioskKey(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 키오스크 추천메뉴정보 영구삭제 */
+    int deleteProdInfoKioskRecmd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 키오스크 메뉴추천리스트 영구삭제 */
+    int deleteProdInfoKioskRecmdProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품정보 영구삭제 */
+    int deleteProdInfo(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 재료/알러지-상품맵핑정보 영구삭제 */
+    int deleteProdInfoAlgiProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품 바코드 영구삭제 */
+    int deleteProdInfoBarcd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 배달앱 상품명-맵핑정보 영구삭제 */
+    int deleteProdInfoDlvrProdNm(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품 이미지 영구삭제 */
+    int deleteProdInfoImage(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 마스터-키오스크옵션상품 영구삭제 */
+    int deleteProdInfoOption(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 재료-상품맵핑정보 영구삭제 */
+    int deleteProdInfoRecpProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품 판매금액 영구삭제 */
+    int deleteProdInfoSalePrice(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 거래처별_취급상품 영구삭제 */
+    int deleteProdInfoVendorProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품_세트구성_상품 영구삭제 */
+    int deleteProdInfoUnitstProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 본사) 상품별_취급매장 영구삭제 */
+    int deleteProdInfoHqProductStore(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 매장) 주방프린터_출력상품 영구삭제 */
+    int deleteProdInfoPrintProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 매장) 상품_사이드선택_상품 영구삭제 */
+    int deleteProdInfoSdselProd(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 본사에 속한 매장 조회*/
+    List<DefaultMap<String>> getAllStoreList(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품 이미지 영구삭제 관련, 기존 상품이미지 정보 조회 */
+    List<DefaultMap<String>> getProdImgInfo(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - [임시]삭제할 상품 임시테이블 등록 */
+    int insertTmpDelProduct(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - [임시]상품삭제 테이블 전체삭제 */
+    int deleteAllTmpDelProduct(ProdVO prodVO);
+
+    /** [임시]상품삭제 테이블에서 본사상품 조회*/
+    List<DefaultMap<String>> getHqTmpDelProduct(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품 전체리스트 조회*/
+    List<DefaultMap<String>> getAllProdList(ProdVO prodVO);
+
 }

@@ -111,4 +111,10 @@ public interface ProdService {
 
     /** 발주 단위 구분 조회 */
     List<DefaultMap<String>> getPoUnitFgData(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품삭제 */
+    int selectProdDelete(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
+    /** 전체상품삭제 */
+    int allProdDelete(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

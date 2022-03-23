@@ -240,6 +240,18 @@ public class ProdVO extends PageVO {
     /** 명칭코드그룹코드 */
     private String nmcodeGrpCd;
 
+    /** 세션ID */
+    private String sessionId;
+
+    /** 삭제차수 (1: 본사, 매장 각각 본인상품삭제 / 2: 본사에 속한 매장의 상품 삭제) */
+    private String delLevel;
+
+    /** 순번 */
+    private int seq;
+
+    /** 상품삭제구분 */
+    private String delTypeFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1128,5 +1140,37 @@ public class ProdVO extends PageVO {
 
     public void setNmcodeGrpCd(String nmcodeGrpCd) {
         this.nmcodeGrpCd = nmcodeGrpCd;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getDelLevel() {
+        return delLevel;
+    }
+
+    public void setDelLevel(String delLevel) {
+        this.delLevel = delLevel;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public String getDelTypeFg() {
+        return delTypeFg;
+    }
+
+    public void setDelTypeFg(String delTypeFg) {
+        this.delTypeFg = delTypeFg;
     }
 }

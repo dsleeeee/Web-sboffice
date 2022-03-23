@@ -646,4 +646,47 @@ public class ProdController {
         return ReturnUtil.returnListJson(Status.OK, result, prodVO);
     }
 
+    /**
+     * 선택상품삭제
+     *
+     * @param prodVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2022. 03. 08.
+     */
+    @RequestMapping(value = "/selectProdDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectProdDelete(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.selectProdDelete(prodVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 전체상품삭제
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/allProdDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result allProdDelete(@RequestBody ProdVO prodVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.allProdDelete(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
 }
