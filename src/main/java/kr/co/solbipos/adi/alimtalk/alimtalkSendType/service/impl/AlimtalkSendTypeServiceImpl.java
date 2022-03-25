@@ -132,10 +132,48 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
         return alimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplateList(alimtalkSendTypeVO);
     }
 
-    /** 템플릿 계정등록 팝업 - 사업자 카테고리 조회 */
+    /** 알림톡 계정등록 팝업 - 계정정보 체크 조회 */
+    @Override
+    public DefaultMap<String> getAlimtalkIdRegisterAllChk(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
+
+        alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return alimtalkSendTypeMapper.getAlimtalkIdRegisterAllChk(alimtalkSendTypeVO);
+    }
+
+    /** 알림톡 계정등록 팝업 - 사업자 카테고리 조회 */
     @Override
     public List<DefaultMap<Object>> getCategoryCodeComboList(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
 
         return alimtalkSendTypeMapper.getCategoryCodeComboList(alimtalkSendTypeVO);
+    }
+
+    /** 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 insert */
+    @Override
+    public int getAlimtalkSenderSaveInsert(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        alimtalkSendTypeVO.setRegDt(currentDt);
+        alimtalkSendTypeVO.setModDt(currentDt);
+
+        procCnt = alimtalkSendTypeMapper.getAlimtalkSenderSaveInsert(alimtalkSendTypeVO);
+
+        return procCnt;
+    }
+
+    /** 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 update */
+    @Override
+    public int getAlimtalkSenderSaveUpdate(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        alimtalkSendTypeVO.setModDt(currentDt);
+
+        procCnt = alimtalkSendTypeMapper.getAlimtalkSenderSaveUpdate(alimtalkSendTypeVO);
+
+        return procCnt;
     }
 }

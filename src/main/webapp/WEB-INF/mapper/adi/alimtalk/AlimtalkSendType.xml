@@ -261,7 +261,21 @@
         ORDER BY taat.TEMPLATE_GRP_FG, taat.TEMPLATE_CD
     </select>
 
-    <!-- 템플릿 계정등록 팝업 - 사업자 카테고리 조회 -->
+    <!-- 알림톡 계정등록 팝업 - 계정정보 체크 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkIdRegisterAllChk"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkIdRegisterAllChk */
+        SELECT
+        taa.SENDER_KEY
+        FROM TB_AL_ALIMTALK taa
+        WHERE 1=1
+        AND taa.ORGN_CD = #{orgnCd}
+    </select>
+
+    <!-- 알림톡 계정등록 팝업 - 사업자 카테고리 조회 -->
     <!--
         TABLE    :
         COMMENTS :
@@ -312,5 +326,67 @@
             </when>
         </choose>
     </select>
+
+    <!-- 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getAlimtalkSenderSaveInsert"  parameterType="AlimtalkSendTypeVO">
+        /* AlimtalkSendTypeMapper.getAlimtalkSenderSaveInsert */
+        INSERT INTO TB_AL_ALIMTALK
+        (
+            ORGN_CD,
+            PLUS_FRIEND_ID,
+            PHONE_NO,
+            CATEGORY_CODE,
+            TOKEN,
+            SENDER_KEY,
+            APP_KEY,
+            SECRET_KEY,
+            APPR_FG,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{orgnCd},
+            #{plusFriendId},
+            #{phoneNo},
+            #{categoryCode},
+            '',
+            '',
+            #{appKey},
+            #{secretKey},
+            '',
+            'N',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getAlimtalkSenderSaveUpdate"  parameterType="AlimtalkSendTypeVO">
+        /* AlimtalkSendTypeMapper.getAlimtalkSenderSaveUpdate */
+        UPDATE
+        TB_AL_ALIMTALK
+        SET TOKEN = #{token},
+        SENDER_KEY = #{senderKey},
+        APPR_FG = #{apprFg},
+        USE_YN = 'Y',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND ORGN_CD = #{orgnCd}
+        AND PLUS_FRIEND_ID = #{plusFriendId}
+        AND PHONE_NO = #{phoneNo}
+    </update>
 
 </mapper>

@@ -91,8 +91,18 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         $scope.categoryCode("S", s.selectedValue);
     };
 
-    // 인증요청하기
-    $scope.registerRequest = function() {
+    // 인증요청
+    // $scope.registerRequest = function() {
+    //     var params = {};
+    //     params.plusFriendId = $scope.plusFriendId;
+    //     params.categoryCode = $scope.categoryCodeLCombo + $scope.categoryCodeMCombo + $scope.categoryCodeSCombo;
+    //     params.phoneNo = $scope.phoneNo;
+    //
+    //     jsf__alimtalkSender(params);
+    // };
+
+    // 인증요청
+    $scope.registerRequestSave = function() {
         if ($scope.plusFriendId === "" || $scope.plusFriendId === undefined) {
             $scope._popMsg(messages["alimtalkIdRegister.plusFriendIdAlert"]); // 카카오계정ID를 입력해주세요.
             return;
@@ -111,19 +121,143 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         }
 
         var params = {};
+        params.orgnCd = orgnCd;
+        params.regId = userId;
+        params.modId = userId;
         params.plusFriendId = $scope.plusFriendId;
         params.categoryCode = $scope.categoryCodeLCombo + $scope.categoryCodeMCombo + $scope.categoryCodeSCombo;
         params.phoneNo = $scope.phoneNo;
 
-        // alert(params.plusFriendId);
-        // alert(params.categoryCode);
-        // alert(params.phoneNo);
+        // 알림톡 계정등록 체크
+        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterAllChk.sb", params, function(response){
+            var alimtalkIdInfo = response.data.data.result;
+            $scope.alimtalkIdInfo = alimtalkIdInfo;
 
-        alert("준비중");
+            if(response.data.data.result != null) {
+                $scope._popMsg(messages["alimtalkSendType.alimtalkIdRegisterAlert"]); // 계정이 등록되어 있습니다.
+                return false;
+            } else {
+                // 인증요청 API호출 및 저장
+                $scope.registerRequestApi(params);
+            }
+        });
     };
 
-    // 저장
-    $scope.registerSave = function() {
+    // 인증요청 (발신프로필 등록 API 호출 및 저장)
+    $scope.registerRequestApi = function(params) {
+        // 로딩바 show
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+        $.ajax({
+            type: "POST",
+            url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderApiSave.sb",
+            data:  JSON.stringify(params),
+            cache: false,
+            dataType: "json",
+            contentType : 'application/json',
+            success: function(result){
+                // alert(result.status);
+                // alert(result.data);
+                // alert(result.data.resultCode);
+                // alert(result.data.resultMessage);
+                if (result.data.resultCode.toString() === "0") {
+                    $scope._popMsg("인증번호 발송이 요청 되었습니다.");
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.data.resultCode.toString() !== "0") {
+                    $scope._popMsg(result.data.resultMessage.toString());
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                // if (result.status === "OK") {
+                //     $scope._popMsg("저장되었습니다.");
+                //     $scope.close();
+                // }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                /*else if(result.status === undefined) {
+                    location.href = "/";
+                }*/
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            }
+        });
+    };
+
+    // 계정등록 (토큰인증 API 호출 및 저장)
+    $scope.registerTokenSave = function() {
+        if ($scope.token === "" || $scope.token === undefined) {
+            $scope._popMsg(messages["alimtalkIdRegister.tokenAlert"]); // 인증번호를 입력해주세요.
+            return;
+        }
+
+        var params = {};
+        params.orgnCd = orgnCd;
+        params.modId = userId;
+        params.plusFriendId = $scope.plusFriendId;
+        params.token = $scope.token;
+        params.phoneNo = $scope.phoneNo;
+
+        // 로딩바 show
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+        $.ajax({
+            type: "POST",
+            url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderTokenApiSave.sb",
+            data:  JSON.stringify(params),
+            cache: false,
+            dataType: "json",
+            contentType : 'application/json',
+            success: function(result){
+                // alert(result.status);
+                // alert(result.data);
+                if (result.data.resultCode.toString() === "0") {
+                    $scope._popMsg("인증번호 발송이 요청 되었습니다.");
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+
+                    // 그룹-계정등록 (그룹에 발신프로필 추가 API 호출 및 저장)
+                    $scope.registerGroupSave();
+                }
+                else if (result.data.resultCode.toString() !== "0") {
+                    $scope._popMsg(result.data.resultMessage.toString());
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                // if (result.status === "OK") {
+                //     $scope._popMsg("저장되었습니다.");
+                //     $scope.close();
+                // }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                /*else if(result.status === undefined) {
+                    location.href = "/";
+                }*/
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            }
+        });
+    };
+
+    // 그룹-계정등록 (그룹에 발신프로필 추가 API 호출 및 저장)
+    $scope.registerGroupSave = function() {
         alert("준비중");
     };
 

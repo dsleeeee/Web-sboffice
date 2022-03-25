@@ -2,6 +2,8 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <wj-popup control="wjAlimtalkIdRegisterLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;height:500px;" fade-in="false" fade-out="false">
     <div ng-controller="alimtalkIdRegisterCtrl">
@@ -84,8 +86,8 @@
                         <input type="text" class="sb-input w100" id="srchPhoneNo" ng-model="phoneNo" placeholder="'-'를 제외한 휴대폰번호 입력" />
                     </td>
                     <td>
-                        <%-- 인증요청하기 --%>
-                        <button class="btn_skyblue fl" id="btnAlimtalkIdRegisterRequest" ng-click="registerRequest()"><s:message code='alimtalkIdRegister.registerRequest' /></button>
+                        <%-- 인증요청 --%>
+                        <button class="btn_skyblue fl" id="btnAlimtalkIdRegisterRequestSave" ng-click="registerRequestSave()"><s:message code='alimtalkIdRegister.registerRequestSave' /></button>
                     </td>
                 </tr>
                 <tr>
@@ -97,8 +99,8 @@
                         <input type="text" class="sb-input w100" id="srchToken" ng-model="token" />
                     </td>
                     <td>
-                        <%-- 저장 --%>
-                        <button class="btn_skyblue fl" id="btnAlimtalkIdRegisterSave" ng-click="registerSave()"><s:message code='alimtalkIdRegister.registerSave' /></button>
+                        <%-- 계정등록 --%>
+                        <button class="btn_skyblue fl" id="btnAlimtalkIdRegisterTokenSave" ng-click="registerTokenSave()"><s:message code='alimtalkIdRegister.registerTokenSave' /></button>
                     </td>
                 </tr>
                 </tbody>
@@ -125,4 +127,27 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220321.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var orgnCd = "${orgnCd}";
+    var userId = "${userId}";
+</script>
+
+<%--<form id="alimtalkSender_info" name="alimtalkSender_info" method="post" action="/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderApiSample.sb" target="calimtalkSenderFrm">--%>
+    <%--<iframe name="calimtalkSenderFrm" style="display:none;"></iframe>--%>
+
+    <%--<input type="hidden" name="plusFriendId"      value=""  /> &lt;%&ndash;프로세스 요청 종류 구분 변수&ndash;%&gt;--%>
+    <%--<input type="hidden" name="phoneNo"    value="" /> &lt;%&ndash;프로세스 요청의 구분 변수&ndash;%&gt;--%>
+    <%--<input type="hidden" name="categoryCode"         value="" /> &lt;%&ndash;결제 건에 대한 NHN KCP 거래 고유번호&ndash;%&gt;--%>
+<%--</form>--%>
+
+<%--<script type="text/javascript">--%>
+    <%--function jsf__alimtalkSender( data )--%>
+    <%--{--%>
+        <%--document.alimtalkSender_info.plusFriendId.value = data.plusFriendId;--%>
+        <%--document.alimtalkSender_info.phoneNo.value = data.phoneNo;--%>
+        <%--document.alimtalkSender_info.categoryCode.value = data.categoryCode;--%>
+        <%--document.alimtalkSender_info.submit();--%>
+    <%--}--%>
+<%--</script>--%>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220322.01" charset="utf-8"></script>

@@ -47,6 +47,15 @@ public interface AlimtalkSendTypeMapper {
     /** 템플릿 선택변경 팝업 - 템플릿 조회 */
     List<DefaultMap<Object>> getAlimtalkSendTypeDetailTemplateList(AlimtalkSendTypeVO alimtalkSendTypeVO);
 
-    /** 템플릿 계정등록 팝업 - 사업자 카테고리 조회 */
+    /** 알림톡 계정등록 팝업 - 계정정보 체크 조회 */
+    DefaultMap<String> getAlimtalkIdRegisterAllChk(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
+    /** 알림톡 계정등록 팝업 - 사업자 카테고리 조회 */
     List<DefaultMap<Object>> getCategoryCodeComboList(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
+    /** 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 insert */
+    int getAlimtalkSenderSaveInsert(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
+    /** 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 update */
+    int getAlimtalkSenderSaveUpdate(AlimtalkSendTypeVO alimtalkSendTypeVO);
 }
