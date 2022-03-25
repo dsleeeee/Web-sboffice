@@ -92,16 +92,6 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
     };
 
     // 인증요청
-    // $scope.registerRequest = function() {
-    //     var params = {};
-    //     params.plusFriendId = $scope.plusFriendId;
-    //     params.categoryCode = $scope.categoryCodeLCombo + $scope.categoryCodeMCombo + $scope.categoryCodeSCombo;
-    //     params.phoneNo = $scope.phoneNo;
-    //
-    //     jsf__alimtalkSender(params);
-    // };
-
-    // 인증요청
     $scope.registerRequestSave = function() {
         if ($scope.plusFriendId === "" || $scope.plusFriendId === undefined) {
             $scope._popMsg(messages["alimtalkIdRegister.plusFriendIdAlert"]); // 카카오계정ID를 입력해주세요.

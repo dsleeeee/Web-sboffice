@@ -132,22 +132,4 @@
     var userId = "${userId}";
 </script>
 
-<%--<form id="alimtalkSender_info" name="alimtalkSender_info" method="post" action="/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderApiSample.sb" target="calimtalkSenderFrm">--%>
-    <%--<iframe name="calimtalkSenderFrm" style="display:none;"></iframe>--%>
-
-    <%--<input type="hidden" name="plusFriendId"      value=""  /> &lt;%&ndash;프로세스 요청 종류 구분 변수&ndash;%&gt;--%>
-    <%--<input type="hidden" name="phoneNo"    value="" /> &lt;%&ndash;프로세스 요청의 구분 변수&ndash;%&gt;--%>
-    <%--<input type="hidden" name="categoryCode"         value="" /> &lt;%&ndash;결제 건에 대한 NHN KCP 거래 고유번호&ndash;%&gt;--%>
-<%--</form>--%>
-
-<%--<script type="text/javascript">--%>
-    <%--function jsf__alimtalkSender( data )--%>
-    <%--{--%>
-        <%--document.alimtalkSender_info.plusFriendId.value = data.plusFriendId;--%>
-        <%--document.alimtalkSender_info.phoneNo.value = data.phoneNo;--%>
-        <%--document.alimtalkSender_info.categoryCode.value = data.categoryCode;--%>
-        <%--document.alimtalkSender_info.submit();--%>
-    <%--}--%>
-<%--</script>--%>
-
 <script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220322.01" charset="utf-8"></script>
