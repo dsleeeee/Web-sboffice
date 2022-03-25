@@ -37,11 +37,15 @@ app.controller('prodClassCdInsertCtrl', ['$scope', '$http', function ($scope, $h
     // 파라미터
     var params       = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/base/prod/prodExcelUpload/prodExcelUpload/getProdClassCdInsertList.sb", params, function() {
-    }, false);
+    $scope._inquirySub("/base/prod/prodExcelUpload/prodExcelUpload/getProdClassCdInsertList.sb", params, function() {}, false);
   };
 
   $scope.prodClassCdSave = function () {
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["prodExcelUpload.masterInsert.None"]);
+      return false;
+    }
 
     var params = new Array();
 

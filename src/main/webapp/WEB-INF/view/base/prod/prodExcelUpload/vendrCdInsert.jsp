@@ -65,4 +65,4 @@
   var vatIncldYnData   = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/vendrCdInsert.js?ver=20220323.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/vendrCdInsert.js?ver=20220323.02" charset="utf-8"></script>

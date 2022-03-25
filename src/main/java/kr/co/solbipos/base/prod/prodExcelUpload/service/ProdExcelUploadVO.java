@@ -157,6 +157,9 @@ public class ProdExcelUploadVO extends PageVO {
     /** 브랜드사용여부 */
     private String brandUseFg;
 
+    /** 삭제구분 */
+    private String deleteFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -387,5 +390,13 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setBrandUseFg(String brandUseFg) {
         this.brandUseFg = brandUseFg;
+    }
+
+    public String getDeleteFg() {
+        return deleteFg;
+    }
+
+    public void setDeleteFg(String deleteFg) {
+        this.deleteFg = deleteFg;
     }
 }
