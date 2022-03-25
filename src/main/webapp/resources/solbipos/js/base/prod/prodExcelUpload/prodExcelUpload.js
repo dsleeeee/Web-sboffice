@@ -600,4 +600,35 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
     };
     // <-- //그리드 행 삭제 -->
 
+
+    // 기초마스터등록
+    $scope.masterInsert = function() {
+
+        // 엑셀업로드 이후
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["prodExcelUpload.masterInsert.None"]);
+            return false;
+        }
+
+        var params = {};
+        $scope._postJSONQuery.withOutPopUp('/base/prod/prodExcelUpload/prodExcelUpload/getMasterChk.sb', params, function (response) {
+            var masterChkList = response.data.data.result;
+            $scope.masterChkList = masterChkList;
+            console.log($scope.masterChkList);
+            if ($scope.masterChkList.prodClassCnt == 0 && $scope.masterChkList.vendrCnt == 0) {
+                $scope.prodClassCdInsertLayer.show(true);
+                $scope._broadcast('prodClassCdInsertCtrl', true);
+            } else if ($scope.masterChkList.prodClassCnt == 0) {
+                $scope.prodClassCdInsertLayer.show(true);
+                $scope._broadcast('prodClassCdInsertCtrl', false);
+            } else if ($scope.masterChkList.vendrCnt == 0) {
+                $scope.vendrCdInsertLayer.show(true);
+                $scope._broadcast('vendrCdInsertCtrl', false);
+            } else {
+                $scope._popMsg(messages["prodExcelUpload.masterInsert.Chk"]);
+            }
+
+        });
+
+    }
 }]);

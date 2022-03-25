@@ -27,10 +27,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : SimpleProdServiceImpl.java
@@ -360,7 +363,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     }
                 }
 
-                // 상품정보 저장
+               // 상품정보 저장
                 long result = prodMapper.saveProductInfo(prodVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 

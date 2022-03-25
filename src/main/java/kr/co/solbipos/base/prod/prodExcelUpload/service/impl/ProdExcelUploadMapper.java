@@ -71,4 +71,13 @@ public interface ProdExcelUploadMapper {
 
     /** 가격관리구분 검증 조회 */
     String getPrcCtrlFgCheck(ProdExcelUploadVO prodExcelUploadVO);
+
+    /** 기초 마스터 체크 */
+    DefaultMap<Object> getMasterChk(ProdExcelUploadVO prodExcelUploadVO);
+
+    /** 기초 마스터 등록 - 상품분류 */
+    List<DefaultMap<String>> getProdClassCdInsertList(ProdExcelUploadVO prodExcelUploadVO);
+
+    /** 기초 마스터 등록 - 거래처 */
+    List<DefaultMap<String>> getVendrCdInsertList(ProdExcelUploadVO prodExcelUploadVO);
 }

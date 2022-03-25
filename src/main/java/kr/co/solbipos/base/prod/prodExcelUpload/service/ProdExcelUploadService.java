@@ -2,6 +2,9 @@ package kr.co.solbipos.base.prod.prodExcelUpload.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.vendr.service.VendrVO;
+
 import java.util.List;
 
 /**
@@ -38,4 +41,19 @@ public interface ProdExcelUploadService {
 
     /** 검증결과 삭제 */
     int getProdExcelUploadCheckDelete(ProdExcelUploadVO[] prodExcelUploadVOs, SessionInfoVO sessionInfoVO);
+
+    /** 기초마스터 체크*/
+    DefaultMap<Object> getMasterChk(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO);
+
+    /** 기초마스터등록 - 상품분류 조회 */
+    List<DefaultMap<String>> getProdClassCdInsertList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO);
+
+    /** 기초마스터등록 - 상품분류 저장 */
+    int prodClassCdSave(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO);
+
+    /** 기초마스터등록 - 거래처 조회 */
+    List<DefaultMap<String>> getVendrCdInsertList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO);
+
+    /** 기초마스터등록 - 거래처 저장 */
+    int vendrCdSave(VendrVO[] vendrVOs, SessionInfoVO sessionInfoVO);
 }
