@@ -350,6 +350,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     // 자동채번 Start
                     String prodCd = prodMapper.getProdCd(prodVO);
                     prodVO.setProdCd(prodCd);
+                    // 2022.03.26 - 거래처코드 있으면 엑셀업로드 후 삭제가 안 되어서 주석처리
                     if(simpleProdVO.getVendrCd() != null && !"".equals(simpleProdVO.getVendrCd())){
                         simpleProdVO.setProdCd(prodCd);
                     }
@@ -500,7 +501,13 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     prodExcelUploadVO.setSessionId(simpleProdVO.getSessionId());
                     prodExcelUploadVO.setMembrOrgnCd(simpleProdVO.getMembrOrgnCd());
                     prodExcelUploadVO.setStoreCd(simpleProdVO.getStoreCd());
-                    prodExcelUploadVO.setProdCd(simpleProdVO.getProdCd());
+
+                    if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
+                        prodExcelUploadVO.setProdCd("자동채번");
+                    } else if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.MANUAL) {
+                        prodExcelUploadVO.setProdCd(simpleProdVO.getProdCd());
+                    }
+                    prodExcelUploadVO.setDeleteFg("검증성공");
 
                     procCnt = prodExcelUploadMapper.getProdExcelUploadCheckDelete(prodExcelUploadVO);
                 }

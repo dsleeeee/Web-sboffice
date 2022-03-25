@@ -82,6 +82,9 @@
             ]]>
         </if>
         AND PROD_CD = #{prodCd}
+        <if test='deleteFg != null and deleteFg != ""'>
+        AND RESULT = #{deleteFg}
+        </if>
     </delete>
 
     <!-- 검증결과 조회 -->
