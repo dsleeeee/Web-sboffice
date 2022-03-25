@@ -56,20 +56,22 @@
                   <input type="text" class="sb-input w100" id="fileOrgNm" ng-model="version.fileOrgNm" readonly/>
                 </td>
               </tr>
-              <tr> <%-- 사용기한 --%>
-                <th><s:message code="media.useDate" /></th>
-                <td>
-                  <div class="sb-select">
-                    <span class="txtIn"><input id="startDate" class="w110px"></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="endDate" class="w110px"></span>
-                  </div>
-                </td>
+              <tr>
                   <%-- 파일사이즈 --%>
                 <th><s:message code="media.fileSize" /></th>
                 <td>{{version.fileSize}}</td>
               </tr>
-
+              <tr> <%-- 사용기한 --%>
+                <th><s:message code="media.useDate" /></th>
+                <td colspan="3">
+                  <div class="sb-select">
+                    <span class="txtIn"><input id="startDate" class="w110px"></span>
+                    <span class="rg">~</span>
+                    <span class="txtIn"><input id="endDate" class="w110px"></span>
+                    <span style="background:#ebf5ff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; padding:5px 10px 5px 10px; font-size:0.75em; transition:all 0.2s;"><a href="#" ng-click="maxDate()"><s:message code="media.maxDate" /></a></span>
+                  </div>
+                </td>
+              </tr>
               <tr> <%-- 파일타입 --%>
                 <th><s:message code="media.fileType" /></th>
                 <td>
@@ -127,6 +129,6 @@
   var storeCd      = "${storeCd}";
   var userId       = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20210617.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20210617.03" charset="utf-8"></script>
 
 
