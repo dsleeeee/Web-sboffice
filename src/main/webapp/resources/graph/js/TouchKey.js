@@ -1982,6 +1982,7 @@ Format.prototype.initElements = function () {
             s.graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, new Array(cell.children[1]));
           }
         }
+        s.graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, null);
       }
     }
   });
@@ -2007,6 +2008,7 @@ Format.prototype.initElements = function () {
             s.graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, new Array(cell.children[1]));
           }
         }
+        s.graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, null);
       }
     }
   });
@@ -2182,7 +2184,9 @@ Format.prototype.setElementsValue = function () {
       this.selectStyle.selectedValue = styleCd;
       // 페이지버튼 색상변경
       this.setBtnStyle();
-
+      // '태그구분' 콤보박스 사용못하게 막기(분류는 태그구분 필요 없음)
+      $("#cellTypeCombo").css('background-color', '#F0F0F0');
+      $("#cellTypeCombo").attr("disabled", true);
     } else {
       var cellTypeComboValueChk = graph.cellTypeCombo.selectedValue;
       var childrenNode = 0;
@@ -2205,6 +2209,9 @@ Format.prototype.setElementsValue = function () {
           graph.orgChildren.cell = childCell;
         }
       }
+      // '태그구분' 콤보박스 사용
+      $("#cellTypeCombo").css('background-color', '#FFFFFF');
+      $("#cellTypeCombo").attr("disabled", false);
     }
   }
 
