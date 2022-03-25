@@ -47,6 +47,11 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.fileType;
   };
 
+  // 파일업로드시 파일사이즈 변경
+  $scope.maxDate = function(){
+    endDate.value = new Date('2099-12-31');
+  };
+
   // 조회 버튼 클릭
   $scope.$on("verRegistCtrl", function(event, data) {
 
@@ -273,6 +278,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 닫기
   $scope.close = function(){
+    endDate.value = new Date(Date.now());
 
     // 첨부파일 리셋
     var agent = navigator.userAgent.toLowerCase();

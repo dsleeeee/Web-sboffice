@@ -127,6 +127,11 @@
                     <s:message code="prodExcelUpload.chkProdNm" />
                 </label>
             </span>
+            <%-- 기초마스터 등록 --%>
+            <button class="btn_skyblue mr10
+             fr" id="btnMasterSave" ng-click="masterInsert()">
+                <s:message code="prodExcelUpload.masterInsert" />
+            </button>
         </div>
         <%-- 상품내역--%>
         <s:message code="prodExcelUpload.prodList" />
@@ -234,7 +239,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20211118.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20211118.05" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -242,6 +247,18 @@
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prodExcelUpload/prodExcelUploadAdd.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 기초 마스터 등록 - 거래처 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prodExcelUpload/vendrCdInsert.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 기초 마스터 등록 - 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prodExcelUpload/prodClassCdInsert.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

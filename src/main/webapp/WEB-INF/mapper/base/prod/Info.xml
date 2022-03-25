@@ -96,6 +96,36 @@
     </if>
   </select>
 
+
+    <!-- 상위분류 코드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+        COMMENTS : 해당분류코드의 상위 분류코드를 조회한다.
+    -->
+    <select id="getPProdClsCd2" parameterType="productClassVO" resultType="String">
+        /* USE : InfoMapper.getPProdClsCd2 */
+        <choose>
+            <when test='orgnFg != null and orgnFg.toString == "HQ"'>
+                SELECT MAX(PROD_CLASS_CD) AS PROD_CLASS_CD
+                FROM TB_HQ_PRODUCT_CLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='clsLevelCd != null and clsLevelCd == "3"'>
+                    AND P_PROD_CLASS_CD = (SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CLASS_NM = #{level1})
+                </if>
+                AND     PROD_CLASS_NM = #{pProdClassCd}
+            </when>
+            <when test='orgnFg != null and orgnFg.toString == "STORE"'>
+                SELECT MAX(PROD_CLASS_CD) AS PROD_CLASS_CD
+                FROM TB_MS_PRODUCT_CLASS
+                WHERE STORE_CD = #{storeCd}
+                <if test='clsLevelCd != null and clsLevelCd == "3"'>
+                    AND P_PROD_CLASS_CD = (SELECT PROD_CLASS_CD FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_NM = #{level1})
+                </if>
+                AND     PROD_CLASS_NM = #{pProdClassCd}
+            </when>
+        </choose>
+    </select>
+
   <!-- 분류 등록 -->
   <!--
       TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS

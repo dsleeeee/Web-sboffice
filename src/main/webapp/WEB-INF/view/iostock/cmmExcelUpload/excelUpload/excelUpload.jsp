@@ -687,12 +687,12 @@
                         failCnt++;
                         continue;
                     }
-                } else { // 필수값
-                    msg = messages["member.excel.nm.kr"] + messages["excelUpload.require.data"]; // 회원명(한글)(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
-                    item.result = msg;
-                    failCnt++;
-                    continue;
-                }
+                } //else { // 필수값
+                //     msg = messages["member.excel.nm.kr"] + messages["excelUpload.require.data"]; // 회원명(한글)(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
+                //     item.result = msg;
+                //     failCnt++;
+                //     continue;
+                // }
 
                 // 회원명(영문) 최대길이 체크
                 if (nvl(item.memberEngNm, '') !== '' && nvl(item.memberEngNm + '', '').getByteLengthForOracle() > 100) {
@@ -891,6 +891,11 @@
                         failCnt++;
                         continue;
                     }
+                } else { // 필수값
+                    msg = messages["member.excel.telNo"] + messages["excelUpload.require.data"]; // 전화번호(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
+                    item.result = msg;
+                    failCnt++;
+                    continue;
                 }
 
                 // 단축번호

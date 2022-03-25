@@ -214,6 +214,10 @@ public class RegistServiceImpl implements RegistService {
         registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         registVO.setMembrNo(mapper.getNewMemberNo(registVO));
 
+        if(registVO.getMembrNm() == null || registVO.getMembrNm() == ""){
+            registVO.setMembrNm(registVO.getMembrNo());
+        }
+
         // 회원단축번호 추가_2019.08.02 추가 이다솜 -> 테스트중 에러나서 주석처리 2020.10.27 김설아(확인 김중선)
         // .js 단에서 처리하고 있음 2020.11.02 이다솜 -> 에러나서 수정함 2020.11.12 김설아
 //        registVO.setShortNo(registVO.getTelNo().substring(registVO.getTelNo().length() - 4, registVO.getTelNo().length()));

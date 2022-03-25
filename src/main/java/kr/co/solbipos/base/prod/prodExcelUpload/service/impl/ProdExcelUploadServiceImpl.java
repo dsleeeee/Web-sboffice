@@ -1,15 +1,13 @@
 package kr.co.solbipos.base.prod.prodExcelUpload.service.impl;
 
-import kr.co.common.data.enums.Status;
-import kr.co.common.exception.JsonException;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
-import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.info.service.impl.InfoMapper;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadService;
 import kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO;
@@ -17,7 +15,8 @@ import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO;
 import kr.co.solbipos.base.prod.simpleProd.service.impl.SimpleProdMapper;
-import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
+import kr.co.solbipos.base.prod.vendr.service.VendrVO;
+import kr.co.solbipos.base.prod.vendr.service.impl.VendrMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +47,8 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
     private final ProdExcelUploadMapper prodExcelUploadMapper; // 상품엑셀업로드
     private final SimpleProdMapper simpleProdMapper; // 간편상품등록
     private final ProdMapper prodMapper; // 상품등록
+    private final InfoMapper infoMapper; // 상품분류등록
+    private final VendrMapper vendrMapper; // 거래처등록
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
@@ -55,10 +56,12 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
      * Constructor Injection
      */
     @Autowired
-    public ProdExcelUploadServiceImpl(ProdExcelUploadMapper prodExcelUploadMapper, SimpleProdMapper simpleProdMapper, ProdMapper prodMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public ProdExcelUploadServiceImpl(ProdExcelUploadMapper prodExcelUploadMapper, SimpleProdMapper simpleProdMapper, ProdMapper prodMapper, InfoMapper infoMapper, VendrMapper vendrMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.prodExcelUploadMapper = prodExcelUploadMapper;
         this.simpleProdMapper = simpleProdMapper;
         this.prodMapper = prodMapper;
+        this.infoMapper = infoMapper;
+        this.vendrMapper = vendrMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -422,7 +425,15 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             }
 
             // 상품분류
-            if (prodExcelUploadVO.getProdClassCd() != null && !"".equals(prodExcelUploadVO.getProdClassCd())) {
+            if (prodExcelUploadVO.getProdClassCd() != null && !"".equals(prodExcelUploadVO.getProdClassCd()) && !"선택".equals(prodExcelUploadVO.getProdClassCd())) {
+                String prodClassList = prodExcelUploadMapper.prodClassComboList(prodExcelUploadVO).toString();
+
+                if(!prodClassList.contains(prodExcelUploadVO.getProdClassCd())){
+                    prodExcelUploadVO.setResult("존재하지 않는 상품분류입니다.");
+                } else {
+                    String prodClassCd = prodExcelUploadMapper.getProdClassCdCheck(prodExcelUploadVO);
+                    prodExcelUploadVO.setProdClassCd(prodClassCd);
+                }
             } else {
                 prodExcelUploadVO.setResult("상품분류를 입력해주세요.");
             }
@@ -454,6 +465,16 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 }
             }
 
+            // 거래처
+            if (prodExcelUploadVO.getVendrCd() != null && !"".equals(prodExcelUploadVO.getVendrCd()) && !"선택".equals(prodExcelUploadVO.getVendrCd())) {
+                String vendrList = simpleProdMapper.vendrComboList(simpleProdVO).toString();
+                if(!vendrList.contains(prodExcelUploadVO.getVendrCd())){
+                    prodExcelUploadVO.setResult("존재하지 않는 거래처입니다.");
+                } else {
+                    String vendrCd = prodExcelUploadMapper.getVendrCdCheck(prodExcelUploadVO);
+                    prodExcelUploadVO.setVendrCd(vendrCd);
+                }
+            }
 
             // ProdVO
             ProdVO prodVO = new ProdVO();
@@ -524,5 +545,125 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
         }
 
         return procCnt;
+    }
+
+    /**  기초 마스터 체크  */
+    @Override
+    public DefaultMap<Object> getMasterChk(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO) {
+
+        prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+
+        return prodExcelUploadMapper.getMasterChk(prodExcelUploadVO);
+    }
+
+    /**  기초 마스터 등록 - 상품분류  */
+    @Override
+    public List<DefaultMap<String>> getProdClassCdInsertList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO) {
+
+        prodExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+
+        return prodExcelUploadMapper.getProdClassCdInsertList(prodExcelUploadVO);
+    }
+
+    @Override
+    public int prodClassCdSave(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for( ProductClassVO productClassVO : productClassVOs) {
+
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {   // 본사
+                productClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            }
+            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {    // 매장
+                productClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            }
+
+            productClassVO.setRegDt(dt);
+            productClassVO.setRegId(sessionInfoVO.getUserId());
+            productClassVO.setModDt(dt);
+            productClassVO.setModId(sessionInfoVO.getUserId());
+            productClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+
+            String prodClassCd = "";
+            prodClassCd = infoMapper.getClsCd(productClassVO);
+            productClassVO.setProdClassCd(prodClassCd);
+
+            if(!productClassVO.getClsLevelCd().equals("1")){
+                String pProdClassCd = "";
+                pProdClassCd = infoMapper.getPProdClsCd2(productClassVO);
+                productClassVO.setpProdClassCd(pProdClassCd);
+            }
+
+            result += infoMapper.insertCls(productClassVO);
+            // 본사에서 접속시
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                infoMapper.insertClsToStore(productClassVO);
+            }
+        }
+        return result;
+    }
+
+    /**  기초 마스터 등록 - 거래처  */
+    @Override
+    public List<DefaultMap<String>> getVendrCdInsertList(ProdExcelUploadVO prodExcelUploadVO, SessionInfoVO sessionInfoVO) {
+
+        prodExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+
+        return prodExcelUploadMapper.getVendrCdInsertList(prodExcelUploadVO);
+    }
+
+    /**  기초 마스터 등록 - 거래처 저장  */
+    @Override
+    public int vendrCdSave(VendrVO[] vendrVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for( VendrVO vendrVO : vendrVOs) {
+
+            vendrVO.setRegDt(dt);
+            vendrVO.setRegId(sessionInfoVO.getUserId());
+            vendrVO.setModDt(dt);
+            vendrVO.setModId(sessionInfoVO.getUserId());
+
+            vendrVO.setUseYn(UseYn.Y);
+            vendrVO.setShipFg("Y");
+
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+                // 신규등록일때 거래처코드(본사 자동채번)
+                String vendrCd = vendrMapper.getHqVendrCd(vendrVO);
+                vendrVO.setVendrCd(vendrCd);
+
+                result = vendrMapper.insertHqVendr(vendrVO);
+
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                //매장코드
+                vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+                // 신규등록일때 거래처코드(매장 자동채번)
+                String vendrCd = vendrMapper.getMsVendrCd(vendrVO);
+                vendrVO.setVendrCd(vendrCd);
+
+                result = vendrMapper.insertMsVendr(vendrVO);
+            }
+        }
+        return result;
     }
 }

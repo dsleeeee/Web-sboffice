@@ -201,7 +201,7 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.13" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.12" charset="utf-8"></script>
 
 <%-- 수불 엑셀업로드 공통 팝업 --%>
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">

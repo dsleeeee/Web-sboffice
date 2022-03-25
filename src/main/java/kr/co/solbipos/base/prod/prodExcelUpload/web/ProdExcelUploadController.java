@@ -11,6 +11,7 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
@@ -20,8 +21,10 @@ import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.base.prod.vendr.service.VendrVO;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
+import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.RtnDstbCloseStoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -266,4 +269,122 @@ public class ProdExcelUploadController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 기초 마스터 체크
+     *
+     * @param prodExcelUploadVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022.03.23
+     */
+    @RequestMapping(value = "/prodExcelUpload/getMasterChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMasterChk(ProdExcelUploadVO prodExcelUploadVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = prodExcelUploadService.getMasterChk(prodExcelUploadVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 기초 마스터 등록 - 상품분류
+     *
+     * @param prodExcelUploadVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022.03.23
+     */
+    @RequestMapping(value = "/prodExcelUpload/getProdClassCdInsertList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassCdInsertList(ProdExcelUploadVO prodExcelUploadVO, HttpServletRequest request,
+                                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result  = prodExcelUploadService.getProdClassCdInsertList(prodExcelUploadVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodExcelUploadVO);
+    }
+
+    /**
+     * 기초 마스터 등록 - 상품분류 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   productClassVOs
+     * @return  String
+     * @author  권지현
+     * @since   2022.03.23
+     */
+    @RequestMapping(value = "/prodExcelUpload/prodClassCdSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveRtnDstbCloseStoreDtl(HttpServletRequest request, HttpServletResponse response,
+                                           Model model, @RequestBody ProductClassVO[] productClassVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodExcelUploadService.prodClassCdSave(productClassVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 기초 마스터 등록 - 거래처
+     *
+     * @param prodExcelUploadVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022.03.23
+     */
+    @RequestMapping(value = "/prodExcelUpload/getVendrCdInsertList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrCdInsertList(ProdExcelUploadVO prodExcelUploadVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result  = prodExcelUploadService.getVendrCdInsertList(prodExcelUploadVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodExcelUploadVO);
+    }
+
+    /**
+     * 기초 마스터 등록 - 거래처 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrVOs
+     * @return  String
+     * @author  권지현
+     * @since   2022.03.23
+     */
+    @RequestMapping(value = "/prodExcelUpload/vendrCdSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result prodClassCdSave(HttpServletRequest request, HttpServletResponse response,
+                                           Model model, @RequestBody VendrVO[] vendrVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodExcelUploadService.vendrCdSave(vendrVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
 }

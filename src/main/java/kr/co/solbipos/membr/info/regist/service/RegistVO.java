@@ -44,7 +44,7 @@ public class RegistVO extends PageVO {
     /** 회원번호 */
     private String membrNo;
     /** 회원명 */
-    @NotBlank(groups = {Regist.class}, message = "{regist.membr.nm}{cmm.require.text}")
+//    @NotBlank(groups = {Regist.class}, message = "{regist.membr.nm}{cmm.require.text}")
     private String membrNm;
     /** 회원영문명 */
     private String membrEngNm;

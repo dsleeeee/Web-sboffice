@@ -72,13 +72,17 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
                 // 검증결과
                 if (col.binding === "result") {
-                    var item = s.rows[e.row].dataItem;
                     // 값이 있으면 링크 효과
                     if (item[("result")] !== '검증성공') {
                         wijmo.addClass(e.cell, 'wij_gridText-red');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    }
+                } else if (col.binding === "memberTelNo") {
+                    if(item.memberTelNo === undefined || item.memberTelNo === ""){
+                        item.memberTelNo = '01000000000';
                     }
                 }
             }

@@ -32,15 +32,7 @@
         <td >
           <div class="sb-select">
             <span class="txtIn w130px">
-              <wj-input-date
-                      id="srchTimeStartDate"
-                      value="startDate"
-                      ng-model="startDate"
-                      control="startDateCombo"
-                      min="2000-01-01"
-                      max="2099-12-31"
-                      initialized="_initDateBox(s)">
-              </wj-input-date>
+                <input id="srchTimeStartDate" ng-model="startDate" class="w110px">
             </span>
             <span class="chk ml10">
               <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />

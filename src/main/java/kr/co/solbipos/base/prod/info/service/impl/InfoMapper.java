@@ -39,6 +39,9 @@ public interface InfoMapper {
     /** 상위분류 코드 조회 */
     String getPProdClsCd(ProductClassVO productClassVO);
 
+    /** 상위분류 코드 조회 - 엑셀업로드 - 기초마스터등록 시 사용 */
+    String getPProdClsCd2(ProductClassVO productClassVO);
+
     /** 분류 등록 */
     int insertCls(ProductClassVO productClassVO);
 
