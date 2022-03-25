@@ -161,7 +161,7 @@
   var serviceFg    = ${ccu.getCommCode("007")};
   var webUseYn     = ${ccu.getCommCode("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=2018121102.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20220323.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 비밀번호 변경 --%>
 <c:import url="/WEB-INF/view/store/manage/pwdManage/pwdChange.jsp">
