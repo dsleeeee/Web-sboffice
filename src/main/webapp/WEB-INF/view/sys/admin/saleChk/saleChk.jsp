@@ -202,10 +202,10 @@
           <wj-flex-grid-column header="<s:message code="saleChk.posNo"/>" binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleChk.billNo"/>" binding="billNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleChk.saleYn"/>" binding="saleYn" align="center" is-read-only="true" data-map="saleYnDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="saleChk.resultMsg"/>" binding="resultMsg" width="110" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleChk.remark"/>" binding="remark" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleChk.procDate"/>" binding="procDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleChk.procTime"/>" binding="procTime" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleChk.resultMsg"/>" binding="resultMsg" width="110" align="center"></wj-flex-grid-column>
 
           <wj-flex-grid-column header="<s:message code="saleChk.procDt2"/>" binding="procDt2" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleChk.procYn2"/>" binding="procYn2" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
