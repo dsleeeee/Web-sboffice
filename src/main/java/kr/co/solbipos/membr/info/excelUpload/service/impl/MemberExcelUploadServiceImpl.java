@@ -97,6 +97,10 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
             memberExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
             if (memberExcelUploadVO.getStatus() == GridDataFg.INSERT) {
+
+                if(memberExcelUploadVO.getMembrNm() == null || memberExcelUploadVO.getMembrNm() == ""){
+                    memberExcelUploadVO.setMembrNm(memberExcelUploadVO.getMembrNo());
+                }
                 result = mapper.insertMember(memberExcelUploadVO);
 
                 if (result == 1) {

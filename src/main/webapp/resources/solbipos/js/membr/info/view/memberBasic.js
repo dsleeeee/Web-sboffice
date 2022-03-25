@@ -197,11 +197,11 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.valueCheck = function () {
 
         // 회원명을 입력하세요.
-        var msg = messages["regist.membr.nm"] + messages["cmm.require.text"];
-        if (isNull($scope.member.membrNm)) {
-            $scope._popMsg(msg);
-            return false;
-        }
+        // var msg = messages["regist.membr.nm"] + messages["cmm.require.text"];
+        // if (isNull($scope.member.membrNm)) {
+        //     $scope._popMsg(msg);
+        //     return false;
+        // }
 
         // 등록매장을 선택해주세요.
         if (hqOfficeCd !== '00000') {

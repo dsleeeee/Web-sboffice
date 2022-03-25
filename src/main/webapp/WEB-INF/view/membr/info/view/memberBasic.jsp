@@ -37,7 +37,7 @@
                 </tr>
                 <tr>
                     <%-- 회원명 --%>
-                    <th><s:message code="regist.membr.nm"/><em class="imp">*</em></th>
+                    <th><s:message code="regist.membr.nm"/></th>
                     <td>
                         <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm" class="sb-input w100" maxlength="30" required>
                     </td>
@@ -344,4 +344,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20201112.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20201112.03" charset="utf-8"></script>

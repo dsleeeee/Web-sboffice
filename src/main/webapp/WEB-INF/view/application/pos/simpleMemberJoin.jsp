@@ -121,12 +121,12 @@
                 return false;
             }
 
-            <%-- 회원명을 입력해주세요. --%>
-            var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='cmm.require.text'/>";
-            if($("#membrNm").val() === "") {
-                s_alert.popOk(msg, function(){ $("#membrNm").focus(); });
-                return false;
-            }
+            <%--&lt;%&ndash; 회원명을 입력해주세요. &ndash;%&gt;--%>
+            <%--var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='cmm.require.text'/>";--%>
+            <%--if($("#membrNm").val() === "") {--%>
+            <%--    s_alert.popOk(msg, function(){ $("#membrNm").focus(); });--%>
+            <%--    return false;--%>
+            <%--}--%>
 
             <%-- 회원명의 길이가 너무 깁니다. --%>
             var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='application.pos.simpleMemberJoin.textOver'/>";

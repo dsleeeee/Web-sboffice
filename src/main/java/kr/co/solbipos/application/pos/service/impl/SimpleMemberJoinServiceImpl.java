@@ -94,6 +94,10 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         memberVO.setModDt(dt);                                  //수정일시
         memberVO.setModId(sessionInfoVO.getUserId());           //수정아이디
 
+        if(memberVO.getMembrNm() == null || memberVO.getMembrNm() == ""){
+            memberVO.setMembrNm(memberVO.getMembrNo());
+        }
+
         // 회원등록
         result = mapper.insertMember(memberVO);
 
