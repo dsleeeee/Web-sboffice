@@ -551,6 +551,7 @@
                 AND STORE_CD = #{storeCd}
             ]]>
         </if>
+        AND VENDR_CD IS NOT NULL
         ORDER BY VENDR_CD
     </select>
 </mapper>

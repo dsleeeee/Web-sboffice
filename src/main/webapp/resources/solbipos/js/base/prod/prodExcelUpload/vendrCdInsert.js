@@ -46,7 +46,7 @@ app.controller('vendrCdInsertCtrl', ['$scope', '$http', function ($scope, $http)
 
   $scope.vendrCdSave = function () {
 
-    if ($scope.flex.rows.length <= 0) {
+    if ($scope.vendrFlex.rows.length <= 0) {
       $scope._popMsg(messages["prodExcelUpload.masterInsert.None"]);
       return false;
     }
