@@ -60,4 +60,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodClassCdInsert.js?ver=20220323.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodClassCdInsert.js?ver=20220323.03" charset="utf-8"></script>

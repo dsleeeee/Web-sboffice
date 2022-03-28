@@ -42,7 +42,7 @@ app.controller('prodClassCdInsertCtrl', ['$scope', '$http', function ($scope, $h
 
   $scope.prodClassCdSave = function () {
 
-    if ($scope.flex.rows.length <= 0) {
+    if ($scope.prodClassFlex.rows.length <= 0) {
       $scope._popMsg(messages["prodExcelUpload.masterInsert.None"]);
       return false;
     }
