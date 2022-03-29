@@ -8,10 +8,13 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeService;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeVO;
+// API VO
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiSenderVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiSenderReceiveVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiTokenVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiTokenReceiveVO;
+import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiGroupVO;
+import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiGroupReceiveVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,11 +57,11 @@ public class AlimtalkSendTypeController {
     private final SessionService sessionService;
     private final AlimtalkSendTypeService alimtalkSendTypeService;
 
-    private final String AppKey = "SOfDZwJzUpJKjIFG";
-    private final String SecretKey = "uYtgbHyO";
-    private final String ApiUrl = "https://api-alimtalk.cloud.toast.com";
-    private final String GroupKey = "aa4fdaba4e8087b8e3773ac7321d0e73664fa5d3";
-    private final String SenderKey = "57e3cbf116e20ca20091142ed2623dd19926865b";
+//    private final String AppKey = "SOfDZwJzUpJKjIFG";
+//    private final String SecretKey = "uYtgbHyO";
+//    private final String ApiUrl = "https://api-alimtalk.cloud.toast.com";
+//    private final String GroupKey = "aa4fdaba4e8087b8e3773ac7321d0e73664fa5d3";
+//    private final String SenderKey = "57e3cbf116e20ca20091142ed2623dd19926865b";
 
     /**
      * Constructor Injection
@@ -76,11 +79,11 @@ public class AlimtalkSendTypeController {
      * @param response
      * @param model
      */
-    @RequestMapping(value = "/alimtalkSendType/list.sb", method = RequestMethod.GET)
-    public String alimtalkSendTypeView(HttpServletRequest request, HttpServletResponse response, Model model) {
-
-        return "adi/alimtalk/alimtalkSendType/alimtalkSendType";
-    }
+//    @RequestMapping(value = "/alimtalkSendType/list.sb", method = RequestMethod.GET)
+//    public String alimtalkSendTypeView(HttpServletRequest request, HttpServletResponse response, Model model) {
+//
+//        return "adi/alimtalk/alimtalkSendType/alimtalkSendType";
+//    }
 
     /**
      * 알림톡 전송유형 - 계정정보 체크 조회
@@ -276,6 +279,34 @@ public class AlimtalkSendTypeController {
     }
 
     /**
+     * 알림톡 계정등록 팝업 - 그룹-계정정보 체크 조회
+     *
+     * @param alimtalkSendTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 03. 21.
+     */
+    @RequestMapping(value = "/alimtalkSendType/getAlimtalkRegisterGroupChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAlimtalkRegisterGroupChk(AlimtalkSendTypeVO alimtalkSendTypeVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = alimtalkSendTypeService.getAlimtalkRegisterGroupChk(alimtalkSendTypeVO, sessionInfoVO);
+
+        System.out.println("WEB_ALIMTALK >>> 알림톡 그룹-계정정보 체크 조회 result : " + result);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
      * 알림톡 계정등록 팝업 - 사업자 카테고리 조회
      *
      * @param alimtalkSendTypeVO
@@ -314,7 +345,7 @@ public class AlimtalkSendTypeController {
     public Result getAlimtalkSenderApiSave(@RequestBody AlimtalkSendTypeVO alimtalkSendTypeVO, HttpServletRequest request,
                                            HttpServletResponse response, Model model) {
 
-        System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> Api sb 진입");
+        System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> API sb 진입");
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -323,6 +354,10 @@ public class AlimtalkSendTypeController {
         //GET 방식 HTTPS
         HttpURLConnection conn = null;
         ObjectMapper mapper = new ObjectMapper();
+
+        String ApiUrl = alimtalkSendTypeVO.getApiUrl();
+        String AppKey = alimtalkSendTypeVO.getAppKey();
+        String SecretKey = alimtalkSendTypeVO.getSecretKey();
 
         // NHN API 호출(발신프로필 등록)
         ApiSenderVO apiSenderVO = new ApiSenderVO();
@@ -337,7 +372,7 @@ public class AlimtalkSendTypeController {
             // 객체를 JSON 타입의 String으로 변환
             String jsonString = mapper.writeValueAsString(apiSenderVO);
 
-            System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> NHN API 호출 인자 값 : " + jsonString);
+            System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> API 호출 인자 값 : " + jsonString);
 
             URL url = new URL(ApiUrl + "/alimtalk/v2.1/appkeys/" + AppKey + "/senders");
             conn = (HttpURLConnection)url.openConnection();
@@ -360,8 +395,8 @@ public class AlimtalkSendTypeController {
                 sb.append(line);
             }
 
-            System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> NHN API 호출 URL : " + url);
-            System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> NHN API 응답 인자 값 : " +  sb.toString());
+            System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> API 호출 URL : " + url);
+            System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> API 응답 인자 값 : " +  sb.toString());
 
             //json 데이터를 클래스에 넣음.
             apiSenderReceiveVO = mapper.readValue(sb.toString(), ApiSenderReceiveVO.class);
@@ -384,13 +419,13 @@ public class AlimtalkSendTypeController {
         resultMap.put("resultCode", apiSenderReceiveVO.getHeader().getResultCode());
         resultMap.put("resultMessage", apiSenderReceiveVO.getHeader().getResultMessage());
 
-        System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> Api sb 끝");
+        System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> API sb 끝");
 
         return returnJson(Status.OK, resultMap);
     }
 
     /**
-     * 알림톡 계정등록 팝업 - 계정등록 (토큰인증 및 API 호출 및 저장)
+     * 알림톡 계정등록 팝업 - 계정등록 (토큰인증 API 호출 및 저장)
      *
      * @param
      * @param request
@@ -405,7 +440,7 @@ public class AlimtalkSendTypeController {
     public Result getAlimtalkSenderTokenApiSave(@RequestBody AlimtalkSendTypeVO alimtalkSendTypeVO, HttpServletRequest request,
                                            HttpServletResponse response, Model model) {
 
-        System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> Api sb 진입");
+        System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> API sb 진입");
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -414,6 +449,10 @@ public class AlimtalkSendTypeController {
         //GET 방식 HTTPS
         HttpURLConnection conn = null;
         ObjectMapper mapper = new ObjectMapper();
+
+        String ApiUrl = alimtalkSendTypeVO.getApiUrl();
+        String AppKey = alimtalkSendTypeVO.getAppKey();
+        String SecretKey = alimtalkSendTypeVO.getSecretKey();
 
         // NHN API 호출(발신프로필 토큰 인증)
         ApiTokenVO apiTokenVO = new ApiTokenVO();
@@ -427,7 +466,7 @@ public class AlimtalkSendTypeController {
             // 객체를 JSON 타입의 String으로 변환
             String jsonString = mapper.writeValueAsString(apiTokenVO);
 
-            System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> NHN API 호출 인자 값 : " + jsonString);
+            System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> API 호출 인자 값 : " + jsonString);
 
             URL url = new URL(ApiUrl + "/alimtalk/v2.1/appkeys/" + AppKey + "/sender/token");
             conn = (HttpURLConnection)url.openConnection();
@@ -450,8 +489,8 @@ public class AlimtalkSendTypeController {
                 sb.append(line);
             }
 
-            System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> NHN API 호출 URL : " + url);
-            System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> NHN API 응답 인자 값 : " +  sb.toString());
+            System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> API 호출 URL : " + url);
+            System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> API 응답 인자 값 : " +  sb.toString());
 
             //json 데이터를 클래스에 넣음.
             apiTokenReceiveVO = mapper.readValue(sb.toString(), ApiTokenReceiveVO.class);
@@ -473,9 +512,106 @@ public class AlimtalkSendTypeController {
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
         resultMap.put("resultCode", apiTokenReceiveVO.getHeader().getResultCode());
         resultMap.put("resultMessage", apiTokenReceiveVO.getHeader().getResultMessage());
-        resultMap.put("apprFg", apiTokenReceiveVO.getSender().getStatus());
+        resultMap.put("senderKey", apiTokenReceiveVO.getSender().getSenderKey());
 
-        System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> Api sb 끝");
+        System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> API sb 끝");
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 알림톡 계정등록 팝업 - 그룹-계정등록 (그룹에 발신프로필 추가 API 호출 및 저장)
+     *
+     * @param
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 03. 28.
+     */
+    @RequestMapping(value = "/alimtalkIdRegister/getAlimtalkSenderGroupApiSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAlimtalkSenderGroupApiSave(@RequestBody AlimtalkSendTypeVO alimtalkSendTypeVO, HttpServletRequest request,
+                                                HttpServletResponse response, Model model) {
+
+        System.out.println("WEB_ALIMTALK >>> 알림톡 그룹-계정등록 >>> API sb 진입");
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = 0;
+
+        //GET 방식 HTTPS
+        HttpURLConnection conn = null;
+        ObjectMapper mapper = new ObjectMapper();
+
+        String ApiUrl = alimtalkSendTypeVO.getApiUrl();
+        String AppKey = alimtalkSendTypeVO.getAppKey();
+        String SecretKey = alimtalkSendTypeVO.getSecretKey();
+        String GroupKey = alimtalkSendTypeVO.getGroupSenderKey();
+        String SenderKey = alimtalkSendTypeVO.getSenderKey();
+
+        // NHN API 호출(그룹에 발신프로필 추가)
+        ApiGroupVO apiGroupVO = new ApiGroupVO();
+        apiGroupVO.setAppKey(AppKey);
+        apiGroupVO.setGroupSenderKey(GroupKey);
+        apiGroupVO.setSenderKey(SenderKey);
+
+        // NHN API 응답(그룹에 발신프로필 추가)
+        ApiGroupReceiveVO apiGroupReceiveVO = new ApiGroupReceiveVO();
+
+        try {
+            // 객체를 JSON 타입의 String으로 변환
+            String jsonString = mapper.writeValueAsString(apiGroupVO);
+
+            System.out.println("WEB_ALIMTALK >>> 알림톡 그룹-계정등록 >>> API 호출 인자 값 : " + jsonString);
+
+            URL url = new URL(ApiUrl + "/alimtalk/v2.1/appkeys/" + AppKey + "/sender-groups/" + GroupKey + "/senders/" + SenderKey);
+            conn = (HttpURLConnection)url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty ("X-Secret-Key", SecretKey);
+
+            OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+            osw.write(jsonString);
+            osw.flush();
+
+            BufferedReader br = null;
+            //url -> json으로 던짐
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            //string으로 데이터 받음.
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            System.out.println("WEB_ALIMTALK >>> 알림톡 그룹-계정등록 >>> API 호출 URL : " + url);
+            System.out.println("WEB_ALIMTALK >>> 알림톡 그룹-계정등록 >>> API 응답 인자 값 : " +  sb.toString());
+
+            //json 데이터를 클래스에 넣음.
+            apiGroupReceiveVO = mapper.readValue(sb.toString(), ApiGroupReceiveVO.class);
+
+            // 해당 그룹-계정정보가 이미 NHN 사이트에 등록되있을때(-1018 This is a plusFriend that has already been added)
+            if(apiGroupReceiveVO.getHeader().getResultCode() == 0 || apiGroupReceiveVO.getHeader().getResultCode() == -1018){
+                alimtalkSendTypeVO.setAppKey(AppKey);
+
+                // 알림톡 그룹-계정정보 저장 insert
+                result = alimtalkSendTypeService.getAlimtalkSenderGroupSaveInsert(alimtalkSendTypeVO, sessionInfoVO);
+            }
+
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("resultCode", apiGroupReceiveVO.getHeader().getResultCode());
+        resultMap.put("resultMessage", apiGroupReceiveVO.getHeader().getResultMessage());
+
+        System.out.println("WEB_ALIMTALK >>> 알림톡 그룹-계정등록 >>> API sb 끝");
 
         return returnJson(Status.OK, resultMap);
     }
