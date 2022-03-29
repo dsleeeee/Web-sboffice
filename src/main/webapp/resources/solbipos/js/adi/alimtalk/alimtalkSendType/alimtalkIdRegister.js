@@ -114,6 +114,9 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         params.orgnCd = orgnCd;
         params.regId = userId;
         params.modId = userId;
+        params.appKey = appKey;
+        params.secretKey = secretKey;
+        params.apiUrl = apiUrl;
         params.plusFriendId = $scope.plusFriendId;
         params.categoryCode = $scope.categoryCodeLCombo + $scope.categoryCodeMCombo + $scope.categoryCodeSCombo;
         params.phoneNo = $scope.phoneNo;
@@ -150,7 +153,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
                 // alert(result.data.resultCode);
                 // alert(result.data.resultMessage);
                 if (result.data.resultCode.toString() === "0") {
-                    $scope._popMsg("인증번호 발송이 요청 되었습니다.");
+                    $scope._popMsg("휴대폰번호로 인증번호 발송 되었습니다.");
                     // 로딩바 hide
                     $scope.$broadcast('loadingPopupInactive');
                 }
@@ -192,7 +195,13 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
 
         var params = {};
         params.orgnCd = orgnCd;
+        params.regId = userId;
         params.modId = userId;
+        params.groupSenderKey = groupSenderKey;
+        params.groupSenderKeyNm = groupSenderKeyNm;
+        params.appKey = appKey;
+        params.secretKey = secretKey;
+        params.apiUrl = apiUrl;
         params.plusFriendId = $scope.plusFriendId;
         params.token = $scope.token;
         params.phoneNo = $scope.phoneNo;
@@ -210,12 +219,10 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
                 // alert(result.status);
                 // alert(result.data);
                 if (result.data.resultCode.toString() === "0") {
-                    $scope._popMsg("인증번호 발송이 요청 되었습니다.");
-                    // 로딩바 hide
-                    $scope.$broadcast('loadingPopupInactive');
+                    params.senderKey = result.data.senderKey.toString();
 
-                    // 그룹-계정등록 (그룹에 발신프로필 추가 API 호출 및 저장)
-                    $scope.registerGroupSave();
+                    // 그룹-계정등록 체크
+                    $scope.registerGroupChk(params);
                 }
                 else if (result.data.resultCode.toString() !== "0") {
                     $scope._popMsg(result.data.resultMessage.toString());
@@ -246,9 +253,79 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         });
     };
 
+    // 그룹-계정등록 체크
+    $scope.registerGroupChk = function(params) {
+        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkRegisterGroupChk.sb", params, function(response){
+            var alimtalkGroupInfo = response.data.data.result;
+            $scope.alimtalkGroupInfo = alimtalkGroupInfo;
+
+            if(response.data.data.result != null) {
+                $scope._popMsg("계정등록 되었습니다.");
+                // 로딩바 hide
+                $scope.$broadcast('loadingPopupInactive');
+                // 팝업 닫기
+                $scope.close();
+            } else {
+                // 그룹-계정등록 (그룹에 발신프로필 추가 API 호출 및 저장)
+                $scope.registerGroupApi(params);
+            }
+        });
+    };
+
     // 그룹-계정등록 (그룹에 발신프로필 추가 API 호출 및 저장)
-    $scope.registerGroupSave = function() {
-        alert("준비중");
+    $scope.registerGroupApi = function(params) {
+        $.ajax({
+            type: "POST",
+            url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderGroupApiSave.sb",
+            data:  JSON.stringify(params),
+            cache: false,
+            dataType: "json",
+            contentType : 'application/json',
+            success: function(result){
+                // alert(result.status);
+                // alert(result.data);
+                if (result.data.resultCode.toString() === "0") {
+                    $scope._popMsg("계정등록 되었습니다.");
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+                    // 팝업 닫기
+                    $scope.close();
+                }
+                else if (result.data.resultCode.toString() !== "0") {
+                    // 해당 그룹-계정정보가 이미 NHN 사이트에 등록되있을때(-1018 This is a plusFriend that has already been added)
+                    if(result.data.resultCode.toString() === "-1018") {
+                        $scope._popMsg("계정등록 되었습니다.");
+                        // 팝업 닫기
+                        $scope.close();
+                    } else {
+                        $scope._popMsg(result.data.resultMessage.toString());
+                    }
+
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                // if (result.status === "OK") {
+                //     $scope._popMsg("저장되었습니다.");
+                //     $scope.close();
+                // }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                /*else if(result.status === undefined) {
+                    location.href = "/";
+                }*/
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            }
+        });
     };
 
     // 팝업 닫기

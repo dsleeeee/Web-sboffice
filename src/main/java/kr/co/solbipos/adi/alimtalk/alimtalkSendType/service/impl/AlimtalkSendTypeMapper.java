@@ -2,6 +2,7 @@ package kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -50,12 +51,21 @@ public interface AlimtalkSendTypeMapper {
     /** 알림톡 계정등록 팝업 - 계정정보 체크 조회 */
     DefaultMap<String> getAlimtalkIdRegisterAllChk(AlimtalkSendTypeVO alimtalkSendTypeVO);
 
+    /** 알림톡 계정등록 팝업 - 그룹-계정정보 체크 조회 */
+    DefaultMap<String> getAlimtalkRegisterGroupChk(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
     /** 알림톡 계정등록 팝업 - 사업자 카테고리 조회 */
     List<DefaultMap<Object>> getCategoryCodeComboList(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
+    /** 알림톡 계정등록 팝업 - 키값 리스트 조회 */
+    List<DefaultMap<String>> getAlimtalkKeyColList(SessionInfoVO sessionInfoVO);
 
     /** 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 insert */
     int getAlimtalkSenderSaveInsert(AlimtalkSendTypeVO alimtalkSendTypeVO);
 
     /** 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 update */
     int getAlimtalkSenderSaveUpdate(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
+    /** 알림톡 계정등록 팝업 - 알림톡 그룹-계정정보 저장 insert */
+    int getAlimtalkSenderGroupSaveInsert(AlimtalkSendTypeVO alimtalkSendTypeVO);
 }

@@ -130,6 +130,12 @@
 <script type="text/javascript">
     var orgnCd = "${orgnCd}";
     var userId = "${userId}";
+
+    var groupSenderKey = "${groupSenderKey}";
+    var groupSenderKeyNm = "${groupSenderKeyNm}";
+    var appKey = "${appKey}";
+    var secretKey = "${secretKey}";
+    var apiUrl = "${apiUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220322.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220323.03" charset="utf-8"></script>

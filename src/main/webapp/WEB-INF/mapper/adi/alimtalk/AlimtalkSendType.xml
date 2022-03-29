@@ -275,6 +275,22 @@
         AND taa.ORGN_CD = #{orgnCd}
     </select>
 
+    <!-- 알림톡 계정등록 팝업 - 그룹-계정정보 체크 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkRegisterGroupChk"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkRegisterGroupChk */
+        SELECT
+        taag.SENDER_KEY
+        FROM TB_AL_ALIMTALK_GROUP taag
+        WHERE 1=1
+        AND taag.ORGN_CD = #{orgnCd}
+        AND taag.GROUP_KEY = #{groupSenderKey}
+        AND taag.SENDER_KEY = #{senderKey}
+    </select>
+
     <!-- 알림톡 계정등록 팝업 - 사업자 카테고리 조회 -->
     <!--
         TABLE    :
@@ -325,6 +341,67 @@
                 </if>
             </when>
         </choose>
+    </select>
+
+    <!-- 알림톡 계정등록 팝업 - 키값 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkKeyColList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkKeyColList */
+        SELECT
+        A.GROUP_KEY,
+        A.GROUP_NM,
+        B.APP_KEY,
+        C.SECRET_KEY,
+        D.API_URL
+        FROM
+        (
+            SELECT
+            taan.NMCODE_NM AS GROUP_KEY,
+            taan.REMARK AS GROUP_NM
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '004'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) A,
+        (
+            SELECT
+            taan.NMCODE_NM AS APP_KEY
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '001'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) B,
+        (
+            SELECT
+            taan.NMCODE_NM AS SECRET_KEY
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '002'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) C,
+        (
+            SELECT
+            taan.NMCODE_NM AS API_URL
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '003'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) D
     </select>
 
     <!-- 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 insert -->
@@ -388,5 +465,36 @@
         AND PLUS_FRIEND_ID = #{plusFriendId}
         AND PHONE_NO = #{phoneNo}
     </update>
+
+    <!-- 알림톡 계정등록 팝업 - 알림톡 그룹-계정정보 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getAlimtalkSenderGroupSaveInsert"  parameterType="AlimtalkSendTypeVO">
+        /* AlimtalkSendTypeMapper.getAlimtalkSenderGroupSaveInsert */
+        INSERT INTO TB_AL_ALIMTALK_GROUP
+        (
+            ORGN_CD,
+            GROUP_KEY,
+            GROUP_NM,
+            SENDER_KEY,
+            APP_KEY,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{orgnCd},
+            #{groupSenderKey},
+            #{groupSenderKeyNm},
+            #{senderKey},
+            #{appKey},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
 
 </mapper>

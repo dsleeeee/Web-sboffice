@@ -64,6 +64,9 @@ public class AlimtalkSendTypeVO extends PageVO {
     private String senderKey;
 
     /** API에서 쓰는 고정키값 */
+    private String apiUrl;
+
+    /** API에서 쓰는 고정키값 */
     private String appKey;
 
     /** API에서 쓰는 Header키 값 */
@@ -71,6 +74,12 @@ public class AlimtalkSendTypeVO extends PageVO {
 
     /** 플러스 친구 상태코드 */
     private String apprFg;
+
+    /** NHN매장계정 그룹아이디 */
+    private String groupSenderKey;
+
+    /** NHN매장계정 그룹아이디명 */
+    private String groupSenderKeyNm;
 
     public String getOrgnCd() { return orgnCd; }
 
@@ -128,6 +137,10 @@ public class AlimtalkSendTypeVO extends PageVO {
 
     public void setSenderKey(String senderKey) { this.senderKey = senderKey; }
 
+    public String getApiUrl() { return apiUrl; }
+
+    public void setApiUrl(String apiUrl) { this.apiUrl = apiUrl; }
+
     public String getAppKey() { return appKey; }
 
     public void setAppKey(String appKey) { this.appKey = appKey; }
@@ -139,4 +152,12 @@ public class AlimtalkSendTypeVO extends PageVO {
     public String getApprFg() { return apprFg; }
 
     public void setApprFg(String apprFg) { this.apprFg = apprFg; }
+
+    public String getGroupSenderKey() { return groupSenderKey; }
+
+    public void setGroupSenderKey(String groupSenderKey) { this.groupSenderKey = groupSenderKey; }
+
+    public String getGroupSenderKeyNm() { return groupSenderKeyNm; }
+
+    public void setGroupSenderKeyNm(String groupSenderKeyNm) { this.groupSenderKeyNm = groupSenderKeyNm; }
 }
