@@ -143,7 +143,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         $.ajax({
             type: "POST",
             url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderApiSave.sb",
-            data:  JSON.stringify(params),
+            data: JSON.stringify(params),
             cache: false,
             dataType: "json",
             contentType : 'application/json',
@@ -211,7 +211,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         $.ajax({
             type: "POST",
             url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderTokenApiSave.sb",
-            data:  JSON.stringify(params),
+            data: JSON.stringify(params),
             cache: false,
             dataType: "json",
             contentType : 'application/json',
@@ -277,7 +277,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         $.ajax({
             type: "POST",
             url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderGroupApiSave.sb",
-            data:  JSON.stringify(params),
+            data: JSON.stringify(params),
             cache: false,
             dataType: "json",
             contentType : 'application/json',
