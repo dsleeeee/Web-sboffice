@@ -158,7 +158,18 @@
         taat.TEMPLATE_NM,
         taat.TEMPLATE_CONTENT
         FROM TB_AL_ALIMTALK_TYPE_SETTING taats,
-        TB_AL_ALIMTALK_TEMPLATE taat
+        (
+            SELECT
+            (CASE WHEN A.COMMON_FG = 'C' THEN #{orgnCd} ELSE A.ORGN_CD END) AS ORGN_CD,
+            A.SEND_TYPE_CD,
+            A.SEND_TYPE_DTL_CD,
+            A.TEMPLATE_GRP_FG,
+            A.TEMPLATE_CD,
+            A.TEMPLATE_NM,
+            A.TEMPLATE_CONTENT
+            FROM TB_AL_ALIMTALK_TEMPLATE A
+            WHERE 1=1
+        ) taat
         WHERE 1=1
         AND taats.ORGN_CD = #{orgnCd}
         AND taats.SEND_TYPE_CD = #{sendTypeCd}
