@@ -562,8 +562,10 @@
     <!-- 부가서비스 > SMS관리 > 발신번호관리 -->
     <typeAlias alias="smsTelNoManageVO" type="kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO"/>
 
-    <!-- 부가서비스 > 알림톡관리리 > 알림톡 전송유형 -->
+    <!-- 부가서비스 > 알림톡관리 > 알림톡 전송유형 -->
     <typeAlias alias="alimtalkSendTypeVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeVO"/>
+    <!-- 부가서비스 > 알림톡관리 > 알림톡 전송이력 -->
+    <typeAlias alias="alimtalkSendHistVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendHist.service.AlimtalkSendHistVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="useSmVO" type="kr.co.solbipos.adi.sms.usesm.service.UseSmVO"/>
