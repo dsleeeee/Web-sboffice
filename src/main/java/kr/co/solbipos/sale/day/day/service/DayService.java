@@ -31,6 +31,15 @@ public interface DayService {
     /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
     List<DefaultMap<String>> getDayStoreDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
+    List<DefaultMap<String>> getDayProdDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
+    List<DefaultMap<String>> getDayDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
+    List<DefaultMap<String>> getDaySumAvgList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
     /** 매장별 할인내역 팝업 - 매장별 할인내역 조회 */
     List<DefaultMap<String>> getDayStoreDcList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 

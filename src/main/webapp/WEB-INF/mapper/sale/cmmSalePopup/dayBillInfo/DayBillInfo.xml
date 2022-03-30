@@ -57,4 +57,48 @@
         ORDER BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
     </select>
 
+    <!-- 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회-->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        COMMENTS : [매출]헤더
+    -->
+    <select id="getDayStoreBillList2"  parameterType="DayBillInfoVO" resultType="DefaultMap">
+        /* DayBillInfoMapper.getDayStoreBillList2 */
+        SELECT 	tssh.STORE_CD,
+                (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssh.STORE_CD) AS STORE_NM,
+                tssh.POS_NO,
+                tssh.BILL_NO,
+                TO_CHAR(TO_DATE(tssh.BILL_DT, 'YYYY-MM-DD HH24:MI:SS'),'yyyy-mm-dd hh24:mi:ss') AS BILL_DT,
+                tssh.SALE_YN,
+                tssh.TOT_SALE_AMT,
+                tssh.TOT_DC_AMT,
+                tssh.REAL_SALE_AMT
+        FROM    TB_SL_SALE_HDR tssh
+        WHERE   1=1
+        AND     tssh.HQ_OFFICE_CD = #{membrOrgnCd}
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tssh.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tssh.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tssh.HQ_OFFICE_CD, tssh.STORE_CD, tssh.BILL_DT, tssh.POS_NO
+    </select>
+
 </mapper>

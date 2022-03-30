@@ -136,6 +136,73 @@ public class DayController {
 
 
     /**
+     * 매장별 매출현황 팝업 - 매장별 매출현황 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.03.29
+     */
+    @RequestMapping(value = "/dayProdDtl/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayProdDtlList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDayProdDtlList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
+    /**
+     * 매장별 매출현황 팝업 - 매장별 매출현황 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.03.30
+     */
+    @RequestMapping(value = "/dayDtl/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayDtlList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDayDtlList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
+    /**
+     * 매장별 매출현황 팝업 - 매장별 매출현황 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.03.30
+     */
+    @RequestMapping(value = "/daySumAvg/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDaySumAvgList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDaySumAvgList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
+
+    /**
      * 매장별 할인내역 팝업 - 매장별 할인내역 조회
      * @param   request
      * @param   response

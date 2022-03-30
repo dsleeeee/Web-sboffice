@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/day/dayTotal/"/>
 
 <div id="dayTotalView" name="dayView" class="subCon" ng-controller="dayTotalCtrl">
@@ -125,5 +126,7 @@
   var payCol    = '${payCol}';
   var arrPayCol = payCol.split(',');
 </script>--%>
-
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20210720.03" charset="utf-8"></script>
+<script>
+  var orgnFg = "${orgnFg}";
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20210720.04" charset="utf-8"></script>

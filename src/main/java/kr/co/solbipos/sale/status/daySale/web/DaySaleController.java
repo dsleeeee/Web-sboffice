@@ -6,6 +6,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.day.day.service.DayVO;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlService;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +23,13 @@ import java.util.List;
 public class DaySaleController {
     private final SessionService sessionService;
     private final DayService dayService;
+    private final TodayDtlService todayDtlService;
 
     @Autowired
-    public DaySaleController(SessionService sessionService, DayService dayService) {
+    public DaySaleController(SessionService sessionService, DayService dayService, TodayDtlService todayDtlService) {
         this.sessionService = sessionService;
         this.dayService = dayService;
+        this.todayDtlService = todayDtlService;
     }
 
     /** 매출현황 - 일자별 */
@@ -103,6 +107,18 @@ public class DaySaleController {
         // 상분분류별 탭 - 분류레벨 최대값 조회
         model.addAttribute("maxLevel", dayService.getDayProdClassMaxLevel(dayVO, sessionInfoVO));
 
+
+        // 객수 조회
+        TodayDtlVO todayDtlVO = new TodayDtlVO();
+
+        List<DefaultMap<String>> guestColList = todayDtlService.getGuestColList(todayDtlVO, sessionInfoVO);
+        // 객수 코드를 , 로 연결하는 문자열 생성
+        String guestCol = "";
+        for(int i=0; i < guestColList.size(); i++) {
+            guestCol += (guestCol.equals("") ? "" : ",") + guestColList.get(i).getStr("guestCd");
+        }
+        model.addAttribute("guestColList", guestColList);
+        model.addAttribute("guestCol", guestCol);
 
         return "sale/status/daySale/daySale";
     }

@@ -157,7 +157,11 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                 // 년월 클릭시 상세정보 조회
                 if ( col.binding === "yearMonth") {
-                    $scope._broadcast('dayStoreDtlCtrl', params);
+                    if(orgnFg === "HQ") {
+                        $scope._broadcast('dayStoreDtlCtrl', params);
+                    } else if(orgnFg === "STORE"){
+                        $scope._broadcast('dayDtlCtrl', params);
+                    }
                 }
 
                 // 총할인 클릭시 상세정보 조회
@@ -167,7 +171,11 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                 // 영수건수 클릭시 상세정보 조회
                 if ( col.binding === "billCnt") {
-                    $scope._broadcast('dayStoreBillCtrl', params);
+                    if(orgnFg === "HQ") {
+                        $scope._broadcast('dayStoreBillCtrl', params);
+                    } else if(orgnFg === "STORE"){
+                        $scope._broadcast('daySumAvgCtrl', params);
+                    }
                 }
 
                 // 결제수단

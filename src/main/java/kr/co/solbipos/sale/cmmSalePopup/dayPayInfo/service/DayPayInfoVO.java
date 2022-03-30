@@ -23,6 +23,9 @@ public class DayPayInfoVO extends PageVO {
     /** 팝업호출시 구분 */
     private String gubun;
 
+    /** 팝업호출시 구분 */
+    private String cashGubun;
+
     /** 년월 */
     private String yearMonth;
 
@@ -100,6 +103,14 @@ public class DayPayInfoVO extends PageVO {
     public String getGubun() { return gubun; }
 
     public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getCashGubun() {
+        return cashGubun;
+    }
+
+    public void setCashGubun(String cashGubun) {
+        this.cashGubun = cashGubun;
+    }
 
     public String getYearMonth() { return yearMonth; }
 

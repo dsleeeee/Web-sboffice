@@ -199,6 +199,19 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- 일자별 매출현황 팝업 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/day/dayDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 일자별 매출현황 팝업 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/day/daySumAvg.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+
 <%-- 상품매출 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>

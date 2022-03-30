@@ -55,4 +55,20 @@ public class DayBillInfoServiceImpl implements DayBillInfoService {
 
         return dayBillInfoMapper.getDayStoreBillList(dayBillInfoVO);
     }
+
+    /** 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayStoreBillList2(DayBillInfoVO dayBillInfoVO, SessionInfoVO sessionInfoVO) {
+
+        dayBillInfoVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayBillInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = dayBillInfoVO.getStoreCds().split(",");
+        dayBillInfoVO.setStoreCdList(storeCds);
+
+        return dayBillInfoMapper.getDayStoreBillList2(dayBillInfoVO);
+    }
 }

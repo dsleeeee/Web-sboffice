@@ -7,7 +7,9 @@ var app = agrid.getApp();
 app.controller('dayCardCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('dayCardCtrl', $scope, $http, true));
-
+  var gubun;
+  var startDate;
+  var endDate;
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -23,6 +25,35 @@ app.controller('dayCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         } else if (col.format === "time") {
           e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
         }
+
+        if (col.binding === "cardNm") {
+          var item = s.rows[e.row].dataItem;
+          wijmo.addClass(e.cell, 'wijLink');
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+      }
+    });
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        var params       = {};
+        if(orgnFg === "STORE"){
+          params.storeCd  = storeCd;
+        }
+        params.chkPop = 'cardApprPop';
+        params.acquireNm = selectedRow.cardNm;
+        params.startDate = startDate;
+        params.endDate = endDate;
+
+        if (col.binding === "cardNm") { // 영수증번호 클릭
+          $scope._broadcast('saleApprCardCtrl', params);
+        }
+
       }
     });
 
@@ -46,13 +77,18 @@ app.controller('dayCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.searchDayCardList = function (data) {
     // 파라미터
     var params      = {};
+    gubun = data.gubun;
     // 기간별매출 > 일자별 탭 > 일별종합 탭
     if(data.gubun == "day") {
       params.saleDate = data.saleDate;
+      startDate = data.saleDate;
+      endDate = data.saleDate;
     }
     // 기간별매출 > 월별 탭 > 월별종합 탭
     if(data.gubun == "month") {
       params.yearMonth = data.yearMonth;
+      startDate = data.yearMonth + '01';
+      endDate = data.yearMonth + '31';
     }
     params.storeCd  = data.storeCd;
     params.gubun  = data.gubun;

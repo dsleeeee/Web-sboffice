@@ -200,6 +200,12 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- 매장별 매출현황 팝업 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/day/dayProdDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
 <%-- 상품매출 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
@@ -214,6 +220,11 @@
 
 <%-- 매장별 영수건수 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/dayBillInfo/dayStoreBill.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- 매장별 영수건수 팝업 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayBillInfo/dayStoreBill2.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
@@ -378,3 +389,11 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 <%-- //할인 팝업 레이어 시작 --%>
+
+<%-- 영수증 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="payColList" value="${payColList}"/>
+    <c:param name="guestColList" value="${guestColList}"/>
+</c:import>

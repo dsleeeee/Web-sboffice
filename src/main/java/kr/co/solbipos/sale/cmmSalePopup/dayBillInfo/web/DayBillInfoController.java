@@ -67,4 +67,27 @@ public class DayBillInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, result, dayBillInfoVO);
     }
+
+    /**
+     * 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회
+     *
+     * @param dayBillInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2022.03.28
+     */
+    @RequestMapping(value = "/dayBillInfo/getDayStoreBillList2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayStoreBillList2(DayBillInfoVO dayBillInfoVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayBillInfoService.getDayStoreBillList2(dayBillInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayBillInfoVO);
+    }
 }

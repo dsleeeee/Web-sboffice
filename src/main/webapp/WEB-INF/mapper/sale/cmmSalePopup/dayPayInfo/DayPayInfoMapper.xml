@@ -61,7 +61,9 @@
     <select id="getDayCashList" parameterType="payInfoVO" resultType="DefaultMap">
         /* USE : PayInfoMapper.getDayCashList */
         <![CDATA[
-       SELECT  tsspc.CORNR_CD, tmc.CORNR_NM
+       SELECT   tsspc.STORE_CD,
+                tms.STORE_NM,
+                tsspc.CORNR_CD, tmc.CORNR_NM
         ,       tsspc.APPR_PROC_FG --, tcn.NMCODE_NM AS APPR_PROC_NM
         ,       DECODE(tsspc.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_NM
         ,       tsspc.CASH_BILL_CARD_NO
@@ -74,6 +76,7 @@
         ,       TB_MS_CORNER tmc
         ,       TB_CM_VAN_CMPNY tcvc
         ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
         WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
         ]]>
         <choose>
@@ -105,7 +108,18 @@
         AND     tcvc.VAN_CD           (+) =   tsspc.VAN_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_GRP_CD     (+)    =   '018'
         AND     tcn.NMCODE_CD         (+)    =   tsspc.APPR_PROC_FG
+        AND     tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspc.STORE_CD
         ]]>
+        <if test='cashGubun != null and cashGubun == "021"'>
+            <![CDATA[
+            AND tsspc.APPR_PROC_FG <> '3'
+            ]]>
+        </if>
+        <if test='cashGubun != null and cashGubun == "02"'>
+            AND tsspc.APPR_PROC_FG = '3'
+        </if>
+        ORDER BY tsspc.STORE_CD, tms.STORE_NM, tsspc.CORNR_CD, tmc.CORNR_NM, tsspc.APPR_DT
     </select>
 
 
