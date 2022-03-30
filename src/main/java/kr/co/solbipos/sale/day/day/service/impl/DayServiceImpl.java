@@ -137,6 +137,58 @@ public class DayServiceImpl implements DayService {
     }
 
 
+
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
+    @Override
+    public List<DefaultMap<String>> getDayProdDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+        }
+
+        return dayMapper.getDayProdDtlList(dayVO);
+    }
+
+
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
+    @Override
+    public List<DefaultMap<String>> getDayDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+        }
+
+        return dayMapper.getDayDtlList(dayVO);
+    }
+
+
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
+    @Override
+    public List<DefaultMap<String>> getDaySumAvgList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+        }
+
+        return dayMapper.getDaySumAvgList(dayVO);
+    }
+
+
     /** 매장별 할인내역 팝업 - 매장별 할인내역 조회 */
     @Override
     public List<DefaultMap<String>> getDayStoreDcList(DayVO dayVO, SessionInfoVO sessionInfoVO) {

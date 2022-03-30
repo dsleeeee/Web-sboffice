@@ -56,6 +56,7 @@ app.controller('dayCashCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     }
     params.storeCd  = data.storeCd;
     params.gubun  = data.gubun;
+    params.cashGubun  = data.cashGubun;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/cmmSalePopup/dayPayInfo/dayCash/list.sb", params);

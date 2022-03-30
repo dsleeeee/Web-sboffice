@@ -34,6 +34,15 @@ public interface DayMapper {
     /** 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트 조회 */
     List<DefaultMap<String>> getDayStoreDtlList(DayVO dayVO);
 
+    /** 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트 조회 */
+    List<DefaultMap<String>> getDayProdDtlList(DayVO dayVO);
+
+    /** 일자별(일별종합 탭) - 일자 매출현황 리스트 조회 */
+    List<DefaultMap<String>> getDayDtlList(DayVO dayVO);
+
+    /** 일자별(일별종합 탭) - 일자 매출현황 리스트 조회 */
+    List<DefaultMap<String>> getDaySumAvgList(DayVO dayVO);
+
     /** 일자별(일별종합 탭) - 일자 매장별 할인현황 리스트 조회 */
     List<DefaultMap<String>> getDayStoreDcList(DayVO dayVO);
 

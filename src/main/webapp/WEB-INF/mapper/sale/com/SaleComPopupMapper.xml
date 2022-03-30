@@ -1105,7 +1105,9 @@
     -->
     <select id="getCardApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.getCardApprPopList */
-		SELECT TO_CHAR(TO_DATE(TSSPC.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+		SELECT TSSPC.STORE_CD
+		  	, TMS.STORE_NM
+		  	, TO_CHAR(TO_DATE(TSSPC.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			, TSSPC.POS_NO
 			, DECODE(TSSPC.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN
 			, DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
@@ -1119,7 +1121,7 @@
 			, TO_CHAR(TO_DATE(TSSPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
 			, TSSPC.APPR_NO
 			, (TSSPC.SALE_FG * TSSPC.APPR_AMT) AS APPR_AMT
-		FROM TB_SL_SALE_PAY_CARD TSSPC
+		FROM TB_SL_SALE_PAY_CARD TSSPC, TB_MS_STORE TMS
 		WHERE 1=1
 		AND TSSPC.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
@@ -1155,6 +1157,9 @@
 		<if test='endDate != null and endDate != ""'>
 			AND TSSPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
 		</if>
+		AND TMS.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
+		AND TMS.STORE_CD = TSSPC.STORE_CD
+		ORDER BY TSSPC.STORE_CD, TSSPC.SALE_DATE, TSSPC.POS_NO
     </select>
 
     <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(현금) -->

@@ -34,6 +34,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.storeCd"/>" 	binding="storeCd" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.storeNm"/>" 	binding="storeNm" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.saleDate"/>" 	binding="saleDate" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.posNo"/>" 		binding="posNo"			width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprGuBun"/>" 	binding="apprGubun"		width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>

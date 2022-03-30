@@ -338,6 +338,144 @@
     </select>
 
 
+
+    <!-- 매장별 매출현황 팝업 - 매장별 매출현황 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : dayVO
+        COMMENTS : 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트를 조회한다.
+    -->
+    <select id="getDayProdDtlList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayProdDtlList */
+        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                tssd.PROD_CD,
+                tmp.PROD_NM,
+                AVG(tssd.SALE_UPRC) AS SALE_UPRC,
+                SUM(tssd.SALE_QTY) AS SALE_QTY,
+                SUM(tssd.SALE_AMT) AS TOT_SALE_AMT,
+                SUM(tssd.DC_AMT) AS TOT_DC_AMT,
+                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM 	TB_SL_SALE_DTL tssd, TB_MS_PRODUCT tmp
+        WHERE   1=1
+        AND     tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                                AND SALE_DATE = #{saleDate}
+                            ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                                AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                            ]]>
+                </if>
+            </when>
+        </choose>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tssd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        AND 	tmp.STORE_CD = tssd.STORE_CD
+        AND 	tmp.PROD_CD = tssd.PROD_CD
+        GROUP BY tssd.PROD_CD, tmp.PROD_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD
+    </select>
+
+
+    <!-- 매장별 매출현황 팝업 - 매장별 매출현황 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : dayVO
+        COMMENTS : 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트를 조회한다.
+    -->
+    <select id="getDayDtlList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayDtlList */
+        SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                TOT_SALE_AMT,
+                TOT_DC_AMT,
+                REAL_SALE_AMT,
+                REAL_SALE_CNT,
+                SALE_CNT,
+                RTN_SALE_CNT,
+                ROUND(TOT_SALE_AMT/SALE_CNT) AS BILL_UPRC
+        FROM 	TB_SL_DAILY_TOTAL
+        WHERE   1=1
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                                AND SALE_DATE = #{saleDate}
+                            ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                                AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                            ]]>
+                </if>
+            </when>
+        </choose>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY SALE_DATE
+    </select>
+
+
+    <!-- 매장별 매출현황 팝업 - 매장별 매출현황 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : dayVO
+        COMMENTS : 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트를 조회한다.
+    -->
+    <select id="getDaySumAvgList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDaySumAvgList */
+        SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                ROUND(AVG(TOT_SALE_AMT)) AS AVG_SALE_AMT,
+                ROUND(AVG(TOT_DC_AMT)) AS AVG_DC_AMT,
+                ROUND(AVG(REAL_SALE_AMT)) AS AVG_REAL_SALE_AMT
+        FROM 	TB_SL_SALE_HDR
+        WHERE   1=1
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                                AND SALE_DATE = #{saleDate}
+                            ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                                AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                            ]]>
+                </if>
+            </when>
+        </choose>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY SALE_DATE
+        ORDER BY SALE_DATE
+    </select>
+
+
     <!-- 매장별 할인내역 팝업 - 매장별 할인내역 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR_DC

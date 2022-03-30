@@ -70,10 +70,18 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.gubun = "day";
 
         if (col.binding === "saleDate") { // 일자 클릭
-          $scope._broadcast('dayStoreDtlCtrl', params);
+          if(orgnFg ==="HQ") {
+            $scope._broadcast('dayStoreDtlCtrl', params);
+          } else if(orgnFg === "STORE"){
+            $scope._broadcast('dayProdDtlCtrl', params);
+          }
         }
         if (col.binding === "billCnt") { // 영수건수 클릭
-          $scope._broadcast('dayStoreBillCtrl', params);
+          if(orgnFg ==="HQ") {
+            $scope._broadcast('dayStoreBillCtrl', params);
+          } else if(orgnFg === "STORE"){
+            $scope._broadcast('dayStoreBill2Ctrl', params);
+          }
         }
         if (col.binding === "totDcAmt") { // 총할인 클릭
           $scope._broadcast('dayStoreDcCtrl', params);
@@ -88,8 +96,12 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
             // 값이 있으면 링크
             if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
               callCtrl = 'day'+ (payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+              if(callCtrl == 'dayCashCtrl') {
+                params.cashGubun = "02"
+              }
               // 현금영수증 클릭시 -> 현금 팝업
               if(callCtrl == 'dayCashbillCtrl') {
+                params.cashGubun = "021";
                 callCtrl = 'dayCashCtrl';
               }
               $scope._broadcast(callCtrl, params);
