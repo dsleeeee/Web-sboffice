@@ -68,10 +68,13 @@ public class SendStatusVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
+
     /** 본사명 */
     private String hqOfficeNm;
+
     /** 매장코드 */
     private String storeCd;
+
     /** 매장명 */
     private String storeNm;
 
