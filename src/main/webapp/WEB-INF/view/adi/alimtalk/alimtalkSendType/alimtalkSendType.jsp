@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="alimtalkSendType.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('alimtalkSendTypeCtrl',1)" id="nxBtnSearch1">
+                <button class="btn_blue fr" ng-click="_broadcast('alimtalkSendTypeCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
                 <%-- 계정등록 --%>
