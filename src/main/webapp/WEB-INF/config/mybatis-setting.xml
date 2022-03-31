@@ -564,6 +564,8 @@
 
     <!-- 부가서비스 > 알림톡관리 > 알림톡 전송유형 -->
     <typeAlias alias="alimtalkSendTypeVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeVO"/>
+    <!-- 부가서비스 > 알림톡관리 > 알림톡 전송결과 -->
+    <typeAlias alias="alimtalkSendStatusVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendStatus.service.AlimtalkSendStatusVO"/>
     <!-- 부가서비스 > 알림톡관리 > 알림톡 전송이력 -->
     <typeAlias alias="alimtalkSendHistVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendHist.service.AlimtalkSendHistVO"/>
 <!--

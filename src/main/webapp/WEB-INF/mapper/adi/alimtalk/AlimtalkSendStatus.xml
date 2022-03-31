@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AlimtalkSendStatus.xml
+    알림톡 전송결과
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.03.30     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.alimtalk.alimtalkSendStatus.service.impl.AlimtalkSendStatusMapper">
+
+    <!-- 알림톡 전송결과 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkSendStatusList"  parameterType="AlimtalkSendStatusVO" resultType="DefaultMap">
+        /* AlimtalkSendStatusMapper.getAlimtalkSendStatusList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        hmt.MSG_ID,
+        hmt.REG_DT,
+        hmt.S_OGN_CD,
+        hmt.S_OGN_NM,
+        hmt.S_USER_NM,
+--         hmt.CALLBACK AS S_PHONE_NUMBER,
+        hmt.R_OGN_CD,
+        hmt.R_OGN_NM,
+--         (CASE WHEN hmt.R_OGN_FG = 'C' THEN (SELECT SBPENC.D(MEMBR_NM) FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = hmt.R_OGN_CD AND MEMBR_NO = hmt.CST_NO GROUP BY MEMBR_NM)
+--                WHEN hmt.R_OGN_FG NOT IN ('C') THEN (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD AND USER_ID = hmt.R_USER_ID GROUP BY USER_NM)
+--                ELSE null END
+--         ) AS R_USER_NM,
+        hmt.PHONE_NUMBER AS R_PHONE_NUMBER,
+        hmt.MSG_TYPE,
+        hmt.RESERVE_YN,
+        hmt.SEND_DATE,
+        hmt.READ_DATE,
+        hmt.SEND_STATUS,
+        (SELECT DECODE(REMARK, NULL, NMCODE_NM, REMARK) FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '004' AND NMCODE_LEVEL = '2' AND PARENT_CD = '001' AND NMCODE_NM = hmt.RESULT_CD AND USE_YN = 'Y') AS RESULT_NM,
+--         DECODE(hmt.COMPANY, '1', 'MONO', '2', 'SMTNT', NULL) AS COMPANY,
+        hmt.SUBJECT,
+        hmt.MSG_CONTENT,
+        hmt.ALK_SEND_SEQ,
+        hmt.GUBUN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                (
+                    --알림톡
+                    SELECT
+                    A.MSG_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.S_OGN_CD GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.S_USER_ID GROUP BY USER_NM) AS S_USER_NM,
+--                     A.CALLBACK,
+                    A.R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.R_OGN_CD GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.R_OGN_FG,
+                    A.R_USER_ID,
+                    A.CST_NO,
+                    SBPENC.D(A.TEL_NO) AS PHONE_NUMBER,
+                    4 AS MSG_TYPE,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.RECEIVE_DATE AS READ_DATE,
+                     0 AS SEND_STATUS,
+                     null AS RESULT_CD,
+--                     '1' AS COMPANY, --1:KT, 2:SMTNT
+                    A.SUBJECT,
+                    A.ALK_MSG AS MSG_CONTENT,
+                    A.ALK_SEND_SEQ,
+                    'TB_AL_ALIMTALK_SEND_ENC' AS GUBUN
+                    FROM TB_AL_ALIMTALK_SEND_ENC A
+                    WHERE 1=1
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
+                )
+                UNION ALL
+                (
+                    --알림톡 전송결과
+                    SELECT
+                    A.MSG_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.S_OGN_CD GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.S_USER_ID GROUP BY USER_NM) AS S_USER_NM,
+--                     A.CALLBACK,
+                    A.R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.R_OGN_CD GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.R_OGN_FG,
+                    A.R_USER_ID,
+                    A.CST_NO,
+                    SBPENC.D(A.TEL_NO) AS PHONE_NUMBER,
+                    4 AS MSG_TYPE,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.RECEIVE_DATE AS READ_DATE,
+                    (CASE WHEN A.SUCC_COUNT = 0 THEN -1
+                          WHEN A.SUCC_COUNT = 1 THEN 3
+                          ELSE null END
+                    ) AS SEND_STATUS, --현재는 1건씩 전송해서
+                    A.RESULT_CD,
+--                     '1' AS COMPANY, --1:KT, 2:SMTNT
+                    A.SUBJECT,
+                    A.ALK_MSG AS MSG_CONTENT,
+                    A.ALK_SEND_SEQ,
+                    'TB_AL_ALIMTALK_REPORT' AS GUBUN
+                    FROM TB_AL_ALIMTALK_REPORT A
+                    WHERE 1=1
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND A.S_OGN_CD LIKE '%' || #{ssOrgnCd} || '%'
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND A.R_OGN_CD LIKE '%' || #{rrOrgnCd} || '%'
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
+                )
+            )
+        ) hmt,
+        (
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                  WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                  ELSE null END
+            ) AS AGENCY_CD
+            FROM
+            (
+                SELECT
+                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.ORGN_NM,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.STORE_CD
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            ) twuidv01
+            WHERE 1=1
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twuidv01.AGENCY_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND twuidv01.STORE_CD = #{orgnCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        AND twuidv01.ORGN_CD = hmt.S_OGN_CD
+        ORDER BY hmt.REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 알림톡 전송결과 - 예약취소 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getAlimtalkSendStatusReserveCancelSaveDelete" parameterType="AlimtalkSendStatusVO">
+        /* AlimtalkSendStatusMapper.getAlimtalkSendStatusReserveCancelSaveDelete */
+        DELETE TB_AL_ALIMTALK_SEND_ENC
+        WHERE 1=1
+        AND MSG_ID = #{msgId}
+    </delete>
+
+    <!-- 알림톡 전송이력 복구 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getAlkSendSeqRecoverSaveUpdate" parameterType="AlimtalkSendStatusVO">
+        /* AlimtalkSendStatusMapper.getAlkSendSeqRecoverSaveUpdate */
+        UPDATE
+        HCS_ALK_SEND_REG_T
+        SET
+        ALK_SEND_COUNT = (SELECT (ALK_SEND_COUNT-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND SALK_SEND_SEQ = #{alkSendSeq}),
+        SEND_QTY = (SELECT (SEND_QTY-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND SALK_SEND_SEQ = #{alkSendSeq}),
+        WAIT_QTY = (SELECT (WAIT_QTY-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND SALK_SEND_SEQ = #{alkSendSeq}),
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND ALK_SEND_ORGN_CD = #{orgnCd}
+        AND SALK_SEND_SEQ = #{alkSendSeq}
+    </update>
+
+</mapper>
