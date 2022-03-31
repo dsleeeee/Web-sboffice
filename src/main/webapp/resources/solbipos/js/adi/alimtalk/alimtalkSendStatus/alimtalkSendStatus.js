@@ -105,7 +105,6 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
         dataItem.regDt = messages["alimtalkSendStatus.regDt"];
         dataItem.sOgnNm = messages["alimtalkSendStatus.send"];
         dataItem.sUserNm = messages["alimtalkSendStatus.send"];
-        // dataItem.sPhoneNumber = messages["alimtalkSendStatus.send"];
         dataItem.rOgnNm = messages["alimtalkSendStatus.receive"];
         dataItem.rPhoneNumber = messages["alimtalkSendStatus.receive"];
         dataItem.msgType = messages["alimtalkSendStatus.msgType"];
@@ -113,7 +112,6 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
         dataItem.readDate = messages["alimtalkSendStatus.readDate"];
         dataItem.sendStatus = messages["alimtalkSendStatus.sendStatus"];
         dataItem.resultNm = messages["alimtalkSendStatus.resultNm"];
-        // dataItem.company = messages["alimtalkSendStatus.company"];
         dataItem.msgContent = messages["alimtalkSendStatus.msgContent"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
