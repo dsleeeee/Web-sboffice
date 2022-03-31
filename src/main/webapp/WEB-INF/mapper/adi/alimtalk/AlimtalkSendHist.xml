@@ -45,8 +45,8 @@
             twuidv01.HQ_OFFICE_CD,
             twuidv01.STORE_CD,
             (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
-                WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
-                ELSE null END
+                  WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                  ELSE null END
             ) AS AGENCY_CD
             FROM
             (
