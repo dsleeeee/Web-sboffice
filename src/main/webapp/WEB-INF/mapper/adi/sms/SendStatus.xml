@@ -382,15 +382,15 @@
         /* SendStatusMapper.getDaySendStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        hdt.OGN_CD,
+        hdt.OGN_CD AS ORGN_CD,
         twuidv01.ORGN_NM,
         hdt.SMS_DATE,
         hdt.SMS_CHARGE_AMT,
         hdt.SMS_CHARGE_CNT,
-        hdt.TOT_SEND_QTY,
-        hdt.TOT_WAIT_QTY,
-        hdt.TOT_SUCCESS_QTY,
-        hdt.TOT_FAIL_QTY,
+        (hdt.SMS_SEND_QTY + hdt.LMS_SEND_QTY + hdt.MMS_SEND_QTY) AS TOT_SEND_QTY,
+        (hdt.SMS_WAIT_QTY + hdt.LMS_WAIT_QTY + hdt.MMS_WAIT_QTY) AS TOT_WAIT_QTY,
+        (hdt.SMS_SUCCESS_QTY + hdt.LMS_SUCCESS_QTY + hdt.MMS_SUCCESS_QTY) AS TOT_SUCCESS_QTY,
+        (hdt.SMS_FAIL_QTY + hdt.LMS_FAIL_QTY + hdt.MMS_FAIL_QTY) AS TOT_FAIL_QTY,
         hdt.SMS_SEND_QTY,
         hdt.SMS_WAIT_QTY,
         hdt.SMS_SUCCESS_QTY,
@@ -460,6 +460,10 @@
             </when>
         </choose>
         AND twuidv01.ORGN_CD = hdt.OGN_CD
+        AND (hdt.SMS_CHARGE_CNT +
+             hdt.SMS_SEND_QTY + hdt.SMS_WAIT_QTY + hdt.SMS_SUCCESS_QTY + hdt.SMS_FAIL_QTY +
+             hdt.LMS_SEND_QTY + hdt.LMS_WAIT_QTY + hdt.LMS_SUCCESS_QTY + hdt.LMS_FAIL_QTY +
+             hdt.MMS_SEND_QTY + hdt.MMS_WAIT_QTY + hdt.MMS_SUCCESS_QTY + hdt.MMS_FAIL_QTY) > 0
         ORDER BY hdt.OGN_CD, hdt.SMS_DATE DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

@@ -57,7 +57,7 @@ app.controller('daySendStatusCtrl', ['$scope', '$http', function ($scope, $http)
 
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.ognCd = messages["daySendStatus.orgnCd"];
+        dataItem.orgnCd = messages["daySendStatus.orgnCd"];
         dataItem.orgnNm = messages["daySendStatus.orgnNm"];
         dataItem.smsDate = messages["daySendStatus.smsDate"];
         dataItem.smsChargeAmt = messages["daySendStatus.smsChargeAmt"];
