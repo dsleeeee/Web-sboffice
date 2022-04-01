@@ -346,7 +346,7 @@
         UPDATE
         CET_SMSPT_T
         SET
-        SMS_AMT = (SELECT (SMS_AMT + (FN_GET_SMS_UPRC(DECODE(#{msgType}, 1, 'SMS', 2, 'LMS', 'MMS'), #{orgnCd}))) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}), -- TB_CM_NMCODE.NMCODE_GRP_CD = '222'
+        SMS_AMT = (SELECT (SMS_AMT + (FN_GET_SMS_UPRC(DECODE(#{msgType}, 1, 'SMS', 2, 'LMS', 3, 'MMS', 'ALK'), #{orgnCd}))) FROM CET_SMSPT_T WHERE OGN_CD = #{orgnCd}), -- TB_CM_NMCODE.NMCODE_GRP_CD = '222'
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1
@@ -382,15 +382,15 @@
         /* SendStatusMapper.getDaySendStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        hdt.OGN_CD,
+        hdt.OGN_CD AS ORGN_CD,
         twuidv01.ORGN_NM,
         hdt.SMS_DATE,
         hdt.SMS_CHARGE_AMT,
         hdt.SMS_CHARGE_CNT,
-        hdt.TOT_SEND_QTY,
-        hdt.TOT_WAIT_QTY,
-        hdt.TOT_SUCCESS_QTY,
-        hdt.TOT_FAIL_QTY,
+        (hdt.SMS_SEND_QTY + hdt.LMS_SEND_QTY + hdt.MMS_SEND_QTY) AS TOT_SEND_QTY,
+        (hdt.SMS_WAIT_QTY + hdt.LMS_WAIT_QTY + hdt.MMS_WAIT_QTY) AS TOT_WAIT_QTY,
+        (hdt.SMS_SUCCESS_QTY + hdt.LMS_SUCCESS_QTY + hdt.MMS_SUCCESS_QTY) AS TOT_SUCCESS_QTY,
+        (hdt.SMS_FAIL_QTY + hdt.LMS_FAIL_QTY + hdt.MMS_FAIL_QTY) AS TOT_FAIL_QTY,
         hdt.SMS_SEND_QTY,
         hdt.SMS_WAIT_QTY,
         hdt.SMS_SUCCESS_QTY,
@@ -460,6 +460,11 @@
             </when>
         </choose>
         AND twuidv01.ORGN_CD = hdt.OGN_CD
+        AND (hdt.SMS_CHARGE_CNT != 0
+                OR hdt.SMS_SEND_QTY != 0 OR hdt.SMS_WAIT_QTY != 0 OR hdt.SMS_SUCCESS_QTY != 0 OR hdt.SMS_FAIL_QTY != 0
+                OR hdt.LMS_SEND_QTY != 0 OR hdt.LMS_WAIT_QTY != 0 OR hdt.LMS_SUCCESS_QTY != 0 OR hdt.LMS_FAIL_QTY != 0
+                OR hdt.MMS_SEND_QTY != 0 OR hdt.MMS_WAIT_QTY != 0 OR hdt.MMS_SUCCESS_QTY != 0 OR hdt.MMS_FAIL_QTY != 0
+            )
         ORDER BY hdt.OGN_CD, hdt.SMS_DATE DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -472,79 +477,85 @@
     <select id="getPeriodSendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
         /* SendStatusMapper.getPeriodSendStatusList */
         SELECT
-        hdt.OGN_CD,
+        hdt.OGN_CD AS ORGN_CD,
         twuidv01.ORGN_NM,
         SUM(hdt.SMS_CHARGE_AMT) AS SMS_CHARGE_AMT,
         SUM(hdt.SMS_CHARGE_CNT) AS SMS_CHARGE_CNT,
-        SUM(hdt.TOT_SEND_QTY) AS TOT_SEND_QTY,
-        SUM(hdt.TOT_WAIT_QTY) AS TOT_WAIT_QTY,
-        SUM(hdt.TOT_SUCCESS_QTY) AS TOT_SUCCESS_QTY,
-        SUM(hdt.TOT_FAIL_QTY) AS TOT_FAIL_QTY,
-        SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_NM) * hdt.SMS_FAIL_QTY) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_NM) * hdt.LMS_FAIL_QTY) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_NM) * hdt.MMS_SUCCESS_QTY)) AS TOT_SALE_AMT,
+        SUM(hdt.SMS_SEND_QTY + hdt.LMS_SEND_QTY + hdt.MMS_SEND_QTY) AS TOT_SEND_QTY,
+        SUM(hdt.SMS_WAIT_QTY + hdt.LMS_WAIT_QTY + hdt.MMS_WAIT_QTY) AS TOT_WAIT_QTY,
+        SUM(hdt.SMS_SUCCESS_QTY + hdt.LMS_SUCCESS_QTY + hdt.MMS_SUCCESS_QTY) AS TOT_SUCCESS_QTY,
+        SUM(hdt.SMS_FAIL_QTY + hdt.LMS_FAIL_QTY + hdt.MMS_FAIL_QTY) AS TOT_FAIL_QTY,
+        SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * hdt.SMS_SUCCESS_QTY) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * hdt.LMS_SUCCESS_QTY) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * hdt.MMS_SUCCESS_QTY)) AS TOT_SALE_AMT,
         SUM(hdt.SMS_SEND_QTY) AS SMS_SEND_QTY,
         SUM(hdt.SMS_WAIT_QTY) AS SMS_WAIT_QTY,
         SUM(hdt.SMS_SUCCESS_QTY) AS SMS_SUCCESS_QTY,
         SUM(hdt.SMS_FAIL_QTY) AS SMS_FAIL_QTY,
-        SUM(FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_NM) * hdt.SMS_FAIL_QTY) AS SMS_SALE_AMT,
+        SUM(FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * hdt.SMS_SUCCESS_QTY) AS SMS_SALE_AMT,
         SUM(hdt.LMS_SEND_QTY) AS LMS_SEND_QTY,
         SUM(hdt.LMS_WAIT_QTY) AS LMS_WAIT_QTY,
         SUM(hdt.LMS_SUCCESS_QTY) AS LMS_SUCCESS_QTY,
         SUM(hdt.LMS_FAIL_QTY) AS LMS_FAIL_QTY,
-        SUM(FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_NM) * hdt.LMS_FAIL_QTY) AS LMS_SALE_AMT,
+        SUM(FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * hdt.LMS_SUCCESS_QTY) AS LMS_SALE_AMT,
         SUM(hdt.MMS_SEND_QTY) AS MMS_SEND_QTY,
         SUM(hdt.MMS_WAIT_QTY) AS MMS_WAIT_QTY,
         SUM(hdt.MMS_SUCCESS_QTY) AS MMS_SUCCESS_QTY,
         SUM(hdt.MMS_FAIL_QTY) AS MMS_FAIL_QTY,
-        SUM(FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_NM) * hdt.MMS_SUCCESS_QTY) AS MMS_SALE_AMT
+        SUM(FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * hdt.MMS_SUCCESS_QTY) AS MMS_SALE_AMT
         FROM HCS_DDSMS_T hdt,
         (
-        SELECT
-        twuidv01.ORGN_FG,
-        twuidv01.ORGN_CD,
-        twuidv01.ORGN_NM,
-        twuidv01.HQ_OFFICE_CD,
-        twuidv01.HQ_OFFICE_NM,
-        twuidv01.STORE_CD,
-        twuidv01.STORE_NM,
-        (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
-        WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
-        ELSE null END
-        ) AS AGENCY_CD
-        FROM
-        (
-        SELECT
-        DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
-        twuidv01.ORGN_CD,
-        twuidv01.ORGN_NM,
-        twuidv01.HQ_OFFICE_CD,
-        twuidv01.HQ_OFFICE_NM,
-        twuidv01.STORE_CD,
-        twuidv01.STORE_NM
-        FROM TB_WB_USER_INFO_DTL_V01 twuidv01
-        GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.HQ_OFFICE_NM, twuidv01.STORE_CD, twuidv01.STORE_NM
-        ) twuidv01
-        WHERE 1=1
-        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
-            AND twuidv01.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
-        </if>
-        <if test='hqOfficeNm != null and hqOfficeNm !=""'>
-            AND twuidv01.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
-        </if>
-        <if test='storeCd != null and storeCd !=""'>
-            AND twuidv01.STORE_CD LIKE '%' || #{storeCd} || '%'
-        </if>
-        <if test='storeNm != null and storeNm !=""'>
-            AND twuidv01.STORE_NM LIKE '%' || #{storeNm} || '%'
-        </if>
-        GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.HQ_OFFICE_NM, twuidv01.STORE_CD, twuidv01.STORE_NM
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.HQ_OFFICE_NM,
+            twuidv01.STORE_CD,
+            twuidv01.STORE_NM,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD =
+                  twuidv01.HQ_OFFICE_CD)
+                  WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                  ELSE null END
+            ) AS AGENCY_CD
+            FROM
+            (
+                SELECT
+                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.ORGN_NM,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.HQ_OFFICE_NM,
+                twuidv01.STORE_CD,
+                twuidv01.STORE_NM
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.HQ_OFFICE_NM,
+                twuidv01.STORE_CD, twuidv01.STORE_NM
+            ) twuidv01
+            WHERE 1=1
+            <if test='hqOfficeCd != null and hqOfficeCd !=""'>
+                AND twuidv01.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+            </if>
+            <if test='hqOfficeNm != null and hqOfficeNm !=""'>
+                AND twuidv01.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+            </if>
+            <if test='storeCd != null and storeCd !=""'>
+                AND twuidv01.STORE_CD LIKE '%' || #{storeCd} || '%'
+            </if>
+            <if test='storeNm != null and storeNm !=""'>
+                AND twuidv01.STORE_NM LIKE '%' || #{storeNm} || '%'
+            </if>
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.HQ_OFFICE_NM, twuidv01.STORE_CD, twuidv01.STORE_NM
         ) twuidv01
         WHERE 1=1
         AND hdt.SMS_DATE BETWEEN #{startDate} AND #{endDate}
         AND twuidv01.ORGN_CD = hdt.OGN_CD
+        AND (hdt.SMS_CHARGE_CNT != 0
+                OR hdt.SMS_SEND_QTY != 0 OR hdt.SMS_WAIT_QTY != 0 OR hdt.SMS_SUCCESS_QTY != 0 OR hdt.SMS_FAIL_QTY != 0
+                OR hdt.LMS_SEND_QTY != 0 OR hdt.LMS_WAIT_QTY != 0 OR hdt.LMS_SUCCESS_QTY != 0 OR hdt.LMS_FAIL_QTY != 0
+                OR hdt.MMS_SEND_QTY != 0 OR hdt.MMS_WAIT_QTY != 0 OR hdt.MMS_SUCCESS_QTY != 0 OR hdt.MMS_FAIL_QTY != 0
+            )
         GROUP BY hdt.OGN_CD, twuidv01.ORGN_NM
         ORDER BY hdt.OGN_CD DESC
     </select>
-
 
     <!-- 공통 화면 상단 SMS전송(당일) 표시 - [125 SMS전송현황표시]에 등록된 본사 하위 매장인지 조회 -->
     <!--

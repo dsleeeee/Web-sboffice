@@ -95,10 +95,10 @@ app.controller('smsChargeResultCtrl', ['$scope', '$http', function ($scope, $htt
         // 가상로그인
         if(document.getElementsByName('sessionId')[0]) {
             var vSessionId = document.getElementsByName('sessionId')[0].value;
-            location.href = '/adi/sms/smsChargeTab/smsChargeTab/list.sb?sid='+ vSessionId + '&tabVal='+ vTabVal;
+            location.href = urlVal + '?sid=' + vSessionId + '&tabVal=' + vTabVal;
         // 로그인
         } else {
-            location.href = '/adi/sms/smsChargeTab/smsChargeTab/list.sb?tabVal='+ vTabVal;
+            location.href = urlVal + '?tabVal=' + vTabVal;
         }
     };
 }]);

@@ -21,9 +21,6 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('periodSendStatusCtrl', $scope, $http, false));
 
-    // comboBox 초기화
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
-
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#periodSendStatusStartDate", gvStartDate);
     var endDate = wcombo.genDateVal("#periodSendStatusEndDate", gvEndDate);
@@ -42,7 +39,7 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
 
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.ognCd = messages["periodSendStatus.orgnCd"];
+        dataItem.orgnCd = messages["periodSendStatus.orgnCd"];
         dataItem.orgnNm = messages["periodSendStatus.orgnNm"];
         dataItem.smsChargeAmt = messages["periodSendStatus.smsChargeAmt"];
         dataItem.smsChargeCnt = messages["periodSendStatus.smsChargeCnt"];
@@ -134,7 +131,6 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.listScale = $scope.periodSendStatusListScale;
 
         $scope._inquiryMain("/adi/sms/sendStatus/periodSendStatus/getPeriodSendStatusList.sb", params, function() {}, false);
     };

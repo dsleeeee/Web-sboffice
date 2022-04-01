@@ -126,4 +126,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsChargeResult.js?ver=20211104.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/smsChargeResult.js?ver=20220321.01" charset="utf-8"></script>

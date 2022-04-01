@@ -185,7 +185,7 @@
                   )
               )
         )  A,
-        --마케팅용SMS전송
+        --마케팅용 SMS전송
         (
             SELECT
             SUBSTR(SBPENC.D(sssemr.DEST_INFO), INSTR(SBPENC.D(sssemr.DEST_INFO), '^')+1) AS PHONE_NUMBER,

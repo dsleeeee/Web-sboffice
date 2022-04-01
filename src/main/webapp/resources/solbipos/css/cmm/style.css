@@ -1902,6 +1902,11 @@ div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:25px; line-
  * 테이블이 아닌 div 에서도 sb-input 스타일 적용
  */
 div input.sb-input-msg {border:1px solid #e8e8e8; padding:0 10px; height:25px; line-height:25px; font-size:0.8em;}
+/**
+ * 20220331 추가
+ * 테이블이 아닌 div 에서도 sb-input 스타일 적용
+ */
+div input.sb-input-alk {border:1px solid #000b12; padding:0 10px; height:25px; line-height:25px; font-size:0.8em; font-weight:bold; text-align:center; background-color:white; border-radius:4px;}
 
 /**
  * 20190108 추가

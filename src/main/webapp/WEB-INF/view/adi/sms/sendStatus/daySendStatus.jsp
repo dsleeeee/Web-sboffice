@@ -72,7 +72,7 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="daySendStatus.orgnCd"/>" binding="ognCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="daySendStatus.orgnCd"/>" binding="orgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.orgnNm"/>" binding="orgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.smsDate"/>" binding="smsDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySendStatus.smsChargeAmt"/>" binding="smsChargeAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
@@ -108,4 +108,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20211021.011" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20220401.01" charset="utf-8"></script>

@@ -153,7 +153,7 @@ public class SendStatusController {
      * @param response
      * @param model
      * @return  Object
-     * @author  김설아
+     * @author  권지현
      * @since   2021. 09. 17.
      */
     @RequestMapping(value = "/periodSendStatus/getPeriodSendStatusList.sb", method = RequestMethod.POST)
