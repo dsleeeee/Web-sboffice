@@ -5327,6 +5327,7 @@
                 FROM TB_HQ_PRODUCT thp
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.PROD_CD NOT IN ('0000000000000', '0A0000DLVFEE')
                 AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
@@ -5345,6 +5346,7 @@
                 FROM TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
+                AND tmp.PROD_CD NOT IN ('0000000000000', '0A0000DLVFEE')
                 AND tmp.REG_FG ='S'
                 AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
