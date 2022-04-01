@@ -81,6 +81,9 @@ public class AlimtalkSendTypeVO extends PageVO {
     /** NHN매장계정 그룹아이디명 */
     private String groupSenderKeyNm;
 
+    /** 공통템플릿 구분 */
+    private String commonFg;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -160,4 +163,8 @@ public class AlimtalkSendTypeVO extends PageVO {
     public String getGroupSenderKeyNm() { return groupSenderKeyNm; }
 
     public void setGroupSenderKeyNm(String groupSenderKeyNm) { this.groupSenderKeyNm = groupSenderKeyNm; }
+
+    public String getCommonFg() { return commonFg; }
+
+    public void setCommonFg(String commonFg) { this.commonFg = commonFg; }
 }

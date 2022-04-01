@@ -15,7 +15,7 @@
         <div class="subCon">
             <div class="w100 mb5">
                 <div class="oh sb-select dkbr">
-                    <p class="tl s14 mt5 lh15 blue">템플릿을 클릭하면 적용됩니다.</p>
+                    <p class="tl s14 mt5 lh15 blue">적용할 템플릿 내용을 클릭해주세요.</p>
                 </div>
             </div>
             <%-- 템플릿 양식 --%>
@@ -30,4 +30,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/templatePopup.js?ver=20220321.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/templatePopup.js?ver=20220331.01" charset="utf-8"></script>

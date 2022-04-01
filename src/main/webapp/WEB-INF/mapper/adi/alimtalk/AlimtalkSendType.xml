@@ -243,7 +243,9 @@
         taat.TEMPLATE_GRP_FG,
         taat.TEMPLATE_CD,
         taat.TEMPLATE_NM,
-        taat.TEMPLATE_CONTENT
+        taat.TEMPLATE_CONTENT,
+        taat.COMMON_FG,
+        (CASE WHEN taat.COMMON_FG = 'C' THEN '공용' ELSE '계정 전용' END) AS COMMON_FG_NM
         FROM TB_AL_ALIMTALK_TEMPLATE taat
         WHERE 1=1
         AND (
@@ -269,7 +271,7 @@
             AND taats.TEMPLATE_GRP_FG = taat.TEMPLATE_GRP_FG
             AND taats.TEMPLATE_CD = taat.TEMPLATE_CD
         )
-        ORDER BY taat.TEMPLATE_GRP_FG, taat.TEMPLATE_CD
+        ORDER BY taat.COMMON_FG, taat.TEMPLATE_GRP_FG, taat.TEMPLATE_CD
     </select>
 
     <!-- 알림톡 계정등록 팝업 - 계정정보 체크 조회 -->
