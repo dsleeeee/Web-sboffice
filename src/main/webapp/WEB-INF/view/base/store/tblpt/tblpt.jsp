@@ -11,7 +11,7 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/base/store/tblpt/"/>
 <c:set var="vUserIdChk" value="${sessionScope.sessionInfo.vUserId}"/>
-<link rel="stylesheet" type="text/css" media="screen" href="http://mob.solbipos.com/mobile/css/button_style1.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="https://mob.solbipos.com/mobile/css/button_style1.css" />
 
 <div class="subCon3" ng-controller="tblptListCtrl">
 
@@ -76,5 +76,5 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/tblpt/tblpt.js?ver=20210715.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/tblpt/tblpt.js?ver=20220401.01" charset="utf-8"></script>
 

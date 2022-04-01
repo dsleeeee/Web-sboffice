@@ -15,8 +15,8 @@
 
 /*
 1. IMPORT 나 LINK로 참조 시 정상 적용되지 않는 브라우저가 있어서 스타일 직접 적용
-@import url("http://mob.solbipos.com/mobile/css/button_style1.css");
-<link rel="stylesheet" href="http://mob.solbipos.com/mobile/css/button_style1.css" type="text/css">
+@import url("https://mob.solbipos.com/mobile/css/button_style1.css");
+<link rel="stylesheet" href="https://mob.solbipos.com/mobile/css/button_style1.css" type="text/css">
 */
 
 /* 단순버튼 01 */
@@ -523,5 +523,5 @@ button[class*="btn02"] {border: 0;}
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/tblms/tblms.js?ver=20210715.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/tblms/tblms.js?ver=20220401.03" charset="utf-8"></script>
 

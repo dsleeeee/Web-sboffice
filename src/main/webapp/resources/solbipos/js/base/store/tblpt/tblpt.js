@@ -47,7 +47,7 @@ app.controller('tblptListCtrl', ['$scope', '$http', '$timeout', function ($scope
     var tblptTempPw     = '';
     var tblptTempPwDate = getCurDateTime();
 
-    if(hrefChk.indexOf("neo.solbipos.com") != -1)   open_url = 'http://mob.solbipos.com/login/login_check_tbl.jsp?';
+    if(hrefChk.indexOf("neo.solbipos.com") != -1)   open_url = 'https://mob.solbipos.com/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.85") != -1)  open_url = 'http://192.168.0.85:22001/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.72") != -1)  open_url = 'http://192.168.0.72:2020/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("localhost") != -1)     open_url = 'http://localhost:2020/login/login_check_tbl.jsp?';
@@ -59,7 +59,7 @@ app.controller('tblptListCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     if(tblFgOp == 'explainSetting')
     {
-        window.open('http://mob.solbipos.com/etc/manual/explain_manual.jsp');
+        window.open('https://mob.solbipos.com/etc/manual/explain_manual.jsp');
     }
     else if(tblFgOp == 'chromeSetup')
     {
