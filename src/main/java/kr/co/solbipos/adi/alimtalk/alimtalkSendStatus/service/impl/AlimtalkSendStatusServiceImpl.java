@@ -107,4 +107,15 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
 
         return alimtalkSendStatusMapper.getAlimtalkDaySendStatusList(alimtalkSendStatusVO);
     }
+
+    /** 알림톡 기간별 전송현황 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getAlimtalkPeriodSendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            alimtalkSendStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+
+        return alimtalkSendStatusMapper.getAlimtalkPeriodSendStatusList(alimtalkSendStatusVO);
+    }
 }

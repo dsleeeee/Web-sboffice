@@ -37,4 +37,7 @@ public interface AlimtalkSendStatusMapper {
 
     /** 알림톡 일자별 전송현황 - 조회 */
     List<DefaultMap<Object>> getAlimtalkDaySendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO);
+
+    /** 알림톡 기간별 전송현황 - 조회 */
+    List<DefaultMap<Object>> getAlimtalkPeriodSendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO);
 }
