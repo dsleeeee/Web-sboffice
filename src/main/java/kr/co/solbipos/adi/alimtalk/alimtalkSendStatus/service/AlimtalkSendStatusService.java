@@ -27,4 +27,7 @@ public interface AlimtalkSendStatusService {
 
     /** 알림톡 전송결과 - 예약취소 */
     int getAlimtalkSendStatusReserveCancelSave(AlimtalkSendStatusVO[] alimtalkSendStatusVOs, SessionInfoVO sessionInfoVO);
+
+    /** 알림톡 일자별 전송현황 - 조회 */
+    List<DefaultMap<Object>> getAlimtalkDaySendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO);
 }

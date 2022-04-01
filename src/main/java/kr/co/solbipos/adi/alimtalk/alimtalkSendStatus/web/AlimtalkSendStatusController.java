@@ -111,4 +111,27 @@ public class AlimtalkSendStatusController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 알림톡 일자별 전송현황 - 조회
+     *
+     * @param alimtalkSendStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 04. 01.
+     */
+    @RequestMapping(value = "/alimtalkDaySendStatus/getAlimtalkDaySendStatusList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAlimtalkDaySendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = alimtalkSendStatusService.getAlimtalkDaySendStatusList(alimtalkSendStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, alimtalkSendStatusVO);
+    }
 }

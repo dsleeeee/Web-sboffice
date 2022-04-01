@@ -34,4 +34,7 @@ public interface AlimtalkSendStatusMapper {
 
     /** 알림톡 전송이력 복구 */
     int getAlkSendSeqRecoverSaveUpdate(AlimtalkSendStatusVO alimtalkSendStatusVO);
+
+    /** 알림톡 일자별 전송현황 - 조회 */
+    List<DefaultMap<Object>> getAlimtalkDaySendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO);
 }

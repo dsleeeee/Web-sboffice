@@ -96,4 +96,15 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
 
         return procCnt;
     }
+
+    /** 알림톡 일자별 전송현황 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getAlimtalkDaySendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        alimtalkSendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        alimtalkSendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return alimtalkSendStatusMapper.getAlimtalkDaySendStatusList(alimtalkSendStatusVO);
+    }
 }
