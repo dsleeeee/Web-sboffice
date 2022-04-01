@@ -56,15 +56,18 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
                 if ( col.binding === "sendTypeCd") {
                     var selectedRow = s.rows[ht.row].dataItem;
 
-                    var storeScope = agrid.getScope('alimtalkSendTypeDetailCtrl');
-                    storeScope._broadcast('alimtalkSendTypeDetailCtrl', selectedRow);
-                    event.preventDefault();
+                    // var storeScope = agrid.getScope('alimtalkSendTypeDetailCtrl');
+                    // storeScope._broadcast('alimtalkSendTypeDetailCtrl', selectedRow);
+                    // event.preventDefault();
+
+                    // 알림톡 계정등록 체크 없으면 아무동작 못하게
+                    $scope.alimtalkIdRegisterChkStop(selectedRow);
                 }
             }
         });
 
         // 페이지 로드시 호출
-        $scope.initPageSmsSend();
+        $scope.initPageAlimtalkSendType();
     };
 
     // <-- 검색 호출 -->
@@ -92,12 +95,18 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
     // <-- //검색 호출 -->
 
     // 페이지 로드시 호출
-    $scope.initPageSmsSend = function() {
+    $scope.initPageAlimtalkSendType = function() {
         // 조회
         $scope.searchAlimtalkSendType();
 
         // 알림톡 계정등록 체크
         $scope.alimtalkIdRegisterChk("N");
+    };
+
+    // 알림톡 계정등록
+    $scope.alimtalkIdRegister = function(){
+        // 알림톡 계정등록 체크
+        $scope.alimtalkIdRegisterChk("Y");
     };
 
     // 알림톡 계정등록 체크
@@ -120,10 +129,23 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
         });
     };
 
-    // 알림톡 계정등록
-    $scope.alimtalkIdRegister = function(){
-        // 알림톡 계정등록 체크
-        $scope.alimtalkIdRegisterChk("Y");
+    // 알림톡 계정등록 체크 없으면 아무동작 못하게
+    $scope.alimtalkIdRegisterChkStop = function(selectedRow){
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterChk.sb", params, function(response){
+            var alimtalkIdInfo = response.data.data.result;
+            $scope.alimtalkIdInfo = alimtalkIdInfo;
+
+            if(response.data.data.result != null) {
+                var storeScope = agrid.getScope('alimtalkSendTypeDetailCtrl');
+                storeScope._broadcast('alimtalkSendTypeDetailCtrl', selectedRow);
+                event.preventDefault();
+            } else {
+                $scope._popMsg(messages["alimtalkSendType.alimtalkIdRegisterStopAlert"]); // 계정등록 후 클릭해주세요.
+                return false;
+            }
+        });
     };
 
     // 화면 ready 된 후 설정
@@ -276,7 +298,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             $("#lblSendTypeDtlCd").text(" ( [ " + $scope.selectedSendTypeTemplate.sendTypeDtlCd + " ]");
             $("#lblSendTypeDtlNm").text($scope.selectedSendTypeTemplate.sendTypeDtlNm + " )");
             // 대기일때만
-            if($scope.selectedSendTypeTemplate.sendTypeCd == "01") {
+            if($scope.selectedSendTypeTemplate.sendTypeCd == "001") {
                 $("#tabSendTypeTemplate").css("display", "");
             } else {
                 $("#tabSendTypeTemplate").css("display", "none");
@@ -336,7 +358,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             innerHtml += "<table>";
             innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ data.templateNm +"\" readonly/></td></tr>";
             innerHtml += "<tr style=\"height: 10px\"></tr>";
-            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: #EAF7FF\">" + data.templateContent + "</textarea></td></tr>";
+            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + data.templateContent + "</textarea></td></tr>";
             innerHtml += "</table>";
             innerHtml += "</div>";
             $("#divTemplateComment").html(innerHtml);
@@ -349,9 +371,10 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             innerHtml += "</colgroup>";
             innerHtml += "<tbody>";
             innerHtml += "<table>";
-            innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ '' +"\" readonly/></td></tr>";
-            innerHtml += "<tr style=\"height: 10px\"></tr>";
-            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: #EAF7FF\">" + '' + "</textarea></td></tr>";
+            // innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ '' +"\" readonly/></td></tr>";
+            // innerHtml += "<tr style=\"height: 10px\"></tr>";
+            // innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + '' + "</textarea></td></tr>";
+            innerHtml += "<tr><td>"+''+"</td></tr>";
             innerHtml += "</table>";
             innerHtml += "</div>";
             $("#divTemplateComment").html(innerHtml);
@@ -401,13 +424,13 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
     };
     // <-- //그리드 저장 -->
 
-    // 템플릿 선택변경
+    // 템플릿 선택
     $scope.templatePopup = function() {
         $scope.wjTemplatePopupLayer.show(true);
         event.preventDefault();
     };
 
-    // 템플릿 선택변경 팝업 - 템플릿 목록 선택
+    // 템플릿 선택 팝업 - 템플릿 목록 선택
     $scope.templateChoiceChange = function(data) {
         $("#lblTemplateGrpFg").text(data.templateGrpFg);
         $("#lblTemplateCd").text(data.templateCd);
@@ -418,7 +441,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
 
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
-        // 템플릿 선택변경 팝업 핸들러 추가
+        // 템플릿 선택 팝업 핸들러 추가
         $scope.wjTemplatePopupLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('templatePopupCtrl', $scope.getSelectedSendTypeTemplate());

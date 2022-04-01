@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : templatePopup.js
- * 설  명 : 템플릿 선택변경 팝업 JavaScript
+ * 설  명 : 템플릿 선택 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -51,7 +51,7 @@ app.controller('templatePopupCtrl', ['$scope', '$http', function ($scope, $http)
 
             if(list.length > 0) {
                 for(var i=0; i < list.length; i++) {
-                    innerHtml += "<div style=\"float:left; text-align:center; width:185px; height:220px; padding-top:10px; padding-right:10px;\">";
+                    innerHtml += "<div style=\"float:left; text-align:center; width:185px; height:250px; padding-top:10px; padding-right:10px;\">";
                     innerHtml += "<table>";
                     innerHtml += "<colgroup>";
                     innerHtml += "<col class=\"w100\" />";
@@ -62,7 +62,10 @@ app.controller('templatePopupCtrl', ['$scope', '$http', function ($scope, $http)
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
                     innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ list[i].templateNm +"\" readonly/></td></tr>";
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
-                    innerHtml += "<tr><td><textarea style=\"width:100%; height:140px; overflow-x:hidden; background-color: #EAF7FF\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\')\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
+                    // innerHtml += "<tr><td><textarea style=\"width:100%; height:140px; overflow-x:hidden; background-color: #EAF7FF\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\')\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
+                    innerHtml += "<tr><td><textarea style=\"width:100%; height:140px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
+                    innerHtml += "<tr style=\"height: 5px\"></tr>";
+                    innerHtml += "<tr><td><button class=\"btn_skyblue\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\')\">" + '선택' + "</button></td></tr>";
                     innerHtml += "</table>";
                     innerHtml += "</div>";
                 }

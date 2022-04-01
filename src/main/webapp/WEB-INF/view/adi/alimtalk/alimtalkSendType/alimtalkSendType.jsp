@@ -105,6 +105,7 @@
                              <label id="lblSendTypeDtlCd"></label>
                              <label id="lblSendTypeDtlNm"></label>
                         </span>
+                        <%-- 저장 --%>
                         <button class="btn_skyblue" id="btnAlimtalkSendTypeTemplateSave" ng-click="save()"><s:message code='cmm.save' /></button>
                     </div>
                     <table class="tblType01" id="tabSendTypeTemplate" style="display: none">
@@ -149,9 +150,9 @@
                                 <label id="lblTemplateCd"></label>
                             </div>
                             <div class="oh sb-select dkbr mb10">
-                                <p class="tl s14 mt5 lh15 blue">[템플릿 선택변경] 후, [저장]을 클릭하셔야 저장됩니다.</p>
+                                <p class="tl s14 mt5 lh15 blue">[템플릿 선택] 후, [저장]을 클릭하셔야 저장됩니다.</p>
                             </div>
-                            <%-- 템플릿 선택변경 --%>
+                            <%-- 템플릿 선택 --%>
                             <div class="updownSet oh">
                                 <button class="btn_skyblue fl" id="btnAlimtalkSendTypeTemplatePopup" ng-click="templatePopup()"><s:message code='alimtalkSendType.templatePopup' /></button>
                             </div>
@@ -174,9 +175,9 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220321.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220402.01" charset="utf-8"></script>
 
-<%-- 템플릿 선택변경 팝업 --%>
+<%-- 템플릿 선택 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/templatePopup.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

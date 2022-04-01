@@ -230,7 +230,7 @@ public class AlimtalkSendTypeController {
     }
 
     /**
-     * 템플릿 선택변경 팝업 - 템플릿 조회
+     * 템플릿 선택 팝업 - 템플릿 조회
      *
      * @param alimtalkSendTypeVO
      * @param request

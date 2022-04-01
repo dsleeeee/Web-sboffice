@@ -45,7 +45,7 @@ public interface AlimtalkSendTypeMapper {
     /** 알림톡 전송유형 - 템플릿 상세 저장 merge */
     int getAlimtalkSendTypeDetailTemplateSaveMerge(AlimtalkSendTypeVO alimtalkSendTypeVO);
 
-    /** 템플릿 선택변경 팝업 - 템플릿 조회 */
+    /** 템플릿 선택 팝업 - 템플릿 조회 */
     List<DefaultMap<Object>> getAlimtalkSendTypeDetailTemplateList(AlimtalkSendTypeVO alimtalkSendTypeVO);
 
     /** 알림톡 계정등록 팝업 - 계정정보 체크 조회 */

@@ -123,7 +123,7 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
         return procCnt;
     }
 
-    /** 템플릿 선택변경 팝업 - 템플릿 조회 */
+    /** 템플릿 선택 팝업 - 템플릿 조회 */
     @Override
     public List<DefaultMap<Object>> getAlimtalkSendTypeDetailTemplateList(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
 
