@@ -5,7 +5,7 @@
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
 <input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:100%;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;">
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="cmm.store.select"/>
@@ -30,10 +30,6 @@
           </tr>
           </tbody>
         </table>
-        <%-- 조회 --%>
-        <%--<div class="mt10 tr">
-          <button class="btn_skyblue" id="btnSearch" ng-click="getStoreList();" ><s:message code="cmm.search" /></button>
-        </div>--%>
 
         <div class="mt20 oh sb-select dkbr">
           <%-- 페이지 스케일  --%>
@@ -48,29 +44,33 @@
                     initialized="initComboBox(s)">
             </wj-combo-box>
           <%--// 페이지 스케일  --%>
+
+          <%-- 조회 --%>
+          <button class="btn_skyblue ml5 fr" id="btnSearch" ng-click="getStoreList()" ><s:message code="cmm.search" /></button>
           <%-- 선택 --%>
-          &nbsp;
-          <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
-          <button class="btn_skyblue fr" id="btnSearch" ng-click="getStoreList()" ><s:message code="cmm.search" /></button>
+          <button class="btn_skyblue ml5 fr" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
         </div>
+
         <%--위즈모 테이블--%>
-        <div class="theGrid mt10" style="height: 400px;">
-          <wj-flex-grid
-            autoGenerateColumns="false"
-            selection-mode="Row"
-            items-source="data"
-          <%--control="storeGridM"--%>
-            control="flex"
-            initialized="initGrid(s,e)"
-            is-read-only="false"
-            item-formatter="_itemFormatter">
+        <div class="w100 mt10 mb20">
+          <div class="wj-gridWrap" style="height:400px; overflow-y: hidden; overflow-x: hidden;">
+            <wj-flex-grid
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              items-source="data"
+            <%--control="storeGridM"--%>
+              control="flex"
+              initialized="initGrid(s,e)"
+              is-read-only="false"
+              item-formatter="_itemFormatter">
 
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
-          </wj-flex-grid>
+            </wj-flex-grid>
+          </div>
         </div>
         <%--//위즈모 테이블--%>
       </div>
@@ -106,13 +106,20 @@
     $scope.initGrid = function (s, e) {
     };
 
+    // 리스트 조회여부(기본 'N')
+    $scope.searchFg = "N";
+
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
 
       // 매장선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
 
-      $scope.searchStore();
+      // 리스트를 한번도 조회한 적이 없는경우만 실행(매장선택팝업 재오픈시, 기존에 선택한 매장정보 그대로 보이게 하기 위함)
+      if ($scope.searchFg == "N") {
+        $scope.searchStore();
+      }
+
       event.preventDefault();
     });
 
@@ -123,6 +130,9 @@
       params.storeNm = $scope.storeNm;
       params.listScale  = $scope.listScale;
       $scope._inquirySub("/popup/getStoreList.sb", params, function () {
+
+        // 리스트 조회여부 'Y'로 변경
+        $scope.searchFg = "Y";
       });
     };
 

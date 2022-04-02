@@ -76,13 +76,15 @@
             <th>
                 <s:message code="recomendr.orgn"/>
             </th>
-            <td colspan="3">
+            <td>
                 <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
                     <jsp:param name="targetId" value="store"/>
                 </jsp:include>
                 <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
             </td>
+            <th></th>
+            <td></td>
         </tr>
         </tbody>
     </table>
@@ -139,7 +141,7 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrRecomendr/membrRecomendr.js?ver=2020062901.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrRecomendr/membrRecomendr.js?ver=2020062901.12" charset="utf-8"></script>
 
 <%-- 매장 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/store.jsp">
