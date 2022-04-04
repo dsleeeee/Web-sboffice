@@ -28,11 +28,11 @@ app.controller('messageDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     // <-- 검색 호출 -->
     $scope.$on("messageDtlCtrl", function(event, data) {
         if(data != undefined) {
-            $("#messageContentDtl").val(data.msgContent);
             $("#srchMessageDtlSubject").val(data.subject);
+            $("#messageContentDtl").val(data.msgContent);
         } else {
-            $("#messageContentDtl").val("");
             $("#srchMessageDtlSubject").val("");
+            $("#messageContentDtl").val("");
         }
 
         event.preventDefault();

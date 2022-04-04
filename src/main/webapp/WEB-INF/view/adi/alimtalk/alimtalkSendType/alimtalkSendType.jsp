@@ -28,7 +28,7 @@
     </div>
 
     <div class="w100">
-        <div class="fl" style="width:calc(100% - 350px);">
+        <div class="fl" style="width:calc(100% - 335px);">
             <%-- left --%>
             <div class="wj-TblWrap mt20 mb20 w40 fl" ng-controller="alimtalkSendTypeCtrl">
                 <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
@@ -94,7 +94,7 @@
             </div>
             <%--//center--%>
         </div>
-        <div class="fr" style="width:350px;">
+        <div class="fr" style="width:335px;">
             <%--right--%>
             <div class="wj-TblWrap mt20 mb20 w100 fr" ng-controller="alimtalkSendTypeTemplateCtrl">
                 <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
