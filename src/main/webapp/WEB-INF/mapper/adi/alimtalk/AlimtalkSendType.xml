@@ -256,21 +256,9 @@
         AND taat.SEND_TYPE_CD = #{sendTypeCd}
         AND taat.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
         AND taat.APPR_FG = 'TSC03'
-        AND NOT EXISTS
-        (
-            SELECT *
-            FROM TB_AL_ALIMTALK_TYPE_SETTING taats
-            WHERE 1=1
-            AND taats.ORGN_CD = #{orgnCd}
-            <if test="templateGrpFg != null and templateGrpFg != ''">
-                AND taats.TEMPLATE_GRP_FG = #{templateGrpFg}
-            </if>
-            <if test="templateCd != null and templateCd != ''">
-                AND taats.TEMPLATE_CD = #{templateCd}
-            </if>
-            AND taats.TEMPLATE_GRP_FG = taat.TEMPLATE_GRP_FG
-            AND taats.TEMPLATE_CD = taat.TEMPLATE_CD
-        )
+        <if test="templateCd != null and templateCd != ''">
+            AND taat.TEMPLATE_CD != #{templateCd}
+        </if>
         ORDER BY taat.COMMON_FG, taat.TEMPLATE_GRP_FG, taat.TEMPLATE_CD
     </select>
 

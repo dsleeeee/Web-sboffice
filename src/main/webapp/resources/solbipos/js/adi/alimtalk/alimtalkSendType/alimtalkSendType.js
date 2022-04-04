@@ -426,6 +426,9 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
 
     // 템플릿 선택
     $scope.templatePopup = function() {
+        $scope.selectedSendTypeTemplate.templateGrpFg = $("#lblTemplateGrpFg").text();
+        $scope.selectedSendTypeTemplate.templateCd = $("#lblTemplateCd").text();
+
         $scope.wjTemplatePopupLayer.show(true);
         event.preventDefault();
     };

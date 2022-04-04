@@ -175,7 +175,7 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220402.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220402.024" charset="utf-8"></script>
 
 <%-- 템플릿 선택 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/templatePopup.jsp">
