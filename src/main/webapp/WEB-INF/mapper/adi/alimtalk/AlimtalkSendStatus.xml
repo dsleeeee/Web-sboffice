@@ -42,6 +42,7 @@
 --         DECODE(hmt.COMPANY, '1', 'MONO', '2', 'SMTNT', NULL) AS COMPANY,
         hmt.SUBJECT,
         hmt.MSG_CONTENT,
+        hmt.ALK_MSG_PARAMS,
         hmt.ALK_SEND_SEQ,
         hmt.GUBUN
         <include refid="CmmSQL.PagingTemplateCount"/>
@@ -75,6 +76,7 @@
 --                     '1' AS COMPANY, --1:KT, 2:SMTNT
                     A.SUBJECT,
                     A.ALK_MSG AS MSG_CONTENT,
+                    A.ALK_MSG_PARAMS,
                     A.ALK_SEND_SEQ,
                     'TB_AL_ALIMTALK_SEND_ENC' AS GUBUN
                     FROM TB_AL_ALIMTALK_SEND_ENC A
@@ -119,6 +121,7 @@
 --                     '1' AS COMPANY, --1:KT, 2:SMTNT
                     A.SUBJECT,
                     A.ALK_MSG AS MSG_CONTENT,
+                    A.ALK_MSG_PARAMS,
                     A.ALK_SEND_SEQ,
                     'TB_AL_ALIMTALK_REPORT' AS GUBUN
                     FROM TB_AL_ALIMTALK_REPORT A

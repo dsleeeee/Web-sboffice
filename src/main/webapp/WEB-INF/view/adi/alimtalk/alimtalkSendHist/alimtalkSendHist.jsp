@@ -146,6 +146,7 @@
 
                     <%--저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendHist.alkSendSeq"/>" binding="alkSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendHist.alkMsgParams"/>" binding="alkMsgParams" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -161,7 +162,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20220330.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20220401.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">

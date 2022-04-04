@@ -91,6 +91,7 @@ app.controller('alimtalkSendHistCtrl', ['$scope', '$http', '$timeout', function 
                 // 메세지 클릭시 상세정보 조회
                 if ( col.binding === "msgContent") {
                     var selectedRow = s.rows[ht.row].dataItem;
+                    selectedRow.pageGubun = "alimtalkSendHist";
                     $scope.setSelectedAlimtalkSendHist(selectedRow);
                     $scope.wjAlimtalkMessageDtlLayer.show(true);
                     event.preventDefault();

@@ -87,6 +87,7 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
                 // 메세지 클릭시 상세정보 조회
                 if ( col.binding === "msgContent") {
                     var selectedRow = s.rows[ht.row].dataItem;
+                    selectedRow.pageGubun = "alimtalkSendStatus";
                     $scope.setSelectedAlimtalkSendStatus(selectedRow);
                     $scope.wjAlimtalkMessageDtlLayer.show(true);
                     event.preventDefault();
@@ -174,40 +175,42 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
 
     // 예약취소
     $scope.reserveCancel = function() {
-        // 파라미터 설정
-        var paramsChk = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                paramsChk.push($scope.flex.collectionView.items[i]);
-            }
-        }
-
-        if(paramsChk.length <= 0) {
-            s_alert.pop(messages["cmm.not.select"]);
-            return;
-        }
+        alert("준비중");
 
         // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                if($scope.flex.collectionView.items[i].reserveYn != "1"
-                    || $scope.flex.collectionView.items[i].sendStatus == "3"
-                    || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 8)) >= parseInt(getCurDateTime())) ) {
-
-                    $scope._popMsg(messages["alimtalkSendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
-                    return false;
-                }
-
-                params.push($scope.flex.collectionView.items[i]);
-            }
-        }
-
-        // 예약 문자를 취소하시겠습니까?
-        if (confirm(messages["alimtalkSendStatus.reserveCancelConfirm"])) {
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus/getAlimtalkSendStatusReserveCancelSave.sb", params, function(){ $scope.searchAlimtalkSendStatus() });
-        }
+        // var paramsChk = new Array();
+        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        //     if($scope.flex.collectionView.items[i].gChk) {
+        //         paramsChk.push($scope.flex.collectionView.items[i]);
+        //     }
+        // }
+        //
+        // if(paramsChk.length <= 0) {
+        //     s_alert.pop(messages["cmm.not.select"]);
+        //     return;
+        // }
+        //
+        // // 파라미터 설정
+        // var params = new Array();
+        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        //     if($scope.flex.collectionView.items[i].gChk) {
+        //         if($scope.flex.collectionView.items[i].reserveYn != "1"
+        //             || $scope.flex.collectionView.items[i].sendStatus == "3"
+        //             || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 8)) >= parseInt(getCurDateTime())) ) {
+        //
+        //             $scope._popMsg(messages["alimtalkSendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
+        //             return false;
+        //         }
+        //
+        //         params.push($scope.flex.collectionView.items[i]);
+        //     }
+        // }
+        //
+        // // 예약 문자를 취소하시겠습니까?
+        // if (confirm(messages["alimtalkSendStatus.reserveCancelConfirm"])) {
+        //     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        //     $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus/getAlimtalkSendStatusReserveCancelSave.sb", params, function(){ $scope.searchAlimtalkSendStatus() });
+        // }
     };
 
     // 선택

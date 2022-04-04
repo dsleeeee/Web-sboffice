@@ -28,6 +28,7 @@
         hssrt.MSG_TYPE,
         hssrt.SUBJECT,
         hssrt.MSG_CONTENT,
+        hssrt.ALK_MSG_PARAMS,
         DECODE(hssrt.RESERVE_YN, '1', hssrt.SEND_DATE, NULL) AS SEND_DATE,
         hssrt.READ_DATE,
         hssrt.RESERVE_YN,
