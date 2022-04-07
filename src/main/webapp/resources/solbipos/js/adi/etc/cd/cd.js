@@ -20,7 +20,6 @@ var useYnFg = [
 ];
 // 사용여부 DropBoxDataMap
 var useYnFgDataMap = new wijmo.grid.DataMap([
-  {id: "", name: "전체"},
   {id: "Y", name: "사용"},
   {id: "N", name: "사용안함"}
   ], 'id', 'name');
