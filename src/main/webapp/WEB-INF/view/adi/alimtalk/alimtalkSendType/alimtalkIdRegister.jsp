@@ -17,15 +17,18 @@
         <div class="subCon">
             <table class="tblType01">
                 <colgroup>
-                    <col class="w20"/>
-                    <col class="w60"/>
-                    <col class="w20"/>
+                    <col class="w30"/>
+                    <col class="w55"/>
+                    <col class="w15"/>
                 </colgroup>
                 <tbody>
                 <tr>
                     <%-- 카카오계정ID --%>
                     <th>
-                        <s:message code="alimtalkIdRegister.plusFriendId"/>
+                        <div class="impWrap">
+                            <s:message code="alimtalkIdRegister.plusFriendId"/>
+                            <em class="imp">*</em>
+                        </div>
                     </th>
                     <td colspan="2">
                         <input type="text" class="sb-input w100" id="srchPlusFriendId" ng-model="plusFriendId" placeholder="@로 시작하는 플러스친구 검색용 ID 입력" />
@@ -34,12 +37,15 @@
                 <tr>
                     <%-- 사업자 카테고리 --%>
                     <th>
-                        <s:message code="alimtalkIdRegister.categoryCode"/>
+                        <div class="impWrap">
+                            <s:message code="alimtalkIdRegister.categoryCode"/>
+                            <em class="imp">*</em>
+                        </div>
                     </th>
                     <td colspan="2">
                         <div class="sb-select dkbr ml5 fl">
                             <wj-combo-box
-                                    class="w130px fl"
+                                    class="w120px fl"
                                     id="srchCategoryCodeLCombo"
                                     ng-model="categoryCodeLCombo"
                                     items-source="_getComboData('categoryCodeLCombo')"
@@ -52,7 +58,7 @@
                         </div>
                         <div class="sb-select dkbr ml5 fl">
                             <wj-combo-box
-                                    class="w130px fl"
+                                    class="w120px fl"
                                     id="srchCategoryCodeMCombo"
                                     ng-model="categoryCodeMCombo"
                                     items-source="_getComboData('categoryCodeMCombo')"
@@ -65,7 +71,7 @@
                         </div>
                         <div class="sb-select dkbr ml5 fl">
                             <wj-combo-box
-                                    class="w130px fl"
+                                    class="w120px fl"
                                     id="srchCategoryCodeSCombo"
                                     ng-model="categoryCodeSCombo"
                                     items-source="_getComboData('categoryCodeSCombo')"
@@ -80,7 +86,10 @@
                 <tr>
                     <%-- 휴대폰번호 --%>
                     <th>
-                        <s:message code="alimtalkIdRegister.phoneNo"/>
+                        <div class="impWrap">
+                            <s:message code="alimtalkIdRegister.phoneNo"/>
+                            <em class="imp">*</em>
+                        </div>
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchPhoneNo" ng-model="phoneNo" placeholder="'-'를 제외한 휴대폰번호 입력" />
@@ -97,6 +106,10 @@
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchToken" ng-model="token" />
+
+                    </td>
+                    <td style="display: none;">
+                        <input type="text" class="sb-input w100" id="srchTokenYn" ng-model="tokenYn" />
                     </td>
                     <td>
                         <%-- 계정등록 --%>
@@ -138,4 +151,4 @@
     var apiUrl = "${apiUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220323.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220407.01" charset="utf-8"></script>

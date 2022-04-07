@@ -25,46 +25,58 @@
                 </button>
             </div>
         </div>
+        <div class="w100 fl mt10" style="height:25px;">
+            <table>
+                <tr>
+                    <td class="s14">
+                        <%-- 잔여금액 --%>
+                        <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
+                        <span><s:message code="alimtalkSendType.smsAmt" /></span>
+                        <span class="mr5"><label id="lblAlimtalkSendTypeSmsAmt"></label></span>
+                        <%-- 잔여금액이 없는 경우 알림톡이 전송되지 않습니다. --%>
+                        <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
+                        <span><s:message code="alimtalkSendType.smsAmtMemo" /></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 
-    <div class="w100">
-        <div class="fl" style="width:calc(100% - 335px);">
-            <%-- left --%>
-            <div class="wj-TblWrap mt20 mb20 w40 fl" ng-controller="alimtalkSendTypeCtrl">
-                <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+    <div class="w100 fl">
+        <%-- left --%>
+        <div class="fl" style="width:320px;">
+            <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;">
+                <%-- left 상단 --%>
+                <div ng-controller="alimtalkSendTypeCtrl">
                     <div class="updownSet oh mb10">
-                    <span class="fl bk lh30">
-                        <%-- 전송유형 --%>
-                        <s:message code="alimtalkSendType.sendType"/>
-                    </span>
+                        <span class="fl bk lh30">
+                            <%-- 전송유형 --%>
+                            <s:message code="alimtalkSendType.sendType"/>
+                        </span>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-                            <div class="row">
-                                <wj-flex-grid
-                                        autoGenerateColumns.="false"
-                                        control="flex"
-                                        initialized="initGrid(s,e)"
-                                        sticky-headers="true"
-                                        selection-mode="Row"
-                                        items-source="data"
-                                        item-formatter="_itemFormatter"
-                                        ime-enabled="true">
+                        <div class="wj-gridWrap" style="height:150px; overflow-y: hidden; overflow-x: hidden;">
+                            <wj-flex-grid
+                                    autoGenerateColumns.="false"
+                                    control="flex"
+                                    initialized="initGrid(s,e)"
+                                    sticky-headers="true"
+                                    selection-mode="Row"
+                                    items-source="data"
+                                    item-formatter="_itemFormatter"
+                                    ime-enabled="true">
 
-                                    <!-- define columns -->
-                                    <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeCd"/>" binding="sendTypeCd" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeNm"/>" binding="sendTypeNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                                </wj-flex-grid>
-                            </div>
+                                <!-- define columns -->
+                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeCd"/>" binding="sendTypeCd" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeNm"/>" binding="sendTypeNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                            </wj-flex-grid>
                         </div>
                     </div>
                 </div>
-            </div>
-            <%--//left--%>
-            <%--center--%>
-            <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="alimtalkSendTypeDetailCtrl">
-                <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
-                    <div class="updownSet oh mb10">
+                <%-- //left 상단 --%>
+                <%-- left 하단 --%>
+                <div class="bt" ng-controller="alimtalkSendTypeDetailCtrl">
+                    <div class="updownSet oh mb10 mt20">
                         <span class="fl bk lh30">
                             <%-- 전송유형 상세 --%>
                             <s:message code="alimtalkSendType.sendTypeDtl"/>
@@ -74,7 +86,7 @@
                         <button class="btn_skyblue" id="btnAlimtalkSendTypeDetailSave" ng-click="save()"><s:message code='cmm.save' /></button>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                        <div class="wj-gridWrap" style="height:150px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns="false"
                                     control="flex"
@@ -85,19 +97,20 @@
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeDtlCd"/>" binding="sendTypeDtlCd" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeDtlNm"/>" binding="sendTypeDtlNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeDtlNm"/>" binding="sendTypeDtlNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="alimtalkSendType.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="70" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
                 </div>
+                <%-- //left 하단 --%>
             </div>
-            <%--//center--%>
         </div>
-        <div class="fr" style="width:335px;">
-            <%--right--%>
-            <div class="wj-TblWrap mt20 mb20 w100 fr" ng-controller="alimtalkSendTypeTemplateCtrl">
-                <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+        <%-- //left --%>
+        <%-- center --%>
+        <div class="fl" style="width:310px;">
+            <div ng-controller="alimtalkSendTypeTemplateCtrl">
+                <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;">
                     <div class="updownSet oh mb10">
                         <span class="fl bk lh30">
                             <%-- 템플릿 --%>
@@ -110,9 +123,8 @@
                     </div>
                     <table class="tblType01" id="tabSendTypeTemplate" style="display: none">
                         <colgroup>
-                            <col class="w25" />
                             <col class="w40" />
-                            <col class="w35" />
+                            <col class="w60" />
                         </colgroup>
                         <tbody>
                         <tr>
@@ -121,40 +133,19 @@
                                 <s:message code="alimtalkSendType.sendPeriod" />
                             </th>
                             <td>
-                                <div class="sb-select">
-                                    <wj-combo-box
-                                            id="srchSendPeriodFgCombo"
-                                            ng-model="sendPeriodFg"
-                                            items-source="_getComboData('sendPeriodFgCombo')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            initialized="_initComboBox(s)"
-                                            control="srchSendPeriodFgCombo">
-                                    </wj-combo-box>
-                                </div>
-                            </td>
-                            <td>
                                 <input type="text" class="sb-input w100" ng-model="sendPeriod" />
                             </td>
                         </tr>
                         </tbody>
                     </table>
                     <%-- 템플릿 양식 --%>
-                    <div class="w100 fl pd10 bt" style="height:310px;">
+                    <div class="w100 fl pd10 pdl30 bt" style="height:310px;">
                         <div id ="divTemplateGrpPage" style="display: none;">
                             <div style="display: none;">
                                 <%-- 템플릿 그룹구분 --%>
                                 <label id="lblTemplateGrpFg"></label>
                                 <%-- 템플릿코드 --%>
                                 <label id="lblTemplateCd"></label>
-                            </div>
-                            <div class="oh sb-select dkbr mb10">
-                                <p class="tl s14 mt5 lh15 blue">[템플릿 선택] 후, [저장]을 클릭하셔야 저장됩니다.</p>
-                            </div>
-                            <%-- 템플릿 선택 --%>
-                            <div class="updownSet oh">
-                                <button class="btn_skyblue fl" id="btnAlimtalkSendTypeTemplatePopup" ng-click="templatePopup()"><s:message code='alimtalkSendType.templatePopup' /></button>
                             </div>
                             <div style="height:260px; overflow-x: hidden; overflow-y: auto;">
                                 <div id="divTemplateComment"></div>
@@ -164,8 +155,28 @@
                     <%-- //템플릿 양식 --%>
                 </div>
             </div>
-            <%--//right--%>
         </div>
+        <%-- //center --%>
+        <%-- right --%>
+        <div class="fr" style="width:calc(100% - 630px);">
+            <div ng-controller="templateListCtrl">
+                <div class="wj-TblWrapBr mr10 pd10" style="height:470px; overflow-y: hidden;">
+                    <div class="w100 mb5">
+                        <div class="oh sb-select dkbr">
+                            <p class="tl s14 mt5 lh15 blue">템플릿 선택시 저장됩니다.</p>
+                        </div>
+                    </div>
+                    <%-- 템플릿 양식 --%>
+                    <div class="w100 fl" style="height:430px;">
+                        <div style="height:410px; overflow-x: hidden; overflow-y: auto;">
+                            <div id="divTemplateCommentList"></div>
+                        </div>
+                    </div>
+                    <%-- //템플릿 양식 --%>
+                </div>
+            </div>
+        </div>
+        <%-- //right --%>
     </div>
 
 </div>
@@ -173,15 +184,19 @@
 <script type="text/javascript">
     <%-- 사용여부 --%>
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
+
+    // 템플릿 치환값 리스트
+    var templateChangeKeyColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="templateChangeKeyCol" items="${templateChangeKeyColList}">
+        var templateChangeKeyParam = {};
+        templateChangeKeyParam.nmcodeNm = "${templateChangeKeyCol.nmcodeNm}";
+        templateChangeKeyParam.nmcodeItem2 = "${templateChangeKeyCol.nmcodeItem2}";
+        templateChangeKeyColList.push(templateChangeKeyParam);
+    </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220402.024" charset="utf-8"></script>
-
-<%-- 템플릿 선택 팝업 --%>
-<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/templatePopup.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220407.01" charset="utf-8"></script>
 
 <%-- 알림톡 계정등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.jsp">

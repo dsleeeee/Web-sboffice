@@ -45,6 +45,20 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
         this.alimtalkSendTypeMapper = alimtalkSendTypeMapper;
     }
 
+    /** 알림톡 키값 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getAlimtalkKeyColList(SessionInfoVO sessionInfoVO) {
+
+        return alimtalkSendTypeMapper.getAlimtalkKeyColList(sessionInfoVO);
+    }
+
+    /** 알림톡 템플릿 치환값 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getAlimtalkTemplateChangeKeyColList(SessionInfoVO sessionInfoVO) {
+
+        return alimtalkSendTypeMapper.getAlimtalkTemplateChangeKeyColList(sessionInfoVO);
+    }
+
     /** 알림톡 전송유형 - 계정정보 체크 조회 */
     @Override
     public DefaultMap<String> getAlimtalkIdRegisterChk(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
@@ -123,7 +137,7 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
         return procCnt;
     }
 
-    /** 템플릿 선택 팝업 - 템플릿 조회 */
+    /** 알림톡 전송유형 - 템플릿 목록 조회 */
     @Override
     public List<DefaultMap<Object>> getAlimtalkSendTypeDetailTemplateList(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
 
@@ -155,13 +169,6 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
     public List<DefaultMap<Object>> getCategoryCodeComboList(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
 
         return alimtalkSendTypeMapper.getCategoryCodeComboList(alimtalkSendTypeVO);
-    }
-
-    /** 알림톡 계정등록 팝업 - 키값 리스트 조회 */
-    @Override
-    public List<DefaultMap<String>> getAlimtalkKeyColList(SessionInfoVO sessionInfoVO) {
-
-        return alimtalkSendTypeMapper.getAlimtalkKeyColList(sessionInfoVO);
     }
 
     /** 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 insert */

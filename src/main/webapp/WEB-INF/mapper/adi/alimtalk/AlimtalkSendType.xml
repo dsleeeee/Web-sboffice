@@ -11,6 +11,83 @@
 -->
 <mapper namespace="kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.impl.AlimtalkSendTypeMapper">
 
+    <!-- 알림톡 키값 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkKeyColList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkKeyColList */
+        SELECT
+        A.GROUP_KEY,
+        A.GROUP_NM,
+        B.APP_KEY,
+        C.SECRET_KEY,
+        D.API_URL
+        FROM
+        (
+            SELECT
+            taan.NMCODE_NM AS GROUP_KEY,
+            taan.REMARK AS GROUP_NM
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '004'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) A,
+        (
+            SELECT
+            taan.NMCODE_NM AS APP_KEY
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '001'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) B,
+        (
+            SELECT
+            taan.NMCODE_NM AS SECRET_KEY
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '002'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) C,
+        (
+            SELECT
+            taan.NMCODE_NM AS API_URL
+            FROM TB_AL_ALIMTALK_NMCODE taan
+            WHERE 1=1
+            AND taan.NMCODE_GRP_CD = '999'
+            AND taan.NMCODE_LEVEL = '2'
+            AND taan.PARENT_CD = '003'
+            AND taan.NMCODE_CD = '001'
+            AND taan.USE_YN = 'Y'
+        ) D
+    </select>
+
+    <!-- 알림톡 템플릿 치환값 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkTemplateChangeKeyColList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getAlimtalkTemplateChangeKeyColList */
+        SELECT
+        tcn.NMCODE_NM,
+        tcn.NMCODE_ITEM_2
+        FROM TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tcn.NMCODE_GRP_CD = '304'
+        ORDER BY tcn.NMCODE_CD
+    </select>
+
     <!-- 알림톡 전송유형 - 계정정보 체크 조회 -->
     <!--
         TABLE    :
@@ -63,12 +140,12 @@
             (
                 (
                     SELECT
-                    taats.SEND_TYPE_DTL_CD,
-                    taats.USE_YN
-                    FROM TB_AL_ALIMTALK_TYPE_SETTING taats
+                    tmats.SEND_TYPE_DTL_CD,
+                    tmats.USE_YN
+                    FROM TB_MS_ALIMTALK_TYPE_SETTING tmats
                     WHERE 1=1
-                    AND taats.ORGN_CD = #{orgnCd}
-                    AND taats.SEND_TYPE_CD = #{sendTypeCd}
+                    AND tmats.ORGN_CD = #{orgnCd}
+                    AND tmats.SEND_TYPE_CD = #{sendTypeCd}
                 )
                 UNION ALL
                 (
@@ -82,11 +159,11 @@
                     AND taan.PARENT_CD = #{sendTypeCd}
                     AND taan.NMCODE_CD NOT IN (
                                                     SELECT
-                                                    taats.SEND_TYPE_DTL_CD
-                                                    FROM TB_AL_ALIMTALK_TYPE_SETTING taats
+                                                    tmats.SEND_TYPE_DTL_CD
+                                                    FROM TB_MS_ALIMTALK_TYPE_SETTING tmats
                                                     WHERE 1=1
-                                                    AND taats.ORGN_CD = #{orgnCd}
-                                                    AND taats.SEND_TYPE_CD = #{sendTypeCd}
+                                                    AND tmats.ORGN_CD = #{orgnCd}
+                                                    AND tmats.SEND_TYPE_CD = #{sendTypeCd}
                                                 )
                     AND taan.USE_YN = 'Y'
                 )
@@ -102,7 +179,7 @@
     -->
     <insert id="getAlimtalkSendTypeDetailSaveMerge"  parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailSaveMerge */
-        MERGE INTO TB_AL_ALIMTALK_TYPE_SETTING
+        MERGE INTO TB_MS_ALIMTALK_TYPE_SETTING
         USING DUAL
         ON  (
                 ORGN_CD = #{orgnCd} AND SEND_TYPE_CD = #{sendTypeCd} AND SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
@@ -151,13 +228,12 @@
     <select id="getAlimtalkSendTypeDetailTemplate"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplate */
         SELECT
-        taats.SEND_PERIOD_FG,
-        taats.SEND_PERIOD,
+        tmats.SEND_PERIOD,
         taat.TEMPLATE_GRP_FG,
         taat.TEMPLATE_CD,
         taat.TEMPLATE_NM,
         taat.TEMPLATE_CONTENT
-        FROM TB_AL_ALIMTALK_TYPE_SETTING taats,
+        FROM TB_MS_ALIMTALK_TYPE_SETTING tmats,
         (
             SELECT
             (CASE WHEN A.COMMON_FG = 'C' THEN #{orgnCd} ELSE A.ORGN_CD END) AS ORGN_CD,
@@ -171,14 +247,14 @@
             WHERE 1=1
         ) taat
         WHERE 1=1
-        AND taats.ORGN_CD = #{orgnCd}
-        AND taats.SEND_TYPE_CD = #{sendTypeCd}
-        AND taats.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
-        AND taat.ORGN_CD (+)= taats.ORGN_CD
-        AND taat.SEND_TYPE_CD (+)= taats.SEND_TYPE_CD
-        AND taat.SEND_TYPE_DTL_CD (+)= taats.SEND_TYPE_DTL_CD
-        AND taat.TEMPLATE_GRP_FG (+)= taats.TEMPLATE_GRP_FG
-        AND taat.TEMPLATE_CD (+)= taats.TEMPLATE_CD
+        AND tmats.ORGN_CD = #{orgnCd}
+        AND tmats.SEND_TYPE_CD = #{sendTypeCd}
+        AND tmats.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+        AND taat.ORGN_CD (+)= tmats.ORGN_CD
+        AND taat.SEND_TYPE_CD (+)= tmats.SEND_TYPE_CD
+        AND taat.SEND_TYPE_DTL_CD (+)= tmats.SEND_TYPE_DTL_CD
+        AND taat.TEMPLATE_GRP_FG (+)= tmats.TEMPLATE_GRP_FG
+        AND taat.TEMPLATE_CD (+)= tmats.TEMPLATE_CD
     </select>
 
     <!-- 알림톡 전송유형 - 템플릿 상세 저장 merge -->
@@ -188,7 +264,7 @@
     -->
     <insert id="getAlimtalkSendTypeDetailTemplateSaveMerge"  parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplateSaveMerge */
-        MERGE INTO TB_AL_ALIMTALK_TYPE_SETTING
+        MERGE INTO TB_MS_ALIMTALK_TYPE_SETTING
         USING DUAL
         ON  (
                 ORGN_CD = #{orgnCd} AND SEND_TYPE_CD = #{sendTypeCd} AND SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
@@ -232,7 +308,7 @@
             )
     </insert>
 
-    <!-- 템플릿 선택 팝업 - 템플릿 조회 -->
+    <!-- 알림톡 전송유형 - 템플릿 목록 조회 -->
     <!--
         TABLE    :
         COMMENTS :
@@ -256,9 +332,6 @@
         AND taat.SEND_TYPE_CD = #{sendTypeCd}
         AND taat.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
         AND taat.APPR_FG = 'TSC03'
-        <if test="templateCd != null and templateCd != ''">
-            AND taat.TEMPLATE_CD != #{templateCd}
-        </if>
         ORDER BY taat.COMMON_FG, taat.TEMPLATE_GRP_FG, taat.TEMPLATE_CD
     </select>
 
@@ -342,67 +415,6 @@
                 </if>
             </when>
         </choose>
-    </select>
-
-    <!-- 알림톡 계정등록 팝업 - 키값 리스트 조회 -->
-    <!--
-        TABLE    :
-        COMMENTS :
-    -->
-    <select id="getAlimtalkKeyColList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
-        /* AlimtalkSendTypeMapper.getAlimtalkKeyColList */
-        SELECT
-        A.GROUP_KEY,
-        A.GROUP_NM,
-        B.APP_KEY,
-        C.SECRET_KEY,
-        D.API_URL
-        FROM
-        (
-            SELECT
-            taan.NMCODE_NM AS GROUP_KEY,
-            taan.REMARK AS GROUP_NM
-            FROM TB_AL_ALIMTALK_NMCODE taan
-            WHERE 1=1
-            AND taan.NMCODE_GRP_CD = '999'
-            AND taan.NMCODE_LEVEL = '2'
-            AND taan.PARENT_CD = '004'
-            AND taan.NMCODE_CD = '001'
-            AND taan.USE_YN = 'Y'
-        ) A,
-        (
-            SELECT
-            taan.NMCODE_NM AS APP_KEY
-            FROM TB_AL_ALIMTALK_NMCODE taan
-            WHERE 1=1
-            AND taan.NMCODE_GRP_CD = '999'
-            AND taan.NMCODE_LEVEL = '2'
-            AND taan.PARENT_CD = '001'
-            AND taan.NMCODE_CD = '001'
-            AND taan.USE_YN = 'Y'
-        ) B,
-        (
-            SELECT
-            taan.NMCODE_NM AS SECRET_KEY
-            FROM TB_AL_ALIMTALK_NMCODE taan
-            WHERE 1=1
-            AND taan.NMCODE_GRP_CD = '999'
-            AND taan.NMCODE_LEVEL = '2'
-            AND taan.PARENT_CD = '002'
-            AND taan.NMCODE_CD = '001'
-            AND taan.USE_YN = 'Y'
-        ) C,
-        (
-            SELECT
-            taan.NMCODE_NM AS API_URL
-            FROM TB_AL_ALIMTALK_NMCODE taan
-            WHERE 1=1
-            AND taan.NMCODE_GRP_CD = '999'
-            AND taan.NMCODE_LEVEL = '2'
-            AND taan.PARENT_CD = '003'
-            AND taan.NMCODE_CD = '001'
-            AND taan.USE_YN = 'Y'
-        ) D
     </select>
 
     <!-- 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 insert -->

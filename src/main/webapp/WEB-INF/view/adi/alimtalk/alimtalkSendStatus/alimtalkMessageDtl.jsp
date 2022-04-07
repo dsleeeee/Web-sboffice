@@ -36,4 +36,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.js?ver=20220401.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.js?ver=20220407.01" charset="utf-8"></script>

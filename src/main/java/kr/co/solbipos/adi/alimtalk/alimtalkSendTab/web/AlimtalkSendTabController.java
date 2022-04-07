@@ -82,6 +82,13 @@ public class AlimtalkSendTabController {
         System.out.println("WEB_ALIMTALK >>> secretKey : " + secretKey);
         System.out.println("WEB_ALIMTALK >>> apiUrl : " + apiUrl);
 
+
+        // 알림톡 전송유형 - 템플릿 치환값 리스트 조회
+        List<DefaultMap<String>> templateChangeKeyColList = alimtalkSendTypeService.getAlimtalkTemplateChangeKeyColList(sessionInfoVO);
+
+        model.addAttribute("templateChangeKeyColList", templateChangeKeyColList);
+        System.out.println("WEB_ALIMTALK >>> templateChangeKeyColList : " + templateChangeKeyColList);
+
         return "adi/alimtalk/alimtalkSendTab/alimtalkSendTab";
     }
 }

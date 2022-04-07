@@ -28,9 +28,9 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="alimtalkAddresseeDtl.phoneNumber"/>" binding="phoneNumber" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="alimtalkAddresseeDtl.addr"/>" binding="addr" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="alimtalkAddresseeDtl.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="alimtalkAddresseeDtl.phoneNumber"/>" binding="phoneNumber" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="alimtalkAddresseeDtl.addr"/>" binding="addr" width="100" is-read-only="true" align="center"></wj-flex-grid-column>--%>
+                        <%--<wj-flex-grid-column header="<s:message code="alimtalkAddresseeDtl.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>--%>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -40,4 +40,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkAddresseeDtl.js?ver=20220330.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkAddresseeDtl.js?ver=20220407.01" charset="utf-8"></script>

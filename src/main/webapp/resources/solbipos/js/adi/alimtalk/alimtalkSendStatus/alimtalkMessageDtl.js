@@ -29,26 +29,7 @@ app.controller('alimtalkMessageDtlCtrl', ['$scope', '$http', function ($scope, $
     $scope.$on("alimtalkMessageDtlCtrl", function(event, data) {
         if(data != undefined) {
             $("#srchMessageDtlSubject").val(data.subject);
-
-            var content = data.msgContent;
-            if(data.pageGubun == "alimtalkSendStatus") {
-                if(data.reserveYn == "1" && data.sendStatus != "3") {
-                    var arrAlkMsgParams = data.alkMsgParams.split(",");
-                    for(var i = 0; i < arrAlkMsgParams.length; i++) {
-                        var num = "#{num" + [i+1] + "}";
-                        content = content.replace(num, arrAlkMsgParams[i]);
-                    }
-                }
-            } else {
-                if(data.reserveYn == "1" && data.successQty != "1") {
-                    var arrAlkMsgParams = data.alkMsgParams.split(",");
-                    for(var i = 0; i < arrAlkMsgParams.length; i++) {
-                        var num = "#{num" + [i+1] + "}";
-                        content = content.replace(num, arrAlkMsgParams[i]);
-                    }
-                }
-            }
-            $("#messageContentDtl").val(content);
+            $("#messageContentDtl").val(data.msgContent);
 
         } else {
             $("#srchMessageDtlSubject").val("");

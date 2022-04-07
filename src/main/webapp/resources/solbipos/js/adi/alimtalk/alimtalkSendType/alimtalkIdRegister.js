@@ -140,6 +140,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
     $scope.registerRequestApi = function(params) {
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+
         $.ajax({
             type: "POST",
             url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderApiSave.sb",
@@ -156,6 +157,13 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
                     $scope._popMsg("휴대폰번호로 인증번호 발송 되었습니다.");
                     // 로딩바 hide
                     $scope.$broadcast('loadingPopupInactive');
+
+                    $scope.tokenYn = "Y";
+                    $("#srchPlusFriendId").attr("disabled",true);
+                    $("#srchCategoryCodeLCombo").attr("disabled",true);
+                    $("#srchCategoryCodeMCombo").attr("disabled",true);
+                    $("#srchCategoryCodeSCombo").attr("disabled",true);
+                    $("#srchPhoneNo").attr("disabled",true);
                 }
                 else if (result.data.resultCode.toString() !== "0") {
                     $scope._popMsg(result.data.resultMessage.toString());
@@ -188,6 +196,11 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
 
     // 계정등록 (토큰인증 API 호출 및 저장)
     $scope.registerTokenSave = function() {
+        if ($scope.tokenYn !== "Y") {
+            $scope._popMsg(messages["alimtalkIdRegister.tokenYnAlert"]); // 인증요청을 해주세요.
+            return;
+        }
+
         if ($scope.token === "" || $scope.token === undefined) {
             $scope._popMsg(messages["alimtalkIdRegister.tokenAlert"]); // 인증번호를 입력해주세요.
             return;
@@ -208,6 +221,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
 
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+
         $.ajax({
             type: "POST",
             url: "/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getAlimtalkSenderTokenApiSave.sb",
@@ -333,10 +347,17 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         $scope.plusFriendId = "";
         $scope.phoneNo = "";
         $scope.token = "";
+        $scope.tokenYn = "";
 
         $scope._setComboData("categoryCodeLCombo", categoryCodeComboLData); // 사업자 카테고리(대분류)
         $scope._setComboData("categoryCodeMCombo", categoryCodeComboMData); // 사업자 카테고리(중분류)
         $scope._setComboData("categoryCodeSCombo", categoryCodeComboSData); // 사업자 카테고리(소분류)
+
+        $("#srchPlusFriendId").attr("disabled",false);
+        $("#srchCategoryCodeLCombo").attr("disabled",false);
+        $("#srchCategoryCodeMCombo").attr("disabled",false);
+        $("#srchCategoryCodeSCombo").attr("disabled",false);
+        $("#srchPhoneNo").attr("disabled",false);
 
         $scope.wjAlimtalkIdRegisterLayer.hide();
     };

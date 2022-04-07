@@ -18,11 +18,6 @@ var addSelected = "N";
 // 전송유형 템플릿 등록에 추가버튼, '전송유형상세코드' 미선택시 막을려고 ("V":선택, "N":미선택)
 var addSelected2 = "N";
 
-// 전송주기구분
-var sendPeriodFgComboData = [
-    {"name":"대기인원수","value":"01"}
-];
-
 /**
  *  알림톡 전송유형 조회 그리드 생성
  */
@@ -30,6 +25,8 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('alimtalkSendTypeCtrl', $scope, $http, false));
+
+    $("#lblAlimtalkSendTypeSmsAmt").text("0");
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -101,6 +98,9 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
 
         // 알림톡 계정등록 체크
         $scope.alimtalkIdRegisterChk("N");
+
+        // 잔여금액
+        $scope.restSmsAmt();
     };
 
     // 알림톡 계정등록
@@ -145,6 +145,18 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
                 $scope._popMsg(messages["alimtalkSendType.alimtalkIdRegisterStopAlert"]); // 계정등록 후 클릭해주세요.
                 return false;
             }
+        });
+    };
+
+    // 잔여금액
+    $scope.restSmsAmt = function() {
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getSmsAmtList.sb', params, function (response) {
+            var smsAmtList = response.data.data.result;
+            $scope.smsAmtList = smsAmtList;
+
+            $("#lblAlimtalkSendTypeSmsAmt").text($scope.smsAmtList.smsAmt);
         });
     };
 
@@ -198,6 +210,9 @@ app.controller('alimtalkSendTypeDetailCtrl', ['$scope', '$http', function ($scop
 
                     var storeScope = agrid.getScope('alimtalkSendTypeTemplateCtrl');
                     storeScope._broadcast('alimtalkSendTypeTemplateCtrl', selectedRow);
+
+                    var storeScope2 = agrid.getScope('templateListCtrl');
+                    storeScope2._broadcast('templateListCtrl', selectedRow);
                     event.preventDefault();
                 }
             }
@@ -232,6 +247,10 @@ app.controller('alimtalkSendTypeDetailCtrl', ['$scope', '$http', function ($scop
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('alimtalkSendTypeTemplateCtrl');
                 storeScope._broadcast('alimtalkSendTypeTemplateCtrl', null);
+
+                // 템플릿 목록 초기화
+                var storeScope2 = agrid.getScope('templateListCtrl');
+                storeScope2.templateListClear();
             });
         }, false);
     };
@@ -278,9 +297,6 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('alimtalkSendTypeTemplateCtrl', $scope, $http, false));
 
-    // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("sendPeriodFgCombo", sendPeriodFgComboData); // 전송주기구분
-
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
@@ -297,8 +313,8 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         if(addSelected2 === "Y") {
             $("#lblSendTypeDtlCd").text(" ( [ " + $scope.selectedSendTypeTemplate.sendTypeDtlCd + " ]");
             $("#lblSendTypeDtlNm").text($scope.selectedSendTypeTemplate.sendTypeDtlNm + " )");
-            // 대기일때만
-            if($scope.selectedSendTypeTemplate.sendTypeCd == "001") {
+            // 전송유형 : 대기 -> 대기중 일때만
+            if($scope.selectedSendTypeTemplate.sendTypeCd == "001" && $scope.selectedSendTypeTemplate.sendTypeDtlCd == "02") {
                 $("#tabSendTypeTemplate").css("display", "");
             } else {
                 $("#tabSendTypeTemplate").css("display", "none");
@@ -326,16 +342,23 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             $scope.templateInfo = templateInfo;
 
             if(response.data.data.result != null) {
-                $scope.sendPeriodFg = $scope.templateInfo.sendPeriodFg;
                 $scope.sendPeriod = $scope.templateInfo.sendPeriod;
-                $("#lblTemplateGrpFg").text($scope.templateInfo.templateGrpFg);
-                $("#lblTemplateCd").text($scope.templateInfo.templateCd);
 
-                // 템플릿 양식 그리기
-                $scope.searchTemplateFormMake("Y", $scope.templateInfo);
+                if(response.data.data.result.templateCd != null) {
+                    $("#lblTemplateGrpFg").text($scope.templateInfo.templateGrpFg);
+                    $("#lblTemplateCd").text($scope.templateInfo.templateCd);
+
+                    // 템플릿 양식 그리기
+                    $scope.searchTemplateFormMake("Y", $scope.templateInfo);
+                } else {
+                    $("#lblTemplateGrpFg").text("");
+                    $("#lblTemplateCd").text("");
+
+                    // 템플릿 양식 그리기
+                    $scope.searchTemplateFormMake("N", null);
+                }
 
             } else {
-                $scope.sendPeriodFg = "";
                 $scope.sendPeriod = "";
                 $("#lblTemplateGrpFg").text("");
                 $("#lblTemplateCd").text("");
@@ -349,7 +372,13 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
     $scope.searchTemplateFormMake = function(dataYn, data) {
         var innerHtml = "";
         if(dataYn == "Y") {
-            innerHtml += "<div style=\"float:left; text-align:center; width:225px; height:230px; padding-top:10px; padding-right:10px;\">";
+            // 예시 템플릿 치환
+            var templateContent = data.templateContent;
+            for (var i = 0; i < templateChangeKeyColList.length; i++) {
+                templateContent = templateContent.replaceAll(templateChangeKeyColList[i].nmcodeNm.toString(), templateChangeKeyColList[i].nmcodeItem2.toString());
+            }
+
+            innerHtml += "<div style=\"float:left; text-align:center; width:225px; height:250px; padding-top:10px; padding-right:10px;\">";
             innerHtml += "<table>";
             innerHtml += "<colgroup>";
             innerHtml += "<col class=\"w100\" />";
@@ -358,7 +387,8 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             innerHtml += "<table>";
             innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ data.templateNm +"\" readonly/></td></tr>";
             innerHtml += "<tr style=\"height: 10px\"></tr>";
-            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + data.templateContent + "</textarea></td></tr>";
+            innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-alk-msgTop w100\" value=\""+ '알림톡 도착' +"\" disabled/></td></tr>";
+            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: white\" readonly>" + templateContent + "</textarea></td></tr>";
             innerHtml += "</table>";
             innerHtml += "</div>";
             $("#divTemplateComment").html(innerHtml);
@@ -412,43 +442,146 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         var params = {};
         params.sendTypeCd = $scope.selectedSendTypeTemplate.sendTypeCd;
         params.sendTypeDtlCd = $scope.selectedSendTypeTemplate.sendTypeDtlCd;
-        params.sendPeriodFg = $scope.sendPeriodFg;
-        params.sendPeriod = $scope.sendPeriod;
+        // 전송유형 : 대기 -> 대기중 일때만
+        if(params.sendTypeCd == "001" && params.sendTypeDtlCd == "02") {
+            params.sendPeriodFg = "02";
+            params.sendPeriod = $scope.sendPeriod;
+        } else {
+            params.sendPeriodFg = "01";
+            params.sendPeriod = "0";
+        }
         params.templateGrpFg = $("#lblTemplateGrpFg").text();
         params.templateCd = $("#lblTemplateCd").text();
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){
+        $scope._postJSONSave.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){
             $scope.searchAlimtalkSendTypeTemplate();
         });
     };
     // <-- //그리드 저장 -->
 
-    // 템플릿 선택
-    $scope.templatePopup = function() {
-        $scope.selectedSendTypeTemplate.templateGrpFg = $("#lblTemplateGrpFg").text();
-        $scope.selectedSendTypeTemplate.templateCd = $("#lblTemplateCd").text();
-
-        $scope.wjTemplatePopupLayer.show(true);
-        event.preventDefault();
-    };
-
-    // 템플릿 선택 팝업 - 템플릿 목록 선택
+    // 템플릿 목록 - 템플릿 목록 선택
     $scope.templateChoiceChange = function(data) {
         $("#lblTemplateGrpFg").text(data.templateGrpFg);
         $("#lblTemplateCd").text(data.templateCd);
 
         // 템플릿 양식 그리기
         $scope.searchTemplateFormMake("Y", data);
+
+        // 저장
+        var params = {};
+        params.sendTypeCd = $scope.selectedSendTypeTemplate.sendTypeCd;
+        params.sendTypeDtlCd = $scope.selectedSendTypeTemplate.sendTypeDtlCd;
+        // 전송유형 : 대기 -> 대기중 일때만
+        if(params.sendTypeCd == "001" && params.sendTypeDtlCd == "02") {
+            params.sendPeriodFg = "02";
+            params.sendPeriod = $scope.sendPeriod;
+        } else {
+            params.sendPeriodFg = "01";
+            params.sendPeriod = "0";
+        }
+        params.templateGrpFg = $("#lblTemplateGrpFg").text();
+        params.templateCd = $("#lblTemplateCd").text();
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){});
+    };
+}]);
+
+
+// 템플릿 목록 선택
+function templateChoice(templateGrpFg, templateCd, templateNm, templateContent, i, listLength) {
+    var scope = agrid.getScope('templateListCtrl');
+    var params = {};
+    params.templateGrpFg = templateGrpFg;
+    params.templateCd = templateCd;
+    params.templateNm = templateNm;
+    params.templateContent = templateContent;
+    params.listNum = i;
+    params.listLength = listLength;
+    scope.templateChoice(params);
+}
+/**
+ *  템플릿 조회 그리드 생성
+ */
+app.controller('templateListCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('templateListCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
     };
 
-    // 화면 ready 된 후 설정
-    angular.element(document).ready(function () {
-        // 템플릿 선택 팝업 핸들러 추가
-        $scope.wjTemplatePopupLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('templatePopupCtrl', $scope.getSelectedSendTypeTemplate());
-            }, 50)
-        });
+    // <-- 검색 호출 -->
+    $scope.$on("templateListCtrl", function(event, data) {
+        $scope.searchTemplateList(data);
+        event.preventDefault();
     });
+
+    $scope.searchTemplateList = function(params) {
+        $("#divTemplateCommentList").html("");
+
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/templatePopup/getAlimtalkSendTypeDetailTemplateList.sb", params, function(response) {
+            var list = response.data.data.list;
+            var innerHtml = "";
+
+            if(list.length > 0) {
+                for(var i=0; i < list.length; i++) {
+                    innerHtml += "<div style=\"float:left; text-align:center; width:205px; height:270px; padding-top:10px; padding-right:10px;\">";
+                    innerHtml += "<table>";
+                    innerHtml += "<colgroup>";
+                    innerHtml += "<col class=\"w100\" />";
+                    innerHtml += "</colgroup>";
+                    innerHtml += "<tbody>";
+                    innerHtml += "<table>";
+                    innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
+                    innerHtml += "<tr style=\"height: 10px\"></tr>";
+                    innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ list[i].templateNm +"\" readonly/></td></tr>";
+                    innerHtml += "<tr style=\"height: 10px\"></tr>";
+                    // innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\')\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
+                    innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
+                    innerHtml += "<tr style=\"height: 5px\"></tr>";
+                    innerHtml += "<tr><td><button class=\"btn_skyblue\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length + "\')\">" + '선택' + "</button></td></tr>";
+                    innerHtml += "</table>";
+                    innerHtml += "</div>";
+                }
+                $("#divTemplateCommentList").html(innerHtml);
+            } else {
+                innerHtml += "<div style=\"float:left; text-align:center; width:225px; height:190px; padding-top:10px; padding-right:10px;\">";
+                innerHtml += "<table>";
+                innerHtml += "<colgroup>";
+                innerHtml += "<col class=\"w100\" />";
+                innerHtml += "</colgroup>";
+                innerHtml += "<tbody>";
+                innerHtml += "<table>";
+                innerHtml += "<tr style=\"height: 20px\"></tr>";
+                innerHtml += "<tr><td>"+'- 등록된 템플릿이 없습니다.'+"</td></tr>";
+                innerHtml += "</table>";
+                innerHtml += "</div>";
+                $("#divTemplateCommentList").html(innerHtml);
+            }
+        }, false);
+    };
+    // <-- //검색 호출 -->
+
+    // 템플릿 목록 선택
+    $scope.templateChoice = function (data) {
+        var scope = agrid.getScope('alimtalkSendTypeTemplateCtrl');
+        scope.templateChoiceChange(data);
+
+        // 선택된 메세지 표시
+        for(var i=0; i < data.listLength; i++) {
+            if(i == data.listNum) {
+                $("#txt_commonFgNm" + i).css("background-color", "lightskyblue");
+            } else {
+                $("#txt_commonFgNm" + i).css("background-color", "white");
+            }
+        }
+    };
+
+    // 템플릿 목록 초기화
+    $scope.templateListClear = function () {
+        $("#divTemplateCommentList").html("");
+    };
 }]);

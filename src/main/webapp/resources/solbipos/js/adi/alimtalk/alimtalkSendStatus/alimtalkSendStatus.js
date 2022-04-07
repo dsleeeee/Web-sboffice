@@ -87,7 +87,6 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
                 // 메세지 클릭시 상세정보 조회
                 if ( col.binding === "msgContent") {
                     var selectedRow = s.rows[ht.row].dataItem;
-                    selectedRow.pageGubun = "alimtalkSendStatus";
                     $scope.setSelectedAlimtalkSendStatus(selectedRow);
                     $scope.wjAlimtalkMessageDtlLayer.show(true);
                     event.preventDefault();
