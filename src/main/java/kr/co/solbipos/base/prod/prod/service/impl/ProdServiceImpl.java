@@ -309,44 +309,42 @@ public class ProdServiceImpl implements ProdService {
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && hqProdEnvstVal == HqProdEnvFg.ALL) {
         // 본사인 경우 매장에 수정정보 내려줌
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            //[본사신규상품매장생성]이 [0 자동생성]일 경우 매장에 수정정보 내려줌
-            if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043") , "0").equals("0")){
-                String procResult;
+            //[본사신규상품매장생성]이 [0 자동생성]일 경우 매장에 수정정보 내려줌 -> 신규상품생성여부임, 수정정보는 내려줌
+            String procResult;
 
-                if (prodExist == 0) {
-                    // 상품정보 매장에 INSERT
-                    procResult = prodMapper.insertHqProdToStoreProd(prodVO);
+            if (prodExist == 0 && CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043") , "0").equals("0")) {
+                // 상품정보 매장에 INSERT
+                procResult = prodMapper.insertHqProdToStoreProd(prodVO);
 
-                    // 상품분류 매장에 INSERT
-                    prodMapper.insertClsHqToStore(prodVO);
+                // 상품분류 매장에 INSERT
+                prodMapper.insertClsHqToStore(prodVO);
 
-//                    }
+//                }
 
-                } else {
-                    // 상품정보 매장에 UPDATE
-                    procResult = prodMapper.updateHqProdToStoreProd(prodVO);
+            } else {
+                // 상품정보 매장에 UPDATE
+                procResult = prodMapper.updateHqProdToStoreProd(prodVO);
 
-                    // 상품분류 매장에 UPDATE
-                    prodMapper.updateClsHqToStore(prodVO);
+                // 상품분류 매장에 UPDATE
+                prodMapper.updateClsHqToStore(prodVO);
 
-                }
+            }
 
-                //매장 상품 바코드 저장(바코드정보가 있을 경우만)
-                if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
-                    prodMapper.saveProdBarcdStore(prodVO);
-                } else {
-                    prodMapper.deleteProdBarcdStore(prodVO);
-                }
+            //매장 상품 바코드 저장(바코드정보가 있을 경우만)
+            if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
+                prodMapper.saveProdBarcdStore(prodVO);
+            } else {
+                prodMapper.deleteProdBarcdStore(prodVO);
+            }
 
-                // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
-                if ("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
-                    //그룹(sdselGrp)
-                    prodMapper.insertSdselGrpToStore(prodVO);
-                    //분류(sdselClass)
-                    prodMapper.insertSdselClassToStore(prodVO);
-                    //상품(sdselProd)
-                    prodMapper.insertSdselProdToStore(prodVO);
-                }
+            // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
+            if ("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd() != null && prodVO.getSdselGrpCd().length() > 0) {
+                //그룹(sdselGrp)
+                prodMapper.insertSdselGrpToStore(prodVO);
+                //분류(sdselClass)
+                prodMapper.insertSdselClassToStore(prodVO);
+                //상품(sdselProd)
+                prodMapper.insertSdselProdToStore(prodVO);
             }
         }
 
