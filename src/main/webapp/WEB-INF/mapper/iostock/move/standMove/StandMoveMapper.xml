@@ -597,24 +597,17 @@
 		ORDER
 		BY      A.PROD_CD
     </select>
-	
+
 	<select id="getStorageList" parameterType="standMoveVO" resultType="DefaultMap">
         /* USE : StandMoveMapper.getStorageList - 매장 창고정보 조회 */
-	    SELECT   B.STORE_CD
-		  ,      B.STORAGE_CD
-		  ,      TMS.STORAGE_NM
-	      ,      SUM(B.CURR_QTY) AS CURR_QTY
-		FROM   TB_ST_STORE_STOCK_CUR B
-		  ,    TB_MS_STORAGE TMS
-		WHERE    B.STORE_CD   	=   #{storeCd}
-		AND      B.STORAGE_CD   <![CDATA[  >=  ]]>  '000'
-		AND      B.STORAGE_CD   <![CDATA[  <  ]]>   '999'
-		AND      B.STORE_CD     =   TMS.STORE_CD
-		AND      B.STORAGE_CD 	= 	TMS.STORAGE_CD
-		GROUP
-		BY     B.STORE_CD
-		,      B.STORAGE_CD
-		,      TMS.STORAGE_NM
+        SELECT 	A.STORE_CD,
+				A.STORAGE_CD,
+				A.STORAGE_NM,
+				NVL((SELECT SUM(B.CURR_QTY) FROM TB_ST_STORE_STOCK_CUR B WHERE B.STORE_CD = A.STORE_CD AND B.STORAGE_CD = A.STORAGE_CD), 0) AS CURR_QTY
+		FROM   	TB_MS_STORAGE A
+		WHERE 	A.STORE_CD = #{storeCd}
+		AND		A.STORAGE_CD   <![CDATA[  >=  ]]>  '000'
+		AND		A.STORAGE_CD   <![CDATA[  <   ]]>  '999'
     </select>
 	
     <!-- 매대이동관리 - 매대이동관리 상세 리스트 DTL 수정 -->
