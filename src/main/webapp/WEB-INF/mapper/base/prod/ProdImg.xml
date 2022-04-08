@@ -492,6 +492,44 @@
                    </foreach>
     </insert>
 
+    <!-- 상품이미지관리 - 본사상품이미지 매장적용(낱개) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        PARAM    : prodImgVO
+        COMMENTS : 본사상품 이미지를 매장에 적용한다.
+    -->
+    <insert id="prodImgToStore2" parameterType="prodImgVO">
+        /* USE : ProdImgMapper.prodImgToStore2 */
+            INSERT INTO TB_MS_PRODUCT_IMAGE
+             (
+                STORE_CD,
+                PROD_CD,
+                IMG_FG,
+                IMG_URL,
+                IMG_FILE_NM,
+                IMG_CHG_DT,
+                REMARK,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+             )
+                SELECT #{storeCd},
+                        PROD_CD,
+                        IMG_FG,
+                        SUBSTR(IMG_URL , 0, INSTR (IMG_URL, #{hqOfficeCd}) -1) || #{storeCd} || '/' || #{orgImgFg} AS IMG_URL,
+                        IMG_FILE_NM,
+                        #{regDt},
+                        REMARK,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_HQ_PRODUCT_IMAGE
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND IMG_FG = #{orgImgFg}
+    </insert>
+
     <!-- 이미지 복사 -->
     <!--
           TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE

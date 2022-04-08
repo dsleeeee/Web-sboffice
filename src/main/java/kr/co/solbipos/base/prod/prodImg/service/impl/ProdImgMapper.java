@@ -54,6 +54,9 @@ public interface ProdImgMapper {
     /** 상품이미지관리 - 본사상품이미지 매장적용 */
     int prodImgToStore(ProdImgVO prodImgVO);
 
+    /** 상품이미지관리 - 본사상품이미지 매장적용 */
+    int prodImgToStore2(ProdImgVO prodImgVO);
+
     /**  상품이미지관리 - 상품목록조회 */
     String getProdImgNm(ProdImgVO prodImgVO);
 

@@ -258,6 +258,7 @@ public class ProdImgServiceImpl implements ProdImgService {
         // 매장 키오스크 포스 환경설정값 일괄 저장
         for (ProdImgVO prodImgVO : prodImgVOs) {
 
+            prodImgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             prodImgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             prodImgVO.setImgChgDt(dt);
             prodImgVO.setRegDt(dt);
@@ -272,9 +273,40 @@ public class ProdImgServiceImpl implements ProdImgService {
 
             // 기존 매장이미지 삭제
             prodImgMapper.delStoreProdImg(prodImgVO);
+            for(int i = 0; i < prodImgVO.getArrImgFg().length; i++){
+                System.out.println("삭제 명령어 보기 : " + "/usr/bin/rm -rf " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getStoreCd() + "/" + prodImgVO.getArrImgFg()[i] + "/");
+                // 삭제명령어
+                try {
+                    Runtime.getRuntime().exec("/usr/bin/rm -rf " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getStoreCd() + "/" + prodImgVO.getArrImgFg()[i] + "/");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // 서버 파일복사
+                prodImgVO.setOrgImgFg(prodImgVO.getArrImgFg()[i]);
+                // 등록된 이미지 리스트 가져옴
+                List<DefaultMap<String>> orgFileNm = prodImgMapper.getProdImgList(prodImgVO);
+
+                for(int j = 0; j < orgFileNm.size(); j++){
+                    // 서버 파일 업로드
+                    System.out.println("복사 명령어 : " + "/usr/bin/cp -f " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getHqOfficeCd() + "/" + prodImgVO.getArrImgFg()[i] + "/" + orgFileNm.get(j).get("orgImgFileNm") + " " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getStoreCd() + "/" + prodImgVO.getArrImgFg()[i] + "/");
+                    try {
+                        Runtime.getRuntime().exec("/usr/bin/cp -f " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getHqOfficeCd() + "/" + prodImgVO.getArrImgFg()[i] + "/" + orgFileNm.get(j).get("orgImgFileNm") + " " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getStoreCd() + "/" + prodImgVO.getArrImgFg()[i] + "/");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                // DB 저장
+                if(orgFileNm.size() > 0) {
+                    // 본사상품이미지 매장적용
+                    result = prodImgMapper.prodImgToStore2(prodImgVO);
+                }
+            }
 
             // 본사상품이미지 매장적용
-            result = prodImgMapper.prodImgToStore(prodImgVO);
+//            result = prodImgMapper.prodImgToStore(prodImgVO);
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         }
