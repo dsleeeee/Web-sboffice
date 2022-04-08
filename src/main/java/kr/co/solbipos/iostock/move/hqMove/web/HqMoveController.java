@@ -85,7 +85,7 @@ public class HqMoveController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqMoveService.getHqMoveList(hqMoveVO);
+        List<DefaultMap<String>> list = hqMoveService.getHqMoveList(hqMoveVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, hqMoveVO);
     }
@@ -108,7 +108,7 @@ public class HqMoveController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        DefaultMap<String> result = hqMoveService.getSlipNoInfo(hqMoveVO);
+        DefaultMap<String> result = hqMoveService.getSlipNoInfo(hqMoveVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -131,7 +131,7 @@ public class HqMoveController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqMoveService.getHqMoveDtlList(hqMoveVO);
+        List<DefaultMap<String>> list = hqMoveService.getHqMoveDtlList(hqMoveVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, hqMoveVO);
     }
@@ -200,7 +200,7 @@ public class HqMoveController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqMoveService.getHqMoveRegistList(hqMoveVO);
+        List<DefaultMap<String>> list = hqMoveService.getHqMoveRegistList(hqMoveVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, hqMoveVO);
     }
@@ -245,7 +245,7 @@ public class HqMoveController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = hqMoveService.getHqMoveAddProdList(hqMoveVO);
+        List<DefaultMap<String>> list = hqMoveService.getHqMoveAddProdList(hqMoveVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, hqMoveVO);
     }

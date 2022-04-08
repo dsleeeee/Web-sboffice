@@ -7,6 +7,16 @@ public class HqMoveVO extends PageVO {
 
     private static final long serialVersionUID = 8013623600434420897L;
 
+    /**
+     * 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+    /** 조회매장 */
+    private String storeCd;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 전표번호(YYMM(4)+SEQ(6)) */
@@ -91,7 +101,23 @@ public class HqMoveVO extends PageVO {
     private String yymm;
     /** 발생구분 */
     private String occrFg;
-    
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
     /**
      * @return the hqOfficeCd
      */

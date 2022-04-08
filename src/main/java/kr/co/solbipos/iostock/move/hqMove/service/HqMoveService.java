@@ -7,19 +7,19 @@ import java.util.List;
 
 public interface HqMoveService {
     /** 매장이동관리 - 매장이동관리 리스트 조회 */
-    List<DefaultMap<String>> getHqMoveList(HqMoveVO hqMoveVO);
+    List<DefaultMap<String>> getHqMoveList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO);
 
     /** 매장이동관리 - 매장이동관리 전표상세 상세 조회 */
-    DefaultMap<String> getSlipNoInfo(HqMoveVO hqMoveVO);
+    DefaultMap<String> getSlipNoInfo(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO);
 
     /** 매장이동관리 - 매장이동관리 상세 리스트 조회 */
-    List<DefaultMap<String>> getHqMoveDtlList(HqMoveVO hqMoveVO);
+    List<DefaultMap<String>> getHqMoveDtlList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO);
 
     /** 매장이동관리 - 매장이동관리 신규등록 상품 리스트 조회 */
-    List<DefaultMap<String>> getHqMoveRegistList(HqMoveVO hqMoveVO);
+    List<DefaultMap<String>> getHqMoveRegistList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO);
 
     /** 매장이동관리 - 매장이동관리 상품추가 상품 리스트 조회 */
-    List<DefaultMap<String>> getHqMoveAddProdList(HqMoveVO hqMoveVO);
+    List<DefaultMap<String>> getHqMoveAddProdList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO);
 
     /** 매장이동관리 - 매장이동관리 상세 리스트 저장 */
     int saveHqMoveDtl(HqMoveVO[] hqMoveVOs, SessionInfoVO sessionInfoVO);

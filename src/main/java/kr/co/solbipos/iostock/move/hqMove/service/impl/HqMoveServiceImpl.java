@@ -4,6 +4,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 import java.util.List;
 
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,19 +33,35 @@ public class HqMoveServiceImpl implements HqMoveService {
 
     /** 매장이동관리 - 매장이동관리 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getHqMoveList(HqMoveVO hqMoveVO) {
+    public List<DefaultMap<String>> getHqMoveList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO) {
+
+        hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return hqMoveMapper.getHqMoveList(hqMoveVO);
     }
 
     /** 매장이동관리 - 전표상세 조회 */
     @Override
-    public DefaultMap<String> getSlipNoInfo(HqMoveVO hqMoveVO) {
+    public DefaultMap<String> getSlipNoInfo(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO) {
+        hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return hqMoveMapper.getSlipNoInfo(hqMoveVO);
     }
 
     /** 매장이동관리 - 매장이동관리 상세 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getHqMoveDtlList(HqMoveVO hqMoveVO) {
+    public List<DefaultMap<String>> getHqMoveDtlList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO) {
+        hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return hqMoveMapper.getHqMoveDtlList(hqMoveVO);
     }
 
@@ -90,6 +107,11 @@ public class HqMoveServiceImpl implements HqMoveService {
             hqMoveVO.setModId(sessionInfoVO.getUserId());
             hqMoveVO.setModDt(currentDt);
 
+            hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
             // DTL 수정
             result = hqMoveMapper.updateHqMoveDtl(hqMoveVO);
             if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -98,13 +120,21 @@ public class HqMoveServiceImpl implements HqMoveService {
             if(confirmFg.equals("Y")) {
 	        	//이입
             	hqMoveVO.setStorageCd(hqMoveVO.getInStorageCd());
-            	hqMoveVO.setOccrFg("42");
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                    hqMoveVO.setOccrFg("42");
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    hqMoveVO.setOccrFg("52");
+                }
             	hqMoveVO.setConfirmFg("Y");
 	            result = hqMoveMapper.insertHqStoreOutstockProd(hqMoveVO);
 	            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 	            //이출
 	            hqMoveVO.setStorageCd(hqMoveVO.getOutStorageCd());
-	            hqMoveVO.setOccrFg("41");
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                    hqMoveVO.setOccrFg("41");
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    hqMoveVO.setOccrFg("51");
+                }
 	            hqMoveVO.setInUnitQty(hqMoveVO.getOutUnitQty());
 	            hqMoveVO.setInEtcQty(hqMoveVO.getOutEtcQty());
 	            hqMoveVO.setInTotQty(hqMoveVO.getOutTotQty());
@@ -119,6 +149,11 @@ public class HqMoveServiceImpl implements HqMoveService {
             i++;
         }
 
+        hqStoreMoveHdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqStoreMoveHdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         // HD 수정
         result = hqMoveMapper.updateHqMoveHd(hqStoreMoveHdVO);
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -130,6 +165,12 @@ public class HqMoveServiceImpl implements HqMoveService {
             HqMoveVO iostockNewSlipNoVO = new HqMoveVO();
             iostockNewSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             iostockNewSlipNoVO.setYymm(yymm);
+
+            iostockNewSlipNoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                iostockNewSlipNoVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
             String iostockNewSlipNo = hqMoveMapper.getIostockNewSlipNo(iostockNewSlipNoVO);
 
             String outSlipNo = iostockNewSlipNo;
@@ -138,6 +179,11 @@ public class HqMoveServiceImpl implements HqMoveService {
             hqStoreMoveHdVO.setProcFg("3");
             hqStoreMoveHdVO.setOutSlipNo(outSlipNo);
             hqStoreMoveHdVO.setInSlipNo(inSlipNo);
+
+            hqStoreMoveHdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                hqStoreMoveHdVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
 
             // HD의 수정
             result = hqMoveMapper.updateHqMoveConfirm(hqStoreMoveHdVO);
@@ -153,7 +199,11 @@ public class HqMoveServiceImpl implements HqMoveService {
     public int deleteHqMoveDtl(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
+        hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         // DTL 삭제
         result = hqMoveMapper.deleteAllHqMoveDtl(hqMoveVO);
@@ -169,7 +219,13 @@ public class HqMoveServiceImpl implements HqMoveService {
 
     /** 매장이동관리 - 매장이동관리 신규등록 상품 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getHqMoveRegistList(HqMoveVO hqMoveVO) {
+    public List<DefaultMap<String>> getHqMoveRegistList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO) {
+
+        hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return hqMoveMapper.getHqMoveRegistList(hqMoveVO);
     }
 
@@ -188,6 +244,11 @@ public class HqMoveServiceImpl implements HqMoveService {
         HqMoveVO newSlipNoVO = new HqMoveVO();
         newSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         newSlipNoVO.setYymm(yymm);
+
+        newSlipNoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            newSlipNoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         String newSlipNo = hqMoveMapper.getNewSlipNo(newSlipNoVO);
 
         HqMoveVO hqStoreMoveHdVO = new HqMoveVO();
@@ -228,6 +289,11 @@ public class HqMoveServiceImpl implements HqMoveService {
             hqMoveVO.setModId(sessionInfoVO.getUserId());
             hqMoveVO.setModDt(currentDt);
 
+            hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
             // DTL 등록
             result = hqMoveMapper.insertHqMoveDtl(hqMoveVO);
             if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -236,12 +302,20 @@ public class HqMoveServiceImpl implements HqMoveService {
             if(confirmFg.equals("Y")) {
 	        	//이입
             	hqMoveVO.setStorageCd(hqMoveVO.getInStorageCd());
-            	hqMoveVO.setOccrFg("42");
+            	if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                    hqMoveVO.setOccrFg("42");
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    hqMoveVO.setOccrFg("51");
+                }
 	            result = hqMoveMapper.insertHqStoreOutstockProd(hqMoveVO);
 	            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 	            //이출
 	            hqMoveVO.setStorageCd(hqMoveVO.getOutStorageCd());
-	            hqMoveVO.setOccrFg("41");
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                    hqMoveVO.setOccrFg("41");
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    hqMoveVO.setOccrFg("52");
+                }
 	            hqMoveVO.setInUnitQty(hqMoveVO.getOutUnitQty());
 	            hqMoveVO.setInEtcQty(hqMoveVO.getOutEtcQty());
 	            hqMoveVO.setInTotQty(hqMoveVO.getOutTotQty());
@@ -256,6 +330,11 @@ public class HqMoveServiceImpl implements HqMoveService {
             i++;
         }
 
+        hqStoreMoveHdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqStoreMoveHdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         // HD 등록
         result = hqMoveMapper.insertHqMoveHd(hqStoreMoveHdVO);
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -266,6 +345,12 @@ public class HqMoveServiceImpl implements HqMoveService {
             HqMoveVO iostockNewSlipNoVO = new HqMoveVO();
             iostockNewSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             iostockNewSlipNoVO.setYymm(yymm);
+
+            iostockNewSlipNoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                iostockNewSlipNoVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
             String iostockNewSlipNo = hqMoveMapper.getIostockNewSlipNo(iostockNewSlipNoVO);
 
             String outSlipNo = iostockNewSlipNo;
@@ -285,7 +370,13 @@ public class HqMoveServiceImpl implements HqMoveService {
 
     /** 매장이동관리 - 매장이동관리 상품추가 상품 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getHqMoveAddProdList(HqMoveVO hqMoveVO) {
+    public List<DefaultMap<String>> getHqMoveAddProdList(HqMoveVO hqMoveVO, SessionInfoVO sessionInfoVO) {
+
+        hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return hqMoveMapper.getHqMoveRegistList(hqMoveVO);
     }
 
@@ -324,12 +415,22 @@ public class HqMoveServiceImpl implements HqMoveService {
             hqMoveVO.setModId(sessionInfoVO.getUserId());
             hqMoveVO.setModDt(currentDt);
 
+            hqMoveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                hqMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
             // DTL 등록
             result = hqMoveMapper.insertHqMoveDtl(hqMoveVO);
             if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             returnResult += result;
             i++;
+        }
+
+        hqStoreMoveHdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqStoreMoveHdVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
         // HD 수정
