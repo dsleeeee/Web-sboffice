@@ -172,6 +172,8 @@
         <button class="btn_skyblue ml5 fr" ng-click="save()" ><s:message code="cmm.save"/></button>
         <%-- 삭제 --%>
         <button class="btn_skyblue ml5 fr" ng-click="delete()" ><s:message code="cmm.delete"/></button>
+        <%-- 자동채번 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="barCdAutoSet()" ><s:message code="barcd.autoBarcd"/></button>
         <%-- 바코드 자동 생성 --%>
 <%--        <button class="btn_skyblue ml5 fr" ng-click="autoBarcd()" ><s:message code="barcd.autoBarcd"/></button>--%>
     </div>
@@ -246,7 +248,7 @@
     var hqOfficeCd = '${hqOfficeCd}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/barcd.js?ver=20201224.09" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prodBarcd/prodDetailView.jsp">

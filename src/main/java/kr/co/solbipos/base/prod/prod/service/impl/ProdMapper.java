@@ -57,6 +57,7 @@ public interface ProdMapper {
 
     /** 상품정보 저장 */
     int saveProductInfo(ProdVO prodVO);
+    int saveProdInfo(ProdVO prodVO);
 
     /** 본사에서는 프로시저 호출에 사용할 상품의 존재여부를 미리 체크함 */
     int getProdExistInfo(ProdVO prodVO);

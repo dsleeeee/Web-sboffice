@@ -103,6 +103,8 @@ public class ProdVO extends PageVO {
     private String useYn;
     /** 비고 */
     private String remark;
+    /** 상품 상세 설명 */
+    private String prodInfo;
 
     /** 바코드 */
     private String barCd;
@@ -781,6 +783,14 @@ public class ProdVO extends PageVO {
      */
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getProdInfo() {
+        return prodInfo;
+    }
+
+    public void setProdInfo(String prodInfo) {
+        this.prodInfo = prodInfo;
     }
 
     /**

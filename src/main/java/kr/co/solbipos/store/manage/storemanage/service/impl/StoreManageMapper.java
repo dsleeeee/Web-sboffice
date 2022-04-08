@@ -152,6 +152,9 @@ public interface StoreManageMapper {
     int insertStoreBarcd(StoreManageVO storeManageVO);
     int insertStoreHqBarcd(StoreManageVO storeManageVO);
 
+    /** 상품상세설명 복사 */
+    int insertStoreHqProdInfo(StoreManageVO storeManageVO);
+
     /** 취급상품 복사  */
     int insertStoreHqProductStore(StoreManageVO storeManageVO);
     int deleteStoreProductStore(StoreManageVO storeManageVO);

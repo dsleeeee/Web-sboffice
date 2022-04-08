@@ -95,6 +95,8 @@
                                 <div style="float: left; padding: 3px 10px 0 5px;"><label><s:message code="prodImg.kioskImg" /></label></div>
                                 <div style="float: left;"><input type="checkbox" id="chkDid" value="003"/></div>
                                 <div style="float: left; padding: 3px 10px 0 5px;"><label><s:message code="prodImg.didImg" /></label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkHash" value="004"/></div>
+                                <div style="float: left; padding: 3px 10px 0 5px;"><label><s:message code="prodImg.didHash" /></label></div>
                                 <button class="btn_blue ml10 fl" id="btnRegImgStore" ng-click="btnRegImgStore()"><s:message code="cmm.apply"/></button>
                             </td>
                         </tr>
@@ -110,4 +112,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgStoreRegist.js?ver=20210617.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgStoreRegist.js?ver=20210617.02" charset="utf-8"></script>

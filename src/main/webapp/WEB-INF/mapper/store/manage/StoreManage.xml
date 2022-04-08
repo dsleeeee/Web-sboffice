@@ -2555,6 +2555,59 @@
             )
     </insert>
 
+    <!-- 상품상세설명 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_INFO
+        PARAM    : storeManageVO
+        COMMENTS : 본사의 상품상세설명을 복사한다
+    -->
+    <insert id="insertStoreHqProdInfo" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProdInfo */
+        MERGE INTO TB_MS_PRODUCT_INFO A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            PROD_CD,
+            PROD_INFO,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_HQ_PRODUCT_INFO
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROD_INFO = B.PROD_INFO,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.PROD_INFO,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.PROD_INFO,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
     <!-- 사이드(속성) 복사 -->
     <!--
         TABLE    : TB_MS_PRODUCT_SDATTR_CLASS
