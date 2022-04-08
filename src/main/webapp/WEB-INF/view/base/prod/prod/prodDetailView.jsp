@@ -512,6 +512,22 @@
                     </tbody>
                 </table>
             </div>
+            <%-- 상품상세설명 --%>
+            <h3 class="h3_tbl" ng-if="prodDetail.prodInfo !== ''"><s:message code="prod.title.info"/></h3>
+            <div class="tblBr" ng-if="prodDetail.prodInfo !== ''">
+                <table class="tblType01">
+                    <colgroup>
+                        <col class="w100"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class="gr lh20" id="_prodInfo">
+                            <textarea id="_info"  class="w100" cols="42" style="height:30px;resize: none;" readonly>{{prodDetail.prodInfo}}</textarea>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <%-- 할인/적립정보 --%>
             <h3 class="h3_tbl" ng-if="prodDetail.pointSaveYn === 'Y'"><s:message code="prod.title.dcAndSaveInfo"/></h3>
             <div class="tblBr" ng-if="prodDetail.pointSaveYn === 'Y'">

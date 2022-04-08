@@ -447,7 +447,8 @@
                 thvp.VENDR_CD,
                 thvp.VENDR_NM,
                 thp.PRC_CTRL_FG,
-                thp.MAP_PROD_CD
+                thp.MAP_PROD_CD,
+                ( SELECT PROD_INFO FROM TB_HQ_PRODUCT_INFO WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
@@ -558,7 +559,8 @@
                 tmvp.VENDR_CD,
                 tmvp.VENDR_NM,
                 tmp.PRC_CTRL_FG,
-                tmp.MAP_PROD_CD
+                tmp.MAP_PROD_CD,
+                ( SELECT PROD_INFO FROM TB_MS_PRODUCT_INFO WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_BRAND tmb ON
@@ -987,6 +989,88 @@
             </when>
         </choose>
     </update>
+
+
+    <!-- 상품정보 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_INFO, TB_HQ_PRODUCT_INFO
+        PARAM    : prodVO
+        COMMENTS : 본사/매장의 상품상세설명을 생성/수정 한다.
+    -->
+    <update id="saveProdInfo" parameterType="prodVO">
+    /* ProdMapper.saveProdInfo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_INFO thpi
+                USING DUAL
+                ON (
+                thpi.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thpi.PROD_CD = #{prodCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                thpi.PROD_INFO = #{prodInfo},
+                thpi.MOD_DT = #{modDt},
+                thpi.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                HQ_OFFICE_CD,
+                PROD_CD,
+                PROD_INFO,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                #{prodCd},
+                #{prodInfo},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_INFO tmpi
+                USING DUAL
+                ON (
+                        tmpi.STORE_CD = #{storeCd}
+                    AND tmpi.PROD_CD = #{prodCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                    tmpi.PROD_INFO = #{prodInfo},
+                    tmpi.MOD_DT = #{modDt},
+                    tmpi.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                STORE_CD,
+                PROD_CD,
+                PROD_INFO,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{prodCd},
+                #{prodInfo},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+        </choose>
+    </update>
+
 
     <!-- 상품 판매가 저장 -->
     <!--

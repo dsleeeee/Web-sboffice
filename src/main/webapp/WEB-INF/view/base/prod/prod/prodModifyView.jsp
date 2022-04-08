@@ -244,7 +244,8 @@
                     <s:message code="prod.barCd"/>
                 </th>
                 <td>
-                    <input type="text" id="_barCd" name="barCd" class="sb-input w100" ng-model="prodModifyInfo.barCd" />
+                    <input type="text" id="_barCd" name="barCd" class="sb-input" style="width: 150px" ng-model="prodModifyInfo.barCd" />
+                  <button class="btn_skyblue fr w30" ng-click="barCdAutoSet()"><s:message code="prod.autoSet"/></button>
                 </td>
                 <%-- 가격관리구분 --%>
                 <th>
@@ -670,6 +671,23 @@
           </tbody>
         </table>
       </div>
+      <%-- 상품 상세 설명 --%>
+      <h3 class="h3_tbl"><s:message code="prod.title.info"/></h3>
+      <div class="tblBr">
+        <table class="tblType01">
+          <colgroup>
+            <col class="w100"/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <th class="gr lh30">
+<%--              <input type="text" id="_info" name="info" style="height:50px" class="sb-input w100" ng-model="prodModifyInfo.info"/>--%>
+                  <textarea id="_info"  class="w100" cols="42" style="height:30px;resize: none;" ng-model="prodModifyInfo.prodInfo"></textarea>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <%-- 할인/적립정보 --%>
       <h3 class="h3_tbl" ng-if="prodModifyInfo.pointSaveYn === 'Y'"><s:message code="prod.title.dcAndSaveInfo"/></h3>
       <div class="tblBr" ng-if="prodModifyInfo.pointSaveYn === 'Y'">
@@ -745,7 +763,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20211103.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20211103.07" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -129,6 +129,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
             // 비고
             params.remark = ""; // 비고
+            params.prodInfo = ""; // 상품 상세 설명
             // 상품정보 set (초기값 셋팅)
             $scope.setProdModifyInfo(params);
         }
@@ -141,7 +142,20 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
-    
+
+    $scope.barCdAutoSet = function (){
+        if($scope.getMode() === "I"){
+            $scope.prodModifyInfo.barCd = '자동생성';
+        } else if($scope.getMode() === "U"){
+            $scope.prodModifyInfo.barCd = $scope.prodModifyInfo.prodCd + numberPad(Math.floor(Math.random() * 100), 2);
+        }
+    }
+
+    function numberPad(n, width) {
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+    }
+
     // 브랜드 콤보박스 셋팅
     $scope.setbrandDropdownList = function(prodCd){
 
