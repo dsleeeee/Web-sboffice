@@ -123,7 +123,7 @@ public class HqMoveServiceImpl implements HqMoveService {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
                     hqMoveVO.setOccrFg("42");
                 } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                    hqMoveVO.setOccrFg("52");
+                    hqMoveVO.setOccrFg("51");
                 }
             	hqMoveVO.setConfirmFg("Y");
 	            result = hqMoveMapper.insertHqStoreOutstockProd(hqMoveVO);
@@ -133,7 +133,7 @@ public class HqMoveServiceImpl implements HqMoveService {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
                     hqMoveVO.setOccrFg("41");
                 } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                    hqMoveVO.setOccrFg("51");
+                    hqMoveVO.setOccrFg("52");
                 }
 	            hqMoveVO.setInUnitQty(hqMoveVO.getOutUnitQty());
 	            hqMoveVO.setInEtcQty(hqMoveVO.getOutEtcQty());
