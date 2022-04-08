@@ -1335,4 +1335,542 @@ public class ProdServiceImpl implements ProdService {
         }
         return prodMapper.getPoUnitFgData(prodVO);
     }
+
+
+    /** 선택상품삭제 */
+    @Override
+    public int selectProdDelete(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO){
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        int delYn = 0;           // 삭제가능여부 파악
+        int iSeq = 1;            // 상품삭제 임시테이블 상품 seq 번호
+
+        String delProdSeq = "";  // 영구삭제할 상품 seq 번호(불필요한 로직 실행안하기 위한 판별용)
+        String modProdSeq = "";  // '미사용'처리할 상품 seq 번호(불필요한 로직 실행안하기 위한 판별용)
+
+        for (ProdVO prodVO : prodVOs) {
+
+            delYn = 0; // 초기화
+            prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            prodVO.setRegDt(dt);
+            prodVO.setRegId(sessionInfoVO.getUserId());
+            prodVO.setModDt(dt);
+            prodVO.setModId(sessionInfoVO.getUserId());
+            prodVO.setSessionId(sessionInfoVO.getUserId());
+
+            // 삭제 시작 전, 기존 상품삭제 임시테이블 초기화
+            if(iSeq == 1){
+                prodVO.setDelLevel(""); // 모든 데이터 초기화
+                prodMapper.deleteAllTmpDelProduct(prodVO);
+            }
+
+            prodVO.setDelLevel("1"); // 본사 또는 매장의 본인 상품 삭제
+            prodVO.setSeq(iSeq);
+
+            // 상품삭제 전 데이터 확인
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+                delYn += prodMapper.getHqEventMsgProdCnt(prodVO);              // 본사 - 이벤트 상품
+                delYn += prodMapper.getHqProductSdselProdCnt(prodVO);          // 본사 - 상품 사이드선택 상품
+                delYn += prodMapper.getHqProductUnitstProdCnt(prodVO);         // 본사 - 상품 세트구성 상품
+                delYn += prodMapper.getHqPromoBeneProdCnt(prodVO);             // 본사 - 프로모션 혜택품목
+                delYn += prodMapper.getHqPromoCondiProdCnt(prodVO);            // 본사 - 프로모션 적용상품
+                delYn += prodMapper.getHqStoreProdGroupDtlCnt(prodVO);         // 본사 - 메뉴그룹-상품설정
+                delYn += prodMapper.getStHqActualInspectionDtlCnt(prodVO);     // 본사 - 실사재고 상세
+                delYn += prodMapper.getStHqAdjustDtlCnt(prodVO);               // 본사 - 재고조정 상세
+                delYn += prodMapper.getStHqDisuseDtlCnt(prodVO);               // 본사 - 재고폐기 상세
+                delYn += prodMapper.getStHqSetprodCompositionCnt(prodVO);      // 본사 - 수불내역 세트구성/해체내역
+                delYn += prodMapper.getStHqSetprodCompositionDtlCnt(prodVO);   // 본사 - 수불내역 세트구성/해체내역 상세
+                delYn += prodMapper.getStHqStockCurCnt(prodVO);                // 본사 - 현재고
+                delYn += prodMapper.getPoHqMoveDtlCnt(prodVO);                 // 본사수불 - 이동전표 본사간이동내역 DT
+                delYn += prodMapper.getPoHqStoreDistributeCnt(prodVO);         // 본사수불 - 분배출고_매장별분배출고내역
+                delYn += prodMapper.getPoHqStoreOutstockDtlCnt(prodVO);        // 본사수불 - 출고전표_매장출고내역_상세
+                delYn += prodMapper.getPoHqVendrInstockDtlCnt(prodVO);         // 본사수불 - 거래처_업체입고반출전표_상세
+                delYn += prodMapper.getPoHqVendrOrderDtlCnt(prodVO);           // 본사수불 - 거래처_업체발주전표 상세
+                delYn += prodMapper.getPoStoreInstockErrorDtlCnt(prodVO);      // 본사수불 - 물량오류_매장입고오류내역 상세
+                delYn += prodMapper.getPoStoreMoveDtlCnt(prodVO);              // 본사수불 - 이동전표_매장간이동내역-상세
+            }else{
+                delYn += prodMapper.getMsEventMsgProdCnt(prodVO);              // 매장 - 이벤트 상품
+                delYn += prodMapper.getMsProductUnitstProdCnt(prodVO);         // 매장 - 상품 세트구성 상품
+                delYn += prodMapper.getMsPromoBeneProdCnt(prodVO);             // 매장 - 프로모션 혜택품목
+                delYn += prodMapper.getMsPromoCondiProdCnt(prodVO);            // 매장 - 프로모션 적용상품
+                delYn += prodMapper.getStStoreActualInspectionDtlCnt(prodVO);  // 매장 - 실사재고 상세
+                delYn += prodMapper.getStStoreAdjustDtlCnt(prodVO);            // 매장 - 재고조정 상세
+                delYn += prodMapper.getStStoreDisuseDtlCnt(prodVO);            // 매장 - 재고폐기 상세
+                delYn += prodMapper.getStStoreStockCurCnt(prodVO);             // 매장 - 현재고
+                delYn += prodMapper.getPoHqStoreDistributeCnt(prodVO);         // 매장수불 - 분배출고_매장별분배출고내역
+                delYn += prodMapper.getPoHqStoreOrderDtlCnt(prodVO);           // 매장수불 - 주문전표_본사주문내역-상세
+                delYn += prodMapper.getPoHqStoreOutstockDtlCnt(prodVO);        // 매장수불 - 출고전표_매장출고내역_상세
+                delYn += prodMapper.getPoStoreStandMoveDtlCnt(prodVO);         // 매장수불 - 매대창고간이동내역 상세
+                delYn += prodMapper.getPoStoreVendrInstockDtlCnt(prodVO);      // 매장수불 - 거래처 업체입고반출전표 상세
+                delYn += prodMapper.getPoStoreVendrOrderDtlCnt(prodVO);        // 매장수불 - 거래처 업체발주전표 상세
+            }
+
+            if(delYn == 0){
+                prodVO.setDelTypeFg("0"); // 영구삭제가능
+                delProdSeq += (delProdSeq.equals("") ? "" : ",") + prodVO.getProdCd();
+            }else{
+                prodVO.setDelTypeFg("1"); // 영구삭제불가('미사용' 처리)
+                modProdSeq += (modProdSeq.equals("") ? "" : ",") + prodVO.getProdCd();
+            }
+
+            // 상품삭제 임시테이블에 Insert
+            prodMapper.insertTmpDelProduct(prodVO);
+            iSeq++;
+        }
+        System.out.println("선택_delProdSeq : " + delProdSeq);
+        System.out.println("선택_modProdSeq : " + modProdSeq);
+
+        ProdVO prodVO2 = new ProdVO();
+        prodVO2.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO2.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO2.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        prodVO2.setRegDt(dt);
+        prodVO2.setRegId(sessionInfoVO.getUserId());
+        prodVO2.setModDt(dt);
+        prodVO2.setModId(sessionInfoVO.getUserId());
+        prodVO2.setSessionId(sessionInfoVO.getUserId());
+        prodVO2.setDelLevel("1"); // 본사 또는 매장의 본인 상품 삭제
+
+        // 선택상품 영구삭제
+        if(!StringUtil.getOrBlank(delProdSeq).equals("")){
+
+            prodVO2.setDelTypeFg("0"); // 영구삭제가능
+
+            prodMapper.deleteProdInfoCouponProd(prodVO2);          // 쿠폰적용상품
+            prodMapper.deleteProdInfoKioskKey(prodVO2);            // 키오스크 키맵설정
+            prodMapper.deleteProdInfoKioskRecmd(prodVO2);          // 키오스크 추천메뉴정보
+            prodMapper.deleteProdInfoKioskRecmdProd(prodVO2);      // 키오스크 메뉴추천리스트
+            prodMapper.deleteProdInfoAlgiProd(prodVO2);            // 재료/알러지-상품맵핑정보
+            prodMapper.deleteProdInfoBarcd(prodVO2);               // 상품-바코드
+            prodMapper.deleteProdInfoDlvrProdNm(prodVO2);          // 배달앱 상품명-맵핑정보
+            prodMapper.deleteProdInfoOption(prodVO2);              // 마스터-키오스크옵션상품
+            prodMapper.deleteProdInfoRecpProd(prodVO2);            // 재료-상품맵핑정보
+            prodMapper.deleteProdInfoSalePrice(prodVO2);           // 상품 판매금액
+            prodMapper.deleteProdInfoVendorProd(prodVO2);          // 거래처별_취급상품
+            prodMapper.deleteProdInfoUnitstProd(prodVO2);          // 상품_세트구성_상품
+
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+                prodMapper.deleteProdInfoHqProductStore(prodVO2);  // 본사) 상품별_취급매장
+            }else{
+                prodMapper.deleteProdInfoPrintProd(prodVO2);       // 매장) 주방프린터_출력상품
+                prodMapper.deleteProdInfoSdselProd(prodVO2);       // 매장) 상품_사이드선택_상품
+            }
+
+            // 상품이미지 삭제
+            try{
+                // 저장 경로 설정
+                String path_folder = "";
+
+                // 접속권한에 따른 경로 셋팅
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+                    path_folder = sessionInfoVO.getHqOfficeCd();
+                }else{
+                    path_folder = sessionInfoVO.getStoreCd();
+                }
+
+                // 서버 저장 경로 설정 (imgFg -> 001: 기본이미지, 002: KIOSK이미지, 003: DID이미지)
+                //String path = "D:\\prod_img\\" + path_folder + "/";
+                String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/";
+
+                // 삭제할 상품이미지 파일명 가져오기
+                List<DefaultMap<String>> imgList = prodMapper.getProdImgInfo(prodVO2);
+
+                if(imgList.size() > 0){
+                    for(DefaultMap<String> list : imgList){
+                        // 서버 파일 삭제
+                        File delFile = new File(path + list.getStr("imgFg") + "/" + list.getStr("imgFileNm"));
+                        if(delFile.exists()) {
+                            delFile.delete();
+                            System.out.println("선택_이미지삭제 : " + path + list.getStr("imgFg") + "/" + list.getStr("imgFileNm"));
+                        }
+                    }
+                }
+
+            }catch(Exception e) {
+                System.out.println("선택_이미지삭제_오류 : " + e.getMessage());
+            }
+
+            prodMapper.deleteProdInfoImage(prodVO2);               // 상품 이미지
+            prodMapper.deleteProdInfo(prodVO2);                    // 상품정보
+
+            // 본사인경우, 매장의 상품정보도 영구삭제
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+                deleteStoreProd(prodVO2);
+            }
+        }
+
+        // 선택상품 '미사용' 처리
+        prodVO2.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO2.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO2.setStoreCd(sessionInfoVO.getStoreCd());
+        }else{
+            prodVO2.setStoreCd("");
+        }
+        prodVO2.setSessionId(sessionInfoVO.getUserId());
+        prodVO2.setDelLevel("1"); // 본사 또는 매장의 본인 상품 삭제
+
+        if(!StringUtil.getOrBlank(modProdSeq).equals("")){
+
+            prodVO2.setDelTypeFg("1"); // 영구삭제불가('미사용' 처리)
+            prodMapper.updateProdUseYn(prodVO2);
+
+            // 본사인경우, 매장의 상품정보도 '미사용' 처리
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+                prodMapper.updateStoreProdUseYn(prodVO2);
+            }
+        }
+
+        // 완료 본사/매장의 임시테이블 초기화
+        prodMapper.deleteAllTmpDelProduct(prodVO2);
+
+        return result;
+    }
+
+    /** 전체상품삭제 */
+    @Override
+    public int allProdDelete(ProdVO prodVO, SessionInfoVO sessionInfoVO){
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        int delYn = 0;           // 삭제가능여부 파악
+        int iSeq = 1;            // 상품삭제 임시테이블 상품 seq 번호
+
+        String delProdSeq = "";  // 영구삭제할 상품 seq 번호(불필요한 로직 실행안하기 위한 판별용)
+        String modProdSeq = "";  // '미사용'처리할 상품 seq 번호(불필요한 로직 실행안하기 위한 판별용)
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        prodVO.setRegDt(dt);
+        prodVO.setRegId(sessionInfoVO.getUserId());
+        prodVO.setModDt(dt);
+        prodVO.setModId(sessionInfoVO.getUserId());
+        prodVO.setSessionId(sessionInfoVO.getUserId());
+
+        // 삭제 시작 전, 기존 상품삭제 임시테이블 초기화
+        prodMapper.deleteAllTmpDelProduct(prodVO);
+
+        prodVO.setDelLevel("1"); // 본사 또는 매장의 본인 상품 삭제
+        prodVO.setUserId(sessionInfoVO.getUserId());
+
+        // 전체 상품 조회
+        List<DefaultMap<String>> prodList = prodMapper.getAllProdList(prodVO);
+
+        if(prodList.size() > 0){
+            for(DefaultMap<String> prod : prodList) {
+
+                delYn = 0; // 초기화
+                prodVO.setProdCd(prod.getStr("prodCd"));
+                prodVO.setSeq(iSeq);
+
+                // 상품삭제 전 데이터 확인
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    delYn += prodMapper.getHqEventMsgProdCnt(prodVO);              // 본사 - 이벤트 상품
+                    delYn += prodMapper.getHqProductSdselProdCnt(prodVO);          // 본사 - 상품 사이드선택 상품
+                    delYn += prodMapper.getHqProductUnitstProdCnt(prodVO);         // 본사 - 상품 세트구성 상품
+                    delYn += prodMapper.getHqPromoBeneProdCnt(prodVO);             // 본사 - 프로모션 혜택품목
+                    delYn += prodMapper.getHqPromoCondiProdCnt(prodVO);            // 본사 - 프로모션 적용상품
+                    delYn += prodMapper.getHqStoreProdGroupDtlCnt(prodVO);         // 본사 - 메뉴그룹-상품설정
+                    delYn += prodMapper.getStHqActualInspectionDtlCnt(prodVO);     // 본사 - 실사재고 상세
+                    delYn += prodMapper.getStHqAdjustDtlCnt(prodVO);               // 본사 - 재고조정 상세
+                    delYn += prodMapper.getStHqDisuseDtlCnt(prodVO);               // 본사 - 재고폐기 상세
+                    delYn += prodMapper.getStHqSetprodCompositionCnt(prodVO);      // 본사 - 수불내역 세트구성/해체내역
+                    delYn += prodMapper.getStHqSetprodCompositionDtlCnt(prodVO);   // 본사 - 수불내역 세트구성/해체내역 상세
+                    delYn += prodMapper.getStHqStockCurCnt(prodVO);                // 본사 - 현재고
+                    delYn += prodMapper.getPoHqMoveDtlCnt(prodVO);                 // 본사수불 - 이동전표 본사간이동내역 DT
+                    delYn += prodMapper.getPoHqStoreDistributeCnt(prodVO);         // 본사수불 - 분배출고_매장별분배출고내역
+                    delYn += prodMapper.getPoHqStoreOutstockDtlCnt(prodVO);        // 본사수불 - 출고전표_매장출고내역_상세
+                    delYn += prodMapper.getPoHqVendrInstockDtlCnt(prodVO);         // 본사수불 - 거래처_업체입고반출전표_상세
+                    delYn += prodMapper.getPoHqVendrOrderDtlCnt(prodVO);           // 본사수불 - 거래처_업체발주전표 상세
+                    delYn += prodMapper.getPoStoreInstockErrorDtlCnt(prodVO);      // 본사수불 - 물량오류_매장입고오류내역 상세
+                    delYn += prodMapper.getPoStoreMoveDtlCnt(prodVO);              // 본사수불 - 이동전표_매장간이동내역-상세
+                } else {
+                    delYn += prodMapper.getMsEventMsgProdCnt(prodVO);              // 매장 - 이벤트 상품
+                    delYn += prodMapper.getMsProductUnitstProdCnt(prodVO);         // 매장 - 상품 세트구성 상품
+                    delYn += prodMapper.getMsPromoBeneProdCnt(prodVO);             // 매장 - 프로모션 혜택품목
+                    delYn += prodMapper.getMsPromoCondiProdCnt(prodVO);            // 매장 - 프로모션 적용상품
+                    delYn += prodMapper.getStStoreActualInspectionDtlCnt(prodVO);  // 매장 - 실사재고 상세
+                    delYn += prodMapper.getStStoreAdjustDtlCnt(prodVO);            // 매장 - 재고조정 상세
+                    delYn += prodMapper.getStStoreDisuseDtlCnt(prodVO);            // 매장 - 재고폐기 상세
+                    delYn += prodMapper.getStStoreStockCurCnt(prodVO);             // 매장 - 현재고
+                    delYn += prodMapper.getPoHqStoreDistributeCnt(prodVO);         // 매장수불 - 분배출고_매장별분배출고내역
+                    delYn += prodMapper.getPoHqStoreOrderDtlCnt(prodVO);           // 매장수불 - 주문전표_본사주문내역-상세
+                    delYn += prodMapper.getPoHqStoreOutstockDtlCnt(prodVO);        // 매장수불 - 출고전표_매장출고내역_상세
+                    delYn += prodMapper.getPoStoreStandMoveDtlCnt(prodVO);         // 매장수불 - 매대창고간이동내역 상세
+                    delYn += prodMapper.getPoStoreVendrInstockDtlCnt(prodVO);      // 매장수불 - 거래처 업체입고반출전표 상세
+                    delYn += prodMapper.getPoStoreVendrOrderDtlCnt(prodVO);        // 매장수불 - 거래처 업체발주전표 상세
+                }
+
+                if(delYn == 0){
+                    prodVO.setDelTypeFg("0"); // 영구삭제가능
+                    delProdSeq += (delProdSeq.equals("") ? "" : ",") + prodVO.getProdCd();
+                }else{
+                    prodVO.setDelTypeFg("1"); // 영구삭제불가('미사용' 처리)
+                    modProdSeq += (modProdSeq.equals("") ? "" : ",") + prodVO.getProdCd();
+                }
+
+                // 상품삭제 임시테이블에 Insert
+                prodMapper.insertTmpDelProduct(prodVO);
+                iSeq++;
+            }
+        }
+
+        System.out.println("전체_delProdSeq : " + delProdSeq);
+        System.out.println("전체_modProdSeq : " + modProdSeq);
+
+        // 선택상품 영구삭제
+        if(!StringUtil.getOrBlank(delProdSeq).equals("")){
+
+            prodVO.setDelTypeFg("0"); // 영구삭제가능
+
+            prodMapper.deleteProdInfoCouponProd(prodVO);          // 쿠폰적용상품
+            prodMapper.deleteProdInfoKioskKey(prodVO);            // 키오스크 키맵설정
+            prodMapper.deleteProdInfoKioskRecmd(prodVO);          // 키오스크 추천메뉴정보
+            prodMapper.deleteProdInfoKioskRecmdProd(prodVO);      // 키오스크 메뉴추천리스트
+            prodMapper.deleteProdInfoAlgiProd(prodVO);            // 재료/알러지-상품맵핑정보
+            prodMapper.deleteProdInfoBarcd(prodVO);               // 상품-바코드
+            prodMapper.deleteProdInfoDlvrProdNm(prodVO);          // 배달앱 상품명-맵핑정보
+            prodMapper.deleteProdInfoOption(prodVO);              // 마스터-키오스크옵션상품
+            prodMapper.deleteProdInfoRecpProd(prodVO);            // 재료-상품맵핑정보
+            prodMapper.deleteProdInfoSalePrice(prodVO);           // 상품 판매금액
+            prodMapper.deleteProdInfoVendorProd(prodVO);          // 거래처별_취급상품
+            prodMapper.deleteProdInfoUnitstProd(prodVO);          // 상품_세트구성_상품
+
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+                prodMapper.deleteProdInfoHqProductStore(prodVO);  // 본사) 상품별_취급매장
+            }else{
+                prodMapper.deleteProdInfoPrintProd(prodVO);       // 매장) 주방프린터_출력상품
+                prodMapper.deleteProdInfoSdselProd(prodVO);       // 매장) 상품_사이드선택_상품
+            }
+
+            // 상품이미지 삭제
+            try{
+                // 저장 경로 설정
+                String path_folder = "";
+
+                // 접속권한에 따른 경로 셋팅
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+                    path_folder = sessionInfoVO.getHqOfficeCd();
+                }else{
+                    path_folder = sessionInfoVO.getStoreCd();
+                }
+
+                // 서버 저장 경로 설정 (imgFg -> 001: 기본이미지, 002: KIOSK이미지, 003: DID이미지)
+                //String path = "D:\\prod_img\\" + path_folder + "/";
+                String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/";
+
+                // 삭제할 상품이미지 파일명 가져오기
+                List<DefaultMap<String>> imgList = prodMapper.getProdImgInfo(prodVO);
+
+                if(imgList.size() > 0){
+                    for(DefaultMap<String> list : imgList){
+                        // 서버 파일 삭제
+                        File delFile = new File(path + list.getStr("imgFg") + "/" + list.getStr("imgFileNm"));
+                        if(delFile.exists()) {
+                            delFile.delete();
+                            System.out.println("전체_이미지삭제 : " + path + list.getStr("imgFg") + "/" + list.getStr("imgFileNm"));
+                        }
+                    }
+                }
+
+            }catch(Exception e) {
+                System.out.println("전체_이미지삭제_오류 : " + e.getMessage());
+            }
+
+            prodMapper.deleteProdInfoImage(prodVO);               // 상품 이미지
+            prodMapper.deleteProdInfo(prodVO);                    // 상품정보
+
+            // 본사인경우, 매장의 상품정보도 영구삭제
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+                deleteStoreProd(prodVO);
+            }
+        }
+
+        // 선택상품 '미사용' 처리
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }else{
+            prodVO.setStoreCd("");
+        }
+        prodVO.setSessionId(sessionInfoVO.getUserId());
+        prodVO.setDelLevel("1"); // 본사 또는 매장의 본인 상품 삭제
+
+        if(!StringUtil.getOrBlank(modProdSeq).equals("")){
+
+            prodVO.setDelTypeFg("1"); // 영구삭제불가('미사용' 처리)
+            prodMapper.updateProdUseYn(prodVO);
+
+            // 본사인경우, 매장의 상품정보도 '미사용' 처리
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+                prodMapper.updateStoreProdUseYn(prodVO);
+            }
+        }
+
+        // 완료 본사/매장의 임시테이블 초기화
+        prodMapper.deleteAllTmpDelProduct(prodVO);
+
+        return result;
+    }
+
+    /** 본사에 속한 매장의 상품삭제 */
+    public void deleteStoreProd(ProdVO prodVO){
+
+        String dt = currentDateTimeString();
+
+        int delYn = 0;           // 삭제가능여부 파악
+        int iSeq = 1;            // 상품삭제 임시테이블 상품 seq 번호
+
+        String delProdSeq = "";  // 영구삭제할 상품 seq 번호(불필요한 로직 실행안하기 위한 판별용)
+        String modProdSeq = "";  // '미사용'처리할 상품 seq 번호(불필요한 로직 실행안하기 위한 판별용)
+
+        // 전체 매장 조회
+        List<DefaultMap<String>> storeList = prodMapper.getAllStoreList(prodVO);
+
+        // 본사에서 영구삭제한 상품
+        prodVO.setDelLevel("1");
+        prodVO.setDelTypeFg("0");
+        List<DefaultMap<String>> prodList = prodMapper.getHqTmpDelProduct(prodVO);
+
+        prodVO.setDelLevel("2"); // 본사에 속한 매장의 상품 삭제
+
+        if(storeList.size() > 0) {
+            for (DefaultMap<String> store : storeList) {
+
+                iSeq = 1;        // 초기화
+                delProdSeq = ""; // 초기화
+                modProdSeq = ""; // 초기화
+                prodVO.setStoreCd(store.getStr("storeCd"));
+
+                for(DefaultMap<String> prod : prodList){
+
+                    delYn = 0; // 초기화
+                    prodVO.setProdCd(prod.getStr("prodCd"));
+                    prodVO.setSeq(iSeq);
+
+                    // 상품삭제 전 데이터 확인
+                    delYn += prodMapper.getMsEventMsgProdCnt(prodVO);              // 매장 - 이벤트 상품
+                    delYn += prodMapper.getMsProductUnitstProdCnt(prodVO);         // 매장 - 상품 세트구성 상품
+                    delYn += prodMapper.getMsPromoBeneProdCnt(prodVO);             // 매장 - 프로모션 혜택품목
+                    delYn += prodMapper.getMsPromoCondiProdCnt(prodVO);            // 매장 - 프로모션 적용상품
+                    delYn += prodMapper.getStStoreActualInspectionDtlCnt(prodVO);  // 매장 - 실사재고 상세
+                    delYn += prodMapper.getStStoreAdjustDtlCnt(prodVO);            // 매장 - 재고조정 상세
+                    delYn += prodMapper.getStStoreDisuseDtlCnt(prodVO);            // 매장 - 재고폐기 상세
+                    delYn += prodMapper.getStStoreStockCurCnt(prodVO);             // 매장 - 현재고
+                    delYn += prodMapper.getPoHqStoreDistributeCnt(prodVO);         // 매장수불 - 분배출고_매장별분배출고내역
+                    delYn += prodMapper.getPoHqStoreOrderDtlCnt(prodVO);           // 매장수불 - 주문전표_본사주문내역-상세
+                    delYn += prodMapper.getPoHqStoreOutstockDtlCnt(prodVO);        // 매장수불 - 출고전표_매장출고내역_상세
+                    delYn += prodMapper.getPoStoreStandMoveDtlCnt(prodVO);         // 매장수불 - 매대창고간이동내역 상세
+                    delYn += prodMapper.getPoStoreVendrInstockDtlCnt(prodVO);      // 매장수불 - 거래처 업체입고반출전표 상세
+                    delYn += prodMapper.getPoStoreVendrOrderDtlCnt(prodVO);        // 매장수불 - 거래처 업체발주전표 상세
+
+                    if (delYn == 0) {
+                        // 영구삭제가능
+                        prodVO.setDelTypeFg("0"); // 영구삭제가능
+                        delProdSeq += (delProdSeq.equals("") ? "" : ",") + prodVO.getProdCd();
+                    } else {
+                        // 영구삭제불가('미사용' 처리)
+                        prodVO.setDelTypeFg("1"); // 영구삭제불가('미사용' 처리)
+                        modProdSeq += (modProdSeq.equals("") ? "" : ",") + prodVO.getProdCd();
+                    }
+
+                    // 상품삭제 임시테이블에 Insert
+                    prodMapper.insertTmpDelProduct(prodVO);
+                    iSeq++;
+                }
+
+                System.out.println("본사상품매장삭제_delProdSeq : " + prodVO.getStoreCd()  + " / " + delProdSeq);
+                System.out.println("본사상품매장삭제_modProdSeq : " + prodVO.getStoreCd()  + " / "  + modProdSeq);
+
+                ProdVO prodVO2 = new ProdVO();
+                prodVO2.setOrgnFg(OrgnFg.STORE.getCode()); // 매장상품 삭제를 위해
+                prodVO2.setHqOfficeCd(prodVO.getHqOfficeCd());
+                prodVO2.setStoreCd(prodVO.getStoreCd());
+                prodVO2.setRegDt(dt);
+                prodVO2.setRegId(prodVO.getRegId());
+                prodVO2.setModDt(dt);
+                prodVO2.setModId(prodVO.getModId());
+                prodVO2.setSessionId(prodVO.getSessionId());
+                prodVO2.setDelLevel("2"); // 본사에 속한 매장의 상품 삭제
+
+                // 선택상품 영구삭제
+                if (!StringUtil.getOrBlank(delProdSeq).equals("")) {
+
+                    prodVO2.setDelTypeFg("0"); // 영구삭제가능
+
+                    prodMapper.deleteProdInfoCouponProd(prodVO2);          // 쿠폰적용상품
+                    prodMapper.deleteProdInfoKioskKey(prodVO2);            // 키오스크 키맵설정
+                    prodMapper.deleteProdInfoKioskRecmd(prodVO2);          // 키오스크 추천메뉴정보
+                    prodMapper.deleteProdInfoKioskRecmdProd(prodVO2);      // 키오스크 메뉴추천리스트
+                    prodMapper.deleteProdInfoAlgiProd(prodVO2);            // 재료/알러지-상품맵핑정보
+                    prodMapper.deleteProdInfoBarcd(prodVO2);               // 상품-바코드
+                    prodMapper.deleteProdInfoDlvrProdNm(prodVO2);          // 배달앱 상품명-맵핑정보
+                    prodMapper.deleteProdInfoOption(prodVO2);              // 마스터-키오스크옵션상품
+                    prodMapper.deleteProdInfoRecpProd(prodVO2);            // 재료-상품맵핑정보
+                    prodMapper.deleteProdInfoSalePrice(prodVO2);           // 상품 판매금액
+                    prodMapper.deleteProdInfoVendorProd(prodVO2);          // 거래처별_취급상품
+                    prodMapper.deleteProdInfoUnitstProd(prodVO2);          // 상품_세트구성_상품
+                    prodMapper.deleteProdInfoPrintProd(prodVO2);           // 매장) 주방프린터_출력상품
+                    prodMapper.deleteProdInfoSdselProd(prodVO2);           // 매장) 상품_사이드선택_상품
+
+
+                    // 상품이미지 삭제
+                    try{
+                        // 저장 경로 설정
+                        String path_folder = "";
+                        path_folder = prodVO2.getStoreCd(); // 매장상품 삭제를 위해
+
+                        // 서버 저장 경로 설정 (imgFg -> 001: 기본이미지, 002: KIOSK이미지, 003: DID이미지)
+                        //String path = "D:\\prod_img\\" + path_folder + "/";
+                        String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/";
+
+                        // 삭제할 상품이미지 파일명 가져오기
+                        List<DefaultMap<String>> imgList = prodMapper.getProdImgInfo(prodVO2);
+
+                        if(imgList.size() > 0){
+                            for(DefaultMap<String> list : imgList){
+                                // 서버 파일 삭제
+                                File delFile = new File(path + list.getStr("imgFg") + "/" + list.getStr("imgFileNm"));
+                                if(delFile.exists()) {
+                                    delFile.delete();
+                                    System.out.println("본사상품매장삭제_이미지삭제 : " + path + list.getStr("imgFg") + "/" + list.getStr("imgFileNm"));
+                                }
+                            }
+                        }
+
+                    }catch(Exception e) {
+                        System.out.println("본사상품매장삭제_이미지삭제_오류 : " + e.getMessage());
+                    }
+
+                    prodMapper.deleteProdInfoImage(prodVO2);               // 상품 이미지
+                    prodMapper.deleteProdInfo(prodVO2);                    // 상품정보
+                }
+
+                // 선택상품 '미사용' 처리
+                if (!StringUtil.getOrBlank(modProdSeq).equals("")) {
+
+                    prodVO2.setDelTypeFg("1"); // 영구삭제불가('미사용' 처리)
+                    prodMapper.updateProdUseYn(prodVO2);
+                }
+
+                // 완료 매장의 임시테이블 초기화
+                prodMapper.deleteAllTmpDelProduct(prodVO2);
+            }
+        }
+    }
 }
