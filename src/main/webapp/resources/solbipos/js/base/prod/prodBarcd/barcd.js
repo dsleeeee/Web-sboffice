@@ -107,6 +107,29 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
 
+  // 자동생성
+  $scope.barCdAutoSet = function() {
+
+    if($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["cmm.empty.data"]);
+      return false;
+    }
+
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        item.barCd = item.prodCd + numberPad(Math.floor(Math.random() * 100), 2);
+      }
+    }
+
+    $scope.flex.refresh();
+  }
+
+  function numberPad(n, width) {
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+  }
+
   // 상품정보관리 그리드 조회
   $scope.$on("barcdCtrl", function(event, data) {
     $scope.searchProdList();
