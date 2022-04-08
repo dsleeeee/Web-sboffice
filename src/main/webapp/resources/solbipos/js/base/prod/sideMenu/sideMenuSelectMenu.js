@@ -371,12 +371,19 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           if(selectedRow.sdselClassCd !== '' && selectedRow.sdselClassCd !== undefined && selectedRow.sdselClassCd !== '자동채번') {
             $("#sideClassTitle").html(" [" + selectedRow.sdselClassCd + "]" + selectedRow.sdselClassNm);
 
-            // 선택상품버튼
-            $("#btnUpSelProd").show();
-            $("#btnDownSelProd").show();
-            $("#btnAddSelProd").show();
-            $("#btnDelSelProd").show();
-            $("#btnSaveSelProd").show();
+            if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselClassCd <= 799999) {
+              $("#btnUpSelProd").hide();
+              $("#btnDownSelProd").hide();
+              $("#btnAddSelProd").hide();
+              $("#btnDelSelProd").hide();
+              $("#btnSaveSelProd").show();
+            } else {
+              $("#btnUpSelProd").show();
+              $("#btnDownSelProd").show();
+              $("#btnAddSelProd").show();
+              $("#btnDelSelProd").show();
+              $("#btnSaveSelProd").show();
+            }
 
             var params = {};
             params.sdselClassCd = selectedRow.sdselClassCd;
