@@ -287,6 +287,20 @@ public class ProdImgServiceImpl implements ProdImgService {
                 // 등록된 이미지 리스트 가져옴
                 List<DefaultMap<String>> orgFileNm = prodImgMapper.getProdImgList(prodImgVO);
 
+                String pre_path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getStoreCd() + "/";
+                String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getStoreCd() + "/" + prodImgVO.getArrImgFg()[i] + "/";
+
+                // 서버 저장 위치에 해당 폴더가 존재하는지 확인 후 없으면 폴더 생성
+                // 부모-자식 폴더 동시에 생성 불가하기 때문에 pre_path 폴더 생성 후 path 폴더 생성
+                File pre_dir = new File(pre_path);
+                if(!pre_dir.isDirectory()){
+                    pre_dir.mkdir();
+                }
+                File dir = new File(path);
+                if(!dir.isDirectory()){
+                    dir.mkdir();
+                }
+
                 for(int j = 0; j < orgFileNm.size(); j++){
                     // 서버 파일 업로드
                     System.out.println("복사 명령어 : " + "/usr/bin/cp -f " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getHqOfficeCd() + "/" + prodImgVO.getArrImgFg()[i] + "/" + orgFileNm.get(j).get("orgImgFileNm") + " " + BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + prodImgVO.getStoreCd() + "/" + prodImgVO.getArrImgFg()[i] + "/");
@@ -395,6 +409,8 @@ public class ProdImgServiceImpl implements ProdImgService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
             }
             result = prodImgMapper.prodImgCopy(prodImgVO);
         }
