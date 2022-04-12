@@ -373,6 +373,31 @@ function getCurDateTime(seperator_day)
         //alert('common.js : '+e);
     }
 }
+
+// 내일날짜 구하기
+function getTomorrow(seperator) {
+
+    if (seperator === undefined) seperator = "";
+
+    var today = new Date();
+    var tomorrow = new Date(today.setDate(today.getDate() + 1));
+
+    var dd = tomorrow.getDate();
+    var mm = tomorrow.getMonth()+1; //January is 0!
+    var yyyy = tomorrow.getFullYear();
+
+    if (dd < 10) {
+        dd= '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    tomorrow = yyyy + seperator + mm + seperator + dd;
+
+    return tomorrow;
+}
 // 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )
 $(document).on('click', 'a[href="#"]', function (e) {
   e.preventDefault();

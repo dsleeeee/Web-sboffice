@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdStatusMapper.xml
+    배달상품현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.04.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.dlvr.prodStatus.service.impl.ProdStatusMapper">
+
+    <!-- 배달상품현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_OD_ORDER_DTL
+        PARAM    : prodStatusVO
+        COMMENTS : 배달상품현황 리스트 조회
+    -->
+    <select id="getProdStatusList" parameterType="prodStatusVO" resultType="DefaultMap">
+        /* ProdStatusMapper.getProdStatusList */
+         SELECT tood.STORE_CD,
+                TO_CHAR(TO_DATE(tood.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tood.POS_NO,
+                tood.ORDER_NO,
+                tood.PROD_CD,
+                tmp.PROD_NM,
+                tood.SALE_UPRC,
+                tood.SALE_QTY,
+                tood.SALE_AMT,
+                tood.DC_AMT,
+                tood.REAL_SALE_AMT,
+                tood.COOK_MEMO
+          FROM TB_OD_ORDER_DTL tood,
+               TB_MS_PRODUCT tmp
+         WHERE tood.STORE_CD = #{storeCd}
+           AND tmp.STORE_CD (+)= tood.STORE_CD
+           AND tmp.PROD_CD (+)= tood.PROD_CD
+           AND	tood.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <choose>
+            <when test='cookMemoUseYn != null and cookMemoUseYn == "Y"'>
+                AND tood.COOK_MEMO IS NOT NULL
+            </when>
+            <when test='cookMemoUseYn != null and cookMemoUseYn == "N"'>
+                AND tood.COOK_MEMO IS NULL
+            </when>
+        </choose>
+    </select>
+
+</mapper>

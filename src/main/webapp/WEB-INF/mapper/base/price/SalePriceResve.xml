@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SalePriceResve.xml
+    가격예약
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.04.05     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.salePriceResve.service.impl.SalePriceResveMapper">
+
+    <!-- 가격예약(본사판매가) 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(본사판매가) 리스트 조회
+    -->
+    <select id="getHqSalePriceResveList" parameterType="salePriceResveVO" resultType="DefaultMap">
+        /* SalePriceResveMapper.getHqSalePriceResveList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+          SELECT
+                thp.PROD_CD,
+                thp.PROD_NM,
+                thp.PROD_CLASS_CD,                                                              -- 상품분류코드
+                thp.PO_UNIT_QTY,                                                                -- 입수
+                thp.COST_UPRC AS HQ_COST_UPRC,                                                  -- 본사원가
+                thp.SPLY_UPRC AS HQ_SPLY_UPRC,                                                  -- 대표공급가
+                TO_CHAR(TO_DATE(thpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+                TO_CHAR(TO_DATE(thpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
+                TO_CHAR(TO_DATE(thpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,         -- 종료시간
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC,                                                -- 본사판매가
+                thpsp.SALE_UPRC AS SALE_UPRC,                                                   -- 변경판매가
+                thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,                                      -- 본사내점-판매가
+                thpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,                                         -- 변경내점-판매가
+                thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,                                      -- 본사배달-판매가
+                thpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,                                         -- 변경배달-판매가
+                thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,                                      -- 본사포장-판매가
+                thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,                                         -- 변경포장-판매가
+                thp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+           FROM TB_HQ_PRODUCT thp,
+                (
+                         SELECT HQ_OFFICE_CD,
+                                PROD_CD,
+                                START_DATE,
+                                END_DATE,
+                                SALE_UPRC,
+                                STIN_SALE_UPRC,
+                                DLVR_SALE_UPRC,
+                                PACK_SALE_UPRC
+                           FROM TB_HQ_PRODUCT_SALE_PRICE
+                          WHERE 1=1
+                            AND HQ_OFFICE_CD = #{hqOfficeCd}
+                            <!-- AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd') -->
+                            <!-- AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd') -->
+                            AND SALE_PRC_FG = '1'
+                            AND SALE_RESVE_FG = '1'
+                ) thpsp
+          WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                          FROM TB_HQ_PRODUCT_CLASS
+                                         WHERE 1=1
+                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT
+                                             BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+            AND (
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+            OR
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+          AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+          AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER
+           BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 가격예약(본사판매가) 기존 예약 판매가 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(본사판매가) 기존 예약 판매가 삭제
+    -->
+    <delete id="deleteHqSalePriceResve" parameterType="salePriceResveVO">
+      /* SalePriceResveMapper.deleteHqSalePriceResve */
+        DELETE
+          FROM TB_HQ_PRODUCT_SALE_PRICE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = '1'
+           AND SALE_RESVE_FG = '1'
+           AND START_DATE = #{orgStartDate}
+    </delete>
+
+    <!-- 가격예약(본사판매가) 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(본사판매가) 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해)
+    -->
+    <select id="getHqSalePriceCnt" parameterType="salePriceResveVO" resultType="Integer">
+        /* USE : SalePriceResveMapper.getHqSalePriceCnt */
+        SELECT COUNT(SALE_UPRC) AS CNT
+          FROM TB_HQ_PRODUCT_SALE_PRICE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = '1'
+           AND START_DATE = #{startDate}
+    </select>
+
+    <!-- 가격예약(본사판매가) 기존 판매가 히스토리에 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE_HISTORY
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(본사판매가) 기존 판매가 히스토리에 저장
+    -->
+    <insert id="insertHqSalePriceHistory"  parameterType="salePriceResveVO" >
+        /* USE : SalePriceResveMapper.insertHqSalePriceHistory */
+        <![CDATA[
+        INSERT INTO TB_HQ_PRODUCT_SALE_PRICE_HISTORY
+                (
+                    HIS_SEQ,
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    SALE_PRC_FG,
+                    START_DATE,
+                    END_DATE,
+                    SALE_UPRC,
+                    REG_DT,
+                    REG_ID,
+                    STIN_SALE_UPRC,
+                    DLVR_SALE_UPRC,
+                    PACK_SALE_UPRC,
+                    SALE_RESVE_FG
+                 )
+        SELECT SQ_HQ_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+               HQ_OFFICE_CD,
+               PROD_CD,
+               SALE_PRC_FG,
+               START_DATE,
+               END_DATE,
+               SALE_UPRC,
+               #{regDt},
+               #{regId},
+               NVL(STIN_SALE_UPRC, SALE_UPRC),
+               NVL(DLVR_SALE_UPRC, SALE_UPRC),
+               NVL(PACK_SALE_UPRC, SALE_UPRC),
+               SALE_RESVE_FG
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND PROD_CD = #{prodCd}
+          AND SALE_PRC_FG = '1'
+          AND START_DATE = #{startDate}
+        ]]>
+    </insert>
+
+    <!-- 가격예약(본사판매가) 새 예약 판매가 등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(본사판매가) 새 예약 판매가 등록
+    -->
+    <insert id="insertHqSalePrice"  parameterType="salePriceResveVO" >
+        /* USE : SalePriceResveMapper.insertHqSalePrice */
+        MERGE INTO TB_HQ_PRODUCT_SALE_PRICE tmpsp
+            USING DUAL
+            ON (
+                    tmpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tmpsp.PROD_CD = #{prodCd}
+                    AND tmpsp.SALE_PRC_FG = '1'
+                    AND tmpsp.START_DATE = #{startDate}
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        tmpsp.END_DATE = #{endDate},   -- 종료날짜
+                        tmpsp.SALE_UPRC = #{saleUprc}, -- 판매가
+                        tmpsp.STIN_SALE_UPRC = NVL(#{stinSaleUprc}, #{saleUprc}), -- 내점가
+                        tmpsp.DLVR_SALE_UPRC = NVL(#{dlvrSaleUprc}, #{saleUprc}), -- 배달가
+                        tmpsp.PACK_SALE_UPRC = NVL(#{packSaleUprc}, #{saleUprc}), -- 포장가
+                        tmpsp.SALE_RESVE_FG = #{saleResveFg}, -- 가격예약구분
+                        tmpsp.MOD_DT = #{modDt},
+                        tmpsp.MOD_ID = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                     HQ_OFFICE_CD,
+                     PROD_CD,
+                     SALE_PRC_FG,
+                     START_DATE,
+                     END_DATE,
+                     SALE_UPRC,
+                     STIN_SALE_UPRC,
+                     DLVR_SALE_UPRC,
+                     PACK_SALE_UPRC,
+                     SALE_RESVE_FG,
+                     REG_DT,
+                     REG_ID,
+                     MOD_DT,
+                     MOD_ID
+                        ) VALUES (
+                                     #{hqOfficeCd},
+                                     #{prodCd},
+                                     '1',
+                                     #{startDate},
+                                     #{endDate},
+                                     #{saleUprc},
+                                     NVL(#{stinSaleUprc}, #{saleUprc}),
+                                     NVL(#{dlvrSaleUprc}, #{saleUprc}),
+                                     NVL(#{packSaleUprc}, #{saleUprc}),
+                                     #{saleResveFg},
+                                     #{regDt},
+                                     #{regId},
+                                     #{modDt},
+                                     #{modId}
+                                 )
+    </insert>
+
+    <!-- 가격예약(본사판매가) 본사 예약 판매가 매장 적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(본사판매가) 본사 예약 판매가 매장 적용
+    -->
+    <insert id="insertHqSalePriceToStore"  parameterType="salePriceResveVO" >
+        /* USE : SalePriceResveMapper.insertHqSalePriceToStore */
+        MERGE INTO TB_MS_PRODUCT_SALE_PRICE A
+        USING   (
+                    SELECT  A.STORE_CD
+                    ,       B.PROD_CD
+                    ,       B.SALE_PRC_FG
+                    ,       B.START_DATE
+                    ,       B.END_DATE
+                    ,       B.SALE_UPRC
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    ,       B.STIN_SALE_UPRC
+                    ,       B.DLVR_SALE_UPRC
+                    ,       B.PACK_SALE_UPRC
+                    ,       B.SALE_RESVE_FG
+                    FROM    TB_MS_STORE A
+                    ,       TB_HQ_PRODUCT_SALE_PRICE B
+                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     B.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     B.PROD_CD       =   #{prodCd}
+                    AND     B.SALE_PRC_FG   =   '1'
+                    AND     B.START_DATE    =   #{startDate}
+                ) B
+        ON      (           A.STORE_CD      =   B.STORE_CD
+                AND         A.PROD_CD       =   B.PROD_CD
+                AND         A.SALE_PRC_FG   =   B.SALE_PRC_FG
+                AND         A.START_DATE    =   B.START_DATE
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.END_DATE          =   B.END_DATE
+        ,       A.SALE_UPRC         =   B.SALE_UPRC
+        ,       A.STIN_SALE_UPRC    =   B.STIN_SALE_UPRC
+        ,       A.DLVR_SALE_UPRC    =   B.DLVR_SALE_UPRC
+        ,       A.PACK_SALE_UPRC    =   B.PACK_SALE_UPRC
+        ,       A.SALE_RESVE_FG     =   B.SALE_RESVE_FG
+        ,       A.MOD_DT            =   B.MOD_DT
+        ,       A.MOD_ID            =   B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.PROD_CD
+        ,       A.SALE_PRC_FG
+        ,       A.START_DATE
+        ,       A.END_DATE
+        ,       A.SALE_UPRC
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.STIN_SALE_UPRC
+        ,       A.DLVR_SALE_UPRC
+        ,       A.PACK_SALE_UPRC
+        ,       A.SALE_RESVE_FG
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.PROD_CD
+        ,       B.SALE_PRC_FG
+        ,       B.START_DATE
+        ,       B.END_DATE
+        ,       B.SALE_UPRC
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.STIN_SALE_UPRC
+        ,       B.DLVR_SALE_UPRC
+        ,       B.PACK_SALE_UPRC
+        ,       B.SALE_RESVE_FG
+        )
+    </insert>
+
+    <!-- 가격예약(본사판매가) 상품가격정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(본사판매가) 상품가격정보 조회
+    -->
+    <select id="searchHqSalePriceInfo" parameterType="salePriceResveVO" resultType="DefaultMap">
+        /* SalePriceResveMapper.searchHqSalePriceInfo */
+        SELECT A.PROD_CD,
+	           A.START_DATE,
+	           CASE WHEN A.END_DATE='99991231' THEN LEAD(TO_CHAR(TO_DATE(A.START_DATE, 'yyyymmdd')-1, 'yyyymmdd'), 1, '99991231') OVER (ORDER BY A.START_DATE) ELSE A.END_DATE END AS END_DATE,
+               A.SALE_UPRC,
+               A.STIN_SALE_UPRC,
+               A.DLVR_SALE_UPRC,
+               A.PACK_SALE_UPRC
+          FROM (
+                    SELECT PROD_CD,
+                           START_DATE,
+                           END_DATE,
+                           SALE_UPRC,
+                           STIN_SALE_UPRC,
+                           DLVR_SALE_UPRC,
+                           PACK_SALE_UPRC
+                      FROM TB_HQ_PRODUCT_SALE_PRICE
+                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND PROD_CD = #{prodCd}
+                       AND SALE_PRC_FG = '1'
+                       AND END_DATE = '99991231'
+	                 UNION (
+                                SELECT B.PROD_CD,
+                                       B.START_DATE,
+                                       LEAD(TO_CHAR(TO_DATE(B.START_DATE, 'yyyymmdd')-1, 'yyyymmdd'), 1, '99991231') OVER (ORDER BY B.START_DATE) AS END_DATE,
+                                       B.SALE_UPRC,
+                                       B.STIN_SALE_UPRC,
+                                       B.DLVR_SALE_UPRC,
+                                       B.PACK_SALE_UPRC
+	           		              FROM (
+                                           SELECT PROD_CD,
+                                                  START_DATE,
+                                                  SALE_UPRC,
+                                                  STIN_SALE_UPRC,
+                                                  DLVR_SALE_UPRC,
+                                                  PACK_SALE_UPRC
+				                             FROM TB_HQ_PRODUCT_SALE_PRICE
+                                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                              AND PROD_CD = #{prodCd}
+                                              AND SALE_PRC_FG = '1'
+				                              AND END_DATE != '99991231'
+				           	                UNION
+                                           SELECT PROD_CD,
+                                                  END_DATE AS START_DATE,
+                                                  SALE_UPRC,
+                                                  STIN_SALE_UPRC,
+                                                  DLVR_SALE_UPRC,
+                                                  PACK_SALE_UPRC
+                                             FROM TB_HQ_PRODUCT_SALE_PRICE
+                                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                              AND PROD_CD = #{prodCd}
+                                              AND SALE_PRC_FG = '1'
+				                              AND END_DATE != '99991231'
+			                           ) B
+	                       )
+	            ) A
+    </select>
+
+
+</mapper>

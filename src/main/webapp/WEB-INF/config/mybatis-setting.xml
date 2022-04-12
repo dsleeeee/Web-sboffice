@@ -315,7 +315,8 @@
     <typeAlias alias="hqSalePriceHistoryVO" type="kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryVO"/>
     <!-- 기초관리 > 가격관리 > 판매가변경이력 -->
     <typeAlias alias="salePriceHistoryVO" type="kr.co.solbipos.base.price.salePriceHistory.service.SalePriceHistoryVO"/>
-
+    <!-- 기초관리 > 가격관리 > 가격에약 -->
+    <typeAlias alias="salePriceResveVO" type="kr.co.solbipos.base.price.salePriceResve.service.SalePriceResveVO"/>
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
         <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
@@ -713,6 +714,9 @@
 
     <!-- 중량별 -->
     <typeAlias alias="weightVO" type="kr.co.solbipos.sale.status.weight.weight.service.WeightVO"/>
+
+    <!-- 배달상품현황 -->
+    <typeAlias alias="prodStatusVO" type="kr.co.solbipos.sale.status.dlvr.prodStatus.service.ProdStatusVO"/>
 
     <!-- 매출관리 > 매출현황2 > 기간별 매장-상품 매출 다운로드(고봉민) -->
     <typeAlias alias="storeProdSaleReportVO" type="kr.co.solbipos.sale.status.storeProdSaleReport.service.StoreProdSaleReportVO"/>
