@@ -453,6 +453,20 @@
         /* USE : SalePriceMapper.updateHqProdSalePriceHistory */
         <![CDATA[
         INSERT INTO TB_HQ_PRODUCT_SALE_PRICE_HISTORY
+                  (
+                    HIS_SEQ,
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    SALE_PRC_FG,
+                    START_DATE,
+                    END_DATE,
+                    SALE_UPRC,
+                    REG_DT,
+                    REG_ID,
+                    STIN_SALE_UPRC,
+                    DLVR_SALE_UPRC,
+                    PACK_SALE_UPRC
+                 )
         SELECT SQ_HQ_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
                HQ_OFFICE_CD,
                PROD_CD,
