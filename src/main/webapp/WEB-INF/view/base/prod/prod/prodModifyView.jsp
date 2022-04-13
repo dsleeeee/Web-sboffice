@@ -244,8 +244,8 @@
                     <s:message code="prod.barCd"/>
                 </th>
                 <td>
-                    <input type="text" id="_barCd" name="barCd" class="sb-input" style="width: 150px" ng-model="prodModifyInfo.barCd" />
-                  <button class="btn_skyblue fr w30" ng-click="barCdAutoSet()"><s:message code="prod.autoSet"/></button>
+                    <input type="text" id="_barCd" name="barCd" class="sb-input" style="width: 150px" ng-model="prodModifyInfo.barCd"/>
+                    <button type="button"  class="btn_skyblue fr w30" ng-click="barCdAutoSet()"><s:message code="prod.autoSet"/></button>
                 </td>
                 <%-- 가격관리구분 --%>
                 <th>
