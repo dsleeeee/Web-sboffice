@@ -8,6 +8,7 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.envConfgBatchChange.service.EnvConfgBatchChangeService;
 import kr.co.solbipos.store.manage.envConfgBatchChange.service.EnvConfgBatchChangeVO;
+import kr.co.solbipos.sys.cd.envconfg.service.EnvConfgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,14 +30,16 @@ public class EnvConfgBatchChangeController {
 
     private final SessionService sessionService;
     private final EnvConfgBatchChangeService envConfgBatchChangeService;
+    private final EnvConfgService envConfgService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public EnvConfgBatchChangeController(SessionService sessionService, EnvConfgBatchChangeService envConfgBatchChangeService) {
+    public EnvConfgBatchChangeController(SessionService sessionService, EnvConfgBatchChangeService envConfgBatchChangeService, EnvConfgService envConfgService) {
         this.sessionService = sessionService;
         this.envConfgBatchChangeService = envConfgBatchChangeService;
+        this.envConfgService = envConfgService;
     }
 
     /**
@@ -48,6 +51,10 @@ public class EnvConfgBatchChangeController {
      */
     @RequestMapping(value = "/envConfgBatchChange/list.sb", method = RequestMethod.GET)
     public String envConfgBatchChangeView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> envstGrpList = envConfgService.getEnvstGrpList();
+
+        model.addAttribute("envstGrpList", convertToJson(envstGrpList)  );
 
         return "store/manage/envConfgBatchChange/envConfgBatchChange";
     }
@@ -301,6 +308,29 @@ public class EnvConfgBatchChangeController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = envConfgBatchChangeService.getEnvConfgBatchChangeFnkeySave(envConfgBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 기능키명칭탭 - 저장
+     *
+     * @param envConfgBatchChangeVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2021.09.15
+     */
+    @RequestMapping(value = "/envConfgBatchChangeEnvSetting/getEnvConfgBatchChangeEnvSettingSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEnvConfgBatchChangeEnvSettingSave(@RequestBody EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, HttpServletRequest request,
+                                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = envConfgBatchChangeService.getEnvConfgBatchChangeEnvSettingSave(envConfgBatchChangeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

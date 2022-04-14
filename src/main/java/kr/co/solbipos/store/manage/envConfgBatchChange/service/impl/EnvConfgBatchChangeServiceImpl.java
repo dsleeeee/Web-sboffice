@@ -223,4 +223,22 @@ public class EnvConfgBatchChangeServiceImpl implements EnvConfgBatchChangeServic
 
         return procCnt;
     }
+
+    @Override
+    public int getEnvConfgBatchChangeEnvSettingSave(EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(EnvConfgBatchChangeVO envConfgBatchChangeVO : envConfgBatchChangeVOs) {
+
+            envConfgBatchChangeVO.setModDt(currentDt);
+            envConfgBatchChangeVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt = envConfgBatchChangeMapper.getEnvConfgBatchChangeEnvSettingSaveHq(envConfgBatchChangeVO);
+            procCnt = envConfgBatchChangeMapper.getEnvConfgBatchChangeEnvSettingSaveMs(envConfgBatchChangeVO);
+            procCnt = envConfgBatchChangeMapper.getEnvConfgBatchChangeEnvSettingSavePos(envConfgBatchChangeVO);
+        }
+
+        return procCnt;
+    }
 }

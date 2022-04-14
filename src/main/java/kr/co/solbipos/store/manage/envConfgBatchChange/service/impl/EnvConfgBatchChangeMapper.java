@@ -69,4 +69,9 @@ public interface EnvConfgBatchChangeMapper {
     /** 기능키명칭탭 - 저장  */
     int getEnvConfgBatchChangeFnkeySave(EnvConfgBatchChangeVO envConfgBatchChangeVO);
 
+    /** 환경설정관리 - 저장  */
+    int getEnvConfgBatchChangeEnvSettingSaveHq(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+    int getEnvConfgBatchChangeEnvSettingSaveMs(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+    int getEnvConfgBatchChangeEnvSettingSavePos(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
 }

@@ -55,4 +55,7 @@ public interface EnvConfgBatchChangeService {
     /** 기능키명칭탭 - 저장 */
     int getEnvConfgBatchChangeFnkeySave(EnvConfgBatchChangeVO[] EnvConfgBatchChangeVOs, SessionInfoVO sessionInfoVO);
 
+    /** 환경설정관리 - 저장 */
+    int getEnvConfgBatchChangeEnvSettingSave(EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
 }

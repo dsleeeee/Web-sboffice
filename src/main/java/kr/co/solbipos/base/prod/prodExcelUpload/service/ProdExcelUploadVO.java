@@ -56,10 +56,12 @@ public class ProdExcelUploadVO extends PageVO {
     private String result;
 
     /** 공급단가 */
-    private Double splyUprc;
+    private String splyUprc;
+    private Double splyUprcD;
 
     /** 원가단가 */
-    private Double costUprc;
+    private String costUprc;
+    private Double costUprcD;
 
     /** 세션ID */
     private String sessionId;
@@ -110,16 +112,19 @@ public class ProdExcelUploadVO extends PageVO {
     private String splyUprcUseYn;
 
     /** 발주단위수량 */
-    private Integer poUnitQty;
+    private String poUnitQty;
+    private Integer poUnitQtyI;
 
     /** 발주단위 */
     private String poUnitFg;
 
     /** 발주최소수량 */
-    private Integer poMinQty;
+    private String poMinQty;
+    private Integer poMinQtyI;
 
     /** 안전재고수량 */
-    private Integer safeStockQty;
+    private String safeStockQty;
+    private Integer safeStockQtyI;
 
     /** 사용여부 */
     private String useYn;
@@ -131,7 +136,8 @@ public class ProdExcelUploadVO extends PageVO {
     private String vendrCd;
 
     /** 초기재고 */
-    private Integer startStockQty;
+    private String startStockQty;
+    private Integer startStockQtyI;
 
     /** 구분 */
     private String gubun;
@@ -200,13 +206,25 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setResult(String result) { this.result = result; }
 
-    public Double getSplyUprc() { return splyUprc; }
+    public Double getSplyUprcD() { return splyUprcD; }
 
-    public void setSplyUprc(Double splyUprc) { this.splyUprc = splyUprc; }
+    public void setSplyUprcD(Double splyUprcD) { this.splyUprcD = splyUprcD; }
 
-    public Double getCostUprc() { return costUprc; }
+    public Double getCostUprcD() { return costUprcD; }
 
-    public void setCostUprc(Double costUprc) { this.costUprc = costUprc; }
+    public void setCostUprcD(Double costUprcD) { this.costUprcD = costUprcD; }
+
+    public String getSplyUprc() {
+        return splyUprc;
+    }
+
+    public void setSplyUprc(String splyUprc) {
+        this.splyUprc = splyUprc;
+    }
+
+    public String getCostUprc() {
+        return costUprc;
+    }
 
     public String getSessionId() { return sessionId; }
 
@@ -224,67 +242,89 @@ public class ProdExcelUploadVO extends PageVO {
         this.prodNoEnv = prodNoEnv;
     }
 
-    public String getProdTypeFg() { return prodTypeFg; }
+    public String getProdTypeFg() {
+        return prodTypeFg;
+    }
 
     public void setProdTypeFg(String prodTypeFg) {
         this.prodTypeFg = prodTypeFg;
     }
 
-    public String getPoProdFg() { return poProdFg; }
+    public String getPoProdFg() {
+        return poProdFg;
+    }
 
     public void setPoProdFg(String poProdFg) {
         this.poProdFg = poProdFg;
     }
 
-    public String getVatFg() { return vatFg; }
+    public String getVatFg() {
+        return vatFg;
+    }
 
     public void setVatFg(String vatFg) {
         this.vatFg = vatFg;
     }
 
-    public String getSaleUprc() { return saleUprc; }
+    public String getSaleUprc() {
+        return saleUprc;
+    }
 
     public void setSaleUprc(String saleUprc) {
         this.saleUprc = saleUprc;
     }
 
-    public String getChkProdNm() { return chkProdNm; }
+    public String getChkProdNm() {
+        return chkProdNm;
+    }
 
     public void setChkProdNm(String chkProdNm) {
         this.chkProdNm = chkProdNm;
     }
 
-    public String getPointSaveYn() { return pointSaveYn; }
+    public String getPointSaveYn() {
+        return pointSaveYn;
+    }
 
     public void setPointSaveYn(String pointSaveYn) {
         this.pointSaveYn = pointSaveYn;
     }
 
-    public String getProdTipYn() { return prodTipYn; }
+    public String getProdTipYn() {
+        return prodTipYn;
+    }
 
     public void setProdTipYn(String prodTipYn) {
         this.prodTipYn = prodTipYn;
     }
 
-    public String getSaleProdYn() { return saleProdYn; }
+    public String getSaleProdYn() {
+        return saleProdYn;
+    }
 
     public void setSaleProdYn(String saleProdYn) {
         this.saleProdYn = saleProdYn;
     }
 
-    public String getStockProdYn() { return stockProdYn; }
+    public String getStockProdYn() {
+        return stockProdYn;
+    }
 
     public void setStockProdYn(String stockProdYn) {
         this.stockProdYn = stockProdYn;
     }
 
-    public String getSideProdYn() { return sideProdYn; }
+    public String getSideProdYn() {
+        return sideProdYn;
+    }
 
     public void setSideProdYn(String sideProdYn) {
         this.sideProdYn = sideProdYn;
     }
 
-    public String getSetProdFg() { return setProdFg; }
+    public String getSetProdFg() {
+        return setProdFg;
+    }
 
     public void setSetProdFg(String setProdFg) {
         this.setProdFg = setProdFg;
@@ -296,27 +336,17 @@ public class ProdExcelUploadVO extends PageVO {
         this.lastCostUprc = lastCostUprc;
     }
 
-    public String getSplyUprcUseYn() { return splyUprcUseYn; }
+    public String getSplyUprcUseYn() {
+        return splyUprcUseYn;
+    }
 
     public void setSplyUprcUseYn(String splyUprcUseYn) {
         this.splyUprcUseYn = splyUprcUseYn;
     }
 
-    public Integer getPoUnitQty() { return poUnitQty; }
-
-    public void setPoUnitQty(Integer poUnitQty) { this.poUnitQty = poUnitQty; }
-
     public String getPoUnitFg() { return poUnitFg; }
 
     public void setPoUnitFg(String poUnitFg) { this.poUnitFg = poUnitFg; }
-
-    public Integer getPoMinQty() { return poMinQty; }
-
-    public void setPoMinQty(Integer poMinQty) { this.poMinQty = poMinQty; }
-
-    public Integer getSafeStockQty() { return safeStockQty; }
-
-    public void setSafeStockQty(Integer safeStockQty) { this.safeStockQty = safeStockQty; }
 
     public String getUseYn() { return useYn; }
 
@@ -329,10 +359,6 @@ public class ProdExcelUploadVO extends PageVO {
     public String getVendrCd() { return vendrCd; }
 
     public void setVendrCd(String vendrCd) { this.vendrCd = vendrCd; }
-
-    public Integer getStartStockQty() { return startStockQty; }
-
-    public void setStartStockQty(Integer startStockQty) { this.startStockQty = startStockQty; }
 
     public String getGubun() { return gubun; }
 
@@ -398,5 +424,73 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setDeleteFg(String deleteFg) {
         this.deleteFg = deleteFg;
+    }
+
+    public void setCostUprc(String costUprc) {
+        this.costUprc = costUprc;
+    }
+
+    public String getPoUnitQty() {
+        return poUnitQty;
+    }
+
+    public void setPoUnitQty(String poUnitQty) {
+        this.poUnitQty = poUnitQty;
+    }
+
+    public Integer getPoUnitQtyI() {
+        return poUnitQtyI;
+    }
+
+    public void setPoUnitQtyI(Integer poUnitQtyI) {
+        this.poUnitQtyI = poUnitQtyI;
+    }
+
+    public String getPoMinQty() {
+        return poMinQty;
+    }
+
+    public void setPoMinQty(String poMinQty) {
+        this.poMinQty = poMinQty;
+    }
+
+    public Integer getPoMinQtyI() {
+        return poMinQtyI;
+    }
+
+    public void setPoMinQtyI(Integer poMinQtyI) {
+        this.poMinQtyI = poMinQtyI;
+    }
+
+    public String getSafeStockQty() {
+        return safeStockQty;
+    }
+
+    public void setSafeStockQty(String safeStockQty) {
+        this.safeStockQty = safeStockQty;
+    }
+
+    public Integer getSafeStockQtyI() {
+        return safeStockQtyI;
+    }
+
+    public void setSafeStockQtyI(Integer safeStockQtyI) {
+        this.safeStockQtyI = safeStockQtyI;
+    }
+
+    public String getStartStockQty() {
+        return startStockQty;
+    }
+
+    public void setStartStockQty(String startStockQty) {
+        this.startStockQty = startStockQty;
+    }
+
+    public Integer getStartStockQtyI() {
+        return startStockQtyI;
+    }
+
+    public void setStartStockQtyI(Integer startStockQtyI) {
+        this.startStockQtyI = startStockQtyI;
     }
 }

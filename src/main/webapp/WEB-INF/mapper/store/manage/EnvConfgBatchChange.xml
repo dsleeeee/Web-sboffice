@@ -534,4 +534,34 @@
                         MOD_ID = #{modId}
             WHERE STORE_CD = #{storeCd} AND FNKEY_FG ='6020' AND FNKEY_NO = #{fnkeyNo}
     </update>
+
+    <!-- 환경설정관리 - 저장 update -->
+    <!--
+        TABLE    : TB_HQ_ENVST, TB_MS_STORE_ENVST, TB_MS_POS_ENVST
+        COMMENTS : [매장]환경설정
+    -->
+    <update id="getEnvConfgBatchChangeEnvSettingSaveHq" parameterType="EnvConfgBatchChangeVO">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeEnvSettingSaveHq */
+            UPDATE  TB_HQ_ENVST
+            SET     USE_YN = #{useYn},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+            WHERE   ENVST_CD = #{envstCd}
+    </update>
+    <update id="getEnvConfgBatchChangeEnvSettingSaveMs" parameterType="EnvConfgBatchChangeVO">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeEnvSettingSaveMs */
+            UPDATE  TB_MS_STORE_ENVST
+            SET     USE_YN = #{useYn},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+            WHERE   ENVST_CD = #{envstCd}
+    </update>
+    <update id="getEnvConfgBatchChangeEnvSettingSavePos" parameterType="EnvConfgBatchChangeVO">
+        /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeEnvSettingSavePos */
+            UPDATE  TB_MS_POS_ENVST
+            SET     USE_YN = #{useYn},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+            WHERE   ENVST_CD = #{envstCd}
+    </update>
 </mapper>
