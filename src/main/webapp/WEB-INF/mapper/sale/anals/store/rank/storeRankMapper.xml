@@ -11,41 +11,27 @@
     -->
     <select id="getStoreRankList" parameterType="storeRankVO" resultType="DefaultMap">
         /* USE : storeRankMapper.getStoreRankList */
-		SELECT M.STORE_CD
-		      , M.STORE_NM
-		      , M.TOT_SALE_AMT
-		      , M.TOT_DC_AMT
-		      , M.REAL_SALE_AMT
-		      , M.SALE_DATE_CNT
-              , ROUND((M.REAL_SALE_AMT / M.SALE_DATE_CNT),0) AS REAL_SALE_AMT_AVG
-		      , M.BILL_CNT
-		      , M.TOT_GUEST_CNT
-		      , ROUND(M.TOT_SALE_AMT/M.BILL_CNT,0) AS TOT_BILL_AMT
-		      , ROUND(RATIO_TO_REPORT(M.REAL_SALE_AMT) OVER(), 2) *100 AS STORE_RAT
+		SELECT M2.STORE_CD
+		      , M2.STORE_NM
+		      , NVL(M1.TOT_SALE_AMT, 0) AS TOT_SALE_AMT
+		      , NVL(M1.TOT_DC_AMT, 0) AS TOT_DC_AMT
+		      , NVL(M1.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+		      , NVL(M2.SALE_DATE_CNT, 0) AS SALE_DATE_CNT
+              , NVL(ROUND((M1.REAL_SALE_AMT / M2.SALE_DATE_CNT),0), 0)  AS REAL_SALE_AMT_AVG
+		      , NVL(M1.BILL_CNT, 0) AS BILL_CNT
+		      , NVL(M1.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT
+		      , NVL(ROUND(M1.TOT_SALE_AMT/M1.BILL_CNT,0), 0) AS TOT_BILL_AMT
+		      , NVL(ROUND(RATIO_TO_REPORT(M1.REAL_SALE_AMT) OVER(), 2) *100, 0) AS STORE_RAT
 			  ${sQuery1}
 		FROM (
 			SELECT TSDT.STORE_CD
-			     , TMS.STORE_NM
 			     , SUM(TSDT.TOT_SALE_AMT) AS TOT_SALE_AMT
 			     , SUM(TSDT.TOT_DC_AMT) AS TOT_DC_AMT
 			     , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
 			     , SUM(TSDT.BILL_CNT) AS BILL_CNT
 			     , SUM(TSDT.TOT_GUEST_CNT) AS TOT_GUEST_CNT
-			     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z
-			     	WHERE Z.STORE_CD = TSDT.STORE_CD
-			     	AND Z.HQ_OFFICE_CD = #{hqOfficeCd}
-			     	<if test='startDate != null and startDate != ""'>
-			     		AND Z.SALE_DATE >= #{startDate}
-			     	</if>
-			     	<if test='endDate != null and endDate != ""'>
-			     		AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}
-			     	</if>
-			     ) AS SALE_DATE_CNT
 			  FROM TB_SL_DAILY_TOTAL TSDT
-			     , TB_MS_STORE TMS
-			 WHERE TSDT.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
-               AND TSDT.STORE_CD = TMS.STORE_CD
-			   AND TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
+			 WHERE TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 			<if test='startDate != null and startDate != ""'>
 			   AND TSDT.SALE_DATE >= #{startDate}
 			</if>
@@ -58,14 +44,31 @@
 							#{item}
 					</foreach>
 			</if>
-			 GROUP BY TSDT.STORE_CD, TMS.STORE_NM
-			<if test='chkSort == "1"'>
-			 ORDER BY SUM(TSDT.TOT_SALE_AMT) DESC
-			</if>
-			<if test='chkSort == "2"'>
-			 ORDER BY SUM(TSDT.TOT_SALE_AMT) ASC
-			</if>
-		 ) M,
+			 GROUP BY TSDT.STORE_CD
+		 ) M1,
+		 (
+		SELECT 	TMS.STORE_CD
+		, 		TMS.STORE_NM
+		,		TMS.SYS_STAT_FG
+		, 		(SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z
+				WHERE Z.STORE_CD = TMS.STORE_CD
+				AND Z.HQ_OFFICE_CD = #{hqOfficeCd}
+				<if test='startDate != null and startDate != ""'>
+					AND Z.SALE_DATE >= #{startDate}
+				</if>
+				<if test='endDate != null and endDate != ""'>
+					AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}
+				</if>
+				) AS SALE_DATE_CNT
+		FROM 	TB_MS_STORE TMS
+		WHERE 	TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND TMS.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		) M2,
 		(
 			SELECT STORE_CD
 				  ${sQuery2}
@@ -85,10 +88,18 @@
 				</if>
 			GROUP BY TSDP.STORE_CD
 		) N
-		WHERE M.STORE_CD = N.STORE_CD
+		WHERE 	M2.STORE_CD = M1.STORE_CD(+)
+		AND		M2.STORE_CD = N.STORE_CD(+)
+		AND 	(M2.SYS_STAT_FG = '1' OR M1.TOT_SALE_AMT != 0)
 		<if test='rowNum != null and rowNum != "" and chkRank == "N"'>
             AND ROWNUM <![CDATA[<= ]]> #{rowNum}
 	     </if>
+		<if test='chkSort == "1"'>
+			ORDER BY TOT_SALE_AMT DESC
+		</if>
+		<if test='chkSort == "2"'>
+			ORDER BY TOT_SALE_AMT ASC
+		</if>
     </select>
 
 	<!-- 매장별매출분석 - 결제수단 컬럼 리스트 조회 -->
