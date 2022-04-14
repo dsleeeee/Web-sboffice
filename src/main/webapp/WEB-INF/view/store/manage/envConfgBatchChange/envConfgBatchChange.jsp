@@ -25,11 +25,15 @@
             <li>
                 <a id="fnkeyTab" href="#" ng-click="fnkeyShow()"><s:message code="envConfgBatchChange.fnkey"/></a>
             </li>
+            <%-- 환경설정관리 탭 --%>
+            <li>
+                <a id="envSettingTab" href="#" ng-click="envSettingShow()"><s:message code="envConfgBatchChange.envSetting"/></a>
+            </li>
         </ul>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChange.js?ver=20210322.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChange.js?ver=20210322.03" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 본사환경 레이어 --%>
@@ -53,6 +57,13 @@
 
 <%-- 기능키명칭 레이어 --%>
 <c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/envConfgBatchChangeFnkey.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- 탭페이지 레이어 끝 --%>
+
+<%-- 환경설정관리 레이어 --%>
+<c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/envConfgBatchChangeEnvSetting.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
