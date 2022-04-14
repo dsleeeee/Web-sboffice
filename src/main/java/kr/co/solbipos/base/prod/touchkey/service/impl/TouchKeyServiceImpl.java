@@ -281,6 +281,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     @Override
     public Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd) {
 
+        boolean result = true;
+
         // XML 저장
         DefaultMap<String> param = new DefaultMap<String>();
         param.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
@@ -297,12 +299,16 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             param.put("tukeyGrpCd", tukeyGrpCd);
             if ( keyMapper.getTouchKeyXml(param) != null ) {
                 if( keyMapper.updateTouchKeyConfgXml(param) != 1 ) {
+                    System.out.println("터치키 저장 에러 : updateTouchKeyConfgXml");
+                    result = false;
                     throw new BizException( messageService.get("cmm.modifyFail") );
                 }
             } else {
                 tukeyGrpCd = keyMapper.getTouchKeyGrpCd(param);
                 param.put("tukeyGrpCd", tukeyGrpCd);
                 if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
+                    System.out.println("터치키 저장 에러 : insertTouchKeyConfgXml1");
+                    result = false;
                     throw new BizException( messageService.get("cmm.registFail") );
                 }
             }
@@ -310,6 +316,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             tukeyGrpCd = keyMapper.getTouchKeyGrpCd(param);
             param.put("tukeyGrpCd", tukeyGrpCd);
             if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
+                System.out.println("터치키 저장 에러 : insertTouchKeyConfgXml2");
+                result = false;
                 throw new BizException( messageService.get("cmm.registFail") );
             }
         }
@@ -357,6 +365,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
             // 터치 분류(그룹) 저장
             if( keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1 ) {
+                System.out.println("터치키 저장 에러 : insertTouchKeyClass");
+                result = false;
                 throw new BizException( messageService.get("label.modifyFail") );
             }
 
@@ -370,12 +380,17 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
                 // 터치키 저장
                 if( keyMapper.insertTouchKey(touchKeyVO) != 1 ) {
+                    System.out.println("터치키 저장 에러 : insertTouchKey");
+                    result = false;
                     throw new BizException( messageService.get("label.modifyFail") );
                 }
             }
         }
-
-        return new Result(Status.OK, tukeyGrpCd);
+        if(result){
+            return new Result(Status.OK, tukeyGrpCd);
+        } else {
+            return new Result(Status.FAIL, tukeyGrpCd);
+        }
     }
 
     /** 터치키미적용상품 */
@@ -795,8 +810,10 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     }
 
+    /** 판매터치키 초기화 */
     @Override
     public int deleteTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+        System.out.println("판매터치키 초기화 버튼 클릭");
         int result = 0;
 
         TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();

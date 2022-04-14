@@ -400,24 +400,40 @@
     -->
     <insert id="insertTouchKeyConfgXml" parameterType="DefaultMap">
         /* USE : TouchkeyMapper.insertTouchKeyConfgXml */
+        <selectKey keyProperty="cnt" resultType="String" order="BEFORE">
+            <choose>
+                <!-- 본사 -->
+                <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  COUNT(*) AS CNT
+                FROM    TB_WB_HQ_CONFG_XML
+                WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     CONFG_FG      =   #{confgFg}
+                AND     GRP_CD        =   #{tukeyGrpCd}
+                </when>
+                <!-- 매장 -->
+                <when test='orgnFg != null and orgnFg == "S"'>
+                    SELECT  COUNT(*) AS CNT
+                    FROM    TB_WB_STORE_CONFG_XML
+                    WHERE   STORE_CD  =   #{storeCd}
+                    AND     CONFG_FG  =   #{confgFg}
+                    AND     GRP_CD    =   #{tukeyGrpCd}
+                </when>
+            </choose>
+        </selectKey>
         <choose>
             <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                MERGE INTO TB_WB_HQ_CONFG_XML A
-                USING   DUAL
-                ON      (
-                            A.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                        AND A.CONFG_FG      =   #{confgFg}
-                        AND A.GRP_CD        =   #{tukeyGrpCd}
-                        )
-                WHEN MATCHED THEN
-                UPDATE
+            <when test='orgnFg != null and orgnFg == "H" and cnt != "0"'>
+                UPDATE  TB_WB_HQ_CONFG_XML A
                 SET     A.USE_YN    =   #{useYn}
                 ,       A.MOD_DT    =   #{regDt}
                 ,       A.MOD_ID    =   #{regId}
                 ,       A.XML       =   #{xml:CLOB}
-                WHEN NOT MATCHED THEN
-                INSERT
+                WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     CONFG_FG      =   #{confgFg}
+                AND     GRP_CD        =   #{tukeyGrpCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "H" and cnt == "0"'>
+                INSERT INTO TB_WB_HQ_CONFG_XML A
                 (
                         A.HQ_OFFICE_CD
                 ,       A.CONFG_FG
@@ -439,22 +455,18 @@
                 )
             </when>
             <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                MERGE INTO TB_WB_STORE_CONFG_XML A
-                USING   DUAL
-                ON      (
-                            A.STORE_CD  =   #{storeCd}
-                        AND A.CONFG_FG  =   #{confgFg}
-                        AND A.GRP_CD    =   #{tukeyGrpCd}
-                        )
-                WHEN MATCHED THEN
-                UPDATE
+            <when test='orgnFg != null and orgnFg == "S" and cnt != "0"'>
+                UPDATE  TB_WB_STORE_CONFG_XML A
                 SET     A.USE_YN    =   #{useYn}
                 ,       A.MOD_DT    =   #{regDt}
                 ,       A.MOD_ID    =   #{regId}
                 ,       A.XML       =   #{xml:CLOB}
-                WHEN NOT MATCHED THEN
-                INSERT
+                WHERE   STORE_CD  =   #{storeCd}
+                AND     CONFG_FG  =   #{confgFg}
+                AND     GRP_CD    =   #{tukeyGrpCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S" and cnt == "0"'>
+                INSERT INTO TB_WB_STORE_CONFG_XML A
                 (
                         A.STORE_CD
                 ,       A.CONFG_FG
@@ -492,10 +504,10 @@
                 UPDATE
                     TB_WB_HQ_CONFG_XML twhcx
                 SET
-                    twhcx.XML = #{xml:CLOB},
                     twhcx.USE_YN = #{useYn},
                     twhcx.MOD_DT = #{regDt},
-                    twhcx.MOD_ID = #{regId}
+                    twhcx.MOD_ID = #{regId},
+                    twhcx.XML = #{xml:CLOB}
                 WHERE
                     twhcx.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND twhcx.CONFG_FG = #{confgFg}
@@ -506,10 +518,10 @@
                 UPDATE
                     TB_WB_STORE_CONFG_XML twscx
                 SET
-                    twscx.XML = #{xml:CLOB},
                     twscx.USE_YN = #{useYn},
                     twscx.MOD_DT = #{regDt},
-                    twscx.MOD_ID = #{regId}
+                    twscx.MOD_ID = #{regId},
+                    twscx.XML = #{xml:CLOB}
                 WHERE
                     twscx.STORE_CD = #{storeCd}
                     AND twscx.CONFG_FG = #{confgFg}
