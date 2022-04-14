@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -123,8 +124,74 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
         int procCnt = 0;
         int i = 1;
         String currentDt = currentDateTimeString();
+        String pattern = "^[0-9]*$"; //숫자만
 
         for(ProdExcelUploadVO prodExcelUploadVO : prodExcelUploadVOs) {
+
+            // 숫자가 입력되어야 하는 컬럼에 문자가 입력되면 null처리
+            // 포장금액         prodPackAmt
+            // 배달금액         prodDlvrAmt
+            // 원가단가         costUprc
+            // 최종원가단가     lastCostUprc
+            if(prodExcelUploadVO.getCostUprc() != null && !"".equals(prodExcelUploadVO.getCostUprc())){
+                if(Pattern.matches(pattern, prodExcelUploadVO.getCostUprc())){
+                    prodExcelUploadVO.setCostUprcD(Double.parseDouble(prodExcelUploadVO.getCostUprc()));
+                }
+            }
+            // 공급단가         splyUprc
+            if(prodExcelUploadVO.getSplyUprc() != null && !"".equals(prodExcelUploadVO.getSplyUprc())){
+                if (Pattern.matches(pattern, prodExcelUploadVO.getSplyUprc())) {
+                    prodExcelUploadVO.setSplyUprcD(Double.parseDouble(prodExcelUploadVO.getSplyUprc()));
+                }
+            }
+            // 발주단위수량       poUnitQty
+            if(prodExcelUploadVO.getPoUnitQty() != null && !"".equals(prodExcelUploadVO.getPoUnitQty())){
+                if (Pattern.matches(pattern, prodExcelUploadVO.getPoUnitQty())) {
+                    prodExcelUploadVO.setPoUnitQtyI(Integer.parseInt(prodExcelUploadVO.getPoUnitQty()));
+                }
+            }
+            // 발주최소수량       poMinQty
+            if(prodExcelUploadVO.getPoMinQty() != null && !"".equals(prodExcelUploadVO.getPoMinQty())){
+                if (Pattern.matches(pattern, prodExcelUploadVO.getPoMinQty())) {
+                    prodExcelUploadVO.setPoMinQtyI(Integer.parseInt(prodExcelUploadVO.getPoMinQty()));
+                }
+            }
+            // 안전재고수량       safeStockQty
+            if(prodExcelUploadVO.getSafeStockQty() != null && !"".equals(prodExcelUploadVO.getSafeStockQty())){
+                if (Pattern.matches(pattern, prodExcelUploadVO.getSafeStockQty())) {
+                    prodExcelUploadVO.setSafeStockQtyI(Integer.parseInt(prodExcelUploadVO.getSafeStockQty()));
+                }
+            }
+            // 판매단가         saleUprc - 자료형이 String이라 VO에서 에러는 안 나지만 문자가 포함 된 경우 0으로 치환
+            if(prodExcelUploadVO.getSaleUprc() != null && !"".equals(prodExcelUploadVO.getSaleUprc())){
+                if (!Pattern.matches(pattern, prodExcelUploadVO.getSaleUprc())) {
+                    prodExcelUploadVO.setSaleUprc("0");
+                }
+            }
+            // 초기재고수량     startStockQty
+            if(prodExcelUploadVO.getStartStockQty() != null && !"".equals(prodExcelUploadVO.getStartStockQty())){
+                if (Pattern.matches(pattern, prodExcelUploadVO.getStartStockQty())) {
+                    prodExcelUploadVO.setStartStockQtyI(Integer.parseInt(prodExcelUploadVO.getStartStockQty()));
+                }
+            }
+            // 판매단가-내점      stinSaleUprc
+            if(prodExcelUploadVO.getStinSaleUprc() != null && !"".equals(prodExcelUploadVO.getStinSaleUprc())){
+                if (!Pattern.matches(pattern, prodExcelUploadVO.getStinSaleUprc())) {
+                    prodExcelUploadVO.setStinSaleUprc(null);
+                }
+            }
+            // 판매단가-배달      dlvrSaleUprc
+            if(prodExcelUploadVO.getDlvrSaleUprc() != null && !"".equals(prodExcelUploadVO.getDlvrSaleUprc())){
+                if (!Pattern.matches(pattern, prodExcelUploadVO.getDlvrSaleUprc())) {
+                    prodExcelUploadVO.setDlvrSaleUprc(null);
+                }
+            }
+            // 판매단가-포장      packSaleUprc
+            if(prodExcelUploadVO.getPackSaleUprc() != null && !"".equals(prodExcelUploadVO.getPackSaleUprc())){
+                if (!Pattern.matches(pattern, prodExcelUploadVO.getPackSaleUprc())) {
+                    prodExcelUploadVO.setPackSaleUprc(null);
+                }
+            }
 
             prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             prodExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
@@ -251,26 +318,28 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 초기재고
             if (prodExcelUploadVO.getStartStockQty() != null && !"".equals(prodExcelUploadVO.getStartStockQty())) {
-                if (prodExcelUploadVO.getStartStockQty() < 0) {
+                String startStockQty = prodExcelUploadVO.getStartStockQty().replace(",", "");
+                if (startStockQty.length() > 8) { //99999999
+                    startStockQty = "0";
+                    prodExcelUploadVO.setResult("초기재고 길이가 너무 깁니다.");
+                } else if (Integer.parseInt(startStockQty) < 0) {
                     prodExcelUploadVO.setResult("초기재고는 0이상 입력해주세요.");
                 }
-                if (prodExcelUploadVO.getStartStockQty() > 99999999) {
-                    prodExcelUploadVO.setStartStockQty(0);
-                    prodExcelUploadVO.setResult("초기재고 길이가 너무 깁니다.");
-                }
+                prodExcelUploadVO.setStartStockQtyI(Integer.parseInt(startStockQty));
             } else {
                 prodExcelUploadVO.setResult("초기재고를 입력해주세요.");
             }
 
             // 안전재고
             if (prodExcelUploadVO.getSafeStockQty() != null && !"".equals(prodExcelUploadVO.getSafeStockQty())) {
-                if (prodExcelUploadVO.getSafeStockQty() < 0) {
+                String safeStockQty = prodExcelUploadVO.getSafeStockQty().replace(",", "");
+                if (safeStockQty.length() > 9) {    //999999999
+                    safeStockQty = "0";
+                    prodExcelUploadVO.setResult("안전재고 길이가 너무 깁니다.");
+                } else if (Integer.parseInt(safeStockQty) < 0) {
                     prodExcelUploadVO.setResult("안전재고는 0이상 입력해주세요.");
                 }
-                if (prodExcelUploadVO.getSafeStockQty() > 999999999) {
-                    prodExcelUploadVO.setSafeStockQty(0);
-                    prodExcelUploadVO.setResult("안전재고 길이가 너무 깁니다.");
-                }
+                prodExcelUploadVO.setSafeStockQtyI(Integer.parseInt(safeStockQty));
             } else {
                 prodExcelUploadVO.setResult("안전재고를 입력해주세요.");
             }
@@ -278,10 +347,11 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             // 원가단가 길이체크
             // 값이 있을때만
             if (prodExcelUploadVO.getCostUprc() != null && !"".equals(prodExcelUploadVO.getCostUprc())) {
-                if(prodExcelUploadVO.getCostUprc() > 9999999999999999.0) {
-                    prodExcelUploadVO.setCostUprc(0.0);
+                if(Double.parseDouble(prodExcelUploadVO.getCostUprc()) > 9999999999999999.0) {
+                    prodExcelUploadVO.setCostUprc("0.0");
                     prodExcelUploadVO.setResult("원가단가 길이가 너무 깁니다.");
                 }
+                prodExcelUploadVO.setCostUprcD(Double.parseDouble(prodExcelUploadVO.getCostUprc()));
             }
 
             // 재고관리여부
@@ -325,26 +395,28 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 최소발주수량
             if (prodExcelUploadVO.getPoMinQty() != null && !"".equals(prodExcelUploadVO.getPoMinQty())) {
-                if (prodExcelUploadVO.getPoMinQty() < 1) {
+                String poMinQty = prodExcelUploadVO.getPoMinQty().replace(",", "");
+                if (poMinQty.length() > 9) { //999999999
+                    poMinQty = "0";
+                    prodExcelUploadVO.setResult("최소발주수량 길이가 너무 깁니다.");
+                } else if (Integer.parseInt(poMinQty) < 1) {
                     prodExcelUploadVO.setResult("최소발주수량은 1이상 입력해주세요.");
                 }
-                if (prodExcelUploadVO.getPoMinQty() > 999999999) {
-                    prodExcelUploadVO.setPoMinQty(0);
-                    prodExcelUploadVO.setResult("최소발주수량 길이가 너무 깁니다.");
-                }
+                prodExcelUploadVO.setPoMinQtyI(Integer.parseInt(poMinQty));
             } else {
                 prodExcelUploadVO.setResult("최소발주수량을 입력해주세요.");
             }
 
             // 발주단위수량
             if (prodExcelUploadVO.getPoUnitQty() != null && !"".equals(prodExcelUploadVO.getPoUnitQty())) {
-                if (prodExcelUploadVO.getPoUnitQty() < 1) {
+                String poUnitQty = prodExcelUploadVO.getPoUnitQty().replace(",", "");
+                if (poUnitQty.length() > 9) { //999999999
+                    poUnitQty = "0";
+                    prodExcelUploadVO.setResult("발주단위수량 길이가 너무 깁니다.");
+                } else if (Integer.parseInt(poUnitQty) < 1) {
                     prodExcelUploadVO.setResult("발주단위수량은 1이상 입력해주세요.");
                 }
-                if (prodExcelUploadVO.getPoUnitQty() > 999999999) {
-                    prodExcelUploadVO.setPoUnitQty(0);
-                    prodExcelUploadVO.setResult("발주단위수량 길이가 너무 깁니다.");
-                }
+                prodExcelUploadVO.setPoUnitQtyI(Integer.parseInt(poUnitQty));
             } else {
                 prodExcelUploadVO.setResult("발주단위수량를 입력해주세요.");
             }
@@ -353,8 +425,13 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             if (prodExcelUploadVO.getPoUnitFg() != null && !"".equals(prodExcelUploadVO.getPoUnitFg())) {
                 if(String.valueOf(1).equals(prodExcelUploadVO.getPoUnitFg())) {
                     // 발주단위수량
-                    if (!prodExcelUploadVO.getPoUnitQty().equals(1)) {
-                        prodExcelUploadVO.setResult("발주단위가 낱개인 경우 발주단위수량은 1만 입력가능합니다.");
+                    if (prodExcelUploadVO.getPoUnitQty() != null && !"".equals(prodExcelUploadVO.getPoUnitQty())) {
+                        // 발주단위수량
+                        if (!String.valueOf(1).equals(prodExcelUploadVO.getPoUnitQtyI())) {
+                            prodExcelUploadVO.setResult("발주단위가 낱개인 경우 발주단위수량은 1만 입력가능합니다.");
+                        }
+                    } else {
+                        prodExcelUploadVO.setResult("발주단위수량를 입력해주세요.");
                     }
                 }
             } else {
@@ -370,10 +447,11 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             // 공급단가 길이체크
             // 값이 있을때만
             if (prodExcelUploadVO.getSplyUprc() != null && !"".equals(prodExcelUploadVO.getSplyUprc())) {
-                if(prodExcelUploadVO.getSplyUprc() > 9999999999999999.0) {
-                    prodExcelUploadVO.setSplyUprc(0.0);
+                if(Double.parseDouble(prodExcelUploadVO.getSplyUprc()) > 9999999999999999.0) {
+                    prodExcelUploadVO.setSplyUprc("0.0");
                     prodExcelUploadVO.setResult("공급단가 길이가 너무 깁니다.");
                 }
+                prodExcelUploadVO.setSplyUprcD(Double.parseDouble(prodExcelUploadVO.getSplyUprc()));
             }
 
             // 판매단가 길이체크
@@ -506,8 +584,8 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             if(prodExcelUploadVO.getStinSaleUprc() == null) { prodExcelUploadVO.setStinSaleUprc(""); }
             if(prodExcelUploadVO.getDlvrSaleUprc() == null) { prodExcelUploadVO.setDlvrSaleUprc(""); }
             if(prodExcelUploadVO.getPackSaleUprc() == null) { prodExcelUploadVO.setPackSaleUprc(""); }
-            if(prodExcelUploadVO.getSplyUprc() == null) { prodExcelUploadVO.setSplyUprc(0.0); }
-            if(prodExcelUploadVO.getCostUprc() == null) { prodExcelUploadVO.setCostUprc(0.0); }
+            if(prodExcelUploadVO.getSplyUprc() == null) { prodExcelUploadVO.setSplyUprcD(0.0); }
+            if(prodExcelUploadVO.getCostUprc() == null) { prodExcelUploadVO.setCostUprcD(0.0); }
             if(prodExcelUploadVO.getBarCd() == null) { prodExcelUploadVO.setBarCd(""); }
 
             if (prodExcelUploadVO.getResult() == null || prodExcelUploadVO.getResult() == "") {

@@ -238,16 +238,16 @@
             #{stockProdYn},
             'N', --SIDE_PROD_YN
             '1', --SET_PROD_FG
-            REPLACE(#{costUprc}, ',',''),
+            REPLACE(#{costUprcD}, ',',''),
             '0', --LAST_COST_UPRC
-            REPLACE(#{splyUprc}, ',',''),
+            REPLACE(#{splyUprcD}, ',',''),
             'Y', --SPLY_UPRC_USE_YN
             #{poProdFg},
             #{poUnitFg}, --PO_UNIT_FG
-            REPLACE(#{poUnitQty}, ',',''), --PO_UNIT_QTY
+            REPLACE(#{poUnitQtyI}, ',',''), --PO_UNIT_QTY
             '', --PO_UNIT_ALLOW_FG
-            REPLACE(#{poMinQty}, ',',''),
-            REPLACE(#{safeStockQty}, ',',''),
+            REPLACE(#{poMinQtyI}, ',',''),
+            REPLACE(#{safeStockQtyI}, ',',''),
             '', --STOCK_UNIT_FG
             'Y', --USE_YN
             #{remark}, --REMARK
@@ -258,7 +258,7 @@
             #{modDt},
             #{modId},
             #{vendrCd},
-            REPLACE(#{startStockQty}, ',',''),
+            REPLACE(#{startStockQtyI}, ',',''),
             #{prcCtrlFg},
             REPLACE(NVL(#{stinSaleUprc}, #{saleUprc}), ',',''),
             REPLACE(NVL(#{dlvrSaleUprc}, #{saleUprc}), ',',''),
