@@ -44,8 +44,8 @@
 
     <div class="w100 fl">
         <%-- left --%>
-        <div class="fl" style="width:320px;">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;">
+        <div class="fl" style="width:300px;">
+            <div class="wj-TblWrapBr mr10 pd20" style="height:530px; overflow-y: hidden;">
                 <%-- left 상단 --%>
                 <div ng-controller="alimtalkSendTypeCtrl">
                     <div class="updownSet oh mb10">
@@ -55,7 +55,7 @@
                         </span>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:150px; overflow-y: hidden; overflow-x: hidden;">
+                        <div class="wj-gridWrap" style="height:185px; overflow-y: hidden; overflow-x: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns.="false"
                                     control="flex"
@@ -86,7 +86,7 @@
                         <button class="btn_skyblue" id="btnAlimtalkSendTypeDetailSave" ng-click="save()"><s:message code='cmm.save' /></button>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:150px; overflow-x: hidden; overflow-y: hidden;">
+                        <div class="wj-gridWrap" style="height:185px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns="false"
                                     control="flex"
@@ -96,8 +96,8 @@
                                     item-formatter="_itemFormatter">
 
                                 <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeDtlCd"/>" binding="sendTypeDtlCd" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeDtlNm"/>" binding="sendTypeDtlNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeDtlCd"/>" binding="sendTypeDtlCd" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="alimtalkSendType.sendTypeDtlNm"/>" binding="sendTypeDtlNm" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="alimtalkSendType.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="70" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
@@ -108,13 +108,12 @@
         </div>
         <%-- //left --%>
         <%-- center --%>
-        <div class="fl" style="width:310px;">
+        <div class="fl" style="width:250px;">
             <div ng-controller="alimtalkSendTypeTemplateCtrl">
-                <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;">
+                <div class="wj-TblWrapBr mr10 pd20" style="height:530px; overflow-y: hidden;">
                     <div class="updownSet oh mb10">
                         <span class="fl bk lh30">
                             <%-- 템플릿 --%>
-                            <s:message code="alimtalkSendType.sendTypeTemplate"/>
                              <label id="lblSendTypeDtlCd"></label>
                              <label id="lblSendTypeDtlNm"></label>
                         </span>
@@ -139,7 +138,7 @@
                         </tbody>
                     </table>
                     <%-- 템플릿 양식 --%>
-                    <div class="w100 fl pd10 pdl30 bt" style="height:310px;">
+                    <div class="w100 fl pdt5 bt" style="height:310px;">
                         <div id ="divTemplateGrpPage" style="display: none;">
                             <div style="display: none;">
                                 <%-- 템플릿 그룹구분 --%>
@@ -158,17 +157,12 @@
         </div>
         <%-- //center --%>
         <%-- right --%>
-        <div class="fr" style="width:calc(100% - 630px);">
+        <div class="fr" style="width:calc(100% - 550px);">
             <div ng-controller="templateListCtrl">
-                <div class="wj-TblWrapBr mr10 pd10" style="height:470px; overflow-y: hidden;">
-                    <div class="w100 mb5">
-                        <div class="oh sb-select dkbr">
-                            <p class="tl s14 mt5 lh15 blue">템플릿 선택시 저장됩니다.</p>
-                        </div>
-                    </div>
+                <div class="wj-TblWrapBr mr10 pd10" style="height:530px; overflow-y: hidden;">
                     <%-- 템플릿 양식 --%>
-                    <div class="w100 fl" style="height:430px;">
-                        <div style="height:410px; overflow-x: hidden; overflow-y: auto;">
+                    <div class="w100 fl" style="height:530px;">
+                        <div style="height:510px; overflow-x: hidden; overflow-y: auto;">
                             <div id="divTemplateCommentList"></div>
                         </div>
                     </div>
@@ -187,7 +181,7 @@
 
     // 템플릿 치환값 리스트
     var templateChangeKeyColList = [];
-    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <%--javascript에서 사용할 템플릿 치환값 json 데이터 생성--%>
     <c:forEach var="templateChangeKeyCol" items="${templateChangeKeyColList}">
         var templateChangeKeyParam = {};
         templateChangeKeyParam.nmcodeNm = "${templateChangeKeyCol.nmcodeNm}";
@@ -196,7 +190,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220407.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220414.01" charset="utf-8"></script>
 
 <%-- 알림톡 계정등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.jsp">

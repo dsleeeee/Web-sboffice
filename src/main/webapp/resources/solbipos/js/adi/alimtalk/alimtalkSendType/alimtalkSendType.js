@@ -227,7 +227,7 @@ app.controller('alimtalkSendTypeDetailCtrl', ['$scope', '$http', function ($scop
             addSelected = "Y";
         }
         if(addSelected === "Y") {
-            $("#lblSendTypeCd").text(" ( [ " + $scope.selectedSendType.sendTypeCd + " ]");
+            $("#lblSendTypeCd").text(" ( " + $scope.selectedSendType.sendTypeCd + " /");
             $("#lblSendTypeNm").text($scope.selectedSendType.sendTypeNm + " )");
             $scope.searchAlimtalkSendTypeDetail();
 
@@ -311,7 +311,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             addSelected2 = "Y";
         }
         if(addSelected2 === "Y") {
-            $("#lblSendTypeDtlCd").text(" ( [ " + $scope.selectedSendTypeTemplate.sendTypeDtlCd + " ]");
+            $("#lblSendTypeDtlCd").text(" ( " + $scope.selectedSendTypeTemplate.sendTypeDtlCd + " /");
             $("#lblSendTypeDtlNm").text($scope.selectedSendTypeTemplate.sendTypeDtlNm + " )");
             // 전송유형 : 대기 -> 대기중 일때만
             if($scope.selectedSendTypeTemplate.sendTypeCd == "001" && $scope.selectedSendTypeTemplate.sendTypeDtlCd == "02") {
@@ -388,7 +388,8 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ data.templateNm +"\" readonly/></td></tr>";
             innerHtml += "<tr style=\"height: 10px\"></tr>";
             innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-alk-msgTop w100\" value=\""+ '알림톡 도착' +"\" disabled/></td></tr>";
-            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: white\" readonly>" + templateContent + "</textarea></td></tr>";
+            // innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: white\" readonly>" + templateContent + "</textarea></td></tr>";
+            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: lightyellow\" readonly>" + templateContent + "</textarea></td></tr>";
             innerHtml += "</table>";
             innerHtml += "</div>";
             $("#divTemplateComment").html(innerHtml);
@@ -454,7 +455,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         params.templateCd = $("#lblTemplateCd").text();
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){
+        $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){
             $scope.searchAlimtalkSendTypeTemplate();
         });
     };
@@ -484,7 +485,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         params.templateCd = $("#lblTemplateCd").text();
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){});
+        $scope._postJSONSave.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){});
     };
 }]);
 
@@ -535,14 +536,18 @@ app.controller('templateListCtrl', ['$scope', '$http', function ($scope, $http) 
                     innerHtml += "</colgroup>";
                     innerHtml += "<tbody>";
                     innerHtml += "<table>";
-                    innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
+                    if($("#lblTemplateCd").text().toString() == list[i].templateCd.toString()) {
+                        innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
+                    } else {
+                        innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
+                    }
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
                     innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ list[i].templateNm +"\" readonly/></td></tr>";
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
                     // innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\')\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
                     innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
                     innerHtml += "<tr style=\"height: 5px\"></tr>";
-                    innerHtml += "<tr><td><button class=\"btn_skyblue\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length + "\')\">" + '선택' + "</button></td></tr>";
+                    innerHtml += "<tr><td><button class=\"btn_skyblue\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length + "\')\">" + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;선택&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + "</button></td></tr>";
                     innerHtml += "</table>";
                     innerHtml += "</div>";
                 }
@@ -573,7 +578,7 @@ app.controller('templateListCtrl', ['$scope', '$http', function ($scope, $http) 
         // 선택된 메세지 표시
         for(var i=0; i < data.listLength; i++) {
             if(i == data.listNum) {
-                $("#txt_commonFgNm" + i).css("background-color", "lightskyblue");
+                $("#txt_commonFgNm" + i).css("background-color", "lightcoral");
             } else {
                 $("#txt_commonFgNm" + i).css("background-color", "white");
             }

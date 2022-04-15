@@ -17,8 +17,8 @@
         <div class="subCon">
             <table class="tblType01">
                 <colgroup>
-                    <col class="w30"/>
-                    <col class="w55"/>
+                    <col class="w25"/>
+                    <col class="w60"/>
                     <col class="w15"/>
                 </colgroup>
                 <tbody>
@@ -45,7 +45,7 @@
                     <td colspan="2">
                         <div class="sb-select dkbr ml5 fl">
                             <wj-combo-box
-                                    class="w120px fl"
+                                    class="w130px fl"
                                     id="srchCategoryCodeLCombo"
                                     ng-model="categoryCodeLCombo"
                                     items-source="_getComboData('categoryCodeLCombo')"
@@ -58,7 +58,7 @@
                         </div>
                         <div class="sb-select dkbr ml5 fl">
                             <wj-combo-box
-                                    class="w120px fl"
+                                    class="w130px fl"
                                     id="srchCategoryCodeMCombo"
                                     ng-model="categoryCodeMCombo"
                                     items-source="_getComboData('categoryCodeMCombo')"
@@ -71,7 +71,7 @@
                         </div>
                         <div class="sb-select dkbr ml5 fl">
                             <wj-combo-box
-                                    class="w120px fl"
+                                    class="w130px fl"
                                     id="srchCategoryCodeSCombo"
                                     ng-model="categoryCodeSCombo"
                                     items-source="_getComboData('categoryCodeSCombo')"
@@ -122,7 +122,6 @@
                 <div class="oh sb-select dkbr">
                     <p class="tl s14 mt5 lh15 blue">* 카카오계정ID 등록하는 방법</p>
                     <p class="tl s14 mt5 lh15">1. 카카오를 접속하여 카카오톡 계정 로그인을 합니다.</p>
-                    <p class="tl s14 mt5 lh15">&nbsp;&nbsp;&nbsp;- <a href="https://accounts.kakao.com/login/kakaobusiness?continue=https://business.kakao.com/dashboard/?sid%3Dpfraa" target="_blank">[카카오 사이트 바로가기] 클릭</a></p>
                     <p class="tl s14 mt5 lh15">2. 새 채널 만들기를 합니다.</p>
                     <p class="tl s14 mt5 lh15">3. 채널이 만들어지면 비지니스 채널를 신청합니다. 이때 3가지 서류가 필요합니다.</p>
                     <p class="tl s14 mt5 lh15">&nbsp;&nbsp;&nbsp;1) 사업자등록증 또는 고유번호</p>
@@ -134,6 +133,12 @@
                     <p class="tl s14 mt5 lh15">&nbsp;&nbsp;&nbsp;- 부적절한 내용이 포함되었거나 문제가 있는 경우에 반려가 될 수 있습니다.</p>
                     <p class="tl s14 mt5 lh15">&nbsp;&nbsp;&nbsp;- 최대 2일 걸립니다.</p>
                 </div>
+            </div>
+            <div class="oh sb-select dkbr">
+                <%-- 카카오계정(채널) 생성 --%>
+                <button class="btn_skyblue fr ml10" id="btnKakaoPlusFriendId" ng-click="kakaoPlusFriendId()"><s:message code='alimtalkIdRegister.kakaoPlusFriendId' /></button>
+                <%-- 계정생성 가이드 --%>
+                <button class="btn_skyblue fr ml10" id="btnPlusFriendIdManual" ng-click="plusFriendIdManual()"><s:message code='alimtalkIdRegister.plusFriendIdManual' /></button>
             </div>
         </div>
 
@@ -151,4 +156,10 @@
     var apiUrl = "${apiUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220407.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220414.01" charset="utf-8"></script>
+
+<%-- 알림톡 계정생성 가이드 팝업 --%>
+<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkManual.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

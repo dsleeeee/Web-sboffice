@@ -342,6 +342,30 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         });
     };
 
+    // 카카오계정(채널) 생성
+    $scope.kakaoPlusFriendId = function(){
+        window.open("https://accounts.kakao.com/login/kakaobusiness?continue=https://business.kakao.com/dashboard/?sid%3Dpfraa");
+
+        $scope.wjAlimtalkManualLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 계정생성 가이드
+    $scope.plusFriendIdManual = function(){
+        $scope.wjAlimtalkManualLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+        // 알림톡 계정생성 가이드 팝업 핸들러 추가
+        $scope.wjAlimtalkManualLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('alimtalkManualCtrl', null);
+            }, 50)
+        });
+    });
+
     // 팝업 닫기
     $scope.close = function(){
         $scope.plusFriendId = "";
