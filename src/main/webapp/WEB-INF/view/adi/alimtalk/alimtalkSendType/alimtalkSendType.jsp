@@ -8,12 +8,12 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="alimtalkSendTypeView" class="subCon" style="display: none;">
+<div class="subCon">
 
     <div ng-controller="alimtalkSendTypeCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
-            <a href="#" class="open fl"><s:message code="alimtalkSendType.info"/></a>
+            <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <button class="btn_blue fr" ng-click="_broadcast('alimtalkSendTypeCtrl',1)">
@@ -43,19 +43,19 @@
     </div>
 
     <div class="w100 fl">
-        <%-- left --%>
-        <div class="fl" style="width:300px;">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:530px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:570px; overflow-y: hidden;">
+            <%-- left --%>
+            <div class="fl pdr10 br" style="width:260px;">
                 <%-- left 상단 --%>
                 <div ng-controller="alimtalkSendTypeCtrl">
                     <div class="updownSet oh mb10">
-                        <span class="fl bk lh30">
-                            <%-- 전송유형 --%>
-                            <s:message code="alimtalkSendType.sendType"/>
-                        </span>
+                    <span class="fl bk lh30">
+                        <%-- 전송유형 --%>
+                        <s:message code="alimtalkSendType.sendType"/>
+                    </span>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:185px; overflow-y: hidden; overflow-x: hidden;">
+                        <div class="wj-gridWrap" style="height:210px; overflow-y: hidden; overflow-x: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns.="false"
                                     control="flex"
@@ -77,16 +77,16 @@
                 <%-- left 하단 --%>
                 <div class="bt" ng-controller="alimtalkSendTypeDetailCtrl">
                     <div class="updownSet oh mb10 mt20">
-                        <span class="fl bk lh30">
-                            <%-- 전송유형 상세 --%>
-                            <s:message code="alimtalkSendType.sendTypeDtl"/>
-                            <label id="lblSendTypeCd"></label>
-                            <label id="lblSendTypeNm"></label>
-                        </span>
+                    <span class="fl bk lh30">
+                        <%-- 전송상세 --%>
+                        <s:message code="alimtalkSendType.sendTypeDtl"/>
+                        <label id="lblSendTypeCd"></label>
+                        <label id="lblSendTypeNm"></label>
+                    </span>
                         <button class="btn_skyblue" id="btnAlimtalkSendTypeDetailSave" ng-click="save()"><s:message code='cmm.save' /></button>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:185px; overflow-x: hidden; overflow-y: hidden;">
+                        <div class="wj-gridWrap" style="height:210px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns="false"
                                     control="flex"
@@ -105,12 +105,10 @@
                 </div>
                 <%-- //left 하단 --%>
             </div>
-        </div>
-        <%-- //left --%>
-        <%-- center --%>
-        <div class="fl" style="width:250px;">
-            <div ng-controller="alimtalkSendTypeTemplateCtrl">
-                <div class="wj-TblWrapBr mr10 pd20" style="height:530px; overflow-y: hidden;">
+            <%-- //left --%>
+            <%-- center --%>
+            <div class="fl pdl10 pdr10 br" style="width:215px;">
+                <div ng-controller="alimtalkSendTypeTemplateCtrl">
                     <div class="updownSet oh mb10">
                         <span class="fl bk lh30">
                             <%-- 템플릿 --%>
@@ -138,7 +136,7 @@
                         </tbody>
                     </table>
                     <%-- 템플릿 양식 --%>
-                    <div class="w100 fl pdt5 bt" style="height:310px;">
+                    <div class="w100 fl" style="height:510px;">
                         <div id ="divTemplateGrpPage" style="display: none;">
                             <div style="display: none;">
                                 <%-- 템플릿 그룹구분 --%>
@@ -146,7 +144,7 @@
                                 <%-- 템플릿코드 --%>
                                 <label id="lblTemplateCd"></label>
                             </div>
-                            <div style="height:260px; overflow-x: hidden; overflow-y: auto;">
+                            <div style="height:460px; overflow-x: hidden; overflow-y: auto;">
                                 <div id="divTemplateComment"></div>
                             </div>
                         </div>
@@ -154,23 +152,21 @@
                     <%-- //템플릿 양식 --%>
                 </div>
             </div>
-        </div>
-        <%-- //center --%>
-        <%-- right --%>
-        <div class="fr" style="width:calc(100% - 550px);">
-            <div ng-controller="templateListCtrl">
-                <div class="wj-TblWrapBr mr10 pd10" style="height:530px; overflow-y: hidden;">
+            <%-- //center --%>
+            <%-- right --%>
+            <div class="fr pdl10" style="width:calc(100% - 475px);">
+                <div ng-controller="templateListCtrl">
                     <%-- 템플릿 양식 --%>
-                    <div class="w100 fl" style="height:530px;">
-                        <div style="height:510px; overflow-x: hidden; overflow-y: auto;">
+                    <div class="w100 fl" style="height:570px;">
+                        <div style="height:550px; overflow-x: hidden; overflow-y: auto;">
                             <div id="divTemplateCommentList"></div>
                         </div>
                     </div>
                     <%-- //템플릿 양식 --%>
                 </div>
             </div>
+            <%-- //right --%>
         </div>
-        <%-- //right --%>
     </div>
 
 </div>
@@ -190,7 +186,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220414.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220418.02" charset="utf-8"></script>
 
 <%-- 알림톡 계정등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.jsp">

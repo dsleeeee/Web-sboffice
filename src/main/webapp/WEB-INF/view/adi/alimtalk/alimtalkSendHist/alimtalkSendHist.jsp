@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="alimtalkSendHist.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('alimtalkSendHistCtrl',1)" id="nxBtnSearch1">
+                <button class="btn_blue fr" ng-click="_pageView('alimtalkSendHistCtrl',1)" id="nxBtnSearch2">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -36,9 +36,9 @@
                 </th>
                 <td colspan="3">
                     <div class="sb-select">
-                        <span class="txtIn"><input id="startDate" name="startDate" class="w110px" /></span>
+                        <span class="txtIn"><input id="startDateAlimtalkSendHist" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"><input id="endDate" name="endDate" class="w110px" /></span>
+                        <span class="txtIn"><input id="endDateAlimtalkSendHist" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
             </tr>
@@ -49,14 +49,14 @@
                         <s:message code="alimtalkSendHist.subject" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchSubject" ng-model="subject" onkeyup="fnNxBtnSearch('1');"/>
+                        <input type="text" class="sb-input w100" id="srchSubject" ng-model="subject" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                         <%-- 메세지 --%>
                     <th>
                         <s:message code="alimtalkSendHist.msgContent" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchMsgContent" ng-model="msgContent" onkeyup="fnNxBtnSearch('1');"/>
+                        <input type="text" class="sb-input w100" id="srchMsgContent" ng-model="msgContent" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
                 <tr>
@@ -103,7 +103,7 @@
             <wj-combo-box
                     class="w100px fl"
                     id="listScaleBox"
-                    ng-model="listScale"
+                    ng-model="listScaleAlimtalkSendHist"
                     items-source="_getComboData('listScaleBox')"
                     display-member-path="name"
                     selected-value-path="value"
@@ -118,10 +118,10 @@
 
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
-            <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
+            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
-                        control="flex"
+                        control="flexAlimtalkSendHist"
                         initialized="initGrid(s,e)"
                         sticky-headers="true"
                         selection-mode="Row"
@@ -161,13 +161,13 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20220407.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20220418.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
-<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">--%>
+    <%--<c:param name="menuCd" value="${menuCd}"/>--%>
+    <%--<c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
 <%-- 알림톡 수신자정보 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendHist/alimtalkAddresseeDtl.jsp">

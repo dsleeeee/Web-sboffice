@@ -44,8 +44,8 @@ app.controller('alimtalkSendHistCtrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
     // 검색조건에 조회기간
-    var startDate = wcombo.genDateVal("#startDate", gvStartDate);
-    var endDate = wcombo.genDateVal("#endDate", gvEndDate);
+    var startDate = wcombo.genDateVal("#startDateAlimtalkSendHist", gvStartDate);
+    var endDate = wcombo.genDateVal("#endDateAlimtalkSendHist", gvEndDate);
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("gubunCombo", gubunComboData); // 조회구분
@@ -182,7 +182,7 @@ app.controller('alimtalkSendHistCtrl', ['$scope', '$http', '$timeout', function 
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
         params.storeCds = $("#alimtalkSendHistStoreCd").val();
-        params.listScale = $scope.listScale;
+        params.listScale = $scope.listScaleAlimtalkSendHist;
 
         $scope._inquiryMain("/adi/alimtalk/alimtalkSendHist/alimtalkSendHist/getAlimtalkSendHistList.sb", params, function() {}, false);
     };
@@ -224,14 +224,14 @@ app.controller('alimtalkSendHistCtrl', ['$scope', '$http', '$timeout', function 
 
     // <-- 엑셀다운로드 -->
     $scope.excelDownload = function(){
-        if ($scope.flex.rows.length <= 0) {
+        if ($scope.flexAlimtalkSendHist.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
             return false;
         }
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function()	{
-            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flexAlimtalkSendHist,
                 {
                     includeColumnHeaders: 	true,
                     includeCellStyles	: 	false,

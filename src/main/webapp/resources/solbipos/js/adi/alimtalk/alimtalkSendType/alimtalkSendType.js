@@ -160,8 +160,16 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
         });
     };
 
+    // 알림톡 잔여금액 알림 팝업
+    $scope.alimtalkSmsAmtPopup = function() {
+        if(parseInt($("#lblAlimtalkSendTypeSmsAmt").text()) <= 0) {
+            s_alert.pop(messages["alimtalkSendType.alimtalkSmsAmtSendAlert"]); // 잔여금액이 없는 경우 알림톡이 전송되지 않습니다.
+        }
+    };
+
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
+
         // 알림톡 계정등록 팝업 핸들러 추가
         $scope.wjAlimtalkIdRegisterLayer.shown.addHandler(function (s) {
             setTimeout(function() {
@@ -211,8 +219,8 @@ app.controller('alimtalkSendTypeDetailCtrl', ['$scope', '$http', function ($scop
                     var storeScope = agrid.getScope('alimtalkSendTypeTemplateCtrl');
                     storeScope._broadcast('alimtalkSendTypeTemplateCtrl', selectedRow);
 
-                    var storeScope2 = agrid.getScope('templateListCtrl');
-                    storeScope2._broadcast('templateListCtrl', selectedRow);
+                    // var storeScope2 = agrid.getScope('templateListCtrl');
+                    // storeScope2._broadcast('templateListCtrl', selectedRow);
                     event.preventDefault();
                 }
             }
@@ -283,6 +291,10 @@ app.controller('alimtalkSendTypeDetailCtrl', ['$scope', '$http', function ($scop
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailSave.sb", params, function(){
             $scope.searchAlimtalkSendTypeDetail();
+
+            // 알림톡 잔여금액 알림 팝업
+            var scope = agrid.getScope('alimtalkSendTypeCtrl');
+            scope.alimtalkSmsAmtPopup();
         });
     };
     // <-- //그리드 저장 -->
@@ -343,42 +355,44 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
 
             if(response.data.data.result != null) {
                 $scope.sendPeriod = $scope.templateInfo.sendPeriod;
-
                 if(response.data.data.result.templateCd != null) {
                     $("#lblTemplateGrpFg").text($scope.templateInfo.templateGrpFg);
                     $("#lblTemplateCd").text($scope.templateInfo.templateCd);
 
-                    // 템플릿 양식 그리기
+                    // 템플릿 양식 그리기, 데이터 치환
                     $scope.searchTemplateFormMake("Y", $scope.templateInfo);
                 } else {
                     $("#lblTemplateGrpFg").text("");
                     $("#lblTemplateCd").text("");
 
-                    // 템플릿 양식 그리기
+                    // 템플릿 양식 그리기, 데이터 치환
                     $scope.searchTemplateFormMake("N", null);
                 }
-
             } else {
                 $scope.sendPeriod = "";
                 $("#lblTemplateGrpFg").text("");
                 $("#lblTemplateCd").text("");
 
-                // 템플릿 양식 그리기
+                // 템플릿 양식 그리기, 데이터 치환
                 $scope.searchTemplateFormMake("N", null);
             }
+
+            var storeScope2 = agrid.getScope('templateListCtrl');
+            storeScope2._broadcast('templateListCtrl', params);
         });
     };
 
+    // 템플릿 양식 그리기, 데이터 치환
     $scope.searchTemplateFormMake = function(dataYn, data) {
         var innerHtml = "";
         if(dataYn == "Y") {
-            // 예시 템플릿 치환
+            // 템플릿 테이터 치환
             var templateContent = data.templateContent;
-            for (var i = 0; i < templateChangeKeyColList.length; i++) {
-                templateContent = templateContent.replaceAll(templateChangeKeyColList[i].nmcodeNm.toString(), templateChangeKeyColList[i].nmcodeItem2.toString());
+            for (var j = 0; j < templateChangeKeyColList.length; j++) {
+                templateContent = templateContent.replaceAll(templateChangeKeyColList[j].nmcodeNm.toString(), templateChangeKeyColList[j].nmcodeItem2.toString());
             }
 
-            innerHtml += "<div style=\"float:left; text-align:center; width:225px; height:250px; padding-top:10px; padding-right:10px;\">";
+            innerHtml += "<div style=\"float:left; text-align:center; width:205px; height:230px; padding-top:10px; padding-right:10px;\">";
             innerHtml += "<table>";
             innerHtml += "<colgroup>";
             innerHtml += "<col class=\"w100\" />";
@@ -389,7 +403,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
             innerHtml += "<tr style=\"height: 10px\"></tr>";
             innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-alk-msgTop w100\" value=\""+ '알림톡 도착' +"\" disabled/></td></tr>";
             // innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: white\" readonly>" + templateContent + "</textarea></td></tr>";
-            innerHtml += "<tr><td><textarea style=\"width:100%; height:180px; overflow-x:hidden; background-color: lightyellow\" readonly>" + templateContent + "</textarea></td></tr>";
+            innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: lightyellow\" readonly>" + templateContent + "</textarea></td></tr>";
             innerHtml += "</table>";
             innerHtml += "</div>";
             $("#divTemplateComment").html(innerHtml);
@@ -457,6 +471,10 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){
             $scope.searchAlimtalkSendTypeTemplate();
+
+            // 알림톡 잔여금액 알림 팝업
+            var scope = agrid.getScope('alimtalkSendTypeCtrl');
+            scope.alimtalkSmsAmtPopup();
         });
     };
     // <-- //그리드 저장 -->
@@ -466,7 +484,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         $("#lblTemplateGrpFg").text(data.templateGrpFg);
         $("#lblTemplateCd").text(data.templateCd);
 
-        // 템플릿 양식 그리기
+        // 템플릿 양식 그리기, 데이터 치환
         $scope.searchTemplateFormMake("Y", data);
 
         // 저장
@@ -529,7 +547,13 @@ app.controller('templateListCtrl', ['$scope', '$http', function ($scope, $http) 
 
             if(list.length > 0) {
                 for(var i=0; i < list.length; i++) {
-                    innerHtml += "<div style=\"float:left; text-align:center; width:205px; height:270px; padding-top:10px; padding-right:10px;\">";
+                    // 템플릿 테이터 치환
+                    var templateContent = list[i].templateContent;
+                    for (var j = 0; j < templateChangeKeyColList.length; j++) {
+                        templateContent = templateContent.replaceAll(templateChangeKeyColList[j].nmcodeNm.toString(), templateChangeKeyColList[j].nmcodeItem2.toString());
+                    }
+
+                    innerHtml += "<div style=\"float:left; text-align:center; width:195px; height:240px; padding-top:10px; padding-right:10px;\">";
                     innerHtml += "<table>";
                     innerHtml += "<colgroup>";
                     innerHtml += "<col class=\"w100\" />";
@@ -537,17 +561,18 @@ app.controller('templateListCtrl', ['$scope', '$http', function ($scope, $http) 
                     innerHtml += "<tbody>";
                     innerHtml += "<table>";
                     if($("#lblTemplateCd").text().toString() == list[i].templateCd.toString()) {
-                        innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
+                        innerHtml += "<tr><td onmouseup=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
+                        // innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
                     } else {
-                        innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
+                        innerHtml += "<tr><td onmouseup=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:white; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
+                        // innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
                     }
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
                     innerHtml += "<tr><td><input type=\"text\" class=\"sb-input-msg w100\" value=\""+ list[i].templateNm +"\" readonly/></td></tr>";
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
-                    // innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\')\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
-                    innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + list[i].templateContent + "</textarea></td></tr>";
+                    innerHtml += "<tr><td><textarea style=\"width:100%; height:160px; overflow-x:hidden; background-color: #EAF7FF\" readonly>" + templateContent + "</textarea></td></tr>";
                     innerHtml += "<tr style=\"height: 5px\"></tr>";
-                    innerHtml += "<tr><td><button class=\"btn_skyblue\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length + "\')\">" + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;선택&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + "</button></td></tr>";
+                    // innerHtml += "<tr><td><button class=\"btn_skyblue\" onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ list[i].templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length + "\')\">" + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;선택&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + "</button></td></tr>";
                     innerHtml += "</table>";
                     innerHtml += "</div>";
                 }
