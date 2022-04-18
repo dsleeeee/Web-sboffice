@@ -425,9 +425,9 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             if (prodExcelUploadVO.getPoUnitFg() != null && !"".equals(prodExcelUploadVO.getPoUnitFg())) {
                 if(String.valueOf(1).equals(prodExcelUploadVO.getPoUnitFg())) {
                     // 발주단위수량
-                    if (prodExcelUploadVO.getPoUnitQty() != null && !"".equals(prodExcelUploadVO.getPoUnitQty())) {
+                    if (prodExcelUploadVO.getPoUnitQtyI() != null && !"".equals(prodExcelUploadVO.getPoUnitQtyI())) {
                         // 발주단위수량
-                        if (!String.valueOf(1).equals(prodExcelUploadVO.getPoUnitQtyI())) {
+                        if (prodExcelUploadVO.getPoUnitQtyI() != 1) {
                             prodExcelUploadVO.setResult("발주단위가 낱개인 경우 발주단위수량은 1만 입력가능합니다.");
                         }
                     } else {
