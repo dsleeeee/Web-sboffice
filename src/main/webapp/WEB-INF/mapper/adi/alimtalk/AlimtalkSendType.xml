@@ -318,10 +318,8 @@
         SELECT
         taat.TEMPLATE_GRP_FG,
         taat.TEMPLATE_CD,
-        taat.TEMPLATE_NM,
-        taat.TEMPLATE_CONTENT,
-        taat.COMMON_FG,
-        (CASE WHEN taat.COMMON_FG = 'C' THEN '공용' ELSE '계정 전용' END) AS COMMON_FG_NM
+        (CASE WHEN taat.COMMON_FG = 'C' THEN ('(공용) ' || taat.TEMPLATE_NM) ELSE ('(계정 전용) ' || taat.TEMPLATE_NM) END) AS TEMPLATE_NM,
+        taat.TEMPLATE_CONTENT
         FROM TB_AL_ALIMTALK_TEMPLATE taat
         WHERE 1=1
         AND (
