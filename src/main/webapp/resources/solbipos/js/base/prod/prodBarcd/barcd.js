@@ -249,8 +249,24 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     var params      = [];
 
     if($scope.flex.columns[1].visible){ // 검증결과 컬럼이 보일때(엑셀업로드일때)
+
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        if($scope.flex.collectionView.itemsEdited[i].barCd.getByteLengthForOracle() > 40){
+          $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + messages["barcd.maxBarCd.msg"]);
+          return false;
+        }
+
+        var numberAlphabet = /[^A-za-z0-9]/g;
+        if(numberAlphabet.test($scope.flex.collectionView.itemsEdited[i].barCd)){
+          $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + messages["barcd.inChkBarCd.msg"]);
+          return false;
+        }
+      }
+
       for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        params.push($scope.flex.collectionView.items[i]);
+        if($scope.flex.collectionView.items[i].result === "검증성공"){
+          params.push($scope.flex.collectionView.items[i]);
+        }
       }
 
       $scope._popConfirm(messages["barcd.saveConfirm"], function() {  // 검증을 통과한 상품을 저장하시겠습니까?
@@ -261,11 +277,17 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
               $scope.searchProdList();
             }
         );
-      });
+      });gw
     } else {  // 일반 저장일때
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
         if($scope.flex.collectionView.itemsEdited[i].barCd.getByteLengthForOracle() > 40){
           $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.maxBarCd.msg"]);
+          return false;
+        }
+
+        var numberAlphabet = /[^A-za-z0-9]/g;
+        if(numberAlphabet.test($scope.flex.collectionView.itemsEdited[i].barCd)){
+          $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.inChkBarCd.msg"]);
           return false;
         }
       }
