@@ -48,7 +48,7 @@ public class ProdStatusServiceImpl implements ProdStatusService {
     /** 가격예약(본사판매가) 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getProdStatusList(ProdStatusVO prodStatusVO, SessionInfoVO sessionInfoVO) {
-
+        prodStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
 
