@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : hqSalePriceInfo.js
- * 설  명 : 가격예약(본사판매가) 상품가격정보 팝업 JavaScript
+ * 파일명 : storeProdSalePriceInfo.js
+ * 설  명 : 가격예약(매장판매가) [상품별 판매가관리] 상품가격정보 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2022.04.05     이다솜      1.0
+ * 2022.04.13     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -16,10 +16,10 @@ var app = agrid.getApp();
 /**
  *  상품삭제 팝업생성
  */
-app.controller('hqSalePriceInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('storeProdSalePriceInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSalePriceInfoCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('storeProdSalePriceInfoCtrl', $scope, $http, true));
 
     $scope.initGrid = function (s, e) {
         // 그리드 링크 효과
@@ -38,23 +38,26 @@ app.controller('hqSalePriceInfoCtrl', ['$scope', '$http', function ($scope, $htt
         });
     };
 
-    $scope.$on("hqSalePriceInfoCtrl", function(event, data) {
+    $scope.$on("storeProdSalePriceInfoCtrl", function(event, data) {
 
-        // 상품명 셋팅
-        $("#lblProd").text( "[" + data.prodCd + "] " + data.prodNm);
+        // 매장명, 상품명 셋팅
+        $("#lblProd").text(data.prodNm);
+        $("#lblStore").text( "[" + data.storeCd + "] " + data.storeNm);
         $("#hdProdCd").val(data.prodCd);
+        $("#hdStoreCd").val(data.storeCd);
 
         // 상품가격정보 조회
-        $scope.searchHqSalePriceInfo(data);
+        $scope.searchStoreSalePriceInfo(data);
         event.preventDefault();
     });
-    
+
     // 상품가격정보 조회
-    $scope.searchHqSalePriceInfo = function () {
+    $scope.searchStoreSalePriceInfo = function () {
 
         var params = {};
         params.prodCd = $("#hdProdCd").val();
+        params.storeCd = $("#hdStoreCd").val();
 
-        $scope._inquirySub('/base/price/salePriceResve/hqSalePriceResve/getHqSalePriceInfo.sb', params, function() {}, false);
+        $scope._inquirySub('/base/price/salePriceResve/storeSalePriceResve/getStoreSalePriceInfo.sb', params, function() {}, false);
     }
 }]);

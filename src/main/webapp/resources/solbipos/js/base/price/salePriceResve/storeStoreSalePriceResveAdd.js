@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : hqSalePriceResveAdd.js
- * 설  명 : 가격예약(본사판매가) 추가 팝업 JavaScript
+ * 파일명 : storeStoreSalePriceResveAdd.js
+ * 설  명 : 가격예약(매장판매가) 매장별 판매가관리 추가 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2022.04.05     이다솜      1.0
+ * 2022.04.18     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -13,23 +13,53 @@
  */
 var app = agrid.getApp();
 
+// 판매가 선택 DropBoxDataMap
+var saleAmtOptionFg = [
+    {"name":"매장판매가","value":"S"},
+    {"name":"본사판매가","value":"H"}
+];
+var stinSaleAmtOptionFg = [
+    {"name":"매장판매가","value":"S"},
+    {"name":"본사판매가","value":"H"},
+    {"name":"매장내점-판매가","value":"SS"},
+    {"name":"본사내점-판매가","value":"HS"}
+];
+var dlvrSaleAmtOptionFg = [
+    {"name":"매장판매가","value":"S"},
+    {"name":"본사판매가","value":"H"},
+    {"name":"매장배달-판매가","value":"SD"},
+    {"name":"본사배달-판매가","value":"HD"}
+];
+var packSaleAmtOptionFg = [
+    {"name":"매장판매가","value":"S"},
+    {"name":"본사판매가","value":"H"},
+    {"name":"매장포장-판매가","value":"SP"},
+    {"name":"본사포장-판매가","value":"HP"}
+];
+
+// 단위 DropBoxDataMap
+var unitFg = [
+    {"name":"1원 단위","value":"1"},
+    {"name":"100원 단위","value":"100"},
+    {"name":"1,000원 단위","value":"1000"}
+];
+// 반올림 DropBoxDataMap
+var modeFg = [
+    {"name":"반올림","value":"0"},
+    {"name":"절상","value":"1"},
+    {"name":"절하","value":"2"}
+];
+
 /**
- *  상품삭제 팝업생성
+ * 상품별 판매가관리 그리드 생성
  */
-app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSalePriceResveAddCtrl', $scope, $http, true));
-
-    // 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox2", gvListScaleBoxData);
-
-    $scope.popApplyFg = true;
-    $scope.popSaleUprcApply = true;
+    angular.extend(this, new RootController('storeStoreSalePriceResveAddCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
 
         // 예약일시 날짜셋팅
@@ -47,7 +77,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
                 // 판매가 변경시 다른 컬럼값도 변경
                 if (col.binding === "saleUprc") {
                     $scope.calcAmt(item);
-                    if($scope.popSaleUprcApply){
+                    if($scope.popStoreSaleUprcApply){
                         $scope.saleUprc(item);
                     }
                 }
@@ -70,12 +100,16 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         dataItem.prodCd               = messages["salePriceResve.prodCd"];
         dataItem.prodNm               = messages["salePriceResve.prodNm"];
         dataItem.hqSaleUprc           = messages["salePriceResve.salePrice"];
+        dataItem.storeSaleUprc        = messages["salePriceResve.salePrice"];
         dataItem.saleUprc             = messages["salePriceResve.salePrice"];
         dataItem.hqStinSaleUprc       = messages["salePriceResve.stinSaleUprc"];
+        dataItem.storeStinSaleUprc    = messages["salePriceResve.stinSaleUprc"];
         dataItem.stinSaleUprc         = messages["salePriceResve.stinSaleUprc"];
         dataItem.hqDlvrSaleUprc       = messages["salePriceResve.dlvrSaleUprc"];
+        dataItem.storeDlvrSaleUprc    = messages["salePriceResve.dlvrSaleUprc"];
         dataItem.dlvrSaleUprc         = messages["salePriceResve.dlvrSaleUprc"];
         dataItem.hqPackSaleUprc       = messages["salePriceResve.packSaleUprc"];
+        dataItem.storePackSaleUprc    = messages["salePriceResve.packSaleUprc"];
         dataItem.packSaleUprc         = messages["salePriceResve.packSaleUprc"];
         dataItem.prcCtrlFg            = messages["salePriceResve.prcCtrlFg"];
 
@@ -120,24 +154,49 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         }
     };
 
-    // 조회
-    $scope.$on("hqSalePriceResveAddCtrl", function(event, data) {
+    // 콤보박스 데이터 Set
+    $scope._setComboData("listScaleBox4", gvListScaleBoxData);
 
-        // 상품리스트 조회
-        $scope.searchHqSalePriceList();
+    $scope._setComboData("saleAmtOption", saleAmtOptionFg);
+    $scope._setComboData("changeUnit", unitFg);
+    $scope._setComboData("changeMode", modeFg);
+
+    $scope._setComboData("storeStinSaleUprcOption", stinSaleAmtOptionFg);
+    $scope._setComboData("stinSaleUprcChangeUnit", unitFg);
+    $scope._setComboData("stinSaleUprcChangeMode", modeFg);
+
+    $scope._setComboData("storeDlvrSaleUprcOption", dlvrSaleAmtOptionFg);
+    $scope._setComboData("dlvrSaleUprcChangeUnit", unitFg);
+    $scope._setComboData("dlvrSaleUprcChangeMode", modeFg);
+
+    $scope._setComboData("storePackSaleUprcOption", packSaleAmtOptionFg);
+    $scope._setComboData("packSaleUprcChangeUnit", unitFg);
+    $scope._setComboData("packSaleUprcChangeMode", modeFg);
+
+    $scope.popStoreSaleUprcApply = true;
+
+    $scope.$on("storeStoreSalePriceResveAddCtrl", function(event, data) {
+        $scope.searchSalePriceList();
         event.preventDefault();
     });
 
-    // 상품리스트 조회
-    $scope.searchHqSalePriceList = function () {
+    // 판매가 그리드 조회
+    $scope.searchSalePriceList = function(){
+        if( isEmptyObject( $("#popSearchStoreCd").val()) ) {
+            $scope._popMsg("매장을 선택해주세요.");
+            return false;
+        }
 
         var params = {};
+        params.storeCd = $("#popSearchStoreCd").val();
         params.prodClassCd = $scope.prodClassCd;
-        params.listScale = $scope.listScaleCombo2.text;
-        params.prodCd = $("#srchPopProdCd").val();
-        params.prodNm = $("#srchPopProdNm").val();
+        params.listScale = $scope.listScaleCombo4.text;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
 
-        $scope._inquirySub('/base/price/salePrice/hqSalePrice/getHqSalePriceList.sb', params, function() {
+        console.log('params', params);
+
+        $scope._inquirySub('/base/price/salePrice/storeSalePrice/getStoreSalePriceList.sb', params, function() {
 
             // 조회한 값으로 마진금액, 마진율 계산
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -147,7 +206,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
 
             // 가격관리구분에 의해 본사는 매장의 상품가격 수정 불가(매장판매가관리본사강제수정 가능인 경우는 수정가능)
             if(coercionFg === "0") {
-                var grid = wijmo.Control.getControl("#wjGridHqSalePricePop");
+                var grid = wijmo.Control.getControl("#wjGridStoreStoreSalePricePop");
                 var rows = grid.rows;
 
                 for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -158,6 +217,10 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
                     }
                 }
             }
+
+            // paging 영역 보이도록
+            var vCtrlPager = document.getElementById('storeStoreSalePriceResveAddCtrlPager');
+            vCtrlPager.style.visibility='visible'
 
         }, false);
     };
@@ -183,16 +246,41 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
     };
 
     // 상품분류정보 선택취소
-    $scope.delProdClass2 = function(){
+    $scope.popDelProdClass2 = function(){
+        $("#popSearchProdClassCd").val("");
+        $("#popSearchProdClassNm").val("");
         $scope.prodClassCd = "";
         $scope.prodClassNm = "";
     };
+
+    // 상품정보
+    $scope.prodInfo;
+    $scope.setProdInfo = function(data){
+        $scope.prodInfo = data;
+    };
+    $scope.getProdInfo = function(){
+        return $scope.prodInfo;
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.popSearchStoreShow = function () {
+        $scope._broadcast('popSearchStoreCtrl');
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+        // 상품분류 팝업 핸들러 추가
+        $scope.prodClassPopUpLayer.shown.addHandler(function (s) {
+        });
+    });
 
     // 가격 변경
     $scope.calcAmt = function(item){
         var hqCostUprc = item.hqCostUprc;
         var hqSplyUprc = item.hqSplyUprc;
-        //var storeSplyUprc = item.storeSplyUprc;
+        var storeSplyUprc = item.storeSplyUprc;
         // var hqSaleUprc = item.hqSaleUprc;
         var saleUprc = item.saleUprc;
         var poUnitQty =  item.poUnitQty;
@@ -200,8 +288,8 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         item.hqMarginAmt = (hqSplyUprc - hqCostUprc); // 본사마진금액
         item.hqMarginRate = (hqSplyUprc - hqCostUprc) / hqCostUprc * 100; // 본사마진율
         // item.saleUprcAmt = (saleUprc - poUnitQty); // 현재판매금액
-        // item.storeMarginAmt = ((saleUprc - poUnitQty) - storeSplyUprc); // 매장마진금액
-        // item.storeMarginRate = ((saleUprc - poUnitQty) - storeSplyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
+        item.storeMarginAmt = ((saleUprc - poUnitQty) - storeSplyUprc); // 매장마진금액
+        item.storeMarginRate = ((saleUprc - poUnitQty) - storeSplyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
     };
 
     // 일괄변경
@@ -211,24 +299,26 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         item.packSaleUprc = item.saleUprc;
     };
 
-    // 판매가 수정시 체크박스 체크
+    //판매가 수정시 체크박스 체크
     $scope.checked = function (item){
         item.gChk = true;
-    }
+    };
 
     // 저장
-    $scope.saveProdPrice2 = function(){
+    $scope.saveProdPrice3 = function(){
+
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 if(coercionFg === "0"){
+                    // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
                     if ($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
-                        $scope._popMsg(messages["salePriceResve.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
+                        $scope._popMsg(messages["salePrice.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
                         return false;
                     }
                 }
             }
         }
-        
+
         // 예약날짜 체크
         var date = new Date();
         var year = new String(date.getFullYear());
@@ -284,21 +374,21 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
 
                 // 변경판매가 - 소수점 입력 불가
                 if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){
-                    $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                    $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
                     return false;
                 }
 
                 // 변경판매가 - 마이너스(-)외에 다른 문자 입력 불가
                 if (/[^0-9]/g.test($scope.flex.collectionView.items[i].saleUprc)) {
                     if((/^-[0-9]/g.test($scope.flex.collectionView.items[i].saleUprc) == false)){
-                        $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                        $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
                         return false;
                     }
                 }
 
                 // 변경판매가 - 1000000000 이상 입력 불가
                 if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){
-                    $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                    $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
                     return false;
                 }
 
@@ -310,21 +400,21 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
 
                         // 변경내점-판매가 - 소수점 입력 불가
                         if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].stinSaleUprc)) == false) {
-                            $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                            $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
 
                         // 변경내점-판매가 - 마이너스(-)외에 다른 문자 입력 불가
                         if (/[^0-9]/g.test($scope.flex.collectionView.items[i].stinSaleUprc)) {
                             if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].stinSaleUprc) == false)) {
-                                $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                                $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
                                 return false;
                             }
                         }
 
                         // 변경내점-판매가 - 1000000000 이상 입력 불가
                         if ($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000) {
-                            $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                            $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
                     }
@@ -334,21 +424,21 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
 
                         // 변경배달-판매가 - 소수점 입력 불가
                         if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].dlvrSaleUprc)) == false) {
-                            $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
+                            $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
 
                         // 변경배달-판매가 - 마이너스(-)외에 다른 문자 입력 불가
                         if (/[^0-9]/g.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) {
                             if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].dlvrSaleUprc) == false)) {
-                                $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
+                                $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
                                 return false;
                             }
                         }
 
                         // 변경배달-판매가 - 1000000000 이상 입력 불가
                         if ($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000) {
-                            $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
+                            $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
                     }
@@ -358,26 +448,28 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
 
                         // 변경포장-판매가 - 소수점 입력 불가
                         if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].packSaleUprc)) == false) {
-                            $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                            $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
 
                         // 변경포장-판매가 - 마이너스(-)외에 다른 문자 입력 불가
                         if (/[^0-9]/g.test($scope.flex.collectionView.items[i].packSaleUprc)) {
                             if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].packSaleUprc) == false)) {
-                                $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
                                 return false;
                             }
                         }
 
                         // 변경포장-판매가 - 1000000000 이상 입력 불가
                         if ($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000) {
-                            $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                            $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
                     }
+
                 }
-                $scope.flex.collectionView.items[i].applyFg = $scope.popApplyFg;
+
+                $scope.flex.collectionView.items[i].storeCd = $("#popSearchStoreCd").val();
                 $scope.flex.collectionView.items[i].startDate = wijmo.Globalize.format($scope.startDateCombo.value, 'yyyyMMdd');
                 $scope.flex.collectionView.items[i].endDate = wijmo.Globalize.format($scope.endDateCombo.value, 'yyyyMMdd');
                 params.push($scope.flex.collectionView.items[i]);
@@ -385,52 +477,42 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
             }
         }
 
-        if ($scope.popApplyFg) {
-            $scope._popConfirm( "하위매장에 가격이 적용됩니다. 그래도 저장하시겠습니까?", function(){
-                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-                $scope._save('/base/price/salePriceResve/hqSalePriceResve/saveHqSalePriceResve.sb', params, function(){
 
-                    // 부모창 재조회
-                    var vScope = agrid.getScope("hqSalePriceResveCtrl");
-                    vScope.searchHqSalePriceResveList();
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save('/base/price/salePriceResve/storeSalePriceResve/saveStoreProdSalePriceResve.sb', params, function(){
 
-                    // 팝업 닫기
-                    $scope.hqSalePriceResveAddLayer.hide(true);
-                    $scope.close();
-
-                });
-            });
-        } else {
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save('/base/price/salePriceResve/hqSalePriceResve/saveHqSalePriceResve.sb', params, function(){
-
-                // 부모창 재조회
-                var vScope = agrid.getScope("hqSalePriceResveCtrl");
-                vScope.searchHqSalePriceResveList();
-
-                // 팝업 닫기
-                $scope.hqSalePriceResveAddLayer.hide(true);
-                $scope.close();
-
-            });
-        }
-
+            // 팝업 닫기
+            $scope.storeStoreSalePriceResveAddLayer.hide(true);
+            $scope.close2();
+        });
     };
-    
+
     // 닫기
-    $scope.close = function () {
-        
+    $scope.close2 = function () {
+
         // 입력값 초기화
-        $scope.delProdClass2();
+        $("#popSearchStoreCd").val("");
+        $("#popSearchStoreNm").val("");
+        $("#popSearchProdClassCd").val("");
+        $("#popSearchProdClassNm").val("");
+        $scope.prodClassCd = "";
+        $scope.prodClassNm = "";
         $("#srchPopProdCd").val("");
         $("#srchPopProdNm").val("");
         $scope.startDateCombo.value = getTomorrow('-');
         $scope.endDateCombo.value = "9999-12-31";
-        $("input:checkbox[id='popSaleUprcApply']").prop("checked", true);
-        $("input:checkbox[id='popApplyFg']").prop("checked", true);
-        $scope.popApplyFg = true;
-        $scope.popSaleUprcApply = true;
+        $("input:checkbox[id='popProdSaleUprcApply']").prop("checked", true);
+        $scope.popStoreSaleUprcApply = true;
+
+        // 그리드 초기화
+        var scope = agrid.getScope('storeStoreSalePriceResveAddCtrl');
+        scope._gridDataInit();
+
+        // grid paging 초기화(숨기기.. 아예 없애는거 모름..)
+        var vCtrlPager = document.getElementById('storeStoreSalePriceResveAddCtrlPager');
+        vCtrlPager.style.visibility='hidden'
 
     };
+
 
 }]);

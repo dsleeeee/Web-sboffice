@@ -45,5 +45,27 @@ public interface SalePriceResveMapper {
     int insertHqSalePriceToStore(SalePriceResveVO salePriceResveVO);
 
     /** 가격예약(본사판매가) 상품가격정보 조회 */
-    List<DefaultMap<String>> searchHqSalePriceInfo(SalePriceResveVO salePriceResveVO);
+    List<DefaultMap<String>> getHqSalePriceInfo(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) [상품별 판매가관리] 리스트 조회 */
+    List<DefaultMap<String>> getStoreProdSalePriceResveList(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) [매장별 판매가관리] 리스트 조회 */
+    List<DefaultMap<String>> getStoreStoreSalePriceResveList(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) 기존 예약 판매가 삭제 */
+    int deleteStoreSalePriceResve(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해) */
+    int getStoreSalePriceCnt(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) 기존 판매가 히스토리에 저장 */
+    int insertStoreSalePriceHistory(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) 새 예약 판매가 등록 */
+    int insertStoreSalePrice(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) 상품가격정보 조회 */
+    List<DefaultMap<String>> getStoreSalePriceInfo(SalePriceResveVO salePriceResveVO);
+
 }

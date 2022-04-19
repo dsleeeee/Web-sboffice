@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : hqSalePriceResve.js
- * 설  명 : 가격예약(본사판매가) JavaScript
+ * 파일명 : storeStoreSalePriceResve.js
+ * 설  명 : 매장별 판매가관리 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2022.04.05     이다솜      1.0
+ * 2022.04.15     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -51,12 +51,12 @@ var modeFg = [
 ];
 
 /**
- * 가격예약(본사판매가) 그리드 생성
+ * 매장별 판매가관리 그리드 생성
  */
-app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSalePriceResveCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('storeStoreSalePriceResveCtrl', $scope, $http, false));
 
     // 오늘날짜
     var date = new Date();
@@ -100,8 +100,10 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
                     var params     = {};
                     params.prodCd = selectedRow.prodCd;
                     params.prodNm = selectedRow.prodNm;
-                    $scope.hqSalePriceInfoLayer.show(true);
-                    $scope._broadcast('hqSalePriceInfoCtrl', params);
+                    params.storeCd = $("#searchStoreCd").val();
+                    params.storeNm = $("#searchStoreNm").val();
+                    $scope.storeStoreSalePriceInfoLayer.show(true);
+                    $scope._broadcast('storeStoreSalePriceInfoCtrl', params);
                 }
             }
         });
@@ -118,7 +120,7 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
                 // 판매가 변경시 다른 컬럼값도 변경
                 if (col.binding === "saleUprc") {
                     $scope.calcAmt(item);
-                    if($scope.saleUprcApply){
+                    if($scope.storeSaleUprcApply){
                         $scope.saleUprc(item);
                     }
                 }
@@ -143,12 +145,16 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         dataItem.prodCd               = messages["salePriceResve.prodCd"];
         dataItem.prodNm               = messages["salePriceResve.prodNm"];
         dataItem.hqSaleUprc           = messages["salePriceResve.salePrice"];
+        dataItem.storeSaleUprc        = messages["salePriceResve.salePrice"];
         dataItem.saleUprc             = messages["salePriceResve.salePrice"];
         dataItem.hqStinSaleUprc       = messages["salePriceResve.stinSaleUprc"];
+        dataItem.storeStinSaleUprc    = messages["salePriceResve.stinSaleUprc"];
         dataItem.stinSaleUprc         = messages["salePriceResve.stinSaleUprc"];
         dataItem.hqDlvrSaleUprc       = messages["salePriceResve.dlvrSaleUprc"];
+        dataItem.storeDlvrSaleUprc    = messages["salePriceResve.dlvrSaleUprc"];
         dataItem.dlvrSaleUprc         = messages["salePriceResve.dlvrSaleUprc"];
         dataItem.hqPackSaleUprc       = messages["salePriceResve.packSaleUprc"];
+        dataItem.storePackSaleUprc    = messages["salePriceResve.packSaleUprc"];
         dataItem.packSaleUprc         = messages["salePriceResve.packSaleUprc"];
         dataItem.prcCtrlFg            = messages["salePriceResve.prcCtrlFg"];
 
@@ -194,7 +200,7 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
     };
 
     // 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    $scope._setComboData("listScaleBox3", gvListScaleBoxData);
     $scope._setComboData("saleAmtOption", saleAmtOptionFg);
     $scope._setComboData("changeUnit", unitFg);
     $scope._setComboData("changeMode", modeFg);
@@ -211,25 +217,29 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("packSaleUprcChangeUnit", unitFg);
     $scope._setComboData("packSaleUprcChangeMode", modeFg);
 
-    $scope.applyFg = true;
-    $scope.saleUprcApply = true;
+    $scope.storeSaleUprcApply = true;
 
-    // 조회
-    $scope.$on("hqSalePriceResveCtrl", function(event, data) {
-        $scope.searchHqSalePriceResveList();
+    $scope.$on("storeStoreSalePriceResveCtrl", function(event, data) {
+        $scope.searchSalePriceList2();
         event.preventDefault();
     });
 
     // 판매가 그리드 조회
-    $scope.searchHqSalePriceResveList = function(){
+    $scope.searchSalePriceList2 = function(){
+        if( isEmptyObject( $("#searchStoreCd").val()) ) {
+            $scope._popMsg("매장을 선택해주세요.");
+            return false;
+        }
 
         var params = {};
+        params.storeCd = $("#searchStoreCd").val();
         params.prodClassCd = $scope.prodClassCd;
-        params.listScale = $scope.listScaleCombo.text;
+        params.listScale = $scope.listScaleCombo3.text;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
 
-        $scope._inquirySub('/base/price/salePriceResve/hqSalePriceResve/getHqSalePriceResveList.sb', params, function() {
+
+        $scope._inquirySub('/base/price/salePriceResve/storeSalePriceResve/getStoreStoreSalePriceResveList.sb', params, function() {
 
             // 조회한 값으로 마진금액, 마진율 계산
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -238,7 +248,7 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
             }
 
             // 그리드 선택불가 항목처리
-            $scope.setGridReadOnly();
+            $scope.setGridReadOnly2();
 
         }, false);
     };
@@ -264,11 +274,11 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
     };
 
     // 일괄변경 테이블 숨김/보임
-    $scope.changeShow = function(){
-        if( $("#tblHqChange").css("display") === 'none'){
-            $("#tblHqChange").show();
+    $scope.changeShow2 = function(){
+        if( $("#tblStoreChange").css("display") === 'none'){
+            $("#tblStoreChange").show();
         } else {
-            $("#tblHqChange").hide();
+            $("#tblStoreChange").hide();
         }
     };
 
@@ -287,6 +297,13 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         return $scope.prodInfo;
     };
 
+    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.searchStoreShow = function () {
+        $scope._broadcast('searchStoreCtrl');
+    };
+
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
         // 상품분류 팝업 핸들러 추가
@@ -298,10 +315,10 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
     // 매장판매가 일괄적용시, 입력한 매장판매가를 적용시킴.
     // 본사판매가 일괄적용시, 조회된 본사판매가를 적용시킴.
     $scope.changeAmt = function() {
-        /*if( isEmptyObject( $("#searchStoreCd").val()) ) {
+        if( isEmptyObject( $("#searchStoreCd").val()) ) {
             $scope._popMsg("매장을 선택해주세요.");
             return false;
-        }*/
+        }
 
         if( $scope.flex.collectionView === undefined){
             $scope._popMsg("판매가를 일괄적용할 상품을 조회해주세요.");
@@ -348,16 +365,16 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.flex.collectionView.refresh();
 
         // 그리드 선택불가 항목처리
-        $scope.setGridReadOnly();
+        $scope.setGridReadOnly2();
     };
 
     // 내점-판매가 일괄적용 버튼 클릭
     $scope.changeStinSaleUprc = function(){
 
-        /*if( isEmptyObject( $("#searchStoreCd").val()) ) {
+        if( isEmptyObject( $("#searchStoreCd").val()) ) {
             $scope._popMsg("매장을 선택해주세요.");
             return false;
-        }*/
+        }
 
         if( $scope.flex.collectionView === undefined){
             $scope._popMsg("내점-판매가를 일괄적용할 상품을 조회해주세요.");
@@ -407,16 +424,16 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.flex.collectionView.refresh();
 
         // 그리드 선택불가 항목처리
-        $scope.setGridReadOnly();
+        $scope.setGridReadOnly2();
     };
 
     // 배달-판매가 일괄적용 버튼 클릭
     $scope.changeDlvrSaleUprc = function(){
 
-        /*if( isEmptyObject( $("#searchStoreCd").val()) ) {
+        if( isEmptyObject( $("#searchStoreCd").val()) ) {
             $scope._popMsg("매장을 선택해주세요.");
             return false;
-        }*/
+        }
 
         if( $scope.flex.collectionView === undefined){
             $scope._popMsg("배달-판매가를 일괄적용할 상품을 조회해주세요.");
@@ -466,16 +483,16 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.flex.collectionView.refresh();
 
         // 그리드 선택불가 항목처리
-        $scope.setGridReadOnly();
+        $scope.setGridReadOnly2();
     };
 
     // 포장-판매가 일괄적용 버튼 클릭
     $scope.changePackSaleUprc = function(){
 
-        /*if( isEmptyObject( $("#searchStoreCd").val()) ) {
+        if( isEmptyObject( $("#searchStoreCd").val()) ) {
             $scope._popMsg("매장을 선택해주세요.");
             return false;
-        }*/
+        }
 
         if( $scope.flex.collectionView === undefined){
             $scope._popMsg(" 포장-판매가를 일괄적용할 상품을 조회해주세요.");
@@ -525,7 +542,7 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.flex.collectionView.refresh();
 
         // 그리드 선택불가 항목처리
-        $scope.setGridReadOnly();
+        $scope.setGridReadOnly2();
     };
 
     // 변경판매가 계산
@@ -564,7 +581,7 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.calcAmt = function(item){
         var hqCostUprc = item.hqCostUprc;
         var hqSplyUprc = item.hqSplyUprc;
-        //var storeSplyUprc = item.storeSplyUprc;
+        var storeSplyUprc = item.storeSplyUprc;
         // var hqSaleUprc = item.hqSaleUprc;
         var saleUprc = item.saleUprc;
         var poUnitQty =  item.poUnitQty;
@@ -572,8 +589,8 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         item.hqMarginAmt = (hqSplyUprc - hqCostUprc); // 본사마진금액
         item.hqMarginRate = (hqSplyUprc - hqCostUprc) / hqCostUprc * 100; // 본사마진율
         // item.saleUprcAmt = (saleUprc - poUnitQty); // 현재판매금액
-        // item.storeMarginAmt = ((saleUprc - poUnitQty) - storeSplyUprc); // 매장마진금액
-        // item.storeMarginRate = ((saleUprc - poUnitQty) - storeSplyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
+        item.storeMarginAmt = ((saleUprc - poUnitQty) - storeSplyUprc); // 매장마진금액
+        item.storeMarginRate = ((saleUprc - poUnitQty) - storeSplyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
     };
 
     // 일괄변경
@@ -586,30 +603,19 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
     //판매가 수정시 체크박스 체크
     $scope.checked = function (item){
         item.gChk = true;
-    }
+    };
 
     // 수정
-    $scope.saveProdPrice = function(){
+    $scope.saveProdPrice2 = function(){
+
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 if(coercionFg === "0"){
+                    // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
                     if ($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
                         $scope._popMsg(messages["salePriceResve.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
                         return false;
                     }
-                }
-
-                if(Number(now) >= Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
-                    $scope._popMsg(messages["salePriceResve.startDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
-                    return false;
-                }
-                if(Number(now) >= Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
-                    $scope._popMsg(messages["salePriceResve.endDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
-                    return false;
-                }
-                if(Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', '')) > Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))){
-                    $scope._popMsg(messages["salePriceResve.resveDate"] + messages["salePriceResve.resveDate.chk.msg2"]);
-                    return false;
                 }
             }
         }
@@ -623,10 +629,10 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 if (($scope.flex.collectionView.items[i].orgStartDate !== $scope.flex.collectionView.items[i].startDate) ||
-                    ($scope.flex.collectionView.items[i].hqSaleUprc !== $scope.flex.collectionView.items[i].saleUprc) ||
-                    ($scope.flex.collectionView.items[i].hqStinSaleUprc !== $scope.flex.collectionView.items[i].stinSaleUprc) ||
-                    ($scope.flex.collectionView.items[i].hqDlvrSaleUprc !== $scope.flex.collectionView.items[i].dlvrSaleUprc) ||
-                    ($scope.flex.collectionView.items[i].hqPackSaleUprc !== $scope.flex.collectionView.items[i].packSaleUprc)) {
+                    ($scope.flex.collectionView.items[i].storeSaleUprc !== $scope.flex.collectionView.items[i].saleUprc) ||
+                    ($scope.flex.collectionView.items[i].storeStinSaleUprc !== $scope.flex.collectionView.items[i].stinSaleUprc) ||
+                    ($scope.flex.collectionView.items[i].storeDlvrSaleUprc !== $scope.flex.collectionView.items[i].dlvrSaleUprc) ||
+                    ($scope.flex.collectionView.items[i].storePackSaleUprc !== $scope.flex.collectionView.items[i].packSaleUprc)) {
 
                     // 변경판매가 - 필수 입력값 체크
                     if ($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
@@ -735,8 +741,10 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
                                 return false;
                             }
                         }
+
                     }
-                    $scope.flex.collectionView.items[i].applyFg = $scope.applyFg;
+
+                    $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
                     $scope.flex.collectionView.items[i].orgStartDate = $scope.flex.collectionView.items[i].orgStartDate.replaceAll('-', ''); // 키값
                     $scope.flex.collectionView.items[i].startDate = $scope.flex.collectionView.items[i].startDate.replaceAll('-', '');
                     $scope.flex.collectionView.items[i].endDate = $scope.flex.collectionView.items[i].endDate.replaceAll('-', '');
@@ -745,31 +753,21 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
             }
         }
 
-        if ($scope.applyFg) {
-            $scope._popConfirm( "하위매장에 가격이 적용됩니다. 그래도 저장하시겠습니까?", function(){
-                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-                $scope._save('/base/price/salePriceResve/hqSalePriceResve/modHqSalePriceResve.sb', params, function(){
-                    $scope.searchHqSalePriceResveList();
-                });
-            });
-        } else {
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save('/base/price/salePriceResve/hqSalePriceResve/modHqSalePriceResve.sb', params, function(){
-                $scope.searchHqSalePriceResveList();
-            });
-        }
 
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save('/base/price/salePriceResve/storeSalePriceResve/modStoreProdSalePriceResve.sb', params, function(){
+            $scope.searchSalePriceList2();
+        });
     };
 
     // 추가 팝업
-    $scope.addProdPrice = function () {
-        $scope.hqSalePriceResveAddLayer.show(true);
-        $scope._pageView('hqSalePriceResveAddCtrl',1);
+    $scope.addProdPrice2 = function () {
+        $scope.storeStoreSalePriceResveAddLayer.show(true);
     };
 
     // 그리드 선택불가 항목처리
-    $scope.setGridReadOnly = function () {
-        var grid = wijmo.Control.getControl("#wjGridHqSalePriceResve");
+    $scope.setGridReadOnly2 = function () {
+        var grid = wijmo.Control.getControl("#wjGridStoreSalePriceResveArea");
         var rows = grid.rows;
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {

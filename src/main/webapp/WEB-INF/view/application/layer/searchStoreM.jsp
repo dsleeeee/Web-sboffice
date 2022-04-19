@@ -33,7 +33,7 @@
 
         <div class="mt20 oh sb-select dkbr">
           <%-- 페이지 스케일  --%>
-            <wj-combo-box
+            <%--<wj-combo-box
                     class="w100px fl"
                     id="listScaleBoxM"
                     ng-model="listScale"
@@ -42,7 +42,7 @@
                     selected-value-path="value"
                     is-editable="false"
                     initialized="initComboBox(s)">
-            </wj-combo-box>
+            </wj-combo-box>--%>
           <%--// 페이지 스케일  --%>
 
           <%-- 조회 --%>
@@ -76,11 +76,11 @@
       </div>
 
       <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
-        <%-- id --%>
+      <%--<div class="pageNum mt20">
+        &lt;%&ndash; id &ndash;%&gt;
         <ul id="<c:out value="${param.targetId}"/>CtrlPager" data-size="10">
         </ul>
-      </div>
+      </div>--%>
       <%--//페이지 리스트--%>
     </div>
   </div>
@@ -128,8 +128,8 @@
       var params = {};
       params.storeCd = $scope.storeCd;
       params.storeNm = $scope.storeNm;
-      params.listScale  = $scope.listScale;
-      $scope._inquirySub("/popup/getStoreList.sb", params, function () {
+      //params.listScale  = $scope.listScale;
+      $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreList.sb", params, function () {
 
         // 리스트 조회여부 'Y'로 변경
         $scope.searchFg = "Y";
