@@ -32,5 +32,21 @@ public interface SalePriceResveService {
     int modHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 
     /** 가격예약(본사판매가) 상품가격정보 조회 */
-    List<DefaultMap<String>> searchHqSalePriceInfo(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getHqSalePriceInfo(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+
+    /** 가격예약(매장판매가) [상품별 판매가관리] 리스트 조회 */
+    List<DefaultMap<String>> getStoreProdSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+
+    /** 가격예약(매장판매가) [매장별 판매가관리] 리스트 조회 */
+    List<DefaultMap<String>> getStoreStoreSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+
+    /** 가격예약(매장판매가) 추가 */
+    int saveStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
+
+    /** 가격예약(매장판매가) 수정 */
+    int modStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
+
+    /** 가격예약(매장판매가) 상품가격정보 조회 */
+    List<DefaultMap<String>> getStoreSalePriceInfo(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+
 }

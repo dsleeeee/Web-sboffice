@@ -9,7 +9,7 @@
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="salePriceResve.hqSalePriceResve"/>&nbsp;-&nbsp;<s:message code="cmm.add"/>
+            <s:message code="salePriceResve.hqSalePriceResve"/>&nbsp;<s:message code="cmm.add"/>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
@@ -176,4 +176,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20220405.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20220418.01" charset="utf-8"></script>

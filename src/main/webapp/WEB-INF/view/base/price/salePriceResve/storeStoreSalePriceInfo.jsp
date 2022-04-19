@@ -3,20 +3,22 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="hqSalePriceInfoLayer" control="hqSalePriceInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;">
+<wj-popup id="storeStoreSalePriceInfoLayer" control="storeStoreSalePriceInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;">
 
-    <div ng-controller="hqSalePriceInfoCtrl">
+    <div ng-controller="storeStoreSalePriceInfoCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="salePriceResve.hqSalePriceResve"/>&nbsp;<s:message code="salePriceResve.salePriceInfo"/>
+            <s:message code="salePriceResve.storeSalePrice"/>&nbsp;<s:message code="salePriceResve.salePriceInfo"/>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
 
         <%-- body --%>
         <div class="wj-dialog-body">
-            <label id="lblProd"></label>
-            <input type="hidden" id="hdProdCd" />
+            <label id="lblProd2"></label>&nbsp;/&nbsp;
+            <label id="lblStore2"></label>
+            <input type="hidden" id="hdProdCd2" />
+            <input type="hidden" id="hdStoreCd2" />
 
             <%-- 그리드 영역 --%>
             <div class="w100 mt10">
@@ -51,4 +53,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceInfo.js?ver=20220418.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceInfo.js?ver=20220418.01" charset="utf-8"></script>
