@@ -19,32 +19,87 @@
     -->
     <select id="getProdStatusList" parameterType="prodStatusVO" resultType="DefaultMap">
         /* ProdStatusMapper.getProdStatusList */
-         SELECT tood.STORE_CD,
-                TO_CHAR(TO_DATE(tood.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-                tood.POS_NO,
-                tood.ORDER_NO,
-                tood.PROD_CD,
+         SELECT tssd.STORE_CD,
+                TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tssd.POS_NO,
+                tssd.BILL_NO,
+                tssd.BILL_DTL_NO,
+                tssd.PROD_CD,
                 tmp.PROD_NM,
-                tood.SALE_UPRC,
-                tood.SALE_QTY,
-                tood.SALE_AMT,
-                tood.DC_AMT,
-                tood.REAL_SALE_AMT,
-                tood.COOK_MEMO
-          FROM TB_OD_ORDER_DTL tood,
-               TB_MS_PRODUCT tmp
-         WHERE tood.STORE_CD = #{storeCd}
-           AND tmp.STORE_CD (+)= tood.STORE_CD
-           AND tmp.PROD_CD (+)= tood.PROD_CD
-           AND	tood.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                tssd.SALE_UPRC,
+                tssd.SALE_QTY,
+                tssd.SALE_AMT,
+                tssd.DC_AMT,
+                tssd.REAL_SALE_AMT,
+                tcn.NMCODE_NM,
+                tssd.COOK_MEMO
+          FROM TB_SL_SALE_DTL tssd,
+               TB_MS_PRODUCT tmp,
+                (
+                <choose>
+                    <when test='hqOfficeCd != "A0001"'>
+                        SELECT '0' AS NMCODE_CD,
+                        '일반' AS NMCODE_NM
+                        FROM DUAL
+                        UNION
+                        SELECT NMCODE_CD,
+                        NMCODE_NM
+                        FROM TB_CM_NMCODE
+                        WHERE NMCODE_GRP_CD = '112'
+                    </when>
+                    <otherwise>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            SELECT '0' AS NMCODE_CD,
+                            '일반' AS NMCODE_NM
+                            FROM DUAL
+                            UNION
+                            SELECT '1' AS NMCODE_CD,
+                            'CID' AS NMCODE_NM
+                            FROM DUAL
+                            UNION
+                            SELECT NMCODE_CD,
+                            NMCODE_NM
+                            FROM TB_HQ_NMCODE
+                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND NMCODE_GRP_CD = '113'
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "S"'>
+                            SELECT '0' AS NMCODE_CD,
+                            '일반' AS NMCODE_NM
+                            FROM DUAL
+                            UNION
+                            SELECT '1' AS NMCODE_CD,
+                            'CID' AS NMCODE_NM
+                            FROM DUAL
+                            UNION
+                            SELECT NMCODE_CD,
+                            NMCODE_NM
+                            FROM TB_MS_STORE_NMCODE
+                            WHERE STORE_CD = #{storeCd}
+                            AND NMCODE_GRP_CD = '113'
+                        </if>
+                    </otherwise>
+                </choose>
+                ) tcn
+         WHERE tssd.STORE_CD = #{storeCd}
+           AND tmp.STORE_CD (+)= tssd.STORE_CD
+           AND tmp.PROD_CD (+)= tssd.PROD_CD
+           AND	tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+           AND  tcn.NMCODE_CD (+)= tssd.DLVR_IN_FG
         <choose>
             <when test='cookMemoUseYn != null and cookMemoUseYn == "Y"'>
-                AND tood.COOK_MEMO IS NOT NULL
+                AND tssd.COOK_MEMO IS NOT NULL
             </when>
             <when test='cookMemoUseYn != null and cookMemoUseYn == "N"'>
-                AND tood.COOK_MEMO IS NULL
+                AND tssd.COOK_MEMO IS NULL
             </when>
         </choose>
+        <if test='optionFg != null and optionFg == "1"'>
+            AND tssd.PROD_CD = '0000000000000'
+        </if>
+        <if test='optionFg != null and optionFg == "2"'>
+            AND tssd.PROD_CD != '0000000000000'
+        </if>
     </select>
 
 </mapper>

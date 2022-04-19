@@ -82,7 +82,7 @@
               <%--상품코드--%>
               <th><s:message code="prod.prodCd"/></th>
               <td>
-                <input type="text" id="prodCd" name="prodCd" class="sb-input w100"
+                <input type="text" id="prodCd" numberAlphabet name="prodCd" class="sb-input w100"
                        ng-model="prodModifyInfo.prodCd"
                        readonly="readonly"
                         <c:if test="${prodNoEnvFg == 'MANUAL'}">
@@ -244,7 +244,7 @@
                     <s:message code="prod.barCd"/>
                 </th>
                 <td>
-                    <input type="text" id="_barCd" name="barCd" class="sb-input" style="width: 150px" ng-model="prodModifyInfo.barCd"/>
+                    <input type="text" id="_barCd" numberAlphabet name="barCd" class="sb-input" style="width: 150px" ng-model="prodModifyInfo.barCd"/>
                     <button type="button"  class="btn_skyblue fr w30" ng-click="barCdAutoSet()"><s:message code="prod.autoSet"/></button>
                 </td>
                 <%-- 가격관리구분 --%>
@@ -759,6 +759,9 @@
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
       $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
+    });
+    $("input:text[numberAlphabet]").on("keyup", function() {
+      $(this).val($(this).val().replace(/[^A-za-z0-9]/g,""));
     });
   });
 </script>
