@@ -40,6 +40,9 @@ public interface OrderChannelService {
     /** 주문채널별현황 - 일별 탭 조회 */
     List<DefaultMap<String>> getOrderChannelDayList(OrderChannelVO orderChannelVO, SessionInfoVO sessionInfoVO);
 
+    /** 주문채널별현황 - 일별 탭 조회 */
+    List<DefaultMap<String>> getOrderChannelDtlList(OrderChannelVO orderChannelVO, SessionInfoVO sessionInfoVO);
+
     /** 주문채널별현황 - 월별 탭 조회 */
     List<DefaultMap<String>> getOrderChannelMonthList(OrderChannelVO orderChannelVO, SessionInfoVO sessionInfoVO);
 }

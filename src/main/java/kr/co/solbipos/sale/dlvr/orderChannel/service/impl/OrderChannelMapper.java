@@ -46,6 +46,9 @@ public interface OrderChannelMapper {
     /** 주문채널별현황 - 일별 탭 조회 */
     List<DefaultMap<String>> getOrderChannelDayList(OrderChannelVO orderChannelVO);
 
+    /** 주문채널별현황 - 일별 상세 조회 */
+    List<DefaultMap<String>> getOrderChannelDtlList(OrderChannelVO orderChannelVO);
+
     /** 주문채널별현황 - 월별 탭 조회 */
     List<DefaultMap<String>> getOrderChannelMonthList(OrderChannelVO orderChannelVO);
 
