@@ -26,8 +26,8 @@
         tmsr.PROC_DT,
         (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = tmsr.REG_ID) AS USER_NM,
         tmsr.PROC_FG,
-        tmsr.PROC_MSG,
-        '다운로드' AS DOWNLOAD,
+        (CASE WHEN tmsr.PROC_FG IN ('0','1') THEN '대기' ELSE tmsr.PROC_MSG END) AS PROC_MSG,
+        (CASE WHEN tmsr.PROC_FG = '2' THEN '다운로드' ELSE null END) AS DOWNLOAD,
         tmsr.FROM_SALE_DATE,
         tmsr.TO_SALE_DATE,
         tmsr.FILE_NAME
