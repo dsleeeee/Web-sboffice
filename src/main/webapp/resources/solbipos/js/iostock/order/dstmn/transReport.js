@@ -30,12 +30,12 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
-    }	
-    
+    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -81,12 +81,12 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
-    }	
-    
+    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -124,12 +124,12 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.slipNo = $scope.strSlipNo;
     params.startDate	=	$scope.startDate;
     params.endDate		=	$scope.endDate;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
-    }	
-    
+    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -291,10 +291,10 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
             	  outQty	=	outUnitQty;
               } else {
             	  outQty	=	outUnitQty+'('+ outEtcQty+')';
-              } 
+              }
 //              console.log("outUnitQty ::"+outUnitQty)
               console.log("outQty ::"+outQty)
-//              console.log("outTotQty ::"+outTotQty)              
+//              console.log("outTotQty ::"+outTotQty)
               prodListHtml += '<tr class="h25">'
                 + '<td class="tc">' + (n + 1) + '</td>'
                 + '<td class="tl"><input type="text" value="' + prodNm + '" class="w100" readonly></td>'
@@ -307,7 +307,7 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
 //                + '<td class="tr">' + outTotQty + '</td>'
             	+ '<td class="tr">' + outQty + '</td>'
                 + '<td class="tr">' + outAmt + '</td>'
-                + '<td class="tr">' + outVat + '</td>'                
+                + '<td class="tr">' + outVat + '</td>'
                  + '<td class="tl"><input type="text" value="' + nvl(item.remark,'') + '" class="w100" readonly></td>'
 //                + '<td class="tl"></td>'
                 + '</tr>';
@@ -439,7 +439,7 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
       + '<td class="tc">상호(법인명)</td>'
       + '<td class="tc">' + $scope.suppliedNm + '</td>'
       + '<td class="tc">성명</td>'
-      + '<td class="tc">' + $scope.supplierOwnerNm + '</td>'
+      + '<td class="tc">' + $scope.suppliedOwnerNm + '</td>'
       + '</tr>'
       + '<tr>'
       + '<td class="tc">사업장주소</td>'
