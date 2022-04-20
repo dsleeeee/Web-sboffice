@@ -247,38 +247,43 @@ public class MediaServiceImpl implements MediaService {
 
             mediaVO.setFileType((String)multi.getParameter("fileType"));
 
-            String type = mediaMapper.getFileType(mediaVO);     // 확장자|확장자|확장자 를
-            String[] typeList = type.split(",");         // |기준으로 잘라서 배열에 넣음
+            // 수정 시 파일은 수정하지 않고 다른 정보만 수정 할 경우
+            if (!orgFileName.equals("")) {
 
-            for(int i = 0; i < typeList.length; i++){          // 잘린 확장자 확인
-                if(fileExt.equals(typeList[i].replace(".","")))
-                {
-                    mediaVO.setResult("T");
+                String type = mediaMapper.getFileType(mediaVO);     // 확장자|확장자|확장자 를
+                String[] typeList = type.split(",");         // |기준으로 잘라서 배열에 넣음
+
+                for(int i = 0; i < typeList.length; i++){          // 잘린 확장자 확인
+                    if(fileExt.equals(typeList[i].replace(".",""))){
+                        mediaVO.setResult("T");
+                    }
                 }
-            }
 
-            if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+                if (mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
 
-                orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
-                // 파일경로
-                mediaVO.setFileDir(path);
-                // 파일명 (물리적으로 저장되는 파일명)
-                mediaVO.setFileNm(newFileName);
-                // 파일확장자
-                mediaVO.setFileExt(fileExt);
-                // 파일사이즈
-                Long fileSize = mFile.getSize();
-                mediaVO.setFileSize(fileSize.intValue());
-                // 파일 MIME_TYPE
-                mediaVO.setFileMimeType(mFile.getContentType());
-                // 원본 파일명
-                mediaVO.setFileOrgNm(orgFileName);
-            }
+                    orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
+                    // 파일경로
+                    mediaVO.setFileDir(path);
+                    // 파일명 (물리적으로 저장되는 파일명)
+                    mediaVO.setFileNm(newFileName);
+                    // 파일확장자
+                    mediaVO.setFileExt(fileExt);
+                    // 파일사이즈
+                    Long fileSize = mFile.getSize();
+                    mediaVO.setFileSize(fileSize.intValue());
+                    // 파일 MIME_TYPE
+                    mediaVO.setFileMimeType(mFile.getContentType());
+                    // 원본 파일명
+                    mediaVO.setFileOrgNm(orgFileName);
+                }
 
-            try {
-                mFile.transferTo(new File(path+newFileName));
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    mFile.transferTo(new File(path + newFileName));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                mediaVO.setResult("T");
             }
         }
 
