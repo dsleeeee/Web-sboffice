@@ -304,6 +304,7 @@
                 tssh.POS_NO,
                 tssh.BILL_NO,
                 tssh.REAL_SALE_AMT,
+                TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'YYYY-MM-DD hh24:mi:SS') AS BILL_DT,
                 tsshd.CHANNEL_ORDER_NO,
                 tsshd.VORDER_NO
         FROM 	TB_SL_SALE_HDR tssh,

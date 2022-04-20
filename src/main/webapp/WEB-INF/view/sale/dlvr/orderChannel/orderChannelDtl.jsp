@@ -41,6 +41,7 @@
             <wj-flex-grid-column header="<s:message code="orderChannelDtl.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderChannelDtl.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderChannelDtl.saleAmt"/>" binding="realSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderChannelDtl.billDt"/>" binding="billDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderChannelDtl.vorderNo"/>" binding="vorderNo" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderChannelDtl.channelOrderNo"/>" binding="channelOrderNo" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
 
