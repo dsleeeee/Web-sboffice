@@ -118,6 +118,28 @@ public class OrderChannelServiceImpl implements OrderChannelService {
         return orderChannelMapper.getOrderChannelDayList(orderChannelVO);
     }
 
+    /** 주문채널별현황 - 일별 상세 조회 */
+    @Override
+    public List<DefaultMap<String>> getOrderChannelDtlList(OrderChannelVO orderChannelVO, SessionInfoVO sessionInfoVO) {
+
+        orderChannelVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        orderChannelVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        System.out.println("받은거 : " + orderChannelVO.getSrchStoreCd() + " / " + orderChannelVO.getSrchStoreCd());
+        System.out.println("orgnFg : " + sessionInfoVO.getOrgnFg());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            orderChannelVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        System.out.println("매장 : " + sessionInfoVO.getStoreCd());
+        System.out.println("매장arr : " + orderChannelVO.getSrchStoreCd());
+
+        // 매장코드
+        if(!StringUtil.getOrBlank(orderChannelVO.getSrchStoreCd()).equals("")) {
+            orderChannelVO.setArrStoreCd(orderChannelVO.getSrchStoreCd().split(","));
+        }
+
+        return orderChannelMapper.getOrderChannelDtlList(orderChannelVO);
+    }
+
     /** 주문채널별현황 - 월별 탭 조회 */
     @Override
     public List<DefaultMap<String>> getOrderChannelMonthList(OrderChannelVO orderChannelVO, SessionInfoVO sessionInfoVO) {

@@ -66,6 +66,10 @@ public class OrderChannelVO extends PageVO {
     /** 주문채널 구분자 array */
     private String arrDlvrInFgCol[];
 
+    private String saleDate;
+
+    private String dlvrInFg;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -168,5 +172,21 @@ public class OrderChannelVO extends PageVO {
 
     public void setArrDlvrInFgCol(String[] arrDlvrInFgCol) {
         this.arrDlvrInFgCol = arrDlvrInFgCol;
+    }
+
+    public String getSaleDate() {
+        return saleDate;
+    }
+
+    public void setSaleDate(String saleDate) {
+        this.saleDate = saleDate;
+    }
+
+    public String getDlvrInFg() {
+        return dlvrInFg;
+    }
+
+    public void setDlvrInFg(String dlvrInFg) {
+        this.dlvrInFg = dlvrInFg;
     }
 }

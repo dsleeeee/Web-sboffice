@@ -39,3 +39,8 @@
 <c:import url="/WEB-INF/view/sale/dlvr/orderChannel/orderChannelMonth.jsp">
 </c:import>
 <%-- 탭페이지 레이어 끝 --%>
+
+<%-- 팝업 --%>
+<%-- 일별 상세 --%>
+<c:import url="/WEB-INF/view/sale/dlvr/orderChannel/orderChannelDtl.jsp">
+</c:import>

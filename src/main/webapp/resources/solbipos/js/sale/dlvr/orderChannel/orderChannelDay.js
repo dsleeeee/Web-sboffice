@@ -92,6 +92,49 @@ app.controller('orderChannelDayCtrl', ['$scope', '$http', '$timeout', function (
             }
         }
         // <-- //그리드 헤더2줄 -->
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                // 배달경로 i=0이 아닌이유 0은 일반이라 TB_SL_SALE_HDR_DLVR테이블에 정보가 없음
+                for (var i = 1; i < dlvrInFgColList.length; i++) {
+                    if (col.binding === ("billCnt" + dlvrInFgColList[i].dlvrInFg)) {
+                        var item = s.rows[e.row].dataItem;
+
+                        // 값이 있으면 링크 효과
+                        if (item[("billCnt" + dlvrInFgColList[i].dlvrInFg)] > 0) {
+                            wijmo.addClass(e.cell, 'wijLink');
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        }
+                    }
+                }
+            }
+        });
+
+        // 그리드 클릭 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col         = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+                var params      = {};
+                params.srchStoreCd  = $("#orderChannelDayStoreCd").val();
+                params.saleDate = selectedRow.saleDate.replaceAll("-","");
+
+                // 배달경로 i=0이 아닌이유 0은 일반이라 TB_SL_SALE_HDR_DLVR테이블에 정보가 없음
+                for (var i = 1; i < dlvrInFgColList.length; i++) {
+                    if (col.binding === ("billCnt" + dlvrInFgColList[i].dlvrInFg)) {
+                        params.dlvrInFg = dlvrInFgColList[i].dlvrInFg;
+                        console.log("day");
+                        console.log(params);
+
+                        $scope._broadcast('orderChannelDtlCtrl', params);
+                    }
+                }
+            }
+        });
     };
 
     // 다른 컨트롤러의 broadcast 받기

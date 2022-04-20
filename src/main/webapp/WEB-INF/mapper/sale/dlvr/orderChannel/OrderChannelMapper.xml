@@ -269,26 +269,64 @@
     <select id="getOrderChannelDayList" parameterType="orderChannelVO" resultType="DefaultMap">
         /* USE : OrderChannelMapper.getOrderChannelDayList */
         SELECT TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-                SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
-                SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
-                <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
-                    SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
-                </foreach>
-          FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
-         WHERE 1=1
-           AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+        SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
+        SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+        <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
+        </foreach>
+        FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
+        WHERE 1=1
+        AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsdto.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                 #{item}
             </foreach>
         </if>
-           AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-         GROUP
-            BY tsdto.SALE_DATE
+        AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP
+        BY tsdto.SALE_DATE
         ORDER
-            BY tsdto.SALE_DATE DESC
+        BY tsdto.SALE_DATE DESC
+    </select>
+
+    <!-- 매출관리 > 배달현황 > 주문채널별현황 - 일별 상세 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : orderChannelVO
+        COMMENTS : 주문채널별현황 - 일별 상세 데이터를 조회한다.
+    -->
+    <select id="getOrderChannelDtlList" parameterType="orderChannelVO" resultType="DefaultMap">
+        /* USE : OrderChannelMapper.getOrderChannelDtlList */
+        SELECT 	tssh.STORE_CD,
+                tms.STORE_NM,
+                tssh.POS_NO,
+                tssh.BILL_NO,
+                tssh.REAL_SALE_AMT,
+                tsshd.CHANNEL_ORDER_NO,
+                tsshd.VORDER_NO
+        FROM 	TB_SL_SALE_HDR tssh,
+                TB_SL_SALE_HDR_DLVR tsshd,
+                TB_MS_STORE tms
+        WHERE 1=1
+        AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND     tssh.SALE_DATE = #{saleDate}
+        AND     tsshd.DLVR_IN_FG = #{dlvrInFg}
+        AND 	tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND 	tsshd.STORE_CD = tssh.STORE_CD
+        AND 	tsshd.SALE_DATE = tssh.SALE_DATE
+        AND 	tsshd.POS_NO = tssh.POS_NO
+        AND 	tsshd.BILL_NO = tssh.BILL_NO
+        AND 	tms.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND 	tms.STORE_CD = tssh.STORE_CD
+        ORDER BY tssh.STORE_CD, tms.STORE_NM, tssh.POS_NO, tssh.BILL_NO
     </select>
 
     <!-- 매출관리 > 배달현황 > 주문채널별현황 - 월별 탭 조회 -->

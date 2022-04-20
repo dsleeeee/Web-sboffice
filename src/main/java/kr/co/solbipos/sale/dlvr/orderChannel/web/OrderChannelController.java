@@ -137,6 +137,29 @@ public class OrderChannelController {
         return returnListJson(Status.OK, list, list);
     }
 
+
+
+    /**
+     * 주문채널별현황 - 일별 탭 상세 조회
+     * @param orderChannelVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  String
+     * @author  권지현
+     * @since   2022.04.19
+     */
+    @RequestMapping(value = "/getOrderChannelDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOrderChannelDtlList(OrderChannelVO orderChannelVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = orderChannelService.getOrderChannelDtlList(orderChannelVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, list);
+    }
+
     /**
      * 주문채널별현황 - 월별 탭 조회
      * @param orderChannelVO
