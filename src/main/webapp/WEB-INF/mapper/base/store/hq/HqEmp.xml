@@ -332,6 +332,7 @@
         UPDATE TB_WB_USER_INFO
            SET USER_PWD = #{userPwd},
                LAST_PWD_CHG_DT = #{modDt},
+               MOB_LOGIN_AUTO_SERIAL = #{modDt},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE USER_ID = #{userId}
