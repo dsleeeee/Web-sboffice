@@ -92,19 +92,19 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleDate"/>" binding="saleDate" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.posNo"/>" binding="posNo" width="70" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.billNo"/>" binding="billNo" width="70" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.billDtlNo"/>" binding="billDtlNo" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.prodCd"/>" binding="prodCd" width="120" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.prodNm"/>" binding="prodNm" width="150" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleUprc"/>" binding="saleUprc" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleQty"/>" binding="saleQty" width="80" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleAmt"/>" binding="saleAmt" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.dcAmt"/>" binding="dcAmt" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.nmcodeNm"/>" binding="nmcodeNm" width="100" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.cookMemo"/>" binding="cookMemo" width="200" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleDate"/>" binding="saleDate" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.billDtlNo"/>" binding="billDtlNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleUprc"/>" binding="saleUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleQty"/>" binding="saleQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.nmcodeNm"/>" binding="nmcodeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.cookMemo"/>" binding="cookMemo" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>

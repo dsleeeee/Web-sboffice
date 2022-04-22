@@ -194,6 +194,14 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
                             if(callCtrl == 'dayEmp_cardCtrl') {
                                 callCtrl = 'dayEmpCardCtrl';
                             }
+                            if(callCtrl == "dayCashCtrl"){
+                                params.cashGubun = "02";
+                            }
+                            if(callCtrl == "dayCashbillCtrl"){
+                                params.cashGubun = "021";
+                                callCtrl = 'dayCashCtrl';
+                            }
+                            console.log(callCtrl);
                             $scope._broadcast(callCtrl, params);
                             // alert(callCtrl);
                             // sale/cmmSalePopup/dayPayInfo/
