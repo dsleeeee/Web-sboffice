@@ -43,7 +43,8 @@
         hmt.SUBJECT,
         hmt.MSG_CONTENT,
         hmt.ALK_SEND_SEQ,
-        hmt.GUBUN
+        hmt.GUBUN,
+        hmt.REQUEST_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
@@ -76,7 +77,8 @@
                     A.SUBJECT,
                     A.ALK_MSG AS MSG_CONTENT,
                     A.ALK_SEND_SEQ,
-                    'TB_AL_ALIMTALK_SEND_ENC' AS GUBUN
+                    'TB_AL_ALIMTALK_SEND_ENC' AS GUBUN,
+                    A.REQUEST_ID
                     FROM TB_AL_ALIMTALK_SEND_ENC A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
@@ -120,7 +122,8 @@
                     A.SUBJECT,
                     A.ALK_MSG AS MSG_CONTENT,
                     A.ALK_SEND_SEQ,
-                    'TB_AL_ALIMTALK_REPORT' AS GUBUN
+                    'TB_AL_ALIMTALK_REPORT' AS GUBUN,
+                    A.REQUEST_ID
                     FROM TB_AL_ALIMTALK_REPORT A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'

@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,13 +38,15 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 public class AlimtalkAnalysisTabController {
 
     private final SessionService sessionService;
+    private final AlimtalkSendTypeService alimtalkSendTypeService; // 알림톡 전송유형
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public AlimtalkAnalysisTabController(SessionService sessionService) {
+    public AlimtalkAnalysisTabController(SessionService sessionService, AlimtalkSendTypeService alimtalkSendTypeService) {
         this.sessionService = sessionService;
+        this.alimtalkSendTypeService = alimtalkSendTypeService;
     }
 
     /**
@@ -55,6 +58,29 @@ public class AlimtalkAnalysisTabController {
      */
     @RequestMapping(value = "/alimtalkAnalysisTab/list.sb", method = RequestMethod.GET)
     public String alimtalkAnalysisTabView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 알림톡 계정등록 팝업 - 키값 리스트 조회
+        List<DefaultMap<String>> alimtalkKeyColList = alimtalkSendTypeService.getAlimtalkKeyColList(sessionInfoVO);
+
+        String groupSenderKey = alimtalkKeyColList.get(0).getStr("groupKey");
+        String groupSenderKeyNm = alimtalkKeyColList.get(0).getStr("groupNm");
+        String appKey = alimtalkKeyColList.get(0).getStr("appKey");
+        String secretKey = alimtalkKeyColList.get(0).getStr("secretKey");
+        String apiUrl = alimtalkKeyColList.get(0).getStr("apiUrl");
+
+        model.addAttribute("groupSenderKey", groupSenderKey);
+        model.addAttribute("groupSenderKeyNm", groupSenderKeyNm);
+        model.addAttribute("appKey", appKey);
+        model.addAttribute("secretKey", secretKey);
+        model.addAttribute("apiUrl", apiUrl);
+
+        System.out.println("WEB_ALIMTALK >>> groupSenderKey : " + groupSenderKey);
+        System.out.println("WEB_ALIMTALK >>> groupSenderKeyNm : " + groupSenderKeyNm);
+        System.out.println("WEB_ALIMTALK >>> appKey : " + appKey);
+        System.out.println("WEB_ALIMTALK >>> secretKey : " + secretKey);
+        System.out.println("WEB_ALIMTALK >>> apiUrl : " + apiUrl);
 
         return "adi/alimtalk/alimtalkAnalysisTab/alimtalkAnalysisTab";
     }
