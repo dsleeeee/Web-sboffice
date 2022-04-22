@@ -36,7 +36,7 @@ public class MonthSaleController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 결제수단 조회
-        List<DefaultMap<String>> payColList = dayService.getPayColList(dayVO, sessionInfoVO);
+        List<DefaultMap<String>> payColList = dayService.getPayColAddList(dayVO, sessionInfoVO);
 
         // 결제수단 코드를 , 로 연결하는 문자열 생성
         String payCol = "";
