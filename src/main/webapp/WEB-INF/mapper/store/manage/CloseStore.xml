@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CloseStore.xml
+    폐점예정매장 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.04.22      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.closeStore.service.impl.CloseStoreMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_CM_AGENCY
+        PARAM    : closeStoreVO
+        COMMENTS : 폐점예정매장 목록을 조회한다.
+    -->
+    <select id="getCloseStoreList" parameterType="closeStoreVO" resultType="DefaultMap">
+        /* USE : CloseStoreMapper.getCloseStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.HQ_OFFICE_CD,
+                B.HQ_OFFICE_NM,
+                A.STORE_CD,
+                A.STORE_NM,
+                A.AGENCY_CD,
+                C.AGENCY_NM,
+                TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_DAILY_TOTAL WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_CD = A.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+                TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS REG_DT,
+                A.SYS_STAT_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_STORE A,
+                TB_HQ_OFFICE B,
+                TB_CM_AGENCY C
+        WHERE   B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND     C.AGENCY_CD = A.AGENCY_CD
+        <![CDATA[
+        AND     A.SYS_STAT_FG   NOT IN ('2','9')
+        AND     A.REG_DT         <=  TO_CHAR(ADD_MONTHS(TO_DATE(#{startMonth},'YYYYMM') , -2),'YYYYMMDD')
+        AND     A.STORE_CD NOT IN   (
+                                    SELECT  DISTINCT STORE_CD
+                                    FROM    TB_SL_MONTHLY_TOTAL TSMT
+                                    WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(TO_DATE(#{startMonth},'YYYYMM') , -2),'YYYYMM')
+                                    )
+        ]]>
+        --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
+        <if test='agencyCd != null and agencyCd !=""'>
+            AND A.AGENCY_CD LIKE '%' || #{agencyCd} || '%'
+        </if>
+        <if test='agencyNm != null and agencyNm !=""'>
+            AND C.AGENCY_NM LIKE '%' || #{agencyNm} || '%'
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
+            AND A.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm !=""'>
+            AND B.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+        </if>
+        <if test='storeCd != null and storeCd !=""'>
+            AND A.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test='storeNm != null and storeNm !=""'>
+            AND A.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND A.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY A.HQ_OFFICE_CD ASC, A.STORE_CD ASC, A.AGENCY_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 폐점예정매장 - 매장 폐점 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : closeStoreVO
+        COMMENTS : 매장을 폐점처리한다.
+    -->
+    <update id="saveCloseStore" parameterType="DefaultMap">
+        /* USE : CloseStoreMapper.saveCloseStore */
+        MERGE INTO TB_MS_STORE A
+            USING   (
+                    SELECT  A.STORE_CD,
+                            A.SYS_REMARK
+                    FROM    TB_MS_STORE A,
+                            TB_HQ_OFFICE B,
+                            TB_CM_AGENCY C
+                    WHERE   B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                    AND     C.AGENCY_CD = A.AGENCY_CD
+                    <![CDATA[
+                    AND     A.SYS_STAT_FG   NOT IN ('2','9')
+                    AND     A.REG_DT         <=  TO_CHAR(ADD_MONTHS(SYSDATE, -2),'YYYYMMDD')
+                    AND     A.STORE_CD NOT IN   (
+                                                SELECT  DISTINCT STORE_CD
+                                                FROM    TB_SL_MONTHLY_TOTAL TSMT
+                                                WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(SYSDATE, -2),'YYYYMM')
+                                                )
+                    ]]>
+                    --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
+                    <if test='agencyCd != null and agencyCd !=""'>
+                        AND A.AGENCY_CD LIKE '%' || #{agencyCd} || '%'
+                    </if>
+                    <if test='agencyNm != null and agencyNm !=""'>
+                        AND C.AGENCY_NM LIKE '%' || #{agencyNm} || '%'
+                    </if>
+                    <if test='hqOfficeCd != null and hqOfficeCd !=""'>
+                        AND A.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+                    </if>
+                    <if test='hqOfficeNm != null and hqOfficeNm !=""'>
+                        AND B.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+                    </if>
+                    <if test='storeCd != null and storeCd !=""'>
+                        AND A.STORE_CD LIKE '%' || #{storeCd} || '%'
+                    </if>
+                    <if test='storeNm != null and storeNm !=""'>
+                        AND A.STORE_NM LIKE '%' || #{storeNm} || '%'
+                    </if>
+                    <if test='sysStatFg != null and sysStatFg != ""'>
+                        AND A.SYS_STAT_FG = #{sysStatFg}
+                    </if>
+                ) B
+            ON      (
+                A.STORE_CD  =   B.STORE_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET     A..SYS_STAT_FG      =   '2'
+                    ,       A.SYS_CLOSURE_DATE  =   TO_CHAR(SYSDATE, 'YYYYMMDD')
+                    ,       A.SYS_REMARK        =   A.SYS_REMARK || '3개월 동안 매출 자료가 발생되지 않아 ' || TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ' 폐점처리됨, USER_ID='|| #{regId} || ', 폐점비고 : ' || #{remark}
+                    ,       A.MOD_DT    =   #{regDt}
+                    ,       A.MOD_ID    =   #{regId}
+    </update>
+</mapper>

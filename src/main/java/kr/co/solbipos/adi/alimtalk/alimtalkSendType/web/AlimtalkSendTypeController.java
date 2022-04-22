@@ -431,8 +431,6 @@ public class AlimtalkSendTypeController {
             apiSenderReceiveVO = mapper.readValue(sb.toString(), ApiSenderReceiveVO.class);
 
             if(apiSenderReceiveVO.getHeader().getResultCode() == 0){
-                alimtalkSendTypeVO.setAppKey(AppKey);
-                alimtalkSendTypeVO.setSecretKey(SecretKey);
 
                 // 알림톡 계정정보 저장 insert
                 result = alimtalkSendTypeService.getAlimtalkSenderSaveInsert(alimtalkSendTypeVO, sessionInfoVO);
@@ -624,7 +622,6 @@ public class AlimtalkSendTypeController {
 
             // 해당 그룹-계정정보가 이미 NHN 사이트에 등록되있을때(-1018 This is a plusFriend that has already been added)
             if(apiGroupReceiveVO.getHeader().getResultCode() == 0 || apiGroupReceiveVO.getHeader().getResultCode() == -1018){
-                alimtalkSendTypeVO.setAppKey(AppKey);
 
                 // 알림톡 그룹-계정정보 저장 insert
                 result = alimtalkSendTypeService.getAlimtalkSenderGroupSaveInsert(alimtalkSendTypeVO, sessionInfoVO);

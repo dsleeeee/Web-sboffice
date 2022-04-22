@@ -30,16 +30,16 @@
             <th><s:message code="prodStatus.saleDate" /></th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w110px"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w110px"></span>
                 </div>
             </td>
             <%-- 요리메모 사용여부 --%>
             <th><s:message code="prodStatus.cookMemoUseYn" /></th>
             <td>
                 <div class="sb-select">
-                    <div class="sb-select fl w50">
+                    <div class="sb-select fl w100">
                         <wj-combo-box
                                 id="cookMemoUseYn"
                                 ng-model="cookMemoUseYn"
@@ -52,6 +52,27 @@
                     </div>
                 </div>
             </td>
+        </tr>
+        <tr>
+            <th><s:message code="prodStatus.optionFg" /></th>
+            <td>
+                <div class="sb-select">
+                    <div class="sb-select fl w100">
+                        <wj-combo-box
+                                id="optionFg"
+                                ng-model="optionFg"
+                                items-source="_getComboData('optionFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                selected-index="1">
+                        </wj-combo-box>
+                    </div>
+                </div>
+            </td>
+            <th></th>
+            <td></td>
         </tr>
         </tbody>
     </table>
@@ -71,17 +92,19 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleDate"/>" binding="saleDate" width="100" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.posNo"/>" binding="posNo" width="80" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.orderNo"/>" binding="orderNo" width="100" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.prodCd"/>" binding="prodCd" width="120" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.prodNm"/>" binding="prodNm" width="150" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleUprc"/>" binding="saleUprc" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleQty"/>" binding="saleQty" width="80" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.saleAmt"/>" binding="saleAmt" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.dcAmt"/>" binding="dcAmt" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodStatus.cookMemo"/>" binding="cookMemo" width="200" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleDate"/>" binding="saleDate" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.billDtlNo"/>" binding="billDtlNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleUprc"/>" binding="saleUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleQty"/>" binding="saleQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.nmcodeNm"/>" binding="nmcodeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodStatus.cookMemo"/>" binding="cookMemo" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -94,4 +117,4 @@
     var cookMemoUseYn = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dlvr/prodStatus.js?ver=20220411.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dlvr/prodStatus.js?ver=20220411.05" charset="utf-8"></script>

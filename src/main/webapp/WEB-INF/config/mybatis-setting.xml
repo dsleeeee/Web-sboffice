@@ -128,8 +128,10 @@
     <typeAlias alias="migDataMappingVO" type="kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO"/>
     <!-- 기초관리 > 매장정보관리 > 환경변수일괄변경 -->
     <typeAlias alias="envConfgBatchChangeVO" type="kr.co.solbipos.store.manage.envConfgBatchChange.service.EnvConfgBatchChangeVO"/>
-<!-- 기초관리 > 매장정보관리 > 포스H/W정보현황 -->
+    <!-- 기초관리 > 매장정보관리 > 포스H/W정보현황 -->
     <typeAlias alias="posHwInfoVO" type="kr.co.solbipos.store.manage.posHwInfo.service.PosHwInfoVO"/>
+    <!-- 기초관리 > 매장정보관리 > 폐점예정매장 -->
+    <typeAlias alias="closeStoreVO" type="kr.co.solbipos.store.manage.closeStore.service.CloseStoreVO"/>
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>

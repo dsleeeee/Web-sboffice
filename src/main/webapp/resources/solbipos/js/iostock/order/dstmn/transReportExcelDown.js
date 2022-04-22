@@ -29,12 +29,12 @@ app.controller('transReportExcelDownCtrl', ['$scope', '$http', '$timeout', funct
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
-    }	
-    
+    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -80,12 +80,12 @@ app.controller('transReportExcelDownCtrl', ['$scope', '$http', '$timeout', funct
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
-    }	
-    
+    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -121,12 +121,12 @@ app.controller('transReportExcelDownCtrl', ['$scope', '$http', '$timeout', funct
   $scope.prodList = function () {
     var params    = {};
     params.slipNo = $scope.strSlipNo;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
-    }	
-    
+    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -181,7 +181,7 @@ app.controller('transReportExcelDownCtrl', ['$scope', '$http', '$timeout', funct
       // "complete" code here
     });
   };
-  
+
   //박정은
   $scope.excelDown = function(){
 	  var params    = {};
@@ -192,8 +192,8 @@ app.controller('transReportExcelDownCtrl', ['$scope', '$http', '$timeout', funct
 	  //가상로그인 session 설정
 	  if(document.getElementsByName('sessionId')[0]){
 		  params['sid'] = document.getElementsByName('sessionId')[0].value;
-	  }	
-	    
+	  }
+
 	    // ajax 통신 설정
 	    $http({
 	      method : 'POST', //방식
@@ -454,7 +454,7 @@ app.controller('transReportExcelDownCtrl', ['$scope', '$http', '$timeout', funct
       + '<td class="tc">상호(법인명)</td>'
       + '<td class="tc">' + $scope.suppliedNm + '</td>'
       + '<td class="tc">성명</td>'
-      + '<td class="tc">' + $scope.supplierOwnerNm + '</td>'
+      + '<td class="tc">' + $scope.suppliedOwnerNm + '</td>'
       + '</tr>'
       + '<tr>'
       + '<td class="tc">사업장주소</td>'

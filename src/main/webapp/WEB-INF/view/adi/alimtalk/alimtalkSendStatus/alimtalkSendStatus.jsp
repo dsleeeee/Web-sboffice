@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <div id="alimtalkSendStatusView" class="subCon" style="display: none;">
     <div ng-controller="alimtalkSendStatusCtrl">
@@ -145,6 +146,7 @@
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.reserveYn"/>" binding="reserveYn" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.gubun"/>" binding="gubun" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.alkSendSeq"/>" binding="alkSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.requestId"/>" binding="requestId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -160,7 +162,18 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20220407.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var orgnCd = "${orgnCd}";
+    var userId = "${userId}";
+
+    var groupSenderKey = "${groupSenderKey}";
+    var groupSenderKeyNm = "${groupSenderKeyNm}";
+    var appKey = "${appKey}";
+    var secretKey = "${secretKey}";
+    var apiUrl = "${apiUrl}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20220407.02" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">

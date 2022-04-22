@@ -13,6 +13,11 @@
  */
 var app = agrid.getApp();
 
+var optionFg = [
+    {"name":"전체","value":""},
+    {"name":"주문앱미등록상품","value":"1"},
+    {"name":"주문앱미등록상품외","value":"2"}
+];
 /**
  * 배달상품현황 그리드 생성
  */
@@ -24,6 +29,7 @@ app.controller('prodStatusCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
     $scope._setComboData("cookMemoUseYn", cookMemoUseYn);
+    $scope._setComboData("optionFg", optionFg);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -43,6 +49,7 @@ app.controller('prodStatusCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.cookMemoUseYn = $scope.cookMemoUseYn;
+        params.optionFg = $scope.optionFg;
 
         $scope._inquirySub('/sale/status/dlvr/prodStatus/getProdStatusList.sb', params, function() {
 

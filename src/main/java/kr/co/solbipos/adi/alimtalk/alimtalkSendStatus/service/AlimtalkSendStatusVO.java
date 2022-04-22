@@ -78,6 +78,24 @@ public class AlimtalkSendStatusVO extends PageVO {
     /** 매장명 */
     private String storeNm;
 
+    /** API에서 쓰는 고정키값 */
+    private String apiUrl;
+
+    /** API에서 쓰는 고정키값 */
+    private String appKey;
+
+    /** API에서 쓰는 Header키 값 */
+    private String secretKey;
+
+    /** NHN매장계정 그룹아이디 */
+    private String groupSenderKey;
+
+    /** NHN매장계정 그룹아이디명 */
+    private String groupSenderKeyNm;
+
+    /** 문자 전송 성공시 메세지ID */
+    private String requestId;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -165,4 +183,28 @@ public class AlimtalkSendStatusVO extends PageVO {
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
     }
+
+    public String getApiUrl() { return apiUrl; }
+
+    public void setApiUrl(String apiUrl) { this.apiUrl = apiUrl; }
+
+    public String getAppKey() { return appKey; }
+
+    public void setAppKey(String appKey) { this.appKey = appKey; }
+
+    public String getSecretKey() { return secretKey; }
+
+    public void setSecretKey(String secretKey) { this.secretKey = secretKey; }
+
+    public String getGroupSenderKey() { return groupSenderKey; }
+
+    public void setGroupSenderKey(String groupSenderKey) { this.groupSenderKey = groupSenderKey; }
+
+    public String getGroupSenderKeyNm() { return groupSenderKeyNm; }
+
+    public void setGroupSenderKeyNm(String groupSenderKeyNm) { this.groupSenderKeyNm = groupSenderKeyNm; }
+
+    public String getRequestId() { return requestId; }
+
+    public void setRequestId(String requestId) { this.requestId = requestId; }
 }

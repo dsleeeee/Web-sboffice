@@ -52,6 +52,7 @@ app.controller('empStoreEmpCtrl', ['$scope', '$http', function ($scope, $http) {
                     var params      = {};
                     params.empNo = selectedRow.empNo;
 
+                    $("#empTitle").html("[" + selectedRow.empNo + "]" + selectedRow.empNm);
                     var storeScope = agrid.getScope('empManageStoreCtrl');
                     storeScope._broadcast('empManageStoreCtrl', params);
 
@@ -65,6 +66,7 @@ app.controller('empStoreEmpCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 검색 호출 -->
     $scope.$on("empStoreEmpCtrl", function(event, data) {
+        $("#empTitle").html("");
         $scope.searchEmpStoreEmpList();
         event.preventDefault();
     });
@@ -74,11 +76,13 @@ app.controller('empStoreEmpCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope._inquiryMain("/base/store/empStore/emp/getEmpStoreEmpList.sb", params, function() {
             $scope.$apply(function() {
-                var storeScope = agrid.getScope('empManageStoreCtrl');
-                storeScope._gridDataInit();
+                if($("#empTitle").html() === ""){
+                    var storeScope2 = agrid.getScope('empManageStoreCtrl');
+                    storeScope2._gridDataInit();
 
-                var storeScope2 = agrid.getScope('empNoManageStoreCtrl');
-                storeScope2._gridDataInit();
+                    var storeScope23 = agrid.getScope('empNoManageStoreCtrl');
+                    storeScope23._gridDataInit();
+                }
             });
         }, false);
     };
@@ -93,6 +97,7 @@ app.controller('empManageStoreCtrl', ['$scope', '$http', function ($scope, $http
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('empManageStoreCtrl', $scope, $http, true));
+    var empNo;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -102,13 +107,14 @@ app.controller('empManageStoreCtrl', ['$scope', '$http', function ($scope, $http
 
     // <-- 검색 호출 -->
     $scope.$on("empManageStoreCtrl", function(event, data) {
+        empNo = data.empNo;
         $scope.searchEmpManageStoreList(data);
         event.preventDefault();
     });
 
     $scope.searchEmpManageStoreList = function(data) {
         var params = {};
-        params.empNo = data.empNo;
+        params.empNo = empNo;
 
         $scope._inquirySub("/base/store/empStore/emp/getEmpManageStoreList.sb", params, function() {}, false);
     };
@@ -133,6 +139,9 @@ app.controller('empManageStoreCtrl', ['$scope', '$http', function ($scope, $http
         $scope._save("/base/store/empStore/emp/getEmpManageStoreDelete.sb", params, function(){
             var storeScope = agrid.getScope('empStoreEmpCtrl');
             storeScope.searchEmpStoreEmpList();
+            $scope.searchEmpManageStoreList(empNo);
+            var storeScope3 = agrid.getScope('empNoManageStoreCtrl');
+            storeScope3.searchEmpNoManageStoreList(empNo);
         });
     };
 
@@ -145,7 +154,7 @@ app.controller('empNoManageStoreCtrl', ['$scope', '$http', function ($scope, $ht
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('empNoManageStoreCtrl', $scope, $http, true));
-
+    var empNo;
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
@@ -154,13 +163,14 @@ app.controller('empNoManageStoreCtrl', ['$scope', '$http', function ($scope, $ht
 
     // <-- 검색 호출 -->
     $scope.$on("empNoManageStoreCtrl", function(event, data) {
+        empNo = data.empNo;
         $scope.searchEmpNoManageStoreList(data);
         event.preventDefault();
     });
 
     $scope.searchEmpNoManageStoreList = function(data) {
         var params = {};
-        params.empNo = data.empNo;
+        params.empNo = empNo;
 
         $scope._inquirySub("/base/store/empStore/emp/getEmpNoManageStoreList.sb", params, function() {}, false);
     };
@@ -185,6 +195,9 @@ app.controller('empNoManageStoreCtrl', ['$scope', '$http', function ($scope, $ht
         $scope._save("/base/store/empStore/emp/getEmpManageStoreSave.sb", params, function(){
             var storeScope = agrid.getScope('empStoreEmpCtrl');
             storeScope.searchEmpStoreEmpList();
+            var storeScope2 = agrid.getScope('empManageStoreCtrl');
+            storeScope2.searchEmpManageStoreList(empNo);
+            $scope.searchEmpNoManageStoreList(empNo);
         });
     };
 

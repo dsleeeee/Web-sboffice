@@ -174,42 +174,101 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
 
     // 예약취소
     $scope.reserveCancel = function() {
-        alert("준비중");
+        // 파라미터 설정
+        var paramsChk = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                paramsChk.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        if(paramsChk.length <= 0) {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
 
         // 파라미터 설정
-        // var paramsChk = new Array();
-        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        //     if($scope.flex.collectionView.items[i].gChk) {
-        //         paramsChk.push($scope.flex.collectionView.items[i]);
-        //     }
-        // }
-        //
-        // if(paramsChk.length <= 0) {
-        //     s_alert.pop(messages["cmm.not.select"]);
-        //     return;
-        // }
-        //
-        // // 파라미터 설정
-        // var params = new Array();
-        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        //     if($scope.flex.collectionView.items[i].gChk) {
-        //         if($scope.flex.collectionView.items[i].reserveYn != "1"
-        //             || $scope.flex.collectionView.items[i].sendStatus == "3"
-        //             || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 8)) >= parseInt(getCurDateTime())) ) {
-        //
-        //             $scope._popMsg(messages["alimtalkSendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
-        //             return false;
-        //         }
-        //
-        //         params.push($scope.flex.collectionView.items[i]);
-        //     }
-        // }
-        //
-        // // 예약 문자를 취소하시겠습니까?
-        // if (confirm(messages["alimtalkSendStatus.reserveCancelConfirm"])) {
-        //     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        //     $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus/getAlimtalkSendStatusReserveCancelSave.sb", params, function(){ $scope.searchAlimtalkSendStatus() });
-        // }
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                if($scope.flex.collectionView.items[i].reserveYn != "1"
+                    || $scope.flex.collectionView.items[i].sendStatus == "3"
+                    || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 8)) >= parseInt(getCurDateTime())) ) {
+
+                    $scope._popMsg(messages["alimtalkSendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
+                    return false;
+                }
+                $scope.flex.collectionView.items[i].orgnCd = orgnCd;
+                $scope.flex.collectionView.items[i].regId = userId;
+                $scope.flex.collectionView.items[i].modId = userId;
+                $scope.flex.collectionView.items[i].groupSenderKey = groupSenderKey;
+                $scope.flex.collectionView.items[i].groupSenderKeyNm = groupSenderKeyNm;
+                $scope.flex.collectionView.items[i].appKey = appKey;
+                $scope.flex.collectionView.items[i].secretKey = secretKey;
+                $scope.flex.collectionView.items[i].apiUrl = apiUrl;
+
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        // 예약 문자를 취소하시겠습니까?
+        if (confirm(messages["alimtalkSendStatus.reserveCancelConfirm"])) {
+            // 예약취소 (메세지발송 취소 API 호출 및 저장)
+            $scope.registerRequestApi(params);
+        }
+    };
+
+    // 예약취소 (메세지발송 취소 API 호출 및 저장)
+    $scope.registerRequestApi = function(params) {
+        // 로딩바 show
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+
+        $.ajax({
+            type: "POST",
+            url: "/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus/getAlimtalkReserveCancelApiSave.sb",
+            data: JSON.stringify(params),
+            cache: false,
+            dataType: "json",
+            contentType : 'application/json',
+            success: function(result){
+                // alert(result.status);
+                // alert(result.data);
+                // alert(result.data.resultCode);
+                // alert(result.data.resultMessage);
+                if (result.data.resultCode.toString() === "0") {
+                    $scope._popMsg("예약취소 되었습니다.");
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+                    // 조회
+                    $scope.searchAlimtalkSendStatus();
+                }
+                else if (result.data.resultCode.toString() !== "0") {
+                    $scope._popMsg(result.data.resultMessage.toString());
+                    // 로딩바 hide
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                // if (result.status === "OK") {
+                //     $scope._popMsg("저장되었습니다.");
+                //     $scope.close();
+                // }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                /*else if(result.status === undefined) {
+                    location.href = "/";
+                }*/
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            }
+        });
     };
 
     // 선택

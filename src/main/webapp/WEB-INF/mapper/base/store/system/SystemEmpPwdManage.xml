@@ -82,6 +82,7 @@
             TB_WB_USER_INFO
         SET
             USER_PWD = #{newPassword},
+            MOB_LOGIN_AUTO_SERIAL = #{modDt},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
         WHERE

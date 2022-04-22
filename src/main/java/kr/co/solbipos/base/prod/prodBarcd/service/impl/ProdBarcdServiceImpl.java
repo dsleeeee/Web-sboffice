@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -252,7 +253,9 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
 
                 List<DefaultMap<String>> list = prodBarcdMapper.chkExcelUpload(prodBarcdVO);
 
-                if (prodBarcdVO.getBarCd().length() >= 1 && prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
+                if (!Pattern.matches("[a-zA-Z0-9]*", prodBarcdVO.getBarCd())){
+                    prodBarcdVO.setResult("바코드는 영문, 숫자로만 이루어져야합니다.");
+                } else if (prodBarcdVO.getBarCd().length() >= 1 && prodBarcdVO.getBarCd().getBytes(StandardCharsets.UTF_8).length > 40) {
                     prodBarcdVO.setResult("바코드 길이가 40byte를 넘습니다.");
                 } else if (list.size() != 0) {
                     if (StringUtil.getOrBlank(list.get(0).get("cntProd")).equals("0")) {

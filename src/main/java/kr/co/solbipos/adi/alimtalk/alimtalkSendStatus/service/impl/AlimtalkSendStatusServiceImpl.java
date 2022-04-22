@@ -61,38 +61,32 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
 
     /** 알림톡 전송결과 - 예약취소 */
     @Override
-    public int getAlimtalkSendStatusReserveCancelSave(AlimtalkSendStatusVO[] alimtalkSendStatusVOs, SessionInfoVO sessionInfoVO) {
+    public int getAlimtalkSendStatusReserveCancelSave(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
         String currentDt = currentDateTimeString();
 
-        for(AlimtalkSendStatusVO alimtalkSendStatusVO : alimtalkSendStatusVOs) {
+        alimtalkSendStatusVO.setModDt(currentDt);
 
-            alimtalkSendStatusVO.setModDt(currentDt);
-            alimtalkSendStatusVO.setModId(sessionInfoVO.getUserId());
+        String msgType = ""; // 메세지타입
 
-            alimtalkSendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-
-            String msgType = ""; // 메세지타입
-
-            if(alimtalkSendStatusVO.getGubun().equals("TB_AL_ALIMTALK_SEND_ENC")) {
-                msgType = "4"; // 메세지타입
-                procCnt = alimtalkSendStatusMapper.getAlimtalkSendStatusReserveCancelSaveDelete(alimtalkSendStatusVO); // TB_AL_ALIMTALK_SEND_ENC
-            }
-
-            alimtalkSendStatusVO.setMsgType(msgType);
-
-            // 잔여금액 복구
-            SendStatusVO sendStatusVO = new SendStatusVO();
-            sendStatusVO.setModDt(currentDt);
-            sendStatusVO.setModId(sessionInfoVO.getUserId());
-            sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getOrgnCd());
-            sendStatusVO.setMsgType(alimtalkSendStatusVO.getMsgType());
-            procCnt = sendStatusMapper.getSmsAmtRecoverSaveUpdate(sendStatusVO);
-
-            // 알림톡 전송이력 복구
-            procCnt = alimtalkSendStatusMapper.getAlkSendSeqRecoverSaveUpdate(alimtalkSendStatusVO);
+        if(alimtalkSendStatusVO.getGubun().equals("TB_AL_ALIMTALK_SEND_ENC")) {
+            msgType = "4"; // 메세지타입
+            procCnt = alimtalkSendStatusMapper.getAlimtalkSendStatusReserveCancelSaveDelete(alimtalkSendStatusVO); // TB_AL_ALIMTALK_SEND_ENC
         }
+
+        alimtalkSendStatusVO.setMsgType(msgType);
+
+        // 잔여금액 복구
+        SendStatusVO sendStatusVO = new SendStatusVO();
+        sendStatusVO.setModDt(currentDt);
+        sendStatusVO.setModId(sessionInfoVO.getUserId());
+        sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getOrgnCd());
+        sendStatusVO.setMsgType(alimtalkSendStatusVO.getMsgType());
+        procCnt = sendStatusMapper.getSmsAmtRecoverSaveUpdate(sendStatusVO);
+
+        // 알림톡 전송이력 복구
+        procCnt = alimtalkSendStatusMapper.getAlkSendSeqRecoverSaveUpdate(alimtalkSendStatusVO);
 
         return procCnt;
     }
