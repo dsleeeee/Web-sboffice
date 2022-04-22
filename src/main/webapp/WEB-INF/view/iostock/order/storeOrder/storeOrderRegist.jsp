@@ -152,8 +152,9 @@
         <p id="registStoreLoanInfo" class="fl s14 bk lh30"></p>
         <div class="tr">
           <%-- 저장 --%>
-          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveStoreOrderRegist()">
-            <s:message code="cmm.save"/></button>
+          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="getOrderTotAmt()">
+            <s:message code="cmm.save"/>
+          </button>
         </div>
       </div>
 
@@ -185,6 +186,7 @@
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderUnitQty"/><s:message code="storeOrder.dtl.orderAmt"/>" binding="prevOrderTot" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.saleUprc"/>" binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -212,7 +214,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20200910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20220420.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

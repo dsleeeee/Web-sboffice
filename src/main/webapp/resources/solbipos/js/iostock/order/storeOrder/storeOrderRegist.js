@@ -397,9 +397,23 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params);
   };
 
+  // 주문 상품 저장 전 출고요청일자에 등록한 주문 총 합계 금액 조회
+  $scope.getOrderTotAmt = function(){
+
+    var params       = {};
+    params.reqDate   = $scope.reqDate;
+    $scope._postJSONQuery.withOutPopUp( "/iostock/order/storeOrder/storeOrder/getOrderTotAmt.sb", params, function(response) {
+
+      if(response.data.data !== null) {
+        $scope.saveStoreOrderRegist(response.data.data);
+      }
+
+    });
+  };
 
   // 주문 상품 저장
-  $scope.saveStoreOrderRegist = function () {
+  $scope.saveStoreOrderRegist = function (orderTotAmt) {
+
     var params   = [];
     var orderTot = 0;
     var grid 			= $scope.flex;
@@ -441,14 +455,25 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       item.slipFg    = $scope.slipFg;
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.hdRemark  = $scope.regHdRemark;
-      orderTot += parseInt(item.orderTot);
+
+      if(item.prevOrderTot !== null){
+          orderTot += parseInt(item.orderTot - item.prevOrderTot); //  합계 - 기주문수량금액 = 추가한 주문수량의 금액 합계
+      }else{
+          orderTot += parseInt(item.orderTot);
+      }
+
       params.push(item);
     }
 
+    // 상품 주문 합계 + 이전에 등록한 주문 총 합계
+    orderTot += parseInt(orderTotAmt);
+
+    // 1회주문한도액과 주문가능금액 중 적은금액을 기준으로 주문가능금액 체크
+    var approvalAmt = $scope.maxOrderAmt > $scope.availableOrderAmt ? $scope.availableOrderAmt : $scope.maxOrderAmt;
 
     // 주문가능액 체크
-    if ($scope.availableOrderAmt != null) {
-      if (parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
+    if (approvalAmt != null) {
+      if (parseInt(approvalAmt) < parseInt(orderTot)) {
         $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
         return false;
       }

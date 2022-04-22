@@ -646,6 +646,8 @@
     <typeAlias alias="excelUploadVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO"/>
     <typeAlias alias="excelUploadMPSVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO"/>
 
+    <!-- 정산관리 -->
+    <typeAlias alias="depositDdcVO" type="kr.co.solbipos.excclc.excclc.depositDdc.service.DepositDdcVO"/>
 
 	<!-- 공통팝업 -->
     <typeAlias alias="stockComPopupVO" type="kr.co.solbipos.stock.com.popup.service.StockComPopupVO"/>

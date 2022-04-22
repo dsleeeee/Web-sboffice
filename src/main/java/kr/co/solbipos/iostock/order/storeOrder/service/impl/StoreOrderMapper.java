@@ -85,4 +85,6 @@ public interface StoreOrderMapper {
     /** 주문등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
     int deleteExcelUploadCompleteData(ExcelUploadMPSVO excelUploadMPSVO);
 
+    /** 주문등록 출고요청일자에 등록한 주문 총 합계 금액 조회 */
+    String getOrderTotAmt(StoreOrderVO storeOrderVO);
 }

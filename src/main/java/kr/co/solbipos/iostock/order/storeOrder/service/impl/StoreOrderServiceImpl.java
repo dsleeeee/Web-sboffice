@@ -504,4 +504,13 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 
         return result;
     }
+
+    /** 주문등록 출고요청일자에 등록한 주문 총 합계 금액 조회 */
+    @Override
+    public String getOrderTotAmt(StoreOrderVO storeOrderVO, SessionInfoVO sessionInfoVO) {
+
+        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return storeOrderMapper.getOrderTotAmt(storeOrderVO);
+    }
 }

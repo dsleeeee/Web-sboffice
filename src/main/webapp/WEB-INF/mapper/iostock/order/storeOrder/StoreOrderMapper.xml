@@ -120,6 +120,7 @@
         ,       TO_NUMBER(DECODE(tphso.ORDER_AMT    ,  0, NULL, tphso.ORDER_AMT*tphso.SLIP_FG     )) AS ORDER_AMT
         ,       TO_NUMBER(DECODE(tphso.ORDER_VAT    ,  0, NULL, tphso.ORDER_VAT*tphso.SLIP_FG     )) AS ORDER_VAT
         ,       TO_NUMBER(DECODE(tphso.ORDER_TOT    ,  0, NULL, tphso.ORDER_TOT*tphso.SLIP_FG     )) AS ORDER_TOT
+        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT    ,  0, NULL, tphso.ORDER_TOT*tphso.SLIP_FG     )) AS PREV_ORDER_TOT
         ]]>
         <if test='option2 != null and option2 != ""'>
             , SF_ZERO_TO_NULL(optionTb.ORDER_UNIT_QTY) AS ORDER_UNIT_QTY
@@ -352,10 +353,10 @@
 				tphsl.LIMIT_LOAN_AMT,
         		tphsl.CURR_LOAN_AMT,
         		tphsl.MAX_ORDER_AMT,
-				tphsl.AVAILABLE_ORDER_AMT,
+                (tphsl.LIMIT_LOAN_AMT - tphso2.OUT_TOT - tphso.PREV_ORDER_TOT + tphsm.MONEY_AMT) AS AVAILABLE_ORDER_AMT,
 				tphsl.NO_OUTSTOCK_AMT_FG,
 				tphsl.ORDER_CLOSE_YN
-        FROM    (   SELECT  SUM(tphso.ORDER_TOT) AS PREV_ORDER_TOT
+        FROM    (   SELECT  NVL(SUM(tphso.ORDER_TOT), 0) AS PREV_ORDER_TOT
                     FROM    TB_PO_HQ_STORE_ORDER tphso
                     WHERE   STORE_CD  =   #{storeCd}
                     AND     REQ_DATE  !=  #{reqDate}
@@ -365,7 +366,7 @@
         					tphsl.CURR_LOAN_AMT,
 							NVL(tphsl.MAX_ORDER_AMT,        0) AS MAX_ORDER_AMT,
                     		NVL(tphsl.NO_OUTSTOCK_AMT_FG, 'N') AS NO_OUTSTOCK_AMT_FG,
-                    		NVL(tphsl.ORDER_CLOSE_YN,     'N') AS ORDER_CLOSE_YN,
+                    		NVL(tphsl.ORDER_CLOSE_YN,     'N') AS ORDER_CLOSE_YN
                     		<!--
 							DECODE(tphsl.ORDER_FG
                                   ,'1'
@@ -421,14 +422,27 @@
 					                    방식2 : 여신잔액이 0보다 큰 경우, 여신한도액 + 여신잔액과 1회 주문한도액 중 작은금액 (1회 주문한도액 미입력시 여신한도액 + 여신잔액)
 					                    방식3 : 여신잔액이 0보다 큰 경우, 주문가능                                                              (1회 주문한도액 미입력시 주문가능액은 무한대)
 							-->
-			                DECODE	(tphsl.ORDER_FG,'1', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, tphsl.CURR_LOAN_AMT,                   		LEAST(tphsl.CURR_LOAN_AMT, tphsl.MAX_ORDER_AMT)																		),
+			                <!-- DECODE	(tphsl.ORDER_FG,'1', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, tphsl.CURR_LOAN_AMT,                   		LEAST(tphsl.CURR_LOAN_AMT, tphsl.MAX_ORDER_AMT)																		),
 			                                 		'2', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, tphsl.CURR_LOAN_AMT + tphsl.LIMIT_LOAN_AMT,	DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1,LEAST(tphsl.CURR_LOAN_AMT + tphsl.LIMIT_LOAN_AMT, tphsl.MAX_ORDER_AMT), 0	)   ),
-			                                 		'3', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, 999999999,									DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1,999999999,                                           					0   )   )	<!-- 9자리이기에 999999999 -->
-									)	AS AVAILABLE_ORDER_AMT
+			                                 		'3', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, 999999999,									DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1,999999999,                                           					0   )   )	/* 9자리이기에 999999999 */
+									)	AS AVAILABLE_ORDER_AMT -->
                     FROM    TB_PO_HQ_STORE_LOAN tphsl
                     WHERE   tphsl.HQ_OFFICE_CD  =   #{hqOfficeCd}
                     AND     tphsl.STORE_CD      =   #{storeCd}
                 ) tphsl
+        ,       (
+                    SELECT NVL(SUM(tphso2.OUT_TOT), 0) AS OUT_TOT
+                    FROM TB_PO_HQ_STORE_OUTSTOCK tphso2
+                    WHERE tphso2.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tphso2.STORE_CD = #{storeCd}
+                    AND tphso2.PROC_FG = '20'
+                ) tphso2
+        ,       (
+                    SELECT NVL(SUM(tphsm.MONEY_AMT), 0) AS MONEY_AMT
+                    FROM TB_PO_HQ_STORE_MONEY tphsm
+                    WHERE tphsm.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tphsm.STORE_CD = #{storeCd}
+                ) tphsm
     </select>
 
     <!-- 주문등록 출고요청가능일 조회 -->
@@ -1115,5 +1129,20 @@
                                 )
     </delete>
     <!--                엑셀업로드 끝                 -->
+
+    <!-- 주문등록 출고요청일자에 등록한 주문 총 합계 금액 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER
+        PARAM    : storeOrderVO
+        COMMENTS : 출고요청일자에 등록한 주문 총 합계 금액을 조회한다.
+    -->
+    <select id="getOrderTotAmt" parameterType="storeOrderVO" resultType="String">
+        /* USE : StoreOrderMapper.getOrderTotAmt */
+        SELECT NVL(MAX(ORDER_TOT*SLIP_FG), 0) AS ORDER_TOT
+          FROM TB_PO_HQ_STORE_ORDER
+         WHERE STORE_CD = #{storeCd}
+           AND REQ_DATE = #{reqDate}
+           AND SLIP_FG = 1
+    </select>
 
 </mapper>

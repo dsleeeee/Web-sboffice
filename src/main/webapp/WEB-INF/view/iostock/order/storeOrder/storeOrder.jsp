@@ -13,9 +13,7 @@
   <table class="searchTbl">
     <colgroup>
       <col class="w15"/>
-      <col class="w35"/>
-      <col class="w15"/>
-      <col class="w35"/>
+      <col class="w85"/>
     </colgroup>
     <tbody>
     <tr>

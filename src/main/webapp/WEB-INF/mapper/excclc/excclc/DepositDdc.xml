@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DepositDdc.xml
+    입금/공제 관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.04.20     최초작성
+-->
+<mapper namespace="kr.co.solbipos.excclc.excclc.depositDdc.service.impl.DepositDdcMapper">
+
+    <!-- 매장별집계 탭 - 매장별집계 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE
+        PARAM    : depositDdcVO
+        COMMENTS : 매장별집계 탭 - 매장별집계 리스트 조회
+    -->
+    <select id="getStoreTotalList"  parameterType="depositDdcVO" resultType="DefaultMap">
+        /* DepositDdcMapper.getStoreTotalList */
+        SELECT A.STORE_CD,
+               B.STORE_NM,
+               SUM(CASE WHEN A.MONEY_FG = '00' THEN A.MONEY_AMT ELSE 0 END) AS DEPOSIT_MONEY_AMT,
+               SUM(CASE WHEN A.MONEY_FG != '00' THEN A.MONEY_AMT ELSE 0 END) AS OTHER_MONEY_AMT,
+               SUM(A.MONEY_AMT) AS TOT_MONEY_AMT
+          FROM TB_PO_HQ_STORE_MONEY A,
+               TB_MS_STORE B
+         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+           AND A.STORE_CD = B.STORE_CD
+           AND A.MONEY_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND A.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+         GROUP
+            BY A.STORE_CD,
+               B.STORE_NM
+    </select>
+
+    <!-- 매장별집계 탭 - 상세내역 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY
+        PARAM    : depositDdcVO
+        COMMENTS : 매장별집계 탭 - 상세내역 리스트 조회
+    -->
+    <select id="getStoreTotalDtlList"  parameterType="depositDdcVO" resultType="DefaultMap">
+        /* DepositDdcMapper.getStoreTotalDtlList */
+        SELECT TO_CHAR(TO_DATE(A.MONEY_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS MONEY_DT,
+               A.MONEY_FG,
+               NVL((SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '133' AND NMCODE_CD = A.MONEY_FG), A.MONEY_FG) AS MONEY_FG_NM,
+               A.MONEY_AMT,
+               A.REMARK,
+               (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.REG_ID) AS USER_NM,
+               A.MONEY_DATE,
+               A.STORE_CD,
+               A.SEQ_NO
+          FROM TB_PO_HQ_STORE_MONEY A
+         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND A.STORE_CD = #{storeCd}
+           AND A.MONEY_DATE BETWEEN #{startDate} AND #{endDate}
+         ORDER
+            BY A.MONEY_DATE,
+               A.SEQ_NO
+    </select>
+
+    <!-- 매장별집계 탭 - 입금/기타공제 계정 콤보박스 데이터 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : depositDdcVO
+        COMMENTS :  매장별집계 탭 - 입금/기타공제 계정 콤보박스 데이터 조회
+    -->
+    <select id="getMoneyFgCombo" parameterType="depositDdcVO" resultType="DefaultMap">
+        /* USE : DepositDdcMapper.getMoneyFgCombo */
+        SELECT HQ_OFFICE_CD,
+               NMCODE_GRP_CD,
+               NMCODE_CD,
+               PARENT_CD,
+               NMCODE_NM,
+               NMCODE_ITEM_1,
+               NMCODE_ITEM_2,
+               USE_YN
+          FROM TB_HQ_NMCODE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+           AND USE_YN = 'Y'
+        ORDER
+           BY NMCODE_CD
+    </select>
+
+    <!-- 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY
+        PARAM    : depositDdcVO
+        COMMENTS :  매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 등록
+    -->
+    <insert id="insertDepositDdc" parameterType="depositDdcVO">
+        /* DepositDdcMapper.insertDepositDdc */
+        INSERT INTO TB_PO_HQ_STORE_MONEY
+        (
+            MONEY_DATE,
+            STORE_CD,
+            SEQ_NO,
+            HQ_OFFICE_CD,
+            MONEY_FG,
+            MONEY_AMT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{moneyDate},
+            #{storeCd},
+            (SELECT TO_NUMBER(NVL(MAX(SEQ_NO), 0)+1) FROM TB_PO_HQ_STORE_MONEY WHERE MONEY_DATE = #{moneyDate} AND STORE_CD = #{storeCd}),
+            #{hqOfficeCd},
+            #{moneyFg},
+            #{moneyAmt},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+  </insert>
+
+    <!-- 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY
+        PARAM    : depositDdcVO
+        COMMENTS : 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 조회
+    -->
+    <select id="getDepositDdc"  parameterType="depositDdcVO" resultType="DefaultMap">
+        /* DepositDdcMapper.getDepositDdc */
+        SELECT A.MONEY_FG,
+               A.MONEY_AMT,
+               A.REMARK,
+               (SELECT STORE_NM FROM TB_MS_STORE TMS WHERE TMS.STORE_CD = #{storeCd}) AS STORE_NM
+          FROM TB_PO_HQ_STORE_MONEY A
+         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND A.STORE_CD = #{storeCd}
+           AND A.MONEY_DATE = #{moneyDate}
+           AND A.SEQ_NO = #{seqNo}
+    </select>
+
+    <!-- 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY
+        PARAM    : depositDdcVO
+        COMMENTS : 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 수정
+    -->
+    <update id="updateDepositDdc" parameterType="depositDdcVO">
+        /* USE : DepositDdcMapper.updateDepositDdc */
+        UPDATE TB_PO_HQ_STORE_MONEY
+           SET MONEY_FG = #{moneyFg},
+               MONEY_AMT = #{moneyAmt},
+               REMARK = #{remark},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_CD = #{storeCd}
+           AND MONEY_DATE = #{moneyDate}
+           AND SEQ_NO = #{seqNo}
+    </update>
+
+    <!-- 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY
+        PARAM    : depositDdcVO
+        COMMENTS : 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 삭제
+    -->
+    <delete id="deleteDepositDdc" parameterType="depositDdcVO">
+        /* DepositDdcMapper.deleteDepositDdc */
+        DELETE
+          FROM TB_PO_HQ_STORE_MONEY
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_CD = #{storeCd}
+           AND MONEY_DATE = #{moneyDate}
+           AND SEQ_NO = #{seqNo}
+    </delete>
+
+</mapper>

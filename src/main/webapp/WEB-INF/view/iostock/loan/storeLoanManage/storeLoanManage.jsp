@@ -106,7 +106,7 @@
         <wj-flex-grid-column header="<s:message code="loan.limitLoanAmt"/>" binding="limitLoanAmt" width="90" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.useLoanAmt"/>" binding="useLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.currLoanAmt"/>" binding="currLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>" binding="maxOrderAmt" width="90" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>" binding="maxOrderAmt" width="90" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.maxOrderAmtYn"/>" binding="maxOrderAmtYn" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.orderFg"/>" binding="orderFg" width="90" align="center" is-read-only="false" data-map="orderFg"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.availableOrderAmt"/>" binding="availableOrderAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>

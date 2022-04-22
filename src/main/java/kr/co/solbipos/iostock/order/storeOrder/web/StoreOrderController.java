@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+
 /**
  * @Class Name : StoreOrderController.java
  * @Description : 수불관리 > 수주관리 > 주문등록
@@ -343,10 +345,6 @@ public class StoreOrderController {
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
-
-
-
-
     /**
      * 콤보조회
      * @param   request
@@ -365,5 +363,25 @@ public class StoreOrderController {
         List<DefaultMap<String>> list = cmmCodeService.selectCmmCodeList(request.getParameter("nmcodeGrpCd"));
 
         return ReturnUtil.returnListJson(Status.OK, list, storeOrderVO);
+    }
+
+    /**
+     * 주문등록 출고요청일자에 등록한 주문 총 합계 금액 조회
+     * @param StoreOrderVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/storeOrder/getOrderTotAmt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOrderTotAmt(StoreOrderVO StoreOrderVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = storeOrderService.getOrderTotAmt(StoreOrderVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }
