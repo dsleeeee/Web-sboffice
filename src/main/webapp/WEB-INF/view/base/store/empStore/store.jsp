@@ -8,14 +8,23 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
 <div id="empStoreStoreView" class="subCon" style="display: none;">
+    <div class="searchBar flddUnfld">
+        <a href="#" class="open fl"><s:message code="day.dayTotal"/></a>
+        <%-- 조회 --%>
+        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empStoreStoreCtrl')">
+            <s:message code="cmm.search"/>
+        </button>
+    </div>
 
     <div ng-controller="empStoreStoreCtrl">
         <%--매장정보--%>
         <div class="wj-TblWrap mt20 mb20 w40 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;" >
-                <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
-                    <s:message code="empStore.store.store" />
-                </h3>
+                <div class="updownSet oh mb10">
+                    <span class="fl bk lh30">
+                        <s:message code="empStore.store.store" />
+                    </span>
+                </div>
                 <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
@@ -41,12 +50,14 @@
     <%--관리사원--%>
     <div class="wj-TblWrap mt20 mb20 w30 fl" ng-controller="storeManageEmpCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
-            <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
-                <s:message code="empStore.store.manage" />
-                <span class="fr" style="font-size:1em;" id="btnDelete">
-                    <a href="#" class="btn_grayS" ng-click="del()"><s:message code="cmm.delete" /></a>
+            <div class="updownSet oh mb10">
+                <span class="fl bk lh30">
+                    <s:message code="empStore.store.manage" /><span id="storeTitle"></span>
                 </span>
-            </h3>
+                <button class="btn_skyblue" id="btnDelete" ng-click="del()">
+                    <s:message code="cmm.delete" />
+                </button>
+            </div>
             <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
                 <wj-flex-grid
                     autoGenerateColumns="false"
@@ -75,12 +86,14 @@
     <%--미관리사원--%>
     <div class="wj-TblWrap mt20 mb20 w30 fr" ng-controller="storeNoManageEmpCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
-            <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
-                <s:message code="empStore.store.noManage" />
-                <span class="fr" style="font-size:1em;" id="btnAdd">
-                    <a href="#" class="btn_grayS" ng-click="add()"><s:message code="cmm.add" /></a>
+            <div class="updownSet oh mb10">
+                <span class="fl bk lh30">
+                    <s:message code="empStore.store.noManage" />
                 </span>
-            </h3>
+                <button class="btn_skyblue" id="btnAdd" ng-click="add()">
+                    <s:message code="cmm.add" />
+                </button>
+            </div>
             <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
                 <wj-flex-grid
                     autoGenerateColumns="false"
@@ -115,4 +128,4 @@
     var sysStatFgData = ${ccu.getCommCodeExcpAll("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empStore/store.js?ver=20200513.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empStore/store.js?ver=20200513.07" charset="utf-8"></script>
