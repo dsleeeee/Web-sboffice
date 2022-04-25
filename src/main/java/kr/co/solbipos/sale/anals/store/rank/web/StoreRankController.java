@@ -13,6 +13,7 @@ import kr.co.solbipos.sale.status.prod.payFg.service.ProdPayFgVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : StoreRankController.java
@@ -109,5 +112,48 @@ public class StoreRankController {
         List<DefaultMap<String>> list = storeRankService.getPayColList(storeRankVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, storeRankVO);
+    }
+
+    /**
+     * 매장순위 - 매장 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeRankVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.04.30
+     */
+    @RequestMapping(value = "/rank/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(HttpServletRequest request, HttpServletResponse response, Model model, StoreRankVO storeRankVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeRankService.getStoreList(storeRankVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeRankVO);
+    }
+
+    /**
+     * 매장순위 - 매장 인덱스 저장
+     * @param storeRankVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2022.04.20
+     */
+    @RequestMapping(value = "/rank/saveStoreIndexNo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreIndexNo(@RequestBody StoreRankVO[] storeRankVOs, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeRankService.saveStoreIndexNo(storeRankVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

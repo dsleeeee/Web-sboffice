@@ -57,6 +57,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	        
 		    	sQuery1 +=", MAX(M.STORE_CD"+ j +") AS STORE_CD" + j + "\n";
 		    	sQuery1 +=", MAX(M.STORE_NM"+ j +") AS STORE_NM" + j + "\n";
+		    	sQuery1 +=", MAX(M.INDEX_NO"+ j +") AS INDEX_NO" + j + "\n";
 		    	sQuery1 +=", MAX(M.REAL_SALE_AMT"+ j +") AS REAL_SALE_AMT" + j + "\n";
 		    	sQuery1 +=", MAX(M.BILL_CNT"+ j +") AS BILL_CNT" + j + "\n";
 		    	sQuery1 +=", ROUND(SUM(REAL_SALE_AMT"+ j +")/DECODE(SUM(M.BILL_CNT"+ j +"),0, NULL, SUM(BILL_CNT" + j +")),0) AS TOT_BILL_AMT" + j + "\n";
@@ -64,23 +65,24 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		    	
 		    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_CD,'') AS STORE_CD" + j + "\n";
 		    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_NM,'') AS STORE_NM" + j + "\n";
+		    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.INDEX_NO,'') AS INDEX_NO" + j + "\n";
 		    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.REAL_SALE_AMT,'') AS REAL_SALE_AMT" + j + "\n";
 		    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.BILL_CNT,'') AS BILL_CNT" + j + "\n";
 		    	
 		    	if(i != 0) {
 		    	sQuery3 +=" UNION ALL" + "\n";
 		    	}
-		    	sQuery3 +=" SELECT"+"'"+ j +"'"+" GBN, M.RN, M.STORE_CD, M.STORE_NM, M.REAL_SALE_AMT, M.BILL_CNT" + "\n";
+		    	sQuery3 +=" SELECT"+"'"+ j +"'"+" GBN, M.RN, M.STORE_CD, M.STORE_NM, M.INDEX_NO, M.REAL_SALE_AMT, M.BILL_CNT" + "\n";
 		        sQuery3 +=" FROM (" + "\n";
 		    	sQuery3 +=" SELECT TSDT.STORE_CD" + "\n";
-		    	sQuery3 +=", TMS.STORE_NM, SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(TSDT.BILL_CNT) AS BILL_CNT, RANK() OVER (ORDER BY SUM(TSDT.REAL_SALE_AMT) DESC)  RN" + "\n";
-		    	sQuery3 +=" FROM TB_SL_MONTHLY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
+		    	sQuery3 +=", TMS.STORE_NM, TMSI.INDEX_NO, SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(TSDT.BILL_CNT) AS BILL_CNT, RANK() OVER (ORDER BY SUM(TSDT.REAL_SALE_AMT) DESC)  RN" + "\n";
+		    	sQuery3 +=" FROM TB_SL_MONTHLY_TOTAL TSDT,TB_MS_STORE TMS, TB_MS_STORE_INFO TMSI WHERE TSDT.STORE_CD = TMS.STORE_CD AND TMSI.STORE_CD (+) = TMS.STORE_CD " + "\n";
 		    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 		    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 		    	if(!storeCd.equals("")) {
 		    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
 		    	}
-		    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM ) M WHERE RN <= " + k + "\n";
+		    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM, TMSI.INDEX_NO ) M WHERE RN <= " + k + "\n";
 	        }        
 	        storeMonthVO.setsQuery1(sQuery1);
 	        storeMonthVO.setsQuery2(sQuery2);
@@ -91,6 +93,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		    
 	    	sQuery1 +=", MAX(M.STORE_CD"+ j +") AS STORE_CD" + j + "\n";
 	    	sQuery1 +=", MAX(M.STORE_NM"+ j +") AS STORE_NM" + j + "\n";
+	    	sQuery1 +=", MAX(M.INDEX_NO"+ j +") AS INDEX_NO" + j + "\n";
 	    	sQuery1 +=", MAX(M.REAL_SALE_AMT"+ j +") AS REAL_SALE_AMT" + j + "\n";
 	    	sQuery1 +=", MAX(M.BILL_CNT"+ j +") AS BILL_CNT" + j + "\n";
 	    	sQuery1 +=", ROUND(SUM(REAL_SALE_AMT"+ j +")/DECODE(SUM(M.BILL_CNT"+ j +"),0, NULL, SUM(BILL_CNT" + j +")),0) AS TOT_BILL_AMT" + j + "\n";
@@ -98,20 +101,21 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	    	
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_CD,'') AS STORE_CD" + j + "\n";
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_NM,'') AS STORE_NM" + j + "\n";
+	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.INDEX_NO,'') AS INDEX_NO" + j + "\n";
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.REAL_SALE_AMT,'') AS REAL_SALE_AMT" + j + "\n";
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.BILL_CNT,'') AS BILL_CNT" + j + "\n";
 	    	
-	    	sQuery3 +=" SELECT"+"'"+ j +"'"+" GBN, M.RN, M.STORE_CD, M.STORE_NM, M.REAL_SALE_AMT, M.BILL_CNT" + "\n";
+	    	sQuery3 +=" SELECT"+"'"+ j +"'"+" GBN, M.RN, M.STORE_CD, M.STORE_NM, M.INDEX_NO, M.REAL_SALE_AMT, M.BILL_CNT" + "\n";
 	        sQuery3 +=" FROM (" + "\n";
 	    	sQuery3 +=" SELECT TSDT.STORE_CD" + "\n";
-	    	sQuery3 +=", TMS.STORE_NM, SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(TSDT.BILL_CNT) AS BILL_CNT, RANK() OVER (ORDER BY SUM(TSDT.REAL_SALE_AMT) DESC)  RN" + "\n";
-	    	sQuery3 +=" FROM TB_SL_MONTHLY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
+	    	sQuery3 +=", TMS.STORE_NM, TMSI.INDEX_NO, SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(TSDT.BILL_CNT) AS BILL_CNT, RANK() OVER (ORDER BY SUM(TSDT.REAL_SALE_AMT) DESC)  RN" + "\n";
+	    	sQuery3 +=" FROM TB_SL_MONTHLY_TOTAL TSDT,TB_MS_STORE TMS, TB_MS_STORE_INFO TMSI WHERE TSDT.STORE_CD = TMS.STORE_CD AND TMSI.STORE_CD (+) = TMS.STORE_CD " + "\n";
 	    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 	    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 	    	if(!storeCd.equals("")) {
 	    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
 	    	}
-	    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM ) M WHERE RN <= " + k + "\n";
+	    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM, TMSI.INDEX_NO ) M WHERE RN <= " + k + "\n";
 	    	
 	    	storeMonthVO.setSaleDate(j);
 	        storeMonthVO.setsQuery1(sQuery1);

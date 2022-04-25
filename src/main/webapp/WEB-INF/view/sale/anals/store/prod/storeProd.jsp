@@ -119,6 +119,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="store.indexNo"/>" 			binding="indexNo" 		width="65" align="center"  is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 			binding="storeNm" 		width="200" align="center"  is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -162,6 +163,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
+		   <wj-flex-grid-column header="<s:message code="store.indexNo"/>" 			binding="indexNo" 		width="65" align="center"  is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 			binding="storeNm" 		width="200" align="center"  is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>

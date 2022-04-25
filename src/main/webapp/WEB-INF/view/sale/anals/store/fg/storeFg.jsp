@@ -101,6 +101,7 @@
 
 	          <!-- define columns -->
 	          <wj-flex-grid-column header="<s:message code="store.storeFg"/>"  			binding="clsFg"       		width="*" align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.indexNo"/>" 			binding="indexNo" 			width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 			binding="storeNm" 			width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 		binding="totSaleAmt" 		width="*" align="right" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" 			binding="totDcAmt" 			width="*" align="right" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
@@ -121,7 +122,7 @@
 
 	</div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20190125.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20190125.04" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">

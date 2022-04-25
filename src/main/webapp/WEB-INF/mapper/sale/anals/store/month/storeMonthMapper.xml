@@ -10,7 +10,7 @@
         COMMENTS : 매장별매출분석 - 매장순위 리스트를 조회한다.
     -->
     <select id="getStoreMonthList" parameterType="storeMonthVO" resultType="DefaultMap">
-        /* USE : storeMonthMapper.getStoreRankList */		 
+        /* USE : storeMonthMapper.getStoreMonthList */
 		SELECT M.RN
 			 ${sQuery1}
 		  FROM (
