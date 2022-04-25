@@ -43,7 +43,7 @@
     </div>
 
     <div class="w100 fl">
-        <div class="wj-TblWrapBr mr10 pd10" style="height:570px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:530px; overflow-y: hidden;">
             <%-- left --%>
             <div class="fl pdr10 br" style="width:260px;">
                 <%-- left 상단 --%>
@@ -55,7 +55,7 @@
                     </span>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:210px; overflow-y: hidden; overflow-x: hidden;">
+                        <div class="wj-gridWrap" style="height:190px; overflow-y: hidden; overflow-x: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns.="false"
                                     control="flex"
@@ -86,7 +86,7 @@
                         <button class="btn_skyblue" id="btnAlimtalkSendTypeDetailSave" ng-click="save()"><s:message code='cmm.save' /></button>
                     </div>
                     <div class="w100 mt10 mb20">
-                        <div class="wj-gridWrap" style="height:210px; overflow-x: hidden; overflow-y: hidden;">
+                        <div class="wj-gridWrap" style="height:190px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid
                                     autoGenerateColumns="false"
                                     control="flex"
@@ -136,7 +136,7 @@
                         </tbody>
                     </table>
                     <%-- 템플릿 양식 --%>
-                    <div class="w100 fl" style="height:510px;">
+                    <div class="w100 fl" style="height:470px;">
                         <div id ="divTemplateGrpPage" style="display: none;">
                             <div style="display: none;">
                                 <%-- 템플릿 그룹구분 --%>
@@ -144,7 +144,7 @@
                                 <%-- 템플릿코드 --%>
                                 <label id="lblTemplateCd"></label>
                             </div>
-                            <div style="height:460px; overflow-x: hidden; overflow-y: auto;">
+                            <div style="height:420px; overflow-x: hidden; overflow-y: auto;">
                                 <div id="divTemplateComment"></div>
                             </div>
                         </div>
@@ -157,8 +157,8 @@
             <div class="fr pdl10" style="width:calc(100% - 475px);">
                 <div ng-controller="templateListCtrl">
                     <%-- 템플릿 양식 --%>
-                    <div class="w100 fl" style="height:570px;">
-                        <div style="height:550px; overflow-x: hidden; overflow-y: auto;">
+                    <div class="w100 fl" style="height:530px;">
+                        <div style="height:510px; overflow-x: hidden; overflow-y: auto;">
                             <div id="divTemplateCommentList"></div>
                         </div>
                     </div>
