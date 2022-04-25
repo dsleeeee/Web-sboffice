@@ -226,7 +226,7 @@
         MOD_ID = #{modId}
         WHERE 1=1
         AND ALK_SEND_ORGN_CD = #{orgnCd}
-        AND SALK_SEND_SEQ = #{alkSendSeq}
+        AND ALK_SEND_SEQ = #{alkSendSeq}
     </update>
 
     <!-- 알림톡 일자별 전송현황 - 조회 -->
