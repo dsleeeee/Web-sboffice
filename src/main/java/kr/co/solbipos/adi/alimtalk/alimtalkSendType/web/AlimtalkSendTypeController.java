@@ -57,12 +57,6 @@ public class AlimtalkSendTypeController {
     private final SessionService sessionService;
     private final AlimtalkSendTypeService alimtalkSendTypeService;
 
-//    private final String AppKey = "SOfDZwJzUpJKjIFG";
-//    private final String SecretKey = "uYtgbHyO";
-//    private final String ApiUrl = "https://api-alimtalk.cloud.toast.com";
-//    private final String GroupKey = "aa4fdaba4e8087b8e3773ac7321d0e73664fa5d3";
-//    private final String SenderKey = "57e3cbf116e20ca20091142ed2623dd19926865b";
-
     /**
      * Constructor Injection
      */

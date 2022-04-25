@@ -219,14 +219,14 @@
         UPDATE
         HCS_ALK_SEND_REG_T
         SET
-        ALK_SEND_COUNT = (SELECT (ALK_SEND_COUNT-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND SALK_SEND_SEQ = #{alkSendSeq}),
-        SEND_QTY = (SELECT (SEND_QTY-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND SALK_SEND_SEQ = #{alkSendSeq}),
-        WAIT_QTY = (SELECT (WAIT_QTY-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND SALK_SEND_SEQ = #{alkSendSeq}),
+        ALK_SEND_COUNT = (SELECT (ALK_SEND_COUNT-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND ALK_SEND_SEQ = #{alkSendSeq}),
+        SEND_QTY = (SELECT (SEND_QTY-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND ALK_SEND_SEQ = #{alkSendSeq}),
+        WAIT_QTY = (SELECT (WAIT_QTY-1) FROM HCS_ALK_SEND_REG_T WHERE ALK_SEND_ORGN_CD = #{orgnCd} AND ALK_SEND_SEQ = #{alkSendSeq}),
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1
         AND ALK_SEND_ORGN_CD = #{orgnCd}
-        AND SALK_SEND_SEQ = #{alkSendSeq}
+        AND ALK_SEND_SEQ = #{alkSendSeq}
     </update>
 
     <!-- 알림톡 일자별 전송현황 - 조회 -->
