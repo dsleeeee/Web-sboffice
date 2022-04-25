@@ -85,16 +85,29 @@ public class SessionServiceImpl implements SessionService {
         String path = BaseEnv.FILE_UPLOAD_DIR + "logo_img/";
 //        String path = "D:\\" + "logo_img/";
 
+        // 보안때매 파일 확장자도 같이 저장하도록 수정
         File file = new File(path + sessionInfoVO.getHqOfficeCd());
         File file1 = new File(path + sessionInfoVO.getHqOfficeCd() + ".PNG");
         File file2 = new File(path + sessionInfoVO.getHqOfficeCd() + ".JPG");
+        File file3 = new File(path + sessionInfoVO.getHqOfficeCd() + ".png");
+        File file4 = new File(path + sessionInfoVO.getHqOfficeCd() + ".jpg");
 
         boolean isExists = file.exists();
         boolean isExists1 = file1.exists();
         boolean isExists2 = file2.exists();
+        boolean isExists3 = file3.exists();
+        boolean isExists4 = file4.exists();
 
-        if(isExists || isExists1 ||isExists2) {
+        if(isExists) {
             sessionInfoVO.setLogoImg("Y");
+        } else if(isExists1) {
+            sessionInfoVO.setLogoImg(".PNG");
+        } else if(isExists2) {
+            sessionInfoVO.setLogoImg(".JPG");
+        } else if(isExists3) {
+            sessionInfoVO.setLogoImg(".png");
+        } else if(isExists4) {
+            sessionInfoVO.setLogoImg(".jpg");
         } else {
             sessionInfoVO.setLogoImg("N");
         }

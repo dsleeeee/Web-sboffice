@@ -302,10 +302,61 @@ public class MyInfoServiceImpl implements MyInfoService{
                 }
 
                 if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 1. 기존 이미지 있는지 확인
+                    File file = new File(path + newFileName);
+                    File file1 = new File(path +newFileName + ".PNG");
+                    File file2 = new File(path +newFileName + ".JPG");
+                    File file3 = new File(path +newFileName + ".png");
+                    File file4 = new File(path +newFileName + ".jpg");
+
+                    boolean isExists = file.exists();
+                    boolean isExists1 = file1.exists();
+                    boolean isExists2 = file2.exists();
+                    boolean isExists3 = file3.exists();
+                    boolean isExists4 = file4.exists();
+                    
+                    // 2. 기존이미지가 있으면 이미지 삭제
+                    if(isExists){
+                        // 서버 파일 삭제
+                        File delFile = new File(path + newFileName);
+                        if(delFile.exists()) {
+                            delFile.delete();
+                        }
+                    }
+                    if(isExists1){
+                        // 서버 파일 삭제
+                        File delFile = new File(path + newFileName + ".PNG");
+                        if(delFile.exists()) {
+                            delFile.delete();
+                        }
+                    }
+                    if(isExists2){
+                        // 서버 파일 삭제
+                        File delFile = new File(path + newFileName + ".JPG");
+                        if(delFile.exists()) {
+                            delFile.delete();
+                        }
+                    }
+                    if(isExists3){
+                        // 서버 파일 삭제
+                        File delFile = new File(path + newFileName + ".png");
+                        if(delFile.exists()) {
+                            delFile.delete();
+                        }
+                    }
+                    if(isExists4){
+                        // 서버 파일 삭제
+                        File delFile = new File(path + newFileName + ".jpg");
+                        if(delFile.exists()) {
+                            delFile.delete();
+                        }
+                    }
                     // 파일 저장하는 부분
                     try {
-                        File destFile = new File(path + newFileName);
+                        File destFile = new File(path + newFileName + "." + fileExt);
                         mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 640 " + destFile);
                         isSuccess = "0";
                     } catch (Exception e) {
                         e.printStackTrace();
