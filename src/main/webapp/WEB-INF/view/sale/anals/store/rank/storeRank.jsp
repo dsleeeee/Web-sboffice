@@ -99,6 +99,8 @@
 	<div class="mt10 oh sb-select dkbr">
 	    
 	  <div class="fr">
+		<%-- 매장표시설정 --%>
+		<button class="btn_skyblue" id="btnStoreIndexNo" ng-click="storeIndexNoShow()"><s:message code="store.storeIndexNo" /></button>
 	  	<%-- 차트 --%>
 	    <button class="btn_skyblue" id="btnShowChart"><s:message code="cmm.chart" /></button>
 	    <%-- 엑셀 다운로드 //TODO --%>
@@ -119,10 +121,11 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
-          frozen-columns="4"
+          frozen-columns="5"
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="store.indexNo"/>" 		binding="indexNo" 		width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 		binding="storeNm" 		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>"		binding="totDcAmt" 		width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -194,4 +197,9 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20190126.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20190126.03" charset="utf-8"></script>
+
+<c:import url="/WEB-INF/view/sale/anals/store/rank/storeIndexNo.jsp">
+	<c:param name="menuCd" value="${menuCd}"/>
+	<c:param name="menuNm" value="${menuNm}"/>
+</c:import>

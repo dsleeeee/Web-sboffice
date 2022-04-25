@@ -121,6 +121,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="store.indexNo"/>" 		binding="indexNo" 		width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 		binding="storeNm" 		width="250" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
    		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
@@ -138,4 +139,4 @@
     <%--//위즈모 테이블--%>  
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/month/storeMonth.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/month/storeMonth.js?ver=20190125.03" charset="utf-8"></script>

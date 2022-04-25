@@ -14,4 +14,10 @@ public interface StoreRankService {
     
     /**매장순위 - 결제수단 컬럼 리스트 조회 */
     List<DefaultMap<String>> getPayColList(StoreRankVO storeRankVO, SessionInfoVO sessionInfoVO);
+
+    /**매장순위 - 매장 리스트 조회 */
+    List<DefaultMap<String>> getStoreList(StoreRankVO storeRankVO, SessionInfoVO sessionInfoVO);
+
+    /**매장순위 - 매장인덱스저장 */
+    int saveStoreIndexNo(StoreRankVO[] storeRankVOs, SessionInfoVO sessionInfoVO);
 }

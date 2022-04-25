@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
 @Service("StoreRankService")
 public class StoreRankServiceImpl implements StoreRankService {
     private final StoreRankMapper storeRankMapper;
@@ -68,5 +70,28 @@ public class StoreRankServiceImpl implements StoreRankService {
     @Override
     public List<DefaultMap<String>> getPayColList(StoreRankVO storeRankVO, SessionInfoVO sessionInfoVO) {
         return storeRankMapper.getPayColList(storeRankVO);
+    }
+
+    @Override
+    public List<DefaultMap<String>> getStoreList(StoreRankVO storeRankVO, SessionInfoVO sessionInfoVO) {
+        storeRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return storeRankMapper.getStoreList(storeRankVO);
+    }
+
+
+    @Override
+    public int saveStoreIndexNo(StoreRankVO[] storeRankVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (StoreRankVO storeRankVO : storeRankVOs) {
+            storeRankVO.setRegDt(dt);
+            storeRankVO.setRegId(sessionInfoVO.getUserId());
+            storeRankVO.setModDt(dt);
+            storeRankVO.setModId(sessionInfoVO.getUserId());
+
+            result = storeRankMapper.saveStoreIndexNo(storeRankVO);
+        }
+        return result;
     }
 }

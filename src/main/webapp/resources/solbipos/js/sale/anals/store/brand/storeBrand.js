@@ -40,6 +40,7 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 첫째줄 헤더 생성
     var dataItem         = {};
     dataItem.hqBrandNm  = messages["store.hqBrandNm"];
+    dataItem.indexNo  = messages["store.indexNo"];
     dataItem.storeNm  = messages["store.storeNm"];
     dataItem.totSaleAmt       = messages["store.totSaleAmt"];
     dataItem.totDcAmt      = messages["store.totDcAmt"];

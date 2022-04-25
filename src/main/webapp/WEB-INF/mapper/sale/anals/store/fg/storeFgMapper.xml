@@ -9,8 +9,10 @@
 		PARAM : STORE_CD, SALE_DATE(FR,TO)
 	-->
     <select id="getStoreFgList" parameterType="storeFgVO" resultType="DefaultMap">
+		/** StoreFgMapper.getStoreFgList */
 		SELECT TSDP.STORE_CD
 		     , TMS.STORE_NM
+			 , TMSI.INDEX_NO
 		<choose>
 		    <when test='storeFg != null and storeFg == "1"'>    <!-- 매장형태  , DECODE(TMS.CLS_FG,'1','기타','2','기타','기타')  AS CLS_FG -->
 		     , DECODE(TMS.direct_manage_yn,'Y','직영','N','가맹','기타') AS CLS_FG
@@ -26,9 +28,10 @@
 		     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER() * 100, 2) AS RAT_REAL_SALE_AMT
 		     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER() * 100, 2) AS RAT_CNT
 		  FROM TB_MS_STORE TMS
+		     , TB_MS_STORE_INFO TMSI
 		     , TB_SL_DAILY_PROD TSDP
 		 WHERE TMS.STORE_CD = TSDP.STORE_CD
-
+		 AND   TMSI.STORE_CD (+) = TMS.STORE_CD
 			<if test='hqOfficeCd != null and hqOfficeCd != ""'>
 	            AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 	        </if>
@@ -69,11 +72,11 @@
 		
 		 <choose>
 		    <when test='storeFg != null and storeFg == "1"'>    <!-- 매장형태 -->
-		     GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TMS.direct_manage_yn
+		     GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TMSI.INDEX_NO, TMS.direct_manage_yn
 		 	ORDER BY TMS.direct_manage_yn, SUM(TSDP.TOT_SALE_AMT) DESC
 		    </when>
 		    <when test='storeFg != null and storeFg == "2"'>    <!-- 매장용도 -->
-			GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TMS.CLS_FG
+			GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TMSI.INDEX_NO, TMS.CLS_FG
 		 	ORDER BY TMS.CLS_FG, SUM(TSDP.TOT_SALE_AMT) DESC
             </when>
         </choose>

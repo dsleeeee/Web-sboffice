@@ -38,6 +38,7 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	    // 첫째줄 헤더 생성
 	    var dataItem         = {};
+	    dataItem.indexNo  		= messages["store.indexNo"];
 	    dataItem.storeNm  		= messages["store.storeNm"];
 	    dataItem.realSaleAmt 	= messages["store.realSaleAmt"];
 	    dataItem.billCnt 		= messages["store.billCnt"];
@@ -149,18 +150,20 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 					params.chkSort = $scope.isCheckedSortMonth;
 					params.rowNum = $scope.rowNum;
 			   	    
+			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.indexNo"], 	binding: 'indexNo'+month, 		align: "center", isReadOnly: "true"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.storeNm"], 	binding: 'storeNm'+month, 		align: "center", isReadOnly: "true"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.realSaleAmt"], binding: 'realSaleAmt'+month, 	align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.billCnt"], 	binding: 'billCnt'+month, 		align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.totBillAmt"], 	binding: 'totBillAmt'+month, 	align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.storeRat"], 	binding: 'storeRat'+month, 		align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		
-			   		grid.columnHeaders.setCellData(0, 0+(i*5), date);
-			   		grid.columnHeaders.setCellData(0, 1+(i*5), date);
-			   		grid.columnHeaders.setCellData(0, 2+(i*5), date);
-			   		grid.columnHeaders.setCellData(0, 3+(i*5), date);
-			   		grid.columnHeaders.setCellData(0, 4+(i*5), date);
-			   		
+			   		grid.columnHeaders.setCellData(0, 0+(i*6), date);
+			   		grid.columnHeaders.setCellData(0, 1+(i*6), date);
+			   		grid.columnHeaders.setCellData(0, 2+(i*6), date);
+			   		grid.columnHeaders.setCellData(0, 3+(i*6), date);
+			   		grid.columnHeaders.setCellData(0, 4+(i*6), date);
+			   		grid.columnHeaders.setCellData(0, 5+(i*6), date);
+
 			   	}
 		   	
 	   	 	}

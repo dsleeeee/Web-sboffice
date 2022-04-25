@@ -42,6 +42,7 @@ app.controller('storeRankCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 	    // 첫째줄 헤더 생성
 	    var dataItem         = {};
+		dataItem.indexNo  		= messages["store.indexNo"];
 	    dataItem.storeNm  		= messages["store.storeNm"];
 	    dataItem.totSaleAmt 	= messages["store.totSaleAmt"];
 	    dataItem.totDcAmt 		= messages["store.totDcAmt"];
@@ -232,6 +233,11 @@ app.controller('storeRankCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.storeRankSelectStoreShow = function () {
     $scope._broadcast('storeRankSelectStoreCtrl');
   };
+
+  // 엑셀 다운로드
+  $scope.storeIndexNoShow = function () {
+	  $scope._broadcast('storeIndexNoCtrl');
+  }
 
   // 엑셀 다운로드
   $scope.excelDownloadStoreRank = function () {

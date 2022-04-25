@@ -11,6 +11,9 @@
     -->
     <select id="getStoreRankList" parameterType="storeRankVO" resultType="DefaultMap">
         /* USE : storeRankMapper.getStoreRankList */
+        SELECT 	*
+        FROM
+        (
 		SELECT M2.STORE_CD
 		      , M2.STORE_NM
 		      , NVL(M1.TOT_SALE_AMT, 0) AS TOT_SALE_AMT
@@ -22,6 +25,7 @@
 		      , NVL(M1.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT
 		      , NVL(ROUND(M1.TOT_SALE_AMT/M1.BILL_CNT,0), 0) AS TOT_BILL_AMT
 		      , NVL(ROUND(RATIO_TO_REPORT(M1.REAL_SALE_AMT) OVER(), 2) *100, 0) AS STORE_RAT
+		      , M2.INDEX_NO
 			  ${sQuery1}
 		FROM (
 			SELECT TSDT.STORE_CD
@@ -60,7 +64,9 @@
 					AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}
 				</if>
 				) AS SALE_DATE_CNT
-		FROM 	TB_MS_STORE TMS
+		,		TMSI.INDEX_NO
+		FROM 	TB_MS_STORE TMS,
+		     	TB_MS_STORE_INFO TMSI
 		WHERE 	TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
 			AND TMS.STORE_CD IN
@@ -68,6 +74,7 @@
 				#{item}
 			</foreach>
 		</if>
+		     AND TMSI.STORE_CD (+)= TMS.STORE_CD
 		) M2,
 		(
 			SELECT STORE_CD
@@ -91,14 +98,15 @@
 		WHERE 	M2.STORE_CD = M1.STORE_CD(+)
 		AND		M2.STORE_CD = N.STORE_CD(+)
 		AND 	(M2.SYS_STAT_FG = '1' OR M1.TOT_SALE_AMT != 0)
-		<if test='rowNum != null and rowNum != "" and chkRank == "N"'>
-            AND ROWNUM <![CDATA[<= ]]> #{rowNum}
-	     </if>
 		<if test='chkSort == "1"'>
 			ORDER BY TOT_SALE_AMT DESC
 		</if>
 		<if test='chkSort == "2"'>
 			ORDER BY TOT_SALE_AMT ASC
+		</if>
+		)
+		<if test='rowNum != null and rowNum != "" and chkRank == "N"'>
+			WHERE ROWNUM <![CDATA[<= ]]> #{rowNum}
 		</if>
     </select>
 
@@ -118,4 +126,61 @@
         BY      TCN.NMCODE_CD
         ]]>
     </select>
+
+	<!-- 매장별매출분석 - 매장 리스트 조회 -->
+	<!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeRankVO
+        COMMENTS : 매장 리스트 조회한다.
+    -->
+	<select id="getStoreList" parameterType="storeRankVO" resultType="DefaultMap">
+		/* USE : storeRankMapper.getStoreList */
+		SELECT  tms.STORE_CD,
+		       	tms.STORE_NM,
+		       	tmsi.INDEX_NO
+		FROM    TB_MS_STORE tms,
+				TB_MS_STORE_INFO tmsi
+		WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND 	tmsi.STORE_CD (+)= tms.STORE_CD
+		ORDER BY tmsi.INDEX_NO, tms.STORE_CD
+	</select>
+
+
+	<!-- 매장순위 - 매장인덱스저장 -->
+	<!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeRankVO
+        COMMENTS : 매장 리스트 조회한다.
+    -->
+	<insert id="saveStoreIndexNo" parameterType="DefaultMap">
+		MERGE INTO TB_MS_STORE_INFO A
+			USING   DUAL
+			ON      (
+					A.STORE_CD  =   #{storeCd}
+				)
+			WHEN MATCHED THEN
+				UPDATE
+					SET     A.INDEX_NO    =   #{indexNo}
+					,       A.MOD_DT    =   #{regDt}
+					,       A.MOD_ID    =   #{regId}
+			WHEN NOT MATCHED THEN
+				INSERT
+					(
+					 		A.STORE_CD
+					,		A.INDEX_NO
+					,       A.MOD_DT
+					,       A.MOD_ID
+					,       A.REG_DT
+					,       A.REG_ID
+					)
+					VALUES
+					(
+							#{storeCd}
+					,		#{indexNo}
+					,       #{modDt}
+					,       #{modId}
+					,       #{regDt}
+					,       #{regId}
+					)
+	</insert>
 </mapper>

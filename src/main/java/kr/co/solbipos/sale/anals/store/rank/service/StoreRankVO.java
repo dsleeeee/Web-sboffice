@@ -26,6 +26,8 @@ public class StoreRankVO extends PageVO {
     /** 본사,매장 구분 */
     private String orgnFg;
 
+    private String indexNo;
+
     /**
      * @return the hqOfficeCd
      */
@@ -117,5 +119,12 @@ public class StoreRankVO extends PageVO {
 	public void setArrStoreCd(String[] arrStoreCd) {
 		this.arrStoreCd = arrStoreCd;
 	}
-	
+
+    public String getIndexNo() {
+        return indexNo;
+    }
+
+    public void setIndexNo(String indexNo) {
+        this.indexNo = indexNo;
+    }
 }
