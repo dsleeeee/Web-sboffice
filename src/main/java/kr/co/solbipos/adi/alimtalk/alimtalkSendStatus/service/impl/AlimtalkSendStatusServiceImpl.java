@@ -80,7 +80,7 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
         // 잔여금액 복구
         SendStatusVO sendStatusVO = new SendStatusVO();
         sendStatusVO.setModDt(currentDt);
-        sendStatusVO.setModId(alimtalkSendStatusVO.getUserId());
+        sendStatusVO.setModId(alimtalkSendStatusVO.getModId());
         sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getOrgnCd());
         sendStatusVO.setMsgType(alimtalkSendStatusVO.getMsgType());
         procCnt = sendStatusMapper.getSmsAmtRecoverSaveUpdate(sendStatusVO);
