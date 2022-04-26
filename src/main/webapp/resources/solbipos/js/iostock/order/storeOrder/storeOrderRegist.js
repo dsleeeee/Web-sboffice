@@ -358,7 +358,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
                 }
               }
 
-              $("#registStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신잔액 : " + addComma($scope.currLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
+              $("#registStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
             } else {
               $("#registStoreLoanInfo").html('');
             }
@@ -470,11 +470,12 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
 
     // 1회주문한도액과 주문가능금액 중 적은금액을 기준으로 주문가능금액 체크
     var approvalAmt = $scope.maxOrderAmt > $scope.availableOrderAmt ? $scope.availableOrderAmt : $scope.maxOrderAmt;
+    var approvalAmtNm = $scope.maxOrderAmt > $scope.availableOrderAmt ? messages["loan.availableOrderAmt"] : messages["loan.maxOrderAmt"];
 
     // 주문가능액 체크
     if (approvalAmt != null) {
       if (parseInt(approvalAmt) < parseInt(orderTot)) {
-        $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
+        $scope._popMsg("주문 총 금액이 " + approvalAmtNm + "을 초과하였습니다.");
         return false;
       }
     }

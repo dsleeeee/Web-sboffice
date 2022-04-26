@@ -36,10 +36,10 @@
         <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" ng-if="btnAddProd">
           <s:message code="storeOrder.addProd"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('save')" ng-if="btnDtlSave">
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="getOrderTotAmt()" ng-if="btnDtlSave">
           <s:message code="cmm.save"/></button>
         <%-- 확정 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" ng-if="btnConfirm">
+        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm', '0')" ng-if="btnConfirm">
           <s:message code="storeOrder.dtl.confirm"/></button>
       </div>
 
@@ -74,6 +74,7 @@
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.prevOrderUnitQty"/><s:message code="storeOrder.dtl.orderAmt"/>" binding="prevOrderTot" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
@@ -90,4 +91,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20220420.04" charset="utf-8"></script>
