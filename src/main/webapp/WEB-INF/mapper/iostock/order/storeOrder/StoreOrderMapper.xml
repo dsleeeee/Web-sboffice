@@ -63,6 +63,7 @@
         ,       tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
         ,       tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
         ,       tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
+        ,       tphso.ORDER_TOT*tphso.SLIP_FG AS PREV_ORDER_TOT
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       the.ENVST_VAL AS ENVST0011
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphso

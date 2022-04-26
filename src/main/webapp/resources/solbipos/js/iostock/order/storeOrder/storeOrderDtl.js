@@ -189,9 +189,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                 }
               }
 
-            //$("#dtlStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신잔액 : " + addComma($scope.currLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
-            //$("#dtlStoreLoanInfo").html("[1회주문한도액] " + addComma($scope.maxOrderAmt) + "  [여신잔액] " + addComma($scope.currLoanAmt) + "  [미출고액] " + addComma($scope.prevOrderTot) + "  [주문가능액] " + addComma($scope.availableOrderAmt));
-              $("#dtlStoreLoanInfo").html("1회주문한도액 [" + addComma($scope.maxOrderAmt) + "]   여신잔액 [" + addComma($scope.currLoanAmt) + "]   미출고액 [" + addComma($scope.prevOrderTot) + "]   주문가능액 [" + addComma($scope.availableOrderAmt) + "]");
+              $("#dtlStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
             } else {
               $("#dtlStoreLoanInfo").html('');
             }
@@ -222,8 +220,22 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._inquirySub("/iostock/order/storeOrder/storeOrderDtl/list.sb", params);
   };
 
+  // 주문 상품 저장 전 출고요청일자에 등록한 주문 총 합계 금액 조회
+  $scope.getOrderTotAmt = function(){
+
+    var params       = {};
+    params.reqDate   = $scope.reqDate;
+    $scope._postJSONQuery.withOutPopUp( "/iostock/order/storeOrder/storeOrder/getOrderTotAmt.sb", params, function(response) {
+
+      if(response.data.data !== null) {
+        $scope.saveStoreOrderDtl('save', response.data.data)
+      }
+
+    });
+  };
+
   // 주문 상세 저장
-  $scope.saveStoreOrderDtl = function (saveFg) {
+  $scope.saveStoreOrderDtl = function (saveFg, orderTotAmt) {
     var params   = [];
     var orderTot = 0;
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
@@ -233,9 +245,22 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       item.slipFg    = $scope.slipFg;
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리.
       item.hdRemark  = $scope.dtlHdRemark;
-      orderTot += parseInt(item.orderTot);
+
+      if(item.prevOrderTot !== null){
+        orderTot += parseInt(item.orderTot - item.prevOrderTot); //  합계 - 기주문수량금액 = 추가한 주문수량의 금액 합계
+      }else{
+        orderTot += parseInt(item.orderTot);
+      }
+
       params.push(item);
     }
+
+    // 상품 주문 합계 + 이전에 등록한 주문 총 합계
+    orderTot += parseInt(orderTotAmt);
+
+    // 1회주문한도액과 주문가능금액 중 적은금액을 기준으로 주문가능금액 체크
+    var approvalAmt = $scope.maxOrderAmt > $scope.availableOrderAmt ? $scope.availableOrderAmt : $scope.maxOrderAmt;
+    var approvalAmtNm = $scope.maxOrderAmt > $scope.availableOrderAmt ? messages["loan.availableOrderAmt"] : messages["loan.maxOrderAmt"];
 
     // 파라미터 길이체크
     if (params.length <= 0) {
@@ -250,9 +275,10 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       params = JSON.stringify(params);
     }
 
-    if ($scope.availableOrderAmt != null) {
-      if (parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
-        $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);    //storeOrder.dtl.orderTotOver=주문 총금액이 주문가능액을 초과하였습니다.
+    // 주문가능액 체크
+    if (approvalAmt != null) {
+      if (parseInt(approvalAmt) < parseInt(orderTot)) {
+        $scope._popMsg("주문 총 금액이 " + approvalAmtNm + "을 초과하였습니다.");
         return false;
       }
     }
