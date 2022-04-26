@@ -438,6 +438,36 @@ public class CmmUtil {
         if(inputStr.toLowerCase().indexOf("onstop"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onstop"                  , "사용할 수 없는 문자열"); }
         if(inputStr.toLowerCase().indexOf("onsubmit"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onsubmit"                , "사용할 수 없는 문자열"); }
         if(inputStr.toLowerCase().indexOf("onunload"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onunload"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onbegin"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onbegin"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onend"                     )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onend"                   , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onrepeat"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onrepeat"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncancel"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncancel"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncanplay"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncanplay"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncanplaythrough"          )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncanplaythrough"        , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onclose"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onclose"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oncuechange"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oncuechange"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ondurationchange"          )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ondurationchange"        , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onemptied"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onemptied"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onended"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onended"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oninput"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oninput"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("oninvalid"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("oninvalid"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onloadeddata"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onloadeddata"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onloadedmetadata"          )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onloadedmetadata"        , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onloadstart"               )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onloadstart"             , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onpause"                   )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onpause"                 , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onplay"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onplay"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onplaying"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onplaying"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onprogress"                )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onprogress"              , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onratechange"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onratechange"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onseeked"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onseeked"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onseeking"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onseeking"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onshow"                    )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onshow"                  , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onstalled"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onstalled"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onsuspend"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onsuspend"               , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ontimeupdate"              )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ontimeupdate"            , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("ontoggle"                  )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("ontoggle"                , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onvolumechange"            )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onvolumechange"          , "사용할 수 없는 문자열"); }
+        if(inputStr.toLowerCase().indexOf("onwaiting"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onwaiting"               , "사용할 수 없는 문자열"); }
 
         return inputStr;
     }
