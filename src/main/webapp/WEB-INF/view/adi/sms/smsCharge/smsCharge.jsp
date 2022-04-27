@@ -162,17 +162,17 @@
                 frm.good_mny_qty.value = frm.qty[4].value;
             }
 
-            else if (frm.amt[5].checked)
-            {
-                frm.good_mny.value = frm.amt[5].value;
-                frm.good_mny_qty.value = frm.qty[5].value;
-            }
-
-            else if (frm.amt[6].checked)
-            {
-                frm.good_mny.value = frm.amt[6].value;
-                frm.good_mny_qty.value = frm.qty[6].value;
-            }
+            // else if (frm.amt[5].checked)
+            // {
+            //     frm.good_mny.value = frm.amt[5].value;
+            //     frm.good_mny_qty.value = frm.qty[5].value;
+            // }
+            //
+            // else if (frm.amt[6].checked)
+            // {
+            //     frm.good_mny.value = frm.amt[6].value;
+            //     frm.good_mny_qty.value = frm.qty[6].value;
+            // }
         }
 
         /* 표준웹 실행 */
@@ -383,24 +383,24 @@
                                     <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>5,000통</font></td>--%>
                                 </tr>
-                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td>
-                                        <input type='radio' name='amt' value='100'/>
-                                        <input type='hidden' name='qty' value='100'/>
-                                    </td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>100원</font></td>
-                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>--%>
-                                </tr>
-                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
-                                <tr height='26' align='center'>
-                                    <td>
-                                        <input type='radio' name='amt' value='1004'/>
-                                        <input type='hidden' name='qty' value='1004'/>
-                                    </td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>1004원</font></td>
-                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>--%>
-                                </tr>
+                                <%--<tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>--%>
+                                <%--<tr height='26' align='center'>--%>
+                                    <%--<td>--%>
+                                        <%--<input type='radio' name='amt' value='100'/>--%>
+                                        <%--<input type='hidden' name='qty' value='100'/>--%>
+                                    <%--</td>--%>
+                                    <%--<td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>100원</font></td>--%>
+                                    <%--&lt;%&ndash;<td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>&ndash;%&gt;--%>
+                                <%--</tr>--%>
+                                <%--<tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>--%>
+                                <%--<tr height='26' align='center'>--%>
+                                    <%--<td>--%>
+                                        <%--<input type='radio' name='amt' value='1004'/>--%>
+                                        <%--<input type='hidden' name='qty' value='1004'/>--%>
+                                    <%--</td>--%>
+                                    <%--<td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>1004원</font></td>--%>
+                                    <%--&lt;%&ndash;<td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>&ndash;%&gt;--%>
+                                <%--</tr>--%>
                                 <tr bgcolor='#bfccd8' height='1'><td colspan='3'></td></tr>
                                 <tr height='30'>
                                     <td colspan='3' style='color:#585858;' align='right'>* 부가세 별도금액 입니다.</td>
