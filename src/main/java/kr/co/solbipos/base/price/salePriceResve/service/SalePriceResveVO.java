@@ -112,6 +112,15 @@ public class SalePriceResveVO extends PageVO {
     /** 변경전 시작일자 */
     private String orgStartDate;
 
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -338,5 +347,13 @@ public class SalePriceResveVO extends PageVO {
 
     public void setOrgStartDate(String orgStartDate) {
         this.orgStartDate = orgStartDate;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
     }
 }

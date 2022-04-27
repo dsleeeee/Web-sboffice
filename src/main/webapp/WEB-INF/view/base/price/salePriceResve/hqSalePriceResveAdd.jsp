@@ -36,11 +36,11 @@
                 <tr>
                     <th><s:message code="salePriceResve.prodCd" /></th>
                     <td>
-                        <input type="text" id="srchPopProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('');"/>
+                        <input type="text" id="srchPopProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                     <th><s:message code="salePriceResve.prodNm" /></th>
                     <td>
-                        <input type="text" id="srchPopProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('');"/>
+                        <input type="text" id="srchPopProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                 </tr>
                 <c:if test="${subPriceFg == '1'}">
@@ -65,7 +65,7 @@
                         is-editable="false"
                         initialized="_initComboBox(s)">
                 </wj-combo-box>
-                <button class="btn_blue fr" ng-click="_pageView('hqSalePriceResveAddCtrl',1)"><s:message code="cmm.search" /></button>
+                <button class="btn_blue fr" id="nxBtnSearch1" ng-click="_pageView('hqSalePriceResveAddCtrl',1)"><s:message code="cmm.search" /></button>
              </div>
 
             <%-- 그리드 영역 --%>

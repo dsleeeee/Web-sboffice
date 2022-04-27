@@ -9,7 +9,7 @@
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="salePriceResve.storeSalePrice"/>&nbsp;<s:message code="salePriceResve.salePriceInfo"/>
+            <s:message code="salePriceResve.salePriceInfo"/>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
 
@@ -53,4 +53,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceInfo.js?ver=20220418.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceInfo.js?ver=20220427.01" charset="utf-8"></script>
