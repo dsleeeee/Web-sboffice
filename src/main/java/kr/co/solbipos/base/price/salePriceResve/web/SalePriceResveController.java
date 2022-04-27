@@ -307,4 +307,113 @@ public class SalePriceResveController {
         return returnListJson(Status.OK, result, salePriceResveVO);
     }
 
+    /**
+     * 가격예약(판매가관리) 화면 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2022.04.25
+     */
+    @RequestMapping(value = "/salePriceResve/view.sb", method = RequestMethod.GET)
+    public String salePriceResveView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 내점/배달/포장 가격관리 사용여부
+        model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+
+        // 본사통제구분-판매가
+        model.addAttribute("salePriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0045") , "1"));
+
+        // 내일날짜
+        Calendar cal = Calendar.getInstance();
+        cal.add(cal.DATE, +1);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = formatter.format(cal.getTime());
+        model.addAttribute("tomorrowDate", dateStr);
+
+        return "base/price/salePriceResve/salePriceResve";
+    }
+
+    /**
+     * 가격예약(판매가관리) 리스트 조회
+     * @param salePriceResveVO
+     * @param request
+     * @return
+     * @author 이다솜
+     * @since 2022.04.25
+     */
+    @RequestMapping(value = "/salePriceResve/getSalePriceResveList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePriceResveList(SalePriceResveVO salePriceResveVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceResveService.getSalePriceResveList(salePriceResveVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceResveVO);
+    }
+
+    /**
+     * 가격예약(판매가관리) 추가
+     * @param salePriceResveVOs
+     * @param request
+     * @return
+     * @author 이다솜
+     * @since 2022.04.25
+     */
+    @RequestMapping(value = "/salePriceResve/saveSalePriceResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSalePriceResve(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceResveService.saveSalePriceResve(salePriceResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 가격예약(판매가관리) 수정
+     * @param salePriceResveVOs
+     * @param request
+     * @return
+     * @author 이다솜
+     * @since 2022.04.25
+     */
+    @RequestMapping(value = "/salePriceResve/modSalePriceResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result modSalePriceResve(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceResveService.modSalePriceResve(salePriceResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 가격예약(판매가관리) 상품가격정보 조회
+     * @param salePriceResveVO
+     * @param request
+     * @return
+     * @author 이다솜
+     * @since 2022.04.25
+     */
+    @RequestMapping(value = "/salePriceResve/getSalePriceInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePriceInfo(SalePriceResveVO salePriceResveVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceResveService.getSalePriceInfo(salePriceResveVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceResveVO);
+    }
+
 }

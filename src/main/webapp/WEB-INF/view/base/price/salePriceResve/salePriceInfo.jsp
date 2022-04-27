@@ -3,9 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="storeProdSalePriceInfoLayer" control="storeProdSalePriceInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;">
-
-    <div ng-controller="storeProdSalePriceInfoCtrl">
+<wj-popup id="salePriceInfoLayer" control="salePriceInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;">
+    <div ng-controller="salePriceInfoCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
@@ -15,10 +14,9 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
-            <label id="lblProd"></label>&nbsp;/&nbsp;
-            <label id="lblStore"></label>
+
+            <label id="lblProd"></label>
             <input type="hidden" id="hdProdCd" />
-            <input type="hidden" id="hdStoreCd" />
 
             <%-- 그리드 영역 --%>
             <div class="w100 mt10">
@@ -49,8 +47,8 @@
                 <%--//위즈모 테이블--%>
             </div>
         </div>
-    </div>
 
+    </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceInfo.js?ver=20220427.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceInfo.js?ver=20220427.01" charset="utf-8"></script>

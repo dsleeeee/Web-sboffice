@@ -7,6 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.salePriceResve.service.SalePriceResveService;
 import kr.co.solbipos.base.price.salePriceResve.service.SalePriceResveVO;
 import org.slf4j.Logger;
@@ -236,6 +237,95 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
     public List<DefaultMap<String>> getStoreSalePriceInfo(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO){
 
         salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return salePriceResveMapper.getStoreSalePriceInfo(salePriceResveVO);
+    }
+
+    /** 가격예약(판매가관리) 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO) {
+
+        salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        salePriceResveVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        salePriceResveVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return salePriceResveMapper.getSalePriceResveList(salePriceResveVO);
+    }
+
+    /** 가격예약(판매가관리) 추가 */
+    @Override
+    public int saveSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SalePriceResveVO salePriceResveVO : salePriceResveVOs) {
+
+            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceResveVO.setStoreCd(sessionInfoVO.getStoreCd());
+            salePriceResveVO.setSaleResveFg("1"); // 가격예약구분 0:일반, 1:예약
+            salePriceResveVO.setRegDt(currentDt);
+            salePriceResveVO.setRegId(sessionInfoVO.getUserId());
+            salePriceResveVO.setModDt(currentDt);
+            salePriceResveVO.setModId(sessionInfoVO.getUserId());
+
+            // 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해)
+            int prodCnt = salePriceResveMapper.getStoreSalePriceCnt(salePriceResveVO);
+
+            if(prodCnt > 0){ // 기존 판매가 히스토리에 저장
+                result = salePriceResveMapper.insertStoreSalePriceHistory(salePriceResveVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+            // todo 추후 최초 판매가도 히스토리 등록할 경우에 이 주석 해제하여 사용
+
+            // 새 예약 판매가 등록
+            result = salePriceResveMapper.insertStoreSalePrice(salePriceResveVO);
+
+        }
+        return result;
+    }
+
+    /** 가격예약(판매가관리) 수정 */
+    @Override
+    public int modSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SalePriceResveVO salePriceResveVO : salePriceResveVOs) {
+
+            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceResveVO.setStoreCd(sessionInfoVO.getStoreCd());
+            salePriceResveVO.setSaleResveFg("1"); // 가격예약구분 0:일반, 1:예약
+            salePriceResveVO.setRegDt(currentDt);
+            salePriceResveVO.setRegId(sessionInfoVO.getUserId());
+            salePriceResveVO.setModDt(currentDt);
+            salePriceResveVO.setModId(sessionInfoVO.getUserId());
+
+            // 기존 예약 판매가 삭제
+            salePriceResveMapper.deleteStoreSalePriceResve(salePriceResveVO);
+
+            // 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해)
+            int prodCnt = salePriceResveMapper.getStoreSalePriceCnt(salePriceResveVO);
+
+            if(prodCnt > 0){ // 기존 판매가 히스토리에 저장
+                result = salePriceResveMapper.insertStoreSalePriceHistory(salePriceResveVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+            // todo 추후 최초 판매가도 히스토리 등록할 경우에 이 주석 해제하여 사용
+
+            // 새 예약 판매가 등록
+            result = salePriceResveMapper.insertStoreSalePrice(salePriceResveVO);
+
+        }
+        return result;
+    }
+
+    /** 가격예약(판매가관리) 상품가격정보 조회 */
+    public List<DefaultMap<String>> getSalePriceInfo(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO){
+
+        salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        salePriceResveVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return salePriceResveMapper.getStoreSalePriceInfo(salePriceResveVO);
     }

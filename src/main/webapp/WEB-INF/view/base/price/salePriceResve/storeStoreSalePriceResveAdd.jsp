@@ -87,7 +87,7 @@
 
             <%--위즈모 테이블--%>
             <div class="wj-TblWrapBr mt10">
-                    <div id="theGridStore" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
+                    <div style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -194,4 +194,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResveAdd.js?ver=20220418.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResveAdd.js?ver=20220427.01" charset="utf-8"></script>

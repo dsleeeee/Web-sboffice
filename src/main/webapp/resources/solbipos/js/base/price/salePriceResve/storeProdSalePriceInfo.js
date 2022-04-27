@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 /**
- *  상품삭제 팝업생성
+ *  상품가격정보 팝업생성
  */
 app.controller('storeProdSalePriceInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
@@ -47,7 +47,7 @@ app.controller('storeProdSalePriceInfoCtrl', ['$scope', '$http', function ($scop
         $("#hdStoreCd").val(data.storeCd);
 
         // 상품가격정보 조회
-        $scope.searchStoreSalePriceInfo(data);
+        $scope.searchStoreSalePriceInfo();
         event.preventDefault();
     });
 
