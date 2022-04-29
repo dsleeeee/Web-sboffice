@@ -157,9 +157,14 @@
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.hqOfficeNm"/>" binding="hqOfficeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.storeCd"/>" binding="storeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="statusPosInstall.posCnt"/>" binding="posCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instInsDt"/>" binding="instInsDt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instFg"/>" binding="instFg" data-map="instFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.bizNo"/>" binding="bizNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.vanNo"/>" binding="vanNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.vanNm"/>" binding="vanNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.dist"/>" binding="dist" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.agency"/>" binding="agency" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.posNo"/>" binding="posNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.day"/>" binding="day" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instFg"/>" binding="instFg" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.agencyNm"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.instAgencyNm"/>" binding="instAgencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.instInsId"/>" binding="instInsId" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
