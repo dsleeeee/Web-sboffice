@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileAppr.xml
+    (모바일) 매출현황 > 승인현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.04.27     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.appr.service.impl.MobileApprMapper">
+
+    <!-- 요일별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY
+        COMMENTS : [매출]일별_종합, [매출]일별_결제
+    -->
+    <select id="getMobileApprList" parameterType="mobileApprVO" resultType="DefaultMap">
+        /* MobileAppr.getMobileApprList */
+        SELECT 	tsdt.STORE_CD,
+                tms.STORE_NM,
+                TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        <if test='apprFg != null and apprFg != "" and apprFg == "01"'>
+                SUM(PAY_AMT_01) AS TOT_PAY_AMT
+        </if>
+        <if test='apprFg != null and apprFg != "" and apprFg == "02"'>
+                SUM(APPR_CASH_AMT) AS TOT_PAY_AMT
+        </if>
+        FROM 	TB_SL_DAILY_TOTAL tsdt,
+                TB_MS_STORE tms
+        WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+          AND 	tms.STORE_CD = tsdt.STORE_CD
+          AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='array != null and array != "" and array == "S"'>
+            GROUP BY ROLLUP((tsdt.STORE_CD, tms.STORE_NM), tsdt.SALE_DATE)
+        </if>
+        <if test='array != null and array != "" and array == "D"'>
+            GROUP BY ROLLUP(tsdt.SALE_DATE, (tsdt.STORE_CD, tms.STORE_NM))
+        </if>
+    </select>
+
+    <!-- 차트 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PAY
+        COMMENTS : [매출]일별_결제
+    -->
+    <select id="getMobileApprDtlList" parameterType="mobileApprVO" resultType="DefaultMap">
+        /* MobileAppr.getMobileApprDtlList */
+        SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') AS SALE_DATE,
+                TO_CHAR(TO_DATE(APPR_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS APPR_DT,
+                DECODE(SALE_FG, 1, '승인', -1, '취소') AS SALE_FG,
+                SALE_AMT
+        <if test='apprFg != null and apprFg != "" and apprFg == "01"'>
+            FROM 	TB_SL_SALE_PAY_CARD tsspc
+        </if>
+        <if test='apprFg != null and apprFg != "" and apprFg == "02"'>
+            FROM 	TB_SL_SALE_PAY_CASH tsspc
+        </if>
+        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	STORE_CD = #{storeCd}
+        AND 	SALE_DATE = #{saleDate}
+        <if test='apprFg != null and apprFg != "" and apprFg == "02"'>
+        AND 	APPR_PROC_FG IN ('1', '2', '4')
+        </if>
+        ORDER BY APPR_DT
+    </select>
+
+</mapper>

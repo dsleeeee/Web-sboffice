@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileStoreTimeSale.xml
+    (모바일) 매장매출 > 시간대별
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.04.27     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.storeTimeSale.service.impl.MobileStoreTimeSaleMapper">
+
+    <!-- 요일별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE
+        COMMENTS : [매출]일별_종합, 매장정보
+    -->
+    <select id="getMobileStoreTimeSaleList" parameterType="mobileStoreTimeSaleVO" resultType="DefaultMap">
+        /* MobileStoreTimeSaleMapper.getMobileStoreTimeSaleList */
+        SELECT 	tsdt.STORE_CD,
+                tms.STORE_NM,
+                tsdt.SALE_HOUR,
+                SUM(tsdt.SALE_CNT) AS SALE_CNT,
+                SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM 	TB_SL_DAILY_TIME tsdt,
+                TB_MS_STORE tms
+        WHERE 	tms.STORE_CD = tsdt.STORE_CD
+        AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND 	tsdt.SALE_DATE = #{startDate}
+        <if test='array != null and array != "" and array == "S"'>
+        GROUP BY ROLLUP ((tsdt.STORE_CD, tms.STORE_NM), tsdt.SALE_HOUR)
+        </if>
+        <if test='array != null and array != "" and array == "D"'>
+        GROUP BY ROLLUP (tsdt.SALE_HOUR, (tsdt.STORE_CD, tms.STORE_NM))
+        </if>
+    </select>
+
+</mapper>
