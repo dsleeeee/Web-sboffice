@@ -98,6 +98,8 @@ public class SessionServiceImpl implements SessionService {
         boolean isExists3 = file3.exists();
         boolean isExists4 = file4.exists();
 
+        System.out.println("로고 값 : " + isExists + isExists1 + isExists2 + isExists3 + isExists4);
+
         if(isExists) {
             sessionInfoVO.setLogoImg("Y");
         } else if(isExists1) {
@@ -111,6 +113,8 @@ public class SessionServiceImpl implements SessionService {
         } else {
             sessionInfoVO.setLogoImg("N");
         }
+
+        System.out.println("로고 값 : " + sessionInfoVO.getLogoImg());
 
         // 본사는 소속된 가맹점을 세션에 저장
         if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
