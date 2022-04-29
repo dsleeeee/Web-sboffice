@@ -190,9 +190,9 @@ public class MediaServiceImpl implements MediaService {
                 mediaVO.setUseYn(UseYn.N);
             }
 
-            Iterator<String> files = multi.getFileNames();
+            String fileType = mediaMapper.getFileTypeNm(mediaVO);
             // 파일이 수정 된 경우
-            while(files.hasNext()) {
+            if(mediaVO.getFileOrgNm() != null) {
                 // 2. 기존에 등록된 파일 삭제
                 // 파일서버 대응 경로 지정 (운영)
                 String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
@@ -206,7 +206,6 @@ public class MediaServiceImpl implements MediaService {
                 }
             }
 
-            String fileType = mediaMapper.getFileTypeNm(mediaVO);
             mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
 
             mediaVO.setModDt(insertDt);
