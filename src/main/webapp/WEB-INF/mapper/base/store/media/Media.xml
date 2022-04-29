@@ -142,6 +142,28 @@
         </choose>
     </select>
 
+    <!-- 포스버전정보 상세 조회  -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 포스버전에 대한 상세 정보를 조회한다.
+    -->
+    <select id="dtlInfo2" parameterType="MediaVO" resultType="DefaultMap">
+        /* USE : Media.dtlInfo2 */
+        <!-- 본사 -->
+        <if test='hqOfficeCd != null and hqOfficeCd != "" and hqOfficeCd != "00000"'>
+            SELECT FILE_NM
+            FROM TB_HQ_POS_ADVER_FILE
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            AND ADVER_FILE_NO = #{verSerNo}
+        </if>
+        <if test='hqOfficeCd != null and (hqOfficeCd == "" or hqOfficeCd == "00000")'>
+            SELECT FILE_NM
+            FROM TB_MS_POS_ADVER_FILE
+            WHERE STORE_CD = #{storeCd}
+            AND ADVER_FILE_NO = #{verSerNo}
+        </if>
+    </select>
+
 
     <!-- 파일코드 채번  -->
     <!--
@@ -351,6 +373,20 @@
           FROM TB_CM_NMCODE
          WHERE NMCODE_GRP_CD ='303'
            AND NMCODE_CD = #{fileType}
+    </select>
+
+
+    <!-- 파일 확장자 조회   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 파일 확장자명를 조회한다.
+    -->
+    <select id="getFileTypeNm" parameterType="MediaVO" resultType="String">
+        /* USE : Media.getFileTypeNm */
+        SELECT NMCODE_NM
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD ='303'
+          AND NMCODE_CD = #{fileType}
     </select>
 
     <!-- 날짜 중복 조회   -->

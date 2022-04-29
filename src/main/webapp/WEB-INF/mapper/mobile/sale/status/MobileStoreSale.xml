@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileStoreSale.xml
+    (모바일) 매장매출 > 매장종합
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.04.27     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.storeSale.service.impl.MobileStoreSaleMapper">
+
+    <!-- 매장종합 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY
+        COMMENTS : [매출]일별_종합, [매출]일별_결제
+    -->
+    <select id="getMobileStoreSaleList" parameterType="mobileStoreSaleVO" resultType="DefaultMap">
+        /* MobileStoreSaleMapper.getMobileStoreSaleList */
+        SELECT 	tsdt.STORE_CD,
+                tms.STORE_NM,
+                SUM(tsdt.BILL_CNT) AS BILL_CNT,
+                SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM 	TB_SL_DAILY_TOTAL tsdt,
+                TB_MS_STORE tms
+        WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+          AND 	tms.STORE_CD = tsdt.STORE_CD
+          AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP BY tsdt.STORE_CD, tms.STORE_NM
+        ORDER BY tsdt.STORE_CD, tms.STORE_NM
+    </select>
+
+    <!-- 차트 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PAY
+        COMMENTS : [매출]일별_결제
+    -->
+    <select id="getMobileStoreSaleDtlList" parameterType="mobileStoreSaleVO" resultType="DefaultMap">
+        /* MobileStoreSaleMapper.getMobileStoreSaleDtlList */
+        SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') AS SALE_DATE,
+                BILL_CNT,
+                REAL_SALE_AMT
+        FROM 	TB_SL_DAILY_TOTAL
+        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	STORE_CD = #{storeCd}
+        AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        ORDER BY SALE_DATE
+    </select>
+
+</mapper>

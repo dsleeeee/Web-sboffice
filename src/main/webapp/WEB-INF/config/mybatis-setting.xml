@@ -864,6 +864,16 @@
     <typeAlias alias="mobileVoucherNoVO" type="kr.co.solbipos.mobile.sale.status.voucherNo.service.MobileVoucherNoVO"/>
     <!-- (모바일) QR > 원하는 페이지 오픈 -->
     <typeAlias alias="mobileDirectVO" type="kr.co.solbipos.mobile.application.direct.service.MobileDirectVO"/>
+    <!-- (모바일) 매출현황 > 요일별 -->
+    <typeAlias alias="mobileDayOfWeekSaleVO" type="kr.co.solbipos.mobile.sale.status.dayOfWeekSale.service.MobileDayOfWeekSaleVO"/>
+    <!-- (모바일) 매출현황 > 승인현황 -->
+    <typeAlias alias="mobileApprVO" type="kr.co.solbipos.mobile.sale.status.appr.service.MobileApprVO"/>
+    <!-- (모바일) 매장매출 > 매장종합 -->
+    <typeAlias alias="mobileStoreSaleVO" type="kr.co.solbipos.mobile.sale.status.storeSale.service.MobileStoreSaleVO"/>
+    <!-- (모바일) 매장매출 > 요일별 -->
+    <typeAlias alias="mobileStoreDayOfWeekSaleVO" type="kr.co.solbipos.mobile.sale.status.storeDayOfWeekSale.service.MobileStoreDayOfWeekSaleVO"/>
+    <!-- (모바일) 매장매출 > 시간대별 -->
+    <typeAlias alias="mobileStoreTimeSaleVO" type="kr.co.solbipos.mobile.sale.status.storeTimeSale.service.MobileStoreTimeSaleVO"/>
 
     <!-- (모바일) 부가서비스 > 근태현황 -->
     <typeAlias alias="mobileDclzManageVO" type="kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageVO"/>

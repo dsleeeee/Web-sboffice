@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileDayOfWeekSale.xml
+    (모바일) 매출현황 > 요일별
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.04.27     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.dayOfWeekSale.service.impl.MobileDayOfWeekSaleMapper">
+
+    <!-- 요일별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY
+        COMMENTS : [매출]일별_종합, [매출]일별_결제
+    -->
+    <select id="getMobileDayOfWeekSaleList" parameterType="mobileDayOfWeekSaleVO" resultType="DefaultMap">
+        /* MobileDayOfWeekSale.getMobileDayOfWeekSaleList */
+        SELECT  YOIL,
+                YOIL2,
+                COUNT(SALE_DATE) AS SALE_DATE,
+                SUM(SALE_CNT) AS SALE_CNT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                TRUNC(SUM(REAL_SALE_AMT) / COUNT(SALE_DATE)) AS DAY_AVR_SALE
+        FROM
+            (
+                SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'YYYY-MM-DD'),'DY') AS YOIL,
+                        TO_CHAR(TO_DATE(SALE_DATE, 'YYYY-MM-DD'),'d') AS YOIL2,
+                        SALE_DATE,
+                        SALE_CNT,
+                        REAL_SALE_AMT
+                FROM 	TB_SL_DAILY_TOTAL tsdt
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                <!-- 매장 -->
+                <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                    AND STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            )
+        GROUP BY YOIL, YOIL2
+        ORDER BY YOIL2
+    </select>
+
+    <!-- 차트 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PAY
+        COMMENTS : [매출]일별_결제
+    -->
+    <select id="getMobileDayOfWeekSaleChartList" parameterType="mobileDayOfWeekSaleVO" resultType="DefaultMap">
+        /* MobileDayOfWeekSale.getMobileDayOfWeekSaleChartList */
+        SELECT  YOIL,
+                TRUNC(SUM(REAL_SALE_AMT) / COUNT(SALE_DATE)) AS DAY_AVR_SALE
+        FROM
+            (
+            SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'YYYY-MM-DD'),'DY') AS YOIL,
+                    SALE_DATE,
+                    SALE_CNT,
+                    REAL_SALE_AMT
+            FROM 	TB_SL_DAILY_TOTAL tsdt
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            )
+        GROUP BY YOIL
+    </select>
+
+</mapper>

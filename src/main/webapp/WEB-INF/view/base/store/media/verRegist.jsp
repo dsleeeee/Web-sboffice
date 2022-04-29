@@ -44,7 +44,7 @@
               <tr>
               <%-- 파일업로드 --%>
                 <th><s:message code="media.file" /></th>
-                <td colspan="3" id="fileIn">
+                <td id="fileIn">
                   <input type="file" class="form-control" id="file"
                          name="file"
                          ng-model="version.uploadFile"
@@ -129,6 +129,6 @@
   var storeCd      = "${storeCd}";
   var userId       = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20210617.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20210617.04" charset="utf-8"></script>
 
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileStoreDayOfWeekSale.xml
+    (모바일) 매장매출 > 요일별
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.04.27     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.status.storeDayOfWeekSale.service.impl.MobileStoreDayOfWeekSaleMapper">
+
+    <!-- 요일별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY
+        COMMENTS : [매출]일별_종합, [매출]일별_결제
+    -->
+    <select id="getMobileStoreDayOfWeekSaleList" parameterType="mobileStoreDayOfWeekSaleVO" resultType="DefaultMap">
+        /* MobileStoreDayOfWeekSaleMapper.getMobileStoreDayOfWeekSaleList */
+        SELECT 	STORE_CD,
+                STORE_NM,
+                YOIL,
+                YOIL2,
+                SUM(SALE_DATE) AS SALE_DATE,
+                SUM(BILL_CNT) AS BILL_CNT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM (
+                SELECT 	tsdt.STORE_CD,
+                        tms.STORE_NM,
+                        TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYY-MM-DD'),'DY') AS YOIL,
+                        TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYY-MM-DD'),'d') AS YOIL2,
+                        COUNT(tsdt.SALE_DATE) AS SALE_DATE,
+                        SUM(tsdt.BILL_CNT) AS BILL_CNT,
+                        SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM 	TB_SL_DAILY_TOTAL tsdt,
+                        TB_MS_STORE tms
+                WHERE 	tms.STORE_CD = tsdt.STORE_CD
+                AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                GROUP BY tsdt.STORE_CD, tms.STORE_NM, tsdt.SALE_DATE
+                )
+        <if test='array != null and array != "" and array == "S"'>
+            GROUP BY ROLLUP((STORE_CD, STORE_NM), (YOIL, YOIL2))
+            ORDER BY STORE_CD, YOIL2
+        </if>
+        <if test='array != null and array != "" and array == "D"'>
+            GROUP BY ROLLUP((YOIL, YOIL2), (STORE_CD, STORE_NM))
+            ORDER BY YOIL2, STORE_CD
+        </if>
+    </select>
+
+</mapper>
