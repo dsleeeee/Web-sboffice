@@ -270,7 +270,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       startDate.value = getFormatDate($scope.version.startDate, '-');
       endDate.value = getFormatDate($scope.version.endDate, '-');
 
-      $("#fileIn").attr("colspan", 0);
+      $("#fileIn").attr("colspan", 1);
       $("#fileOrgH").show();
       $("#fileOrgD").show();
     });

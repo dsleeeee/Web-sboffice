@@ -32,6 +32,7 @@ public interface MediaMapper {
 
     /** 포스버전정보 상세 조회 */
     DefaultMap<String> dtlInfo(MediaVO mediaVO);
+    DefaultMap<String> dtlInfo2(MediaVO mediaVO);
 
     /** 버전 삭제 */
     int verDelete(MediaVO mediaVO);
@@ -56,6 +57,9 @@ public interface MediaMapper {
 
     /** 파일 확장자 */
     String getFileType(MediaVO mediaVO);
+
+    /** 파일 확장자 */
+    String getFileTypeNm(MediaVO mediaVO);
 
     /** 날짜 체크 */
     String chkDate(MediaVO mediaVO);

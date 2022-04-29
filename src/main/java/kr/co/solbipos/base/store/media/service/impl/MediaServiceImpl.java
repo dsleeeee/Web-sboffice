@@ -139,6 +139,9 @@ public class MediaServiceImpl implements MediaService {
                 mediaVO.setUseYn(UseYn.N);
             }
 
+            String fileType = mediaMapper.getFileTypeNm(mediaVO);
+            mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
+
             mediaVO.setRegDt(insertDt);
             mediaVO.setRegId((String)multi.getParameter("userId"));
             mediaVO.setModDt(insertDt);
@@ -186,6 +189,21 @@ public class MediaServiceImpl implements MediaService {
             } else {
                 mediaVO.setUseYn(UseYn.N);
             }
+
+            // 2. 기존에 등록된 파일 삭제
+            // 파일서버 대응 경로 지정 (운영)
+            String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
+            DefaultMap<String> fileInfo = mediaMapper.dtlInfo2(mediaVO);
+            if(fileInfo.size() > 0){
+                // 서버 파일 삭제
+                File delFile = new File(path + fileInfo.get("fileNm"));
+                if(delFile.exists()) {
+                    delFile.delete();
+                }
+            }
+
+            String fileType = mediaMapper.getFileTypeNm(mediaVO);
+            mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
 
             mediaVO.setModDt(insertDt);
             mediaVO.setModId((String)multi.getParameter("userId"));
