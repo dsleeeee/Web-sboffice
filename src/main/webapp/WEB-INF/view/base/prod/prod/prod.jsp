@@ -129,7 +129,7 @@
         <%-- 상품엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
         <%-- 신규상품등록 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
+        <button class="btn_skyblue ml5 fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg" <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'A0001'}">style="display: none;"</c:if>>
             <s:message code="prod.title.addProd" />
         </button>
         <%-- 매장상품일괄등록 --%>
