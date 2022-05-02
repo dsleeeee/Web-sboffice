@@ -170,3 +170,14 @@ function smsTodayCntChange(time){
   }
 }
 /** //SMS전송(당일) */
+
+
+
+// 이용약관
+$("#termsOfUse").bind("click", function () {
+    $("#fullDimmedTermsOfUsePop").show();
+    $("#layerTermsOfUsePop").show();
+
+    $(".userLayer").toggle();
+    return false;
+});

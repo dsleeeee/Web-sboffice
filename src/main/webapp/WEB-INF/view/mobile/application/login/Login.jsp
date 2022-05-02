@@ -71,6 +71,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
         <s:message code="login.find.pw" />
       </a>
     </span>
+    <a href="#" id="termsOfUse" style="margin-right: 0px; line-height:0px; font-size:0.875em; text-decoration:underline;">이용약관</a>
   </div>
 
 </div>
@@ -83,6 +84,10 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     <c:param name="type" value="${type}" />
   </c:import>
 </c:if>
+
+<%-- 이용약관 레이어 팝업 가져오기 --%>
+<c:import url="/WEB-INF/view/mobile/application/layer/mobileTermsOfUsePop.jsp">
+</c:import>
 
 <script>
 	genEventSingle($("#userId"));
@@ -106,6 +111,15 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
   function loginAutoClick(){
     $("input:checkbox[id='chk']").prop("checked", true);
   }
+
+
+
+  // 이용약관
+  $("#termsOfUse").bind("click", function () {
+    $("#fullDimmedMobileTermsOfUsePop").show();
+    $("#layerMobileTermsOfUsePop").show();
+    return false;
+  });
 </script>
 
 
