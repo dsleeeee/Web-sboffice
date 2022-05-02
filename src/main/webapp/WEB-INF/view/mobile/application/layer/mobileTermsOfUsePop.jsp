@@ -10,7 +10,7 @@
         <div class="title" style="width: 350px; height: 550px;">
             <%-- 타이틀 --%>
             <p class="tit">
-                <s:message code="login.layer.termsOfUse.title" />
+                <s:message code="mobile.login.layer.termsOfUse.title" />
             </p>
             <a href="#" class="btn_close"></a>
             <%-- //타이틀 --%>
