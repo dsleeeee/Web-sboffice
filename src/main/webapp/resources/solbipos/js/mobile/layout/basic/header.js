@@ -80,3 +80,14 @@ $(".menuControl").click(function () {
   }
   return false;
 });
+
+
+
+// 이용약관
+$("#termsOfUse").bind("click", function () {
+  $("#fullDimmedMobileTermsOfUsePop").show();
+  $("#layerMobileTermsOfUsePop").show();
+
+  $(".userLayer").toggle();
+  return false;
+});

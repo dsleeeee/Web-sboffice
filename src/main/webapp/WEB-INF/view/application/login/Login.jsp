@@ -57,14 +57,16 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
   </f:form>
 
   <div class="linkArea">
-    <span class="find"> <a href="/user/idFind.sb" class="fdId">
+    <span class="find">
+      <a href="/user/idFind.sb" class="fdId">
         <s:message code="login.find.id" />
-      </a> <a href="/user/pwdFind.sb" class="fdPw">
+      </a>
+      <a href="/user/pwdFind.sb" class="fdPw">
         <s:message code="login.find.pw" />
       </a>
     </span>
     <a href="<%=mobile_url%>" class="btn_mobile_login">
-    <s:message code="mobile.login.submit" />
+      <s:message code="mobile.login.submit" />
     </a>
     <a href="http://www.solbipos.com" target="_blank" class="distributor">
       <s:message code="login.add.dist" />
@@ -72,6 +74,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     <a href="http://www.solbipos.com" target="_blank" class="agency">
       <s:message code="login.add.agency" />
     </a>
+    <a href="#" id="termsOfUse" style="margin-right: 45px; line-height:50px; font-size:0.875em; text-decoration:underline;">이용약관</a>
   </div>
 
 </div>
@@ -84,6 +87,10 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     <c:param name="type" value="${type}" />
   </c:import>
 </c:if>
+
+<%-- 이용약관 레이어 팝업 가져오기 --%>
+<c:import url="/WEB-INF/view/application/layer/termsOfUsePop.jsp">
+</c:import>
 
 <script>
 	genEventSingle($("#userId"));
@@ -108,6 +115,14 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
             $('#nxBtnSearchn').click();
         }
     }
+
+
+    // 이용약관
+    $("#termsOfUse").bind("click", function () {
+      $("#fullDimmedTermsOfUsePop").show();
+      $("#layerTermsOfUsePop").show();
+      return false;
+    });
 </script>
 
 
