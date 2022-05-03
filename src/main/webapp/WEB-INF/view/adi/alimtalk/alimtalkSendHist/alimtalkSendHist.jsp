@@ -161,7 +161,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20220418.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20220503.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">--%>

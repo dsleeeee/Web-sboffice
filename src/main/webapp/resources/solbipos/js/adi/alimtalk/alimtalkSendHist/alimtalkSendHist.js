@@ -22,6 +22,7 @@ var msgTypeDataMapData = [
 ];
 // 예약여부
 var reserveYnDataMapData = [
+    {"name":"전체","value":""},
     {"name":"예약","value":"1"},
     {"name":"즉시","value":"0"}
 ];
