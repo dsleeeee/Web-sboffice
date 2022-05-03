@@ -393,21 +393,41 @@
         tho.HQ_OFFICE_NM,
         tci.STORE_CD,
         tms.STORE_NM,
+        tms.BIZ_NO,
         (SELECT COUNT(POS_NO) FROM TB_MS_POS WHERE STORE_CD = tci.STORE_CD) AS POS_CNT,
         tci.INST_INS_DT,
         tci.INST_FG,
         (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY_NM,
         (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tci.AGENCY_CD) AS INST_AGENCY_NM,
-        tci.INST_INS_ID
+        tci.INST_INS_ID AS INST_INS_ID_BCK
+        ,       K.VENDOR_TERMNL_NO AS VAN_NO
+        ,       E.VAN_NM
+        ,       (SELECT NVL(MAX(EMP_NM), tci.INST_INS_ID) FROM TB_CM_EMPLOYEE WHERE USER_ID = tci.INST_INS_ID) AS INST_INS_ID
+        ,       SUBSTR(tci.INST_INS_DT,9,14) AS DAY
+        ,       tci.POS_NO AS POS_NO
+        ,       (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = (SELECT DECODE(P_AGENCY_CD, '00000', AGENCY_CD, P_AGENCY_CD) FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD)) AS DIST
+        ,       (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_CM_INSTLL tci,
         TB_MS_STORE tms,
         TB_HQ_OFFICE tho
+        ,       TB_CM_VAN_CMPNY E
+        ,       (
+                    SELECT  A.STORE_CD
+                    ,       REGEXP_REPLACE(LISTAGG(A.VENDOR_TERMNL_NO, ',') WITHIN GROUP(ORDER BY A.VENDOR_TERMNL_NO), '([^,]+)(,\1)*(,|$)', '\1\3') VENDOR_TERMNL_NO
+                    FROM    TB_MS_POS_TERMNL A
+                    ,       TB_MS_POS B
+                    WHERE   A.VENDOR_FG =   '01'
+                    AND     B.STORE_CD  =   A.STORE_CD
+                    AND     B.USE_YN    =   'Y'
+                    GROUP
+                    BY      A.STORE_CD
+                ) K
         WHERE 1=1
         <if test='chkDt != true'>
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                 <![CDATA[
-                    AND tci.INST_INS_DT BETWEEN #{startDate} AND #{endDate}
+                    AND tci.INST_INS_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                 ]]>
             </if>
         </if>
@@ -438,6 +458,9 @@
         </if>
         AND tci.STORE_CD = tms.STORE_CD
         AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        AND E.VAN_FG        (+) =   '01'
+        AND E.VAN_CD        (+) =   tms.VAN_CD
+        AND K.STORE_CD      (+) =   tms.STORE_CD
         <choose>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "AGENCY"'>

@@ -136,6 +136,8 @@
             initialized="initComboBox(s)">
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadStatusPosinstall()"><s:message code="cmm.excel.down" /></button>
     </div>
 
     <%-- 그리드 --%>
@@ -190,4 +192,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=2019052801.20" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=20220503.20" charset="utf-8"></script>

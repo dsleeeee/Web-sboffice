@@ -24,7 +24,7 @@ var instFgData = [
 /**
  *  POS설치현황 그리드 생성
  */
-app.controller('statusPosInstallCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('statusPosInstallCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('statusPosInstallCtrl', $scope, $http, true));
@@ -82,5 +82,29 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', function ($scope, $ht
         $scope._inquiryMain("/store/manage/status/posInstl/getStatusPosInstallList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+  // 엑셀 다운로드
+  $scope.excelDownloadStatusPosinstall = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      },
+          messages["storeStatus.posInstall"] + '_' + getCurDateTime() +'.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+    }, 10);
+  };
 
 }]);
