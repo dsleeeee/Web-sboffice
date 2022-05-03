@@ -29,6 +29,9 @@ public interface SmsChargeHistMapper {
     /** SMS충전내역 - 조회 */
     List<DefaultMap<Object>> getSmsChargeHistList(SmsChargeHistVO smsChargeHistVO);
 
+    /** SMS충전내역 - 엑셀 조회 */
+    List<DefaultMap<Object>> getSmsChargeHistExcelList(SmsChargeHistVO smsChargeHistVO);
+
     /** SMS임의충전 팝업 - 조회 */
     List<DefaultMap<Object>> getSmsChargeRegistList(SmsChargeHistVO smsChargeHistVO);
 
