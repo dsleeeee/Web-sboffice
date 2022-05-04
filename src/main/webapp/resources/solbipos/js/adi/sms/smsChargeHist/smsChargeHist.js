@@ -232,10 +232,9 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
             return false;
         }
 
-        var params       = {};
+        var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.listScale = $scope.listScale;
 
         $scope._broadcast('smsChargeHistExcelCtrl', params);
     };
