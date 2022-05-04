@@ -59,6 +59,23 @@ public class AlimtalkSendHistServiceImpl implements AlimtalkSendHistService {
         return alimtalkSendHistMapper.getAlimtalkSendHistList(alimtalkSendHistVO);
     }
 
+    /** 알림톡 전송이력 - 엑셀 조회 */
+    @Override
+    public List<DefaultMap<Object>> getAlimtalkSendHistExcelList(AlimtalkSendHistVO alimtalkSendHistVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        alimtalkSendHistVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        alimtalkSendHistVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = alimtalkSendHistVO.getStoreCds().split(",");
+            alimtalkSendHistVO.setStoreCdList(storeCds);
+        }
+
+        return alimtalkSendHistMapper.getAlimtalkSendHistExcelList(alimtalkSendHistVO);
+    }
+
     /** 알림톡 수신자정보 팝업 - 조회 */
     @Override
     public List<DefaultMap<Object>> getAlimtalkAddresseeDtlList(AlimtalkSendHistVO alimtalkSendHistVO, SessionInfoVO sessionInfoVO) {

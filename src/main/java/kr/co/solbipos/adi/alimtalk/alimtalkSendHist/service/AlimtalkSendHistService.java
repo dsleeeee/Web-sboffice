@@ -25,6 +25,9 @@ public interface AlimtalkSendHistService {
     /** 알림톡 전송이력 - 조회 */
     List<DefaultMap<Object>> getAlimtalkSendHistList(AlimtalkSendHistVO alimtalkSendHistVO, SessionInfoVO sessionInfoVO);
 
+    /** 알림톡 전송이력 - 엑셀 조회 */
+    List<DefaultMap<Object>> getAlimtalkSendHistExcelList(AlimtalkSendHistVO alimtalkSendHistVO, SessionInfoVO sessionInfoVO);
+
     /** 알림톡 수신자정보 팝업 - 조회 */
     List<DefaultMap<Object>> getAlimtalkAddresseeDtlList(AlimtalkSendHistVO alimtalkSendHistVO, SessionInfoVO sessionInfoVO);
 }

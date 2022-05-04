@@ -90,6 +90,29 @@ public class AlimtalkSendHistController {
     }
 
     /**
+     * 알림톡 전송이력 - 엑셀 조회
+     *
+     * @param alimtalkSendHistVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 04.
+     */
+    @RequestMapping(value = "/alimtalkSendHist/getAlimtalkSendHistExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAlimtalkSendHistExcelList(AlimtalkSendHistVO alimtalkSendHistVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = alimtalkSendHistService.getAlimtalkSendHistExcelList(alimtalkSendHistVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, alimtalkSendHistVO);
+    }
+
+    /**
      * 알림톡 수신자정보 팝업 - 조회
      *
      * @param alimtalkSendHistVO
