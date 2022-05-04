@@ -151,7 +151,7 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
-        // 알림톡 가격조회시
+        // 알림톡 가격 조회시
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             smsChargeVO.setAlkChargeOrgnCd(sessionInfoVO.getHqOfficeCd());
 
