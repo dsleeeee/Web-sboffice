@@ -149,6 +149,7 @@ public class SmsChargeServiceImpl implements SmsChargeService {
     @Override
     public DefaultMap<String> getMsgOneAmtGuideList(SmsChargeVO smsChargeVO,  SessionInfoVO sessionInfoVO) {
 
+        // SMS 가격 조회시
         smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
         // 알림톡 가격 조회시
