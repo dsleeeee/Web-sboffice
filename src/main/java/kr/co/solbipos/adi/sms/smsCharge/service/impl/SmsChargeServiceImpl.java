@@ -8,6 +8,7 @@ import kr.co.solbipos.adi.sms.smsCharge.service.SmsChargeService;
 import kr.co.solbipos.adi.sms.smsCharge.service.SmsChargeVO;
 import kr.co.solbipos.adi.sms.smsChargeHist.service.impl.SmsChargeHistMapper;
 import kr.co.solbipos.adi.sms.smsChargeHist.service.SmsChargeHistVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,16 @@ public class SmsChargeServiceImpl implements SmsChargeService {
     private final SmsChargeMapper smsChargeMapper;
     private final SmsChargeHistMapper smsChargeHistMapper; // SMS충전내역
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SmsChargeServiceImpl(SmsChargeMapper smsChargeMapper, SmsChargeHistMapper smsChargeHistMapper) {
+    public SmsChargeServiceImpl(SmsChargeMapper smsChargeMapper, SmsChargeHistMapper smsChargeHistMapper, CmmEnvUtil cmmEnvUtil) {
         this.smsChargeMapper = smsChargeMapper;
         this.smsChargeHistMapper = smsChargeHistMapper; // SMS충전내역
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 충전결제 저장 */
@@ -147,6 +150,24 @@ public class SmsChargeServiceImpl implements SmsChargeService {
     public DefaultMap<String> getMsgOneAmtGuideList(SmsChargeVO smsChargeVO,  SessionInfoVO sessionInfoVO) {
 
         smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        // 알림톡 가격조회시
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            smsChargeVO.setAlkChargeOrgnCd(sessionInfoVO.getHqOfficeCd());
+
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            // 환경설정 코드값 조회 [1231 알림톡비용차감]
+            String alkChargeEnvstVal1231 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1231"));
+            System.out.println("WEB_ALIMTALK >>>  가격안내 >>> 환경설정 코드값 [1231 알림톡비용차감] : " + alkChargeEnvstVal1231);
+
+            // 본사
+            if(alkChargeEnvstVal1231.equals("1")) {
+                smsChargeVO.setAlkChargeOrgnCd(sessionInfoVO.getHqOfficeCd());
+            // 매장
+            } else {
+                smsChargeVO.setAlkChargeOrgnCd(sessionInfoVO.getStoreCd());
+            }
+        }
 
         return smsChargeMapper.getMsgOneAmtGuideList(smsChargeVO);
     }

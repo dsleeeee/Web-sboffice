@@ -75,6 +75,9 @@ public class SmsChargeVO extends PageVO {
     /** 사용자ID */
     private String userId;
 
+    /** 알림톡비용차감 주체 소속코드 */
+    private String alkChargeOrgnCd;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -146,4 +149,8 @@ public class SmsChargeVO extends PageVO {
     public String getUserId() { return userId; }
 
     public void setUserId(String userId) { this.userId = userId; }
+
+    public String getAlkChargeOrgnCd() { return alkChargeOrgnCd; }
+
+    public void setAlkChargeOrgnCd(String alkChargeOrgnCd) { this.alkChargeOrgnCd = alkChargeOrgnCd; }
 }
