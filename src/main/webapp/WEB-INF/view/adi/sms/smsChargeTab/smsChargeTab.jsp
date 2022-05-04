@@ -24,6 +24,7 @@
 <script type="text/javascript">
     var tabVal = "${tabVal}"; // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
     var urlVal = "/adi/sms/smsChargeTab/smsChargeTab/list.sb"; // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
+    var pageGubunVal = "sms"; // 페이지구분
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeTab/smsChargeTab.js?ver=20220321.01" charset="utf-8"></script>
