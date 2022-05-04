@@ -102,8 +102,40 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
 
             if(alimtalkSendTypeVO.getStatus() == GridDataFg.UPDATE) {
                 procCnt = alimtalkSendTypeMapper.getAlimtalkSendTypeDetailSaveMerge(alimtalkSendTypeVO);
-
             }
+
+            // 현재 사용여부만 변경가능함으로
+            if(alimtalkSendTypeVO.getUseYn().equals("Y")) {
+                System.out.println("WEB_ALIMTALK >>> 알림톡 설정 >>> 전송유형 상세 저장 >>> 사용여부 : " + alimtalkSendTypeVO.getUseYn());
+
+                // 전송유형 설정에 등록된 템플릿 조회
+                String alimtalkSendTypeTemplateCd = alimtalkSendTypeMapper.getAlimtalkSendTypeTemplateCd(alimtalkSendTypeVO);
+                System.out.println("WEB_ALIMTALK >>> 알림톡 설정 >>> 전송유형 상세 저장 >>> 전송유형 설정에 등록된 템플릿 : " + alimtalkSendTypeTemplateCd);
+
+                // 첫번째 템플릿 초기설정
+                if(alimtalkSendTypeTemplateCd == null) {
+
+                    // 첫번째 템플릿 조회
+                    List<DefaultMap<String>> templateCdList = alimtalkSendTypeMapper.getTemplateCd(alimtalkSendTypeVO);
+                    System.out.println("WEB_ALIMTALK >>> 알림톡 설정 >>> 전송유형 상세 저장 >>> 첫번째 템플릿 templateCd : " + templateCdList.get(0).getStr("templateCd"));
+                    System.out.println("WEB_ALIMTALK >>> 알림톡 설정 >>> 전송유형 상세 저장 >>> 첫번째 템플릿 templateGrpFg : " + templateCdList.get(0).getStr("templateGrpFg"));
+
+                    alimtalkSendTypeVO.setTemplateCd(templateCdList.get(0).getStr("templateCd"));
+                    alimtalkSendTypeVO.setTemplateGrpFg(templateCdList.get(0).getStr("templateGrpFg"));
+
+                    // 전송유형 : 대기 -> 대기중 일때만
+                    if(alimtalkSendTypeVO.getSendTypeCd().equals("001") && alimtalkSendTypeVO.getSendTypeDtlCd().equals("02")) {
+                        alimtalkSendTypeVO.setSendPeriodFg("02");
+                        alimtalkSendTypeVO.setSendPeriod("0");
+                    } else {
+                        alimtalkSendTypeVO.setSendPeriodFg("01");
+                        alimtalkSendTypeVO.setSendPeriod("0");
+                    }
+
+                    procCnt = alimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplateSaveMerge(alimtalkSendTypeVO);
+                }
+            }
+
         }
 
         return procCnt;

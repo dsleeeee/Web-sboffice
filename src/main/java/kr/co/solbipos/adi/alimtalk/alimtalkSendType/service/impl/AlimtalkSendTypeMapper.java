@@ -42,6 +42,12 @@ public interface AlimtalkSendTypeMapper {
     /** 알림톡 전송유형 - 전송유형 상세 조회 */
     List<DefaultMap<Object>> getAlimtalkSendTypeDetailList(AlimtalkSendTypeVO alimtalkSendTypeVO);
 
+    /** 전송유형 설정에 등록된 템플릿 조회 */
+    String getAlimtalkSendTypeTemplateCd(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
+    /** 첫번째 템플릿 조회 */
+    List<DefaultMap<String>> getTemplateCd(AlimtalkSendTypeVO alimtalkSendTypeVO);
+
     /** 알림톡 전송유형 - 전송유형 상세 저장 merge */
     int getAlimtalkSendTypeDetailSaveMerge(AlimtalkSendTypeVO alimtalkSendTypeVO);
 

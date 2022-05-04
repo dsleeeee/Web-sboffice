@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkKeyColList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkKeyColList" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkKeyColList */
         SELECT
         A.GROUP_KEY,
@@ -77,7 +77,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkTemplateChangeKeyColList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkTemplateChangeKeyColList" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkTemplateChangeKeyColList */
         SELECT
         tcn.NMCODE_NM,
@@ -93,7 +93,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkIdRegisterChk"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkIdRegisterChk" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkIdRegisterChk */
         SELECT
         taa.SENDER_KEY
@@ -108,7 +108,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkSendTypeList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkSendTypeList" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeList */
         SELECT
         taan.NMCODE_CD AS SEND_TYPE_CD,
@@ -127,7 +127,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkSendTypeDetailList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkSendTypeDetailList" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailList */
         SELECT
         A.SEND_TYPE_DTL_CD,
@@ -172,12 +172,59 @@
         ORDER BY A.SEND_TYPE_DTL_CD
     </select>
 
+    <!-- 전송유형 설정에 등록된 템플릿 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkSendTypeTemplateCd" parameterType="AlimtalkSendTypeVO" resultType="String">
+        /* AlimtalkSendTypeMapper.getAlimtalkSendTypeTemplateCd */
+        SELECT
+        tmats.TEMPLATE_CD
+        FROM TB_MS_ALIMTALK_TYPE_SETTING tmats
+        WHERE 1=1
+        AND tmats.ORGN_CD = #{orgnCd}
+        AND tmats.SEND_TYPE_CD = #{sendTypeCd}
+        AND tmats.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+    </select>
+
+    <!-- 첫번째 템플릿 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTemplateCd" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+        /* AlimtalkSendTypeMapper.getTemplateCd */
+        SELECT
+        TEMPLATE_CD,
+        TEMPLATE_GRP_FG
+        FROM
+        (
+            SELECT
+            taat.TEMPLATE_CD,
+            taat.TEMPLATE_GRP_FG
+            FROM TB_AL_ALIMTALK_TEMPLATE taat
+            WHERE 1=1
+            AND (
+                    (taat.COMMON_FG = 'C')
+                    OR
+                    (taat.COMMON_FG = 'S' AND taat.ORGN_CD = #{orgnCd})
+                )
+            AND taat.SEND_TYPE_CD = #{sendTypeCd}
+            AND taat.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+            AND taat.APPR_FG = 'TSC03'
+            ORDER BY taat.COMMON_FG, taat.TEMPLATE_GRP_FG, taat.TEMPLATE_CD
+        )
+        WHERE 1=1
+        AND ROWNUM = 1
+    </select>
+
     <!-- 알림톡 전송유형 - 전송유형 상세 저장 merge -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getAlimtalkSendTypeDetailSaveMerge"  parameterType="AlimtalkSendTypeVO">
+    <insert id="getAlimtalkSendTypeDetailSaveMerge" parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailSaveMerge */
         MERGE INTO TB_MS_ALIMTALK_TYPE_SETTING
         USING DUAL
@@ -225,7 +272,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkSendTypeDetailTemplate"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkSendTypeDetailTemplate" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplate */
         SELECT
         tmats.SEND_PERIOD,
@@ -262,7 +309,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getAlimtalkSendTypeDetailTemplateSaveMerge"  parameterType="AlimtalkSendTypeVO">
+    <insert id="getAlimtalkSendTypeDetailTemplateSaveMerge" parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplateSaveMerge */
         MERGE INTO TB_MS_ALIMTALK_TYPE_SETTING
         USING DUAL
@@ -313,7 +360,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkSendTypeDetailTemplateList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkSendTypeDetailTemplateList" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkSendTypeDetailTemplateList */
         SELECT
         taat.TEMPLATE_GRP_FG,
@@ -338,7 +385,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkIdRegisterAllChk"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkIdRegisterAllChk" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkIdRegisterAllChk */
         SELECT
         taa.SENDER_KEY
@@ -352,7 +399,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkRegisterGroupChk"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkRegisterGroupChk" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkRegisterGroupChk */
         SELECT
         taag.SENDER_KEY
@@ -368,7 +415,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getCategoryCodeComboList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getCategoryCodeComboList" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getCategoryCodeComboList */
         <choose>
             <when test='gubun != null and gubun != ""'>
@@ -420,7 +467,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getAlimtalkSenderSaveInsert"  parameterType="AlimtalkSendTypeVO">
+    <insert id="getAlimtalkSenderSaveInsert" parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSenderSaveInsert */
         INSERT INTO TB_AL_ALIMTALK
         (
@@ -461,7 +508,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <update id="getAlimtalkSenderSaveUpdate"  parameterType="AlimtalkSendTypeVO">
+    <update id="getAlimtalkSenderSaveUpdate" parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSenderSaveUpdate */
         UPDATE
         TB_AL_ALIMTALK
@@ -482,7 +529,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getAlimtalkSenderGroupSaveInsert"  parameterType="AlimtalkSendTypeVO">
+    <insert id="getAlimtalkSenderGroupSaveInsert" parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSenderGroupSaveInsert */
         INSERT INTO TB_AL_ALIMTALK_GROUP
         (
