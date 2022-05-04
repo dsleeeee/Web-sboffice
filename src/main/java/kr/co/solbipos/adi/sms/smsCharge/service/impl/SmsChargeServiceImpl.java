@@ -141,4 +141,13 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         return procCnt;
     }
+
+    /** 메세지 건당 가격안내 팝업 - 조회 */
+    @Override
+    public DefaultMap<String> getMsgOneAmtGuideList(SmsChargeVO smsChargeVO,  SessionInfoVO sessionInfoVO) {
+
+        smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return smsChargeMapper.getMsgOneAmtGuideList(smsChargeVO);
+    }
 }

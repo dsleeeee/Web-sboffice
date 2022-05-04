@@ -27,4 +27,7 @@ public interface SmsChargeService {
 
     /** 결제취소 저장 */
     int getSmsChargeSaveUpdate(SmsChargeVO smsChargeVO);
+
+    /** 메세지 건당 가격안내 팝업 - 조회 */
+    DefaultMap<String> getMsgOneAmtGuideList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
 }
