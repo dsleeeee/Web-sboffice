@@ -227,15 +227,15 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // <-- 엑셀다운로드 -->
     $scope.excelDownload = function(){
-        var params       = {};
-        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
-        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.listScale = $scope.listScale;
-
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
             return false;
         }
+
+        var params       = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.listScale = $scope.listScale;
 
         $scope._broadcast('smsChargeHistExcelCtrl', params);
     };

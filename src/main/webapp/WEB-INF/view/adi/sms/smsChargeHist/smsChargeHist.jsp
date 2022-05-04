@@ -119,7 +119,7 @@
 
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
-            <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
+            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -162,7 +162,7 @@
 
     <%-- 엑셀다운로드 그리드 --%>
     <div class="w100 mt10 mb20" style="display:none;" ng-controller="smsChargeHistExcelCtrl">
-        <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="excelFlex"
@@ -200,7 +200,7 @@
     var siteUrl = '<%=pay_site_url%>'; // 결제상세 URL
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20220503.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20220503.02" charset="utf-8"></script>
 
 <%-- SMS임의충전 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsChargeHist/smsChargeRegist.jsp">
