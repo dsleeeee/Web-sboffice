@@ -25,6 +25,9 @@ public interface SmsSendHistService {
     /** SMS전송이력 - 조회 */
     List<DefaultMap<Object>> getSmsSendHistList(SmsSendHistVO smsSendHistVO, SessionInfoVO sessionInfoVO);
 
+    /** SMS전송이력 - 엑셀 조회 */
+    List<DefaultMap<Object>> getSmsSendHistExcelList(SmsSendHistVO smsSendHistVO, SessionInfoVO sessionInfoVO);
+
     /** 수신자정보 팝업 - 조회 */
     List<DefaultMap<Object>> getAddresseeDtlList(SmsSendHistVO smsSendHistVO, SessionInfoVO sessionInfoVO);
 }

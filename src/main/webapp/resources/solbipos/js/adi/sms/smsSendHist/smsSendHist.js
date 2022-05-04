@@ -228,24 +228,143 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
             return false;
         }
 
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-        $timeout(function()	{
-            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
-                {
-                    includeColumnHeaders: 	true,
-                    includeCellStyles	: 	false,
-                    includeColumns      :	function (column) {
-                        return column.visible;
-                    }
-                },
-                'SMS전송이력_'+getCurDate()+'.xlsx',
-                function () {
-                    $timeout(function () {
-                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
-                    }, 10);
-                }
-            );
-        }, 10);
+        var params = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.storeCds = $("#smsSendHistStoreCd").val();
+
+        $scope._broadcast('smsSendHistExcelCtrl', params);
     };
     // <-- //엑셀다운로드 -->
+}]);
+
+
+/**
+ *  SMS전송이력 엑셀 조회 그리드 생성
+ */
+app.controller('smsSendHistExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('smsSendHistExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
+        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                if (col.format === "date") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
+                } else if (col.format === "dateTime") {
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+                } else if (col.format === "time") {
+                    e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
+                }
+            }
+        });
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.regDt = messages["smsSendHist.regDt"];
+        dataItem.smsSendOrgnCd = messages["smsSendHist.send"];
+        dataItem.smsSendOrgnNm = messages["smsSendHist.send"];
+        dataItem.smsSendSeq = messages["smsSendHist.smsSendSeq"];
+        dataItem.smsSendCount = messages["smsSendHist.smsSendCount"];
+        dataItem.msgType = messages["smsSendHist.msgType"];
+        dataItem.subject = messages["smsSendHist.subject"];
+        dataItem.msgContent = messages["smsSendHist.msgContent"];
+        dataItem.sendDate = messages["smsSendHist.sendDate"];
+        dataItem.readDate = messages["smsSendHist.readDate"];
+        dataItem.reserveYn = messages["smsSendHist.reserveYn"];
+        dataItem.sendQty = messages["smsSendHist.sendQty"];
+        dataItem.waitQty = messages["smsSendHist.waitQty"];
+        dataItem.successQty = messages["smsSendHist.successQty"];
+        dataItem.failQty = messages["smsSendHist.failQty"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
+    };
+
+    // <-- 검색 호출 -->
+    $scope.$on("smsSendHistExcelCtrl", function(event, data) {
+        $scope.searchSmsSendHistExcel(data);
+        event.preventDefault();
+    });
+
+    $scope.searchSmsSendHistExcel = function(params) {
+        $scope._inquirySub("/adi/sms/smsSendHist/smsSendHist/getSmsSendHistExcelList.sb", params, function() {
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function()	{
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.excelFlex,
+                    {
+                        includeColumnHeaders: 	true,
+                        includeCellStyles	: 	false,
+                        includeColumns      :	function (column) {
+                            return column.visible;
+                        }
+                    },
+                    'SMS전송이력_'+getCurDate()+'.xlsx',
+                    function () {
+                        $timeout(function () {
+                            $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                        }, 10);
+                    }
+                );
+            }, 10);
+        }, false);
+    };
+    // <-- //검색 호출 -->
 }]);

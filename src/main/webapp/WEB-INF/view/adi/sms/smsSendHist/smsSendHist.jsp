@@ -157,11 +157,45 @@
             </ul>
         </div>
         <%--//페이지 리스트--%>
-
     </div>
+
+    <%-- 엑셀다운로드 그리드 --%>
+    <div class="w100 mt10 mb20" style="display:none;" ng-controller="smsSendHistExcelCtrl">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="excelFlex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="smsSendHist.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.orgnCd"/>" binding="smsSendOrgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.orgnNm"/>" binding="smsSendOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.smsSendCount"/>" binding="smsSendCount" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.subject"/>" binding="subject" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.msgContent"/>" binding="msgContent" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.sendDate"/>" binding="sendDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.readDate"/>" binding="readDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.reserveYn"/>" binding="reserveYn" data-map="reserveYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.sendQty"/>" binding="sendQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.waitQty"/>" binding="waitQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.successQty"/>" binding="successQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.failQty"/>" binding="failQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+
+                <%--저장시 필요--%>
+                <wj-flex-grid-column header="<s:message code="smsSendHist.smsSendSeq"/>" binding="smsSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20210806.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20220504.01" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">
