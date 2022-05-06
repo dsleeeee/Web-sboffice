@@ -201,6 +201,9 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
                 $scope.flex.collectionView.items[i].orgnCd = orgnCd;
                 $scope.flex.collectionView.items[i].regId = userId;
                 $scope.flex.collectionView.items[i].modId = userId;
+                $scope.flex.collectionView.items[i].orgnFg = orgnFg;
+                $scope.flex.collectionView.items[i].hqOfficeCd = hqOfficeCd;
+                $scope.flex.collectionView.items[i].storeCd = storeCd;
                 $scope.flex.collectionView.items[i].groupSenderKey = groupSenderKey;
                 $scope.flex.collectionView.items[i].groupSenderKeyNm = groupSenderKeyNm;
                 $scope.flex.collectionView.items[i].appKey = appKey;
