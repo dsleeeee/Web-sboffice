@@ -66,7 +66,7 @@
         p.txt {line-height:23px; color:#4383b0; white-space: pre;}
         p.txt span {font-weight:bold; color:#e44541;}
 
-        #sample_wrap h1 {width:700px; margin:50px auto 0 ; font-size:12px; background:#0e66a4; color:#fff; height:35px; line-height:35px; text-align:center;}
+        #sample_wrap h1 {width:700px; margin:0px auto 0 ; font-size:12px; background:#0e66a4; color:#fff; height:35px; line-height:35px; text-align:center;}
         .sample {margin:0 auto; width:698px; border-left:1px solid #0e66a4; border-right:1px solid #0e66a4; border-bottom:1px solid #0e66a4;}
     </style>
 
@@ -162,17 +162,35 @@
                 frm.good_mny_qty.value = frm.qty[4].value;
             }
 
-            // else if (frm.amt[5].checked)
-            // {
-            //     frm.good_mny.value = frm.amt[5].value;
-            //     frm.good_mny_qty.value = frm.qty[5].value;
-            // }
-            //
-            // else if (frm.amt[6].checked)
-            // {
-            //     frm.good_mny.value = frm.amt[6].value;
-            //     frm.good_mny_qty.value = frm.qty[6].value;
-            // }
+            else if (frm.amt[5].checked)
+            {
+                frm.good_mny.value = frm.amt[5].value;
+                frm.good_mny_qty.value = frm.qty[5].value;
+            }
+
+            else if (frm.amt[6].checked)
+            {
+                frm.good_mny.value = frm.amt[6].value;
+                frm.good_mny_qty.value = frm.qty[6].value;
+            }
+
+            else if (frm.amt[7].checked)
+            {
+                frm.good_mny.value = frm.amt[7].value;
+                frm.good_mny_qty.value = frm.qty[7].value;
+            }
+
+            else if (frm.amt[8].checked)
+            {
+                frm.good_mny.value = frm.amt[8].value;
+                frm.good_mny_qty.value = frm.qty[8].value;
+            }
+
+            else if (frm.amt[9].checked)
+            {
+                frm.good_mny.value = frm.amt[9].value;
+                frm.good_mny_qty.value = frm.qty[9].value;
+            }
         }
 
         /* 표준웹 실행 */
@@ -227,6 +245,12 @@
 
     <!-- SMS충전결제 결과 -->
     <div ng-controller="smsChargeCtrl">
+        <div class="subCon">
+            <%-- 메세지 건당 가격안내 --%>
+            <button class="btn_skyblue fl ml30" ng-click="msgOneAmtGuidePopup()">
+                가격안내
+            </button>
+        </div>
     </div>
     <script type="text/javascript">
         var app = agrid.getApp();
@@ -280,6 +304,11 @@
                 return $scope.selectedSmsChargeResult;
             };
 
+            // 메세지 건당 가격안내
+            $scope.msgOneAmtGuidePopup = function(){
+                $scope.wjMsgOneAmtGuideLayer.show(true);
+            };
+
             // 화면 ready 된 후 설정
             angular.element(document).ready(function () {
 
@@ -289,12 +318,25 @@
                         $scope._broadcast('smsChargeResultCtrl', $scope.getSelectedSmsChargeResult());
                     }, 50)
                 });
+
+                // 메세지 건당 가격안내 팝업 핸들러 추가
+                $scope.wjMsgOneAmtGuideLayer.shown.addHandler(function (s) {
+                    setTimeout(function() {
+                        $scope._broadcast('msgOneAmtGuideCtrl', null);
+                    }, 50)
+                });
             });
         }]);
     </script>
     <%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>--%>
     <%-- SMS충전결제 결과 팝업 --%>
     <c:import url="/WEB-INF/view/adi/sms/smsCharge/smsChargeResult.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
+    <%-- 메세지 건당 가격안내 팝업 --%>
+    <c:import url="/WEB-INF/view/adi/sms/smsCharge/msgOneAmtGuide.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
@@ -341,19 +383,19 @@
                                 <tr bgcolor='#79a9d2' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td>
-                                        <input type='radio' name='amt' value='8250' checked/>
-                                        <input type='hidden' name='qty' value='7500'/>
+                                        <input type='radio' name='amt' value='11000' checked/>
+                                        <input type='hidden' name='qty' value='10000'/>
                                     </td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>7,500원</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>10,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>500통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td>
-                                        <input type='radio' name='amt' value='16500'/>
-                                        <input type='hidden' name='qty' value='15000'/>
+                                        <input type='radio' name='amt' value='22000'/>
+                                        <input type='hidden' name='qty' value='20000'/>
                                     </td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>15,000원</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>20,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>1,000통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
@@ -368,39 +410,63 @@
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td>
-                                        <input type='radio' name='amt' value='49500'/>
-                                        <input type='hidden' name='qty' value='45000'/>
+                                        <input type='radio' name='amt' value='55000'/>
+                                        <input type='hidden' name='qty' value='50000'/>
                                     </td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>45,000원</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>50,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>3,000통</font></td>--%>
                                 </tr>
                                 <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
                                 <tr height='26' align='center'>
                                     <td>
-                                        <input type='radio' name='amt' value='82500'/>
-                                        <input type='hidden' name='qty' value='75000'/>
+                                        <input type='radio' name='amt' value='77000'/>
+                                        <input type='hidden' name='qty' value='70000'/>
                                     </td>
-                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>75,000원</font></td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>70,000원</font></td>
                                     <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>5,000통</font></td>--%>
                                 </tr>
-                                <%--<tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>--%>
-                                <%--<tr height='26' align='center'>--%>
-                                    <%--<td>--%>
-                                        <%--<input type='radio' name='amt' value='100'/>--%>
-                                        <%--<input type='hidden' name='qty' value='100'/>--%>
-                                    <%--</td>--%>
-                                    <%--<td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>100원</font></td>--%>
-                                    <%--&lt;%&ndash;<td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>&ndash;%&gt;--%>
-                                <%--</tr>--%>
-                                <%--<tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>--%>
-                                <%--<tr height='26' align='center'>--%>
-                                    <%--<td>--%>
-                                        <%--<input type='radio' name='amt' value='1004'/>--%>
-                                        <%--<input type='hidden' name='qty' value='1004'/>--%>
-                                    <%--</td>--%>
-                                    <%--<td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>1004원</font></td>--%>
-                                    <%--&lt;%&ndash;<td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>&ndash;%&gt;--%>
-                                <%--</tr>--%>
+                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
+                                <tr height='26' align='center'>
+                                    <td>
+                                        <input type='radio' name='amt' value='110000'/>
+                                        <input type='hidden' name='qty' value='100000'/>
+                                    </td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>100,000원</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>100통</font></td>--%>
+                                </tr>
+                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
+                                <tr height='26' align='center'>
+                                    <td>
+                                        <input type='radio' name='amt' value='165000'/>
+                                        <input type='hidden' name='qty' value='150000'/>
+                                    </td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>150,000원</font></td>
+                                    <%--<td><font style='width:50px; text-align:right; color:#585858;                  '>1004통</font></td>--%>
+                                </tr>
+                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
+                                <tr height='26' align='center'>
+                                    <td>
+                                        <input type='radio' name='amt' value='220000'/>
+                                        <input type='hidden' name='qty' value='200000'/>
+                                    </td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>200,000원</font></td>
+                                </tr>
+                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
+                                <tr height='26' align='center'>
+                                    <td>
+                                        <input type='radio' name='amt' value='550000'/>
+                                        <input type='hidden' name='qty' value='500000'/>
+                                    </td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>500,000원</font></td>
+                                </tr>
+                                <tr bgcolor='#ebebeb' height='1'><td colspan='3'></td></tr>
+                                <tr height='26' align='center'>
+                                    <td>
+                                        <input type='radio' name='amt' value='1100000'/>
+                                        <input type='hidden' name='qty' value='1000000'/>
+                                    </td>
+                                    <td><font style='width:60px; text-align:right; color:#3187ca; font-weight:bold;'>1,000,000원</font></td>
+                                </tr>
                                 <tr bgcolor='#bfccd8' height='1'><td colspan='3'></td></tr>
                                 <tr height='30'>
                                     <td colspan='3' style='color:#585858;' align='right'>* 부가세 별도금액 입니다.</td>

@@ -57,4 +57,22 @@
         AND cpt.CONTROLNO = #{controlno}
     </select>
 
+    <!-- 메세지 건당 가격안내 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMsgOneAmtGuideList" parameterType="SmsChargeVO" resultType="DefaultMap">
+        /* SmsChargeMapper.getMsgOneAmtGuideList */
+        SELECT
+        FN_GET_SMS_UPRC('SMS', #{orgnCd}) AS SMS_ONE_AMT, -- TB_CM_NMCODE.NMCODE_GRP_CD = '222'
+        FN_GET_SMS_UPRC('LMS', #{orgnCd}) AS LMS_ONE_AMT,
+        FN_GET_SMS_UPRC('MMS', #{orgnCd}) AS MMS_ONE_AMT,
+        FN_GET_SMS_UPRC('ALK', #{alkChargeOrgnCd}) AS ALK_ONE_AMT,
+        FN_GET_SMS_UPRC('ALK_SMS', #{alkChargeOrgnCd}) AS ALK_SMS_ONE_AMT,
+        FN_GET_SMS_UPRC('ALK_LMS', #{alkChargeOrgnCd}) AS ALK_LMS_ONE_AMT,
+        FN_GET_SMS_UPRC('ALK_MMS', #{alkChargeOrgnCd}) AS ALK_MMS_ONE_AMT
+        FROM dual
+    </select>
+
 </mapper>

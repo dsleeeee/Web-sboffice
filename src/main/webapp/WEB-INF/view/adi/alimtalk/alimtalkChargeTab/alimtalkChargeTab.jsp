@@ -24,6 +24,7 @@
 <script type="text/javascript">
     var tabVal = "${tabVal}"; // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
     var urlVal = "/adi/alimtalk/alimtalkChargeTab/alimtalkChargeTab/list.sb"; // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
+    var pageGubunVal = "alimtalk"; // 페이지구분
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkChargeTab/alimtalkChargeTab.js?ver=20211021.01" charset="utf-8"></script>

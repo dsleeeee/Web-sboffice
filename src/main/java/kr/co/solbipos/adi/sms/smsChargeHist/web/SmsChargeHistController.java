@@ -90,6 +90,29 @@ public class SmsChargeHistController {
     }
 
     /**
+     * SMS충전내역 - 엑셀 조회
+     *
+     * @param smsChargeHistVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 03.
+     */
+    @RequestMapping(value = "/smsChargeHist/getSmsChargeHistExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsChargeHistExcelList(SmsChargeHistVO smsChargeHistVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsChargeHistService.getSmsChargeHistExcelList(smsChargeHistVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsChargeHistVO);
+    }
+
+    /**
      * SMS임의충전 팝업 - 조회
      *
      * @param smsChargeHistVO

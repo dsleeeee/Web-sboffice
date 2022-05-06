@@ -121,7 +121,7 @@
             <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
-                        control="flexAlimtalkSendHist"
+                        control="alimtalkSendHistFlex"
                         initialized="initGrid(s,e)"
                         sticky-headers="true"
                         selection-mode="Row"
@@ -157,11 +157,45 @@
             </ul>
         </div>
         <%--//페이지 리스트--%>
-
     </div>
+
+    <%-- 엑셀다운로드 그리드 --%>
+    <div class="w100 mt10 mb20" style="display:none;" ng-controller="alimtalkSendHistExcelCtrl">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="alimtalkSendHistExcelFlex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.orgnCd"/>" binding="alkSendOrgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.orgnNm"/>" binding="alkSendOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.alkSendCount"/>" binding="alkSendCount" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.subject"/>" binding="subject" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.msgContent"/>" binding="msgContent" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.sendDate"/>" binding="sendDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.readDate"/>" binding="readDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.reserveYn"/>" binding="reserveYn" data-map="reserveYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.sendQty"/>" binding="sendQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.waitQty"/>" binding="waitQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.successQty"/>" binding="successQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.failQty"/>" binding="failQty" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+
+                <%--저장시 필요--%>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendHist.alkSendSeq"/>" binding="alkSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20220418.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=.20220504.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">--%>

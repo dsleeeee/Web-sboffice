@@ -139,4 +139,30 @@ public class SmsChargeController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 메세지 건당 가격안내 팝업 - 조회
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 03.
+     */
+    @RequestMapping(value = "/msgOneAmtGuide/getMsgOneAmtGuideList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMsgOneAmtGuideList(SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = smsChargeService.getMsgOneAmtGuideList(smsChargeVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
 }

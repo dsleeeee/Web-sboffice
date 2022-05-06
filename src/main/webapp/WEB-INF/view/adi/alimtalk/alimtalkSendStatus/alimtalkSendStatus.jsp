@@ -8,6 +8,8 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div id="alimtalkSendStatusView" class="subCon" style="display: none;">
     <div ng-controller="alimtalkSendStatusCtrl">
@@ -165,6 +167,9 @@
 <script type="text/javascript">
     var orgnCd = "${orgnCd}";
     var userId = "${userId}";
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
+    var storeCd = "${storeCd}";
 
     var groupSenderKey = "${groupSenderKey}";
     var groupSenderKeyNm = "${groupSenderKeyNm}";
@@ -173,7 +178,7 @@
     var apiUrl = "${apiUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20220407.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20220407.03" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">

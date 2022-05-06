@@ -55,6 +55,17 @@ public class SmsChargeHistServiceImpl implements SmsChargeHistService {
         return smsChargeHistMapper.getSmsChargeHistList(smsChargeHistVO);
     }
 
+    /** SMS충전내역 - 엑셀 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSmsChargeHistExcelList(SmsChargeHistVO smsChargeHistVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        smsChargeHistVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        smsChargeHistVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return smsChargeHistMapper.getSmsChargeHistExcelList(smsChargeHistVO);
+    }
+
     /** SMS임의충전 팝업 - 조회 */
     @Override
     public List<DefaultMap<Object>> getSmsChargeRegistList(SmsChargeHistVO smsChargeHistVO, SessionInfoVO sessionInfoVO) {

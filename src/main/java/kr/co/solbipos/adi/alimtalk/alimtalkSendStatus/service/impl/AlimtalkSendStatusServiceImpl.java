@@ -38,14 +38,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService {
     private final AlimtalkSendStatusMapper alimtalkSendStatusMapper;
     private final SendStatusMapper sendStatusMapper; // SMS 문자전송현황
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public AlimtalkSendStatusServiceImpl(AlimtalkSendStatusMapper alimtalkSendStatusMapper, SendStatusMapper sendStatusMapper) {
+    public AlimtalkSendStatusServiceImpl(AlimtalkSendStatusMapper alimtalkSendStatusMapper, SendStatusMapper sendStatusMapper, CmmEnvUtil cmmEnvUtil) {
         this.alimtalkSendStatusMapper = alimtalkSendStatusMapper;
         this.sendStatusMapper = sendStatusMapper; // SMS 문자전송현황
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 알림톡 전송결과 - 조회 */
@@ -81,8 +83,26 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
         SendStatusVO sendStatusVO = new SendStatusVO();
         sendStatusVO.setModDt(currentDt);
         sendStatusVO.setModId(alimtalkSendStatusVO.getModId());
-        sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getOrgnCd());
+//        sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getOrgnCd());
         sendStatusVO.setMsgType(alimtalkSendStatusVO.getMsgType());
+        // 알림톡 가격 조회시
+        if (alimtalkSendStatusVO.getOrgnFg().equals("HQ")){
+            sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getHqOfficeCd());
+
+        } else if (alimtalkSendStatusVO.getOrgnFg().equals("STORE")){
+            // 환경설정 코드값 조회 [1231 알림톡비용차감]
+            sessionInfoVO.setStoreCd(alimtalkSendStatusVO.getStoreCd());
+            String alkChargeEnvstVal1231 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1231"));
+            System.out.println("WEB_ALIMTALK >>> 가격안내 >>> 환경설정 코드값 [1231 알림톡비용차감] : " + alkChargeEnvstVal1231);
+
+            // 본사
+            if(alkChargeEnvstVal1231.equals("1")) {
+                sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getHqOfficeCd());
+            // 매장
+            } else {
+                sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getStoreCd());
+            }
+        }
         procCnt = sendStatusMapper.getSmsAmtRecoverSaveUpdate(sendStatusVO);
 
         // 알림톡 전송이력 복구

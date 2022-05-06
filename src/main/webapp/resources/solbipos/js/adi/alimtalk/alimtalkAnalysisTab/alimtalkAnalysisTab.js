@@ -53,7 +53,7 @@ app.controller('alimtalkAnalysisTabCtrl', ['$scope', function ($scope) {
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("alimtalkSendHistCtrl");
-        scope.flexAlimtalkSendHist.refresh();
+        scope.alimtalkSendHistFlex.refresh();
     };
 
     // 알림톡 일자별 전송현황 탭 보이기

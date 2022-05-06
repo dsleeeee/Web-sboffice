@@ -90,6 +90,29 @@ public class SmsSendHistController {
     }
 
     /**
+     * SMS전송이력 - 엑셀 조회
+     *
+     * @param smsSendHistVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 04.
+     */
+    @RequestMapping(value = "/smsSendHist/getSmsSendHistExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsSendHistExcelList(SmsSendHistVO smsSendHistVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsSendHistService.getSmsSendHistExcelList(smsSendHistVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsSendHistVO);
+    }
+
+    /**
      * 수신자정보 팝업 - 조회
      *
      * @param smsSendHistVO
