@@ -57,6 +57,8 @@ public class ViewVO extends PageVO {
     private Date sysOpenDate;
     /** 시스템폐점일자 */
     private String sysClosureDate;
+    /** 기준매장코드 */
+    private String originalStoreCd;
 
     /**
      * @return the hqOfficeCd
@@ -261,5 +263,13 @@ public class ViewVO extends PageVO {
      */
     public void setSysClosureDate(String sysClosureDate) {
         this.sysClosureDate = sysClosureDate;
+    }
+
+    public String getOriginalStoreCd() {
+        return originalStoreCd;
+    }
+
+    public void setOriginalStoreCd(String originalStoreCd) {
+        this.originalStoreCd = originalStoreCd;
     }
 }

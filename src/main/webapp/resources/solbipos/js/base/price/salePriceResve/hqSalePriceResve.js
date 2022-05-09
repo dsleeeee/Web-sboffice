@@ -623,6 +623,7 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 if (($scope.flex.collectionView.items[i].orgStartDate !== $scope.flex.collectionView.items[i].startDate) ||
+                    ($scope.flex.collectionView.items[i].orgEndDate !== $scope.flex.collectionView.items[i].endDate) ||
                     ($scope.flex.collectionView.items[i].hqSaleUprc !== $scope.flex.collectionView.items[i].saleUprc) ||
                     ($scope.flex.collectionView.items[i].hqStinSaleUprc !== $scope.flex.collectionView.items[i].stinSaleUprc) ||
                     ($scope.flex.collectionView.items[i].hqDlvrSaleUprc !== $scope.flex.collectionView.items[i].dlvrSaleUprc) ||

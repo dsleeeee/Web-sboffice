@@ -27,6 +27,7 @@
                  thp.COST_UPRC AS HQ_COST_UPRC,                                                  -- 본사원가
                  thp.SPLY_UPRC AS HQ_SPLY_UPRC,                                                  -- 대표공급가
                  TO_CHAR(TO_DATE(thpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+                 TO_CHAR(TO_DATE(thpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_END_DATE,     -- 종료시간
                  TO_CHAR(TO_DATE(thpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
                  TO_CHAR(TO_DATE(thpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,         -- 종료시간
                  thpsp.SALE_UPRC AS HQ_SALE_UPRC,                                                -- 본사판매가
@@ -426,6 +427,7 @@
                tmp.PROD_CD,
                tmp.PROD_NM,
                TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+               TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_END_DATE,     -- 종료시간
                TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
                TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,         -- 종료시간
                tmpsp.SALE_UPRC AS SALE_UPRC_P,              -- 변경전 판매금액
@@ -508,6 +510,7 @@
          SELECT tmp.PROD_CD,
                 tmp.PROD_NM,
                 TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+                TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS ORG_END_DATE,   -- 종료시간
                 TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
                 TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS END_DATE,       -- 종료시간
                 thp.PROD_CLASS_CD,                            -- 상품분류코드
@@ -854,6 +857,7 @@
                  SELECT tmp.PROD_CD,
                         tmp.PROD_NM,
                         TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+                        TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS ORG_END_DATE,   -- 종료시간
                         TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
                         TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS END_DATE,       -- 종료시간
                         tmp.PROD_CLASS_CD,  -- 상품분류코드
@@ -952,6 +956,7 @@
                   SELECT tmp.PROD_CD,
                          tmp.PROD_NM,
                          TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+                         TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS ORG_END_DATE,   -- 종료시간
                          TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
                          TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS END_DATE,       -- 종료시간
                          tmp.PROD_CLASS_CD,  -- 상품분류코드

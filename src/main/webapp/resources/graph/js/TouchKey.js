@@ -234,6 +234,12 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   });
 
+  // 매장 판매터치키복사 팝업
+  $scope.copyStoreTouchKey = function(){
+    $scope.copyStoreTouchKeyLayer.show(true);
+    $scope._broadcast('copyStoreTouchKeyCtrl');
+  };
+
   // 스타일미리보기
   $scope.viewStyle = function() {
     $scope.touchKeyStyleLayer.show();

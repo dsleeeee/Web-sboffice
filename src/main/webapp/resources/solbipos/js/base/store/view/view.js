@@ -44,6 +44,16 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+
+        // 매장 판매터치키 변경 버튼 set
+        if( col.binding === "buttons"){
+          e.cell.innerHTML = "변경";
+          e.cell.dataItem = item;
+          wijmo.addClass(e.cell, 'wijLink');
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+
         if (col.binding === "storeCd" || col.binding === "storeNm" || col.binding === "ownerNm" ) {
           wijmo.addClass(e.cell, 'wijLink');
         }
@@ -55,6 +65,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
 
         // 매장명과 매장코드 클릭시 매장 상세정보 조회
         if ( col.binding === "storeCd" ||  col.binding === "storeNm") {
@@ -68,6 +79,11 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.setSelectedStore(s.rows[ht.row].dataItem);
           $scope.vanConfigLayer.show(true);
           event.preventDefault();
+        }
+
+        // 매장 판매터치키 변경 버튼 클릭
+        if ( col.binding === "buttons") {
+            $scope.vLoginProcess(selectedRow.msUserId);
         }
       }
     });
@@ -89,6 +105,12 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장환경복사 팝업
   $scope.copyStoreEnv = function(){
     $scope.copyStoreEnvLayer.show(true);
+  };
+
+  // 매장 판매터치키복사 팝업
+  $scope.copyStoreTouchKey = function(){
+    $scope.copyStoreTouchKeyLayer.show(true);
+    $scope._broadcast('copyStoreTouchKeyCtrl');
   };
 
   // 화면 ready 된 후 설정
@@ -128,6 +150,68 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._broadcast('storeListExcelCtrl', params);
   };
   // <-- //엑셀다운로드 호출 -->
+
+    // 가상로그인 수행
+    // 최초 가상로그인으로 로그인시에는 vLoginId 가 아닌 vUserId 파라미터로 로그인 후 vLoginId로 사용한다.
+    $scope.vLoginProcess = function(value) {
+
+        if (isEmpty(value)) {
+            $scope.$apply(function() {
+                $scope._popMsg(messages["virtualLogin.vLogin.fail"]);
+            });
+            return false;
+        } else {
+
+            /* post */
+            $scope.popupCnt = $scope.popupCnt + 1;
+
+            var form = document.createElement("form");
+            form.setAttribute("method", "POST");
+            form.setAttribute("action", "/store/manage/virtualLogin/virtualLogin/vLogin.sb");
+            form.setAttribute("target", value);
+
+            var formField = document.createElement("input");
+            formField.setAttribute("type", "hidden");
+            formField.setAttribute("name", "vUserId");
+            formField.setAttribute("value", value);
+            form.appendChild(formField);
+
+            formField = document.createElement("input");
+            formField.setAttribute("type", "hidden");
+            formField.setAttribute("name", "optUrl");
+            formField.setAttribute("value", "/base/prod/touchKey/touchKey/view.sb");
+            form.appendChild(formField);
+
+            document.body.appendChild(form);
+
+            var popup = window.open("", value, "width=1024,height=768,resizable=yes,scrollbars=yes");
+            var crono = window.setInterval(function () {
+                if (popup.closed !== false) { // !== opera compatibility reasons
+                    window.clearInterval(crono);
+                    var params = {};
+                    params.vUserId = value;
+                    if ( popup.document.getElementsByName("sessionId") ) {
+                        params.sid = popup.document.getElementsByName("sessionId")[0].value;
+                    }
+
+                    $http({
+                        method: 'POST',
+                        url: "/store/manage/virtualLogin/virtualLogin/vLogout.sb",
+                        params: params,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
+                    }).then(function successCallback(response) {
+
+                    }, function errorCallback(response) {
+                        $scope._popMsg(response.message);
+                        return false;
+                    });
+
+                }
+            }, 250);
+            form.submit();
+            document.body.removeChild(form);
+        }
+    };
 
 }]);
 

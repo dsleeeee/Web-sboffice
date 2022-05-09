@@ -44,6 +44,9 @@ public class CopyStoreEnvVO extends PageVO {
     /** 프로시져 실행 결과 */
     private String result;
 
+    /** 터치키그룹코드 : 시즌,행사별 등 일종의 템플릿 */
+    private String tukeyGrpCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -162,5 +165,13 @@ public class CopyStoreEnvVO extends PageVO {
      */
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getTukeyGrpCd() {
+        return tukeyGrpCd;
+    }
+
+    public void setTukeyGrpCd(String tukeyGrpCd) {
+        this.tukeyGrpCd = tukeyGrpCd;
     }
 }

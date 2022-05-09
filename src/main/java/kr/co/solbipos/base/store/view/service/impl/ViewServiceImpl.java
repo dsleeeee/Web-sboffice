@@ -13,7 +13,6 @@ import kr.co.solbipos.base.store.view.service.ViewVO;
 import kr.co.solbipos.base.store.view.service.enums.StoreEnv;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
-import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -205,4 +204,61 @@ public class ViewServiceImpl implements ViewService {
 
         return viewMapper.getStoreEnvInfoList(copyStoreEnvVO);
     }
+
+    /** 매장 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreList(ViewVO viewVO, SessionInfoVO sessionInfoVO){
+
+        viewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return viewMapper.getStoreList(viewVO);
+    }
+
+    /** 매장 판매터치키 콤보박스 데이터 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreTouchKeyGrpCombo(ViewVO viewVO, SessionInfoVO sessionInfoVO){
+
+        return viewMapper.getStoreTouchKeyGrpCombo(viewVO);
+    }
+
+    /** 매장 판매터치키 선택그룹 복사 */
+    @Override
+    public int copyStoreTouchKeyGrp(CopyStoreEnvVO[] copyStoreEnvVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        String procResult = "";
+
+        for (CopyStoreEnvVO copyStoreEnvVO : copyStoreEnvVOs) {
+
+            copyStoreEnvVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            copyStoreEnvVO.setRegDt(currentDt);
+            copyStoreEnvVO.setRegId(sessionInfoVO.getUserId());
+            copyStoreEnvVO.setModDt(currentDt);
+            copyStoreEnvVO.setModId(sessionInfoVO.getUserId());
+
+            // 전체복사
+            if("".equals(copyStoreEnvVO.getTukeyGrpCd())){
+
+                // 터치키 클래스와 터치키 전체복사
+                procResult = viewMapper.copyTouchKey(copyStoreEnvVO);
+
+                // 터치키 XML 전체복사
+                copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
+                procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO);
+
+            }else{ // 선택그룹 복사
+
+                // 터치키 클래스와 터치키 선택그룹 복사
+                procResult = viewMapper.copyTouchKeyGrp(copyStoreEnvVO);
+
+                // 터치키 선택그룹 XML 복사
+                copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
+                procResult = viewMapper.copyTouchKeyGrpXML(copyStoreEnvVO);
+            }
+        }
+
+        return result;
+    }
+
 }

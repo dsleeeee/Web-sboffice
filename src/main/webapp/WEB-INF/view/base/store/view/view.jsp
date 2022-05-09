@@ -111,6 +111,10 @@
           <s:message code="storeView.copy.store" />
         </button>
     <%--</c:if>--%>
+      <%-- 매장 판매터치키복사 --%>
+      <button class="btn_skyblue ml5 fr"  id="copyTouchKey" ng-click="copyStoreTouchKey()">
+        <s:message code="storeView.copy.touchKey" />
+      </button>
   </div>
 
   <%-- 회원목록 그리드 --%>
@@ -135,6 +139,7 @@
         <wj-flex-grid-column header="<s:message code="storeView.address"/>" binding="address" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.posVerNo"/>" binding="posVerNo" width="85" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysStatFgNm"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.touchKey"/>" binding="buttons" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysOpenDate"/>" binding="sysOpenDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysClosureDate"/>" binding="sysClosureDate"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sms"/>" binding="gChk" visible="false" width="40" align="center"></wj-flex-grid-column>
@@ -175,6 +180,7 @@
         <wj-flex-grid-column header="<s:message code="storeView.sysOpenDate"/>" binding="sysOpenDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysClosureDate"/>" binding="sysClosureDate"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sms"/>" binding="gChk" visible="false" width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="" binding="msUserId" visible="false"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -187,7 +193,7 @@ var sysStatFg = ${ccu.getCommCodeSelect("005")};
 var areaCd = ${ccu.getCommCodeSelect("061")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20190114.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20220504.01" charset="utf-8"></script>
 
 <%-- 매장 상세정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/dtl.jsp">
@@ -199,4 +205,8 @@ var areaCd = ${ccu.getCommCodeSelect("061")};
 
 <%-- 매장환경복사 --%>
 <c:import url="/WEB-INF/view/base/store/view/copyStoreEnv.jsp">
+</c:import>
+
+<%-- 매장 판매터치키복사 --%>
+<c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
 </c:import>

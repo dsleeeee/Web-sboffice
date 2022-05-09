@@ -126,6 +126,12 @@ public class VirtualLoginController {
             ) {
 
         String returnUrl = "/main.sb";
+
+        // 가상로그인시, 사용자가 따로 지정한 ULR이 있는 경우 해당화면으로 이동
+        if(request.getParameter("optUrl") != null && !"".equals(request.getParameter("optUrl"))){
+            returnUrl = request.getParameter("optUrl");
+        }
+
         // 기존 세션 조회
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         // 기존세션 이용하여 권한조회

@@ -625,6 +625,7 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 if (($scope.flex.collectionView.items[i].orgStartDate !== $scope.flex.collectionView.items[i].startDate) ||
+                    ($scope.flex.collectionView.items[i].orgEndDate !== $scope.flex.collectionView.items[i].endDate) ||
                     ($scope.flex.collectionView.items[i].saleUprcP !== $scope.flex.collectionView.items[i].saleUprc) ||
                     ($scope.flex.collectionView.items[i].stinSaleUprcP !== $scope.flex.collectionView.items[i].stinSaleUprc) ||
                     ($scope.flex.collectionView.items[i].dlvrSaleUprcP !== $scope.flex.collectionView.items[i].dlvrSaleUprc) ||

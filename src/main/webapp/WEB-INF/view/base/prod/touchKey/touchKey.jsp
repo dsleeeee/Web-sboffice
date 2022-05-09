@@ -72,6 +72,10 @@
                 <button class="btn_blk fl" id="btnApplyStore" ng-click="$broadcast('showPopUp')">
                     <s:message code="touchKey.applyStore" />
                 </button>
+                <%-- 매장 판매터치키복사 --%>
+                <button class="btn_blk ml5 fl"  id="copyTouchKey" ng-click="copyStoreTouchKey()">
+                    <s:message code="touchKey.copy" />
+                </button>
             </td>
         </tr>
         </tbody>
@@ -300,10 +304,21 @@
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
 
+    <%-- 매장 판매터치키복사 --%>
+    <c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
+    </c:import>
+
 </div>
 <%--//서브컨텐츠--%>
 
 <script>
+
+    // 본사권한 [기초관리] - [매장관리] - [매장정보조회]의 판매터치키변경을 클릭하여 접속한 경우, 왼쪽 메뉴영역은 접어두기.
+    var referrer = document.referrer;
+    if(orgnFg === "STORE" && referrer.indexOf("/base/store/view/view/list.sb") > 0){
+        $(".menuControl").trigger("click");
+    }
+
     // 브랜드
     var brandList = ${brandList};
     var touchKeyGrpData = ${touchKeyGrp};
@@ -386,7 +401,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220324.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220504.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
