@@ -60,7 +60,7 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20220201.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20220201.02" charset="utf-8"></script>
 
 <%-- 일반번호 인증요청 처리 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsGeneralNoManage.jsp">

@@ -30,4 +30,10 @@ public interface SmsChargeService {
 
     /** 메세지 건당 가격안내 팝업 - 조회 */
     DefaultMap<String> getMsgOneAmtGuideList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
+
+    /** 잔여금액 알림 설정 팝업 - 조회 */
+    DefaultMap<String> getRestSmsAmtAlimSettingList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
+
+    /** 잔여금액 알림 설정 팝업 - 저장 */
+    int getRestSmsAmtAlimSettingSave(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
 }

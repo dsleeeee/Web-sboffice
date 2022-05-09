@@ -110,4 +110,4 @@
     var sysStatFgComboData = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManageStoreRegist.js?ver=20211005.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/msgManage/msgManageStoreRegist.js?ver=20211005.02" charset="utf-8"></script>

@@ -154,7 +154,7 @@ public class SmsChargeController {
     @RequestMapping(value = "/msgOneAmtGuide/getMsgOneAmtGuideList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMsgOneAmtGuideList(SmsChargeVO smsChargeVO, HttpServletRequest request,
-                                     HttpServletResponse response, Model model) {
+                                        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -164,5 +164,54 @@ public class SmsChargeController {
         resultMap.put("result", result);
 
         return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 잔여금액 알림 설정 팝업 - 조회
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 09.
+     */
+    @RequestMapping(value = "/restSmsAmtAlimSetting/getRestSmsAmtAlimSettingList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRestSmsAmtAlimSettingList(SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = smsChargeService.getRestSmsAmtAlimSettingList(smsChargeVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 잔여금액 알림 설정 팝업 - 저장
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 09.
+     */
+    @RequestMapping(value = "/restSmsAmtAlimSetting/getRestSmsAmtAlimSettingSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRestSmsAmtAlimSettingSave(@RequestBody SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsChargeService.getRestSmsAmtAlimSettingSave(smsChargeVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

@@ -75,4 +75,58 @@
         FROM dual
     </select>
 
+    <!-- 잔여금액 알림 설정 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getRestSmsAmtAlimSettingList" parameterType="SmsChargeVO" resultType="DefaultMap">
+        /* SmsChargeMapper.getRestSmsAmtAlimSettingList */
+        SELECT
+        NVL(MAX(cst.RM_SMS_AMT), -99999) AS RM_SMS_AMT
+        FROM CET_SMSPT_T cst
+        WHERE 1=1
+        AND cst.OGN_CD = #{orgnCd}
+    </select>
+
+    <!-- 잔여금액 알림 설정 팝업 - 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getRestSmsAmtAlimSettingSaveMerge" parameterType="SmsChargeVO">
+        /* SmsChargeMapper.getRestSmsAmtAlimSettingSaveMerge */
+        MERGE INTO CET_SMSPT_T
+        USING DUAL
+        ON  (
+                OGN_CD = #{orgnCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            RM_SMS_AMT = #{rmSmsAmt},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                OGN_CD,
+                SMS_QTY,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                SMS_AMT,
+                RM_SMS_AMT
+            ) VALUES (
+                #{orgnCd},
+                0,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                0,
+                #{rmSmsAmt}
+            )
+    </insert>
+
 </mapper>
