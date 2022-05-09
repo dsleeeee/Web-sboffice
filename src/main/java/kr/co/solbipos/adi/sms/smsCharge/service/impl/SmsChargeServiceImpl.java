@@ -168,6 +168,9 @@ public class SmsChargeServiceImpl implements SmsChargeService {
             } else {
                 smsChargeVO.setAlkChargeOrgnCd(sessionInfoVO.getStoreCd());
             }
+
+        } else {
+            smsChargeVO.setAlkChargeOrgnCd(sessionInfoVO.getOrgnCd());
         }
 
         return smsChargeMapper.getMsgOneAmtGuideList(smsChargeVO);
