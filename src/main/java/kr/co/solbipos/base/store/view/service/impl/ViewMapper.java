@@ -75,13 +75,13 @@ public interface ViewMapper {
     /** 포스기능키 복사 */
     String copyPosFnKey(CopyStoreEnvVO copyStoreEnvVO);
 
-    /** 판매터치키 복사 */
+    /** 판매터치키 전체복사 */
     String copyTouchKey(CopyStoreEnvVO copyStoreEnvVO);
 
     /** 터치키 XML 조회 */
     String getTouchKeyXml(DefaultMap<String> param);
 
-    /** 터치키 XML 복사 */
+    /** 터치키 XML 전체복사 */
     String copyTouchKeyXML(CopyStoreEnvVO copyStoreEnvVO);
 
     /** 쿠폰분류 복사 */
@@ -95,4 +95,17 @@ public interface ViewMapper {
 
     /** 매장환경 복사를 위한 정보 조회 */
     List<DefaultMap<String>> getStoreEnvInfoList(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 매장 리스트 조회 */
+    List<DefaultMap<String>> getStoreList(ViewVO viewVO);
+
+    /** 매장 판매터치키 콤보박스 데이터 조회 */
+    List<DefaultMap<String>> getStoreTouchKeyGrpCombo(ViewVO viewVO);
+
+    /** 판매터치키 선택그룹 복사 */
+    String copyTouchKeyGrp(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 판매터치키 선택그룹 XML 복사 */
+    String copyTouchKeyGrpXML(CopyStoreEnvVO copyStoreEnvVO);
+
 }

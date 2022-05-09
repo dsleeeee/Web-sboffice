@@ -1,6 +1,5 @@
 package kr.co.solbipos.base.store.view.web;
 
-import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -251,6 +250,69 @@ public class ViewController {
         posParam.put("targetStoreCd", request.getParameter("targetStoreCd"));
 
         int result = viewService.copyStoreEnv(copyStoreEnvVOs, posParam, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장 리스트 조회
+     *
+     * @param viewVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2022.04.29
+     */
+    @RequestMapping(value = "/view/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(ViewVO viewVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = viewService.getStoreList(viewVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, viewVO);
+    }
+
+    /**
+     * 매장 판매터치키 콤보박스 데이터 조회
+     * @param viewVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/view/getStoreTouchKeyGrpCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreTouchKeyGrpCombo(ViewVO viewVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = viewService.getStoreTouchKeyGrpCombo(viewVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, viewVO);
+    }
+
+    /**
+     * 매장 판매터치키 선택그룹 복사
+     * @param copyStoreEnvVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/view/copyStoreTouchKeyGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyStoreTouchKeyGrp(@RequestBody CopyStoreEnvVO[] copyStoreEnvVOs, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = viewService.copyStoreTouchKeyGrp(copyStoreEnvVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

@@ -51,4 +51,13 @@ public interface ViewService {
 
     /** 매장환경 복사를 위한 정보 조회 */
     List<DefaultMap<String>> getStoreEnvInfoList(CopyStoreEnvVO copyStoreEnvVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장 리스트 조회 */
+    List<DefaultMap<String>> getStoreList(ViewVO viewVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장 판매터치키 콤보박스 데이터 조회 */
+    List<DefaultMap<String>>getStoreTouchKeyGrpCombo(ViewVO viewVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장 판매터치키 선택그룹 복사 */
+    int copyStoreTouchKeyGrp(CopyStoreEnvVO[] copyStoreEnvVOs, SessionInfoVO sessionInfoVO);
 }

@@ -354,6 +354,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="34"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgStartDate" width="100" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="orgEndDate" width="100" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceResve.startDate"/>" binding="startDate" width="120" align="center">
                     <wj-flex-grid-cell-template cell-type="CellEdit">
                         <div class="sb-select">
@@ -430,7 +431,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResve.js?ver=20220418.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResve.js?ver=20220502.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

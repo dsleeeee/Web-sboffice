@@ -617,6 +617,19 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
                         return false;
                     }
                 }
+
+                if(Number(now) >= Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.startDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
+                    return false;
+                }
+                if(Number(now) >= Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.endDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
+                    return false;
+                }
+                if(Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', '')) > Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))){
+                    $scope._popMsg(messages["salePriceResve.resveDate"] + messages["salePriceResve.resveDate.chk.msg2"]);
+                    return false;
+                }
             }
         }
 
@@ -629,6 +642,7 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             if ($scope.flex.collectionView.items[i].gChk) {
                 if (($scope.flex.collectionView.items[i].orgStartDate !== $scope.flex.collectionView.items[i].startDate) ||
+                    ($scope.flex.collectionView.items[i].orgEndDate !== $scope.flex.collectionView.items[i].endDate) ||
                     ($scope.flex.collectionView.items[i].storeSaleUprc !== $scope.flex.collectionView.items[i].saleUprc) ||
                     ($scope.flex.collectionView.items[i].storeStinSaleUprc !== $scope.flex.collectionView.items[i].stinSaleUprc) ||
                     ($scope.flex.collectionView.items[i].storeDlvrSaleUprc !== $scope.flex.collectionView.items[i].dlvrSaleUprc) ||

@@ -29,14 +29,18 @@
                tmp.POS_VER_NO,
                tms.SYS_STAT_FG,
                TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
-               TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE
+               TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
+               tme.USER_ID AS MS_USER_ID
       <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_STORE tms,
-               TB_MS_POS tmp
+               TB_MS_POS tmp,
+               TB_MS_EMPLOYEE tme
          WHERE tms.HQ_OFFICE_CD =  #{hqOfficeCd}
            AND tmp.STORE_CD (+)= tms.STORE_CD
            AND tmp.POS_NO (+)= '01' -- 기본포스(포스 최신버전 가져오기 위함)
            AND tmp.USE_YN (+)= 'Y'
+           AND tme.STORE_CD (+)= tms.STORE_CD
+           AND tme.EMP_NO (+)= '0000'
         <if test='storeCd != null and storeCd != ""'>
            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>
@@ -543,6 +547,98 @@
         WHERE 1=1
         AND tcn.NMCODE_GRP_CD = '101'
         AND tcn.NMCODE_ITEM_1 = 'Y'
+    </select>
+
+    <!-- 매장 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : viewVO
+        COMMENTS : 매장 리스트 조회
+    -->
+    <select id="getStoreList" parameterType="viewVO" resultType="DefaultMap">
+        /* ViewMapper.getStoreList */
+        SELECT tms.STORE_CD,
+               tms.STORE_NM
+          FROM TB_MS_STORE tms
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM  LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='originalStoreCd != null and originalStoreCd != ""'>
+            AND tms.STORE_CD != #{originalStoreCd}
+        </if>
+         ORDER
+            BY tms.STORE_CD
+    </select>
+
+    <!-- 매장 판매터치키 콤보박스 데이터 조회 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS
+        PARAM    : viewVO
+        COMMENTS : 매장 판매터치키 콤보박스 데이터를 조회한다.
+    -->
+    <select id="getStoreTouchKeyGrpCombo" parameterType="viewVO" resultType="DefaultMap">
+        /* ViewMapper.getStoreTouchKeyGrpCombo */
+        SELECT TUKEY_GRP_CD AS NAME,
+               TUKEY_GRP_CD AS VALUE
+          FROM TB_MS_TOUCH_KEY_CLASS
+         WHERE STORE_CD = #{storeCd}
+         GROUP
+            BY TUKEY_GRP_CD
+    </select>
+
+    <!-- 판매터치키 선택그룹 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY, TB_MS_TOUCH_KEY_CLASS
+                   TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML (6020, 6021)
+        PARAM    :
+        COMMENTS : 매장 판매터치키 선택그룹 정보를 복사한다.
+    -->
+    <select id="copyTouchKeyGrp" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyTouchKeyGrp */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY_GRP
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{tukeyGrpCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 판매터치키 선택그룹 XML 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY, TB_MS_TOUCH_KEY_CLASS
+                   TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML (6020, 6021)
+        PARAM    :
+        COMMENTS : 매장 판매터치키 선택그룹 XML 정보를 복사한다.
+    -->
+    <select id="copyTouchKeyGrpXML" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyTouchKeyGrpXML */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY_GRP_XML
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{tukeyGrpCd},
+                #{confgFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
     </select>
 
 </mapper>
