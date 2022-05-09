@@ -246,6 +246,12 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리.
       item.hdRemark  = $scope.dtlHdRemark;
 
+      if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
+          $scope._popMsg(messages["storeOrder.dtl.prodCd"] +"["+item.prodCd+"]" +" "+ messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
+          grid.select(i,6,i,6 );
+          return false;
+      }
+
       if(item.prevOrderTot !== null){
         orderTot += parseInt(item.orderTot - item.prevOrderTot); //  합계 - 기주문수량금액 = 추가한 주문수량의 금액 합계
       }else{
