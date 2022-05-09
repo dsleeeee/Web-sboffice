@@ -250,6 +250,10 @@
             <button class="btn_skyblue fl ml30" ng-click="msgOneAmtGuidePopup()">
                 가격안내
             </button>
+            <%-- 잔여금액 알림 설정 --%>
+            <button class="btn_skyblue fl ml10" ng-click="restSmsAmtAlimSettingPopup()">
+                잔여금액 알림 설정
+            </button>
         </div>
     </div>
     <script type="text/javascript">
@@ -309,6 +313,11 @@
                 $scope.wjMsgOneAmtGuideLayer.show(true);
             };
 
+            // 잔여금액 알림 설정
+            $scope.restSmsAmtAlimSettingPopup = function(){
+                $scope.wjRestSmsAmtAlimSettingLayer.show(true);
+            };
+
             // 화면 ready 된 후 설정
             angular.element(document).ready(function () {
 
@@ -325,6 +334,13 @@
                         $scope._broadcast('msgOneAmtGuideCtrl', null);
                     }, 50)
                 });
+
+                // 잔여금액 알림 설정 팝업 핸들러 추가
+                $scope.wjRestSmsAmtAlimSettingLayer.shown.addHandler(function (s) {
+                    setTimeout(function() {
+                        $scope._broadcast('restSmsAmtAlimSettingCtrl', null);
+                    }, 50)
+                });
             });
         }]);
     </script>
@@ -337,6 +353,12 @@
 
     <%-- 메세지 건당 가격안내 팝업 --%>
     <c:import url="/WEB-INF/view/adi/sms/smsCharge/msgOneAmtGuide.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
+    <%-- 잔여금액 알림 설정 팝업 --%>
+    <c:import url="/WEB-INF/view/adi/sms/smsCharge/restSmsAmtAlimSetting.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>

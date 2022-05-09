@@ -78,6 +78,9 @@ public class SmsChargeVO extends PageVO {
     /** 알림톡비용차감 주체 소속코드 */
     private String alkChargeOrgnCd;
 
+    /** 잔여금액 설정값 */
+    private String rmSmsAmt;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -153,4 +156,8 @@ public class SmsChargeVO extends PageVO {
     public String getAlkChargeOrgnCd() { return alkChargeOrgnCd; }
 
     public void setAlkChargeOrgnCd(String alkChargeOrgnCd) { this.alkChargeOrgnCd = alkChargeOrgnCd; }
+
+    public String getRmSmsAmt() { return rmSmsAmt; }
+
+    public void setRmSmsAmt(String rmSmsAmt) { this.rmSmsAmt = rmSmsAmt; }
 }

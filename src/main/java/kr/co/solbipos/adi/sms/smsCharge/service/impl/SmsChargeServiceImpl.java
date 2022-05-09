@@ -147,7 +147,7 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
     /** 메세지 건당 가격안내 팝업 - 조회 */
     @Override
-    public DefaultMap<String> getMsgOneAmtGuideList(SmsChargeVO smsChargeVO,  SessionInfoVO sessionInfoVO) {
+    public DefaultMap<String> getMsgOneAmtGuideList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO) {
 
         // SMS 가격 조회시
         smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
@@ -171,5 +171,33 @@ public class SmsChargeServiceImpl implements SmsChargeService {
         }
 
         return smsChargeMapper.getMsgOneAmtGuideList(smsChargeVO);
+    }
+
+    /** 잔여금액 알림 설정 팝업 - 조회 */
+    @Override
+    public DefaultMap<String> getRestSmsAmtAlimSettingList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO) {
+
+        smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return smsChargeMapper.getRestSmsAmtAlimSettingList(smsChargeVO);
+    }
+
+    /** 잔여금액 알림 설정 팝업 - 저장 */
+    @Override
+    public int getRestSmsAmtAlimSettingSave(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        smsChargeVO.setRegDt(currentDt);
+        smsChargeVO.setRegId(sessionInfoVO.getUserId());
+        smsChargeVO.setModDt(currentDt);
+        smsChargeVO.setModId(sessionInfoVO.getUserId());
+
+        smsChargeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        procCnt = smsChargeMapper.getRestSmsAmtAlimSettingSaveMerge(smsChargeVO);
+
+        return procCnt;
     }
 }
