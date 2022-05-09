@@ -71,7 +71,7 @@ app.controller('msgManageStoreRegistCtrl', ['$scope', '$http', function ($scope,
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/adi/sms/msgManage/msgManage/getMsgManageStoreRegistSave.sb", params, function(){ $scope.close() });
+            $scope._postJSONSave.withPopUp("/adi/sms/msgManage/msgManage/getMsgManageStoreRegistSave.sb", params, function(){ $scope.close() });
         });
     });
 
