@@ -114,7 +114,7 @@ app.controller('smsTelNoManageCtrl', ['$scope', '$http', function ($scope, $http
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoManageSaveUpdate.sb", params, function(){ $scope.allSearch() });
+            $scope._postJSONSave.withPopUp("/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoManageSaveUpdate.sb", params, function(){ $scope.allSearch() });
         });
     };
 

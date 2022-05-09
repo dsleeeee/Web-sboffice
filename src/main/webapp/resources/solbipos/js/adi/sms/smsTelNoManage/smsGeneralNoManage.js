@@ -239,7 +239,7 @@ app.controller('smsGeneralNoManageCtrl', ['$scope', '$http', function ($scope, $
 
     $scope.saveSmsGeneralNoManage = function(params){
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageSave.sb", params, function(){
+        $scope._postJSONSave.withPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageSave.sb", params, function(){
             $scope.searchSmsGeneralNoManage();
         });
     };
