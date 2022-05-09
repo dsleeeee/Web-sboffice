@@ -13,7 +13,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body" style="height:500px; overflow-y: auto;">
+        <div class="wj-dialog-body" style="height:550px; overflow-y: auto;">
 
             <div ng-controller="copyStoreTouchKeyCtrl">
                 <p class="mb5" style="font-size: small">-<s:message code="storeView.original.storeCd" />-</p>
