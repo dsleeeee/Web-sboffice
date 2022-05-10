@@ -36,13 +36,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
     private final AlimtalkSendTypeMapper alimtalkSendTypeMapper;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public AlimtalkSendTypeServiceImpl(AlimtalkSendTypeMapper alimtalkSendTypeMapper) {
+    public AlimtalkSendTypeServiceImpl(AlimtalkSendTypeMapper alimtalkSendTypeMapper, CmmEnvUtil cmmEnvUtil) {
         this.alimtalkSendTypeMapper = alimtalkSendTypeMapper;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 알림톡 키값 리스트 조회 */
@@ -245,5 +247,33 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
         procCnt = alimtalkSendTypeMapper.getAlimtalkSenderGroupSaveInsert(alimtalkSendTypeVO);
 
         return procCnt;
+    }
+
+    /** 잔여금액 조회 */
+    @Override
+    public DefaultMap<Object> getAlimtalkSmsAmtList(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
+
+        // 알림톡 가격 조회시
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            // 환경설정 코드값 조회 [1231 알림톡비용차감]
+            String alkChargeEnvstVal1231 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1231"));
+            System.out.println("WEB_ALIMTALK >>> 잔여금액 조회 >>> 환경설정 코드값 [1231 알림톡비용차감] : " + alkChargeEnvstVal1231);
+
+            // 본사
+            if(alkChargeEnvstVal1231.equals("1")) {
+                alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+                // 매장
+            } else {
+                alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getStoreCd());
+            }
+
+        } else {
+            alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return alimtalkSendTypeMapper.getAlimtalkSmsAmtList(alimtalkSendTypeVO);
     }
 }

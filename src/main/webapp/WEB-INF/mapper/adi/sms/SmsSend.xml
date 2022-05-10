@@ -58,8 +58,7 @@
         NVL(MAX(cst.SMS_AMT), 0) AS SMS_AMT,
         FN_GET_SMS_UPRC('SMS', #{orgnCd}) AS SMS_ONE_AMT, -- TB_CM_NMCODE.NMCODE_GRP_CD = '222'
         FN_GET_SMS_UPRC('LMS', #{orgnCd}) AS LMS_ONE_AMT,
-        FN_GET_SMS_UPRC('MMS', #{orgnCd}) AS MMS_ONE_AMT,
-        FN_GET_SMS_UPRC('ALK', #{orgnCd}) AS ALK_ONE_AMT
+        FN_GET_SMS_UPRC('MMS', #{orgnCd}) AS MMS_ONE_AMT
         FROM CET_SMSPT_T cst
         WHERE 1=1
         AND cst.OGN_CD = #{orgnCd}

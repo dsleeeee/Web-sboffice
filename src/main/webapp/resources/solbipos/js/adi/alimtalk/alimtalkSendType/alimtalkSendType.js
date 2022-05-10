@@ -152,7 +152,7 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.restSmsAmt = function() {
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getSmsAmtList.sb', params, function (response) {
+        $scope._postJSONQuery.withOutPopUp('/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSmsAmtList.sb', params, function (response) {
             var smsAmtList = response.data.data.result;
             $scope.smsAmtList = smsAmtList;
 

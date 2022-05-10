@@ -186,7 +186,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220418.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220509.01" charset="utf-8"></script>
 
 <%-- 알림톡 계정등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.jsp">

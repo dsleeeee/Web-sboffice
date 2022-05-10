@@ -66,4 +66,7 @@ public interface AlimtalkSendTypeService {
 
     /** 알림톡 계정등록 팝업 - 알림톡 그룹-계정정보 저장 insert */
     int getAlimtalkSenderGroupSaveInsert(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO);
+
+    /** 잔여금액 조회 */
+    DefaultMap<Object> getAlimtalkSmsAmtList(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO);
 }
