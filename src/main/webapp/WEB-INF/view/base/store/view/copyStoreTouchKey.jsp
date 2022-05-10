@@ -8,7 +8,7 @@
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font" ng-controller="copyStoreTouchKeyCtrl">
-            <s:message code="storeView.copy.touchKey" />
+            <s:message code="storeView.copy.store.touchKey" />
             <a href="" class="wj-hide btn_close" ng-click="closePop()"></a>
         </div>
 
@@ -41,7 +41,7 @@
                         </td>
                         <td>
                             <%--조회--%>
-                            <button class="btn_skyblue fr" id="btnSearch" ng-click="searchOrgStoreList()" ><s:message code="cmm.search" /></button>
+                            <button class="btn_skyblue fr" id="nxBtnSearch" ng-click="searchOrgStoreList()" ><s:message code="cmm.search" /></button>
                         </td>
                     </tr>
                     </tbody>
@@ -121,16 +121,16 @@
                         <%-- 매장코드 --%>
                         <th><s:message code="storeView.storeCd" /></th>
                         <td>
-                            <input type="text" class="sb-input w100" id="srchStoreCd2" onkeyup="fnNxBtnSearch();"/>
+                            <input type="text" class="sb-input w100" id="srchStoreCd2" onkeyup="fnNxBtnSearch('2');"/>
                         </td>
                         <%-- 매장명 --%>
                         <th><s:message code="storeView.storeNm" /></th>
                         <td>
-                            <input type="text" class="sb-input w100" id="srchStoreNm2" onkeyup="fnNxBtnSearch();"/>
+                            <input type="text" class="sb-input w100" id="srchStoreNm2" onkeyup="fnNxBtnSearch('2');"/>
                         </td>
                         <td>
                             <%--조회--%>
-                            <button class="btn_skyblue fr" id="btnSearch" ng-click="searchTargetStoreList()" ><s:message code="cmm.search" /></button>
+                            <button class="btn_skyblue fr" id="nxBtnSearch2" ng-click="searchTargetStoreList()" ><s:message code="cmm.search" /></button>
                         </td>
                     </tr>
                     </tbody>

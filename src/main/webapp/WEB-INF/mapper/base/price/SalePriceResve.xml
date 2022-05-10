@@ -57,6 +57,12 @@
                             AND SALE_RESVE_FG = '1'
                  ) thpsp
            WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='startDate != null and startDate != ""'>
+             AND thpsp.START_DATE <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+             AND thpsp.END_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
         <if test='prodClassCd != null and prodClassCd != ""'>
              AND thp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -487,6 +493,12 @@
            AND thp.PROD_CD = tmp.PROD_CD
            AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
            AND thpsp.PROD_CD = thp.PROD_CD
+        <if test='startDate != null and startDate != ""'>
+            AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+            AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tms.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -562,6 +574,12 @@
                 ) tmpsp
           WHERE tmp.STORE_CD = #{storeCd}
             AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='startDate != null and startDate != ""'>
+            AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+            AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -926,6 +944,12 @@
                         ) thp
                   WHERE 1=1
                     AND tmp.STORE_CD = #{storeCd}
+                <if test='startDate != null and startDate != ""'>
+                    AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}
+                </if>
+                <if test='endDate != null and endDate != ""'>
+                    AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}
+                </if>
                 <if test='prodClassCd != null and prodClassCd != ""'>
                     AND tmp.PROD_CLASS_CD IN (
                                                  SELECT PROD_CLASS_CD
@@ -989,6 +1013,12 @@
                       ) tmpsp
                 WHERE 1=1
                   AND tmp.STORE_CD = #{storeCd}
+                <if test='startDate != null and startDate != ""'>
+                    AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}
+                </if>
+                <if test='endDate != null and endDate != ""'>
+                    AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}
+                </if>
                 <if test='prodClassCd != null and prodClassCd != ""'>
                   AND tmp.PROD_CLASS_CD IN (
                                                     SELECT PROD_CLASS_CD

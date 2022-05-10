@@ -58,6 +58,13 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeStoreSalePriceResveCtrl', $scope, $http, false));
 
+    // 조회일자 셋팅
+    $scope.srchStartDate2 = wcombo.genDateVal("#srchTimeStartDate2", gvStartDate);
+    $scope.srchEndDate2   = wcombo.genDateVal("#srchTimeEndDate2", gvEndDate);
+
+    // 전체기간 체크박스
+    $scope.isChecked2 = true;
+
     // 오늘날짜
     var date = new Date();
     var year = new String(date.getFullYear());
@@ -127,6 +134,10 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
             }
             s.collectionView.commitEdit();
         });
+
+        // 전체기간 체크박스 선택에 따른 날짜선택 초기화
+        $scope.srchStartDate2.isReadOnly = $scope.isChecked2;
+        $scope.srchEndDate2.isReadOnly = $scope.isChecked2;
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -219,6 +230,12 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
 
     $scope.storeSaleUprcApply = true;
 
+    // 전체기간 체크박스 클릭이벤트
+    $scope.isChkDt2 = function() {
+        $scope.srchStartDate2.isReadOnly = $scope.isChecked2;
+        $scope.srchEndDate2.isReadOnly = $scope.isChecked2;
+    };
+
     $scope.$on("storeStoreSalePriceResveCtrl", function(event, data) {
         $scope.searchSalePriceList2();
         event.preventDefault();
@@ -232,6 +249,13 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
         }
 
         var params = {};
+
+        // 조회일자 '전체기간' 선택에 따른 params
+        if(!$scope.isChecked2){
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate2.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.srchEndDate2.value, 'yyyyMMdd');
+        }
+
         params.storeCd = $("#searchStoreCd").val();
         params.prodClassCd = $scope.prodClassCd;
         params.listScale = $scope.listScaleCombo3.text;

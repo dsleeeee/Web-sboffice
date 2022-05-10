@@ -75,6 +75,13 @@ app.controller('salePriceResveCtrl', ['$scope', '$http', function ($scope, $http
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('salePriceResveCtrl', $scope, $http, false));
 
+    // 조회일자 셋팅
+    $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
+    $scope.srchEndDate   = wcombo.genDateVal("#srchTimeEndDate", gvEndDate);
+
+    // 전체기간 체크박스
+    $scope.isChecked = true;
+
     // 오늘날짜
     var date = new Date();
     var year = new String(date.getFullYear());
@@ -141,6 +148,10 @@ app.controller('salePriceResveCtrl', ['$scope', '$http', function ($scope, $http
             }
             s.collectionView.commitEdit();
         });
+
+        // 전체기간 체크박스 선택에 따른 날짜선택 초기화
+        $scope.srchStartDate.isReadOnly = $scope.isChecked;
+        $scope.srchEndDate.isReadOnly = $scope.isChecked;
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -249,6 +260,12 @@ app.controller('salePriceResveCtrl', ['$scope', '$http', function ($scope, $http
 
     $scope.saleUprcApply = true;
 
+    // 전체기간 체크박스 클릭이벤트
+    $scope.isChkDt = function() {
+        $scope.srchStartDate.isReadOnly = $scope.isChecked;
+        $scope.srchEndDate.isReadOnly = $scope.isChecked;
+    };
+
     $scope.$on("salePriceResveCtrl", function(event, data) {
         $scope.searchSalePriceResveList();
         event.preventDefault();
@@ -257,6 +274,13 @@ app.controller('salePriceResveCtrl', ['$scope', '$http', function ($scope, $http
     $scope.searchSalePriceResveList = function() {
 
         var params = {};
+
+        // 조회일자 '전체기간' 선택에 따른 params
+        if(!$scope.isChecked){
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        }
+
         params.prodClassCd = $scope.prodClassCd;
         params.listScale = $scope.listScaleCombo.text;
         params.prodCd = $scope.prodCd;

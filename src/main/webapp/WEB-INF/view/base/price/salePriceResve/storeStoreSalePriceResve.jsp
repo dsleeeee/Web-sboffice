@@ -28,6 +28,24 @@
             <col class="w35" />
         </colgroup>
         <tbody>
+        <%-- 조회일자 --%>
+        <tr>
+            <th><s:message code="cmm.search.date" /></th>
+            <td colspan="3">
+                <div class="sb-select">
+                    <span class="txtIn"><input id="srchTimeStartDate2" class="w120px"></span>
+                    <span class="rg">~</span>
+                    <span class="txtIn"><input id="srchTimeEndDate2" class="w120px"></span>
+                    <%--전체기간--%>
+                    <span class="chk ml10">
+                      <input type="checkbox" id="chkDt2" ng-model="isChecked2" ng-change="isChkDt2()" />
+                      <label for="chkDt2">
+                        <s:message code="cmm.all.day" />
+                      </label>
+                    </span>
+                </div>
+            </td>
+        </tr>
         <%-- 매장선택 --%>
         <tr>
             <th><s:message code="salePriceResve.select.store" /></th>
@@ -431,7 +449,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResve.js?ver=20220502.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResve.js?ver=20220509.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
