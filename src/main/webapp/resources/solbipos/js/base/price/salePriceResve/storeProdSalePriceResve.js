@@ -45,6 +45,13 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeProdSalePriceResveCtrl', $scope, $http, false));
 
+    // 조회일자 셋팅
+    $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
+    $scope.srchEndDate   = wcombo.genDateVal("#srchTimeEndDate", gvEndDate);
+
+    // 전체기간 체크박스
+    $scope.isChecked = true;
+
     // 오늘날짜
     var date = new Date();
     var year = new String(date.getFullYear());
@@ -134,6 +141,10 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
             s.collectionView.commitEdit();
         });
 
+        // 전체기간 체크박스 선택에 따른 날짜선택 초기화
+        $scope.srchStartDate.isReadOnly = $scope.isChecked;
+        $scope.srchEndDate.isReadOnly = $scope.isChecked;
+
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
             var ht = s.hitTest(e);
@@ -205,6 +216,12 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
         }
     };
 
+    // 전체기간 체크박스 클릭이벤트
+    $scope.isChkDt = function() {
+        $scope.srchStartDate.isReadOnly = $scope.isChecked;
+        $scope.srchEndDate.isReadOnly = $scope.isChecked;
+    };
+
     $scope.$on("storeProdSalePriceResveCtrl", function(event, data) {
 
         // 상품별 예약판매가 조회
@@ -244,6 +261,13 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
     $scope.searchSalePriceList = function(){
 
         var params = {};
+
+        // 조회일자 '전체기간' 선택에 따른 params
+        if(!$scope.isChecked){
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        }
+
         params.prodCd = $("#prodCd").val();
         params.storeCd = $("#storeCd").val();
         params.listScale = $scope.listScaleCombo1.text;

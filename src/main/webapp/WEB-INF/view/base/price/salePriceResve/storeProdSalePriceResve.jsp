@@ -27,6 +27,24 @@
             <col class="w35" />
         </colgroup>
         <tbody>
+        <%-- 조회일자 --%>
+        <tr>
+            <th><s:message code="cmm.search.date" /></th>
+            <td colspan="3">
+                <div class="sb-select">
+                    <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w120px"></span>
+                    <span class="rg">~</span>
+                    <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w120px"></span>
+                    <%--전체기간--%>
+                    <span class="chk ml10">
+                      <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
+                      <label for="chkDt">
+                        <s:message code="cmm.all.day" />
+                      </label>
+                    </span>
+                </div>
+            </td>
+        </tr>
         <%-- 상품선택 --%>
         <tr>
             <th><s:message code="salePriceResve.select.prod" /></th>
@@ -298,7 +316,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResve.js?ver=20220502.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResve.js?ver=20220509.01" charset="utf-8"></script>
 
 <%-- 가격예약(매장판매가) [상품별 판매가관리] 상품가격정보 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePriceResve/storeProdSalePriceInfo.jsp">

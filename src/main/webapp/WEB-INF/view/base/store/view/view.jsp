@@ -113,7 +113,7 @@
     <%--</c:if>--%>
       <%-- 매장 판매터치키복사 --%>
       <button class="btn_skyblue ml5 fr"  id="copyTouchKey" ng-click="copyStoreTouchKey()">
-        <s:message code="storeView.copy.touchKey" />
+        <s:message code="storeView.copy.store.touchKey" />
       </button>
   </div>
 

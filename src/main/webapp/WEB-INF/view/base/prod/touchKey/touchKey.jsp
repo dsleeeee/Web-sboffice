@@ -66,15 +66,15 @@
                 <input type="hidden" id="hdNewGrp"/>
             </td>
         </tr>
-        <tr id="trApplyStore" ng-show="userOrgnFg != 'S'">
+        <tr id="trApplyStore" style="display: none;">
             <th><s:message code="touchKey.applyStore" /></th>
             <td colspan="3" class="oh">
                 <button class="btn_blk fl" id="btnApplyStore" ng-click="$broadcast('showPopUp')">
                     <s:message code="touchKey.applyStore" />
                 </button>
-                <%-- 매장 판매터치키복사 --%>
+                <%-- 터치키 매장복사 --%>
                 <button class="btn_blk ml5 fl"  id="copyTouchKey" ng-click="copyStoreTouchKey()">
-                    <s:message code="touchKey.copy" />
+                    <s:message code="touchKey.storeCopy" />
                 </button>
             </td>
         </tr>
@@ -351,6 +351,13 @@
         $("#hdNewGrp").val("N");
     }
 
+    // 매장은 터치키 매장적용, 터치키복사 기능 사용할 수 없음.
+    if(orgnFg === "STORE") {
+        $("#trApplyStore").css("display", "none");
+    }else{
+        $("#trApplyStore").css("display", "");
+    }
+
     var urlParams = (function (url) {
         var result = {};
         var idx = url.lastIndexOf('?');
@@ -401,7 +408,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220504.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220509.02"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

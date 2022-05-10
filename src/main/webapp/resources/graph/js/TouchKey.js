@@ -332,6 +332,13 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
             // 터치키 저장 기본 수정 Flag로 셋팅
             $("#hdNewGrp").val("N");
 
+            // 매장은 터치키 매장적용, 터치키복사 기능 사용할 수 없음.
+            if(orgnFg === "STORE") {
+                $("#trApplyStore").css("display", "none");
+            }else{
+                $("#trApplyStore").css("display", "");
+            }
+
           });
           //});
         });
@@ -2452,6 +2459,14 @@ Format.prototype.save = function () {
 
           // 터치키 저장 기본 수정 Flag로 셋팅
           $("#hdNewGrp").val("N");
+
+          // 매장은 터치키 매장적용, 터치키복사 기능 사용할 수 없음.
+          if(orgnFg === "STORE") {
+              $("#trApplyStore").css("display", "none");
+          }else{
+              $("#trApplyStore").css("display", "");
+          }
+
         });
       };
       var onerror = function (req) {
