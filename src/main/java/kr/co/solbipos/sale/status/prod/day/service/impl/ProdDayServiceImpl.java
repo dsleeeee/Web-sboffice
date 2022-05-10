@@ -28,6 +28,7 @@ public class ProdDayServiceImpl implements ProdDayService {
 
         prodDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodDayVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(prodDayVO.getStoreCd()).equals("")) {
         	prodDayVO.setArrStoreCd(prodDayVO.getStoreCd().split(","));
@@ -42,6 +43,7 @@ public class ProdDayServiceImpl implements ProdDayService {
 
         prodDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodDayVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(prodDayVO.getStoreCd()).equals("")) {
         	prodDayVO.setArrStoreCd(prodDayVO.getStoreCd().split(","));

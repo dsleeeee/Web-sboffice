@@ -39,6 +39,8 @@ public class NonSaleChargeVO extends PageVO {
     private String endDate;
     /** 다중 매장코드 */
     private String[] arrStoreCd;
+    /** 사원번호 */
+    private String empNo;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -90,5 +92,13 @@ public class NonSaleChargeVO extends PageVO {
 
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

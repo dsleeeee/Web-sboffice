@@ -179,9 +179,20 @@ app.controller('empNoManageStoreCtrl', ['$scope', '$http', function ($scope, $ht
     // 추가버튼
     $scope.add = function() {
         var params = new Array();
+        var all = false;
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
+                if($scope.flex.collectionView.items[i].storeCd === "ALL"){
+                    all = true;
+                }
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        if(all) {
+            params.length = 0;
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 params.push($scope.flex.collectionView.items[i]);
             }
         }

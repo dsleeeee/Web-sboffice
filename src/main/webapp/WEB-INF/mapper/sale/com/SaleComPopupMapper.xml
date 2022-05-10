@@ -1127,6 +1127,12 @@
 		<if test='storeCd != null and storeCd != ""'>
             AND TSSPC.STORE_CD = #{storeCd}
         </if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR  TSSPC.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
         <if test='arrStoreCornr != null and arrStoreCornr != ""'>
 			AND TSSPC.STORE_CD||'||'||TSSPC.CORNR_CD  IN
 	        <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
@@ -1793,6 +1799,10 @@
                    		#{item}
                		</foreach>
                	</if>
+				AND (
+						'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+					OR	TSSDP.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+					)
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
                 AND TSSDP.STORE_CD  = #{storeCd}

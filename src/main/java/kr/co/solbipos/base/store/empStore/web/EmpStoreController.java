@@ -4,7 +4,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.empStore.service.EmpStoreService;
 import kr.co.solbipos.base.store.empStore.service.EmpStoreVO;
@@ -28,14 +30,16 @@ public class EmpStoreController {
 
     private final SessionService sessionService;
     private final EmpStoreService empStoreService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public EmpStoreController(SessionService sessionService, EmpStoreService empStoreService) {
+    public EmpStoreController(SessionService sessionService, EmpStoreService empStoreService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.empStoreService = empStoreService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -47,6 +51,11 @@ public class EmpStoreController {
      */
     @RequestMapping(value = "/empStore/list.sb", method = RequestMethod.GET)
     public String empStoreView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        model.addAttribute("empStore", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0001"), "N"));
+
         return "base/store/empStore/empStore";
     }
 

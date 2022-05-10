@@ -42,6 +42,9 @@ public class MobileTodaySaleVO extends PageVO {
     /** 다중매장코드 array */
     private String arrStoreCd[];
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -72,5 +75,13 @@ public class MobileTodaySaleVO extends PageVO {
 
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

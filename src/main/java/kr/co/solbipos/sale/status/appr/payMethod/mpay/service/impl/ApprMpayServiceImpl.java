@@ -27,7 +27,9 @@ public class ApprMpayServiceImpl implements ApprMpayService {
     /** Mpay 승인현황 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprMpayList(ApprMpayVO apprMpayVO, SessionInfoVO sessionInfoVO) {
+		apprMpayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprMpayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprMpayVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprMpayVO.getCornrCd() != null && !"".equals(apprMpayVO.getCornrCd())) || (apprMpayVO.getPosNo() != null && !"".equals(apprMpayVO.getPosNo()))) {
     		if (apprMpayVO.getCornrCd() != null && !"".equals(apprMpayVO.getCornrCd())) {
@@ -63,7 +65,9 @@ public class ApprMpayServiceImpl implements ApprMpayService {
 	/** Mpay 승인현황 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprMpayExcelList(ApprMpayVO apprMpayVO, SessionInfoVO sessionInfoVO) {
+		apprMpayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprMpayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprMpayVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprMpayVO.getCornrCd() != null && !"".equals(apprMpayVO.getCornrCd())) || (apprMpayVO.getPosNo() != null && !"".equals(apprMpayVO.getPosNo()))) {
     		if (apprMpayVO.getCornrCd() != null && !"".equals(apprMpayVO.getCornrCd())) {

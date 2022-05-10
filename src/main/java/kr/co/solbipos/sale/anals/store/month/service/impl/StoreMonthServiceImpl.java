@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.anals.store.month.service.StoreMonthService;
 import kr.co.solbipos.sale.anals.store.month.service.StoreMonthVO;
 
@@ -26,7 +27,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
     /** 매장월별순위 - 매장월별순위 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getStoreMonthList(StoreMonthVO storeMonthVO, SessionInfoVO sessionInfoVO) {
-  
+
     	storeMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         
         String arrayStoreCd = "";
@@ -82,6 +83,12 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		    	if(!storeCd.equals("")) {
 		    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
 		    	}
+		    	if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+					sQuery3 +="AND (" +
+							"'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = '" + sessionInfoVO.getHqOfficeCd() + "' AND ENVST_CD = '0001')" +
+							"OR TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = '" + sessionInfoVO.getHqOfficeCd() + "' AND EMP_NO = '" + sessionInfoVO.getEmpNo() + "')" +
+							")";
+				}
 		    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM, TMSI.INDEX_NO ) M WHERE RN <= " + k + "\n";
 	        }        
 	        storeMonthVO.setsQuery1(sQuery1);
@@ -115,6 +122,12 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	    	if(!storeCd.equals("")) {
 	    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
 	    	}
+			if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+				sQuery3 +="AND (" +
+						"'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = '" + sessionInfoVO.getHqOfficeCd() + "' AND ENVST_CD = '0001')" +
+						"OR TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = '" + sessionInfoVO.getHqOfficeCd() + "' AND EMP_NO = '" + sessionInfoVO.getEmpNo() + "')" +
+						")";
+			}
 	    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM, TMSI.INDEX_NO ) M WHERE RN <= " + k + "\n";
 	    	
 	    	storeMonthVO.setSaleDate(j);

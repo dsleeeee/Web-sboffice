@@ -10,7 +10,7 @@
 	-->
 
     <select id="getVersusPeriodClassList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
-
+		/* VersusPeriodClassMapper.getVersusPeriodClassList */
         SELECT DM.LV1_CD
      		 , DM.LV1_NM
      		 , DM.LV2_CD
@@ -142,6 +142,12 @@
 											#{item}
 										</foreach>
 									</if>
+									<if test='orgnFg != null and orgnFg == "H"'>
+										AND (
+												'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+											OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+											)
+									</if>
 									<if test='brandCd != null and brandCd != ""'>
                                        AND B.HQ_BRAND_CD = #{brandCd}
                                     </if>
@@ -162,6 +168,12 @@
 												#{item}
 											</foreach>
 										 </if>
+										<if test='orgnFg != null and orgnFg == "H"'>
+											AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												)
+										</if>
 										 <if test='brandCd != null and brandCd != ""'>
                                             AND C.HQ_BRAND_CD = #{brandCd}
                                          </if>
@@ -285,6 +297,12 @@
 												#{item}
 										   </foreach>
 									   </if>
+										<if test='orgnFg != null and orgnFg == "H"'>
+											AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												)
+										</if>
 									   <if test='brandCd != null and brandCd != ""'>
                                           AND B.HQ_BRAND_CD = #{brandCd}
                                        </if>
@@ -305,6 +323,12 @@
 												#{item}
 										      </foreach>
 									   	  </if>
+										  <if test='orgnFg != null and orgnFg == "H"'>
+											AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												)
+										  </if>
 									   	  <if test='brandCd != null and brandCd != ""'>
                                              AND C.HQ_BRAND_CD = #{brandCd}
                                           </if>
@@ -337,6 +361,7 @@
     </select>
 
     <select id="getVersusPeriodClassDtlList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
+	/* VersusPeriodClassMapper.getVersusPeriodClassDtlList */
 	<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT DM.PROD_CD
 		     , DM.PROD_NM
@@ -373,6 +398,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
 											   AND B.PROD_CLASS_CD = #{prodClassCd}
 											</if>
@@ -394,6 +425,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 											<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 											   	  AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 	 </if>
@@ -413,6 +450,12 @@
 									  	  		#{item}
 									  	  	</foreach>
 	                                     </if>
+										 <if test='orgnFg != null and orgnFg == "H"'>
+											 AND (
+											 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+											 OR	Z.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+											 )
+										 </if>
 									   AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
 									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
@@ -438,6 +481,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
 											   AND B.PROD_CLASS_CD = #{prodClassCd}
 											</if>
@@ -458,6 +507,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	 </if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 											 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 											   	AND C.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 	 </if>
@@ -476,6 +531,12 @@
 									  	  		#{item}
 									  	  	</foreach>
 	                                     </if>
+										 <if test='orgnFg != null and orgnFg == "H"'>
+											 AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												 OR	Z.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												 )
+										 </if>
 									   		AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
 									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
@@ -491,6 +552,7 @@
     </select>
 
 	<select id="getVersusPeriodClassDtlExcelList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
+		/* VersusPeriodClassMapper.getVersusPeriodClassDtlExcelList */
 		SELECT DM.PROD_CD
 		     , DM.PROD_NM
 			 , SUM(DM.REAL_SALE_AMT_A)  AS REAL_SALE_AMT_A
@@ -525,6 +587,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
 											   AND B.PROD_CLASS_CD = #{prodClassCd}
 											</if>
@@ -545,6 +613,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 											<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 											   	  AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 	 </if>
@@ -563,6 +637,12 @@
 									  	  		#{item}
 									  	  	</foreach>
 	                                     </if>
+										 <if test='orgnFg != null and orgnFg == "H"'>
+											 AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												 OR	Z.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												 )
+										 </if>
 									   AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
 									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
@@ -588,6 +668,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
 											   AND B.PROD_CLASS_CD = #{prodClassCd}
 											</if>
@@ -608,6 +694,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	 </if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 											 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 											   	AND C.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 	 </if>
@@ -626,6 +718,12 @@
 									  	  		#{item}
 									  	  	</foreach>
 	                                     </if>
+										 <if test='orgnFg != null and orgnFg == "H"'>
+											 AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												 OR	Z.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												 )
+										 </if>
 									   		AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
 									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
@@ -640,6 +738,7 @@
     </select>
 
     <select id="getVersusPeriodClassDtlChartList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
+		/* VersusPeriodClassMapper.getVersusPeriodClassDtlChartList */
 		SELECT DM.PROD_CD
 		     , DM.PROD_NM
 			 , SUM(DM.REAL_SALE_AMT_A)  AS REAL_SALE_AMT_A
@@ -674,7 +773,13 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
-									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
+		<if test='prodClassCd != null and prodClassCd != ""'>
 											   AND B.PROD_CLASS_CD = #{prodClassCd}
 											</if>
 											<if test='brandCd != null and brandCd != ""'>
@@ -694,6 +799,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 											<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 											   	  AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 	 </if>
@@ -712,6 +823,12 @@
 									  	  		#{item}
 									  	  	</foreach>
 	                                     </if>
+										 <if test='orgnFg != null and orgnFg == "H"'>
+											 AND (
+												 	'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												 OR	Z.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												 )
+										 </if>
 									   AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
 									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
@@ -737,6 +854,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	</if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
 											   AND B.PROD_CLASS_CD = #{prodClassCd}
 											</if>
@@ -757,6 +880,12 @@
 														#{item}
 										      	   </foreach>
 									   	  	 </if>
+											<if test='orgnFg != null and orgnFg == "H"'>
+												AND (
+														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+													OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+													)
+											</if>
 											 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 											   	AND C.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 	 </if>
@@ -775,6 +904,12 @@
 									  	  		#{item}
 									  	  	</foreach>
 	                                     </if>
+										 <if test='orgnFg != null and orgnFg == "H"'>
+											 AND (
+											 		'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												 OR	Z.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												 )
+										 </if>
 									   		AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
 									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
@@ -791,7 +926,7 @@
     </select>
 
     <select id="getBrandCdList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
-
+		/* VersusPeriodClassMapper.getBrandCdList */
 	    SELECT HQ_BRAND_CD AS NMCODE_CD
 	         , HQ_BRAND_NM AS NMCODE_NM
 	      FROM TB_HQ_BRAND

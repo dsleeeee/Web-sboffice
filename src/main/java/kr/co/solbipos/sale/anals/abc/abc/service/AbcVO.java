@@ -22,6 +22,8 @@ public class AbcVO extends PageVO {
     private String gradeC;
     /** 정렬구분 */
     private String sortFg;
+	/** 사원번호 */
+	private String empNo;
     
 	public String getOrgnFg() {
 		return orgnFg;
@@ -75,5 +77,11 @@ public class AbcVO extends PageVO {
 		return serialVersionUID;
 	}
 
-   
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 }

@@ -37,6 +37,12 @@
                     #{item}
                 </foreach>
             </if>
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	TSDP.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+            </if>
            	<if test='startDate != null and startDate != ""'>
            		AND TSDP.SALE_DATE >= #{startDate}
            	</if>
@@ -71,6 +77,12 @@
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	TSDP.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
         </if>
         <if test='startDate != null and startDate != ""'>
             AND TSDP.SALE_DATE >= #{startDate}

@@ -45,6 +45,9 @@ public class MonthServiceImpl implements MonthService {
     /** 월별종합탭 - 월별종합조회 */
     @Override
     public List<DefaultMap<Object>> getMonthTotalList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
+        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
@@ -71,7 +74,9 @@ public class MonthServiceImpl implements MonthService {
     /** 할인구별별탭 - 할인구분별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthDcList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
-
+        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setEmpNo(sessionInfoVO.getEmpNo());
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -97,7 +102,9 @@ public class MonthServiceImpl implements MonthService {
     /** 과면세별탭 - 과면세별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthTaxList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
-
+        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setEmpNo(sessionInfoVO.getEmpNo());
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -113,7 +120,9 @@ public class MonthServiceImpl implements MonthService {
     /** 시간대별탭 - 시간대별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthTimeList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
-
+        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setEmpNo(sessionInfoVO.getEmpNo());
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -154,7 +163,9 @@ public class MonthServiceImpl implements MonthService {
     /** 상품분류별탭 - 상품분류별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthProdClassList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
-
+        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setEmpNo(sessionInfoVO.getEmpNo());
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
 //        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         monthVO.setLevel("Level" + monthVO.getLevel());
@@ -306,7 +317,9 @@ public class MonthServiceImpl implements MonthService {
     /** 사원카드별탭 - 사원카드별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthEmpCardList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
-
+        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setEmpNo(sessionInfoVO.getEmpNo());
         monthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthVO.setStoreCds(sessionInfoVO.getStoreCd());

@@ -27,7 +27,9 @@ public class ApprNcashServiceImpl implements ApprNcashService {
     /** 비매출현금 승인현황 탭 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprNcashList(ApprNcashVO apprNcashVO, SessionInfoVO sessionInfoVO) {
+		apprNcashVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprNcashVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprNcashVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if (apprNcashVO.getPosNo() != null && !"".equals(apprNcashVO.getPosNo())) {
 			String[] arrPosNo = apprNcashVO.getPosNo().split(",");

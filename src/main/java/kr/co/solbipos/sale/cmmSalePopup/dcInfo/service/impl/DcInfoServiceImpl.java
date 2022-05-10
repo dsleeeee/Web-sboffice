@@ -25,7 +25,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 일반할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getGeneralDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         return dcInfoMapper.getGeneralDcList(dcInfoVO);
     }
 
@@ -33,7 +35,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 쿠폰할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getCoupnDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -48,7 +52,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 회원할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getMembrDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         dcInfoVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
         return dcInfoMapper.getMembrDcList(dcInfoVO);
     }
@@ -57,7 +63,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 제휴할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPartnerDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         return dcInfoMapper.getPartnerDcList(dcInfoVO);
     }
 
@@ -65,7 +73,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 서비스 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getServiceDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         return dcInfoMapper.getServiceDcList(dcInfoVO);
     }
 
@@ -73,7 +83,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 프로모션할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPromtnDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         return dcInfoMapper.getPromtnDcList(dcInfoVO);
     }
 
@@ -89,7 +101,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 현장할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getSiteDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         return dcInfoMapper.getSiteDcList(dcInfoVO);
     }
 
@@ -97,7 +111,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - VMEM 쿠폰할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getVcoupnDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -111,7 +127,9 @@ public class DcInfoServiceImpl implements DcInfoService {
     /** 매출공통팝업 - 스마트오더 할인 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getSmartorderDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

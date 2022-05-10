@@ -70,6 +70,8 @@ public class PrepaidServiceImpl implements PrepaidService {
             prepaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
         prepaidStoreVO.setStoreCdList(storeCds);
+        prepaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prepaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         return mapper.getPrepaidMemberList(prepaidStoreVO);
     }
@@ -111,6 +113,8 @@ public class PrepaidServiceImpl implements PrepaidService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prepaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        prepaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prepaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         return mapper.getChargeMemberList(prepaidStoreVO);
     }

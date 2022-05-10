@@ -45,7 +45,9 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     /** 시간대별탭 - 시간대별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayPeriodTimeList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -61,7 +63,9 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     /** 시간대별탭 - 시간대별 매출상세조회 */
     @Override
     public List<DefaultMap<Object>> getDayPeriodTimeDetailList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -77,7 +81,9 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     /** 상품분류별탭 - 상품분류별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayPeriodProdClassList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
@@ -98,7 +104,9 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     /** 상품분류별탭 - 상품분류별 매출상세조회 */
     @Override
     public List<DefaultMap<Object>> getDayPeriodProdClassDetailList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
@@ -131,7 +139,9 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     /** 코너별탭 - 코너별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayPeriodCornerList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -156,7 +166,9 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     /** 상품권별탭 - 상품권별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayPeriodGiftList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());

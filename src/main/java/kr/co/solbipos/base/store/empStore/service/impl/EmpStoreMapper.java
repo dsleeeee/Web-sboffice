@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.store.empStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.empStore.service.EmpStoreVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

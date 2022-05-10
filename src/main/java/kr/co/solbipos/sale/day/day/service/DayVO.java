@@ -117,6 +117,9 @@ public class DayVO extends PageVO {
     /** 조회매장 */
     private String storeCds;
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -529,5 +532,13 @@ public class DayVO extends PageVO {
 
     public void setStoreCds(String storeCds) {
         this.storeCds = storeCds;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

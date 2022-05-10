@@ -42,6 +42,9 @@ public class MembrProdServiceImpl implements MembrProdService {
     @Override
     public List<DefaultMap<Object>> getMembrProdList(MembrProdVO membrProdVO, SessionInfoVO sessionInfoVO) {
 
+        membrProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        membrProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        membrProdVO.setEmpNo(sessionInfoVO.getEmpNo());
         membrProdVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             membrProdVO.setStoreCd(sessionInfoVO.getStoreCd());

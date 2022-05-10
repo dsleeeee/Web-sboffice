@@ -3,8 +3,10 @@ var app = agrid.getApp();
 app.controller('empStoreCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
-        $("#empStoreEmpView").show();
-        $("#empStoreStoreView").hide();
+        if(empStore =="Y"){
+            $("#empStoreEmpView").show();
+            $("#empStoreStoreView").hide();
+        }
     };
 
     // 사원별 탭 보이기
@@ -18,6 +20,7 @@ app.controller('empStoreCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("empStoreEmpCtrl");
         scope.flex.refresh();
+        $scope._broadcast('empStoreEmpCtrl');
         var scope2 = agrid.getScope("empManageStoreCtrl");
         scope2.flex.refresh();
         var scope3 = agrid.getScope("empNoManageStoreCtrl");
@@ -35,6 +38,7 @@ app.controller('empStoreCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("empStoreStoreCtrl");
         scope.flex.refresh();
+        $scope._broadcast('empStoreStoreCtrl');
         var scope2 = agrid.getScope("storeManageEmpCtrl");
         scope2.flex.refresh();
         var scope3 = agrid.getScope("storeNoManageEmpCtrl");

@@ -44,6 +44,7 @@ public class InclnServiceImpl implements InclnService {
     if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
       inclnVo.setStoreCd(sessionInfoVO.getStoreCd());
     }
+    inclnVo.setEmpNo(sessionInfoVO.getEmpNo());
 
     return inclnMapper.getInclnList(inclnVo);
   }

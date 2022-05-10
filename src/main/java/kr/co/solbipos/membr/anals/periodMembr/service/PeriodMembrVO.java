@@ -30,6 +30,11 @@ public class PeriodMembrVO extends PageVO {
     /** 조회매장 */
     private String storeCd;
 
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -48,5 +53,21 @@ public class PeriodMembrVO extends PageVO {
 
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

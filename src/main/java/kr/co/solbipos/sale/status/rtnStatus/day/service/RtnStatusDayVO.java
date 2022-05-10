@@ -63,8 +63,10 @@ public class RtnStatusDayVO extends PageVO {
 	private String arrDcCol[];
 	/** 쿼리문의 PIVOT IN에 사용할 할인구분 컬럼 문자열 */
 	private String pivotDcCol;
-    
-    public String getStoreCd() {
+	/** 사원번호 */
+	private String empNo;
+
+	public String getStoreCd() {
 		return storeCd;
 	}
 	public void setStoreCd(String storeCd) {
@@ -248,5 +250,13 @@ public class RtnStatusDayVO extends PageVO {
 
 	public void setPivotDcCol(String pivotDcCol) {
 		this.pivotDcCol = pivotDcCol;
+	}
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
 	}
 }

@@ -16,6 +16,8 @@ public class ProdRankVO extends PageVO {
     private String orgnFg;
     /** 정렬기준 */
     private String orderType;
+    /** 사원번호 */
+    private String empNo;
 
     /**
      * @return the hqOfficeCd
@@ -73,5 +75,13 @@ public class ProdRankVO extends PageVO {
 
     public void setOrderType(String orderType) {
         this.orderType = orderType;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

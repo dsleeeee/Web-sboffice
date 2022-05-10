@@ -39,6 +39,12 @@
                 #{item}
             </foreach>
         </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tmmpb.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
               AND tmmpb.STORE_CD = #{storeCd}
@@ -87,6 +93,12 @@
             (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmmcs.MEMBR_ORGN_CD AND STORE_CD = tmmcs.STORE_CD) AS STORE_NM
             FROM TB_MB_MEMBER_POSTPAID_STORE tmmcs
             WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tmmcs.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+            </if>
             <if test='storeCd != null and storeCd != ""'>
               AND tmmcs.STORE_CD LIKE '%'|| #{storeCd} ||'%'
             </if>

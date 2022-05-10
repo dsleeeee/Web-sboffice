@@ -41,7 +41,12 @@ public class ApprAcquireVO extends PageVO {
     private String hqOfficeCd;
     /** 본사브랜드코드 */
     private String hqBrandCd;
-    
+
+	/** 본사,매장 구분 */
+	private String orgnFg;
+	/** 사원번호 */
+	private String empNo;
+
     /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     
@@ -201,5 +206,21 @@ public class ApprAcquireVO extends PageVO {
 
 	public void setSaleYn(String saleYn) {
 		this.saleYn = saleYn;
+	}
+
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
 	}
 }

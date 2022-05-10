@@ -280,6 +280,12 @@
                         #{item}
                     </foreach>
                 </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR  tssd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
+                </if>
                 <if test="posNo != null and posNo != ''">
                     AND tssd.POS_NO = #{posNo}
                 </if>
@@ -405,6 +411,12 @@
                             #{item}
                         </foreach>
                     </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
                     AND     SALE_DATE BETWEEN #{yearMonth} || '01' AND #{yearMonth} || '31'
                     GROUP BY STORE_CD, SUBSTR(SALE_DATE,0,6), PROD_CD, VAT_FG
         ) tssd
@@ -415,6 +427,12 @@
                     <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
                         #{item}
                     </foreach>
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR   tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
                 </if>
                 <if test="posNo != null and posNo != ''">
                     AND tsmp.POS_NO = #{posNo}
@@ -520,6 +538,12 @@
                         <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
                             #{item}
                         </foreach>
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR  tssd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
                     </if>
                     AND tssd.SALE_DATE = #{saleDate}
                     <if test="prodCd != null and prodCd != ''">
@@ -629,6 +653,12 @@
                         <foreach collection="storeCdList" item="item" open="( " separator="," close=")" >
                             #{item}
                         </foreach>
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR   tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
                     </if>
                     AND tsmp.SALE_YM = #{yearMonth}
                     <if test="prodCd != null and prodCd != ''">

@@ -42,6 +42,7 @@ public class ProdRankServiceImpl implements ProdRankService {
 
         prodRankVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodRankVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	if (!StringUtil.getOrBlank(prodRankVO.getStoreCd()).equals("")) {
     		prodRankVO.setArrStoreCd(prodRankVO.getStoreCd().split(","));
@@ -56,6 +57,7 @@ public class ProdRankServiceImpl implements ProdRankService {
 
         prodRankVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodRankVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	if (!StringUtil.getOrBlank(prodRankVO.getStoreCd()).equals("")) {
     		prodRankVO.setArrStoreCd(prodRankVO.getStoreCd().split(","));

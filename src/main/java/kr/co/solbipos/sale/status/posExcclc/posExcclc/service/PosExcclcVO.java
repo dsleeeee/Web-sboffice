@@ -81,6 +81,10 @@ public class PosExcclcVO extends PageVO {
     private String exactAmtGift; //상품권시재금액
     private String lostAmtCash; //현금과부족
     private String lostAmtGift; //상품권과부족
+	/** 본사,매장 구분 */
+	private String orgnFg;
+	/** 사원번호 */
+	private String empNo;
 
     public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -513,4 +517,19 @@ public class PosExcclcVO extends PageVO {
 		this.arrStoreCd = arrStoreCd;
 	}
 
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 }

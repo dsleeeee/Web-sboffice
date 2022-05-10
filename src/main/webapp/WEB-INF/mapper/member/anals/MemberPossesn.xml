@@ -55,6 +55,12 @@
                             AND tssh.STORE_CD = #{storeCd}
                         ]]>
                     </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
                     AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     AND tsshm.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
                     AND tsshm.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD

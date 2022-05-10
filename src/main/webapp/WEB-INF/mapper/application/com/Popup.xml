@@ -139,6 +139,10 @@
           FROM    TB_MS_STORE tms
           WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
           ]]>
+        AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR  tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
       <if test='storeCd != null and storeCd != ""'>
         AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
       </if>

@@ -6,6 +6,14 @@ public class DayPayInfoVO extends PageVO {
 
     private static final long serialVersionUID = -8575865020250823752L;
 
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 매장코드 */
@@ -29,6 +37,16 @@ public class DayPayInfoVO extends PageVO {
     /** 년월 */
     private String yearMonth;
 
+    /** 사원번호 */
+    private String empNo;
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     /**
      * @return the hqOfficeCd
@@ -115,4 +133,12 @@ public class DayPayInfoVO extends PageVO {
     public String getYearMonth() { return yearMonth; }
 
     public void setYearMonth(String yearMonth) { this.yearMonth = yearMonth; }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 }

@@ -139,7 +139,7 @@ public class PopupController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = popupService.getStoreList(storeManageVO);
+        List<DefaultMap<String>> list = popupService.getStoreList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, storeManageVO);
     }

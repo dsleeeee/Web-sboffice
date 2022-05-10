@@ -30,6 +30,10 @@ public class SaleAnalsMonthlyVO extends PageVO {
     private String sat;
     /** 조회일자 */
     private String saleDate;
+	/** 본사,매장 구분 */
+	private String orgnFg;
+	/** 사원번호 */
+	private String empNo;
 
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -129,4 +133,19 @@ public class SaleAnalsMonthlyVO extends PageVO {
 		this.saleDate = saleDate;
 	}
 
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 }

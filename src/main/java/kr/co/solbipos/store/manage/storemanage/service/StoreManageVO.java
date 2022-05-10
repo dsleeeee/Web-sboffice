@@ -157,6 +157,9 @@ public class StoreManageVO extends PageVO {
     /** 환경설정값 */
     private String envstVal;
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -804,5 +807,13 @@ public class StoreManageVO extends PageVO {
 
     public void setEnvstVal(String envstVal) {
         this.envstVal = envstVal;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

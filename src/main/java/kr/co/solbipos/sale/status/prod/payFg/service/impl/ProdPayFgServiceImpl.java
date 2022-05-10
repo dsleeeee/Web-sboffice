@@ -44,6 +44,7 @@ public class ProdPayFgServiceImpl implements ProdPayFgService {
 
         prodPayFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodPayFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodPayFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(prodPayFgVO.getStoreCd()).equals("")) {
             prodPayFgVO.setArrStoreCd(prodPayFgVO.getStoreCd().split(","));
@@ -68,6 +69,7 @@ public class ProdPayFgServiceImpl implements ProdPayFgService {
 
         prodPayFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodPayFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodPayFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(prodPayFgVO.getStoreCd()).equals("")) {
             prodPayFgVO.setArrStoreCd(prodPayFgVO.getStoreCd().split(","));

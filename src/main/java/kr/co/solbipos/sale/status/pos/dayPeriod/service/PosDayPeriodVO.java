@@ -39,6 +39,8 @@ public class PosDayPeriodVO extends PageVO {
 
     /** 조회매장포스수 */
     private int storePosCnt;
+	/** 사원번호 */
+	private String empNo;
     
 	public String getStoreCd() {
 		return storeCd;
@@ -138,5 +140,13 @@ public class PosDayPeriodVO extends PageVO {
 	}
 	public void setOrgnFg(String orgnFg) {
 		this.orgnFg = orgnFg;
+	}
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
 	}
 }

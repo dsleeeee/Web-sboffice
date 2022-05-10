@@ -54,6 +54,9 @@ public class MobileTimeMonthSaleVO extends PageVO {
     /** 검색 종료 시간 */
     private String endTime;
 
+    /** 사원번호 */
+    private String empNo;
+
     /** 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     private String sQuery2;
@@ -112,6 +115,14 @@ public class MobileTimeMonthSaleVO extends PageVO {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 
     public String getsQuery1() { return sQuery1; }

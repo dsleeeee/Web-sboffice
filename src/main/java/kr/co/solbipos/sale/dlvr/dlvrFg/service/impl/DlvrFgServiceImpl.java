@@ -76,6 +76,7 @@ public class DlvrFgServiceImpl implements DlvrFgService {
 
         dlvrFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
@@ -104,6 +105,7 @@ public class DlvrFgServiceImpl implements DlvrFgService {
 
         dlvrFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
@@ -132,6 +134,7 @@ public class DlvrFgServiceImpl implements DlvrFgService {
 
         dlvrFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
@@ -160,6 +163,7 @@ public class DlvrFgServiceImpl implements DlvrFgService {
 
         dlvrFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {

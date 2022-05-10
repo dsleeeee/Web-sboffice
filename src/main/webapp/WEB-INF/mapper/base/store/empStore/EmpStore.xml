@@ -22,15 +22,10 @@
         the.EMP_NO,
         the.EMP_NM,
         the.SERVICE_FG,
-        COUNT(thes.STORE_CD) AS STORE_CNT
-        FROM TB_HQ_EMPLOYEE the,
-        TB_HQ_EMPLOYEE_STORE thes
+        (SELECT COUNT(STORE_CD)  FROM TB_HQ_EMPLOYEE_STORE thes WHERE thes.HQ_OFFICE_CD = the.HQ_OFFICE_CD AND thes.STORE_CD != 'ALL' AND thes.EMP_NO = the.EMP_NO) AS STORE_CNT
+        FROM TB_HQ_EMPLOYEE the
         WHERE 1=1
-        AND thes.HQ_OFFICE_CD (+)= the.HQ_OFFICE_CD
-        AND thes.EMP_NO (+)= the.EMP_NO
         AND the.HQ_OFFICE_CD = #{membrOrgnCd}
-        AND the.USE_YN = 'Y'
-        GROUP BY the.EMP_NO, the.EMP_NM, the.SERVICE_FG
         ORDER BY the.EMP_NO
     </select>
 
@@ -43,7 +38,7 @@
         /* EmpStoreMapper.getEmpManageStoreList */
         SELECT
         thes.HQ_OFFICE_CD,
-        tms.STORE_CD,
+        thes.STORE_CD,
         tms.STORE_NM,
         thes.EMP_NO,
         tms.SYS_STAT_FG
@@ -127,7 +122,9 @@
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND EMP_NO = #{empNo}
-        AND STORE_CD = #{storeCd}
+        <if test='storeCd != "ALL"'>
+            AND STORE_CD = #{storeCd}
+        </if>
     </delete>
 
     <!-- 매장별탭 - 매장정보 조회 -->
@@ -164,7 +161,8 @@
         thes.STORE_CD,
         thes.EMP_NO,
         the.EMP_NM,
-        the.SERVICE_FG
+        the.SERVICE_FG,
+        (SELECT COUNT(*)  FROM TB_HQ_EMPLOYEE_STORE thes2 WHERE thes2.HQ_OFFICE_CD = thes.HQ_OFFICE_CD AND thes2.STORE_CD = 'ALL' AND thes2.EMP_NO = thes.EMP_NO) AS ALL_FG
         FROM TB_HQ_EMPLOYEE_STORE thes,
         TB_HQ_EMPLOYEE the
         WHERE 1=1

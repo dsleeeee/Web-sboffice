@@ -28,7 +28,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
     @Override
     public List<DefaultMap<String>> getVersusPeriodClassList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
 
-    	versusPeriodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		versusPeriodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		versusPeriodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
         	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
@@ -41,7 +43,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 	@Override
 	public List<DefaultMap<String>> getVersusPeriodClassDtlList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
 
+		versusPeriodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		versusPeriodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
         	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
@@ -54,7 +58,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 	@Override
 	public List<DefaultMap<String>> getVersusPeriodClassDtlExcelList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
 
+		versusPeriodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		versusPeriodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
         	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
@@ -66,7 +72,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 	@Override
 	public List<DefaultMap<String>> getVersusPeriodClassDtlChartList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
 
+		versusPeriodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		versusPeriodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
         	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));

@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="empNo" value="${sessionScope.sessionInfo.empNo}" />
 
 <div class="subCon" ng-controller="saleAnalsMonthlyCtrl" ng-init="init()">
 
@@ -123,11 +124,11 @@
 
 <script>
   var statusDataFg  = ${ccu.getCommCode("100")};
-  
+  var empNo = "${empNo}"
   
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthly/saleAnalsMonthly.js?ver=20200116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthly/saleAnalsMonthly.js?ver=20200116.02" charset="utf-8"></script>
 
 
 <%-- 상품코드 상세 레이어 --%>

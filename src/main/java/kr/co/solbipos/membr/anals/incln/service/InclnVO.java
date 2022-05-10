@@ -32,6 +32,7 @@ public class InclnVO extends PageVO {
   private String sumAgefifties;
   private String option;
   private String hqOfficeCd;
+  private String empNo;
 
   public String getHqOfficeCd() {
     return hqOfficeCd;
@@ -239,5 +240,13 @@ public class InclnVO extends PageVO {
 
   public void setSumSale(String sumSale) {
     this.sumSale = sumSale;
+  }
+
+  public String getEmpNo() {
+    return empNo;
+  }
+
+  public void setEmpNo(String empNo) {
+    this.empNo = empNo;
   }
 }

@@ -27,7 +27,9 @@ public class StoreFgVO extends PageVO {
     /** 판매자별, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     private String sQuery2;
-    
+
+	/** 사원번호 */
+	private String empNo;
     
 
     public String getOrgnFg() {
@@ -117,4 +119,12 @@ public class StoreFgVO extends PageVO {
     public void setsQuery2(String sQuery2) {
         this.sQuery2 = sQuery2;
     }
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 }

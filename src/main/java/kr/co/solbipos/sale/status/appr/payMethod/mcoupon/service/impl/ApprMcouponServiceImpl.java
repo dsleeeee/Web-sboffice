@@ -27,7 +27,9 @@ public class ApprMcouponServiceImpl implements ApprMcouponService {
     /** 신용카드 승인현황 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprMcouponList(ApprMcouponVO apprMcouponVO, SessionInfoVO sessionInfoVO) {
+		apprMcouponVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprMcouponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprMcouponVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd())) || (apprMcouponVO.getPosNo() != null && !"".equals(apprMcouponVO.getPosNo()))) {
     		if (apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd())) {
@@ -63,7 +65,9 @@ public class ApprMcouponServiceImpl implements ApprMcouponService {
 	/** 모바일쿠폰 승인현황 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprMcouponExcelList(ApprMcouponVO apprMcouponVO, SessionInfoVO sessionInfoVO) {
+		apprMcouponVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprMcouponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprMcouponVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd())) || (apprMcouponVO.getPosNo() != null && !"".equals(apprMcouponVO.getPosNo()))) {
     		if (apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd())) {

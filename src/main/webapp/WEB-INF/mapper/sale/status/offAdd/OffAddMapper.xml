@@ -33,6 +33,12 @@
 				#{item}
 			</foreach>
 		</if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
 		AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
 		GROUP BY SALE_DATE
 		ORDER BY SALE_DATE
@@ -61,6 +67,12 @@
 			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 				#{item}
 			</foreach>
+		</if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
 		</if>
 	  	AND		tssd.SALE_DATE = #{saleDate}
 		GROUP BY tssd.PROD_CD, tmp.PROD_NM, tssd.ORDER_ADD_FG
@@ -91,6 +103,12 @@
 				#{item}
 			</foreach>
 		</if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
 		AND 	SALE_DATE BETWEEN #{startDate} || '01' AND #{endDate} || '31'
 		GROUP BY TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm')
 		ORDER BY SALE_DATE DESC
@@ -119,6 +137,12 @@
 			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 				#{item}
 			</foreach>
+		</if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
 		</if>
 		AND		tssd.SALE_DATE LIKE #{saleDate} || '%'
 		GROUP BY tssd.PROD_CD, tmp.PROD_NM, tssd.ORDER_ADD_FG
@@ -193,6 +217,12 @@
 								#{item}
 							</foreach>
 						</if>
+						<if test='orgnFg != null and orgnFg == "H"'>
+							AND (
+									'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+								OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+								)
+						</if>
 						AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 						<if test="prodCd != null and prodCd != ''">
 							AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
@@ -241,6 +271,12 @@
 								<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 									#{item}
 								</foreach>
+							</if>
+							<if test='orgnFg != null and orgnFg == "H"'>
+								AND (
+										'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+									OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+									)
 							</if>
 							AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
 							<if test="prodCd != null and prodCd != ''">
@@ -327,6 +363,12 @@
 				#{item}
 			</foreach>
 		</if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
 		AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 		<if test="prodCd != null and prodCd != ''">
 			AND tsdp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
@@ -375,6 +417,12 @@
 			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 				#{item}
 			</foreach>
+		</if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
 		</if>
 		AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
 		<if test="prodCd != null and prodCd != ''">

@@ -55,6 +55,9 @@ public class SideVO extends PageVO {
     /** 상품명 */
     private String prodNm;
 
+    /** 사원번호 */
+    private String empNo;
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -146,5 +149,13 @@ public class SideVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

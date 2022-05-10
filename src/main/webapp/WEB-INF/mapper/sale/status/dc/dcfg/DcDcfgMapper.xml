@@ -54,7 +54,14 @@
                                     #{item}
                                 </foreach>
                             </if>
-                        )
+							<if test='orgnFg != null and orgnFg == "H"'>
+								AND (
+										'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+									OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+									)
+							</if>
+
+		)
                   UNPIVOT
                         ( TOT_DC_AMT
                                   FOR DC_CD IN( DC_AMT_01 AS '01',
@@ -131,6 +138,12 @@
                 #{item}
             </foreach>
           </if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+			'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+			OR	TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+			)
+		</if>
           <if test='arrDcCd != null and arrDcCd.length >= 0'>
             AND TSDD.DC_CD IN
             <foreach collection="arrDcCd" item="item" open="(" close=")" separator=",">

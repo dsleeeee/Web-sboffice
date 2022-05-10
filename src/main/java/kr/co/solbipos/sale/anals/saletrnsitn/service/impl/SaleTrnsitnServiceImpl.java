@@ -76,6 +76,7 @@ public class SaleTrnsitnServiceImpl implements SaleTrnsitnService {
         saleTrnsitnVO.setOrgnFg		(sessionInfoVO.getOrgnFg().getCode());	//소속구분(M:시스템, A:대리점, H:본사, S:매장,가맹점
         saleTrnsitnVO.setHqOfficeCd	(sessionInfoVO.getHqOfficeCd()		);	//본사코드
         saleTrnsitnVO.setStoreCd	(sessionInfoVO.getStoreCd()			);	//매장코드
+		saleTrnsitnVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	LOGGER.debug("### saleTrnsitnVO: " + saleTrnsitnVO);
     	LOGGER.debug("### baseDate     : " + saleTrnsitnVO.getBaseDate());
@@ -105,7 +106,7 @@ public class SaleTrnsitnServiceImpl implements SaleTrnsitnService {
 
     	SaleTrnsitnDatesVO datesVo = saletrnsitnMapper.getPreviouseDatesInfo(saleTrnsitnVO);
     	BeanUtils.copyProperties(datesVo, saleTrnsitnVO);
-    	
+
         return saletrnsitnMapper.getSaletrnsitnList(saleTrnsitnVO);
     }
 
@@ -124,6 +125,7 @@ public class SaleTrnsitnServiceImpl implements SaleTrnsitnService {
         saleTrnsitnVO.setOrgnFg		(sessionInfoVO.getOrgnFg().getCode());	//소속구분(M:시스템, A:대리점, H:본사, S:매장,가맹점
         saleTrnsitnVO.setHqOfficeCd	(sessionInfoVO.getHqOfficeCd()		);	//본사코드
         saleTrnsitnVO.setStoreCd	(sessionInfoVO.getStoreCd()			);	//매장코드
+		saleTrnsitnVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	LOGGER.debug("### saleTrnsitnVO: " + saleTrnsitnVO);
     	LOGGER.debug("### baseDate     : " + saleTrnsitnVO.getBaseDate());

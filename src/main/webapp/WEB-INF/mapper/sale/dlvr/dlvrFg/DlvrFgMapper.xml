@@ -94,6 +94,12 @@
                         #{item}
                     </foreach>
                 </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR	tsdpd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
+                </if>
                 <if test="dlvrPackFg != null and dlvrPackFg != ''">
                    AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
                 </if>
@@ -215,6 +221,12 @@
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
                         #{item}
                     </foreach>
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR	tsdpd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
                 </if>
                 <if test="dlvrPackFg != null and dlvrPackFg != ''">
                    AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
@@ -346,6 +358,12 @@
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
                         #{item}
                     </foreach>
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR	tsdpd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
                 </if>
                 <if test="dlvrPackFg != null and dlvrPackFg != ''">
                    AND tsdpd.DLVR_PACK_FG = #{dlvrPackFg}
@@ -499,6 +517,12 @@
                                     </foreach>
                                 </if>
                             </if>
+                            <if test='orgnFg != null and orgnFg == "H"'>
+                                AND (
+                                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                    OR	tssdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                    )
+                            </if>
                             <if test='orgnFg != null and orgnFg == "S"'>
                                 AND tssdp.STORE_CD = #{storeCd}
                             </if>
@@ -526,6 +550,12 @@
                     #{item}
                 </foreach>
             </if>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
         </if>
         <if test='orgnFg != null and orgnFg == "S"'>
             AND tssd.STORE_CD = #{storeCd}

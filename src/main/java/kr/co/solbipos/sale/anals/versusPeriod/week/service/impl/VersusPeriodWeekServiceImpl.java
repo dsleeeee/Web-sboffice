@@ -25,8 +25,10 @@ public class VersusPeriodWeekServiceImpl implements VersusPeriodWeekService {
 	/** 상품별 매출 - 일자별 상품 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getVersusPeriodWeekList(VersusPeriodWeekVO versusPeriodWeekVO, SessionInfoVO sessionInfoVO) {
-  
-    	versusPeriodWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        versusPeriodWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        versusPeriodWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        versusPeriodWeekVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	if(!StringUtil.getOrBlank(versusPeriodWeekVO.getStoreCd()).equals("")) {
         	versusPeriodWeekVO.setArrStoreCd(versusPeriodWeekVO.getStoreCd().split(","));
@@ -38,8 +40,10 @@ public class VersusPeriodWeekServiceImpl implements VersusPeriodWeekService {
 	/** 상품별 매출 - 차트 */
     @Override
     public List<DefaultMap<String>> getVersusPeriodWeekChartList(VersusPeriodWeekVO versusPeriodWeekVO, SessionInfoVO sessionInfoVO) {
-  
-    	versusPeriodWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        versusPeriodWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        versusPeriodWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        versusPeriodWeekVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	if(!StringUtil.getOrBlank(versusPeriodWeekVO.getStoreCd()).equals("")) {
         	versusPeriodWeekVO.setArrStoreCd(versusPeriodWeekVO.getStoreCd().split(","));

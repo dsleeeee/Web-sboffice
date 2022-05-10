@@ -67,6 +67,8 @@ public class OffAddVO extends PageVO {
 
     /** 오프라인추가구분 */
     private String orderAddFg;
+    /** 사원번호 */
+    private String empNo;
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -199,5 +201,13 @@ public class OffAddVO extends PageVO {
 
     public void setOrderAddFg(String orderAddFg) {
         this.orderAddFg = orderAddFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

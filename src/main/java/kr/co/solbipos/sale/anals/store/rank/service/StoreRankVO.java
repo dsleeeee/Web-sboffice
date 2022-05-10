@@ -28,6 +28,9 @@ public class StoreRankVO extends PageVO {
 
     private String indexNo;
 
+    /** 사원번호 */
+    private String empNo;
+
     /**
      * @return the hqOfficeCd
      */
@@ -126,5 +129,13 @@ public class StoreRankVO extends PageVO {
 
     public void setIndexNo(String indexNo) {
         this.indexNo = indexNo;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

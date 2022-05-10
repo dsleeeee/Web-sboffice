@@ -26,7 +26,9 @@ public class TodayGnrlzServiceImpl implements TodayGnrlzService {
     /** 당일매출종합현황 - 매출종합 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getTodayGnrlzList(TodayGnrlzVO todayGnrlzVO, SessionInfoVO sessionInfoVO) {
+        todayGnrlzVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         todayGnrlzVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        todayGnrlzVO.setEmpNo(sessionInfoVO.getEmpNo());
         if(!StringUtil.getOrBlank(todayGnrlzVO.getStoreCd()).equals("")) {
             todayGnrlzVO.setArrStoreCd(todayGnrlzVO.getStoreCd().split(","));
         }
@@ -37,7 +39,9 @@ public class TodayGnrlzServiceImpl implements TodayGnrlzService {
     /** 당일매출종합현황 - 결제수단별 매출 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getTodayGnrlzPayList(TodayGnrlzVO todayGnrlzVO, SessionInfoVO sessionInfoVO) {
+        todayGnrlzVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         todayGnrlzVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        todayGnrlzVO.setEmpNo(sessionInfoVO.getEmpNo());
         if(!StringUtil.getOrBlank(todayGnrlzVO.getStoreCd()).equals("")) {
             todayGnrlzVO.setArrStoreCd(todayGnrlzVO.getStoreCd().split(","));
         }
@@ -48,7 +52,9 @@ public class TodayGnrlzServiceImpl implements TodayGnrlzService {
     /** 당일매출종합현황 - 회원 Point 적립/사용 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getTodayGnrlzMemberList(TodayGnrlzVO todayGnrlzVO, SessionInfoVO sessionInfoVO) {
+        todayGnrlzVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         todayGnrlzVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        todayGnrlzVO.setEmpNo(sessionInfoVO.getEmpNo());
         todayGnrlzVO.setOrgnCd(sessionInfoVO.getOrgnCd());
         if(!StringUtil.getOrBlank(todayGnrlzVO.getStoreCd()).equals("")) {
             todayGnrlzVO.setArrStoreCd(todayGnrlzVO.getStoreCd().split(","));
@@ -60,7 +66,9 @@ public class TodayGnrlzServiceImpl implements TodayGnrlzService {
     /** 당일매출종합현황 - 상품별 매출현황 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getTodayGnrlzProdList(TodayGnrlzVO todayGnrlzVO, SessionInfoVO sessionInfoVO) {
+        todayGnrlzVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         todayGnrlzVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        todayGnrlzVO.setEmpNo(sessionInfoVO.getEmpNo());
         if(!StringUtil.getOrBlank(todayGnrlzVO.getStoreCd()).equals("")) {
             todayGnrlzVO.setArrStoreCd(todayGnrlzVO.getStoreCd().split(","));
         }

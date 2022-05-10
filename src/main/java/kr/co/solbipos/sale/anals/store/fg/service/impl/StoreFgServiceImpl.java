@@ -35,7 +35,9 @@ public class StoreFgServiceImpl implements StoreFgService {
     /** 매장형태별 - 매장형태별 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getStoreFgList(StoreFgVO storeFgVO, SessionInfoVO sessionInfoVO) {
-    	storeFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeFgVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	 if(!StringUtil.getOrBlank(storeFgVO.getStoreCd()).equals("")) {
          	storeFgVO.setArrStoreCd(storeFgVO.getStoreCd().split(","));

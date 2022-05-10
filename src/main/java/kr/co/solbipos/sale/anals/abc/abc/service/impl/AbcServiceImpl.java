@@ -26,7 +26,9 @@ public class AbcServiceImpl implements AbcService {
     /**상픔ABC분석 - 상픔ABC분석 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getAbcList(AbcVO abcVO, SessionInfoVO sessionInfoVO) {
-    	abcVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        abcVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        abcVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        abcVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	 if(!StringUtil.getOrBlank(abcVO.getStoreCd()).equals("")) {
          	abcVO.setArrStoreCd(abcVO.getStoreCd().split(","));

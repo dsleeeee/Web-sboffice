@@ -42,7 +42,9 @@ public class PeriodMembrServiceImpl implements PeriodMembrService {
     public List<DefaultMap<Object>> getPeriodMembrList(PeriodMembrVO periodMembrVO, SessionInfoVO sessionInfoVO) {
 
         periodMembrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        periodMembrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         periodMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        periodMembrVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             periodMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

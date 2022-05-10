@@ -40,6 +40,12 @@
 		<if test='storeCd != null and storeCd != ""'>
 										AND STORE_CD = #{storeCd}
 		</if>
+		<if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
 		<if test='reqYearMonth != null and reqYearMonth != ""'>
 										AND SUBSTR(SALE_DATE,1,6) = #{reqYearMonth}
 		</if>
@@ -55,6 +61,12 @@
 		]]>
 		<if test='storeCd != null and storeCd != ""'>
 										AND STORE_CD = #{storeCd}
+		</if>
+		<if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
 		</if>
 		<if test='reqYearMonth != null and reqYearMonth != ""'>
 										AND SUBSTR(HOLIDAY_DT,1,6) = #{reqYearMonth}
@@ -101,7 +113,12 @@
 	    AND     TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 	    AND		TSSH.HQ_OFFICE_CD	=	TMS.HQ_OFFICE_CD
 	    AND		TSSH.STORE_CD		=	TMS.STORE_CD
-	    
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	TSSDP.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
 		<if test='storeCd != null and storeCd != ""'>
 		    AND     TSSDP.STORE_CD  = #{storeCd}
 		</if>

@@ -34,6 +34,8 @@ public class SaleAnalsMonthlyServiceImpl implements SaleAnalsMonthlyService {
     /** 월력판매분석 - 결제수단별 팝업 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getSaleAnalsMonthlyPopupList(SaleAnalsMonthlyVO SaleAnalsMonthlyVO, SessionInfoVO sessionInfoVO) {
+        SaleAnalsMonthlyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        SaleAnalsMonthlyVO.setEmpNo(sessionInfoVO.getEmpNo());
 		List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
         result = SaleAnalsMonthlyMapper.getSaleAnalsMonthlyPopupList(SaleAnalsMonthlyVO);
 

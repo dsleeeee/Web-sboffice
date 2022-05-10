@@ -48,6 +48,9 @@ public class TaxBillServiceImpl implements TaxBillService {
     public List<DefaultMap<Object>> getTaxBillRequestList(TaxBillVO taxBillVO, SessionInfoVO sessionInfoVO) {
 
         taxBillVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        taxBillVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        taxBillVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        taxBillVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         return taxBillMapper.getTaxBillRequestList(taxBillVO);
     }
