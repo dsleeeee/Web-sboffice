@@ -101,6 +101,13 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
 
         // 잔여금액
         $scope.restSmsAmt();
+
+        // 매장일때 [1228 알림톡계정기준]이 본사인 경우
+        if(orgnFg == "STORE" && alkIdEnvstVal1228 == "1") {
+            $("#tdAlimtalkIdStoreMemo").css("display", "");
+        } else {
+            $("#tdAlimtalkIdStoreMemo").css("display", "none");
+        }
     };
 
     // 알림톡 계정등록
@@ -123,13 +130,19 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
                     return false;
                 }
             } else {
-                $scope.wjAlimtalkIdRegisterLayer.show(true);
-                event.preventDefault();
+                // 매장일때 [1228 알림톡계정기준]이 본사인 경우
+                if(orgnFg == "STORE" && alkIdEnvstVal1228 == "1") {
+                    $scope._popMsg(messages["alimtalkSendType.alimtalkIdRegisterHqAlert"]); // 본사에서 계정등록 하셔야합니다.
+                    return false;
+                } else {
+                    $scope.wjAlimtalkIdRegisterLayer.show(true);
+                    event.preventDefault();
+                }
             }
         });
     };
 
-    // 알림톡 계정등록 체크 없으면 아무동작 못하게
+    // 알림톡 계정등록 체크 - 없으면 아무동작 못하게
     $scope.alimtalkIdRegisterChkStop = function(selectedRow){
         var params = {};
 

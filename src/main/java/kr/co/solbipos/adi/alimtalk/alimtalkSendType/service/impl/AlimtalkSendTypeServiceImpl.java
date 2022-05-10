@@ -65,7 +65,26 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
     @Override
     public DefaultMap<String> getAlimtalkIdRegisterChk(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
 
-        alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        // 계정정보 체크 조회시
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 환경설정 코드값 조회 [1228 알림톡계정기준]
+            String alkIdEnvstVal1228 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1228"));
+            System.out.println("WEB_ALIMTALK >>> 계정정보 체크 조회 >>> 환경설정 코드값 [1228 알림톡계정기준] : " + alkIdEnvstVal1228);
+
+            // 본사
+            if(alkIdEnvstVal1228.equals("1")) {
+                alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+            // 매장
+            } else {
+                alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getStoreCd());
+            }
+
+        } else {
+            alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        }
 
         return alimtalkSendTypeMapper.getAlimtalkIdRegisterChk(alimtalkSendTypeVO);
     }
@@ -254,10 +273,10 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
     public DefaultMap<Object> getAlimtalkSmsAmtList(AlimtalkSendTypeVO alimtalkSendTypeVO, SessionInfoVO sessionInfoVO) {
 
         // 알림톡 가격 조회시
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
 
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             // 환경설정 코드값 조회 [1231 알림톡비용차감]
             String alkChargeEnvstVal1231 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1231"));
             System.out.println("WEB_ALIMTALK >>> 잔여금액 조회 >>> 환경설정 코드값 [1231 알림톡비용차감] : " + alkChargeEnvstVal1231);
@@ -265,7 +284,7 @@ public class AlimtalkSendTypeServiceImpl implements AlimtalkSendTypeService {
             // 본사
             if(alkChargeEnvstVal1231.equals("1")) {
                 alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
-                // 매장
+            // 매장
             } else {
                 alimtalkSendTypeVO.setOrgnCd(sessionInfoVO.getStoreCd());
             }

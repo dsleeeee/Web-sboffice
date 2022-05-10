@@ -5,6 +5,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeService;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeVO;
@@ -15,6 +17,7 @@ import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiTokenVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiTokenReceiveVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiGroupVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.ApiGroupReceiveVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,14 +59,16 @@ public class AlimtalkSendTypeController {
 
     private final SessionService sessionService;
     private final AlimtalkSendTypeService alimtalkSendTypeService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public AlimtalkSendTypeController(SessionService sessionService, AlimtalkSendTypeService alimtalkSendTypeService) {
+    public AlimtalkSendTypeController(SessionService sessionService, AlimtalkSendTypeService alimtalkSendTypeService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.alimtalkSendTypeService = alimtalkSendTypeService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -101,9 +106,13 @@ public class AlimtalkSendTypeController {
 
         // 알림톡 전송유형 - 템플릿 치환값 리스트 조회
         List<DefaultMap<String>> templateChangeKeyColList = alimtalkSendTypeService.getAlimtalkTemplateChangeKeyColList(sessionInfoVO);
-
         model.addAttribute("templateChangeKeyColList", templateChangeKeyColList);
         System.out.println("WEB_ALIMTALK >>> templateChangeKeyColList : " + templateChangeKeyColList);
+
+        // 환경설정 코드값 조회 [1228 알림톡계정기준]
+        String alkIdEnvstVal1228 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1228"));
+        model.addAttribute("alkIdEnvstVal1228", alkIdEnvstVal1228);
+        System.out.println("WEB_ALIMTALK >>> 환경설정 코드값 [1228 알림톡계정기준] : " + alkIdEnvstVal1228);
 
         return "adi/alimtalk/alimtalkSendType/alimtalkSendType";
     }
