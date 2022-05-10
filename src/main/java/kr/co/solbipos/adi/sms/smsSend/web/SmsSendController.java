@@ -136,7 +136,7 @@ public class SmsSendController {
      */
     @RequestMapping(value = "/smsSend/getSmsAmtList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSmsQtyList(SmsSendVO smsSendVO, HttpServletRequest request,
+    public Result getSmsAmtList(SmsSendVO smsSendVO, HttpServletRequest request,
                                  HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);

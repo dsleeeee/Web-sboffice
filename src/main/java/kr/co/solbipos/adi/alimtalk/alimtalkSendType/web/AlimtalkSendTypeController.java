@@ -635,4 +635,30 @@ public class AlimtalkSendTypeController {
 
         return returnJson(Status.OK, resultMap);
     }
+
+    /**
+     * 잔여금액 조회
+     *
+     * @param alimtalkSendTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 09.
+     */
+    @RequestMapping(value = "/alimtalkSendType/getAlimtalkSmsAmtList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAlimtalkSmsAmtList(AlimtalkSendTypeVO alimtalkSendTypeVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = alimtalkSendTypeService.getAlimtalkSmsAmtList(alimtalkSendTypeVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
 }

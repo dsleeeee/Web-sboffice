@@ -93,7 +93,7 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
             // 환경설정 코드값 조회 [1231 알림톡비용차감]
             sessionInfoVO.setStoreCd(alimtalkSendStatusVO.getStoreCd());
             String alkChargeEnvstVal1231 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1231"));
-            System.out.println("WEB_ALIMTALK >>> 가격안내 >>> 환경설정 코드값 [1231 알림톡비용차감] : " + alkChargeEnvstVal1231);
+            System.out.println("WEB_ALIMTALK >>> 예약취소 >>> 환경설정 코드값 [1231 알림톡비용차감] : " + alkChargeEnvstVal1231);
 
             // 본사
             if(alkChargeEnvstVal1231.equals("1")) {
@@ -102,6 +102,9 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
             } else {
                 sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getStoreCd());
             }
+
+        } else {
+            sendStatusVO.setOrgnCd(alimtalkSendStatusVO.getOrgnCd());
         }
         procCnt = sendStatusMapper.getSmsAmtRecoverSaveUpdate(sendStatusVO);
 
