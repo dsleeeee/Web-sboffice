@@ -63,6 +63,10 @@
 	           AND     TMP.USE_YN               =   'Y'
 	           AND     TMPB.STORE_CD      (+)    =   TSSSC.STORE_CD
 	           AND     TMPB.PROD_CD      (+)    =   TSSSC.PROD_CD
+				AND (
+						'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+					OR	TMP.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+					)
 	           GROUP
 	           BY      TSSSC.PROD_CD
 	          ,      TMP.PROD_NM
@@ -220,6 +224,10 @@
 		AND     TSSSC.STORE_CD    (+) =   TMP.STORE_CD
 		AND     TSSSC.PROD_CD     (+) =   TMP.PROD_CD
 		AND      TMS.STORE_CD      =   TSSSC.STORE_CD
+		AND (
+				'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+			OR	TMS.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+			)
 		ORDER
 		BY      TSSSC.STORE_CD
 		<include refid="CmmSQL.PagingTemplateBottom"/>

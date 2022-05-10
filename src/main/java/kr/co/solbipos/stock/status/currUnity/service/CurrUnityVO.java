@@ -24,6 +24,8 @@ public class CurrUnityVO extends PageVO {
     private String arrVendrCd[];
     /** 상품분류코드 */
     private String prodClassCd;
+	/** 사원번호 */
+	private String empNo;
 
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -97,4 +99,11 @@ public class CurrUnityVO extends PageVO {
 		this.prodClassCd = prodClassCd;
 	}
 
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 }

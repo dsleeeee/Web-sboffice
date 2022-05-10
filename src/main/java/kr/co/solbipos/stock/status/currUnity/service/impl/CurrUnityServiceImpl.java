@@ -29,6 +29,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
 	public List<DefaultMap<String>> getCurrUnityList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
 
 		currUnityVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        currUnityVO.setEmpNo(sessionInfoVO.getEmpNo());
 		// 거래처 멀티 선택
         if(!StringUtil.getOrBlank(currUnityVO.getVendrCd()).equals("")) {
             currUnityVO.setArrVendrCd(currUnityVO.getVendrCd().split(","));
@@ -55,6 +56,7 @@ public class CurrUnityServiceImpl implements CurrUnityService {
 	public List<DefaultMap<String>> getCurrUnityStoreDtlList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
 
 		currUnityVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        currUnityVO.setEmpNo(sessionInfoVO.getEmpNo());
 		// 거래처 멀티 선택
         if(!StringUtil.getOrBlank(currUnityVO.getVendrCd()).equals("")) {
             currUnityVO.setArrVendrCd(currUnityVO.getVendrCd().split(","));
