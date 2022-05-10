@@ -35,7 +35,12 @@
                         <span class="mr5"><label id="lblAlimtalkSendTypeSmsAmt"></label></span>
                         <%-- 잔여금액이 없는 경우 알림톡이 전송되지 않습니다. --%>
                         <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
-                        <span><s:message code="alimtalkSendType.smsAmtMemo" /></span>
+                        <span class="mr5"><s:message code="alimtalkSendType.smsAmtMemo" /></span>
+                    </td>
+                    <td class="s14" id="tdAlimtalkIdStoreMemo" style="display: none;">
+                        <%-- 계정 미등록시 본사에 요청바랍니다. --%>
+                        <span><img src="/resource/solbipos/css/img/sms/s_icon.jpg"></span>
+                        <span><s:message code="alimtalkSendType.alimtalkIdStoreMemo" /></span>
                     </td>
                 </tr>
             </table>
@@ -184,9 +189,12 @@
         templateChangeKeyParam.nmcodeItem2 = "${templateChangeKeyCol.nmcodeItem2}";
         templateChangeKeyColList.push(templateChangeKeyParam);
     </c:forEach>
+
+    var orgnFg = "${orgnFg}";
+    var alkIdEnvstVal1228 = "${alkIdEnvstVal1228}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220509.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220510.01" charset="utf-8"></script>
 
 <%-- 알림톡 계정등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.jsp">
