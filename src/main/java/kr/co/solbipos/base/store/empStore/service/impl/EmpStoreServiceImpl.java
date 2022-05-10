@@ -56,16 +56,62 @@ public class EmpStoreServiceImpl implements EmpStoreService {
 
         empStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
 
-        return empStoreMapper.getEmpManageStoreList(empStoreVO);
+        boolean all = false;
+
+        List<DefaultMap<Object>> empManageStoreList = empStoreMapper.getEmpManageStoreList(empStoreVO);
+
+        for(int i =0; i < empManageStoreList.size(); i++){
+            if(empManageStoreList.get(i).get("storeCd").equals("ALL")){
+                all = true;
+            }
+        }
+
+        if(all){
+            empManageStoreList.clear();
+
+            DefaultMap<Object> resultMap = new DefaultMap<Object>();
+
+            resultMap.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+            resultMap.put("storeCd", "ALL");
+            resultMap.put("storeNm", "전체매장");
+            resultMap.put("empNo", empStoreVO.getEmpNo());
+
+            empManageStoreList.add(0, resultMap);
+        }
+
+        return empManageStoreList;
     }
 
     /** 사원별탭 - 미관리매장 조회 */
     @Override
     public List<DefaultMap<Object>> getEmpNoManageStoreList(EmpStoreVO empStoreVO, SessionInfoVO sessionInfoVO) {
 
+        boolean all = false;
+
         empStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
 
-        return empStoreMapper.getEmpNoManageStoreList(empStoreVO);
+        List<DefaultMap<Object>> empManageStoreList = empStoreMapper.getEmpManageStoreList(empStoreVO);
+        List<DefaultMap<Object>> empNoManageStoreList = empStoreMapper.getEmpNoManageStoreList(empStoreVO);
+
+        for(int i =0; i < empManageStoreList.size(); i++){
+            if(empManageStoreList.get(i).get("storeCd").equals("ALL")){
+                all = true;
+            }
+        }
+
+        if(!all){
+
+            DefaultMap<Object> resultMap = new DefaultMap<Object>();
+
+            resultMap.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+            resultMap.put("storeCd", "ALL");
+            resultMap.put("storeNm", "전체매장");
+            resultMap.put("empNo", empStoreVO.getEmpNo());
+
+            empNoManageStoreList.add(0, resultMap);
+        }
+
+        return empNoManageStoreList;
     }
 
     /** 사원별탭 - 관리매장 추가 */

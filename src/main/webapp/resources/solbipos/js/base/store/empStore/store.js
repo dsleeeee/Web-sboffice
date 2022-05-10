@@ -124,7 +124,16 @@ app.controller('storeManageEmpCtrl', ['$scope', '$http', function ($scope, $http
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                params.push($scope.flex.collectionView.items[i]);
+                if($scope.flex.collectionView.items[i].allFg === 1){
+                    var all = {};
+                    all.hqOfficeCd = $scope.flex.collectionView.items[i].hqOfficeCd;
+                    all.storeCd = 'ALL';
+                    all.empNo  = $scope.flex.collectionView.items[i].empNo;
+                    params.push(all);
+                    params.push($scope.flex.collectionView.items[i]);
+                } else {
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
         }
 

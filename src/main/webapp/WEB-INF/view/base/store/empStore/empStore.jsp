@@ -6,12 +6,20 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/base/store/empStore"/>
 
-<div class="con">
-    <div class="tabType1" ng-controller="empStoreCtrl" ng-init="init()">
+<div id="divNoPermissionMsg" class="contents" style="display: none;">
+    <div class="elseCon">
+        <p class="lgTxt">
+            해당 메뉴에 권한이 없습니다.
+        </p>
+    </div>
+</div>
+
+<div id="divContents"  class="con" style="display: none;">
+    <div class="tabType1" ng-controller="empStoreCtrl">
         <ul>
             <%-- 사원별 탭 --%>
             <li>
-                <a id="empStoreEmpTab" href="#" class="on" ng-click="empStoreEmpShow()"><s:message code="empStore.emp"/></a>
+                <a id="empStoreEmpTab" href="#" class="on" ng-click="empStoreEmpShow()" ng-init="init()"><s:message code="empStore.emp"/></a>
             </li>
             <%-- 매장별 탭 --%>
             <li>
@@ -20,6 +28,18 @@
         </ul>
     </div>
 </div>
+
+<script>
+    var empStore = "${empStore}";
+
+    if (empStore == "Y") {
+        $("#divNoPermissionMsg").css('display', 'none');
+        $("#divContents").css('display', '');
+    } else {
+        $("#divNoPermissionMsg").css('display', '');
+        $("#divContents").css('display', 'none');
+    }
+</script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/empStore/empStore.js?ver=20200513.04" charset="utf-8"></script>
 

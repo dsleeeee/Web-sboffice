@@ -9,7 +9,7 @@
 
 <div id="empStoreEmpView" class="subCon" style="display: none;">
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl"><s:message code="day.dayTotal"/></a>
+        <a href="#" class="open fl"><s:message code="empStore.emp"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empStoreEmpCtrl')">
             <s:message code="cmm.search"/>
@@ -19,7 +19,7 @@
     <div ng-controller="empStoreEmpCtrl">
         <%--사원정보--%>
         <div class="wj-TblWrap mt20 mb20 w33 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;" >
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px; overflow-y: hidden;" >
                 <div class="updownSet oh mb10">
                     <span class="fl bk lh30">
                         <s:message code="empStore.emp.emp" />
@@ -35,9 +35,9 @@
                         item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="empStore.emp.empNo"/>" binding="empNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="empStore.emp.empNm"/>" binding="empNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="empStore.emp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empStore.emp.empNo"/>" binding="empNo" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empStore.emp.empNm"/>" binding="empNm" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empStore.emp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" width="55" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="empStore.emp.storeCnt"/>" binding="storeCnt" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -49,11 +49,13 @@
 
     <%--관리매장--%>
     <div class="wj-TblWrap mt20 mb20 w33 fl" ng-controller="empManageStoreCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:470px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30">
                 <s:message code="empStore.emp.manage" /><span id="empTitle"></span>
                 </span>
+            </div>
+            <div class="updownSet oh mb10">
                 <button class="btn_skyblue" id="btnDelete" ng-click="del()">
                     <s:message code="cmm.delete" />
                 </button>
@@ -86,11 +88,13 @@
 
     <%--미관리매장--%>
     <div class="wj-TblWrap mt20 mb20 w33 fr" ng-controller="empNoManageStoreCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:470px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30">
                 <s:message code="empStore.emp.noManage" />
                 </span>
+            </div>
+            <div class="updownSet oh mb10">
                 <button class="btn_skyblue" id="btnAdd" ng-click="add()">
                     <s:message code="cmm.add" />
                 </button>
@@ -130,4 +134,4 @@
     var sysStatFgData = ${ccu.getCommCodeExcpAll("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empStore/emp.js?ver=20200513.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empStore/emp.js?ver=20200513.06" charset="utf-8"></script>
