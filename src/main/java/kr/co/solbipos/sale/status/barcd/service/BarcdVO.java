@@ -45,8 +45,8 @@ public class BarcdVO extends PageVO {
     private String orgnFg;
     /** 상품명*/
     private String prodNm;
-    
-    
+	/** 사원번호 */
+	private String empNo;
     
     public String getStoreCd() {
 		return storeCd;
@@ -170,5 +170,13 @@ public class BarcdVO extends PageVO {
 	}
 	public void setBarcdCd(String barcdCd) {
 		this.barcdCd = barcdCd;
+	}
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
 	}
 }

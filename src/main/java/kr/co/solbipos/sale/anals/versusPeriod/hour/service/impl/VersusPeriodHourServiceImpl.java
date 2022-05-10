@@ -28,7 +28,9 @@ public class VersusPeriodHourServiceImpl implements VersusPeriodHourService {
     @Override
     public List<DefaultMap<String>> getVersusPeriodHourList(VersusPeriodHourVO versusPeriodHourVO, SessionInfoVO sessionInfoVO) {
 
-    	versusPeriodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        versusPeriodHourVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        versusPeriodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        versusPeriodHourVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	if(!StringUtil.getOrBlank(versusPeriodHourVO.getStoreCd()).equals("")) {
         	versusPeriodHourVO.setArrStoreCd(versusPeriodHourVO.getStoreCd().split(","));

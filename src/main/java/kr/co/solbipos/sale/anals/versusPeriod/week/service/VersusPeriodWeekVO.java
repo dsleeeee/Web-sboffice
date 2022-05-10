@@ -22,6 +22,10 @@ public class VersusPeriodWeekVO extends PageVO {
     private String compStartDate;
     /** 대비기간 마감일자 */
     private String compEndDate;
+	/** 본사,매장 구분 */
+	private String orgnFg;
+	/** 사원번호 */
+	private String empNo;
 
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -73,5 +77,21 @@ public class VersusPeriodWeekVO extends PageVO {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
 	}
 }

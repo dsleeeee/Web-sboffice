@@ -68,6 +68,8 @@ public class PostpaidServiceImpl implements PostpaidService {
         postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         postpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        postpaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        postpaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         return mapper.getPostpaidMemberList(postpaidStoreVO);
     }
@@ -85,6 +87,9 @@ public class PostpaidServiceImpl implements PostpaidService {
 
         postpaidStoreVO.setDefaultStoreCd(defaultStoreCd);
         postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        postpaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        postpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        postpaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

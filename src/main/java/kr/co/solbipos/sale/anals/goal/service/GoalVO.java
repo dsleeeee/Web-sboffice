@@ -44,6 +44,8 @@ public class GoalVO extends PageVO {
     private String saleEndDateYn;
     /** 마지막날자 */
     private String saleEndDate;
+	/** 사원번호 */
+	private String empNo;
     /**
      * @return the hqOfficeCd
      */
@@ -231,5 +233,12 @@ public class GoalVO extends PageVO {
 	public void setSaleEndDateYn(String saleEndDateYn) {
 		this.saleEndDateYn = saleEndDateYn;
 	}
-	
+
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 }

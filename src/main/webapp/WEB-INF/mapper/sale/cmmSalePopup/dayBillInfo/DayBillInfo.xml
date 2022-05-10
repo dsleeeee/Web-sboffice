@@ -11,7 +11,7 @@
 -->
 <mapper namespace="kr.co.solbipos.sale.cmmSalePopup.dayBillInfo.service.impl.DayBillInfoMapper">
 
-    <!-- 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회-->
+    <!-- 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회(본사)-->
     <!--
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
@@ -53,11 +53,15 @@
                 #{item}
             </foreach>
         </if>
+        AND (
+            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND ENVST_CD = '0001')
+        OR  tssh.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+        )
         GROUP BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
         ORDER BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
     </select>
 
-    <!-- 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회-->
+    <!-- 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회(매장)-->
     <!--
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더

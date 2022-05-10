@@ -85,6 +85,10 @@
                     AND thp.PROD_CD = tssd.PROD_CD
                     AND thpc_p.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                     AND thpc_p.PROD_CLASS_CD = thp.PROD_CLASS_CD
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
                     GROUP BY thpc_p.PROD_CLASS_CD, thpc_p.PATH, tmm.GENDR_FG, TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 )
                 )
                 GROUP BY Level1, Level2, Level3

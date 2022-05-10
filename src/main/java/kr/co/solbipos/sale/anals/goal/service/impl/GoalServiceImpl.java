@@ -29,7 +29,9 @@ public class GoalServiceImpl implements GoalService {
     /**매출목표관리 - 일자별 목표대비 매출 리스트 조회   */
     @Override
 	public List<DefaultMap<String>> getSaleGoalDayColList(GoalVO goalVO, SessionInfoVO sessionInfoVO) {
-    	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd()); 
+    	goalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+    	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	goalVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	 if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
      		String[] arrStoreCd = goalVO.getStoreCd().split(",");
@@ -46,8 +48,10 @@ public class GoalServiceImpl implements GoalService {
     /**매출목표관리 - 일자별 목표대비 매출 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getSaleGoalDayList(GoalVO goalVO, SessionInfoVO sessionInfoVO) {
-  
-    	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		goalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		goalVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
     		String[] arrStoreCd = goalVO.getStoreCd().split(",");
@@ -80,8 +84,10 @@ public class GoalServiceImpl implements GoalService {
     /**매출목표관리 - 월별 목표대비 매출 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getSaleGoalMonthList(GoalVO goalVO, SessionInfoVO sessionInfoVO) {
-  
-    	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		goalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		goalVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
         	goalVO.setArrStoreCd(goalVO.getStoreCd().split(","));
@@ -93,9 +99,11 @@ public class GoalServiceImpl implements GoalService {
     /**매출목표관리 - 매장 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getSaleGoalStoreList(GoalVO goalVO, SessionInfoVO sessionInfoVO) {
-  
-    	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	goalVO.setStoreCd(sessionInfoVO.getStoreCd()); 	       
+
+		goalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	goalVO.setStoreCd(sessionInfoVO.getStoreCd());
+		goalVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         return goalMapper.getSaleGoalStoreList(goalVO);
     }

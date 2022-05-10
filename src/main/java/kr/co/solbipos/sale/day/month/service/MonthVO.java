@@ -145,6 +145,9 @@ public class MonthVO extends PageVO {
     /** 본사코드 */
     private String hqOfficeCd;
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -419,5 +422,13 @@ public class MonthVO extends PageVO {
 
     public void setOfficeEmpNm(String officeEmpNm) {
         this.officeEmpNm = officeEmpNm;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

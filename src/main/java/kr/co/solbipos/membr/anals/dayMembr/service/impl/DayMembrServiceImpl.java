@@ -51,6 +51,8 @@ public class DayMembrServiceImpl implements DayMembrService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        dayMembrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayMembrVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         // 결제수단 array 값 세팅
         dayMembrVO.setArrPayCol(dayMembrVO.getPayCol().split(","));
@@ -69,7 +71,9 @@ public class DayMembrServiceImpl implements DayMembrService {
     @Override
     public List<DefaultMap<Object>> getDayMembrPurchsList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO) {
 
+        dayMembrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayMembrVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -81,6 +85,9 @@ public class DayMembrServiceImpl implements DayMembrService {
     @Override
     public DefaultMap<String> getDayMembrDetail(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO) {
 
+        dayMembrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayMembrVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayMembrVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         return mapper.getDayMembrDetail(dayMembrVO);
@@ -90,7 +97,9 @@ public class DayMembrServiceImpl implements DayMembrService {
     @Override
     public List<DefaultMap<Object>> getDayMembrDetailPurchsList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO) {
 
+        dayMembrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayMembrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayMembrVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

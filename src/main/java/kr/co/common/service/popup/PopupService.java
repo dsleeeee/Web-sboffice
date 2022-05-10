@@ -38,7 +38,7 @@ public interface PopupService {
     List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO, SessionInfoVO sessionInfoVO);
 
     /** 매장 목록 조회 */
-    List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
+    List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 매장 목록 조회(가맹점 로직 추가) */
     List<DefaultMap<String>> getSearchStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);

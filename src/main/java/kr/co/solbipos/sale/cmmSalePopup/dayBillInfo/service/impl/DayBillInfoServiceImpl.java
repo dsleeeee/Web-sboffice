@@ -45,6 +45,9 @@ public class DayBillInfoServiceImpl implements DayBillInfoService {
     public List<DefaultMap<Object>> getDayStoreBillList(DayBillInfoVO dayBillInfoVO, SessionInfoVO sessionInfoVO) {
 
         dayBillInfoVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayBillInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayBillInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayBillInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayBillInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

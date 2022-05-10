@@ -45,6 +45,11 @@ public class MembrPointVO extends PageVO {
     /** 정렬 */
     private String array;
 
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -96,4 +101,20 @@ public class MembrPointVO extends PageVO {
     public String getArray() { return array; }
 
     public void setArray(String array) { this.array = array; }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 }

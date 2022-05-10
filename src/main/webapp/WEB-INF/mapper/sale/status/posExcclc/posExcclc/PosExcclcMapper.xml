@@ -178,6 +178,12 @@
                                    #{item}
                                </foreach>
                            </if>
+						   <if test='orgnFg != null and orgnFg == "H"'>
+							AND (
+									'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+								OR	TPE.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+								)
+						   </if>
                            <if test='startDate != null and startDate != ""'>
                                AND TPE.SALE_DATE >= #{startDate}
                            </if>
@@ -209,6 +215,12 @@
                                     #{item}
                                 </foreach>
                             </if>
+							<if test='orgnFg != null and orgnFg == "H"'>
+								AND (
+										'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+									OR	TPE.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+									)
+							</if>
                             <if test='startDate != null and startDate != ""'>
                                 AND TPE.SALE_DATE >= #{startDate}
                             </if>
@@ -239,6 +251,12 @@
                                 #{item}
                             </foreach>
                         </if>
+						<if test='orgnFg != null and orgnFg == "H"'>
+							AND (
+									'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+								OR	TPE.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+								)
+						</if>
 			            <if test='startDate != null and startDate != ""'>
                             AND TPE.SALE_DATE >= #{startDate}
                         </if>
@@ -709,6 +727,12 @@
                                    #{item}
                                </foreach>
                            </if>
+							<if test='orgnFg != null and orgnFg == "H"'>
+								AND (
+										'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+									OR	TPE.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+									)
+							</if>
                            <if test='startDate != null and startDate != ""'>
                                AND TPE.SALE_DATE >= #{startDate}
                            </if>
@@ -740,6 +764,12 @@
                                     #{item}
                                 </foreach>
                             </if>
+							<if test='orgnFg != null and orgnFg == "H"'>
+								AND (
+										'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+									OR	TPE.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+									)
+							</if>
                             <if test='startDate != null and startDate != ""'>
                                 AND TPE.SALE_DATE >= #{startDate}
                             </if>
@@ -770,6 +800,12 @@
                                 #{item}
                             </foreach>
                         </if>
+						<if test='orgnFg != null and orgnFg == "H"'>
+							AND (
+									'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+								OR	TPE.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+								)
+						</if>
 			            <if test='startDate != null and startDate != ""'>
                             AND TPE.SALE_DATE >= #{startDate}
                         </if>

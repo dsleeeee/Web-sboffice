@@ -51,6 +51,9 @@ public class MobileMonthSaleVO extends PageVO {
     /** 조회월 */
     private String endMonth;
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -94,4 +97,12 @@ public class MobileMonthSaleVO extends PageVO {
     public String getEndMonth() { return endMonth; }
 
     public void setEndMonth(String endMonth) { this.endMonth = endMonth; }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 }

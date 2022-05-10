@@ -95,6 +95,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
         }
 
     	if(saleComPopupVO.getChkPop().equals("cardApprPop")) {				//카드
+				saleComPopupVO.setEmpNo(sessionInfoVO.getEmpNo());
     		return saleComPopupMapper.getCardApprPopList(saleComPopupVO);
     	}else if(saleComPopupVO.getChkPop().equals("cashApprPop")) {		//현금
     		return saleComPopupMapper.getCashApprPopList(saleComPopupVO);
@@ -142,6 +143,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 
 		saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		saleComPopupVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));

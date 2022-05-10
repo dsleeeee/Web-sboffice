@@ -27,7 +27,9 @@ public class ApprCashServiceImpl implements ApprCashService {
     /** 신용카드 승인현황 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprCashList(ApprCashVO apprCashVO, SessionInfoVO sessionInfoVO) {
+		apprCashVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprCashVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprCashVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd())) || (apprCashVO.getPosNo() != null && !"".equals(apprCashVO.getPosNo()))) {
     		if (apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd())) {
@@ -62,7 +64,9 @@ public class ApprCashServiceImpl implements ApprCashService {
 	/** 신용카드 승인현황 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprCashExcelList(ApprCashVO apprCashVO, SessionInfoVO sessionInfoVO) {
+		apprCashVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprCashVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprCashVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd())) || (apprCashVO.getPosNo() != null && !"".equals(apprCashVO.getPosNo()))) {
     		if (apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd())) {

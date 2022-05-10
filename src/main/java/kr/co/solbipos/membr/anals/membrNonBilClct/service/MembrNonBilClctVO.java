@@ -36,6 +36,11 @@ public class MembrNonBilClctVO extends PageVO {
     /** 회원명 */
     private String membrNm;
 
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -70,5 +75,21 @@ public class MembrNonBilClctVO extends PageVO {
 
     public void setMembrNm(String membrNm) {
         this.membrNm = membrNm;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

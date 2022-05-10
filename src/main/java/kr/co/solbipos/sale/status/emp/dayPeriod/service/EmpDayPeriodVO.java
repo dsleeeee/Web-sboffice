@@ -14,6 +14,7 @@ public class EmpDayPeriodVO extends PageVO {
     
     /**판매자 번호*/
     private String empNo;
+	private String orgnFg;
     
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -43,4 +44,11 @@ public class EmpDayPeriodVO extends PageVO {
 		return serialVersionUID;
 	}
 
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 }

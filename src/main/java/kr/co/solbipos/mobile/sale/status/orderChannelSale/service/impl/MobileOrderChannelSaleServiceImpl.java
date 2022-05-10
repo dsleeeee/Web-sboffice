@@ -59,6 +59,7 @@ public class MobileOrderChannelSaleServiceImpl implements MobileOrderChannelSale
 
         mobileOrderChannelSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileOrderChannelSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobileOrderChannelSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             mobileOrderChannelSaleVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -78,6 +79,7 @@ public class MobileOrderChannelSaleServiceImpl implements MobileOrderChannelSale
 
         mobileOrderChannelSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileOrderChannelSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobileOrderChannelSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             mobileOrderChannelSaleVO.setStoreCd(sessionInfoVO.getStoreCd());
         }

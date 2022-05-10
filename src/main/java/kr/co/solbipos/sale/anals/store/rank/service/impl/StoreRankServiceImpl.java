@@ -28,9 +28,11 @@ public class StoreRankServiceImpl implements StoreRankService {
     /** 매장순위 - 매장순위 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getStoreRankList(StoreRankVO storeRankVO, SessionInfoVO sessionInfoVO) {
-  
-    	storeRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
+        storeRankVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeRankVO.setEmpNo(sessionInfoVO.getEmpNo());
+
         if(!StringUtil.getOrBlank(storeRankVO.getStoreCd()).equals("")) {
         	storeRankVO.setArrStoreCd(storeRankVO.getStoreCd().split(","));
         }

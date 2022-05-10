@@ -65,6 +65,10 @@ public class PostpaidStoreVO extends PageVO {
     private String defaultStoreCd;
     /** 등록여부  */
     private UseYn regYn;
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
 
     /**
      * @return the membrOrgnFg
@@ -369,5 +373,21 @@ public class PostpaidStoreVO extends PageVO {
      */
     public void setRegYn(UseYn regYn) {
         this.regYn = regYn;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

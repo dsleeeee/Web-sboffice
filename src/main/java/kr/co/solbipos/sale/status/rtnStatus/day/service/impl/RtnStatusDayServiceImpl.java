@@ -44,9 +44,11 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
     /** 반품현황 - 일자별 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getRtnStatusDayList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
-    	rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
-    	if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
+		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
         	
         	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
     		if (arrStoreCd.length > 0) {
@@ -81,6 +83,7 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 	public List<DefaultMap<String>> getRtnStatusProdList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
 		
 		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
         	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
@@ -99,6 +102,7 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 	public List<DefaultMap<String>> getRtnStatusProdExcelList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
 			String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
@@ -114,7 +118,9 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 	/** 반품현황 - 일자별 전체 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getRtnstatusDayExcelList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
         	
@@ -169,7 +175,9 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 	/** 반품현황 - 영수증별 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getRtnstatusBillList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
 		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
 			String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
 			if (arrStoreCd.length > 0) {

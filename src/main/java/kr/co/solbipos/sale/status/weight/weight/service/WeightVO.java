@@ -52,6 +52,9 @@ public class WeightVO extends PageVO {
     /** 상품명 */
     private String prodNm;
 
+    /** 사원번호 */
+    private String empNo;
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -135,5 +138,13 @@ public class WeightVO extends PageVO {
 
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

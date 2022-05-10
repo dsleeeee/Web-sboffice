@@ -26,8 +26,9 @@ public class ProdClassServiceImpl implements ProdClassService {
     /** 분류별상품탭 - 조회 */
     @Override
     public List<DefaultMap<String>> getProdClassList(ProdClassVO prodClassVO, SessionInfoVO sessionInfoVO) {
-  
-    	prodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(prodClassVO.getStoreCd()).equals("")) {
         	prodClassVO.setArrStoreCd(prodClassVO.getStoreCd().split(","));
@@ -39,8 +40,9 @@ public class ProdClassServiceImpl implements ProdClassService {
     /** 분류별상품탭 - 엑셀 조회 */
     @Override
     public List<DefaultMap<String>> getProdClassExcelList(ProdClassVO prodClassVO, SessionInfoVO sessionInfoVO) {
-  
-    	prodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(prodClassVO.getStoreCd()).equals("")) {
         	prodClassVO.setArrStoreCd(prodClassVO.getStoreCd().split(","));

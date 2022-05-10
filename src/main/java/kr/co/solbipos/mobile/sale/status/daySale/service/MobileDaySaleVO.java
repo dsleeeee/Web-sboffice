@@ -45,6 +45,9 @@ public class MobileDaySaleVO extends PageVO {
     /** 구분 */
     private String gubun;
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -80,4 +83,12 @@ public class MobileDaySaleVO extends PageVO {
     public String getGubun() { return gubun; }
 
     public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 }

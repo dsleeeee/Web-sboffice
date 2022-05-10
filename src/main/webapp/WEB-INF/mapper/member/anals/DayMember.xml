@@ -59,6 +59,12 @@
                     AND tsshm.STORE_CD = #{storeCd}
                 ]]>
             </if>
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tsshm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+            </if>
             AND tssh.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
             AND tssh.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
             AND tssh.STORE_CD = tsshm.STORE_CD
@@ -107,6 +113,12 @@
             <![CDATA[
                 AND tsshm.STORE_CD = #{storeCd}
             ]]>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsshm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
         </if>
         AND tsshm.SALE_DATE = #{saleDate}
         AND tsshm.MEMBR_NO = #{membrNo}
@@ -194,6 +206,12 @@
             <![CDATA[
                 AND tsshm.STORE_CD = #{storeCd}
             ]]>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsshm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
         </if>
         AND tsshm.SALE_DATE = #{saleDate}
         AND tsshm.MEMBR_NO = #{membrNo}

@@ -76,6 +76,9 @@ public class ProdInfoVO extends PageVO {
     /** 다중 상품분류코드(배열형) */
     private String[] arrProdClassCd;
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -166,5 +169,13 @@ public class ProdInfoVO extends PageVO {
 
     public void setArrProdClassCd(String[] arrProdClassCd) {
         this.arrProdClassCd = arrProdClassCd;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

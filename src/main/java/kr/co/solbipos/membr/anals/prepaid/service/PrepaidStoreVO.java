@@ -60,6 +60,10 @@ public class PrepaidStoreVO extends PageVO {
     private String[] storeCdList;
     /** 기본매장  */
     private String defaultStoreCd;
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
 
     public String getMembrOrgnCd() { return membrOrgnCd; }
 
@@ -349,5 +353,21 @@ public class PrepaidStoreVO extends PageVO {
      */
     public void setDefaultStoreCd(String defaultStoreCd) {
         this.defaultStoreCd = defaultStoreCd;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

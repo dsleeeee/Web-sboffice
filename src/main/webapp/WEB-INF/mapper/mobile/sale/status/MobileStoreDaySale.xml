@@ -50,6 +50,10 @@
                     SUM(tsdt.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
             FROM    TB_SL_DAILY_TOTAL tsdt
             WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsdt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                 AND tsdt.STORE_CD IN
                 <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -69,6 +73,10 @@
                     SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN tsddd.BILL_CNT ELSE 0 END) AS PACK_BILL_CNT
             FROM    TB_SL_DAILY_DTL_DLVR tsddd
             WHERE   tsddd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsddd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                 AND tsddd.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -85,6 +93,10 @@
                     SUM(CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END) AS ETC_AMT
             FROM    TB_SL_DAILY_PAY tsdp
             WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                 AND tsdp.STORE_CD IN
                 <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -101,6 +113,10 @@
                     SUM(CASE WHEN tsdd.DC_CD NOT IN('01','02') THEN tsdd.TOT_DC_AMT ELSE 0 END) AS ETC_DC_AMT
             FROM    TB_SL_DAILY_DC tsdd
             WHERE   tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsdd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                 AND tsdd.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -115,6 +131,10 @@
                     SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
             FROM    TB_SL_SALE_HDR tssh
             WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                 AND tssh.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -128,6 +148,10 @@
             SELECT  STORE_CD, STORE_NM
             FROM    TB_MS_STORE
             WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
                 AND STORE_CD IN
                 <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">

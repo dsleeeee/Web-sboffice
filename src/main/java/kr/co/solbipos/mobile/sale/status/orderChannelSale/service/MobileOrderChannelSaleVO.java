@@ -51,6 +51,9 @@ public class MobileOrderChannelSaleVO extends PageVO {
     /** 주문채널 구분자 array */
     private String arrDlvrInFgCol[];
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -113,5 +116,13 @@ public class MobileOrderChannelSaleVO extends PageVO {
 
     public void setArrDlvrInFgCol(String[] arrDlvrInFgCol) {
         this.arrDlvrInFgCol = arrDlvrInFgCol;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

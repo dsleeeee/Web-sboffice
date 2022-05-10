@@ -26,7 +26,9 @@ public class PosExcclcServiceImpl implements PosExcclcService {
     /** POS정산내역 - POS정산내역 리스트 조회  */
 	@Override
 	public List<DefaultMap<String>> getPosExcclcList(PosExcclcVO posExcclcVO, SessionInfoVO sessionInfoVO) {
+		posExcclcVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		posExcclcVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		posExcclcVO.setEmpNo(sessionInfoVO.getEmpNo());
 		if (posExcclcVO.getStoreCd() != null && !"".equals(posExcclcVO.getStoreCd())) {
     		String[] arrStoreCd = posExcclcVO.getStoreCd().split(",");
     		if (arrStoreCd.length > 0) {
@@ -46,7 +48,9 @@ public class PosExcclcServiceImpl implements PosExcclcService {
 
 	@Override
 	public List<DefaultMap<String>> getPosExcclcExcelList(PosExcclcVO posExcclcVO, SessionInfoVO sessionInfoVO) {
+		posExcclcVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		posExcclcVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		posExcclcVO.setEmpNo(sessionInfoVO.getEmpNo());
 		if (posExcclcVO.getStoreCd() != null && !"".equals(posExcclcVO.getStoreCd())) {
     		String[] arrStoreCd = posExcclcVO.getStoreCd().split(",");
     		if (arrStoreCd.length > 0) {

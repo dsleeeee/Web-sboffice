@@ -33,6 +33,7 @@ public class NonSaleChargeServiceImpl implements NonSaleChargeService {
 
         nonSaleChargeVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         nonSaleChargeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        nonSaleChargeVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             if(!StringUtil.getOrBlank(nonSaleChargeVO.getStoreCd()).equals("")) {
@@ -49,6 +50,7 @@ public class NonSaleChargeServiceImpl implements NonSaleChargeService {
 
         nonSaleChargeVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         nonSaleChargeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        nonSaleChargeVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             if(!StringUtil.getOrBlank(nonSaleChargeVO.getStoreCd()).equals("")) {

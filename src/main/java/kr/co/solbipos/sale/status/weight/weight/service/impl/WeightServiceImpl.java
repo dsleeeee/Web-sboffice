@@ -43,6 +43,7 @@ public class WeightServiceImpl implements WeightService {
 
         weightVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         weightVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        weightVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             weightVO.setStoreCd(sessionInfoVO.getStoreCd());

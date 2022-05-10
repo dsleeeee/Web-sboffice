@@ -281,6 +281,9 @@ public class SaleTrnsitnVO extends PageVO {
 
     /** 소진기관 */
     private String exhaustionOrg;
+
+	/** 사원번호 */
+	private String empNo;
     //----------------------------------------------------------------------------------------------
 
 	public String getOrgnFg() {
@@ -699,5 +702,11 @@ public class SaleTrnsitnVO extends PageVO {
 		this.exhaustionOrg = exhaustionOrg;
 	}
 
-    
+	public String getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 }

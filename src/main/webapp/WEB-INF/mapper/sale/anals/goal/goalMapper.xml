@@ -10,6 +10,7 @@
         COMMENTS : 매출목표관리 - 월별 목표대비 매출 리스트 조회한다.
     -->
     <select id="getSaleGoalDayColList" parameterType="goalVO" resultType="DefaultMap">
+/* GoalMapper.getSaleGoalDayColList */
         SELECT B.STORE_CD, B.STORE_NM, A.SALE_GOAL_AMT
 	    FROM TB_SL_SALE_GOAL_MONTHLY A, TB_MS_STORE B
 	   WHERE 1=1
@@ -23,6 +24,12 @@
                 #{item}
             </foreach>
          </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
 	     AND A.STORE_CD = B.STORE_CD
 	     ORDER BY A.STORE_CD
     </select>
@@ -34,6 +41,7 @@
         COMMENTS : 매출목표관리 - 일자별 목표대비 매출 리스트 조회한다.
     -->
     <select id="getSaleGoalDayList" parameterType="goalVO" resultType="DefaultMap">
+/* GoalMapper.getSaleGoalDayList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT TO_CHAR(TO_DATE(M.SALE_GOAL_DATE, 'YYYY-MM-DD'),'YYYY-MM-DD') SALE_GOAL_DATE
                , M.SALE_GOAL_DY
@@ -56,6 +64,12 @@
 					        #{item}
 					    </foreach>
 					 </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	TSSGD.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
 					 <if test='storeCd == null or storeCd == ""'>
 					   AND 1 = 2
 					 </if>
@@ -95,6 +109,12 @@
                             #{item}
                         </foreach>
                      </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	TSSGD.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
                      <if test='storeCd == null or storeCd == ""'>
                        AND 1 = 2
                      </if>
@@ -151,6 +171,12 @@
                           #{item}
                       </foreach>
                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	TSSGD.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
                    AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
                    AND TSSGD.STORE_CD = TMS.STORE_CD
                  GROUP BY TSSGD.STORE_CD
@@ -204,6 +230,12 @@
                           #{item}
                       </foreach>
                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	TSSGD.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
                    AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
                    AND TSSGD.STORE_CD = TMS.STORE_CD
                  GROUP BY TSSGD.STORE_CD
@@ -230,6 +262,12 @@
 		<if test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
 	    AND A.STORE_CD = #{storeCd}	
 	    </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
     </select>
     
     <!-- 매출목표관리 - 매출목표 조회 -->

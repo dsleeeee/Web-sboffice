@@ -46,6 +46,7 @@ public class SideServiceImpl implements SideService {
 
         sideVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         sideVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        sideVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(sideVO.getStoreCd()).equals("")) {
             sideVO.setArrStoreCd(sideVO.getStoreCd().split(","));
@@ -58,6 +59,7 @@ public class SideServiceImpl implements SideService {
 
         sideVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         sideVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        sideVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(sideVO.getStoreCd()).equals("")) {
             sideVO.setArrStoreCd(sideVO.getStoreCd().split(","));

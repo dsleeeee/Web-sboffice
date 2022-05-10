@@ -11,6 +11,7 @@
 		화면 PAGE : 89P
 		PARAM : STORE_CD, SALE_DATE(FR,TO)
 	-->
+/* VersusPeriodWeekMapper.getVersusPeriodWeekList */
 	SELECT LV_NM, M.*
   FROM (
   	      SELECT LEVEL LV, DECODE(LEVEL,1,'일',2,'월',3,'화',4,'수',5,'목',6,'금',7,'토') LV_NM
@@ -79,6 +80,12 @@
 										 		#{item}
 										 	</foreach>
 										 </if>
+										<if test='orgnFg != null and orgnFg == "H"'>
+											AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												OR	TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												)
+										</if>
 										GROUP BY TSDT.SALE_DATE
 										ORDER BY TSDT.SALE_DATE
 									   ) M
@@ -123,6 +130,12 @@
 										 		#{item}
 										 	</foreach>
 										 </if>
+										<if test='orgnFg != null and orgnFg == "H"'>
+											AND (
+													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+												OR	TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+												)
+										</if>
 										GROUP BY TSDT.SALE_DATE
 										ORDER BY TSDT.SALE_DATE
 									   ) M
@@ -147,6 +160,7 @@ ORDER BY LV.LV
     -->
 
     <select id="getVersusPeriodWeekChartList" parameterType="versusPeriodWeekVO" resultType="DefaultMap">
+		/* VersusPeriodWeekMapper.getVersusPeriodWeekChartList */
 	WITH  A
     		 AS (
             	SELECT M.*
@@ -217,6 +231,12 @@ ORDER BY LV.LV
 										 						#{item}
 										 					</foreach>
 														</if>
+														<if test='orgnFg != null and orgnFg == "H"'>
+															AND (
+																	'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+																OR	TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+																)
+														</if>
                                                     GROUP BY TSDT.SALE_DATE
                                                     ORDER BY TSDT.SALE_DATE
                                                    ) M
@@ -260,6 +280,12 @@ ORDER BY LV.LV
 										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 										 						#{item}
 										 					</foreach>
+														</if>
+														<if test='orgnFg != null and orgnFg == "H"'>
+															AND (
+																	'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+																OR	TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+																)
 														</if>
                                                     GROUP BY TSDT.SALE_DATE
                                                     ORDER BY TSDT.SALE_DATE

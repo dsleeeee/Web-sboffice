@@ -37,8 +37,9 @@ public class IostockCmmVO extends PageVO {
     
     /** 창고코드 */
     private String storageCd;
-    
-    
+
+    /** 사원번호 */
+    private String empNo;
 
     /**
      * @return the orgnFg
@@ -201,6 +202,12 @@ public class IostockCmmVO extends PageVO {
 	public void setStorageCd(String storageCd) {
 		this.storageCd = storageCd;
 	}
-    
-    
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 }

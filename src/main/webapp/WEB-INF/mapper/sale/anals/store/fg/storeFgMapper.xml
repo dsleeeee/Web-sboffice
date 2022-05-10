@@ -50,6 +50,10 @@
 		               #{item}
 		           </foreach>
 	           </if>
+				AND (
+						'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+					OR	TMS.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+					)
 	           <if test='prodCd != null and prodCd != ""'>
 	                AND EXISTS (SELECT * FROM TB_HQ_PRODUCT Z WHERE Z.HQ_OFFICE_CD = TSDP.HQ_OFFICE_CD AND Z.PROD_CD = TSDP.PROD_CD AND Z.PROD_CD = #{prodCd})
 	           </if>

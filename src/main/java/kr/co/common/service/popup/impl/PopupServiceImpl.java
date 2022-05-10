@@ -87,7 +87,8 @@ public class PopupServiceImpl implements PopupService{
 
     /** 매장 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO) {
+    public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+        storeManageVO.setEmpNo(sessionInfoVO.getEmpNo());
         return popupMapper.getStoreList(storeManageVO);
     }
 

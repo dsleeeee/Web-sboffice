@@ -22,6 +22,8 @@ public class ProdHourVO extends PageVO {
     private String saleTime;
     /** 본사,매장 구분 */
     private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
     
     /**
      * @return the hqOfficeCd
@@ -115,4 +117,12 @@ public class ProdHourVO extends PageVO {
 	public void setOrgnFg(String orgnFg) {
 		this.orgnFg = orgnFg;
 	}
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 }

@@ -10,6 +10,7 @@
 		PARAM : STORE_CD, SALE_DATE(FR,TO)
 	-->
     <select id="getVersusPeriodHourList" parameterType="versusPeriodHourVO" resultType="DefaultMap">
+/* VersusPeriodHourMapper.getVersusPeriodHourList */
        SELECT  M.LV
      , SUM(M.REAL_SALE_AMT_A)    AS REAL_SALE_AMT_A
      , SUM(M.SALE_CNT_A)         AS SALE_CNT_A
@@ -50,6 +51,12 @@
                         				#{item}
                     			   </foreach>
         						 </if>
+								<if test='orgnFg != null and orgnFg == "H"'>
+									AND (
+											'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+										OR	TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+										)
+								</if>
 								 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 							   	 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 								 </if>
@@ -83,6 +90,12 @@
                         				#{item}
                     			   </foreach>
         						 </if>
+								<if test='orgnFg != null and orgnFg == "H"'>
+									AND (
+											'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+										OR	TSDT.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+										)
+								</if>
         						 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 							   	 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 								 </if>

@@ -26,6 +26,8 @@ public class IostockCmmServiceImpl implements IostockCmmService {
     /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
     @Override
     public List<DefaultMap<String>> selectStoreList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return iostockCmmMapper.selectStoreList(iostockCmmVO);
     }

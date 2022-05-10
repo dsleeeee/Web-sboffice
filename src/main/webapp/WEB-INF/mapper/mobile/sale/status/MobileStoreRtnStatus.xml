@@ -27,6 +27,10 @@
         FROM 	TB_SL_DAILY_TOTAL tsdt,
                 TB_MS_STORE tms
         WHERE	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR	tsdt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsdt.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">

@@ -27,7 +27,9 @@ public class ApprPartnerServiceImpl implements ApprPartnerService {
     /** 제휴카드 승인현황 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprPartnerList(ApprPartnerVO apprPartnerVO, SessionInfoVO sessionInfoVO) {
+		apprPartnerVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprPartnerVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprPartnerVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) || (apprPartnerVO.getPosNo() != null && !"".equals(apprPartnerVO.getPosNo()))) {
     		if (apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) {
@@ -63,7 +65,9 @@ public class ApprPartnerServiceImpl implements ApprPartnerService {
 	/** 제휴카드 승인현황 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprPartnerExcelList(ApprPartnerVO apprPartnerVO, SessionInfoVO sessionInfoVO) {
+		apprPartnerVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprPartnerVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprPartnerVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) || (apprPartnerVO.getPosNo() != null && !"".equals(apprPartnerVO.getPosNo()))) {
     		if (apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) {

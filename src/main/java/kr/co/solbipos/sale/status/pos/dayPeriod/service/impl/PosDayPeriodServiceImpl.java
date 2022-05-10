@@ -29,6 +29,7 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
 
     	posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		posDayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
     		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
@@ -48,6 +49,7 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
 
 		posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		posDayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
 			String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");

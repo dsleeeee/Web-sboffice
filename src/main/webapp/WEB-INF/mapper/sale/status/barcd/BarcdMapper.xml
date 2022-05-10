@@ -166,6 +166,12 @@
                 #{item}
             </foreach>
         </if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
         <if test='prodNm != null and prodNm != ""'>
            AND B.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
@@ -218,6 +224,12 @@
         		#{item}
         	</foreach>
         </if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
         GROUP BY A.STORE_CD, A.SALE_DATE ,B.STORE_NM
         ORDER BY A.SALE_DATE DESC, A.STORE_CD
        <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -377,6 +389,12 @@
                 #{item}
             </foreach>
         </if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
         <if test='prodNm != null and prodNm != ""'>
            AND B.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
@@ -419,6 +437,12 @@
         		#{item}
         	</foreach>
         </if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+				OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+				)
+		</if>
         GROUP BY A.STORE_CD, A.SALE_DATE ,B.STORE_NM
         ORDER BY A.SALE_DATE DESC, A.STORE_CD
     </select>

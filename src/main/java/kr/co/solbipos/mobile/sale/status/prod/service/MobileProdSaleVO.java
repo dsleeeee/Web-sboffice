@@ -30,6 +30,8 @@ public class MobileProdSaleVO extends PageVO {
     private String todayBest3Fg;
     /** 사용자 아이디 */
     private String userId;
+    /** 사원번호 */
+    private String empNo;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -101,5 +103,13 @@ public class MobileProdSaleVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

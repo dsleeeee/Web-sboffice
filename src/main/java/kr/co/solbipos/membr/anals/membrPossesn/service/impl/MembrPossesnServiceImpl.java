@@ -42,6 +42,9 @@ public class MembrPossesnServiceImpl implements MembrPossesnService {
     public List<DefaultMap<Object>> getMembrPossesnList(MembrPossesnVO membrPossesnVO,
                                                           SessionInfoVO sessionInfoVO) {
 
+        membrPossesnVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        membrPossesnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        membrPossesnVO.setEmpNo(sessionInfoVO.getEmpNo());
         membrPossesnVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             membrPossesnVO.setStoreCd(sessionInfoVO.getStoreCd());

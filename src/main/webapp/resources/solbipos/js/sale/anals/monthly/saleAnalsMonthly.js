@@ -66,7 +66,8 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 		params.reqYearMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
 		params.storeCd = $("#saleAnalsMonthlySelectStoreCd").val();
 		params.hqOfficeCd = gvHqOfficeCd;
-		
+		params.empNo = empNo;
+
 		var url = "/sale/anals/monthly/SaleAnalsMonthly/list.sb";
 
 		$http({

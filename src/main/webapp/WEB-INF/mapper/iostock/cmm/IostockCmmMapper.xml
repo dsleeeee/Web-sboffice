@@ -10,12 +10,18 @@
         COMMENTS : 매장선택 리스트를 조회한다.
     -->
     <select id="selectStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
-        /* USE : IostockCmmMapper.selectStoreList */
+    /* USE : IostockCmmMapper.selectStoreList */
         <![CDATA[
         SELECT  tms.HQ_OFFICE_CD, tms.STORE_CD, tms.STORE_NM
         FROM    TB_MS_STORE tms
         WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
         ]]>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR   tms.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>

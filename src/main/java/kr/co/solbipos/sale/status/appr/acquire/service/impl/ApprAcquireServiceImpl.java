@@ -27,7 +27,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
     /** 승인현황 카드매입사별 탭 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
@@ -64,7 +66,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	/** 승인현황 카드매입사별 탭 - 모바일쿠폰 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireMcouponList(ApprAcquireVO apprAcquireVO,	SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
@@ -101,7 +105,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	/** 승인현황 카드매입사별 탭 - 모바일페이 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireMpayList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
@@ -138,7 +144,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	/** 승인현황 카드매입사별 탭 - 비매출카드 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireNcardList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
 			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
@@ -164,7 +172,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	/** 승인현황 카드매입사별 탭 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireExcelList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
@@ -201,7 +211,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	/** 승인현황 카드매입사별 탭 - 모바일쿠폰 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireMcouponExcelList(ApprAcquireVO apprAcquireVO,	SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
@@ -238,7 +250,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	/** 승인현황 카드매입사별 탭 - 모바일페이 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireMpayExcelList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
@@ -275,7 +289,9 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	/** 승인현황 카드매입사별 탭 - 비매출카드 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprAcquireNcardExcelList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprAcquireVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
 			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");

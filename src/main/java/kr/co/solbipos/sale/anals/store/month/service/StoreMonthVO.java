@@ -29,6 +29,11 @@ public class StoreMonthVO extends PageVO {
     private String sQuery3;
     private List<DefaultMap<String>> arrSaleDate;
 
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
+
     /**
      * @return the hqOfficeCd
      */
@@ -126,5 +131,20 @@ public class StoreMonthVO extends PageVO {
 	public void setArrStoreCd(String[] arrStoreCd) {
 		this.arrStoreCd = arrStoreCd;
 	}
-	
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 }

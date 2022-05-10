@@ -27,7 +27,9 @@ public class DcDcfgServiceImpl implements DcDcfgService {
     /** 할일구분별매출 - 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDcDcfgList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
-    	dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
         	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
@@ -41,7 +43,9 @@ public class DcDcfgServiceImpl implements DcDcfgService {
     /** 할일구분별매출 - 엑셀 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDcDcfgExcelList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
-    	dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
     	if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
         	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));

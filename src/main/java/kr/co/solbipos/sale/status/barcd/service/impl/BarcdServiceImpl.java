@@ -29,6 +29,7 @@ public class BarcdServiceImpl implements BarcdService {
     public List<DefaultMap<String>> getBarcdList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
     	barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		barcdVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
     		String[] arrStoreCd = barcdVO.getStoreCd().split(",");
@@ -47,6 +48,7 @@ public class BarcdServiceImpl implements BarcdService {
 	public List<DefaultMap<String>> getBarcdDtlList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
     	barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		barcdVO.setEmpNo(sessionInfoVO.getEmpNo());
 		
 		if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
     		String[] arrStoreCd = barcdVO.getStoreCd().split(",");
@@ -64,7 +66,8 @@ public class BarcdServiceImpl implements BarcdService {
 	public List<DefaultMap<String>> getBarcdExcelList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
 		barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-    	
+		barcdVO.setEmpNo(sessionInfoVO.getEmpNo());
+
     	if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
     		String[] arrStoreCd = barcdVO.getStoreCd().split(",");
     		if (arrStoreCd.length > 0) {
@@ -81,6 +84,7 @@ public class BarcdServiceImpl implements BarcdService {
 	public List<DefaultMap<String>> getBarcdDtlExcelList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
 		barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		barcdVO.setEmpNo(sessionInfoVO.getEmpNo());
 		
 		if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
     		String[] arrStoreCd = barcdVO.getStoreCd().split(",");

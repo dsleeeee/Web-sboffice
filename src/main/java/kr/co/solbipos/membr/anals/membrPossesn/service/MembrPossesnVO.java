@@ -27,6 +27,14 @@ public class MembrPossesnVO extends PageVO {
     /** 조회매장 */
     private String storeCd;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    /** 사원번호 */
+    private String empNo;
+
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -41,5 +49,29 @@ public class MembrPossesnVO extends PageVO {
 
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

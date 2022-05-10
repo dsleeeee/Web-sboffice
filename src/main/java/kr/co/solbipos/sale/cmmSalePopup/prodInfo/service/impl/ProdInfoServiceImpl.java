@@ -57,6 +57,7 @@ public class ProdInfoServiceImpl implements ProdInfoService {
 
         prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             // 매장 array 값 세팅
@@ -78,6 +79,7 @@ public class ProdInfoServiceImpl implements ProdInfoService {
 
         prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             // 매장 array 값 세팅
@@ -99,6 +101,7 @@ public class ProdInfoServiceImpl implements ProdInfoService {
 
         prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
@@ -126,6 +129,7 @@ public class ProdInfoServiceImpl implements ProdInfoService {
 
         prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){

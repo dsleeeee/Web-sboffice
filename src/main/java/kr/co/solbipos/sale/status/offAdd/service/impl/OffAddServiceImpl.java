@@ -43,7 +43,10 @@ public class OffAddServiceImpl implements OffAddService {
     @Override
     public List<DefaultMap<String>> getOffAddDayList(OffAddVO offAddVO, SessionInfoVO sessionInfoVO) {
 
+        offAddVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         offAddVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
+
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
             offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
         }
@@ -55,7 +58,9 @@ public class OffAddServiceImpl implements OffAddService {
     @Override
     public List<DefaultMap<String>> getOffAddDayDetailList(OffAddVO offAddVO, SessionInfoVO sessionInfoVO) {
 
+        offAddVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         offAddVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
             offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
@@ -68,7 +73,10 @@ public class OffAddServiceImpl implements OffAddService {
     @Override
     public List<DefaultMap<String>> getOffAddMonthList(OffAddVO offAddVO, SessionInfoVO sessionInfoVO) {
 
+        offAddVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         offAddVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
+
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
             offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
         }
@@ -80,7 +88,9 @@ public class OffAddServiceImpl implements OffAddService {
     @Override
     public List<DefaultMap<String>> getOffAddMonthDetailList(OffAddVO offAddVO, SessionInfoVO sessionInfoVO) {
 
+        offAddVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         offAddVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
             offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
@@ -95,6 +105,7 @@ public class OffAddServiceImpl implements OffAddService {
 
         offAddVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         offAddVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
             offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
@@ -119,6 +130,7 @@ public class OffAddServiceImpl implements OffAddService {
 
         offAddVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         offAddVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
             offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));

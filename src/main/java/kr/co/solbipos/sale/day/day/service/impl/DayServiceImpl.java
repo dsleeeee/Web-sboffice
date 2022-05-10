@@ -82,6 +82,8 @@ public class DayServiceImpl implements DayService {
     /** 일자별(일별종합 탭) - 일별종합 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDayTotalList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
@@ -123,7 +125,8 @@ public class DayServiceImpl implements DayService {
     /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
     @Override
     public List<DefaultMap<String>> getDayStoreDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
-
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -192,6 +195,8 @@ public class DayServiceImpl implements DayService {
     /** 매장별 할인내역 팝업 - 매장별 할인내역 조회 */
     @Override
     public List<DefaultMap<String>> getDayStoreDcList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
@@ -219,6 +224,8 @@ public class DayServiceImpl implements DayService {
     /** 일자별(할인구분별 탭) - 할인구분 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDayDcList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
@@ -241,6 +248,8 @@ public class DayServiceImpl implements DayService {
     /** 일자별(과면세별 탭) - 과면세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDayTaxList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
@@ -252,6 +261,8 @@ public class DayServiceImpl implements DayService {
 
     /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
     public List<DefaultMap<String>> getDayTimeList(DayVO dayVO, SessionInfoVO sessionInfoVO){
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
@@ -306,7 +317,8 @@ public class DayServiceImpl implements DayService {
 
     /** 일자별(상품분류 탭) - 상품분류별 리스트 조회 */
     public List<DefaultMap<String>> getDayProdClassList(DayVO dayVO, SessionInfoVO sessionInfoVO){
-
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
 //        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dayVO.setpProdClassCd("00000");
@@ -480,7 +492,8 @@ public class DayServiceImpl implements DayService {
     /** 사원카드별탭 - 사원카드별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayEmpCardList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
-
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayVO.setStoreCds(sessionInfoVO.getStoreCd());

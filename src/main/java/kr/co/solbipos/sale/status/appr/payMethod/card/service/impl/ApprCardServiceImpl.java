@@ -27,7 +27,9 @@ public class ApprCardServiceImpl implements ApprCardService {
     /** 신용카드 승인현황 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprCardList(ApprCardVO apprCardVO, SessionInfoVO sessionInfoVO) {
+		apprCardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprCardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprCardVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd())) || (apprCardVO.getPosNo() != null && !"".equals(apprCardVO.getPosNo()))) {
     		if (apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd())) {
@@ -62,7 +64,9 @@ public class ApprCardServiceImpl implements ApprCardService {
 	/** 신용카드 승인현황 신용카드 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprCardExcelList(ApprCardVO apprCardVO, SessionInfoVO sessionInfoVO) {
+		apprCardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprCardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprCardVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if ((apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd())) || (apprCardVO.getPosNo() != null && !"".equals(apprCardVO.getPosNo()))) {
     		if (apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd())) {

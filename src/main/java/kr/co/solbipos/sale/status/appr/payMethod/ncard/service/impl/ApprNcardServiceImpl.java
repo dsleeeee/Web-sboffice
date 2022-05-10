@@ -27,7 +27,9 @@ public class ApprNcardServiceImpl implements ApprNcardService {
     /** 비매출카드 승인현황 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprNcardList(ApprNcardVO apprNcardVO, SessionInfoVO sessionInfoVO) {
+		apprNcardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprNcardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprNcardVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if (apprNcardVO.getPosNo() != null && !"".equals(apprNcardVO.getPosNo())) {
 			String[] arrPosNo = apprNcardVO.getPosNo().split(",");
@@ -51,7 +53,9 @@ public class ApprNcardServiceImpl implements ApprNcardService {
 	/** 비매출카드 승인현황 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprNcardExcelList(ApprNcardVO apprNcardVO, SessionInfoVO sessionInfoVO) {
+		apprNcardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		apprNcardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		apprNcardVO.setEmpNo(sessionInfoVO.getEmpNo());
 
 		if (apprNcardVO.getPosNo() != null && !"".equals(apprNcardVO.getPosNo())) {
 			String[] arrPosNo = apprNcardVO.getPosNo().split(",");

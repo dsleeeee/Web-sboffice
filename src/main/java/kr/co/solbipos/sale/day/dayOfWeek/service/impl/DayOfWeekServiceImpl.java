@@ -46,7 +46,9 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
     /** 주간종합탭 - 주간종합조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekTotalList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
-
+        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -72,7 +74,9 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
     /** 할인구별별탭 - 할인구분별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekDcList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
-
+        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -98,7 +102,9 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
     /** 과면세별탭 - 과면세별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekTaxList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
-
+        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -114,7 +120,9 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
     /** 시간대별탭 - 시간대별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekTimeList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
-
+        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
@@ -152,7 +160,9 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
     /** 상품분류별탭 - 상품분류별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekProdClassList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
-
+        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
 //        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayOfWeekVO.setLevel("Level" + dayOfWeekVO.getLevel());

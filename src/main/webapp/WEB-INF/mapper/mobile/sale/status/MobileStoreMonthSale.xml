@@ -61,6 +61,10 @@
                         + SUM(tsmt.DC_AMT_06) + SUM(tsmt.DC_AMT_07) + SUM(tsmt.DC_AMT_08) + SUM(tsmt.DC_AMT_09) + SUM(tsmt.DC_AMT_10) AS ETC_DC_AMT
                 FROM    TB_SL_MONTHLY_TOTAL tsmt
                 WHERE   tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tsmt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                     AND tsmt.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -81,6 +85,10 @@
                         SUM(CASE WHEN tsmdd.DLVR_PACK_FG = '3' THEN tsmdd.BILL_CNT ELSE 0 END) AS PACK_BILL_CNT
                 FROM    TB_SL_MONTHLY_DTL_DLVR tsmdd
                 WHERE   tsmdd.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tsmdd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                     AND tsmdd.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -100,6 +108,10 @@
                                 SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
                         FROM    TB_SL_SALE_HDR tssh
                         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
                         <if test='arrStoreCd != null and arrStoreCd != ""'>
                             AND tssh.STORE_CD IN
                             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -115,6 +127,10 @@
                 SELECT  STORE_CD, STORE_NM
                 FROM    TB_MS_STORE
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
                     AND STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">

@@ -26,7 +26,9 @@ public class StoreBrandServiceImpl implements StoreBrandService {
     /** 브랜드별 매출 - 브랜드별 매출 리스트 조회   */
     @Override
     public List<DefaultMap<String>> getStoreBrandList(StoreBrandVO storeBrandVO, SessionInfoVO sessionInfoVO) {
-    	storeBrandVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeBrandVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeBrandVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeBrandVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
     	if(!StringUtil.getOrBlank(storeBrandVO.getStoreCd()).equals("")) {
          	storeBrandVO.setArrStoreCd(storeBrandVO.getStoreCd().split(","));

@@ -29,6 +29,7 @@ public class ProdHourServiceImpl implements ProdHourService {
 
         prodHourVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodHourVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(prodHourVO.getStoreCd()).equals("")) {
         	prodHourVO.setArrStoreCd(prodHourVO.getStoreCd().split(","));
@@ -76,6 +77,7 @@ public class ProdHourServiceImpl implements ProdHourService {
 
         prodHourVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodHourVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(prodHourVO.getStoreCd()).equals("")) {
         	prodHourVO.setArrStoreCd(prodHourVO.getStoreCd().split(","));
