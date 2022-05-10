@@ -247,11 +247,11 @@
     <div ng-controller="smsChargeCtrl">
         <div class="subCon">
             <%-- 메세지 건당 가격안내 --%>
-            <button class="btn_skyblue fl ml30" ng-click="msgOneAmtGuidePopup()">
-                가격안내
+            <button class="btn_skyblue fl ml30" style="line-height:30px;" ng-click="msgOneAmtGuidePopup()">
+                건별 가격안내
             </button>
             <%-- 잔여금액 알림 설정 --%>
-            <button class="btn_skyblue fl ml10" ng-click="restSmsAmtAlimSettingPopup()">
+            <button class="btn_skyblue fl ml10" style="line-height:30px;" ng-click="restSmsAmtAlimSettingPopup()">
                 잔여금액 알림 설정
             </button>
         </div>
