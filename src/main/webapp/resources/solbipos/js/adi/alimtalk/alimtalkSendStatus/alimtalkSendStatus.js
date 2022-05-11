@@ -18,7 +18,9 @@ var msgTypeDataMapData = [
     {"name":"SMS","value":"1"},
     {"name":"LMS","value":"2"},
     {"name":"MMS","value":"3"},
-    {"name":"알림톡","value":"4"}
+    {"name":"알림톡_SMS","value":"4"},
+    {"name":"알림톡_LMS","value":"5"},
+    {"name":"알림톡_MMS","value":"6"}
 ];
 // 결과
 var sendStatusFgData = [
@@ -31,6 +33,12 @@ var reserveYnDataMapData = [
     {"name":"전체","value":""},
     {"name":"예약","value":"1"},
     {"name":"즉시","value":"0"}
+];
+// 대체발송 메세지타입
+var rmTypeDataMapData = [
+    {"name":"SMS","value":"1"},
+    {"name":"LMS","value":"2"},
+    {"name":"MMS","value":"3"}
 ];
 
 /**
@@ -56,6 +64,8 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
         // 그리드 DataMap 설정
         $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
+        $scope.rmTypeDataMap = new wijmo.grid.DataMap(rmTypeDataMapData, 'value', 'name'); // 대체발송 메세지타입
+        $scope.rmSendYnDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 대체발송 사용여부
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -113,6 +123,14 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
         dataItem.sendStatus = messages["alimtalkSendStatus.sendStatus"];
         dataItem.resultNm = messages["alimtalkSendStatus.resultNm"];
         dataItem.msgContent = messages["alimtalkSendStatus.msgContent"];
+        dataItem.sendOrgnNm = messages["alimtalkSendStatus.sendOrgnNm"];
+        dataItem.payOrgnNm = messages["alimtalkSendStatus.payOrgnNm"];
+        dataItem.senderKeyOrgnNm = messages["alimtalkSendStatus.senderKeyOrgnNm"];
+        dataItem.rmSendYn = messages["alimtalkSendStatus.rm"];
+        dataItem.rmType = messages["alimtalkSendStatus.rm"];
+        dataItem.rmTitle = messages["alimtalkSendStatus.rm"];
+        dataItem.rmContent = messages["alimtalkSendStatus.rm"];
+        dataItem.rmSendNo = messages["alimtalkSendStatus.rm"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 

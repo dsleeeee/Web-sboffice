@@ -44,7 +44,15 @@
         hmt.MSG_CONTENT,
         hmt.ALK_SEND_SEQ,
         hmt.GUBUN,
-        hmt.REQUEST_ID
+        hmt.REQUEST_ID,
+        hmt.SEND_ORGN_NM,
+        hmt.PAY_ORGN_NM,
+        hmt.SENDER_KEY_ORGN_NM,
+        hmt.RM_SEND_YN,
+        hmt.RM_TYPE,
+        hmt.RM_TITLE,
+        hmt.RM_CONTENT,
+        hmt.RM_SEND_NO
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
@@ -78,7 +86,18 @@
                     A.ALK_MSG AS MSG_CONTENT,
                     A.ALK_SEND_SEQ,
                     'TB_AL_ALIMTALK_SEND_ENC' AS GUBUN,
-                    A.REQUEST_ID
+                    A.REQUEST_ID,
+                    A.SEND_ORGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.SEND_ORGN_CD GROUP BY ORGN_NM) AS SEND_ORGN_NM,
+                    A.PAY_ORGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.PAY_ORGN_CD GROUP BY ORGN_NM) AS PAY_ORGN_NM,
+                    A.SENDER_KEY_ORGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.SENDER_KEY_ORGN_CD GROUP BY ORGN_NM) AS SENDER_KEY_ORGN_NM,
+                    A.RM_SEND_YN,
+                    A.RM_TYPE,
+                    A.RM_TITLE,
+                    A.RM_CONTENT,
+                    SBPENC.D(A.RM_SEND_NO) AS RM_SEND_NO
                     FROM TB_AL_ALIMTALK_SEND_ENC A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
@@ -123,7 +142,18 @@
                     A.ALK_MSG AS MSG_CONTENT,
                     A.ALK_SEND_SEQ,
                     'TB_AL_ALIMTALK_REPORT' AS GUBUN,
-                    A.REQUEST_ID
+                    A.REQUEST_ID,
+                    A.SEND_ORGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.SEND_ORGN_CD GROUP BY ORGN_NM) AS SEND_ORGN_NM,
+                    A.PAY_ORGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.PAY_ORGN_CD GROUP BY ORGN_NM) AS PAY_ORGN_NM,
+                    A.SENDER_KEY_ORGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.SENDER_KEY_ORGN_CD GROUP BY ORGN_NM) AS SENDER_KEY_ORGN_NM,
+                    A.RM_SEND_YN,
+                    A.RM_TYPE,
+                    A.RM_TITLE,
+                    A.RM_CONTENT,
+                    SBPENC.D(A.RM_SEND_NO) AS RM_SEND_NO
                     FROM TB_AL_ALIMTALK_REPORT A
                     WHERE 1=1
                     AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'

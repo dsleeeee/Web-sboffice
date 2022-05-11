@@ -136,12 +136,20 @@
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.name"/>" binding="sUserNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.orgnNm"/>" binding="rOgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.telNo"/>" binding="rPhoneNumber" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendDate"/>" binding="sendDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.readDate"/>" binding="readDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendStatus"/>" binding="sendStatus" data-map="sendStatusFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.resultNm"/>" binding="resultNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgContent"/>" binding="msgContent" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendOrgnNm"/>" binding="sendOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.payOrgnNm"/>" binding="payOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnNm"/>" binding="senderKeyOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmTitle"/>" binding="rmTitle" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmContent"/>" binding="rmContent" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendNo"/>" binding="rmSendNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%--저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgId"/>" binding="msgId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -176,9 +184,12 @@
     var appKey = "${appKey}";
     var secretKey = "${secretKey}";
     var apiUrl = "${apiUrl}";
+
+    <%-- 사용여부 --%>
+    var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20220407.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20220511.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">
