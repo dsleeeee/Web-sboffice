@@ -83,10 +83,12 @@
     <select id="getRestSmsAmtAlimSettingList" parameterType="SmsChargeVO" resultType="DefaultMap">
         /* SmsChargeMapper.getRestSmsAmtAlimSettingList */
         SELECT
-        NVL(MAX(cst.RM_SMS_AMT), -99999) AS RM_SMS_AMT
+        NVL(MAX(cst.RM_SMS_AMT), -99999) AS RM_SMS_AMT,
+        SBPENC.D(cst.TEL_NO) AS TEL_NO
         FROM CET_SMSPT_T cst
         WHERE 1=1
         AND cst.OGN_CD = #{orgnCd}
+        GROUP BY cst.TEL_NO
     </select>
 
     <!-- 잔여금액 알림 설정 팝업 - 저장 merge -->
@@ -105,6 +107,7 @@
             UPDATE
             SET
             RM_SMS_AMT = #{rmSmsAmt},
+            TEL_NO = SBPENC.E(#{telNo}),
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
         WHEN NOT MATCHED THEN
@@ -116,7 +119,8 @@
                 MOD_DT,
                 MOD_ID,
                 SMS_AMT,
-                RM_SMS_AMT
+                RM_SMS_AMT,
+                TEL_NO
             ) VALUES (
                 #{orgnCd},
                 0,
@@ -125,7 +129,8 @@
                 #{modDt},
                 #{modId},
                 0,
-                #{rmSmsAmt}
+                #{rmSmsAmt},
+                ''
             )
     </insert>
 

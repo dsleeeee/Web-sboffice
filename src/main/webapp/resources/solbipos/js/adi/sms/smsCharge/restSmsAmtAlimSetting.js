@@ -52,15 +52,31 @@ app.controller('restSmsAmtAlimSettingCtrl', ['$scope', '$http', function ($scope
             $scope.restSmsAmtAlimSetting = restSmsAmtAlimSetting;
 
             $scope.rmSmsAmt = $scope.restSmsAmtAlimSetting.rmSmsAmt;
+            $scope.restSmsAmtAlimSettingTelNo = $scope.restSmsAmtAlimSetting.telNo;
         });
     };
     // <-- //검색 호출 -->
 
     // 저장
     $("#funcSave").click(function(e){
+        if($scope.rmSmsAmt !== -99999) {
+            if ($scope.restSmsAmtAlimSettingTelNo === "" || $scope.restSmsAmtAlimSettingTelNo === undefined) {
+                $scope._popMsg(messages["restSmsAmtAlimSetting.telNoAlert"]); // 알림받을번호를 입력해주세요.
+                return false;
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test($scope.restSmsAmtAlimSettingTelNo)) {
+                    $scope._popMsg(messages["restSmsAmtAlimSetting.telNoInChk"]); // 알림받을번호는 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+        }
+
         $scope._popConfirm(messages["cmm.choo.save"], function() {
             var params = {};
             params.rmSmsAmt = $scope.rmSmsAmt;
+            params.telNo = $scope.restSmsAmtAlimSettingTelNo;
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/sms/smsCharge/restSmsAmtAlimSetting/getRestSmsAmtAlimSettingSave.sb", params, function(){ $scope.close() });
@@ -70,6 +86,7 @@ app.controller('restSmsAmtAlimSettingCtrl', ['$scope', '$http', function ($scope
     // 팝업 닫기
     $scope.close = function(){
         $scope.srchRmSmsAmtCombo.selectedIndex = 0;
+        $scope.restSmsAmtAlimSettingTelNo = "";
 
         $scope.wjRestSmsAmtAlimSettingLayer.hide();
     };

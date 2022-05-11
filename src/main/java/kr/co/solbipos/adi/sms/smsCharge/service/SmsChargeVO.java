@@ -81,6 +81,9 @@ public class SmsChargeVO extends PageVO {
     /** 잔여금액 설정값 */
     private String rmSmsAmt;
 
+    /** 전화번호 */
+    private String telNo;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -160,4 +163,9 @@ public class SmsChargeVO extends PageVO {
     public String getRmSmsAmt() { return rmSmsAmt; }
 
     public void setRmSmsAmt(String rmSmsAmt) { this.rmSmsAmt = rmSmsAmt; }
+
+    public String getTelNo() { return telNo; }
+
+    public void setTelNo(String telNo) { this.telNo = telNo; }
+
 }
