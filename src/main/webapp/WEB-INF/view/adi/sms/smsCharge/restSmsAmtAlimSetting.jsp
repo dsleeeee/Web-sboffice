@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjRestSmsAmtAlimSettingLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:380px;height:240px;" fade-in="false" fade-out="false">
+<wj-popup control="wjRestSmsAmtAlimSettingLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:410px;height:300px;" fade-in="false" fade-out="false">
     <div ng-controller="restSmsAmtAlimSettingCtrl">
 
         <%-- header --%>
@@ -16,7 +16,10 @@
         <div class="wj-dialog-body">
             <div class="w100 mb20">
                 <div class="oh sb-select dkbr">
-                    <p class="tl s14 mt5 lh15">해당 서비스 이용시 비용은 '솔비포스'에서 부담합니다.</p>
+                    <p class="tl s14 mt5 lh15">※ 잔여금액 알림 설정이란?</p>
+                    <p class="tl s14 mt5 lh15">- 충전하신 잔여금액이 '잔여금액 설정값' 이하시 입력하신</p>
+                    <p class="tl s14 mt5 lh15">&nbsp;&nbsp;번호로 문자서비스를 받으실 수 있습니다.</p>
+                    <p class="tl s14 mt5 lh15">※ 해당 서비스 이용시 비용은 '솔비포스'에서 부담합니다.</p>
                 </div>
             </div>
             <table class="tblType01">
@@ -69,4 +72,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/restSmsAmtAlimSetting.js?ver=20220511.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/restSmsAmtAlimSetting.js?ver=20220512.01" charset="utf-8"></script>
