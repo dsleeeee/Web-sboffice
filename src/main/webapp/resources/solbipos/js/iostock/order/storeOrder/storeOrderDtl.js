@@ -220,6 +220,53 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._inquirySub("/iostock/order/storeOrder/storeOrderDtl/list.sb", params);
   };
 
+  // 주문가능한지 체크(저장, 확전 전에 체크)
+  $scope.storeCloseCheck = function (saveFg, orderTotAmt){
+
+    var params     = {};
+    params.reqDate = $scope.reqDate;
+    params.slipFg  = $scope.slipFg;
+
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+      params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+
+    // ajax 통신 설정
+    $http({
+      method : 'POST', //방식
+      url    : '/iostock/order/storeOrder/storeOrderRegist/storeCloseCheck.sb', /* 통신할 URL */
+      params : params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        if (!$.isEmptyObject(response.data.data)) {
+          if (response.data.data.orderCloseFg === "Y") {
+            $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
+            return false;
+          }
+        }
+        if(saveFg === '' && orderTotAmt === ''){          // 저장버튼
+          $scope.getOrderTotAmt();
+        }
+        if(saveFg === 'confirm' && orderTotAmt === '0'){  // 확정버튼
+          $scope.saveStoreOrderDtl(saveFg, orderTotAmt);
+        }
+      }
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      if (response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        $scope._popMsg(messages['cmm.error']);
+      }
+      return false;
+    }).then(function () {
+      // "complete" code here
+    });
+  }
+
   // 주문 상품 저장 전 출고요청일자에 등록한 주문 총 합계 금액 조회
   $scope.getOrderTotAmt = function(){
 

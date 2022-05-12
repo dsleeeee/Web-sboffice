@@ -152,7 +152,7 @@
         <p id="registStoreLoanInfo" class="fl s14 bk lh30"></p>
         <div class="tr">
           <%-- 저장 --%>
-          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="getOrderTotAmt()">
+          <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="storeCloseCheck2()">
             <s:message code="cmm.save"/>
           </button>
         </div>
@@ -214,7 +214,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20220420.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20220420.05" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -250,6 +250,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         if (!$.isEmptyObject(response.data.data)) {
           if (response.data.data.orderCloseFg === "Y") {
             $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
+            $scope.wjStoreOrderRegistLayer.hide();
             return false;
           }
         }
@@ -396,6 +397,48 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params);
   };
+
+  // 주문가능한지 체크(창 안닫음)
+  $scope.storeCloseCheck2 = function (){
+
+    var params     = {};
+    params.reqDate = $scope.reqDate;
+    params.slipFg  = $scope.slipFg;
+
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+      params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+
+    // ajax 통신 설정
+    $http({
+      method : 'POST', //방식
+      url    : '/iostock/order/storeOrder/storeOrderRegist/storeCloseCheck.sb', /* 통신할 URL */
+      params : params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        if (!$.isEmptyObject(response.data.data)) {
+          if (response.data.data.orderCloseFg === "Y") {
+            $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
+            return false;
+          }
+        }
+        $scope.getOrderTotAmt(); // 주문진행구분 체크
+      }
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      if (response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        $scope._popMsg(messages['cmm.error']);
+      }
+      return false;
+    }).then(function () {
+      // "complete" code here
+    });
+  }
 
   // 주문 상품 저장 전 출고요청일자에 등록한 주문 총 합계 금액 조회
   $scope.getOrderTotAmt = function(){
