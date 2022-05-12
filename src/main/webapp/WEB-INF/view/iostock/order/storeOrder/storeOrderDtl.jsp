@@ -36,10 +36,10 @@
         <button type="button" id="btnAddProd" class="btn_skyblue ml5" ng-click="addProd()" ng-if="btnAddProd">
           <s:message code="storeOrder.addProd"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="getOrderTotAmt()" ng-if="btnDtlSave">
+        <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="storeCloseCheck('','')" ng-if="btnDtlSave">
           <s:message code="cmm.save"/></button>
         <%-- 확정 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm', '0')" ng-if="btnConfirm">
+        <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="storeCloseCheck('confirm', '0')" ng-if="btnConfirm">
           <s:message code="storeOrder.dtl.confirm"/></button>
       </div>
 
@@ -91,4 +91,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20220509.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20220509.05" charset="utf-8"></script>
