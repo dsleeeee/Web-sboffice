@@ -14,13 +14,15 @@
 var app = agrid.getApp();
 
 // 메세지타입
-var msgTypeDataMapData = [
+var alkMsgTypeDataMapData = [
     {"name":"SMS","value":"1"},
     {"name":"LMS","value":"2"},
     {"name":"MMS","value":"3"},
     {"name":"알림톡_SMS","value":"4"},
     {"name":"알림톡_LMS","value":"5"},
-    {"name":"알림톡_MMS","value":"6"}
+    {"name":"알림톡_MMS","value":"6"},
+    {"name":"알림톡","value":"-4"},
+    {"name":"알림톡_대체발송","value":"-5"}
 ];
 // 결과
 var sendStatusFgData = [
@@ -62,7 +64,7 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
-        $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
+        $scope.msgTypeDataMap = new wijmo.grid.DataMap(alkMsgTypeDataMapData, 'value', 'name'); // 메세지타입
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
         $scope.rmTypeDataMap = new wijmo.grid.DataMap(rmTypeDataMapData, 'value', 'name'); // 대체발송 메세지타입
         $scope.rmSendYnDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 대체발송 사용여부

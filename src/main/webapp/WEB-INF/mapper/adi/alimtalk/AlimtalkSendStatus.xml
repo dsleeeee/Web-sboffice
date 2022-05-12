@@ -75,7 +75,7 @@
                     A.R_USER_ID,
                     A.CST_NO,
                     SBPENC.D(A.TEL_NO) AS PHONE_NUMBER,
-                    4 AS MSG_TYPE,
+                    (CASE WHEN A.RESULT_CD != '1000' AND A.RESEND_STATUS IN('RSC05','RSC04') THEN -4 ELSE -5 END) AS MSG_TYPE,
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     A.RECEIVE_DATE AS READ_DATE,
