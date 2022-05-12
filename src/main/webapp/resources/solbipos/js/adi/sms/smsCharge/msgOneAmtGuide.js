@@ -29,14 +29,14 @@ app.controller('msgOneAmtGuideCtrl', ['$scope', '$http', function ($scope, $http
     $scope.$on("msgOneAmtGuideCtrl", function(event, data) {
         $scope.searchMsgOneAmtGuide();
 
-        if(pageGubunVal == "sms") {
-            $("#divMsgOneAmtGuideSms").css("display", "");
-            $("#divMsgOneAmtGuideAlk").css("display", "none");
-        }
-        else if (pageGubunVal == "alimtalk") {
-            $("#divMsgOneAmtGuideSms").css("display", "none");
-            $("#divMsgOneAmtGuideAlk").css("display", "");
-        }
+        // if(pageGubunVal == "sms") {
+        //     $("#divMsgOneAmtGuideSms").css("display", "");
+        //     $("#divMsgOneAmtGuideAlk").css("display", "none");
+        // }
+        // else if (pageGubunVal == "alimtalk") {
+        //     $("#divMsgOneAmtGuideSms").css("display", "none");
+        //     $("#divMsgOneAmtGuideAlk").css("display", "");
+        // }
         event.preventDefault();
     });
 
