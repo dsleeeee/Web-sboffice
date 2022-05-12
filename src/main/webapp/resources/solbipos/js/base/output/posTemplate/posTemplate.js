@@ -129,6 +129,19 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/base/output/posTemplate/template/list.sb", params, function() {
+
+      var grid = wijmo.Control.getControl("#wjGridPosTemplate");
+      var rows = grid.rows;
+
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        var item = $scope.flex.collectionView.items[i];
+
+        if(item.templtRegFg !== gvOrgnFg || item.templtCd === "000"){
+          item.gChk = false;
+          rows[i].isReadOnly = true;
+        }
+      }
+
         // 코드리스트 조회
         $scope._postJSONQuery.withOutPopUp("/base/output/posTemplate/code/list.sb", params,
           function(response) {
