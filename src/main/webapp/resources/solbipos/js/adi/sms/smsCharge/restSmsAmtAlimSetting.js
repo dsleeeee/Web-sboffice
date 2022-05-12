@@ -60,7 +60,7 @@ app.controller('restSmsAmtAlimSettingCtrl', ['$scope', '$http', function ($scope
     // 저장
     $("#funcSave").click(function(e){
         if($scope.rmSmsAmt !== -99999) {
-            if ($scope.restSmsAmtAlimSettingTelNo === "" || $scope.restSmsAmtAlimSettingTelNo === undefined) {
+            if ($scope.restSmsAmtAlimSettingTelNo === "" || $scope.restSmsAmtAlimSettingTelNo === undefined || $scope.restSmsAmtAlimSettingTelNo === null) {
                 $scope._popMsg(messages["restSmsAmtAlimSetting.telNoAlert"]); // 알림받을번호를 입력해주세요.
                 return false;
             } else {
