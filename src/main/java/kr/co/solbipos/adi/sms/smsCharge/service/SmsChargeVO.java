@@ -84,6 +84,12 @@ public class SmsChargeVO extends PageVO {
     /** 전화번호 */
     private String telNo;
 
+    /** 잔여금액 설정값 이하시 전송여부 */
+    private String rmSmsAmtYn;
+
+    /** 0이하시 SMS전송여부 */
+    private String zeroSmsAmtYn;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -168,4 +174,11 @@ public class SmsChargeVO extends PageVO {
 
     public void setTelNo(String telNo) { this.telNo = telNo; }
 
+    public String getRmSmsAmtYn() { return rmSmsAmtYn; }
+
+    public void setRmSmsAmtYn(String rmSmsAmtYn) { this.rmSmsAmtYn = rmSmsAmtYn; }
+
+    public String getZeroSmsAmtYn() { return zeroSmsAmtYn; }
+
+    public void setZeroSmsAmtYn(String zeroSmsAmtYn) { this.zeroSmsAmtYn = zeroSmsAmtYn; }
 }

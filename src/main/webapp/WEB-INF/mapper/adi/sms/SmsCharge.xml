@@ -83,7 +83,7 @@
     <select id="getRestSmsAmtAlimSettingList" parameterType="SmsChargeVO" resultType="DefaultMap">
         /* SmsChargeMapper.getRestSmsAmtAlimSettingList */
         SELECT
-        NVL(MAX(cst.RM_SMS_AMT), -99999) AS RM_SMS_AMT,
+        NVL(MAX(cst.RM_SMS_AMT), null) AS RM_SMS_AMT,
         SBPENC.D(cst.TEL_NO) AS TEL_NO
         FROM CET_SMSPT_T cst
         WHERE 1=1
@@ -106,6 +106,8 @@
         WHEN MATCHED THEN
             UPDATE
             SET
+            RM_SMS_AMT_YN = #{rmSmsAmtYn},
+            ZERO_SMS_AMT_YN = #{zeroSmsAmtYn},
             RM_SMS_AMT = #{rmSmsAmt},
             TEL_NO = SBPENC.E(#{telNo}),
             MOD_DT = #{modDt},
@@ -119,6 +121,8 @@
                 MOD_DT,
                 MOD_ID,
                 SMS_AMT,
+                RM_SMS_AMT_YN,
+                ZERO_SMS_AMT_YN,
                 RM_SMS_AMT,
                 TEL_NO
             ) VALUES (
@@ -130,6 +134,8 @@
                 #{modId},
                 0,
                 #{rmSmsAmt},
+                #{rmSmsAmtYn},
+                #{zeroSmsAmtYn},
                 ''
             )
     </insert>

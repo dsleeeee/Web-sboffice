@@ -72,4 +72,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/restSmsAmtAlimSetting.js?ver=20220512.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsCharge/restSmsAmtAlimSetting.js?ver=20220513.01" charset="utf-8"></script>

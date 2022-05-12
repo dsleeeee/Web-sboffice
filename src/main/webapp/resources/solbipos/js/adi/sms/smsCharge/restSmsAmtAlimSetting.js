@@ -15,7 +15,7 @@ var app = agrid.getApp();
 
 // 잔여금액 알림값
 var rmSmsAmtDataMapData = [
-    {"name":"미사용","value":-99999},
+    {"name":"미사용","value":null},
     {"name":"5,000","value":5000},
     {"name":"10,000","value":10000},
     {"name":"20,000","value":20000},
@@ -59,7 +59,7 @@ app.controller('restSmsAmtAlimSettingCtrl', ['$scope', '$http', function ($scope
 
     // 저장
     $("#funcSave").click(function(e){
-        if($scope.rmSmsAmt !== -99999) {
+        if($scope.rmSmsAmt !== null) {
             if ($scope.restSmsAmtAlimSettingTelNo === "" || $scope.restSmsAmtAlimSettingTelNo === undefined || $scope.restSmsAmtAlimSettingTelNo === null) {
                 $scope._popMsg(messages["restSmsAmtAlimSetting.telNoAlert"]); // 알림받을번호를 입력해주세요.
                 return false;
@@ -77,6 +77,13 @@ app.controller('restSmsAmtAlimSettingCtrl', ['$scope', '$http', function ($scope
             var params = {};
             params.rmSmsAmt = $scope.rmSmsAmt;
             params.telNo = $scope.restSmsAmtAlimSettingTelNo;
+            if($scope.rmSmsAmt !== null) {
+                params.rmSmsAmtYn = "Y";
+                params.zeroSmsAmtYn = "Y";
+            } else {
+                params.rmSmsAmtYn = "N";
+                params.zeroSmsAmtYn = "N";
+            }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/sms/smsCharge/restSmsAmtAlimSetting/getRestSmsAmtAlimSettingSave.sb", params, function(){ $scope.close() });
