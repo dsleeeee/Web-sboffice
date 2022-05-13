@@ -187,7 +187,16 @@
         COMMENTS : 상품의 연결된 프린터를 저장한다.
     -->
     <insert id="linkedPrter" parameterType="prodKitchenprintLinkVO">
-        INSERT INTO TB_MS_PRINTER_PROD
+        /* USE : ProdKitchenprintLinkMapper.linkedPrter */
+        MERGE INTO TB_MS_PRINTER_PROD
+        USING DUAL
+        ON (
+                STORE_CD = #{storeCd}
+            AND PRTER_NO = #{prterNo}
+            AND PROD_CD = #{prodCd}
+            )
+        WHEN NOT MATCHED THEN
+        INSERT
             (
                 STORE_CD,
                 PRTER_NO,
@@ -208,4 +217,297 @@
                )
     </insert>
 
+    <!-- 프린터그룹 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP, TB_HQ_PRINTER_GROUP_PROD, TB_HQ_PRINTER_GROUP_STORE_PRINT
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 프린터그룹 목록을 조회한다.
+    -->
+    <select id="getPrinterGroupList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* USE : ProdKitchenprintLinkMapper.getPrinterGroupList */
+        SELECT  PRINTER_GROUP_CD,
+                PRINTER_GROUP_NM,
+                '추가' AS ADD_PROD,
+                '추가' AS ADD_PRINTER
+        FROM 	TB_HQ_PRINTER_GROUP thpg
+        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="printerGroupNm != null and printerGroupNm != ''">
+            AND PRINTER_GROUP_NM LIKE '%'||#{printerGroupNm}||'%' --그룹명
+        </if>
+        ORDER BY PRINTER_GROUP_CD
+    </select>
+
+    <!-- 프린터그룹 - 코드 채번 -->
+    <!--
+        TABLE    : TB_HQ_STORE_PROD_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 새로운 그룹 생성시 코드를 생성한다.
+    -->
+    <select id="getPrinterGroupCode" parameterType="storeTypeVO" resultType="String">
+        /* USE : ProdKitchenprintLinkMapper.getPrinterGroupCode */
+        SELECT LPAD(NVL(MAX(PRINTER_GROUP_CD), '0') + 1, 3, '0')
+        FROM TB_HQ_PRINTER_GROUP
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 프린터그룹 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 프린터그룹을 저장한다.
+    -->
+    <insert id="savePrinterGroup" parameterType="prodKitchenprintLinkVO">
+        /* USE : ProdKitchenprintLinkMapper.savePrinterGroup */
+        MERGE INTO  TB_HQ_PRINTER_GROUP A
+            USING   DUAL
+            ON (    A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND A.PRINTER_GROUP_CD = #{printerGroupCd})
+
+            WHEN MATCHED THEN
+                UPDATE
+                    SET A.PRINTER_GROUP_NM = #{printerGroupNm},
+                        A.MOD_DT = #{modDt},
+                        A.MOD_ID = #{modId}
+
+            WHEN NOT MATCHED THEN
+                INSERT (
+                        A.HQ_OFFICE_CD,
+                        A.PRINTER_GROUP_CD,
+                        A.PRINTER_GROUP_NM,
+                        A.REMARK,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID
+                    )
+                    VALUES (
+                       #{hqOfficeCd},
+                       #{printerGroupCd},
+                       #{printerGroupNm},
+                       #{remark},
+                       #{regDt},
+                       #{regId},
+                       #{modDt},
+                       #{modId}
+                   )
+    </insert>
+
+    <!-- 매핑상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_PROD
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 매핑상품 목록을 조회한다.
+    -->
+    <select id="getProdMapping" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* USE : ProdKitchenprintLinkMapper.getProdMapping */
+        SELECT 	thpgp.PROD_CD,
+                thp.PROD_NM
+        FROM 	TB_HQ_PRINTER_GROUP_PROD thpgp,
+                TB_HQ_PRODUCT thp
+        WHERE 	thpgp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thpgp.PRINTER_GROUP_CD = #{printerGroupCd}
+        AND		thpgp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND		thpgp.PROD_CD = thp.PROD_CD
+        ORDER BY thpgp.PROD_CD
+    </select>
+
+    <!-- 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_PROD
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 상품 목록을 조회한다.
+    -->
+    <select id="getGroupProdList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* USE : ProdKitchenprintLinkMapper.getGroupProdList */
+        SELECT  thp.PROD_CD,
+                thp.PROD_NM
+        FROM    TB_HQ_PRODUCT thp
+        WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PRINTER_GROUP_PROD thpgp WHERE thpgp.HQ_OFFICE_CD = #{hqOfficeCd} AND PRINTER_GROUP_CD = #{printerGroupCd})
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS (
+            SELECT 1
+            FROM TB_HQ_PRODUCT_BARCD
+            WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+            AND PROD_CD = thp.PROD_CD
+            AND BARCD_CD = #{barCd}
+            ) --바코드
+        </if>
+        <if test="hqBrandCd != null and hqBrandCd != ''">
+            AND thp.HQ_BRAND_CD = #{hqBrandCd} --브랜드코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        <if test="storeGroup != null and storeGroup != ''"> --메뉴그룹
+            AND thp.PROD_CD IN (SELECT PROD_CD FROM TB_HQ_STORE_PROD_GROUP_DTL WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_GROUP_CD = #{storeGroup})
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        ORDER
+        BY thp.PROD_CD ASC
+    </select>
+
+    <!-- 매핑 상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_STORE_PRINT
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 매핑된 프린터를 삭제한다.
+    -->
+    <delete id="deleteProdMapping" parameterType="DefaultMap">
+        /* USE : ProdKitchenprintLinkMapper.deleteProdMapping */
+        DELETE  TB_HQ_PRINTER_GROUP_PROD
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     PRINTER_GROUP_CD = #{printerGroupCd}
+        AND     PROD_CD = #{prodCd}
+    </delete>
+
+    <!-- 매핑 상품 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_STORE_PRINT
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 프린터그룹을 저장한다.
+    -->
+    <insert id="saveProdMapping" parameterType="prodKitchenprintLinkVO">
+        /* USE : ProdKitchenprintLinkMapper.saveProdMapping */
+        INSERT INTO TB_HQ_PRINTER_GROUP_PROD
+        (
+            HQ_OFFICE_CD,
+            PRINTER_GROUP_CD,
+            PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{printerGroupCd},
+            #{prodCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 매핑프린터 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_PROD
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 매핑프린터 목록을 조회한다.
+    -->
+    <select id="getPrinterMapping" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* USE : ProdKitchenprintLinkMapper.getPrinterMapping */
+        SELECT	thpgsp.STORE_CD,
+                tms.STORE_NM,
+                thpgsp.PRTER_NO,
+                tmp.PRTER_NM
+        FROM 	TB_HQ_PRINTER_GROUP_STORE_PRINT thpgsp,
+                TB_MS_STORE tms,
+                TB_MS_PRINTER tmp
+        WHERE 	thpgsp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thpgsp.PRINTER_GROUP_CD = #{printerGroupCd}
+        AND 	tms.HQ_OFFICE_CD = thpgsp.HQ_OFFICE_CD
+        AND 	tms.STORE_CD = thpgsp.STORE_CD
+        AND 	tmp.STORE_CD = thpgsp.STORE_CD
+        AND 	tmp.PRTER_NO = thpgsp.PRTER_NO
+        ORDER BY thpgsp.STORE_CD, thpgsp.PRTER_NO
+    </select>
+
+    <!-- 프린터 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_PROD
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 프린터 목록을 조회한다.
+    -->
+    <select id="getPrinterList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* USE : ProdKitchenprintLinkMapper.getPrinterList */
+        SELECT	tms.STORE_CD,
+                tms.STORE_NM,
+                tmp.PRTER_NO,
+                tmp.PRTER_NM
+        FROM 	TB_MS_STORE tms,
+                TB_MS_PRINTER tmp
+        WHERE 	tms.HQ_OFFICE_CD = 'A0001'
+        AND 	tmp.STORE_CD = tms.STORE_CD
+        AND 	tms.STORE_CD || tmp.PRTER_NO NOT IN (SELECT STORE_CD || PRTER_NO FROM TB_HQ_PRINTER_GROUP_STORE_PRINT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PRINTER_GROUP_CD = #{printerGroupCd})
+        ORDER BY tms.STORE_CD, tmp.PRTER_NO
+    </select>
+
+    <!-- 매핑 프린터 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_STORE_PRINT
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 매핑된 프린터를 삭제한다.
+    -->
+    <delete id="deletePrinterMapping" parameterType="DefaultMap">
+        /* USE : ProdKitchenprintLinkMapper.deletePrinterMapping */
+        DELETE  TB_HQ_PRINTER_GROUP_STORE_PRINT
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     PRINTER_GROUP_CD = #{printerGroupCd}
+        AND     STORE_CD = #{storeCd}
+        AND     PRTER_NO = #{prterNo}
+    </delete>
+
+    <!-- 매핑 프린터 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_STORE_PRINT
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 프린터그룹을 저장한다.
+    -->
+    <insert id="savePrinterMapping" parameterType="prodKitchenprintLinkVO">
+        /* USE : ProdKitchenprintLinkMapper.savePrinterMapping */
+        INSERT INTO TB_HQ_PRINTER_GROUP_STORE_PRINT
+            (
+                HQ_OFFICE_CD,
+                PRINTER_GROUP_CD,
+                STORE_CD,
+                PRTER_NO,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            )
+        VALUES
+            (
+                #{hqOfficeCd},
+                #{printerGroupCd},
+                #{storeCd},
+                #{prterNo},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
 </mapper>

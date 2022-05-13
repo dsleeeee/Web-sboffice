@@ -7,7 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-
+<div id="prodKitchenprintLinkView">
 <div class="subCon" ng-controller="prodKitchenprintLinkCtrl">
   <%--searchTbl--%>
   <div class="searchBar flddUnfld">
@@ -70,12 +70,12 @@
       <%-- 상품코드 --%>
       <th><s:message code="prod.prodCd" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
+        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch('1');"/>
       </td>
       <%-- 상품명 --%>
       <th><s:message code="prod.prodNm" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
+        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('1');"/>
       </td>
     </tr>
     <tr>
@@ -90,7 +90,7 @@
       <%-- 바코드 --%>
       <th><s:message code="prod.barCd" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch();"/>
+        <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch('1');"/>
       </td>
     </tr>
     <tr>
@@ -145,13 +145,9 @@
   <%--//searchTbl--%>
     <div class="w28 fl mt40">
       <div class="wj-TblWrapBr ml10 pd20 ng-scope" >
-    <%-- 상품별 매출현황 --%>
-      <div class="oh sb-select mb10">
-        <span class="fl bk lh60"></span>
-      </div>
 
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 500px; overflow-x: hidden; overflow-y: hidden;">
+      <div class="wj-gridWrap" style="height: 330px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 selection-mode="Row"
@@ -164,7 +160,7 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.saleUprc"/>" binding="saleUprc" width="100" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
@@ -172,8 +168,8 @@
     </div>
   </div>
 </div>
-<div class="w35 fl">
   <%-- 연결된 프린터 --%>
+<div class="w35 fl">
   <div class="wj-TblWrapBr ml10 pd20 ng-scope"  ng-controller="prodKitchenprintLinkedCtrl">
 
     <div id="srchSysStatFg2" style="display: none"></div>
@@ -186,7 +182,7 @@
     </div>
 
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 480px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -198,18 +194,18 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNo"/>" binding="prterNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNm"/>" binding="prterNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeCd"/>" binding="storeCd" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeNm"/>" binding="storeNm" width="90" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNo"/>" binding="prterNo" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNm"/>" binding="prterNm" width="90" align="left" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
     <%--//위즈모 테이블--%>
   </div>
 </div>
-<div class="w35 fl">
   <%-- 안연결된 프린터 --%>
+<div class="w35 fl">
   <div class="wj-TblWrapBr ml10 pd20 ng-scope" ng-controller="prodKitchenprintUnlinkCtrl">
 
     <div class="oh sb-select mb10">
@@ -219,7 +215,7 @@
     </div>
 
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 480px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -231,18 +227,18 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNo"/>" binding="prterNo" width="80" align="center" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNm"/>" binding="prterNm" width="100" align="left" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeCd"/>" binding="storeCd" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeNm"/>" binding="storeNm" width="90" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNo"/>" binding="prterNo" width="75" align="center" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNm"/>" binding="prterNm" width="90" align="left" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
     <%--//위즈모 테이블--%>
   </div>
 </div>
-
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/prodKitchenprintLink.js?ver=20201224.02" charset="utf-8"></script>
+</div>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/prodKitchenprintLink.js?ver=20201224.03" charset="utf-8"></script>
 
 <script type="text/javascript">
   var sysStatFg = ${ccu.getCommCode("005")};
