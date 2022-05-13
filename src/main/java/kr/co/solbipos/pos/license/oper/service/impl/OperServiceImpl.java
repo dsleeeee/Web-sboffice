@@ -40,6 +40,13 @@ public class OperServiceImpl implements OperService {
         this.operMapper = operMapper;
     }
 
+    /** 매출매장현황탭 - 러닝매장현황조회 */
+    @Override
+    public List<DefaultMap<Object>> getRunSaleStoreList(OperVO operVO, SessionInfoVO sessionInfoVO) {
+
+        return operMapper.getRunSaleStoreList(operVO);
+    }
+
     /** 매출매장현황탭 - 매출매장현황조회 */
     @Override
     public List<DefaultMap<Object>> getSaleStoreList(OperVO operVO, SessionInfoVO sessionInfoVO) {

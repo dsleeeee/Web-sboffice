@@ -46,6 +46,28 @@ public class OperController {
     }
 
     /**
+     * 매출매장현황탭 - 러닝매장현황조회
+     *
+     * @param operVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/oper/getRunSaleStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRunSaleStoreList(OperVO operVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+//        System.out.println("test11111");
+
+        List<DefaultMap<Object>> result = operService.getRunSaleStoreList(operVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, operVO);
+    }
+
+    /**
      * 매출매장현황탭 - 매출매장현황조회
      *
      * @param operVO

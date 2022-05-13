@@ -22,6 +22,9 @@ import java.util.List;
  */
 public interface OperService {
 
+    /** 매출매장현황탭 - 러닝매장현황조회*/
+    List<DefaultMap<Object>> getRunSaleStoreList(OperVO operVO, SessionInfoVO sessionInfoVO);
+
     /** 매출매장현황탭 - 매출매장현황조회*/
     List<DefaultMap<Object>> getSaleStoreList(OperVO operVO, SessionInfoVO sessionInfoVO);
 

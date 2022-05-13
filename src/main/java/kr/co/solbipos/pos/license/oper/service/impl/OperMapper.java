@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface OperMapper {
 
+    /** 매출매장현황탭 - 러닝매장현황조회 */
+    List<DefaultMap<Object>> getRunSaleStoreList(OperVO operVO);
+
     /** 매출매장현황탭 - 매출매장현황조회 */
     List<DefaultMap<Object>> getSaleStoreList(OperVO operVO);
 

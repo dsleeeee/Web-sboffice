@@ -243,7 +243,7 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
                 includeColumnHeaders: true,
-                includeCellStyles: true,
+                includeCellStyles: true,  //20220427 false 엑섹속도 cell 스타일 확인중
                 includeColumns: function (column) {
                     return column.visible;
                 }
