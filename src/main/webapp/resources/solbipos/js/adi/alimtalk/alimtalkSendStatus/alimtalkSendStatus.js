@@ -80,6 +80,12 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
                     wijmo.addClass(e.cell, 'wijLink');
                 }
 
+                // 대체발송 메세지
+                if (col.binding === "rmContent") {
+                    // var item = s.rows[e.row].dataItem;
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+
                 if (col.format === "date") {
                     e.cell.innerHTML = getFormatDate(e.cell.innerText);
                 } else if (col.format === "dateTime") {
@@ -99,8 +105,22 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
                 // 메세지 클릭시 상세정보 조회
                 if ( col.binding === "msgContent") {
                     var selectedRow = s.rows[ht.row].dataItem;
-                    $scope.setSelectedAlimtalkSendStatus(selectedRow);
-                    $scope.wjAlimtalkMessageDtlLayer.show(true);
+
+                    var storeScope = agrid.getScope('alimtalkSendHistCtrl');
+                    storeScope.setSelectedAlimtalkSendHist(selectedRow);
+                    storeScope.wjAlimtalkMessageDtlLayer.show(true);
+                    event.preventDefault();
+                }
+
+                // 대체발송 메세지 클릭시 상세정보 조회
+                if ( col.binding === "rmContent") {
+                    var selectedRow = s.rows[ht.row].dataItem;
+                    selectedRow.subject = selectedRow.rmTitle;
+                    selectedRow.msgContent = selectedRow.rmContent;
+
+                    var storeScope = agrid.getScope('alimtalkSendHistCtrl');
+                    storeScope.setSelectedAlimtalkSendHist(selectedRow);
+                    storeScope.wjAlimtalkMessageDtlLayer.show(true);
                     event.preventDefault();
                 }
             }
@@ -295,22 +315,22 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
     };
 
     // 선택
-    $scope.selectedAlimtalkSendStatus;
-    $scope.setSelectedAlimtalkSendStatus = function(store) {
-        $scope.selectedAlimtalkSendStatus = store;
-    };
-    $scope.getSelectedAlimtalkSendStatus = function() {
-        return $scope.selectedAlimtalkSendStatus;
-    };
+    // $scope.selectedAlimtalkSendStatus;
+    // $scope.setSelectedAlimtalkSendStatus = function(store) {
+    //     $scope.selectedAlimtalkSendStatus = store;
+    // };
+    // $scope.getSelectedAlimtalkSendStatus = function() {
+    //     return $scope.selectedAlimtalkSendStatus;
+    // };
 
     // 화면 ready 된 후 설정
-    angular.element(document).ready(function () {
-
-        // 알림톡 메세지 팝업 핸들러 추가
-        $scope.wjAlimtalkMessageDtlLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('alimtalkMessageDtlCtrl', $scope.getSelectedAlimtalkSendStatus());
-            }, 50)
-        });
-    });
+    // angular.element(document).ready(function () {
+    //
+    //     // 알림톡 메세지 팝업 핸들러 추가
+    //     $scope.wjAlimtalkMessageDtlLayer.shown.addHandler(function (s) {
+    //         setTimeout(function() {
+    //             $scope._broadcast('alimtalkMessageDtlCtrl', $scope.getSelectedAlimtalkSendStatus());
+    //         }, 50)
+    //     });
+    // });
 }]);
