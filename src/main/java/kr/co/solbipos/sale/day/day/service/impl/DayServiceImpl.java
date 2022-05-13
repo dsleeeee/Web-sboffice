@@ -121,6 +121,32 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getDayTotalList(dayVO);
     }
 
+    @Override
+    public List<DefaultMap<String>> getDayCashTotalList(DayVO dayVO, SessionInfoVO sessionInfoVO) {        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+        }
+
+        String payCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = dayVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            // 현금,현금영수증 제외 + payCd길이가 1인거 = 현금(.. 인애들 제외
+            if(! (arrPayCol[i].length() == 1) ) {
+                pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+                payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+            }
+        }
+        dayVO.setPivotPayCol(pivotPayCol);
+        dayVO.setArrPayCol(payCol.split(","));
+
+        return dayMapper.getDayCashTotalList(dayVO);
+    }
+
 
     /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
     @Override
