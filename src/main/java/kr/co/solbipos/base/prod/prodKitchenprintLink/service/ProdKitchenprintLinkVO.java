@@ -73,6 +73,21 @@ public class ProdKitchenprintLinkVO extends PageVO {
     /** 사용자 아이디 */
     private String userId;
 
+    /** 그룹코드 */
+    private String printerGroupCd;
+
+    /** 그룹명 */
+    private String printerGroupNm;
+
+    /** 비고 */
+    private String remark;
+
+    /** 상품유형구분 */
+    private String prodTypeFg;
+
+    /** 메뉴그룹 */
+    private String storeGroup;
+
     public String getSysClosureDate() {
         return sysClosureDate;
     }
@@ -215,5 +230,45 @@ public class ProdKitchenprintLinkVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPrinterGroupCd() {
+        return printerGroupCd;
+    }
+
+    public void setPrinterGroupCd(String printerGroupCd) {
+        this.printerGroupCd = printerGroupCd;
+    }
+
+    public String getPrinterGroupNm() {
+        return printerGroupNm;
+    }
+
+    public void setPrinterGroupNm(String printerGroupNm) {
+        this.printerGroupNm = printerGroupNm;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getProdTypeFg() {
+        return prodTypeFg;
+    }
+
+    public void setProdTypeFg(String prodTypeFg) {
+        this.prodTypeFg = prodTypeFg;
+    }
+
+    public String getStoreGroup() {
+        return storeGroup;
+    }
+
+    public void setStoreGroup(String storeGroup) {
+        this.storeGroup = storeGroup;
     }
 }

@@ -47,4 +47,45 @@ public interface ProdKitchenprintLinkService {
      * 안연결된 프린터 연결
      */
     int linkedPrter(ProdKitchenprintLinkVO[] prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 프린터그룹 조회
+     */
+    List<DefaultMap<String>> getPrinterGroupList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 프린터그룹 저장
+     */
+    int savePrinterGroup(ProdKitchenprintLinkVO[] prodKitchenprintLinkVOs, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 매핑상품 조회
+     */
+    List<DefaultMap<String>> getProdMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 상품 조회
+     */
+    List<DefaultMap<String>> getGroupProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 상품 매핑 저장
+     */
+    int saveProdMapping(ProdKitchenprintLinkVO[] prodKitchenprintLinkVOs, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 매핑프린터 조회
+     */
+    List<DefaultMap<String>> getPrinterMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 프린터 조회
+     */
+    List<DefaultMap<String>> getPrinterList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 프린터 매핑 저장
+     */
+    int savePrinterMapping(ProdKitchenprintLinkVO[] prodKitchenprintLinkVOs, SessionInfoVO sessionInfoVO);
+
 }

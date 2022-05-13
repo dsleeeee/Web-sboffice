@@ -28,6 +28,9 @@ public interface DayService {
     /** 일자별(일별종합 탭) - 일별종합 리스트 조회 */
     List<DefaultMap<String>> getDayTotalList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
+    /** 일자(현금)종합 (일별종합 탭) - 일별종합 리스트 조회 */
+    List<DefaultMap<String>> getDayCashTotalList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
     /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
     List<DefaultMap<String>> getDayStoreDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 

@@ -216,6 +216,18 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
 
         $scope._inquirySub('/base/price/salePriceManage/salePriceManage/getSalePriceManageList.sb', params, function() {
 
+            var grid = wijmo.Control.getControl("#wjGridSalePriceManage");
+            var rows = grid.rows;
+
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+
+                if(item.prodCd === "0000000000000" || item.prodCd === "0A0000DLVFEE" || item.prodCd === "0ADLVFEE0000"){
+                    item.gChk = false;
+                    rows[i].isReadOnly = true;
+                }
+            }
+
             // 프랜차이즈매장은 본사에서 등록한 상품 선택 불가
             if(orgnFg == "STORE" && hqOfficeCd != "00000") {
 

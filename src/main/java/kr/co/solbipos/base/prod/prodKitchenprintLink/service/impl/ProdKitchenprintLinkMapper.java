@@ -42,4 +42,31 @@ public interface ProdKitchenprintLinkMapper {
 
     /* 안연결된 프린터 연결 */
     int linkedPrter(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /* 프린터그룹 조회 */
+    List<DefaultMap<String>> getPrinterGroupList(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /* 프린터그룹 코드 채번 */
+    String getPrinterGroupCode(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /* 프린터그룹 저장 */
+    int savePrinterGroup(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /* 매핑상품 조회 */
+    List<DefaultMap<String>> getProdMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+    /* 상품 조회 */
+    List<DefaultMap<String>> getGroupProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+    /* 상품 매핑 삭제 */
+    int deleteProdMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+    /* 상품 매핑 저장 */
+    int saveProdMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /* 매핑프린터 조회*/
+    List<DefaultMap<String>> getPrinterMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+    /* 프린터 조회 */
+    List<DefaultMap<String>> getPrinterList(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+    /* 프린터 매핑 삭제 */
+    int deletePrinterMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+    /* 프린터 매핑 저장 */
+    int savePrinterMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
 }

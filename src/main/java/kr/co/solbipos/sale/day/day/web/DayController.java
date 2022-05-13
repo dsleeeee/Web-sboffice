@@ -111,6 +111,28 @@ public class DayController {
         return ReturnUtil.returnListJson(Status.OK, list, dayVO);
     }
 
+    /**
+     * 일자(현금)종합 (일별종합 탭) - 일별종합 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 02. 18.
+     */
+    @RequestMapping(value = "/dayCashTotal/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayCashTotalList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDayCashTotalList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
 
     /**
      * 매장별 매출현황 팝업 - 매장별 매출현황 조회

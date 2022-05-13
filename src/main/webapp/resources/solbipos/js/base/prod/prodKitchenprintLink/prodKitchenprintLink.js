@@ -52,6 +52,8 @@ app.controller('prodKitchenprintLinkCtrl', ['$scope', '$http', function ($scope,
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
   $scope.srchEndDate   = wcombo.genDateVal("#srchTimeEndDate", gvEndDate);
+  $scope.srchStartDate.isReadOnly = true;
+  $scope.srchEndDate.isReadOnly = true;
 
   // 전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
