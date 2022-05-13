@@ -198,4 +198,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResveAdd.js?ver=20220427.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResveAdd.js?ver=20220427.02" charset="utf-8"></script>

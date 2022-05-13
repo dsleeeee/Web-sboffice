@@ -196,6 +196,11 @@ app.controller('storeProdSalePriceResveAddCtrl', ['$scope', '$http', function ($
                         item.gChk = false;
                         rows[i].isReadOnly = true;
                     }
+
+                    if(item.prodCd === "0000000000000" || item.prodCd === "0A0000DLVFEE" || item.prodCd === "0ADLVFEE0000"){
+                        item.gChk = false;
+                        rows[i].isReadOnly = true;
+                    }
                 }
             }
 
