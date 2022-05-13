@@ -245,9 +245,6 @@ public class ProdVO extends PageVO {
     /** 세션ID */
     private String sessionId;
 
-    /** 삭제차수 (1: 본사, 매장 각각 본인상품삭제 / 2: 본사에 속한 매장의 상품 삭제) */
-    private String delLevel;
-
     /** 순번 */
     private int seq;
 
@@ -1158,14 +1155,6 @@ public class ProdVO extends PageVO {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
-    }
-
-    public String getDelLevel() {
-        return delLevel;
-    }
-
-    public void setDelLevel(String delLevel) {
-        this.delLevel = delLevel;
     }
 
     public int getSeq() {
