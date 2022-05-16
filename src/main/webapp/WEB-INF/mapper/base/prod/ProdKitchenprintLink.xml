@@ -458,7 +458,7 @@
                 tmp.PRTER_NM
         FROM 	TB_MS_STORE tms,
                 TB_MS_PRINTER tmp
-        WHERE 	tms.HQ_OFFICE_CD = 'A0001'
+        WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	tmp.STORE_CD = tms.STORE_CD
         AND 	tms.STORE_CD || tmp.PRTER_NO NOT IN (SELECT STORE_CD || PRTER_NO FROM TB_HQ_PRINTER_GROUP_STORE_PRINT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PRINTER_GROUP_CD = #{printerGroupCd})
         ORDER BY tms.STORE_CD, tmp.PRTER_NO
