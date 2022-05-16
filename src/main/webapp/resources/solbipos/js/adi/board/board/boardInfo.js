@@ -40,6 +40,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         // 관리자
         var targetFgData = [
             {"name": "관리자/총판/대리점", "value": "123"},
+            {"name": "총판/대리점", "value": "23"},
             {"name": "전체", "value": "12345"},
             {"name": "본사/매장", "value": "45"},
             {"name": "특정대상(본사/매장)", "value": "6"}
