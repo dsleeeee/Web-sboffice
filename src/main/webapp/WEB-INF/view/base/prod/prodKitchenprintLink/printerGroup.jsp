@@ -42,6 +42,9 @@
                     <button class="btn_skyblue" id="btnAddMenuGroup" ng-click="addMenuGroup()">
                         <s:message code="cmm.add" />
                     </button>
+                    <button class="btn_skyblue" id="btnSaveMenuGroup" ng-click="saveMenuGroup()">
+                        <s:message code="cmm.save" />
+                    </button>
                 </div>
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
