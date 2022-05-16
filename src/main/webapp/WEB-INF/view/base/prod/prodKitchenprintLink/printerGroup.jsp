@@ -29,7 +29,6 @@
                 <td>
                     <input type="text" class="sb-input w100" ng-model="printerGroupNm" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
-                <td colspan="2"><span class="s12 red">[상품-매장프린터연결] 및 [주방프린터 상품연결] 화면에서 연결된 상품을 관리할 수 있습니다.</span></td>
             </tr>
             </tbody>
         </table>
