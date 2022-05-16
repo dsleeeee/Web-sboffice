@@ -236,7 +236,8 @@
             SET
             USE_YN = #{useYn},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId}
+            MOD_ID = #{modId},
+            NEC_SEND_YN = 'Y'
         WHEN NOT MATCHED THEN
             INSERT (
                 ORGN_CD,
@@ -250,7 +251,8 @@
                 REG_DT,
                 REG_ID,
                 MOD_DT,
-                MOD_ID
+                MOD_ID,
+                NEC_SEND_YN
             ) VALUES (
                 #{orgnCd},
                 #{sendTypeCd},
@@ -263,7 +265,8 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                'Y'
             )
     </insert>
 
@@ -324,7 +327,8 @@
             TEMPLATE_GRP_FG = #{templateGrpFg},
             TEMPLATE_CD = #{templateCd},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId}
+            MOD_ID = #{modId},
+            NEC_SEND_YN = 'Y'
         WHEN NOT MATCHED THEN
             INSERT (
                 ORGN_CD,
@@ -338,7 +342,8 @@
                 REG_DT,
                 REG_ID,
                 MOD_DT,
-                MOD_ID
+                MOD_ID,
+                NEC_SEND_YN
             ) VALUES (
                 #{orgnCd},
                 #{sendTypeCd},
@@ -351,7 +356,8 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                'Y'
             )
     </insert>
 
