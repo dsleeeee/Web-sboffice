@@ -176,7 +176,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211021.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeDtl.js?ver=20211021.03" charset="utf-8"></script>
 
 <%-- SMS결제취소 결과 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsCharge/smsCancelResult.jsp">

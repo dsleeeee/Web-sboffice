@@ -48,8 +48,8 @@ app.controller('smsChargeDtlCtrl', ['$scope', '$http', function ($scope, $http) 
             $("#orgnCdDtl").val(data.orgnCd);
             $("#orgnNmDtl").val(data.orgnNm);
             $("#chargeIdNmDtl").val(data.chargeIdNm);
-            $("#chargeDateDtl").val(data.chargeDate.substring(0,4) + "-" + data.chargeDate.substring(4,6) + "-" + data.chargeDate.substring(6,8));
-            $("#chargeTimeDtl").val(data.chargeTime.substring(0,2) + ":" + data.chargeTime.substring(2,4) + ":" + data.chargeTime.substring(4,6));
+            $("#chargeDateDtl").val(data.chargeDate);
+            $("#chargeTimeDtl").val(data.chargeTime);
             $("#chargeAmtDtl").val(data.chargeAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             $scope.pgresourceDtlCombo.selectedValue = data.pgresource;
             $("#controlnoDtl").val(data.controlno);
