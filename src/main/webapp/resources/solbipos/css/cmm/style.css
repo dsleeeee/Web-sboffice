@@ -166,6 +166,9 @@ button.btn_down:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
 button.btn_down:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
 button.btn_down:hover:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
 
+/*알림톡 - 잔여금액 알림 설정 버튼*/
+button.btn_gray_alk {background:#aeaeae; color:#fff; border-radius:4px; line-height:25px; padding:0 10px; font-size:1em; transition:all 0.2s;}
+button.btn_gray_alk:hover {background:#777; transition:all 0.2s;}
 
 /* **************************************** *
  * LAYOUT

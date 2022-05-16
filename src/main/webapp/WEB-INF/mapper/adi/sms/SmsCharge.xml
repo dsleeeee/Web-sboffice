@@ -84,7 +84,8 @@
         /* SmsChargeMapper.getRestSmsAmtAlimSettingList */
         SELECT
         NVL(MAX(cst.RM_SMS_AMT), null) AS RM_SMS_AMT,
-        SBPENC.D(cst.TEL_NO) AS TEL_NO
+        SBPENC.D(cst.TEL_NO) AS TEL_NO,
+        0 AS EMPTY --데이터 없을때 때문에
         FROM CET_SMSPT_T cst
         WHERE 1=1
         AND cst.OGN_CD = #{orgnCd}
