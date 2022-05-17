@@ -9,11 +9,11 @@
 <div class="con">
     <div class="tabType1" ng-controller="smsChargeTabCtrl" ng-init="init()">
         <ul>
-            <%-- SMS충전/KCP PG 탭 --%>
+            <%-- 충전/KCP PG 탭 --%>
             <li>
                 <a id="smsChargeTab" href="#" class="on" ng-click="smsChargeShow()"><s:message code="smsChargeTab.smsCharge"/></a>
             </li>
-            <%-- SMS충전내역 탭 --%>
+            <%-- 충전내역 탭 --%>
             <li>
                 <a id="smsChargeHistTab" href="#" ng-click="smsChargeHistShow()"><s:message code="smsChargeTab.smsChargeHist"/></a>
             </li>
