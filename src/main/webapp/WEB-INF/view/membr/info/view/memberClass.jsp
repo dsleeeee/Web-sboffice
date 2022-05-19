@@ -240,7 +240,7 @@
                 <input type="text" class="sb-input fl w15"
                        ng-attr-placeholder="{{classData.pointSaveFg === '2' ? '원당1Point' : '%적립'}}"
                        ng-style="userUseYn ? { 'font-size': '0.8rem'} : {'display': 'none' }"
-                       ng-attr-maxlength="{{classData.pointSaveFg === '2' ? '5' : '3'}}"
+                       ng-attr-maxlength="{{classData.pointSaveFg === '2' ? '5' : '6'}}"
                        ng-model="membrTotal"/>
 
                 <%--일괄등록--%>
@@ -271,8 +271,8 @@
                         <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>" binding="initPayCd" is-read-only="true" width="*" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>" binding="membrClassType" is-read-only="true" width="*"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.pay.code"/>" binding="payCd" data-map="payCdDataMap" width="*"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>" ng-switch-default  max-length="3" binding="accRate" width="*"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>" ng-switch-when="1" max-length="3" binding="accRate" width="*"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>" ng-switch-default  max-length="6" binding="accRate" width="*"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>" ng-switch-when="1" max-length="6" binding="accRate" width="*"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.point.list.amt"/>" ng-switch-when="2" binding="accRate" width="*" max-length="5"></wj-flex-grid-column>
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
