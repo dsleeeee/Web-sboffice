@@ -28,15 +28,6 @@ app.controller('msgOneAmtGuideCtrl', ['$scope', '$http', function ($scope, $http
     // <-- 검색 호출 -->
     $scope.$on("msgOneAmtGuideCtrl", function(event, data) {
         $scope.searchMsgOneAmtGuide();
-
-        // if(pageGubunVal == "sms") {
-        //     $("#divMsgOneAmtGuideSms").css("display", "");
-        //     $("#divMsgOneAmtGuideAlk").css("display", "none");
-        // }
-        // else if (pageGubunVal == "alimtalk") {
-        //     $("#divMsgOneAmtGuideSms").css("display", "none");
-        //     $("#divMsgOneAmtGuideAlk").css("display", "");
-        // }
         event.preventDefault();
     });
 
@@ -51,9 +42,7 @@ app.controller('msgOneAmtGuideCtrl', ['$scope', '$http', function ($scope, $http
             $("#msgOneAmtGuideLmsOneAmt").val($scope.msgOneAmtGuide.lmsOneAmt);
             $("#msgOneAmtGuideMmsOneAmt").val($scope.msgOneAmtGuide.mmsOneAmt);
             $("#msgOneAmtGuideAlkOneAmt").val($scope.msgOneAmtGuide.alkOneAmt);
-            // $("#msgOneAmtGuideAlkSmsOneAmt").val($scope.msgOneAmtGuide.alkSmsOneAmt);
             $("#msgOneAmtGuideAlkLmsOneAmt").val($scope.msgOneAmtGuide.alkLmsOneAmt);
-            // $("#msgOneAmtGuideAlkMmsOneAmt").val($scope.msgOneAmtGuide.alkMmsOneAmt);
         });
     };
     // <-- //검색 호출 -->
@@ -64,9 +53,7 @@ app.controller('msgOneAmtGuideCtrl', ['$scope', '$http', function ($scope, $http
         $("#msgOneAmtGuideLmsOneAmt").val("");
         $("#msgOneAmtGuideMmsOneAmt").val("");
         $("#msgOneAmtGuideAlkOneAmt").val("");
-        // $("#msgOneAmtGuideAlkSmsOneAmt").val("");
         $("#msgOneAmtGuideAlkLmsOneAmt").val("");
-        // $("#msgOneAmtGuideAlkMmsOneAmt").val("");
 
         $scope.wjMsgOneAmtGuideLayer.hide();
     };
