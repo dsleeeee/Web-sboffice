@@ -79,7 +79,7 @@
                 </tr>
             </c:if>
             <c:if test="${multiStoreFg eq 0}">
-                <input type="hidden" id="mobileDayOfWeekSaleStoreCd" value="${sessionInfo.storeCd}"/>
+                <input type="hidden" id="mobileApprStoreCd" value="${sessionInfo.storeCd}"/>
             </c:if>
         </c:if>
         </tbody>
