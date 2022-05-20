@@ -30,4 +30,7 @@ public interface InstallManageService {
 
     /** 설치요청 등록 */
     int saveInstallRequest(InstallVO[] installVOs, SessionInfoVO sessionInfoVO );
+
+    /** 설치요청 체크 */
+    int getInstallRequestChk(InstallVO[] installVOs, SessionInfoVO sessionInfoVO );
 }

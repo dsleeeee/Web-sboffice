@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
@@ -129,5 +130,31 @@ public class InstallManageController {
         int result = installManageService.saveInstallRequest(installVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
+    }
+
+
+    /**
+     * 설치관리 - 설치 요청 체크
+     *
+     * @param installVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "installManage/installManage/getInstallRequestChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getInstallRequestChk(@RequestBody InstallVO[] installVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = installManageService.getInstallRequestChk(installVOs, sessionInfoVO);
+
+        if(result == 0){
+            return returnJson(Status.OK, result);
+        } else{
+            return returnJson(Status.FAIL, result);
+        }
     }
 }

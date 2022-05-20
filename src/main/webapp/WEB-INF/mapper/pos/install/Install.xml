@@ -189,4 +189,23 @@
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
     </update>
+
+    <!-- 설치요청 체크 -->
+    <!--
+        TABLE    : TB_MS_POS
+        COMMENTS : 설치요청 체크
+    -->
+    <select id="getInstallRequestChk" parameterType="installVO" resultType="Integer">
+        /* InstallManageMapper.getInstallRequestChk */
+        SELECT  COUNT(*)
+        FROM    TB_CM_INSTLL
+        WHERE   STORE_CD = #{storeCd}
+        AND     POS_NO = #{posNo}
+        <if test='instReason != null and instReason == "001"'>
+            AND INST_FG = '1'
+        </if>
+        <if test='instReason != null and instReason != "001"'>
+            AND INST_FG = '0'
+        </if>
+    </select>
 </mapper>

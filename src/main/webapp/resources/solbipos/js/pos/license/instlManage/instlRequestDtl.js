@@ -87,12 +87,13 @@ app.controller('instlRequestDtlCtrl', ['$scope', '$http', '$timeout', function (
             }
 
             // (삭제)저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/pos/license/instlManage/delRequestDtl.sb", params, function(){});
+            $scope._save("/pos/license/instlManage/delRequestDtl.sb", params, function(){
 
-            // angular 그리드 hide 시 깨지므로 refresh()
-            var scope = agrid.getScope("instlRequestListCtrl");
-            scope.flex.refresh();
-            scope.getInstallList();
+                // angular 그리드 hide 시 깨지므로 refresh()
+                var scope = agrid.getScope("instlRequestListCtrl");
+                scope.getInstallList();
+            });
+
         });
     };
 

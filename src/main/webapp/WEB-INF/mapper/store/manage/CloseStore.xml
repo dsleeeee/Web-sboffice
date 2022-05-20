@@ -41,7 +41,7 @@
         AND     A.STORE_CD NOT IN   (
                                     SELECT  DISTINCT STORE_CD
                                     FROM    TB_SL_MONTHLY_TOTAL TSMT
-                                    WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(TO_DATE(#{startMonth},'YYYYMM') , -3),'YYYYMM')
+                                    WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(TO_DATE(#{startMonth},'YYYYMM') , -1),'YYYYMM')
                                     )
         ]]>
         --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
@@ -93,7 +93,7 @@
                     AND     A.STORE_CD NOT IN   (
                                                 SELECT  DISTINCT STORE_CD
                                                 FROM    TB_SL_MONTHLY_TOTAL TSMT
-                                                WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(SYSDATE, -3),'YYYYMM')
+                                                WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(SYSDATE, -1),'YYYYMM')
                                                 )
                     ]]>
                     --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
@@ -126,7 +126,7 @@
                 UPDATE
                     SET     A.SYS_STAT_FG       =   '2'
                     ,       A.SYS_CLOSURE_DATE  =   TO_CHAR(SYSDATE, 'YYYYMMDD')
-                    ,       A.SYS_REMARK        =   A.SYS_REMARK || '3개월 동안 매출 자료가 발생되지 않아 ' || TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ' 폐점처리됨, USER_ID='|| #{modId} || ', 폐점비고 : ' || #{remark}
+                    ,       A.SYS_REMARK        =   A.SYS_REMARK || '1개월 동안 매출 자료가 발생되지 않아 ' || TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ' 폐점처리됨, USER_ID='|| #{modId} || ', 폐점비고 : ' || #{remark}
                     ,       A.MOD_DT            =   #{modDt}
                     ,       A.MOD_ID            =   #{modId}
     </update>

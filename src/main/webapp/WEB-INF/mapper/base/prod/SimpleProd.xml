@@ -237,7 +237,8 @@
             PRC_CTRL_FG,
             STIN_SALE_UPRC,
             DLVR_SALE_UPRC,
-            PACK_SALE_UPRC
+            PACK_SALE_UPRC,
+            DEPOSIT_CUP_FG
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -286,7 +287,8 @@
             #{prcCtrlFg},
             NVL(#{stinSaleUprc}, #{saleUprc}),
             NVL(#{dlvrSaleUprc}, #{saleUprc}),
-            NVL(#{packSaleUprc}, #{saleUprc})
+            NVL(#{packSaleUprc}, #{saleUprc}),
+            #{depositCupFg}
         )
     </insert>
 
@@ -345,7 +347,8 @@
         PRC_CTRL_FG,
         NVL(STIN_SALE_UPRC, '') AS STIN_SALE_UPRC,
         NVL(DLVR_SALE_UPRC, '') AS DLVR_SALE_UPRC,
-        NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC
+        NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC,
+        NVL(DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG
         FROM TB_TMP_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}

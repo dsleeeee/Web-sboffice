@@ -251,6 +251,9 @@ public class ProdVO extends PageVO {
     /** 상품삭제구분 */
     private String delTypeFg;
 
+    /** 보증컵유형 */
+    private String depositCupFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1171,5 +1174,13 @@ public class ProdVO extends PageVO {
 
     public void setDelTypeFg(String delTypeFg) {
         this.delTypeFg = delTypeFg;
+    }
+
+    public String getDepositCupFg() {
+        return depositCupFg;
+    }
+
+    public void setDepositCupFg(String depositCupFg) {
+        this.depositCupFg = depositCupFg;
     }
 }

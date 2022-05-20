@@ -93,4 +93,25 @@ public class InstallManageServiceImpl implements InstallManageService {
 
         return result;
     }
+
+    /** 설치요청 체크 */
+    @Override
+    public int getInstallRequestChk(InstallVO[] installVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        for(InstallVO installVO : installVOs){
+            result += installManageMapper.getInstallRequestChk(installVO);
+
+            // 설치가 한번도 없었으면 설치사유는 신규설치로 해야함
+            if(!installVO.getInstReason().equals("001")){
+                installVO.setInstReason(null);
+                if(installManageMapper.getInstallRequestChk(installVO) == 0) {
+                    return -1;
+                };
+            }
+        }
+
+        return result;
+    }
 }

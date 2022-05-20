@@ -55,4 +55,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestDtl.js?ver=20191017" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestDtl.js?ver=20191017.01" charset="utf-8"></script>

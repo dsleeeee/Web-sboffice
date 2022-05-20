@@ -105,6 +105,7 @@
                     <c:if test="${orgnFg == 'HQ'}">
                         <wj-flex-grid-column header="<s:message code="simpleProd.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" align="center"></wj-flex-grid-column>
                     </c:if>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.depositCupFg"/>" binding="depositCupFg" data-map="depositCupFgDataMap" width="100" align="center"></wj-flex-grid-column>
 
                     <%--상품 저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="simpleProd.chkProdNm"/>" binding="chkProdNm" width="100" align="center" visible="false"></wj-flex-grid-column>
@@ -161,7 +162,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20211111.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20211111.07" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

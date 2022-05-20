@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    NonSaleMapper.xml
+    보증금현황 매출조회 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.05.16     신규생성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.nonSale.service.impl.NonSaleMapper">
+
+	<!-- 일별 -->
+	<!--
+        TABLE    : TB_SL_SALE_DTL
+        PARAM    : nonSaleVO
+        COMMENTS : 일별 보증금현황 매출을 조회한다.
+    -->
+	<select id="getNonSaleDayList" parameterType="nonSaleVO" resultType="DefaultMap">
+		/* USE : NonSaleMapper.getNonSaleDayList */
+		<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+				PROD_CD,
+				PROD_NM,
+				NON_SALE_FG,
+				SUM(SALE_QTY) AS TOT_SALE_QTY,
+				SUM(SALE_AMT) AS TOT_SALE_AMT,
+				SUM(DC_AMT) AS TOT_DC_AMT,
+				SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+		<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM	(
+				SELECT	tssd.SALE_DATE,
+						tssd.PROD_CD,
+						tmp.PROD_NM,
+						(SELECT COUNT(BILL_NO)
+						FROM TB_NS_NONSALE_HDR tnnh
+						WHERE tnnh.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+						AND tnnh.STORE_CD = tssd.STORE_CD
+						AND tnnh.SALE_DATE = tssd.SALE_DATE
+						AND tnnh.POS_NO = tssd.POS_NO
+						AND tnnh.BILL_NO = tssd.BILL_NO) AS non_sale_Fg,
+						tssd.SALE_QTY,
+						tssd.SALE_AMT,
+						tssd.DC_AMT,
+						tssd.REAL_SALE_AMT
+				FROM 	TB_SL_SALE_DTL tssd,
+						TB_MS_PRODUCT tmp
+				WHERE 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+				<if test='storeCd != null and storeCd != ""'>
+					AND tssd.STORE_CD IN
+					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='orgnFg != null and orgnFg == "H"'>
+				AND 	(
+							'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = 'A0001' AND ENVST_CD = '0001')
+						OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = 'A0001' AND EMP_NO = '0000')
+						)
+				</if>
+				AND 	tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+				AND 	tssd.STORE_CD || tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO IN (	SELECT DISTINCT	tssd2.STORE_CD || tssd2.SALE_DATE || tssd2.POS_NO || tssd2.BILL_NO
+				    														FROM	TB_SL_SALE_DTL tssd2
+				    														WHERE 	tssd2.HQ_OFFICE_CD = #{hqOfficeCd}
+																			AND 	tssd2.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+				    														AND 	tssd2.PROD_CD IN (SELECT PROD_CD FROM TB_MS_PRODUCT tmp2 WHERE tmp2.STORE_CD = tssd2.STORE_CD AND  tmp2.PROD_CD = tssd2.PROD_CD)
+																			<if test='storeCd != null and storeCd != ""'>
+																				AND tssd2.STORE_CD IN
+																				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+																					#{item}
+																				</foreach>
+																			</if>
+																			<if test='orgnFg != null and orgnFg == "H"'>
+																				AND 	(
+																				'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = 'A0001' AND ENVST_CD = '0001')
+																				OR	tssd2.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = 'A0001' AND EMP_NO = '0000')
+																				)
+																			</if>
+				    )
+				AND 	tmp.STORE_CD = tssd.STORE_CD
+				AND 	tmp.PROD_CD = tssd.PROD_CD
+				)
+		<if test='nonSaleFg != null and nonSaleFg != ""'>
+		WHERE	NON_SALE_FG = #{nonSaleFg}
+		</if>
+		GROUP BY SALE_DATE, PROD_CD, PROD_NM, NON_SALE_FG
+		ORDER BY SALE_DATE, PROD_CD, PROD_NM, NON_SALE_FG
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+	</select>
+
+
+	<!-- 일별 -->
+	<!--
+        TABLE    : TB_SL_SALE_DTL
+        PARAM    : nonSaleVO
+        COMMENTS : 일별 보증금현황 매출을 조회한다.
+    -->
+	<select id="getNonSaleDayExcelList" parameterType="nonSaleVO" resultType="DefaultMap">
+		/* USE : NonSaleMapper.getNonSaleDayExcelList */
+		SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+		PROD_CD,
+		PROD_NM,
+		NON_SALE_FG,
+		SUM(SALE_QTY) AS TOT_SALE_QTY,
+		SUM(SALE_AMT) AS TOT_SALE_AMT,
+		SUM(DC_AMT) AS TOT_DC_AMT,
+		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+		FROM	(
+		SELECT	tssd.SALE_DATE,
+		tssd.PROD_CD,
+		tmp.PROD_NM,
+		(SELECT COUNT(BILL_NO)
+		FROM TB_NS_NONSALE_HDR tnnh
+		WHERE tnnh.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+		AND tnnh.STORE_CD = tssd.STORE_CD
+		AND tnnh.SALE_DATE = tssd.SALE_DATE
+		AND tnnh.POS_NO = tssd.POS_NO
+		AND tnnh.BILL_NO = tssd.BILL_NO) AS non_sale_Fg,
+		tssd.SALE_QTY,
+		tssd.SALE_AMT,
+		tssd.DC_AMT,
+		tssd.REAL_SALE_AMT
+		FROM 	TB_SL_SALE_DTL tssd,
+		TB_MS_PRODUCT tmp
+		WHERE 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND tssd.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND 	(
+			'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = 'A0001' AND ENVST_CD = '0001')
+			OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = 'A0001' AND EMP_NO = '0000')
+			)
+		</if>
+		AND 	tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		AND 	tmp.STORE_CD = tssd.STORE_CD
+		AND 	tmp.PROD_CD = tssd.PROD_CD
+		)
+		<if test='nonSaleFg != null and nonSaleFg != ""'>
+			WHERE	NON_SALE_FG = #{nonSaleFg}
+		</if>
+		GROUP BY SALE_DATE, PROD_CD, PROD_NM, NON_SALE_FG
+		ORDER BY SALE_DATE, PROD_CD, PROD_NM, NON_SALE_FG
+	</select>
+</mapper>

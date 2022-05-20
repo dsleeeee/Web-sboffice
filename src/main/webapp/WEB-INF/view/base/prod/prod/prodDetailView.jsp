@@ -363,6 +363,20 @@
                             {{_sdselGrpCd}}
                         </td>
                     </tr>
+                    <tr>
+                        <th><s:message code="prod.depositCupFg"/></th>
+                        <td>
+                            <wj-combo-box ng-model="prodDetail.depositCupFg"
+                                          ng-hide="true"
+                                          text="_depositCupFg"
+                                          items-source="_getComboData('depositCupFgComboData')"
+                                          display-member-path="name"
+                                          selected-value-path="value"
+                                          is-editable="false">
+                            </wj-combo-box>
+                            {{_depositCupFg}}
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

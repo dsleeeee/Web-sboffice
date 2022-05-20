@@ -157,6 +157,9 @@ public class SimpleProdVO extends PageVO {
     /** 브랜드사용여부 */
     private String brandUseFg;
 
+    /** 보증컵유형 */
+    private String depositCupFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -391,5 +394,13 @@ public class SimpleProdVO extends PageVO {
 
     public void setBrandUseFg(String brandUseFg) {
         this.brandUseFg = brandUseFg;
+    }
+
+    public String getDepositCupFg() {
+        return depositCupFg;
+    }
+
+    public void setDepositCupFg(String depositCupFg) {
+        this.depositCupFg = depositCupFg;
     }
 }

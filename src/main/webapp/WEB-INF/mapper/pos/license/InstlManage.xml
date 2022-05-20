@@ -241,7 +241,8 @@
         (
             SELECT
             AGENCY_CD,
-            SUM(CASE WHEN INST_FG = 0 THEN 1 ELSE 0 END) AS INST_0
+            SUM(CASE WHEN INST_FG = 0 THEN 1 ELSE 0 END) AS INST_0,
+            MIN(INST_INS_DT) AS INST_INS_DT
             FROM TB_CM_INSTLL
             GROUP BY AGENCY_CD
         ) tci
@@ -250,7 +251,7 @@
         <if test='chkDt != true'>
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                 <![CDATA[
-                    AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
+                    AND tci.INST_INS_DT BETWEEN #{startDate} AND #{endDate}
                 ]]>
             </if>
         </if>

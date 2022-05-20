@@ -498,6 +498,10 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 상품유형
             if (prodExcelUploadVO.getProdTypeFg() != null && !"".equals(prodExcelUploadVO.getProdTypeFg())) {
+                // 상품유형이 [보증금상품]이면 강제로 면세처리
+                if(prodExcelUploadVO.getProdTypeFg().equals("4")){
+                    prodExcelUploadVO.setVatFg("2");
+                }
             } else {
                 prodExcelUploadVO.setResult("상품유형를 선택해주세요.");
             }
