@@ -116,6 +116,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.sdattrClassCd = ""; // 속성
             params.sdselGrpNm = ""; // 선택매뉴명
             params.sdselGrpCd = ""; // 선택매뉴코드
+            params.depositCupFg = ""; //보증금상품유형
             // 상품발주정보
             params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
             params.splyUprcUseYn = "Y"; // 공급단가사용여부
@@ -489,6 +490,20 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
         }
 
+        // 상품유형
+        if ($scope.prodModifyInfo.prodTypeFg === "4"){
+            // 보증금 상품은 강제로 면세
+            $scope.prodModifyInfo.vatFg = "2";
+            if($scope.prodModifyInfo.depositCupFg === "" || $scope.prodModifyInfo.depositCupFg === null){
+                $scope._popMsg(messages["prod.depositCupFgChk.none"]);
+                return false;
+            }
+        } else if($scope.prodModifyInfo.prodTypeFg !== "4") {
+            if($scope.prodModifyInfo.depositCupFg !== "") {
+                $scope._popMsg(messages["prod.depositCupFgChk.msg"]);
+                return false;
+            }
+        }
         // 분류조회
         if (isNull($scope.prodModifyInfo.prodClassCd)) {
             $scope._popMsg(messages["prod.prodClassCdNmChk.msg"]);
@@ -677,6 +692,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if($scope.prodModifyInfo.sideProdYn === 'N'){
                         $scope.prodModifyInfo.sdselGrpNm = "";
                         $scope.prodModifyInfo.sdselGrpCd = "";
+                    }
+
+                    if($scope.prodModifyInfo.depositCupFg === null){
+                        $scope.prodModifyInfo.depositCupFg = "";
                     }
                 }
             );

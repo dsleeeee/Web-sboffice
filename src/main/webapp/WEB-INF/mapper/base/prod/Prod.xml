@@ -448,6 +448,7 @@
                 thvp.VENDR_NM,
                 thp.PRC_CTRL_FG,
                 thp.MAP_PROD_CD,
+                NVL(thp.DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
                 ( SELECT PROD_INFO FROM TB_HQ_PRODUCT_INFO WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO
                 FROM
                 TB_HQ_PRODUCT thp
@@ -560,6 +561,7 @@
                 tmvp.VENDR_NM,
                 tmp.PRC_CTRL_FG,
                 tmp.MAP_PROD_CD,
+                NVL(tmp.DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
                 ( SELECT PROD_INFO FROM TB_MS_PRODUCT_INFO WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO
                 FROM
                 TB_MS_PRODUCT tmp
@@ -769,7 +771,8 @@
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId},
                 PRC_CTRL_FG = #{prcCtrlFg},
-                MAP_PROD_CD = #{mapProdCd}
+                MAP_PROD_CD = #{mapProdCd},
+                DEPOSIT_CUP_FG = #{depositCupFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -811,7 +814,8 @@
                 MOD_DT,
                 MOD_ID,
                 PRC_CTRL_FG,
-                MAP_PROD_CD
+                MAP_PROD_CD,
+                DEPOSIT_CUP_FG
                 ) VALUES (
                 #{hqOfficeCd},
                 TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
@@ -851,7 +855,8 @@
                 #{modDt},
                 #{modId},
                 #{prcCtrlFg},
-                #{mapProdCd}
+                #{mapProdCd},
+                #{depositCupFg}
                 )
             </when>
             <!-- 매장 -->
@@ -900,7 +905,8 @@
                 REMARK = #{remark},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId},
-                MAP_PROD_CD = #{mapProdCd}
+                MAP_PROD_CD = #{mapProdCd},
+                DEPOSIT_CUP_FG = #{depositCupFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -943,7 +949,8 @@
                 MOD_DT,
                 MOD_ID,
                 REG_FG,
-                MAP_PROD_CD
+                MAP_PROD_CD,
+                DEPOSIT_CUP_FG
                 ) VALUES (
                 #{storeCd},
                 TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
@@ -984,7 +991,8 @@
                 #{modDt},
                 #{modId},
                 'S',
-                #{mapProdCd}
+                #{mapProdCd},
+                #{depositCupFg}
                 )
             </when>
         </choose>
@@ -1577,7 +1585,8 @@
                     thp.MOD_DT,
                     thp.MOD_ID,
                     thp.PRC_CTRL_FG,
-                    thp.MAP_PROD_CD
+                    thp.MAP_PROD_CD,
+                    thp.DEPOSIT_CUP_FG
                FROM
                    TB_HQ_PRODUCT thp
                WHERE
@@ -1622,7 +1631,8 @@
                tmp.REMARK              = thp.REMARK,
                tmp.MOD_DT              = #{modDt},
                tmp.MOD_ID              = #{modId},
-               tmp.MAP_PROD_CD         = thp.MAP_PROD_CD
+               tmp.MAP_PROD_CD         = thp.MAP_PROD_CD,
+               tmp.DEPOSIT_CUP_FG      = thp.DEPOSIT_CUP_FG
         WHEN NOT MATCHED THEN
             INSERT
             (
@@ -1665,7 +1675,8 @@
                 tmp.MOD_DT,
                 tmp.MOD_ID,
                 tmp.REG_FG,
-                tmp.MAP_PROD_CD
+                tmp.MAP_PROD_CD,
+                tmp.DEPOSIT_CUP_FG
             )
             VALUES
             (
@@ -1709,7 +1720,8 @@
                 #{modDt},
                 #{modId},
                 'H', --상품등록구분 REG_FG(현재 등록매장수, 매장상품일괄등록 기능은 본사에만 기능있음)
-                thp.MAP_PROD_CD
+                thp.MAP_PROD_CD,
+                thp.DEPOSIT_CUP_FG
             )
     </insert>
 
@@ -3357,7 +3369,8 @@
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
             'H' AS REG_FG,
-            MAP_PROD_CD
+            MAP_PROD_CD,
+            thp.DEPOSIT_CUP_FG
             FROM
             (
                   SELECT *
@@ -3411,7 +3424,8 @@
             USE_YN = B.USE_YN,
             REMARK = B.REMARK,
             MOD_DT = B.MOD_DT,
-            MOD_ID = B.MOD_ID
+            MOD_ID = B.MOD_ID,
+            DEPOSIT_CUP_FG = B.DEPOSIT_CUP_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3453,7 +3467,8 @@
                 A.MOD_DT,
                 A.MOD_ID,
                 A.REG_FG,
-                A.MAP_PROD_CD
+                A.MAP_PROD_CD,
+                A.DEPOSIT_CUP_FG
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -3494,7 +3509,8 @@
                 B.MOD_DT,
                 B.MOD_ID,
                 B.REG_FG,
-                B.MAP_PROD_CD
+                B.MAP_PROD_CD,
+                B.DEPOSIT_CUP_FG
             )
     </insert>
 

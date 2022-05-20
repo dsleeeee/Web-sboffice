@@ -75,6 +75,9 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                     $("#btnDtlSetConfigProd").css("display", "");
                 }
 
+                if(prodDetail.depositCupFg === null){
+                    prodDetail.depositCupFg = "";
+                }
             }
         );
         // 기능수행 종료 : 반드시 추가

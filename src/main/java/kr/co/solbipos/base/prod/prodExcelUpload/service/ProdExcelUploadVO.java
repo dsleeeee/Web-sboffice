@@ -166,6 +166,9 @@ public class ProdExcelUploadVO extends PageVO {
     /** 삭제구분 */
     private String deleteFg;
 
+    /** 보증컵유형 */
+    private String depositCupFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -492,5 +495,13 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setStartStockQtyI(Integer startStockQtyI) {
         this.startStockQtyI = startStockQtyI;
+    }
+
+    public String getDepositCupFg() {
+        return depositCupFg;
+    }
+
+    public void setDepositCupFg(String depositCupFg) {
+        this.depositCupFg = depositCupFg;
     }
 }

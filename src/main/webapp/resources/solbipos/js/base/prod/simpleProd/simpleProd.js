@@ -13,6 +13,16 @@
  */
 var app = agrid.getApp();
 
+// 보증금상품유형
+var depositCupFgData = [
+    {"name": "선택", "value": ""},
+    // {"name": "일반", "value": "0"},
+    {"name": "종이", "value": "1"},
+    {"name": "플라스틱", "value": "2"},
+    {"name": "다회용", "value": "3"},
+    {"name": "보증컵기타", "value": "4"}
+];
+
 /**
  *  상품목록 조회 그리드 생성
  */
@@ -56,6 +66,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+        $scope.depositCupFgDataMap = new wijmo.grid.DataMap(depositCupFgData, 'value', 'name'); // 보증금상품유형
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -73,6 +84,20 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
                     }
                 }
             }
+        });
+
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 가격 변경시 체크박스 체크
+                if (col.binding === "prodTypeFg") {
+                    if(item.prodTypeFg === "4"){
+                        item.vatFg = "2";
+                    }
+                }
+            }
+            s.collectionView.commitEdit();
         });
 
         // 전체삭제
@@ -119,6 +144,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         } else {
             params.prcCtrlFg = "S";
         }
+        params.depositCupFg = "";
 
         for(var i = 0; i < rowsCount; i++) {
             // 추가기능 수행 : 파라미터
@@ -186,6 +212,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             } else {
                 $scope.flex.collectionView.items[i].prcCtrlFg = "S";
             }
+            $scope.flex.collectionView.items[i].depositCupFg = "";
         }
         $scope.flex.refresh();
     };
@@ -416,6 +443,18 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
                             }
                         }
                     }
+                }
+            }
+
+            // 상품유형 보증금일때
+            if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
+                $scope.flex.collectionView.items[i].vatFg = "2";
+                if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null){
+                    result = messages["simpleProd.depositCupFg.None"];
+                }
+            } else {
+                if($scope.flex.collectionView.items[i].depositCupFg !== "" && $scope.flex.collectionView.items[i].prodNm !== "" && $scope.flex.collectionView.items[i].prodNm !== null){
+                    result = messages["simpleProd.depositCupFg.Chk"];
                 }
             }
 

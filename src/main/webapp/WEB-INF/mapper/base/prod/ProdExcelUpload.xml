@@ -110,7 +110,7 @@
         SDSEL_GRP_CD,
         POINT_SAVE_YN,
         PROD_DC_FG,
-        VAT_FG,
+        CASE PROD_TYPE_FG WHEN '4' THEN '2' ELSE VAT_FG END AS VAT_FG,
         PROD_TIP_YN,
         PROD_PACK_AMT,
         PROD_DLVR_AMT,
@@ -143,7 +143,8 @@
         PRC_CTRL_FG,
         NVL(STIN_SALE_UPRC, '') AS STIN_SALE_UPRC,
         NVL(DLVR_SALE_UPRC, '') AS DLVR_SALE_UPRC,
-        NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC
+        NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC,
+        NVL(DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG
         FROM TB_TMP_EXCEL_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
@@ -212,7 +213,8 @@
             PRC_CTRL_FG,
             STIN_SALE_UPRC,
             DLVR_SALE_UPRC,
-            PACK_SALE_UPRC
+            PACK_SALE_UPRC,
+            DEPOSIT_CUP_FG
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -262,7 +264,8 @@
             #{prcCtrlFg},
             REPLACE(NVL(#{stinSaleUprc}, #{saleUprc}), ',',''),
             REPLACE(NVL(#{dlvrSaleUprc}, #{saleUprc}), ',',''),
-            REPLACE(NVL(#{packSaleUprc}, #{saleUprc}), ',','')
+            REPLACE(NVL(#{packSaleUprc}, #{saleUprc}), ',',''),
+            #{depositCupFg}
         )
     </insert>
 
