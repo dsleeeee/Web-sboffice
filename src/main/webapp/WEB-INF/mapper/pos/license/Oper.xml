@@ -170,7 +170,7 @@
                 ) M
         ,       (
                     SELECT  A.STORE_CD
-                    ,       MAX(A.INST_INS_DT) INST_INS_DT
+                    ,       MIN(A.INST_INS_DT) INST_INS_DT
                     FROM    TB_CM_INSTLL A
                     GROUP
                     BY      A.STORE_CD
