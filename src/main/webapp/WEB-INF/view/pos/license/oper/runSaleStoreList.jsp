@@ -191,8 +191,8 @@
                     <wj-flex-grid-column header="<s:message code="oper.pCashApprCnt"/>      " binding="pCashApprCnt"    width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.pCardCnt"/>          " binding="pCardCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
 
-                    <wj-flex-grid-column header="<s:message code="oper.instInsDt"/>         " binding="instInsDt"       width="100" is-read-only="true" align="center" visible="false"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.regDate"/>           " binding="regDate"         width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.instInsDt"/>         " binding="instInsDt"       width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.regDate"/>           " binding="regDate"         width="100" is-read-only="true" align="center" visible="false"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>       " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
 
                     <wj-flex-grid-column header="<s:message code="oper.maxSaleDate"/>       " binding="maxSaleDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
