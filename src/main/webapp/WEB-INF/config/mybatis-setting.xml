@@ -733,6 +733,8 @@
     <typeAlias alias="sideVO" type="kr.co.solbipos.sale.status.side.service.SideVO"/>
     <!-- 매출관리 > 매출현황2 > 오프라인추가매출현황 -->
     <typeAlias alias="offAddVO" type="kr.co.solbipos.sale.status.offAdd.service.OffAddVO"/>
+    <!-- 매출관리 > 매출현황2 > 보증금현황 -->
+    <typeAlias alias="nonSaleVO" type="kr.co.solbipos.sale.status.nonSale.service.NonSaleVO"/>
 
     <!-- 매출관리 > 매출분석 > 매장별배출분석 -->
     <typeAlias alias="storeRankVO" 	type="kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO"/>
